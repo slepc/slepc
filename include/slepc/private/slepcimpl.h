@@ -60,7 +60,8 @@ struct _n_SlepcMatStruct {
 };
 typedef struct _n_SlepcMatStruct* SlepcMatStruct;
 
-#define SLEPC_MAT_STRUCT_BSE 88101
+#define SLEPC_MAT_STRUCT_BSE     88101
+#define SLEPC_MAT_STRUCT_HAMILT  88102
 
 /*
   SlepcCheckMatStruct - Check that a given Mat is a structured matrix of the wanted type.

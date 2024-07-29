@@ -81,7 +81,8 @@ typedef enum { EPS_HEP    = 1,
                EPS_GNHEP  = 4,
                EPS_PGNHEP = 5,
                EPS_GHIEP  = 6,
-               EPS_BSE    = 7 } EPSProblemType;
+               EPS_BSE    = 7,
+               EPS_HAMILT = 8 } EPSProblemType;
 
 /*E
     EPSExtraction - Determines the type of extraction technique employed

@@ -331,6 +331,7 @@ PetscErrorCode EPSSetUp(EPS eps)
     /* make sure the user has set the appropriate matrix */
     PetscCall(STGetMatrix(eps->st,0,&A));
     if (eps->problem_type==EPS_BSE) PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_BSE,NULL));
+    if (eps->problem_type==EPS_HAMILT) PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_HAMILT,NULL));
   }
 
   /* safeguard for small problems */

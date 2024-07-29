@@ -6,6 +6,8 @@
 
 - `STFILTER`: new polynomial filter based on a truncated Chebyshev series. Use
   `STFilterSetType()` to choose among the available filters.
+- `EPS`: new structured eigenvalue problem type `EPS_HAMILT` for the case of a matrix
+   with Hamiltonian structure created with `MatCreateHamiltonian()`.
 
 ### Removed
 

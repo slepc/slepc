@@ -40,7 +40,7 @@
 
    Level: intermediate
 
-.seealso: MatCreateNest(), EPSSetOperators(), EPSSetProblemType()
+.seealso: MatCreateNest(), EPSSetOperators(), EPSSetProblemType(), MatCreateHamiltonian()
 @*/
 PetscErrorCode MatCreateBSE(Mat R,Mat C,Mat *H)
 {
@@ -75,6 +75,76 @@ PetscErrorCode MatCreateBSE(Mat R,Mat C,Mat *H)
 
   PetscCall(PetscNew(&mctx));
   mctx->cookie = SLEPC_MAT_STRUCT_BSE;
+  PetscCall(PetscObjectContainerCompose((PetscObject)*H,"SlepcMatStruct",mctx,PetscCtxDestroyDefault));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   MatCreateHamiltonian - Create a matrix that can be used to define a structured
+   eigenvalue problem of Hamiltonian type.
+
+   Collective
+
+   Input Parameters:
++  A - matrix for the (0,0) block
+.  B - matrix for the (0,1) block, must be real symmetric or Hermitian
+-  C - matrix for the (1,0) block, must be real symmetric or Hermitian
+
+   Output Parameter:
+.  H  - the resulting matrix
+
+   Notes:
+   The resulting matrix has the block form H = [ A B; C -A^* ], where B and C are
+   assumed to be symmetric in the real case or Hermitian in the comples case. Note
+   that this function does not check this property, so if the matrices provided by
+   the user do not satisfy it, then the solver will not behave as expected.
+
+   The obtained matrix can be used as an input matrix to EPS eigensolvers via
+   EPSSetOperators() for the case that the problem type is EPS_HAMILT. Note that the
+   user cannot just build a matrix with the required structure, it must be done via
+   this function.
+
+   In the current implementation, H is a MATNEST matrix, where the (1,1) block is
+   a matrix of type MATHERMITIANTRANSPOSEVIRTUAL obtained from A and scaled by -1.
+
+   Level: intermediate
+
+.seealso: MatCreateNest(), EPSSetOperators(), EPSSetProblemType(), MatCreateBSE()
+@*/
+PetscErrorCode MatCreateHamiltonian(Mat A,Mat B,Mat C,Mat *H)
+{
+  PetscInt       Ma,Mb,Mc,Na,Nb,Nc,ma,mb,mc,na,nb,nc;
+  Mat            block[4] = { A, B, C, NULL };
+  SlepcMatStruct mctx;
+
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(A,MAT_CLASSID,1);
+  PetscValidHeaderSpecific(B,MAT_CLASSID,2);
+  PetscValidHeaderSpecific(C,MAT_CLASSID,3);
+  PetscCheckSameTypeAndComm(A,1,B,2);
+  PetscCheckSameTypeAndComm(A,1,C,3);
+  PetscAssertPointer(H,4);
+
+  /* check sizes */
+  PetscCall(MatGetSize(A,&Ma,&Na));
+  PetscCall(MatGetLocalSize(A,&ma,&na));
+  PetscCall(MatGetSize(B,&Mb,&Nb));
+  PetscCall(MatGetLocalSize(B,&mb,&nb));
+  PetscCall(MatGetSize(C,&Mc,&Nc));
+  PetscCall(MatGetLocalSize(C,&mc,&nc));
+  PetscCheck(Mb==Ma && mb==ma,PetscObjectComm((PetscObject)A),PETSC_ERR_ARG_INCOMP,"Incompatible row dimensions");
+  PetscCheck(Nc==Na && nc==na,PetscObjectComm((PetscObject)A),PETSC_ERR_ARG_INCOMP,"Incompatible column dimensions");
+
+  /* (1,1) block */
+  PetscCall(MatCreateHermitianTranspose(A,&block[3]));
+  PetscCall(MatScale(block[3],-1.0));
+
+  /* create nest matrix and compose context */
+  PetscCall(MatCreateNest(PetscObjectComm((PetscObject)A),2,NULL,2,NULL,block,H));
+  PetscCall(MatDestroy(&block[3]));
+
+  PetscCall(PetscNew(&mctx));
+  mctx->cookie = SLEPC_MAT_STRUCT_HAMILT;
   PetscCall(PetscObjectContainerCompose((PetscObject)*H,"SlepcMatStruct",mctx,PetscCtxDestroyDefault));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

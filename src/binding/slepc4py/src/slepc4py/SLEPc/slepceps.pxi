@@ -31,6 +31,7 @@ cdef extern from * nogil:
         EPS_PGNHEP
         EPS_GHIEP
         EPS_BSE
+        EPS_HAMILT
 
     ctypedef enum SlepcEPSExtraction "EPSExtraction":
         EPS_RITZ

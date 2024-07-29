@@ -70,6 +70,7 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
         case EPS_PGNHEP: type = "generalized non-" SLEPC_STRING_HERMITIAN " eigenvalue problem with " SLEPC_STRING_HERMITIAN " positive definite B"; break;
         case EPS_GHIEP:  type = "generalized " SLEPC_STRING_HERMITIAN "-indefinite eigenvalue problem"; break;
         case EPS_BSE:    type = "structured Bethe-Salpeter eigenvalue problem"; break;
+        case EPS_HAMILT: type = "structured Hamiltonian eigenvalue problem"; break;
       }
     } else type = "not yet set";
     PetscCall(PetscViewerASCIIPrintf(viewer,"  problem type: %s\n",type));
@@ -78,6 +79,8 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
     if (isstruct) {
       PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_BSE,&flg));
       if (flg) PetscCall(PetscViewerASCIIPrintf(viewer,"  matrix A has a Bethe-Salpeter structure\n"));
+      PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_HAMILT,&flg));
+      if (flg) PetscCall(PetscViewerASCIIPrintf(viewer,"  matrix A has a Hamiltonian structure\n"));
     }
     if (eps->extraction) {
       switch (eps->extraction) {

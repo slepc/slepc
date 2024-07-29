@@ -105,7 +105,9 @@ static PetscErrorCode EPSSetUp_KrylovSchur(EPS eps)
     if (isfilt) PetscCall(EPSSetUp_KrylovSchur_Filter(eps));
     else PetscCall(EPSSetUp_KrylovSchur_Slice(eps));
   } else if (eps->isstructured) {
-    PetscCall(EPSSetUp_KrylovSchur_BSE(eps));
+    if (eps->problem_type==EPS_BSE) PetscCall(EPSSetUp_KrylovSchur_BSE(eps));
+    else if (eps->problem_type==EPS_HAMILT) SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Not implemented yet");
+    else SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Unknown matrix structure");
     PetscFunctionReturn(PETSC_SUCCESS);
   } else {
     PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
