@@ -108,7 +108,7 @@
 
 !     ** Create Mat
       PetscCallA(MatCreateSeqDense(PETSC_COMM_SELF,k,l,PETSC_NULL_SCALAR_ARRAY,Q,ierr))
-      PetscCallA(MatDenseGetArrayF90(Q,qq,ierr))
+      PetscCallA(MatDenseGetArray(Q,qq,ierr))
       do i=1,k
         do j=1,l
           if (i<j) then
@@ -118,7 +118,7 @@
           end if
         end do
       end do
-      PetscCallA(MatDenseRestoreArrayF90(Q,qq,ierr))
+      PetscCallA(MatDenseRestoreArray(Q,qq,ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Test several operations
