@@ -24,6 +24,8 @@ SLEPC_INTERN PetscErrorCode EPSSetUp_KrylovSchur_BSE(EPS);
 SLEPC_INTERN PetscErrorCode EPSSolve_KrylovSchur_BSE_Shao(EPS);
 SLEPC_INTERN PetscErrorCode EPSSolve_KrylovSchur_BSE_Gruning(EPS);
 SLEPC_INTERN PetscErrorCode EPSSolve_KrylovSchur_BSE_ProjectedBSE(EPS);
+SLEPC_INTERN PetscErrorCode EPSSetUp_KrylovSchur_Hamilt(EPS);
+SLEPC_INTERN PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS);
 SLEPC_INTERN PetscErrorCode EPSGetArbitraryValues(EPS,PetscScalar*,PetscScalar*);
 SLEPC_INTERN PetscErrorCode EPSKrylovSchurGetChildEPS(EPS,EPS*);
 
