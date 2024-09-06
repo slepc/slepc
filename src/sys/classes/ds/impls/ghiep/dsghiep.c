@@ -265,7 +265,7 @@ static PetscErrorCode DSVectors_GHIEP(DS ds,DSMatType mat,PetscInt *k,PetscReal 
   PetscScalar       *Z;
   const PetscScalar *A,*Q;
   PetscInt          i;
-  PetscReal         e,*T;
+  PetscReal         e,*T,*S;
 
   PetscFunctionBegin;
   switch (mat) {
@@ -285,7 +285,12 @@ static PetscErrorCode DSVectors_GHIEP(DS ds,DSMatType mat,PetscInt *k,PetscReal 
               PetscCall(PetscArrayzero(Z+i*ds->ld,ds->ld));
               Z[i+i*ds->ld] = 1.0;
             }
-          } else PetscCall(DSVectors_GHIEP_Eigen_Some(ds,&i,rnorm));
+          } else {
+            PetscCall(DSVectors_GHIEP_Eigen_Some(ds,&i,rnorm));
+            PetscCall(DSGetArrayReal(ds,DS_MAT_D,&S));
+            S[i]=S[i-1]=1.0;
+            PetscCall(DSRestoreArrayReal(ds,DS_MAT_D,&S));
+          }
         }
         PetscCall(MatDenseRestoreArrayRead(ds->omat[DS_MAT_A],&A));
         PetscCall(MatDenseRestoreArrayRead(ds->omat[DS_MAT_Q],&Q));
