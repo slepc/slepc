@@ -185,7 +185,8 @@ PetscErrorCode EPSSolve(EPS eps)
 #endif
 
   /* Sort eigenvalues according to eps->which parameter */
-  PetscCall(SlepcSortEigenvalues(eps->sc,eps->nconv,eps->eigr,eps->eigi,eps->perm));
+  if (eps->problem_type==EPS_HAMILT) PetscCall(SlepcSortEigenvaluesSpecial(eps->sc,eps->nconv,eps->eigr,eps->eigi,eps->perm));
+  else PetscCall(SlepcSortEigenvalues(eps->sc,eps->nconv,eps->eigr,eps->eigi,eps->perm));
   PetscCall(PetscLogEventEnd(EPS_Solve,eps,0,0,0));
 
   /* Various viewers */
