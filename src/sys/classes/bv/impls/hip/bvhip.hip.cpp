@@ -431,7 +431,7 @@ PetscErrorCode BV_SquareSum_HIP(BV bv,PetscInt j,PetscScalar *h,PetscReal *sum)
     PetscCall(VecHIPGetArrayRead(bv->buffer,&d_h));
     PetscCall(PetscHipBLASIntCast(bv->nc+j,&idx));
     PetscCall(PetscLogGpuTimeBegin());
-    PetscCallHIPBLAS(hipblasXdotc(hipblashandle,idx,d_h,one,d_h,one,&dot));
+    PetscCallHIPBLAS(hipblasXdot(hipblashandle,idx,d_h,one,d_h,one,&dot));
     PetscCall(PetscLogGpuTimeEnd());
     PetscCall(PetscLogGpuFlops(2.0*(bv->nc+j)));
     *sum = PetscRealPart(dot);
