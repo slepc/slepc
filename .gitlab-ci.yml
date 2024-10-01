@@ -870,16 +870,16 @@ intel-c-int64-nompi-mkl:
     PETSC_CONFIG_OPTS: --with-cc=icx --with-fc=ifx --with-cxx=icpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-64-bit-indices --with-64-bit-blas-indices --with-mpi=0 --COPTFLAGS='-O -g -fp-model=precise' --CXXOPTFLAGS='-O -g -fp-model=precise' --FOPTFLAGS='-O -g -fp-model=precise'
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme --download-arpack
 
-#gnu-c-hip-complex:   # TODO
-#  extends:
-#    - .stage-3
-#    - .linux_test
-#  tags:
-#    - gpu:amd, name:satet
-#  variables:
-#    LOAD_MODULES: rocm
-#    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip
-#    TEST_OPTS: -j1 -l6 query=requires queryval=hip
+gnu-c-hip-complex:
+  extends:
+    - .stage-3
+    - .linux_test
+  tags:
+    - gpu:amd, name:satet
+  variables:
+    LOAD_MODULES: rocm
+    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip
+    TEST_OPTS: query=requires queryval=hip
 
 gnu-c-hip-single:
   extends:
