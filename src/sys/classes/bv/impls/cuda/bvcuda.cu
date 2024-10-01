@@ -431,7 +431,7 @@ PetscErrorCode BV_SquareSum_CUDA(BV bv,PetscInt j,PetscScalar *h,PetscReal *sum)
     PetscCall(VecCUDAGetArrayRead(bv->buffer,&d_h));
     PetscCall(PetscCuBLASIntCast(bv->nc+j,&idx));
     PetscCall(PetscLogGpuTimeBegin());
-    PetscCallCUBLAS(cublasXdotc(cublasv2handle,idx,d_h,one,d_h,one,&dot));
+    PetscCallCUBLAS(cublasXdot(cublasv2handle,idx,d_h,one,d_h,one,&dot));
     PetscCall(PetscLogGpuTimeEnd());
     PetscCall(PetscLogGpuFlops(2.0*(bv->nc+j)));
     *sum = PetscRealPart(dot);

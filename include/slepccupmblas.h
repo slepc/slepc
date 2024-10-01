@@ -21,21 +21,17 @@
 /* complex single */
 #if defined(PETSC_USE_COMPLEX)
 #if defined(PETSC_USE_REAL_SINGLE)
-#define cublasXdotc(a,b,c,d,e,f,g) cublasCdotc((a),(b),(const cuComplex *)(c),(d),(const cuComplex *)(e),(f),(cuComplex *)(g))
 #define cublasXgetrfBatched(a,b,c,d,e,f,g) cublasCgetrfBatched((a),(b),(cuComplex**)(c),(d),(e),(f),(g))
 #define cublasXgetrsBatched(a,b,c,d,e,f,g,h,i,j,k) cublasCgetrsBatched((a),(b),(c),(d),(const cuComplex**)(e),(f),(g),(cuComplex**)(h),(i),(j),(k))
 #else /* complex double */
-#define cublasXdotc(a,b,c,d,e,f,g) cublasZdotc((a),(b),(const cuDoubleComplex *)(c),(d),(const cuDoubleComplex *)(e),(f),(cuDoubleComplex *)(g))
 #define cublasXgetrfBatched(a,b,c,d,e,f,g) cublasZgetrfBatched((a),(b),(cuDoubleComplex**)(c),(d),(e),(f),(g))
 #define cublasXgetrsBatched(a,b,c,d,e,f,g,h,i,j,k) cublasZgetrsBatched((a),(b),(c),(d),(const cuDoubleComplex**)(e),(f),(g),(cuDoubleComplex**)(h),(i),(j),(k))
 #endif
 #else /* real single */
 #if defined(PETSC_USE_REAL_SINGLE)
-#define cublasXdotc cublasSdot
 #define cublasXgetrfBatched cublasSgetrfBatched
 #define cublasXgetrsBatched cublasSgetrsBatched
 #else /* real double */
-#define cublasXdotc cublasDdot
 #define cublasXgetrfBatched cublasDgetrfBatched
 #define cublasXgetrsBatched cublasDgetrsBatched
 #endif
@@ -59,15 +55,11 @@
 /* complex single */
 #if defined(PETSC_USE_COMPLEX)
 #if defined(PETSC_USE_REAL_SINGLE)
-#define hipblasXdotc(a,b,c,d,e,f,g) hipblasCdotc((a),(b),(const hipComplex *)(c),(d),(const hipComplex *)(e),(f),(hipComplex *)(g))
 #else /* complex double */
-#define hipblasXdotc(a,b,c,d,e,f,g) hipblasZdotc((a),(b),(const hipDoubleComplex *)(c),(d),(const hipDoubleComplex *)(e),(f),(hipDoubleComplex *)(g))
 #endif
 #else /* real single */
 #if defined(PETSC_USE_REAL_SINGLE)
-#define hipblasXdotc hipblasSdot
 #else /* real double */
-#define hipblasXdotc hipblasDdot
 #endif
 #endif
 
