@@ -59,7 +59,7 @@ PetscErrorCode EPSMonitorSetFromOptions(EPS eps,const char opt[],const char name
 
   PetscCall((*cfunc)(viewer,format,ctx,&vf));
   PetscCall(PetscViewerDestroy(&viewer));
-  PetscCall(EPSMonitorSet(eps,mfunc,vf,(PetscErrorCode(*)(void **))dfunc));
+  PetscCall(EPSMonitorSet(eps,mfunc,vf,(PetscCtxDestroyFn*)dfunc));
   if (trackall) PetscCall(EPSSetTrackAll(eps,PETSC_TRUE));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -624,7 +624,7 @@ PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,
 +  eps     - eigensolver context obtained from EPSCreate()
 .  func    - convergence test function, see EPSConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL)
+-  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
 
    Note:
    If the error estimate returned by the convergence test function is less than
@@ -634,11 +634,11 @@ PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,
 
 .seealso: EPSSetConvergenceTest(), EPSSetTolerances()
 @*/
-PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,void* ctx,PetscErrorCode (*destroy)(void*))
+PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,void* ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
-  if (eps->convergeddestroy) PetscCall((*eps->convergeddestroy)(eps->convergedctx));
+  if (eps->convergeddestroy) PetscCall((*eps->convergeddestroy)(&eps->convergedctx));
   eps->convergeduser    = func;
   eps->convergeddestroy = destroy;
   eps->convergedctx     = ctx;
@@ -734,7 +734,7 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
 +  eps     - eigensolver context obtained from EPSCreate()
 .  func    - stopping test function, see EPSStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL)
+-  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
 
    Note:
    Normal usage is to first call the default routine EPSStoppingBasic() and then
@@ -746,11 +746,11 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
 
 .seealso: EPSSetStoppingTest(), EPSStoppingBasic()
 @*/
-PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void* ctx,PetscErrorCode (*destroy)(void*))
+PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void* ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
-  if (eps->stoppingdestroy) PetscCall((*eps->stoppingdestroy)(eps->stoppingctx));
+  if (eps->stoppingdestroy) PetscCall((*eps->stoppingdestroy)(&eps->stoppingctx));
   eps->stoppinguser    = func;
   eps->stoppingdestroy = destroy;
   eps->stoppingctx     = ctx;

@@ -56,7 +56,8 @@ PetscErrorCode PEPMonitor(PEP pep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 .  monitor - pointer to function (if this is NULL, it turns off monitoring)
 .  mctx    - [optional] context for private data for the
              monitor routine (use NULL if no context is desired)
--  monitordestroy - [optional] routine that frees monitor context (may be NULL)
+-  monitordestroy - [optional] routine that frees monitor context (may be NULL),
+             see PetscCtxDestroyFn for the calling sequence
 
    Calling sequence of monitor:
 $  PetscErrorCode monitor(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *mctx)
@@ -92,7 +93,7 @@ $  PetscErrorCode monitor(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,
 
 .seealso: PEPMonitorFirst(), PEPMonitorAll(), PEPMonitorCancel()
 @*/
-PetscErrorCode PEPMonitorSet(PEP pep,PetscErrorCode (*monitor)(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *mctx),void *mctx,PetscErrorCode (*monitordestroy)(void**))
+PetscErrorCode PEPMonitorSet(PEP pep,PetscErrorCode (*monitor)(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *mctx),void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);

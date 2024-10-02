@@ -129,7 +129,7 @@ int main(int argc,char **argv)
   PetscCall(PetscPrintf(PETSC_COMM_WORLD," Convergence test = %d, stopping test = %d\n",(int)conv,(int)stop));
 
   PetscCall(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_DEFAULT,&vf));
-  PetscCall(NEPMonitorSet(nep,(PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*))NEPMonitorFirst,vf,(PetscErrorCode (*)(void**))PetscViewerAndFormatDestroy));
+  PetscCall(NEPMonitorSet(nep,(PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*))NEPMonitorFirst,vf,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy));
   PetscCall(NEPMonitorCancel(nep));
 
   PetscCall(NEPGetDS(nep,&ds));

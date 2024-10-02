@@ -180,6 +180,8 @@ PetscErrorCode SVDDestroy(SVD *svd)
   /* just in case the initial vectors have not been used */
   PetscCall(SlepcBasisDestroy_Private(&(*svd)->nini,&(*svd)->IS));
   PetscCall(SlepcBasisDestroy_Private(&(*svd)->ninil,&(*svd)->ISL));
+  if ((*svd)->convergeddestroy) PetscCall((*(*svd)->convergeddestroy)(&(*svd)->convergedctx));
+  if ((*svd)->stoppingdestroy) PetscCall((*(*svd)->stoppingdestroy)(&(*svd)->stoppingctx));
   PetscCall(SVDMonitorCancel(*svd));
   PetscCall(PetscHeaderDestroy(svd));
   PetscFunctionReturn(PETSC_SUCCESS);

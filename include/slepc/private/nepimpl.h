@@ -95,16 +95,16 @@ struct _p_NEP {
   void                 *jacobianctx;
   NEPConvergenceTestFn *converged;
   NEPConvergenceTestFn *convergeduser;
-  PetscErrorCode       (*convergeddestroy)(void*);
+  PetscCtxDestroyFn    *convergeddestroy;
   NEPStoppingTestFn    *stopping;
   NEPStoppingTestFn    *stoppinguser;
-  PetscErrorCode      (*stoppingdestroy)(void*);
-  void           *convergedctx;
-  void           *stoppingctx;
-  PetscErrorCode (*monitor[MAXNEPMONITORS])(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
-  PetscErrorCode (*monitordestroy[MAXNEPMONITORS])(void**);
-  void           *monitorcontext[MAXNEPMONITORS];
-  PetscInt       numbermonitors;
+  PetscCtxDestroyFn    *stoppingdestroy;
+  void                 *convergedctx;
+  void                 *stoppingctx;
+  PetscErrorCode       (*monitor[MAXNEPMONITORS])(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
+  PetscCtxDestroyFn    *monitordestroy[MAXNEPMONITORS];
+  void                 *monitorcontext[MAXNEPMONITORS];
+  PetscInt             numbermonitors;
 
   /*----------------- Child objects and working data -------------------*/
   DS             ds;               /* direct solver object */

@@ -56,7 +56,8 @@ PetscErrorCode SVDMonitor(SVD svd,PetscInt it,PetscInt nconv,PetscReal *sigma,Pe
 .  monitor - pointer to function (if this is NULL, it turns off monitoring)
 .  mctx    - [optional] context for private data for the
              monitor routine (use NULL if no context is desired)
--  monitordestroy - [optional] routine that frees monitor context (may be NULL)
+-  monitordestroy - [optional] routine that frees monitor context (may be NULL),
+             see PetscCtxDestroyFn for the calling sequence
 
    Calling sequence of monitor:
 $  PetscErrorCode monitor(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,void *mctx)
@@ -92,7 +93,7 @@ $  PetscErrorCode monitor(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,P
 
 .seealso: SVDMonitorFirst(), SVDMonitorAll(), SVDMonitorConditioning(), SVDMonitorCancel()
 @*/
-PetscErrorCode SVDMonitorSet(SVD svd,PetscErrorCode (*monitor)(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,void *mctx),void *mctx,PetscErrorCode (*monitordestroy)(void**))
+PetscErrorCode SVDMonitorSet(SVD svd,PetscErrorCode (*monitor)(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,void *mctx),void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);

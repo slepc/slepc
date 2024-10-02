@@ -102,18 +102,18 @@ struct _p_EPS {
   /*-------------- User-provided functions and contexts -----------------*/
   EPSConvergenceTestFn      *converged;
   EPSConvergenceTestFn      *convergeduser;
-  PetscErrorCode            (*convergeddestroy)(void*);
+  PetscCtxDestroyFn         *convergeddestroy;
   EPSStoppingTestFn         *stopping;
   EPSStoppingTestFn         *stoppinguser;
-  PetscErrorCode            (*stoppingdestroy)(void*);
+  PetscCtxDestroyFn         *stoppingdestroy;
   SlepcArbitrarySelectionFn *arbitrary;
-  void           *convergedctx;
-  void           *stoppingctx;
-  void           *arbitraryctx;
-  PetscErrorCode (*monitor[MAXEPSMONITORS])(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
-  PetscErrorCode (*monitordestroy[MAXEPSMONITORS])(void**);
-  void           *monitorcontext[MAXEPSMONITORS];
-  PetscInt       numbermonitors;
+  void                      *convergedctx;
+  void                      *stoppingctx;
+  void                      *arbitraryctx;
+  PetscErrorCode            (*monitor[MAXEPSMONITORS])(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
+  PetscCtxDestroyFn         *monitordestroy[MAXEPSMONITORS];
+  void                      *monitorcontext[MAXEPSMONITORS];
+  PetscInt                  numbermonitors;
 
   /*----------------- Child objects and working data -------------------*/
   ST             st;               /* spectral transformation object */

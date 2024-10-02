@@ -346,7 +346,8 @@ PetscErrorCode EPSDestroy(EPS *eps)
   PetscCall(SlepcBasisDestroy_Private(&(*eps)->nds,&(*eps)->defl));
   PetscCall(SlepcBasisDestroy_Private(&(*eps)->nini,&(*eps)->IS));
   PetscCall(SlepcBasisDestroy_Private(&(*eps)->ninil,&(*eps)->ISL));
-  if ((*eps)->convergeddestroy) PetscCall((*(*eps)->convergeddestroy)((*eps)->convergedctx));
+  if ((*eps)->convergeddestroy) PetscCall((*(*eps)->convergeddestroy)(&(*eps)->convergedctx));
+  if ((*eps)->stoppingdestroy) PetscCall((*(*eps)->stoppingdestroy)(&(*eps)->stoppingctx));
   PetscCall(EPSMonitorCancel(*eps));
   PetscCall(PetscHeaderDestroy(eps));
   PetscFunctionReturn(PETSC_SUCCESS);

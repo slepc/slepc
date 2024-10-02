@@ -59,7 +59,7 @@ PetscErrorCode NEPMonitorSetFromOptions(NEP nep,const char opt[],const char name
 
   PetscCall((*cfunc)(viewer,format,ctx,&vf));
   PetscCall(PetscViewerDestroy(&viewer));
-  PetscCall(NEPMonitorSet(nep,mfunc,vf,(PetscErrorCode(*)(void **))dfunc));
+  PetscCall(NEPMonitorSet(nep,mfunc,vf,(PetscCtxDestroyFn*)dfunc));
   if (trackall) PetscCall(NEPSetTrackAll(nep,PETSC_TRUE));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -670,7 +670,7 @@ PetscErrorCode NEPGetTwoSided(NEP nep,PetscBool *twosided)
 +  nep     - nonlinear eigensolver context obtained from NEPCreate()
 .  conv    - convergence test function, see NEPConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL)
+-  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
 
    Note:
    If the error estimate returned by the convergence test function is less than
@@ -680,11 +680,11 @@ PetscErrorCode NEPGetTwoSided(NEP nep,PetscBool *twosided)
 
 .seealso: NEPSetConvergenceTest(), NEPSetTolerances()
 @*/
-PetscErrorCode NEPSetConvergenceTestFunction(NEP nep,NEPConvergenceTestFn *conv,void* ctx,PetscErrorCode (*destroy)(void*))
+PetscErrorCode NEPSetConvergenceTestFunction(NEP nep,NEPConvergenceTestFn *conv,void* ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
-  if (nep->convergeddestroy) PetscCall((*nep->convergeddestroy)(nep->convergedctx));
+  if (nep->convergeddestroy) PetscCall((*nep->convergeddestroy)(&nep->convergedctx));
   nep->convergeduser    = conv;
   nep->convergeddestroy = destroy;
   nep->convergedctx     = ctx;
@@ -779,7 +779,7 @@ PetscErrorCode NEPGetConvergenceTest(NEP nep,NEPConv *conv)
 +  nep     - nonlinear eigensolver context obtained from NEPCreate()
 .  stop    - the stopping test function, see NEPStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL)
+-  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
 
    Note:
    Normal usage is to first call the default routine NEPStoppingBasic() and then
@@ -791,11 +791,11 @@ PetscErrorCode NEPGetConvergenceTest(NEP nep,NEPConv *conv)
 
 .seealso: NEPSetStoppingTest(), NEPStoppingBasic()
 @*/
-PetscErrorCode NEPSetStoppingTestFunction(NEP nep,NEPStoppingTestFn *stop,void* ctx,PetscErrorCode (*destroy)(void*))
+PetscErrorCode NEPSetStoppingTestFunction(NEP nep,NEPStoppingTestFn *stop,void* ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
-  if (nep->stoppingdestroy) PetscCall((*nep->stoppingdestroy)(nep->stoppingctx));
+  if (nep->stoppingdestroy) PetscCall((*nep->stoppingdestroy)(&nep->stoppingctx));
   nep->stoppinguser    = stop;
   nep->stoppingdestroy = destroy;
   nep->stoppingctx     = ctx;

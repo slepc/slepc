@@ -100,7 +100,7 @@ static PetscErrorCode ourmonitor(NEP nep,PetscInt i,PetscInt nc,PetscScalar *er,
   PetscObjectUseFortranCallback(nep,_cb.monitor,(NEP*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,void*,PetscErrorCode*),(&nep,&i,&nc,er,ei,d,&l,_ctx,&ierr));
 }
 
-static PetscErrorCode ourdestroy(void** ctx)
+static PetscErrorCode ourdestroy(void **ctx)
 {
   NEP nep = (NEP)*ctx;
   PetscObjectUseFortranCallback(nep,_cb.monitordestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
@@ -111,9 +111,9 @@ static PetscErrorCode ourconvergence(NEP nep,PetscScalar eigr,PetscScalar eigi,P
   PetscObjectUseFortranCallback(nep,_cb.convergence,(NEP*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),(&nep,&eigr,&eigi,&res,errest,_ctx,&ierr));
 }
 
-static PetscErrorCode ourconvdestroy(void *ctx)
+static PetscErrorCode ourconvdestroy(void **ctx)
 {
-  NEP nep = (NEP)ctx;
+  NEP nep = (NEP)*ctx;
   PetscObjectUseFortranCallback(nep,_cb.convdestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
@@ -122,9 +122,9 @@ static PetscErrorCode ourstopping(NEP nep,PetscInt its,PetscInt max_it,PetscInt 
   PetscObjectUseFortranCallback(nep,_cb.stopping,(NEP*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,NEPConvergedReason*,void*,PetscErrorCode*),(&nep,&its,&max_it,&nconv,&nev,reason,_ctx,&ierr));
 }
 
-static PetscErrorCode ourstopdestroy(void *ctx)
+static PetscErrorCode ourstopdestroy(void **ctx)
 {
-  NEP nep = (NEP)ctx;
+  NEP nep = (NEP)*ctx;
   PetscObjectUseFortranCallback(nep,_cb.stopdestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
@@ -157,11 +157,11 @@ SLEPC_EXTERN void nepmonitorset_(NEP *nep,void (*monitor)(NEP*,PetscInt*,PetscIn
   CHKFORTRANNULLOBJECT(mctx);
   CHKFORTRANNULLFUNCTION(monitordestroy);
   if ((PetscVoidFunction)monitor == (PetscVoidFunction)nepmonitorall_) {
-    *ierr = NEPMonitorSet(*nep,(PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*))NEPMonitorAll,*(PetscViewerAndFormat**)mctx,(PetscErrorCode (*)(void**))PetscViewerAndFormatDestroy);
+    *ierr = NEPMonitorSet(*nep,(PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*))NEPMonitorAll,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else if ((PetscVoidFunction)monitor == (PetscVoidFunction)nepmonitorconverged_) {
-    *ierr = NEPMonitorSet(*nep,(PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*))NEPMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscErrorCode (*)(void**))NEPMonitorConvergedDestroy);
+    *ierr = NEPMonitorSet(*nep,(PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*))NEPMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)NEPMonitorConvergedDestroy);
   } else if ((PetscVoidFunction)monitor == (PetscVoidFunction)nepmonitorfirst_) {
-    *ierr = NEPMonitorSet(*nep,(PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*))NEPMonitorFirst,*(PetscViewerAndFormat**)mctx,(PetscErrorCode (*)(void**))PetscViewerAndFormatDestroy);
+    *ierr = NEPMonitorSet(*nep,(PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*))NEPMonitorFirst,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else {
     *ierr = PetscObjectSetFortranCallback((PetscObject)*nep,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.monitor,(PetscVoidFunction)monitor,mctx); if (*ierr) return;
     *ierr = PetscObjectSetFortranCallback((PetscObject)*nep,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.monitordestroy,(PetscVoidFunction)monitordestroy,mctx); if (*ierr) return;

@@ -275,7 +275,7 @@ SLEPC_EXTERN PetscErrorCode EPSSetInitialSpace(EPS,PetscInt,Vec[]);
 SLEPC_EXTERN PetscErrorCode EPSSetLeftInitialSpace(EPS,PetscInt,Vec[]);
 
 SLEPC_EXTERN PetscErrorCode EPSMonitor(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt);
-SLEPC_EXTERN PetscErrorCode EPSMonitorSet(EPS,PetscErrorCode (*)(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*),void*,PetscErrorCode (*)(void**));
+SLEPC_EXTERN PetscErrorCode EPSMonitorSet(EPS,PetscErrorCode (*)(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*),void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode EPSMonitorCancel(EPS);
 SLEPC_EXTERN PetscErrorCode EPSGetMonitorContext(EPS,void*);
 
@@ -283,14 +283,14 @@ SLEPC_EXTERN PetscErrorCode EPSMonitorSetFromOptions(EPS,const char[],const char
 SLEPC_EXTERN PetscErrorCode EPSMonitorLGCreate(MPI_Comm,const char[],const char[],const char[],PetscInt,const char*[],int,int,int,int,PetscDrawLG*);
 SLEPC_EXTERN PetscErrorCode EPSMonitorFirst(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode EPSMonitorFirstDrawLG(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN PetscErrorCode EPSMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
 SLEPC_EXTERN PetscErrorCode EPSMonitorAll(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode EPSMonitorAllDrawLG(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorAllDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN PetscErrorCode EPSMonitorAllDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
 SLEPC_EXTERN PetscErrorCode EPSMonitorConverged(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
 SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedDrawLG(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
 SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedDestroy(PetscViewerAndFormat**);
 
 SLEPC_EXTERN PetscErrorCode EPSSetOptionsPrefix(EPS,const char*);
@@ -344,8 +344,8 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(EPSConvergenceTestFn)(EPS eps,PetscS
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(EPSStoppingTestFn)(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx);
 
-SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTestFn*,void*,PetscErrorCode (*)(void*));
-SLEPC_EXTERN PetscErrorCode EPSSetStoppingTestFunction(EPS,EPSStoppingTestFn*,void*,PetscErrorCode (*)(void*));
+SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode EPSSetStoppingTestFunction(EPS,EPSStoppingTestFn*,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode EPSSetEigenvalueComparison(EPS,SlepcEigenvalueComparisonFn*,void*);
 SLEPC_EXTERN PetscErrorCode EPSSetArbitrarySelection(EPS,SlepcArbitrarySelectionFn*,void*);
 
