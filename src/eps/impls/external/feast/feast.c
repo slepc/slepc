@@ -93,17 +93,22 @@ static PetscErrorCode EPSSolve_FEAST(EPS eps)
 #endif
 
   PetscFunctionBegin;
+#if !defined(PETSC_HAVE_64BIT_BLAS_INDICES)
+  PetscCall(PetscBLASIntCast(eps->ncv,&ncv));
+  PetscCall(PetscBLASIntCast(eps->nloc,&n));
+#else
   ncv = eps->ncv;
   n   = eps->nloc;
+#endif
 
   /* parameters */
   feastinit(fpm);
   fpm[0] = (eps->numbermonitors>0)? 1: 0;   /* runtime comments */
-  fpm[1] = ctx->npoints;                    /* contour points */
+  fpm[1] = (MKL_INT)ctx->npoints;           /* contour points */
 #if !defined(PETSC_USE_REAL_SINGLE)
   fpm[2] = -PetscLog10Real(eps->tol);       /* tolerance for trace */
 #endif
-  fpm[3] = eps->max_it;                     /* refinement loops */
+  fpm[3] = (MKL_INT)eps->max_it;            /* refinement loops */
   fpm[5] = 1;                               /* second stopping criterion */
 #if defined(PETSC_USE_REAL_SINGLE)
   fpm[6] = -PetscLog10Real(eps->tol);       /* tolerance for trace */
