@@ -358,8 +358,7 @@ static PetscErrorCode MatDestroy_NEPDeflation(Mat M)
   PetscCall(MatShellGetContext(M,&matctx));
   if (matctx->extop->szd) {
     PetscCall(BVDestroy(&matctx->U));
-    PetscCall(PetscFree2(matctx->hfj,matctx->work));
-    PetscCall(PetscFree2(matctx->A,matctx->B));
+    PetscCall(PetscFree4(matctx->hfj,matctx->work,matctx->A,matctx->B));
     PetscCall(VecDestroy(&matctx->w[0]));
     PetscCall(VecDestroy(&matctx->w[1]));
   }
@@ -397,6 +396,7 @@ static PetscErrorCode NEPDeflationComputeShellMat(NEP_EXT_OP extop,PetscScalar l
   PetscBool        ini=PETSC_FALSE;
   PetscScalar      *hf,*hfj,*hfjp,sone=1.0,*hH,*hHprev,*pts,*B,*A,*Hj=extop->Hj,*basisv,zero=0.0;
   PetscBLASInt     n_,info,szd_;
+  size_t           len;
 
   PetscFunctionBegin;
   if (!M) Mshell = jacobian?extop->MJ:extop->MF;
@@ -436,8 +436,8 @@ static PetscErrorCode NEPDeflationComputeShellMat(NEP_EXT_OP extop,PetscScalar l
       PetscCall(BVCreateVec(extop->nep->V,matctx->w));
       PetscCall(VecDuplicate(matctx->w[0],matctx->w+1));
       PetscCall(BVDuplicateResize(extop->nep->V,szd,&matctx->U));
-      PetscCall(PetscMalloc2(extop->simpU?2*(szd)*(szd):2*(szd)*(szd)*extop->nep->nt,&matctx->hfj,szd,&matctx->work));
-      PetscCall(PetscMalloc2(szd*szd,&matctx->A,szd*szd,&matctx->B));
+      len = extop->simpU? (size_t)2*szd*szd: (size_t)2*szd*szd*extop->nep->nt;
+      PetscCall(PetscMalloc4(len,&matctx->hfj,szd,&matctx->work,szd*szd,&matctx->A,szd*szd,&matctx->B));
     }
   } else PetscCall(MatShellGetContext(Mshell,&matctx));
   if (ini || matctx->theta != lambda || matctx->n != extop->n) {
