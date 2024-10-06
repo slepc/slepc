@@ -429,8 +429,8 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
       against pQ so that next M has rank nnc+d-1 instead of nrow+d-1
     */
     for (i=0;i<deg;i++) {
-      PetscCallBLAS("BLASgemm",BLASgemm_("C","N",&newc_,&nnc_,&nrow_,&sone,pQ+offu,&rs1_,S+(lock+newc)*lds+i*ctx->ld+lock,&lds_,&zero,SS+i*newc*nnc,&newc_));
-      PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&nrow_,&nnc_,&newc_,&mone,pQ+offu,&rs1_,SS+i*newc*nnc,&newc_,&sone,S+(lock+newc)*lds+i*ctx->ld+lock,&lds_));
+      PetscCallBLAS("BLASgemm",BLASgemm_("C","N",&newc_,&nnc_,&nrow_,&sone,pQ+offu,&rs1_,S+(lock+newc)*lds+i*ctx->ld+lock,&lds_,&zero,PetscSafePointerPlusOffset(SS,i*nnc*newc),&newc_));
+      PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&nrow_,&nnc_,&newc_,&mone,pQ+offu,&rs1_,PetscSafePointerPlusOffset(SS,i*nnc*newc),&newc_,&sone,S+(lock+newc)*lds+i*ctx->ld+lock,&lds_));
       /* repeat orthogonalization step */
       PetscCallBLAS("BLASgemm",BLASgemm_("C","N",&newc_,&nnc_,&nrow_,&sone,pQ+offu,&rs1_,S+(lock+newc)*lds+i*ctx->ld+lock,&lds_,&zero,SS2,&newc_));
       PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&nrow_,&nnc_,&newc_,&mone,pQ+offu,&rs1_,SS2,&newc_,&sone,S+(lock+newc)*lds+i*ctx->ld+lock,&lds_));
@@ -470,7 +470,7 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
   }
   if (newc>0) {
     for (i=0;i<deg;i++) {
-      p = SS+nnc*newc*i;
+      p = PetscSafePointerPlusOffset(SS,i*nnc*newc);
       for (j=lock+newc;j<cs1;j++) {
         for (k=0;k<newc;k++) S[j*lds+i*ctx->ld+lock+k] = *(p++);
       }

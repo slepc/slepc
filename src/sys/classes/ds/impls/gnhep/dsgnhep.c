@@ -100,13 +100,13 @@ static PetscErrorCode DSVectors_GNHEP_Eigen_Some(DS ds,PetscInt *k,PetscReal *rn
 #if defined(PETSC_USE_COMPLEX)
   mm = 1;
   PetscCall(DSAllocateWork_Private(ds,2*ld,2*ld,0));
-  PetscCallBLAS("LAPACKtgevc",LAPACKtgevc_(side,"S",select,&n,A,&ld,B,&ld,Y+(*k)*ld,&ld,X+(*k)*ld,&ld,&mm,&mout,ds->work,ds->rwork,&info));
+  PetscCallBLAS("LAPACKtgevc",LAPACKtgevc_(side,"S",select,&n,A,&ld,B,&ld,PetscSafePointerPlusOffset(Y,(*k)*ld),&ld,PetscSafePointerPlusOffset(X,(*k)*ld),&ld,&mm,&mout,ds->work,ds->rwork,&info));
 #else
   if ((*k)<n-1 && (A[ld*(*k)+(*k)+1] != 0.0 || B[ld*(*k)+(*k)+1] != 0.0)) iscomplex = PETSC_TRUE;
   mm = iscomplex? 2: 1;
   if (iscomplex) select[(*k)+1] = (PetscBLASInt)PETSC_TRUE;
   PetscCall(DSAllocateWork_Private(ds,6*ld,0,0));
-  PetscCallBLAS("LAPACKtgevc",LAPACKtgevc_(side,"S",select,&n,A,&ld,B,&ld,Y+(*k)*ld,&ld,X+(*k)*ld,&ld,&mm,&mout,ds->work,&info));
+  PetscCallBLAS("LAPACKtgevc",LAPACKtgevc_(side,"S",select,&n,A,&ld,B,&ld,PetscSafePointerPlusOffset(Y,(*k)*ld),&ld,PetscSafePointerPlusOffset(X,(*k)*ld),&ld,&mm,&mout,ds->work,&info));
 #endif
   SlepcCheckLapackInfo("tgevc",info);
   PetscCheck(select[*k] && mout==mm,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Wrong arguments in call to Lapack xTGEVC");
