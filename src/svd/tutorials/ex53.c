@@ -303,7 +303,7 @@ static PetscErrorCode ColitNextRow(ColsNzIter iter,PetscInt *i,PetscScalar **pai
     nz = A->nzr[iloc];
     while (PETSC_TRUE) {
       found1 = getcolpos(rcol,nz,iter->j1,&k1);
-      found2 = getcolpos(rcol+k1+found1,nz-k1-found1,iter->j2,&k2);
+      found2 = getcolpos(PetscSafePointerPlusOffset(rcol,k1+found1),nz-k1-found1,iter->j2,&k2);
       if (found1 || found2) break;
       iloc++;
       if (iloc>=A->Iend-A->Istart) {
