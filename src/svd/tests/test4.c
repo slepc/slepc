@@ -83,7 +83,7 @@ int main(int argc,char **argv)
   PetscCall(SVDSetStoppingTest(svd,SVD_STOP_BASIC));
   /* test monitors */
   PetscCall(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_DEFAULT,&vf));
-  PetscCall(SVDMonitorSet(svd,(PetscErrorCode (*)(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*))SVDMonitorFirst,vf,(PetscErrorCode (*)(void**))PetscViewerAndFormatDestroy));
+  PetscCall(SVDMonitorSet(svd,(PetscErrorCode (*)(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*))SVDMonitorFirst,vf,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy));
   /* PetscCall(SVDMonitorCancel(svd)); */
   PetscCall(SVDSetFromOptions(svd));
 

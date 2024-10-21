@@ -58,7 +58,7 @@ PetscErrorCode MFNMonitorSetFromOptions(MFN mfn,const char opt[],const char name
 
   PetscCall((*cfunc)(viewer,format,ctx,&vf));
   PetscCall(PetscViewerDestroy(&viewer));
-  PetscCall(MFNMonitorSet(mfn,mfunc,vf,(PetscErrorCode(*)(void **))dfunc));
+  PetscCall(MFNMonitorSet(mfn,mfunc,vf,(PetscCtxDestroyFn*)dfunc));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

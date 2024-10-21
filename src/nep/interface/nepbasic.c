@@ -355,7 +355,8 @@ PetscErrorCode NEPDestroy(NEP *nep)
   PetscCall(PetscFree((*nep)->sc));
   /* just in case the initial vectors have not been used */
   PetscCall(SlepcBasisDestroy_Private(&(*nep)->nini,&(*nep)->IS));
-  if ((*nep)->convergeddestroy) PetscCall((*(*nep)->convergeddestroy)((*nep)->convergedctx));
+  if ((*nep)->convergeddestroy) PetscCall((*(*nep)->convergeddestroy)(&(*nep)->convergedctx));
+  if ((*nep)->stoppingdestroy) PetscCall((*(*nep)->stoppingdestroy)(&(*nep)->stoppingctx));
   PetscCall(NEPMonitorCancel(*nep));
   PetscCall(PetscHeaderDestroy(nep));
   PetscFunctionReturn(PETSC_SUCCESS);

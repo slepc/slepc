@@ -334,7 +334,7 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
 +  svd     - singular value solver context obtained from SVDCreate()
 .  conv    - the convergence test function, see SVDConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL)
+-  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
 
    Note:
    If the error estimate returned by the convergence test function is less than
@@ -344,11 +344,11 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
 
 .seealso: SVDSetConvergenceTest(), SVDSetTolerances()
 @*/
-PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,void* ctx,PetscErrorCode (*destroy)(void*))
+PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,void* ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
-  if (svd->convergeddestroy) PetscCall((*svd->convergeddestroy)(svd->convergedctx));
+  if (svd->convergeddestroy) PetscCall((*svd->convergeddestroy)(&svd->convergedctx));
   svd->convergeduser    = conv;
   svd->convergeddestroy = destroy;
   svd->convergedctx     = ctx;
@@ -450,7 +450,7 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
 +  svd     - singular value solver context obtained from SVDCreate()
 .  stop    - the stopping test function, see SVDStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL)
+-  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
 
    Note:
    Normal usage is to first call the default routine SVDStoppingBasic() and then
@@ -462,11 +462,11 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
 
 .seealso: SVDSetStoppingTest(), SVDStoppingBasic()
 @*/
-PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void* ctx,PetscErrorCode (*destroy)(void*))
+PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void* ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
-  if (svd->stoppingdestroy) PetscCall((*svd->stoppingdestroy)(svd->stoppingctx));
+  if (svd->stoppingdestroy) PetscCall((*svd->stoppingdestroy)(&svd->stoppingctx));
   svd->stoppinguser    = stop;
   svd->stoppingdestroy = destroy;
   svd->stoppingctx     = ctx;
@@ -588,7 +588,7 @@ PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name
 
   PetscCall((*cfunc)(viewer,format,ctx,&vf));
   PetscCall(PetscViewerDestroy(&viewer));
-  PetscCall(SVDMonitorSet(svd,mfunc,vf,(PetscErrorCode(*)(void **))dfunc));
+  PetscCall(SVDMonitorSet(svd,mfunc,vf,(PetscCtxDestroyFn*)dfunc));
   if (trackall) PetscCall(SVDSetTrackAll(svd,PETSC_TRUE));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

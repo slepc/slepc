@@ -52,10 +52,10 @@ struct _p_MFN {
   PetscBool      errorifnotconverged;    /* error out if MFNSolve() does not converge */
 
   /*-------------- User-provided functions and contexts -----------------*/
-  PetscErrorCode (*monitor[MAXMFNMONITORS])(MFN,PetscInt,PetscReal,void*);
-  PetscErrorCode (*monitordestroy[MAXMFNMONITORS])(void**);
-  void           *monitorcontext[MAXMFNMONITORS];
-  PetscInt       numbermonitors;
+  PetscErrorCode    (*monitor[MAXMFNMONITORS])(MFN,PetscInt,PetscReal,void*);
+  PetscCtxDestroyFn *monitordestroy[MAXMFNMONITORS];
+  void              *monitorcontext[MAXMFNMONITORS];
+  PetscInt          numbermonitors;
 
   /*----------------- Child objects and working data -------------------*/
   BV             V;                /* set of basis vectors */

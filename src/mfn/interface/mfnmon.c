@@ -56,7 +56,8 @@ PetscErrorCode MFNMonitor(MFN mfn,PetscInt it,PetscReal errest)
 .  monitor - pointer to function (if this is NULL, it turns off monitoring)
 .  mctx    - [optional] context for private data for the
              monitor routine (use NULL if no context is desired)
--  monitordestroy - [optional] routine that frees monitor context (may be NULL)
+-  monitordestroy - [optional] routine that frees monitor context (may be NULL),
+             see PetscCtxDestroyFn for the calling sequence
 
    Calling sequence of monitor:
 $  PetscErrorCode monitor(MFN mfn,PetscInt its,PetscReal errest,void *mctx)
@@ -81,7 +82,7 @@ $  PetscErrorCode monitor(MFN mfn,PetscInt its,PetscReal errest,void *mctx)
 
 .seealso: MFNMonitorCancel()
 @*/
-PetscErrorCode MFNMonitorSet(MFN mfn,PetscErrorCode (*monitor)(MFN mfn,PetscInt its,PetscReal errest,void *mctx),void *mctx,PetscErrorCode (*monitordestroy)(void**))
+PetscErrorCode MFNMonitorSet(MFN mfn,PetscErrorCode (*monitor)(MFN mfn,PetscInt its,PetscReal errest,void *mctx),void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(mfn,MFN_CLASSID,1);

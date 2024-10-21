@@ -75,6 +75,6 @@ PetscErrorCode MatCreateBSE(Mat R,Mat C,Mat *H)
 
   PetscCall(PetscNew(&mctx));
   mctx->cookie = SLEPC_MAT_STRUCT_BSE;
-  PetscCall(PetscObjectContainerCompose((PetscObject)*H,"SlepcMatStruct",mctx,PetscContainerUserDestroyDefault));
+  PetscCall(PetscObjectContainerCompose((PetscObject)*H,"SlepcMatStruct",mctx,PetscCtxDestroyDefault));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

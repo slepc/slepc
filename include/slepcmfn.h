@@ -76,7 +76,7 @@ SLEPC_EXTERN PetscErrorCode MFNSetErrorIfNotConverged(MFN,PetscBool);
 SLEPC_EXTERN PetscErrorCode MFNGetErrorIfNotConverged(MFN,PetscBool*);
 
 SLEPC_EXTERN PetscErrorCode MFNMonitor(MFN,PetscInt,PetscReal);
-SLEPC_EXTERN PetscErrorCode MFNMonitorSet(MFN,PetscErrorCode (*)(MFN,PetscInt,PetscReal,void*),void*,PetscErrorCode (*)(void**));
+SLEPC_EXTERN PetscErrorCode MFNMonitorSet(MFN,PetscErrorCode (*)(MFN,PetscInt,PetscReal,void*),void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode MFNMonitorCancel(MFN);
 SLEPC_EXTERN PetscErrorCode MFNGetMonitorContext(MFN,void*);
 

@@ -283,7 +283,7 @@ SLEPC_EXTERN PetscErrorCode NEPGetTrackAll(NEP,PetscBool*);
 SLEPC_EXTERN PetscErrorCode NEPGetConvergedReason(NEP,NEPConvergedReason*);
 
 SLEPC_EXTERN PetscErrorCode NEPMonitor(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt);
-SLEPC_EXTERN PetscErrorCode NEPMonitorSet(NEP,PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*),void*,PetscErrorCode (*)(void**));
+SLEPC_EXTERN PetscErrorCode NEPMonitorSet(NEP,PetscErrorCode (*)(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*),void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode NEPMonitorCancel(NEP);
 SLEPC_EXTERN PetscErrorCode NEPGetMonitorContext(NEP,void*);
 
@@ -291,14 +291,14 @@ SLEPC_EXTERN PetscErrorCode NEPMonitorSetFromOptions(NEP,const char[],const char
 SLEPC_EXTERN PetscErrorCode NEPMonitorLGCreate(MPI_Comm,const char[],const char[],const char[],PetscInt,const char*[],int,int,int,int,PetscDrawLG*);
 SLEPC_EXTERN PetscErrorCode NEPMonitorFirst(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode NEPMonitorFirstDrawLG(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
 SLEPC_EXTERN PetscErrorCode NEPMonitorAll(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode NEPMonitorAllDrawLG(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
 SLEPC_EXTERN PetscErrorCode NEPMonitorConverged(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode NEPMonitorConvergedCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN PetscErrorCode NEPMonitorConvergedCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
 SLEPC_EXTERN PetscErrorCode NEPMonitorConvergedDrawLG(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode NEPMonitorConvergedDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN PetscErrorCode NEPMonitorConvergedDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
 SLEPC_EXTERN PetscErrorCode NEPMonitorConvergedDestroy(PetscViewerAndFormat**);
 
 SLEPC_EXTERN PetscErrorCode NEPSetOptionsPrefix(NEP,const char*);
@@ -352,8 +352,8 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(NEPConvergenceTestFn)(NEP nep,PetscS
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(NEPStoppingTestFn)(NEP nep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,NEPConvergedReason *reason,void *ctx);
 
-SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTestFn*,void*,PetscErrorCode (*)(void*));
-SLEPC_EXTERN PetscErrorCode NEPSetStoppingTestFunction(NEP,NEPStoppingTestFn*,void*,PetscErrorCode (*)(void*));
+SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode NEPSetStoppingTestFunction(NEP,NEPStoppingTestFn*,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode NEPSetEigenvalueComparison(NEP,SlepcEigenvalueComparisonFn*,void*);
 
 /* --------- options specific to particular eigensolvers -------- */

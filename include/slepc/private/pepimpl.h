@@ -93,16 +93,16 @@ struct _p_PEP {
   /*-------------- User-provided functions and contexts -----------------*/
   PEPConvergenceTestFn *converged;
   PEPConvergenceTestFn *convergeduser;
-  PetscErrorCode       (*convergeddestroy)(void*);
+  PetscCtxDestroyFn    *convergeddestroy;
   PEPStoppingTestFn    *stopping;
   PEPStoppingTestFn    *stoppinguser;
-  PetscErrorCode       (*stoppingdestroy)(void*);
-  void           *convergedctx;
-  void           *stoppingctx;
-  PetscErrorCode (*monitor[MAXPEPMONITORS])(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
-  PetscErrorCode (*monitordestroy[MAXPEPMONITORS])(void**);
-  void           *monitorcontext[MAXPEPMONITORS];
-  PetscInt        numbermonitors;
+  PetscCtxDestroyFn    *stoppingdestroy;
+  void                 *convergedctx;
+  void                 *stoppingctx;
+  PetscErrorCode       (*monitor[MAXPEPMONITORS])(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
+  PetscCtxDestroyFn    *monitordestroy[MAXPEPMONITORS];
+  void                 *monitorcontext[MAXPEPMONITORS];
+  PetscInt             numbermonitors;
 
   /*----------------- Child objects and working data -------------------*/
   ST             st;               /* spectral transformation object */

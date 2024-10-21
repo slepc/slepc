@@ -78,16 +78,16 @@ struct _p_SVD {
   /*-------------- User-provided functions and contexts -----------------*/
   SVDConvergenceTestFn *converged;
   SVDConvergenceTestFn *convergeduser;
-  PetscErrorCode       (*convergeddestroy)(void*);
+  PetscCtxDestroyFn    *convergeddestroy;
   SVDStoppingTestFn    *stopping;
   SVDStoppingTestFn    *stoppinguser;
-  PetscErrorCode       (*stoppingdestroy)(void*);
-  void           *convergedctx;
-  void           *stoppingctx;
-  PetscErrorCode (*monitor[MAXSVDMONITORS])(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*);
-  PetscErrorCode (*monitordestroy[MAXSVDMONITORS])(void**);
-  void           *monitorcontext[MAXSVDMONITORS];
-  PetscInt       numbermonitors;
+  PetscCtxDestroyFn    *stoppingdestroy;
+  void                 *convergedctx;
+  void                 *stoppingctx;
+  PetscErrorCode       (*monitor[MAXSVDMONITORS])(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*);
+  PetscCtxDestroyFn    *monitordestroy[MAXSVDMONITORS];
+  void                 *monitorcontext[MAXSVDMONITORS];
+  PetscInt             numbermonitors;
 
   /*----------------- Child objects and working data -------------------*/
   DS             ds;               /* direct solver object */

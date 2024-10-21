@@ -59,7 +59,7 @@ PetscErrorCode PEPMonitorSetFromOptions(PEP pep,const char opt[],const char name
 
   PetscCall((*cfunc)(viewer,format,ctx,&vf));
   PetscCall(PetscViewerDestroy(&viewer));
-  PetscCall(PEPMonitorSet(pep,mfunc,vf,(PetscErrorCode(*)(void **))dfunc));
+  PetscCall(PEPMonitorSet(pep,mfunc,vf,(PetscCtxDestroyFn*)dfunc));
   if (trackall) PetscCall(PEPSetTrackAll(pep,PETSC_TRUE));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -764,7 +764,7 @@ PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
 +  pep     - eigensolver context obtained from PEPCreate()
 .  conv    - convergence test function, see PEPConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL)
+-  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
 
    Note:
    If the error estimate returned by the convergence test function is less than
@@ -774,11 +774,11 @@ PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
 
 .seealso: PEPSetConvergenceTest(), PEPSetTolerances()
 @*/
-PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,void* ctx,PetscErrorCode (*destroy)(void*))
+PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,void* ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
-  if (pep->convergeddestroy) PetscCall((*pep->convergeddestroy)(pep->convergedctx));
+  if (pep->convergeddestroy) PetscCall((*pep->convergeddestroy)(&pep->convergedctx));
   pep->convergeduser    = conv;
   pep->convergeddestroy = destroy;
   pep->convergedctx     = ctx;
@@ -874,7 +874,7 @@ PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
 +  pep     - eigensolver context obtained from PEPCreate()
 .  stop    - stopping test function, see PEPStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL)
+-  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
 
    Note:
    Normal usage is to first call the default routine PEPStoppingBasic() and then
@@ -886,11 +886,11 @@ PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
 
 .seealso: PEPSetStoppingTest(), PEPStoppingBasic()
 @*/
-PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void* ctx,PetscErrorCode (*destroy)(void*))
+PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void* ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
-  if (pep->stoppingdestroy) PetscCall((*pep->stoppingdestroy)(pep->stoppingctx));
+  if (pep->stoppingdestroy) PetscCall((*pep->stoppingdestroy)(&pep->stoppingctx));
   pep->stoppinguser    = stop;
   pep->stoppingdestroy = destroy;
   pep->stoppingctx     = ctx;

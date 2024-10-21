@@ -90,7 +90,7 @@ int main(int argc,char **argv)
   PetscCall(MFNSetErrorIfNotConverged(mfn,PETSC_TRUE));
   /* test monitors */
   PetscCall(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_DEFAULT,&vf));
-  PetscCall(MFNMonitorSet(mfn,(PetscErrorCode (*)(MFN,PetscInt,PetscReal,void*))MFNMonitorDefault,vf,(PetscErrorCode (*)(void**))PetscViewerAndFormatDestroy));
+  PetscCall(MFNMonitorSet(mfn,(PetscErrorCode (*)(MFN,PetscInt,PetscReal,void*))MFNMonitorDefault,vf,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy));
   /* PetscCall(MFNMonitorCancel(mfn)); */
   PetscCall(MFNSetFromOptions(mfn));
 

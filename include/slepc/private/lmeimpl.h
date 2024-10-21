@@ -54,10 +54,10 @@ struct _p_LME {
   PetscBool      errorifnotconverged;    /* error out if LMESolve() does not converge */
 
   /*-------------- User-provided functions and contexts -----------------*/
-  PetscErrorCode (*monitor[MAXLMEMONITORS])(LME,PetscInt,PetscReal,void*);
-  PetscErrorCode (*monitordestroy[MAXLMEMONITORS])(void**);
-  void           *monitorcontext[MAXLMEMONITORS];
-  PetscInt       numbermonitors;
+  PetscErrorCode    (*monitor[MAXLMEMONITORS])(LME,PetscInt,PetscReal,void*);
+  PetscCtxDestroyFn *monitordestroy[MAXLMEMONITORS];
+  void              *monitorcontext[MAXLMEMONITORS];
+  PetscInt          numbermonitors;
 
   /*----------------- Child objects and working data -------------------*/
   BV             V;              /* set of basis vectors */
