@@ -57,9 +57,9 @@ static inline PetscReal SlepcAbs(PetscReal x,PetscReal y)
 
   w = PetscMax(xabs,yabs);
   z = PetscMin(xabs,yabs);
-  if (PetscUnlikely(z == (PetscReal)0.0)) return w;
+  if (PetscUnlikely(z == PetscRealConstant(0.0))) return w;
   t = z/w;
-  return w*PetscSqrtReal((PetscReal)1.0+t*t);
+  return w*PetscSqrtReal(PetscRealConstant(1.0)+t*t);
 }
 
 /*MC
