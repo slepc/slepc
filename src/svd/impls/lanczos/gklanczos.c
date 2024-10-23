@@ -247,15 +247,15 @@ static PetscErrorCode SVDSolve_Lanczos(SVD svd)
 
     /* inner loop */
     nv = PetscMin(svd->nconv+svd->mpd,svd->ncv);
-    PetscCall(BVSetActiveColumns(svd->V,svd->nconv,nv));
     PetscCall(DSGetArrayReal(svd->ds,DS_MAT_T,&alpha));
     beta = alpha + ld;
     if (lanczos->oneside) PetscCall(SVDOneSideLanczos(svd,alpha,beta,svd->V,u,u_1,svd->nconv,nv,swork));
     else {
-      PetscCall(BVSetActiveColumns(svd->U,svd->nconv,nv));
       PetscCall(SVDTwoSideLanczos(svd,alpha,beta,svd->V,svd->U,svd->nconv,&nv,NULL));
+      PetscCall(BVSetActiveColumns(svd->U,svd->nconv,nv));
     }
     PetscCall(DSRestoreArrayReal(svd->ds,DS_MAT_T,&alpha));
+    PetscCall(BVSetActiveColumns(svd->V,svd->nconv,nv));
 
     /* compute SVD of bidiagonal matrix */
     PetscCall(DSSetDimensions(svd->ds,nv,svd->nconv,0));
