@@ -8,7 +8,7 @@
 #  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #
 
-LDLIBS += $(SLEPC_LIB)
+LDLIBS += $(SLEPC_LIB_NOPETSC)
 
 include ${PETSC_DIR}/lib/petsc/conf/rules
 include ${SLEPC_DIR}/${PETSC_ARCH}/lib/slepc/conf/slepcrules

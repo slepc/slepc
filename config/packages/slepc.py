@@ -64,8 +64,8 @@ class SLEPc(package.Package):
       slepcvars.write('SHLIBS = libslepc\n')
       slepcvars.write('LIBNAME = '+os.path.join('${INSTALL_LIB_DIR}','libslepc.${AR_LIB_SUFFIX}')+'\n')
       for module in ['SYS','EPS','SVD','PEP','NEP','MFN','LME']:
-        slepcvars.write('SLEPC_'+module+'_LIB = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc ${SLEPC_EXTERNAL_LIB} ${PETSC_SNES_LIB}\n')
-      slepcvars.write('SLEPC_LIB = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc ${SLEPC_EXTERNAL_LIB} ${PETSC_SNES_LIB}\n')
+        slepcvars.write('SLEPC_'+module+'_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc ${SLEPC_EXTERNAL_LIB}\n')
+      slepcvars.write('SLEPC_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc ${SLEPC_EXTERNAL_LIB}\n')
 
   def ShowInfo(self):
     self.log.Println('\nSLEPc directory:\n  '+self.dir)
