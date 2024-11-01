@@ -158,6 +158,103 @@ PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
 }
 
 /*@
+   SVDSetThreshold - Sets the threshold used in the threshold stopping test.
+
+   Logically Collective
+
+   Input Parameters:
++  svd   - the singular value solver context
+.  thres - the threshold value
+-  rel   - whether the threshold is relative or not
+
+   Options Database Keys:
++  -svd_threshold_absolute <thres> - Sets an absolute threshold
+-  -svd_threshold_relative <thres> - Sets a relative threshold
+
+   Notes:
+   This function internally calls SVDSetStoppingTest() to set a special stopping
+   test based on the threshold, where singular values are computed in sequence
+   until one of the computed singular values is below the threshold.
+
+   If the solver is configured to compute smallest singular values, then the
+   threshold must be interpreted in the opposite direction, i.e., the computation
+   will stop when one of the computed singular values is above the threshold.
+
+   In the case of largest singular values, the threshold can be made relative
+   with respect to the largest singular value (i.e., the matrix norm).
+
+   The test against the threshold is done for converged singular values, which
+   implies that the final number of converged singular values will be at least
+   one more than the actual number of values below/above the threshold.
+
+   Since the number of computed singular values is not known a priori, the solver
+   will need to reallocate the basis of vectors internally, to have enough room
+   to accommodate all the singular vectors. Hence, this option must be used with
+   caution to avoid out-of-memory problems. The recommendation is to set the value
+   of ncv to be larger than the estimated number of singular values, to minimize
+   the number of reallocations.
+
+   This functionality is most useful when computing largest singular values. A
+   typical use case is to compute a low rank approximation of a matrix. Suppose
+   we know that singular values decay abruptly around a certain index k, which
+   is unknown. Then using a small relative threshold such as 0.2 will guarantee that
+   the computed singular vectors capture the numerical rank k. However, if the matrix
+   does not have low rank, i.e., singular values decay progressively, then a
+   value of 0.2 will imply a very high cost, both computationally and in memory.
+
+   If a number of wanted singular values has been set with SVDSetDimensions()
+   it is also taken into account and the solver will stop when one of the two
+   conditions (threshold or number of converged values) is met.
+
+   Use SVDSetStoppingTest() to return to the usual computation of a fixed number
+   of singular values.
+
+   Level: advanced
+
+.seealso: SVDGetThreshold(), SVDSetStoppingTest(), SVDSetDimensions(), SVDSetWhichSingularTriplets()
+@*/
+PetscErrorCode SVDSetThreshold(SVD svd,PetscReal thres,PetscBool rel)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
+  PetscValidLogicalCollectiveReal(svd,thres,2);
+  PetscValidLogicalCollectiveBool(svd,rel,3);
+  PetscCheck(thres>0.0,PetscObjectComm((PetscObject)svd),PETSC_ERR_ARG_OUTOFRANGE,"Illegal value of the threshold. Must be > 0");
+  if (svd->thres != thres || svd->threlative != rel) {
+    svd->thres = thres;
+    svd->threlative = rel;
+    svd->state = SVD_STATE_INITIAL;
+    PetscCall(SVDSetStoppingTest(svd,SVD_STOP_THRESHOLD));
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   SVDGetThreshold - Gets the threshold used by the threshold stopping test.
+
+   Not Collective
+
+   Input Parameter:
+.  svd - the singular value solver context
+
+   Output Parameters:
++  thres - the threshold
+-  rel   - whether the threshold is relative or not
+
+   Level: advanced
+
+.seealso: SVDSetThreshold()
+@*/
+PetscErrorCode SVDGetThreshold(SVD svd,PetscReal *thres,PetscBool *rel)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
+  if (thres) *thres = svd->thres;
+  if (rel)   *rel   = svd->threlative;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
    SVDSetDimensions - Sets the number of singular values to compute
    and the dimension of the subspace.
 
@@ -244,7 +341,7 @@ PetscErrorCode SVDGetDimensions(SVD svd,PetscInt *nsv,PetscInt *ncv,PetscInt *mp
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
-  if (nsv) *nsv = svd->nsv;
+  if (nsv) *nsv = svd->nsv? svd->nsv: 1;
   if (ncv) *ncv = svd->ncv;
   if (mpd) *mpd = svd->mpd;
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -469,7 +566,8 @@ PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void* 
   svd->stoppinguser    = stop;
   svd->stoppingdestroy = destroy;
   svd->stoppingctx     = ctx;
-  if (stop == SVDStoppingBasic) svd->stop = SVD_STOP_BASIC;
+  if (stop == SVDStoppingBasic) PetscCall(SVDSetStoppingTest(svd,SVD_STOP_BASIC));
+  else if (stop == SVDStoppingThreshold) PetscCall(SVDSetStoppingTest(svd,SVD_STOP_THRESHOLD));
   else {
     svd->stop     = SVD_STOP_USER;
     svd->stopping = svd->stoppinguser;
@@ -488,13 +586,15 @@ PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void* 
 -  stop - the type of stopping test
 
    Options Database Keys:
-+  -svd_stop_basic - Sets the default stopping test
--  -svd_stop_user  - Selects the user-defined stopping test
++  -svd_stop_basic     - Sets the default stopping test
+.  -svd_stop_threshold - Sets the threshold stopping test
+-  -svd_stop_user      - Selects the user-defined stopping test
 
    Note:
    The parameter 'stop' can have one of these values
-+     SVD_STOP_BASIC - default stopping test
--     SVD_STOP_USER  - function set by SVDSetStoppingTestFunction()
++     SVD_STOP_BASIC     - default stopping test
+.     SVD_STOP_THRESHOLD - threshold stopping test
+-     SVD_STOP_USER      - function set by SVDSetStoppingTestFunction()
 
    Level: advanced
 
@@ -507,6 +607,7 @@ PetscErrorCode SVDSetStoppingTest(SVD svd,SVDStop stop)
   PetscValidLogicalCollectiveEnum(svd,stop,2);
   switch (stop) {
     case SVD_STOP_BASIC: svd->stopping = SVDStoppingBasic; break;
+    case SVD_STOP_THRESHOLD: svd->stopping = SVDStoppingThreshold; break;
     case SVD_STOP_USER:
       PetscCheck(svd->stoppinguser,PetscObjectComm((PetscObject)svd),PETSC_ERR_ORDER,"Must call SVDSetStoppingTestFunction() first");
       svd->stopping = svd->stoppinguser;
@@ -640,6 +741,12 @@ PetscErrorCode SVDSetFromOptions(SVD svd)
     PetscCall(PetscOptionsReal("-svd_tol","Tolerance","SVDSetTolerances",SlepcDefaultTol(svd->tol),&r,&flg2));
     if (flg1 || flg2) PetscCall(SVDSetTolerances(svd,r,i));
 
+    r = svd->thres;
+    PetscCall(PetscOptionsReal("-svd_threshold_absolute","Absolute threshold","SVDSetThreshold",r,&r,&flg));
+    if (flg) PetscCall(SVDSetThreshold(svd,r,PETSC_FALSE));
+    PetscCall(PetscOptionsReal("-svd_threshold_relative","Relative threshold","SVDSetThreshold",r,&r,&flg));
+    if (flg) PetscCall(SVDSetThreshold(svd,r,PETSC_TRUE));
+
     PetscCall(PetscOptionsBoolGroupBegin("-svd_conv_abs","Absolute error convergence test","SVDSetConvergenceTest",&flg));
     if (flg) PetscCall(SVDSetConvergenceTest(svd,SVD_CONV_ABS));
     PetscCall(PetscOptionsBoolGroup("-svd_conv_rel","Relative error convergence test","SVDSetConvergenceTest",&flg));
@@ -653,11 +760,14 @@ PetscErrorCode SVDSetFromOptions(SVD svd)
 
     PetscCall(PetscOptionsBoolGroupBegin("-svd_stop_basic","Stop iteration if all singular values converged or max_it reached","SVDSetStoppingTest",&flg));
     if (flg) PetscCall(SVDSetStoppingTest(svd,SVD_STOP_BASIC));
+    PetscCall(PetscOptionsBoolGroup("-svd_stop_threshold","Stop iteration if a converged singular value is below/above the threshold","SVDSetStoppingTest",&flg));
+    if (flg) PetscCall(SVDSetStoppingTest(svd,SVD_STOP_THRESHOLD));
     PetscCall(PetscOptionsBoolGroupEnd("-svd_stop_user","User-defined stopping test","SVDSetStoppingTest",&flg));
     if (flg) PetscCall(SVDSetStoppingTest(svd,SVD_STOP_USER));
 
     i = svd->nsv;
     PetscCall(PetscOptionsInt("-svd_nsv","Number of singular values to compute","SVDSetDimensions",svd->nsv,&i,&flg1));
+    if (!flg1) i = PETSC_CURRENT;
     j = svd->ncv;
     PetscCall(PetscOptionsInt("-svd_ncv","Number of basis vectors","SVDSetDimensions",svd->ncv,&j,&flg2));
     k = svd->mpd;

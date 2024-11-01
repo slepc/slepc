@@ -1,0 +1,9 @@
+
+Generalized singular value problem stored in file.
+
+ Reading COMPLEX matrix from a binary file...
+ Using B=bidiag(1,-1) with p=325
+
+ All generalized singular values computed up to the required tolerance:
+     34.30748, 18.35946, 13.07144, 8.84460
+

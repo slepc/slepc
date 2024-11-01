@@ -1,0 +1,13 @@
+
+Hyperbolic singular value problem stored in file.
+
+ Reading REAL matrix from a binary file...
+
+ Matrix dimensions: 200x200, using signature Omega=blkdiag(-I_100,I_100)
+
+ All singular values computed up to the required tolerance:
+     34.27694, 34.27694, 33.37360, 33.37360, 31.95052, 31.95052, 31.44451, 31.44451,
+     30.54168, 30.54168, 30.12424, 30.12424, 29.11947, 29.11947, 28.04413, 28.04413,
+     27.60573, 27.60573, 27.29445
+
+Level of orthogonality below the tolerance

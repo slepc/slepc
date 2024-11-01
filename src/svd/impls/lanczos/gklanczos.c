@@ -45,7 +45,7 @@ static PetscErrorCode SVDSetUp_Lanczos(SVD svd)
   PetscCall(MatGetSize(svd->A,NULL,&N));
   PetscCall(SVDSetDimensions_Default(svd));
   PetscCheck(svd->ncv<=svd->nsv+svd->mpd,PetscObjectComm((PetscObject)svd),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nev+mpd");
-  if (svd->max_it==PETSC_DETERMINE) svd->max_it = PetscMax(N/svd->ncv,100);
+  if (svd->max_it==PETSC_DETERMINE) svd->max_it = PetscMax(N/svd->ncv,100)*((svd->stop==SVD_STOP_THRESHOLD)?10:1);
   svd->leftbasis = PetscNot(lanczos->oneside);
   PetscCall(SVDAllocateSolution(svd,1));
   PetscCall(DSSetType(svd->ds,DSSVD));
@@ -221,7 +221,7 @@ static PetscErrorCode SVDSolve_Lanczos(SVD svd)
 {
   SVD_LANCZOS    *lanczos = (SVD_LANCZOS*)svd->data;
   PetscReal      *alpha,*beta;
-  PetscScalar    *swork,*w,*P;
+  PetscScalar    *swork,*w,*P,*aux1,*aux2;
   PetscInt       i,k,j,nv,ld;
   Vec            u=NULL,u_1=NULL;
   Mat            U,V;
@@ -269,6 +269,7 @@ static PetscErrorCode SVDSolve_Lanczos(SVD svd)
 
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,1.0,&k));
+    SVDSetCtxThreshold(svd,svd->sigma,k);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     /* compute restart vector */
@@ -295,8 +296,21 @@ static PetscErrorCode SVDSolve_Lanczos(SVD svd)
       PetscCall(DSRestoreMat(svd->ds,DS_MAT_U,&U));
     }
 
-    /* copy restart vector from the last column */
-    if (svd->reason == SVD_CONVERGED_ITERATING) PetscCall(BVCopyColumn(svd->V,nv,k));
+    if (svd->reason == SVD_CONVERGED_ITERATING) {
+      PetscCall(BVCopyColumn(svd->V,nv,k));  /* copy restart vector from the last column */
+      if (svd->stop==SVD_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+        svd->ncv = svd->mpd+k;
+        PetscCall(SVDReallocateSolution(svd,svd->ncv+1));
+        for (i=nv;i<svd->ncv;i++) svd->perm[i] = i;
+        PetscCall(DSReallocate(svd->ds,svd->ncv+1));
+        aux1 = w;
+        aux2 = swork;
+        PetscCall(PetscMalloc2(svd->ncv+1,&w,svd->ncv,&swork));
+        PetscCall(PetscArraycpy(w,aux1,ld));
+        PetscCall(PetscFree2(aux1,aux2));
+        PetscCall(DSGetLeadingDimension(svd->ds,&ld));
+      }
+    }
 
     svd->nconv = k;
     PetscCall(SVDMonitor(svd,svd->its,svd->nconv,svd->sigma,svd->errest,nv));

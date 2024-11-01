@@ -33,6 +33,7 @@ static PetscErrorCode SVDSetUp_Randomized(SVD svd)
   PetscFunctionBegin;
   SVDCheckStandard(svd);
   SVDCheckDefinite(svd);
+  SVDCheckUnsupported(svd,SVD_FEATURE_THRESHOLD);
   PetscCheck(svd->which==SVD_LARGEST,PetscObjectComm((PetscObject)svd),PETSC_ERR_SUP,"This solver supports only largest singular values");
   PetscCall(MatGetSize(svd->A,NULL,&N));
   PetscCall(SVDSetDimensions_Default(svd));

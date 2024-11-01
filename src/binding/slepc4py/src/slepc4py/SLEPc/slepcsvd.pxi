@@ -36,6 +36,7 @@ cdef extern from * nogil:
     ctypedef enum SlepcSVDStop "SVDStop":
         SVD_STOP_BASIC
         SVD_STOP_USER
+        SVD_STOP_THRESHOLD
 
     ctypedef enum SlepcSVDConvergedReason "SVDConvergedReason":
         SVD_CONVERGED_TOL
@@ -97,6 +98,8 @@ cdef extern from * nogil:
     PetscErrorCode SVDGetTolerances(SlepcSVD,PetscReal*,PetscInt*)
     PetscErrorCode SVDSetWhichSingularTriplets(SlepcSVD,SlepcSVDWhich)
     PetscErrorCode SVDGetWhichSingularTriplets(SlepcSVD,SlepcSVDWhich*)
+    PetscErrorCode SVDSetThreshold(SlepcSVD,PetscReal,PetscBool)
+    PetscErrorCode SVDGetThreshold(SlepcSVD,PetscReal*,PetscBool*)
     PetscErrorCode SVDSetConvergenceTest(SlepcSVD,SlepcSVDConv)
     PetscErrorCode SVDGetConvergenceTest(SlepcSVD,SlepcSVDConv*)
 

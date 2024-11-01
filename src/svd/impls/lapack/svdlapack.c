@@ -19,6 +19,7 @@ static PetscErrorCode SVDSetUp_LAPACK(SVD svd)
   PetscInt       M,N,P=0;
 
   PetscFunctionBegin;
+  if (svd->nsv==0) svd->nsv = 1;
   PetscCall(MatGetSize(svd->A,&M,&N));
   if (!svd->isgeneralized) svd->ncv = N;
   else {
@@ -26,7 +27,7 @@ static PetscErrorCode SVDSetUp_LAPACK(SVD svd)
     svd->ncv = PetscMin(M,PetscMin(N,P));
   }
   if (svd->mpd!=PETSC_DETERMINE) PetscCall(PetscInfo(svd,"Warning: parameter mpd ignored\n"));
-  SVDCheckUnsupported(svd,SVD_FEATURE_STOPPING);
+  SVDCheckIgnored(svd,SVD_FEATURE_STOPPING);
   if (svd->max_it==PETSC_DETERMINE) svd->max_it = 1;
   svd->leftbasis = PETSC_TRUE;
   PetscCall(SVDAllocateSolution(svd,0));
@@ -126,7 +127,7 @@ static PetscErrorCode SVDSolve_LAPACK_GSVD(SVD svd)
   PetscCall(DSRestoreMat(svd->ds,DS_MAT_B,&Bds));
   PetscCall(DSSetState(svd->ds,DS_STATE_RAW));
 
-  nsv  = PetscMin(n,PetscMin(p,m));
+  nsv = PetscMin(n,PetscMin(p,m));
   PetscCall(PetscMalloc1(nsv,&w));
   PetscCall(DSSolve(svd->ds,w,NULL));
   PetscCall(DSSort(svd->ds,w,NULL,NULL,NULL,NULL));

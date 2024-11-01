@@ -69,7 +69,8 @@ PetscErrorCode SVDView(SVD svd,PetscViewer viewer)
     PetscCall(PetscViewerASCIIPrintf(viewer,"  transpose mode: %s\n",svd->impltrans?"implicit":"explicit"));
     if (svd->which == SVD_LARGEST) PetscCall(PetscViewerASCIIPrintf(viewer,"  selected portion of the spectrum: largest\n"));
     else PetscCall(PetscViewerASCIIPrintf(viewer,"  selected portion of the spectrum: smallest\n"));
-    PetscCall(PetscViewerASCIIPrintf(viewer,"  number of singular values (nsv): %" PetscInt_FMT "\n",svd->nsv));
+    if (svd->stop==SVD_STOP_THRESHOLD) PetscCall(PetscViewerASCIIPrintf(viewer,"  computing singular values %s the threshold: %g%s\n",svd->which==SVD_LARGEST?"above":"below",(double)svd->thres,svd->threlative?" (relative)":""));
+    if (svd->nsv) PetscCall(PetscViewerASCIIPrintf(viewer,"  number of singular values (nsv): %" PetscInt_FMT "\n",svd->nsv));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  number of column vectors (ncv): %" PetscInt_FMT "\n",svd->ncv));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  maximum dimension of projected problem (mpd): %" PetscInt_FMT "\n",svd->mpd));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  maximum number of iterations: %" PetscInt_FMT "\n",svd->max_it));
@@ -208,27 +209,28 @@ PetscErrorCode SVDConvergedReasonViewFromOptions(SVD svd)
 static PetscErrorCode SVDErrorView_ASCII(SVD svd,SVDErrorType etype,PetscViewer viewer)
 {
   PetscReal      error,sigma;
-  PetscInt       i,j;
+  PetscInt       i,j,numsv;
 
   PetscFunctionBegin;
-  if (svd->nconv<svd->nsv) {
-    PetscCall(PetscViewerASCIIPrintf(viewer," Problem: less than %" PetscInt_FMT " singular values converged\n\n",svd->nsv));
+  numsv = svd->stop==SVD_STOP_THRESHOLD? svd->nconv: svd->nsv;
+  if (svd->nconv<numsv) {
+    PetscCall(PetscViewerASCIIPrintf(viewer," Problem: less than %" PetscInt_FMT " singular values converged\n\n",numsv));
     PetscFunctionReturn(PETSC_SUCCESS);
   }
-  for (i=0;i<svd->nsv;i++) {
+  for (i=0;i<numsv;i++) {
     PetscCall(SVDComputeError(svd,i,etype,&error));
     if (error>=5.0*svd->tol) {
-      PetscCall(PetscViewerASCIIPrintf(viewer," Problem: some of the first %" PetscInt_FMT " relative errors are higher than the tolerance\n\n",svd->nsv));
+      PetscCall(PetscViewerASCIIPrintf(viewer," Problem: some of the first %" PetscInt_FMT " relative errors are higher than the tolerance\n\n",numsv));
       PetscFunctionReturn(PETSC_SUCCESS);
     }
   }
-  PetscCall(PetscViewerASCIIPrintf(viewer," All requested %ssingular values computed up to the required tolerance:",svd->isgeneralized?"generalized ":""));
-  for (i=0;i<=(svd->nsv-1)/8;i++) {
+  PetscCall(PetscViewerASCIIPrintf(viewer," All %s%ssingular values computed up to the required tolerance:",svd->stop==SVD_STOP_THRESHOLD?"":"requested ",svd->isgeneralized?"generalized ":""));
+  for (i=0;i<=(numsv-1)/8;i++) {
     PetscCall(PetscViewerASCIIPrintf(viewer,"\n     "));
-    for (j=0;j<PetscMin(8,svd->nsv-8*i);j++) {
+    for (j=0;j<PetscMin(8,numsv-8*i);j++) {
       PetscCall(SVDGetSingularTriplet(svd,8*i+j,&sigma,NULL,NULL));
       PetscCall(PetscViewerASCIIPrintf(viewer,"%.5f",(double)sigma));
-      if (8*i+j+1<svd->nsv) PetscCall(PetscViewerASCIIPrintf(viewer,", "));
+      if (8*i+j+1<numsv) PetscCall(PetscViewerASCIIPrintf(viewer,", "));
     }
   }
   PetscCall(PetscViewerASCIIPrintf(viewer,"\n\n"));
