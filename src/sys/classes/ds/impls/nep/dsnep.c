@@ -457,7 +457,7 @@ PetscErrorCode DSSolve_NEP_Contour(DS ds,PetscScalar *wr,PetscScalar *wi)
     PetscCall(PetscMPIIntCast(2*mid*n*p,&len));
     PetscCallMPI(MPIU_Allreduce(MPI_IN_PLACE,S,len,MPIU_SCALAR,MPIU_SUM,PetscObjectComm((PetscObject)ds)));
   }
-  p = ctx->spls?PetscMin(ctx->spls,n):n;
+  PetscCall(PetscBLASIntCast(ctx->spls?PetscMin(ctx->spls,n):n,&p));
   pp = p;
   do {
     p = pp;

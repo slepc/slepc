@@ -121,8 +121,8 @@ static PetscErrorCode DSSolve_GHEP(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_Q],&Q));
 #if defined(PETSC_USE_COMPLEX)
   rr = ds->rwork;
-  rwork = ds->rwork + n1;
-  lrwork = ds->lrwork - n1;
+  rwork = ds->rwork+n1;
+  PetscCall(PetscBLASIntCast(ds->lrwork-n1,&lrwork));
   PetscCallBLAS("LAPACKsygvd",LAPACKsygvd_(&itype,"V","U",&n1,A+off,&ld,B+off,&ld,rr,work,&lwork,rwork,&lrwork,iwork,&liwork,&info));
   for (i=0;i<n1;i++) wr[ds->l+i] = rr[i];
 #else
