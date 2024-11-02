@@ -197,7 +197,7 @@ static PetscErrorCode STSetShift_Cayley(ST st,PetscScalar newshift)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode STSetFromOptions_Cayley(ST st,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode STSetFromOptions_Cayley(ST st,PetscOptionItems PetscOptionsObject)
 {
   PetscScalar    nu;
   PetscBool      flg;

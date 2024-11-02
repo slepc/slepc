@@ -39,7 +39,7 @@ typedef struct _p_ST* ST;
 
 .seealso: STSetType(), ST
 J*/
-typedef const char* STType;
+typedef const char *STType;
 #define STSHELL     "shell"
 #define STSHIFT     "shift"
 #define STSINVERT   "sinvert"

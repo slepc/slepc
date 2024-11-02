@@ -252,7 +252,7 @@ static PetscErrorCode RGIsAxisymmetric_Ellipse(RG rg,PetscBool vertical,PetscBoo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode RGSetFromOptions_Ellipse(RG rg,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode RGSetFromOptions_Ellipse(RG rg,PetscOptionItems PetscOptionsObject)
 {
   PetscScalar    s;
   PetscReal      r1,r2;

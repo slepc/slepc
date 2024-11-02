@@ -20,13 +20,10 @@
 #endif
 
 /*
-   These are not usually called from Fortran but allow Fortran users
+   These cannot be called from Fortran but allow Fortran users
    to transparently set these monitors from .F code
 */
-SLEPC_EXTERN void lmemonitordefault_(LME *lme,PetscInt *it,PetscReal *errest,PetscViewerAndFormat **ctx,PetscErrorCode *ierr)
-{
-  *ierr = LMEMonitorDefault(*lme,*it,*errest,*ctx);
-}
+SLEPC_EXTERN void lmemonitordefault_(LME*,PetscInt*,PetscReal*,PetscViewerAndFormat*,PetscErrorCode*);
 
 static struct {
   PetscFortranCallbackId monitor;

@@ -22,7 +22,7 @@
 
 SLEPC_EXTERN PetscErrorCode VecCreateComp(MPI_Comm,PetscInt*,PetscInt,VecType,Vec,Vec*);
 SLEPC_EXTERN PetscErrorCode VecCreateCompWithVecs(Vec*,PetscInt,Vec,Vec*);
-SLEPC_EXTERN PetscErrorCode VecCompGetSubVecs(Vec,PetscInt*,const Vec**);
+SLEPC_EXTERN PetscErrorCode VecCompGetSubVecs(Vec,PetscInt*,const Vec*[]);
 SLEPC_EXTERN PetscErrorCode VecCompSetSubVecs(Vec,PetscInt,Vec*);
 
 /* Some auxiliary functions */

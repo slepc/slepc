@@ -253,6 +253,18 @@ else:
     Epilog(slepc,petsc)
     sys.exit(0)
 
+# Generate Fortran bindings
+if hasattr(petsc,'fc') and petsc.fortran:
+  log.Print('\nGenerating Fortran bindings...')
+  try:
+    import os,sys
+    sys.path.insert(0, os.path.abspath(os.path.join('lib','slepc','bin','maint')))
+    import generatefortranbindings
+    del sys.path[0]
+    generatefortranbindings.main(petsc.dir,slepc.dir,petsc.archname)
+  except RuntimeError as e:
+    log.Exit('Unable to generate Fortran bindings:\n'+str(e))
+
 # Write main configuration files
 if not slepc.prefixdir:
   slepc.prefixdir = archdir

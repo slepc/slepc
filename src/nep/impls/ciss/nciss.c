@@ -984,7 +984,7 @@ static PetscErrorCode NEPReset_CISS(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode NEPSetFromOptions_CISS(NEP nep,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode NEPSetFromOptions_CISS(NEP nep,PetscOptionItems PetscOptionsObject)
 {
   NEP_CISS          *ctx = (NEP_CISS*)nep->data;
   PetscReal         r1,r2;

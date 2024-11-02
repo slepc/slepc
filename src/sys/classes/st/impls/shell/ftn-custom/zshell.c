@@ -12,13 +12,11 @@
 #include <slepcst.h>
 
 #if defined(PETSC_HAVE_FORTRAN_CAPS)
-#define stshellgetcontext_                 STSHELLGETCONTEXT
 #define stshellsetapply_                   STSHELLSETAPPLY
 #define stshellsetapplytranspose_          STSHELLSETAPPLYTRANSPOSE
 #define stshellsetapplyhermitiantranspose_ STSHELLSETAPPLYHERMITIANTRANSPOSE
 #define stshellsetbacktransform_           STSHELLSETBACKTRANSFORM
 #elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
-#define stshellgetcontext_                 stshellgetcontext
 #define stshellsetapply_                   stshellsetapply
 #define stshellsetapplytranspose_          stshellsetapplytranspose
 #define stshellsetapplyhermitiantranspose_ stshellsetapplyhermitiantranspose
@@ -51,11 +49,6 @@ static PetscErrorCode ourshellapplyhermitiantranspose(ST st,Vec x,Vec y)
 static PetscErrorCode ourshellbacktransform(ST st,PetscInt n,PetscScalar *eigr,PetscScalar *eigi)
 {
   PetscObjectUseFortranCallback(st,_cb.backtransform,(ST*,PetscInt*,PetscScalar*,PetscScalar*,PetscErrorCode*),(&st,&n,eigr,eigi,&ierr));
-}
-
-SLEPC_EXTERN void stshellgetcontext_(ST *st,void **ctx,PetscErrorCode *ierr)
-{
-  *ierr = STShellGetContext(*st,ctx);
 }
 
 SLEPC_EXTERN void stshellsetapply_(ST *st,void (*apply)(void*,Vec*,Vec*,PetscErrorCode*),PetscErrorCode *ierr)

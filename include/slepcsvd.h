@@ -39,7 +39,7 @@ typedef struct _p_SVD* SVD;
 
 .seealso: SVDSetType(), SVD
 J*/
-typedef const char* SVDType;
+typedef const char *SVDType;
 #define SVDCROSS       "cross"
 #define SVDCYCLIC      "cyclic"
 #define SVDLAPACK      "lapack"
@@ -61,9 +61,9 @@ SLEPC_EXTERN PetscClassId SVD_CLASSID;
 
 .seealso: SVDSetProblemType(), SVDGetProblemType()
 E*/
-typedef enum { SVD_STANDARD=1,
-               SVD_GENERALIZED,   /* GSVD */
-               SVD_HYPERBOLIC     /* HSVD */
+typedef enum { SVD_STANDARD    = 1,
+               SVD_GENERALIZED = 2,  /* GSVD */
+               SVD_HYPERBOLIC  = 3   /* HSVD */
              } SVDProblemType;
 
 /*E
@@ -228,7 +228,6 @@ SLEPC_EXTERN PetscErrorCode SVDMonitorCancel(SVD);
 SLEPC_EXTERN PetscErrorCode SVDGetMonitorContext(SVD,void*);
 
 SLEPC_EXTERN PetscErrorCode SVDMonitorSetFromOptions(SVD,const char[],const char[],void*,PetscBool);
-SLEPC_EXTERN PetscErrorCode SVDMonitorLGCreate(MPI_Comm,const char[],const char[],const char[],PetscInt,const char*[],int,int,int,int,PetscDrawLG*);
 SLEPC_EXTERN PetscErrorCode SVDMonitorFirst(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode SVDMonitorFirstDrawLG(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode SVDMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
@@ -343,9 +342,9 @@ SLEPC_EXTERN PetscErrorCode SVDTRLanczosGetScale(SVD,PetscReal*);
 
 .seealso: SVDPRIMMESetMethod(), SVDPRIMMEGetMethod()
 E*/
-typedef enum { SVD_PRIMME_HYBRID=1,
-               SVD_PRIMME_NORMALEQUATIONS,
-               SVD_PRIMME_AUGMENTED } SVDPRIMMEMethod;
+typedef enum { SVD_PRIMME_HYBRID          = 1,
+               SVD_PRIMME_NORMALEQUATIONS = 2,
+               SVD_PRIMME_AUGMENTED       = 3 } SVDPRIMMEMethod;
 SLEPC_EXTERN const char *SVDPRIMMEMethods[];
 
 SLEPC_EXTERN PetscErrorCode SVDPRIMMESetBlockSize(SVD,PetscInt);
@@ -360,9 +359,9 @@ SLEPC_EXTERN PetscErrorCode SVDPRIMMEGetMethod(SVD,SVDPRIMMEMethod*);
 
 .seealso: SVDKSVDSetEigenMethod(), SVDKSVDGetEigenMethod()
 E*/
-typedef enum { SVD_KSVD_EIGEN_MRRR=1,
-               SVD_KSVD_EIGEN_DC,
-               SVD_KSVD_EIGEN_ELPA } SVDKSVDEigenMethod;
+typedef enum { SVD_KSVD_EIGEN_MRRR = 1,
+               SVD_KSVD_EIGEN_DC   = 2,
+               SVD_KSVD_EIGEN_ELPA = 3 } SVDKSVDEigenMethod;
 SLEPC_EXTERN const char *SVDKSVDEigenMethods[];
 
 /*E
@@ -372,8 +371,8 @@ SLEPC_EXTERN const char *SVDKSVDEigenMethods[];
 
 .seealso: SVDKSVDSetPolarMethod(), SVDKSVDGetPolarMethod()
 E*/
-typedef enum { SVD_KSVD_POLAR_QDWH=1,
-               SVD_KSVD_POLAR_ZOLOPD } SVDKSVDPolarMethod;
+typedef enum { SVD_KSVD_POLAR_QDWH   = 1,
+               SVD_KSVD_POLAR_ZOLOPD = 2 } SVDKSVDPolarMethod;
 SLEPC_EXTERN const char *SVDKSVDPolarMethods[];
 
 SLEPC_EXTERN PetscErrorCode SVDKSVDSetEigenMethod(SVD,SVDKSVDEigenMethod);

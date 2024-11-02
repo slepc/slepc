@@ -38,7 +38,7 @@ typedef struct _p_BV* BV;
 
 .seealso: BVSetType(), BV
 J*/
-typedef const char* BVType;
+typedef const char *BVType;
 #define BVMAT        "mat"
 #define BVSVEC       "svec"
 #define BVVECS       "vecs"
@@ -128,10 +128,10 @@ SLEPC_EXTERN PetscErrorCode BVGetSplit(BV,BV*,BV*);
 SLEPC_EXTERN PetscErrorCode BVRestoreSplit(BV,BV*,BV*);
 SLEPC_EXTERN PetscErrorCode BVGetSplitRows(BV,IS,IS,BV*,BV*);
 SLEPC_EXTERN PetscErrorCode BVRestoreSplitRows(BV,IS,IS,BV*,BV*);
-SLEPC_EXTERN PetscErrorCode BVGetArray(BV,PetscScalar**);
-SLEPC_EXTERN PetscErrorCode BVRestoreArray(BV,PetscScalar**);
-SLEPC_EXTERN PetscErrorCode BVGetArrayRead(BV,const PetscScalar**);
-SLEPC_EXTERN PetscErrorCode BVRestoreArrayRead(BV,const PetscScalar**);
+SLEPC_EXTERN PetscErrorCode BVGetArray(BV,PetscScalar*[]);
+SLEPC_EXTERN PetscErrorCode BVRestoreArray(BV,PetscScalar*[]);
+SLEPC_EXTERN PetscErrorCode BVGetArrayRead(BV,const PetscScalar*[]);
+SLEPC_EXTERN PetscErrorCode BVRestoreArrayRead(BV,const PetscScalar*[]);
 SLEPC_EXTERN PetscErrorCode BVCreateVec(BV,Vec*);
 SLEPC_EXTERN PetscErrorCode BVCreateVecEmpty(BV,Vec*);
 SLEPC_EXTERN PetscErrorCode BVSetVecType(BV,VecType);

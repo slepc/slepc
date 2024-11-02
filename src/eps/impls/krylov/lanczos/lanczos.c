@@ -696,7 +696,7 @@ static PetscErrorCode EPSSolve_Lanczos(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSSetFromOptions_Lanczos(EPS eps,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode EPSSetFromOptions_Lanczos(EPS eps,PetscOptionItems PetscOptionsObject)
 {
   EPS_LANCZOS            *lanczos = (EPS_LANCZOS*)eps->data;
   PetscBool              flg;

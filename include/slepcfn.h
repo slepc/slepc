@@ -38,7 +38,7 @@ typedef struct _p_FN* FN;
 
 .seealso: FNSetType(), FN
 J*/
-typedef const char* FNType;
+typedef const char *FNType;
 #define FNCOMBINE  "combine"
 #define FNRATIONAL "rational"
 #define FNEXP      "exp"
@@ -103,9 +103,9 @@ SLEPC_EXTERN PetscErrorCode FNRegister(const char[],PetscErrorCode(*)(FN));
 /* --------- options specific to particular functions -------- */
 
 SLEPC_EXTERN PetscErrorCode FNRationalSetNumerator(FN,PetscInt,PetscScalar*);
-SLEPC_EXTERN PetscErrorCode FNRationalGetNumerator(FN,PetscInt*,PetscScalar**);
+SLEPC_EXTERN PetscErrorCode FNRationalGetNumerator(FN,PetscInt*,PetscScalar*[]);
 SLEPC_EXTERN PetscErrorCode FNRationalSetDenominator(FN,PetscInt,PetscScalar*);
-SLEPC_EXTERN PetscErrorCode FNRationalGetDenominator(FN,PetscInt*,PetscScalar**);
+SLEPC_EXTERN PetscErrorCode FNRationalGetDenominator(FN,PetscInt*,PetscScalar*[]);
 
 SLEPC_EXTERN PetscErrorCode FNCombineSetChildren(FN,FNCombineType,FN,FN);
 SLEPC_EXTERN PetscErrorCode FNCombineGetChildren(FN,FNCombineType*,FN*,FN*);

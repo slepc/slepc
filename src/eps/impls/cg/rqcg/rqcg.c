@@ -328,7 +328,7 @@ static PetscErrorCode EPSReset_RQCG(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSSetFromOptions_RQCG(EPS eps,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode EPSSetFromOptions_RQCG(EPS eps,PetscOptionItems PetscOptionsObject)
 {
   PetscBool      flg;
   PetscInt       nrest;

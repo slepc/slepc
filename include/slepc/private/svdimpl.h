@@ -28,7 +28,7 @@ struct _SVDOps {
   PetscErrorCode (*solveg)(SVD);
   PetscErrorCode (*solveh)(SVD);
   PetscErrorCode (*setup)(SVD);
-  PetscErrorCode (*setfromoptions)(SVD,PetscOptionItems*);
+  PetscErrorCode (*setfromoptions)(SVD,PetscOptionItems);
   PetscErrorCode (*publishoptions)(SVD);
   PetscErrorCode (*destroy)(SVD);
   PetscErrorCode (*reset)(SVD);

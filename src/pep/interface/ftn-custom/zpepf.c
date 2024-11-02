@@ -38,23 +38,12 @@
 #endif
 
 /*
-   These are not usually called from Fortran but allow Fortran users
+   These cannot be called from Fortran but allow Fortran users
    to transparently set these monitors from .F code
 */
-SLEPC_EXTERN void pepmonitorall_(PEP *pep,PetscInt *it,PetscInt *nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = PEPMonitorAll(*pep,*it,*nconv,eigr,eigi,errest,*nest,*vf);
-}
-
-SLEPC_EXTERN void pepmonitorfirst_(PEP *pep,PetscInt *it,PetscInt *nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = PEPMonitorFirst(*pep,*it,*nconv,eigr,eigi,errest,*nest,*vf);
-}
-
-SLEPC_EXTERN void pepmonitorconverged_(PEP *pep,PetscInt *it,PetscInt *nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = PEPMonitorConverged(*pep,*it,*nconv,eigr,eigi,errest,*nest,*vf);
-}
+SLEPC_EXTERN void pepmonitorall_(PEP*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
+SLEPC_EXTERN void pepmonitorfirst_(PEP*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
+SLEPC_EXTERN void pepmonitorconverged_(PEP*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
 
 SLEPC_EXTERN void pepmonitorconvergedcreate_(PetscViewer *vin,PetscViewerFormat *format,void *ctx,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
 {
@@ -136,15 +125,8 @@ SLEPC_EXTERN void pepmonitorset_(PEP *pep,void (*monitor)(PEP*,PetscInt*,PetscIn
   }
 }
 
-SLEPC_EXTERN void pepconvergedabsolute_(PEP *pep,PetscScalar *eigr,PetscScalar *eigi,PetscReal *res,PetscReal *errest,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = PEPConvergedAbsolute(*pep,*eigr,*eigi,*res,errest,ctx);
-}
-
-SLEPC_EXTERN void pepconvergedrelative_(PEP *pep,PetscScalar *eigr,PetscScalar *eigi,PetscReal *res,PetscReal *errest,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = PEPConvergedRelative(*pep,*eigr,*eigi,*res,errest,ctx);
-}
+SLEPC_EXTERN void pepconvergedabsolute_(PEP*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
+SLEPC_EXTERN void pepconvergedrelative_(PEP*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 
 SLEPC_EXTERN void pepsetconvergencetestfunction_(PEP *pep,void (*func)(PEP*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void* ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
@@ -161,10 +143,7 @@ SLEPC_EXTERN void pepsetconvergencetestfunction_(PEP *pep,void (*func)(PEP*,Pets
   }
 }
 
-SLEPC_EXTERN void pepstoppingbasic_(PEP *pep,PetscInt *its,PetscInt *max_it,PetscInt *nconv,PetscInt *nev,PEPConvergedReason *reason,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = PEPStoppingBasic(*pep,*its,*max_it,*nconv,*nev,reason,ctx);
-}
+SLEPC_EXTERN void pepstoppingbasic_(PEP*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,PEPConvergedReason*,void*,PetscErrorCode*);
 
 SLEPC_EXTERN void pepsetstoppingtestfunction_(PEP *pep,void (*func)(PEP*,PetscInt,PetscInt,PetscInt,PetscInt,PEPConvergedReason*,void*,PetscErrorCode*),void* ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {

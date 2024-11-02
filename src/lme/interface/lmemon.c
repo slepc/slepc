@@ -14,25 +14,6 @@
 #include <slepc/private/lmeimpl.h>   /*I "slepclme.h" I*/
 #include <petscdraw.h>
 
-PetscErrorCode LMEMonitorLGCreate(MPI_Comm comm,const char host[],const char label[],const char metric[],PetscInt l,const char *names[],int x,int y,int m,int n,PetscDrawLG *lgctx)
-{
-  PetscDraw      draw;
-  PetscDrawAxis  axis;
-  PetscDrawLG    lg;
-
-  PetscFunctionBegin;
-  PetscCall(PetscDrawCreate(comm,host,label,x,y,m,n,&draw));
-  PetscCall(PetscDrawSetFromOptions(draw));
-  PetscCall(PetscDrawLGCreate(draw,l,&lg));
-  if (names) PetscCall(PetscDrawLGSetLegend(lg,names));
-  PetscCall(PetscDrawLGSetFromOptions(lg));
-  PetscCall(PetscDrawLGGetAxis(lg,&axis));
-  PetscCall(PetscDrawAxisSetLabels(axis,"Convergence","Iteration",metric));
-  PetscCall(PetscDrawDestroy(&draw));
-  *lgctx = lg;
-  PetscFunctionReturn(PETSC_SUCCESS);
-}
-
 /*
    Runs the user provided monitor routines, if any.
 */
@@ -204,14 +185,14 @@ PetscErrorCode LMEMonitorDefault(LME lme,PetscInt its,PetscReal errest,PetscView
 PetscErrorCode LMEMonitorDefaultDrawLG(LME lme,PetscInt its,PetscReal errest,PetscViewerAndFormat *vf)
 {
   PetscViewer    viewer = vf->viewer;
-  PetscDrawLG    lg = vf->lg;
+  PetscDrawLG    lg;
   PetscReal      x,y;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(lme,LME_CLASSID,1);
   PetscValidHeaderSpecific(viewer,PETSC_VIEWER_CLASSID,4);
-  PetscValidHeaderSpecific(lg,PETSC_DRAWLG_CLASSID,4);
   PetscCall(PetscViewerPushFormat(viewer,vf->format));
+  PetscCall(PetscViewerDrawGetDrawLG(viewer,0,&lg));
   if (its==1) {
     PetscCall(PetscDrawLGReset(lg));
     PetscCall(PetscDrawLGSetDimension(lg,1));
@@ -251,6 +232,6 @@ PetscErrorCode LMEMonitorDefaultDrawLGCreate(PetscViewer viewer,PetscViewerForma
   PetscFunctionBegin;
   PetscCall(PetscViewerAndFormatCreate(viewer,format,vf));
   (*vf)->data = ctx;
-  PetscCall(LMEMonitorLGCreate(PetscObjectComm((PetscObject)viewer),NULL,"Error Estimate","Log Error Estimate",1,NULL,PETSC_DECIDE,PETSC_DECIDE,400,300,&(*vf)->lg));
+  PetscCall(PetscViewerMonitorLGSetUp(viewer,NULL,"Error Estimate","Log Error Estimate",1,NULL,PETSC_DECIDE,PETSC_DECIDE,400,300));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

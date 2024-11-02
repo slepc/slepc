@@ -323,7 +323,7 @@ static PetscErrorCode SVDSolve_Lanczos(SVD svd)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode SVDSetFromOptions_Lanczos(SVD svd,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode SVDSetFromOptions_Lanczos(SVD svd,PetscOptionItems PetscOptionsObject)
 {
   PetscBool      set,val;
   SVD_LANCZOS    *lanczos = (SVD_LANCZOS*)svd->data;

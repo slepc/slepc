@@ -1853,7 +1853,7 @@ PetscErrorCode PEPJDGetProjection(PEP pep,PEPJDProjection *proj)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode PEPSetFromOptions_JD(PEP pep,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode PEPSetFromOptions_JD(PEP pep,PetscOptionItems PetscOptionsObject)
 {
   PetscBool       flg,b1;
   PetscReal       r1;

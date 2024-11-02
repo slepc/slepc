@@ -208,7 +208,7 @@ PetscErrorCode EPSCHASEGetDegree(EPS eps,PetscInt *deg,PetscBool *opt)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSSetFromOptions_ChASE(EPS eps,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode EPSSetFromOptions_ChASE(EPS eps,PetscOptionItems PetscOptionsObject)
 {
   EPS_ChASE   *ctx = (EPS_ChASE*)eps->data;
   PetscBool   flg1,flg2;

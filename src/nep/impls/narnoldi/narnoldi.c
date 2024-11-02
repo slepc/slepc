@@ -280,7 +280,7 @@ PetscErrorCode NEPNArnoldiGetLagPreconditioner(NEP nep,PetscInt *lag)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode NEPSetFromOptions_NArnoldi(NEP nep,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode NEPSetFromOptions_NArnoldi(NEP nep,PetscOptionItems PetscOptionsObject)
 {
   PetscInt       i;
   PetscBool      flg;

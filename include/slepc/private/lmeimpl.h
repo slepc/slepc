@@ -26,7 +26,7 @@ typedef struct _LMEOps *LMEOps;
 struct _LMEOps {
   PetscErrorCode (*solve[sizeof(LMEProblemType)])(LME);
   PetscErrorCode (*setup)(LME);
-  PetscErrorCode (*setfromoptions)(LME,PetscOptionItems*);
+  PetscErrorCode (*setfromoptions)(LME,PetscOptionItems);
   PetscErrorCode (*publishoptions)(LME);
   PetscErrorCode (*destroy)(LME);
   PetscErrorCode (*reset)(LME);

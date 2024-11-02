@@ -27,7 +27,7 @@ struct _EPSOps {
   PetscErrorCode (*solve)(EPS);
   PetscErrorCode (*setup)(EPS);
   PetscErrorCode (*setupsort)(EPS);
-  PetscErrorCode (*setfromoptions)(EPS,PetscOptionItems*);
+  PetscErrorCode (*setfromoptions)(EPS,PetscOptionItems);
   PetscErrorCode (*publishoptions)(EPS);
   PetscErrorCode (*destroy)(EPS);
   PetscErrorCode (*reset)(EPS);

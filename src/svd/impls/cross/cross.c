@@ -383,7 +383,7 @@ static PetscErrorCode EPSMonitor_Cross(EPS eps,PetscInt its,PetscInt nconv,Petsc
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode SVDSetFromOptions_Cross(SVD svd,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode SVDSetFromOptions_Cross(SVD svd,PetscOptionItems PetscOptionsObject)
 {
   PetscBool      set,val;
   SVD_CROSS      *cross = (SVD_CROSS*)svd->data;

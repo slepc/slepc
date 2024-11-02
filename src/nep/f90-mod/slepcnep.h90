@@ -7,3 +7,14 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
+      interface NEPNLEIGSGetRKShifts
+        subroutine NEPNLEIGSGetRKShifts(a,b,c,z)
+          import tNEP
+          NEP a
+          PetscInt b
+          PetscScalar c(*)
+          PetscErrorCode z
+        end subroutine
+      end interface NEPNLEIGSGetRKShifts
+
+      external NEPMonitorConvergedDestroy

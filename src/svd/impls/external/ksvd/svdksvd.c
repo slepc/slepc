@@ -155,7 +155,7 @@ static PetscErrorCode SVDView_KSVD(SVD svd,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode SVDSetFromOptions_KSVD(SVD svd,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode SVDSetFromOptions_KSVD(SVD svd,PetscOptionItems PetscOptionsObject)
 {
   SVD_KSVD           *ctx = (SVD_KSVD*)svd->data;
   SVDKSVDEigenMethod eigen;

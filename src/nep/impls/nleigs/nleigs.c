@@ -1711,7 +1711,7 @@ static PetscErrorCode NEPNLEIGSGetRKShifts_NLEIGS(NEP nep,PetscInt *ns,PetscScal
 
 .seealso: NEPNLEIGSSetRKShifts()
 @*/
-PetscErrorCode NEPNLEIGSGetRKShifts(NEP nep,PetscInt *ns,PetscScalar *shifts[])
+PetscErrorCode NEPNLEIGSGetRKShifts(NEP nep,PetscInt *ns,PetscScalar *shifts[]) PeNS
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
@@ -1868,7 +1868,7 @@ PetscErrorCode NEPNLEIGSGetFullBasis(NEP nep,PetscBool *fullbasis)
 
 #define SHIFTMAX 30
 
-static PetscErrorCode NEPSetFromOptions_NLEIGS(NEP nep,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode NEPSetFromOptions_NLEIGS(NEP nep,PetscOptionItems PetscOptionsObject)
 {
   NEP_NLEIGS     *ctx = (NEP_NLEIGS*)nep->data;
   PetscInt       i=0,k;

@@ -1063,13 +1063,13 @@ PetscErrorCode DSNEPSetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn *fun,vo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctionFn **fun,void **ctx)
+static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctionFn **fun,void *ctx)
 {
   DS_NEP *dsctx = (DS_NEP*)ds->data;
 
   PetscFunctionBegin;
   if (fun) *fun = dsctx->computematrix;
-  if (ctx) *ctx = dsctx->computematrixctx;
+  if (ctx) ctx = dsctx->computematrixctx;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -1090,11 +1090,11 @@ static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
 
 .seealso: DSNEPSetComputeMatrixFunction()
 @*/
-PetscErrorCode DSNEPGetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn **fun,void **ctx)
+PetscErrorCode DSNEPGetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn **fun,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(ds,DS_CLASSID,1);
-  PetscUseMethod(ds,"DSNEPGetComputeMatrixFunction_C",(DS,DSNEPMatrixFunctionFn**,void**),(ds,fun,ctx));
+  PetscUseMethod(ds,"DSNEPGetComputeMatrixFunction_C",(DS,DSNEPMatrixFunctionFn**,void*),(ds,fun,ctx));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -1178,7 +1178,7 @@ PetscErrorCode DSNEPGetRG(DS ds,RG *rg)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode DSSetFromOptions_NEP(DS ds,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode DSSetFromOptions_NEP(DS ds,PetscOptionItems PetscOptionsObject)
 {
   PetscInt       k;
   PetscBool      flg;

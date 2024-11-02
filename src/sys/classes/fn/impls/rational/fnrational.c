@@ -316,7 +316,7 @@ static PetscErrorCode FNRationalGetNumerator_Rational(FN fn,PetscInt *np,PetscSc
 
 .seealso: FNRationalSetNumerator()
 @*/
-PetscErrorCode FNRationalGetNumerator(FN fn,PetscInt *np,PetscScalar *pcoeff[])
+PetscErrorCode FNRationalGetNumerator(FN fn,PetscInt *np,PetscScalar *pcoeff[]) PeNS
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(fn,FN_CLASSID,1);
@@ -413,7 +413,7 @@ static PetscErrorCode FNRationalGetDenominator_Rational(FN fn,PetscInt *nq,Petsc
 
 .seealso: FNRationalSetDenominator()
 @*/
-PetscErrorCode FNRationalGetDenominator(FN fn,PetscInt *nq,PetscScalar *qcoeff[])
+PetscErrorCode FNRationalGetDenominator(FN fn,PetscInt *nq,PetscScalar *qcoeff[]) PeNS
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(fn,FN_CLASSID,1);
@@ -421,7 +421,7 @@ PetscErrorCode FNRationalGetDenominator(FN fn,PetscInt *nq,PetscScalar *qcoeff[]
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode FNSetFromOptions_Rational(FN fn,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode FNSetFromOptions_Rational(FN fn,PetscOptionItems PetscOptionsObject)
 {
 #define PARMAX 10
   PetscScalar    array[PARMAX];

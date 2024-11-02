@@ -8,7 +8,6 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
         module slepcsysdef
-        use petscsysdef
         use petscmatdef
 #include <../src/sys/f90-mod/slepcsys.h>
         end module
@@ -16,12 +15,9 @@
         module slepcsys
         use,intrinsic :: iso_c_binding
         use slepcsysdef
-        use petscsys
         use petscmat
 #include <../src/sys/f90-mod/slepcsys.h90>
-        interface
-#include <../src/sys/f90-mod/ftn-auto-interfaces/slepcsys.h90>
-        end interface
+#include <../ftn/sys/slepcall.h90>
         interface SlepcInitialize
           module procedure SlepcInitializeWithHelp, SlepcInitializeNoHelp, SlepcInitializeNoArguments
         end interface
@@ -35,10 +31,12 @@
           PetscErrorCode             :: ierr
 
           if (filename .ne. PETSC_NULL_CHARACTER) then
-             filename = trim(filename)
+             call SlepcInitializeF(trim(filename),help,ierr)
+             CHKERRQ(ierr)
+          else
+             call SlepcInitializeF(filename,help,ierr)
+             CHKERRQ(ierr)
           endif
-          call SlepcInitializeF(filename,help,PETSC_TRUE,ierr)
-          CHKERRQ(ierr)
         end subroutine SlepcInitializeWithHelp
 
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
@@ -49,10 +47,12 @@
           PetscErrorCode             :: ierr
 
           if (filename .ne. PETSC_NULL_CHARACTER) then
-             filename = trim(filename)
+             call SlepcInitializeF(trim(filename),PETSC_NULL_CHARACTER,ierr)
+             CHKERRQ(ierr)
+          else
+             call SlepcInitializeF(filename,PETSC_NULL_CHARACTER,ierr)
+             CHKERRQ(ierr)
           endif
-          call SlepcInitializeF(filename,PETSC_NULL_CHARACTER,PETSC_TRUE,ierr)
-          CHKERRQ(ierr)
         end subroutine SlepcInitializeNoHelp
 
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
@@ -61,7 +61,9 @@
         subroutine SlepcInitializeNoArguments(ierr)
           PetscErrorCode             :: ierr
 
-          call SlepcInitializeF(PETSC_NULL_CHARACTER,PETSC_NULL_CHARACTER,PETSC_FALSE,ierr)
+          call SlepcInitializeF(PETSC_NULL_CHARACTER,PETSC_NULL_CHARACTER,ierr)
           CHKERRQ(ierr)
         end subroutine SlepcInitializeNoArguments
+
+#include <../ftn/sys/slepcall.hf90>
         end module

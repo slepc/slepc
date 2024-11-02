@@ -318,7 +318,7 @@ PetscErrorCode SlepcFinalize(void)
 
 .seealso: SlepcInitialize(), SlepcInitializeFortran()
 @*/
-PetscErrorCode SlepcInitializeNoArguments(void)
+PetscErrorCode SlepcInitializeNoArguments(void) PeNS
 {
   int  argc = 0;
   char **args = NULL;

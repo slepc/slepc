@@ -93,16 +93,10 @@ chk_slepcdir:
           printf "******************************************************"${PETSC_TEXT_NORMAL}"\n" ; \
         fi
 
-allfortranstubs: deletefortranstubs
-	@${PYTHON} lib/slepc/bin/maint/generatefortranstubs.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch=${PETSC_ARCH} --bfort=${BFORT} --mode=generate --verbose=${V}
-	-@${PYTHON} lib/slepc/bin/maint/generatefortranstubs.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch=${PETSC_ARCH} --mode=merge --verbose=${V}
+fortranbindings: deletefortranbindings
+	@${PYTHON} lib/slepc/bin/maint/generatefortranbindings.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch=${PETSC_ARCH}
 
-#copy of allfortranstubs with PETSC_ARCH=''
-allfortranstubsinplace: deletefortranstubs
-	@${PYTHON} lib/slepc/bin/maint/generatefortranstubs.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch='' --bfort=${BFORT} --mode=generate --verbose=${V}
-	-@${PYTHON} lib/slepc/bin/maint/generatefortranstubs.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch='' --mode=merge --verbose=${V}
-
-deletefortranstubs:
+deletefortranbindings:
 	-@find src -type d -name ftn-auto* | xargs rm -rf
 	-@if [ -n "${PETSC_ARCH}" ] && [ -d ${PETSC_ARCH} ] && [ -d ${PETSC_ARCH}/src ]; then \
           find ${PETSC_ARCH}/src -type d -name ftn-auto* | xargs rm -rf ;\
@@ -281,7 +275,7 @@ chk_loc:
           printf ${PETSC_TEXT_HILIGHT}"*********************** ERROR **********************************************\n" ; \
           echo " Please specify LOC variable for eg: make allmanpages LOC=/sandbox/slepc "; \
           printf "****************************************************************************"${PETSC_TEXT_NORMAL}"\n" ;  false; fi
-	@${MKDIR} ${LOC}/manualpages
+	@${MKDIR} ${LOC}/docs/manualpages
 
 chk_c2html:
 	@if [ ${C2HTML}foo = foo ] ; then \
@@ -351,7 +345,7 @@ docsetdate:
         export datestr; \
         gitver=`git describe --match "v*"`; \
         export gitver; \
-        find include src docs/manualpages -type f -name \*.html \
+        find include src ${LOC}/docs/manualpages -type f -name \*.html \
           -exec perl -pi -e 's^(<body.*>)^$$1\n   <div id=\"version\" align=right><b>$$ENV{slepcversion} $$ENV{datestr}</b></div>\n   <div id="bugreport" align=right><a href="mailto:slepc-maint\@upv.es?subject=Typo or Error in Documentation &body=Please describe the typo or error in the documentation: $$ENV{slepcversion} $$ENV{gitver} {} "><small>Report Typos and Errors</small></a></div>^i' {} \; \
           -exec perl -pi -e 's^(<head>)^$$1 <link rel="canonical" href="https://slepc.upv.es/documentation/current/{}" />^i' {} \; ; \
         echo "Done fixing version number, date, canonical URL info"
@@ -367,54 +361,6 @@ allcleanhtml:
 	-${OMAKE_SELF} ACTION=cleanhtml PETSC_DIR=${PETSC_DIR} tree
 
 # ******** Rules for checking coding standards *********************************************************
-
-countfortranfunctions:
-	-@for D in `find ${SLEPC_DIR}/src -name ftn-auto` \
-        `find ${SLEPC_DIR}/src -name ftn-custom`; do cd $$D; \
-        grep -E '^void' *.c | \
-        cut -d'(' -f1 | tr -s  ' ' | cut -d' ' -f3 | uniq | grep -E -v "(^$$|Petsc)" | \
-        sed "s/_$$//"; done | sort > /tmp/countfortranfunctions
-
-countcfunctions:
-	-@ ls ${SLEPC_DIR}/include/*.h | grep -v slepcblaslapack.h | \
-        xargs grep extern | grep "(" | tr -s ' ' | \
-        cut -d'(' -f1 | cut -d' ' -f3 | grep -v "\*" | tr -s '\012' |  \
-        tr 'A-Z' 'a-z' |  sort > /tmp/countcfunctions
-
-difffortranfunctions: countfortranfunctions countcfunctions
-	-@echo -------------- Functions missing in the Fortran interface ---------------------
-	-@${DIFF} /tmp/countcfunctions /tmp/countfortranfunctions | grep "^<" | cut -d' ' -f2
-	-@echo ----------------- Functions missing in the C interface ------------------------
-	-@${DIFF} /tmp/countcfunctions /tmp/countfortranfunctions | grep "^>" | cut -d' ' -f2
-	-@${RM}  /tmp/countcfunctions /tmp/countfortranfunctions
-
-checkbadfortranstubs:
-	-@echo "========================================="
-	-@echo "Functions with MPI_Comm as an Argument"
-	-@echo "========================================="
-	-@for D in `find ${SLEPC_DIR}/src -name ftn-auto`; do cd $$D; \
-        grep '^void' *.c | grep 'MPI_Comm' | \
-        tr -s ' ' | tr -s ':' ' ' |cut -d'(' -f1 | cut -d' ' -f1,3; done
-	-@echo "========================================="
-	-@echo "Functions with a String as an Argument"
-	-@echo "========================================="
-	-@for D in `find ${SLEPC_DIR}/src -name ftn-auto`; do cd $$D; \
-        grep '^void' *.c | grep 'char \*' | \
-        tr -s ' ' | tr -s ':' ' ' |cut -d'(' -f1 | cut -d' ' -f1,3; done
-	-@echo "========================================="
-	-@echo "Functions with Pointers to PETSc Objects as Argument"
-	-@echo "========================================="
-	-@_p_OBJ=`grep _p_ ${PETSC_DIR}/include/*.h | tr -s ' ' | \
-        cut -d' ' -f 3 | tr -s '\012' | grep -v '{' | cut -d'*' -f1 | \
-        sed "s/_p_//g" | tr -s '\012 ' ' *|' ` ; \
-        _p_OBJS=`grep _p_ ${SLEPC_DIR}/include/*.h | tr -s ' ' | \
-        cut -d' ' -f 3 | tr -s '\012' | grep -v '{' | cut -d'*' -f1 | \
-        sed "s/_p_//g" | tr -s '\012 ' ' *|' ` ; \
-        for D in `find ${SLEPC_DIR}/src -name ftn-auto`; do cd $$D; \
-        for OBJ in $$_p_OBJ $$_p_OBJS; do \
-        grep "$$OBJ \*" *.c | tr -s ' ' | tr -s ':' ' ' | \
-        cut -d'(' -f1 | cut -d' ' -f1,4; \
-        done; done
 
 # Compare ABI/API of two versions of PETSc library with the old one defined by PETSC_{DIR,ARCH}_ABI_OLD
 abitest:
@@ -435,5 +381,5 @@ abitest:
 	-@echo "========================================================================================="
 	-@$(PYTHON) ${SLEPC_DIR}/lib/slepc/bin/maint/abicheck.py -old_dir ${SLEPC_DIR_ABI_OLD} -old_arch ${PETSC_ARCH_ABI_OLD} -old_petsc_dir ${PETSC_DIR_ABI_OLD} -new_dir ${SLEPC_DIR} -new_arch ${PETSC_ARCH} -new_petsc_dir ${PETSC_DIR} -report_format html
 
-.PHONY: info all deletelibs allclean alletags alldoc allcleanhtml countfortranfunctions install
+.PHONY: info all deletelibs allclean alletags alldoc allcleanhtml install
 

@@ -951,7 +951,7 @@ static PetscErrorCode PEPReset_CISS(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode PEPSetFromOptions_CISS(PEP pep,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode PEPSetFromOptions_CISS(PEP pep,PetscOptionItems PetscOptionsObject)
 {
   PEP_CISS          *ctx = (PEP_CISS*)pep->data;
   PetscReal         r1,r2;

@@ -46,28 +46,13 @@
 #endif
 
 /*
-   These are not usually called from Fortran but allow Fortran users
+   These cannot be called from Fortran but allow Fortran users
    to transparently set these monitors from .F code
 */
-SLEPC_EXTERN void svdmonitorall_(SVD *svd,PetscInt *it,PetscInt *nconv,PetscReal *sigma,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = SVDMonitorAll(*svd,*it,*nconv,sigma,errest,*nest,*vf);
-}
-
-SLEPC_EXTERN void svdmonitorfirst_(SVD *svd,PetscInt *it,PetscInt *nconv,PetscReal *sigma,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = SVDMonitorFirst(*svd,*it,*nconv,sigma,errest,*nest,*vf);
-}
-
-SLEPC_EXTERN void svdmonitorconditioning_(SVD *svd,PetscInt *it,PetscInt *nconv,PetscReal *sigma,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = SVDMonitorConditioning(*svd,*it,*nconv,sigma,errest,*nest,*vf);
-}
-
-SLEPC_EXTERN void svdmonitorconverged_(SVD *svd,PetscInt *it,PetscInt *nconv,PetscReal *sigma,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = SVDMonitorConverged(*svd,*it,*nconv,sigma,errest,*nest,*vf);
-}
+SLEPC_EXTERN void svdmonitorall_(SVD*,PetscInt*,PetscInt*,PetscReal*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
+SLEPC_EXTERN void svdmonitorfirst_(SVD*,PetscInt*,PetscInt*,PetscReal*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
+SLEPC_EXTERN void svdmonitorconditioning_(SVD*,PetscInt*,PetscInt*,PetscReal*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
+SLEPC_EXTERN void svdmonitorconverged_(SVD*,PetscInt*,PetscInt*,PetscReal*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
 
 SLEPC_EXTERN void svdmonitorconvergedcreate_(PetscViewer *vin,PetscViewerFormat *format,void *ctx,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
 {
@@ -142,25 +127,10 @@ SLEPC_EXTERN void svdmonitorset_(SVD *svd,void (*monitor)(SVD*,PetscInt*,PetscIn
   }
 }
 
-SLEPC_EXTERN void svdconvergedabsolute_(SVD *svd,PetscReal *sigma,PetscReal *res,PetscReal *errest,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = SVDConvergedAbsolute(*svd,*sigma,*res,errest,ctx);
-}
-
-SLEPC_EXTERN void svdconvergedrelative_(SVD *svd,PetscReal *sigma,PetscReal *res,PetscReal *errest,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = SVDConvergedRelative(*svd,*sigma,*res,errest,ctx);
-}
-
-SLEPC_EXTERN void svdconvergednorm_(SVD *svd,PetscReal *sigma,PetscReal *res,PetscReal *errest,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = SVDConvergedNorm(*svd,*sigma,*res,errest,ctx);
-}
-
-SLEPC_EXTERN void svdconvergedmaxit_(SVD *svd,PetscReal *sigma,PetscReal *res,PetscReal *errest,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = SVDConvergedMaxIt(*svd,*sigma,*res,errest,ctx);
-}
+SLEPC_EXTERN void svdconvergedabsolute_(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
+SLEPC_EXTERN void svdconvergedrelative_(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
+SLEPC_EXTERN void svdconvergednorm_(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
+SLEPC_EXTERN void svdconvergedmaxit_(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 
 SLEPC_EXTERN void svdsetconvergencetestfunction_(SVD *svd,void (*func)(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void* ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
@@ -181,15 +151,8 @@ SLEPC_EXTERN void svdsetconvergencetestfunction_(SVD *svd,void (*func)(SVD*,Pets
   }
 }
 
-SLEPC_EXTERN void svdstoppingbasic_(SVD *svd,PetscInt *its,PetscInt *max_it,PetscInt *nconv,PetscInt *nsv,SVDConvergedReason *reason,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = SVDStoppingBasic(*svd,*its,*max_it,*nconv,*nsv,reason,ctx);
-}
-
-SLEPC_EXTERN void svdstoppingthreshold_(SVD *svd,PetscInt *its,PetscInt *max_it,PetscInt *nconv,PetscInt *nsv,SVDConvergedReason *reason,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = SVDStoppingThreshold(*svd,*its,*max_it,*nconv,*nsv,reason,ctx);
-}
+SLEPC_EXTERN void svdstoppingbasic_(SVD*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,SVDConvergedReason*,void*,PetscErrorCode*);
+SLEPC_EXTERN void svdstoppingthreshold_(SVD*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,SVDConvergedReason*,void*,PetscErrorCode*);
 
 SLEPC_EXTERN void svdsetstoppingtestfunction_(SVD *svd,void (*func)(SVD*,PetscInt,PetscInt,PetscInt,PetscInt,SVDConvergedReason*,void*,PetscErrorCode*),void* ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {

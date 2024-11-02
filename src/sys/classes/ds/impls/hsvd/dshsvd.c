@@ -628,7 +628,7 @@ PetscErrorCode DSHSVDGetReorthogonalize(DS ds,PetscBool *reorth)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode DSSetFromOptions_HSVD(DS ds,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode DSSetFromOptions_HSVD(DS ds,PetscOptionItems PetscOptionsObject)
 {
   PetscBool      flg,reorth;
 
