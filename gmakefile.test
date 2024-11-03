@@ -447,6 +447,7 @@ help-nontest:
 	-@echo "   slepc_libs - build (update) the SLEPc and related libraries"
 	-@echo "   check - run a basic check that the libraries are built correctly and can be used"
 	-@echo "   "
+	-@echo "   getversion_slepc - print the SLEPc version, or $$""SLEPC_DIR/lib/slepc/bin/petscversion"
 	-@echo "   getlinklibs_slepc - print the libraries that a SLEPc application must link against"
 	-@echo "   getincludedirs_slepc - print the include directories that a SLEPc application must be compiled against"
 	-@echo "   getcflags - print the C compiler flags PETSc is using"
@@ -458,7 +459,7 @@ help-nontest:
 	-@echo "   test - use \"make -f gmakefile.test help\" for help on running the extensive tests"
 	-@echo
 	-@echo "Developer rules:"
-	-@echo "   clean - delete libraries and Fortran module files (used in $SLEPC_DIR)"
+	-@echo "   clean - delete libraries and Fortran module files (used in $$""SLEPC_DIR)"
 	-@echo "   lint_slepc - run lint on the source code, including its embedded documentation"
 	-@echo "           delete compiled examples, .o and related files (used in tutorials or test directories)"
 	-@echo "   clang-tidy - run clang-tidy on the SLEPc C code"
