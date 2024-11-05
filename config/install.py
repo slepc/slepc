@@ -520,11 +520,11 @@ for dir in dirs:
     if os.path.splitext(dst)[1] == '.'+self.arLibSuffix:
       if not 'win32fe' in self.petscCC:
         (result, output) = subprocess.getstatusoutput(self.ranlib+' '+dst)
-    if os.path.splitext(dst)[1] == '.dylib' and os.path.isfile('/usr/bin/install_name_tool'):
-      (result, output) = subprocess.getstatusoutput('otool -D '+src)
-      oldname = output[output.find("\n")+1:]
+    if os.path.splitext(dst)[1] == '.dylib' and shutil.which('otool') and shutil.which('install_name_tool'):
+      output = subprocess.check_output(['otool', '-D', src], universal_newlines=True)
+      oldname = output.splitlines()[1]
       installName = oldname.replace(os.path.realpath(self.archDir), self.installDir)
-      (result, output) = subprocess.getstatusoutput('/usr/bin/install_name_tool -id '+installName+' '+dst)
+      subprocess.check_output(['install_name_tool', '-id', installName, dst])
     # preserve the original timestamps - so that the .a vs .so time order is preserved
     shutil.copystat(src,dst)
     return
