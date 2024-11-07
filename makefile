@@ -212,6 +212,22 @@ cleantest:
 
 deletelibs:
 	-${RM} -r ${SLEPC_LIB_DIR}/libslepc*.*
+
+deleteshared:
+	@for LIBNAME in ${SHLIBS}; \
+        do \
+           if [ -d ${SLEPC_INSTALLDIR}/lib/$${LIBNAME}$${LIB_NAME_SUFFIX}.dylib.dSYM ]; then \
+             echo ${RM} -rf ${SLEPC_INSTALLDIR}/lib/$${LIBNAME}$${LIB_NAME_SUFFIX}.dylib.dSYM; \
+             ${RM} -rf ${SLEPC_INSTALLDIR}/lib/$${LIBNAME}$${LIB_NAME_SUFFIX}.dylib.dSYM; \
+           fi; \
+           echo ${RM} ${SLEPC_INSTALLDIR}/lib/$${LIBNAME}$${LIB_NAME_SUFFIX}.${SL_LINKER_SUFFIX}; \
+           ${RM} ${SLEPC_INSTALLDIR}/lib/$${LIBNAME}$${LIB_NAME_SUFFIX}.${SL_LINKER_SUFFIX}; \
+        done
+	@if [ -f ${SLEPC_INSTALLDIR}/lib/so_locations ]; then \
+          echo ${RM} ${SLEPC_INSTALLDIR}/lib/so_locations; \
+          ${RM} ${SLEPC_INSTALLDIR}/lib/so_locations; \
+        fi
+
 deletemods:
 	-${RM} -f ${SLEPC_DIR}/${PETSC_ARCH}/include/slepc*.mod
 
