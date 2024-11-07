@@ -61,11 +61,11 @@ class SLEPc(package.Package):
       self.AddDefine(slepcconf,'VERSION_BRANCH_GIT',slepc.branch)
     # Single library installation
     if petsc.singlelib:
-      slepcvars.write('SHLIBS = libslepc\n')
-      slepcvars.write('LIBNAME = '+os.path.join('${INSTALL_LIB_DIR}','libslepc.${AR_LIB_SUFFIX}')+'\n')
+      slepcvars.write('SHLIBS = libslepc${LIB_NAME_SUFFIX}\n')
+      slepcvars.write('LIBNAME = '+os.path.join('${INSTALL_LIB_DIR}','libslepc${LIB_NAME_SUFFIX}.${AR_LIB_SUFFIX}')+'\n')
       for module in ['SYS','EPS','SVD','PEP','NEP','MFN','LME']:
-        slepcvars.write('SLEPC_'+module+'_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc ${SLEPC_EXTERNAL_LIB}\n')
-      slepcvars.write('SLEPC_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc ${SLEPC_EXTERNAL_LIB}\n')
+        slepcvars.write('SLEPC_'+module+'_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc${LIB_NAME_SUFFIX} ${SLEPC_EXTERNAL_LIB}\n')
+      slepcvars.write('SLEPC_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc${LIB_NAME_SUFFIX} ${SLEPC_EXTERNAL_LIB}\n')
 
   def ShowInfo(self):
     self.log.Println('\nSLEPc directory:\n  '+self.dir)

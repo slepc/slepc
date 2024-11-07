@@ -33,14 +33,14 @@ FCPPFLAGS       = ${SLEPC_FCPPFLAGS} ${PETSC_FCPPFLAGS}
 CUDACPPFLAGS    = ${SLEPC_CUDACPPFLAGS} ${PETSC_CUDACPPFLAGS}
 
 # Variables for the different SLEPc modules
-SLEPC_SYS_LIB_BASIC = -lslepcsys
-SLEPC_MFN_LIB_BASIC = -lslepcmfn ${SLEPC_SYS_LIB_BASIC}
-SLEPC_LME_LIB_BASIC = -lslepclme ${SLEPC_SYS_LIB_BASIC}
-SLEPC_EPS_LIB_BASIC = -lslepceps ${SLEPC_LME_LIB_BASIC}
-SLEPC_SVD_LIB_BASIC = -lslepcsvd ${SLEPC_EPS_LIB_BASIC}
-SLEPC_PEP_LIB_BASIC = -lslepcpep ${SLEPC_EPS_LIB_BASIC}
-SLEPC_NEP_LIB_BASIC = -lslepcnep ${SLEPC_PEP_LIB_BASIC}
-SLEPC_LIB_BASIC     = -lslepcnep -lslepcpep -lslepcsvd -lslepceps -lslepcmfn -lslepclme -lslepcsys
+SLEPC_SYS_LIB_BASIC = -lslepcsys${LIB_NAME_SUFFIX}
+SLEPC_MFN_LIB_BASIC = -lslepcmfn${LIB_NAME_SUFFIX} ${SLEPC_SYS_LIB_BASIC}
+SLEPC_LME_LIB_BASIC = -lslepclme${LIB_NAME_SUFFIX} ${SLEPC_SYS_LIB_BASIC}
+SLEPC_EPS_LIB_BASIC = -lslepceps${LIB_NAME_SUFFIX} ${SLEPC_LME_LIB_BASIC}
+SLEPC_SVD_LIB_BASIC = -lslepcsvd${LIB_NAME_SUFFIX} ${SLEPC_EPS_LIB_BASIC}
+SLEPC_PEP_LIB_BASIC = -lslepcpep${LIB_NAME_SUFFIX} ${SLEPC_EPS_LIB_BASIC}
+SLEPC_NEP_LIB_BASIC = -lslepcnep${LIB_NAME_SUFFIX} ${SLEPC_PEP_LIB_BASIC}
+SLEPC_LIB_BASIC     = -lslepcnep${LIB_NAME_SUFFIX} -lslepcpep${LIB_NAME_SUFFIX} -lslepcsvd${LIB_NAME_SUFFIX} -lslepceps${LIB_NAME_SUFFIX} -lslepcmfn${LIB_NAME_SUFFIX} -lslepclme${LIB_NAME_SUFFIX} -lslepcsys${LIB_NAME_SUFFIX}
 
 SLEPC_SYS_LIB_NOPETSC = ${SLEPC_C_SH_LIB_PATH} -L${SLEPC_LIB_DIR} ${SLEPC_SYS_LIB_BASIC} ${SLEPC_EXTERNAL_LIB}
 SLEPC_MFN_LIB_NOPETSC = ${SLEPC_C_SH_LIB_PATH} -L${SLEPC_LIB_DIR} ${SLEPC_MFN_LIB_BASIC} ${SLEPC_EXTERNAL_LIB}
@@ -61,7 +61,7 @@ SLEPC_NEP_LIB   = ${SLEPC_NEP_LIB_NOPETSC} ${PETSC_SNES_LIB}
 SLEPC_LIB       = ${SLEPC_LIB_NOPETSC} ${PETSC_SNES_LIB}
 
 # Redefine variable used to build shared libraries
-SHLIBS = libslepcsys libslepcmfn libslepclme libslepceps libslepcsvd libslepcpep libslepcnep
+SHLIBS = libslepcsys${LIB_NAME_SUFFIX} libslepcmfn${LIB_NAME_SUFFIX} libslepclme${LIB_NAME_SUFFIX} libslepceps${LIB_NAME_SUFFIX} libslepcsvd${LIB_NAME_SUFFIX} libslepcpep${LIB_NAME_SUFFIX} libslepcnep${LIB_NAME_SUFFIX}
 
 # Include definitions customized by configuration
 include ${SLEPC_DIR}/${PETSC_ARCH}/lib/slepc/conf/slepcvariables
