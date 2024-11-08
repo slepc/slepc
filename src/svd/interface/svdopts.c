@@ -199,7 +199,6 @@ PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
   PetscValidLogicalCollectiveInt(svd,nsv,2);
   PetscValidLogicalCollectiveInt(svd,ncv,3);
   PetscValidLogicalCollectiveInt(svd,mpd,4);
-  PetscCheck(nsv>0,PetscObjectComm((PetscObject)svd),PETSC_ERR_ARG_OUTOFRANGE,"Illegal value of nsv. Must be > 0");
   if (nsv != PETSC_CURRENT) {
     PetscCheck(nsv>0,PetscObjectComm((PetscObject)svd),PETSC_ERR_ARG_OUTOFRANGE,"Illegal value of nsv. Must be > 0");
     svd->nsv = nsv;
