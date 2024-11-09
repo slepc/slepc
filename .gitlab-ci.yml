@@ -399,7 +399,7 @@ gnu-c-complex-multilib:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-single-library=0 --download-metis --download-parmetis --download-scalapack --with-cxx-dialect=17
+    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-single-library=0 --with-library-name-suffix=Complex --download-metis --download-parmetis --download-scalapack --with-cxx-dialect=17
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --with-fortran-bindings-inplace
 
 gnu-c-libs:

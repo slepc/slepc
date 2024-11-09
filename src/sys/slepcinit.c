@@ -125,6 +125,9 @@ static PetscErrorCode SlepcLoadDynamicLibrary(const char *name,PetscBool *found)
   PetscCall(PetscStrcpy(libs,SLEPC_LIB_DIR));
   PetscCall(PetscStrlcat(libs,"/libslepc",sizeof(libs)));
   PetscCall(PetscStrlcat(libs,name,sizeof(libs)));
+#if defined(PETSC_LIB_NAME_SUFFIX)
+  PetscCall(PetscStrlcat(libs,PETSC_LIB_NAME_SUFFIX,sizeof(libs)));
+#endif
   PetscCall(PetscDLLibraryRetrieve(PETSC_COMM_WORLD,libs,dlib,sizeof(dlib),found));
   if (*found) PetscCall(PetscDLLibraryAppend(PETSC_COMM_WORLD,&PetscDLLibrariesLoaded,dlib));
   PetscFunctionReturn(PETSC_SUCCESS);
