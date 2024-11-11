@@ -124,6 +124,7 @@ int main(int argc,char **argv)
          suffix: 1
       test:
          suffix: 2
+         requires: defined(PETSC_HAVE_DYNAMIC_LIBRARIES) defined(PETSC_USE_SHARED_LIBRARIES)
          args: -library_preload
 
    testset:
