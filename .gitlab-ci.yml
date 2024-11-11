@@ -903,3 +903,12 @@ gnu-c-hip-int64:
     PETSC_CONFIG_OPTS: --with-hip --with-64-bit-indices
     TEST_OPTS: query=requires queryval=hip
 
+gnu-c-static-multilib:
+  extends:
+    - .stage-3
+    - .linux_test
+  tags:
+    - name:satet
+  variables:
+    PETSC_CONFIG_OPTS: --with-shared-libraries=0 --with-single-library=0
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme --download-blopex
