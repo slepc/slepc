@@ -230,12 +230,11 @@ define GFORTRAN_DEP_CLEANUP
 endef
 
 # link line constructed differently for gmakefile vs gmakefile.test invocation
-#ifeq ($(libslepcall),)
+ifeq ($(libslepcall),)
 SLEPC_TEST_LIB = $(SLEPC_LIB)
-#else
-#SLEPC_TEST_LIB = $(SLEPC_LIB)
-#SLEPC_TEST_LIB = $(C_SH_LIB_PATH) $(SLEPC_EXTERNAL_LIB_BASIC)
-#endif
+else
+SLEPC_TEST_LIB = $(SLEPC_C_SH_LIB_PATH) $(SLEPC_EXTERNAL_LIB) $(PETSC_LIB)
+endif
 
 # MACOS FIREWALL HANDLING
 # - if run with MACOS_FIREWALL=1
