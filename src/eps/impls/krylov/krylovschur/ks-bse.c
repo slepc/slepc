@@ -722,7 +722,7 @@ PetscErrorCode EPSSetUp_KrylovSchur_BSE(EPS eps)
 PetscErrorCode EPSSolve_KrylovSchur_BSE_Shao(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
-  PetscInt        k,l,ld,nv,nconv=0,nevsave;
+  PetscInt        i,k,l,ld,nv,nconv=0,nevsave;
   Mat             H,Q;
   BV              U,V;
   IS              is[2];
@@ -766,6 +766,7 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_Shao(EPS eps)
     PetscCall(DSSynchronize(eps->ds,eps->eigr,eps->eigi));
 
     /* Check convergence */
+    for (i=0;i<eps->ncv;i++) eps->eigr[i] = PetscSqrtReal(PetscRealPart(eps->eigr[i]));
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,1.0,&k));
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
@@ -790,7 +791,6 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_Shao(EPS eps)
 
     if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(eps->V,nv,k+l));
     eps->nconv = k;
-    for (k=0; k<eps->ncv; k++) eps->eigr[k] = PetscSqrtReal(PetscRealPart(eps->eigr[k]));
     PetscCall(EPSMonitor(eps,eps->its,nconv,eps->eigr,eps->eigi,eps->errest,nv));
   }
 
@@ -928,7 +928,7 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_Gruning(EPS eps)
 PetscErrorCode EPSSolve_KrylovSchur_BSE_ProjectedBSE(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
-  PetscInt        k,l,ld,nv,nconv=0,nevsave;
+  PetscInt        i,k,l,ld,nv,nconv=0,nevsave;
   Mat             H,Q;
   Vec             v;
   BV              U,V;
@@ -976,6 +976,7 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_ProjectedBSE(EPS eps)
     PetscCall(DSSynchronize(eps->ds,eps->eigr,eps->eigi));
 
     /* Check convergence */
+    for (i=0;i<eps->ncv;i++) eps->eigr[i] = PetscSqrtReal(PetscRealPart(eps->eigr[i]));
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,1.0,&k));
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
@@ -1000,8 +1001,6 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_ProjectedBSE(EPS eps)
 
     if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(eps->V,nv,k+l));
     eps->nconv = k;
-    /* Obtain eigenvalues */
-    for (k=0; k<eps->ncv; k++) eps->eigr[k] = PetscSqrtReal(PetscRealPart(eps->eigr[k]));
     PetscCall(EPSMonitor(eps,eps->its,nconv,eps->eigr,eps->eigi,eps->errest,nv));
   }
 
