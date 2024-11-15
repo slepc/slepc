@@ -215,6 +215,7 @@ def requires(pkgname, major, minor, release=True):
     return "%s>=%s,<%s" % (pkgname, vmin, vmax)
 
 def run_setup():
+    is_sdist = 'sdist' in sys.argv
     setup_args = metadata.copy()
     vstr = setup_args['version'].split('.')[:2]
     x, y = tuple(map(int, vstr))
@@ -223,12 +224,15 @@ def run_setup():
         setup_args['version'] = "%d.%d.0.dev0" %(x, y+1)
     if setuptools:
         setup_args['zip_safe'] = False
-        try:
-            import numpy
-            major = int(numpy.__version__.partition('.')[0])
-            numpy_pin = 'numpy>=1.19' if major >= 2 else 'numpy<2'
-        except ImportError:
-            numpy_pin = 'numpy'
+        numpy_pin = 'numpy'
+        if not is_sdist:
+            try:
+                import numpy
+
+                major = int(numpy.__version__.partition('.')[0])
+                numpy_pin = 'numpy>=1.19' if major >= 2 else 'numpy<2'
+            except ImportError:
+                pass
         setup_args['setup_requires'] = ['numpy']
         setup_args['install_requires'] = [numpy_pin]
         for pkg in map(str.lower, PLIST):

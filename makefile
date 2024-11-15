@@ -238,6 +238,9 @@ clean:: allclean
 
 #********* Rules for printing library properties useful for building applications **********************
 
+getversion_slepc:
+	-@${SLEPC_DIR}/lib/slepc/bin/slepcversion
+
 getlinklibs_slepc:
 	-@${OMAKE} -f gmakefile gmakegetlinklibs_slepc
 
