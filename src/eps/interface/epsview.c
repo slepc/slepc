@@ -303,7 +303,7 @@ static PetscErrorCode EPSErrorView_ASCII(EPS eps,EPSErrorType etype,PetscViewer 
 
   PetscFunctionBegin;
   PetscCall(EPS_GetActualConverged(eps,&nconv));
-  nvals = (eps->which==EPS_ALL || eps->stop==EPS_STOP_THRESHOLD)? eps->nconv: eps->nev;
+  nvals = (eps->which==EPS_ALL || eps->stop==EPS_STOP_THRESHOLD)? nconv: eps->nev;
   if (eps->which!=EPS_ALL && nconv<nvals) {
     PetscCall(PetscViewerASCIIPrintf(viewer," Problem: less than %" PetscInt_FMT " eigenvalues converged\n\n",eps->nev));
     PetscFunctionReturn(PETSC_SUCCESS);
