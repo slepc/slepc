@@ -229,14 +229,25 @@ int main(int argc,char **argv)
          requires: hpddm
 
    testset:
-      args: -svd_type trlanczos -svd_trlanczos_explicitmatrix -svd_trlanczos_scale 100 -svd_trlanczos_gbidiag {{lower upper single}} -terse
+      args: -f1 ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -f2 identity -svd_threshold_relative 0.87 -terse
+      output_file: output/ex48_5.out
+      requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
       test:
          suffix: 5
-         args: -f1 ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -f2 identity -svd_threshold_relative 0.87
-         requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
+         args: -svd_type trlanczos -svd_trlanczos_explicitmatrix -svd_trlanczos_scale 100 -svd_trlanczos_gbidiag {{lower upper single}}
+      test:
+         suffix: 5_cross
+         args: -svd_type cross -svd_cross_explicitmatrix
+
+   testset:
+      args: -f1 ${DATAFILESPATH}/matrices/complex/qc324.petsc -f2 bidiagonal -svd_threshold_relative 0.3 -svd_ncv 8 -svd_tol 1e-7 -terse
+      output_file: output/ex48_5_complex.out
+      requires: double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
       test:
          suffix: 5_complex
-         args: -f1 ${DATAFILESPATH}/matrices/complex/qc324.petsc -f2 bidiagonal -svd_threshold_relative 0.5 -svd_ncv 8 -svd_trlanczos_ksp_rtol 1e-6 -svd_tol 1e-7
-         requires: double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
+         args: -svd_type trlanczos -svd_trlanczos_explicitmatrix -svd_trlanczos_scale 100 -svd_trlanczos_ksp_rtol 1e-6 -svd_trlanczos_gbidiag {{lower upper single}}
+      test:
+         suffix: 5_complex_cross
+         args: -svd_type cross -svd_cross_explicitmatrix
 
 TEST*/

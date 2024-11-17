@@ -181,7 +181,7 @@ int main(int argc,char **argv)
          filter: sed -e 's/[0-9][0-9]$//'
 
    testset:
-      args: -svd_type {{trlanczos lanczos}} -terse
+      args: -svd_type {{trlanczos lanczos cross}} -terse
       filter: grep -v method
       test:
          suffix: 4

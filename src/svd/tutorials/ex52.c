@@ -235,7 +235,7 @@ int main(int argc,char **argv)
          suffix: 5_lapack
 
    testset:
-      args: -svd_type trlanczos -terse -p 100
+      args: -svd_type {{trlanczos cross}} -terse -p 100
       test:
          suffix: 6
          filter: sed -e "s/27.29445, 27.29445/27.29445/"
