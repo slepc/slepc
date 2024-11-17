@@ -209,7 +209,7 @@ static PetscErrorCode SVDSetUp_Cross(SVD svd)
     } else {
       if (issinv) which = EPS_TARGET_MAGNITUDE;
       else if (svd->ishyperbolic) which = svd->which==SVD_LARGEST?EPS_LARGEST_MAGNITUDE:EPS_SMALLEST_MAGNITUDE;
-      else which = svd->which==SVD_LARGEST?EPS_LARGEST_REAL:EPS_SMALLEST_REAL;
+      else which = svd->which==SVD_LARGEST?EPS_LARGEST_MAGNITUDE:EPS_SMALLEST_MAGNITUDE;
     }
     PetscCall(EPSSetWhichEigenpairs(cross->eps,which));
     PetscCall(EPSSetDimensions(cross->eps,svd->nsv,svd->ncv,svd->mpd));
@@ -516,7 +516,7 @@ static PetscErrorCode SVDCrossGetEPS_Cross(SVD svd,EPS *eps)
     PetscCall(EPSSetOptionsPrefix(cross->eps,((PetscObject)svd)->prefix));
     PetscCall(EPSAppendOptionsPrefix(cross->eps,"svd_cross_"));
     PetscCall(PetscObjectSetOptions((PetscObject)cross->eps,((PetscObject)svd)->options));
-    PetscCall(EPSSetWhichEigenpairs(cross->eps,EPS_LARGEST_REAL));
+    PetscCall(EPSSetWhichEigenpairs(cross->eps,EPS_LARGEST_MAGNITUDE));
     PetscCall(EPSMonitorSet(cross->eps,EPSMonitor_Cross,svd,NULL));
   }
   *eps = cross->eps;
