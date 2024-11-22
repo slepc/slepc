@@ -755,6 +755,29 @@ static PetscErrorCode DSDestroy_GSVD(DS ds)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode DSReallocate_GSVD(DS ds,PetscInt ld)
+{
+  PetscInt i,*perm=ds->perm;
+
+  PetscFunctionBegin;
+  for (i=0;i<DS_NUM_MAT;i++) {
+    if (i!=DS_MAT_A && i!=DS_MAT_B && i!=DS_MAT_X && i!=DS_MAT_U && i!=DS_MAT_V && i!=DS_MAT_T && i!=DS_MAT_D) PetscCall(MatDestroy(&ds->omat[i]));
+  }
+
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_A,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_B,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_X,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_U,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_V,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_T,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_D,ld));
+
+  PetscCall(PetscMalloc1(ld,&ds->perm));
+  PetscCall(PetscArraycpy(ds->perm,perm,ds->ld));
+  PetscCall(PetscFree(perm));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 /*MC
    DSGSVD - Dense Generalized Singular Value Decomposition.
 
@@ -822,6 +845,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_GSVD(DS ds)
   ds->ops->cond          = DSCond_GSVD;
   ds->ops->matgetsize    = DSMatGetSize_GSVD;
   ds->ops->destroy       = DSDestroy_GSVD;
+  ds->ops->reallocate    = DSReallocate_GSVD;
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSGSVDSetDimensions_C",DSGSVDSetDimensions_GSVD));
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSGSVDGetDimensions_C",DSGSVDGetDimensions_GSVD));
   PetscFunctionReturn(PETSC_SUCCESS);

@@ -660,6 +660,28 @@ static PetscErrorCode DSSetCompact_HSVD(DS ds,PetscBool comp)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode DSReallocate_HSVD(DS ds,PetscInt ld)
+{
+  PetscInt i,*perm=ds->perm;
+
+  PetscFunctionBegin;
+  for (i=0;i<DS_NUM_MAT;i++) {
+    if (!ds->compact && i==DS_MAT_A) continue;
+    if (i!=DS_MAT_U && i!=DS_MAT_V && i!=DS_MAT_T && i!=DS_MAT_D) PetscCall(MatDestroy(&ds->omat[i]));
+  }
+
+  if (!ds->compact) PetscCall(DSReallocateMat_Private(ds,DS_MAT_A,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_U,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_V,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_T,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_D,ld));
+
+  PetscCall(PetscMalloc1(ld,&ds->perm));
+  PetscCall(PetscArraycpy(ds->perm,perm,ds->ld));
+  PetscCall(PetscFree(perm));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 /*MC
    DSHSVD - Dense Hyperbolic Singular Value Decomposition.
 
@@ -714,6 +736,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_HSVD(DS ds)
   ds->ops->synchronize    = DSSynchronize_HSVD;
 #endif
   ds->ops->setcompact     = DSSetCompact_HSVD;
+  ds->ops->reallocate     = DSReallocate_HSVD;
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSHSVDSetDimensions_C",DSHSVDSetDimensions_HSVD));
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSHSVDGetDimensions_C",DSHSVDGetDimensions_HSVD));
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSHSVDSetReorthogonalize_C",DSHSVDSetReorthogonalize_HSVD));

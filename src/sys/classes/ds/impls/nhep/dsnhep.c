@@ -536,6 +536,24 @@ static PetscErrorCode DSTranslateHarmonic_NHEP(DS ds,PetscScalar tau,PetscReal b
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode DSReallocate_NHEP(DS ds,PetscInt ld)
+{
+  PetscInt i,*perm=ds->perm;
+
+  PetscFunctionBegin;
+  for (i=0;i<DS_NUM_MAT;i++) {
+    if (i!=DS_MAT_A && i!=DS_MAT_Q) PetscCall(MatDestroy(&ds->omat[i]));
+  }
+
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_A,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_Q,ld));
+
+  PetscCall(PetscMalloc1(ld,&ds->perm));
+  PetscCall(PetscArraycpy(ds->perm,perm,ds->ld));
+  PetscCall(PetscFree(perm));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 /*MC
    DSNHEP - Dense Non-Hermitian Eigenvalue Problem.
 
@@ -579,5 +597,6 @@ SLEPC_EXTERN PetscErrorCode DSCreate_NHEP(DS ds)
   ds->ops->update          = DSUpdateExtraRow_NHEP;
   ds->ops->cond            = DSCond_NHEP;
   ds->ops->transharm       = DSTranslateHarmonic_NHEP;
+  ds->ops->reallocate      = DSReallocate_NHEP;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

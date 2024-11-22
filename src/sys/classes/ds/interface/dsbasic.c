@@ -846,7 +846,7 @@ PetscErrorCode DSViewFromOptions(DS ds,PetscObject obj,const char name[])
 
    Level: intermediate
 
-.seealso: DSGetLeadingDimension(), DSSetDimensions(), DSSetExtraRow(), DSReset()
+.seealso: DSGetLeadingDimension(), DSSetDimensions(), DSSetExtraRow(), DSReset(), DSReallocate()
 @*/
 PetscErrorCode DSAllocate(DS ds,PetscInt ld)
 {
@@ -861,6 +861,40 @@ PetscErrorCode DSAllocate(DS ds,PetscInt ld)
     ds->ld = ld;
     PetscUseTypeMethod(ds,allocate,ld);
   }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   DSReallocate - Reallocates memory for internal storage or matrices in DS,
+   keeping the previously set data.
+
+   Logically Collective
+
+   Input Parameters:
++  ds - the direct solver context
+-  ld - new leading dimension
+
+   Notes:
+   The new leading dimension must be larger than the previous one. The relevant
+   data previously set is copied over to the new data structures.
+
+   This operation is not available in all DS types.
+
+   Level: developer
+
+.seealso: DSAllocate()
+@*/
+PetscErrorCode DSReallocate(DS ds,PetscInt ld)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(ds,DS_CLASSID,1);
+  PetscValidLogicalCollectiveInt(ds,ld,2);
+  PetscValidType(ds,1);
+  PetscCheck(ds->ld,PetscObjectComm((PetscObject)ds),PETSC_ERR_ORDER,"DSAllocate() must be called first");
+  PetscCheck(ld>ds->ld,PetscObjectComm((PetscObject)ds),PETSC_ERR_ARG_OUTOFRANGE,"New leading dimension %" PetscInt_FMT " must be larger than the previous one %" PetscInt_FMT,ld,ds->ld);
+  PetscCall(PetscInfo(ds,"Reallocating memory with new leading dimension=%" PetscInt_FMT "\n",ld));
+  PetscUseTypeMethod(ds,reallocate,ld);
+  ds->ld = ld;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

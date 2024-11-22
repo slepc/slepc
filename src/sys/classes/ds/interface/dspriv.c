@@ -63,6 +63,36 @@ PetscErrorCode DSAllocateMat_Private(DS ds,DSMatType m)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+PetscErrorCode DSReallocateMat_Private(DS ds,DSMatType mat,PetscInt ld)
+{
+  Mat               M;
+  PetscInt          i,m,n,rows,cols;
+  PetscScalar       *dst;
+  PetscReal         *rdst;
+  const PetscScalar *src;
+  const PetscReal   *rsrc;
+
+  PetscFunctionBegin;
+  PetscCall(MatGetSize(ds->omat[mat],&m,&n));
+  rows = ld;
+  cols = m==n? ld: n;
+  PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,rows,cols,NULL,&M));
+  PetscCall(MatDenseGetArrayRead(ds->omat[mat],&src));
+  PetscCall(MatDenseGetArray(M,&dst));
+  if (mat==DS_MAT_T && PetscDefined(USE_COMPLEX)) {
+    rsrc = (const PetscReal*)src;
+    rdst = (PetscReal*)dst;
+    for (i=0;i<3;i++) PetscCall(PetscArraycpy(rdst+i*ld,rsrc+i*ds->ld,ds->ld));
+  } else {
+    for (i=0;i<n;i++) PetscCall(PetscArraycpy(dst+i*ld,src+i*ds->ld,ds->ld));
+  }
+  PetscCall(MatDenseRestoreArrayRead(ds->omat[mat],&src));
+  PetscCall(MatDenseRestoreArray(M,&dst));
+  PetscCall(MatDestroy(&ds->omat[mat]));
+  ds->omat[mat] = M;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 PetscErrorCode DSAllocateWork_Private(DS ds,PetscInt s,PetscInt r,PetscInt i)
 {
   PetscFunctionBegin;
