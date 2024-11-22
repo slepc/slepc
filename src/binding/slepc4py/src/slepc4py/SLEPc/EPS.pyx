@@ -169,11 +169,13 @@ class EPSStop(object):
     """
     EPS stopping test
 
-    - `BASIC`: Default stopping test.
-    - `USER`:  User-defined stopping test.
+    - `BASIC`:     Default stopping test.
+    - `USER`:      User-defined stopping test.
+    - `THRESHOLD`: Threshold stopping test.
     """
-    BASIC = EPS_STOP_BASIC
-    USER  = EPS_STOP_USER
+    BASIC     = EPS_STOP_BASIC
+    USER      = EPS_STOP_USER
+    THRESHOLD = EPS_STOP_THRESHOLD
 
 class EPSConvergedReason(object):
     """
@@ -641,6 +643,45 @@ cdef class EPS(Object):
         """
         cdef SlepcEPSWhich val = which
         CHKERR( EPSSetWhichEigenpairs(self.eps, val) )
+
+    def getThreshold(self):
+        """
+        Gets the threshold used in the threshold stopping test.
+
+        Returns
+        -------
+        thres: float
+             The threshold.
+        rel: bool
+             Whether the threshold is relative or not.
+        """
+        cdef PetscReal rval = 0
+        cdef PetscBool tval = PETSC_FALSE
+        CHKERR( EPSGetThreshold(self.eps, &rval, &tval) )
+        return (toReal(rval), toBool(tval))
+
+    def setThreshold(self, thres, rel=False):
+        """
+        Sets the threshold used in the threshold stopping test.
+
+        Parameters
+        ----------
+        thres: float
+             The threshold.
+        rel: bool, optional
+             Whether the threshold is relative or not.
+
+        Notes
+        -----
+        This function internally sets a special stopping test based on
+        the threshold, where eigenvalues are computed in sequence
+        until one of the computed eigenvalues is below/above the
+        threshold (depending on whether largest or smallest eigenvalues
+        are computed).
+        """
+        cdef PetscReal rval = asReal(thres)
+        cdef PetscBool tval = asBool(rel)
+        CHKERR( EPSSetThreshold(self.eps, rval, tval) )
 
     def getTarget(self):
         """

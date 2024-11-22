@@ -74,6 +74,7 @@ cdef extern from * nogil:
     ctypedef enum SlepcEPSStop "EPSStop":
         EPS_STOP_BASIC
         EPS_STOP_USER
+        EPS_STOP_THRESHOLD
 
     ctypedef enum SlepcEPSConvergedReason "EPSConvergedReason":
         EPS_CONVERGED_TOL
@@ -136,6 +137,8 @@ cdef extern from * nogil:
     PetscErrorCode EPSGetBalance(SlepcEPS,SlepcEPSBalance*,PetscInt*,PetscReal*)
     PetscErrorCode EPSSetWhichEigenpairs(SlepcEPS,SlepcEPSWhich)
     PetscErrorCode EPSGetWhichEigenpairs(SlepcEPS,SlepcEPSWhich*)
+    PetscErrorCode EPSSetThreshold(SlepcEPS,PetscReal,PetscBool)
+    PetscErrorCode EPSGetThreshold(SlepcEPS,PetscReal*,PetscBool*)
     PetscErrorCode EPSSetTarget(SlepcEPS,PetscScalar)
     PetscErrorCode EPSGetTarget(SlepcEPS,PetscScalar*)
     PetscErrorCode EPSSetInterval(SlepcEPS,PetscReal,PetscReal)

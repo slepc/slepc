@@ -27,6 +27,8 @@ int main(int argc,char **argv)
   Mat            A;               /* operator matrix */
   EPS            eps;             /* eigenproblem solver context */
   EPSType        type;
+  EPSStop        stop;
+  PetscReal      thres;
   PetscInt       N,m=15,nev;
   PetscMPIInt    rank;
   PetscBool      terse;
@@ -93,8 +95,14 @@ int main(int argc,char **argv)
   */
   PetscCall(EPSGetType(eps,&type));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD," Solution method: %s\n\n",type));
-  PetscCall(EPSGetDimensions(eps,&nev,NULL,NULL));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD," Number of requested eigenvalues: %" PetscInt_FMT "\n",nev));
+  PetscCall(EPSGetStoppingTest(eps,&stop));
+  if (stop!=EPS_STOP_THRESHOLD) {
+    PetscCall(EPSGetDimensions(eps,&nev,NULL,NULL));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Number of requested eigenvalues: %" PetscInt_FMT "\n",nev));
+  } else {
+    PetscCall(EPSGetThreshold(eps,&thres,NULL));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Using threshold: %.4g\n",(double)thres));
+  }
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Display solution and clean up
@@ -176,5 +184,10 @@ PetscErrorCode MatMarkovModel(PetscInt m,Mat A)
       nsize: 2
       args: -eps_largest_real -eps_nev 4 -eps_two_sided {{0 1}} -eps_krylovschur_locking {{0 1}} -ds_parallel synchronized -terse
       filter: sed -e "s/90424/90423/" | sed -e "s/85715/85714/"
+
+   test:
+      suffix: 2
+      args: -eps_threshold_relative .9 -eps_ncv 10 -terse
+      filter: sed -e "s/-0.85714/0.85714/" | sed -e "s/90424/90423/" | sed -e "s/-1.00000, 1.00000/1.00000, -1.00000/" | sed -e "s/-0.97137, 0.97137/0.97137, -0.97137/" | sed -e "s/-0.90423, 0.90423/0.90423, -0.90423/"
 
 TEST*/

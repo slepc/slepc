@@ -22,6 +22,8 @@
 #define epsconvergedrelative_             EPSCONVERGEDRELATIVE
 #define epsconvergednorm_                 EPSCONVERGEDNORM
 #define epssetconvergencetestfunction_    EPSSETCONVERGENCETESTFUNCTION
+#define epsstoppingbasic_                 EPSSTOPPINGBASIC
+#define epsstoppingthreshold_             EPSSTOPPINGTHRESHOLD
 #define epssetstoppingtestfunction_       EPSSETSTOPPINGTESTFUNCTION
 #define epsseteigenvaluecomparison_       EPSSETEIGENVALUECOMPARISON
 #define epssetarbitraryselection_         EPSSETARBITRARYSELECTION
@@ -36,6 +38,8 @@
 #define epsconvergedrelative_             epsconvergedrelative
 #define epsconvergednorm_                 epsconvergednorm
 #define epssetconvergencetestfunction_    epssetconvergencetestfunction
+#define epsstoppingbasic_                 epsstoppingbasic
+#define epsstoppingthreshold_             epsstoppingthreshold
 #define epssetstoppingtestfunction_       epssetstoppingtestfunction
 #define epsseteigenvaluecomparison_       epsseteigenvaluecomparison
 #define epssetarbitraryselection_         epssetarbitraryselection
@@ -184,12 +188,19 @@ SLEPC_EXTERN void epsstoppingbasic_(EPS *eps,PetscInt *its,PetscInt *max_it,Pets
   *ierr = EPSStoppingBasic(*eps,*its,*max_it,*nconv,*nev,reason,ctx);
 }
 
+SLEPC_EXTERN void epsstoppingthreshold_(EPS *eps,PetscInt *its,PetscInt *max_it,PetscInt *nconv,PetscInt *nsv,EPSConvergedReason *reason,void *ctx,PetscErrorCode *ierr)
+{
+  *ierr = EPSStoppingThreshold(*eps,*its,*max_it,*nconv,*nsv,reason,ctx);
+}
+
 SLEPC_EXTERN void epssetstoppingtestfunction_(EPS *eps,void (*func)(EPS*,PetscInt,PetscInt,PetscInt,PetscInt,EPSConvergedReason*,void*,PetscErrorCode*),void* ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);
   if ((PetscVoidFunction)func == (PetscVoidFunction)epsstoppingbasic_) {
     *ierr = EPSSetStoppingTest(*eps,EPS_STOP_BASIC);
+  } else if ((PetscVoidFunction)func == (PetscVoidFunction)epsstoppingthreshold_) {
+    *ierr = EPSSetStoppingTest(*eps,EPS_STOP_THRESHOLD);
   } else {
     *ierr = PetscObjectSetFortranCallback((PetscObject)*eps,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.stopping,(PetscVoidFunction)func,ctx); if (*ierr) return;
     *ierr = PetscObjectSetFortranCallback((PetscObject)*eps,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.stopdestroy,(PetscVoidFunction)destroy,ctx); if (*ierr) return;

@@ -37,13 +37,14 @@ typedef struct {
   PetscInt  guard;     /* number of guard vectors */
 } EPS_LOBPCG;
 
-static PetscErrorCode EPSSetDimensions_LOBPCG(EPS eps,PetscInt nev,PetscInt *ncv,PetscInt *mpd)
+static PetscErrorCode EPSSetDimensions_LOBPCG(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
   EPS_LOBPCG *ctx = (EPS_LOBPCG*)eps->data;
   PetscInt   k;
 
   PetscFunctionBegin;
-  k = PetscMax(3*ctx->bs,((eps->nev-1)/ctx->bs+3)*ctx->bs);
+  if (*nev==0) *nev = 1;
+  k = PetscMax(3*ctx->bs,((*nev-1)/ctx->bs+3)*ctx->bs);
   if (*ncv!=PETSC_DETERMINE) { /* ncv set */
     PetscCheck(*ncv>=k,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv is not sufficiently large");
   } else *ncv = k;
@@ -59,13 +60,13 @@ static PetscErrorCode EPSSetUp_LOBPCG(EPS eps)
   PetscFunctionBegin;
   EPSCheckHermitianDefinite(eps);
   EPSCheckNotStructured(eps);
-  if (!ctx->bs) ctx->bs = PetscMin(16,eps->nev);
+  if (!ctx->bs) ctx->bs = PetscMin(16,eps->nev?eps->nev:1);
   PetscCheck(eps->n-eps->nds>=5*ctx->bs,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"The problem size is too small relative to the block size");
-  PetscCall(EPSSetDimensions_LOBPCG(eps,eps->nev,&eps->ncv,&eps->mpd));
+  PetscCall(EPSSetDimensions_LOBPCG(eps,&eps->nev,&eps->ncv,&eps->mpd));
   if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
   if (!eps->which) eps->which = EPS_SMALLEST_REAL;
   PetscCheck(eps->which==EPS_SMALLEST_REAL || eps->which==EPS_LARGEST_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"This solver supports only smallest real or largest real eigenvalues");
-  EPSCheckUnsupported(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION);
+  EPSCheckUnsupported(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_THRESHOLD);
   EPSCheckIgnored(eps,EPS_FEATURE_BALANCE);
 
   if (!ctx->restart) ctx->restart = 0.9;

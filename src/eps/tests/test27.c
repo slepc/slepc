@@ -126,7 +126,7 @@ int main(int argc,char **argv)
       output_file: output/test27_2.out
       test:
          suffix: 2
-         args: -st_type filter -st_filter_degree 150 -eps_nev 1
+         args: -st_type filter -st_filter_degree 150
          requires: !single
       test:
          suffix: 2_evsl

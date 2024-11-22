@@ -67,6 +67,7 @@
 
       PetscEnum, parameter :: EPS_STOP_BASIC             =  0
       PetscEnum, parameter :: EPS_STOP_USER              =  1
+      PetscEnum, parameter :: EPS_STOP_THRESHOLD         =  2
 
       PetscEnum, parameter :: EPS_POWER_SHIFT_CONSTANT   =  0
       PetscEnum, parameter :: EPS_POWER_SHIFT_RAYLEIGH   =  1

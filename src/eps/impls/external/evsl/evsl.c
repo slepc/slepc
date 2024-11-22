@@ -72,6 +72,7 @@ static PetscErrorCode EPSSetUp_EVSL(EPS eps)
   EPSCheckStandard(eps);
   EPSCheckHermitian(eps);
   EPSCheckNotStructured(eps);
+  if (eps->nev==0) eps->nev = 1;
   PetscCall(PetscObjectTypeCompare((PetscObject)eps->st,STSHIFT,&isshift));
   PetscCheck(isshift,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"This solver does not support spectral transformations");
 

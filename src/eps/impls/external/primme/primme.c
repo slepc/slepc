@@ -179,6 +179,7 @@ static PetscErrorCode EPSSetUp_PRIMME(EPS eps)
   PetscFunctionBegin;
   EPSCheckHermitianDefinite(eps);
   EPSCheckNotStructured(eps);
+  if (eps->nev==0) eps->nev = 1;
   PetscCallMPI(MPI_Comm_size(PetscObjectComm((PetscObject)eps),&numProcs));
   PetscCallMPI(MPI_Comm_rank(PetscObjectComm((PetscObject)eps),&procID));
 

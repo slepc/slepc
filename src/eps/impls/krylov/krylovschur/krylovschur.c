@@ -69,7 +69,7 @@ static PetscErrorCode EPSSetUp_KrylovSchur_Filter(EPS eps)
   EPSCheckHermitianCondition(eps,PETSC_TRUE," with polynomial filter");
   EPSCheckStandardCondition(eps,PETSC_TRUE," with polynomial filter");
   PetscCheck(eps->intb<PETSC_MAX_REAL || eps->inta>PETSC_MIN_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONG,"The defined computational interval should have at least one of their sides bounded");
-  EPSCheckUnsupportedCondition(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION,PETSC_TRUE," with polynomial filter");
+  EPSCheckUnsupportedCondition(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_THRESHOLD,PETSC_TRUE," with polynomial filter");
   if (eps->tol==(PetscReal)PETSC_DETERMINE) eps->tol = SLEPC_DEFAULT_TOL*1e-2;  /* use tighter tolerance */
   PetscCall(STFilterSetInterval(eps->st,eps->inta,eps->intb));
   if (!ctx->estimatedrange) {
@@ -83,8 +83,8 @@ static PetscErrorCode EPSSetUp_KrylovSchur_Filter(EPS eps)
     PetscCall(STFilterSetRange(eps->st,rleft,rright));
     ctx->estimatedrange = PETSC_TRUE;
   }
-  if (eps->ncv==PETSC_DETERMINE && eps->nev==1) eps->nev = 40;  /* user did not provide nev estimation */
-  PetscCall(EPSSetDimensions_Default(eps,eps->nev,&eps->ncv,&eps->mpd));
+  if (eps->ncv==PETSC_DETERMINE && eps->nev==0) eps->nev = 40;  /* user did not provide nev estimation */
+  PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
   PetscCheck(eps->ncv<=eps->nev+eps->mpd,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nev+mpd");
   if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -108,9 +108,9 @@ static PetscErrorCode EPSSetUp_KrylovSchur(EPS eps)
     PetscCall(EPSSetUp_KrylovSchur_BSE(eps));
     PetscFunctionReturn(PETSC_SUCCESS);
   } else {
-    PetscCall(EPSSetDimensions_Default(eps,eps->nev,&eps->ncv,&eps->mpd));
+    PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
     PetscCheck(eps->ncv<=eps->nev+eps->mpd,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nev+mpd");
-    if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
+    if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv)*((eps->stop==EPS_STOP_THRESHOLD)?10:1);
     if (!eps->which) PetscCall(EPSSetWhichEigenpairs_Default(eps));
   }
   PetscCheck(ctx->lock || eps->mpd>=eps->ncv,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Should not use mpd parameter in non-locking variant");
@@ -227,7 +227,7 @@ static PetscErrorCode EPSSetUpSort_KrylovSchur(EPS eps)
 PetscErrorCode EPSSolve_KrylovSchur_Default(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
-  PetscInt        j,*pj,k,l,nv,ld,nconv;
+  PetscInt        i,j,*pj,k,l,nv,ld,nconv;
   Mat             U,Op,H,T;
   PetscScalar     *g;
   PetscReal       beta,gamma=1.0;
@@ -282,6 +282,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Default(EPS eps)
 
     /* Check convergence */
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,gamma,&k));
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
 
@@ -326,7 +327,17 @@ PetscErrorCode EPSSolve_KrylovSchur_Default(EPS eps)
     PetscCall(BVMultInPlace(eps->V,U,eps->nconv,k+l));
     PetscCall(DSRestoreMat(eps->ds,DS_MAT_Q,&U));
 
-    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(eps->V,nv,k+l));
+    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) {
+      PetscCall(BVCopyColumn(eps->V,nv,k+l));  /* copy restart vector from the last column */
+      if (eps->stop==EPS_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+        eps->ncv = eps->mpd+k;
+        PetscCall(EPSReallocateSolution(eps,eps->ncv+1));
+        for (i=nv;i<eps->ncv;i++) eps->perm[i] = i;
+        PetscCall(DSReallocate(eps->ds,eps->ncv+1));
+        PetscCall(DSGetLeadingDimension(eps->ds,&ld));
+      }
+    }
+
     eps->nconv = k;
     PetscCall(EPSMonitor(eps,eps->its,nconv,eps->eigr,eps->eigi,eps->errest,nv));
   }
