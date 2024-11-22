@@ -18,7 +18,7 @@ class Primme(package.Package):
     self.packagetype    = 'source_c'
     self.installable    = True
     self.downloadable   = True
-    self.version        = '3.2'
+    self.version        = '3.2.3'
     self.url            = 'https://github.com/primme/primme/archive/v'+self.version+'.tar.gz'
     self.archive        = 'primme-'+self.version+'.tar.gz'
     self.supportssingle = True
