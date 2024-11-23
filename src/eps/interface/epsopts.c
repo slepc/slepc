@@ -581,6 +581,14 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
    with respect to the dominant eigenvalue. Otherwise, the argument rel should be
    PETSC_FALSE.
 
+   An additional use case is with target magnitude selection of eigenvalues (e.g.,
+   with shift-and-invert), but this must be used with caution to avoid unexpected
+   behaviour. With an absolute threshold, the solver will assume that leftmost
+   eigenvalues are being computed (e.g., with target=0 for a problem with real
+   positive eigenvalues). In case of a relative threshold, a value of threshold<1
+   implies that the wanted eigenvalues are the largest ones, and otherwise the
+   solver assumes that smallest eigenvalues are being computed.
+
    The test against the threshold is done for converged eigenvalues, which
    implies that the final number of converged eigenvalues will be at least
    one more than the actual number of values below/above the threshold.

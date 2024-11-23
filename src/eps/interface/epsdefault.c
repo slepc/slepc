@@ -349,8 +349,13 @@ PetscErrorCode EPSStoppingThreshold(EPS eps,PetscInt its,PetscInt max_it,PetscIn
   thres   = ((EPSStoppingCtx)ctx)->thres;
   rel     = ((EPSStoppingCtx)ctx)->threlative;
   which   = ((EPSStoppingCtx)ctx)->which;
-  magnit  = (which==EPS_SMALLEST_MAGNITUDE || which==EPS_LARGEST_MAGNITUDE)? PETSC_TRUE: PETSC_FALSE;
-  if (nconv && magnit && ((which==EPS_LARGEST_MAGNITUDE && ((rel && lastev<thres*firstev) || (!rel && lastev<thres))) || (which==EPS_SMALLEST_MAGNITUDE && lastev>thres))) {
+  magnit  = (which==EPS_SMALLEST_MAGNITUDE || which==EPS_LARGEST_MAGNITUDE || which==EPS_TARGET_MAGNITUDE)? PETSC_TRUE: PETSC_FALSE;
+  if (nconv && magnit && which==EPS_TARGET_MAGNITUDE && ((rel && ((thres>1.0 && lastev>thres*firstev) || (thres<1.0 && lastev<thres*firstev))) || (!rel && lastev>thres))) {
+    if (!rel) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is above the threshold %g\n",(double)lastev,(double)thres));
+    else if (thres>1.0) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is above the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
+    else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
+    *reason = EPS_CONVERGED_TOL;
+  } else if (nconv && magnit && ((which==EPS_LARGEST_MAGNITUDE && ((rel && lastev<thres*firstev) || (!rel && lastev<thres))) || (which==EPS_SMALLEST_MAGNITUDE && lastev>thres))) {
     if (which==EPS_SMALLEST_MAGNITUDE) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is above the threshold %g\n",(double)lastev,(double)thres));
     else if (!rel) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is below the threshold %g\n",(double)lastev,(double)thres));
     else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastev,(double)firstev,(double)thres));

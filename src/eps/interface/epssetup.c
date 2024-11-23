@@ -359,10 +359,10 @@ PetscErrorCode EPSSetUp(EPS eps)
   /* threshold stopping test */
   if (eps->stop==EPS_STOP_THRESHOLD) {
     PetscCheck(eps->thres!=PETSC_MIN_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"Must give a threshold value with EPSSetThreshold()");
-    PetscCheck(eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_SMALLEST_MAGNITUDE || eps->which==EPS_LARGEST_REAL || eps->which==EPS_SMALLEST_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Threshold stopping test can only be used with largest/smallest magnitude/real selection of eigenvalues");
+    PetscCheck(eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_SMALLEST_MAGNITUDE || eps->which==EPS_LARGEST_REAL || eps->which==EPS_SMALLEST_REAL || eps->which==EPS_TARGET_MAGNITUDE,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Threshold stopping test can only be used with largest/smallest/target magnitude or largest/smallest real selection of eigenvalues");
     if (eps->which==EPS_LARGEST_REAL || eps->which==EPS_SMALLEST_REAL) PetscCheck(eps->problem_type==EPS_HEP || eps->problem_type==EPS_GHEP || eps->problem_type==EPS_BSE,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Threshold stopping test with largest/smallest real can only be used in problems that have all eigenvaues real");
-    else PetscCheck(eps->thres>0.0,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"In case of largest/smallest magnitude the threshold value must be positive");
-    PetscCheck(eps->which==EPS_LARGEST_MAGNITUDE || !eps->threlative,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"Can only use a relative threshold when which=EPS_LARGEST_MAGNITUDE");
+    else PetscCheck(eps->thres>0.0,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"In case of largest/smallest/target magnitude the threshold value must be positive");
+    PetscCheck(eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_TARGET_MAGNITUDE || !eps->threlative,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"Can only use a relative threshold with largest/target magnitude selection of eigenvalues");
     PetscCall(PetscNew(&ctx));
     ctx->thres      = eps->thres;
     ctx->threlative = eps->threlative;

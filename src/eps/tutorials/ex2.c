@@ -203,4 +203,17 @@ int main(int argc,char **argv)
       suffix: 5
       requires: !single
 
+   testset:
+      args: -n 25 -m 24 -st_type sinvert -terse
+      requires: double
+      test:
+         suffix: 6
+         args: -eps_threshold_absolute .15 -eps_target 0.01
+      test:
+         suffix: 6_rel_large
+         args: -eps_threshold_relative .98 -eps_target 8
+      test:
+         suffix: 6_rel_small
+         args: -eps_threshold_relative 3
+
 TEST*/
