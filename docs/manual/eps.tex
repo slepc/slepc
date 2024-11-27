@@ -207,6 +207,13 @@ allows the specification of the number of eigenvalues to compute, \texttt{nev}. 
 \end{Verbatim}
 requests 10 eigenvalues and instructs to use 24 column vectors. Note that \texttt{ncv} must be at least equal to \texttt{nev}, although in general it is recommended (depending on the method) to work with a larger subspace, for instance $\mathtt{ncv}\geq2\cdot\mathtt{nev}$ or even more. The case that the user requests a relatively large number of eigenpairs is discussed in \S\ref{sec:large-nev}.
 
+Instead of specifying the number of wanted eigenvalues \texttt{nev}, it is also possible to specify a threshold with
+        \findex{EPSSetThreshold}
+        \begin{Verbatim}[fontsize=\small]
+        EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel);
+        \end{Verbatim}
+This usage is discussed in \S\ref{sec:thres} for the case of \texttt{SVD}. For details about the differences in case of \texttt{EPS}, we refer to the manual page of \ident{EPSSetThreshold}.
+
 \paragraph{Eigenvalues of Interest.}
 
 For the selection of the portion of the spectrum of interest, there are several alternatives. In real symmetric problems, one may want to compute the largest or smallest eigenvalues in magnitude, or the leftmost or rightmost ones, or even all eigenvalues in a given interval. In other problems, in which the eigenvalues can be complex, then one can select eigenvalues depending on the magnitude, or the real part or even the imaginary part. Sometimes the eigenvalues of interest are those closest to a given target value, $\tau$, measuring the distance either in the ordinary way or along the real (or imaginary) axis. In some other cases, wanted eigenvalues must be found in a given region of the complex plane. Table \ref{tab:portion} summarizes all the possibilities available for the function

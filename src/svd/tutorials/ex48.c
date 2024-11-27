@@ -228,4 +228,26 @@ int main(int argc,char **argv)
          args: -prefix_push svd_trlanczos_pc_hpddm_ -levels_1_st_share_sub_ksp -levels_1_eps_nev 10 -levels_1_eps_threshold 0.005 -levels_1_pc_asm_type basic -define_subdomains -levels_1_pc_asm_sub_mat_type sbaij -levels_1_sub_pc_type cholesky -prefix_pop
          requires: hpddm
 
+   testset:
+      args: -f1 ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -f2 identity -svd_threshold_relative 0.87 -terse
+      output_file: output/ex48_5.out
+      requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
+      test:
+         suffix: 5
+         args: -svd_type trlanczos -svd_trlanczos_explicitmatrix -svd_trlanczos_scale 100 -svd_trlanczos_gbidiag {{lower upper single}}
+      test:
+         suffix: 5_cross
+         args: -svd_type cross -svd_cross_explicitmatrix
+
+   testset:
+      args: -f1 ${DATAFILESPATH}/matrices/complex/qc324.petsc -f2 bidiagonal -svd_threshold_relative 0.3 -svd_ncv 8 -svd_tol 1e-7 -terse
+      output_file: output/ex48_5_complex.out
+      requires: double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
+      test:
+         suffix: 5_complex
+         args: -svd_type trlanczos -svd_trlanczos_explicitmatrix -svd_trlanczos_scale 100 -svd_trlanczos_ksp_rtol 1e-6 -svd_trlanczos_gbidiag {{lower upper single}}
+      test:
+         suffix: 5_complex_cross
+         args: -svd_type cross -svd_cross_explicitmatrix
+
 TEST*/

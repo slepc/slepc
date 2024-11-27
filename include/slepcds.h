@@ -159,6 +159,7 @@ SLEPC_EXTERN PetscErrorCode DSReset(DS);
 SLEPC_EXTERN PetscErrorCode DSDuplicate(DS,DS*);
 
 SLEPC_EXTERN PetscErrorCode DSAllocate(DS,PetscInt);
+SLEPC_EXTERN PetscErrorCode DSReallocate(DS,PetscInt);
 SLEPC_EXTERN PetscErrorCode DSGetLeadingDimension(DS,PetscInt*);
 SLEPC_EXTERN PetscErrorCode DSSetState(DS,DSStateType);
 SLEPC_EXTERN PetscErrorCode DSGetState(DS,DSStateType*);

@@ -723,6 +723,27 @@ static PetscErrorCode DSSetCompact_SVD(DS ds,PetscBool comp)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode DSReallocate_SVD(DS ds,PetscInt ld)
+{
+  PetscInt i,*perm=ds->perm;
+
+  PetscFunctionBegin;
+  for (i=0;i<DS_NUM_MAT;i++) {
+    if (!ds->compact && i==DS_MAT_A) continue;
+    if (i!=DS_MAT_U && i!=DS_MAT_V && i!=DS_MAT_T) PetscCall(MatDestroy(&ds->omat[i]));
+  }
+
+  if (!ds->compact) PetscCall(DSReallocateMat_Private(ds,DS_MAT_A,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_U,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_V,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_T,ld));
+
+  PetscCall(PetscMalloc1(ld,&ds->perm));
+  PetscCall(PetscArraycpy(ds->perm,perm,ds->ld));
+  PetscCall(PetscFree(perm));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 /*MC
    DSSVD - Dense Singular Value Decomposition.
 
@@ -778,6 +799,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_SVD(DS ds)
   ds->ops->synchronize   = DSSynchronize_SVD;
 #endif
   ds->ops->setcompact    = DSSetCompact_SVD;
+  ds->ops->reallocate    = DSReallocate_SVD;
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSSVDSetDimensions_C",DSSVDSetDimensions_SVD));
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSSVDGetDimensions_C",DSSVDGetDimensions_SVD));
   PetscFunctionReturn(PETSC_SUCCESS);

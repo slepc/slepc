@@ -123,7 +123,7 @@ int main(int argc,char **argv)
   PetscCall(PetscOptionsGetBool(NULL,NULL,"-skiporth",&skiporth,NULL));
   PetscCall(SVDGetConverged(svd,&nconv));
   PetscCall(SVDGetDimensions(svd,&nsv,NULL,NULL));
-  nconv = PetscMin(nconv,nsv);
+  if (nsv) nconv = PetscMin(nconv,nsv);
   if (nconv>0 && !skiporth) {
     PetscCall(SVDGetTolerances(svd,&tol,NULL));
     PetscCall(VecDuplicateVecs(u,nconv,&U));
@@ -233,5 +233,17 @@ int main(int argc,char **argv)
       test:
          args: -svd_type lapack
          suffix: 5_lapack
+
+   testset:
+      args: -svd_type {{trlanczos cross}} -terse -p 100
+      test:
+         suffix: 6
+         filter: sed -e "s/27.29445, 27.29445/27.29445/"
+         args: -file ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -svd_threshold_relative 0.8
+         requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
+      test:
+         suffix: 6_complex
+         args: -file ${DATAFILESPATH}/matrices/complex/qc324.petsc -svd_threshold_relative 0.6
+         requires: double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
 
 TEST*/

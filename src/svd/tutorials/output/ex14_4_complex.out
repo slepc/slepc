@@ -1,0 +1,10 @@
+
+Singular value problem stored in file.
+
+ Reading COMPLEX matrix from a binary file...
+
+ Using threshold: 0.6
+ Stopping condition: tol=1e-08, maxit=1000
+ All singular values computed up to the required tolerance:
+     1.52311, 1.29132, 1.18146, 1.11204, 0.95904, 0.95001, 0.82830
+

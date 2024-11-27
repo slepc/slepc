@@ -1,0 +1,10 @@
+
+Bethe-Salpeter eigenproblem, n=90
+
+ Found 24 eigenvalues, all of them computed up to the required tolerance:
+     2.30166, -2.30166, 2.30664, -2.30664, 2.31492, -2.31492, 2.32645, -2.32645,
+     2.34119, -2.34119, 2.35908, -2.35908, 2.38004, -2.38004, 2.40398, -2.40398,
+     2.43082, -2.43082, 2.46043, -2.46043, 2.49272, -2.49272, 2.52756, -2.52756
+
+ Level of bi-orthogonality of eigenvectors < 100*eps
+

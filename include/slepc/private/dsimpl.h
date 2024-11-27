@@ -41,6 +41,7 @@ struct _DSOps {
   PetscErrorCode (*hermitian)(DS,DSMatType,PetscBool*);
   PetscErrorCode (*synchronize)(DS,PetscScalar*,PetscScalar*);
   PetscErrorCode (*setcompact)(DS,PetscBool);
+  PetscErrorCode (*reallocate)(DS,PetscInt);
 };
 
 struct _p_DS {
@@ -108,6 +109,7 @@ struct _p_DS {
 #endif
 
 SLEPC_INTERN PetscErrorCode DSAllocateMat_Private(DS,DSMatType);
+SLEPC_INTERN PetscErrorCode DSReallocateMat_Private(DS,DSMatType,PetscInt);
 SLEPC_INTERN PetscErrorCode DSAllocateWork_Private(DS,PetscInt,PetscInt,PetscInt);
 SLEPC_INTERN PetscErrorCode DSSortEigenvalues_Private(DS,PetscScalar*,PetscScalar*,PetscInt*,PetscBool);
 SLEPC_INTERN PetscErrorCode DSSortEigenvaluesReal_Private(DS,PetscReal*,PetscInt*);

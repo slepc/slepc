@@ -280,6 +280,7 @@ PetscErrorCode EPSSetUp_KrylovSchur_Slice(EPS eps)
   MPI_Comm        child;
 
   PetscFunctionBegin;
+  if (eps->nev==0) eps->nev = 1;
   if (ctx->global) {
     EPSCheckHermitianDefiniteCondition(eps,PETSC_TRUE," with spectrum slicing");
     EPSCheckSinvertCayleyCondition(eps,PETSC_TRUE," with spectrum slicing");
@@ -330,7 +331,7 @@ PetscErrorCode EPSSetUp_KrylovSchur_Slice(EPS eps)
     }
   }
   if (ctx->global) {
-    PetscCall(EPSSetDimensions_Default(eps,ctx->nev,&ctx->ncv,&ctx->mpd));
+    PetscCall(EPSSetDimensions_Default(eps,&ctx->nev,&ctx->ncv,&ctx->mpd));
     /* create subintervals and initialize auxiliary eps for slicing runs */
     PetscCall(EPSKrylovSchurGetChildEPS(eps,&ctx->eps));
     /* prevent computation of factorization in global eps */

@@ -54,7 +54,7 @@ static PetscErrorCode EPSSetUp_Subspace_Filter(EPS eps)
     ctx->estimatedrange = PETSC_TRUE;
   }
   if (eps->ncv==PETSC_DETERMINE && eps->nev==1) eps->nev = 40;  /* user did not provide nev estimation */
-  PetscCall(EPSSetDimensions_Default(eps,eps->nev,&eps->ncv,&eps->mpd));
+  PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
   PetscCheck(eps->ncv<=eps->nev+eps->mpd,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nev+mpd");
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -69,14 +69,15 @@ static PetscErrorCode EPSSetUp_Subspace(EPS eps)
   if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
   if (!eps->which) PetscCall(EPSSetWhichEigenpairs_Default(eps));
   if (eps->which==EPS_ALL) {
+    if (eps->nev==0) eps->nev = 1;
     PetscCall(PetscObjectTypeCompare((PetscObject)eps->st,STFILTER,&isfilt));
     PetscCheck(isfilt,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Spectrum slicing not supported in this solver");
     PetscCall(EPSSetUp_Subspace_Filter(eps));
   } else {
     PetscCheck(eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_TARGET_MAGNITUDE,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"This solver supports only largest magnitude or target magnitude eigenvalues");
-    PetscCall(EPSSetDimensions_Default(eps,eps->nev,&eps->ncv,&eps->mpd));
+    PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
   }
-  EPSCheckUnsupported(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_EXTRACTION | EPS_FEATURE_TWOSIDED);
+  EPSCheckUnsupported(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_EXTRACTION | EPS_FEATURE_THRESHOLD | EPS_FEATURE_TWOSIDED);
   PetscCheck(eps->converged==EPSConvergedRelative,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"This solver only supports relative convergence test");
 
   PetscCall(EPSAllocateSolution(eps,0));

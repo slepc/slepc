@@ -84,11 +84,13 @@ class SVDStop(object):
     """
     SVD stopping test
 
-    - `BASIC`: Default stopping test.
-    - `USER`:  User-defined stopping test.
+    - `BASIC`:     Default stopping test.
+    - `USER`:      User-defined stopping test.
+    - `THRESHOLD`: Threshold stopping test.
     """
-    BASIC = SVD_STOP_BASIC
-    USER  = SVD_STOP_USER
+    BASIC     = SVD_STOP_BASIC
+    USER      = SVD_STOP_USER
+    THRESHOLD = SVD_STOP_THRESHOLD
 
 class SVDConvergedReason(object):
     """
@@ -407,6 +409,49 @@ cdef class SVD(Object):
         """
         cdef SlepcSVDWhich val = which
         CHKERR( SVDSetWhichSingularTriplets(self.svd, val) )
+
+    def getThreshold(self):
+        """
+        Gets the threshold used in the threshold stopping test.
+
+        Returns
+        -------
+        thres: float
+             The threshold.
+        rel: bool
+             Whether the threshold is relative or not.
+        """
+        cdef PetscReal rval = 0
+        cdef PetscBool tval = PETSC_FALSE
+        CHKERR( SVDGetThreshold(self.svd, &rval, &tval) )
+        return (toReal(rval), toBool(tval))
+
+    def setThreshold(self, thres, rel=False):
+        """
+        Sets the threshold used in the threshold stopping test.
+
+        Parameters
+        ----------
+        thres: float
+             The threshold.
+        rel: bool, optional
+             Whether the threshold is relative or not.
+
+        Notes
+        -----
+        This function internally sets a special stopping test based on
+        the threshold, where singular values are computed in sequence
+        until one of the computed singular values is below/above the
+        threshold (depending on whether largest or smallest singular
+        values are computed).
+
+        In the case of largest singular values, the threshold can be
+        made relative with respect to the largest singular value
+        (i.e., the matrix norm).
+        """
+        cdef PetscReal rval = asReal(thres)
+        cdef PetscBool tval = asBool(rel)
+        CHKERR( SVDSetThreshold(self.svd, rval, tval) )
 
     def getTolerances(self):
         """

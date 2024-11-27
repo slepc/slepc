@@ -1,0 +1,9 @@
+
+2-D Laplacian Eigenproblem, N=600 (25x24 grid)
+
+ Solution method: krylovschur
+
+ Using threshold: 0.98
+ Found 8 eigenvalues, all of them computed up to the required tolerance:
+     7.96965, 7.92611, 7.92258, 7.87905, 7.85426, 7.84497, 7.80720, 7.80144
+

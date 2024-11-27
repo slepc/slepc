@@ -51,7 +51,8 @@ typedef enum { SVD_STATE_INITIAL,
    To check for unsupported features at SVDSetUp_XXX()
 */
 typedef enum { SVD_FEATURE_CONVERGENCE=16,  /* convergence test selected by user */
-               SVD_FEATURE_STOPPING=32      /* stopping test */
+               SVD_FEATURE_STOPPING=32,     /* stopping test */
+               SVD_FEATURE_THRESHOLD=64     /* threshold stopping test */
              } SVDFeatureType;
 
 /*
@@ -68,6 +69,8 @@ struct _p_SVD {
   PetscInt       mpd;              /* maximum dimension of projected problem */
   PetscInt       nini,ninil;       /* number of initial vecs (negative means not copied yet) */
   PetscReal      tol;              /* tolerance */
+  PetscReal      thres;            /* threshold value */
+  PetscBool      threlative;       /* threshold is relative */
   SVDConv        conv;             /* convergence test */
   SVDStop        stop;             /* stopping test */
   SVDWhich       which;            /* which singular values are computed */
@@ -161,6 +164,7 @@ struct _p_SVD {
     if (condition) { \
       PetscCheck(!((mask) & SVD_FEATURE_CONVERGENCE) || (svd)->converged==SVDConvergedRelative,PetscObjectComm((PetscObject)(svd)),PETSC_ERR_SUP,"The solver '%s'%s only supports the default convergence test",((PetscObject)(svd))->type_name,(msg)); \
       PetscCheck(!((mask) & SVD_FEATURE_STOPPING) || (svd)->stopping==SVDStoppingBasic,PetscObjectComm((PetscObject)(svd)),PETSC_ERR_SUP,"The solver '%s'%s only supports the default stopping test",((PetscObject)(svd))->type_name,(msg)); \
+      PetscCheck(!((mask) & SVD_FEATURE_THRESHOLD) || (svd)->stopping!=SVDStoppingThreshold,PetscObjectComm((PetscObject)(svd)),PETSC_ERR_SUP,"The solver '%s'%s does not support the threshold stopping test",((PetscObject)(svd))->type_name,(msg)); \
     } \
   } while (0)
 #define SVDCheckUnsupported(svd,mask) SVDCheckUnsupportedCondition(svd,mask,PETSC_TRUE,"")
@@ -174,6 +178,17 @@ struct _p_SVD {
     } \
   } while (0)
 #define SVDCheckIgnored(svd,mask) SVDCheckIgnoredCondition(svd,mask,PETSC_TRUE,"")
+
+/*
+    SVDSetCtxThreshold - Fills SVDStoppingCtx with data needed for the threshold stopping test
+*/
+#define SVDSetCtxThreshold(svd,sigma,k) \
+  do { \
+    if (svd->stop==SVD_STOP_THRESHOLD && k) { \
+      ((SVDStoppingCtx)svd->stoppingctx)->firstsv = sigma[0]; \
+      ((SVDStoppingCtx)svd->stoppingctx)->lastsv  = sigma[k-1]; \
+    } \
+  } while (0)
 
 /*
   SVD_KSPSetOperators - Sets the KSP matrices

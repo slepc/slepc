@@ -20,7 +20,8 @@ int main(int argc,char **argv)
   Mat            A;               /* operator matrix */
   SVD            svd;             /* singular value problem solver context */
   SVDType        type;
-  PetscReal      tol;
+  SVDStop        stop;
+  PetscReal      tol,thres;
   PetscInt       nsv,maxit,its;
   char           filename[PETSC_MAX_PATH_LEN];
   PetscViewer    viewer;
@@ -80,8 +81,14 @@ int main(int argc,char **argv)
   */
   PetscCall(SVDGetType(svd,&type));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD," Solution method: %s\n\n",type));
-  PetscCall(SVDGetDimensions(svd,&nsv,NULL,NULL));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD," Number of requested singular values: %" PetscInt_FMT "\n",nsv));
+  PetscCall(SVDGetStoppingTest(svd,&stop));
+  if (stop!=SVD_STOP_THRESHOLD) {
+    PetscCall(SVDGetDimensions(svd,&nsv,NULL,NULL));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Number of requested singular values: %" PetscInt_FMT "\n",nsv));
+  } else {
+    PetscCall(SVDGetThreshold(svd,&thres,NULL));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Using threshold: %.4g\n",(double)thres));
+  }
   PetscCall(SVDGetTolerances(svd,&tol,&maxit));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD," Stopping condition: tol=%.4g, maxit=%" PetscInt_FMT "\n",(double)tol,maxit));
 
@@ -172,5 +179,17 @@ int main(int argc,char **argv)
          args: -file ${DATAFILESPATH}/matrices/complex/qc324.petsc
          requires: double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
          filter: sed -e 's/[0-9][0-9]$//'
+
+   testset:
+      args: -svd_type {{trlanczos lanczos cross}} -terse
+      filter: grep -v method
+      test:
+         suffix: 4
+         args: -file ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -svd_threshold_relative 0.9 -svd_ncv {{26 12}}
+         requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
+      test:
+         suffix: 4_complex
+         args: -file ${DATAFILESPATH}/matrices/complex/qc324.petsc -svd_threshold_relative 0.6 -svd_ncv {{18 10}}
+         requires: double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
 
 TEST*/

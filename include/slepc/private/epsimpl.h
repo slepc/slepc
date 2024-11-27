@@ -68,7 +68,8 @@ typedef enum { EPS_FEATURE_BALANCE=1,       /* balancing */
                EPS_FEATURE_EXTRACTION=8,    /* extraction technique different from Ritz */
                EPS_FEATURE_CONVERGENCE=16,  /* convergence test selected by user */
                EPS_FEATURE_STOPPING=32,     /* stopping test */
-               EPS_FEATURE_TWOSIDED=64      /* two-sided variant */
+               EPS_FEATURE_THRESHOLD=64,    /* threshold stopping test */
+               EPS_FEATURE_TWOSIDED=128     /* two-sided variant */
              } EPSFeatureType;
 
 /*
@@ -85,6 +86,8 @@ struct _p_EPS {
   PetscInt       nds;              /* number of basis vectors of deflation space */
   PetscScalar    target;           /* target value */
   PetscReal      tol;              /* tolerance */
+  PetscReal      thres;            /* threshold */
+  PetscBool      threlative;       /* threshold is relative */
   EPSConv        conv;             /* convergence test */
   EPSStop        stop;             /* stopping test */
   EPSWhich       which;            /* which part of the spectrum to be sought */
@@ -250,6 +253,7 @@ struct _p_EPS {
       PetscCheck(!((mask) & EPS_FEATURE_EXTRACTION) || (eps)->extraction==EPS_RITZ,PetscObjectComm((PetscObject)(eps)),PETSC_ERR_SUP,"The solver '%s'%s only supports Ritz extraction",((PetscObject)(eps))->type_name,(msg)); \
       PetscCheck(!((mask) & EPS_FEATURE_CONVERGENCE) || (eps)->converged==EPSConvergedRelative,PetscObjectComm((PetscObject)(eps)),PETSC_ERR_SUP,"The solver '%s'%s only supports the default convergence test",((PetscObject)(eps))->type_name,(msg)); \
       PetscCheck(!((mask) & EPS_FEATURE_STOPPING) || (eps)->stopping==EPSStoppingBasic,PetscObjectComm((PetscObject)(eps)),PETSC_ERR_SUP,"The solver '%s'%s only supports the default stopping test",((PetscObject)(eps))->type_name,(msg)); \
+      PetscCheck(!((mask) & EPS_FEATURE_THRESHOLD) || (eps)->stopping!=EPSStoppingThreshold,PetscObjectComm((PetscObject)(eps)),PETSC_ERR_SUP,"The solver '%s'%s does not support the threshold stopping test",((PetscObject)(eps))->type_name,(msg)); \
       PetscCheck(!((mask) & EPS_FEATURE_TWOSIDED) || !(eps)->twosided,PetscObjectComm((PetscObject)(eps)),PETSC_ERR_SUP,"The solver '%s'%s cannot compute left eigenvectors (no two-sided variant)",((PetscObject)(eps))->type_name,(msg)); \
     } \
   } while (0)
@@ -273,6 +277,25 @@ struct _p_EPS {
     } \
   } while (0)
 #define EPSCheckIgnored(eps,mask) EPSCheckIgnoredCondition(eps,mask,PETSC_TRUE,"")
+
+/*
+    EPSSetCtxThreshold - Fills EPSStoppingCtx with data needed for the threshold stopping test
+*/
+#define EPSSetCtxThreshold(eps,eigr,eigi,k) \
+  do { \
+    if (eps->stop==EPS_STOP_THRESHOLD && k) { \
+      PetscScalar __kr=eigr[k-1],__ki=eigi[k-1],__kr0=eigr[0],__ki0=eigi[0]; \
+      PetscCall(STBackTransform(eps->st,1,&__kr,&__ki)); \
+      PetscCall(STBackTransform(eps->st,1,&__kr0,&__ki0)); \
+      if (eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_SMALLEST_MAGNITUDE) { \
+        ((EPSStoppingCtx)eps->stoppingctx)->firstev = SlepcAbsEigenvalue(__kr0,__ki0); \
+        ((EPSStoppingCtx)eps->stoppingctx)->lastev  = SlepcAbsEigenvalue(__kr,__ki); \
+      } else { \
+        ((EPSStoppingCtx)eps->stoppingctx)->firstev = PetscRealPart(__kr0); \
+        ((EPSStoppingCtx)eps->stoppingctx)->lastev  = PetscRealPart(__kr); \
+      } \
+    } \
+  } while (0)
 
 /*
   EPS_SetInnerProduct - set B matrix for inner product if appropriate.
@@ -409,7 +432,7 @@ static inline PetscErrorCode EPS_GetEigenvector(EPS eps,BV V,PetscInt i,Vec Vr,V
 }
 
 SLEPC_INTERN PetscErrorCode EPSSetWhichEigenpairs_Default(EPS);
-SLEPC_INTERN PetscErrorCode EPSSetDimensions_Default(EPS,PetscInt,PetscInt*,PetscInt*);
+SLEPC_INTERN PetscErrorCode EPSSetDimensions_Default(EPS,PetscInt*,PetscInt*,PetscInt*);
 SLEPC_INTERN PetscErrorCode EPSBackTransform_Default(EPS);
 SLEPC_INTERN PetscErrorCode EPSComputeVectors(EPS);
 SLEPC_INTERN PetscErrorCode EPSComputeVectors_Hermitian(EPS);

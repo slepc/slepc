@@ -24,6 +24,8 @@
 #define svdconvergednorm_                 SVDCONVERGEDNORM
 #define svdconvergedmaxit_                SVDCONVERGEDMAXIT
 #define svdsetconvergencetestfunction_    SVDSETCONVERGENCETESTFUNCTION
+#define svdstoppingbasic_                 SVDSTOPPINGBASIC
+#define svdstoppingthreshold_             SVDSTOPPINGTHRESHOLD
 #define svdsetstoppingtestfunction_       SVDSETSTOPPINGTESTFUNCTION
 #elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
 #define svdmonitorset_                    svdmonitorset
@@ -38,6 +40,8 @@
 #define svdconvergednorm_                 svdconvergednorm
 #define svdconvergedmaxit_                svdconvergedmaxit
 #define svdsetconvergencetestfunction_    svdsetconvergencetestfunction
+#define svdstoppingbasic_                 svdstoppingbasic
+#define svdstoppingthreshold_             svdstoppingthreshold
 #define svdsetstoppingtestfunction_       svdsetstoppingtestfunction
 #endif
 
@@ -182,12 +186,19 @@ SLEPC_EXTERN void svdstoppingbasic_(SVD *svd,PetscInt *its,PetscInt *max_it,Pets
   *ierr = SVDStoppingBasic(*svd,*its,*max_it,*nconv,*nsv,reason,ctx);
 }
 
+SLEPC_EXTERN void svdstoppingthreshold_(SVD *svd,PetscInt *its,PetscInt *max_it,PetscInt *nconv,PetscInt *nsv,SVDConvergedReason *reason,void *ctx,PetscErrorCode *ierr)
+{
+  *ierr = SVDStoppingThreshold(*svd,*its,*max_it,*nconv,*nsv,reason,ctx);
+}
+
 SLEPC_EXTERN void svdsetstoppingtestfunction_(SVD *svd,void (*func)(SVD*,PetscInt,PetscInt,PetscInt,PetscInt,SVDConvergedReason*,void*,PetscErrorCode*),void* ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);
   if ((PetscVoidFunction)func == (PetscVoidFunction)svdstoppingbasic_) {
     *ierr = SVDSetStoppingTest(*svd,SVD_STOP_BASIC);
+  } else if ((PetscVoidFunction)func == (PetscVoidFunction)svdstoppingthreshold_) {
+    *ierr = SVDSetStoppingTest(*svd,SVD_STOP_THRESHOLD);
   } else {
     *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.stopping,(PetscVoidFunction)func,ctx); if (*ierr) return;
     *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.stopdestroy,(PetscVoidFunction)destroy,ctx); if (*ierr) return;

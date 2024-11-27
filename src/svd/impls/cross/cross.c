@@ -171,6 +171,7 @@ static PetscErrorCode SVDSetUp_Cross(SVD svd)
   PetscInt       n,N;
 
   PetscFunctionBegin;
+  if (svd->nsv==0 && svd->stop!=SVD_STOP_THRESHOLD) svd->nsv = 1;
   if (!cross->eps) PetscCall(SVDCrossGetEPS(svd,&cross->eps));
   PetscCall(MatDestroy(&cross->C));
   PetscCall(MatDestroy(&cross->D));
@@ -208,10 +209,11 @@ static PetscErrorCode SVDSetUp_Cross(SVD svd)
     } else {
       if (issinv) which = EPS_TARGET_MAGNITUDE;
       else if (svd->ishyperbolic) which = svd->which==SVD_LARGEST?EPS_LARGEST_MAGNITUDE:EPS_SMALLEST_MAGNITUDE;
-      else which = svd->which==SVD_LARGEST?EPS_LARGEST_REAL:EPS_SMALLEST_REAL;
+      else which = svd->which==SVD_LARGEST?EPS_LARGEST_MAGNITUDE:EPS_SMALLEST_MAGNITUDE;
     }
     PetscCall(EPSSetWhichEigenpairs(cross->eps,which));
-    PetscCall(EPSSetDimensions(cross->eps,svd->nsv,svd->ncv,svd->mpd));
+    PetscCall(EPSSetDimensions(cross->eps,svd->nsv?svd->nsv:PETSC_CURRENT,svd->ncv,svd->mpd));
+    if (svd->stop==SVD_STOP_THRESHOLD) PetscCall(EPSSetThreshold(cross->eps,svd->thres*svd->thres,svd->threlative));
     PetscCall(EPSSetTolerances(cross->eps,svd->tol==(PetscReal)PETSC_DETERMINE?SLEPC_DEFAULT_TOL/10.0:svd->tol,svd->max_it));
     switch (svd->conv) {
     case SVD_CONV_ABS:
@@ -233,7 +235,6 @@ static PetscErrorCode SVDSetUp_Cross(SVD svd)
       SETERRQ(PetscObjectComm((PetscObject)svd),PETSC_ERR_SUP,"User-defined convergence test not supported in this solver");
     }
   }
-  SVDCheckUnsupported(svd,SVD_FEATURE_STOPPING);
   /* Transfer the trackall option from svd to eps */
   PetscCall(SVDGetTrackAll(svd,&trackall));
   PetscCall(EPSSetTrackAll(cross->eps,trackall));
@@ -355,12 +356,22 @@ static PetscErrorCode SVDComputeVectors_Cross(SVD svd)
 
 static PetscErrorCode EPSMonitor_Cross(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx)
 {
-  PetscInt       i;
+  PetscInt       i,ncv;
   SVD            svd = (SVD)ctx;
+  SVD_CROSS      *cross;
   PetscScalar    er,ei;
   ST             st;
 
   PetscFunctionBegin;
+  if (svd->stop==SVD_STOP_THRESHOLD) {
+    cross = (SVD_CROSS*)svd->data;
+    PetscCall(EPSGetDimensions(cross->eps,NULL,&ncv,NULL));
+    if (ncv!=svd->ncv) {  /* reallocate */
+      PetscCall(SVDReallocateSolution(svd,ncv));
+      for (i=svd->ncv;i<ncv;i++) svd->perm[i] = i;
+      svd->ncv = ncv;
+    }
+  }
   PetscCall(EPSGetST(eps,&st));
   for (i=0;i<PetscMin(nest,svd->ncv);i++) {
     er = eigr[i]; ei = eigi[i];
@@ -515,7 +526,7 @@ static PetscErrorCode SVDCrossGetEPS_Cross(SVD svd,EPS *eps)
     PetscCall(EPSSetOptionsPrefix(cross->eps,((PetscObject)svd)->prefix));
     PetscCall(EPSAppendOptionsPrefix(cross->eps,"svd_cross_"));
     PetscCall(PetscObjectSetOptions((PetscObject)cross->eps,((PetscObject)svd)->options));
-    PetscCall(EPSSetWhichEigenpairs(cross->eps,EPS_LARGEST_REAL));
+    PetscCall(EPSSetWhichEigenpairs(cross->eps,EPS_LARGEST_MAGNITUDE));
     PetscCall(EPSMonitorSet(cross->eps,EPSMonitor_Cross,svd,NULL));
   }
   *eps = cross->eps;

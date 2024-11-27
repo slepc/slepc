@@ -821,6 +821,26 @@ static PetscErrorCode DSSetCompact_HEP(DS ds,PetscBool comp)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode DSReallocate_HEP(DS ds,PetscInt ld)
+{
+  PetscInt i,*perm=ds->perm;
+
+  PetscFunctionBegin;
+  for (i=0;i<DS_NUM_MAT;i++) {
+    if (!ds->compact && i==DS_MAT_A) continue;
+    if (i!=DS_MAT_Q && i!=DS_MAT_T) PetscCall(MatDestroy(&ds->omat[i]));
+  }
+
+  if (!ds->compact) PetscCall(DSReallocateMat_Private(ds,DS_MAT_A,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_Q,ld));
+  PetscCall(DSReallocateMat_Private(ds,DS_MAT_T,ld));
+
+  PetscCall(PetscMalloc1(ld,&ds->perm));
+  PetscCall(PetscArraycpy(ds->perm,perm,ds->ld));
+  PetscCall(PetscFree(perm));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 /*MC
    DSHEP - Dense Hermitian Eigenvalue Problem.
 
@@ -871,5 +891,6 @@ SLEPC_EXTERN PetscErrorCode DSCreate_HEP(DS ds)
   ds->ops->synchronize   = DSSynchronize_HEP;
 #endif
   ds->ops->setcompact    = DSSetCompact_HEP;
+  ds->ops->reallocate    = DSReallocate_HEP;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

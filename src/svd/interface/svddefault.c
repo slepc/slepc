@@ -83,13 +83,79 @@ PetscErrorCode SVDConvergedMaxIt(SVD svd,PetscReal sigma,PetscReal res,PetscReal
 
    Level: advanced
 
-.seealso: SVDSetStoppingTest(), SVDConvergedReason, SVDGetConvergedReason()
+.seealso: SVDSetStoppingTest(), SVDStoppingThreshold(), SVDConvergedReason, SVDGetConvergedReason()
 @*/
 PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx)
 {
   PetscFunctionBegin;
   *reason = SVD_CONVERGED_ITERATING;
   if (nconv >= nsv) {
+    PetscCall(PetscInfo(svd,"Singular value solver finished successfully: %" PetscInt_FMT " singular triplets converged at iteration %" PetscInt_FMT "\n",nconv,its));
+    *reason = SVD_CONVERGED_TOL;
+  } else if (its >= max_it) {
+    if (svd->conv == SVD_CONV_MAXIT) *reason = SVD_CONVERGED_MAXIT;
+    else {
+      *reason = SVD_DIVERGED_ITS;
+      PetscCall(PetscInfo(svd,"Singular value solver iteration reached maximum number of iterations (%" PetscInt_FMT ")\n",its));
+    }
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@C
+   SVDStoppingThreshold - Routine to determine whether the outer singular value
+   solver iteration must be stopped, according to some threshold for the computed values.
+
+   Collective
+
+   Input Parameters:
++  svd    - singular value solver context obtained from SVDCreate()
+.  its    - current number of iterations
+.  max_it - maximum number of iterations
+.  nconv  - number of currently converged singular triplets (ignored here)
+.  nsv    - number of requested singular triplets (ignored here)
+-  ctx    - context containing additional data (SVDStoppingCtx)
+
+   Output Parameter:
+.  reason - result of the stopping test
+
+   Notes:
+   A positive value of reason indicates that the iteration has finished successfully
+   (converged), and a negative value indicates an error condition (diverged). If
+   the iteration needs to be continued, reason must be set to SVD_CONVERGED_ITERATING
+   (zero).
+
+   SVDStoppingThreshold() will stop when one of the computed singular values is not
+   above/below the threshold given at SVDSetThreshold(). If a number of wanted singular
+   values has been specified via SVDSetDimensions() then it is also taken into account,
+   and the solver will stop when one of the two conditions (threshold or number of
+   converged values) is met.
+
+   Use SVDSetStoppingTest() to provide your own test instead of using this one.
+
+   Level: advanced
+
+.seealso: SVDSetStoppingTest(), SVDStoppingBasic(), SVDSetThreshold(), SVDSetDimensions(), SVDConvergedReason, SVDGetConvergedReason()
+@*/
+PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx)
+{
+  PetscReal thres,firstsv,lastsv;
+  PetscBool rel;
+  SVDWhich  which;
+
+  PetscFunctionBegin;
+  *reason = SVD_CONVERGED_ITERATING;
+  firstsv = ((SVDStoppingCtx)ctx)->firstsv;
+  lastsv  = ((SVDStoppingCtx)ctx)->lastsv;
+  thres   = ((SVDStoppingCtx)ctx)->thres;
+  rel     = ((SVDStoppingCtx)ctx)->threlative;
+  which   = ((SVDStoppingCtx)ctx)->which;
+  if (nconv && ((which==SVD_LARGEST && ((rel && lastsv<thres*firstsv) || (!rel && lastsv<thres))) || (which==SVD_SMALLEST && lastsv>thres))) {
+    if (which==SVD_SMALLEST) PetscCall(PetscInfo(svd,"Singular value solver finished successfully: singular value %g is above the threshold %g\n",(double)lastsv,(double)thres));
+    else if (!rel) PetscCall(PetscInfo(svd,"Singular value solver finished successfully: singular value %g is below the threshold %g\n",(double)lastsv,(double)thres));
+    else PetscCall(PetscInfo(svd,"Singular value solver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastsv,(double)firstsv,(double)thres));
+    *reason = SVD_CONVERGED_TOL;
+  } else if (nsv && nconv >= nsv) {
     PetscCall(PetscInfo(svd,"Singular value solver finished successfully: %" PetscInt_FMT " singular triplets converged at iteration %" PetscInt_FMT "\n",nconv,its));
     *reason = SVD_CONVERGED_TOL;
   } else if (its >= max_it) {

@@ -285,13 +285,86 @@ PetscErrorCode EPSConvergedNorm(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscR
 
    Level: advanced
 
-.seealso: EPSSetStoppingTest(), EPSConvergedReason, EPSGetConvergedReason()
+.seealso: EPSSetStoppingTest(), EPSStoppingThreshold(), EPSConvergedReason, EPSGetConvergedReason()
 @*/
 PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx)
 {
   PetscFunctionBegin;
   *reason = EPS_CONVERGED_ITERATING;
   if (nconv >= nev) {
+    PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: %" PetscInt_FMT " eigenpairs converged at iteration %" PetscInt_FMT "\n",nconv,its));
+    *reason = EPS_CONVERGED_TOL;
+  } else if (its >= max_it) {
+    *reason = EPS_DIVERGED_ITS;
+    PetscCall(PetscInfo(eps,"Linear eigensolver iteration reached maximum number of iterations (%" PetscInt_FMT ")\n",its));
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@C
+   EPSStoppingThreshold - Routine to determine whether the outer eigenvalue solver
+   iteration must be stopped, according to some threshold for the computed values.
+
+   Collective
+
+   Input Parameters:
++  eps    - eigenvalue solver context obtained from EPSCreate()
+.  its    - current number of iterations
+.  max_it - maximum number of iterations
+.  nconv  - number of currently converged eigenpairs (ignored here)
+.  nev    - number of requested eigenpairs (ignored here)
+-  ctx    - context containing additional data (EPSStoppingCtx)
+
+   Output Parameter:
+.  reason - result of the stopping test
+
+   Notes:
+   A positive value of reason indicates that the iteration has finished successfully
+   (converged), and a negative value indicates an error condition (diverged). If
+   the iteration needs to be continued, reason must be set to EPS_CONVERGED_ITERATING
+   (zero).
+
+   EPSStoppingThreshold() will stop when one of the computed eigenvalues is not
+   above/below the threshold given at EPSSetThreshold(). If a number of wanted
+   eigenvalues has been specified via EPSSetDimensions() then it is also taken into
+   account, and the solver will stop when one of the two conditions (threshold or
+   number of converged values) is met.
+
+   Use EPSSetStoppingTest() to provide your own test instead of using this one.
+
+   Level: advanced
+
+.seealso: EPSSetStoppingTest(), EPSStoppingBasic(), EPSSetThreshold(), EPSSetDimensions(), EPSConvergedReason, EPSGetConvergedReason()
+@*/
+PetscErrorCode EPSStoppingThreshold(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx)
+{
+  PetscReal thres,firstev,lastev;
+  PetscBool magnit,rel;
+  EPSWhich  which;
+
+  PetscFunctionBegin;
+  *reason = EPS_CONVERGED_ITERATING;
+  firstev = ((EPSStoppingCtx)ctx)->firstev;
+  lastev  = ((EPSStoppingCtx)ctx)->lastev;
+  thres   = ((EPSStoppingCtx)ctx)->thres;
+  rel     = ((EPSStoppingCtx)ctx)->threlative;
+  which   = ((EPSStoppingCtx)ctx)->which;
+  magnit  = (which==EPS_SMALLEST_MAGNITUDE || which==EPS_LARGEST_MAGNITUDE || which==EPS_TARGET_MAGNITUDE)? PETSC_TRUE: PETSC_FALSE;
+  if (nconv && magnit && which==EPS_TARGET_MAGNITUDE && ((rel && ((thres>1.0 && lastev>thres*firstev) || (thres<1.0 && lastev<thres*firstev))) || (!rel && lastev>thres))) {
+    if (!rel) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is above the threshold %g\n",(double)lastev,(double)thres));
+    else if (thres>1.0) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is above the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
+    else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
+    *reason = EPS_CONVERGED_TOL;
+  } else if (nconv && magnit && ((which==EPS_LARGEST_MAGNITUDE && ((rel && lastev<thres*firstev) || (!rel && lastev<thres))) || (which==EPS_SMALLEST_MAGNITUDE && lastev>thres))) {
+    if (which==EPS_SMALLEST_MAGNITUDE) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is above the threshold %g\n",(double)lastev,(double)thres));
+    else if (!rel) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is below the threshold %g\n",(double)lastev,(double)thres));
+    else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
+    *reason = EPS_CONVERGED_TOL;
+  } else if (nconv && !magnit && ((which==EPS_LARGEST_REAL && lastev<thres) || (which==EPS_SMALLEST_REAL && lastev>thres))) {
+    if (which==EPS_LARGEST_REAL) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: eigenvalue %g is below the threshold %g\n",(double)lastev,(double)thres));
+    else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: eigenvalue %g is above the threshold %g\n",(double)lastev,(double)thres));
+    *reason = EPS_CONVERGED_TOL;
+  } else if (nev && nconv >= nev) {
     PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: %" PetscInt_FMT " eigenpairs converged at iteration %" PetscInt_FMT "\n",nconv,its));
     *reason = EPS_CONVERGED_TOL;
   } else if (its >= max_it) {

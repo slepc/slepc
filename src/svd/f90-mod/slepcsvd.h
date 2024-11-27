@@ -42,6 +42,7 @@
 
       PetscEnum, parameter :: SVD_STOP_BASIC             =  0
       PetscEnum, parameter :: SVD_STOP_USER              =  1
+      PetscEnum, parameter :: SVD_STOP_THRESHOLD         =  2
 
       PetscEnum, parameter :: SVD_TRLANCZOS_GBIDIAG_SINGLE =  0
       PetscEnum, parameter :: SVD_TRLANCZOS_GBIDIAG_UPPER  =  1

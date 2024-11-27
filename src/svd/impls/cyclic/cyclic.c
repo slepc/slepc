@@ -378,6 +378,7 @@ static PetscErrorCode SVDSetUp_Cyclic(SVD svd)
   MatType           Atype;
 
   PetscFunctionBegin;
+  if (svd->nsv==0) svd->nsv = 1;
   PetscCall(MatGetSize(svd->A,&M,&N));
   PetscCall(MatGetLocalSize(svd->A,&m,&n));
   if (!cyclic->eps) PetscCall(SVDCyclicGetEPS(svd,&cyclic->eps));

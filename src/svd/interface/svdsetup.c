@@ -230,6 +230,7 @@ PetscErrorCode SVDSetUp(SVD svd)
   SlepcSC        sc;
   Vec            *T;
   BV             bv;
+  SVDStoppingCtx ctx;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -351,8 +352,19 @@ PetscErrorCode SVDSetUp(SVD svd)
   if (svd->conv==(SVDConv)-1) PetscCall(SVDSetConvergenceTest(svd,svd->isgeneralized?SVD_CONV_NORM:SVD_CONV_REL));
   PetscCheck(!svd->isgeneralized || svd->conv!=SVD_CONV_REL,PetscObjectComm((PetscObject)svd),PETSC_ERR_SUP,"Relative convergence criterion is not allowed in GSVD");
 
-  /* initialization of matrix norm (stardard case only, for GSVD it is done inside setup()) */
+  /* initialization of matrix norm (standard case only, for GSVD it is done inside setup()) */
   if (!svd->isgeneralized && svd->conv==SVD_CONV_NORM && !svd->nrma) PetscCall(MatNorm(svd->OP,NORM_INFINITY,&svd->nrma));
+
+  /* threshold stopping test */
+  if (svd->stop==SVD_STOP_THRESHOLD) {
+    PetscCheck(svd->thres>0.0,PetscObjectComm((PetscObject)svd),PETSC_ERR_USER_INPUT,"Must give a threshold value with SVDSetThreshold()");
+    PetscCheck(svd->which==SVD_LARGEST || !svd->threlative,PetscObjectComm((PetscObject)svd),PETSC_ERR_USER_INPUT,"Can only use a relative threshold when which=SVD_LARGEST");
+    PetscCall(PetscNew(&ctx));
+    ctx->thres      = svd->thres;
+    ctx->threlative = svd->threlative;
+    ctx->which      = svd->which;
+    PetscCall(SVDSetStoppingTestFunction(svd,SVDStoppingThreshold,ctx,PetscCtxDestroyDefault));
+  }
 
   /* call specific solver setup */
   PetscUseTypeMethod(svd,setup);
@@ -462,6 +474,7 @@ PetscErrorCode SVDSetDimensions_Default(SVD svd)
     PetscCall(MatGetSize(svd->OPb,&P,NULL));
     maxnsol = PetscMin(maxnsol,P);
   }
+  if (svd->nsv==0 && svd->stop!=SVD_STOP_THRESHOLD) svd->nsv = 1;
   if (svd->ncv!=PETSC_DETERMINE) { /* ncv set */
     PetscCheck(svd->ncv>=svd->nsv,PetscObjectComm((PetscObject)svd),PETSC_ERR_USER_INPUT,"The value of ncv must be at least nsv");
   } else if (svd->mpd!=PETSC_DETERMINE) { /* mpd set */
@@ -484,7 +497,7 @@ PetscErrorCode SVDSetDimensions_Default(SVD svd)
    Collective
 
    Input Parameters:
-+  svd   - eigensolver context
++  svd   - singular value solver context
 -  extra - number of additional positions, used for methods that require a
            working basis slightly larger than ncv
 
@@ -542,5 +555,57 @@ PetscErrorCode SVDAllocateSolution(SVD svd,PetscInt extra)
       PetscCall(VecDestroy(&tl));
     } else PetscCall(BVResize(svd->U,requested,PETSC_FALSE));
   }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   SVDReallocateSolution - Reallocate memory storage for common variables such
+   as the singular values and the basis vectors.
+
+   Collective
+
+   Input Parameters:
++  svd     - singular value solver context
+-  newsize - new size
+
+   Developer Notes:
+   This is SLEPC_EXTERN because it may be required by user plugin SVD
+   implementations.
+
+   This is called during the iteration in case the threshold stopping test has
+   been selected.
+
+   Level: developer
+
+.seealso: SVDAllocateSolution(), SVDSetThreshold()
+@*/
+PetscErrorCode SVDReallocateSolution(SVD svd,PetscInt newsize)
+{
+  PetscInt  oldsize,*nperm;
+  PetscReal *nsigma,*nerrest,*nsign;
+
+  PetscFunctionBegin;
+  PetscCall(BVGetSizes(svd->V,NULL,NULL,&oldsize));
+  if (oldsize>=newsize) PetscFunctionReturn(PETSC_SUCCESS);
+  PetscCall(PetscInfo(svd,"Reallocating basis vectors to %" PetscInt_FMT " columns\n",newsize));
+
+  /* reallocate sigma */
+  PetscCall(PetscMalloc3(newsize,&nsigma,newsize,&nperm,newsize,&nerrest));
+  PetscCall(PetscArraycpy(nsigma,svd->sigma,oldsize));
+  PetscCall(PetscArraycpy(nperm,svd->perm,oldsize));
+  PetscCall(PetscArraycpy(nerrest,svd->errest,oldsize));
+  PetscCall(PetscFree3(svd->sigma,svd->perm,svd->errest));
+  svd->sigma  = nsigma;
+  svd->perm   = nperm;
+  svd->errest = nerrest;
+  if (svd->ishyperbolic) {
+    PetscCall(PetscMalloc1(newsize,&nsign));
+    PetscCall(PetscArraycpy(nsign,svd->sign,oldsize));
+    PetscCall(PetscFree(svd->sign));
+    svd->sign = nsign;
+  }
+  /* reallocate V,U */
+  PetscCall(BVResize(svd->V,newsize,PETSC_TRUE));
+  if (svd->leftbasis || svd->isgeneralized) PetscCall(BVResize(svd->U,newsize,PETSC_TRUE));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

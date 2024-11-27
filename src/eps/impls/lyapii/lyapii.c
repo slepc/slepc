@@ -60,6 +60,7 @@ static PetscErrorCode EPSSetUp_LyapII(EPS eps)
   PetscFunctionBegin;
   EPSCheckSinvert(eps);
   EPSCheckNotStructured(eps);
+  if (eps->nev==0) eps->nev = 1;
   if (eps->ncv!=PETSC_DETERMINE) {
     PetscCheck(eps->ncv>=eps->nev+1,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must be at least nev+1");
   } else eps->ncv = eps->nev+1;
@@ -67,7 +68,7 @@ static PetscErrorCode EPSSetUp_LyapII(EPS eps)
   if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(1000*eps->nev,100*eps->n);
   if (!eps->which) eps->which=EPS_LARGEST_REAL;
   PetscCheck(eps->which==EPS_LARGEST_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"This solver supports only largest real eigenvalues");
-  EPSCheckUnsupported(eps,EPS_FEATURE_BALANCE | EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_TWOSIDED);
+  EPSCheckUnsupported(eps,EPS_FEATURE_BALANCE | EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_THRESHOLD | EPS_FEATURE_TWOSIDED);
 
   if (!ctx->rkc) ctx->rkc = 10;
   if (!ctx->rkl) ctx->rkl = 3*ctx->rkc;

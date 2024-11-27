@@ -102,13 +102,14 @@ static void OperatorBMultiVector(void *data,void *x,void *y)
   PetscFunctionReturnVoid();
 }
 
-static PetscErrorCode EPSSetDimensions_BLOPEX(EPS eps,PetscInt nev,PetscInt *ncv,PetscInt *mpd)
+static PetscErrorCode EPSSetDimensions_BLOPEX(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
   EPS_BLOPEX     *ctx = (EPS_BLOPEX*)eps->data;
   PetscInt       k;
 
   PetscFunctionBegin;
-  k = ((eps->nev-1)/ctx->bs+1)*ctx->bs;
+  if (*nev==0) *nev = 1;
+  k = ((*nev-1)/ctx->bs+1)*ctx->bs;
   if (*ncv!=PETSC_DETERMINE) { /* ncv set */
     PetscCheck(*ncv>=k,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv is not sufficiently large");
   } else *ncv = k;
@@ -126,8 +127,8 @@ static PetscErrorCode EPSSetUp_BLOPEX(EPS eps)
   PetscFunctionBegin;
   EPSCheckHermitianDefinite(eps);
   EPSCheckNotStructured(eps);
-  if (!blopex->bs) blopex->bs = PetscMin(16,eps->nev);
-  PetscCall(EPSSetDimensions_BLOPEX(eps,eps->nev,&eps->ncv,&eps->mpd));
+  if (!blopex->bs) blopex->bs = PetscMin(16,eps->nev?eps->nev:1);
+  PetscCall(EPSSetDimensions_BLOPEX(eps,&eps->nev,&eps->ncv,&eps->mpd));
   if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
   if (!eps->which) eps->which = EPS_SMALLEST_REAL;
   PetscCheck(eps->which==EPS_SMALLEST_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"This solver supports only smallest real eigenvalues");

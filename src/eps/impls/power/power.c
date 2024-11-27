@@ -84,6 +84,7 @@ static PetscErrorCode EPSSetUp_Power(EPS eps)
 
   PetscFunctionBegin;
   EPSCheckNotStructured(eps);
+  if (eps->nev==0) eps->nev = 1;
   if (eps->ncv!=PETSC_DETERMINE) {
     PetscCheck(eps->ncv>=eps->nev,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must be at least nev");
   } else eps->ncv = eps->nev;
@@ -101,7 +102,7 @@ static PetscErrorCode EPSSetUp_Power(EPS eps)
     PetscCall(STGetMatMode(eps->st,&mode));
     PetscCheck(mode!=ST_MATMODE_INPLACE,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"ST matrix mode inplace does not work with variable shifts");
   }
-  EPSCheckUnsupported(eps,EPS_FEATURE_BALANCE | EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_CONVERGENCE);
+  EPSCheckUnsupported(eps,EPS_FEATURE_BALANCE | EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_CONVERGENCE | EPS_FEATURE_THRESHOLD);
   EPSCheckIgnored(eps,EPS_FEATURE_EXTRACTION);
   PetscCall(EPSAllocateSolution(eps,0));
   PetscCall(EPS_SetInnerProduct(eps));

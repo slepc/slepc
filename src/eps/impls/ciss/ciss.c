@@ -225,6 +225,7 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
   PetscFunctionBegin;
   EPSCheckNotStructured(eps);
   if (eps->ncv==PETSC_DETERMINE) {
+    if (eps->nev==0) eps->nev = 1;
     eps->ncv = ctx->L_max*ctx->M;
     if (eps->ncv>eps->n) {
       eps->ncv = eps->n;
@@ -232,7 +233,7 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
       PetscCheck(ctx->L_max,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Cannot adjust solver parameters, try setting a smaller value of M (moment size)");
     }
   } else {
-    PetscCall(EPSSetDimensions_Default(eps,eps->nev,&eps->ncv,&eps->mpd));
+    PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
     ctx->L_max = eps->ncv/ctx->M;
     if (!ctx->L_max) {
       ctx->L_max = 1;

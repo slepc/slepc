@@ -48,6 +48,7 @@ PetscErrorCode EPSSetUp_XD(EPS eps)
   PetscFunctionBegin;
   EPSCheckNotStructured(eps);
   /* Setup EPS options and get the problem specification */
+  if (eps->nev==0) eps->nev = 1;
   bs = data->blocksize;
   if (bs <= 0) bs = 1;
   if (eps->ncv!=PETSC_DETERMINE) {
@@ -63,7 +64,7 @@ PetscErrorCode EPSSetUp_XD(EPS eps)
   if (!eps->which) eps->which = EPS_LARGEST_MAGNITUDE;
   PetscCheck(eps->nev+bs<=eps->ncv,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"The value of ncv has to be greater than nev plus blocksize");
   PetscCheck(!eps->trueres,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"-eps_true_residual is disabled in this solver.");
-  EPSCheckUnsupported(eps,EPS_FEATURE_REGION | EPS_FEATURE_TWOSIDED);
+  EPSCheckUnsupported(eps,EPS_FEATURE_REGION | EPS_FEATURE_TWOSIDED | EPS_FEATURE_THRESHOLD);
 
   if (!data->minv) data->minv = (eps->n && eps->n<10)? 1: PetscMin(PetscMax(bs,6),eps->mpd/2);
   min_size_V = data->minv;

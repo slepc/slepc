@@ -163,7 +163,8 @@ typedef enum { EPS_CONV_ABS,
 .seealso: EPSSetStoppingTest(), EPSSetStoppingTestFunction()
 E*/
 typedef enum { EPS_STOP_BASIC,
-               EPS_STOP_USER } EPSStop;
+               EPS_STOP_USER,
+               EPS_STOP_THRESHOLD } EPSStop;
 
 /*E
     EPSConvergedReason - Reason an eigensolver was said to
@@ -182,6 +183,23 @@ typedef enum {/* converged */
               EPS_DIVERGED_SYMMETRY_LOST       = -3,
               EPS_CONVERGED_ITERATING          =  0} EPSConvergedReason;
 SLEPC_EXTERN const char *const*EPSConvergedReasons;
+
+/*S
+   EPSStoppingCtx - Data structure (C struct) to hold additional information to
+   be used in some stopping test functions.
+
+   Level: advanced
+
+.seealso: EPSSetStoppingTestFunction()
+S*/
+struct _n_EPSStoppingCtx {
+  PetscReal firstev;    /* the (absolute) value of the first converged eigenvalue */
+  PetscReal lastev;     /* the (absolute) value of the last converged eigenvalue */
+  PetscReal thres;      /* threshold set with EPSSetThreshold() */
+  PetscBool threlative; /* threshold is relative */
+  EPSWhich  which;      /* which eigenvalues are being computed */
+};
+typedef struct _n_EPSStoppingCtx* EPSStoppingCtx;
 
 SLEPC_EXTERN PetscErrorCode EPSCreate(MPI_Comm,EPS*);
 SLEPC_EXTERN PetscErrorCode EPSDestroy(EPS*);
@@ -236,6 +254,7 @@ SLEPC_EXTERN PetscErrorCode EPSConvergedNorm(EPS,PetscScalar,PetscScalar,PetscRe
 SLEPC_EXTERN PetscErrorCode EPSSetStoppingTest(EPS,EPSStop);
 SLEPC_EXTERN PetscErrorCode EPSGetStoppingTest(EPS,EPSStop*);
 SLEPC_EXTERN PetscErrorCode EPSStoppingBasic(EPS,PetscInt,PetscInt,PetscInt,PetscInt,EPSConvergedReason*,void*);
+SLEPC_EXTERN PetscErrorCode EPSStoppingThreshold(EPS,PetscInt,PetscInt,PetscInt,PetscInt,EPSConvergedReason*,void*);
 SLEPC_EXTERN PetscErrorCode EPSGetConvergedReason(EPS,EPSConvergedReason*);
 
 SLEPC_EXTERN PetscErrorCode EPSSetDimensions(EPS,PetscInt,PetscInt,PetscInt);
@@ -256,6 +275,8 @@ SLEPC_EXTERN PetscErrorCode EPSGetIterationNumber(EPS,PetscInt*);
 
 SLEPC_EXTERN PetscErrorCode EPSSetWhichEigenpairs(EPS,EPSWhich);
 SLEPC_EXTERN PetscErrorCode EPSGetWhichEigenpairs(EPS,EPSWhich*);
+SLEPC_EXTERN PetscErrorCode EPSSetThreshold(EPS,PetscReal,PetscBool);
+SLEPC_EXTERN PetscErrorCode EPSGetThreshold(EPS,PetscReal*,PetscBool*);
 SLEPC_EXTERN PetscErrorCode EPSSetTwoSided(EPS,PetscBool);
 SLEPC_EXTERN PetscErrorCode EPSGetTwoSided(EPS,PetscBool*);
 SLEPC_EXTERN PetscErrorCode EPSSetTrueResidual(EPS,PetscBool);
@@ -306,6 +327,7 @@ SLEPC_EXTERN PetscErrorCode EPSMonitorRegister(const char[],PetscViewerType,Pets
 
 SLEPC_EXTERN PetscErrorCode EPSSetWorkVecs(EPS,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSAllocateSolution(EPS,PetscInt);
+SLEPC_EXTERN PetscErrorCode EPSReallocateSolution(EPS,PetscInt);
 
 /*S
   EPSConvergenceTestFn - A prototype of an EPS convergence test function that would be passed to EPSSetConvergenceTestFunction()

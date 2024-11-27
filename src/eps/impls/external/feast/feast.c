@@ -56,6 +56,7 @@ static PetscErrorCode EPSSetUp_FEAST(EPS eps)
   PetscCheck(size==1,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"The FEAST interface is supported for sequential runs only");
   EPSCheckHermitianDefinite(eps);
   EPSCheckSinvertCayley(eps);
+  if (eps->nev==0) eps->nev = 1;
   if (eps->ncv!=PETSC_DETERMINE) {
     PetscCheck(eps->ncv>=eps->nev+2,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_OUTOFRANGE,"The value of ncv must be at least nev+2");
   } else eps->ncv = PetscMin(PetscMax(20,2*eps->nev+1),eps->n); /* set default value of ncv */

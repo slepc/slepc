@@ -15,7 +15,7 @@ SVD Object: svd 1 MPI process
       type: krylovschur
         50% of basis vectors kept after restart
         using the locking variant
-      selected portion of the spectrum: largest real parts
+      selected portion of the spectrum: largest eigenvalues in magnitude
       computing all residuals (for tracking convergence)
       number of eigenvalues (nev): 1
       number of column vectors (ncv): 6

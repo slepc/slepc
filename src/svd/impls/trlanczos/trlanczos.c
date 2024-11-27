@@ -212,7 +212,7 @@ static PetscErrorCode SVDSetUp_TRLanczos(SVD svd)
   PetscCall(SVDSetDimensions_Default(svd));
   PetscCheck(svd->ncv<=svd->nsv+svd->mpd,PetscObjectComm((PetscObject)svd),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nsv+mpd");
   PetscCheck(lanczos->lock || svd->mpd>=svd->ncv,PetscObjectComm((PetscObject)svd),PETSC_ERR_SUP,"Should not use mpd parameter in non-locking variant");
-  if (svd->max_it==PETSC_DETERMINE) svd->max_it = PetscMax(N/svd->ncv,100);
+  if (svd->max_it==PETSC_DETERMINE) svd->max_it = PetscMax(N/svd->ncv,100)*((svd->stop==SVD_STOP_THRESHOLD)?10:1);
   if (!lanczos->keep) lanczos->keep = 0.5;
   svd->leftbasis = PETSC_TRUE;
   PetscCall(SVDAllocateSolution(svd,1));
@@ -451,7 +451,7 @@ static PetscErrorCode SVDSolve_TRLanczos(SVD svd)
 {
   SVD_TRLANCZOS  *lanczos = (SVD_TRLANCZOS*)svd->data;
   PetscReal      *alpha,*beta;
-  PetscScalar    *swork=NULL,*w;
+  PetscScalar    *swork=NULL,*w,*aux;
   PetscInt       i,k,l,nv,ld;
   Mat            U,V;
   PetscBool      breakdown=PETSC_FALSE;
@@ -500,6 +500,7 @@ static PetscErrorCode SVDSolve_TRLanczos(SVD svd)
 
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,1.0,&k));
+    SVDSetCtxThreshold(svd,svd->sigma,k);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     /* update l */
@@ -531,8 +532,24 @@ static PetscErrorCode SVDSolve_TRLanczos(SVD svd)
     PetscCall(BVMultInPlace(svd->U,U,svd->nconv,k+l));
     PetscCall(DSRestoreMat(svd->ds,DS_MAT_U,&U));
 
-    /* copy the last vector to be the next initial vector */
-    if (svd->reason == SVD_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(svd->V,nv,k+l));
+    if (svd->reason == SVD_CONVERGED_ITERATING && !breakdown) {
+      PetscCall(BVCopyColumn(svd->V,nv,k+l));  /* copy the last vector to be the next initial vector */
+      if (svd->stop==SVD_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+        svd->ncv = svd->mpd+k;
+        PetscCall(SVDReallocateSolution(svd,svd->ncv+1));
+        for (i=nv;i<svd->ncv;i++) svd->perm[i] = i;
+        PetscCall(DSReallocate(svd->ds,svd->ncv+1));
+        aux = w;
+        PetscCall(PetscMalloc1(svd->ncv+1,&w));
+        PetscCall(PetscArraycpy(w,aux,ld));
+        PetscCall(PetscFree(aux));
+        PetscCall(DSGetLeadingDimension(svd->ds,&ld));
+        if (lanczos->oneside) {
+          PetscCall(PetscFree(swork));
+          PetscCall(PetscMalloc1(svd->ncv+1,&swork));
+        }
+      }
+    }
 
     svd->nconv = k;
     PetscCall(SVDMonitor(svd,svd->its,svd->nconv,svd->sigma,svd->errest,nv));
@@ -593,7 +610,7 @@ static PetscErrorCode SVDSolve_TRLanczos_HSVD(SVD svd)
 {
   SVD_TRLANCZOS  *lanczos = (SVD_TRLANCZOS*)svd->data;
   PetscReal      *alpha,*beta,*omega;
-  PetscScalar    *w;
+  PetscScalar    *w,*aux;
   PetscInt       i,k,l,nv,ld,nini;
   Mat            UU,VV,D,A,AT;
   BV             U,V;
@@ -660,6 +677,7 @@ static PetscErrorCode SVDSolve_TRLanczos_HSVD(SVD svd)
 
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,1.0,&k));
+    SVDSetCtxThreshold(svd,svd->sigma,k);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     /* update l */
@@ -691,14 +709,26 @@ static PetscErrorCode SVDSolve_TRLanczos_HSVD(SVD svd)
     PetscCall(BVMultInPlace(U,UU,svd->nconv,k+l));
     PetscCall(DSRestoreMat(svd->ds,DS_MAT_U,&UU));
 
-    /* copy the last vector of V to be the next initial vector
-       and change signature matrix of U */
     if (svd->reason == SVD_CONVERGED_ITERATING && !breakdown) {
+      /* copy the last vector of V to be the next initial vector
+         and change signature matrix of U */
       PetscCall(BVCopyColumn(V,nv,k+l));
       PetscCall(BVSetActiveColumns(U,0,k+l));
       PetscCall(DSGetMatAndColumn(svd->ds,DS_MAT_D,0,&D,&vomega));
       PetscCall(BVSetSignature(U,vomega));
       PetscCall(DSRestoreMatAndColumn(svd->ds,DS_MAT_D,0,&D,&vomega));
+
+      if (svd->stop==SVD_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+        svd->ncv = svd->mpd+k;
+        PetscCall(SVDReallocateSolution(svd,svd->ncv+1));
+        for (i=nv;i<svd->ncv;i++) svd->perm[i] = i;
+        PetscCall(DSReallocate(svd->ds,svd->ncv+1));
+        aux = w;
+        PetscCall(PetscMalloc1(svd->ncv+1,&w));
+        PetscCall(PetscArraycpy(w,aux,ld));
+        PetscCall(PetscFree(aux));
+        PetscCall(DSGetLeadingDimension(svd->ds,&ld));
+      }
     }
 
     svd->nconv = k;
@@ -850,8 +880,8 @@ static PetscErrorCode SVDLanczosGSingle(SVD svd,PetscReal *alpha,PetscReal *beta
 static PetscErrorCode SVDSolve_TRLanczosGSingle(SVD svd,BV U1,BV V)
 {
   SVD_TRLANCZOS  *lanczos = (SVD_TRLANCZOS*)svd->data;
-  PetscReal      *alpha,*beta,normr,scaleth,sigma0,*sigma;
-  PetscScalar    *w;
+  PetscReal      *alpha,*beta,normr,scaleth,sigma0,*sigma,*aux2;
+  PetscScalar    *w,*aux1;
   PetscInt       i,k,l,nv,ld;
   Mat            U,VV;
   PetscBool      breakdown=PETSC_FALSE;
@@ -894,6 +924,8 @@ static PetscErrorCode SVDSolve_TRLanczosGSingle(SVD svd,BV U1,BV V)
 
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,normr,&k));
+    PetscCall(SVDLanczosBackTransform(svd,nv,svd->sigma,sigma,NULL));
+    SVDSetCtxThreshold(svd,sigma,k);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     sigma0 = svd->which==SVD_LARGEST? svd->sigma[0] : 1.0/svd->sigma[0];
@@ -937,12 +969,27 @@ static PetscErrorCode SVDSolve_TRLanczosGSingle(SVD svd,BV U1,BV V)
       PetscCall(BVMultInPlace(U1,VV,svd->nconv,k+l));
       PetscCall(DSRestoreMat(svd->ds,DS_MAT_V,&VV));
 
-      /* copy the last vector to be the next initial vector */
-      if (svd->reason == SVD_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(U1,nv,k+l));
+      if (svd->reason == SVD_CONVERGED_ITERATING && !breakdown) {
+        PetscCall(BVCopyColumn(U1,nv,k+l));  /* copy the last vector to be the next initial vector */
+        if (svd->stop==SVD_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+          svd->ncv = svd->mpd+k;
+          PetscCall(SVDReallocateSolution(svd,svd->ncv+1));
+          PetscCall(BVResize(V,svd->ncv+1,PETSC_TRUE));
+          PetscCall(BVResize(U1,svd->ncv+1,PETSC_TRUE));
+          for (i=nv;i<svd->ncv;i++) svd->perm[i] = i;
+          PetscCall(DSReallocate(svd->ds,svd->ncv+1));
+          aux1 = w;
+          aux2 = sigma;
+          PetscCall(PetscMalloc2(svd->ncv+1,&w,svd->ncv+1,&sigma));
+          PetscCall(PetscArraycpy(w,aux1,ld));
+          PetscCall(PetscArraycpy(sigma,aux2,ld));
+          PetscCall(PetscFree2(aux1,aux2));
+          PetscCall(DSGetLeadingDimension(svd->ds,&ld));
+        }
+      }
     }
 
     svd->nconv = k;
-    PetscCall(SVDLanczosBackTransform(svd,nv,svd->sigma,sigma,NULL));
     PetscCall(SVDMonitor(svd,svd->its,svd->nconv,sigma,svd->errest,nv));
   }
 
@@ -1117,8 +1164,8 @@ static inline PetscErrorCode SVDInitialVectorGUpper(SVD svd,BV V,BV U1,PetscInt 
 static PetscErrorCode SVDSolve_TRLanczosGUpper(SVD svd,BV U1,BV U2,BV V)
 {
   SVD_TRLANCZOS  *lanczos = (SVD_TRLANCZOS*)svd->data;
-  PetscReal      *alpha,*beta,*alphah,*betah,normr,sigma0,*sigma;
-  PetscScalar    *w;
+  PetscReal      *alpha,*beta,*alphah,*betah,normr,sigma0,*sigma,*aux2;
+  PetscScalar    *w,*aux1;
   PetscInt       i,k,l,nv,ld;
   Mat            U,Vmat,X;
   PetscBool      breakdown=PETSC_FALSE;
@@ -1161,6 +1208,8 @@ static PetscErrorCode SVDSolve_TRLanczosGUpper(SVD svd,BV U1,BV U2,BV V)
 
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,normr,&k));
+    PetscCall(SVDLanczosBackTransform(svd,nv,svd->sigma,sigma,NULL));
+    SVDSetCtxThreshold(svd,sigma,k);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     sigma0 = svd->which==SVD_LARGEST? svd->sigma[0] : 1.0/svd->sigma[0];
@@ -1208,12 +1257,27 @@ static PetscErrorCode SVDSolve_TRLanczosGUpper(SVD svd,BV U1,BV U2,BV V)
       PetscCall(BVMultInPlace(U2,Vmat,svd->nconv,k+l));
       PetscCall(DSRestoreMat(svd->ds,DS_MAT_V,&Vmat));
 
-      /* copy the last vector to be the next initial vector */
-      if (svd->reason == SVD_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(V,nv,k+l));
+      if (svd->reason == SVD_CONVERGED_ITERATING && !breakdown) {
+        PetscCall(BVCopyColumn(V,nv,k+l));  /* copy the last vector to be the next initial vector */
+        if (svd->stop==SVD_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+          svd->ncv = svd->mpd+k;
+          PetscCall(SVDReallocateSolution(svd,svd->ncv+1));
+          PetscCall(BVResize(U1,svd->ncv+1,PETSC_TRUE));
+          PetscCall(BVResize(U2,svd->ncv+1,PETSC_TRUE));
+          for (i=nv;i<svd->ncv;i++) svd->perm[i] = i;
+          PetscCall(DSReallocate(svd->ds,svd->ncv+1));
+          aux1 = w;
+          aux2 = sigma;
+          PetscCall(PetscMalloc2(svd->ncv+1,&w,svd->ncv+1,&sigma));
+          PetscCall(PetscArraycpy(w,aux1,ld));
+          PetscCall(PetscArraycpy(sigma,aux2,ld));
+          PetscCall(PetscFree2(aux1,aux2));
+          PetscCall(DSGetLeadingDimension(svd->ds,&ld));
+        }
+      }
     }
 
     svd->nconv = k;
-    PetscCall(SVDLanczosBackTransform(svd,nv,svd->sigma,sigma,NULL));
     PetscCall(SVDMonitor(svd,svd->its,svd->nconv,sigma,svd->errest,nv));
   }
 
@@ -1412,8 +1476,8 @@ static inline PetscErrorCode SVDInitialVectorGLower(SVD svd,BV V,BV U1,BV U2,Pet
 static PetscErrorCode SVDSolve_TRLanczosGLower(SVD svd,BV U1,BV U2,BV V)
 {
   SVD_TRLANCZOS  *lanczos = (SVD_TRLANCZOS*)svd->data;
-  PetscReal      *alpha,*beta,*alphah,*betah,normr,scalef,*sigma,sigma0;
-  PetscScalar    *w;
+  PetscReal      *alpha,*beta,*alphah,*betah,normr,scalef,*sigma,sigma0,*aux2;
+  PetscScalar    *w,*aux1;
   PetscInt       i,k,l,nv,ld;
   Mat            U,Vmat,X;
   PetscBool      breakdown=PETSC_FALSE,inverted;
@@ -1458,6 +1522,8 @@ static PetscErrorCode SVDSolve_TRLanczosGLower(SVD svd,BV U1,BV U2,BV V)
 
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,normr,&k));
+    PetscCall(SVDLanczosBackTransform(svd,nv,svd->sigma,sigma,NULL));
+    SVDSetCtxThreshold(svd,sigma,k);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     sigma0 = inverted? 1.0/svd->sigma[0] : svd->sigma[0];
@@ -1507,12 +1573,27 @@ static PetscErrorCode SVDSolve_TRLanczosGLower(SVD svd,BV U1,BV U2,BV V)
       PetscCall(BVMultInPlace(U2,Vmat,svd->nconv,k+l));
       PetscCall(DSRestoreMat(svd->ds,DS_MAT_V,&Vmat));
 
-      /* copy the last vector to be the next initial vector */
-      if (svd->reason == SVD_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(V,nv,k+l));
+      if (svd->reason == SVD_CONVERGED_ITERATING && !breakdown) {
+        PetscCall(BVCopyColumn(V,nv,k+l));  /* copy the last vector to be the next initial vector */
+        if (svd->stop==SVD_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+          svd->ncv = svd->mpd+k;
+          PetscCall(SVDReallocateSolution(svd,svd->ncv+1));
+          PetscCall(BVResize(U1,svd->ncv+1,PETSC_TRUE));
+          PetscCall(BVResize(U2,svd->ncv+1,PETSC_TRUE));
+          for (i=nv;i<svd->ncv;i++) svd->perm[i] = i;
+          PetscCall(DSReallocate(svd->ds,svd->ncv+1));
+          aux1 = w;
+          aux2 = sigma;
+          PetscCall(PetscMalloc2(svd->ncv+1,&w,svd->ncv+1,&sigma));
+          PetscCall(PetscArraycpy(w,aux1,ld));
+          PetscCall(PetscArraycpy(sigma,aux2,ld));
+          PetscCall(PetscFree2(aux1,aux2));
+          PetscCall(DSGetLeadingDimension(svd->ds,&ld));
+        }
+      }
     }
 
     svd->nconv = k;
-    PetscCall(SVDLanczosBackTransform(svd,nv,svd->sigma,sigma,NULL));
     PetscCall(SVDMonitor(svd,svd->its,svd->nconv,sigma,svd->errest,nv));
   }
 
@@ -1578,6 +1659,7 @@ static PetscErrorCode SVDSolve_TRLanczos_GSVD(SVD svd)
   switch (lanczos->bidiag) {
     case SVD_TRLANCZOS_GBIDIAG_SINGLE:
       PetscCall(SVDSolve_TRLanczosGSingle(svd,U1,svd->U));
+      if (svd->stop==SVD_STOP_THRESHOLD) PetscCall(BVResize(U2,svd->ncv+1,PETSC_FALSE));
       break;
     case SVD_TRLANCZOS_GBIDIAG_UPPER:
       PetscCall(SVDSolve_TRLanczosGUpper(svd,U1,U2,svd->U));

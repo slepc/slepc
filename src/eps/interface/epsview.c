@@ -150,7 +150,8 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
     if (eps->purify) PetscCall(PetscViewerASCIIPrintf(viewer,"  postprocessing eigenvectors with purification\n"));
     if (eps->trueres) PetscCall(PetscViewerASCIIPrintf(viewer,"  computing true residuals explicitly\n"));
     if (eps->trackall) PetscCall(PetscViewerASCIIPrintf(viewer,"  computing all residuals (for tracking convergence)\n"));
-    PetscCall(PetscViewerASCIIPrintf(viewer,"  number of eigenvalues (nev): %" PetscInt_FMT "\n",eps->nev));
+    if (eps->stop==EPS_STOP_THRESHOLD) PetscCall(PetscViewerASCIIPrintf(viewer,"  computing eigenvalues %s the threshold: %g%s\n",(eps->which==EPS_SMALLEST_MAGNITUDE||eps->which==EPS_SMALLEST_REAL)?"below":"above",(double)eps->thres,eps->threlative?" (relative)":""));
+    if (eps->nev) PetscCall(PetscViewerASCIIPrintf(viewer,"  number of eigenvalues (nev): %" PetscInt_FMT "\n",eps->nev));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  number of column vectors (ncv): %" PetscInt_FMT "\n",eps->ncv));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  maximum dimension of projected problem (mpd): %" PetscInt_FMT "\n",eps->mpd));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  maximum number of iterations: %" PetscInt_FMT "\n",eps->max_it));
@@ -302,7 +303,7 @@ static PetscErrorCode EPSErrorView_ASCII(EPS eps,EPSErrorType etype,PetscViewer 
 
   PetscFunctionBegin;
   PetscCall(EPS_GetActualConverged(eps,&nconv));
-  nvals = (eps->which==EPS_ALL)? eps->nconv: eps->nev;
+  nvals = (eps->which==EPS_ALL || eps->stop==EPS_STOP_THRESHOLD)? nconv: eps->nev;
   if (eps->which!=EPS_ALL && nconv<nvals) {
     PetscCall(PetscViewerASCIIPrintf(viewer," Problem: less than %" PetscInt_FMT " eigenvalues converged\n\n",eps->nev));
     PetscFunctionReturn(PETSC_SUCCESS);
@@ -318,7 +319,7 @@ static PetscErrorCode EPSErrorView_ASCII(EPS eps,EPSErrorType etype,PetscViewer 
       PetscFunctionReturn(PETSC_SUCCESS);
     }
   }
-  if (eps->which==EPS_ALL) PetscCall(PetscViewerASCIIPrintf(viewer," Found %" PetscInt_FMT " eigenvalues, all of them computed up to the required tolerance:",nvals));
+  if (eps->which==EPS_ALL || eps->stop==EPS_STOP_THRESHOLD) PetscCall(PetscViewerASCIIPrintf(viewer," Found %" PetscInt_FMT " eigenvalues, all of them computed up to the required tolerance:",nvals));
   else PetscCall(PetscViewerASCIIPrintf(viewer," All requested eigenvalues computed up to the required tolerance:"));
   for (i=0;i<=(nvals-1)/8;i++) {
     PetscCall(PetscViewerASCIIPrintf(viewer,"\n     "));

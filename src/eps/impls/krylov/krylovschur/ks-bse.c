@@ -668,14 +668,16 @@ PetscErrorCode EPSSetUp_KrylovSchur_BSE(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
   PetscBool       flg,sinvert;
-  PetscInt        nev=(eps->nev+1)/2;
+  PetscInt        nev;
 
   PetscFunctionBegin;
   PetscCheck((eps->problem_type==EPS_BSE),PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONGSTATE,"Problem type should be BSE");
   EPSCheckUnsupportedCondition(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_BALANCE,PETSC_TRUE," with BSE structure");
-  PetscCall(EPSSetDimensions_Default(eps,nev,&eps->ncv,&eps->mpd));
+  if (eps->nev==0 && eps->stop!=EPS_STOP_THRESHOLD) eps->nev = 1;
+  nev = (eps->nev+1)/2;
+  PetscCall(EPSSetDimensions_Default(eps,&nev,&eps->ncv,&eps->mpd));
   PetscCheck(eps->ncv<=nev+eps->mpd,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nev+mpd");
-  if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
+  if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv)*((eps->stop==EPS_STOP_THRESHOLD)?10:1);
 
   PetscCall(PetscObjectTypeCompareAny((PetscObject)eps->st,&flg,STSINVERT,STSHIFT,""));
   PetscCheck(flg,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Krylov-Schur BSE only supports shift and shift-and-invert ST");
@@ -768,6 +770,7 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_Shao(EPS eps)
     /* Check convergence */
     for (i=0;i<eps->ncv;i++) eps->eigr[i] = PetscSqrtReal(PetscRealPart(eps->eigr[i]));
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,1.0,&k));
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
 
@@ -789,7 +792,18 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_Shao(EPS eps)
     PetscCall(BVMultInPlace(V,Q,eps->nconv,k+l));
     PetscCall(DSRestoreMat(eps->ds,DS_MAT_Q,&Q));
 
-    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(eps->V,nv,k+l));
+    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) {
+      PetscCall(BVCopyColumn(eps->V,nv,k+l));
+      if (eps->stop==EPS_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+        eps->ncv = eps->mpd+k;
+        PetscCall(BVRestoreSplitRows(eps->V,is[0],is[1],&U,&V));
+        PetscCall(EPSReallocateSolution(eps,eps->ncv+1));
+        PetscCall(BVGetSplitRows(eps->V,is[0],is[1],&U,&V));
+        for (i=nv;i<eps->ncv;i++) eps->perm[i] = i;
+        PetscCall(DSReallocate(eps->ds,eps->ncv+1));
+        PetscCall(DSGetLeadingDimension(eps->ds,&ld));
+      }
+    }
     eps->nconv = k;
     PetscCall(EPSMonitor(eps,eps->its,nconv,eps->eigr,eps->eigi,eps->errest,nv));
   }
@@ -834,7 +848,7 @@ static PetscErrorCode EPSConvergence_Gruning(EPS eps,PetscBool getall,PetscInt k
 PetscErrorCode EPSSolve_KrylovSchur_BSE_Gruning(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
-  PetscInt        k,l,ld,nv,nconv=0,nevsave;
+  PetscInt        i,k,l,ld,nv,nconv=0,nevsave;
   Mat             H,Q,Z;
   BV              U,V,HU,HV;
   IS              is[2];
@@ -885,6 +899,7 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_Gruning(EPS eps)
 
     /* Check convergence */
     PetscCall(EPSConvergence_Gruning(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,&k));
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
 
@@ -910,7 +925,20 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_Gruning(EPS eps)
     PetscCall(DSRestoreMat(eps->ds,DS_MAT_U,&Q));
     PetscCall(DSRestoreMat(eps->ds,DS_MAT_V,&Z));
 
-    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(U,nv,k+l));
+    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) {
+      PetscCall(BVCopyColumn(eps->V,nv,k+l));
+      if (eps->stop==EPS_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+        eps->ncv = eps->mpd+k;
+        PetscCall(BVRestoreSplitRows(eps->V,is[0],is[1],&U,&V));
+        PetscCall(EPSReallocateSolution(eps,eps->ncv+1));
+        PetscCall(BVGetSplitRows(eps->V,is[0],is[1],&U,&V));
+        PetscCall(BVResize(HU,eps->ncv+1,PETSC_TRUE));
+        PetscCall(BVResize(HV,eps->ncv+1,PETSC_TRUE));
+        for (i=nv;i<eps->ncv;i++) { eps->perm[i] = i; eps->eigi[i] = 0.0; }
+        PetscCall(DSReallocate(eps->ds,eps->ncv+1));
+        PetscCall(DSGetLeadingDimension(eps->ds,&ld));
+      }
+    }
     eps->nconv = k;
     PetscCall(EPSMonitor(eps,eps->its,nconv,eps->eigr,eps->eigi,eps->errest,nv));
   }
@@ -978,6 +1006,7 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_ProjectedBSE(EPS eps)
     /* Check convergence */
     for (i=0;i<eps->ncv;i++) eps->eigr[i] = PetscSqrtReal(PetscRealPart(eps->eigr[i]));
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,1.0,&k));
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
 
@@ -999,7 +1028,18 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_ProjectedBSE(EPS eps)
     PetscCall(BVMultInPlace(V,Q,eps->nconv,k+l));
     PetscCall(DSRestoreMat(eps->ds,DS_MAT_Q,&Q));
 
-    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(eps->V,nv,k+l));
+    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) {
+      PetscCall(BVCopyColumn(eps->V,nv,k+l));
+      if (eps->stop==EPS_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+        eps->ncv = eps->mpd+k;
+        PetscCall(BVRestoreSplitRows(eps->V,is[0],is[1],&U,&V));
+        PetscCall(EPSReallocateSolution(eps,eps->ncv+1));
+        PetscCall(BVGetSplitRows(eps->V,is[0],is[1],&U,&V));
+        for (i=nv;i<eps->ncv;i++) eps->perm[i] = i;
+        PetscCall(DSReallocate(eps->ds,eps->ncv+1));
+        PetscCall(DSGetLeadingDimension(eps->ds,&ld));
+      }
+    }
     eps->nconv = k;
     PetscCall(EPSMonitor(eps,eps->its,nconv,eps->eigr,eps->eigi,eps->errest,nv));
   }

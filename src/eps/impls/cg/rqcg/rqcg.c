@@ -42,11 +42,11 @@ static PetscErrorCode EPSSetUp_RQCG(EPS eps)
   PetscFunctionBegin;
   EPSCheckHermitianDefinite(eps);
   EPSCheckNotStructured(eps);
-  PetscCall(EPSSetDimensions_Default(eps,eps->nev,&eps->ncv,&eps->mpd));
+  PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
   if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
   if (!eps->which) eps->which = EPS_SMALLEST_REAL;
   PetscCheck(eps->which==EPS_SMALLEST_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"This solver supports only smallest real eigenvalues");
-  EPSCheckUnsupported(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION);
+  EPSCheckUnsupported(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_THRESHOLD);
   EPSCheckIgnored(eps,EPS_FEATURE_BALANCE);
 
   if (!ctx->nrest) ctx->nrest = 20;

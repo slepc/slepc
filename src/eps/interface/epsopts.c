@@ -142,6 +142,12 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
     PetscCall(PetscOptionsReal("-eps_tol","Tolerance","EPSSetTolerances",SlepcDefaultTol(eps->tol),&r,&flg2));
     if (flg1 || flg2) PetscCall(EPSSetTolerances(eps,r,i));
 
+    r = eps->thres;
+    PetscCall(PetscOptionsReal("-eps_threshold_absolute","Absolute threshold","EPSSetThreshold",r,&r,&flg));
+    if (flg) PetscCall(EPSSetThreshold(eps,r,PETSC_FALSE));
+    PetscCall(PetscOptionsReal("-eps_threshold_relative","Relative threshold","EPSSetThreshold",r,&r,&flg));
+    if (flg) PetscCall(EPSSetThreshold(eps,r,PETSC_TRUE));
+
     PetscCall(PetscOptionsBoolGroupBegin("-eps_conv_rel","Relative error convergence test","EPSSetConvergenceTest",&flg));
     if (flg) PetscCall(EPSSetConvergenceTest(eps,EPS_CONV_REL));
     PetscCall(PetscOptionsBoolGroup("-eps_conv_norm","Convergence test relative to the eigenvalue and the matrix norms","EPSSetConvergenceTest",&flg));
@@ -153,11 +159,14 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
 
     PetscCall(PetscOptionsBoolGroupBegin("-eps_stop_basic","Stop iteration if all eigenvalues converged or max_it reached","EPSSetStoppingTest",&flg));
     if (flg) PetscCall(EPSSetStoppingTest(eps,EPS_STOP_BASIC));
+    PetscCall(PetscOptionsBoolGroup("-eps_stop_threshold","Stop iteration if a converged eigenvalue is below/above the threshold","EPSSetStoppingTest",&flg));
+    if (flg) PetscCall(EPSSetStoppingTest(eps,EPS_STOP_THRESHOLD));
     PetscCall(PetscOptionsBoolGroupEnd("-eps_stop_user","User-defined stopping test","EPSSetStoppingTest",&flg));
     if (flg) PetscCall(EPSSetStoppingTest(eps,EPS_STOP_USER));
 
     i = eps->nev;
     PetscCall(PetscOptionsInt("-eps_nev","Number of eigenvalues to compute","EPSSetDimensions",eps->nev,&i,&flg1));
+    if (!flg1) i = PETSC_CURRENT;
     j = eps->ncv;
     PetscCall(PetscOptionsInt("-eps_ncv","Number of basis vectors","EPSSetDimensions",eps->ncv,&j,&flg2));
     k = eps->mpd;
@@ -344,7 +353,7 @@ PetscErrorCode EPSGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
-  if (nev) *nev = eps->nev;
+  if (nev) *nev = eps->nev? eps->nev: 1;
   if (ncv) *ncv = eps->ncv;
   if (mpd) *mpd = eps->mpd;
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -534,6 +543,111 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
   PetscAssertPointer(which,2);
   *which = eps->which;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   EPSSetThreshold - Sets the threshold used in the threshold stopping test.
+
+   Logically Collective
+
+   Input Parameters:
++  eps   - the eigenvalue solver context
+.  thres - the threshold value
+-  rel   - whether the threshold is relative or not
+
+   Options Database Keys:
++  -eps_threshold_absolute <thres> - Sets an absolute threshold
+-  -eps_threshold_relative <thres> - Sets a relative threshold
+
+   Notes:
+   This function internally calls EPSSetStoppingTest() to set a special stopping
+   test based on the threshold, where eigenvalues are computed in sequence until
+   one of the computed eigenvalues is below the threshold (in magnitude). This is
+   the interpretation in case of searching for largest eigenvalues in magnitude,
+   see EPSSetWhichEigenpairs().
+
+   If the solver is configured to compute smallest magnitude eigenvalues, then the
+   threshold must be interpreted in the opposite direction, i.e., the computation
+   will stop when one of the computed values is above the threshold (in magnitude).
+
+   The threshold can also be used when computing largest/smallest real eigenvalues
+   (i.e, rightmost or leftmost), in which case the threshold is allowed to be
+   negative. The solver will stop when one of the computed eigenvalues is above
+   or below the threshold (considering the real part of the eigenvalue). This mode
+   is allowed only in problem types whose eigenvalues are always real (e.g., HEP).
+
+   In the case of largest magnitude eigenvalues, the threshold can be made relative
+   with respect to the dominant eigenvalue. Otherwise, the argument rel should be
+   PETSC_FALSE.
+
+   An additional use case is with target magnitude selection of eigenvalues (e.g.,
+   with shift-and-invert), but this must be used with caution to avoid unexpected
+   behaviour. With an absolute threshold, the solver will assume that leftmost
+   eigenvalues are being computed (e.g., with target=0 for a problem with real
+   positive eigenvalues). In case of a relative threshold, a value of threshold<1
+   implies that the wanted eigenvalues are the largest ones, and otherwise the
+   solver assumes that smallest eigenvalues are being computed.
+
+   The test against the threshold is done for converged eigenvalues, which
+   implies that the final number of converged eigenvalues will be at least
+   one more than the actual number of values below/above the threshold.
+
+   Since the number of computed eigenvalues is not known a priori, the solver
+   will need to reallocate the basis of vectors internally, to have enough room
+   to accommodate all the eigenvectors. Hence, this option must be used with
+   caution to avoid out-of-memory problems. The recommendation is to set the value
+   of ncv to be larger than the estimated number of eigenvalues, to minimize the
+   number of reallocations.
+
+   If a number of wanted eigenvalues has been set with EPSSetDimensions()
+   it is also taken into account and the solver will stop when one of the two
+   conditions (threshold or number of converged values) is met.
+
+   Use EPSSetStoppingTest() to return to the usual computation of a fixed number
+   of eigenvalues.
+
+   Level: advanced
+
+.seealso: EPSGetThreshold(), EPSSetStoppingTest(), EPSSetDimensions(), EPSSetWhichEigenpairs(), EPSSetProblemType()
+@*/
+PetscErrorCode EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
+  PetscValidLogicalCollectiveReal(eps,thres,2);
+  PetscValidLogicalCollectiveBool(eps,rel,3);
+  if (eps->thres != thres || eps->threlative != rel) {
+    eps->thres = thres;
+    eps->threlative = rel;
+    eps->state = EPS_STATE_INITIAL;
+    PetscCall(EPSSetStoppingTest(eps,EPS_STOP_THRESHOLD));
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   EPSGetThreshold - Gets the threshold used by the threshold stopping test.
+
+   Not Collective
+
+   Input Parameter:
+.  eps - the eigenvalue solver context
+
+   Output Parameters:
++  thres - the threshold
+-  rel   - whether the threshold is relative or not
+
+   Level: advanced
+
+.seealso: EPSSetThreshold()
+@*/
+PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
+  if (thres) *thres = eps->thres;
+  if (rel)   *rel   = eps->threlative;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -754,7 +868,8 @@ PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void* 
   eps->stoppinguser    = func;
   eps->stoppingdestroy = destroy;
   eps->stoppingctx     = ctx;
-  if (func == EPSStoppingBasic) eps->stop = EPS_STOP_BASIC;
+  if (func == EPSStoppingBasic) PetscCall(EPSSetStoppingTest(eps,EPS_STOP_BASIC));
+  else if (func == EPSStoppingThreshold) PetscCall(EPSSetStoppingTest(eps,EPS_STOP_THRESHOLD));
   else {
     eps->stop     = EPS_STOP_USER;
     eps->stopping = eps->stoppinguser;
@@ -773,13 +888,15 @@ PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void* 
 -  stop - the type of stopping test
 
    Options Database Keys:
-+  -eps_stop_basic - Sets the default stopping test
--  -eps_stop_user  - Selects the user-defined stopping test
++  -eps_stop_basic     - Sets the default stopping test
+.  -eps_stop_threshold - Sets the threshold stopping test
+-  -eps_stop_user      - Selects the user-defined stopping test
 
    Note:
    The parameter 'stop' can have one of these values
-+     EPS_STOP_BASIC - default stopping test
--     EPS_STOP_USER  - function set by EPSSetStoppingTestFunction()
++     EPS_STOP_BASIC     - default stopping test
+.     EPS_STOP_THRESHOLD - threshold stopping test)
+-     EPS_STOP_USER      - function set by EPSSetStoppingTestFunction()
 
    Level: advanced
 
@@ -792,6 +909,7 @@ PetscErrorCode EPSSetStoppingTest(EPS eps,EPSStop stop)
   PetscValidLogicalCollectiveEnum(eps,stop,2);
   switch (stop) {
     case EPS_STOP_BASIC: eps->stopping = EPSStoppingBasic; break;
+    case EPS_STOP_THRESHOLD: eps->stopping = EPSStoppingThreshold; break;
     case EPS_STOP_USER:
       PetscCheck(eps->stoppinguser,PetscObjectComm((PetscObject)eps),PETSC_ERR_ORDER,"Must call EPSSetStoppingTestFunction() first");
       eps->stopping = eps->stoppinguser;

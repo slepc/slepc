@@ -1,0 +1,10 @@
+
+Generalized singular value problem stored in file.
+
+ Reading REAL matrix from a binary file...
+ Using B=I with p=200
+
+ All generalized singular values computed up to the required tolerance:
+     35.00752, 34.10419, 34.10419, 33.20131, 32.68111, 32.68111, 31.77900, 31.77900,
+     30.85480, 30.85480, 30.35800, 29.95379
+

@@ -1,0 +1,9 @@
+
+Markov Model, N=120 (m=15)
+
+ Solution method: krylovschur
+
+ Using threshold: 0.9
+ Found 7 eigenvalues, all of them computed up to the required tolerance:
+     1.00000, -1.00000, 0.97137, -0.97137, 0.90423, -0.90423, 0.85714
+
