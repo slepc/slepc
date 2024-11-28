@@ -100,18 +100,18 @@ showcsrc:
 define SHARED_RECIPE_DLL
   @$(RM) $@ dllcmd.${PETSC_ARCH}
   @cygpath -w $^ > dllcmd.${PETSC_ARCH}
-  $(call quiet,CLINKER) $(sl_linker_args) -o $@ @dllcmd.${PETSC_ARCH} $(SLEPC_EXTERNAL_LIB) $(PETSC_SNES_LIB)
+  $(call quiet,CLINKER) $(sl_linker_args) -o $@ @dllcmd.${PETSC_ARCH} $(SLEPC_EXTERNAL_LIB) $(filter-out $(SLEPC_EXTERNAL_LIB),$(PETSC_SNES_LIB))
   @$(RM) dllcmd.${PETSC_ARCH}
 endef
 
 define SHARED_RECIPE_ATFILE
   $(file > $@.args,$^)
-  $(call quiet,CLINKER) $(sl_linker_args) -o $@ @$@.args $(SLEPC_EXTERNAL_LIB) $(PETSC_SNES_LIB)
+  $(call quiet,CLINKER) $(sl_linker_args) -o $@ @$@.args $(SLEPC_EXTERNAL_LIB) $(filter-out $(SLEPC_EXTERNAL_LIB),$(PETSC_SNES_LIB))
   @$(RM) $@.args
 endef
 
 define SHARED_RECIPE_DEFAULT
-  $(call quiet,CLINKER) $(sl_linker_args) -o $@ $^ $(SLEPC_EXTERNAL_LIB) $(PETSC_SNES_LIB)
+  $(call quiet,CLINKER) $(sl_linker_args) -o $@ $^ $(SLEPC_EXTERNAL_LIB) $(filter-out $(SLEPC_EXTERNAL_LIB),$(PETSC_SNES_LIB))
 endef
 
 GMAKE4 = $(if $(findstring 3.99,$(firstword $(sort 3.99 $(MAKE_VERSION)))),1,)

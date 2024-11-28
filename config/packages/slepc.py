@@ -55,6 +55,13 @@ class SLEPc(package.Package):
     self.AddDefine(slepcconf,'PETSC_ARCH',petsc.arch)
     self.AddDefine(slepcconf,'DIR',slepc.dir)
     self.AddDefine(slepcconf,'LIB_DIR',os.path.join(slepc.prefixdir,'lib'))
+    libdir = os.path.join(slepc.prefixdir,'lib')
+    incdir = os.path.join(slepc.prefixdir,'include')
+    if petsc.buildsharedlib:
+      self.libflags = petsc.cc_linker_slflag + libdir + ' -L' + libdir
+    else:
+      self.libflags = '-L' + libdir
+    self.includeflags = '-I' + incdir
     if slepc.isrepo and slepc.gitrev != 'unknown':
       self.AddDefine(slepcconf,'VERSION_GIT',slepc.gitrev)
       self.AddDefine(slepcconf,'VERSION_DATE_GIT',slepc.gitdate)
@@ -64,8 +71,8 @@ class SLEPc(package.Package):
       slepcvars.write('SHLIBS = libslepc${LIB_NAME_SUFFIX}\n')
       slepcvars.write('LIBNAME = '+os.path.join('${INSTALL_LIB_DIR}','libslepc${LIB_NAME_SUFFIX}.${AR_LIB_SUFFIX}')+'\n')
       for module in ['SYS','EPS','SVD','PEP','NEP','MFN','LME']:
-        slepcvars.write('SLEPC_'+module+'_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc${LIB_NAME_SUFFIX} ${SLEPC_EXTERNAL_LIB}\n')
-      slepcvars.write('SLEPC_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc${LIB_NAME_SUFFIX} ${SLEPC_EXTERNAL_LIB}\n')
+        slepcvars.write('SLEPC_'+module+'_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc${LIB_NAME_SUFFIX} ${SLEPC_EXTERNAL_LIB_BASIC}\n')
+      slepcvars.write('SLEPC_LIB_NOPETSC = ${CC_LINKER_SLFLAG}${SLEPC_LIB_DIR} -L${SLEPC_LIB_DIR} -lslepc${LIB_NAME_SUFFIX} ${SLEPC_EXTERNAL_LIB_BASIC}\n')
 
   def ShowInfo(self):
     self.log.Println('\nSLEPc directory:\n  '+self.dir)

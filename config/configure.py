@@ -278,6 +278,8 @@ with slepc.CreateFile(confdir,'slepcvariables') as slepcvars:
                  includeflags.append(entry)
       slepcvars.write('SLEPC_EXTERNAL_LIB = '+' '.join(libflags)+'\n')
       slepcvars.write('SLEPC_EXTERNAL_INCLUDES = '+' '.join(includeflags)+'\n')
+      slepcvars.write('SLEPC_EXTERNAL_LIB_BASIC = '+' '.join(list(set(libflags).difference(set(slepc.libflags.split()))))+'\n')
+      slepcvars.write('SLEPC_EXTERNAL_INCLUDES_BASIC = '+' '.join(list(set(includeflags).difference(set(slepc.includeflags.split()))))+'\n')
 
 log.NewSection('Writing various configuration files...')
 
