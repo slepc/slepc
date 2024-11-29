@@ -291,25 +291,26 @@ static PetscErrorCode EPSBSELanczos_Gruning(EPS eps,BV U,BV V,BV HU,BV HV,PetscR
   PetscCall(BVRestoreColumn(V,0,&v));
 
   /* Normalize initial vector */
-  if (k==0 && eps->nini==0) PetscCall(BVSetRandomColumn(eps->V,0));
-
-  /* y = Hmult(v1,1) */
-  PetscCall(BVGetColumn(U,k,&x));
-  PetscCall(BVGetColumn(HU,k,&y));
-  PetscCall(VecCopy(x,w));
-  PetscCall(VecConjugate(w));
-  PetscCall(VecNestSetSubVec(f,0,x));
-  PetscCall(VecNestSetSubVec(g,0,y));
-  PetscCall(STApply(eps->st,f,g));
-  /* nrm = sqrt(2*real(u1'*y)); */
-  PetscCall(VecDot(x,y,&dot));
-  nrm = PetscSqrtReal(PetscRealPart(2*dot));
-  /* U(:,j) = u1/nrm; */
-  /* HU(:,j) = y/nrm; */
-  PetscCall(VecScale(x,1.0/nrm));
-  PetscCall(VecScale(y,1.0/nrm));
-  PetscCall(BVRestoreColumn(U,k,&x));
-  PetscCall(BVRestoreColumn(HU,k,&y));
+  if (k==0) {
+    if (eps->nini==0) PetscCall(BVSetRandomColumn(eps->V,0));
+    /* y = Hmult(v1,1) */
+    PetscCall(BVGetColumn(U,k,&x));
+    PetscCall(BVGetColumn(HU,k,&y));
+    PetscCall(VecCopy(x,w));
+    PetscCall(VecConjugate(w));
+    PetscCall(VecNestSetSubVec(f,0,x));
+    PetscCall(VecNestSetSubVec(g,0,y));
+    PetscCall(STApply(eps->st,f,g));
+    /* nrm = sqrt(2*real(u1'*y)); */
+    PetscCall(VecDot(x,y,&dot));
+    nrm = PetscSqrtReal(PetscRealPart(2*dot));
+    /* U(:,j) = u1/nrm; */
+    /* HU(:,j) = y/nrm; */
+    PetscCall(VecScale(x,1.0/nrm));
+    PetscCall(VecScale(y,1.0/nrm));
+    PetscCall(BVRestoreColumn(U,k,&x));
+    PetscCall(BVRestoreColumn(HU,k,&y));
+  }
 
   for (j=k;j<m;j++) {
     /* j+1 columns (indexes 0 to j) have been computed */
@@ -910,7 +911,10 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_Gruning(EPS eps)
     PetscCall(DSRestoreMat(eps->ds,DS_MAT_U,&Q));
     PetscCall(DSRestoreMat(eps->ds,DS_MAT_V,&Z));
 
-    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) PetscCall(BVCopyColumn(U,nv,k+l));
+    if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) {
+      PetscCall(BVCopyColumn(U,nv,k+l));
+      PetscCall(BVCopyColumn(HU,nv,k+l));
+    }
     eps->nconv = k;
     PetscCall(EPSMonitor(eps,eps->its,nconv,eps->eigr,eps->eigi,eps->errest,nv));
   }
