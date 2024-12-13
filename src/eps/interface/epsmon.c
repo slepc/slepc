@@ -158,6 +158,21 @@ PetscErrorCode EPSGetMonitorContext(EPS eps,void *ctx)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static inline PetscErrorCode EPSMonitorPrintEval(EPS eps,PetscViewer viewer,PetscScalar er,PetscScalar ei)
+{
+  PetscFunctionBegin;
+  if (eps->problem_type==EPS_HEP || eps->problem_type==EPS_GHEP || eps->problem_type==EPS_BSE) PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)PetscRealPart(er)));
+  else {
+#if defined(PETSC_USE_COMPLEX)
+    PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(er),(double)PetscImaginaryPart(er)));
+#else
+    PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)er));
+    if (ei!=0.0) PetscCall(PetscViewerASCIIPrintf(viewer,"%+gi",(double)ei));
+#endif
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 /*@C
    EPSMonitorFirst - Print the first unconverged approximate value and
    error estimate at each iteration of the eigensolver.
@@ -197,12 +212,7 @@ PetscErrorCode EPSMonitorFirst(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *
     PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
     er = eigr[nconv]; ei = eigi[nconv];
     PetscCall(STBackTransform(eps->st,1,&er,&ei));
-#if defined(PETSC_USE_COMPLEX)
-    PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(er),(double)PetscImaginaryPart(er)));
-#else
-    PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)er));
-    if (ei!=0.0) PetscCall(PetscViewerASCIIPrintf(viewer,"%+gi",(double)ei));
-#endif
+    PetscCall(EPSMonitorPrintEval(eps,viewer,er,ei));
     PetscCall(PetscViewerASCIIPrintf(viewer," (%10.8e)\n",(double)errest[nconv]));
     PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_TRUE));
     PetscCall(PetscViewerASCIISubtractTab(viewer,((PetscObject)eps)->tablevel));
@@ -251,12 +261,7 @@ PetscErrorCode EPSMonitorAll(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *ei
   for (i=0;i<nest;i++) {
     er = eigr[i]; ei = eigi[i];
     PetscCall(STBackTransform(eps->st,1,&er,&ei));
-#if defined(PETSC_USE_COMPLEX)
-    PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(er),(double)PetscImaginaryPart(er)));
-#else
-    PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)er));
-    if (ei!=0.0) PetscCall(PetscViewerASCIIPrintf(viewer,"%+gi",(double)ei));
-#endif
+    PetscCall(EPSMonitorPrintEval(eps,viewer,er,ei));
     PetscCall(PetscViewerASCIIPrintf(viewer," (%10.8e)",(double)errest[i]));
   }
   PetscCall(PetscViewerASCIIPrintf(viewer,"\n"));
@@ -310,12 +315,7 @@ PetscErrorCode EPSMonitorConverged(EPS eps,PetscInt its,PetscInt nconv,PetscScal
       PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
       er = eigr[i]; ei = eigi[i];
       PetscCall(STBackTransform(eps->st,1,&er,&ei));
-#if defined(PETSC_USE_COMPLEX)
-      PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(er),(double)PetscImaginaryPart(er)));
-#else
-      PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)er));
-      if (ei!=0.0) PetscCall(PetscViewerASCIIPrintf(viewer,"%+gi",(double)ei));
-#endif
+      PetscCall(EPSMonitorPrintEval(eps,viewer,er,ei));
       PetscCall(PetscViewerASCIIPrintf(viewer," (%10.8e)\n",(double)errest[i]));
       PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_TRUE));
     }

@@ -1408,7 +1408,7 @@ cdef class EPS(Object):
         cdef SlepcEPSProblemType ptype
         CHKERR( EPSGetEigenvalue(self.eps, i, &sval1, &sval2) )
         CHKERR( EPSGetProblemType(self.eps, &ptype) )
-        if ptype == EPS_HEP or ptype == EPS_GHEP:
+        if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE:
             return toReal(PetscRealPart(sval1))
         else:
             return toComplex(sval1, sval2)
@@ -1500,7 +1500,7 @@ cdef class EPS(Object):
         cdef SlepcEPSProblemType ptype
         CHKERR( EPSGetEigenpair(self.eps, i, &sval1, &sval2, vecr, veci) )
         CHKERR( EPSGetProblemType(self.eps, &ptype) )
-        if ptype == EPS_HEP or ptype == EPS_GHEP:
+        if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE:
             return toReal(PetscRealPart(sval1))
         else:
             return toComplex(sval1, sval2)
