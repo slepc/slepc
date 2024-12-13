@@ -400,7 +400,7 @@ gnu-c-complex-multilib:
     - linux-ubuntu, name:satet
   variables:
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-single-library=0 --with-library-name-suffix=Complex --download-metis --download-parmetis --download-scalapack --with-cxx-dialect=17
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --with-fortran-bindings-inplace
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --download-chase --with-fortran-bindings-inplace
 
 gnu-c-libs:
   extends:
@@ -410,7 +410,7 @@ gnu-c-libs:
     - linux-suse, name:igai
   variables:
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-primme --download-blopex --download-trlan --download-slicot --with-packages-download-dir=/var/local/downloads
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-primme --download-blopex --download-chase --download-trlan --download-slicot --with-packages-download-dir=/var/local/downloads
 
 gnu-cxx-int64:
   extends:
@@ -594,7 +594,7 @@ gnu-c-multilib:
     - linux-suse, name:igai
   variables:
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack --download-netlib-lapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-chase --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads
 
 gnu-c-c99-nompi:
   extends:
@@ -648,7 +648,7 @@ gnu-c-complex-libs:
     - linux-suse, name:igai
   variables:
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-scalapack --download-metis --download-parmetis --download-elemental
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-packages-build-dir=${BUILD_DIR} --download-arpack --download-primme --download-blopex
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-packages-build-dir=${BUILD_DIR} --download-arpack --download-primme --download-chase --download-blopex
     BUILD_DIR: ../externalpackages
 
 clang-c-complex:
@@ -769,7 +769,7 @@ intel-c-mkl-libs:
   variables:
     LOAD_MODULES: compiler mpi mkl
     PETSC_CONFIG_OPTS: --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso --with-scalapack --download-mumps --download-metis --download-parmetis --download-suitesparse
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --download-arpack --download-primme --download-blopex --download-polar --download-ksvd
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --download-arpack --download-primme --download-blopex --download-polar --download-ksvd --download-chase
 
 nvidia-c-complex-nompi:
   extends:

@@ -533,6 +533,15 @@ It is possible to configure \slepc with the serial version of \trlan (built with
 \item[Specific options.] The \slepc interface to \feast allows the user to specify the number of contour integration points with the function \ident{EPSFEASTSetNumPoints} or at run time with the option \Verb!-eps_feast_num_points <n>!.
 \end{description}
 
+\subsection*{\underline{\chase}}
+\begin{description}
+\setlength{\itemsep}{0pt}
+\item[References.]\citep{Winkelmann:2019:CCA}.
+\item[Website.] \url{https://github.com/ChASE-library/ChASE}.
+\item[Summary.] \chase is a modern and scalable library based on subspace iteration with polynomial acceleration to solve dense Hermitian (symmetric) algebraic eigenvalue problems, especially solving dense Hermitian eigenproblems arranged in a sequence. Novel to ChASE is the computation of the spectral estimates that enter in the filter and an optimization of the polynomial degree that further reduces the necessary floating-point operations.
+\item[Installation.] Currently, the \chase interface in \slepc is based on the MPI version with block-cyclic distribution, i.e., \scalapack matrix storage, so it is necessary to enable \scalapack during configuration of \petsc.
+\end{description}
+
 %---------------------------------------------------
 \section{Fortran Interface}
 \label{sec:fortran}

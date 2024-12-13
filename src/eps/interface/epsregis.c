@@ -49,6 +49,9 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_Elemental(EPS);
 #if defined(SLEPC_HAVE_EVSL)
 SLEPC_EXTERN PetscErrorCode EPSCreate_EVSL(EPS);
 #endif
+#if defined(SLEPC_HAVE_CHASE)
+SLEPC_EXTERN PetscErrorCode EPSCreate_ChASE(EPS);
+#endif
 
 /*@C
   EPSRegisterAll - Registers all the eigenvalue solvers in the EPS package.
@@ -102,6 +105,9 @@ PetscErrorCode EPSRegisterAll(void)
 #endif
 #if defined(SLEPC_HAVE_EVSL)
   PetscCall(EPSRegister(EPSEVSL,EPSCreate_EVSL));
+#endif
+#if defined(SLEPC_HAVE_CHASE)
+  PetscCall(EPSRegister(EPSCHASE,EPSCreate_ChASE));
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);
 }

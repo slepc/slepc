@@ -60,5 +60,6 @@
 #define EPSSCALAPACK   'scalapack'
 #define EPSELEMENTAL   'elemental'
 #define EPSEVSL        'evsl'
+#define EPSCHASE       'chase'
 
 #endif

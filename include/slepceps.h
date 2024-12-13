@@ -64,6 +64,7 @@ typedef const char* EPSType;
 #define EPSELPA        "elpa"
 #define EPSELEMENTAL   "elemental"
 #define EPSEVSL        "evsl"
+#define EPSCHASE       "chase"
 
 /* Logging support */
 SLEPC_EXTERN PetscClassId EPS_CLASSID;
@@ -599,3 +600,6 @@ SLEPC_EXTERN PetscErrorCode EPSEVSLGetDamping(EPS,EPSEVSLDamping*);
 
 SLEPC_EXTERN PetscErrorCode EPSFEASTSetNumPoints(EPS,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSFEASTGetNumPoints(EPS,PetscInt*);
+
+SLEPC_EXTERN PetscErrorCode EPSCHASESetDegree(EPS,PetscInt,PetscBool);
+SLEPC_EXTERN PetscErrorCode EPSCHASEGetDegree(EPS,PetscInt*,PetscBool*);
