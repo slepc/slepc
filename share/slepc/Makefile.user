@@ -1,9 +1,10 @@
 # -*- mode: makefile -*-
 
-# This makefile is based on PETSc's Makefile.user. You may need to add
-# the directory containing petsc.pc to the pkg-config path:
-# $ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$PETSC_DIR/$PETSC_ARCH/lib/pkgconfig
-
+# This makefile is based on PETSc's Makefile.user.
+#
+# The following variable must either be a path to petsc.pc or just "petsc" if petsc.pc
+# has been installed to a system location or can be found in PKG_CONFIG_PATH. And the
+# same for slepc.pc.
 petsc.pc := $(PETSC_DIR)/$(PETSC_ARCH)/lib/pkgconfig/petsc.pc
 slepc.pc := $(SLEPC_DIR)/$(PETSC_ARCH)/lib/pkgconfig/slepc.pc
 
