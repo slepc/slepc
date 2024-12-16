@@ -769,7 +769,7 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_Shao(EPS eps)
     PetscCall(DSSynchronize(eps->ds,eps->eigr,eps->eigi));
 
     /* Check convergence */
-    for (i=0;i<eps->ncv;i++) eps->eigr[i] = PetscSqrtReal(PetscRealPart(eps->eigr[i]));
+    for (i=0;i<nv;i++) eps->eigr[i] = PetscSqrtReal(PetscRealPart(eps->eigr[i]));
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,1.0,&k));
     EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
@@ -1006,7 +1006,7 @@ PetscErrorCode EPSSolve_KrylovSchur_BSE_ProjectedBSE(EPS eps)
     PetscCall(DSSynchronize(eps->ds,eps->eigr,eps->eigi));
 
     /* Check convergence */
-    for (i=0;i<eps->ncv;i++) eps->eigr[i] = PetscSqrtReal(PetscRealPart(eps->eigr[i]));
+    for (i=0;i<nv;i++) eps->eigr[i] = PetscSqrtReal(PetscRealPart(eps->eigr[i]));
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,1.0,&k));
     EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
