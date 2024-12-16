@@ -270,7 +270,7 @@ Saad, Y. (1992).
   Algorithms\/}.
 \newblock John Wiley and Sons, New York.
 
-\bibitem[{Sangalli(2019)}]{Sangalli:2019:MBP}
+\bibitem[{Sangalli~\emph{et~al.}(2019)}]{Sangalli:2019:MBP}
 Sangalli, D., et~al. (2019).
 \newblock Many-body perturbation theory calculations using the yambo code.
 \newblock {\em J. Condens. Matter Phys.\/}, 31(32):325902.
