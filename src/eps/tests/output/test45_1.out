@@ -1,0 +1,7 @@
+
+Standard eigenproblem with ChASE, N=1225 (35x35 grid)
+
+ ChASE: using degree 20, optimization TRUE
+ All requested eigenvalues computed up to the required tolerance:
+     0.01522, 0.03800, 0.03800, 0.06077, 0.07576, 0.07576
+

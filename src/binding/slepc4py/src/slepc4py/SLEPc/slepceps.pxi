@@ -22,6 +22,7 @@ cdef extern from * nogil:
     SlepcEPSType EPSELPA
     SlepcEPSType EPSELEMENTAL
     SlepcEPSType EPSEVSL
+    SlepcEPSType EPSCHASE
 
     ctypedef enum SlepcEPSProblemType "EPSProblemType":
         EPS_HEP

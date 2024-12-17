@@ -331,6 +331,7 @@ Wrapper to \blopex         & \texttt{EPSBLOPEX}   & \texttt{blopex} \\
 Wrapper to \scalapack      & \texttt{EPSSCALAPACK}& \texttt{scalapack} \\
 Wrapper to \elpa           & \texttt{EPSELPA}     & \texttt{elpa} \\
 Wrapper to \elemental      & \texttt{EPSELEMENTAL}& \texttt{elemental} \\
+Wrapper to \chase          & \texttt{EPSCHASE}    & \texttt{chase} \\
 Wrapper to \feast          & \texttt{EPSFEAST}    & \texttt{feast} \\\hline
 \end{tabular} }
 \caption{\label{tab:solvers}Eigenvalue solvers available in the \ident{EPS} module.}
@@ -372,6 +373,7 @@ Method   &  Portion of spectrum & Problem type & \!Real/complex\! & \!Two-sided\
 \texttt{scalapack}   & All $\lambda$ & \Verb!EPS_HEP!, \Verb!EPS_GHEP! & both & \\
 \texttt{elpa}        & All $\lambda$ & \Verb!EPS_HEP!, \Verb!EPS_GHEP! & both & \\
 \texttt{elemental}   & All $\lambda$ & \Verb!EPS_HEP!, \Verb!EPS_GHEP! & both & \\
+\texttt{chase}       & Smallest $\mathrm{Re}(\lambda)$ & \Verb!EPS_HEP! & both & \\
 \texttt{feast}       & All $\mathrm{Re}(\lambda)$ in an interval & any & both & \\ \hline
 \end{tabular}
 \caption{\label{tab:support}Supported problem types for all eigensolvers available in \slepc.}

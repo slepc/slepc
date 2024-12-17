@@ -312,6 +312,13 @@ Tisseur, F. and K.~Meerbergen (2001).
 \newblock The quadratic eigenvalue problem.
 \newblock {\em {SIAM} Rev.\/}, 43(2):235--286.
 
+\bibitem[{Winkelmann {\em et~al.\/}(2019)Winkelmann, Springer, and {Di
+  Napoli}}]{Winkelmann:2019:CCA}
+Winkelmann, J., P.~Springer, and E.~{Di Napoli} (2019).
+\newblock {ChASE}: {Chebyshev} accelerated subspace iteration eigensolver for
+  sequences of Hermitian eigenvalue problems.
+\newblock {\em ACM Trans. Math. Software\/}, 45(2):1--–34.
+
 \bibitem[{Wu and Simon(2000)}]{Wu:2000:TLM}
 Wu, K. and H.~Simon (2000).
 \newblock Thick-restart {Lanczos} method for large symmetric eigenvalue

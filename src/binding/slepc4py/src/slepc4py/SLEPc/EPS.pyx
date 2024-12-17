@@ -31,6 +31,7 @@ class EPSType(object):
     - `ELPA`:
     - `ELEMENTAL`:
     - `EVSL`:
+    - `CHASE`:
     """
     # provided implementations
     POWER        = S_(EPSPOWER)
@@ -55,6 +56,7 @@ class EPSType(object):
     ELPA         = S_(EPSELPA)
     ELEMENTAL    = S_(EPSELEMENTAL)
     EVSL         = S_(EPSEVSL)
+    CHASE        = S_(EPSCHASE)
 
 class EPSProblemType(object):
     """
