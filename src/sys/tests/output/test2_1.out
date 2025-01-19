@@ -7,7 +7,7 @@ SLEPc version
  https://slepc.upv.es
 See https://slepc.upv.es/documentation/ for help.
 SLEPc libraries linked from PATH
-Petsc version
+PETSc version
        The PETSc Team
     petsc-maint@mcs.anl.gov
  https://petsc.org/

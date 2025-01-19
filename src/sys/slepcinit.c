@@ -37,7 +37,7 @@ PetscErrorCode SlepcGetVersion(char version[],size_t len)
 #if (SLEPC_VERSION_RELEASE == 1)
   PetscCall(PetscSNPrintf(version,len,"SLEPc Release Version %d.%d.%d, %s",SLEPC_VERSION_MAJOR,SLEPC_VERSION_MINOR,SLEPC_VERSION_SUBMINOR,SLEPC_VERSION_DATE));
 #else
-  PetscCall(PetscSNPrintf(version,len,"SLEPc Development GIT revision: %s  GIT Date: %s",SLEPC_VERSION_GIT,SLEPC_VERSION_DATE_GIT));
+  PetscCall(PetscSNPrintf(version,len,"SLEPc Development Git Revision: %s Git Date: %s",SLEPC_VERSION_GIT,SLEPC_VERSION_DATE_GIT));
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);
 }
