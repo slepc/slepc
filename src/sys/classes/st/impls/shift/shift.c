@@ -13,6 +13,7 @@
 */
 
 #include <slepc/private/stimpl.h>
+#include <petsc/private/matimpl.h>  /* Mat_MPIDense */
 
 /*
    Special STApply() for the BSE structured matrix
@@ -43,6 +44,46 @@ static PetscErrorCode STApply_Shift_BSE(ST st,Vec x,Vec y)
   PetscCall(VecNestGetSubVec(y,0,&y1));
   PetscCall(MatMult(C,x2,y1));
   PetscCall(MatMultAdd(R,x1,y1,y1));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+   Specialized version that avoids communication for multiplication by R.
+   It needs to access internal data structures of MATMPIDENSE.
+   Assumes the bottom part of the input vector x2 contains either conj(x1) or -conj(x1).
+*/
+static PetscErrorCode STApply_Shift_BSE_Dense(ST st,Vec x,Vec y)
+{
+  Mat               H,R,C;
+  Vec               x1,x2,y1;
+  PetscBool         chsgn=PETSC_FALSE;
+  Mat_MPIDense      *mdnR,*mdnC;
+  const PetscScalar *vx1,*vx2;
+
+  PetscFunctionBegin;
+  H = st->T[0];
+  PetscCall(MatNestGetSubMat(H,0,0,&R));
+  PetscCall(MatNestGetSubMat(H,0,1,&C));
+  mdnR = (Mat_MPIDense*)R->data;
+  mdnC = (Mat_MPIDense*)C->data;
+  PetscCall(VecNestGetSubVec(x,0,&x1));
+  PetscCall(VecNestGetSubVec(x,1,&x2));
+  PetscCall(VecNestGetSubVec(y,0,&y1));
+  PetscCall(MatMult(C,x2,y1));
+  /* PetscCall(MatMultAdd(R,x1,y1,y1)); */
+  PetscCall(VecConjugate(mdnC->lvec));
+  PetscCall(VecGetArrayRead(x1,&vx1));
+  PetscCall(VecGetArrayRead(x2,&vx2));
+  if (PetscRealPart(*vx1)==-PetscRealPart(*vx2)) chsgn = PETSC_TRUE;
+  PetscCall(VecRestoreArrayRead(x1,&vx1));
+  PetscCall(VecRestoreArrayRead(x2,&vx2));
+  if (chsgn) PetscCall(VecScale(mdnC->lvec,-1.0));
+  PetscCall(PetscLogEventBegin(MAT_MultAdd,R,mdnC->lvec,y1,y1));
+  PetscCall(VecLockReadPush(mdnC->lvec));
+  PetscCall((*mdnR->A->ops->multadd)(mdnR->A,mdnC->lvec,y1,y1));
+  PetscCall(VecLockReadPop(mdnC->lvec));
+  PetscCall(PetscLogEventEnd(MAT_MultAdd,R,mdnC->lvec,y1,y1));
+  PetscCall(PetscObjectStateIncrease((PetscObject)y1));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -100,6 +141,8 @@ static PetscErrorCode STSetUp_Shift(ST st)
 {
   PetscInt       k,nc,nmat=st->nmat;
   PetscScalar    *coeffs=NULL;
+  PetscBool      denseR,denseC;
+  Mat            H,R,C;
 
   PetscFunctionBegin;
   if (nmat>1) PetscCall(STSetWorkVecs(st,1));
@@ -132,7 +175,14 @@ static PetscErrorCode STSetUp_Shift(ST st)
     }
   }
   if (st->P) PetscCall(KSPSetUp(st->ksp));
-  if (st->structured) st->ops->apply = STApply_Shift_BSE;
+  if (st->structured) {
+    H = st->T[0];
+    PetscCall(MatNestGetSubMat(H,0,0,&R));
+    PetscCall(MatNestGetSubMat(H,0,1,&C));
+    PetscCall(PetscObjectTypeCompareAny((PetscObject)R,&denseR,MATMPIDENSE,MATMPIDENSECUDA,MATMPIDENSEHIP,""));
+    PetscCall(PetscObjectTypeCompareAny((PetscObject)C,&denseC,MATMPIDENSE,MATMPIDENSECUDA,MATMPIDENSEHIP,""));
+    st->ops->apply = (denseR && denseC)? STApply_Shift_BSE_Dense: STApply_Shift_BSE;
+  }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
