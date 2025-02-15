@@ -96,7 +96,7 @@ static PetscErrorCode EPSSolve_ELPA(EPS eps)
   PetscCall(MatDuplicate(A,MAT_DO_NOT_COPY_VALUES,&Q));
   q = (Mat_ScaLAPACK*)Q->data;
 
-  PetscCallELPARET(elpa_init,20200417);    /* 20171201 */
+  PetscCallELPARET(elpa_init,20250131);
   PetscCallELPANOARG(handle = elpa_allocate);
 
   /* set parameters of the matrix and its MPI distribution */
@@ -111,9 +111,9 @@ static PetscErrorCode EPSSolve_ELPA(EPS eps)
   if (B) PetscCallELPA(elpa_set,handle,"blacs_context",a->grid->ictxt);
 
   /* setup and set tunable run-time options */
-  PetscCallELPARET(elpa_setup,handle);
   PetscCallELPA(elpa_set,handle,"solver",ELPA_SOLVER_2STAGE);
   /* PetscCallELPA(elpa_print_settings,handle); */
+  PetscCallELPARET(elpa_setup,handle);
 
   /* solve the eigenvalue problem */
   if (B) {
