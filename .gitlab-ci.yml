@@ -710,11 +710,12 @@ gnu-c-coverage:
     - .stage-3
     - .linux_test
   tags:
-    - name:jepri
+    - name:hapy
   variables:
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --with-coverage=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-primme --download-trlan --download-blopex --download-hpddm --download-evsl
     COVERAGE: 1
+    LOAD_MODULES: mpi
   coverage: /^lines:\s*\d+.\d+\%/
   artifacts:
     reports:
