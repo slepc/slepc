@@ -371,7 +371,14 @@ gnu-c-cuda:
     - gpu:nvidia, name:hapy
   variables:
     LOAD_MODULES: mpi
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-cuda --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --with-magma-dir=/usr/local/opt/magma-2.7.1
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-cuda --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --with-magma-dir=/usr/local/opt/magma-2.7.1 --with-coverage=1
+    COVERAGE: 1
+  coverage: /^lines:\s*\d+.\d+\%/
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
 
 gnu-c-hip:
   extends:
