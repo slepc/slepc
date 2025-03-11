@@ -400,11 +400,12 @@ static PetscErrorCode EPSComputeVectors_BSE_Gruning(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode Orthog_ProjectedBSE(Vec hx,Vec hy,BV X,BV Y,PetscInt j,PetscScalar *h,PetscScalar *c,PetscBool *breakdown)
+/* Full orthogonalization of vector [hx, conj(hx)] against first j vectors in X and Y */
+static PetscErrorCode Orthog_ProjectedBSE(Vec hx,BV X,BV Y,PetscInt j,PetscScalar *h,PetscScalar *c,PetscBool *breakdown)
 {
   PetscInt          i;
   Mat               MX,MY,MXl,MYl;
-  Vec               c1,hxl,hyl,hz;
+  Vec               c1,hxl,hz;
   PetscScalar       *cx1;
   PetscMPIInt       len;
 
@@ -417,25 +418,22 @@ static PetscErrorCode Orthog_ProjectedBSE(Vec hx,Vec hy,BV X,BV Y,PetscInt j,Pet
   PetscCall(BVGetMat(Y,&MY));
   PetscCall(MatDenseGetLocalMatrix(MX,&MXl));
   PetscCall(MatDenseGetLocalMatrix(MY,&MYl));
-  PetscCall(MatCreateVecs(MXl,&c1,&hyl));
-  PetscCall(MatCreateVecs(MXl,NULL,&hxl));
+  PetscCall(MatCreateVecs(MXl,&c1,&hxl));
 
-  /* c1 = X^* hx - Y^* hy
-   * c2 = conj(c1) */
+  /* c1 = X^* hx - conj(Y^T hx) */
 
   PetscCall(VecGetLocalVector(hx,hxl));
-  PetscCall(VecGetLocalVector(hy,hyl));
   PetscCall(VecDuplicate(hx,&hz));
-  /* c1 = -(Y^* hy) */
-  PetscCall(MatMultHermitianTranspose(MYl,hyl,c1));
+  /* c1 = - conj(Y^T hx) */
+  PetscCall(MatMultTranspose(MYl,hxl,c1));
   PetscCall(VecScale(c1,-1));
+  PetscCall(VecConjugate(c1));
   /* c1 = c1 + X^* hx */
   PetscCall(MatMultHermitianTransposeAdd(MXl,hxl,c1,c1));
   PetscCall(VecGetArray(c1,&cx1));
   PetscCallMPI(MPIU_Allreduce(MPI_IN_PLACE,cx1,len,MPIU_SCALAR,MPIU_SUM,PetscObjectComm((PetscObject)hx)));
   PetscCall(VecRestoreArray(c1,&cx1));
   PetscCall(VecRestoreLocalVector(hx,hxl));
-  PetscCall(VecRestoreLocalVector(hy,hyl));
 
   /* accumulate orthog coeffs into h */
   PetscCall(VecGetArrayRead(c1,(const PetscScalar**)&cx1));
@@ -443,9 +441,9 @@ static PetscErrorCode Orthog_ProjectedBSE(Vec hx,Vec hy,BV X,BV Y,PetscInt j,Pet
   for (i=0; i<j; i++) h[i+j] += PetscConj(cx1[i]);
   PetscCall(VecRestoreArrayRead(c1,(const PetscScalar**)&cx1));
 
-  /* u = hx - X c1 - conj(Y) c2 */
+  /* hx = hx - X c1 - conj(Y c1) */
 
-  /* conj(Y) c2 */
+  /* conj(Y c1) */
   PetscCall(VecGetLocalVector(hz,hxl));
   PetscCall(MatMult(MYl,c1,hxl));
   PetscCall(VecConjugate(hxl));
@@ -458,12 +456,12 @@ static PetscErrorCode Orthog_ProjectedBSE(Vec hx,Vec hy,BV X,BV Y,PetscInt j,Pet
   PetscCall(BVRestoreMat(Y,&MY));
   PetscCall(VecDestroy(&c1));
   PetscCall(VecDestroy(&hxl));
-  PetscCall(VecDestroy(&hyl));
   PetscCall(VecDestroy(&hz));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/* Orthogonalize vector x against first j vectors in X and Y */
+/* Orthogonalize vector [hx; hy] against first j vectors in X and Y
+   The result is a vector [u; conj(u)]. Vector hx is overwritten with u. */
 static PetscErrorCode OrthogonalizeVector_ProjectedBSE(Vec hx,Vec hy,BV X,BV Y,PetscInt j,PetscReal *beta,PetscInt k,PetscScalar *h,PetscBool *breakdown)
 {
   PetscInt    l,i;
@@ -488,20 +486,23 @@ static PetscErrorCode OrthogonalizeVector_ProjectedBSE(Vec hx,Vec hy,BV X,BV Y,P
   /* Store coeffs into h */
   for (i=l; i<j-1; i++) h[i] = h[j+i] = beta[i];
   h[j-1] = alpha;
-  h[2*j-1] = alpha-1.0;
+
   /* Orthogonalize: hx = hx - X(:,l:j-1)*h1 - conj(Y(:,l:j-1))*h2 */
+  /* hx = hx - X(:,l:j-1)*h1 */
   PetscCall(BVSetActiveColumns(X,l,j));
   PetscCall(BVSetActiveColumns(Y,l,j));
   PetscCall(BVMultVec(X,-1.0,1.0,hx,h+l));
+  /* hx = conj(hx) */
   PetscCall(VecConjugate(hx));
-  for (i=j+l; i<2*j; i++) h[j+i] = PetscConj(h[i]);
-  PetscCall(BVMultVec(Y,-1.0,1.0,hx,h+2*j+l));
+  /* hx = hx - Y(:,l:j-1)*conj(h2) */
+  h[2*j-1] = PetscConj(alpha-1.0);
+  PetscCall(BVMultVec(Y,-1.0,1.0,hx,h+j+l));
+  h[2*j-1] = alpha-1.0;
+  /* hx = conj(hx) */
   PetscCall(VecConjugate(hx));
 
   /* Full orthogonalization */
-  PetscCall(VecCopy(hx,hy));
-  PetscCall(VecConjugate(hy));
-  PetscCall(Orthog_ProjectedBSE(hx,hy,X,Y,j,h,h+2*j,breakdown));
+  PetscCall(Orthog_ProjectedBSE(hx,X,Y,j,h,h+2*j,breakdown));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -540,7 +541,7 @@ static PetscErrorCode EPSBSELanczos_ProjectedBSE(EPS eps,BV X,BV Y,Vec v,PetscRe
     PetscCall(VecNestSetSubVec(f,0,x));
     PetscCall(VecNestSetSubVec(g,0,y));
     PetscCall(STApply(eps->st,f,g));
-    /* nrm = sqrt(real(u'v)) */
+    /* nrm = sqrt(real(u'*v)) */
     PetscCall(VecDot(y,x,&gamma));
     nrm = PetscSqrtReal(PetscRealPart(gamma));
     /* u = u /(nrm*2) */
@@ -576,7 +577,7 @@ static PetscErrorCode EPSBSELanczos_ProjectedBSE(EPS eps,BV X,BV Y,Vec v,PetscRe
     PetscCall(VecConjugate(y));
     /* [u,cd] = orthog(hx,hy,X(:,1:j),Y(:,1:j),opt)*/
     PetscCall(OrthogonalizeVector_ProjectedBSE(x,y,X,Y,j+1,beta,k,hwork,breakdown));
-    /* alpha(j) = real(cd(j))-1/2 */
+    /* alpha(j) = 2*(real(cd(j))-1/2) */
     alpha[j] = 2*(PetscRealPart(hwork[j]) - 0.5);
     /* v = Hmult(u,1) */
     PetscCall(VecCopy(x,w));
@@ -585,7 +586,7 @@ static PetscErrorCode EPSBSELanczos_ProjectedBSE(EPS eps,BV X,BV Y,Vec v,PetscRe
     PetscCall(VecNestSetSubVec(g,0,y));
     PetscCall(STApply(eps->st,f,g));
     /* nrm = sqrt(real(u'*v)) */
-    /* beta(j) = nrm */
+    /* beta(j) = 2*nrm */
     PetscCall(VecDot(x,y,&gamma));
     beta[j] = 2.0*PetscSqrtReal(PetscRealPart(gamma));
     /* u = u/(nrm*2) */
