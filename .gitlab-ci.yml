@@ -5,6 +5,8 @@
 #
 # stage-3 may take an hour or more. They run the full test suite and heavily test external packages, utilize valgrind etc.
 #
+# stage-4 should take only a few minutes.
+#
 # The stage-(n) tests are only started if all of the stage-(n-1) tests run without error
 #   You can limit the testing by using the variable STAGE with value 1 or 2
 #
@@ -13,6 +15,7 @@ stages:
   - stage-1
   - stage-2
   - stage-3
+  - stage-4
 variables:
   GIT_STRATEGY: fetch
   GIT_CLEAN_FLAGS: -ffdxq
@@ -223,7 +226,7 @@ gnu-lint:
     - echo -e "section_start:`date +%s`:tests_slepc\r\e[0KSLEPc test suite"
     - if [ ! -z ${SLEPC4PY+x} ]; then make slepc4pytest; make -C src/binding/slepc4py/demo PYTHON=${PYTHON}; fi
     - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest; make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" allgtests-tap TIMEOUT=${TIMEOUT} ${TEST_OPTS}; fi
-    - if [ ! -z ${COVERAGE+x} -a -z ${DISABLE_TESTS+x} ]; then mkdir coverage; gcovr -j 4 --xml coverage.xml --xml-pretty --html-details coverage/index.html --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/f90-mod/.*" --exclude '.*/ftn-auto/.*' --print-summary; tar czf ${CI_JOB_NAME}-cov.tar.gz coverage; fi
+    - if [ ! -z ${COVERAGE+x} -a -z ${DISABLE_TESTS+x} ]; then gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/f90-mod/.*" --exclude '.*/ftn-auto/.*' --print-summary; fi
     - echo -e "section_end:`date +%s`:tests_slepc\r\e[0K"
   artifacts:
     reports:
@@ -237,9 +240,8 @@ gnu-lint:
     - arch-*/tests/testresults.xml
     - arch-*/tests/test_*_tap.log
     - arch-*/tests/test_*_err.log
-    - ${CI_JOB_NAME}-cov.tar.gz
     - ${CI_JOB_NAME}-docs*.tar.gz
-    - coverage.xml
+    - coverage-${CI_JOB_NAME}.json
     expire_in: 4 days
   variables:
     OPENBLAS_NUM_THREADS: 1
@@ -252,6 +254,7 @@ gnu-lint:
     variables:
       - $STAGE != "1"
       - $STAGE != "3"
+      - $STAGE != "4"
 
 .stage-3:
   extends: .stage-23
@@ -260,11 +263,21 @@ gnu-lint:
     variables:
       - $STAGE != "1"
       - $STAGE != "2"
+      - $STAGE != "4"
 
 .stage-3-sched:
   extends: .stage-3
   only:
     - schedules
+
+.stage-4:
+  extends: .test
+  stage: stage-4
+  only:
+    variables:
+      - $STAGE != "1"
+      - $STAGE != "2"
+      - $STAGE != "3"
 
 #
 # The following provide templates for various OSes for pre/post info
@@ -374,11 +387,6 @@ gnu-c-cuda:
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-cuda --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --with-magma-dir=/usr/local/opt/magma-2.7.1 --with-coverage=1
     COVERAGE: 1
   coverage: /^lines:\s*\d+.\d+\%/
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage.xml
 
 gnu-c-hip:
   extends:
@@ -724,11 +732,6 @@ gnu-c-coverage:
     COVERAGE: 1
     LOAD_MODULES: mpi
   coverage: /^lines:\s*\d+.\d+\%/
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage.xml
 
 gnu-c-complex-coverage:
   extends:
@@ -740,6 +743,7 @@ gnu-c-complex-coverage:
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-scalar-type=complex --with-debugging=1 --with-coverage=1
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0 --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --download-hpddm
     COVERAGE: 1
+  coverage: /^lines:\s*\d+.\d+\%/
 
 intel-c-complex-int64-mkl:
   extends:
@@ -949,3 +953,45 @@ aocc-c-hip:
     LOAD_MODULES: openmpi/5.0.7-aocc-5.0.0-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-hip --with-fc=0
     TEST_OPTS: query=requires queryval=hip
+
+#
+# Stage-4
+#
+
+# job for merging the json coverage reports
+total-coverage:
+  extends: .test
+  stage: stage-4
+  tags:
+    - name:hapy
+  # get artifacts from dependencies
+  dependencies:
+    # stage-1
+    # stage-2
+    - gnu-c-cuda
+    # stage-3
+    - gnu-c-coverage
+    - gnu-c-complex-coverage
+  before_script:
+    - date
+    - hostname
+    - grep PRETTY_NAME /etc/os-release
+    - nproc
+    - lscpu
+    - ccache --zero-stats
+  script:
+    - rm -rf coverage
+    - mkdir coverage
+    - gcovr --version
+    - 'gcovr -a coverage-*.json -j 4 --xml coverage.xml --xml-pretty --html-details coverage/index.html --print-summary; tar czf coverage.tar.gz coverage'
+  after_script:
+    - date
+  artifacts:
+    when: always
+    paths:
+    - coverage.tar.gz
+    expire_in: 4 days
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
