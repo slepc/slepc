@@ -226,7 +226,20 @@ gnu-lint:
     - echo -e "section_start:`date +%s`:tests_slepc\r\e[0KSLEPc test suite"
     - if [ ! -z ${SLEPC4PY+x} ]; then make slepc4pytest; make -C src/binding/slepc4py/demo PYTHON=${PYTHON}; fi
     - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest; make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" allgtests-tap TIMEOUT=${TIMEOUT} ${TEST_OPTS}; fi
-    - if [ ! -z ${COVERAGE+x} -a -z ${DISABLE_TESTS+x} ]; then gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/f90-mod/.*" --exclude '.*/ftn-auto/.*' --print-summary; fi
+    - |
+      set +e
+      set -x
+      if [ ! -z ${COVERAGE+x} -a -z ${DISABLE_TESTS+x} ]; then
+        rm -rf ${PWD}/.venv-gcovr
+        python3 -m venv ${PWD}/.venv-gcovr
+        source ${PWD}/.venv-gcovr/bin/activate
+        python3 -m pip install --upgrade pip==25.0.1
+        python3 -m pip install --upgrade gcovr==8.3
+        gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/f90-mod/.*" --exclude '.*/ftn-auto/.*' --print-summary
+        deactivate
+        zstd coverage-${CI_JOB_NAME}.json
+      fi
+      set -e
     - echo -e "section_end:`date +%s`:tests_slepc\r\e[0K"
   artifacts:
     reports:
@@ -241,7 +254,7 @@ gnu-lint:
     - arch-*/tests/test_*_tap.log
     - arch-*/tests/test_*_err.log
     - ${CI_JOB_NAME}-docs*.tar.gz
-    - coverage-${CI_JOB_NAME}.json
+    - coverage-${CI_JOB_NAME}.json.zst
     expire_in: 4 days
   variables:
     OPENBLAS_NUM_THREADS: 1
@@ -982,8 +995,16 @@ total-coverage:
   script:
     - rm -rf coverage
     - mkdir coverage
+    - 'zstd -d *.zst'
+    - rm -rf ${PWD}/.venv-gcovr
+    - python3 -m venv ${PWD}/.venv-gcovr
+    - source ${PWD}/.venv-gcovr/bin/activate
+    - python3 -m pip install --upgrade pip==25.0.1
+    - python3 -m pip install --upgrade gcovr==8.3
     - gcovr --version
-    - 'gcovr -a coverage-*.json -j 4 --xml coverage.xml --xml-pretty --html-details coverage/index.html --print-summary; tar czf coverage.tar.gz coverage'
+    - 'gcovr -a "coverage-*.json" -j 4 --xml coverage.xml --xml-pretty --html-details coverage/index.html --print-summary'
+    - tar czf coverage.tar.gz coverage
+    - deactivate
   after_script:
     - date
   artifacts:
