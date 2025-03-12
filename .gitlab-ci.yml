@@ -186,6 +186,7 @@ gnu-lint:
     - printf "PYTHONPATH:$PYTHONPATH\n"
     - printf "PETSC_OPTIONS:$PETSC_OPTIONS\n"
     - printf "PETSC_CONFIG_OPTS:${PETSC_CONFIG_OPTS}\n"
+    - printf "PETSC_COVERAGE_OPTS:${PETSC_COVERAGE_OPTS}\n"
     - printf "SLEPC_CONFIG_OPTS:${SLEPC_CONFIG_OPTS}\n"
     - export SLEPC_DIR=$PWD
     - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
@@ -207,7 +208,7 @@ gnu-lint:
       fi
     - export PETSC_DIR=$PWD
     - export PETSC_ARCH=arch-$CI_JOB_NAME
-    - bash -c "${PYTHON} ./configure --with-debugging=0 --with-strict-petscerrorcode --COPTFLAGS='-O -g' --CXXOPTFLAGS='-O -g' --FOPTFLAGS='-O -g' --CUDAOPTFLAGS='-O3' --HIPOPTFLAGS='-O2' ${PETSC_CONFIG_OPTS}"
+    - bash -c "${PYTHON} ./configure --with-debugging=0 --with-strict-petscerrorcode --COPTFLAGS='-O -g' --CXXOPTFLAGS='-O -g' --FOPTFLAGS='-O -g' --CUDAOPTFLAGS='-O3' --HIPOPTFLAGS='-O2' ${PETSC_CONFIG_OPTS} ${PETSC_COVERAGE_OPTS}"
     - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}"
     - if [ ! -z ${SLEPC4PY+x} ]; then export PYTHONPATH=$PETSC_DIR/$PETSC_ARCH/lib:$SLEPC_DIR/$PETSC_ARCH/lib; fi
     - if [ ! -z ${INSTALL+x} ]; then make install-lib; PETSC_DIR=$INSTALL_DIR; unset PETSC_ARCH; fi
@@ -254,7 +255,6 @@ gnu-lint:
     - arch-*/tests/test_*_tap.log
     - arch-*/tests/test_*_err.log
     - ${CI_JOB_NAME}-docs*.tar.gz
-    - coverage-${CI_JOB_NAME}.json.zst
     expire_in: 4 days
   variables:
     OPENBLAS_NUM_THREADS: 1
@@ -372,6 +372,15 @@ gnu-lint:
   after_script:
     - date
 
+.coverage_test:
+  variables:
+    COVERAGE: 1
+    PETSC_COVERAGE_OPTS: --with-coverage=1
+  coverage: /^lines:\s*\d+.\d+\%/
+  artifacts:
+    paths:
+    - coverage-${CI_JOB_NAME}.json.zst
+
 #
 # The following tests run as part of stage-2.
 #
@@ -393,13 +402,12 @@ gnu-c-cuda:
   extends:
     - .stage-2
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:nvidia, name:hapy
   variables:
     LOAD_MODULES: mpi
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-cuda --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --with-magma-dir=/usr/local/opt/magma-2.7.1 --with-coverage=1
-    COVERAGE: 1
-  coverage: /^lines:\s*\d+.\d+\%/
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-cuda --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --with-magma-dir=/usr/local/opt/magma-2.7.1
 
 gnu-c-hip:
   extends:
@@ -737,26 +745,24 @@ gnu-c-coverage:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - name:hapy
   variables:
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --with-coverage=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-primme --download-trlan --download-blopex --download-hpddm --download-evsl
-    COVERAGE: 1
     LOAD_MODULES: mpi
-  coverage: /^lines:\s*\d+.\d+\%/
 
 gnu-c-complex-coverage:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - name:jepri
   variables:
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-scalar-type=complex --with-debugging=1 --with-coverage=1
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-scalar-type=complex --with-debugging=1
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0 --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --download-hpddm
-    COVERAGE: 1
-  coverage: /^lines:\s*\d+.\d+\%/
 
 intel-c-complex-int64-mkl:
   extends:
