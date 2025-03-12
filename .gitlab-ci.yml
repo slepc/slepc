@@ -443,6 +443,7 @@ gnu-c-libs:
   extends:
     - .stage-2
     - .linux_test
+    - .coverage_test
   tags:
     - linux-suse, name:igai
   variables:
@@ -605,6 +606,7 @@ gnu-c-cuda-complex:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:nvidia, name:hapy
   variables:
@@ -657,6 +659,7 @@ gnu-c-complex:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - name:jepri
   variables:
@@ -668,6 +671,7 @@ gnu-c:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - linux-ubuntu, name:satet
   variables:
@@ -681,6 +685,7 @@ gnu-c-complex-libs:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - linux-suse, name:igai
   variables:
@@ -741,7 +746,7 @@ gnu-c-single:
     PETSC_CONFIG_OPTS: --with-precision=single --download-scalapack
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0
 
-gnu-c-coverage:
+gnu-c-debug:
   extends:
     - .stage-3
     - .linux_test
@@ -753,7 +758,7 @@ gnu-c-coverage:
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-primme --download-trlan --download-blopex --download-hpddm --download-evsl
     LOAD_MODULES: mpi
 
-gnu-c-complex-coverage:
+gnu-c-complex-debug:
   extends:
     - .stage-3
     - .linux_test
@@ -966,6 +971,7 @@ aocc-c-hip:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:amd, name:satet
   variables:
@@ -985,12 +991,17 @@ total-coverage:
     - name:hapy
   # get artifacts from dependencies
   dependencies:
-    # stage-1
     # stage-2
     - gnu-c-cuda
+    - gnu-c-libs
     # stage-3
-    - gnu-c-coverage
-    - gnu-c-complex-coverage
+    - gnu-c-cuda-complex
+    - gnu-c-complex
+    - gnu-c
+    - gnu-c-complex-libs
+    - gnu-c-debug
+    - gnu-c-complex-debug
+    - aocc-c-hip
   before_script:
     - date
     - hostname
