@@ -1013,6 +1013,7 @@ total-coverage:
     - deactivate
   after_script:
     - date
+  coverage: /^lines:\s*\d+.\d+\%/
   artifacts:
     when: always
     paths:
