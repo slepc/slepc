@@ -228,7 +228,6 @@ gnu-lint:
     - if [ ! -z ${SLEPC4PY+x} ]; then make slepc4pytest; make -C src/binding/slepc4py/demo PYTHON=${PYTHON}; fi
     - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest; make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" allgtests-tap TIMEOUT=${TIMEOUT} ${TEST_OPTS}; fi
     - |
-      set +e
       set -x
       if [ ! -z ${COVERAGE+x} -a -z ${DISABLE_TESTS+x} ]; then
         rm -rf ${PWD}/.venv-gcovr
@@ -236,11 +235,26 @@ gnu-lint:
         source ${PWD}/.venv-gcovr/bin/activate
         python3 -m pip install --upgrade pip==25.0.1
         python3 -m pip install --upgrade gcovr==8.3
-        gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/f90-mod/.*" --exclude '.*/ftn-auto/.*' --print-summary
+        if [ -e ${PETSC_ARCH}/lib/libslepc.so ]; then
+          slepclib=${PETSC_ARCH}/lib/libslepc.so
+        elif [ -e ${PETSC_ARCH}/lib/libslepc.a ]; then
+          slepclib=${PETSC_ARCH}/lib/libslepc.a
+        elif [ -e ${PETSC_ARCH}/lib/libslepcsys.so ]; then
+          slepclib=${PETSC_ARCH}/lib/libslepcsys.so
+        else
+          exit 2
+        fi
+        set +e
+        llvm=$(nm $slepclib |grep -l llvm_gcov_init)
+        set -e
+        if [ -n "${llvm}" ]; then
+          gcovr --gcov-executable "llvm-cov gcov" -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/f90-mod/.*" --exclude '.*/ftn-auto/.*' --print-summary
+        else
+          gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/f90-mod/.*" --exclude '.*/ftn-auto/.*' --print-summary
+        fi
         deactivate
         zstd coverage-${CI_JOB_NAME}.json
       fi
-      set -e
     - echo -e "section_end:`date +%s`:tests_slepc\r\e[0K"
   artifacts:
     reports:
