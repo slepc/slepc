@@ -484,7 +484,7 @@ static PetscErrorCode OrthogonalizeVector_ProjectedBSE(Vec hx,Vec hy,BV X,BV Y,P
   PetscCall(BVRestoreColumn(Y,j-1,&y));
   alpha = alpha1-alpha2;
   /* Store coeffs into h */
-  for (i=l; i<j-1; i++) h[i] = h[j+i] = beta[i];
+  for (i=l; i<j-1; i++) h[i] = h[j+i] = beta[i]/2.0;
   h[j-1] = alpha;
 
   /* Orthogonalize: hx = hx - X(:,l:j-1)*h1 - conj(Y(:,l:j-1))*h2 */
