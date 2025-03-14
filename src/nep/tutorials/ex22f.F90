@@ -198,11 +198,11 @@
 !     ** show detailed info unless -terse option is given by user
       PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-terse',terse,ierr))
       if (terse) then
-        PetscCallA(NEPErrorView(nep,PEP_ERROR_RELATIVE,PETSC_NULL_VIEWER,ierr))
+        PetscCallA(NEPErrorView(nep,NEP_ERROR_RELATIVE,PETSC_NULL_VIEWER,ierr))
       else
         PetscCallA(PetscViewerPushFormat(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_ASCII_INFO_DETAIL,ierr))
         PetscCallA(NEPConvergedReasonView(nep,PETSC_VIEWER_STDOUT_WORLD,ierr))
-        PetscCallA(NEPErrorView(nep,PEP_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD,ierr))
+        PetscCallA(NEPErrorView(nep,NEP_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD,ierr))
         PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr))
       endif
       PetscCallA(NEPDestroy(nep,ierr))
