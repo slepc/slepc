@@ -185,53 +185,38 @@ static PetscErrorCode EPSComputeVectors_BSE_Shao(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode Orthog_Gruning(Vec x,BV U,BV V,BV HU,BV HV,PetscInt j,PetscScalar *h,PetscScalar *c,PetscBool s,PetscBool *breakdown)
+static PetscErrorCode Orthog_Gruning(Vec x,BV U,BV V,BV HU,BV HV,PetscInt j,PetscScalar *h,PetscScalar *c,PetscBool *breakdown)
 {
   PetscInt i;
 
   PetscFunctionBegin;
   PetscCall(BVSetActiveColumns(U,0,j));
   PetscCall(BVSetActiveColumns(HU,0,j));
-  if (s) {
-    PetscCall(BVSetActiveColumns(V,0,j));
-    PetscCall(BVSetActiveColumns(HV,0,j));
-  } else {
-    PetscCall(BVSetActiveColumns(V,0,j-1));
-    PetscCall(BVSetActiveColumns(HV,0,j-1));
-  }
+  PetscCall(BVSetActiveColumns(V,0,j));
+  PetscCall(BVSetActiveColumns(HV,0,j));
 #if defined(PETSC_USE_COMPLEX)
   PetscCall(BVDotVecBegin(HU,x,c));
-  if (s || j>1) PetscCall(BVDotVecBegin(HV,x,c+j));
+  PetscCall(BVDotVecBegin(HV,x,c+j));
   PetscCall(BVDotVecEnd(HU,x,c));
-  if (s || j>1) PetscCall(BVDotVecEnd(HV,x,c+j));
+  PetscCall(BVDotVecEnd(HV,x,c+j));
 #else
-  if (s) PetscCall(BVDotVec(HU,x,c));
-  else PetscCall(BVDotVec(HV,x,c+j));
+  PetscCall(BVDotVec(HU,x,c));
 #endif
   for (i=0; i<j; i++) {
-    if (s) {   /* c1 = 2*real(HU^* x) ; c2 = 2*imag(HV^* x)*1i */
+    /* c1 = 2*real(HU^* x) ; c2 = 2*imag(HV^* x)*1i */
 #if defined(PETSC_USE_COMPLEX)
-      c[i] = PetscRealPart(c[i]);
-      c[j+i] = PetscCMPLX(0.0,PetscImaginaryPart(c[j+i]));
+    c[i] = PetscRealPart(c[i]);
+    c[j+i] = PetscCMPLX(0.0,PetscImaginaryPart(c[j+i]));
 #else
-      c[j+i] = 0.0;
+    c[j+i] = 0.0;
 #endif
-    } else {   /* c1 = 2*imag(HU^* x)*1i ; c2 = 2*real(HV^* x) */
-#if defined(PETSC_USE_COMPLEX)
-      c[i] = PetscCMPLX(0.0,PetscImaginaryPart(c[i]));
-      c[j+i] = PetscRealPart(c[j+i]);
-#else
-      c[i] = 0.0;
-#endif
-    }
   }
   /* x = x-U*c1-V*c2 */
 #if defined(PETSC_USE_COMPLEX)
   PetscCall(BVMultVec(U,-2.0,1.0,x,c));
   PetscCall(BVMultVec(V,-2.0,1.0,x,c+j));
 #else
-  if (s) PetscCall(BVMultVec(U,-2.0,1.0,x,c));
-  else PetscCall(BVMultVec(V,-2.0,1.0,x,c+j));
+  PetscCall(BVMultVec(U,-2.0,1.0,x,c));
 #endif
   /* accumulate orthog coeffs into h */
   for (i=0; i<2*j; i++) h[i] += 2*c[i];
@@ -247,22 +232,22 @@ static PetscErrorCode OrthogonalizeVector_Gruning(Vec x,BV U,BV V,BV HU,BV HV,Pe
   PetscFunctionBegin;
   PetscCall(PetscArrayzero(h,4*j));
 
-  /* Local orthogonalization */
   if (s) {
+    /* Local orthogonalization */
     PetscCall(BVGetColumn(U,j-1,&u));
     PetscCall(VecAXPY(x,-*beta,u));
     PetscCall(BVRestoreColumn(U,j-1,&u));
     h[j-1] = *beta;
+    /* Full orthogonalization */
+    PetscCall(Orthog_Gruning(x,U,V,HU,HV,j,h,h+2*j,breakdown));
   } else {
+    /* Local orthogonalization */
     l = j==k+1?0:j-2;  /* 1st column to orthogonalize against */
     for (i=l; i<j-1; i++) h[j+i] = beta[i];
     /* x = x-V(:,l:j-2)*h(l:j-2) */
     PetscCall(BVSetActiveColumns(V,l,j-1));
     PetscCall(BVMultVec(V,-1.0,1.0,x,h+j+l));
   }
-
-  /* Full orthogonalization */
-  PetscCall(Orthog_Gruning(x,U,V,HU,HV,j,h,h+2*j,s,breakdown));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
