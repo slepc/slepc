@@ -24,8 +24,6 @@ TAGS*
 lib/slepc/conf/slepcvariables
 configure.log*
 externalpackages/*
-ftn-auto
-ftn-auto-interfaces
 make_log_*
 test_log_*
 src/python/*
@@ -72,6 +70,4 @@ GTAGS
 CMakeLists.txt
 docs/manual/slepc.pdf
 pkg.gitcommit
-bfort-petsc.txt
-bfort-slepc.txt
 **/f90module*.f90
