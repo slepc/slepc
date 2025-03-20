@@ -119,7 +119,7 @@ else:
   packagesinpetsc = ''
 
 # Load classes for packages and process their command-line options
-import arpack, blopex, chase, elemental, elpa, evsl, feast, hpddm, ksvd, polar, primme, scalapack, slepc4py, slicot, trlan, sowing, lapack
+import arpack, blopex, chase, elemental, elpa, evsl, feast, hpddm, ksvd, polar, primme, scalapack, slepc4py, slicot, trlan, lapack
 arpack    = arpack.Arpack(argdb,log)
 blopex    = blopex.Blopex(argdb,log)
 chase     = chase.Chase(argdb,log)
@@ -131,7 +131,6 @@ ksvd      = ksvd.Ksvd(argdb,log)
 polar     = polar.Polar(argdb,log)
 primme    = primme.Primme(argdb,log)
 trlan     = trlan.Trlan(argdb,log)
-sowing    = sowing.Sowing(argdb,log)
 lapack    = lapack.Lapack(argdb,log)
 scalapack = scalapack.Scalapack(argdb,log,packagesinpetsc)
 slepc4py  = slepc4py.Slepc4py(argdb,log)
@@ -145,7 +144,7 @@ externalwithdeps = [arpack, blopex, chase, elpa, evsl, hpddm, polar, ksvd, primm
 externalpackages = sorted(externalwithdeps, key=lambda p: p.packagename.upper())
 
 petscpackages    = [lapack, elemental, feast, scalapack]
-specialpackages  = [slepc, petsc, slepc4py, sowing]
+specialpackages  = [slepc, petsc, slepc4py]
 checkpackages    = specialpackages + petscpackages + externalwithdeps
 
 # Print help if requested and check for wrong command-line options
@@ -173,7 +172,7 @@ argdb.ErrorIfNotEmpty()
 
 # Check if packages-download directory contains requested packages
 if slepc.downloaddir:
-  l = list(filter(None, [pkg.MissingTarball(slepc.downloaddir) for pkg in externalpackages + [sowing]]))
+  l = list(filter(None, [pkg.MissingTarball(slepc.downloaddir) for pkg in externalpackages]))
   if l:
     log.Println('\n\nDownload the following packages and run the script again:')
     for pkg in l: log.Println(pkg)
