@@ -7,3 +7,15 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
+      interface PEPSTOARGetInertias
+        subroutine PEPSTOARGetInertias(a,b,c,d,z)
+          import tPEP
+          PEP a
+          PetscInt b
+          PetscReal c(*)
+          PetscInt d(*)
+          PetscErrorCode z
+        end subroutine
+      end interface PEPSTOARGetInertias
+
+      external PEPMonitorConvergedDestroy

@@ -212,7 +212,7 @@ static PetscErrorCode FNView_Phi(FN fn,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode FNSetFromOptions_Phi(FN fn,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode FNSetFromOptions_Phi(FN fn,PetscOptionItems PetscOptionsObject)
 {
   FN_PHI         *ctx = (FN_PHI*)fn->data;
   PetscInt       k;

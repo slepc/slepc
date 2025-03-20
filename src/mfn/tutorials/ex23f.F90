@@ -146,7 +146,7 @@
 
       PetscCallA(MFNSolve(mfn,v,y,ierr))
       PetscCallA(MFNGetConvergedReason(mfn,reason,ierr))
-      if (reason.lt.0) then; SETERRA(PETSC_COMM_WORLD,1,'Solver did not converge'); endif
+      if (reason%v.lt.0) then; SETERRA(PETSC_COMM_WORLD,1,'Solver did not converge'); endif
       PetscCallA(VecNorm(y,NORM_2,norm,ierr))
 
 !     ** Optional: Get some information from the solver and display it

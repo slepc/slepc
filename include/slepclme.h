@@ -36,7 +36,7 @@ typedef struct _p_LME* LME;
 
 .seealso: LMESetType(), LME
 J*/
-typedef const char* LMEType;
+typedef const char *LMEType;
 #define LMEKRYLOV   "krylov"
 
 /* Logging support */
@@ -103,7 +103,6 @@ SLEPC_EXTERN PetscErrorCode LMEMonitorCancel(LME);
 SLEPC_EXTERN PetscErrorCode LMEGetMonitorContext(LME,void*);
 
 SLEPC_EXTERN PetscErrorCode LMEMonitorSetFromOptions(LME,const char[],const char[],void*);
-SLEPC_EXTERN PetscErrorCode LMEMonitorLGCreate(MPI_Comm,const char[],const char[],const char[],PetscInt,const char*[],int,int,int,int,PetscDrawLG*);
 SLEPC_EXTERN PetscErrorCode LMEMonitorDefault(LME,PetscInt,PetscReal,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode LMEMonitorDefaultDrawLG(LME,PetscInt,PetscReal,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode LMEMonitorDefaultDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);

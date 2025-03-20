@@ -63,9 +63,9 @@
 
       PetscCallA(MatCreateSeqDense(PETSC_COMM_SELF,n,n,PETSC_NULL_SCALAR_ARRAY,A,ierr))
       PetscCallA(PetscObjectSetName(A,'A',ierr))
-      PetscCallA(MatDenseGetArrayF90(A,aa,ierr))
+      PetscCallA(MatDenseGetArray(A,aa,ierr))
       call FillUpMatrix(n,aa)
-      PetscCallA(MatDenseRestoreArrayF90(A,aa,ierr))
+      PetscCallA(MatDenseRestoreArray(A,aa,ierr))
       PetscCallA(MatSetOption(A,MAT_HERMITIAN,PETSC_TRUE,ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

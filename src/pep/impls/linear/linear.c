@@ -697,7 +697,7 @@ static PetscErrorCode EPSMonitor_Linear(EPS eps,PetscInt its,PetscInt nconv,Pets
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode PEPSetFromOptions_Linear(PEP pep,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode PEPSetFromOptions_Linear(PEP pep,PetscOptionItems PetscOptionsObject)
 {
   PetscBool      set,val;
   PetscInt       k;

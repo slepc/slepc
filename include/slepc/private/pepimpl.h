@@ -26,7 +26,7 @@ typedef struct _PEPOps *PEPOps;
 struct _PEPOps {
   PetscErrorCode (*solve)(PEP);
   PetscErrorCode (*setup)(PEP);
-  PetscErrorCode (*setfromoptions)(PEP,PetscOptionItems*);
+  PetscErrorCode (*setfromoptions)(PEP,PetscOptionItems);
   PetscErrorCode (*publishoptions)(PEP);
   PetscErrorCode (*destroy)(PEP);
   PetscErrorCode (*reset)(PEP);

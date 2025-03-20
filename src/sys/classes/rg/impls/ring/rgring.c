@@ -389,7 +389,7 @@ static PetscErrorCode RGIsAxisymmetric_Ring(RG rg,PetscBool vertical,PetscBool *
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode RGSetFromOptions_Ring(RG rg,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode RGSetFromOptions_Ring(RG rg,PetscOptionItems PetscOptionsObject)
 {
   PetscScalar    s;
   PetscReal      r1,r2,r3,r4,r5;

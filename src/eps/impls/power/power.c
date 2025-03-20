@@ -729,7 +729,7 @@ static PetscErrorCode EPSBackTransform_Power(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSSetFromOptions_Power(EPS eps,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode EPSSetFromOptions_Power(EPS eps,PetscOptionItems PetscOptionsObject)
 {
   EPS_POWER         *power = (EPS_POWER*)eps->data;
   PetscBool         flg,val;

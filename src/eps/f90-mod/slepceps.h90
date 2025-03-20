@@ -7,3 +7,24 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
+      interface EPSKrylovSchurGetSubintervals
+        subroutine EPSKrylovSchurGetSubintervals(a,b,z)
+          import tEPS
+          EPS a
+          PetscReal b(*)
+          PetscErrorCode z
+        end subroutine
+      end interface EPSKrylovSchurGetSubintervals
+
+      interface EPSKrylovSchurGetInertias
+        subroutine EPSKrylovSchurGetInertias(a,b,c,d,z)
+          import tEPS
+          EPS a
+          PetscInt b
+          PetscReal c(*)
+          PetscInt d(*)
+          PetscErrorCode z
+        end subroutine
+      end interface EPSKrylovSchurGetInertias
+
+      external EPSMonitorConvergedDestroy

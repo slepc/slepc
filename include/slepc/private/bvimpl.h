@@ -55,7 +55,7 @@ struct _BVOps {
   PetscErrorCode (*restoremat)(BV,Mat*);
   PetscErrorCode (*duplicate)(BV,BV);
   PetscErrorCode (*create)(BV);
-  PetscErrorCode (*setfromoptions)(BV,PetscOptionItems*);
+  PetscErrorCode (*setfromoptions)(BV,PetscOptionItems);
   PetscErrorCode (*view)(BV,PetscViewer);
   PetscErrorCode (*destroy)(BV);
 };

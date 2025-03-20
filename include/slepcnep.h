@@ -39,7 +39,7 @@ typedef struct _p_NEP* NEP;
 
 .seealso: NEPSetType(), NEP
 J*/
-typedef const char* NEPType;
+typedef const char *NEPType;
 #define NEPRII       "rii"
 #define NEPSLP       "slp"
 #define NEPNARNOLDI  "narnoldi"
@@ -57,8 +57,8 @@ SLEPC_EXTERN PetscClassId NEP_CLASSID;
 
 .seealso: NEPSetProblemType(), NEPGetProblemType()
 E*/
-typedef enum { NEP_GENERAL=1,
-               NEP_RATIONAL     /* NEP defined in split form with all f_i rational */
+typedef enum { NEP_GENERAL  = 1,
+               NEP_RATIONAL = 2     /* NEP defined in split form with all f_i rational */
              } NEPProblemType;
 
 /*E
@@ -68,17 +68,17 @@ typedef enum { NEP_GENERAL=1,
 
 .seealso: NEPSetWhichEigenpairs(), NEPGetWhichEigenpairs()
 E*/
-typedef enum { NEP_LARGEST_MAGNITUDE=1,
-               NEP_SMALLEST_MAGNITUDE,
-               NEP_LARGEST_REAL,
-               NEP_SMALLEST_REAL,
-               NEP_LARGEST_IMAGINARY,
-               NEP_SMALLEST_IMAGINARY,
-               NEP_TARGET_MAGNITUDE,
-               NEP_TARGET_REAL,
-               NEP_TARGET_IMAGINARY,
-               NEP_ALL,
-               NEP_WHICH_USER } NEPWhich;
+typedef enum { NEP_LARGEST_MAGNITUDE  = 1,
+               NEP_SMALLEST_MAGNITUDE = 2,
+               NEP_LARGEST_REAL       = 3,
+               NEP_SMALLEST_REAL      = 4,
+               NEP_LARGEST_IMAGINARY  = 5,
+               NEP_SMALLEST_IMAGINARY = 6,
+               NEP_TARGET_MAGNITUDE   = 7,
+               NEP_TARGET_REAL        = 8,
+               NEP_TARGET_IMAGINARY   = 9,
+               NEP_ALL                = 10,
+               NEP_WHICH_USER         = 11 } NEPWhich;
 
 /*E
     NEPErrorType - The error type used to assess accuracy of computed solutions
@@ -111,9 +111,9 @@ SLEPC_EXTERN const char *NEPRefineTypes[];
 
 .seealso: NEPSetRefine()
 E*/
-typedef enum { NEP_REFINE_SCHEME_SCHUR=1,
-               NEP_REFINE_SCHEME_MBE,
-               NEP_REFINE_SCHEME_EXPLICIT } NEPRefineScheme;
+typedef enum { NEP_REFINE_SCHEME_SCHUR    = 1,
+               NEP_REFINE_SCHEME_MBE      = 2,
+               NEP_REFINE_SCHEME_EXPLICIT = 3 } NEPRefineScheme;
 SLEPC_EXTERN const char *NEPRefineSchemes[];
 
 /*E
@@ -288,7 +288,6 @@ SLEPC_EXTERN PetscErrorCode NEPMonitorCancel(NEP);
 SLEPC_EXTERN PetscErrorCode NEPGetMonitorContext(NEP,void*);
 
 SLEPC_EXTERN PetscErrorCode NEPMonitorSetFromOptions(NEP,const char[],const char[],void*,PetscBool);
-SLEPC_EXTERN PetscErrorCode NEPMonitorLGCreate(MPI_Comm,const char[],const char[],const char[],PetscInt,const char*[],int,int,int,int,PetscDrawLG*);
 SLEPC_EXTERN PetscErrorCode NEPMonitorFirst(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode NEPMonitorFirstDrawLG(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
@@ -406,7 +405,7 @@ SLEPC_EXTERN PetscErrorCode NEPCISSSetThreshold(NEP,PetscReal,PetscReal);
 SLEPC_EXTERN PetscErrorCode NEPCISSGetThreshold(NEP,PetscReal*,PetscReal*);
 SLEPC_EXTERN PetscErrorCode NEPCISSSetRefinement(NEP,PetscInt,PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPCISSGetRefinement(NEP,PetscInt*,PetscInt*);
-SLEPC_EXTERN PetscErrorCode NEPCISSGetKSPs(NEP,PetscInt*,KSP**);
+SLEPC_EXTERN PetscErrorCode NEPCISSGetKSPs(NEP,PetscInt*,KSP*[]);
 #else
 #define SlepcNEPCISSUnavailable(nep) do { \
     PetscFunctionBegin; \
@@ -420,7 +419,7 @@ static inline PetscErrorCode NEPCISSSetThreshold(NEP nep,PETSC_UNUSED PetscReal 
 static inline PetscErrorCode NEPCISSGetThreshold(NEP nep,PETSC_UNUSED PetscReal *delta,PETSC_UNUSED PetscReal *spur) {SlepcNEPCISSUnavailable(nep);}
 static inline PetscErrorCode NEPCISSSetRefinement(NEP nep,PETSC_UNUSED PetscInt inner,PETSC_UNUSED PetscInt blsize) {SlepcNEPCISSUnavailable(nep);}
 static inline PetscErrorCode NEPCISSGetRefinement(NEP nep,PETSC_UNUSED PetscInt *inner,PETSC_UNUSED PetscInt *blsize) {SlepcNEPCISSUnavailable(nep);}
-static inline PetscErrorCode NEPCISSGetKSPs(NEP nep,PETSC_UNUSED PetscInt *nsolve,PETSC_UNUSED KSP **ksp) {SlepcNEPCISSUnavailable(nep);}
+static inline PetscErrorCode NEPCISSGetKSPs(NEP nep,PETSC_UNUSED PetscInt *nsolve,PETSC_UNUSED KSP *ksp[]) {SlepcNEPCISSUnavailable(nep);}
 #undef SlepcNEPCISSUnavailable
 #endif
 
@@ -439,7 +438,7 @@ SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetInterpolation(NEP,PetscReal,PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetInterpolation(NEP,PetscReal*,PetscInt*);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetRKShifts(NEP,PetscInt,PetscScalar[]);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetRKShifts(NEP,PetscInt*,PetscScalar*[]);
-SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetKSPs(NEP,PetscInt*,KSP**);
+SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetKSPs(NEP,PetscInt*,KSP*[]);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetFullBasis(NEP,PetscBool);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetFullBasis(NEP,PetscBool*);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetEPS(NEP,EPS);

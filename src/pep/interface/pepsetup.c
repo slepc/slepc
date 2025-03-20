@@ -197,10 +197,8 @@ PetscErrorCode PEPSetUp(PEP pep)
       pep->sc->comparisonctx = &pep->target;
       break;
     case PEP_TARGET_IMAGINARY:
-#if defined(PETSC_USE_COMPLEX)
       pep->sc->comparison    = SlepcCompareTargetImaginary;
       pep->sc->comparisonctx = &pep->target;
-#endif
       break;
     case PEP_ALL:
       pep->sc->comparison    = SlepcCompareSmallestReal;

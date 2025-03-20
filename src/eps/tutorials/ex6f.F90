@@ -148,23 +148,22 @@
       Mat            A
       Vec            x,y
       PetscInt       trans,one,N
-      PetscScalar    x_array(1),y_array(1)
-      PetscOffset    i_x,i_y
+      PetscScalar, pointer :: xx(:),yy(:)
       PetscErrorCode ierr
 
 !     The actual routine for the matrix-vector product
       external mvmisg
 
       PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
-      PetscCall(VecGetArrayRead(x,x_array,i_x,ierr))
-      PetscCall(VecGetArray(y,y_array,i_y,ierr))
+      PetscCall(VecGetArrayRead(x,xx,ierr))
+      PetscCall(VecGetArray(y,yy,ierr))
 
       trans = 0
       one = 1
-      call mvmisg(trans,N,one,x_array(i_x+1),N,y_array(i_y+1),N)
+      call mvmisg(trans,N,one,xx,N,yy,N)
 
-      PetscCall(VecRestoreArrayRead(x,x_array,i_x,ierr))
-      PetscCall(VecRestoreArray(y,y_array,i_y,ierr))
+      PetscCall(VecRestoreArrayRead(x,xx,ierr))
+      PetscCall(VecRestoreArray(y,yy,ierr))
 
       end
 

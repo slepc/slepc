@@ -28,7 +28,7 @@ SLEPC_EXTERN PetscErrorCode RGFinalizePackage(void);
 
 .seealso: RGSetType(), RG
 J*/
-typedef const char* RGType;
+typedef const char *RGType;
 #define RGINTERVAL  "interval"
 #define RGPOLYGON   "polygon"
 #define RGELLIPSE   "ellipse"
@@ -55,8 +55,8 @@ SLEPC_EXTERN PetscErrorCode RGDestroy(RG*);
 
 .seealso: RGComputeQuadrature()
 E*/
-typedef enum { RG_QUADRULE_TRAPEZOIDAL=1,
-               RG_QUADRULE_CHEBYSHEV } RGQuadRule;
+typedef enum { RG_QUADRULE_TRAPEZOIDAL = 1,
+               RG_QUADRULE_CHEBYSHEV   = 2 } RGQuadRule;
 
 SLEPC_EXTERN PetscErrorCode RGIsTrivial(RG,PetscBool*);
 SLEPC_EXTERN PetscErrorCode RGSetComplement(RG,PetscBool);
@@ -84,7 +84,7 @@ SLEPC_EXTERN PetscErrorCode RGIntervalSetEndpoints(RG,PetscReal,PetscReal,PetscR
 SLEPC_EXTERN PetscErrorCode RGIntervalGetEndpoints(RG,PetscReal*,PetscReal*,PetscReal*,PetscReal*);
 
 SLEPC_EXTERN PetscErrorCode RGPolygonSetVertices(RG,PetscInt,PetscScalar*,PetscScalar*);
-SLEPC_EXTERN PetscErrorCode RGPolygonGetVertices(RG,PetscInt*,PetscScalar**,PetscScalar**);
+SLEPC_EXTERN PetscErrorCode RGPolygonGetVertices(RG,PetscInt*,PetscScalar*[],PetscScalar*[]);
 
 SLEPC_EXTERN PetscErrorCode RGRingSetParameters(RG,PetscScalar,PetscReal,PetscReal,PetscReal,PetscReal,PetscReal);
 SLEPC_EXTERN PetscErrorCode RGRingGetParameters(RG,PetscScalar*,PetscReal*,PetscReal*,PetscReal*,PetscReal*,PetscReal*);

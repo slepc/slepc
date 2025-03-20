@@ -14,25 +14,6 @@
 #include <slepc/private/pepimpl.h>      /*I "slepcpep.h" I*/
 #include <petscdraw.h>
 
-PetscErrorCode PEPMonitorLGCreate(MPI_Comm comm,const char host[],const char label[],const char metric[],PetscInt l,const char *names[],int x,int y,int m,int n,PetscDrawLG *lgctx)
-{
-  PetscDraw      draw;
-  PetscDrawAxis  axis;
-  PetscDrawLG    lg;
-
-  PetscFunctionBegin;
-  PetscCall(PetscDrawCreate(comm,host,label,x,y,m,n,&draw));
-  PetscCall(PetscDrawSetFromOptions(draw));
-  PetscCall(PetscDrawLGCreate(draw,l,&lg));
-  if (names) PetscCall(PetscDrawLGSetLegend(lg,names));
-  PetscCall(PetscDrawLGSetFromOptions(lg));
-  PetscCall(PetscDrawLGGetAxis(lg,&axis));
-  PetscCall(PetscDrawAxisSetLabels(axis,"Convergence","Iteration",metric));
-  PetscCall(PetscDrawDestroy(&draw));
-  *lgctx = lg;
-  PetscFunctionReturn(PETSC_SUCCESS);
-}
-
 /*
    Runs the user provided monitor routines, if any.
 */
@@ -365,7 +346,6 @@ PetscErrorCode PEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
   if (!*vf) PetscFunctionReturn(PETSC_SUCCESS);
   PetscCall(PetscFree((*vf)->data));
   PetscCall(PetscViewerDestroy(&(*vf)->viewer));
-  PetscCall(PetscDrawLGDestroy(&(*vf)->lg));
   PetscCall(PetscFree(*vf));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -396,14 +376,14 @@ PetscErrorCode PEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 PetscErrorCode PEPMonitorFirstDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
   PetscViewer    viewer = vf->viewer;
-  PetscDrawLG    lg = vf->lg;
+  PetscDrawLG    lg;
   PetscReal      x,y;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
   PetscValidHeaderSpecific(viewer,PETSC_VIEWER_CLASSID,8);
-  PetscValidHeaderSpecific(lg,PETSC_DRAWLG_CLASSID,8);
   PetscCall(PetscViewerPushFormat(viewer,vf->format));
+  PetscCall(PetscViewerDrawGetDrawLG(viewer,0,&lg));
   if (its==1) {
     PetscCall(PetscDrawLGReset(lg));
     PetscCall(PetscDrawLGSetDimension(lg,1));
@@ -445,7 +425,7 @@ PetscErrorCode PEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
   PetscFunctionBegin;
   PetscCall(PetscViewerAndFormatCreate(viewer,format,vf));
   (*vf)->data = ctx;
-  PetscCall(PEPMonitorLGCreate(PetscObjectComm((PetscObject)viewer),NULL,"First Error Estimate","Log Error Estimate",1,NULL,PETSC_DECIDE,PETSC_DECIDE,400,300,&(*vf)->lg));
+  PetscCall(PetscViewerMonitorLGSetUp(viewer,NULL,"First Error Estimate","Log Error Estimate",1,NULL,PETSC_DECIDE,PETSC_DECIDE,400,300));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -475,15 +455,15 @@ PetscErrorCode PEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 PetscErrorCode PEPMonitorAllDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
   PetscViewer    viewer = vf->viewer;
-  PetscDrawLG    lg = vf->lg;
+  PetscDrawLG    lg;
   PetscInt       i,n = PetscMin(pep->nev,255);
   PetscReal      *x,*y;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
   PetscValidHeaderSpecific(viewer,PETSC_VIEWER_CLASSID,8);
-  PetscValidHeaderSpecific(lg,PETSC_DRAWLG_CLASSID,8);
   PetscCall(PetscViewerPushFormat(viewer,vf->format));
+  PetscCall(PetscViewerDrawGetDrawLG(viewer,0,&lg));
   if (its==1) {
     PetscCall(PetscDrawLGReset(lg));
     PetscCall(PetscDrawLGSetDimension(lg,n));
@@ -527,7 +507,7 @@ PetscErrorCode PEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
   PetscFunctionBegin;
   PetscCall(PetscViewerAndFormatCreate(viewer,format,vf));
   (*vf)->data = ctx;
-  PetscCall(PEPMonitorLGCreate(PetscObjectComm((PetscObject)viewer),NULL,"All Error Estimates","Log Error Estimate",1,NULL,PETSC_DECIDE,PETSC_DECIDE,400,300,&(*vf)->lg));
+  PetscCall(PetscViewerMonitorLGSetUp(viewer,NULL,"All Error Estimates","Log Error Estimate",1,NULL,PETSC_DECIDE,PETSC_DECIDE,400,300));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -557,14 +537,14 @@ PetscErrorCode PEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 PetscErrorCode PEPMonitorConvergedDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
   PetscViewer      viewer = vf->viewer;
-  PetscDrawLG      lg = vf->lg;
+  PetscDrawLG      lg;
   PetscReal        x,y;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
   PetscValidHeaderSpecific(viewer,PETSC_VIEWER_CLASSID,8);
-  PetscValidHeaderSpecific(lg,PETSC_DRAWLG_CLASSID,8);
   PetscCall(PetscViewerPushFormat(viewer,vf->format));
+  PetscCall(PetscViewerDrawGetDrawLG(viewer,0,&lg));
   if (its==1) {
     PetscCall(PetscDrawLGReset(lg));
     PetscCall(PetscDrawLGSetDimension(lg,1));
@@ -607,6 +587,6 @@ PetscErrorCode PEPMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFor
   PetscCall(PetscNew(&mctx));
   mctx->ctx = ctx;
   (*vf)->data = (void*)mctx;
-  PetscCall(PEPMonitorLGCreate(PetscObjectComm((PetscObject)viewer),NULL,"Convergence History","Number Converged",1,NULL,PETSC_DECIDE,PETSC_DECIDE,400,300,&(*vf)->lg));
+  PetscCall(PetscViewerMonitorLGSetUp(viewer,NULL,"Convergence History","Number Converged",1,NULL,PETSC_DECIDE,PETSC_DECIDE,400,300));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

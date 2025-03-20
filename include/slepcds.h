@@ -43,7 +43,7 @@ typedef struct _p_DS* DS;
 
 .seealso: DSSetType(), DS
 J*/
-typedef const char* DSType;
+typedef const char *DSType;
 #define DSHEP    "hep"
 #define DSNHEP   "nhep"
 #define DSGHEP   "ghep"
@@ -233,7 +233,7 @@ SLEPC_EXTERN PetscErrorCode DSHSVDGetReorthogonalize(DS,PetscBool*);
 SLEPC_EXTERN PetscErrorCode DSPEPSetDegree(DS,PetscInt);
 SLEPC_EXTERN PetscErrorCode DSPEPGetDegree(DS,PetscInt*);
 SLEPC_EXTERN PetscErrorCode DSPEPSetCoefficients(DS,PetscReal*);
-SLEPC_EXTERN PetscErrorCode DSPEPGetCoefficients(DS,PetscReal**);
+SLEPC_EXTERN PetscErrorCode DSPEPGetCoefficients(DS,PetscReal*[]);
 
 SLEPC_EXTERN PetscErrorCode DSNEPSetFN(DS,PetscInt,FN*);
 SLEPC_EXTERN PetscErrorCode DSNEPGetFN(DS,PetscInt,FN*);
@@ -267,7 +267,7 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(DSNEPMatrixFunctionFn)(DS ds,PetscScalar lambda,PetscBool deriv,DSMatType mat,void *ctx);
 
 SLEPC_EXTERN PetscErrorCode DSNEPSetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn*,void*);
-SLEPC_EXTERN PetscErrorCode DSNEPGetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn**,void**);
+SLEPC_EXTERN PetscErrorCode DSNEPGetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn**,void*);
 
 SLEPC_EXTERN PetscFunctionList DSList;
 SLEPC_EXTERN PetscErrorCode DSRegister(const char[],PetscErrorCode(*)(DS));

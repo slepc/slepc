@@ -120,7 +120,7 @@ PetscErrorCode RGPolygonSetVertices(RG rg,PetscInt n,PetscScalar vr[],PetscScala
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode RGPolygonGetVertices_Polygon(RG rg,PetscInt *n,PetscScalar **vr,PetscScalar **vi)
+static PetscErrorCode RGPolygonGetVertices_Polygon(RG rg,PetscInt *n,PetscScalar *vr[],PetscScalar *vi[])
 {
   RG_POLYGON     *ctx = (RG_POLYGON*)rg->data;
   PetscInt       i;
@@ -168,7 +168,7 @@ static PetscErrorCode RGPolygonGetVertices_Polygon(RG rg,PetscInt *n,PetscScalar
 
 .seealso: RGPolygonSetVertices()
 @*/
-PetscErrorCode RGPolygonGetVertices(RG rg,PetscInt *n,PetscScalar **vr,PetscScalar **vi)
+PetscErrorCode RGPolygonGetVertices(RG rg,PetscInt *n,PetscScalar *vr[],PetscScalar *vi[]) PeNS
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(rg,RG_CLASSID,1);
@@ -393,7 +393,7 @@ static PetscErrorCode RGCheckInside_Polygon(RG rg,PetscReal px,PetscReal py,Pets
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode RGSetFromOptions_Polygon(RG rg,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode RGSetFromOptions_Polygon(RG rg,PetscOptionItems PetscOptionsObject)
 {
   PetscScalar    array[VERTMAX];
   PetscInt       i,k;

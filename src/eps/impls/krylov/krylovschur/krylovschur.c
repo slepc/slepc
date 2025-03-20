@@ -825,7 +825,7 @@ PetscErrorCode EPSKrylovSchurSetSubintervals(EPS eps,PetscReal subint[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSKrylovSchurGetSubintervals_KrylovSchur(EPS eps,PetscReal **subint)
+static PetscErrorCode EPSKrylovSchurGetSubintervals_KrylovSchur(EPS eps,PetscReal *subint[])
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
   PetscInt        i;
@@ -873,7 +873,7 @@ static PetscErrorCode EPSKrylovSchurGetSubintervals_KrylovSchur(EPS eps,PetscRea
 
 .seealso: EPSKrylovSchurSetSubintervals(), EPSKrylovSchurGetPartitions(), EPSSetInterval()
 @*/
-PetscErrorCode EPSKrylovSchurGetSubintervals(EPS eps,PetscReal **subint)
+PetscErrorCode EPSKrylovSchurGetSubintervals(EPS eps,PetscReal *subint[]) PeNS
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -882,7 +882,7 @@ PetscErrorCode EPSKrylovSchurGetSubintervals(EPS eps,PetscReal **subint)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,PetscReal **shifts,PetscInt **inertias)
+static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[])
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
   PetscInt        i,numsh;
@@ -971,7 +971,7 @@ static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,
 
 .seealso: EPSSetInterval(), EPSKrylovSchurSetSubintervals()
 @*/
-PetscErrorCode EPSKrylovSchurGetInertias(EPS eps,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[])
+PetscErrorCode EPSKrylovSchurGetInertias(EPS eps,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[]) PeNS
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -1445,7 +1445,7 @@ PetscErrorCode EPSKrylovSchurGetBSEType(EPS eps,EPSKrylovSchurBSEType *bse)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSSetFromOptions_KrylovSchur(EPS eps,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode EPSSetFromOptions_KrylovSchur(EPS eps,PetscOptionItems PetscOptionsObject)
 {
   EPS_KRYLOVSCHUR       *ctx = (EPS_KRYLOVSCHUR*)eps->data;
   PetscBool             flg,lock,b,f1,f2,f3,isfilt;

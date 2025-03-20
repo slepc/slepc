@@ -471,7 +471,7 @@ PetscErrorCode PEPSolve_STOAR(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode PEPSetFromOptions_STOAR(PEP pep,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode PEPSetFromOptions_STOAR(PEP pep,PetscOptionItems PetscOptionsObject)
 {
   PetscBool      flg,lock,b,f1,f2,f3;
   PetscInt       i,j,k;
@@ -581,7 +581,7 @@ PetscErrorCode PEPSTOARGetLocking(PEP pep,PetscBool *lock)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode PEPSTOARGetInertias_STOAR(PEP pep,PetscInt *n,PetscReal **shifts,PetscInt **inertias)
+static PetscErrorCode PEPSTOARGetInertias_STOAR(PEP pep,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[])
 {
   PetscInt       i,numsh;
   PEP_STOAR      *ctx = (PEP_STOAR*)pep->data;
@@ -667,7 +667,7 @@ static PetscErrorCode PEPSTOARGetInertias_STOAR(PEP pep,PetscInt *n,PetscReal **
 
 .seealso: PEPSetInterval()
 @*/
-PetscErrorCode PEPSTOARGetInertias(PEP pep,PetscInt *n,PetscReal **shifts,PetscInt **inertias)
+PetscErrorCode PEPSTOARGetInertias(PEP pep,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[]) PeNS
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);

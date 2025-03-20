@@ -200,10 +200,8 @@ PetscErrorCode EPSSetUpSort_Basic(EPS eps)
       eps->sc->comparisonctx = &eps->target;
       break;
     case EPS_TARGET_IMAGINARY:
-#if defined(PETSC_USE_COMPLEX)
       eps->sc->comparison    = SlepcCompareTargetImaginary;
       eps->sc->comparisonctx = &eps->target;
-#endif
       break;
     case EPS_ALL:
       eps->sc->comparison    = SlepcCompareSmallestReal;

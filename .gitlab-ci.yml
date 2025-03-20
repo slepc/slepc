@@ -400,7 +400,7 @@ gnu-c-complex-multilib:
     - linux-ubuntu, name:satet
   variables:
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-single-library=0 --with-library-name-suffix=Complex --download-metis --download-parmetis --download-scalapack --with-cxx-dialect=17
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --download-chase --with-fortran-bindings-inplace
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --download-chase
 
 gnu-c-libs:
   extends:
@@ -635,7 +635,7 @@ gnu-c:
     - linux-ubuntu, name:satet
   variables:
     PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-cmake
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py --download-sowing
     SLEPC4PY: 1
     BUILD_DOCS: 1
     PKG_CONFIG: 1
@@ -736,7 +736,7 @@ intel-c-complex-int64-mkl:
     LOAD_MODULES: compiler mpi mkl
     MAKE_CFLAGS: -Werror -Wno-higher-precision-fp
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso --with-64-bit-indices --with-64-bit-blas-indices
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-sowing
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
 
 nvidia-c-nompi:
   extends:
@@ -746,7 +746,7 @@ nvidia-c-nompi:
     - compiler:nvidia, name:hapy
   variables:
     LOAD_MODULES: nvhpc-nompi
-    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1
+    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme=/var/local/downloads/primme-3.2.tar.gz --download-arpack
     TEST_OPTS: -j4 -l12
 
@@ -779,7 +779,7 @@ nvidia-c-complex-nompi:
     - compiler:nvidia, name:hapy
   variables:
     LOAD_MODULES: nvhpc-nompi
-    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-scalar-type=complex --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
+    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-scalar-type=complex --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
     TEST_OPTS: -j4 -l12
 
@@ -791,7 +791,7 @@ nvidia-cxx-mpi:
     - compiler:nvidia, name:hapy
   variables:
     LOAD_MODULES: nvhpc
-    PETSC_CONFIG_OPTS: --with-cc=mpicc --with-fc=mpifort --with-cxx=mpicxx --with-clanguage=c++ --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
+    PETSC_CONFIG_OPTS: --with-cc=mpicc --with-fc=mpifort --with-cxx=mpicxx --with-fortran-bindings=0 --with-clanguage=c++ --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
     TEST_OPTS: -j4 -l12
 

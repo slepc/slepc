@@ -437,7 +437,7 @@ static inline PetscErrorCode BVVecsSetVmip(BV bv,PetscInt vmip)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode BVSetFromOptions_Vecs(BV bv,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode BVSetFromOptions_Vecs(BV bv,PetscOptionItems PetscOptionsObject)
 {
   BV_VECS        *ctx = (BV_VECS*)bv->data;
 

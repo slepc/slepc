@@ -64,7 +64,7 @@ $(generated) : $(slepcconf) $(slepcvariables) $(PETSCCONFIGDIR)/gmakegen.py
 	$(PYTHON) $(PETSCCONFIGDIR)/gmakegen.py --petsc-arch=$(PETSC_ARCH_DIR) --pkg-dir=$(SLEPC_DIR) --pkg-name=slepc --pkg-pkgs=$(spkgs) --pkg-arch=$(PETSC_ARCH)
 
 # Skip including generated files (which triggers rebuilding them) when we're just going to clean anyway.
-ifneq ($(filter-out help clean distclean check info gmakeinfo checkbadSource deletefortranstubs allfortranstubs allfortranstubsinplace alletags lint_slepc get%,$(MAKECMDGOALS:clean%=clean)),)
+ifneq ($(filter-out help clean distclean check info gmakeinfo checkbadSource deletefortranbindings fortranbindings alletags lint_slepc get%,$(MAKECMDGOALS:clean%=clean)),)
 include $(generated)
 endif
 
@@ -192,13 +192,19 @@ $(call soname_function,%) : $(call libname_function,%)
 $(OBJDIR)/%.o : %.sycl.cxx | $$(@D)/.DIR
 	$(PETSC_COMPILE.sycl.cxx) $(abspath $<) -o $@
 
-$(OBJDIR)/%.o : %.c | $$(@D)/.DIR
+$(OBJDIR)/src/%.o : src/%.c | $$(@D)/.DIR
+	$(PETSC_COMPILE.c) $(abspath $<) -o $@
+
+$(OBJDIR)/ftn/%.o : $(PETSC_ARCH)/ftn/%.c | $$(@D)/.DIR
 	$(PETSC_COMPILE.c) $(abspath $<) -o $@
 
 $(OBJDIR)/%.o : %.kokkos.cxx | $$(@D)/.DIR
 	$(PETSC_COMPILE.kokkos.cxx) $(abspath $<) -o $@
 
-$(OBJDIR)/%.o : %.cxx | $$(@D)/.DIR
+$(OBJDIR)/src/%.o : src/%.cxx | $$(@D)/.DIR
+	$(PETSC_COMPILE.cxx) $(abspath $<) -o $@
+
+$(OBJDIR)/ftn/%.o : $(PETSC_ARCH)/ftn/%.cxx | $$(@D)/.DIR
 	$(PETSC_COMPILE.cxx) $(abspath $<) -o $@
 
 $(OBJDIR)/%.o : %.hip.cpp | $$(@D)/.DIR

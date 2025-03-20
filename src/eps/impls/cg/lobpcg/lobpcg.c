@@ -634,7 +634,7 @@ static PetscErrorCode EPSView_LOBPCG(EPS eps,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSSetFromOptions_LOBPCG(EPS eps,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode EPSSetFromOptions_LOBPCG(EPS eps,PetscOptionItems PetscOptionsObject)
 {
   PetscBool      lock,flg;
   PetscInt       bs;

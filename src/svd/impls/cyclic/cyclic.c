@@ -850,7 +850,7 @@ static PetscErrorCode EPSMonitor_Cyclic(EPS eps,PetscInt its,PetscInt nconv,Pets
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode SVDSetFromOptions_Cyclic(SVD svd,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode SVDSetFromOptions_Cyclic(SVD svd,PetscOptionItems PetscOptionsObject)
 {
   PetscBool      set,val;
   SVD_CYCLIC     *cyclic = (SVD_CYCLIC*)svd->data;

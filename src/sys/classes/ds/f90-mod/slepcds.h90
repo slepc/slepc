@@ -7,3 +7,11 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
+      interface DSPEPGetCoefficients
+        subroutine DSPEPGetCoefficients(a,b,z)
+          import tDS
+          DS a
+          PetscReal b(*)
+          PetscErrorCode z
+        end subroutine
+      end interface DSPEPGetCoefficients

@@ -7,53 +7,22 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-        module slepcnepdefdummy
-        use slepcpepdef
-        use slepcfndef
-#include <../src/nep/f90-mod/slepcnep.h>
-        end module
-
         module slepcnepdef
-        use slepcnepdefdummy
-        interface operator (.ne.)
-          function nepnotequal(A,B)
-            import tNEP
-            logical nepnotequal
-            type(tNEP), intent(in) :: A,B
-          end function
-        end interface operator (.ne.)
-        interface operator (.eq.)
-          function nepequals(A,B)
-            import tNEP
-            logical nepequals
-            type(tNEP), intent(in) :: A,B
-          end function
-        end interface operator (.eq.)
-        end module
-
-        function nepnotequal(A,B)
-          use slepcnepdefdummy, only: tNEP
-          logical nepnotequal
-          type(tNEP), intent(in) :: A,B
-          nepnotequal = (A%v .ne. B%v)
-        end function
-
-        function nepequals(A,B)
-          use slepcnepdefdummy, only: tNEP
-          logical nepequals
-          type(tNEP), intent(in) :: A,B
-          nepequals = (A%v .eq. B%v)
-        end function
+        use slepcsysdef
+        use slepcpepdef
+#include <../ftn/nep/slepcall.h>
+        end module slepcnepdef
 
         module slepcnep
         use slepcnepdef
         use slepcpep
-        use slepcfn
+#include <../ftn/nep/slepcall.h90>
 #include <../src/nep/f90-mod/slepcnep.h90>
-        interface
-#include <../src/nep/f90-mod/ftn-auto-interfaces/slepcnep.h90>
-        end interface
-        end module
+
+        contains
+
+#include <../ftn/nep/slepcall.hf90>
+        end module slepcnep
 
 ! The following module imports all the functionality of SLEPc and PETSc
         module slepc

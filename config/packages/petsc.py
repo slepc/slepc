@@ -107,7 +107,6 @@ class PETSc(package.Package):
       petscconf_h = os.path.join(self.dir,'include','petscconf.h')
 
     self.buildsharedlib = False
-    self.bfort = 'nobfortinpetsc'
     self.lib_name_suffix = ''
     try:
       with open(self.petscvariables) as f:

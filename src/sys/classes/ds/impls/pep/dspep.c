@@ -406,7 +406,7 @@ PetscErrorCode DSPEPSetCoefficients(DS ds,PetscReal pbc[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode DSPEPGetCoefficients_PEP(DS ds,PetscReal **pbc)
+static PetscErrorCode DSPEPGetCoefficients_PEP(DS ds,PetscReal *pbc[])
 {
   DS_PEP         *ctx = (DS_PEP*)ds->data;
   PetscInt       i;
@@ -444,7 +444,7 @@ static PetscErrorCode DSPEPGetCoefficients_PEP(DS ds,PetscReal **pbc)
 
 .seealso: DSPEPSetCoefficients()
 @*/
-PetscErrorCode DSPEPGetCoefficients(DS ds,PetscReal **pbc)
+PetscErrorCode DSPEPGetCoefficients(DS ds,PetscReal *pbc[]) PeNS
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(ds,DS_CLASSID,1);

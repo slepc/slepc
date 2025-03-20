@@ -116,7 +116,7 @@ endif
 $(generatedtest) : $(slepcconf) $(slepcvariables) $(PETSCCONFIGDIR)/gmakegentest.py $(TESTDIR)/.DIR | $$(@D)/.DIR
 	$(PYTHON) $(PETSCCONFIGDIR)/gmakegentest.py --petsc-dir=$(PETSC_DIR) --petsc-arch=$(PETSC_ARCH_DIR) --testdir=$(TESTDIR) --srcdir=$(TESTSRCDIR) --pkg-name=slepc --pkg-pkgs=$(spkgs) --pkg-arch=$(PETSC_ARCH) --pkg-dir=$(SLEPC_DIR)
 
-ifneq ($(filter-out help clean distclean check info gmakeinfo slepc_libs all install install-lib checkbadSource deletefortranstubs allfortranstubs allfortranstubsinplace alletags lint_slepc get%,$(MAKECMDGOALS:clean%=clean)),)
+ifneq ($(filter-out help clean distclean check info gmakeinfo slepc_libs all install install-lib checkbadSource deletefortranbindings fortranbindings alletags lint_slepc get%,$(MAKECMDGOALS:clean%=clean)),)
 include $(generatedtest)
 endif
 
@@ -462,8 +462,8 @@ help-nontest:
 	-@echo "   lint_slepc - run lint on the source code, including its embedded documentation"
 	-@echo "           delete compiled examples, .o and related files (used in tutorials or test directories)"
 	-@echo "   clang-tidy - run clang-tidy on the SLEPc C code"
-	-@echo "   allfortranstubs - regenerate Fortran stubs/interface definitions, needed after git pulls or source code changes"
-	-@echo "   deletefortranstubs - delete the generated Fortran stubs/interface definitions"
+	-@echo "   fortranbindings - regenerate Fortran stubs/interface definitions, needed after git pulls or source code changes"
+	-@echo "   deletefortranbindings - delete the generated Fortran stubs/interface definitions"
 	-@echo "   checkbadSource - check the source code for violations of coding standards"
 	-@echo "   abitest - Compare ABI/API of two versions of SLEPc library with the old one defined by SLEPC_DIR_ABI_OLD and PETSC_{DIR,ARCH}_ABI_OLD"
 	-@echo "   reconfigure - delete libraries and Fortran module files and run the previously run configure again"

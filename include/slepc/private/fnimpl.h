@@ -28,7 +28,7 @@ struct _FNOps {
   PetscErrorCode (*evaluatefunctionmatcuda[FN_MAX_SOLVE])(FN,Mat,Mat);
   PetscErrorCode (*evaluatefunctionmatvec[FN_MAX_SOLVE])(FN,Mat,Vec);
   PetscErrorCode (*evaluatefunctionmatveccuda[FN_MAX_SOLVE])(FN,Mat,Vec);
-  PetscErrorCode (*setfromoptions)(FN,PetscOptionItems*);
+  PetscErrorCode (*setfromoptions)(FN,PetscOptionItems);
   PetscErrorCode (*view)(FN,PetscViewer);
   PetscErrorCode (*duplicate)(FN,MPI_Comm,FN*);
   PetscErrorCode (*destroy)(FN);

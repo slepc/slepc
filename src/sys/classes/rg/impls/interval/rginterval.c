@@ -315,7 +315,7 @@ static PetscErrorCode RGIsAxisymmetric_Interval(RG rg,PetscBool vertical,PetscBo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode RGSetFromOptions_Interval(RG rg,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode RGSetFromOptions_Interval(RG rg,PetscOptionItems PetscOptionsObject)
 {
   PetscBool      flg;
   PetscInt       k;

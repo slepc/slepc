@@ -42,7 +42,7 @@ typedef struct _p_EPS* EPS;
 
 .seealso: EPSSetType(), EPS
 J*/
-typedef const char* EPSType;
+typedef const char *EPSType;
 #define EPSPOWER       "power"
 #define EPSSUBSPACE    "subspace"
 #define EPSARNOLDI     "arnoldi"
@@ -76,13 +76,13 @@ SLEPC_EXTERN PetscClassId EPS_CLASSID;
 
 .seealso: EPSSetProblemType(), EPSGetProblemType()
 E*/
-typedef enum { EPS_HEP=1,
-               EPS_GHEP,
-               EPS_NHEP,
-               EPS_GNHEP,
-               EPS_PGNHEP,
-               EPS_GHIEP,
-               EPS_BSE   } EPSProblemType;
+typedef enum { EPS_HEP    = 1,
+               EPS_GHEP   = 2,
+               EPS_NHEP   = 3,
+               EPS_GNHEP  = 4,
+               EPS_PGNHEP = 5,
+               EPS_GHIEP  = 6,
+               EPS_BSE    = 7 } EPSProblemType;
 
 /*E
     EPSExtraction - Determines the type of extraction technique employed
@@ -107,17 +107,17 @@ typedef enum { EPS_RITZ,
 
 .seealso: EPSSetWhichEigenpairs(), EPSGetWhichEigenpairs()
 E*/
-typedef enum { EPS_LARGEST_MAGNITUDE=1,
-               EPS_SMALLEST_MAGNITUDE,
-               EPS_LARGEST_REAL,
-               EPS_SMALLEST_REAL,
-               EPS_LARGEST_IMAGINARY,
-               EPS_SMALLEST_IMAGINARY,
-               EPS_TARGET_MAGNITUDE,
-               EPS_TARGET_REAL,
-               EPS_TARGET_IMAGINARY,
-               EPS_ALL,
-               EPS_WHICH_USER } EPSWhich;
+typedef enum { EPS_LARGEST_MAGNITUDE  = 1,
+               EPS_SMALLEST_MAGNITUDE = 2,
+               EPS_LARGEST_REAL       = 3,
+               EPS_SMALLEST_REAL      = 4,
+               EPS_LARGEST_IMAGINARY  = 5,
+               EPS_SMALLEST_IMAGINARY = 6,
+               EPS_TARGET_MAGNITUDE   = 7,
+               EPS_TARGET_REAL        = 8,
+               EPS_TARGET_IMAGINARY   = 9,
+               EPS_ALL                = 10,
+               EPS_WHICH_USER         = 11 } EPSWhich;
 
 /*E
     EPSBalance - The type of balancing used for non-Hermitian problems
@@ -302,7 +302,6 @@ SLEPC_EXTERN PetscErrorCode EPSMonitorCancel(EPS);
 SLEPC_EXTERN PetscErrorCode EPSGetMonitorContext(EPS,void*);
 
 SLEPC_EXTERN PetscErrorCode EPSMonitorSetFromOptions(EPS,const char[],const char[],void*,PetscBool);
-SLEPC_EXTERN PetscErrorCode EPSMonitorLGCreate(MPI_Comm,const char[],const char[],const char[],PetscInt,const char*[],int,int,int,int,PetscDrawLG*);
 SLEPC_EXTERN PetscErrorCode EPSMonitorFirst(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode EPSMonitorFirstDrawLG(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode EPSMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
@@ -426,8 +425,8 @@ SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetDetectZeros(EPS,PetscBool*);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurSetDimensions(EPS,PetscInt,PetscInt,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetDimensions(EPS,PetscInt*,PetscInt*,PetscInt*);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurSetSubintervals(EPS,PetscReal*);
-SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetSubintervals(EPS,PetscReal**);
-SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetInertias(EPS,PetscInt*,PetscReal**,PetscInt**);
+SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetSubintervals(EPS,PetscReal*[]);
+SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetInertias(EPS,PetscInt*,PetscReal*[],PetscInt*[]);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetSubcommInfo(EPS,PetscInt*,PetscInt*,Vec*);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetSubcommPairs(EPS,PetscInt,PetscScalar*,Vec);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetSubcommMats(EPS,Mat*,Mat*);
@@ -460,21 +459,21 @@ SLEPC_EXTERN PetscErrorCode EPSLanczosGetReorthog(EPS,EPSLanczosReorthogType*);
 
 .seealso: EPSPRIMMESetMethod(), EPSPRIMMEGetMethod()
 E*/
-typedef enum { EPS_PRIMME_DYNAMIC=1,
-               EPS_PRIMME_DEFAULT_MIN_TIME,
-               EPS_PRIMME_DEFAULT_MIN_MATVECS,
-               EPS_PRIMME_ARNOLDI,
-               EPS_PRIMME_GD,
-               EPS_PRIMME_GD_PLUSK,
-               EPS_PRIMME_GD_OLSEN_PLUSK,
-               EPS_PRIMME_JD_OLSEN_PLUSK,
-               EPS_PRIMME_RQI,
-               EPS_PRIMME_JDQR,
-               EPS_PRIMME_JDQMR,
-               EPS_PRIMME_JDQMR_ETOL,
-               EPS_PRIMME_SUBSPACE_ITERATION,
-               EPS_PRIMME_LOBPCG_ORTHOBASIS,
-               EPS_PRIMME_LOBPCG_ORTHOBASISW } EPSPRIMMEMethod;
+typedef enum { EPS_PRIMME_DYNAMIC             = 1,
+               EPS_PRIMME_DEFAULT_MIN_TIME    = 2,
+               EPS_PRIMME_DEFAULT_MIN_MATVECS = 3,
+               EPS_PRIMME_ARNOLDI             = 4,
+               EPS_PRIMME_GD                  = 5,
+               EPS_PRIMME_GD_PLUSK            = 6,
+               EPS_PRIMME_GD_OLSEN_PLUSK      = 7,
+               EPS_PRIMME_JD_OLSEN_PLUSK      = 8,
+               EPS_PRIMME_RQI                 = 9,
+               EPS_PRIMME_JDQR                = 10,
+               EPS_PRIMME_JDQMR               = 11,
+               EPS_PRIMME_JDQMR_ETOL          = 12,
+               EPS_PRIMME_SUBSPACE_ITERATION  = 13,
+               EPS_PRIMME_LOBPCG_ORTHOBASIS   = 14,
+               EPS_PRIMME_LOBPCG_ORTHOBASISW  = 15 } EPSPRIMMEMethod;
 SLEPC_EXTERN const char *EPSPRIMMEMethods[];
 
 SLEPC_EXTERN PetscErrorCode EPSPRIMMESetBlockSize(EPS,PetscInt);
@@ -527,8 +526,8 @@ SLEPC_EXTERN PetscErrorCode EPSLOBPCGGetLocking(EPS,PetscBool*);
 
 .seealso: EPSCISSSetQuadRule(), EPSCISSGetQuadRule()
 E*/
-typedef enum { EPS_CISS_QUADRULE_TRAPEZOIDAL=1,
-               EPS_CISS_QUADRULE_CHEBYSHEV } EPSCISSQuadRule;
+typedef enum { EPS_CISS_QUADRULE_TRAPEZOIDAL = 1,
+               EPS_CISS_QUADRULE_CHEBYSHEV   = 2 } EPSCISSQuadRule;
 SLEPC_EXTERN const char *EPSCISSQuadRules[];
 
 /*E
@@ -554,7 +553,7 @@ SLEPC_EXTERN PetscErrorCode EPSCISSSetRefinement(EPS,PetscInt,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSCISSGetRefinement(EPS,PetscInt*,PetscInt*);
 SLEPC_EXTERN PetscErrorCode EPSCISSSetUseST(EPS,PetscBool);
 SLEPC_EXTERN PetscErrorCode EPSCISSGetUseST(EPS,PetscBool*);
-SLEPC_EXTERN PetscErrorCode EPSCISSGetKSPs(EPS,PetscInt*,KSP**);
+SLEPC_EXTERN PetscErrorCode EPSCISSGetKSPs(EPS,PetscInt*,KSP*[]);
 
 SLEPC_EXTERN PetscErrorCode EPSLyapIISetLME(EPS,LME);
 SLEPC_EXTERN PetscErrorCode EPSLyapIIGetLME(EPS,LME*);

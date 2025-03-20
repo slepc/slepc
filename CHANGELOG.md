@@ -10,6 +10,13 @@
 - `EPS`: similar threshold stopping test for eigenvalues, see `EPSSetThreshold()`.
 - New interface to external package ChASE for standard Hermitian eigenproblems.
 
+### Changed
+
+- The Fortran interface has been updated, following the changes in PETSc. Now it is
+  fully compatible with Fortran 90 using modules. The compiler will check the type
+  of arguments when calling subroutines, including enumerates, as well as in other
+  parts of the code. The Fortran interface is no longer generated with `bfort`.
+
 ## [3.22] - 2024-09-29
 
 ### Added

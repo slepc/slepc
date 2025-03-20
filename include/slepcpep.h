@@ -37,7 +37,7 @@ typedef struct _p_PEP* PEP;
 
 .seealso: PEPSetType(), PEP
 J*/
-typedef const char* PEPType;
+typedef const char *PEPType;
 #define PEPLINEAR    "linear"
 #define PEPQARNOLDI  "qarnoldi"
 #define PEPTOAR      "toar"
@@ -51,14 +51,18 @@ SLEPC_EXTERN PetscClassId PEP_CLASSID;
 /*E
     PEPProblemType - Determines the type of the polynomial eigenproblem
 
+    PEP_HERMITIAN is used when all A_i are Hermitian,
+    PEP_HYPERBOLIC is reserved for a QEP with Hermitian matrices, M>0, (x'Cx)^2 > 4(x'Mx)(x'Kx),
+    PEP_GYROSCOPIC is for aQEP with M, K  Hermitian, M>0, C skew-Hermitian.
+
     Level: intermediate
 
 .seealso: PEPSetProblemType(), PEPGetProblemType()
 E*/
-typedef enum { PEP_GENERAL=1,
-               PEP_HERMITIAN,   /* All A_i  Hermitian */
-               PEP_HYPERBOLIC,  /* QEP with Hermitian matrices, M>0, (x'Cx)^2 > 4(x'Mx)(x'Kx) */
-               PEP_GYROSCOPIC   /* QEP with M, K  Hermitian, M>0, C skew-Hermitian */
+typedef enum { PEP_GENERAL    = 1,
+               PEP_HERMITIAN  = 2,
+               PEP_HYPERBOLIC = 3,
+               PEP_GYROSCOPIC = 4
              } PEPProblemType;
 
 /*E
@@ -68,17 +72,17 @@ typedef enum { PEP_GENERAL=1,
 
 .seealso: PEPSetWhichEigenpairs(), PEPGetWhichEigenpairs()
 E*/
-typedef enum { PEP_LARGEST_MAGNITUDE=1,
-               PEP_SMALLEST_MAGNITUDE,
-               PEP_LARGEST_REAL,
-               PEP_SMALLEST_REAL,
-               PEP_LARGEST_IMAGINARY,
-               PEP_SMALLEST_IMAGINARY,
-               PEP_TARGET_MAGNITUDE,
-               PEP_TARGET_REAL,
-               PEP_TARGET_IMAGINARY,
-               PEP_ALL,
-               PEP_WHICH_USER } PEPWhich;
+typedef enum { PEP_LARGEST_MAGNITUDE  = 1,
+               PEP_SMALLEST_MAGNITUDE = 2,
+               PEP_LARGEST_REAL       = 3,
+               PEP_SMALLEST_REAL      = 4,
+               PEP_LARGEST_IMAGINARY  = 5,
+               PEP_SMALLEST_IMAGINARY = 6,
+               PEP_TARGET_MAGNITUDE   = 7,
+               PEP_TARGET_REAL        = 8,
+               PEP_TARGET_IMAGINARY   = 9,
+               PEP_ALL                = 10,
+               PEP_WHICH_USER         = 11 } PEPWhich;
 
 /*E
     PEPBasis - The type of polynomial basis used to represent the polynomial
@@ -128,9 +132,9 @@ SLEPC_EXTERN const char *PEPRefineTypes[];
 
 .seealso: PEPSetRefine()
 E*/
-typedef enum { PEP_REFINE_SCHEME_SCHUR=1,
-               PEP_REFINE_SCHEME_MBE,
-               PEP_REFINE_SCHEME_EXPLICIT } PEPRefineScheme;
+typedef enum { PEP_REFINE_SCHEME_SCHUR    = 1,
+               PEP_REFINE_SCHEME_MBE      = 2,
+               PEP_REFINE_SCHEME_EXPLICIT = 3 } PEPRefineScheme;
 SLEPC_EXTERN const char *PEPRefineSchemes[];
 
 /*E
@@ -140,10 +144,10 @@ SLEPC_EXTERN const char *PEPRefineSchemes[];
 
 .seealso: PEPSetExtract()
 E*/
-typedef enum { PEP_EXTRACT_NONE=1,
-               PEP_EXTRACT_NORM,
-               PEP_EXTRACT_RESIDUAL,
-               PEP_EXTRACT_STRUCTURED } PEPExtract;
+typedef enum { PEP_EXTRACT_NONE       = 1,
+               PEP_EXTRACT_NORM       = 2,
+               PEP_EXTRACT_RESIDUAL   = 3,
+               PEP_EXTRACT_STRUCTURED = 4 } PEPExtract;
 SLEPC_EXTERN const char *PEPExtractTypes[];
 
 /*E
@@ -283,7 +287,6 @@ SLEPC_EXTERN PetscErrorCode PEPMonitorCancel(PEP);
 SLEPC_EXTERN PetscErrorCode PEPGetMonitorContext(PEP,void*);
 
 SLEPC_EXTERN PetscErrorCode PEPMonitorSetFromOptions(PEP,const char[],const char[],void*,PetscBool);
-SLEPC_EXTERN PetscErrorCode PEPMonitorLGCreate(MPI_Comm,const char[],const char[],const char[],PetscInt,const char*[],int,int,int,int,PetscDrawLG*);
 SLEPC_EXTERN PetscErrorCode PEPMonitorFirst(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode PEPMonitorFirstDrawLG(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode PEPMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
@@ -378,7 +381,7 @@ SLEPC_EXTERN PetscErrorCode PEPSTOARSetLocking(PEP,PetscBool);
 SLEPC_EXTERN PetscErrorCode PEPSTOARGetLocking(PEP,PetscBool*);
 SLEPC_EXTERN PetscErrorCode PEPSTOARSetDetectZeros(PEP,PetscBool);
 SLEPC_EXTERN PetscErrorCode PEPSTOARGetDetectZeros(PEP,PetscBool*);
-SLEPC_EXTERN PetscErrorCode PEPSTOARGetInertias(PEP,PetscInt*,PetscReal**,PetscInt**);
+SLEPC_EXTERN PetscErrorCode PEPSTOARGetInertias(PEP,PetscInt*,PetscReal*[],PetscInt*[]);
 SLEPC_EXTERN PetscErrorCode PEPSTOARSetDimensions(PEP,PetscInt,PetscInt,PetscInt);
 SLEPC_EXTERN PetscErrorCode PEPSTOARGetDimensions(PEP,PetscInt*,PetscInt*,PetscInt*);
 SLEPC_EXTERN PetscErrorCode PEPSTOARSetCheckEigenvalueType(PEP,PetscBool);
@@ -428,7 +431,7 @@ SLEPC_EXTERN PetscErrorCode PEPCISSSetThreshold(PEP,PetscReal,PetscReal);
 SLEPC_EXTERN PetscErrorCode PEPCISSGetThreshold(PEP,PetscReal*,PetscReal*);
 SLEPC_EXTERN PetscErrorCode PEPCISSSetRefinement(PEP,PetscInt,PetscInt);
 SLEPC_EXTERN PetscErrorCode PEPCISSGetRefinement(PEP,PetscInt*,PetscInt*);
-SLEPC_EXTERN PetscErrorCode PEPCISSGetKSPs(PEP,PetscInt*,KSP**);
+SLEPC_EXTERN PetscErrorCode PEPCISSGetKSPs(PEP,PetscInt*,KSP*[]);
 #else
 #define SlepcPEPCISSUnavailable(pep) do { \
     PetscFunctionBegin; \
@@ -442,6 +445,6 @@ static inline PetscErrorCode PEPCISSSetThreshold(PEP pep,PETSC_UNUSED PetscReal 
 static inline PetscErrorCode PEPCISSGetThreshold(PEP pep,PETSC_UNUSED PetscReal *delta,PETSC_UNUSED PetscReal *spur) {SlepcPEPCISSUnavailable(pep);}
 static inline PetscErrorCode PEPCISSSetRefinement(PEP pep,PETSC_UNUSED PetscInt inner,PETSC_UNUSED PetscInt blsize) {SlepcPEPCISSUnavailable(pep);}
 static inline PetscErrorCode PEPCISSGetRefinement(PEP pep,PETSC_UNUSED PetscInt *inner,PETSC_UNUSED PetscInt *blsize) {SlepcPEPCISSUnavailable(pep);}
-static inline PetscErrorCode PEPCISSGetKSPs(PEP pep,PETSC_UNUSED PetscInt *nsolve,PETSC_UNUSED KSP **ksp) {SlepcPEPCISSUnavailable(pep);}
+static inline PetscErrorCode PEPCISSGetKSPs(PEP pep,PETSC_UNUSED PetscInt *nsolve,PETSC_UNUSED KSP *ksp[]) {SlepcPEPCISSUnavailable(pep);}
 #undef SlepcPEPCISSUnavailable
 #endif

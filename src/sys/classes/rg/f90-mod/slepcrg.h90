@@ -8,18 +8,10 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
       interface RGPolygonGetVertices
-        subroutine RGPolygonGetVertices0(a,b,c,d,z)
+        subroutine RGPolygonGetVertices(a,b,c,d,z)
           import tRG
           RG a
           PetscInt b
-          PetscScalar c(*)
-          PetscScalar d(*)
-          PetscErrorCode z
-        end subroutine
-        subroutine RGPolygonGetVertices1(a,b,c,d,z)
-          import tRG
-          RG a
-          PetscInt b(*)
           PetscScalar c(*)
           PetscScalar d(*)
           PetscErrorCode z

@@ -46,23 +46,12 @@
 #endif
 
 /*
-   These are not usually called from Fortran but allow Fortran users
+   These cannot be called from Fortran but allow Fortran users
    to transparently set these monitors from .F code
 */
-SLEPC_EXTERN void epsmonitorall_(EPS *eps,PetscInt *it,PetscInt *nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = EPSMonitorAll(*eps,*it,*nconv,eigr,eigi,errest,*nest,*vf);
-}
-
-SLEPC_EXTERN void epsmonitorfirst_(EPS *eps,PetscInt *it,PetscInt *nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = EPSMonitorFirst(*eps,*it,*nconv,eigr,eigi,errest,*nest,*vf);
-}
-
-SLEPC_EXTERN void epsmonitorconverged_(EPS *eps,PetscInt *it,PetscInt *nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt *nest,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = EPSMonitorConverged(*eps,*it,*nconv,eigr,eigi,errest,*nest,*vf);
-}
+SLEPC_EXTERN void epsmonitorall_(EPS*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
+SLEPC_EXTERN void epsmonitorfirst_(EPS*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
+SLEPC_EXTERN void epsmonitorconverged_(EPS*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,PetscViewerAndFormat*,PetscErrorCode*);
 
 SLEPC_EXTERN void epsmonitorconvergedcreate_(PetscViewer *vin,PetscViewerFormat *format,void *ctx,PetscViewerAndFormat **vf,PetscErrorCode *ierr)
 {
@@ -151,20 +140,9 @@ SLEPC_EXTERN void epsmonitorset_(EPS *eps,void (*monitor)(EPS*,PetscInt*,PetscIn
   }
 }
 
-SLEPC_EXTERN void epsconvergedabsolute_(EPS *eps,PetscScalar *eigr,PetscScalar *eigi,PetscReal *res,PetscReal *errest,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = EPSConvergedAbsolute(*eps,*eigr,*eigi,*res,errest,ctx);
-}
-
-SLEPC_EXTERN void epsconvergedrelative_(EPS *eps,PetscScalar *eigr,PetscScalar *eigi,PetscReal *res,PetscReal *errest,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = EPSConvergedRelative(*eps,*eigr,*eigi,*res,errest,ctx);
-}
-
-SLEPC_EXTERN void epsconvergednorm_(EPS *eps,PetscScalar *eigr,PetscScalar *eigi,PetscReal *res,PetscReal *errest,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = EPSConvergedNorm(*eps,*eigr,*eigi,*res,errest,ctx);
-}
+SLEPC_EXTERN void epsconvergedabsolute_(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
+SLEPC_EXTERN void epsconvergedrelative_(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
+SLEPC_EXTERN void epsconvergednorm_(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 
 SLEPC_EXTERN void epssetconvergencetestfunction_(EPS *eps,void (*func)(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void* ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
@@ -183,15 +161,8 @@ SLEPC_EXTERN void epssetconvergencetestfunction_(EPS *eps,void (*func)(EPS*,Pets
   }
 }
 
-SLEPC_EXTERN void epsstoppingbasic_(EPS *eps,PetscInt *its,PetscInt *max_it,PetscInt *nconv,PetscInt *nev,EPSConvergedReason *reason,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = EPSStoppingBasic(*eps,*its,*max_it,*nconv,*nev,reason,ctx);
-}
-
-SLEPC_EXTERN void epsstoppingthreshold_(EPS *eps,PetscInt *its,PetscInt *max_it,PetscInt *nconv,PetscInt *nsv,EPSConvergedReason *reason,void *ctx,PetscErrorCode *ierr)
-{
-  *ierr = EPSStoppingThreshold(*eps,*its,*max_it,*nconv,*nsv,reason,ctx);
-}
+SLEPC_EXTERN void epsstoppingbasic_(EPS*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,EPSConvergedReason*,void*,PetscErrorCode*);
+SLEPC_EXTERN void epsstoppingthreshold_(EPS*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,EPSConvergedReason*,void*,PetscErrorCode*);
 
 SLEPC_EXTERN void epssetstoppingtestfunction_(EPS *eps,void (*func)(EPS*,PetscInt,PetscInt,PetscInt,PetscInt,EPSConvergedReason*,void*,PetscErrorCode*),void* ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {

@@ -28,7 +28,7 @@
 #define slepcinitializefortran_       slepcinitializefortran
 #endif
 
-SLEPC_EXTERN void petscinitializef_(char *filename,char* help,PetscBool *readarguments,PetscErrorCode *ierr,PETSC_FORTRAN_CHARLEN_T len,PETSC_FORTRAN_CHARLEN_T helplen);
+SLEPC_EXTERN void petscinitializef_(char *filename,char* help,PetscErrorCode *ierr,PETSC_FORTRAN_CHARLEN_T len,PETSC_FORTRAN_CHARLEN_T helplen);
 SLEPC_EXTERN void petscfinalize_(PetscErrorCode *ierr);
 
 /*
@@ -37,7 +37,7 @@ SLEPC_EXTERN void petscfinalize_(PetscErrorCode *ierr);
     Notes:
     Since this routine is called from Fortran it does not return error codes.
 */
-SLEPC_EXTERN void slepcinitializef_(char *filename,char* help,PetscBool *readarguments,PetscErrorCode *ierr,PETSC_FORTRAN_CHARLEN_T len,PETSC_FORTRAN_CHARLEN_T helplen)
+SLEPC_EXTERN void slepcinitializef_(char *filename,char* help,PetscErrorCode *ierr,PETSC_FORTRAN_CHARLEN_T len,PETSC_FORTRAN_CHARLEN_T helplen)
 {
   PetscBool flg;
 
@@ -46,7 +46,7 @@ SLEPC_EXTERN void slepcinitializef_(char *filename,char* help,PetscBool *readarg
   *ierr = PetscInitialized(&flg);
   if (*ierr) { (void)(*PetscErrorPrintf)("SlepcInitialize:PetscInitialized failed");return; }
   if (!flg) {
-    petscinitializef_(filename,help,readarguments,ierr,len,helplen);
+    petscinitializef_(filename,help,ierr,len,helplen);
     if (*ierr) { (void)(*PetscErrorPrintf)("SlepcInitialize:PetscInitialize failed");return; }
     SlepcBeganPetsc = PETSC_TRUE;
   }
@@ -61,28 +61,4 @@ SLEPC_EXTERN void slepcinitializef_(char *filename,char* help,PetscBool *readarg
   SlepcFinalizeCalled   = PETSC_FALSE;
   *ierr = PetscInfo(0,"SLEPc successfully started from Fortran\n");
   if (*ierr) { (void)(*PetscErrorPrintf)("SlepcInitialize:Calling PetscInfo()");return; }
-}
-
-SLEPC_EXTERN void slepcfinalize_(PetscErrorCode *ierr)
-{
-  if (PetscUnlikely(!SlepcInitializeCalled)) {
-    (void)(*PetscErrorPrintf)("SlepcInitialize() must be called before SlepcFinalize()");
-    return;
-  }
-
-  *ierr = PetscInfo(0,"SlepcFinalize() called from Fortran\n");
-  if (*ierr) { (void)(*PetscErrorPrintf)("SlepcFinalize:Calling PetscInfo()");return; }
-  *ierr = PETSC_SUCCESS;
-  if (SlepcBeganPetsc) {
-    petscfinalize_(ierr);
-    if (*ierr) { (void)(*PetscErrorPrintf)("SlepcFinalize:Calling petscfinalize_()");return; }
-    SlepcBeganPetsc = PETSC_FALSE;
-  }
-  SlepcInitializeCalled = PETSC_FALSE;
-  SlepcFinalizeCalled   = PETSC_TRUE;
-}
-
-SLEPC_EXTERN void slepcinitializefortran_(PetscErrorCode *info)
-{
-  *info = SlepcInitializeFortran();
 }

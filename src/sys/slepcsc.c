@@ -266,21 +266,25 @@ PetscErrorCode SlepcCompareTargetReal(PetscScalar ar,PetscScalar ai,PetscScalar 
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_COMPLEX)
 PetscErrorCode SlepcCompareTargetImaginary(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,void *ctx)
 {
+#if defined(PETSC_USE_COMPLEX)
   PetscReal   a,b;
   PetscScalar *target = (PetscScalar*)ctx;
+#endif
 
   PetscFunctionBegin;
+#if defined(PETSC_USE_COMPLEX)
   a = PetscAbsReal(PetscImaginaryPart(ar-(*target)));
   b = PetscAbsReal(PetscImaginaryPart(br-(*target)));
   if (a>b) *result = 1;
   else if (a<b) *result = -1;
   else *result = 0;
+#else
+  *result = 0;
+#endif
   PetscFunctionReturn(PETSC_SUCCESS);
 }
-#endif
 
 /*
    Used in the SVD for computing smallest singular values

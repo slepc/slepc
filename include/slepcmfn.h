@@ -37,7 +37,7 @@ typedef struct _p_MFN* MFN;
 
 .seealso: MFNSetType(), MFN
 J*/
-typedef const char* MFNType;
+typedef const char *MFNType;
 #define MFNKRYLOV   "krylov"
 #define MFNEXPOKIT  "expokit"
 
@@ -81,7 +81,6 @@ SLEPC_EXTERN PetscErrorCode MFNMonitorCancel(MFN);
 SLEPC_EXTERN PetscErrorCode MFNGetMonitorContext(MFN,void*);
 
 SLEPC_EXTERN PetscErrorCode MFNMonitorSetFromOptions(MFN,const char[],const char[],void*);
-SLEPC_EXTERN PetscErrorCode MFNMonitorLGCreate(MPI_Comm,const char[],const char[],const char[],PetscInt,const char*[],int,int,int,int,PetscDrawLG*);
 SLEPC_EXTERN PetscErrorCode MFNMonitorDefault(MFN,PetscInt,PetscReal,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode MFNMonitorDefaultDrawLG(MFN,PetscInt,PetscReal,PetscViewerAndFormat*);
 SLEPC_EXTERN PetscErrorCode MFNMonitorDefaultDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);

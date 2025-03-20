@@ -222,7 +222,7 @@ static PetscErrorCode EPSDestroy_FEAST(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSSetFromOptions_FEAST(EPS eps,PetscOptionItems *PetscOptionsObject)
+static PetscErrorCode EPSSetFromOptions_FEAST(EPS eps,PetscOptionItems PetscOptionsObject)
 {
   EPS_FEAST      *ctx = (EPS_FEAST*)eps->data;
   PetscInt       n;
