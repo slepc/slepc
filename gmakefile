@@ -238,17 +238,17 @@ $(OBJDIR)/%.tidy : %.c | $$(@D)/.DIR
 clang-tidy: $(srcs.tidy)
 
 # Hack: manual dependencies on object files
-$(OBJDIR)/src/sys/classes/bv/f90-mod/slepcbvmod.o : $(OBJDIR)/src/sys/f90-mod/slepcsysmod.o
-$(OBJDIR)/src/sys/classes/fn/f90-mod/slepcfnmod.o : $(OBJDIR)/src/sys/f90-mod/slepcsysmod.o
-$(OBJDIR)/src/sys/classes/rg/f90-mod/slepcrgmod.o : $(OBJDIR)/src/sys/f90-mod/slepcsysmod.o
-$(OBJDIR)/src/sys/classes/ds/f90-mod/slepcdsmod.o : $(OBJDIR)/src/sys/classes/fn/f90-mod/slepcfnmod.o $(OBJDIR)/src/sys/classes/rg/f90-mod/slepcrgmod.o
-$(OBJDIR)/src/sys/classes/st/f90-mod/slepcstmod.o : $(OBJDIR)/src/sys/classes/bv/f90-mod/slepcbvmod.o
-$(OBJDIR)/src/mfn/f90-mod/slepcmfnmod.o   : $(OBJDIR)/src/sys/classes/bv/f90-mod/slepcbvmod.o $(OBJDIR)/src/sys/classes/fn/f90-mod/slepcfnmod.o
-$(OBJDIR)/src/lme/f90-mod/slepclmemod.o   : $(OBJDIR)/src/sys/classes/bv/f90-mod/slepcbvmod.o
-$(OBJDIR)/src/eps/f90-mod/slepcepsmod.o   : $(OBJDIR)/src/sys/classes/bv/f90-mod/slepcbvmod.o $(OBJDIR)/src/sys/classes/fn/f90-mod/slepcfnmod.o $(OBJDIR)/src/sys/classes/ds/f90-mod/slepcdsmod.o $(OBJDIR)/src/sys/classes/rg/f90-mod/slepcrgmod.o $(OBJDIR)/src/sys/classes/st/f90-mod/slepcstmod.o $(OBJDIR)/src/lme/f90-mod/slepclmemod.o
-$(OBJDIR)/src/pep/f90-mod/slepcpepmod.o   : $(OBJDIR)/src/eps/f90-mod/slepcepsmod.o
-$(OBJDIR)/src/nep/f90-mod/slepcnepmod.o   : $(OBJDIR)/src/pep/f90-mod/slepcpepmod.o $(OBJDIR)/src/mfn/f90-mod/slepcmfnmod.o
-$(OBJDIR)/src/svd/f90-mod/slepcsvdmod.o   : $(OBJDIR)/src/eps/f90-mod/slepcepsmod.o
+$(OBJDIR)/src/sys/classes/bv/ftn-mod/slepcbvmod.o : $(OBJDIR)/src/sys/ftn-mod/slepcsysmod.o
+$(OBJDIR)/src/sys/classes/fn/ftn-mod/slepcfnmod.o : $(OBJDIR)/src/sys/ftn-mod/slepcsysmod.o
+$(OBJDIR)/src/sys/classes/rg/ftn-mod/slepcrgmod.o : $(OBJDIR)/src/sys/ftn-mod/slepcsysmod.o
+$(OBJDIR)/src/sys/classes/ds/ftn-mod/slepcdsmod.o : $(OBJDIR)/src/sys/classes/fn/ftn-mod/slepcfnmod.o $(OBJDIR)/src/sys/classes/rg/ftn-mod/slepcrgmod.o
+$(OBJDIR)/src/sys/classes/st/ftn-mod/slepcstmod.o : $(OBJDIR)/src/sys/classes/bv/ftn-mod/slepcbvmod.o
+$(OBJDIR)/src/mfn/ftn-mod/slepcmfnmod.o   : $(OBJDIR)/src/sys/classes/bv/ftn-mod/slepcbvmod.o $(OBJDIR)/src/sys/classes/fn/ftn-mod/slepcfnmod.o
+$(OBJDIR)/src/lme/ftn-mod/slepclmemod.o   : $(OBJDIR)/src/sys/classes/bv/ftn-mod/slepcbvmod.o
+$(OBJDIR)/src/eps/ftn-mod/slepcepsmod.o   : $(OBJDIR)/src/sys/classes/bv/ftn-mod/slepcbvmod.o $(OBJDIR)/src/sys/classes/fn/ftn-mod/slepcfnmod.o $(OBJDIR)/src/sys/classes/ds/ftn-mod/slepcdsmod.o $(OBJDIR)/src/sys/classes/rg/ftn-mod/slepcrgmod.o $(OBJDIR)/src/sys/classes/st/ftn-mod/slepcstmod.o $(OBJDIR)/src/lme/ftn-mod/slepclmemod.o
+$(OBJDIR)/src/pep/ftn-mod/slepcpepmod.o   : $(OBJDIR)/src/eps/ftn-mod/slepcepsmod.o
+$(OBJDIR)/src/nep/ftn-mod/slepcnepmod.o   : $(OBJDIR)/src/pep/ftn-mod/slepcpepmod.o $(OBJDIR)/src/mfn/ftn-mod/slepcmfnmod.o
+$(OBJDIR)/src/svd/ftn-mod/slepcsvdmod.o   : $(OBJDIR)/src/eps/ftn-mod/slepcepsmod.o
 
 # all sources should get recompiled when slepcvariables changes (i.e when configure is rerun or when slepcvariables is manually edited.)
 $(srcs.o) : $(slepcvariables)

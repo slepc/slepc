@@ -16,7 +16,7 @@
         use slepcfndef
         use slepcsys
 #include <../ftn/sys/classes/fn/slepcall.h90>
-#include <../src/sys/classes/fn/f90-mod/slepcfn.h90>
+#include <../src/sys/classes/fn/ftn-mod/slepcfn.h90>
 
         contains
 

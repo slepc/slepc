@@ -12,7 +12,7 @@
 */
 
 #include <slepc/private/slepcimpl.h>
-#include <petsc/private/fortranimpl.h>
+#include <petsc/private/ftnimpl.h>
 
 #if defined(PETSC_HAVE_FORTRAN_CAPS)
 #define petscinitializef_             PETSCINITIALIZEF

@@ -17,7 +17,7 @@
         use slepcnepdef
         use slepcpep
 #include <../ftn/nep/slepcall.h90>
-#include <../src/nep/f90-mod/slepcnep.h90>
+#include <../src/nep/ftn-mod/slepcnep.h90>
 
         contains
 

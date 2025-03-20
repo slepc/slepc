@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-#include <petsc/private/fortranimpl.h>
+#include <petsc/private/ftnimpl.h>
 #include <slepcnep.h>
 
 #if defined(PETSC_HAVE_FORTRAN_CAPS)

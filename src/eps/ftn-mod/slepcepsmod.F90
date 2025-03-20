@@ -19,7 +19,7 @@
         use slepcds
         use slepclme
 #include <../ftn/eps/slepcall.h90>
-#include <../src/eps/f90-mod/slepceps.h90>
+#include <../src/eps/ftn-mod/slepceps.h90>
 
         contains
 
