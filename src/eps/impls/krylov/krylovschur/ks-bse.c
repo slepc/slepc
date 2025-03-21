@@ -85,12 +85,16 @@ static PetscErrorCode EPSBSELanczos_Shao(EPS eps,BV U,BV V,PetscReal *alpha,Pets
   IS             is[2];
   PetscReal      nrm;
   PetscScalar    *hwork,lhwork[100],gamma;
+  PetscContainer container;
+  SlepcMatStruct mctx;
 
   PetscFunctionBegin;
   if (4*m > 100) PetscCall(PetscMalloc1(4*m,&hwork));
   else hwork = lhwork;
   PetscCall(STGetMatrix(eps->st,0,&H));
   PetscCall(MatNestGetISs(H,is,NULL));
+  PetscCall(PetscObjectQuery((PetscObject)H,"SlepcMatStruct",(PetscObject*)&container));
+  PetscCall(PetscContainerGetPointer(container,(void**)&mctx));
 
   /* create work vectors */
   PetscCall(BVGetColumn(V,0,&v));
@@ -106,10 +110,9 @@ static PetscErrorCode EPSBSELanczos_Shao(EPS eps,BV U,BV V,PetscReal *alpha,Pets
     if (eps->nini==0) PetscCall(BVSetRandomColumn(eps->V,0));
     PetscCall(BVGetColumn(U,0,&x));
     PetscCall(BVGetColumn(V,0,&y));
-    PetscCall(VecCopy(x,w));
-    PetscCall(VecConjugate(w));
     PetscCall(VecNestSetSubVec(f,0,x));
     PetscCall(VecNestSetSubVec(g,0,y));
+    mctx->s = 1.0;
     PetscCall(STApply(eps->st,f,g));
     PetscCall(VecDot(y,x,&gamma));
     nrm = PetscSqrtReal(PetscRealPart(gamma));
@@ -124,18 +127,15 @@ static PetscErrorCode EPSBSELanczos_Shao(EPS eps,BV U,BV V,PetscReal *alpha,Pets
     PetscCall(BVGetColumn(V,j,&v));
     PetscCall(BVGetColumn(U,j+1,&x));
     PetscCall(BVGetColumn(V,j+1,&y));
-    PetscCall(VecCopy(v,w));
-    PetscCall(VecConjugate(w));
-    PetscCall(VecScale(w,-1.0));
     PetscCall(VecNestSetSubVec(f,0,v));
     PetscCall(VecNestSetSubVec(g,0,x));
+    mctx->s = -1.0;
     PetscCall(STApply(eps->st,f,g));
     PetscCall(OrthogonalizeVector_Shao(x,U,V,j+1,v,beta,k,hwork,breakdown));
     alpha[j] = PetscRealPart(hwork[j]);
-    PetscCall(VecCopy(x,w));
-    PetscCall(VecConjugate(w));
     PetscCall(VecNestSetSubVec(f,0,x));
     PetscCall(VecNestSetSubVec(g,0,y));
+    mctx->s = 1.0;
     PetscCall(STApply(eps->st,f,g));
     PetscCall(VecDot(x,y,&gamma));
     beta[j] = PetscSqrtReal(PetscRealPart(gamma));
@@ -259,12 +259,16 @@ static PetscErrorCode EPSBSELanczos_Gruning(EPS eps,BV U,BV V,BV HU,BV HV,PetscR
   IS             is[2];
   PetscReal      nrm;
   PetscScalar    *hwork,lhwork[100],dot;
+  PetscContainer container;
+  SlepcMatStruct mctx;
 
   PetscFunctionBegin;
   if (4*m > 100) PetscCall(PetscMalloc1(4*m,&hwork));
   else hwork = lhwork;
   PetscCall(STGetMatrix(eps->st,0,&H));
   PetscCall(MatNestGetISs(H,is,NULL));
+  PetscCall(PetscObjectQuery((PetscObject)H,"SlepcMatStruct",(PetscObject*)&container));
+  PetscCall(PetscContainerGetPointer(container,(void**)&mctx));
 
   /* create work vectors */
   PetscCall(BVGetColumn(V,0,&v));
@@ -281,10 +285,9 @@ static PetscErrorCode EPSBSELanczos_Gruning(EPS eps,BV U,BV V,BV HU,BV HV,PetscR
     /* y = Hmult(v1,1) */
     PetscCall(BVGetColumn(U,k,&x));
     PetscCall(BVGetColumn(HU,k,&y));
-    PetscCall(VecCopy(x,w));
-    PetscCall(VecConjugate(w));
     PetscCall(VecNestSetSubVec(f,0,x));
     PetscCall(VecNestSetSubVec(g,0,y));
+    mctx->s = 1.0;
     PetscCall(STApply(eps->st,f,g));
     /* nrm = sqrt(2*real(u1'*y)); */
     PetscCall(VecDot(x,y,&dot));
@@ -307,11 +310,9 @@ static PetscErrorCode EPSBSELanczos_Gruning(EPS eps,BV U,BV V,BV HU,BV HV,PetscR
     /* v = Orthogonalize HU(:,j) */
     PetscCall(OrthogonalizeVector_Gruning(v,U,V,HU,HV,j+1,beta2,k,hwork,PETSC_FALSE,breakdown));
     /* y = Hmult(v,-1) */
-    PetscCall(VecCopy(v,w));
-    PetscCall(VecConjugate(w));
-    PetscCall(VecScale(w,-1.0));
     PetscCall(VecNestSetSubVec(f,0,v));
     PetscCall(VecNestSetSubVec(g,0,y));
+    mctx->s = -1.0;
     PetscCall(STApply(eps->st,f,g));
     /* beta = sqrt(2*real(v'*y)); */
     PetscCall(VecDot(v,y,&dot));
@@ -331,10 +332,9 @@ static PetscErrorCode EPSBSELanczos_Gruning(EPS eps,BV U,BV V,BV HU,BV HV,PetscR
     /* v = Orthogonalize HV(:,j) */
     PetscCall(OrthogonalizeVector_Gruning(v,U,V,HU,HV,j+1,&beta1[j],k,hwork,PETSC_TRUE,breakdown));
     /* y = Hmult(v,1) */
-    PetscCall(VecCopy(v,w));
-    PetscCall(VecConjugate(w));
     PetscCall(VecNestSetSubVec(f,0,v));
     PetscCall(VecNestSetSubVec(g,0,y));
+    mctx->s = 1.0;
     PetscCall(STApply(eps->st,f,g));
     /* beta = sqrt(2*real(v'*y)); */
     PetscCall(VecDot(v,y,&dot));
@@ -499,12 +499,16 @@ static PetscErrorCode EPSBSELanczos_ProjectedBSE(EPS eps,BV X,BV Y,Vec v,PetscRe
   IS             is[2];
   PetscReal      nrm;
   PetscScalar    *hwork,lhwork[100],gamma;
+  PetscContainer container;
+  SlepcMatStruct mctx;
 
   PetscFunctionBegin;
   if (4*m > 100) PetscCall(PetscMalloc1(4*m,&hwork));
   else hwork = lhwork;
   PetscCall(STGetMatrix(eps->st,0,&H));
   PetscCall(MatNestGetISs(H,is,NULL));
+  PetscCall(PetscObjectQuery((PetscObject)H,"SlepcMatStruct",(PetscObject*)&container));
+  PetscCall(PetscContainerGetPointer(container,(void**)&mctx));
 
   /* create work vectors */
   PetscCall(BVGetColumn(Y,0,&u));
@@ -521,10 +525,9 @@ static PetscErrorCode EPSBSELanczos_ProjectedBSE(EPS eps,BV X,BV Y,Vec v,PetscRe
     PetscCall(BVGetColumn(X,0,&x));
     /* v = Hmult(u,1) */
     PetscCall(BVGetColumn(Y,0,&y));
-    PetscCall(VecCopy(x,w));
-    PetscCall(VecConjugate(w));
     PetscCall(VecNestSetSubVec(f,0,x));
     PetscCall(VecNestSetSubVec(g,0,y));
+    mctx->s = 1.0;
     PetscCall(STApply(eps->st,f,g));
     /* nrm = sqrt(real(u'*v)) */
     PetscCall(VecDot(y,x,&gamma));
@@ -548,11 +551,9 @@ static PetscErrorCode EPSBSELanczos_ProjectedBSE(EPS eps,BV X,BV Y,Vec v,PetscRe
     PetscCall(BVGetColumn(X,j+1,&x));
     PetscCall(BVGetColumn(Y,j+1,&y));
     /* u = Hmult(v,-1)*/
-    PetscCall(VecCopy(v,w));
-    PetscCall(VecConjugate(w));
-    PetscCall(VecScale(w,-1.0));
     PetscCall(VecNestSetSubVec(f,0,v));
     PetscCall(VecNestSetSubVec(g,0,x));
+    mctx->s = -1.0;
     PetscCall(STApply(eps->st,f,g));
     /* hx = (u+v) */
     PetscCall(VecCopy(x,y));
@@ -565,10 +566,9 @@ static PetscErrorCode EPSBSELanczos_ProjectedBSE(EPS eps,BV X,BV Y,Vec v,PetscRe
     /* alpha(j) = 2*(real(cd(j))-1/2) */
     alpha[j] = 2*(PetscRealPart(hwork[j]) - 0.5);
     /* v = Hmult(u,1) */
-    PetscCall(VecCopy(x,w));
-    PetscCall(VecConjugate(w));
     PetscCall(VecNestSetSubVec(f,0,x));
     PetscCall(VecNestSetSubVec(g,0,y));
+    mctx->s = 1.0;
     PetscCall(STApply(eps->st,f,g));
     /* nrm = sqrt(real(u'*v)) */
     /* beta(j) = 2*nrm */

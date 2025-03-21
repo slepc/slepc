@@ -26,22 +26,33 @@
 
        y1 = R*x1+C*x2
 
-   The bottom part of the input vector x2 should normally contain
-   either conj(x1) or -conj(x1).
+   The bottom part of the input vector x2 is computed as
+   either conj(x1) or -conj(x1), where the sign is given by
+   s in the context SlepcMatStruct.
    The bottom part of the output vector y2 is not referenced.
 */
 static PetscErrorCode STApply_Shift_BSE(ST st,Vec x,Vec y)
 {
-  Mat   H,R,C;
-  Vec   x1,x2,y1;
+  Mat            H,R,C;
+  Vec            x1,x2,y1;
+  PetscContainer container;
+  SlepcMatStruct mctx;
 
   PetscFunctionBegin;
   H = st->T[0];
+  PetscCall(PetscObjectQuery((PetscObject)H,"SlepcMatStruct",(PetscObject*)&container));
+  PetscCall(PetscContainerGetPointer(container,(void**)&mctx));
   PetscCall(MatNestGetSubMat(H,0,0,&R));
   PetscCall(MatNestGetSubMat(H,0,1,&C));
   PetscCall(VecNestGetSubVec(x,0,&x1));
   PetscCall(VecNestGetSubVec(x,1,&x2));
   PetscCall(VecNestGetSubVec(y,0,&y1));
+
+  /* x2 = +/-conj(x1) */
+  PetscCall(VecCopy(x1,x2));
+  PetscCall(VecConjugate(x2));
+  if (mctx->s==-1.0) PetscCall(VecScale(x2,-1.0));
+
   PetscCall(MatMult(C,x2,y1));
   PetscCall(MatMultAdd(R,x1,y1,y1));
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -50,18 +61,19 @@ static PetscErrorCode STApply_Shift_BSE(ST st,Vec x,Vec y)
 /*
    Specialized version that avoids communication for multiplication by R.
    It needs to access internal data structures of MATMPIDENSE.
-   Assumes the bottom part of the input vector x2 contains either conj(x1) or -conj(x1).
 */
 static PetscErrorCode STApply_Shift_BSE_Dense(ST st,Vec x,Vec y)
 {
-  Mat               H,R,C;
-  Vec               x1,x2,y1;
-  PetscBool         chsgn=PETSC_FALSE;
-  Mat_MPIDense      *mdnR,*mdnC;
-  const PetscScalar *vx1,*vx2;
+  Mat            H,R,C;
+  Vec            x1,x2,y1;
+  Mat_MPIDense   *mdnR,*mdnC;
+  PetscContainer container;
+  SlepcMatStruct mctx;
 
   PetscFunctionBegin;
   H = st->T[0];
+  PetscCall(PetscObjectQuery((PetscObject)H,"SlepcMatStruct",(PetscObject*)&container));
+  PetscCall(PetscContainerGetPointer(container,(void**)&mctx));
   PetscCall(MatNestGetSubMat(H,0,0,&R));
   PetscCall(MatNestGetSubMat(H,0,1,&C));
   mdnR = (Mat_MPIDense*)R->data;
@@ -69,15 +81,16 @@ static PetscErrorCode STApply_Shift_BSE_Dense(ST st,Vec x,Vec y)
   PetscCall(VecNestGetSubVec(x,0,&x1));
   PetscCall(VecNestGetSubVec(x,1,&x2));
   PetscCall(VecNestGetSubVec(y,0,&y1));
+
+  /* x2 = +/-conj(x1) */
+  PetscCall(VecCopy(x1,x2));
+  PetscCall(VecConjugate(x2));
+  if (mctx->s==-1.0) PetscCall(VecScale(x2,-1.0));
+
   PetscCall(MatMult(C,x2,y1));
   /* PetscCall(MatMultAdd(R,x1,y1,y1)); */
   PetscCall(VecConjugate(mdnC->lvec));
-  PetscCall(VecGetArrayRead(x1,&vx1));
-  PetscCall(VecGetArrayRead(x2,&vx2));
-  if (PetscRealPart(*vx1)==-PetscRealPart(*vx2)) chsgn = PETSC_TRUE;
-  PetscCall(VecRestoreArrayRead(x1,&vx1));
-  PetscCall(VecRestoreArrayRead(x2,&vx2));
-  if (chsgn) PetscCall(VecScale(mdnC->lvec,-1.0));
+  if (mctx->s==-1.0) PetscCall(VecScale(mdnC->lvec,-1.0));
   PetscCall(PetscLogEventBegin(MAT_MultAdd,R,mdnC->lvec,y1,y1));
   PetscCall(VecLockReadPush(mdnC->lvec));
   PetscCall((*mdnR->A->ops->multadd)(mdnR->A,mdnC->lvec,y1,y1));
