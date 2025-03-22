@@ -55,7 +55,8 @@ struct _n_SlepcConvMon {
 
 /* context for structured eigenproblem matrices created via MatCreateXXX */
 struct _n_SlepcMatStruct {
-  PetscInt cookie;    /* identify which structured matrix */
+  PetscInt    cookie;    /* identify which structured matrix */
+  PetscScalar s;         /* in BSE sign of the bottom part of the vector */
 };
 typedef struct _n_SlepcMatStruct* SlepcMatStruct;
 

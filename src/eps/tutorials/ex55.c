@@ -155,6 +155,11 @@ int main(int argc,char **argv)
       test:
          suffix: 1_real
          requires: !complex
+      test:
+         suffix: 1_dense
+         args: -mat_type dense
+         requires: complex
+         output_file: output/ex55_1.out
 
    testset:
       args: -eps_nev 4 -eps_ncv 16 -eps_krylovschur_bse_type {{shao gruning projectedbse}} -st_type sinvert -terse
