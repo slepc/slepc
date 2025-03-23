@@ -388,60 +388,25 @@ static PetscErrorCode EPSComputeVectors_BSE_Gruning(EPS eps)
 /* Full orthogonalization of vector [hx, conj(hx)] against first j vectors in X and Y */
 static PetscErrorCode Orthog_ProjectedBSE(Vec hx,BV X,BV Y,PetscInt j,PetscScalar *h,PetscScalar *c,PetscBool *breakdown)
 {
-  PetscInt          i;
-  Mat               MX,MY,MXl,MYl;
-  Vec               c1,hxl,hz;
-  PetscScalar       *cx1;
-  PetscMPIInt       len;
+  PetscInt i;
 
   PetscFunctionBegin;
-  PetscCall(PetscMPIIntCast(j,&len));
   PetscCall(BVSetActiveColumns(X,0,j));
   PetscCall(BVSetActiveColumns(Y,0,j));
-  /* BVTDotVec does not exist yet, implemented via MatMult operations */
-  PetscCall(BVGetMat(X,&MX));
-  PetscCall(BVGetMat(Y,&MY));
-  PetscCall(MatDenseGetLocalMatrix(MX,&MXl));
-  PetscCall(MatDenseGetLocalMatrix(MY,&MYl));
-  PetscCall(MatCreateVecs(MXl,&c1,&hxl));
-
-  /* c1 = X^* hx - conj(Y^T hx) */
-
-  PetscCall(VecGetLocalVector(hx,hxl));
-  PetscCall(VecDuplicate(hx,&hz));
-  /* c1 = - conj(Y^T hx) */
-  PetscCall(MatMultTranspose(MYl,hxl,c1));
-  PetscCall(VecScale(c1,-1));
-  PetscCall(VecConjugate(c1));
-  /* c1 = c1 + X^* hx */
-  PetscCall(MatMultHermitianTransposeAdd(MXl,hxl,c1,c1));
-  PetscCall(VecGetArray(c1,&cx1));
-  PetscCallMPI(MPIU_Allreduce(MPI_IN_PLACE,cx1,len,MPIU_SCALAR,MPIU_SUM,PetscObjectComm((PetscObject)hx)));
-  PetscCall(VecRestoreArray(c1,&cx1));
-  PetscCall(VecRestoreLocalVector(hx,hxl));
-
+  /* c1 = X^* hx */
+  PetscCall(BVDotVec(X,hx,c));
+  /* c2 = Y^* conj(hx) */
+  PetscCall(VecConjugate(hx));
+  PetscCall(BVDotVec(Y,hx,c+j));
+  /* c = c1 - c2 */
+  for (i=0;i<j;i++) c[i] -= c[i+j];
+  /* hx = hx - conj(Y*c) */
+  PetscCall(BVMultVec(Y,-1.0,1.0,hx,c));
+  PetscCall(VecConjugate(hx));
+  /* hx = hx - X*c */
+  PetscCall(BVMultVec(X,-1.0,1.0,hx,c));
   /* accumulate orthog coeffs into h */
-  PetscCall(VecGetArrayRead(c1,(const PetscScalar**)&cx1));
-  for (i=0; i<j; i++) h[i] += cx1[i];
-  for (i=0; i<j; i++) h[i+j] += PetscConj(cx1[i]);
-  PetscCall(VecRestoreArrayRead(c1,(const PetscScalar**)&cx1));
-
-  /* hx = hx - X c1 - conj(Y c1) */
-
-  /* conj(Y c1) */
-  PetscCall(VecGetLocalVector(hz,hxl));
-  PetscCall(MatMult(MYl,c1,hxl));
-  PetscCall(VecConjugate(hxl));
-  /* X c1 */
-  PetscCall(MatMultAdd(MXl,c1,hxl,hxl));
-  PetscCall(VecRestoreLocalVector(hz,hxl));
-  PetscCall(VecAXPY(hx,-1,hz));
-
-  PetscCall(BVRestoreMat(X,&MX));
-  PetscCall(BVRestoreMat(Y,&MY));
-  PetscCall(VecDestroy(&c1));
-  PetscCall(VecDestroy(&hxl));
-  PetscCall(VecDestroy(&hz));
+  for (i=0;i<j;i++) h[i] += c[i];
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
