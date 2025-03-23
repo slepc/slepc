@@ -22,7 +22,7 @@ EXAMPLESALL = `(ls *.c *.cxx *.F *.F90 *.cu *.cpp | sort -V) 2> /dev/null`
 # Performs the specified action on all source/include directories except output; used by c2html and cleanhtml
 tree: ${ACTION}
 	-@for dir in `ls -d */ 2> /dev/null` foo ;  do \
-            if [[ $${dir} != "doc/" && $${dir} != "output/" && $${dir} != "ftn-auto/" ]]; then \
+            if [[ $${dir} != "doc/" && $${dir} != "output/" ]]; then \
               if [[ -f $${dir}makefile ]]; then \
 	        (cd $$dir ; ${OMAKE} ACTION=${ACTION} PETSC_ARCH=${PETSC_ARCH}  LOC=${LOC} tree) ; \
               fi; \
@@ -40,7 +40,7 @@ slepc_tree: ${ACTION}
 # Performs the specified action on all source/include directories except tutorial and test
 slepc_tree_src: ${ACTION}
 	-@for dir in `ls -d */ 2> /dev/null` foo ;  do \
-            if [[ $${dir} != "tests/" && $${dir} != "tutorials/" && $${dir} != "doc/" && $${dir} != "output/" && $${dir} != "ftn-auto/" ]]; then \
+            if [[ $${dir} != "tests/" && $${dir} != "tutorials/" && $${dir} != "doc/" && $${dir} != "output/" ]]; then \
               if [[ -f $${dir}makefile ]]; then \
                 (cd $$dir ; ${OMAKE} ACTION=${ACTION} PETSC_ARCH=${PETSC_ARCH}  LOC=${LOC} slepc_tree_src) ; \
               fi; \
