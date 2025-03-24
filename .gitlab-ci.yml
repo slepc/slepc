@@ -750,7 +750,7 @@ nvidia-c-nompi:
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme=/var/local/downloads/primme-3.2.tar.gz --download-arpack
     TEST_OPTS: -j4 -l12
 
-gnu-c-complex-valgrind:
+clang-c-complex-valgrind:
   extends:
     - .stage-3
     - .linux_test
