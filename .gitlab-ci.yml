@@ -160,7 +160,7 @@ gnu-c99-mlib-static:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    PETSC_CONFIG_OPTS: --with-single-library=0 --with-shared-libraries=0 COPTFLAGS="-O -march=native -std=c99"
+    PETSC_CONFIG_OPTS: --with-single-library=0 --with-shared-libraries=0 COPTFLAGS="-O -march=native -std=c99" FPPFLAGS=-fno-underscoring
     TEST_SEARCH: eps_tests-test10_1
 
 gnu-lint:
@@ -846,7 +846,7 @@ gnu-c-nocxx:
   tags:
     - name:jepri
   variables:
-    PETSC_CONFIG_OPTS: --with-cxx=0 --COPTFLAGS='-g -O -fsanitize=address' --FOPTFLAGS='-g -O -fsanitize=address'
+    PETSC_CONFIG_OPTS: --with-cxx=0 --COPTFLAGS='-g -O -fsanitize=address' --FOPTFLAGS='-g -O -fsanitize=address' FPPFLAGS=-fsecond-underscore
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme
 
 gnu-c-complex128:
