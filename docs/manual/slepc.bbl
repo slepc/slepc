@@ -34,7 +34,7 @@ Bai, Z., J.~Demmel, J.~Dongarra, A.~Ruhe, and H.~van~der Vorst (eds.) (2000).
   Practical Guide\/}.
 \newblock SIAM, Philadelphia.
 
-\bibitem[{Balay {\em et~al.\/}(2024)Balay, Abhyankar, Adams, Benson, Brown, Brune,
+\bibitem[{Balay {\em et~al.\/}(2025)Balay, Abhyankar, Adams, Benson, Brown, Brune,
   Buschelman, Constantinescu, Dalcin, Dener, Eijkhout, Faibussowitsch, Gropp, Hapla, Isaac, Jolivet,
   Karpeyev, Kaushik, Knepley, Kong, Kruger, May, McInnes, Mills, Mitchell, Munson,
   Roman, Rupp, Sanan, Sarich, Smith, Suh, Zampini, Zhang, Zhang, and Zhang}]{Balay:PUM}
@@ -42,8 +42,8 @@ Balay, S., S.~Abhyankar, M.~F.~Adams, S.~Benson, J.~Brown, P.~Brune, K.~Buschelm
   E.~Constantinescu, L.~Dalcin, A.~Dener, V.~Eijkhout, J.~Faibussowitsch, W.~D.~Gropp, V.~Hapla,
   T.~Isaac, P.~Jolivet, D.~Karpeyev, D.~Kaushik, M.~G.~Knepley, F.~Kong, S.~Kruger, D.~A.~May,
   L.~C. McInnes, R.~T. Mills, L.~Mitchell, T.~Munson, J.~E. Roman, K.~Rupp, P.~Sanan,
-  J.~Sarich, B.~F.~Smith, H.~Suh, S.~Zampini, H.~Zhang, H.~Zhang, and J.~Zhang (2024).
-\newblock {PETSc/TAO} Users Manual Revision 3.22.
+  J.~Sarich, B.~F.~Smith, H.~Suh, S.~Zampini, H.~Zhang, H.~Zhang, and J.~Zhang (2025).
+\newblock {PETSc/TAO} Users Manual Revision 3.23.
 \newblock Argonne Technical Memorandum ANL-21/39.
 
 \bibitem[{Balay {\em et~al.\/}(1997)Balay, Gropp, McInnes, and
