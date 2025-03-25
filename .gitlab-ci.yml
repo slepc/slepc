@@ -427,11 +427,12 @@ gnu-c-hip:
   extends:
     - .stage-2
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: rocm
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-hip --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse
+    LOAD_MODULES: rocm/6.3.3
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-hip --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
 
 clang-c:
   extends:
@@ -931,11 +932,12 @@ gnu-c-hip-complex:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: rocm
-    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip
+    LOAD_MODULES: rocm/6.3.3
+    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
     TEST_OPTS: query=requires queryval=hip
 
 gnu-c-hip-single:
@@ -1007,6 +1009,7 @@ total-coverage:
   dependencies:
     # stage-2
     - gnu-c-cuda
+    - gnu-c-hip
     - gnu-c-libs
     # stage-3
     - gnu-c-cuda-complex
@@ -1015,6 +1018,7 @@ total-coverage:
     - gnu-c-complex-libs
     - gnu-c-debug
     - gnu-c-complex-debug
+    - gnu-c-hip-complex
     - aocc-c-hip
   before_script:
     - date
