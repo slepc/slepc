@@ -160,7 +160,7 @@ gnu-c99-mlib-static:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    PETSC_CONFIG_OPTS: --with-single-library=0 --with-shared-libraries=0 COPTFLAGS="-O -march=native -std=c99"
+    PETSC_CONFIG_OPTS: --with-single-library=0 --with-shared-libraries=0 COPTFLAGS="-O -march=native -std=c99" FPPFLAGS=-fno-underscoring
     TEST_SEARCH: eps_tests-test10_1
 
 gnu-lint:
@@ -750,7 +750,7 @@ nvidia-c-nompi:
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme=/var/local/downloads/primme-3.2.tar.gz --download-arpack
     TEST_OPTS: -j4 -l12
 
-gnu-c-complex-valgrind:
+clang-c-complex-valgrind:
   extends:
     - .stage-3
     - .linux_test
@@ -846,7 +846,7 @@ gnu-c-nocxx:
   tags:
     - name:jepri
   variables:
-    PETSC_CONFIG_OPTS: --with-cxx=0 --COPTFLAGS='-g -O -fsanitize=address' --FOPTFLAGS='-g -O -fsanitize=address'
+    PETSC_CONFIG_OPTS: --with-cxx=0 --COPTFLAGS='-g -O -fsanitize=address' --FOPTFLAGS='-g -O -fsanitize=address' FPPFLAGS=-fsecond-underscore
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme
 
 gnu-c-complex128:
@@ -912,3 +912,25 @@ gnu-c-static-multilib:
   variables:
     PETSC_CONFIG_OPTS: --with-shared-libraries=0 --with-single-library=0
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme --download-blopex
+
+aocc-c:
+  extends:
+    - .stage-3
+    - .linux_test
+  tags:
+    - name:satet
+  variables:
+    LOAD_MODULES: aocc/5.0.0 openmpi/5.0.7-aocc-5.0.0
+    PETSC_CONFIG_OPTS: --with-debugging=1 --with-fc=0
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
+
+aocc-c-hip:
+  extends:
+    - .stage-3
+    - .linux_test
+  tags:
+    - gpu:amd, name:satet
+  variables:
+    LOAD_MODULES: openmpi/5.0.7-aocc-5.0.0-rocm-6.3.3
+    PETSC_CONFIG_OPTS: --with-hip --with-fc=0
+    TEST_OPTS: query=requires queryval=hip
