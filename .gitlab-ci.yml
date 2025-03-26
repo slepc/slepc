@@ -229,7 +229,7 @@ gnu-lint:
     - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest; make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" allgtests-tap TIMEOUT=${TIMEOUT} ${TEST_OPTS}; fi
     - |
       set -x
-      if [ ! -z ${COVERAGE+x} -a -z ${DISABLE_TESTS+x} ]; then
+      if [ ! -z "${COVERAGE+x}" -a -z "${DISABLE_TESTS+x}" ]; then
         rm -rf ${PWD}/.venv-gcovr
         python3 -m venv ${PWD}/.venv-gcovr
         source ${PWD}/.venv-gcovr/bin/activate
