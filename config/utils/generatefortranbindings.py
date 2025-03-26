@@ -29,7 +29,6 @@ import shutil
 import sys
 import subprocess
 from subprocess import check_output
-import getAPI
 
 CToFortranTypes = {'int':'integer4', 'ptrdiff_t':'PetscInt64', 'float':'PetscFortranFloat', 'int32_t':'integer4',
                    'double':'PetscFortranDouble', 'short':None, 'size_t':'PetscSizeT', 'rocblas_status':None, 'PetscBT':None,
@@ -417,7 +416,9 @@ def generateFortranStub(senums, funname, fun, fd, opts):
 
 def main(petscdir,slepcdir,petscarch):
   '''Generates all the Fortran include and C stub files needed for the Fortran API'''
-  sys.path.insert(0, os.path.abspath(os.path.join('lib','slepc','bin','maint')))
+  sys.path.insert(0, os.path.realpath(os.path.dirname(__file__)))
+  import getAPI
+  del sys.path[0]
 
   classes, enums, senums, typedefs, structs, funcs, files, mansecs, submansecs = getAPI.getAPI()
 

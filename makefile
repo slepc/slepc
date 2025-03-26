@@ -94,7 +94,7 @@ chk_slepcdir:
         fi
 
 fortranbindings: deletefortranbindings
-	@${PYTHON} lib/slepc/bin/maint/generatefortranbindings.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch=${PETSC_ARCH}
+	@${PYTHON} config/utils/generatefortranbindings.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch=${PETSC_ARCH}
 
 deletefortranbindings:
 	-@find src -type d -name ftn-auto* | xargs rm -rf
