@@ -460,7 +460,7 @@ gnu-c-libs:
     - .linux_test
     - .coverage_test
   tags:
-    - linux-suse, name:igai
+    - name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-primme --download-blopex --download-chase --download-trlan --download-slicot --with-packages-download-dir=/var/local/downloads
@@ -702,7 +702,7 @@ gnu-c-complex-libs:
     - .linux_test
     - .coverage_test
   tags:
-    - linux-suse, name:igai
+    - name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-scalapack --download-metis --download-parmetis --download-elemental
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-packages-build-dir=${BUILD_DIR} --download-arpack --download-primme --download-chase --download-blopex
