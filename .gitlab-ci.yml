@@ -248,9 +248,9 @@ gnu-lint:
         llvm=$(nm $slepclib |grep -l llvm_gcov_init)
         set -e
         if [ -n "${llvm}" ]; then
-          gcovr --gcov-executable "llvm-cov gcov" --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/f90-mod/.*" --exclude '.*/ftn-auto/.*' --print-summary
+          gcovr --gcov-executable "llvm-cov gcov" --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
         else
-          gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/f90-mod/.*" --exclude '.*/ftn-auto/.*' --print-summary
+          gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
         fi
         deactivate
         zstd coverage-${CI_JOB_NAME}.json
