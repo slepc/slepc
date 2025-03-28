@@ -5,6 +5,8 @@
 #
 # stage-3 may take an hour or more. They run the full test suite and heavily test external packages, utilize valgrind etc.
 #
+# stage-4 should take only a few minutes.
+#
 # The stage-(n) tests are only started if all of the stage-(n-1) tests run without error
 #   You can limit the testing by using the variable STAGE with value 1 or 2
 #
@@ -13,6 +15,7 @@ stages:
   - stage-1
   - stage-2
   - stage-3
+  - stage-4
 variables:
   GIT_STRATEGY: fetch
   GIT_CLEAN_FLAGS: -ffdxq
@@ -183,6 +186,7 @@ gnu-lint:
     - printf "PYTHONPATH:$PYTHONPATH\n"
     - printf "PETSC_OPTIONS:$PETSC_OPTIONS\n"
     - printf "PETSC_CONFIG_OPTS:${PETSC_CONFIG_OPTS}\n"
+    - printf "PETSC_COVERAGE_OPTS:${PETSC_COVERAGE_OPTS}\n"
     - printf "SLEPC_CONFIG_OPTS:${SLEPC_CONFIG_OPTS}\n"
     - export SLEPC_DIR=$PWD
     - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
@@ -204,7 +208,7 @@ gnu-lint:
       fi
     - export PETSC_DIR=$PWD
     - export PETSC_ARCH=arch-$CI_JOB_NAME
-    - bash -c "${PYTHON} ./configure --with-debugging=0 --with-strict-petscerrorcode --COPTFLAGS='-O -g' --CXXOPTFLAGS='-O -g' --FOPTFLAGS='-O -g' --CUDAOPTFLAGS='-O3' --HIPOPTFLAGS='-O2' ${PETSC_CONFIG_OPTS}"
+    - bash -c "${PYTHON} ./configure --with-debugging=0 --with-strict-petscerrorcode --COPTFLAGS='-O -g' --CXXOPTFLAGS='-O -g' --FOPTFLAGS='-O -g' --CUDAOPTFLAGS='-O3' --HIPOPTFLAGS='-O2' ${PETSC_CONFIG_OPTS} ${PETSC_COVERAGE_OPTS}"
     - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}"
     - if [ ! -z ${SLEPC4PY+x} ]; then export PYTHONPATH=$PETSC_DIR/$PETSC_ARCH/lib:$SLEPC_DIR/$PETSC_ARCH/lib; fi
     - if [ ! -z ${INSTALL+x} ]; then make install-lib; PETSC_DIR=$INSTALL_DIR; unset PETSC_ARCH; fi
@@ -223,7 +227,34 @@ gnu-lint:
     - echo -e "section_start:`date +%s`:tests_slepc\r\e[0KSLEPc test suite"
     - if [ ! -z ${SLEPC4PY+x} ]; then make slepc4pytest; make -C src/binding/slepc4py/demo PYTHON=${PYTHON}; fi
     - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest; make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" allgtests-tap TIMEOUT=${TIMEOUT} ${TEST_OPTS}; fi
-    - if [ ! -z ${COVERAGE+x} -a -z ${DISABLE_TESTS+x} ]; then lcov --capture --exclude "/usr/*" --directory $SLEPC_DIR --output-file coverage.info; genhtml coverage.info --legend --title SLEPc --output-directory coverage; tar czf ${CI_JOB_NAME}-cov.tar.gz coverage; fi
+    - |
+      set -x
+      if [ ! -z "${COVERAGE+x}" -a -z "${DISABLE_TESTS+x}" ]; then
+        rm -rf ${PWD}/.venv-gcovr
+        python3 -m venv ${PWD}/.venv-gcovr
+        source ${PWD}/.venv-gcovr/bin/activate
+        python3 -m pip install --upgrade pip==25.0.1
+        python3 -m pip install --upgrade gcovr==8.3
+        if [ -e ${PETSC_ARCH}/lib/libslepc.so ]; then
+          slepclib=${PETSC_ARCH}/lib/libslepc.so
+        elif [ -e ${PETSC_ARCH}/lib/libslepc.a ]; then
+          slepclib=${PETSC_ARCH}/lib/libslepc.a
+        elif [ -e ${PETSC_ARCH}/lib/libslepcsys.so ]; then
+          slepclib=${PETSC_ARCH}/lib/libslepcsys.so
+        else
+          exit 2
+        fi
+        set +e
+        llvm=$(nm $slepclib |grep -l llvm_gcov_init)
+        set -e
+        if [ -n "${llvm}" ]; then
+          gcovr --gcov-executable "llvm-cov gcov" --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
+        else
+          gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
+        fi
+        deactivate
+        zstd coverage-${CI_JOB_NAME}.json
+      fi
     - echo -e "section_end:`date +%s`:tests_slepc\r\e[0K"
   artifacts:
     reports:
@@ -237,7 +268,6 @@ gnu-lint:
     - arch-*/tests/testresults.xml
     - arch-*/tests/test_*_tap.log
     - arch-*/tests/test_*_err.log
-    - ${CI_JOB_NAME}-cov.tar.gz
     - ${CI_JOB_NAME}-docs*.tar.gz
     expire_in: 4 days
   variables:
@@ -251,6 +281,7 @@ gnu-lint:
     variables:
       - $STAGE != "1"
       - $STAGE != "3"
+      - $STAGE != "4"
 
 .stage-3:
   extends: .stage-23
@@ -259,11 +290,21 @@ gnu-lint:
     variables:
       - $STAGE != "1"
       - $STAGE != "2"
+      - $STAGE != "4"
 
 .stage-3-sched:
   extends: .stage-3
   only:
     - schedules
+
+.stage-4:
+  extends: .test
+  stage: stage-4
+  only:
+    variables:
+      - $STAGE != "1"
+      - $STAGE != "2"
+      - $STAGE != "3"
 
 #
 # The following provide templates for various OSes for pre/post info
@@ -345,6 +386,15 @@ gnu-lint:
   after_script:
     - date
 
+.coverage_test:
+  variables:
+    COVERAGE: 1
+    PETSC_COVERAGE_OPTS: --with-coverage=1
+  coverage: /^lines:\s*\d+.\d+\%/
+  artifacts:
+    paths:
+    - coverage-${CI_JOB_NAME}.json.zst
+
 #
 # The following tests run as part of stage-2.
 #
@@ -366,6 +416,7 @@ gnu-c-cuda:
   extends:
     - .stage-2
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:nvidia, name:hapy
   variables:
@@ -376,11 +427,12 @@ gnu-c-hip:
   extends:
     - .stage-2
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: rocm
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-hip --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse
+    LOAD_MODULES: rocm/6.3.3
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-hip --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
 
 clang-c:
   extends:
@@ -406,8 +458,9 @@ gnu-c-libs:
   extends:
     - .stage-2
     - .linux_test
+    - .coverage_test
   tags:
-    - linux-suse, name:igai
+    - name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-primme --download-blopex --download-chase --download-trlan --download-slicot --with-packages-download-dir=/var/local/downloads
@@ -568,6 +621,7 @@ gnu-c-cuda-complex:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:nvidia, name:hapy
   variables:
@@ -620,6 +674,7 @@ gnu-c-complex:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - name:jepri
   variables:
@@ -631,6 +686,7 @@ gnu-c:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - linux-ubuntu, name:satet
   variables:
@@ -644,11 +700,12 @@ gnu-c-complex-libs:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
-    - linux-suse, name:igai
+    - name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-scalapack --download-metis --download-parmetis --download-elemental
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-packages-build-dir=${BUILD_DIR} --download-arpack --download-primme --download-chase --download-blopex
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-packages-build-dir=${BUILD_DIR} --download-primme --download-chase --download-blopex
     BUILD_DIR: ../externalpackages
 
 clang-c-complex:
@@ -704,27 +761,28 @@ gnu-c-single:
     PETSC_CONFIG_OPTS: --with-precision=single --download-scalapack
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0
 
-gnu-c-coverage:
+gnu-c-debug:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
-    - name:jepri
+    - name:hapy
   variables:
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --with-coverage=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-primme --download-trlan --download-blopex --download-hpddm --download-evsl
-    COVERAGE: 1
+    LOAD_MODULES: mpi
 
-gnu-c-complex-coverage:
+gnu-c-complex-debug:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - name:jepri
   variables:
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-scalar-type=complex --with-debugging=1 --with-coverage=1
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-scalar-type=complex --with-debugging=1
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0 --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --download-hpddm
-    COVERAGE: 1
 
 intel-c-complex-int64-mkl:
   extends:
@@ -874,11 +932,12 @@ gnu-c-hip-complex:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: rocm
-    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip
+    LOAD_MODULES: rocm/6.3.3
+    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
     TEST_OPTS: query=requires queryval=hip
 
 gnu-c-hip-single:
@@ -928,9 +987,68 @@ aocc-c-hip:
   extends:
     - .stage-3
     - .linux_test
+    - .coverage_test
   tags:
     - gpu:amd, name:satet
   variables:
     LOAD_MODULES: openmpi/5.0.7-aocc-5.0.0-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-hip --with-fc=0
     TEST_OPTS: query=requires queryval=hip
+
+#
+# Stage-4
+#
+
+# job for merging the json coverage reports
+total-coverage:
+  extends: .test
+  stage: stage-4
+  tags:
+    - name:hapy
+  # get artifacts from dependencies
+  dependencies:
+    # stage-2
+    - gnu-c-cuda
+    - gnu-c-hip
+    - gnu-c-libs
+    # stage-3
+    - gnu-c-cuda-complex
+    - gnu-c-complex
+    - gnu-c
+    - gnu-c-complex-libs
+    - gnu-c-debug
+    - gnu-c-complex-debug
+    - gnu-c-hip-complex
+    - aocc-c-hip
+  before_script:
+    - date
+    - hostname
+    - grep PRETTY_NAME /etc/os-release
+    - nproc
+    - lscpu
+    - ccache --zero-stats
+  script:
+    - rm -rf coverage
+    - mkdir coverage
+    - 'zstd -d *.zst'
+    - rm -rf ${PWD}/.venv-gcovr
+    - python3 -m venv ${PWD}/.venv-gcovr
+    - source ${PWD}/.venv-gcovr/bin/activate
+    - python3 -m pip install --upgrade pip==25.0.1
+    - python3 -m pip install --upgrade gcovr==8.3
+    - gcovr --version
+    - 'gcovr -a "coverage-*.json" -j 4 --xml coverage.xml --xml-pretty --html-details coverage/index.html --print-summary'
+    - tar czf coverage.tar.gz coverage
+    - deactivate
+  after_script:
+    - date
+  coverage: /^lines:\s*\d+.\d+\%/
+  artifacts:
+    when: always
+    paths:
+    - coverage.tar.gz
+    expire_in: 4 days
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
