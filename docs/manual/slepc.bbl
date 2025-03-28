@@ -6,6 +6,11 @@ Alvarruiz, F., C. Campos, and J.~E. Roman (2024).
 \newblock Thick-restarted joint Lanczos bidiagonalization for the GSVD.
 \newblock {\em J. Comput. Appl. Math.\/}, 440:115506.
 
+\bibitem[{Alvarruiz {\em et~al.\/}(2025)}]{Alvarruiz:2025:VTR}
+Alvarruiz, F., B. Mellado-Pinto, and J.~E. Roman (2025).
+\newblock Variants of thick-restart Lanczos for the Bethe-Salpeter eigenvalue problem.
+\newblock {\em arXiv:2503.20920}.
+
 \bibitem[{Anderson {\em et~al.\/}(1999)Anderson, Bai, Bischof, Blackford, Demmel,
   Dongarra, Croz, Greenbaum, Hammarling, McKenney, and
   Sorensen}]{Anderson:1999:LUG}
