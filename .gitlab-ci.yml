@@ -705,7 +705,7 @@ gnu-c-complex-libs:
     - name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-scalapack --download-metis --download-parmetis --download-elemental
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-packages-build-dir=${BUILD_DIR} --download-arpack --download-primme --download-chase --download-blopex
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-packages-build-dir=${BUILD_DIR} --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.0 --download-primme --download-chase --download-blopex
     BUILD_DIR: ../externalpackages
 
 clang-c-complex:
