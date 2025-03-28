@@ -17,9 +17,25 @@
        [1] M. Shao et al, "A structure preserving Lanczos algorithm for computing
            the optical absorption spectrum", SIAM J. Matrix Anal. App. 39(2), 2018.
 
+       [2] F. Alvarruiz, B. Mellado-Pinto, J. E. Roman, "Variants of thick-restart
+           Lanczos for the Bethe-Salpeter eigenvalue problem", arXiv:2503.20920,
+           2025.
+
 */
 #include <slepc/private/epsimpl.h>
 #include "krylovschur.h"
+
+static PetscBool  cited = PETSC_FALSE;
+static const char citation[] =
+  "@Misc{slepc-bse,\n"
+  "   author = \"F. Alvarruiz and B. Mellado-Pinto and J. E. Roman\",\n"
+  "   title = \"Variants of thick-restart {Lanczos} for the {Bethe--Salpeter} eigenvalue problem\",\n"
+  "   eprint = \"2503.20920\",\n"
+  "   archivePrefix = \"arXiv\",\n"
+  "   primaryClass = \"mathematics.numerical analysis\",\n"
+  "   year = \"2025,\"\n"
+  "   doi = \"https://doi.org/10.48550/arXiv.2503.20920\"\n"
+  "}\n";
 
 static PetscErrorCode Orthog_Shao(Vec x,BV U,BV V,PetscInt j,PetscScalar *h,PetscScalar *c,PetscBool *breakdown)
 {
@@ -613,6 +629,7 @@ PetscErrorCode EPSSetUp_KrylovSchur_BSE(EPS eps)
   PetscFunctionBegin;
   PetscCheck((eps->problem_type==EPS_BSE),PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONGSTATE,"Problem type should be BSE");
   EPSCheckUnsupportedCondition(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_BALANCE,PETSC_TRUE," with BSE structure");
+  PetscCall(PetscCitationsRegister(citation,&cited));
   if (eps->nev==0 && eps->stop!=EPS_STOP_THRESHOLD) eps->nev = 1;
   nev = (eps->nev+1)/2;
   PetscCall(EPSSetDimensions_Default(eps,&nev,&eps->ncv,&eps->mpd));
