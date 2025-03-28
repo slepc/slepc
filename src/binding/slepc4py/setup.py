@@ -65,7 +65,6 @@ tarball  = F('{pyname}-%s.tar.gz' % get_version())
 download = '/'.join([pypiroot, pypislug, tarball])
 
 classifiers = """
-License :: OSI Approved :: BSD License
 Operating System :: POSIX
 Intended Audience :: Developers
 Intended Audience :: Science/Research
