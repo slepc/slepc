@@ -32,7 +32,7 @@
 
 #include <slepc/private/epsimpl.h>                /*I "slepceps.h" I*/
 #include <slepcblaslapack.h>
-/* petsc headers */
+/* PETSc headers */
 #include <petscdm.h>
 #include <petscsnes.h>
 
