@@ -119,7 +119,7 @@ static BlopexInt PETSC_SetRandomValues(void* v,BlopexInt seed)
 {
 
   /* note: without previous call to LOBPCG_InitRandomContext LOBPCG_RandomContext will be null,
-    and VecSetRandom will use internal petsc random context */
+    and VecSetRandom will use internal PetscRandom context */
 
   PetscCall(VecSetRandom((Vec)v,LOBPCG_RandomContext));
   return 0;
