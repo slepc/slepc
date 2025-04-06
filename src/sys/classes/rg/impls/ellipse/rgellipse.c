@@ -213,7 +213,7 @@ static PetscErrorCode RGComputeQuadrature_Ellipse(RG rg,RGQuadRule quad,PetscInt
 #if defined(PETSC_USE_COMPLEX)
     theta = 2.0*PETSC_PI*(i+0.5)/n;
     zn[i] = PetscCMPLX(PetscCosReal(theta),ctx->vscale*PetscSinReal(theta));
-    w[i]  = rg->sfactor*ctx->radius*(PetscCMPLX(ctx->vscale*PetscCosReal(theta),PetscSinReal(theta)))/n;
+    w[i]  = (PetscCMPLX(ctx->vscale*PetscCosReal(theta),PetscSinReal(theta)))*ctx->radius*rg->sfactor/n;
 #else
     theta = PETSC_PI*(i+0.5)/n;
     zn[i] = PetscCosReal(theta);
