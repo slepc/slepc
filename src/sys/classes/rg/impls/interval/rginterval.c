@@ -258,10 +258,10 @@ static PetscErrorCode RGComputeQuadrature_Interval(RG rg,RGQuadRule quad,PetscIn
       theta = PETSC_PI*(i+0.5)/n;
       zn[i] = PetscCosReal(theta);
       w[i]  = PetscCosReal((n-1)*theta)/n;
-      if (ctx->c==ctx->d) z[i] = ((ctx->b-ctx->a)*(zn[i]+1.0)/2.0+ctx->a)*rg->sfactor;
+      if (ctx->c==ctx->d) z[i] = ((zn[i]+1.0)*(ctx->b-ctx->a)/2.0+ctx->a)*rg->sfactor;
       else if (ctx->a==ctx->b) {
 #if defined(PETSC_USE_COMPLEX)
-        z[i] = ((ctx->d-ctx->c)*(zn[i]+1.0)/2.0+ctx->c)*rg->sfactor*PETSC_i;
+        z[i] = ((zn[i]+1.0)*(ctx->d-ctx->c)/2.0+ctx->c)*rg->sfactor*PETSC_i;
 #else
         SETERRQ(PETSC_COMM_SELF,PETSC_ERR_SUP,"Integration points on a vertical line require complex arithmetic");
 #endif
@@ -269,9 +269,9 @@ static PetscErrorCode RGComputeQuadrature_Interval(RG rg,RGQuadRule quad,PetscIn
     }
   } else {  /* RG_QUADRULE_TRAPEZOIDAL */
 #if defined(PETSC_USE_COMPLEX)
-    center = rg->sfactor*PetscCMPLX(ctx->b+ctx->a,ctx->d+ctx->c)/2.0;
+    center = PetscCMPLX(ctx->b+ctx->a,ctx->d+ctx->c)*rg->sfactor/2.0;
 #else
-    center = rg->sfactor*(ctx->b+ctx->a)/2.0;
+    center = (ctx->b+ctx->a)*rg->sfactor/2.0;
 #endif
     radius = PetscSqrtReal(PetscPowRealInt(rg->sfactor*(ctx->b-ctx->a)/2.0,2)+PetscPowRealInt(rg->sfactor*(ctx->d-ctx->c)/2.0,2));
     for (i=0;i<n;i++) {

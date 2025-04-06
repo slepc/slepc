@@ -494,7 +494,7 @@ PetscErrorCode DSSolve_NEP_Contour(DS ds,PetscScalar *wr,PetscScalar *wi)
   for (j=0;j<rk;j++) Z[j+j*rk_] = sigma[j];
   PetscCallBLAS("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&rk_,Q,&rk_,Z,&rk_,alpha,beta,NULL,&ld,V,&rk_,work,&lwork,rwork,&info));
   SlepcCheckLapackInfo(LAPGEEV,info);
-  for (i=0;i<rk;i++) wr[i] = (center+radius*alpha[i]/beta[i])*rgscale;
+  for (i=0;i<rk;i++) wr[i] = (center+alpha[i]*radius/beta[i])*rgscale;
   PetscCall(PetscMalloc1(rk,&inside));
   PetscCall(RGCheckInside(ctx->rg,rk,wr,wi,inside));
   k=0;
