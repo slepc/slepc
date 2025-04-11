@@ -387,6 +387,7 @@ gnu-lint:
     - date
 
 .coverage_test:
+  extends: .linux_test
   variables:
     COVERAGE: 1
     PETSC_COVERAGE_OPTS: --with-coverage=1
@@ -415,7 +416,6 @@ gnu-cxx-complex:
 gnu-c-cuda:
   extends:
     - .stage-2
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:nvidia, name:hapy
@@ -426,7 +426,6 @@ gnu-c-cuda:
 gnu-c-hip:
   extends:
     - .stage-2
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:amd, name:satet
@@ -457,7 +456,6 @@ gnu-c-complex-multilib:
 gnu-c-libs:
   extends:
     - .stage-2
-    - .linux_test
     - .coverage_test
   tags:
     - name:sejmet
@@ -620,7 +618,6 @@ intel-c-complex-mkl:
 gnu-c-cuda-complex:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:nvidia, name:hapy
@@ -672,7 +669,6 @@ clang-c-valgrind:
 gnu-c-complex:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - name:jepri
@@ -684,7 +680,6 @@ gnu-c-complex:
 gnu-c:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - linux-ubuntu, name:satet
@@ -698,7 +693,6 @@ gnu-c:
 gnu-c-complex-libs:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - name:sejmet
@@ -763,7 +757,6 @@ gnu-c-single:
 gnu-c-debug:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - name:hapy
@@ -775,7 +768,6 @@ gnu-c-debug:
 gnu-c-complex-debug:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - name:jepri
@@ -930,7 +922,6 @@ intel-c-int64-nompi-mkl:
 gnu-c-hip-complex:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:amd, name:satet
@@ -984,7 +975,6 @@ aocc-c:
 aocc-c-hip:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:amd, name:satet
