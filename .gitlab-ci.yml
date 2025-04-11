@@ -248,9 +248,9 @@ gnu-lint:
         llvm=$(nm $slepclib |grep -l llvm_gcov_init)
         set -e
         if [ -n "${llvm}" ]; then
-          gcovr --gcov-executable "llvm-cov gcov" --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
+          gcovr --gcov-executable "llvm-cov gcov" --merge-mode-functions=merge-use-line-max --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
         else
-          gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
+          gcovr --merge-mode-functions=merge-use-line-max -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
         fi
         deactivate
         zstd coverage-${CI_JOB_NAME}.json
@@ -627,7 +627,6 @@ gnu-c-cuda-complex:
   variables:
     LOAD_MODULES: mpi
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1
-    TEST_OPTS: -j1 -l6 query=requires queryval=cuda
 
 gnu-c-cuda-single:
   extends:
@@ -938,7 +937,6 @@ gnu-c-hip-complex:
   variables:
     LOAD_MODULES: rocm/6.3.3
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
-    TEST_OPTS: query=requires queryval=hip
 
 gnu-c-hip-single:
   extends:
@@ -993,7 +991,6 @@ aocc-c-hip:
   variables:
     LOAD_MODULES: openmpi/5.0.7-aocc-5.0.0-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-hip --with-fc=0
-    TEST_OPTS: query=requires queryval=hip
 
 #
 # Stage-4
