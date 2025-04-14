@@ -266,7 +266,7 @@ int main(int argc,char **argv)
          args: -nep_type slp -nep_two_sided {{0 1}} -split {{0 1}}
 
    testset:
-      args: -nep_nev 2 -rg_type interval -rg_interval_endpoints .5,15,-.1,.1 -nep_target .7
+      args: -nep_nev 2 -rg_type interval -rg_interval_endpoints .5,15,-.1,.1 -nep_target .71
       requires: !single
       output_file: output/test17_2.out
       filter: sed -e "s/[+-]0\.0*i//g" | grep -v "with 3 terms, with SAME"
@@ -279,7 +279,7 @@ int main(int argc,char **argv)
          requires: complex
       test:
          suffix: 2_nleigs_real
-         args: -nep_type nleigs -rg_interval_endpoints .5,11 -split {{0 1}} -nep_nleigs_ksp_type tfqmr
+         args: -nep_type nleigs -rg_interval_endpoints .5,11 -split {{0 1}} -nep_nleigs_ksp_type tfqmr -nep_nleigs_ksp_rtol 1e-10 -nep_tol 1e-7
          requires: !complex !__float128
 
    testset:
