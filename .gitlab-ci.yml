@@ -645,6 +645,7 @@ gnu-c-multilib:
   tags:
     - linux-suse, name:igai
   variables:
+    LOAD_MODULES: cmake/4.0.1
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack --download-netlib-lapack
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-chase --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads
 
@@ -757,6 +758,7 @@ gnu-c-single:
   variables:
     PETSC_CONFIG_OPTS: --with-precision=single --download-scalapack
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0
+    LOAD_MODULES: cmake/4.0.1
 
 gnu-c-debug:
   extends:
