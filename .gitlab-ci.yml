@@ -74,7 +74,7 @@ variables:
       fi
     - export PETSC_DIR=$PWD
     - export PETSC_ARCH=arch-$CI_JOB_NAME
-    - bash -c "${PYTHON} ./configure --with-debugging=0 COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' FOPTFLAGS='-O3 -march=native' ${PETSC_CONFIG_OPTS}"
+    - bash -c "${PYTHON} ./configure --with-debugging=0 ${PETSC_CONFIG_OPTS}"
     - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}"
     - echo -e "section_end:`date +%s`:build_petsc\r\e[0K"
     - echo -e "section_start:`date +%s`:build_slepc\r\e[0KSLEPc configure and make"
@@ -130,7 +130,7 @@ gnu-c-single-nofort:
     - name:hapy
   variables:
     LOAD_MODULES: mpi
-    PETSC_CONFIG_OPTS: --with-fc=0 --with-precision=single
+    PETSC_CONFIG_OPTS: COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' --with-fc=0 --with-precision=single
     TEST_SEARCH: eps_tests-test10_1
 
 gnu-cxx-complex-nofort:
@@ -138,7 +138,7 @@ gnu-cxx-complex-nofort:
   tags:
     - linux-ubuntu, name:maat
   variables:
-    PETSC_CONFIG_OPTS: --with-fc=0 --with-clanguage=cxx --with-scalar-type=complex
+    PETSC_CONFIG_OPTS: COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' --with-fc=0 --with-clanguage=cxx --with-scalar-type=complex
     TEST_SEARCH: eps_tests-test10_1
 
 gnu-c-complex-nompi-int64:
@@ -146,7 +146,7 @@ gnu-c-complex-nompi-int64:
   tags:
     - linux-debian, name:jepri
   variables:
-    PETSC_CONFIG_OPTS: --with-mpi=0 --with-fc=0 --with-scalar-type=complex --with-64-bit-indices
+    PETSC_CONFIG_OPTS: COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' --with-mpi=0 --with-fc=0 --with-scalar-type=complex --with-64-bit-indices
     DISABLE_TESTS: 1
 
 gnu-c-py:
@@ -154,7 +154,7 @@ gnu-c-py:
   tags:
     - name:sejmet
   variables:
-    PETSC_CONFIG_OPTS: --with-fc=0
+    PETSC_CONFIG_OPTS: COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' --with-fc=0
     TEST_SEARCH: eps_tests-test10_1
     CHECKSOURCE: 1
 
@@ -163,7 +163,8 @@ gnu-c99-mlib-static:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    PETSC_CONFIG_OPTS: --with-single-library=0 --with-shared-libraries=0 COPTFLAGS="-O -march=native -std=c99" FPPFLAGS=-fno-underscoring
+    LOAD_MODULES: mpich/4.0.3
+    PETSC_CONFIG_OPTS: --with-single-library=0 --with-shared-libraries=0 COPTFLAGS="-O -std=c99" FPPFLAGS=-fno-underscoring
     TEST_SEARCH: eps_tests-test10_1
 
 gnu-lint:
@@ -171,7 +172,7 @@ gnu-lint:
   tags:
     - linux-debian, name:jepri
   variables:
-    PETSC_CONFIG_OPTS: --with-fc=0 --with-debugging=1
+    PETSC_CONFIG_OPTS: COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' --with-fc=0 --with-debugging=1
     TEST_SEARCH: eps_tests-test10_1
     RUN_LINT: 1
 
@@ -248,9 +249,9 @@ gnu-lint:
         llvm=$(nm $slepclib |grep -l llvm_gcov_init)
         set -e
         if [ -n "${llvm}" ]; then
-          gcovr --gcov-executable "llvm-cov gcov" --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
+          gcovr --gcov-executable "llvm-cov gcov" --merge-mode-functions=merge-use-line-max --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
         else
-          gcovr -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
+          gcovr --merge-mode-functions=merge-use-line-max -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
         fi
         deactivate
         zstd coverage-${CI_JOB_NAME}.json
@@ -387,6 +388,7 @@ gnu-lint:
     - date
 
 .coverage_test:
+  extends: .linux_test
   variables:
     COVERAGE: 1
     PETSC_COVERAGE_OPTS: --with-coverage=1
@@ -415,7 +417,6 @@ gnu-cxx-complex:
 gnu-c-cuda:
   extends:
     - .stage-2
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:nvidia, name:hapy
@@ -426,12 +427,11 @@ gnu-c-cuda:
 gnu-c-hip:
   extends:
     - .stage-2
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: rocm/6.3.3
+    LOAD_MODULES: mpich/4.0.3-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-hip --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
 
 clang-c:
@@ -451,13 +451,13 @@ gnu-c-complex-multilib:
   tags:
     - linux-ubuntu, name:satet
   variables:
+    LOAD_MODULES: mpich/4.0.3
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-single-library=0 --with-library-name-suffix=Complex --download-metis --download-parmetis --download-scalapack --with-cxx-dialect=17
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --download-chase
 
 gnu-c-libs:
   extends:
     - .stage-2
-    - .linux_test
     - .coverage_test
   tags:
     - name:sejmet
@@ -620,14 +620,12 @@ intel-c-complex-mkl:
 gnu-c-cuda-complex:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:nvidia, name:hapy
   variables:
     LOAD_MODULES: mpi
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1
-    TEST_OPTS: -j1 -l6 query=requires queryval=cuda
 
 gnu-c-cuda-single:
   extends:
@@ -647,6 +645,7 @@ gnu-c-multilib:
   tags:
     - linux-suse, name:igai
   variables:
+    LOAD_MODULES: cmake/4.0.1
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack --download-netlib-lapack
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-chase --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads
 
@@ -673,7 +672,6 @@ clang-c-valgrind:
 gnu-c-complex:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - name:jepri
@@ -685,11 +683,11 @@ gnu-c-complex:
 gnu-c:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - linux-ubuntu, name:satet
   variables:
+    LOAD_MODULES: mpich/4.0.3
     PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-cmake --download-sowing
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py
     SLEPC4PY: 1
@@ -699,7 +697,6 @@ gnu-c:
 gnu-c-complex-libs:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - name:sejmet
@@ -747,6 +744,7 @@ gnu-cxx-complex-int64:
   tags:
     - linux-ubuntu, name:satet
   variables:
+    LOAD_MODULES: mpich/4.0.3
     PETSC_CONFIG_OPTS: --with-clanguage=C++ --with-scalar-type=complex --with-64-bit-indices --with-petsc4py --download-scalapack --download-elemental --download-parmetis --download-metis --download-mumps --download-suitesparse --download-cmake
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-slepc4py --download-primme --download-hpddm
     SLEPC4PY: 1
@@ -760,11 +758,11 @@ gnu-c-single:
   variables:
     PETSC_CONFIG_OPTS: --with-precision=single --download-scalapack
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0
+    LOAD_MODULES: cmake/4.0.1
 
 gnu-c-debug:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - name:hapy
@@ -776,7 +774,6 @@ gnu-c-debug:
 gnu-c-complex-debug:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - name:jepri
@@ -914,6 +911,7 @@ gnu-c-complex128:
   tags:
     - name:satet
   variables:
+    LOAD_MODULES: mpich/4.0.3
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-f2cblaslapack --with-precision=__float128 --with-clanguage=c++
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
 
@@ -931,14 +929,12 @@ intel-c-int64-nompi-mkl:
 gnu-c-hip-complex:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: rocm/6.3.3
+    LOAD_MODULES: mpich/4.0.3-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
-    TEST_OPTS: query=requires queryval=hip
 
 gnu-c-hip-single:
   extends:
@@ -947,7 +943,7 @@ gnu-c-hip-single:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: rocm
+    LOAD_MODULES: mpich/4.0.3-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-precision=single --with-single-library=0 --with-hip
     TEST_OPTS: query=requires queryval=hip
 
@@ -958,7 +954,7 @@ gnu-c-hip-int64:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: rocm
+    LOAD_MODULES: mpich/4.0.3-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-hip --with-64-bit-indices
     TEST_OPTS: query=requires queryval=hip
 
@@ -969,6 +965,7 @@ gnu-c-static-multilib:
   tags:
     - name:satet
   variables:
+    LOAD_MODULES: mpich/4.0.3
     PETSC_CONFIG_OPTS: --with-shared-libraries=0 --with-single-library=0
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme --download-blopex
 
@@ -986,14 +983,12 @@ aocc-c:
 aocc-c-hip:
   extends:
     - .stage-3
-    - .linux_test
     - .coverage_test
   tags:
     - gpu:amd, name:satet
   variables:
     LOAD_MODULES: openmpi/5.0.7-aocc-5.0.0-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-hip --with-fc=0
-    TEST_OPTS: query=requires queryval=hip
 
 #
 # Stage-4

@@ -178,10 +178,10 @@ static PetscErrorCode rescale_eig(EPS eps,PetscInt nv)
       PetscCall(RGIntervalGetEndpoints(eps->rg,&a,&b,&c,&d));
       if (ctx->quad == EPS_CISS_QUADRULE_CHEBYSHEV) {
         for (i=0;i<nv;i++) {
-          if (c==d) eps->eigr[i] = ((b-a)*(eps->eigr[i]+1.0)/2.0+a)*rgscale;
+          if (c==d) eps->eigr[i] = ((eps->eigr[i]+1.0)*(b-a)/2.0+a)*rgscale;
           if (a==b) {
 #if defined(PETSC_USE_COMPLEX)
-            eps->eigr[i] = ((d-c)*(eps->eigr[i]+1.0)/2.0+c)*rgscale*PETSC_i;
+            eps->eigr[i] = ((eps->eigr[i]+1.0)*(d-c)/2.0+c)*rgscale*PETSC_i;
 #else
             SETERRQ(PETSC_COMM_SELF,PETSC_ERR_SUP,"Integration points on a vertical line require complex arithmetic");
 #endif

@@ -34,7 +34,7 @@ typedefs = {}
 aliases = {}
 structs = {}
 includefiles = {}
-mansecs = {}         # mansec[mansecname] = set(alls submansecnames in mansecname)
+mansecs = {}         # mansec[mansecname] = set(all submansecnames in mansecname)
 submansecs = set()
 
 regcomment   = re.compile(r'/\* [-A-Za-z _(),<>|^\*/0-9.:=\[\]\.;]* \*/')
@@ -63,6 +63,7 @@ class Function:
         self.includefile = None
         self.dir         = None
         self.opaque      = False
+        self.opaquestub  = False # only interface is automatic, C stub is custom
         self.arguments   = []
 
     def __str__(self):
@@ -70,6 +71,7 @@ class Function:
         mstr = mstr + '    '+str(self.mansec) + ' ' + str(self.includefile) + '\n'
         mstr = mstr + '    '+str(self.dir) + ' ' + str(self.file) + '\n'
         mstr = mstr + '     opaque < ' + str(self.opaque) + '>\n'
+        mstr = mstr + '     opaquestub < ' + str(self.opaquestub) + '>\n'
         for i in self.arguments:
           mstr = mstr + str(i)
         return mstr
@@ -411,7 +413,7 @@ def findlmansec(dir):  # could use dir to determine mansec
 def getpossiblefunctions():
    '''Gets a list of all the functions in the include/ directory that may be used in the binding for other languages'''
    try:
-     output = check_output('egrep -e "SLEPC_EXTERN PetscErrorCode" -e "static inline PetscErrorCode" include/*.h', shell=True).decode('utf-8')
+     output = check_output('grep -E -e "SLEPC_EXTERN PetscErrorCode" -e "static inline PetscErrorCode" include/*.h', shell=True).decode('utf-8')
    except subprocess.CalledProcessError as e:
      raise RuntimeError('Unable to find possible functions in the include files')
    funs = output.replace('SLEPC_EXTERN','').replace('PetscErrorCode','').replace('static inline','')
@@ -443,6 +445,7 @@ def getFunctions(mansec, functiontoinclude, filename):
     fl = regfun.search(line)
     if fl:
       opaque = False
+      opaquestub = False
       if  line[0:line.find('(')].find('_') > -1:
         line = f.readline()
         continue
@@ -451,6 +454,9 @@ def getFunctions(mansec, functiontoinclude, filename):
       if line.endswith(' PeNS'):
         opaque = True
         line = line[0:-5]
+      if line.endswith(' PeNSS'):
+        opaquestub = True
+        line = line[0:-6]
       if line.endswith(';') or line.find(')') < len(line)-1:
         line = f.readline()
         continue
@@ -467,6 +473,7 @@ def getFunctions(mansec, functiontoinclude, filename):
       if fl:
         fun = Function(name)
         fun.opaque = opaque
+        fun.opaquestub = opaquestub
         fun.file = os.path.basename(filename)
         fun.mansec = mansec
         fun.dir = os.path.dirname(filename)
@@ -503,7 +510,7 @@ def getFunctions(mansec, functiontoinclude, filename):
               if i.find('**') > -1: arg.stars = 2
               i =  regblank.sub('',reg.sub(r'\1\2 ',i).strip()).replace('*','').replace('[]','')
               arg.typename = i
-              # fix input character arrays that are written as *varible name
+              # fix input character arrays that are written as *variable name
               if arg.typename == 'char' and not arg.array and arg.stars == 1:
                 arg.array = 1
                 arg.stars = 0
@@ -531,7 +538,7 @@ def getFunctions(mansec, functiontoinclude, filename):
     line = f.readline()
   f.close()
 
-ForbiddenDirectories = ['tests', 'tutorials', 'doc', 'output', 'ftn-custom', 'ftn-auto', 'ftn-mod', 'binding', 'config', 'lib', '.git', 'share', 'systems']
+ForbiddenDirectories = ['tests', 'tutorials', 'doc', 'output', 'ftn-custom', 'ftn-auto', 'ftn-mod', 'binding', 'binding', 'config', 'lib', '.git', 'share', 'systems']
 
 def getAPI():
   global typedefs

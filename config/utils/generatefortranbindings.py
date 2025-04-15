@@ -191,7 +191,7 @@ def generateCStub(petscarch,senums,classes,funname,fun):
   #      self.stringlen    - True indicates the argument is the length of the previous character string
   #      self.const        - indicates the string argument is an input, not an output
   #      self.stars        - indicates the string is (in C) returned by a pointer to a string array
-  if fun.opaque: return
+  if fun.opaque or fun.opaquestub: return
   # temporary
   for k in fun.arguments:
     # no C stub if function returns an array, except if it is a string
@@ -416,7 +416,7 @@ def generateFortranStub(senums, funname, fun, fd, opts):
 
 def main(petscdir,slepcdir,petscarch):
   '''Generates all the Fortran include and C stub files needed for the Fortran API'''
-  sys.path.insert(0, os.path.realpath(os.path.dirname(__file__)))
+  sys.path.insert(0,os.path.realpath(os.path.dirname(__file__)))
   import getAPI
   del sys.path[0]
 
@@ -680,6 +680,7 @@ def main(petscdir,slepcdir,petscarch):
         fd.write('#include "' + os.path.join('slepc','finclude',i.replace('.h','base.h')) + '"\n')
       for j in files[i].included:
         j = j.replace('types.h','.h')
+        if i == j: continue
         fd.write('#include "' + os.path.join(('petsc' if j.startswith('petsc') else 'slepc'),'finclude',j) + '"\n')
       fd.write('\n')
 
@@ -952,7 +953,7 @@ def main(petscdir,slepcdir,petscarch):
   for i in []: #classes.keys():
     if i in ['PetscIntStack']: continue
     for j in classes[i].functions: # loop over functions in class
-      # check for functions for which we cannot build intefaces
+      # check for functions for which we cannot build interfaces
       if classes[i].functions[j].opaque: continue
       opts = crossCreate(classes[i].functions[j])
       if len(opts) == 1: continue
