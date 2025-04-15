@@ -225,7 +225,7 @@ int main(int argc,char **argv)
          args: -svd_type cross -svd_max_it 1000 -svd_cross_bv_definite_tol 1e-14
          suffix: 5_cross
       test:
-         args: -svd_type cyclic -svd_max_it 4000 -svd_ncv 32 -svd_cyclic_st_ksp_type preonly -svd_cyclic_st_pc_type jacobi -svd_cyclic_bv_definite_tol 1e-14
+         args: -svd_type cyclic -svd_max_it 4000 -svd_ncv 36 -svd_cyclic_st_ksp_type preonly -svd_cyclic_st_pc_type jacobi -svd_cyclic_bv_definite_tol 1e-14 -svd_cyclic_eps_krylovschur_restart .7
          suffix: 5_cyclic
       test:
          args: -svd_type trlanczos -svd_max_it 4000 -svd_ncv 28 -bv_definite_tol 1e-14
