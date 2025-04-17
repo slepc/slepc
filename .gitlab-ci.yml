@@ -833,7 +833,7 @@ nvidia-c-complex-nompi:
   tags:
     - compiler:nvidia, name:hapy
   variables:
-    LOAD_MODULES: nvhpc-nompi
+    LOAD_MODULES: nvhpc-nompi/23.5
     PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-scalar-type=complex --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
     TEST_OPTS: -j4 -l12
@@ -845,7 +845,7 @@ nvidia-cxx-mpi:
   tags:
     - compiler:nvidia, name:hapy
   variables:
-    LOAD_MODULES: nvhpc
+    LOAD_MODULES: nvhpc/23.5
     PETSC_CONFIG_OPTS: --with-cc=mpicc --with-fc=mpifort --with-cxx=mpicxx --with-fortran-bindings=0 --with-clanguage=c++ --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
     TEST_OPTS: -j4 -l12
