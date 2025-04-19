@@ -249,6 +249,15 @@ class PETSc(package.Package):
     except RuntimeError:
       pass
 
+  def isIntel(self):
+    '''returns true if the compiler is an Intel compiler'''
+    try:
+      (result, output) = self.RunCommand(self.cc+' --help | head -n 80',)
+      if 'Intel(R)' in output:
+        return 1
+    except RuntimeError:
+      pass
+
   def removeWarningFlags(self,flags):
     outflags = []
     for flag in flags:
