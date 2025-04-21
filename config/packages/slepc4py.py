@@ -63,6 +63,8 @@ class Slepc4py(package.Package):
     envvars = 'PYTHONPATH=%s ' % pythonpath
     if slepc.isinstall:
       envvars += 'PETSC_ARCH="" SLEPC_DIR=${DESTDIR}${SLEPC_INSTALLDIR} '
+    if petsc.isIntel():
+      envvars += 'CFLAGS="" '
     confdir = os.path.join(destdir,'slepc','conf')
     rule =  'slepc4pybuild:\n'
     rule += '\t@echo "*** Building slepc4py ***"\n'
