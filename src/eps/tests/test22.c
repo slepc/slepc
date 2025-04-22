@@ -35,7 +35,6 @@ static char help[] = "Illustrates how to obtain invariant subspaces. "
 
 /* Matrix operations */
 PetscErrorCode MatMult_Brussel(Mat,Vec,Vec);
-PetscErrorCode MatGetDiagonal_Brussel(Mat,Vec);
 
 typedef struct {
   Mat         T;
@@ -104,7 +103,6 @@ int main(int argc,char **argv)
   /* Create the shell matrix */
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,2*n,2*n,2*N,2*N,(void*)ctx,&A));
   PetscCall(MatShellSetOperation(A,MATOP_MULT,(void(*)(void))MatMult_Brussel));
-  PetscCall(MatShellSetOperation(A,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Brussel));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 Create the eigensolver and solve the problem
@@ -222,31 +220,6 @@ PetscErrorCode MatMult_Brussel(Mat A,Vec x,Vec y)
   PetscCall(VecResetArray(ctx->x2));
   PetscCall(VecResetArray(ctx->y1));
   PetscCall(VecResetArray(ctx->y2));
-  PetscFunctionReturn(PETSC_SUCCESS);
-}
-
-PetscErrorCode MatGetDiagonal_Brussel(Mat A,Vec diag)
-{
-  Vec            d1,d2;
-  PetscInt       n;
-  PetscScalar    *pd;
-  MPI_Comm       comm;
-  CTX_BRUSSEL    *ctx;
-
-  PetscFunctionBeginUser;
-  PetscCall(MatShellGetContext(A,&ctx));
-  PetscCall(PetscObjectGetComm((PetscObject)A,&comm));
-  PetscCall(MatGetLocalSize(ctx->T,&n,NULL));
-  PetscCall(VecGetArray(diag,&pd));
-  PetscCall(VecCreateMPIWithArray(comm,1,n,PETSC_DECIDE,pd,&d1));
-  PetscCall(VecCreateMPIWithArray(comm,1,n,PETSC_DECIDE,pd+n,&d2));
-
-  PetscCall(VecSet(d1,-2.0*ctx->tau1 + ctx->beta - 1.0 + ctx->sigma));
-  PetscCall(VecSet(d2,-2.0*ctx->tau2 - ctx->alpha*ctx->alpha + ctx->sigma));
-
-  PetscCall(VecDestroy(&d1));
-  PetscCall(VecDestroy(&d2));
-  PetscCall(VecRestoreArray(diag,&pd));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
