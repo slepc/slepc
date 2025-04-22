@@ -1,0 +1,6 @@
+
+Vibration analysis of a wiresaw, n=10 v=0.01 eta=0.1
+
+ All requested eigenvalues computed up to the required tolerance:
+     -0.10000-31.42665i, -0.10000+31.42665i, -0.10000+28.27196i, -0.10000-28.27196i
+
