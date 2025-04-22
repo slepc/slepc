@@ -250,4 +250,15 @@ int main(int argc,char **argv)
          suffix: 5_complex_cross
          args: -svd_type cross -svd_cross_explicitmatrix
 
+   testset:
+      requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
+      args: -f1 ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -f2 tridiagonal -svd_nsv 4 -svd_smallest -terse
+      output_file: output/ex48_6.out
+      test:
+         suffix: 6_cross
+         args: -svd_type cross -svd_cross_explicitmatrix
+      test:
+         suffix: 6_cyclic
+         args: -svd_type cyclic -svd_cyclic_explicitmatrix
+
 TEST*/
