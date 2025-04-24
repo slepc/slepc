@@ -80,7 +80,11 @@ int main(int argc,char **argv)
       output_file: output/test36_1.out
       test:
          suffix: 1
-         args: -eps_type {{krylovschur subspace arnoldi gd jd lapack}}
+         args: -eps_type {{krylovschur subspace arnoldi gd lapack}}
+      test:
+         suffix: 1_jd
+         args: -eps_type jd
+         requires: !__float128
       test:
          suffix: 1_elemental
          args: -eps_type elemental
