@@ -275,7 +275,7 @@ END SUBROUTINE FormJacobian
 !  ComputeSingularities - This is a user-defined routine to compute maxnp
 !  points (at most) in the complex plane where the function T(.) is not analytic.
 !
-!  In this case, we discretize the singularity region (-inf,0)~(-10e+6,-10e-6)
+!  In this case, we discretize the singularity region (-inf,0)~(-1e+6,-1e-6)
 !
 !  Input Parameters:
 !    nep   - nonlinear eigensolver context
