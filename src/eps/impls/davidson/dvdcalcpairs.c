@@ -60,6 +60,7 @@ static PetscErrorCode dvd_calcpairs_projeig_solve(dvdDashboard *d)
   PetscFunctionBegin;
   PetscCall(BVGetActiveColumns(d->eps->V,&lV,&kV));
   n = kV-lV;
+  if (!n) PetscFunctionReturn(PETSC_SUCCESS);
   PetscCall(DSSetDimensions(d->eps->ds,n,0,0));
   PetscCall(DSGetMat(d->eps->ds,DS_MAT_A,&A));
   PetscCall(MatDenseGetSubMatrix(d->H,lV,lV+n,lV,lV+n,&H0));
