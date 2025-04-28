@@ -226,7 +226,7 @@ PetscErrorCode FormJacobian(NEP nep,PetscScalar lambda,Mat jac,void *ctx)
    ComputeSingularities - Computes maxnp points (at most) in the complex plane where
    the function T(.) is not analytic.
 
-   In this case, we discretize the singularity region (-inf,0)~(-10e+6,-10e-6)
+   In this case, we discretize the singularity region (-inf,0)~(-1e+6,-1e-5)
 */
 PetscErrorCode ComputeSingularities(NEP nep,PetscInt *maxnp,PetscScalar *xi,void *pt)
 {
