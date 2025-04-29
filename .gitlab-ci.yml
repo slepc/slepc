@@ -979,7 +979,7 @@ aocc-c:
 aocc-c-hip:
   extends:
     - .stage-3
-    - .coverage_test
+    - .linux_test
   tags:
     - gpu:amd, name:satet
   variables:
