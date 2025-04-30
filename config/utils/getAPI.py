@@ -217,6 +217,7 @@ def getIncludeFiles(filename):
     fl = reginclude.search(line)
     if fl and not line.find('deprecated') > -1:
       line = regcomment.sub("",line)
+      line = regcomment2.sub("",line)
       line = line.replace('#include <','').replace('>','').strip()
       if not line == file and (os.path.isfile(os.path.join('include',line)) or line.startswith('petsc')):
         included.append(line)
