@@ -335,6 +335,6 @@
 !         args: -st_type sinvert
 !      test:
 !         suffix: 1_shell
-!         args: -st_type shell
+!         args: -st_type shell -eps_two_sided {{0 1}}
 !
 !TEST*/

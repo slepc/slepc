@@ -238,6 +238,9 @@ PetscErrorCode ComputeResidualNorm(Mat A,Mat B,PetscBool trans,PetscScalar kr,Pe
       test:
          suffix: 1
       test:
+         suffix: 1_complex
+         args: -eps_nev 2 -eps_target -250000
+      test:
          suffix: 1_rqi
          args: -eps_type power -eps_power_shift_type rayleigh -eps_nev 2 -eps_target -2000
       test:

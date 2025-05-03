@@ -182,4 +182,9 @@ PetscErrorCode MatGetDiagonal_Laplacian2D(Mat A,Vec diag)
       args: -n 72 -eps_nev 4 -eps_ncv 20 -terse
       requires: !single
 
+   test:
+      suffix: 2
+      args: -eps_nev 4 -st_type sinvert -st_ksp_type cg -st_pc_type jacobi -terse
+      requires: !single
+
 TEST*/

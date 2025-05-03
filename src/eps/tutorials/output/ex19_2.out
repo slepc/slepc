@@ -1,0 +1,15 @@
+
+3-D Laplacian Eigenproblem
+
+ Grid partitioning: 1 1 1
+
+ Number of requested eigenvalues: 4
+ Number of converged approximate eigenpairs: 4
+
+           k          ||Ax-kx||/||kx||   Eigenvalue Error
+   ----------------- ------------------ ------------------
+       0.207279         removed           removed
+        0.37825        removed         removed
+        0.40708        removed         removed
+       0.443758        removed         removed
+

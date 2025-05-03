@@ -15,10 +15,23 @@ static char help[] = "Diagonal eigenproblem. Illustrates use of shell preconditi
 
 #include <slepceps.h>
 
+typedef struct {
+  PetscScalar target;
+} PCCtx;
+
 PetscErrorCode PCApply_User(PC pc,Vec x,Vec y)
 {
+  PetscInt    i,rstart,rend;
+  PetscScalar *yarray;
+  PCCtx       *ctx;
+
   PetscFunctionBeginUser;
+  PetscCall(PCShellGetContext(pc,&ctx));
   PetscCall(VecCopy(x,y));
+  PetscCall(VecGetOwnershipRange(y,&rstart,&rend));
+  PetscCall(VecGetArray(y,&yarray));
+  for (i=0;i<rend-rstart;i++) yarray[i] /= (i-rstart+1-ctx->target);
+  PetscCall(VecRestoreArray(y,&yarray));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -33,6 +46,7 @@ int main(int argc,char **argv)
   ST             st;
   KSP            ksp;
   PC             pc;
+  PCCtx          ctx;
 
   PetscFunctionBeginUser;
   PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
@@ -61,6 +75,8 @@ int main(int argc,char **argv)
   PetscCall(KSPGetPC(ksp,&pc));
   PetscCall(PCSetType(pc,PCSHELL));
   PetscCall(PCShellSetApply(pc,PCApply_User));
+  PetscCall(EPSGetTarget(eps,&ctx.target));
+  PetscCall(PCShellSetContext(pc,&ctx));
 
   /* set random initial vector */
   PetscCall(MatCreateVecs(A,&v0,NULL));
@@ -89,16 +105,17 @@ int main(int argc,char **argv)
 /*TEST
 
    testset:
+      args: -eps_nev 4 -eps_target 31
       requires: !single
       output_file: output/test12_1.out
       test:
          suffix: 1
-         args: -eps_type {{krylovschur subspace arnoldi gd jd}} -eps_nev 4
+         args: -eps_type {{krylovschur subspace arnoldi power}} -st_type sinvert
       test:
-         suffix: 1_power
-         args: -eps_type power -eps_max_it 10000 -eps_nev 4
+         suffix: 1_gd
+         args: -eps_type {{gd jd}}
       test:
          suffix: 1_gd2
-         args: -eps_type gd -eps_gd_double_expansion -eps_nev 4
+         args: -eps_type gd -eps_gd_double_expansion
 
 TEST*/
