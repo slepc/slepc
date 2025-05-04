@@ -66,6 +66,7 @@ class SLEPc(package.Package):
       self.AddDefine(slepcconf,'VERSION_GIT',slepc.gitrev)
       self.AddDefine(slepcconf,'VERSION_DATE_GIT',slepc.gitdate)
       self.AddDefine(slepcconf,'VERSION_BRANCH_GIT',slepc.branch)
+    slepcvars.write('LIB_NAME_SUFFIX = '+petsc.lib_name_suffix+'\n')
     # Single library installation
     if petsc.singlelib:
       slepcvars.write('SHLIBS = libslepc${LIB_NAME_SUFFIX}\n')

@@ -1,0 +1,17 @@
+
+Generalized eigenproblem stored in file.
+
+ Reading REAL matrices from binary files...
+
+ Number of converged eigenpairs: 6
+
+           k            ||Ax-kBx||         ||y'A-y'Bk||
+   ---------------- ------------------ ------------------
+ -243874.978705+6999.669272i  removed        removed
+ -243874.978705-6999.669272i  removed        removed
+   -212991.492768        removed        removed
+   -199807.746587        removed        removed
+   -195584.123504        removed        removed
+   -189161.438145         removed        removed
+
+
