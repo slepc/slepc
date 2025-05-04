@@ -168,6 +168,7 @@ PetscErrorCode EPSSolve(EPS eps)
         /* the next correction only works with eigenvectors */
         PetscCall(EPSComputeVectors(eps));
         PetscCall(BVScaleColumn(eps->V,i+1,-1.0));
+        if (eps->W) PetscCall(BVScaleColumn(eps->W,i+1,-1.0));
       }
       i++;
     }
