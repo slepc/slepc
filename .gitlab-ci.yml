@@ -196,7 +196,15 @@ gnu-lint:
     - if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
     - cd petsc
     - git clean ${GIT_CLEAN_FLAGS}
-    - git fetch
+    - |
+      for i in $(seq 5)
+      do
+        git fetch
+        if [ $? -eq 0 ]; then
+          break
+        fi
+        sleep 10
+      done
     - |
       if [ -z ${PETSC_BRANCH+x} ]; then
         if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
