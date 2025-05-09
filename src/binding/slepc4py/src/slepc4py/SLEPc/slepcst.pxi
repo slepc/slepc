@@ -56,6 +56,11 @@ cdef extern from * nogil:
     PetscErrorCode STCayleySetAntishift(SlepcST,PetscScalar)
     PetscErrorCode STCayleyGetAntishift(SlepcST,PetscScalar*)
 
+    ctypedef enum SlepcSTFilterType "STFilterType":
+        ST_FILTER_FILTLAN
+
+    PetscErrorCode STFilterSetType(SlepcST,SlepcSTFilterType);
+    PetscErrorCode STFilterGetType(SlepcST,SlepcSTFilterType*);
     PetscErrorCode STFilterSetInterval(SlepcST,PetscReal,PetscReal)
     PetscErrorCode STFilterGetInterval(SlepcST,PetscReal*,PetscReal*)
     PetscErrorCode STFilterSetRange(SlepcST,PetscReal,PetscReal)

@@ -14,6 +14,24 @@
 #include <slepc/private/stimpl.h>         /*I "slepcst.h" I*/
 #include "filter.h"
 
+const char *STFilterTypes[] = {"","FILTLAN","STFilterType","ST_FILTER_",NULL};
+
+static PetscErrorCode STFilterSetType_Private(ST st,STFilterType type)
+{
+  ST_FILTER    *ctx = (ST_FILTER*)st->data;
+
+  PetscFunctionBegin;
+  ctx->type = type;
+  switch(type) {
+    case ST_FILTER_FILTLAN:
+      PetscCall(STCreate_Filter_FILTLAN(st));
+      break;
+    default:
+      SETERRQ(PetscObjectComm((PetscObject)st),PETSC_ERR_ARG_OUTOFRANGE,"Invalid type");
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 /*
    Operator (filter):
                Op               P         M
@@ -28,32 +46,28 @@ static PetscErrorCode STComputeOperator_Filter(ST st)
   PetscCheck(ctx->intb<PETSC_MAX_REAL || ctx->inta>PETSC_MIN_REAL,PetscObjectComm((PetscObject)st),PETSC_ERR_ORDER,"Must pass an interval with STFilterSetInterval()");
   PetscCheck(ctx->right!=0.0 || ctx->left!=0.0,PetscObjectComm((PetscObject)st),PETSC_ERR_ORDER,"Must pass an approximate numerical range with STFilterSetRange()");
   PetscCheck(ctx->left<=ctx->inta && ctx->right>=ctx->intb,PetscObjectComm((PetscObject)st),PETSC_ERR_USER_INPUT,"The requested interval [%g,%g] must be contained in the numerical range [%g,%g]",(double)ctx->inta,(double)ctx->intb,(double)ctx->left,(double)ctx->right);
+
+  if (!ctx->type) PetscCall(STFilterSetType_Private(st,ST_FILTER_FILTLAN)); /* default type */
   if (!ctx->polyDegree) ctx->polyDegree = 100;
-  ctx->frame[0] = ctx->left;
-  ctx->frame[1] = ctx->inta;
-  ctx->frame[2] = ctx->intb;
-  ctx->frame[3] = ctx->right;
-  PetscCall(STFilter_FILTLAN_setFilter(st,&st->T[0]));
+  PetscCall(ctx->computeoperator(st,&st->T[0]));
   st->M = st->T[0];
   PetscCall(MatDestroy(&st->P));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode STSetUp_Filter(ST st)
-{
-  PetscFunctionBegin;
-  PetscCall(STSetWorkVecs(st,4));
-  PetscFunctionReturn(PETSC_SUCCESS);
-}
-
 static PetscErrorCode STSetFromOptions_Filter(ST st,PetscOptionItems PetscOptionsObject)
 {
-  PetscReal array[2]={0,0};
-  PetscInt  k;
-  PetscBool flg;
+  ST_FILTER        *ctx = (ST_FILTER*)st->data;
+  PetscReal        array[2]={0,0};
+  PetscInt         k;
+  PetscBool        flg;
+  STFilterType     type;
 
   PetscFunctionBegin;
   PetscOptionsHeadBegin(PetscOptionsObject,"ST Filter Options");
+
+    PetscCall(PetscOptionsEnum("-st_filter_type","How to construct the filter","STFilterSetType",STFilterTypes,(PetscEnum)ctx->type,(PetscEnum*)&type,&flg));
+    if (flg) PetscCall(STFilterSetType(st,type));
 
     k = 2;
     PetscCall(PetscOptionsRealArray("-st_filter_interval","Interval containing the desired eigenvalues (two real values separated with a comma without spaces)","STFilterSetInterval",array,&k,&flg));
@@ -71,6 +85,92 @@ static PetscErrorCode STSetFromOptions_Filter(ST st,PetscOptionItems PetscOption
     if (flg) PetscCall(STFilterSetDegree(st,k));
 
   PetscOptionsHeadEnd();
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode STReset_Filter(ST st)
+{
+  ST_FILTER *ctx = (ST_FILTER*)st->data;
+
+  PetscFunctionBegin;
+  ctx->left  = 0.0;
+  ctx->right = 0.0;
+  PetscCall(MatDestroy(&ctx->T));
+  PetscCall(MatDestroyMatrices(ctx->nW,&ctx->W));
+  ctx->nW = 0;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode STFilterSetType_Filter(ST st,STFilterType type)
+{
+  ST_FILTER *ctx = (ST_FILTER*)st->data;
+
+  PetscFunctionBegin;
+  if (ctx->type != type) {
+    PetscCall(STReset_Filter(st));
+    PetscCall(STFilterSetType_Private(st,type));
+    st->state   = ST_STATE_INITIAL;
+    st->opready = PETSC_FALSE;
+    ctx->filtch = PETSC_TRUE;
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   STFilterSetType - Sets the method to be used to build the polynomial filter.
+
+   Logically Collective
+
+   Input Parameters:
++  st   - the spectral transformation context
+-  type - the type of filter
+
+   Options Database Key:
+.  -st_filter_type <type> - set the type of filter
+
+   Level: intermediate
+
+.seealso: STFilterGetType()
+@*/
+PetscErrorCode STFilterSetType(ST st,STFilterType type)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(st,ST_CLASSID,1);
+  PetscValidLogicalCollectiveEnum(st,type,2);
+  PetscTryMethod(st,"STFilterSetType_C",(ST,STFilterType),(st,type));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode STFilterGetType_Filter(ST st,STFilterType *type)
+{
+  ST_FILTER *ctx = (ST_FILTER*)st->data;
+
+  PetscFunctionBegin;
+  *type = ctx->type ;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   STFilterGetType - Gets the method to be used to build the polynomial filter.
+
+   Not Collective
+
+   Input Parameter:
+.  st  - the spectral transformation context
+
+   Output Parameter:
+.  type - the type of filter
+
+   Level: intermediate
+
+.seealso: STFilterSetType()
+@*/
+PetscErrorCode STFilterGetType(ST st,STFilterType *type)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(st,ST_CLASSID,1);
+  PetscAssertPointer(type,2);
+  PetscUseMethod(st,"STFilterGetType_C",(ST,STFilterType*),(st,type));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -328,7 +428,8 @@ static PetscErrorCode STFilterGetThreshold_Filter(ST st,PetscReal *gamma)
   ST_FILTER *ctx = (ST_FILTER*)st->data;
 
   PetscFunctionBegin;
-  *gamma = ctx->filterInfo->yLimit;
+  if (ctx->getthreshold) PetscCall(ctx->getthreshold(st,gamma));
+  else *gamma = 0.0;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -357,31 +458,23 @@ PetscErrorCode STFilterGetThreshold(ST st,PetscReal *gamma)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode STReset_Filter(ST st)
-{
-  ST_FILTER *ctx = (ST_FILTER*)st->data;
-
-  PetscFunctionBegin;
-  ctx->left  = 0.0;
-  ctx->right = 0.0;
-  PetscCall(MatDestroy(&ctx->T));
-  PetscCall(MatDestroyMatrices(ctx->nW,&ctx->W));
-  ctx->nW = 0;
-  PetscFunctionReturn(PETSC_SUCCESS);
-}
-
 static PetscErrorCode STView_Filter(ST st,PetscViewer viewer)
 {
   ST_FILTER *ctx = (ST_FILTER*)st->data;
+  PetscReal gamma;
   PetscBool isascii;
 
   PetscFunctionBegin;
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERASCII,&isascii));
   if (isascii) {
+    PetscCall(PetscViewerASCIIPrintf(viewer,"  filter type: %s\n",STFilterTypes[ctx->type]));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  interval of desired eigenvalues: [%g,%g]\n",(double)ctx->inta,(double)ctx->intb));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  numerical range: [%g,%g]\n",(double)ctx->left,(double)ctx->right));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  degree of filter polynomial: %" PetscInt_FMT "\n",ctx->polyDegree));
-    if (st->state>=ST_STATE_SETUP) PetscCall(PetscViewerASCIIPrintf(viewer,"  limit to accept eigenvalues: theta=%g\n",(double)ctx->filterInfo->yLimit));
+    if (st->state>=ST_STATE_SETUP && ctx->getthreshold) {
+      PetscCall(STFilterGetThreshold(st,&gamma));
+      PetscCall(PetscViewerASCIIPrintf(viewer,"  limit to accept eigenvalues: theta=%g\n",(double)gamma));
+    }
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -391,10 +484,10 @@ static PetscErrorCode STDestroy_Filter(ST st)
   ST_FILTER *ctx = (ST_FILTER*)st->data;
 
   PetscFunctionBegin;
-  PetscCall(PetscFree(ctx->opts));
-  PetscCall(PetscFree(ctx->filterInfo));
-  PetscCall(PetscFree(ctx->baseFilter));
+  if (ctx->destroy) PetscCall(ctx->destroy(st));
   PetscCall(PetscFree(st->data));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetType_C",NULL));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetType_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetInterval_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetInterval_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetRange_C",NULL));
@@ -408,8 +501,6 @@ static PetscErrorCode STDestroy_Filter(ST st)
 SLEPC_EXTERN PetscErrorCode STCreate_Filter(ST st)
 {
   ST_FILTER   *ctx;
-  FILTLAN_IOP iop;
-  FILTLAN_PFI pfi;
 
   PetscFunctionBegin;
   PetscCall(PetscNew(&ctx));
@@ -417,44 +508,22 @@ SLEPC_EXTERN PetscErrorCode STCreate_Filter(ST st)
 
   st->usesksp = PETSC_FALSE;
 
+  ctx->type               = (STFilterType)0;
   ctx->inta               = PETSC_MIN_REAL;
   ctx->intb               = PETSC_MAX_REAL;
   ctx->left               = 0.0;
   ctx->right              = 0.0;
   ctx->polyDegree         = 0;
-  ctx->baseDegree         = 10;
-
-  PetscCall(PetscNew(&iop));
-  ctx->opts               = iop;
-  iop->intervalWeights[0] = 100.0;
-  iop->intervalWeights[1] = 1.0;
-  iop->intervalWeights[2] = 1.0;
-  iop->intervalWeights[3] = 1.0;
-  iop->intervalWeights[4] = 100.0;
-  iop->transIntervalRatio = 0.6;
-  iop->reverseInterval    = PETSC_FALSE;
-  iop->initialPlateau     = 0.1;
-  iop->plateauShrinkRate  = 1.5;
-  iop->initialShiftStep   = 0.01;
-  iop->shiftStepExpanRate = 1.5;
-  iop->maxInnerIter       = 30;
-  iop->yLimitTol          = 0.0001;
-  iop->maxOuterIter       = 50;
-  iop->numGridPoints      = 200;
-  iop->yBottomLine        = 0.001;
-  iop->yRippleLimit       = 0.8;
-
-  PetscCall(PetscNew(&pfi));
-  ctx->filterInfo         = pfi;
 
   st->ops->apply           = STApply_Generic;
-  st->ops->setup           = STSetUp_Filter;
   st->ops->computeoperator = STComputeOperator_Filter;
   st->ops->setfromoptions  = STSetFromOptions_Filter;
   st->ops->destroy         = STDestroy_Filter;
   st->ops->reset           = STReset_Filter;
   st->ops->view            = STView_Filter;
 
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetType_C",STFilterSetType_Filter));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetType_C",STFilterGetType_Filter));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetInterval_C",STFilterSetInterval_Filter));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetInterval_C",STFilterGetInterval_Filter));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetRange_C",STFilterSetRange_Filter));

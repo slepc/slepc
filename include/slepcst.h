@@ -168,6 +168,18 @@ PETSC_DEPRECATED_FUNCTION(3, 15, 0, "STSetPreconditionerMat()", ) static inline 
 SLEPC_EXTERN PetscErrorCode STPrecondGetKSPHasMat(ST,PetscBool*);
 SLEPC_EXTERN PetscErrorCode STPrecondSetKSPHasMat(ST,PetscBool);
 
+/*E
+    STFilterType - Selects the method used to build the filter
+
+    Level: intermediate
+
+.seealso: STSetFilterType(), STGetFilterType()
+E*/
+typedef enum { ST_FILTER_FILTLAN = 1 } STFilterType;
+SLEPC_EXTERN const char *STFilterTypes[];
+
+SLEPC_EXTERN PetscErrorCode STFilterSetType(ST,STFilterType);
+SLEPC_EXTERN PetscErrorCode STFilterGetType(ST,STFilterType*);
 SLEPC_EXTERN PetscErrorCode STFilterSetInterval(ST,PetscReal,PetscReal);
 SLEPC_EXTERN PetscErrorCode STFilterGetInterval(ST,PetscReal*,PetscReal*);
 SLEPC_EXTERN PetscErrorCode STFilterSetRange(ST,PetscReal,PetscReal);

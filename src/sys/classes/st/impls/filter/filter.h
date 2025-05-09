@@ -10,6 +10,24 @@
 
 #pragma once
 
+typedef struct {
+  PetscErrorCode  (*computeoperator)(ST,Mat*);
+  PetscErrorCode  (*getthreshold)(ST,PetscReal*);
+  PetscErrorCode  (*destroy)(ST);
+
+  STFilterType    type;            /* the filter method */
+  PetscReal       inta,intb;       /* bounds of the interval of desired eigenvalues */
+  PetscReal       left,right;      /* approximate left and right bounds of the interval containing all eigenvalues */
+  PetscInt        polyDegree;      /* degree of the polynomial filter */
+  Mat             T;               /* the matrix used to build the filter */
+  PetscBool       filtch;          /* filter parameters have changed since last setup */
+  Mat             *W;              /* work matrices for the matrix-matrix application of the filter */
+  PetscInt        nW;              /* number of W matrices */
+  void            *data;           /* placeholder for method-specific stuff */
+} ST_FILTER;
+
+/* FILTLAN */
+
 /* IntervalOptions structure used by GetIntervals */
 struct _n_FILTLAN_IOP {
   PetscReal   intervalWeights[5];  /* weight of the subintervals (5 in mid-pass, 3 in high-pass) */
@@ -47,28 +65,19 @@ struct _n_FILTLAN_PFI {
 };
 typedef struct _n_FILTLAN_PFI *FILTLAN_PFI;
 
-typedef struct {
-  /* user options */
-  PetscReal   inta,intb;           /* bounds of the interval of desired eigenvalues */
-  PetscReal   left,right;          /* approximate left and right bounds of the interval containing all eigenvalues */
-  PetscInt    polyDegree;          /* degree of s(z), with z*s(z) the polynomial filter */
-  PetscInt    baseDegree;          /* left and right degrees of the base filter for each interval */
-  FILTLAN_IOP opts;                /* interval options */
-  /* internal variables */
-  FILTLAN_PFI filterInfo;          /* polynomial filter info */
-  PetscReal   frame[4];            /* outer and inner intervals:
+struct _n_FILTLAN_CTX {
+  PetscInt      baseDegree;        /* left and right degrees of the base filter for each interval */
+  FILTLAN_IOP   opts;              /* interval options */
+  FILTLAN_PFI   filterInfo;        /* polynomial filter info */
+  PetscReal     frame[4];          /* outer and inner intervals:
                                       [frame[0],frame[3]] (tightly) contains all eigenvalues
                                       [frame[1],frame[2]] is the interval in which the eigenvalues are sought */
-  PetscReal   intervals[6];        /* the range of eigenvalues is partitioned into intervals which determine
+  PetscReal     intervals[6];      /* the range of eigenvalues is partitioned into intervals which determine
                                       the base filter approximated by a polynomial filter;
                                       the j-th interval is [intervals(j),intervals(j+1)) */
-  PetscReal   intervals2[6];       /* modified intervals */
-  PetscReal   *baseFilter;         /* coefficients of the base filter (a piecewise polynomial) */
-  Mat         T;                   /* the matrix used to build the filter */
-  PetscBool   filtch;              /* filter parameters have changed since last setup */
-  Mat         *W;                  /* work matrices for the matrix-matrix application of the filter */
-  PetscInt    nW;                  /* number of W matrices */
-} ST_FILTER;
+  PetscReal     intervals2[6];     /* modified intervals */
+  PetscReal     *baseFilter;       /* coefficients of the base filter (a piecewise polynomial) */
+};
+typedef struct _n_FILTLAN_CTX *FILTLAN_CTX;
 
-SLEPC_INTERN PetscErrorCode STFilter_FILTLAN_Apply(ST,Vec,Vec);
-SLEPC_INTERN PetscErrorCode STFilter_FILTLAN_setFilter(ST,Mat*);
+SLEPC_INTERN PetscErrorCode STCreate_Filter_FILTLAN(ST);

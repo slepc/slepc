@@ -31,6 +31,14 @@ class STMatMode(object):
     INPLACE = ST_MATMODE_INPLACE
     SHELL   = ST_MATMODE_SHELL
 
+class STFilterType(object):
+    """
+    ST filter type
+
+    - `FILTLAN`:  An adapted implementation of the Filtered Lanczos Package.
+    """
+    FILTLAN   = ST_FILTER_FILTLAN
+
 # -----------------------------------------------------------------------------
 
 cdef class ST(Object):
@@ -39,8 +47,9 @@ cdef class ST(Object):
     ST
     """
 
-    Type         = STType
-    MatMode      = STMatMode
+    Type          = STType
+    MatMode       = STMatMode
+    FilterType    = STFilterType
 
     def __cinit__(self):
         self.obj = <PetscObject*> &self.st
@@ -554,6 +563,31 @@ cdef class ST(Object):
         cdef PetscScalar sval = 0
         CHKERR( STCayleyGetAntishift(self.st, &sval) )
         return toScalar(sval)
+
+    def setFilterType(self, filter_type):
+        """
+        Sets the method to be used to build the polynomial filter.
+
+        Parameter
+        ---------
+        filter_type: `ST.FilterType` enumerate
+              The type of filter.
+        """
+        cdef SlepcSTFilterType val = filter_type
+        CHKERR( STFilterSetType(self.st, val) )
+
+    def getFilterType(self):
+        """
+        Gets the method to be used to build the polynomial filter.
+
+        Returns
+        -------
+        filter_type: `ST.FilterType` enumerate
+              The type of filter.
+        """
+        cdef SlepcSTFilterType val = ST_FILTER_FILTLAN
+        CHKERR( STFilterGetType(self.st, &val) )
+        return val
 
     def setFilterInterval(self, inta, intb):
         """
