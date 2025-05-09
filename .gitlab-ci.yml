@@ -196,7 +196,15 @@ gnu-lint:
     - if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
     - cd petsc
     - git clean ${GIT_CLEAN_FLAGS}
-    - git fetch
+    - |
+      for i in $(seq 5)
+      do
+        git fetch
+        if [ $? -eq 0 ]; then
+          break
+        fi
+        sleep 10
+      done
     - |
       if [ -z ${PETSC_BRANCH+x} ]; then
         if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
@@ -229,7 +237,6 @@ gnu-lint:
     - if [ ! -z ${SLEPC4PY+x} ]; then make slepc4pytest; make -C src/binding/slepc4py/demo PYTHON=${PYTHON}; fi
     - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest; make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" allgtests-tap TIMEOUT=${TIMEOUT} ${TEST_OPTS}; fi
     - |
-      set -x
       if [ ! -z "${COVERAGE+x}" -a -z "${DISABLE_TESTS+x}" ]; then
         rm -rf ${PWD}/.venv-gcovr
         python3 -m venv ${PWD}/.venv-gcovr
