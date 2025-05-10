@@ -36,8 +36,10 @@ class STFilterType(object):
     ST filter type
 
     - `FILTLAN`:  An adapted implementation of the Filtered Lanczos Package.
+    - `CHEBYSEV`: A polynomial filter based on a truncated Chebyshev series.
     """
     FILTLAN   = ST_FILTER_FILTLAN
+    CHEBYSHEV = ST_FILTER_CHEBYSHEV
 
 # -----------------------------------------------------------------------------
 

@@ -81,3 +81,11 @@ struct _n_FILTLAN_CTX {
 typedef struct _n_FILTLAN_CTX *FILTLAN_CTX;
 
 SLEPC_INTERN PetscErrorCode STCreate_Filter_FILTLAN(ST);
+
+/* Chebyshev series */
+
+struct _n_CHEBYSHEV_CTX {
+};
+typedef struct _n_CHEBYSHEV_CTX *CHEBYSHEV_CTX;
+
+SLEPC_INTERN PetscErrorCode STCreate_Filter_Chebyshev(ST);

@@ -14,7 +14,7 @@
 #include <slepc/private/stimpl.h>         /*I "slepcst.h" I*/
 #include "filter.h"
 
-const char *STFilterTypes[] = {"","FILTLAN","STFilterType","ST_FILTER_",NULL};
+const char *STFilterTypes[] = {"","FILTLAN","CHEBYSHEV","STFilterType","ST_FILTER_",NULL};
 
 static PetscErrorCode STFilterSetType_Private(ST st,STFilterType type)
 {
@@ -25,6 +25,9 @@ static PetscErrorCode STFilterSetType_Private(ST st,STFilterType type)
   switch(type) {
     case ST_FILTER_FILTLAN:
       PetscCall(STCreate_Filter_FILTLAN(st));
+      break;
+    case ST_FILTER_CHEBYSHEV:
+      PetscCall(STCreate_Filter_Chebyshev(st));
       break;
     default:
       SETERRQ(PetscObjectComm((PetscObject)st),PETSC_ERR_ARG_OUTOFRANGE,"Invalid type");

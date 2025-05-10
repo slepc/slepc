@@ -58,6 +58,7 @@ cdef extern from * nogil:
 
     ctypedef enum SlepcSTFilterType "STFilterType":
         ST_FILTER_FILTLAN
+        ST_FILTER_CHEBYSHEV
 
     PetscErrorCode STFilterSetType(SlepcST,SlepcSTFilterType);
     PetscErrorCode STFilterGetType(SlepcST,SlepcSTFilterType*);

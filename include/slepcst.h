@@ -175,7 +175,8 @@ SLEPC_EXTERN PetscErrorCode STPrecondSetKSPHasMat(ST,PetscBool);
 
 .seealso: STSetFilterType(), STGetFilterType()
 E*/
-typedef enum { ST_FILTER_FILTLAN = 1 } STFilterType;
+typedef enum { ST_FILTER_FILTLAN   = 1,
+               ST_FILTER_CHEBYSHEV = 2 } STFilterType;
 SLEPC_EXTERN const char *STFilterTypes[];
 
 SLEPC_EXTERN PetscErrorCode STFilterSetType(ST,STFilterType);
