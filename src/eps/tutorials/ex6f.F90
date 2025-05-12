@@ -43,7 +43,7 @@
 
 !     This is the routine to use for matrix-free approach
 !
-      external MatIsing_Mult
+      external MatMult_Ising, MatMultTranspose_Ising
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
@@ -70,7 +70,8 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
       PetscCallA(MatCreateShell(PETSC_COMM_WORLD,N,N,N,N,PETSC_NULL_INTEGER,A,ierr))
-      PetscCallA(MatShellSetOperation(A,MATOP_MULT,MatIsing_Mult,ierr))
+      PetscCallA(MatShellSetOperation(A,MATOP_MULT,MatMult_Ising,ierr))
+      PetscCallA(MatShellSetOperation(A,MATOP_MULT_TRANSPOSE,MatMultTranspose_Ising,ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Create the eigensolver and display info
@@ -131,7 +132,7 @@
 
 ! -------------------------------------------------------------------
 !
-!   MatIsing_Mult - user provided matrix-vector multiply
+!   MatMult_Ising - user provided matrix-vector multiply
 !
 !   Input Parameters:
 !   A - matrix
@@ -140,7 +141,7 @@
 !   Output Parameter:
 !   y - output vector
 !
-      subroutine MatIsing_Mult(A,x,y,ierr)
+      subroutine MatMult_Ising(A,x,y,ierr)
 #include <petsc/finclude/petscmat.h>
       use petscmat
       implicit none
@@ -159,6 +160,44 @@
       PetscCall(VecGetArray(y,yy,ierr))
 
       trans = 0
+      one = 1
+      call mvmisg(trans,N,one,xx,N,yy,N)
+
+      PetscCall(VecRestoreArrayRead(x,xx,ierr))
+      PetscCall(VecRestoreArray(y,yy,ierr))
+
+      end
+
+! -------------------------------------------------------------------
+!
+!   MatMultTranspose_Ising - user provided transpose matrix-vector multiply
+!
+!   Input Parameters:
+!   A - matrix
+!   x - input vector
+!
+!   Output Parameter:
+!   y - output vector
+!
+      subroutine MatMultTranspose_Ising(A,x,y,ierr)
+#include <petsc/finclude/petscmat.h>
+      use petscmat
+      implicit none
+
+      Mat            A
+      Vec            x,y
+      PetscInt       trans,one,N
+      PetscScalar, pointer :: xx(:),yy(:)
+      PetscErrorCode ierr
+
+!     The actual routine for the transpose matrix-vector product
+      external mvmisg
+
+      PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
+      PetscCall(VecGetArrayRead(x,xx,ierr))
+      PetscCall(VecGetArray(y,yy,ierr))
+
+      trans = 1
       one = 1
       call mvmisg(trans,N,one,xx,N,yy,N)
 
@@ -288,9 +327,16 @@
 
 !/*TEST
 !
-!   test:
-!      suffix: 1
+!   testset:
 !      args: -eps_max_it 1000 -eps_ncv 12 -eps_tol 1e-5 -eps_nev 4 -eps_largest_imaginary -terse
 !      requires: !complex
+!      output_file: output/ex6f_1.out
+!      filter: grep -v iterations | sed -e 's/-0.00000/0.00000/g'
+!      test:
+!         suffix: 1
+!      test:
+!         suffix: 1_ts
+!         args: -eps_two_sided
+!         requires: !single
 !
 !TEST*/

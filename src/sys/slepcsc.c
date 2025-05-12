@@ -215,7 +215,13 @@ PetscErrorCode SlepcCompareLargestImaginary(PetscScalar ar,PetscScalar ai,PetscS
 #endif
   if (a<b) *result = 1;
   else if (a>b) *result = -1;
-  else *result = 0;
+  else { /* break the tie by checking the magnitude */
+    a = SlepcAbsEigenvalue(ar,ai);
+    b = SlepcAbsEigenvalue(br,bi);
+    if (a<b) *result = 1;
+    else if (a>b) *result = -1;
+    else *result = 0;
+  }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -233,7 +239,13 @@ PetscErrorCode SlepcCompareSmallestImaginary(PetscScalar ar,PetscScalar ai,Petsc
 #endif
   if (a>b) *result = 1;
   else if (a<b) *result = -1;
-  else *result = 0;
+  else { /* break the tie by checking the magnitude */
+    a = SlepcAbsEigenvalue(ar,ai);
+    b = SlepcAbsEigenvalue(br,bi);
+    if (a<b) *result = 1;
+    else if (a>b) *result = -1;
+    else *result = 0;
+  }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
