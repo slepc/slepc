@@ -1,7 +1,6 @@
 
 Ising Model Eigenproblem, m=    30, (N=2*m)
 
- Number of iterations of the method:   13
  Solution method: krylovschur                                                                     
  Number of requested eigenvalues: 4
  Stopping condition: tol=1.0000E-05, maxit=  1000
