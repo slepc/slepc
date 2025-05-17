@@ -19,6 +19,7 @@ typedef struct {
   PetscReal       inta,intb;       /* bounds of the interval of desired eigenvalues */
   PetscReal       left,right;      /* approximate left and right bounds of the interval containing all eigenvalues */
   PetscInt        polyDegree;      /* degree of the polynomial filter */
+  STFilterDamping damping;         /* the type of damping */
   Mat             T;               /* the matrix used to build the filter */
   PetscBool       filtch;          /* filter parameters have changed since last setup */
   Mat             *W;              /* work matrices for the matrix-matrix application of the filter */

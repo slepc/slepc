@@ -41,6 +41,20 @@ class STFilterType(object):
     FILTLAN   = ST_FILTER_FILTLAN
     CHEBYSHEV = ST_FILTER_CHEBYSHEV
 
+class STFilterDamping(object):
+    """
+    ST filter damping
+
+    - `NONE`:    No damping
+    - `JACKSON`: Jackson damping
+    - `LANCZOS`: Lanczos damping
+    - `FEJER`:   Fejer damping
+    """
+    NONE    = ST_FILTER_DAMPING_NONE
+    JACKSON = ST_FILTER_DAMPING_JACKSON
+    LANCZOS = ST_FILTER_DAMPING_LANCZOS
+    FEJER   = ST_FILTER_DAMPING_FEJER
+
 # -----------------------------------------------------------------------------
 
 cdef class ST(Object):
@@ -52,6 +66,7 @@ cdef class ST(Object):
     Type          = STType
     MatMode       = STMatMode
     FilterType    = STFilterType
+    FilterDamping = STFilterDamping
 
     def __cinit__(self):
         self.obj = <PetscObject*> &self.st
@@ -696,6 +711,31 @@ cdef class ST(Object):
         cdef PetscInt val = 0
         CHKERR( STFilterGetDegree(self.st, &val) )
         return toInt(val)
+
+    def setFilterDamping(self, damping):
+        """
+        Sets the type of damping to be used in the polynomial filter.
+
+        Parameter
+        ---------
+        damping: `ST.FilterDamping` enumerate
+              The type of damping.
+        """
+        cdef SlepcSTFilterDamping val = damping
+        CHKERR( STFilterSetDamping(self.st, val) )
+
+    def getFilterDamping(self):
+        """
+        Gets the type of damping used in the polynomial filter.
+
+        Returns
+        -------
+        damping: `ST.FilterDamping` enumerate
+              The type of damping.
+        """
+        cdef SlepcSTFilterDamping val = ST_FILTER_DAMPING_NONE
+        CHKERR( STFilterGetDamping(self.st, &val) )
+        return val
 
     #
 

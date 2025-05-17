@@ -179,6 +179,19 @@ typedef enum { ST_FILTER_FILTLAN   = 1,
                ST_FILTER_CHEBYSHEV = 2 } STFilterType;
 SLEPC_EXTERN const char *STFilterTypes[];
 
+/*E
+    STFilterDamping - The damping type used to build the filter
+
+    Level: advanced
+
+.seealso: STSetFilterDamping(), STGetFilterDamping()
+E*/
+typedef enum { ST_FILTER_DAMPING_NONE,
+               ST_FILTER_DAMPING_JACKSON,
+               ST_FILTER_DAMPING_LANCZOS,
+               ST_FILTER_DAMPING_FEJER } STFilterDamping;
+SLEPC_EXTERN const char *STFilterDampings[];
+
 SLEPC_EXTERN PetscErrorCode STFilterSetType(ST,STFilterType);
 SLEPC_EXTERN PetscErrorCode STFilterGetType(ST,STFilterType*);
 SLEPC_EXTERN PetscErrorCode STFilterSetInterval(ST,PetscReal,PetscReal);
@@ -188,3 +201,5 @@ SLEPC_EXTERN PetscErrorCode STFilterGetRange(ST,PetscReal*,PetscReal*);
 SLEPC_EXTERN PetscErrorCode STFilterSetDegree(ST,PetscInt);
 SLEPC_EXTERN PetscErrorCode STFilterGetDegree(ST,PetscInt*);
 SLEPC_EXTERN PetscErrorCode STFilterGetThreshold(ST,PetscReal*);
+SLEPC_EXTERN PetscErrorCode STFilterSetDamping(ST,STFilterDamping);
+SLEPC_EXTERN PetscErrorCode STFilterGetDamping(ST,STFilterDamping*);

@@ -15,6 +15,7 @@
 #include "filter.h"
 
 const char *STFilterTypes[] = {"","FILTLAN","CHEBYSHEV","STFilterType","ST_FILTER_",NULL};
+const char *STFilterDampings[] = {"NONE","JACKSON","LANCZOS","FEJER","STFilterDamping","ST_FILTER_DAMPING_",NULL};
 
 static PetscErrorCode STFilterSetType_Private(ST st,STFilterType type)
 {
@@ -65,6 +66,7 @@ static PetscErrorCode STSetFromOptions_Filter(ST st,PetscOptionItems PetscOption
   PetscInt         k;
   PetscBool        flg;
   STFilterType     type;
+  STFilterDamping  damping;
 
   PetscFunctionBegin;
   PetscOptionsHeadBegin(PetscOptionsObject,"ST Filter Options");
@@ -86,6 +88,9 @@ static PetscErrorCode STSetFromOptions_Filter(ST st,PetscOptionItems PetscOption
     }
     PetscCall(PetscOptionsInt("-st_filter_degree","Degree of filter polynomial","STFilterSetDegree",100,&k,&flg));
     if (flg) PetscCall(STFilterSetDegree(st,k));
+
+    PetscCall(PetscOptionsEnum("-st_filter_damping","Type of damping","STFilterSetDamping",STFilterDampings,(PetscEnum)ctx->damping,(PetscEnum*)&damping,&flg));
+    if (flg) PetscCall(STFilterSetDamping(st,damping));
 
   PetscOptionsHeadEnd();
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -461,6 +466,81 @@ PetscErrorCode STFilterGetThreshold(ST st,PetscReal *gamma)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode STFilterSetDamping_Filter(ST st,STFilterDamping damping)
+{
+  ST_FILTER *ctx = (ST_FILTER*)st->data;
+
+  PetscFunctionBegin;
+  if (ctx->damping != damping) {
+    ctx->damping = damping;
+    st->state    = ST_STATE_INITIAL;
+    st->opready  = PETSC_FALSE;
+    ctx->filtch  = PETSC_TRUE;
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   STFilterSetDamping - Sets the type of damping to be used in the polynomial filter.
+
+   Logically Collective
+
+   Input Parameters:
++  st      - the spectral transformation context
+-  damping - the type of damping
+
+   Options Database Key:
+.  -st_filter_damping <damping> - sets the type of damping
+
+   Note:
+   Only used in Chebyshev filters.
+
+   Level: advanced
+
+.seealso: STFilterGetDamping()
+@*/
+PetscErrorCode STFilterSetDamping(ST st,STFilterDamping damping)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(st,ST_CLASSID,1);
+  PetscValidLogicalCollectiveEnum(st,damping,2);
+  PetscTryMethod(st,"STFilterSetDamping_C",(ST,STFilterDamping),(st,damping));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode STFilterGetDamping_Filter(ST st,STFilterDamping *damping)
+{
+  ST_FILTER *ctx = (ST_FILTER*)st->data;
+
+  PetscFunctionBegin;
+  *damping = ctx->damping;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   STFilterGetDamping - Gets the type of damping used in the polynomial filter.
+
+   Not Collective
+
+   Input Parameter:
+.  st  - the spectral transformation context
+
+   Output Parameter:
+.  damping - the type of damping
+
+   Level: advanced
+
+.seealso: STFilterSetDamping()
+@*/
+PetscErrorCode STFilterGetDamping(ST st,STFilterDamping *damping)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(st,ST_CLASSID,1);
+  PetscAssertPointer(damping,2);
+  PetscUseMethod(st,"STFilterGetDamping_C",(ST,STFilterDamping*),(st,damping));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 static PetscErrorCode STView_Filter(ST st,PetscViewer viewer)
 {
   ST_FILTER *ctx = (ST_FILTER*)st->data;
@@ -474,6 +554,7 @@ static PetscErrorCode STView_Filter(ST st,PetscViewer viewer)
     PetscCall(PetscViewerASCIIPrintf(viewer,"  interval of desired eigenvalues: [%g,%g]\n",(double)ctx->inta,(double)ctx->intb));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  numerical range: [%g,%g]\n",(double)ctx->left,(double)ctx->right));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  degree of filter polynomial: %" PetscInt_FMT "\n",ctx->polyDegree));
+    if (ctx->damping && ctx->type==ST_FILTER_CHEBYSHEV) PetscCall(PetscViewerASCIIPrintf(viewer,"  type of damping = %s\n",STFilterDampings[ctx->damping]));
     if (st->state>=ST_STATE_SETUP && ctx->getthreshold) {
       PetscCall(STFilterGetThreshold(st,&gamma));
       PetscCall(PetscViewerASCIIPrintf(viewer,"  limit to accept eigenvalues: theta=%g\n",(double)gamma));
@@ -498,6 +579,8 @@ static PetscErrorCode STDestroy_Filter(ST st)
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetDegree_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetDegree_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetThreshold_C",NULL));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetDamping_C",NULL));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetDamping_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -534,5 +617,7 @@ SLEPC_EXTERN PetscErrorCode STCreate_Filter(ST st)
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetDegree_C",STFilterSetDegree_Filter));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetDegree_C",STFilterGetDegree_Filter));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetThreshold_C",STFilterGetThreshold_Filter));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterSetDamping_C",STFilterSetDamping_Filter));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetDamping_C",STFilterGetDamping_Filter));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
