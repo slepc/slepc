@@ -89,7 +89,7 @@ PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nc
 {
   PetscFunctionBegin;
   *reason = SVD_CONVERGED_ITERATING;
-  if (nconv >= nsv) {
+  if (nconv >= nsv && svd->conv != SVD_CONV_MAXIT) {
     PetscCall(PetscInfo(svd,"Singular value solver finished successfully: %" PetscInt_FMT " singular triplets converged at iteration %" PetscInt_FMT "\n",nconv,its));
     *reason = SVD_CONVERGED_TOL;
   } else if (its >= max_it) {

@@ -7,7 +7,7 @@ Singular value problem stored in file.
 
  Number of requested singular values: 5
  Stopping condition: tol=1e-08, maxit=1
- SVD solve converged (5 singular triplets) due to CONVERGED_TOL; iterations 1
+ SVD solve converged (5 singular triplets) due to CONVERGED_MAXIT; iterations 1
  ---------------------- --------------------
           sigma            relative error
  ---------------------- --------------------
