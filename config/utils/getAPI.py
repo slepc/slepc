@@ -41,6 +41,12 @@ regcomment   = re.compile(r'/\* [-A-Za-z _(),<>|^\*/0-9.:=\[\]\.;]* \*/')
 regcomment2  = re.compile(r'// [-A-Za-z _(),<>|^\*/0-9.:=\[\]\.;]*')
 regblank     = re.compile(r' [ ]*')
 
+def displayIncludeMansec(obj):
+    return '  ' + str(obj.includefile)+' (' + str(obj.mansec) + ')\n'
+
+def displayFile(obj):
+    return '  ' + str(obj.dir) + '/' + str(obj.file) + '\n'
+
 class Typedef:
     '''Represents typedef oldtype newtype'''
     def __init__(self, name, mansec, includefile, value, *args, **kwargs):
@@ -51,7 +57,7 @@ class Typedef:
 
     def __str__(self):
         mstr = str(self.name) + ' ' + str(self.value)+'\n'
-        mstr = mstr + '  ' + str(self.mansec) + ' ' + str(self.includefile)+'\n'
+        mstr += displayIncludeMansec(self)
         return mstr
 
 class Function:
@@ -63,38 +69,47 @@ class Function:
         self.includefile = None
         self.dir         = None
         self.opaque      = False
-        self.opaquestub  = False # only interface is automatic, C stub is custom
+        self.opaquestub  = False # only Fortran module interface is automatic, C stub is custom
+        self.penss       = False # Function is labeled with PeNS or PeNSS
         self.arguments   = []
 
     def __str__(self):
         mstr = '  ' + str(self.name) + '()\n'
-        mstr = mstr + '    '+str(self.mansec) + ' ' + str(self.includefile) + '\n'
-        mstr = mstr + '    '+str(self.dir) + ' ' + str(self.file) + '\n'
-        mstr = mstr + '     opaque < ' + str(self.opaque) + '>\n'
-        mstr = mstr + '     opaquestub < ' + str(self.opaquestub) + '>\n'
-        for i in self.arguments:
-          mstr = mstr + str(i)
+        mstr += '  ' + displayIncludeMansec(self)
+        mstr += '  ' + displayFile(self)
+        if self.opaque:   mstr += '    opaque binding\n'
+        elif self.opaque: mstr += '    opaque stub\n'
+        if self.arguments:
+          mstr += '    Arguments\n'
+          for i in self.arguments:
+            mstr += '  ' + str(i)
         return mstr
 
 class Argument:
     '''Represents an argument in a Function'''
     def __init__(self, *args, **kwargs):
-        self.name      = None
-        self.typename  = None
-        self.stars     = 0
-        self.array     = False
-        self.optional  = False
-        self.const     = False
+        self.name       = None
+        self.typename   = None
+        self.stars      = 0
+        self.array      = False
+        self.optional   = False
+        self.const      = False
+        self.isfunction = False
         #  PETSc returns strings in two ways either
         #     with a pointer to an array: char *[]
         #     or by copying the string into a given array with a given length: char [], size_t len
-        self.stringlen    = False  # if true the argument is the length of the previous argument which is a character string
+        self.stringlen   = False  # if true the argument is the length of the previous argument which is a character string
 
     def __str__(self):
-        mstr = '    ' + str(self.typename) + ' ' + str(self.name) + '\n'
-        mstr = mstr + '      stars <' + str(self.stars) + '>\n'
-        mstr = mstr + '      is array <' + str(self.array) + '>\n'
-        mstr = mstr + '      optional <' + str(self.optional) + '>\n'
+        mstr = '    ' + str(self.typename) + ' '
+        stars = self.stars
+        while stars:
+          mstr += '*'
+          stars = stars - 1
+        mstr += str(self.name)
+        if self.array: mstr += '[]'
+        if self.optional: mstr += ' optional'
+        mstr += '\n'
         return mstr
 
 class Struct:
@@ -108,21 +123,22 @@ class Struct:
 
     def __str__(self):
         mstr = str(self.name) + '\n'
-        mstr = mstr + '  ' + str(self.mansec) + ' ' + str(self.includefile) + '\n'
-        mstr = mstr + '  opaque <' + str(self.opaque) + '>\n{\n'
+        mstr += displayIncludeMansec(self)
+        if self.opaque:  mstr += '  opaque\n'
+        mstr += '  Records:\n'
         for i in self.records:
-          mstr = mstr + str(i)
-        mstr = mstr + '}\n'
+          mstr += str(i)
         return mstr
 
 class Record:
     '''Represents an entry in a struct'''
     def __init__(self, rawrecord, *args, **kwargs):
         self.name = None
+        # name is currently unused and type contains the type followed by all the names with that type: e.g. PetscInt i,j,k
         self.type = rawrecord
 
     def __str__(self):
-        mstr = '  ' + str(self.type) + ' ' + str(self.name) + '\n'
+        mstr = '    ' + str(self.type)+'\n'
         return mstr
 
 class Enum:
@@ -135,9 +151,9 @@ class Enum:
 
     def __str__(self):
         mstr = str(self.name) + '\n'
-        mstr = mstr + '  ' + str(self.mansec) + ' ' + str(self.includefile) + '\n'
+        mstr += displayIncludeMansec(self)
         for i in self.values:
-          mstr = mstr + '  ' + str(i) + '\n'
+          mstr += '  ' + str(i) + '\n'
         return mstr
 
 class Senum:
@@ -150,9 +166,9 @@ class Senum:
 
     def __str__(self):
         mstr = str(self.name) + '\n'
-        mstr = mstr + '  ' + str(self.mansec) + ' ' + str(self.includefile) + '\n'
+        mstr += displayIncludeMansec(self)
         for i in self.values.keys():
-          mstr = mstr + '  ' + i + ' ' + self.values[i] + '\n'
+          mstr += '  ' + i + ' ' + self.values[i] + '\n'
         return mstr
 
 class IncludeFile:
@@ -165,7 +181,7 @@ class IncludeFile:
     def __str__(self):
         mstr = str(self.mansec) + ' ' + str(self.includefile) + '\n'
         for i in self.included:
-          mstr = mstr + '  ' + str(i) + '\n'
+          mstr += '  ' + str(i) + '\n'
         return mstr
 
 class Class:
@@ -179,10 +195,10 @@ class Class:
 
     def __str__(self):
         mstr = str(self.name) + '\n'
-        mstr = mstr + '  ' + str(self.mansec) + ' ' + str(self.includefile) + '\n'
-        mstr = mstr + '  PetscObject <' + str(self.petscobject) + '>\n\n'
+        mstr += displayIncludeMansec(self)
+        mstr += '  PetscObject <' + str(self.petscobject) + '>\n\n'
         for i in self.functions.keys():
-          mstr = mstr + '  ' + str(self.functions[i]) + '\n'
+          mstr += '  ' + str(self.functions[i]) + '\n'
         return mstr
 
 def findmansec(line,mansec,submansec):
@@ -393,13 +409,11 @@ def findlmansec(dir):  # could use dir to determine mansec
     mansec = None
     submansec = None
     with open(file) as mklines:
-      #print(file)
       submansecl = [line for line in mklines if line.find('BFORTSUBMANSEC') > -1]
       if submansecl:
         submansec = re.sub('BFORTSUBMANSEC[ ]*=[ ]*','',submansecl[0]).strip('\n').strip().lower()
     if not submansec:
       with open(file) as mklines:
-        #print(file)
         submansecl = [line for line in mklines if (line.find('SUBMANSEC') > -1 and line.find('BFORT') == -1)]
         if submansecl:
           submansec = re.sub('SUBMANSEC[ ]*=[ ]*','',submansecl[0]).strip('\n').strip().lower()
@@ -407,14 +421,13 @@ def findlmansec(dir):  # could use dir to determine mansec
       mansecl = [line for line in mklines if line.startswith('MANSEC')]
       if mansecl:
         mansec = re.sub('MANSEC[ ]*=[ ]*','',mansecl[0]).strip('\n').strip().lower()
-        #print(':MANSEC:' + mansec)
     if not submansec: submansec = mansec
     return mansec,submansec
 
 def getpossiblefunctions():
    '''Gets a list of all the functions in the include/ directory that may be used in the binding for other languages'''
    try:
-     output = check_output('grep -E -e "SLEPC_EXTERN PetscErrorCode" -e "static inline PetscErrorCode" include/*.h', shell=True).decode('utf-8')
+     output = check_output('grep -F -e "SLEPC_EXTERN PetscErrorCode" -e "static inline PetscErrorCode" include/*.h', shell=True).decode('utf-8')
    except subprocess.CalledProcessError as e:
      raise RuntimeError('Unable to find possible functions in the include files')
    funs = output.replace('SLEPC_EXTERN','').replace('PetscErrorCode','').replace('static inline','')
@@ -423,6 +436,17 @@ def getpossiblefunctions():
      file = i[i.find('/') + 1:i.find('.') + 2]
      f = i[i.find(': ') + 2:i.find('(')].strip()
      functiontoinclude[f] = file.replace('types','')
+
+   try:
+     output = check_output('grep "SLEPC_EXTERN [a-zA-Z]* [a-zA-Z]*;" include/*.h', shell=True).decode('utf-8')
+   except subprocess.CalledProcessError as e:
+     raise RuntimeError('Unable to find possible functions in the include files')
+   funs = output.replace('SLEPC_EXTERN','')
+   for i in funs.split('\n'):
+     if not i: continue
+     i = i.replace(';','').split(' ')
+     file = i[0][i[0].find('/') + 1:i[0].find('.') + 2]
+     functiontoinclude[i[2]] = file.replace('types','')
    return functiontoinclude
 
 def getFunctions(mansec, functiontoinclude, filename):
@@ -432,6 +456,7 @@ def getFunctions(mansec, functiontoinclude, filename):
   regarg      = re.compile(r'\([A-Za-z0-9*_\[\]]*[,\) ]')
   regerror    = re.compile(r'PetscErrorCode')
   reg         = re.compile(r' ([*])*[a-zA-Z0-9_]*([\[\]]*)')
+  regname     = re.compile(r' [*]*([a-zA-Z0-9_]*)[\[\]]*')
 
   rejects     = ['PetscErrorCode','...','<','(*)','(**)','off_t','MPI_Datatype','va_list','PetscStack','Ceed']
   #
@@ -447,6 +472,7 @@ def getFunctions(mansec, functiontoinclude, filename):
     if fl:
       opaque = False
       opaquestub = False
+      penss = False
       if  line[0:line.find('(')].find('_') > -1:
         line = f.readline()
         continue
@@ -454,11 +480,17 @@ def getFunctions(mansec, functiontoinclude, filename):
       line = line.strip()
       if line.endswith(' PeNS'):
         opaque = True
+        penss  = True
         line = line[0:-5]
       if line.endswith(' PeNSS'):
         opaquestub = True
+        penss      = True
         line = line[0:-6]
-      if line.endswith(';') or line.find(')') < len(line)-1:
+      if line.endswith(';'):
+        line = f.readline()
+        continue
+      if line.find(')') < len(line)-1:
+        # reject functions with arguments that are function pointers. TODO accept them
         line = f.readline()
         continue
       line = regfun.sub("",line)
@@ -475,6 +507,7 @@ def getFunctions(mansec, functiontoinclude, filename):
         fun = Function(name)
         fun.opaque = opaque
         fun.opaquestub = opaquestub
+        fun.penss = penss
         fun.file = os.path.basename(filename)
         fun.mansec = mansec
         fun.dir = os.path.dirname(filename)
@@ -494,10 +527,9 @@ def getFunctions(mansec, functiontoinclude, filename):
                 fun.opaque = True
             args = args.split(",")
             for i in args:
+              arg = Argument()
               if i.find('**') > -1 and not i.strip().startswith('void'): fun.opaque = True
               if i.find('unsigned ') > -1: fun.opaque = True
-              if i.replace('*','').endswith('Fn') or i.replace('*','').endswith('Func'): fun.opaque = True
-              arg = Argument()
               if i.count('const ') > 1: fun.opaque = True
               if i.count("const "): arg.const = True
               i = i.replace("const ","")
@@ -509,6 +541,9 @@ def getFunctions(mansec, functiontoinclude, filename):
                 i = i[:i.find('[')]
               if i.find('*') > -1: arg.stars = 1
               if i.find('**') > -1: arg.stars = 2
+              argname = re.findall(r' [*]*([a-zA-Z0-9_]*)[\[\]]*',i)
+              if argname: arg.name = argname[0]
+              else: arg.name = 'noname'
               i =  regblank.sub('',reg.sub(r'\1\2 ',i).strip()).replace('*','').replace('[]','')
               arg.typename = i
               # fix input character arrays that are written as *variable name
@@ -519,6 +554,8 @@ def getFunctions(mansec, functiontoinclude, filename):
                 fun.opaque = True
               #if arg.typename == 'char' and arg.array and arg.stars:
               #  arg.const = False
+              if arg.typename.endswith('Fn'):
+                arg.isfunction = True
               if arg.typename.count('_') and not arg.typename in ['MPI_Comm', 'size_t']:
                 fun.opaque = True
               if fun.arguments and not fun.arguments[-1].const and fun.arguments[-1].typename == 'char' and arg.typename == 'size_t':
