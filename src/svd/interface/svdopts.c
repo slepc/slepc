@@ -440,7 +440,7 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
 
 .seealso: SVDSetConvergenceTest(), SVDSetTolerances()
 @*/
-PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,void* ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,void *ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -558,7 +558,7 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
 
 .seealso: SVDSetStoppingTest(), SVDStoppingBasic()
 @*/
-PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void* ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
