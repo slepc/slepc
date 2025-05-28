@@ -437,7 +437,7 @@ static PetscErrorCode STFilterGetThreshold_Filter(ST st,PetscReal *gamma)
 
   PetscFunctionBegin;
   if (ctx->getthreshold) PetscCall(ctx->getthreshold(st,gamma));
-  else *gamma = 0.0;
+  else *gamma = 0.5;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -557,7 +557,7 @@ static PetscErrorCode STView_Filter(ST st,PetscViewer viewer)
     if (ctx->damping && ctx->type==ST_FILTER_CHEBYSHEV) PetscCall(PetscViewerASCIIPrintf(viewer,"  type of damping = %s\n",STFilterDampings[ctx->damping]));
     if (st->state>=ST_STATE_SETUP && ctx->getthreshold) {
       PetscCall(STFilterGetThreshold(st,&gamma));
-      PetscCall(PetscViewerASCIIPrintf(viewer,"  limit to accept eigenvalues: theta=%g\n",(double)gamma));
+      PetscCall(PetscViewerASCIIPrintf(viewer,"  limit to accept eigenvalues: gamma=%g\n",(double)gamma));
     }
   }
   PetscFunctionReturn(PETSC_SUCCESS);

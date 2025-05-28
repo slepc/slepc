@@ -86,6 +86,8 @@ SLEPC_INTERN PetscErrorCode STCreate_Filter_FILTLAN(ST);
 /* Chebyshev series */
 
 struct _n_CHEBYSHEV_CTX {
+  PetscReal   *damping_coeffs;
+  PetscReal   *coeffs;
 };
 typedef struct _n_CHEBYSHEV_CTX *CHEBYSHEV_CTX;
 
