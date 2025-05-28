@@ -287,20 +287,20 @@ cdef class EPS(Object):
         self.obj = <PetscObject*> &self.eps
         self.eps = NULL
 
-    def view(self, Viewer viewer=None):
+    def view(self, Viewer viewer=None) -> None:
         """
         Prints the EPS data structure.
 
         Parameters
         ----------
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( EPSView(self.eps, vwr) )
 
-    def destroy(self):
+    def destroy(self) -> Self:
         """
         Destroys the EPS object.
         """
@@ -308,21 +308,20 @@ cdef class EPS(Object):
         self.eps = NULL
         return self
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Resets the EPS object.
         """
         CHKERR( EPSReset(self.eps) )
 
-    def create(self, comm=None):
+    def create(self, comm: Comm | None = None) -> Self:
         """
         Creates the EPS object.
 
         Parameters
         ----------
-        comm: MPI_Comm, optional
-              MPI communicator; if not provided, it defaults to all
-              processes.
+        comm
+            MPI communicator; if not provided, it defaults to all processes.
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcEPS neweps = NULL
@@ -330,14 +329,14 @@ cdef class EPS(Object):
         CHKERR( SlepcCLEAR(self.obj) ); self.eps = neweps
         return self
 
-    def setType(self, eps_type):
+    def setType(self, eps_type: Type | str) -> None:
         """
         Selects the particular solver to be used in the EPS object.
 
         Parameters
         ----------
-        eps_type: `EPS.Type` enumerate
-                  The solver to be used.
+        eps_type
+            The solver to be used.
 
         Notes
         -----
@@ -352,43 +351,42 @@ cdef class EPS(Object):
         eps_type = str2bytes(eps_type, &cval)
         CHKERR( EPSSetType(self.eps, cval) )
 
-    def getType(self):
+    def getType(self) -> str:
         """
         Gets the EPS type of this object.
 
         Returns
         -------
-        type: `EPS.Type` enumerate
-              The solver currently being used.
+        str
+            The solver currently being used.
         """
         cdef SlepcEPSType eps_type = NULL
         CHKERR( EPSGetType(self.eps, &eps_type) )
         return bytes2str(eps_type)
 
-    def getOptionsPrefix(self):
+    def getOptionsPrefix(self) -> str:
         """
         Gets the prefix used for searching for all EPS options in the
         database.
 
         Returns
         -------
-        prefix: string
-                The prefix string set for this EPS object.
+        str
+            The prefix string set for this EPS object.
         """
         cdef const char *prefix = NULL
         CHKERR( EPSGetOptionsPrefix(self.eps, &prefix) )
         return bytes2str(prefix)
 
-    def setOptionsPrefix(self, prefix):
+    def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Sets the prefix used for searching for all EPS options in the
         database.
 
         Parameters
         ----------
-        prefix: string
-                The prefix string to prepend to all EPS option
-                requests.
+        prefix
+            The prefix string to prepend to all EPS option requests.
 
         Notes
         -----
@@ -406,21 +404,21 @@ cdef class EPS(Object):
         prefix = str2bytes(prefix, &cval)
         CHKERR( EPSSetOptionsPrefix(self.eps, cval) )
 
-    def appendOptionsPrefix(self, prefix):
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Appends to the prefix used for searching for all EPS options
         in the database.
 
         Parameters
         ----------
-        prefix: string
-                The prefix string to prepend to all EPS option requests.
+        prefix
+            The prefix string to prepend to all EPS option requests.
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
         CHKERR( EPSAppendOptionsPrefix(self.eps, cval) )
 
-    def setFromOptions(self):
+    def setFromOptions(self) -> None:
         """
         Sets EPS options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
@@ -435,27 +433,27 @@ cdef class EPS(Object):
 
     #
 
-    def getProblemType(self):
+    def getProblemType(self) -> ProblemType:
         """
         Gets the problem type from the EPS object.
 
         Returns
         -------
-        problem_type: `EPS.ProblemType` enumerate
-                      The problem type that was previously set.
+        ProblemType
+            The problem type that was previously set.
         """
         cdef SlepcEPSProblemType val = EPS_NHEP
         CHKERR( EPSGetProblemType(self.eps, &val) )
         return val
 
-    def setProblemType(self, problem_type):
+    def setProblemType(self, problem_type: ProblemType) -> None:
         """
         Specifies the type of the eigenvalue problem.
 
         Parameters
         ----------
-        problem_type: `EPS.ProblemType` enumerate
-               The problem type to be set.
+        problem_type
+            The problem type to be set.
 
         Notes
         -----
@@ -476,77 +474,74 @@ cdef class EPS(Object):
         cdef SlepcEPSProblemType val = problem_type
         CHKERR( EPSSetProblemType(self.eps, val) )
 
-    def isGeneralized(self):
+    def isGeneralized(self) -> bool:
         """
         Tells whether the EPS object corresponds to a generalized
         eigenvalue problem.
 
         Returns
         -------
-        flag: bool
-              True if two matrices were set with `setOperators()`.
+        bool
+            True if two matrices were set with `setOperators()`.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSIsGeneralized(self.eps, &tval) )
         return toBool(tval)
 
-    def isHermitian(self):
+    def isHermitian(self) -> bool:
         """
         Tells whether the EPS object corresponds to a Hermitian
         eigenvalue problem.
 
         Returns
         -------
-        flag: bool
-              True if the problem type set with `setProblemType()` was
-              Hermitian.
+        bool
+            True if the problem type set with `setProblemType()` was Hermitian.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSIsHermitian(self.eps, &tval) )
         return toBool(tval)
 
-    def isPositive(self):
+    def isPositive(self) -> bool:
         """
         Tells whether the EPS object corresponds to an eigenvalue problem
         type that requires a positive (semi-) definite matrix B.
 
         Returns
         -------
-        flag: bool
-              True if the problem type set with `setProblemType()` was
-              positive.
+        bool
+            True if the problem type set with `setProblemType()` was positive.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSIsPositive(self.eps, &tval) )
         return toBool(tval)
 
-    def isStructured(self):
+    def isStructured(self) -> bool:
         """
         Tells whether the EPS object corresponds to a structured eigenvalue problem.
 
         Returns
         -------
-        flag: bool
-              True if the problem type set with `setProblemType()` was
-              structured.
+        bool
+            True if the problem type set with `setProblemType()` was structured.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSIsStructured(self.eps, &tval) )
         return toBool(tval)
 
-    def getBalance(self):
+    def getBalance(self) -> tuple[Balance, int, float]:
         """
         Gets the balancing type used by the EPS object,
         and the associated parameters.
 
         Returns
         -------
-        balance: `EPS.Balance` enumerate
-                 The balancing method
+        balance: Balance
+            The balancing method
         iterations: int
-                    Number of iterations of the balancing algorithm
-        cutoff: real
-                Cutoff value
+            Number of iterations of the balancing algorithm
+        cutoff: float
+            Cutoff value
         """
         cdef SlepcEPSBalance val = EPS_BALANCE_ONESIDE
         cdef PetscInt ival = 0
@@ -554,19 +549,24 @@ cdef class EPS(Object):
         CHKERR( EPSGetBalance(self.eps, &val, &ival, &rval) )
         return (val, toInt(ival), toReal(rval))
 
-    def setBalance(self, balance=None, iterations=None, cutoff=None):
+    def setBalance(
+        self,
+        balance: Balance | None = None,
+        iterations: int | None = None,
+        cutoff: float | None = None,
+    ) -> None:
         """
         Specifies the balancing technique to be employed by the
         eigensolver, and some parameters associated to it.
 
         Parameters
         ----------
-        balance: `EPS.Balance` enumerate
-                 The balancing method
-        iterations: int
-                    Number of iterations of the balancing algorithm
-        cutoff: real
-                Cutoff value
+        balance
+            The balancing method
+        iterations
+            Number of iterations of the balancing algorithm
+        cutoff
+            Cutoff value
         """
         cdef SlepcEPSBalance val = <SlepcEPSBalance>PETSC_DEFAULT
         cdef PetscInt  ival = PETSC_DEFAULT
@@ -576,27 +576,27 @@ cdef class EPS(Object):
         if cutoff     is not None: rval = asReal(cutoff)
         CHKERR( EPSSetBalance(self.eps, val, ival, rval) )
 
-    def getExtraction(self):
+    def getExtraction(self) -> Extraction:
         """
         Gets the extraction type used by the EPS object.
 
         Returns
         -------
-        extraction: `EPS.Extraction` enumerate
-                    The method of extraction.
+        Extraction
+            The method of extraction.
         """
         cdef SlepcEPSExtraction val = EPS_RITZ
         CHKERR( EPSGetExtraction(self.eps, &val) )
         return val
 
-    def setExtraction(self, extraction):
+    def setExtraction(self, extraction: Extraction) -> None:
         """
         Sets the extraction type used by the EPS object.
 
         Parameters
         ----------
-        extraction: `EPS.Extraction` enumerate
-                    The extraction method to be used by the solver.
+        extraction
+            The extraction method to be used by the solver.
 
         Notes
         -----
@@ -612,27 +612,27 @@ cdef class EPS(Object):
         cdef SlepcEPSExtraction val = extraction
         CHKERR( EPSSetExtraction(self.eps, val) )
 
-    def getWhichEigenpairs(self):
+    def getWhichEigenpairs(self) -> Which:
         """
         Returns which portion of the spectrum is to be sought.
 
         Returns
         -------
-        which: `EPS.Which` enumerate
-               The portion of the spectrum to be sought by the solver.
+        Which
+            The portion of the spectrum to be sought by the solver.
         """
         cdef SlepcEPSWhich val = EPS_LARGEST_MAGNITUDE
         CHKERR( EPSGetWhichEigenpairs(self.eps, &val) )
         return val
 
-    def setWhichEigenpairs(self, which):
+    def setWhichEigenpairs(self, which: Which) -> None:
         """
         Specifies which portion of the spectrum is to be sought.
 
         Parameters
         ----------
-        which: `EPS.Which` enumerate
-               The portion of the spectrum to be sought by the solver.
+        which
+            The portion of the spectrum to be sought by the solver.
 
         Notes
         -----
@@ -646,32 +646,32 @@ cdef class EPS(Object):
         cdef SlepcEPSWhich val = which
         CHKERR( EPSSetWhichEigenpairs(self.eps, val) )
 
-    def getThreshold(self):
+    def getThreshold(self) -> tuple[float, bool]:
         """
         Gets the threshold used in the threshold stopping test.
 
         Returns
         -------
         thres: float
-             The threshold.
+            The threshold.
         rel: bool
-             Whether the threshold is relative or not.
+            Whether the threshold is relative or not.
         """
         cdef PetscReal rval = 0
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGetThreshold(self.eps, &rval, &tval) )
         return (toReal(rval), toBool(tval))
 
-    def setThreshold(self, thres, rel=False):
+    def setThreshold(self, thres: float, rel: bool = False) -> None:
         """
         Sets the threshold used in the threshold stopping test.
 
         Parameters
         ----------
-        thres: float
-             The threshold.
-        rel: bool, optional
-             Whether the threshold is relative or not.
+        thres
+            The threshold.
+        rel
+            Whether the threshold is relative or not.
 
         Notes
         -----
@@ -685,14 +685,14 @@ cdef class EPS(Object):
         cdef PetscBool tval = asBool(rel)
         CHKERR( EPSSetThreshold(self.eps, rval, tval) )
 
-    def getTarget(self):
+    def getTarget(self) -> Scalar:
         """
         Gets the value of the target.
 
         Returns
         -------
-        target: float (real or complex)
-                The value of the target.
+        Scalar
+            The value of the target.
 
         Notes
         -----
@@ -702,14 +702,14 @@ cdef class EPS(Object):
         CHKERR( EPSGetTarget(self.eps, &sval) )
         return toScalar(sval)
 
-    def setTarget(self, target):
+    def setTarget(self, target: Scalar) -> None:
         """
         Sets the value of the target.
 
         Parameters
         ----------
-        target: float (real or complex)
-                The value of the target.
+        target
+            The value of the target.
 
         Notes
         -----
@@ -720,16 +720,16 @@ cdef class EPS(Object):
         cdef PetscScalar sval = asScalar(target)
         CHKERR( EPSSetTarget(self.eps, sval) )
 
-    def getInterval(self):
+    def getInterval(self) -> tuple[float, float]:
         """
         Gets the computational interval for spectrum slicing.
 
         Returns
         -------
         inta: float
-                The left end of the interval.
+            The left end of the interval.
         intb: float
-                The right end of the interval.
+            The right end of the interval.
 
         Notes
         -----
@@ -740,16 +740,16 @@ cdef class EPS(Object):
         CHKERR( EPSGetInterval(self.eps, &inta, &intb) )
         return (toReal(inta), toReal(intb))
 
-    def setInterval(self, inta, intb):
+    def setInterval(self, inta: float, intb: float) -> None:
         """
         Defines the computational interval for spectrum slicing.
 
         Parameters
         ----------
-        inta: float
-                The left end of the interval.
-        intb: float
-                The right end of the interval.
+        inta
+            The left end of the interval.
+        intb
+            The right end of the interval.
 
         Notes
         -----
@@ -765,7 +765,7 @@ cdef class EPS(Object):
 
     #
 
-    def getTolerances(self):
+    def getTolerances(self) -> tuple[float, int]:
         """
         Gets the tolerance and maximum iteration count used by the
         default EPS convergence tests.
@@ -773,26 +773,26 @@ cdef class EPS(Object):
         Returns
         -------
         tol: float
-             The convergence tolerance.
+            The convergence tolerance.
         max_it: int
-             The maximum number of iterations
+            The maximum number of iterations.
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
         CHKERR( EPSGetTolerances(self.eps, &rval, &ival) )
         return (toReal(rval), toInt(ival))
 
-    def setTolerances(self, tol=None, max_it=None):
+    def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
         Sets the tolerance and maximum iteration count used by the
         default EPS convergence tests.
 
         Parameters
         ----------
-        tol: float, optional
-             The convergence tolerance.
-        max_it: int, optional
-             The maximum number of iterations
+        tol
+            The convergence tolerance.
+        max_it
+            The maximum number of iterations.
 
         Notes
         -----
@@ -805,67 +805,67 @@ cdef class EPS(Object):
         if max_it is not None: ival = asInt(max_it)
         CHKERR( EPSSetTolerances(self.eps, rval, ival) )
 
-    def getTwoSided(self):
+    def getTwoSided(self) -> bool:
         """
         Returns the flag indicating whether a two-sided variant
         of the algorithm is being used or not.
 
         Returns
         -------
-        twosided: bool
+        bool
             Whether the two-sided variant is to be used or not.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGetTwoSided(self.eps, &tval) )
         return toBool(tval)
 
-    def setTwoSided(self, twosided):
+    def setTwoSided(self, twosided: bool) -> None:
         """
         Sets the solver to use a two-sided variant so that left
         eigenvectors are also computed.
 
         Parameters
         ----------
-        twosided: bool
+        twosided
             Whether the two-sided variant is to be used or not.
         """
         cdef PetscBool tval = asBool(twosided)
         CHKERR( EPSSetTwoSided(self.eps, tval) )
 
-    def getPurify(self):
+    def getPurify(self) -> bool:
         """
         Returns the flag indicating whether purification is activated
         or not.
 
         Returns
         -------
-        purify: bool
+        bool
             Whether purification is activated or not.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGetPurify(self.eps, &tval) )
         return toBool(tval)
 
-    def setPurify(self, purify=True):
+    def setPurify(self, purify: bool = True) -> None:
         """
         Activate or deactivate eigenvector purification.
 
         Parameters
         ----------
-        purify: bool, optional
+        purify
             True to activate purification (default).
         """
         cdef PetscBool tval = asBool(purify)
         CHKERR( EPSSetPurify(self.eps, tval) )
 
-    def getConvergenceTest(self):
+    def getConvergenceTest(self) -> Conv:
         """
         Return the method used to compute the error estimate
         used in the convergence test.
 
         Returns
         -------
-        conv: EPS.Conv
+        Conv
             The method used to compute the error estimate
             used in the convergence test.
         """
@@ -873,75 +873,75 @@ cdef class EPS(Object):
         CHKERR( EPSGetConvergenceTest(self.eps, &conv) )
         return conv
 
-    def setConvergenceTest(self, conv):
+    def setConvergenceTest(self, conv: Conv) -> None:
         """
         Specifies how to compute the error estimate
         used in the convergence test.
 
         Parameters
         ----------
-        conv: EPS.Conv
+        conv
             The method used to compute the error estimate
             used in the convergence test.
         """
         cdef SlepcEPSConv tconv = conv
         CHKERR( EPSSetConvergenceTest(self.eps, tconv) )
 
-    def getTrueResidual(self):
+    def getTrueResidual(self) -> bool:
         """
         Returns the flag indicating whether true residual must be
         computed explicitly or not.
 
         Returns
         -------
-        trueres: bool
+        bool
             Whether the solver compute all residuals or not.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGetTrueResidual(self.eps, &tval) )
         return toBool(tval)
 
-    def setTrueResidual(self, trueres):
+    def setTrueResidual(self, trueres: bool) -> None:
         """
         Specifies if the solver must compute the true residual
         explicitly or not.
 
         Parameters
         ----------
-        trueres: bool
+        trueres
             Whether compute the true residual or not.
         """
         cdef PetscBool tval = asBool(trueres)
         CHKERR( EPSSetTrueResidual(self.eps, tval) )
 
-    def getTrackAll(self):
+    def getTrackAll(self) -> bool:
         """
         Returns the flag indicating whether all residual norms must be
         computed or not.
 
         Returns
         -------
-        trackall: bool
+        bool
             Whether the solver compute all residuals or not.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGetTrackAll(self.eps, &tval) )
         return toBool(tval)
 
-    def setTrackAll(self, trackall):
+    def setTrackAll(self, trackall: bool) -> None:
         """
         Specifies if the solver must compute the residual of all
         approximate eigenpairs or not.
 
         Parameters
         ----------
-        trackall: bool
+        trackall
             Whether compute all residuals or not.
         """
         cdef PetscBool tval = asBool(trackall)
         CHKERR( EPSSetTrackAll(self.eps, tval) )
 
-    def getDimensions(self):
+    def getDimensions(self) -> tuple[int, int, int]:
         """
         Gets the number of eigenvalues to compute and the dimension of
         the subspace.
@@ -949,12 +949,11 @@ cdef class EPS(Object):
         Returns
         -------
         nev: int
-             Number of eigenvalues to compute.
+            Number of eigenvalues to compute.
         ncv: int
-             Maximum dimension of the subspace to be used by the
-             solver.
+            Maximum dimension of the subspace to be used by the solver.
         mpd: int
-             Maximum dimension allowed for the projected problem.
+            Maximum dimension allowed for the projected problem.
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -962,20 +961,24 @@ cdef class EPS(Object):
         CHKERR( EPSGetDimensions(self.eps, &ival1, &ival2, &ival3) )
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
-    def setDimensions(self, nev=None, ncv=None, mpd=None):
+    def setDimensions(
+        self,
+        nev: int | None = None,
+        ncv: int | None = None,
+        mpd: int | None = None,
+    ) -> None:
         """
         Sets the number of eigenvalues to compute and the dimension of
         the subspace.
 
         Parameters
         ----------
-        nev: int, optional
-             Number of eigenvalues to compute.
-        ncv: int, optional
-             Maximum dimension of the subspace to be used by the
-             solver.
-        mpd: int, optional
-             Maximum dimension allowed for the projected problem.
+        nev
+            Number of eigenvalues to compute.
+        ncv
+            Maximum dimension of the subspace to be used by the solver.
+        mpd
+            Maximum dimension allowed for the projected problem.
 
         Notes
         -----
@@ -1004,14 +1007,14 @@ cdef class EPS(Object):
         if mpd is not None: ival3 = asInt(mpd)
         CHKERR( EPSSetDimensions(self.eps, ival1, ival2, ival3) )
 
-    def getST(self):
+    def getST(self) -> ST:
         """
         Obtain the spectral transformation (`ST`) object associated to
         the eigensolver object.
 
         Returns
         -------
-        st: ST
+        ST
             The spectral transformation.
         """
         cdef ST st = ST()
@@ -1019,25 +1022,25 @@ cdef class EPS(Object):
         CHKERR( PetscINCREF(st.obj) )
         return st
 
-    def setST(self, ST st):
+    def setST(self, ST st) -> None:
         """
         Associates a spectral transformation object to the
         eigensolver.
 
         Parameters
         ----------
-        st: ST
+        st
             The spectral transformation.
         """
         CHKERR( EPSSetST(self.eps, st.st) )
 
-    def getBV(self):
+    def getBV(self) -> BV:
         """
         Obtain the basis vector objects associated to the eigensolver.
 
         Returns
         -------
-        bv: BV
+        BV
             The basis vectors context.
         """
         cdef BV bv = BV()
@@ -1045,24 +1048,24 @@ cdef class EPS(Object):
         CHKERR( PetscINCREF(bv.obj) )
         return bv
 
-    def setBV(self, BV bv):
+    def setBV(self, BV bv) -> None:
         """
         Associates a basis vectors object to the eigensolver.
 
         Parameters
         ----------
-        bv: BV
+        bv
             The basis vectors context.
         """
         CHKERR( EPSSetBV(self.eps, bv.bv) )
 
-    def getDS(self):
+    def getDS(self) -> DS:
         """
         Obtain the direct solver associated to the eigensolver.
 
         Returns
         -------
-        ds: DS
+        DS
             The direct solver context.
         """
         cdef DS ds = DS()
@@ -1070,24 +1073,24 @@ cdef class EPS(Object):
         CHKERR( PetscINCREF(ds.obj) )
         return ds
 
-    def setDS(self, DS ds):
+    def setDS(self, DS ds) -> None:
         """
         Associates a direct solver object to the eigensolver.
 
         Parameters
         ----------
-        ds: DS
+        ds
             The direct solver context.
         """
         CHKERR( EPSSetDS(self.eps, ds.ds) )
 
-    def getRG(self):
+    def getRG(self) -> RG:
         """
         Obtain the region object associated to the eigensolver.
 
         Returns
         -------
-        rg: RG
+        RG
             The region context.
         """
         cdef RG rg = RG()
@@ -1095,27 +1098,27 @@ cdef class EPS(Object):
         CHKERR( PetscINCREF(rg.obj) )
         return rg
 
-    def setRG(self, RG rg):
+    def setRG(self, RG rg) -> None:
         """
         Associates a region object to the eigensolver.
 
         Parameters
         ----------
-        rg: RG
+        rg
             The region context.
         """
         CHKERR( EPSSetRG(self.eps, rg.rg) )
 
-    def getOperators(self):
+    def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
         Gets the matrices associated with the eigenvalue problem.
 
         Returns
         -------
         A: Mat
-           The matrix associated with the eigensystem.
+            The matrix associated with the eigensystem.
         B: Mat
-           The second matrix in the case of generalized eigenproblems.
+            The second matrix in the case of generalized eigenproblems.
         """
         cdef Mat A = Mat()
         cdef Mat B = Mat()
@@ -1127,30 +1130,29 @@ cdef class EPS(Object):
         else:
             return (A, None)
 
-    def setOperators(self, Mat A, Mat B=None):
+    def setOperators(self, Mat A, Mat B=None) -> None:
         """
         Sets the matrices associated with the eigenvalue problem.
 
         Parameters
         ----------
-        A: Mat
-           The matrix associated with the eigensystem.
-        B: Mat, optional
-           The second matrix in the case of generalized eigenproblems;
-           if not provided, a standard eigenproblem is assumed.
+        A
+            The matrix associated with the eigensystem.
+        B
+            The second matrix in the case of generalized eigenproblems;
+            if not provided, a standard eigenproblem is assumed.
         """
         cdef PetscMat Bmat = B.mat if B is not None else <PetscMat>NULL
         CHKERR( EPSSetOperators(self.eps, A.mat, Bmat) )
 
-    def setDeflationSpace(self, space):
+    def setDeflationSpace(self, space: Vec | list[Vec]) -> None:
         """
         Add vectors to the basis of the deflation space.
 
         Parameters
         ----------
-        space: a Vec or an array of Vec
-               Set of basis vectors to be added to the deflation
-               space.
+        space
+            Set of basis vectors to be added to the deflation space.
 
         Notes
         -----
@@ -1175,15 +1177,15 @@ cdef class EPS(Object):
 
     #
 
-    def setInitialSpace(self, space):
+    def setInitialSpace(self, space: Vec | list[Vec]) -> None:
         """
         Sets the initial space from which the eigensolver starts to
         iterate.
 
         Parameters
         ----------
-        space: Vec or sequence of Vec
-           The initial space
+        space
+            The initial space
 
         Notes
         -----
@@ -1207,15 +1209,15 @@ cdef class EPS(Object):
         for i in range(ns): vs[i] = (<Vec?>space[i]).vec
         CHKERR( EPSSetInitialSpace(self.eps, <PetscInt>ns, vs) )
 
-    def setLeftInitialSpace(self, space):
+    def setLeftInitialSpace(self, space: Vec | list[Vec]) -> None:
         """
         Sets the left initial space from which the eigensolver starts to
         iterate.
 
         Parameters
         ----------
-        space: Vec or sequence of Vec
-           The left initial space
+        space
+            The left initial space
 
         Notes
         -----
@@ -1234,7 +1236,12 @@ cdef class EPS(Object):
 
     #
 
-    def setStoppingTest(self, stopping, args=None, kargs=None):
+    def setStoppingTest(
+        self,
+        stopping: EPSStoppingFunction | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
         """
         Sets a function to decide when to stop the outer iteration of the eigensolver.
         """
@@ -1247,7 +1254,7 @@ cdef class EPS(Object):
             self.set_attr('__stopping__', None)
             CHKERR( EPSSetStoppingTestFunction(self.eps, EPSStoppingBasic, NULL, NULL) )
 
-    def getStoppingTest(self):
+    def getStoppingTest(self) -> EPSStoppingFunction:
         """
         Gets the stopping function.
         """
@@ -1255,7 +1262,12 @@ cdef class EPS(Object):
 
     #
 
-    def setArbitrarySelection(self, arbitrary, args=None, kargs=None):
+    def setArbitrarySelection(
+        self,
+        arbitrary: EPSArbitraryFunction | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
         """
         Sets a function to look for eigenvalues according to an arbitrary selection
         criterion. This criterion can be based on a computation involving the current
@@ -1273,7 +1285,12 @@ cdef class EPS(Object):
 
     #
 
-    def setEigenvalueComparison(self, comparison, args=None, kargs=None):
+    def setEigenvalueComparison(
+        self,
+        comparison: EPSEigenvalueComparison | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
         """
         Specifies the eigenvalue comparison function when
         `setWhichEigenpairs()` is set to `EPS.Which.USER`.
@@ -1288,7 +1305,12 @@ cdef class EPS(Object):
             self.set_attr('__comparison__', None)
             CHKERR( EPSSetEigenvalueComparison(self.eps, NULL, NULL) )
 
-    def setMonitor(self, monitor, args=None, kargs=None):
+    def setMonitor(
+        self,
+        monitor: EPSMonitorFunction | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
         """
         Appends a monitor function to the list of monitors.
         """
@@ -1302,13 +1324,13 @@ cdef class EPS(Object):
         if kargs is None: kargs = {}
         monitorlist.append((monitor, args, kargs))
 
-    def getMonitor(self):
+    def getMonitor(self) -> EPSMonitorFunction:
         """
         Gets the list of monitor functions.
         """
         return self.get_attr('__monitor__')
 
-    def cancelMonitor(self):
+    def cancelMonitor(self) -> None:
         """
         Clears all monitors for an `EPS` object.
         """
@@ -1317,7 +1339,7 @@ cdef class EPS(Object):
 
     #
 
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Sets up all the internal data structures necessary for the
         execution of the eigensolver.
@@ -1330,13 +1352,13 @@ cdef class EPS(Object):
         """
         CHKERR( EPSSetUp(self.eps) )
 
-    def solve(self):
+    def solve(self) -> None:
         """
         Solves the eigensystem.
         """
         CHKERR( EPSSolve(self.eps) )
 
-    def getIterationNumber(self):
+    def getIterationNumber(self) -> int:
         """
         Gets the current iteration number. If the call to `solve()` is
         complete, then it returns the number of iterations carried out
@@ -1344,35 +1366,34 @@ cdef class EPS(Object):
 
         Returns
         -------
-        its: int
-             Iteration number.
+        int
+            Iteration number.
         """
         cdef PetscInt ival = 0
         CHKERR( EPSGetIterationNumber(self.eps, &ival) )
         return toInt(ival)
 
-    def getConvergedReason(self):
+    def getConvergedReason(self) -> ConvergedReason:
         """
         Gets the reason why the `solve()` iteration was stopped.
 
         Returns
         -------
-        reason: `EPS.ConvergedReason` enumerate
-                Negative value indicates diverged, positive value
-                converged.
+        ConvergedReason
+            Negative value indicates diverged, positive value converged.
         """
         cdef SlepcEPSConvergedReason val = EPS_CONVERGED_ITERATING
         CHKERR( EPSGetConvergedReason(self.eps, &val) )
         return val
 
-    def getConverged(self):
+    def getConverged(self) -> int:
         """
         Gets the number of converged eigenpairs.
 
         Returns
         -------
-        nconv: int
-               Number of converged eigenpairs.
+        int
+            Number of converged eigenpairs.
 
         Notes
         -----
@@ -1382,21 +1403,21 @@ cdef class EPS(Object):
         CHKERR( EPSGetConverged(self.eps, &ival) )
         return toInt(ival)
 
-    def getEigenvalue(self, int i):
+    def getEigenvalue(self, i: int) -> float | Scalar:
         """
         Gets the i-th eigenvalue as computed by `solve()`.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be obtained.
+        i
+            Index of the solution to be obtained.
 
         Returns
         -------
-        e: float | complex
-           The computed eigenvalue. It will be a real variable in case
-           of a Hermitian or generalized Hermitian eigenproblem. Otherwise
-           it will be a complex variable (possibly with zero imaginary part).
+        float | complex
+            The computed eigenvalue. It will be a real variable in case
+            of a Hermitian or generalized Hermitian eigenproblem. Otherwise
+            it will be a complex variable (possibly with zero imaginary part).
 
         Notes
         -----
@@ -1415,17 +1436,17 @@ cdef class EPS(Object):
         else:
             return toComplex(sval1, sval2)
 
-    def getEigenvector(self, int i, Vec Vr, Vec Vi=None):
+    def getEigenvector(self, i: int, Vec Vr, Vec Vi=None) -> None:
         """
         Gets the i-th eigenvector as computed by `solve()`.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be obtained.
-        Vr: Vec
+        i
+            Index of the solution to be obtained.
+        Vr
             Placeholder for the returned eigenvector (real part).
-        Vi: Vec, optional
+        Vi
             Placeholder for the returned eigenvector (imaginary part).
 
         Notes
@@ -1439,17 +1460,17 @@ cdef class EPS(Object):
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
         CHKERR( EPSGetEigenvector(self.eps, i, vecr, veci) )
 
-    def getLeftEigenvector(self, int i, Vec Wr, Vec Wi=None):
+    def getLeftEigenvector(self, i: int, Vec Wr, Vec Wi=None) -> None:
         """
         Gets the i-th left eigenvector as computed by `solve()`.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be obtained.
-        Wr: Vec
+        i
+            Index of the solution to be obtained.
+        Wr
             Placeholder for the returned eigenvector (real part).
-        Wi: Vec, optional
+        Wi
             Placeholder for the returned eigenvector (imaginary part).
 
         Notes
@@ -1466,7 +1487,7 @@ cdef class EPS(Object):
         cdef PetscVec veci = Wi.vec if Wi is not None else <PetscVec>NULL
         CHKERR( EPSGetLeftEigenvector(self.eps, i, vecr, veci) )
 
-    def getEigenpair(self, int i, Vec Vr=None, Vec Vi=None):
+    def getEigenpair(self, i: int, Vec Vr=None, Vec Vi=None) -> Scalar:
         """
         Gets the i-th solution of the eigenproblem as computed by
         `solve()`.  The solution consists of both the eigenvalue and
@@ -1474,11 +1495,11 @@ cdef class EPS(Object):
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be obtained.
-        Vr: Vec, optional
+        i
+            Index of the solution to be obtained.
+        Vr
             Placeholder for the returned eigenvector (real part).
-        Vi: Vec, optional
+        Vi
             Placeholder for the returned eigenvector (imaginary part).
 
         Returns
@@ -1507,14 +1528,14 @@ cdef class EPS(Object):
         else:
             return toComplex(sval1, sval2)
 
-    def getInvariantSubspace(self):
+    def getInvariantSubspace(self) -> list[Vec]:
         """
         Gets an orthonormal basis of the computed invariant subspace.
 
         Returns
         -------
-        subspace: list of Vec
-           Basis of the invariant subspace.
+        list of Vec
+            Basis of the invariant subspace.
 
         Notes
         -----
@@ -1544,20 +1565,20 @@ cdef class EPS(Object):
 
     #
 
-    def getErrorEstimate(self, int i):
+    def getErrorEstimate(self, i: int) -> float:
         """
         Returns the error estimate associated to the i-th computed
         eigenpair.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be considered.
+        i
+            Index of the solution to be considered.
 
         Returns
         -------
-        e: real
-           Error estimate.
+        float
+            Error estimate.
 
         Notes
         -----
@@ -1569,24 +1590,24 @@ cdef class EPS(Object):
         CHKERR( EPSGetErrorEstimate(self.eps, i, &rval) )
         return toReal(rval)
 
-    def computeError(self, int i, etype=None):
+    def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
         Computes the error (based on the residual norm) associated with the i-th
         computed eigenpair.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be considered.
-        etype: `EPS.ErrorType` enumerate
-           The error type to compute.
+        i
+            Index of the solution to be considered.
+        etype
+            The error type to compute.
 
         Returns
         -------
-        e: real
-           The error bound, computed in various ways from the residual norm
-           ``||Ax-kBx||_2`` where ``k`` is the eigenvalue and
-           ``x`` is the eigenvector.
+        float
+            The error bound, computed in various ways from the residual norm
+            ``||Ax-kBx||_2`` where ``k`` is the eigenvalue and
+            ``x`` is the eigenvector.
 
         Notes
         -----
@@ -1599,18 +1620,18 @@ cdef class EPS(Object):
         CHKERR( EPSComputeError(self.eps, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype=None, Viewer viewer=None):
+    def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
         """
         Displays the errors associated with the computed solution
         (as well as the eigenvalues).
 
         Parameters
         ----------
-        etype: `EPS.ErrorType` enumerate, optional
-           The error type to compute.
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        etype
+            The error type to compute.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
 
         Notes
         -----
@@ -1624,35 +1645,35 @@ cdef class EPS(Object):
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( EPSErrorView(self.eps, et, vwr) )
 
-    def valuesView(self, Viewer viewer=None):
+    def valuesView(self, viewer: Viewer | None = None) -> None:
         """
         Displays the computed eigenvalues in a viewer.
 
         Parameters
         ----------
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( EPSValuesView(self.eps, vwr) )
 
-    def vectorsView(self, Viewer viewer=None):
+    def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
         Outputs computed eigenvectors to a viewer.
 
         Parameters
         ----------
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( EPSVectorsView(self.eps, vwr) )
 
     #
 
-    def setPowerShiftType(self, shift):
+    def setPowerShiftType(self, shift: PowerShiftType) -> None:
         """
         Sets the type of shifts used during the power iteration. This
         can be used to emulate the Rayleigh Quotient Iteration (RQI)
@@ -1660,8 +1681,8 @@ cdef class EPS(Object):
 
         Parameters
         ----------
-        shift: `EPS.PowerShiftType` enumerate
-               The type of shift.
+        shift
+            The type of shift.
 
         Notes
         -----
@@ -1681,28 +1702,28 @@ cdef class EPS(Object):
         cdef SlepcEPSPowerShiftType val = shift
         CHKERR( EPSPowerSetShiftType(self.eps, val) )
 
-    def getPowerShiftType(self):
+    def getPowerShiftType(self) -> PowerShiftType:
         """
         Gets the type of shifts used during the power iteration.
 
         Returns
         -------
-        shift: `EPS.PowerShiftType` enumerate
-               The type of shift.
+        PowerShiftType
+            The type of shift.
         """
         cdef SlepcEPSPowerShiftType val = EPS_POWER_SHIFT_CONSTANT
         CHKERR( EPSPowerGetShiftType(self.eps, &val) )
         return val
 
-    def setArnoldiDelayed(self, delayed):
+    def setArnoldiDelayed(self, delayed: bool) -> None:
         """
         Activates or deactivates delayed reorthogonalization in the
         Arnoldi iteration.
 
         Parameters
         ----------
-        delayed: bool
-                 True if delayed reorthogonalization is to be used.
+        delayed
+            True if delayed reorthogonalization is to be used.
 
         Notes
         -----
@@ -1717,29 +1738,29 @@ cdef class EPS(Object):
         cdef PetscBool val = asBool(delayed)
         CHKERR( EPSArnoldiSetDelayed(self.eps, val) )
 
-    def getArnoldiDelayed(self):
+    def getArnoldiDelayed(self) -> bool:
         """
         Gets the type of reorthogonalization used during the Arnoldi
         iteration.
 
         Returns
         -------
-        delayed: bool
-                 True if delayed reorthogonalization is to be used.
+        bool
+            True if delayed reorthogonalization is to be used.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSArnoldiGetDelayed(self.eps, &tval) )
         return toBool(tval)
 
-    def setLanczosReorthogType(self, reorthog):
+    def setLanczosReorthogType(self, reorthog: LanczosReorthog) -> None:
         """
         Sets the type of reorthogonalization used during the Lanczos
         iteration.
 
         Parameters
         ----------
-        reorthog: `EPS.LanczosReorthogType` enumerate
-                  The type of reorthogonalization.
+        reorthog
+            The type of reorthogonalization.
 
         Notes
         -----
@@ -1749,15 +1770,15 @@ cdef class EPS(Object):
         cdef SlepcEPSLanczosReorthogType val = reorthog
         CHKERR( EPSLanczosSetReorthog(self.eps, val) )
 
-    def getLanczosReorthogType(self):
+    def getLanczosReorthogType(self) -> LanczosReorthog:
         """
         Gets the type of reorthogonalization used during the Lanczos
         iteration.
 
         Returns
         -------
-        reorthog: `EPS.LanczosReorthogType` enumerate
-                  The type of reorthogonalization.
+        LanczosReorthogType
+            The type of reorthogonalization.
         """
         cdef SlepcEPSLanczosReorthogType val = \
             EPS_LANCZOS_REORTHOG_LOCAL
@@ -1766,15 +1787,15 @@ cdef class EPS(Object):
 
     #
 
-    def setKrylovSchurBSEType(self, bse):
+    def setKrylovSchurBSEType(self, bse: KrylovSchurBSEType) -> None:
         """
         Sets the method to be used for BSE structured eigenproblems in
         the Krylov-Schur solver.
 
         Parameters
         ----------
-        bse: `EPS.KrylovSchurBSEType` enumerate
-             The BSE method.
+        bse
+            The BSE method.
 
         Notes
         -----
@@ -1785,21 +1806,21 @@ cdef class EPS(Object):
         cdef SlepcEPSKrylovSchurBSEType val = bse
         CHKERR( EPSKrylovSchurSetBSEType(self.eps, val) )
 
-    def getKrylovSchurBSEType(self):
+    def getKrylovSchurBSEType(self) -> KrylovSchurBSEType:
         """
         Gets the method used for BSE structured eigenproblems in the
         Krylov-Schur solver.
 
         Returns
         -------
-        bse: `EPS.KrylovSchurBSEType` enumerate
-             The BSE method.
+        KrylovSchurBSEType
+            The BSE method.
         """
         cdef SlepcEPSKrylovSchurBSEType val = EPS_KRYLOVSCHUR_BSE_SHAO
         CHKERR( EPSKrylovSchurGetBSEType(self.eps, &val) )
         return val
 
-    def setKrylovSchurRestart(self, keep):
+    def setKrylovSchurRestart(self, keep: float) -> None:
         """
         Sets the restart parameter for the Krylov-Schur method, in
         particular the proportion of basis vectors that must be kept
@@ -1807,8 +1828,8 @@ cdef class EPS(Object):
 
         Parameters
         ----------
-        keep: float
-              The number of vectors to be kept at restart.
+        keep
+            The number of vectors to be kept at restart.
 
         Notes
         -----
@@ -1817,28 +1838,28 @@ cdef class EPS(Object):
         cdef PetscReal val = asReal(keep)
         CHKERR( EPSKrylovSchurSetRestart(self.eps, val) )
 
-    def getKrylovSchurRestart(self):
+    def getKrylovSchurRestart(self) -> float:
         """
         Gets the restart parameter used in the Krylov-Schur method.
 
         Returns
         -------
-        keep: float
-              The number of vectors to be kept at restart.
+        float
+            The number of vectors to be kept at restart.
         """
         cdef PetscReal val = 0
         CHKERR( EPSKrylovSchurGetRestart(self.eps, &val) )
         return toReal(val)
 
-    def setKrylovSchurLocking(self, lock):
+    def setKrylovSchurLocking(self, lock: bool) -> None:
         """
         Choose between locking and non-locking variants of the
         Krylov-Schur method.
 
         Parameters
         ----------
-        lock: bool
-              True if the locking variant must be selected.
+        lock
+            True if the locking variant must be selected.
 
         Notes
         -----
@@ -1850,20 +1871,20 @@ cdef class EPS(Object):
         cdef PetscBool val = asBool(lock)
         CHKERR( EPSKrylovSchurSetLocking(self.eps, val) )
 
-    def getKrylovSchurLocking(self):
+    def getKrylovSchurLocking(self) -> bool:
         """
         Gets the locking flag used in the Krylov-Schur method.
 
         Returns
         -------
-        lock: bool
-              The locking flag.
+        bool
+            The locking flag.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSKrylovSchurGetLocking(self.eps, &tval) )
         return toBool(tval)
 
-    def setKrylovSchurPartitions(self, npart):
+    def setKrylovSchurPartitions(self, npart: int) -> None:
         """
         Sets the number of partitions for the case of doing spectrum
         slicing for a computational interval with the communicator split
@@ -1871,8 +1892,8 @@ cdef class EPS(Object):
 
         Parameters
         ----------
-        npart: int
-              The number of partitions.
+        npart
+            The number of partitions.
 
         Notes
         -----
@@ -1884,29 +1905,29 @@ cdef class EPS(Object):
         cdef PetscInt val = asInt(npart)
         CHKERR( EPSKrylovSchurSetPartitions(self.eps, val) )
 
-    def getKrylovSchurPartitions(self):
+    def getKrylovSchurPartitions(self) -> int:
         """
         Gets the number of partitions of the communicator in case of
         spectrum slicing.
 
         Returns
         -------
-        npart: int
-              The number of partitions.
+        int
+            The number of partitions.
         """
         cdef PetscInt val = 0
         CHKERR( EPSKrylovSchurGetPartitions(self.eps, &val) )
         return toInt(val)
 
-    def setKrylovSchurDetectZeros(self, detect):
+    def setKrylovSchurDetectZeros(self, detect: bool) -> None:
         """
         Sets a flag to enforce detection of zeros during the factorizations
         throughout the spectrum slicing computation.
 
         Parameters
         ----------
-        detect: bool
-              True if zeros must checked for.
+        detect
+            True if zeros must checked for.
 
         Notes
         -----
@@ -1921,20 +1942,25 @@ cdef class EPS(Object):
         cdef PetscBool val = asBool(detect)
         CHKERR( EPSKrylovSchurSetDetectZeros(self.eps, val) )
 
-    def getKrylovSchurDetectZeros(self):
+    def getKrylovSchurDetectZeros(self) -> bool:
         """
         Gets the flag that enforces zero detection in spectrum slicing.
 
         Returns
         -------
-        detect: bool
-              The zero detection flag.
+        bool
+            The zero detection flag.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSKrylovSchurGetDetectZeros(self.eps, &tval) )
         return toBool(tval)
 
-    def setKrylovSchurDimensions(self, nev=None, ncv=None, mpd=None):
+    def setKrylovSchurDimensions(
+        self,
+        nev: int | None = None,
+        ncv: int | None = None,
+        mpd: int | None = None,
+    ) -> None:
         """
         Sets the dimensions used for each subsolve step in case of doing
         spectrum slicing for a computational interval. The meaning of the
@@ -1942,12 +1968,12 @@ cdef class EPS(Object):
 
         Parameters
         ----------
-        nev: int, optional
-             Number of eigenvalues to compute.
-        ncv: int, optional
-             Maximum dimension of the subspace to be used by the solver.
-        mpd: int, optional
-             Maximum dimension allowed for the projected problem.
+        nev
+            Number of eigenvalues to compute.
+        ncv
+            Maximum dimension of the subspace to be used by the solver.
+        mpd
+            Maximum dimension allowed for the projected problem.
         """
         cdef PetscInt ival1 = PETSC_DEFAULT
         cdef PetscInt ival2 = PETSC_DEFAULT
@@ -1957,7 +1983,7 @@ cdef class EPS(Object):
         if mpd is not None: ival3 = asInt(mpd)
         CHKERR( EPSKrylovSchurSetDimensions(self.eps, ival1, ival2, ival3) )
 
-    def getKrylovSchurDimensions(self):
+    def getKrylovSchurDimensions(self) -> tuple[int, int, int]:
         """
         Gets the dimensions used for each subsolve step in case of doing
         spectrum slicing for a computational interval.
@@ -1965,11 +1991,11 @@ cdef class EPS(Object):
         Returns
         -------
         nev: int
-             Number of eigenvalues to compute.
+            Number of eigenvalues to compute.
         ncv: int
-             Maximum dimension of the subspace to be used by the solver.
+            Maximum dimension of the subspace to be used by the solver.
         mpd: int
-             Maximum dimension allowed for the projected problem.
+            Maximum dimension allowed for the projected problem.
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -1977,7 +2003,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetDimensions(self.eps, &ival1, &ival2, &ival3) )
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
-    def getKrylovSchurSubcommInfo(self):
+    def getKrylovSchurSubcommInfo(self) -> tuple[int, int, Vec]:
         """
         Gets information related to the case of doing spectrum slicing
         for a computational interval with multiple communicators.
@@ -1985,12 +2011,12 @@ cdef class EPS(Object):
         Returns
         -------
         k: int
-             Number of the subinterval for the calling process.
+            Number of the subinterval for the calling process.
         n: int
-             Number of eigenvalues found in the k-th subinterval.
+            Number of eigenvalues found in the k-th subinterval.
         v: Vec
-             A vector owned by processes in the subcommunicator with dimensions
-             compatible for locally computed eigenvectors.
+            A vector owned by processes in the subcommunicator with dimensions
+            compatible for locally computed eigenvectors.
 
         Notes
         -----
@@ -2004,22 +2030,22 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetSubcommInfo(self.eps, &ival1, &ival2, &vec.vec) )
         return (toInt(ival1), toInt(ival2), vec)
 
-    def getKrylovSchurSubcommPairs(self, int i, Vec V):
+    def getKrylovSchurSubcommPairs(self, i: int, Vec V) -> Scalar:
         """
         Gets the i-th eigenpair stored internally in the multi-communicator
         to which the calling process belongs.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be obtained.
-        V: Vec
-           Placeholder for the returned eigenvector.
+        i
+            Index of the solution to be obtained.
+        V
+            Placeholder for the returned eigenvector.
 
         Returns
         -------
-        e: scalar
-           The computed eigenvalue.
+        Scalar
+            The computed eigenvalue.
 
         Notes
         -----
@@ -2032,7 +2058,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetSubcommPairs(self.eps, i, &sval, vec) )
         return toScalar(sval)
 
-    def getKrylovSchurSubcommMats(self):
+    def getKrylovSchurSubcommMats(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
         Gets the eigenproblem matrices stored internally in the subcommunicator
         to which the calling process belongs.
@@ -2040,9 +2066,9 @@ cdef class EPS(Object):
         Returns
         -------
         A: Mat
-           The matrix associated with the eigensystem.
+            The matrix associated with the eigensystem.
         B: Mat
-           The second matrix in the case of generalized eigenproblems.
+            The second matrix in the case of generalized eigenproblems.
 
         Notes
         -----
@@ -2061,31 +2087,39 @@ cdef class EPS(Object):
         else:
             return (A, None)
 
-    def updateKrylovSchurSubcommMats(self, s=1.0, a=1.0, Mat Au=None,
-                                     t=1.0, b=1.0, Mat Bu=None,
-                                     structure=None, globalup=False):
+    def updateKrylovSchurSubcommMats(
+        self,
+        s: Scalar = 1.0,
+        a: Scalar = 1.0,
+        Mat Au or None = None,
+        t: Scalar = 1.0,
+        b: Scalar = 1.0,
+        Mat Bu or None = None,
+        structure: Mat.Structure | None = None,
+        globalup: bool = False,
+    ) -> None:
         """
         Update the eigenproblem matrices stored internally in the
         subcommunicator to which the calling process belongs.
 
         Parameters
         ----------
-        s: float (real or complex)
-           Scalar that multiplies the existing A matrix.
-        a: float (real or complex)
-           Scalar used in the axpy operation on A.
-        Au: Mat, optional
-           The matrix used in the axpy operation on A.
-        t: float (real or complex)
-           Scalar that multiplies the existing B matrix.
-        b: float (real or complex)
-           Scalar used in the axpy operation on B.
-        Bu: Mat, optional
-           The matrix used in the axpy operation on B.
-        structure: `PETSc.Mat.Structure` enumerate
-           Either same, different, or a subset of the non-zero sparsity pattern.
-        globalup: bool
-           Whether global matrices must be updated or not.
+        s
+            Scalar that multiplies the existing A matrix.
+        a
+            Scalar used in the axpy operation on A.
+        Au
+            The matrix used in the axpy operation on A.
+        t
+            Scalar that multiplies the existing B matrix.
+        b
+            Scalar used in the axpy operation on B.
+        Bu
+            The matrix used in the axpy operation on B.
+        structure
+            Either same, different, or a subset of the non-zero sparsity pattern.
+        globalup
+            Whether global matrices must be updated or not.
 
         Notes
         -----
@@ -2111,13 +2145,13 @@ cdef class EPS(Object):
         cdef PetscBool tval = globalup
         CHKERR( EPSKrylovSchurUpdateSubcommMats(self.eps, s, a, Amat, t, b, Bmat, vstr, tval) )
 
-    def setKrylovSchurSubintervals(self, subint):
+    def setKrylovSchurSubintervals(self, subint: Sequence[float]) -> None:
         """
         Sets the subinterval boundaries for spectrum slicing with a computational interval.
 
         Parameters
         ----------
-        subint: list of float
+        subint
             Real values specifying subintervals
 
         Notes
@@ -2143,14 +2177,14 @@ cdef class EPS(Object):
         for i in range(n): subintarray[i] = asReal(subint[i])
         CHKERR( EPSKrylovSchurSetSubintervals(self.eps, subintarray) )
 
-    def getKrylovSchurSubintervals(self):
+    def getKrylovSchurSubintervals(self) -> ArrayReal:
         """
         Returns the points that delimit the subintervals used
         in spectrum slicing with several partitions.
 
         Returns
         -------
-        subint: list of float
+        ArrayReal
             Real values specifying subintervals
         """
         cdef PetscReal *subintarray = NULL
@@ -2164,17 +2198,17 @@ cdef class EPS(Object):
             CHKERR( PetscFree(subintarray) )
         return subint
 
-    def getKrylovSchurInertias(self):
+    def getKrylovSchurInertias(self) -> tuple[ArrayReal, ArrayInt]:
         """
         Gets the values of the shifts and their corresponding inertias
         in case of doing spectrum slicing for a computational interval.
 
         Returns
         -------
-        shifts: list of float
-             The values of the shifts used internally in the solver.
-        inertias: list of int
-             The values of the inertia in each shift.
+        shifts: ArrayReal
+            The values of the shifts used internally in the solver.
+        inertias: ArrayInt
+            The values of the inertia in each shift.
         """
         cdef PetscReal *shiftsarray = NULL
         cdef PetscInt *inertiasarray = NULL
@@ -2190,15 +2224,15 @@ cdef class EPS(Object):
             CHKERR( PetscFree(inertiasarray) )
         return (shifts, inertias)
 
-    def getKrylovSchurKSP(self):
+    def getKrylovSchurKSP(self) -> KSP:
         """
         Retrieve the linear solver object associated with the internal `EPS`
         object in case of doing spectrum slicing for a computational interval.
 
         Returns
         -------
-        ksp: `KSP`
-             The linear solver object.
+        KSP
+            The linear solver object.
         """
         cdef KSP ksp = KSP()
         CHKERR( EPSKrylovSchurGetKSP(self.eps, &ksp.ksp) )
@@ -2207,71 +2241,71 @@ cdef class EPS(Object):
 
     #
 
-    def setGDKrylovStart(self, krylovstart=True):
+    def setGDKrylovStart(self, krylovstart: bool = True) -> None:
         """
         Activates or deactivates starting the search subspace
         with a Krylov basis.
 
         Parameters
         ----------
-        krylovstart: bool
-              True if starting the search subspace with a Krylov basis.
+        krylovstart
+            True if starting the search subspace with a Krylov basis.
         """
         cdef PetscBool val = asBool(krylovstart)
         CHKERR( EPSGDSetKrylovStart(self.eps, val) )
 
-    def getGDKrylovStart(self):
+    def getGDKrylovStart(self) -> bool:
         """
         Gets a flag indicating if the search subspace is started with a
         Krylov basis.
 
         Returns
         -------
-        krylovstart: bool
-              True if starting the search subspace with a Krylov basis.
+        bool
+            True if starting the search subspace with a Krylov basis.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGDGetKrylovStart(self.eps, &tval) )
         return toBool(tval)
 
-    def setGDBlockSize(self, bs):
+    def setGDBlockSize(self, bs: int) -> None:
         """
         Sets the number of vectors to be added to the searching space
         in every iteration.
 
         Parameters
         ----------
-        bs: int
+        bs
             The number of vectors added to the search space in every iteration.
         """
         cdef PetscInt ival = asInt(bs)
         CHKERR( EPSGDSetBlockSize(self.eps, ival) )
 
-    def getGDBlockSize(self):
+    def getGDBlockSize(self) -> int:
         """
         Gets the number of vectors to be added to the searching space
         in every iteration.
 
         Returns
         -------
-        bs: int
+        int
             The number of vectors added to the search space in every iteration.
         """
         cdef PetscInt ival = 0
         CHKERR( EPSGDGetBlockSize(self.eps, &ival) )
         return toInt(ival)
 
-    def setGDRestart(self, minv=None, plusk=None):
+    def setGDRestart(self, minv: int = None, plusk: int = None) -> None:
         """
         Sets the number of vectors of the search space after restart and
         the number of vectors saved from the previous iteration.
 
         Parameters
         ----------
-        minv: int, optional
-              The number of vectors of the search subspace after restart.
-        plusk: int, optional
-              The number of vectors saved from the previous iteration.
+        minv
+            The number of vectors of the search subspace after restart.
+        plusk
+            The number of vectors saved from the previous iteration.
         """
         cdef PetscInt ival1 = PETSC_DEFAULT
         cdef PetscInt ival2 = PETSC_DEFAULT
@@ -2279,7 +2313,7 @@ cdef class EPS(Object):
         if plusk is not None: ival2 = asInt(plusk)
         CHKERR( EPSGDSetRestart(self.eps, ival1, ival2) )
 
-    def getGDRestart(self):
+    def getGDRestart(self) -> tuple[int, int]:
         """
         Gets the number of vectors of the search space after restart and
         the number of vectors saved from the previous iteration.
@@ -2287,68 +2321,68 @@ cdef class EPS(Object):
         Returns
         -------
         minv: int
-              The number of vectors of the search subspace after restart.
+            The number of vectors of the search subspace after restart.
         plusk: int
-              The number of vectors saved from the previous iteration.
+            The number of vectors saved from the previous iteration.
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
         CHKERR( EPSGDGetRestart(self.eps, &ival1, &ival2) )
         return (toInt(ival1), toInt(ival2))
 
-    def setGDInitialSize(self, initialsize):
+    def setGDInitialSize(self, initialsize: int) -> None:
         """
         Sets the initial size of the searching space.
 
         Parameters
         ----------
-        initialsize: int
+        initialsize
             The number of vectors of the initial searching subspace.
         """
         cdef PetscInt ival = asInt(initialsize)
         CHKERR( EPSGDSetInitialSize(self.eps, ival) )
 
-    def getGDInitialSize(self):
+    def getGDInitialSize(self) -> int:
         """
         Gets the initial size of the searching space.
 
         Returns
         -------
-        initialsize: int
+        int
             The number of vectors of the initial searching subspace.
         """
         cdef PetscInt ival = 0
         CHKERR( EPSGDGetInitialSize(self.eps, &ival) )
         return toInt(ival)
 
-    def setGDBOrth(self, borth):
+    def setGDBOrth(self, borth: bool) -> int:
         """
         Selects the orthogonalization that will be used in the search
         subspace in case of generalized Hermitian problems.
 
         Parameters
         ----------
-        borth: bool
-              Whether to B-orthogonalize the search subspace.
+        borth
+            Whether to B-orthogonalize the search subspace.
         """
         cdef PetscBool tval = asBool(borth)
         CHKERR( EPSGDSetBOrth(self.eps, tval) )
 
-    def getGDBOrth(self):
+    def getGDBOrth(self) -> bool:
         """
         Returns the orthogonalization used in the search subspace in
         case of generalized Hermitian problems.
 
         Returns
         -------
-        borth: bool
-              Whether to B-orthogonalize the search subspace.
+        bool
+            Whether to B-orthogonalize the search subspace.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGDGetBOrth(self.eps, &tval) )
         return toBool(tval)
 
-    def setGDDoubleExpansion(self, doubleexp):
+    def setGDDoubleExpansion(self, doubleexp: bool) -> None:
         """
         Activate a variant where the search subspace is expanded  with
         K*[A*x B*x] (double expansion) instead of the classic K*r, where
@@ -2357,21 +2391,21 @@ cdef class EPS(Object):
 
         Parameters
         ----------
-        doubleexp: bool
-              True if using double expansion.
+        doubleexp
+            True if using double expansion.
         """
         cdef PetscBool val = asBool(doubleexp)
         CHKERR( EPSGDSetDoubleExpansion(self.eps, val) )
 
-    def getGDDoubleExpansion(self):
+    def getGDDoubleExpansion(self) -> bool:
         """
         Gets a flag indicating whether the double expansion variant
         has been activated or not.
 
         Returns
         -------
-        doubleexp: bool
-              True if using double expansion.
+        bool
+            True if using double expansion.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGDGetDoubleExpansion(self.eps, &tval) )
@@ -2379,71 +2413,71 @@ cdef class EPS(Object):
 
     #
 
-    def setJDKrylovStart(self, krylovstart=True):
+    def setJDKrylovStart(self, krylovstart: bool = True) -> None:
         """
         Activates or deactivates starting the search subspace
         with a Krylov basis.
 
         Parameters
         ----------
-        krylovstart: bool
-              True if starting the search subspace with a Krylov basis.
+        krylovstart
+            True if starting the search subspace with a Krylov basis.
         """
         cdef PetscBool val = asBool(krylovstart)
         CHKERR( EPSJDSetKrylovStart(self.eps, val) )
 
-    def getJDKrylovStart(self):
+    def getJDKrylovStart(self) -> bool:
         """
         Gets a flag indicating if the search subspace is started with a
         Krylov basis.
 
         Returns
         -------
-        krylovstart: bool
-              True if starting the search subspace with a Krylov basis.
+        bool
+            True if starting the search subspace with a Krylov basis.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSJDGetKrylovStart(self.eps, &tval) )
         return toBool(tval)
 
-    def setJDBlockSize(self, bs):
+    def setJDBlockSize(self, bs: int) -> None:
         """
         Sets the number of vectors to be added to the searching space
         in every iteration.
 
         Parameters
         ----------
-        bs: int
+        bs
             The number of vectors added to the search space in every iteration.
         """
         cdef PetscInt ival = asInt(bs)
         CHKERR( EPSJDSetBlockSize(self.eps, ival) )
 
-    def getJDBlockSize(self):
+    def getJDBlockSize(self) -> int:
         """
         Gets the number of vectors to be added to the searching space
         in every iteration.
 
         Returns
         -------
-        bs: int
+        int
             The number of vectors added to the search space in every iteration.
         """
         cdef PetscInt ival = 0
         CHKERR( EPSJDGetBlockSize(self.eps, &ival) )
         return toInt(ival)
 
-    def setJDRestart(self, minv=None, plusk=None):
+    def setJDRestart(self, minv: int | None = None, plusk: int | None = None) -> None:
         """
         Sets the number of vectors of the search space after restart and
         the number of vectors saved from the previous iteration.
 
         Parameters
         ----------
-        minv: int, optional
-              The number of vectors of the search subspace after restart.
-        plusk: int, optional
-              The number of vectors saved from the previous iteration.
+        minv
+            The number of vectors of the search subspace after restart.
+        plusk
+            The number of vectors saved from the previous iteration.
         """
         cdef PetscInt ival1 = PETSC_DEFAULT
         cdef PetscInt ival2 = PETSC_DEFAULT
@@ -2451,7 +2485,7 @@ cdef class EPS(Object):
         if plusk is not None: ival2 = asInt(plusk)
         CHKERR( EPSJDSetRestart(self.eps, ival1, ival2) )
 
-    def getJDRestart(self):
+    def getJDRestart(self) -> tuple[int, int]:
         """
         Gets the number of vectors of the search space after restart and
         the number of vectors saved from the previous iteration.
@@ -2459,48 +2493,48 @@ cdef class EPS(Object):
         Returns
         -------
         minv: int
-              The number of vectors of the search subspace after restart.
+            The number of vectors of the search subspace after restart.
         plusk: int
-              The number of vectors saved from the previous iteration.
+            The number of vectors saved from the previous iteration.
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
         CHKERR( EPSJDGetRestart(self.eps, &ival1, &ival2) )
         return (toInt(ival1), toInt(ival2))
 
-    def setJDInitialSize(self, initialsize):
+    def setJDInitialSize(self, initialsize: int) -> None:
         """
         Sets the initial size of the searching space.
 
         Parameters
         ----------
-        initialsize: int
+        initialsize
             The number of vectors of the initial searching subspace.
         """
         cdef PetscInt ival = asInt(initialsize)
         CHKERR( EPSJDSetInitialSize(self.eps, ival) )
 
-    def getJDInitialSize(self):
+    def getJDInitialSize(self) -> int:
         """
         Gets the initial size of the searching space.
 
         Returns
         -------
-        initialsize: int
+        int
             The number of vectors of the initial searching subspace.
         """
         cdef PetscInt ival = 0
         CHKERR( EPSJDGetInitialSize(self.eps, &ival) )
         return toInt(ival)
 
-    def setJDFix(self, fix):
+    def setJDFix(self, fix: float) -> None:
         """
         Sets the threshold for changing the target in the correction equation.
 
         Parameters
         ----------
-        fix: float
-             The threshold for changing the target.
+        fix
+            The threshold for changing the target.
 
         Notes
         -----
@@ -2511,20 +2545,20 @@ cdef class EPS(Object):
         cdef PetscReal val = asReal(fix)
         CHKERR( EPSJDSetFix(self.eps, val) )
 
-    def getJDFix(self):
+    def getJDFix(self) -> float:
         """
         Gets the threshold for changing the target in the correction equation.
 
         Returns
         -------
-        fix: float
-             The threshold for changing the target.
+        float
+            The threshold for changing the target.
         """
         cdef PetscReal val = 0
         CHKERR( EPSJDGetFix(self.eps, &val) )
         return toReal(val)
 
-    def setJDConstCorrectionTol(self, constant):
+    def setJDConstCorrectionTol(self, constant: bool) -> None:
         """
         Deactivates the dynamic stopping criterion that sets the
         `KSP` relative tolerance to `0.5**i`, where `i` is the number
@@ -2532,48 +2566,48 @@ cdef class EPS(Object):
 
         Parameters
         ----------
-        constant: bool
-              If False, the `KSP` relative tolerance is set to `0.5**i`.
+        constant
+            If False, the `KSP` relative tolerance is set to `0.5**i`.
         """
         cdef PetscBool tval = asBool(constant)
         CHKERR( EPSJDSetConstCorrectionTol(self.eps, tval) )
 
-    def getJDConstCorrectionTol(self):
+    def getJDConstCorrectionTol(self) -> bool:
         """
         Returns the flag indicating if the dynamic stopping is being used for
         solving the correction equation.
 
         Returns
         -------
-        constant: bool
-              Flag indicating if the dynamic stopping criterion is not being used.
+        bool
+            True if the dynamic stopping criterion is not being used.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSJDGetConstCorrectionTol(self.eps, &tval) )
         return toBool(tval)
 
-    def setJDBOrth(self, borth):
+    def setJDBOrth(self, borth: bool) -> None:
         """
         Selects the orthogonalization that will be used in the search
         subspace in case of generalized Hermitian problems.
 
         Parameters
         ----------
-        borth: bool
-              Whether to B-orthogonalize the search subspace.
+        borth
+            Whether to B-orthogonalize the search subspace.
         """
         cdef PetscBool tval = asBool(borth)
         CHKERR( EPSJDSetBOrth(self.eps, tval) )
 
-    def getJDBOrth(self):
+    def getJDBOrth(self) -> bool:
         """
         Returns the orthogonalization used in the search subspace in
         case of generalized Hermitian problems.
 
         Returns
         -------
-        borth: bool
-              Whether to B-orthogonalize the search subspace.
+        bool
+            Whether to B-orthogonalize the search subspace.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSJDGetBOrth(self.eps, &tval) )
@@ -2581,58 +2615,58 @@ cdef class EPS(Object):
 
     #
 
-    def setRQCGReset(self, nrest):
+    def setRQCGReset(self, nrest: int) -> None:
         """
         Sets the reset parameter of the RQCG iteration. Every nrest iterations,
         the solver performs a Rayleigh-Ritz projection step.
 
         Parameters
         ----------
-        nrest: int
-               The number of iterations between resets.
+        nrest
+            The number of iterations between resets.
         """
         cdef PetscInt val = asInt(nrest)
         CHKERR( EPSRQCGSetReset(self.eps, val) )
 
-    def getRQCGReset(self):
+    def getRQCGReset(self) -> int:
         """
         Gets the reset parameter used in the RQCG method.
 
         Returns
         -------
-        nrest: int
-               The number of iterations between resets.
+        int
+            The number of iterations between resets.
         """
         cdef PetscInt val = 0
         CHKERR( EPSRQCGGetReset(self.eps, &val) )
         return toInt(val)
 
-    def setLOBPCGBlockSize(self, bs):
+    def setLOBPCGBlockSize(self, bs: int) -> None:
         """
         Sets the block size of the LOBPCG method.
 
         Parameters
         ----------
-        bs: int
+        bs
             The block size.
         """
         cdef PetscInt ival = asInt(bs)
         CHKERR( EPSLOBPCGSetBlockSize(self.eps, ival) )
 
-    def getLOBPCGBlockSize(self):
+    def getLOBPCGBlockSize(self) -> int:
         """
         Gets the block size used in the LOBPCG method.
 
         Returns
         -------
-        bs: int
+        int
             The block size.
         """
         cdef PetscInt ival = 0
         CHKERR( EPSLOBPCGGetBlockSize(self.eps, &ival) )
         return toInt(ival)
 
-    def setLOBPCGRestart(self, restart):
+    def setLOBPCGRestart(self, restart: float) -> None:
         """
         Sets the restart parameter for the LOBPCG method. The meaning
         of this parameter is the proportion of vectors within the
@@ -2641,8 +2675,8 @@ cdef class EPS(Object):
 
         Parameters
         ----------
-        restart: float
-              The percentage of the block of vectors to force a restart.
+        restart
+            The percentage of the block of vectors to force a restart.
 
         Notes
         -----
@@ -2651,28 +2685,28 @@ cdef class EPS(Object):
         cdef PetscReal val = asReal(restart)
         CHKERR( EPSLOBPCGSetRestart(self.eps, val) )
 
-    def getLOBPCGRestart(self):
+    def getLOBPCGRestart(self) -> float:
         """
         Gets the restart parameter used in the LOBPCG method.
 
         Returns
         -------
-        restart: float
-              The restart parameter.
+        float
+            The restart parameter.
         """
         cdef PetscReal val = 0
         CHKERR( EPSLOBPCGGetRestart(self.eps, &val) )
         return toReal(val)
 
-    def setLOBPCGLocking(self, lock):
+    def setLOBPCGLocking(self, lock: bool) -> None:
         """
         Choose between locking and non-locking variants of the
         LOBPCG method.
 
         Parameters
         ----------
-        lock: bool
-              True if the locking variant must be selected.
+        lock
+            True if the locking variant must be selected.
 
         Notes
         -----
@@ -2683,29 +2717,29 @@ cdef class EPS(Object):
         cdef PetscBool val = asBool(lock)
         CHKERR( EPSLOBPCGSetLocking(self.eps, val) )
 
-    def getLOBPCGLocking(self):
+    def getLOBPCGLocking(self) -> bool:
         """
         Gets the locking flag used in the LOBPCG method.
 
         Returns
         -------
-        lock: bool
-              The locking flag.
+        bool
+            The locking flag.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSLOBPCGGetLocking(self.eps, &tval) )
         return toBool(tval)
 
-    def setLyapIIRanks(self, rkc=None, rkl=None):
+    def setLyapIIRanks(self, rkc: int | None = None, rkl: int | None = None) -> None:
         """
         Set the ranks used in the solution of the Lyapunov equation.
 
         Parameters
         ----------
-        rkc: int, optional
-             The compressed rank.
-        rkl: int, optional
-             The Lyapunov rank.
+        rkc
+            The compressed rank.
+        rkl
+            The Lyapunov rank.
         """
         cdef PetscInt ival1 = PETSC_DEFAULT
         cdef PetscInt ival2 = PETSC_DEFAULT
@@ -2713,16 +2747,16 @@ cdef class EPS(Object):
         if rkl is not None: ival2 = asInt(rkl)
         CHKERR( EPSLyapIISetRanks(self.eps, ival1, ival2) )
 
-    def getLyapIIRanks(self):
+    def getLyapIIRanks(self) -> tuple[int, int]:
         """
         Return the rank values used for the Lyapunov step.
 
         Returns
         -------
         rkc: int
-             The compressed rank.
+            The compressed rank.
         rkl: int
-             The Lyapunov rank.
+            The Lyapunov rank.
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -2731,74 +2765,82 @@ cdef class EPS(Object):
 
     #
 
-    def setCISSExtraction(self, extraction):
+    def setCISSExtraction(self, extraction: CISSExtraction) -> None:
         """
         Sets the extraction technique used in the CISS solver.
 
         Parameters
         ----------
-        extraction: `EPS.CISSExtraction` enumerate
-               The extraction technique.
+        extraction
+            The extraction technique.
         """
         cdef SlepcEPSCISSExtraction val = extraction
         CHKERR( EPSCISSSetExtraction(self.eps, val) )
 
-    def getCISSExtraction(self):
+    def getCISSExtraction(self) -> CISSExtraction:
         """
         Gets the extraction technique used in the CISS solver.
 
         Returns
         -------
-        extraction: `EPS.CISSExtraction` enumerate
-               The extraction technique.
+        CISSExtraction
+            The extraction technique.
         """
         cdef SlepcEPSCISSExtraction val = EPS_CISS_EXTRACTION_RITZ
         CHKERR( EPSCISSGetExtraction(self.eps, &val) )
         return val
 
-    def setCISSQuadRule(self, quad):
+    def setCISSQuadRule(self, quad: CISSQuadRule) -> None:
         """
         Sets the quadrature rule used in the CISS solver.
 
         Parameters
         ----------
-        quad: `EPS.CISSQuadRule` enumerate
-               The quadrature rule.
+        quad
+            The quadrature rule.
         """
         cdef SlepcEPSCISSQuadRule val = quad
         CHKERR( EPSCISSSetQuadRule(self.eps, val) )
 
-    def getCISSQuadRule(self):
+    def getCISSQuadRule(self) -> CISSQuadRule:
         """
         Gets the quadrature rule used in the CISS solver.
 
         Returns
         -------
-        quad: `EPS.CISSQuadRule` enumerate
-               The quadrature rule.
+        CISSQuadRule
+            The quadrature rule.
         """
         cdef SlepcEPSCISSQuadRule val = EPS_CISS_QUADRULE_TRAPEZOIDAL
         CHKERR( EPSCISSGetQuadRule(self.eps, &val) )
         return val
 
-    def setCISSSizes(self, ip=None, bs=None, ms=None, npart=None, bsmax=None, realmats=False):
+    def setCISSSizes(
+        self,
+        ip: int | None = None,
+        bs: int | None = None,
+        ms: int | None = None,
+        npart: int | None = None,
+        bsmax: int | None = None,
+        realmats: bool = False,
+    ) -> None:
         """
         Sets the values of various size parameters in the CISS solver.
 
         Parameters
         ----------
-        ip: int, optional
-             Number of integration points.
-        bs: int, optional
-             Block size.
-        ms: int, optional
-             Moment size.
-        npart: int, optional
-             Number of partitions when splitting the communicator.
-        bsmax: int, optional
-             Maximum block size.
-        realmats: bool, optional
-             True if A and B are real.
+        ip
+            Number of integration points.
+        bs
+            Block size.
+        ms
+            Moment size.
+        npart
+            Number of partitions when splitting the communicator.
+        bsmax
+            Maximum block size.
+        realmats
+            True if A and B are real.
 
         Notes
         -----
@@ -2820,24 +2862,24 @@ cdef class EPS(Object):
         if bsmax is not None: ival5 = asInt(bsmax)
         CHKERR( EPSCISSSetSizes(self.eps, ival1, ival2, ival3, ival4, ival5, bval) )
 
-    def getCISSSizes(self):
+    def getCISSSizes(self) -> tuple[int, int, int, int, int, bool]:
         """
         Gets the values of various size parameters in the CISS solver.
 
         Returns
         -------
         ip: int
-             Number of integration points.
+            Number of integration points.
         bs: int
-             Block size.
+            Block size.
         ms: int
-             Moment size.
+            Moment size.
         npart: int
-             Number of partitions when splitting the communicator.
+            Number of partitions when splitting the communicator.
         bsmax: int
-             Maximum block size.
+            Maximum block size.
         realmats: bool
-             True if A and B are real.
+            True if A and B are real.
         """
         cdef PetscInt  ival1 = 0
         cdef PetscInt  ival2 = 0
@@ -2848,16 +2890,16 @@ cdef class EPS(Object):
         CHKERR( EPSCISSGetSizes(self.eps, &ival1, &ival2, &ival3, &ival4, &ival5, &bval) )
         return (toInt(ival1), toInt(ival2), toInt(ival3), toInt(ival4), toInt(ival5), toBool(bval))
 
-    def setCISSThreshold(self, delta=None, spur=None):
+    def setCISSThreshold(self, delta: float | None = None, spur: float | None = None) -> None:
         """
         Sets the values of various threshold parameters in the CISS solver.
 
         Parameters
         ----------
-        delta: float
-                Threshold for numerical rank.
-        spur: float
-                Spurious threshold (to discard spurious eigenpairs).
+        delta
+            Threshold for numerical rank.
+        spur
+            Spurious threshold (to discard spurious eigenpairs).
         """
         cdef PetscReal rval1 = PETSC_DEFAULT
         cdef PetscReal rval2 = PETSC_DEFAULT
@@ -2865,32 +2907,32 @@ cdef class EPS(Object):
         if spur  is not None: rval2 = asReal(spur)
         CHKERR( EPSCISSSetThreshold(self.eps, rval1, rval2) )
 
-    def getCISSThreshold(self):
+    def getCISSThreshold(self) -> tuple[float, float]:
         """
         Gets the values of various threshold parameters in the CISS solver.
 
         Returns
         -------
         delta: float
-                Threshold for numerical rank.
+            Threshold for numerical rank.
         spur: float
-                Spurious threshold (to discard spurious eigenpairs.
+            Spurious threshold (to discard spurious eigenpairs.
         """
         cdef PetscReal delta = 0
         cdef PetscReal spur  = 0
         CHKERR( EPSCISSGetThreshold(self.eps, &delta, &spur) )
         return (toReal(delta), toReal(spur))
 
-    def setCISSRefinement(self, inner=None, blsize=None):
+    def setCISSRefinement(self, inner: int | None = None, blsize: int | None = None) -> None:
         """
         Sets the values of various refinement parameters in the CISS solver.
 
         Parameters
         ----------
-        inner: int, optional
-             Number of iterative refinement iterations (inner loop).
-        blsize: int, optional
-             Number of iterative refinement iterations (blocksize loop).
+        inner
+            Number of iterative refinement iterations (inner loop).
+        blsize
+            Number of iterative refinement iterations (blocksize loop).
         """
         cdef PetscInt ival1 = PETSC_DEFAULT
         cdef PetscInt ival2 = PETSC_DEFAULT
@@ -2898,57 +2940,57 @@ cdef class EPS(Object):
         if blsize is not None: ival2 = asInt(blsize)
         CHKERR( EPSCISSSetRefinement(self.eps, ival1, ival2) )
 
-    def getCISSRefinement(self):
+    def getCISSRefinement(self) -> tuple[int, int]:
         """
         Gets the values of various refinement parameters in the CISS solver.
 
         Returns
         -------
         inner: int
-             Number of iterative refinement iterations (inner loop).
+            Number of iterative refinement iterations (inner loop).
         blsize: int
-             Number of iterative refinement iterations (blocksize loop).
+            Number of iterative refinement iterations (blocksize loop).
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
         CHKERR( EPSCISSGetRefinement(self.eps, &ival1, &ival2) )
         return (toInt(ival1), toInt(ival2))
 
-    def setCISSUseST(self, usest):
+    def setCISSUseST(self, usest: bool) -> None:
         """
         Sets a flag indicating that the CISS solver will use the `ST`
         object for the linear solves.
 
         Parameters
         ----------
-        usest: bool
+        usest
             Whether to use the `ST` object or not.
         """
         cdef PetscBool tval = asBool(usest)
         CHKERR( EPSCISSSetUseST(self.eps, tval) )
 
-    def getCISSUseST(self):
+    def getCISSUseST(self) -> bool:
         """
         Gets the flag for using the `ST` object in the CISS solver.
 
         Returns
         -------
-        usest: bool
+        bool
             Whether to use the `ST` object or not.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSCISSGetUseST(self.eps, &tval) )
         return toBool(tval)
 
-    def getCISSKSPs(self):
+    def getCISSKSPs(self) -> list[KSP]:
         """
         Retrieve the array of linear solver objects associated with
         the CISS solver.
 
         Returns
         -------
-        ksp: list of `KSP`
-             The linear solver objects.
+        list of KSP
+            The linear solver objects.
 
         Notes
         -----

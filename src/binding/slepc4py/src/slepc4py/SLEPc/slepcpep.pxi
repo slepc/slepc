@@ -254,6 +254,7 @@ cdef PetscErrorCode PEP_Stopping(
     elif reason is False: r[0] = PEP_CONVERGED_ITERATING
     elif reason is True:  r[0] = PEP_CONVERGED_USER
     else:                 r[0] = reason
+    return PETSC_SUCCESS
 
 # -----------------------------------------------------------------------------
 

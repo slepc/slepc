@@ -238,20 +238,20 @@ cdef class PEP(Object):
         self.obj = <PetscObject*> &self.pep
         self.pep = NULL
 
-    def view(self, Viewer viewer=None):
+    def view(self, Viewer viewer=None) -> None:
         """
         Prints the PEP data structure.
 
         Parameters
         ----------
-        viewer: Viewer, optional.
+        viewer
             Visualization context; if not provided, the standard
             output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( PEPView(self.pep, vwr) )
 
-    def destroy(self):
+    def destroy(self) -> Self:
         """
         Destroys the PEP object.
         """
@@ -259,21 +259,20 @@ cdef class PEP(Object):
         self.pep = NULL
         return self
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Resets the PEP object.
         """
         CHKERR( PEPReset(self.pep) )
 
-    def create(self, comm=None):
+    def create(self, comm: Comm | None = None) -> Self:
         """
         Creates the PEP object.
 
         Parameters
         ----------
-        comm: Comm, optional.
-            MPI communicator. If not provided, it defaults to all
-            processes.
+        comm
+            MPI communicator. If not provided, it defaults to all processes.
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcPEP newpep = NULL
@@ -281,75 +280,75 @@ cdef class PEP(Object):
         CHKERR( SlepcCLEAR(self.obj) ); self.pep = newpep
         return self
 
-    def setType(self, pep_type):
+    def setType(self, pep_type: Type | str) -> None:
         """
         Selects the particular solver to be used in the PEP object.
 
         Parameters
         ----------
-        pep_type: `PEP.Type` enumerate
+        pep_type
             The solver to be used.
         """
         cdef SlepcPEPType cval = NULL
         pep_type = str2bytes(pep_type, &cval)
         CHKERR( PEPSetType(self.pep, cval) )
 
-    def getType(self):
+    def getType(self) -> str:
         """
         Gets the PEP type of this object.
 
         Returns
         -------
-        type: `PEP.Type` enumerate
+        str
             The solver currently being used.
         """
         cdef SlepcPEPType pep_type = NULL
         CHKERR( PEPGetType(self.pep, &pep_type) )
         return bytes2str(pep_type)
 
-    def getOptionsPrefix(self):
+    def getOptionsPrefix(self) -> str:
         """
         Gets the prefix used for searching for all PEP options in the
         database.
 
         Returns
         -------
-        prefix: string
+        str
             The prefix string set for this PEP object.
         """
         cdef const char *prefix = NULL
         CHKERR( PEPGetOptionsPrefix(self.pep, &prefix) )
         return bytes2str(prefix)
 
-    def setOptionsPrefix(self, prefix):
+    def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Sets the prefix used for searching for all PEP options in the
         database.
 
         Parameters
         ----------
-        prefix: string
+        prefix
             The prefix string to prepend to all PEP option requests.
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
         CHKERR( PEPSetOptionsPrefix(self.pep, cval) )
 
-    def appendOptionsPrefix(self, prefix):
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Appends to the prefix used for searching for all PEP options
         in the database.
 
         Parameters
         ----------
-        prefix: string
+        prefix
             The prefix string to prepend to all PEP option requests.
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
         CHKERR( PEPAppendOptionsPrefix(self.pep, cval) )
 
-    def setFromOptions(self):
+    def setFromOptions(self) -> None:
         """
         Sets PEP options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
@@ -357,91 +356,91 @@ cdef class PEP(Object):
         """
         CHKERR( PEPSetFromOptions(self.pep) )
 
-    def getBasis(self):
+    def getBasis(self) -> Basis:
         """
         Gets the type of polynomial basis used to
         describe the polynomial eigenvalue problem.
 
         Returns
         -------
-        basis: `PEP.Basis` enumerate
-            the basis that was previously set.
+        Basis
+            The basis that was previously set.
         """
         cdef SlepcPEPBasis val = PEP_BASIS_MONOMIAL
         CHKERR( PEPGetBasis(self.pep, &val) )
         return val
 
-    def setBasis(self, basis):
+    def setBasis(self, basis: Basis) -> None:
         """
         Specifies the type of polynomial basis used to
         describe the polynomial eigenvalue problem.
 
         Parameters
         ----------
-        basis: `PEP.Basis` enumerate
-            the basis to be set.
+        basis
+            The basis to be set.
         """
         cdef SlepcPEPBasis val = basis
         CHKERR( PEPSetBasis(self.pep, val) )
 
-    def getProblemType(self):
+    def getProblemType(self) -> ProblemType:
         """
         Gets the problem type from the PEP object.
 
         Returns
         -------
-        problem_type: `PEP.ProblemType` enumerate
+        ProblemType
             The problem type that was previously set.
         """
         cdef SlepcPEPProblemType val = PEP_GENERAL
         CHKERR( PEPGetProblemType(self.pep, &val) )
         return val
 
-    def setProblemType(self, problem_type):
+    def setProblemType(self, problem_type: ProblemType) -> None:
         """
         Specifies the type of the eigenvalue problem.
 
         Parameters
         ----------
-        problem_type: `PEP.ProblemType` enumerate
+        problem_type
             The problem type to be set.
         """
         cdef SlepcPEPProblemType val = problem_type
         CHKERR( PEPSetProblemType(self.pep, val) )
 
-    def getWhichEigenpairs(self):
+    def getWhichEigenpairs(self) -> Which:
         """
         Returns which portion of the spectrum is to be sought.
 
         Returns
         -------
-        which: `PEP.Which` enumerate
+        Which
             The portion of the spectrum to be sought by the solver.
         """
         cdef SlepcPEPWhich val = PEP_LARGEST_MAGNITUDE
         CHKERR( PEPGetWhichEigenpairs(self.pep, &val) )
         return val
 
-    def setWhichEigenpairs(self, which):
+    def setWhichEigenpairs(self, which: Which) -> None:
         """
         Specifies which portion of the spectrum is to be sought.
 
         Parameters
         ----------
-        which: `PEP.Which` enumerate
+        which
             The portion of the spectrum to be sought by the solver.
         """
         cdef SlepcPEPWhich val = which
         CHKERR( PEPSetWhichEigenpairs(self.pep, val) )
 
-    def getTarget(self):
+    def getTarget(self) -> Scalar:
         """
         Gets the value of the target.
 
         Returns
         -------
-        target: float (real or complex)
-                The value of the target.
+        Scalar
+            The value of the target.
 
         Notes
         -----
@@ -451,14 +450,14 @@ cdef class PEP(Object):
         CHKERR( PEPGetTarget(self.pep, &sval) )
         return toScalar(sval)
 
-    def setTarget(self, target):
+    def setTarget(self, target: Scalar) -> None:
         """
         Sets the value of the target.
 
         Parameters
         ----------
-        target: float (real or complex)
-                The value of the target.
+        target
+            The value of the target.
 
         Notes
         -----
@@ -469,7 +468,7 @@ cdef class PEP(Object):
         cdef PetscScalar sval = asScalar(target)
         CHKERR( PEPSetTarget(self.pep, sval) )
 
-    def getTolerances(self):
+    def getTolerances(self) -> tuple[float, int]:
         """
         Gets the tolerance and maximum iteration count used by the
         default PEP convergence tests.
@@ -486,16 +485,16 @@ cdef class PEP(Object):
         CHKERR( PEPGetTolerances(self.pep, &rval, &ival) )
         return (toReal(rval), toInt(ival))
 
-    def setTolerances(self, tol=None, max_it=None):
+    def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
         Sets the tolerance and maximum iteration count used by the
         default PEP convergence tests.
 
         Parameters
         ----------
-        tol: float, optional
+        tol
             The convergence tolerance.
-        max_it: int, optional
+        max_it
             The maximum number of iterations
         """
         cdef PetscReal rval = PETSC_DEFAULT
@@ -504,16 +503,16 @@ cdef class PEP(Object):
         if max_it is not None: ival = asInt(max_it)
         CHKERR( PEPSetTolerances(self.pep, rval, ival) )
 
-    def getInterval(self):
+    def getInterval(self) -> tuple[float, float]:
         """
         Gets the computational interval for spectrum slicing.
 
         Returns
         -------
         inta: float
-                The left end of the interval.
+            The left end of the interval.
         intb: float
-                The right end of the interval.
+            The right end of the interval.
 
         Notes
         -----
@@ -524,16 +523,16 @@ cdef class PEP(Object):
         CHKERR( PEPGetInterval(self.pep, &inta, &intb) )
         return (toReal(inta), toReal(intb))
 
-    def setInterval(self, inta, intb):
+    def setInterval(self, inta: float, intb: float) -> None:
         """
         Defines the computational interval for spectrum slicing.
 
         Parameters
         ----------
-        inta: float
-                The left end of the interval.
-        intb: float
-                The right end of the interval.
+        inta
+            The left end of the interval.
+        intb
+            The right end of the interval.
 
         Notes
         -----
@@ -547,14 +546,14 @@ cdef class PEP(Object):
         cdef PetscReal rval2 = asReal(intb)
         CHKERR( PEPSetInterval(self.pep, rval1, rval2) )
 
-    def getConvergenceTest(self):
+    def getConvergenceTest(self) -> Conv:
         """
         Return the method used to compute the error estimate
         used in the convergence test.
 
         Returns
         -------
-        conv: PEP.Conv
+        Conv
             The method used to compute the error estimate
             used in the convergence test.
         """
@@ -562,36 +561,36 @@ cdef class PEP(Object):
         CHKERR( PEPGetConvergenceTest(self.pep, &conv) )
         return conv
 
-    def setConvergenceTest(self, conv):
+    def setConvergenceTest(self, conv: Conv) -> None:
         """
         Specifies how to compute the error estimate
         used in the convergence test.
 
         Parameters
         ----------
-        conv: PEP.Conv
+        conv
             The method used to compute the error estimate
             used in the convergence test.
         """
         cdef SlepcPEPConv tconv = conv
         CHKERR( PEPSetConvergenceTest(self.pep, tconv) )
 
-    def getRefine(self):
+    def getRefine(self) -> tuple[Refine, int, float, int, RefineScheme]:
         """
         Gets the refinement strategy used by the PEP object,
         and the associated parameters.
 
         Returns
         -------
-        ref: PEP.Refine
+        ref: Refine
             The refinement type.
         npart: int
             The number of partitions of the communicator.
-        tol: real
+        tol: float
             The convergence tolerance.
         its: int
             The maximum number of refinement iterations.
-        scheme: PEP.RefineScheme
+        scheme: RefineScheme
             Scheme for solving linear systems
         """
         cdef SlepcPEPRefine ref = PEP_REFINE_NONE
@@ -602,22 +601,29 @@ cdef class PEP(Object):
         CHKERR( PEPGetRefine(self.pep, &ref, &npart, &tol, &its, &scheme) )
         return (ref, toInt(npart), toReal(tol), toInt(its), scheme)
 
-    def setRefine(self, ref, npart=None, tol=None, its=None, scheme=None):
+    def setRefine(
+        self,
+        ref: Refine,
+        npart: int | None = None,
+        tol: float | None = None,
+        its: int | None = None,
+        scheme: RefineScheme | None = None,
+    ) -> None:
         """
         Sets the refinement strategy used by the PEP object,
         and the associated parameters.
 
         Parameters
         ----------
-        ref: PEP.Refine
+        ref
             The refinement type.
-        npart: int, optional
+        npart
             The number of partitions of the communicator.
-        tol: real, optional
+        tol
             The convergence tolerance.
-        its: int, optional
+        its
             The maximum number of refinement iterations.
-        scheme: PEP.RefineScheme, optional
+        scheme
             Scheme for linear system solves
         """
         cdef SlepcPEPRefine tref = ref
@@ -631,74 +637,74 @@ cdef class PEP(Object):
         if scheme is not None: tscheme = scheme
         CHKERR( PEPSetRefine(self.pep, tref, tnpart, ttol, tits, tscheme) )
 
-    def getRefineKSP(self):
+    def getRefineKSP(self) -> KSP:
         """
         Obtain the `KSP` object used by the eigensolver in the
         refinement phase.
 
         Returns
         -------
-        ksp: `KSP`
-             The linear solver object.
+        KSP
+            The linear solver object.
         """
         cdef KSP ksp = KSP()
         CHKERR( PEPRefineGetKSP(self.pep, &ksp.ksp) )
         CHKERR( PetscINCREF(ksp.obj) )
         return ksp
 
-    def setExtract(self, extract):
+    def setExtract(self, extract: Extract) -> None:
         """
         Specifies the extraction strategy to be used.
 
         Parameters
         ----------
-        extract: `PEP.Extract` enumerate
-               The extraction strategy.
+        extract
+            The extraction strategy.
         """
         cdef SlepcPEPExtract val = extract
         CHKERR( PEPSetExtract(self.pep, val) )
 
-    def getExtract(self):
+    def getExtract(self) -> Extract:
         """
         Gets the extraction technique used by the `PEP` object.
 
         Returns
         -------
-        extract: `PEP.Extract` enumerate
-               The extraction strategy.
+        Extract
+            The extraction strategy.
         """
         cdef SlepcPEPExtract val = PEP_EXTRACT_NONE
         CHKERR( PEPGetExtract(self.pep, &val) )
         return val
 
-    def getTrackAll(self):
+    def getTrackAll(self) -> bool:
         """
         Returns the flag indicating whether all residual norms must be
         computed or not.
 
         Returns
         -------
-        trackall: bool
+        bool
             Whether the solver compute all residuals or not.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( PEPGetTrackAll(self.pep, &tval) )
         return toBool(tval)
 
-    def setTrackAll(self, trackall):
+    def setTrackAll(self, trackall: bool) -> None:
         """
         Specifies if the solver must compute the residual of all
         approximate eigenpairs or not.
 
         Parameters
         ----------
-        trackall: bool
+        trackall
             Whether compute all residuals or not.
         """
         cdef PetscBool tval = trackall
         CHKERR( PEPSetTrackAll(self.pep, tval) )
 
-    def getDimensions(self):
+    def getDimensions(self) -> tuple[int, int, int]:
         """
         Gets the number of eigenvalues to compute and the dimension of
         the subspace.
@@ -718,19 +724,23 @@ cdef class PEP(Object):
         CHKERR( PEPGetDimensions(self.pep, &ival1, &ival2, &ival3) )
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
-    def setDimensions(self, nev=None, ncv=None, mpd=None):
+    def setDimensions(
+        self,
+        nev: int | None = None,
+        ncv: int | None = None,
+        mpd: int | None = None,
+    ) -> None:
         """
         Sets the number of eigenvalues to compute and the dimension of
         the subspace.
 
         Parameters
         ----------
-        nev: int, optional
+        nev
             Number of eigenvalues to compute.
-        ncv: int, optional
-            Maximum dimension of the subspace to be used by the
-            solver.
-        mpd: int, optional
+        ncv
+            Maximum dimension of the subspace to be used by the solver.
+        mpd
             Maximum dimension allowed for the projected problem.
         """
         cdef PetscInt ival1 = PETSC_DEFAULT
@@ -741,14 +751,14 @@ cdef class PEP(Object):
         if mpd is not None: ival3 = asInt(mpd)
         CHKERR( PEPSetDimensions(self.pep, ival1, ival2, ival3) )
 
-    def getST(self):
+    def getST(self) -> ST:
         """
         Obtain the spectral transformation (`ST`) object associated to
         the eigensolver object.
 
         Returns
         -------
-        st: ST
+        ST
             The spectral transformation.
         """
         cdef ST st = ST()
@@ -756,38 +766,38 @@ cdef class PEP(Object):
         CHKERR( PetscINCREF(st.obj) )
         return st
 
-    def setST(self, ST st):
+    def setST(self, ST st) -> None:
         """
         Associates a spectral transformation object to the
         eigensolver.
 
         Parameters
         ----------
-        st: ST
+        st
             The spectral transformation.
         """
         CHKERR( PEPSetST(self.pep, st.st) )
 
-    def getScale(self, Vec Dl=None, Vec Dr=None):
+    def getScale(self, Vec Dl=None, Vec Dr=None) -> tuple[Scale, float, int, float]:
         """
         Gets the strategy used for scaling the polynomial eigenproblem.
 
         Parameters
         ----------
-        Dl: Vec, optional
+        Dl
             Placeholder for the returned left diagonal matrix.
-        Dr: Vec, optional
+        Dr
             Placeholder for the returned right diagonal matrix.
 
         Returns
         -------
-        scale: `PEP.Scale` enumerate
+        scale: Scale
             The scaling strategy.
-        alpha: real
+        alpha: float
             The scaling factor.
         its: int
             The number of iteration of diagonal scaling.
-        lbda: real
+        lbda: float
             Approximation of the wanted eigenvalues (modulus).
         """
         cdef SlepcPEPScale scale = PEP_SCALE_NONE
@@ -811,24 +821,32 @@ cdef class PEP(Object):
         CHKERR( VecDestroy(&vecr) )
         return (scale, toReal(alpha), toInt(its), toReal(lbda))
 
-    def setScale(self, scale, alpha=None, Vec Dl=None, Vec Dr=None, its=None, lbda=None):
+    def setScale(
+        self,
+        scale: Scale,
+        alpha: float | None = None,
+        Vec Dl = None,
+        Vec Dr = None,
+        its: int | None = None,
+        lbda: float | None = None,
+    ) -> None:
         """
         Sets the scaling strategy to be used for scaling the polynomial problem
         before attempting to solve.
 
         Parameters
         ----------
-        scale: `PEP.Scale` enumerate
+        scale
             The scaling strategy.
-        alpha: real, optional
+        alpha
             The scaling factor.
-        Dl: Vec, optional
+        Dl
             The left diagonal matrix.
-        Dr: Vec, optional
+        Dr
             The right diagonal matrix.
-        its: int, optional
+        its
             The number of iteration of diagonal scaling.
-        lbda: real, optional
+        lbda
             Approximation of the wanted eigenvalues (modulus).
         """
         cdef SlepcPEPScale senum = scale
@@ -844,13 +862,13 @@ cdef class PEP(Object):
         if lbda is not None:  rval2 = asReal(lbda)
         CHKERR( PEPSetScale(self.pep, senum, rval1, vecl, vecr, ival, rval2) )
 
-    def getBV(self):
+    def getBV(self) -> BV:
         """
         Obtain the basis vectors object associated to the eigensolver.
 
         Returns
         -------
-        bv: BV
+        BV
             The basis vectors context.
         """
         cdef BV bv = BV()
@@ -858,24 +876,24 @@ cdef class PEP(Object):
         CHKERR( PetscINCREF(bv.obj) )
         return bv
 
-    def setBV(self, BV bv):
+    def setBV(self, BV bv) -> None:
         """
         Associates a basis vectors object to the eigensolver.
 
         Parameters
         ----------
-        bv: BV
+        bv
             The basis vectors context.
         """
         CHKERR( PEPSetBV(self.pep, bv.bv) )
 
-    def getRG(self):
+    def getRG(self) -> RG:
         """
         Obtain the region object associated to the eigensolver.
 
         Returns
         -------
-        rg: RG
+        RG
             The region context.
         """
         cdef RG rg = RG()
@@ -883,24 +901,24 @@ cdef class PEP(Object):
         CHKERR( PetscINCREF(rg.obj) )
         return rg
 
-    def setRG(self, RG rg):
+    def setRG(self, RG rg) -> None:
         """
         Associates a region object to the eigensolver.
 
         Parameters
         ----------
-        rg: RG
+        rg
             The region context.
         """
         CHKERR( PEPSetRG(self.pep, rg.rg) )
 
-    def getDS(self):
+    def getDS(self) -> DS:
         """
         Obtain the direct solver associated to the eigensolver.
 
         Returns
         -------
-        ds: DS
+        DS
             The direct solver context.
         """
         cdef DS ds = DS()
@@ -908,25 +926,25 @@ cdef class PEP(Object):
         CHKERR( PetscINCREF(ds.obj) )
         return ds
 
-    def setDS(self, DS ds):
+    def setDS(self, DS ds) -> None:
         """
         Associates a direct solver object to the eigensolver.
 
         Parameters
         ----------
-        ds: DS
+        ds
             The direct solver context.
         """
         CHKERR( PEPSetDS(self.pep, ds.ds) )
 
-    def getOperators(self):
+    def getOperators(self) -> list[Mat]:
         """
         Gets the matrices associated with the eigenvalue problem.
 
         Returns
         -------
-        operators: tuple of Mat
-           The matrices associated with the eigensystem.
+        list of Mat
+            The matrices associated with the eigensystem.
         """
         cdef Mat A
         cdef PetscMat mat = NULL
@@ -939,14 +957,14 @@ cdef class PEP(Object):
             operators.append(A)
         return tuple(operators)
 
-    def setOperators(self, operators):
+    def setOperators(self, operators: list[Mat]) -> None:
         """
         Sets the matrices associated with the eigenvalue problem.
 
         Parameters
         ----------
-        operators: sequence of Mat
-           The matrices associated with the eigensystem.
+        operators
+            The matrices associated with the eigensystem.
         """
         operators = tuple(operators)
         cdef PetscMat *mats = NULL
@@ -957,15 +975,15 @@ cdef class PEP(Object):
 
     #
 
-    def setInitialSpace(self, space):
+    def setInitialSpace(self, space: Vec | list[Vec]) -> None:
         """
         Sets the initial space from which the eigensolver starts to
         iterate.
 
         Parameters
         ----------
-        space: Vec or sequence of Vec
-           The initial space
+        space
+            The initial space
         """
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
@@ -976,7 +994,12 @@ cdef class PEP(Object):
 
     #
 
-    def setStoppingTest(self, stopping, args=None, kargs=None):
+    def setStoppingTest(
+        self,
+        stopping: PEPStoppingFunction | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
         """
         Sets a function to decide when to stop the outer iteration of the eigensolver.
         """
@@ -989,7 +1012,7 @@ cdef class PEP(Object):
             self.set_attr('__stopping__', None)
             CHKERR( PEPSetStoppingTestFunction(self.pep, PEPStoppingBasic, NULL, NULL) )
 
-    def getStoppingTest(self):
+    def getStoppingTest(self) -> PEPStoppingFunction:
         """
         Gets the stopping function.
         """
@@ -997,7 +1020,12 @@ cdef class PEP(Object):
 
     #
 
-    def setMonitor(self, monitor, args=None, kargs=None):
+    def setMonitor(
+        self,
+        monitor: PEPMonitorFunction | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
         """
         Appends a monitor function to the list of monitors.
         """
@@ -1011,13 +1039,13 @@ cdef class PEP(Object):
         if kargs is None: kargs = {}
         monitorlist.append((monitor, args, kargs))
 
-    def getMonitor(self):
+    def getMonitor(self) -> PEPMonitorFunction:
         """
         Gets the list of monitor functions.
         """
         return self.get_attr('__monitor__')
 
-    def cancelMonitor(self):
+    def cancelMonitor(self) -> None:
         """
         Clears all monitors for a `PEP` object.
         """
@@ -1026,20 +1054,20 @@ cdef class PEP(Object):
 
     #
 
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Sets up all the internal data structures necessary for the
         execution of the eigensolver.
         """
         CHKERR( PEPSetUp(self.pep) )
 
-    def solve(self):
+    def solve(self) -> None:
         """
         Solves the eigensystem.
         """
         CHKERR( PEPSolve(self.pep) )
 
-    def getIterationNumber(self):
+    def getIterationNumber(self) -> int:
         """
         Gets the current iteration number. If the call to `solve()` is
         complete, then it returns the number of iterations carried out
@@ -1047,20 +1075,20 @@ cdef class PEP(Object):
 
         Returns
         -------
-        its: int
-             Iteration number.
+        int
+            Iteration number.
         """
         cdef PetscInt ival = 0
         CHKERR( PEPGetIterationNumber(self.pep, &ival) )
         return toInt(ival)
 
-    def getConvergedReason(self):
+    def getConvergedReason(self) -> ConvergedReason:
         """
         Gets the reason why the `solve()` iteration was stopped.
 
         Returns
         -------
-        reason: `PEP.ConvergedReason` enumerate
+        ConvergedReason
             Negative value indicates diverged, positive value
             converged.
         """
@@ -1068,20 +1096,20 @@ cdef class PEP(Object):
         CHKERR( PEPGetConvergedReason(self.pep, &val) )
         return val
 
-    def getConverged(self):
+    def getConverged(self) -> int:
         """
         Gets the number of converged eigenpairs.
 
         Returns
         -------
-        nconv: int
+        int
             Number of converged eigenpairs.
         """
         cdef PetscInt ival = 0
         CHKERR( PEPGetConverged(self.pep, &ival) )
         return toInt(ival)
 
-    def getEigenpair(self, int i, Vec Vr=None, Vec Vi=None):
+    def getEigenpair(self, i: int, Vec Vr=None, Vec Vi=None) -> None:
         """
         Gets the i-th solution of the eigenproblem as computed by
         `solve()`.  The solution consists of both the eigenvalue and
@@ -1089,16 +1117,16 @@ cdef class PEP(Object):
 
         Parameters
         ----------
-        i: int
+        i
             Index of the solution to be obtained.
-        Vr: Vec, optional
+        Vr
             Placeholder for the returned eigenvector (real part).
-        Vi: Vec, optional
+        Vi
             Placeholder for the returned eigenvector (imaginary part).
 
         Returns
         -------
-        e: complex
+        Complex
             The computed eigenvalue.
         """
         cdef PetscScalar sval1 = 0
@@ -1108,43 +1136,43 @@ cdef class PEP(Object):
         CHKERR( PEPGetEigenpair(self.pep, i, &sval1, &sval2, vecr, veci) )
         return toComplex(sval1, sval2)
 
-    def getErrorEstimate(self, int i):
+    def getErrorEstimate(self, i: int) -> float:
         """
         Returns the error estimate associated to the i-th computed
         eigenpair.
 
         Parameters
         ----------
-        i: int
+        i
             Index of the solution to be considered.
 
         Returns
         -------
-        error: real
+        float
             Error estimate.
         """
         cdef PetscReal rval = 0
         CHKERR( PEPGetErrorEstimate(self.pep, i, &rval) )
         return toReal(rval)
 
-    def computeError(self, int i, etype=None):
+    def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
         Computes the error (based on the residual norm) associated with the i-th
         computed eigenpair.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be considered.
-        etype: `PEP.ErrorType` enumerate
-           The error type to compute.
+        i
+            Index of the solution to be considered.
+        etype
+            The error type to compute.
 
         Returns
         -------
-        error: real
-           The error bound, computed in various ways from the
-           residual norm ``||P(l)x||_2`` where ``l`` is the
-           eigenvalue and ``x`` is the eigenvector.
+        float
+            The error bound, computed in various ways from the
+            residual norm ``||P(l)x||_2`` where ``l`` is the
+            eigenvalue and ``x`` is the eigenvector.
 
         Notes
         -----
@@ -1157,18 +1185,18 @@ cdef class PEP(Object):
         CHKERR( PEPComputeError(self.pep, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype=None, Viewer viewer=None):
+    def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
         """
         Displays the errors associated with the computed solution
         (as well as the eigenvalues).
 
         Parameters
         ----------
-        etype: `PEP.ErrorType` enumerate, optional
-           The error type to compute.
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        etype
+            The error type to compute.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
 
         Notes
         -----
@@ -1183,53 +1211,53 @@ cdef class PEP(Object):
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( PEPErrorView(self.pep, et, vwr) )
 
-    def valuesView(self, Viewer viewer=None):
+    def valuesView(self, viewer: Viewer | None = None) -> None:
         """
         Displays the computed eigenvalues in a viewer.
 
         Parameters
         ----------
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( PEPValuesView(self.pep, vwr) )
 
-    def vectorsView(self, Viewer viewer=None):
+    def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
         Outputs computed eigenvectors to a viewer.
 
         Parameters
         ----------
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( PEPVectorsView(self.pep, vwr) )
 
     #
 
-    def setLinearEPS(self, EPS eps):
+    def setLinearEPS(self, EPS eps) -> None:
         """
         Associate an eigensolver object to the polynomial eigenvalue solver.
 
         Parameters
         ----------
-        eps: `EPS`
+        eps
             The linear eigensolver.
         """
         CHKERR( PEPLinearSetEPS(self.pep, eps.eps) )
 
-    def getLinearEPS(self):
+    def getLinearEPS(self) -> EPS:
         """
         Retrieve the eigensolver object associated to the polynomial
         eigenvalue solver.
 
         Returns
         -------
-        eps: `EPS`
+        EPS
             The linear eigensolver.
         """
         cdef EPS eps = EPS()
@@ -1237,22 +1265,22 @@ cdef class PEP(Object):
         CHKERR( PetscINCREF(eps.obj) )
         return eps
 
-    def setLinearLinearization(self, alpha=1.0, beta=0.0):
+    def setLinearLinearization(self, alpha: float = 1.0, beta: float = 0.0) -> None:
         """
         Set the coefficients that define the linearization of a quadratic eigenproblem.
 
         Parameters
         ----------
-        alpha: float
+        alpha
             First parameter of the linearization.
-        beta: float
+        beta
             Second parameter of the linearization.
         """
         cdef PetscReal a = asReal(alpha)
         cdef PetscReal b = asReal(beta)
         CHKERR( PEPLinearSetLinearization(self.pep, a, b) )
 
-    def getLinearLinearization(self):
+    def getLinearLinearization(self) -> tuple[float, float]:
         """
         Returns the coefficients that define the linearization of a quadratic eigenproblem.
 
@@ -1268,27 +1296,27 @@ cdef class PEP(Object):
         CHKERR( PEPLinearGetLinearization(self.pep, &a, &b) )
         return (asReal(a), asReal(b))
 
-    def setLinearExplicitMatrix(self, flag):
+    def setLinearExplicitMatrix(self, flag: bool) -> None:
         """
         Indicate if the matrices A and B for the linearization of the problem
         must be built explicitly.
 
         Parameters
         ----------
-        flag: bool
+        flag
             Boolean flag indicating if the matrices are built explicitly.
         """
         cdef PetscBool sval = asBool(flag)
         CHKERR( PEPLinearSetExplicitMatrix(self.pep, sval) )
 
-    def getLinearExplicitMatrix(self):
+    def getLinearExplicitMatrix(self) -> bool:
         """
         Returns the flag indicating if the matrices A and B for the linearization
         are built explicitly.
 
         Returns
         -------
-        flag: bool
+        bool
             Boolean flag indicating if the matrices are built explicitly.
         """
         cdef PetscBool sval = PETSC_FALSE
@@ -1297,7 +1325,7 @@ cdef class PEP(Object):
 
     #
 
-    def setQArnoldiRestart(self, keep):
+    def setQArnoldiRestart(self, keep: float) -> None:
         """
         Sets the restart parameter for the Q-Arnoldi method, in
         particular the proportion of basis vectors that must be kept
@@ -1305,8 +1333,8 @@ cdef class PEP(Object):
 
         Parameters
         ----------
-        keep: float
-              The number of vectors to be kept at restart.
+        keep
+            The number of vectors to be kept at restart.
 
         Notes
         -----
@@ -1315,28 +1343,28 @@ cdef class PEP(Object):
         cdef PetscReal val = asReal(keep)
         CHKERR( PEPQArnoldiSetRestart(self.pep, val) )
 
-    def getQArnoldiRestart(self):
+    def getQArnoldiRestart(self) -> float:
         """
         Gets the restart parameter used in the Q-Arnoldi method.
 
         Returns
         -------
-        keep: float
-              The number of vectors to be kept at restart.
+        float
+            The number of vectors to be kept at restart.
         """
         cdef PetscReal val = 0
         CHKERR( PEPQArnoldiGetRestart(self.pep, &val) )
         return toReal(val)
 
-    def setQArnoldiLocking(self, lock):
+    def setQArnoldiLocking(self, lock: bool) -> None:
         """
         Choose between locking and non-locking variants of the
         Q-Arnoldi method.
 
         Parameters
         ----------
-        lock: bool
-              True if the locking variant must be selected.
+        lock
+            True if the locking variant must be selected.
 
         Notes
         -----
@@ -1348,14 +1376,14 @@ cdef class PEP(Object):
         cdef PetscBool val = asBool(lock)
         CHKERR( PEPQArnoldiSetLocking(self.pep, val) )
 
-    def getQArnoldiLocking(self):
+    def getQArnoldiLocking(self) -> bool:
         """
         Gets the locking flag used in the Q-Arnoldi method.
 
         Returns
         -------
-        lock: bool
-              The locking flag.
+        bool
+            The locking flag.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( PEPQArnoldiGetLocking(self.pep, &tval) )
@@ -1363,7 +1391,7 @@ cdef class PEP(Object):
 
     #
 
-    def setTOARRestart(self, keep):
+    def setTOARRestart(self, keep: float) -> None:
         """
         Sets the restart parameter for the TOAR method, in
         particular the proportion of basis vectors that must be kept
@@ -1371,8 +1399,8 @@ cdef class PEP(Object):
 
         Parameters
         ----------
-        keep: float
-              The number of vectors to be kept at restart.
+        keep
+            The number of vectors to be kept at restart.
 
         Notes
         -----
@@ -1381,28 +1409,28 @@ cdef class PEP(Object):
         cdef PetscReal val = asReal(keep)
         CHKERR( PEPTOARSetRestart(self.pep, val) )
 
-    def getTOARRestart(self):
+    def getTOARRestart(self) -> float:
         """
         Gets the restart parameter used in the TOAR method.
 
         Returns
         -------
-        keep: float
-              The number of vectors to be kept at restart.
+        float
+            The number of vectors to be kept at restart.
         """
         cdef PetscReal val = 0
         CHKERR( PEPTOARGetRestart(self.pep, &val) )
         return toReal(val)
 
-    def setTOARLocking(self, lock):
+    def setTOARLocking(self, lock: bool) -> None:
         """
         Choose between locking and non-locking variants of the
         TOAR method.
 
         Parameters
         ----------
-        lock: bool
-              True if the locking variant must be selected.
+        lock
+            True if the locking variant must be selected.
 
         Notes
         -----
@@ -1414,14 +1442,14 @@ cdef class PEP(Object):
         cdef PetscBool val = asBool(lock)
         CHKERR( PEPTOARSetLocking(self.pep, val) )
 
-    def getTOARLocking(self):
+    def getTOARLocking(self) -> bool:
         """
         Gets the locking flag used in the TOAR method.
 
         Returns
         -------
-        lock: bool
-              The locking flag.
+        bool
+            The locking flag.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( PEPTOARGetLocking(self.pep, &tval) )
@@ -1429,22 +1457,22 @@ cdef class PEP(Object):
 
     #
 
-    def setSTOARLinearization(self, alpha=1.0, beta=0.0):
+    def setSTOARLinearization(self, alpha: float = 1.0, beta: float = 0.0) -> None:
         """
         Set the coefficients that define the linearization of a quadratic eigenproblem.
 
         Parameters
         ----------
-        alpha: float
+        alpha
             First parameter of the linearization.
-        beta: float
+        beta
             Second parameter of the linearization.
         """
         cdef PetscReal a = asReal(alpha)
         cdef PetscReal b = asReal(beta)
         CHKERR( PEPSTOARSetLinearization(self.pep, a, b) )
 
-    def getSTOARLinearization(self):
+    def getSTOARLinearization(self) -> tuple[float, float]:
         """
         Returns the coefficients that define the linearization of a quadratic eigenproblem.
 
@@ -1460,15 +1488,15 @@ cdef class PEP(Object):
         CHKERR( PEPSTOARGetLinearization(self.pep, &a, &b) )
         return (asReal(a), asReal(b))
 
-    def setSTOARLocking(self, lock):
+    def setSTOARLocking(self, lock: bool) -> None:
         """
         Choose between locking and non-locking variants of the
         STOAR method.
 
         Parameters
         ----------
-        lock: bool
-              True if the locking variant must be selected.
+        lock
+            True if the locking variant must be selected.
 
         Notes
         -----
@@ -1480,28 +1508,28 @@ cdef class PEP(Object):
         cdef PetscBool val = asBool(lock)
         CHKERR( PEPSTOARSetLocking(self.pep, val) )
 
-    def getSTOARLocking(self):
+    def getSTOARLocking(self) -> bool:
         """
         Gets the locking flag used in the STOAR method.
 
         Returns
         -------
-        lock: bool
-              The locking flag.
+        bool
+            The locking flag.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( PEPSTOARGetLocking(self.pep, &tval) )
         return toBool(tval)
 
-    def setSTOARDetectZeros(self, detect):
+    def setSTOARDetectZeros(self, detect: bool) -> None:
         """
         Sets a flag to enforce detection of zeros during the factorizations
         throughout the spectrum slicing computation.
 
         Parameters
         ----------
-        detect: bool
-              True if zeros must checked for.
+        detect
+            True if zeros must checked for.
 
         Notes
         -----
@@ -1515,20 +1543,25 @@ cdef class PEP(Object):
         cdef PetscBool val = asBool(detect)
         CHKERR( PEPSTOARSetDetectZeros(self.pep, val) )
 
-    def getSTOARDetectZeros(self):
+    def getSTOARDetectZeros(self) -> bool:
         """
         Gets the flag that enforces zero detection in spectrum slicing.
 
         Returns
         -------
-        detect: bool
-              The zero detection flag.
+        bool
+            The zero detection flag.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( PEPSTOARGetDetectZeros(self.pep, &tval) )
         return toBool(tval)
 
-    def setSTOARDimensions(self, nev=None, ncv=None, mpd=None):
+    def setSTOARDimensions(
+        self,
+        nev: int | None = None,
+        ncv: int | None = None,
+        mpd: int | None = None,
+    ) -> None:
         """
         Sets the dimensions used for each subsolve step in case of doing
         spectrum slicing for a computational interval. The meaning of the
@@ -1536,12 +1569,12 @@ cdef class PEP(Object):
 
         Parameters
         ----------
-        nev: int, optional
-             Number of eigenvalues to compute.
-        ncv: int, optional
-             Maximum dimension of the subspace to be used by the solver.
-        mpd: int, optional
-             Maximum dimension allowed for the projected problem.
+        nev
+            Number of eigenvalues to compute.
+        ncv
+            Maximum dimension of the subspace to be used by the solver.
+        mpd
+            Maximum dimension allowed for the projected problem.
         """
         cdef PetscInt ival1 = PETSC_DEFAULT
         cdef PetscInt ival2 = PETSC_DEFAULT
@@ -1551,7 +1584,7 @@ cdef class PEP(Object):
         if mpd is not None: ival3 = asInt(mpd)
         CHKERR( PEPSTOARSetDimensions(self.pep, ival1, ival2, ival3) )
 
-    def getSTOARDimensions(self):
+    def getSTOARDimensions(self) -> tuple[int, int, int]:
         """
         Gets the dimensions used for each subsolve step in case of doing
         spectrum slicing for a computational interval.
@@ -1559,11 +1592,11 @@ cdef class PEP(Object):
         Returns
         -------
         nev: int
-             Number of eigenvalues to compute.
+            Number of eigenvalues to compute.
         ncv: int
-             Maximum dimension of the subspace to be used by the solver.
+            Maximum dimension of the subspace to be used by the solver.
         mpd: int
-             Maximum dimension allowed for the projected problem.
+            Maximum dimension allowed for the projected problem.
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -1571,17 +1604,17 @@ cdef class PEP(Object):
         CHKERR( PEPSTOARGetDimensions(self.pep, &ival1, &ival2, &ival3) )
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
-    def getSTOARInertias(self):
+    def getSTOARInertias(self) -> tuple[ArrayReal, ArrayInt]:
         """
         Gets the values of the shifts and their corresponding inertias
         in case of doing spectrum slicing for a computational interval.
 
         Returns
         -------
-        shifts: list of float
-             The values of the shifts used internally in the solver.
-        inertias: list of int
-             The values of the inertia in each shift.
+        shifts: ArrayReal
+            The values of the shifts used internally in the solver.
+        inertias: ArrayInt
+            The values of the inertia in each shift.
         """
         cdef PetscReal *shiftsarray = NULL
         cdef PetscInt *inertiasarray = NULL
@@ -1597,26 +1630,26 @@ cdef class PEP(Object):
             CHKERR( PetscFree(inertiasarray) )
         return (shifts, inertias)
 
-    def setSTOARCheckEigenvalueType(self, flag):
+    def setSTOARCheckEigenvalueType(self, flag: bool) -> None:
         """
         Sets a flag to check that all the eigenvalues obtained throughout
         the spectrum slicing computation have the same definite type.
 
         Parameters
         ----------
-        flag: bool
+        flag
             Whether the eigenvalue type is checked or not.
         """
         cdef PetscBool sval = asBool(flag)
         CHKERR( PEPSTOARSetCheckEigenvalueType(self.pep, sval) )
 
-    def getSTOARCheckEigenvalueType(self):
+    def getSTOARCheckEigenvalueType(self) -> bool:
         """
         Gets the flag for the eigenvalue type check in spectrum slicing.
 
         Returns
         -------
-        flag: bool
+        bool
             Whether the eigenvalue type is checked or not.
         """
         cdef PetscBool sval = PETSC_FALSE
@@ -1625,7 +1658,7 @@ cdef class PEP(Object):
 
     #
 
-    def setJDRestart(self, keep):
+    def setJDRestart(self, keep: float) -> None:
         """
         Sets the restart parameter for the Jacobi-Davidson method, in
         particular the proportion of basis vectors that must be kept
@@ -1633,8 +1666,8 @@ cdef class PEP(Object):
 
         Parameters
         ----------
-        keep: float
-              The number of vectors to be kept at restart.
+        keep
+            The number of vectors to be kept at restart.
 
         Notes
         -----
@@ -1643,28 +1676,28 @@ cdef class PEP(Object):
         cdef PetscReal val = asReal(keep)
         CHKERR( PEPJDSetRestart(self.pep, val) )
 
-    def getJDRestart(self):
+    def getJDRestart(self) -> float:
         """
         Gets the restart parameter used in the Jacobi-Davidson method.
 
         Returns
         -------
-        keep: float
-              The number of vectors to be kept at restart.
+        float
+            The number of vectors to be kept at restart.
         """
         cdef PetscReal val = 0
         CHKERR( PEPJDGetRestart(self.pep, &val) )
         return toReal(val)
 
-    def setJDFix(self, fix):
+    def setJDFix(self, fix: float) -> None:
         """
         Sets the threshold for changing the target in the correction
         equation.
 
         Parameters
         ----------
-        fix: float
-              Threshold for changing the target.
+        fix
+            Threshold for changing the target.
 
         Notes
         -----
@@ -1675,89 +1708,89 @@ cdef class PEP(Object):
         cdef PetscReal val = asReal(fix)
         CHKERR( PEPJDSetFix(self.pep, val) )
 
-    def getJDFix(self):
+    def getJDFix(self) -> float:
         """
         Gets threshold for changing the target in the correction equation.
 
         Returns
         -------
-        fix: float
-              The threshold for changing the target.
+        float
+            The threshold for changing the target.
         """
         cdef PetscReal val = 0
         CHKERR( PEPJDGetFix(self.pep, &val) )
         return toReal(val)
 
-    def setJDReusePreconditioner(self, flag):
+    def setJDReusePreconditioner(self, flag: bool) -> None:
         """
         Sets a flag indicating whether the preconditioner must be reused or not.
 
         Parameters
         ----------
-        flag: bool
+        flag
             The reuse flag.
         """
         cdef PetscBool bval = asBool(flag)
         CHKERR( PEPJDSetReusePreconditioner(self.pep, bval) )
 
-    def getJDReusePreconditioner(self):
+    def getJDReusePreconditioner(self) -> bool:
         """
         Returns the flag for reusing the preconditioner.
 
         Returns
         -------
-        flag: bool
+        bool
             The reuse flag.
         """
         cdef PetscBool bval = PETSC_FALSE
         CHKERR( PEPJDGetReusePreconditioner(self.pep, &bval) )
         return toBool(bval)
 
-    def setJDMinimalityIndex(self, flag):
+    def setJDMinimalityIndex(self, flag: int) -> None:
         """
         Sets the maximum allowed value for the minimality index.
 
         Parameters
         ----------
-        flag: int
+        flag
             The maximum minimality index.
         """
         cdef PetscInt ival = asInt(flag)
         CHKERR( PEPJDSetMinimalityIndex(self.pep, ival) )
 
-    def getJDMinimalityIndex(self):
+    def getJDMinimalityIndex(self) -> int:
         """
         Returns the maximum allowed value of the minimality index.
 
         Returns
         -------
-        flag: int
+        int
             The maximum minimality index.
         """
         cdef PetscInt ival = 1
         CHKERR( PEPJDGetMinimalityIndex(self.pep, &ival) )
         return toInt(ival)
 
-    def setJDProjection(self, proj):
+    def setJDProjection(self, proj: JDProjection) -> None:
         """
         Sets the type of projection to be used in the Jacobi-Davidson solver.
 
         Parameters
         ----------
-        proj: `PEP.JDProjection` enumerate
-               The type of projection.
+        proj
+            The type of projection.
         """
         cdef SlepcPEPJDProjection val = proj
         CHKERR( PEPJDSetProjection(self.pep, val) )
 
-    def getJDProjection(self):
+    def getJDProjection(self) -> JDProjection:
         """
         Gets the type of projection to be used in the Jacobi-Davidson solver.
 
         Returns
         -------
-        proj: `PEP.JDProjection` enumerate
-               The type of projection.
+        JDProjection
+            The type of projection.
         """
         cdef SlepcPEPJDProjection val = PEP_JD_PROJECTION_HARMONIC
         CHKERR( PEPJDGetProjection(self.pep, &val) )
@@ -1765,49 +1798,57 @@ cdef class PEP(Object):
 
     #
 
-    def setCISSExtraction(self, extraction):
+    def setCISSExtraction(self, extraction: CISSExtraction) -> None:
         """
         Sets the extraction technique used in the CISS solver.
 
         Parameters
         ----------
-        extraction: `PEP.CISSExtraction` enumerate
-               The extraction technique.
+        extraction
+            The extraction technique.
         """
         cdef SlepcPEPCISSExtraction val = extraction
         CHKERR( PEPCISSSetExtraction(self.pep, val) )
 
-    def getCISSExtraction(self):
+    def getCISSExtraction(self) -> CISSExtraction:
         """
         Gets the extraction technique used in the CISS solver.
 
         Returns
         -------
-        extraction: `PEP.CISSExtraction` enumerate
-               The extraction technique.
+        CISSExtraction
+            The extraction technique.
         """
         cdef SlepcPEPCISSExtraction val = PEP_CISS_EXTRACTION_RITZ
         CHKERR( PEPCISSGetExtraction(self.pep, &val) )
         return val
 
-    def setCISSSizes(self, ip=None, bs=None, ms=None, npart=None, bsmax=None, realmats=False):
+    def setCISSSizes(
+        self,
+        ip: int | None = None,
+        bs: int | None = None,
+        ms: int | None = None,
+        npart: int | None = None,
+        bsmax: int | None = None,
+        realmats: bool = False,
+    ) -> None:
         """
         Sets the values of various size parameters in the CISS solver.
 
         Parameters
         ----------
-        ip: int, optional
-             Number of integration points.
-        bs: int, optional
-             Block size.
-        ms: int, optional
-             Moment size.
-        npart: int, optional
-             Number of partitions when splitting the communicator.
-        bsmax: int, optional
-             Maximum block size.
-        realmats: bool, optional
-             True if A and B are real.
+        ip
+            Number of integration points.
+        bs
+            Block size.
+        ms
+            Moment size.
+        npart
+            Number of partitions when splitting the communicator.
+        bsmax
+            Maximum block size.
+        realmats
+            True if A and B are real.
 
         Notes
         -----
@@ -1829,24 +1870,24 @@ cdef class PEP(Object):
         if bsmax is not None: ival5 = asInt(bsmax)
         CHKERR( PEPCISSSetSizes(self.pep, ival1, ival2, ival3, ival4, ival5, bval) )
 
-    def getCISSSizes(self):
+    def getCISSSizes(self) -> tuple[int, int, int, int, int, bool]:
         """
         Gets the values of various size parameters in the CISS solver.
 
         Returns
         -------
         ip: int
-             Number of integration points.
+            Number of integration points.
         bs: int
-             Block size.
+            Block size.
         ms: int
-             Moment size.
+            Moment size.
         npart: int
-             Number of partitions when splitting the communicator.
+            Number of partitions when splitting the communicator.
         bsmax: int
-             Maximum block size.
+            Maximum block size.
         realmats: bool
-             True if A and B are real.
+            True if A and B are real.
         """
         cdef PetscInt  ival1 = 0
         cdef PetscInt  ival2 = 0
@@ -1857,16 +1898,16 @@ cdef class PEP(Object):
         CHKERR( PEPCISSGetSizes(self.pep, &ival1, &ival2, &ival3, &ival4, &ival5, &bval) )
         return (toInt(ival1), toInt(ival2), toInt(ival3), toInt(ival4), toInt(ival5), toBool(bval))
 
-    def setCISSThreshold(self, delta=None, spur=None):
+    def setCISSThreshold(self, delta: float | None = None, spur: float | None = None) -> None:
         """
         Sets the values of various threshold parameters in the CISS solver.
 
         Parameters
         ----------
-        delta: float
-                Threshold for numerical rank.
-        spur: float
-                Spurious threshold (to discard spurious eigenpairs).
+        delta
+            Threshold for numerical rank.
+        spur
+            Spurious threshold (to discard spurious eigenpairs).
         """
         cdef PetscReal rval1 = PETSC_DEFAULT
         cdef PetscReal rval2 = PETSC_DEFAULT
@@ -1874,32 +1915,32 @@ cdef class PEP(Object):
         if spur  is not None: rval2 = asReal(spur)
         CHKERR( PEPCISSSetThreshold(self.pep, rval1, rval2) )
 
-    def getCISSThreshold(self):
+    def getCISSThreshold(self) -> tuple[float, float]:
         """
         Gets the values of various threshold parameters in the CISS solver.
 
         Returns
         -------
         delta: float
-                Threshold for numerical rank.
+            Threshold for numerical rank.
         spur: float
-                Spurious threshold (to discard spurious eigenpairs.
+            Spurious threshold (to discard spurious eigenpairs.
         """
         cdef PetscReal delta = 0
         cdef PetscReal spur  = 0
         CHKERR( PEPCISSGetThreshold(self.pep, &delta, &spur) )
         return (toReal(delta), toReal(spur))
 
-    def setCISSRefinement(self, inner=None, blsize=None):
+    def setCISSRefinement(self, inner: int | None = None, blsize: int | None = None) -> None:
         """
         Sets the values of various refinement parameters in the CISS solver.
 
         Parameters
         ----------
-        inner: int, optional
-             Number of iterative refinement iterations (inner loop).
-        blsize: int, optional
-             Number of iterative refinement iterations (blocksize loop).
+        inner
+            Number of iterative refinement iterations (inner loop).
+        blsize
+            Number of iterative refinement iterations (blocksize loop).
         """
         cdef PetscInt ival1 = PETSC_DEFAULT
         cdef PetscInt ival2 = PETSC_DEFAULT
@@ -1907,31 +1948,31 @@ cdef class PEP(Object):
         if blsize is not None: ival2 = asInt(blsize)
         CHKERR( PEPCISSSetRefinement(self.pep, ival1, ival2) )
 
-    def getCISSRefinement(self):
+    def getCISSRefinement(self) -> tuple[int, int]:
         """
         Gets the values of various refinement parameters in the CISS solver.
 
         Returns
         -------
         inner: int
-             Number of iterative refinement iterations (inner loop).
+            Number of iterative refinement iterations (inner loop).
         blsize: int
-             Number of iterative refinement iterations (blocksize loop).
+            Number of iterative refinement iterations (blocksize loop).
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
         CHKERR( PEPCISSGetRefinement(self.pep, &ival1, &ival2) )
         return (toInt(ival1), toInt(ival2))
 
-    def getCISSKSPs(self):
+    def getCISSKSPs(self) -> list[KSP]:
         """
         Retrieve the array of linear solver objects associated with
         the CISS solver.
 
         Returns
         -------
-        ksp: list of `KSP`
-             The linear solver objects.
+        list of KSP
+            The linear solver objects.
 
         Notes
         -----

@@ -344,6 +344,7 @@ cdef PetscErrorCode EPS_Stopping(
     elif reason is False: r[0] = EPS_CONVERGED_ITERATING
     elif reason is True:  r[0] = EPS_CONVERGED_USER
     else:                 r[0] = reason
+    return PETSC_SUCCESS
 
 # -----------------------------------------------------------------------------
 
@@ -366,6 +367,7 @@ cdef PetscErrorCode EPS_Arbitrary(
     else:
         rr[0] = asScalar(r)
         ri[0] = 0.0
+    return PETSC_SUCCESS
 
 # -----------------------------------------------------------------------------
 
@@ -380,6 +382,7 @@ cdef PetscErrorCode EPS_Comparison(
     (comparison, args, kargs) = <object>ctx
     r = comparison(toComplex(ar, ai), toComplex(br, bi), args, **kargs)
     res[0] = asInt(r)
+    return PETSC_SUCCESS
 
 # -----------------------------------------------------------------------------
 
