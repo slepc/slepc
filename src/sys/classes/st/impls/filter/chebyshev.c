@@ -198,10 +198,46 @@ static PetscErrorCode STComputeOperator_Filter_Chebyshev(ST st,Mat *G)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode Chebyshev_Clenshaw_Damping_Real(ST st,PetscReal x,PetscReal *px)
+{
+  ST_FILTER     *ctx = (ST_FILTER*)st->data;
+  CHEBYSHEV_CTX cheby = (CHEBYSHEV_CTX)ctx->data;
+  PetscReal     t1=0,t2=0;
+  PetscInt      i,degree;
+
+  PetscFunctionBegin;
+  degree = ctx->polyDegree;
+  PetscCheck(cheby->coeffs,PetscObjectComm((PetscObject)st),PETSC_ERR_ARG_NULL,"Chebyshev coefficients are not computed");
+  PetscCheck(cheby->damping_coeffs,PetscObjectComm((PetscObject)st),PETSC_ERR_ARG_NULL,"Chebyshev damping coefficients are not computed");
+  x = 2*x;
+  for (i=degree;i>1;i=i-2) {
+    t2 = cheby->damping_coeffs[i]*cheby->coeffs[i] + x*t1 - t2;
+    t1 = cheby->damping_coeffs[i-1]*cheby->coeffs[i-1] + x*t2 - t1;
+  }
+  if (degree % 2) {
+    t2 = cheby->damping_coeffs[1]*cheby->coeffs[1] + x*t1 - t2;
+    t1 = t2;
+  }
+  *px = cheby->damping_coeffs[0]*cheby->coeffs[0] + .5*x*t1 - t2;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+   Computes the threshold for the Chebyshev filter
+
+   The threshold is P(scale(ctx->inta)), where ctx->inta is the lower bound of the interval.
+   It should be the same value if the upper bound was used instead.
+*/
 static PetscErrorCode STFilterGetThreshold_Filter_Chebyshev(ST st,PetscReal *gamma)
 {
+  ST_FILTER     *ctx = (ST_FILTER*)st->data;
+  PetscReal     c,e;
+
   PetscFunctionBegin;
-  *gamma = 0.5;
+  /* scale ctx->inta */
+  c = (ctx->right + ctx->left) / 2.0;
+  e = (ctx->right - ctx->left) / 2.0;
+  PetscCall(Chebyshev_Clenshaw_Damping_Real(st,(ctx->inta-c)/e,gamma));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
