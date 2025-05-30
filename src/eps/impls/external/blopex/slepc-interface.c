@@ -18,7 +18,7 @@
 #include <temp_multivector.h>
 #include "blopex.h"
 
-static void* mv_TempMultiVectorCreateFromBV(void* ii_,BlopexInt n,void* sample)
+static void *mv_TempMultiVectorCreateFromBV(void *ii_,BlopexInt n,void *sample)
 {
   BV                      bv = (BV)sample;
   Vec                     v;

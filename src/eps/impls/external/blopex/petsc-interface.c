@@ -115,7 +115,7 @@ static BlopexInt PETSC_ClearVector(void *x)
   return 0;
 }
 
-static BlopexInt PETSC_SetRandomValues(void* v,BlopexInt seed)
+static BlopexInt PETSC_SetRandomValues(void *v,BlopexInt seed)
 {
 
   /* note: without previous call to LOBPCG_InitRandomContext LOBPCG_RandomContext will be null,

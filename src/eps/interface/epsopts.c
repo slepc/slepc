@@ -672,7 +672,7 @@ PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
 
 .seealso: EPSSetWhichEigenpairs(), EPSWhich
 @*/
-PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *func,void* ctx)
+PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *func,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -718,7 +718,7 @@ PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *f
 
 .seealso: EPSSetWhichEigenpairs()
 @*/
-PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,void* ctx)
+PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -748,7 +748,7 @@ PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,
 
 .seealso: EPSSetConvergenceTest(), EPSSetTolerances()
 @*/
-PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,void* ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,void *ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -860,7 +860,7 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
 
 .seealso: EPSSetStoppingTest(), EPSStoppingBasic()
 @*/
-PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void* ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
