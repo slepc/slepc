@@ -2055,8 +2055,11 @@ cdef class EPS(Object):
         cdef Mat B = Mat()
         CHKERR( EPSKrylovSchurGetSubcommMats(self.eps, &A.mat, &B.mat) )
         CHKERR( PetscINCREF(A.obj) )
-        CHKERR( PetscINCREF(B.obj) )
-        return (A, B)
+        if B.mat:
+            CHKERR( PetscINCREF(B.obj) )
+            return (A, B)
+        else:
+            return (A, None)
 
     def updateKrylovSchurSubcommMats(self, s=1.0, a=1.0, Mat Au=None,
                                      t=1.0, b=1.0, Mat Bu=None,
