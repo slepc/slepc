@@ -491,7 +491,9 @@ for dir in dirs:
     return
 
   def installShare(self):
-    self.copies.extend(self.copytree(self.rootShareDir, self.destShareDir))
+    if self.copyexamples: exclude = []
+    else: exclude = ['datafiles']
+    self.copies.extend(self.copytree(self.rootShareDir, self.destShareDir, exclude=exclude))
     if self.copyexamples:
       examplesdir=os.path.join(self.destShareDir,'slepc','examples')
       if os.path.exists(examplesdir):
