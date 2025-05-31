@@ -45,14 +45,14 @@ class Slepc4py(package.Package):
     self.log.NewSection('Processing slepc4py...')
 
     pythonpath = get_python_path(petsc)
-    sys.path.insert(0,pythonpath)
+    sys.path = pythonpath.split(':') + sys.path
 
     # Check for pestc4py unless user suppressed this
     if self.have_petsc4py is None:
       try:
         from petsc4py import PETSc
       except ImportError:
-        self.log.Exit('Cannot import petsc4py, make sure your PYTHONPATH is set correctly')
+        self.log.Exit('Cannot import petsc4py, if you have a PYTHONPATH variable make sure it contains the path where petsc4py can be found, e.g., $PETSC_DIR/$PETSC_ARCH/lib')
     elif not self.have_petsc4py:
       self.log.Exit('petsc4py is required but had been marked as not installed')
 
