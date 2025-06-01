@@ -129,7 +129,7 @@ def generateFortranInterface(petscarch, classes, enums, structs, senums, funname
       func = ''
       dims = ['']
       petscclasses = ['PetscObject','PetscViewer','PetscRandom','PetscSubcomm','IS','Vec','Mat','KSP','PC','SNES']
-      petscenums = ['NormType','MatStructure']
+      petscenums = ['NormType','MatStructure','PetscViewerFormat']
       # if ((funname).startswith('MatDenseGetArray') or (funname).startswith('MatDenseRestoreArray')) and fi[-1].endswith('[]'): dims = ['1d','2d']
       for dim in dims:
         fd.write('  subroutine ' + funname + func + dim + '(')
