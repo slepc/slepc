@@ -34,22 +34,11 @@ PetscErrorCode PEPMonitor(PEP pep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 
    Input Parameters:
 +  pep     - eigensolver context obtained from PEPCreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring)
+.  monitor - pointer to function (if this is NULL, it turns off monitoring), see PEPMonitorFn
 .  mctx    - [optional] context for private data for the
              monitor routine (use NULL if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be NULL),
              see PetscCtxDestroyFn for the calling sequence
-
-   Calling sequence of monitor:
-$  PetscErrorCode monitor(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *mctx)
-+  pep    - polynomial eigensolver context obtained from PEPCreate()
-.  its    - iteration number
-.  nconv  - number of converged eigenpairs
-.  eigr   - real part of the eigenvalues
-.  eigi   - imaginary part of the eigenvalues
-.  errest - relative error estimates for each eigenpair
-.  nest   - number of error estimates
--  mctx   - optional monitoring context, as set by PEPMonitorSet()
 
    Options Database Keys:
 +    -pep_monitor        - print only the first error estimate
@@ -66,21 +55,26 @@ $  PetscErrorCode monitor(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,
       the options database.
 
    Notes:
-   Several different monitoring routines may be set by calling
-   PEPMonitorSet() multiple times; all will be called in the
-   order in which they were set.
+   The options database option -pep_monitor and related options are the easiest way
+   to turn on PEP iteration monitoring.
+
+   PEPMonitorRegister() provides a way to associate an options database key with PEP
+   monitor function.
+
+   Several different monitoring routines may be set by calling PEPMonitorSet() multiple
+   times; all will be called in the order in which they were set.
 
    Level: intermediate
 
 .seealso: PEPMonitorFirst(), PEPMonitorAll(), PEPMonitorCancel()
 @*/
-PetscErrorCode PEPMonitorSet(PEP pep,PetscErrorCode (*monitor)(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *mctx),void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
   PetscCheck(pep->numbermonitors<MAXPEPMONITORS,PetscObjectComm((PetscObject)pep),PETSC_ERR_ARG_OUTOFRANGE,"Too many PEP monitors set");
   pep->monitor[pep->numbermonitors]           = monitor;
-  pep->monitorcontext[pep->numbermonitors]    = (void*)mctx;
+  pep->monitorcontext[pep->numbermonitors]    = mctx;
   pep->monitordestroy[pep->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

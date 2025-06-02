@@ -34,22 +34,11 @@ PetscErrorCode NEPMonitor(NEP nep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 
    Input Parameters:
 +  nep     - eigensolver context obtained from NEPCreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring)
+.  monitor - pointer to function (if this is NULL, it turns off monitoring), see NEPMonitorFn
 .  mctx    - [optional] context for private data for the
              monitor routine (use NULL if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be NULL),
              see PetscCtxDestroyFn for the calling sequence
-
-   Calling sequence of monitor:
-$  PetscErrorCode monitor(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *mctx)
-+  nep    - nonlinear eigensolver context obtained from NEPCreate()
-.  its    - iteration number
-.  nconv  - number of converged eigenpairs
-.  eigr   - real part of the eigenvalues
-.  eigi   - imaginary part of the eigenvalues
-.  errest - error estimates for each eigenpair
-.  nest   - number of error estimates
--  mctx   - optional monitoring context, as set by NEPMonitorSet()
 
    Options Database Keys:
 +    -nep_monitor        - print only the first error estimate
@@ -66,21 +55,26 @@ $  PetscErrorCode monitor(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,
       the options database.
 
    Notes:
-   Several different monitoring routines may be set by calling
-   NEPMonitorSet() multiple times; all will be called in the
-   order in which they were set.
+   The options database option -nep_monitor and related options are the easiest way
+   to turn on NEP iteration monitoring.
+
+   NEPMonitorRegister() provides a way to associate an options database key with NEP
+   monitor function.
+
+   Several different monitoring routines may be set by calling NEPMonitorSet() multiple
+   times; all will be called in the order in which they were set.
 
    Level: intermediate
 
 .seealso: NEPMonitorFirst(), NEPMonitorAll(), NEPMonitorCancel()
 @*/
-PetscErrorCode NEPMonitorSet(NEP nep,PetscErrorCode (*monitor)(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *mctx),void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
   PetscCheck(nep->numbermonitors<MAXNEPMONITORS,PetscObjectComm((PetscObject)nep),PETSC_ERR_ARG_OUTOFRANGE,"Too many NEP monitors set");
   nep->monitor[nep->numbermonitors]           = monitor;
-  nep->monitorcontext[nep->numbermonitors]    = (void*)mctx;
+  nep->monitorcontext[nep->numbermonitors]    = mctx;
   nep->monitordestroy[nep->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

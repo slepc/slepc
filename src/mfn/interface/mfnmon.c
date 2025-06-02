@@ -34,18 +34,11 @@ PetscErrorCode MFNMonitor(MFN mfn,PetscInt it,PetscReal errest)
 
    Input Parameters:
 +  mfn     - matrix function context obtained from MFNCreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring)
+.  monitor - pointer to function (if this is NULL, it turns off monitoring), see MFNMonitorFn
 .  mctx    - [optional] context for private data for the
              monitor routine (use NULL if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be NULL),
              see PetscCtxDestroyFn for the calling sequence
-
-   Calling sequence of monitor:
-$  PetscErrorCode monitor(MFN mfn,PetscInt its,PetscReal errest,void *mctx)
-+  mfn    - matrix function context obtained from MFNCreate()
-.  its    - iteration number
-.  errest - error estimate
--  mctx   - optional monitoring context, as set by MFNMonitorSet()
 
    Options Database Keys:
 +    -mfn_monitor - print the error estimate
@@ -55,21 +48,26 @@ $  PetscErrorCode monitor(MFN mfn,PetscInt its,PetscReal errest,void *mctx)
       the options database.
 
    Notes:
-   Several different monitoring routines may be set by calling
-   MFNMonitorSet() multiple times; all will be called in the
-   order in which they were set.
+   The options database option -mfn_monitor and related options are the easiest way
+   to turn on MFN iteration monitoring.
+
+   MFNMonitorRegister() provides a way to associate an options database key with MFN
+   monitor function.
+
+   Several different monitoring routines may be set by calling MFNMonitorSet() multiple
+   times; all will be called in the order in which they were set.
 
    Level: intermediate
 
 .seealso: MFNMonitorCancel()
 @*/
-PetscErrorCode MFNMonitorSet(MFN mfn,PetscErrorCode (*monitor)(MFN mfn,PetscInt its,PetscReal errest,void *mctx),void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(mfn,MFN_CLASSID,1);
   PetscCheck(mfn->numbermonitors<MAXMFNMONITORS,PetscObjectComm((PetscObject)mfn),PETSC_ERR_ARG_OUTOFRANGE,"Too many MFN monitors set");
   mfn->monitor[mfn->numbermonitors]           = monitor;
-  mfn->monitorcontext[mfn->numbermonitors]    = (void*)mctx;
+  mfn->monitorcontext[mfn->numbermonitors]    = mctx;
   mfn->monitordestroy[mfn->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

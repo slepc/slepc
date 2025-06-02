@@ -87,7 +87,7 @@ struct _p_SVD {
   PetscCtxDestroyFn    *stoppingdestroy;
   void                 *convergedctx;
   void                 *stoppingctx;
-  PetscErrorCode       (*monitor[MAXSVDMONITORS])(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*);
+  SVDMonitorFn         *monitor[MAXSVDMONITORS];
   PetscCtxDestroyFn    *monitordestroy[MAXSVDMONITORS];
   void                 *monitorcontext[MAXSVDMONITORS];
   PetscInt             numbermonitors;

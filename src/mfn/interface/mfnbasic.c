@@ -341,7 +341,7 @@ PetscErrorCode MFNRegister(const char *name,PetscErrorCode (*function)(MFN))
 }
 
 /*@C
-   MFNMonitorRegister - Adds MFN monitor routine.
+   MFNMonitorRegister - Registers an MFN monitor routine that may be accessed with MFNMonitorSetFromOptions().
 
    Not Collective
 
@@ -349,12 +349,16 @@ PetscErrorCode MFNRegister(const char *name,PetscErrorCode (*function)(MFN))
 +  name    - name of a new monitor routine
 .  vtype   - a PetscViewerType for the output
 .  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine
+.  monitor - monitor routine, see MFNMonitorRegisterFn
 .  create  - creation routine, or NULL
 -  destroy - destruction routine, or NULL
 
    Notes:
    MFNMonitorRegister() may be called multiple times to add several user-defined monitors.
+
+   The calling sequence for the given function matches the calling sequence of MFNMonitorFn
+   functions passed to MFNMonitorSet() with the additional requirement that its final argument
+   be a PetscViewerAndFormat.
 
    Example Usage:
 .vb
@@ -368,9 +372,9 @@ $      -mfn_monitor_my_monitor
 
    Level: advanced
 
-.seealso: MFNMonitorRegisterAll()
+.seealso: MFNMonitorSet(), MFNMonitorRegisterAll()
 @*/
-PetscErrorCode MFNMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,PetscErrorCode (*monitor)(MFN,PetscInt,PetscReal,PetscViewerAndFormat*),PetscErrorCode (*create)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode (*destroy)(PetscViewerAndFormat**))
+PetscErrorCode MFNMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,MFNMonitorRegisterFn *monitor,MFNMonitorRegisterCreateFn *create,MFNMonitorRegisterDestroyFn *destroy)
 {
   char           key[PETSC_MAX_PATH_LEN];
 

@@ -113,7 +113,7 @@ struct _p_EPS {
   void                      *convergedctx;
   void                      *stoppingctx;
   void                      *arbitraryctx;
-  PetscErrorCode            (*monitor[MAXEPSMONITORS])(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
+  EPSMonitorFn              *monitor[MAXEPSMONITORS];
   PetscCtxDestroyFn         *monitordestroy[MAXEPSMONITORS];
   void                      *monitorcontext[MAXEPSMONITORS];
   PetscInt                  numbermonitors;

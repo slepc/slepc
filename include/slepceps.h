@@ -247,19 +247,10 @@ SLEPC_EXTERN PetscErrorCode EPSSetDS(EPS,DS);
 SLEPC_EXTERN PetscErrorCode EPSGetDS(EPS,DS*);
 SLEPC_EXTERN PetscErrorCode EPSSetTolerances(EPS,PetscReal,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSGetTolerances(EPS,PetscReal*,PetscInt*);
-SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTest(EPS,EPSConv);
-SLEPC_EXTERN PetscErrorCode EPSGetConvergenceTest(EPS,EPSConv*);
-SLEPC_EXTERN PetscErrorCode EPSConvergedAbsolute(EPS,PetscScalar,PetscScalar,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode EPSConvergedRelative(EPS,PetscScalar,PetscScalar,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode EPSConvergedNorm(EPS,PetscScalar,PetscScalar,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode EPSSetStoppingTest(EPS,EPSStop);
-SLEPC_EXTERN PetscErrorCode EPSGetStoppingTest(EPS,EPSStop*);
-SLEPC_EXTERN PetscErrorCode EPSStoppingBasic(EPS,PetscInt,PetscInt,PetscInt,PetscInt,EPSConvergedReason*,void*);
-SLEPC_EXTERN PetscErrorCode EPSStoppingThreshold(EPS,PetscInt,PetscInt,PetscInt,PetscInt,EPSConvergedReason*,void*);
-SLEPC_EXTERN PetscErrorCode EPSGetConvergedReason(EPS,EPSConvergedReason*);
-
 SLEPC_EXTERN PetscErrorCode EPSSetDimensions(EPS,PetscInt,PetscInt,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSGetDimensions(EPS,PetscInt*,PetscInt*,PetscInt*);
+
+SLEPC_EXTERN PetscErrorCode EPSGetConvergedReason(EPS,EPSConvergedReason*);
 
 SLEPC_EXTERN PetscErrorCode EPSGetConverged(EPS,PetscInt*);
 SLEPC_EXTERN PetscErrorCode EPSGetEigenpair(EPS,PetscInt,PetscScalar*,PetscScalar*,Vec,Vec);
@@ -296,23 +287,91 @@ SLEPC_EXTERN PetscErrorCode EPSSetDeflationSpace(EPS,PetscInt,Vec[]);
 SLEPC_EXTERN PetscErrorCode EPSSetInitialSpace(EPS,PetscInt,Vec[]);
 SLEPC_EXTERN PetscErrorCode EPSSetLeftInitialSpace(EPS,PetscInt,Vec[]);
 
+/*S
+  EPSMonitorFn - A function prototype for functions provided to EPSMonitorSet()
+
+  Calling Sequence:
++   eps    - eigensolver context obtained from EPSCreate()
+.   its    - iteration number
+.   nconv  - number of converged eigenpairs
+.   eigr   - real part of the eigenvalues
+.   eigi   - imaginary part of the eigenvalues
+.   errest - relative error estimates for each eigenpair
+.   nest   - number of error estimates
+-   ctx    - optional monitoring context, as provided with EPSMonitorSet()
+
+  Level: beginner
+
+.seealso: EPSMonitorSet()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorFn(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx);
+
+/*S
+  EPSMonitorRegisterFn - A function prototype for functions provided to EPSMonitorRegister()
+
+  Calling Sequence:
++   eps    - eigensolver context obtained from EPSCreate()
+.   its    - iteration number
+.   nconv  - number of converged eigenpairs
+.   eigr   - real part of the eigenvalues
+.   eigi   - imaginary part of the eigenvalues
+.   errest - relative error estimates for each eigenpair
+.   nest   - number of error estimates
+-   ctx    - PetscViewerAndFormat object
+
+  Level: beginner
+
+  Note:
+  This is an EPSMonitorFn specialized for a context of PetscViewerAndFormat.
+
+.seealso: EPSMonitorSet(), EPSMonitorRegister(), EPSMonitorFn, EPSMonitorRegisterCreateFn, EPSMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterFn(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
+
+/*S
+  EPSMonitorRegisterCreateFn - A function prototype for functions that do the creation when provided to EPSMonitorRegister()
+
+  Calling Sequence:
++   viewer - the viewer to be used with the EPSMonitorRegisterFn
+.   format - the format of the viewer
+.   ctx    - a context for the monitor
+-   result - a PetscViewerAndFormat object
+
+  Level: beginner
+
+.seealso: EPSMonitorRegisterFn, EPSMonitorSet(), EPSMonitorRegister(), EPSMonitorFn, EPSMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+
+/*S
+  EPSMonitorRegisterDestroyFn - A function prototype for functions that do the after use destruction when provided to EPSMonitorRegister()
+
+  Calling Sequence:
+.   vf - a PetscViewerAndFormat object to be destroyed, including any context
+
+  Level: beginner
+
+.seealso: EPSMonitorRegisterFn, EPSMonitorSet(), EPSMonitorRegister(), EPSMonitorFn, EPSMonitorRegisterCreateFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
+
 SLEPC_EXTERN PetscErrorCode EPSMonitor(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt);
-SLEPC_EXTERN PetscErrorCode EPSMonitorSet(EPS,PetscErrorCode (*)(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*),void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode EPSMonitorSet(EPS,EPSMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode EPSMonitorCancel(EPS);
 SLEPC_EXTERN PetscErrorCode EPSGetMonitorContext(EPS,void*);
 
 SLEPC_EXTERN PetscErrorCode EPSMonitorSetFromOptions(EPS,const char[],const char[],void*,PetscBool);
-SLEPC_EXTERN PetscErrorCode EPSMonitorFirst(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorFirstDrawLG(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode EPSMonitorAll(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorAllDrawLG(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorAllDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode EPSMonitorConverged(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedDrawLG(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode EPSMonitorConvergedDestroy(PetscViewerAndFormat**);
+SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorFirst;
+SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorFirstDrawLG;
+SLEPC_EXTERN EPSMonitorRegisterCreateFn  EPSMonitorFirstDrawLGCreate;
+SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorAll;
+SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorAllDrawLG;
+SLEPC_EXTERN EPSMonitorRegisterCreateFn  EPSMonitorAllDrawLGCreate;
+SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorConverged;
+SLEPC_EXTERN EPSMonitorRegisterCreateFn  EPSMonitorConvergedCreate;
+SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorConvergedDrawLG;
+SLEPC_EXTERN EPSMonitorRegisterCreateFn  EPSMonitorConvergedDrawLGCreate;
+SLEPC_EXTERN EPSMonitorRegisterDestroyFn EPSMonitorConvergedDestroy;
 
 SLEPC_EXTERN PetscErrorCode EPSSetOptionsPrefix(EPS,const char*);
 SLEPC_EXTERN PetscErrorCode EPSAppendOptionsPrefix(EPS,const char*);
@@ -323,7 +382,7 @@ SLEPC_EXTERN PetscFunctionList EPSMonitorList;
 SLEPC_EXTERN PetscFunctionList EPSMonitorCreateList;
 SLEPC_EXTERN PetscFunctionList EPSMonitorDestroyList;
 SLEPC_EXTERN PetscErrorCode EPSRegister(const char[],PetscErrorCode(*)(EPS));
-SLEPC_EXTERN PetscErrorCode EPSMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,PetscErrorCode(*)(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*),PetscErrorCode(*)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode(*)(PetscViewerAndFormat**));
+SLEPC_EXTERN PetscErrorCode EPSMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,EPSMonitorRegisterFn*,EPSMonitorRegisterCreateFn*,EPSMonitorRegisterDestroyFn*);
 
 SLEPC_EXTERN PetscErrorCode EPSSetWorkVecs(EPS,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSAllocateSolution(EPS,PetscInt);
@@ -347,6 +406,13 @@ SLEPC_EXTERN PetscErrorCode EPSReallocateSolution(EPS,PetscInt);
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(EPSConvergenceTestFn)(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
 
+SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTest(EPS,EPSConv);
+SLEPC_EXTERN PetscErrorCode EPSGetConvergenceTest(EPS,EPSConv*);
+SLEPC_EXTERN EPSConvergenceTestFn EPSConvergedAbsolute;
+SLEPC_EXTERN EPSConvergenceTestFn EPSConvergedRelative;
+SLEPC_EXTERN EPSConvergenceTestFn EPSConvergedNorm;
+SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+
 /*S
   EPSStoppingTestFn - A prototype of an EPS stopping test function that would be passed to EPSSetStoppingTestFunction()
 
@@ -366,8 +432,12 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(EPSConvergenceTestFn)(EPS eps,PetscS
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(EPSStoppingTestFn)(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx);
 
-SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode EPSSetStoppingTest(EPS,EPSStop);
+SLEPC_EXTERN PetscErrorCode EPSGetStoppingTest(EPS,EPSStop*);
+SLEPC_EXTERN EPSStoppingTestFn EPSStoppingBasic;
+SLEPC_EXTERN EPSStoppingTestFn EPSStoppingThreshold;
 SLEPC_EXTERN PetscErrorCode EPSSetStoppingTestFunction(EPS,EPSStoppingTestFn*,void*,PetscCtxDestroyFn*);
+
 SLEPC_EXTERN PetscErrorCode EPSSetEigenvalueComparison(EPS,SlepcEigenvalueComparisonFn*,void*);
 SLEPC_EXTERN PetscErrorCode EPSSetArbitrarySelection(EPS,SlepcArbitrarySelectionFn*,void*);
 

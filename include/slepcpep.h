@@ -245,14 +245,6 @@ SLEPC_EXTERN PetscErrorCode PEPRefineGetKSP(PEP,KSP*);
 
 SLEPC_EXTERN PetscErrorCode PEPSetTolerances(PEP,PetscReal,PetscInt);
 SLEPC_EXTERN PetscErrorCode PEPGetTolerances(PEP,PetscReal*,PetscInt*);
-SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTest(PEP,PEPConv);
-SLEPC_EXTERN PetscErrorCode PEPGetConvergenceTest(PEP,PEPConv*);
-SLEPC_EXTERN PetscErrorCode PEPConvergedAbsolute(PEP,PetscScalar,PetscScalar,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode PEPConvergedRelative(PEP,PetscScalar,PetscScalar,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode PEPConvergedNorm(PEP,PetscScalar,PetscScalar,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode PEPSetStoppingTest(PEP,PEPStop);
-SLEPC_EXTERN PetscErrorCode PEPGetStoppingTest(PEP,PEPStop*);
-SLEPC_EXTERN PetscErrorCode PEPStoppingBasic(PEP,PetscInt,PetscInt,PetscInt,PetscInt,PEPConvergedReason*,void*);
 SLEPC_EXTERN PetscErrorCode PEPGetConvergedReason(PEP,PEPConvergedReason*);
 
 SLEPC_EXTERN PetscErrorCode PEPSetDimensions(PEP,PetscInt,PetscInt,PetscInt);
@@ -281,23 +273,91 @@ SLEPC_EXTERN PetscErrorCode PEPGetWhichEigenpairs(PEP,PEPWhich*);
 SLEPC_EXTERN PetscErrorCode PEPSetTrackAll(PEP,PetscBool);
 SLEPC_EXTERN PetscErrorCode PEPGetTrackAll(PEP,PetscBool*);
 
+/*S
+  PEPMonitorFn - A function prototype for functions provided to PEPMonitorSet()
+
+  Calling Sequence:
++   pep    - eigensolver context obtained from PEPCreate()
+.   its    - iteration number
+.   nconv  - number of converged eigenpairs
+.   eigr   - real part of the eigenvalues
+.   eigi   - imaginary part of the eigenvalues
+.   errest - relative error estimates for each eigenpair
+.   nest   - number of error estimates
+-   ctx    - optional monitoring context, as provided with PEPMonitorSet()
+
+  Level: beginner
+
+.seealso: PEPMonitorSet()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx);
+
+/*S
+  PEPMonitorRegisterFn - A function prototype for functions provided to PEPMonitorRegister()
+
+  Calling Sequence:
++   pep    - eigensolver context obtained from PEPCreate()
+.   its    - iteration number
+.   nconv  - number of converged eigenpairs
+.   eigr   - real part of the eigenvalues
+.   eigi   - imaginary part of the eigenvalues
+.   errest - relative error estimates for each eigenpair
+.   nest   - number of error estimates
+-   ctx    - PetscViewerAndFormat object
+
+  Level: beginner
+
+  Note:
+  This is an PEPMonitorFn specialized for a context of PetscViewerAndFormat.
+
+.seealso: PEPMonitorSet(), PEPMonitorRegister(), PEPMonitorFn, PEPMonitorRegisterCreateFn, PEPMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
+
+/*S
+  PEPMonitorRegisterCreateFn - A function prototype for functions that do the creation when provided to PEPMonitorRegister()
+
+  Calling Sequence:
++   viewer - the viewer to be used with the PEPMonitorRegisterFn
+.   format - the format of the viewer
+.   ctx    - a context for the monitor
+-   result - a PetscViewerAndFormat object
+
+  Level: beginner
+
+.seealso: PEPMonitorRegisterFn, PEPMonitorSet(), PEPMonitorRegister(), PEPMonitorFn, PEPMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+
+/*S
+  PEPMonitorRegisterDestroyFn - A function prototype for functions that do the after use destruction when provided to PEPMonitorRegister()
+
+  Calling Sequence:
+.   vf - a PetscViewerAndFormat object to be destroyed, including any context
+
+  Level: beginner
+
+.seealso: PEPMonitorRegisterFn, PEPMonitorSet(), PEPMonitorRegister(), PEPMonitorFn, PEPMonitorRegisterCreateFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
+
 SLEPC_EXTERN PetscErrorCode PEPMonitor(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt);
-SLEPC_EXTERN PetscErrorCode PEPMonitorSet(PEP,PetscErrorCode (*)(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*),void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode PEPMonitorSet(PEP,PEPMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode PEPMonitorCancel(PEP);
 SLEPC_EXTERN PetscErrorCode PEPGetMonitorContext(PEP,void*);
 
 SLEPC_EXTERN PetscErrorCode PEPMonitorSetFromOptions(PEP,const char[],const char[],void*,PetscBool);
-SLEPC_EXTERN PetscErrorCode PEPMonitorFirst(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode PEPMonitorFirstDrawLG(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode PEPMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode PEPMonitorAll(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode PEPMonitorAllDrawLG(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode PEPMonitorAllDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode PEPMonitorConverged(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode PEPMonitorConvergedCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode PEPMonitorConvergedDrawLG(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode PEPMonitorConvergedDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode PEPMonitorConvergedDestroy(PetscViewerAndFormat**);
+SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorFirst;
+SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorFirstDrawLG;
+SLEPC_EXTERN PEPMonitorRegisterCreateFn  PEPMonitorFirstDrawLGCreate;
+SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorAll;
+SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorAllDrawLG;
+SLEPC_EXTERN PEPMonitorRegisterCreateFn  PEPMonitorAllDrawLGCreate;
+SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorConverged;
+SLEPC_EXTERN PEPMonitorRegisterCreateFn  PEPMonitorConvergedCreate;
+SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorConvergedDrawLG;
+SLEPC_EXTERN PEPMonitorRegisterCreateFn  PEPMonitorConvergedDrawLGCreate;
+SLEPC_EXTERN PEPMonitorRegisterDestroyFn PEPMonitorConvergedDestroy;
 
 SLEPC_EXTERN PetscErrorCode PEPSetOptionsPrefix(PEP,const char*);
 SLEPC_EXTERN PetscErrorCode PEPAppendOptionsPrefix(PEP,const char*);
@@ -308,7 +368,7 @@ SLEPC_EXTERN PetscFunctionList PEPMonitorList;
 SLEPC_EXTERN PetscFunctionList PEPMonitorCreateList;
 SLEPC_EXTERN PetscFunctionList PEPMonitorDestroyList;
 SLEPC_EXTERN PetscErrorCode PEPRegister(const char[],PetscErrorCode(*)(PEP));
-SLEPC_EXTERN PetscErrorCode PEPMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,PetscErrorCode(*)(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*),PetscErrorCode(*)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode(*)(PetscViewerAndFormat**));
+SLEPC_EXTERN PetscErrorCode PEPMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,PEPMonitorRegisterFn*,PEPMonitorRegisterCreateFn*,PEPMonitorRegisterDestroyFn*);
 
 SLEPC_EXTERN PetscErrorCode PEPSetWorkVecs(PEP,PetscInt);
 SLEPC_EXTERN PetscErrorCode PEPAllocateSolution(PEP,PetscInt);
@@ -331,6 +391,13 @@ SLEPC_EXTERN PetscErrorCode PEPAllocateSolution(PEP,PetscInt);
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(PEPConvergenceTestFn)(PEP pep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
 
+SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTest(PEP,PEPConv);
+SLEPC_EXTERN PetscErrorCode PEPGetConvergenceTest(PEP,PEPConv*);
+SLEPC_EXTERN PEPConvergenceTestFn PEPConvergedAbsolute;
+SLEPC_EXTERN PEPConvergenceTestFn PEPConvergedRelative;
+SLEPC_EXTERN PEPConvergenceTestFn PEPConvergedNorm;
+SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTestFunction(PEP,PEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+
 /*S
   PEPStoppingTestFn - A prototype of a PEP stopping test function that would be passed to PEPSetStoppingTestFunction()
 
@@ -350,8 +417,11 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(PEPConvergenceTestFn)(PEP pep,PetscS
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(PEPStoppingTestFn)(PEP pep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,PEPConvergedReason *reason,void *ctx);
 
-SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTestFunction(PEP,PEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode PEPSetStoppingTest(PEP,PEPStop);
+SLEPC_EXTERN PetscErrorCode PEPGetStoppingTest(PEP,PEPStop*);
+SLEPC_EXTERN PEPStoppingTestFn PEPStoppingBasic;
 SLEPC_EXTERN PetscErrorCode PEPSetStoppingTestFunction(PEP,PEPStoppingTestFn*,void*,PetscCtxDestroyFn*);
+
 SLEPC_EXTERN PetscErrorCode PEPSetEigenvalueComparison(PEP,SlepcEigenvalueComparisonFn*,void*);
 
 /* --------- options specific to particular eigensolvers -------- */
