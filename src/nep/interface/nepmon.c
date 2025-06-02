@@ -70,8 +70,15 @@ PetscErrorCode NEPMonitor(NEP nep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 @*/
 PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
+  PetscInt  i;
+  PetscBool identical;
+
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
+  for (i=0;i<nep->numbermonitors;i++) {
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))nep->monitor[i],nep->monitorcontext[i],nep->monitordestroy[i],&identical));
+    if (identical) PetscFunctionReturn(PETSC_SUCCESS);
+  }
   PetscCheck(nep->numbermonitors<MAXNEPMONITORS,PetscObjectComm((PetscObject)nep),PETSC_ERR_ARG_OUTOFRANGE,"Too many NEP monitors set");
   nep->monitor[nep->numbermonitors]           = monitor;
   nep->monitorcontext[nep->numbermonitors]    = mctx;

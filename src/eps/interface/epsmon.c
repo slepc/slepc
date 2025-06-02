@@ -70,8 +70,15 @@ PetscErrorCode EPSMonitor(EPS eps,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 @*/
 PetscErrorCode EPSMonitorSet(EPS eps,EPSMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
+  PetscInt  i;
+  PetscBool identical;
+
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
+  for (i=0;i<eps->numbermonitors;i++) {
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))eps->monitor[i],eps->monitorcontext[i],eps->monitordestroy[i],&identical));
+    if (identical) PetscFunctionReturn(PETSC_SUCCESS);
+  }
   PetscCheck(eps->numbermonitors<MAXEPSMONITORS,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_OUTOFRANGE,"Too many EPS monitors set");
   eps->monitor[eps->numbermonitors]           = monitor;
   eps->monitorcontext[eps->numbermonitors]    = mctx;
