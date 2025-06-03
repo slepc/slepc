@@ -684,8 +684,11 @@ cdef class SVD(Object):
         cdef Mat B = Mat()
         CHKERR( SVDGetOperators(self.svd, &A.mat, &B.mat) )
         CHKERR( PetscINCREF(A.obj) )
-        CHKERR( PetscINCREF(B.obj) )
-        return (A, B)
+        if B.mat:
+            CHKERR( PetscINCREF(B.obj) )
+            return (A, B)
+        else:
+            return (A, None)
 
     def setOperators(self, Mat A, Mat B=None):
         """
