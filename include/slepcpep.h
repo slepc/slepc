@@ -329,7 +329,7 @@ SLEPC_EXTERN PetscErrorCode PEPAllocateSolution(PEP,PetscInt);
 
 .seealso: PEPSetConvergenceTestFunction()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(PEPConvergenceTestFn)(PEP pep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPConvergenceTestFn(PEP pep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
 
 /*S
   PEPStoppingTestFn - A prototype of a PEP stopping test function that would be passed to PEPSetStoppingTestFunction()
@@ -348,7 +348,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(PEPConvergenceTestFn)(PEP pep,PetscS
 
 .seealso: PEPSetStoppingTestFunction()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(PEPStoppingTestFn)(PEP pep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,PEPConvergedReason *reason,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPStoppingTestFn(PEP pep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,PEPConvergedReason *reason,void *ctx);
 
 SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTestFunction(PEP,PEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode PEPSetStoppingTestFunction(PEP,PEPStoppingTestFn*,void*,PetscCtxDestroyFn*);

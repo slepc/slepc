@@ -199,7 +199,7 @@ SLEPC_EXTERN PetscErrorCode NEPVectorsViewFromOptions(NEP);
 
 .seealso: NEPSetFunction()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(NEPFunctionFn)(NEP nep,PetscScalar lambda,Mat T,Mat P,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPFunctionFn(NEP nep,PetscScalar lambda,Mat T,Mat P,void *ctx);
 
 /*S
   NEPJacobianFn - A prototype of a NEP Jacobian evaluation function that would be passed to NEPSetJacobian()
@@ -215,7 +215,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(NEPFunctionFn)(NEP nep,PetscScalar l
 
 .seealso: NEPSetJacobian()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(NEPJacobianFn)(NEP nep,PetscScalar lambda,Mat J,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPJacobianFn(NEP nep,PetscScalar lambda,Mat J,void *ctx);
 
 SLEPC_EXTERN PetscErrorCode NEPSetFunction(NEP,Mat,Mat,NEPFunctionFn*,void*);
 SLEPC_EXTERN PetscErrorCode NEPGetFunction(NEP,Mat*,Mat*,NEPFunctionFn**,void**);
@@ -330,7 +330,7 @@ SLEPC_EXTERN PetscErrorCode NEPAllocateSolution(NEP,PetscInt);
 
 .seealso: NEPSetConvergenceTestFunction()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(NEPConvergenceTestFn)(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPConvergenceTestFn(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
 
 /*S
   NEPStoppingTestFn - A prototype of a NEP stopping test function that would be passed to NEPSetStoppingTestFunction()
@@ -349,7 +349,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(NEPConvergenceTestFn)(NEP nep,PetscS
 
 .seealso: NEPSetStoppingTestFunction()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(NEPStoppingTestFn)(NEP nep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,NEPConvergedReason *reason,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPStoppingTestFn(NEP nep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,NEPConvergedReason *reason,void *ctx);
 
 SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode NEPSetStoppingTestFunction(NEP,NEPStoppingTestFn*,void*,PetscCtxDestroyFn*);

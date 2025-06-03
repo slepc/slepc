@@ -345,7 +345,7 @@ SLEPC_EXTERN PetscErrorCode EPSReallocateSolution(EPS,PetscInt);
 
 .seealso: EPSSetConvergenceTestFunction()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(EPSConvergenceTestFn)(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSConvergenceTestFn(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
 
 /*S
   EPSStoppingTestFn - A prototype of an EPS stopping test function that would be passed to EPSSetStoppingTestFunction()
@@ -364,7 +364,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(EPSConvergenceTestFn)(EPS eps,PetscS
 
 .seealso: EPSSetStoppingTestFunction()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(EPSStoppingTestFn)(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSStoppingTestFn(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx);
 
 SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTestFn*,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode EPSSetStoppingTestFunction(EPS,EPSStoppingTestFn*,void*,PetscCtxDestroyFn*);
