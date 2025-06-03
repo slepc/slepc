@@ -131,7 +131,10 @@ int main(int argc,char **argv)
   PetscCall(MatDenseGetArray(A,&As));
   for (i=0;i<n;i++) As[i+i*n]=2.0;
   for (j=1;j<3;j++) {
-    for (i=0;i<n-j;i++) { As[i+(i+j)*n]=1.0; As[(i+j)+i*n]=1.0; }
+    for (i=0;i<n-j;i++) {
+      As[i+(i+j)*n]=1.0;
+      As[(i+j)+i*n]=1.0;
+    }
   }
   PetscCall(MatDenseRestoreArray(A,&As));
   PetscCall(MatSetOption(A,MAT_HERMITIAN,PETSC_TRUE));
@@ -140,7 +143,7 @@ int main(int argc,char **argv)
   /* Repeat with non-symmetric A */
   PetscCall(MatDenseGetArray(A,&As));
   for (j=1;j<3;j++) {
-    for (i=0;i<n-j;i++) { As[(i+j)+i*n]=-1.0; }
+    for (i=0;i<n-j;i++) As[(i+j)+i*n]=-1.0;
   }
   PetscCall(MatDenseRestoreArray(A,&As));
   PetscCall(MatSetOption(A,MAT_HERMITIAN,PETSC_FALSE));
