@@ -53,10 +53,14 @@ int main(int argc,char **argv)
   PetscCall(DSGetArray(ds,DS_MAT_A,&A));
   for (i=0;i<k;i++) A[i+i*ld]=1.0;
   for (j=1;j<3;j++) {
-    for (i=0;i<m-j;i++) { if ((i+j)<m) A[i+(i+j)*ld]=(PetscScalar)(j+1); }
+    for (i=0;i<m-j;i++) {
+      if ((i+j)<m) A[i+(i+j)*ld]=(PetscScalar)(j+1);
+    }
   }
   for (j=1;j<n/2;j++) {
-    for (i=0;i<n-j;i++) { if ((i+j)<n && i<m) A[(i+j)+i*ld]=-1.0; }
+    for (i=0;i<n-j;i++) {
+      if ((i+j)<n && i<m) A[(i+j)+i*ld]=-1.0;
+    }
   }
   PetscCall(DSRestoreArray(ds,DS_MAT_A,&A));
   /* Fill signature matrix */

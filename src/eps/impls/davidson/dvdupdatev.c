@@ -244,8 +244,9 @@ static PetscErrorCode dvd_updateV_testConv(dvdDashboard *d,PetscInt s,PetscInt p
       norm = d->nR[i+j]/d->nX[i+j];
       c = d->testConv(d,d->eigr[i+j],d->eigi[i+j],norm,&d->errest[i+j]);
     }
-    if (conv && c) { if (nConv) *nConv = i+b; }
-    else conv = PETSC_FALSE;
+    if (conv && c) {
+      if (nConv) *nConv = i+b;
+    } else conv = PETSC_FALSE;
   }
   pre = PetscMax(pre,i);
 

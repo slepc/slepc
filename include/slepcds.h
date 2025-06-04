@@ -264,7 +264,7 @@ SLEPC_EXTERN PetscErrorCode DSNEPGetRG(DS,RG*);
 
 .seealso: DSNEPSetComputeMatrixFunction()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(DSNEPMatrixFunctionFn)(DS ds,PetscScalar lambda,PetscBool deriv,DSMatType mat,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode DSNEPMatrixFunctionFn(DS ds,PetscScalar lambda,PetscBool deriv,DSMatType mat,void *ctx);
 
 SLEPC_EXTERN PetscErrorCode DSNEPSetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn*,void*);
 SLEPC_EXTERN PetscErrorCode DSNEPGetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn**,void*);

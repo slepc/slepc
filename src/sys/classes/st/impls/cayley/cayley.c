@@ -29,7 +29,7 @@ static PetscErrorCode MatMult_Cayley(Mat B,Vec x,Vec y)
   ctx = (ST_CAYLEY*)st->data;
   nu = ctx->nu;
 
-  if (st->matmode == ST_MATMODE_INPLACE) { nu = nu + st->sigma; }
+  if (st->matmode == ST_MATMODE_INPLACE) nu = nu + st->sigma;
 
   if (st->nmat>1) {
     /* generalized eigenproblem: y = (A + tB)x */
@@ -55,7 +55,7 @@ static PetscErrorCode MatMultTranspose_Cayley(Mat B,Vec x,Vec y)
   ctx = (ST_CAYLEY*)st->data;
   nu = ctx->nu;
 
-  if (st->matmode == ST_MATMODE_INPLACE) { nu = nu + st->sigma; }
+  if (st->matmode == ST_MATMODE_INPLACE) nu = nu + st->sigma;
   nu = PetscConj(nu);
 
   if (st->nmat>1) {

@@ -391,7 +391,7 @@ PetscErrorCode PEPCheckDefiniteQEP(PEP pep,PetscReal *xi,PetscReal *mu,PetscInt 
     PetscCall(PEPQSliceDiscriminant(pep,u,w,&d,&s,&omg));
     if (d<0.0) {check = -1; break;}
     if (PetscAbsReal((s-sp)/s)<100*PETSC_MACHINE_EPSILON) break;
-    if (s>sp) {hyp = -1;}
+    if (s>sp) hyp = -1;
     mut = 2*s-sp;
     PetscCall(PEPQSliceMatGetInertia(pep,mut,&inertia,NULL));
     if (inertia == n) {check = 1; break;}

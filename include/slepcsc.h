@@ -34,7 +34,7 @@
 
 .seealso: EPSSetEigenvalueComparison()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(SlepcEigenvalueComparisonFn)(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SlepcEigenvalueComparisonFn(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res,void *ctx);
 
 /*S
   SlepcArbitrarySelectionFn - A prototype of an arbitrary selection function that would be passed to EPSSetArbitrarySelection() and analogue functions in other solver types
@@ -53,7 +53,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(SlepcEigenvalueComparisonFn)(PetscSc
 
 .seealso: EPSSetArbitrarySelection()
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode(SlepcArbitrarySelectionFn)(PetscScalar er,PetscScalar ei,Vec xr,Vec xi,PetscScalar *rr,PetscScalar *ri,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SlepcArbitrarySelectionFn(PetscScalar er,PetscScalar ei,Vec xr,Vec xi,PetscScalar *rr,PetscScalar *ri,void *ctx);
 
 /*S
     SlepcSC - Data structure (C struct) for storing information about
