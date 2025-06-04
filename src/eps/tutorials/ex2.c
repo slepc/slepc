@@ -184,15 +184,15 @@ int main(int argc,char **argv)
          args: -st_type sinvert -st_pc_type cholesky
       test:
          suffix: 4_filter
-         args: -eps_type {{krylovschur subspace}} -st_type filter -st_filter_degree 200
+         args: -eps_type {{krylovschur subspace}} -st_type filter -st_filter_degree 200 -st_filter_type {{filtlan chebyshev}}
          requires: !__float128
       test:
          suffix: 4_filter_cuda
-         args: -eps_type {{krylovschur subspace}} -st_type filter -st_filter_degree 200 -mat_type aijcusparse
+         args: -eps_type {{krylovschur subspace}} -st_type filter -st_filter_degree 200 -mat_type aijcusparse -st_filter_type {{filtlan chebyshev}}
          requires: cuda
       test:
          suffix: 4_filter_hip
-         args: -eps_type {{krylovschur subspace}} -st_type filter -st_filter_degree 200 -mat_type aijhipsparse
+         args: -eps_type {{krylovschur subspace}} -st_type filter -st_filter_degree 200 -mat_type aijhipsparse -st_filter_type {{filtlan chebyshev}}
          requires: hip
       test:
          suffix: 4_evsl

@@ -136,4 +136,17 @@ int main(int argc,char **argv)
       filter: sed -e "s/0.161982,7.83797/0.162007,7.83897/"
       requires: !single
 
+   test:
+      suffix: 4
+      args: -terse -st_filter_type chebyshev -st_filter_damping {{none jackson}}
+      filter: sed -e "s/0.161982,7.83797/0.162007,7.83897/"
+      output_file: output/test31_1.out
+      requires: !single
+
+   test:
+      suffix: 5
+      args: -modify -terse -st_filter_range -0.5,8 -st_filter_type chebyshev -st_filter_damping {{lanczos fejer}}
+      output_file: output/test31_2.out
+      requires: !single
+
 TEST*/
