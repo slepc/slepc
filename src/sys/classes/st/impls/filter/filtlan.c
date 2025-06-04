@@ -959,13 +959,15 @@ static PetscErrorCode MatMult_FILTLAN(Mat A,Vec x,Vec y)
 {
   ST             st;
   ST_FILTER      *ctx;
+  FILTLAN_CTX    filtlan;
   PetscInt       npoints;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(A,&st));
   ctx = (ST_FILTER*)st->data;
-  npoints = (ctx->filterInfo->filterType == 2)? 6: 4;
-  PetscCall(FILTLAN_FilteredConjugateResidualMatrixPolynomialVectorProduct(ctx->T,x,y,ctx->baseFilter,2*ctx->baseDegree+2,ctx->intervals,npoints-1,ctx->opts->intervalWeights,ctx->polyDegree,st->work));
+  filtlan = (FILTLAN_CTX)ctx->data;
+  npoints = (filtlan->filterInfo->filterType == 2)? 6: 4;
+  PetscCall(FILTLAN_FilteredConjugateResidualMatrixPolynomialVectorProduct(ctx->T,x,y,filtlan->baseFilter,2*filtlan->baseDegree+2,filtlan->intervals,npoints-1,filtlan->opts->intervalWeights,ctx->polyDegree,st->work));
   PetscCall(VecCopy(y,st->work[0]));
   PetscCall(MatMult(ctx->T,st->work[0],y));
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -1053,12 +1055,14 @@ static PetscErrorCode MatMatMult_FILTLAN(Mat A,Mat B,Mat C,void *pctx)
 {
   ST             st;
   ST_FILTER      *ctx;
+  FILTLAN_CTX    filtlan;
   PetscInt       i,m1,m2,npoints;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(A,&st));
   ctx = (ST_FILTER*)st->data;
-  npoints = (ctx->filterInfo->filterType == 2)? 6: 4;
+  filtlan = (FILTLAN_CTX)ctx->data;
+  npoints = (filtlan->filterInfo->filterType == 2)? 6: 4;
   if (ctx->nW) {  /* check if work matrices must be resized */
     PetscCall(MatGetSize(B,NULL,&m1));
     PetscCall(MatGetSize(ctx->W[0],NULL,&m2));
@@ -1072,7 +1076,7 @@ static PetscErrorCode MatMatMult_FILTLAN(Mat A,Mat B,Mat C,void *pctx)
     PetscCall(PetscMalloc1(ctx->nW,&ctx->W));
     for (i=0;i<ctx->nW;i++) PetscCall(MatDuplicate(B,MAT_DO_NOT_COPY_VALUES,&ctx->W[i]));
   }
-  PetscCall(FILTLAN_FilteredConjugateResidualMatrixPolynomialVectorProductBlock(ctx->T,B,ctx->W[0],ctx->baseFilter,2*ctx->baseDegree+2,ctx->intervals,npoints-1,ctx->opts->intervalWeights,ctx->polyDegree,st->work,C,ctx->W[1],ctx->W[2],ctx->W[3]));
+  PetscCall(FILTLAN_FilteredConjugateResidualMatrixPolynomialVectorProductBlock(ctx->T,B,ctx->W[0],filtlan->baseFilter,2*filtlan->baseDegree+2,filtlan->intervals,npoints-1,filtlan->opts->intervalWeights,ctx->polyDegree,st->work,C,ctx->W[1],ctx->W[2],ctx->W[3]));
   PetscCall(MatMatMult(ctx->T,ctx->W[0],MAT_REUSE_MATRIX,PETSC_DEFAULT,&C));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -1083,58 +1087,64 @@ static PetscErrorCode MatMatMult_FILTLAN(Mat A,Mat B,Mat C,void *pctx)
    Creates the shifted (and scaled) matrix and the base filter P(z).
    M is a shell matrix whose MatMult() applies the filter.
 */
-PetscErrorCode STFilter_FILTLAN_setFilter(ST st,Mat *G)
+static PetscErrorCode STComputeOperator_Filter_FILTLAN(ST st,Mat *G)
 {
   ST_FILTER      *ctx = (ST_FILTER*)st->data;
+  FILTLAN_CTX    filtlan = (FILTLAN_CTX)ctx->data;
   PetscInt       i,npoints,n,m,N,M;
   PetscReal      frame2[4];
   PetscScalar    alpha;
   const PetscInt HighLowFlags[5] = { 1, -1, 0, -1, 1 };
 
   PetscFunctionBegin;
-  if (ctx->frame[0] == ctx->frame[1]) {  /* low pass filter, convert it to high pass filter */
+  PetscCall(STSetWorkVecs(st,4));
+  filtlan->frame[0] = ctx->left;
+  filtlan->frame[1] = ctx->inta;
+  filtlan->frame[2] = ctx->intb;
+  filtlan->frame[3] = ctx->right;
+  if (filtlan->frame[0] == filtlan->frame[1]) {  /* low pass filter, convert it to high pass filter */
     /* T = frame[3]*eye(n) - A */
     PetscCall(MatDestroy(&ctx->T));
     PetscCall(MatDuplicate(st->A[0],MAT_COPY_VALUES,&ctx->T));
     PetscCall(MatScale(ctx->T,-1.0));
-    alpha = ctx->frame[3];
+    alpha = filtlan->frame[3];
     PetscCall(MatShift(ctx->T,alpha));
-    for (i=0;i<4;i++) frame2[i] = ctx->frame[3] - ctx->frame[3-i];
+    for (i=0;i<4;i++) frame2[i] = filtlan->frame[3] - filtlan->frame[3-i];
   } else {  /* it can be a mid-pass filter or a high-pass filter */
-    if (ctx->frame[0] == 0.0) {
+    if (filtlan->frame[0] == 0.0) {
       PetscCall(PetscObjectReference((PetscObject)st->A[0]));
       PetscCall(MatDestroy(&ctx->T));
       ctx->T = st->A[0];
-      for (i=0;i<4;i++) frame2[i] = ctx->frame[i];
+      for (i=0;i<4;i++) frame2[i] = filtlan->frame[i];
     } else {
       /* T = A - frame[0]*eye(n) */
       PetscCall(MatDestroy(&ctx->T));
       PetscCall(MatDuplicate(st->A[0],MAT_COPY_VALUES,&ctx->T));
-      alpha = -ctx->frame[0];
+      alpha = -filtlan->frame[0];
       PetscCall(MatShift(ctx->T,alpha));
-      for (i=0;i<4;i++) frame2[i] = ctx->frame[i] - ctx->frame[0];
+      for (i=0;i<4;i++) frame2[i] = filtlan->frame[i] - filtlan->frame[0];
     }
   }
 
   /* no need to recompute filter if the parameters did not change */
   if (st->state==ST_STATE_INITIAL || ctx->filtch) {
-    PetscCall(FILTLAN_GetIntervals(ctx->intervals,frame2,ctx->polyDegree,ctx->baseDegree,ctx->opts,ctx->filterInfo));
+    PetscCall(FILTLAN_GetIntervals(filtlan->intervals,frame2,ctx->polyDegree,filtlan->baseDegree,filtlan->opts,filtlan->filterInfo));
     /* translate the intervals back */
-    if (ctx->frame[0] == ctx->frame[1]) {  /* low pass filter, convert it to high pass filter */
-      for (i=0;i<4;i++) ctx->intervals2[i] = ctx->frame[3] - ctx->intervals[3-i];
+    if (filtlan->frame[0] == filtlan->frame[1]) {  /* low pass filter, convert it to high pass filter */
+      for (i=0;i<4;i++) filtlan->intervals2[i] = filtlan->frame[3] - filtlan->intervals[3-i];
     } else {  /* it can be a mid-pass filter or a high-pass filter */
-      if (ctx->frame[0] == 0.0) {
-        for (i=0;i<6;i++) ctx->intervals2[i] = ctx->intervals[i];
+      if (filtlan->frame[0] == 0.0) {
+        for (i=0;i<6;i++) filtlan->intervals2[i] = filtlan->intervals[i];
       } else {
-        for (i=0;i<6;i++) ctx->intervals2[i] = ctx->intervals[i] + ctx->frame[0];
+        for (i=0;i<6;i++) filtlan->intervals2[i] = filtlan->intervals[i] + filtlan->frame[0];
       }
     }
 
-    npoints = (ctx->filterInfo->filterType == 2)? 6: 4;
-    PetscCall(PetscFree(ctx->baseFilter));
-    PetscCall(PetscMalloc1((2*ctx->baseDegree+2)*(npoints-1),&ctx->baseFilter));
-    PetscCall(FILTLAN_HermiteBaseFilterInChebyshevBasis(ctx->baseFilter,ctx->intervals,npoints,HighLowFlags,ctx->baseDegree));
-    PetscCall(PetscInfo(st,"Computed value of yLimit = %g\n",(double)ctx->filterInfo->yLimit));
+    npoints = (filtlan->filterInfo->filterType == 2)? 6: 4;
+    PetscCall(PetscFree(filtlan->baseFilter));
+    PetscCall(PetscMalloc1((2*filtlan->baseDegree+2)*(npoints-1),&filtlan->baseFilter));
+    PetscCall(FILTLAN_HermiteBaseFilterInChebyshevBasis(filtlan->baseFilter,filtlan->intervals,npoints,HighLowFlags,filtlan->baseDegree));
+    PetscCall(PetscInfo(st,"Computed value of yLimit = %g\n",(double)filtlan->filterInfo->yLimit));
   }
   ctx->filtch = PETSC_FALSE;
 
@@ -1148,5 +1158,69 @@ PetscErrorCode STFilter_FILTLAN_setFilter(ST st,Mat *G)
     PetscCall(MatShellSetMatProductOperation(*G,MATPRODUCT_AB,NULL,MatMatMult_FILTLAN,NULL,MATDENSECUDA,MATDENSECUDA));
     PetscCall(MatShellSetMatProductOperation(*G,MATPRODUCT_AB,NULL,MatMatMult_FILTLAN,NULL,MATDENSEHIP,MATDENSEHIP));
   }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode STFilterGetThreshold_Filter_FILTLAN(ST st,PetscReal *gamma)
+{
+  ST_FILTER   *ctx = (ST_FILTER*)st->data;
+  FILTLAN_CTX filtlan = (FILTLAN_CTX)ctx->data;
+
+  PetscFunctionBegin;
+  *gamma = filtlan->filterInfo->yLimit;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode STDestroy_Filter_FILTLAN(ST st)
+{
+  ST_FILTER   *ctx = (ST_FILTER*)st->data;
+  FILTLAN_CTX filtlan = (FILTLAN_CTX)ctx->data;
+
+  PetscFunctionBegin;
+  PetscCall(PetscFree(filtlan->opts));
+  PetscCall(PetscFree(filtlan->filterInfo));
+  PetscCall(PetscFree(filtlan->baseFilter));
+  PetscCall(PetscFree(filtlan));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+PetscErrorCode STCreate_Filter_FILTLAN(ST st)
+{
+  ST_FILTER   *ctx = (ST_FILTER*)st->data;
+  FILTLAN_CTX filtlan;
+  FILTLAN_IOP iop;
+  FILTLAN_PFI pfi;
+
+  PetscFunctionBegin;
+  PetscCall(PetscNew(&filtlan));
+  ctx->data = (void*)filtlan;
+  filtlan->baseDegree = 10;
+
+  PetscCall(PetscNew(&iop));
+  filtlan->opts           = iop;
+  iop->intervalWeights[0] = 100.0;
+  iop->intervalWeights[1] = 1.0;
+  iop->intervalWeights[2] = 1.0;
+  iop->intervalWeights[3] = 1.0;
+  iop->intervalWeights[4] = 100.0;
+  iop->transIntervalRatio = 0.6;
+  iop->reverseInterval    = PETSC_FALSE;
+  iop->initialPlateau     = 0.1;
+  iop->plateauShrinkRate  = 1.5;
+  iop->initialShiftStep   = 0.01;
+  iop->shiftStepExpanRate = 1.5;
+  iop->maxInnerIter       = 30;
+  iop->yLimitTol          = 0.0001;
+  iop->maxOuterIter       = 50;
+  iop->numGridPoints      = 200;
+  iop->yBottomLine        = 0.001;
+  iop->yRippleLimit       = 0.8;
+
+  PetscCall(PetscNew(&pfi));
+  filtlan->filterInfo     = pfi;
+
+  ctx->computeoperator = STComputeOperator_Filter_FILTLAN;
+  ctx->getthreshold    = STFilterGetThreshold_Filter_FILTLAN;
+  ctx->destroy         = STDestroy_Filter_FILTLAN;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

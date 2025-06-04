@@ -1,5 +1,12 @@
 # Changelog of SLEPc versions
 
+## [unreleased]
+
+### Added
+
+- `STFILTER`: new polynomial filter based on a truncated Chebyshev series. Use
+  `STFilterSetType()` to choose among the available filters.
+
 ## [3.23] - 2025-03-29
 
 ### Added
