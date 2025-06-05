@@ -34,18 +34,11 @@ PetscErrorCode LMEMonitor(LME lme,PetscInt it,PetscReal errest)
 
    Input Parameters:
 +  lme     - linear matrix equation solver context obtained from LMECreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring)
+.  monitor - pointer to function (if this is NULL, it turns off monitoring), see LMEMonitorFn
 .  mctx    - [optional] context for private data for the
              monitor routine (use NULL if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be NULL),
              see PetscCtxDestroyFn for the calling sequence
-
-   Calling sequence of monitor:
-$  PetscErrorCode monitor(LME lme,PetscInt its,PetscReal errest,void*mctx)
-+  lme    - linear matrix equation solver context obtained from LMECreate()
-.  its    - iteration number
-.  errest - error estimate
--  mctx   - optional monitoring context, as set by LMEMonitorSet()
 
    Options Database Keys:
 +    -lme_monitor - print the error estimate
@@ -55,21 +48,33 @@ $  PetscErrorCode monitor(LME lme,PetscInt its,PetscReal errest,void*mctx)
       the options database.
 
    Notes:
-   Several different monitoring routines may be set by calling
-   LMEMonitorSet() multiple times; all will be called in the
-   order in which they were set.
+   The options database option -lme_monitor and related options are the easiest way
+   to turn on LME iteration monitoring.
+
+   LMEMonitorRegister() provides a way to associate an options database key with LME
+   monitor function.
+
+   Several different monitoring routines may be set by calling LMEMonitorSet() multiple
+   times; all will be called in the order in which they were set.
 
    Level: intermediate
 
 .seealso: LMEMonitorCancel()
 @*/
-PetscErrorCode LMEMonitorSet(LME lme,PetscErrorCode (*monitor)(LME lme,PetscInt its,PetscReal errest,void*mctx),void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
+  PetscInt  i;
+  PetscBool identical;
+
   PetscFunctionBegin;
   PetscValidHeaderSpecific(lme,LME_CLASSID,1);
+  for (i=0;i<lme->numbermonitors;i++) {
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))lme->monitor[i],lme->monitorcontext[i],lme->monitordestroy[i],&identical));
+    if (identical) PetscFunctionReturn(PETSC_SUCCESS);
+  }
   PetscCheck(lme->numbermonitors<MAXLMEMONITORS,PetscObjectComm((PetscObject)lme),PETSC_ERR_ARG_OUTOFRANGE,"Too many LME monitors set");
   lme->monitor[lme->numbermonitors]           = monitor;
-  lme->monitorcontext[lme->numbermonitors]    = (void*)mctx;
+  lme->monitorcontext[lme->numbermonitors]    = mctx;
   lme->monitordestroy[lme->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

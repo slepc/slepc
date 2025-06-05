@@ -52,7 +52,7 @@ struct _p_MFN {
   PetscBool      errorifnotconverged;    /* error out if MFNSolve() does not converge */
 
   /*-------------- User-provided functions and contexts -----------------*/
-  PetscErrorCode    (*monitor[MAXMFNMONITORS])(MFN,PetscInt,PetscReal,void*);
+  MFNMonitorFn      *monitor[MAXMFNMONITORS];
   PetscCtxDestroyFn *monitordestroy[MAXMFNMONITORS];
   void              *monitorcontext[MAXMFNMONITORS];
   PetscInt          numbermonitors;

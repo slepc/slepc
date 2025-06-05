@@ -10,13 +10,8 @@ Lyapunov equation, N=100 (10x10 grid)
  Erroring out if convergence fails
   Error estimates for check_myprefix_ solve.
   1 LME Error estimate (removed)
-  Error estimates for check_myprefix_ solve.
-  1 LME Error estimate (removed)
-  2 LME Error estimate (removed)
   2 LME Error estimate (removed)
   3 LME Error estimate (removed)
-  3 LME Error estimate (removed)
-  4 LME Error estimate (removed)
   4 LME Error estimate (removed)
  Error estimate reported by the solver: 2.948e-10
  Computed residual norm: 4.03e-10

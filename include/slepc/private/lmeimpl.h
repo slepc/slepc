@@ -54,7 +54,7 @@ struct _p_LME {
   PetscBool      errorifnotconverged;    /* error out if LMESolve() does not converge */
 
   /*-------------- User-provided functions and contexts -----------------*/
-  PetscErrorCode    (*monitor[MAXLMEMONITORS])(LME,PetscInt,PetscReal,void*);
+  LMEMonitorFn      *monitor[MAXLMEMONITORS];
   PetscCtxDestroyFn *monitordestroy[MAXLMEMONITORS];
   void              *monitorcontext[MAXLMEMONITORS];
   PetscInt          numbermonitors;

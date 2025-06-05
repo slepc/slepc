@@ -34,21 +34,11 @@ PetscErrorCode SVDMonitor(SVD svd,PetscInt it,PetscInt nconv,PetscReal *sigma,Pe
 
    Input Parameters:
 +  svd     - singular value solver context obtained from SVDCreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring)
+.  monitor - pointer to function (if this is NULL, it turns off monitoring), see SVDMonitorFn
 .  mctx    - [optional] context for private data for the
              monitor routine (use NULL if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be NULL),
              see PetscCtxDestroyFn for the calling sequence
-
-   Calling sequence of monitor:
-$  PetscErrorCode monitor(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,void *mctx)
-+  svd    - singular value solver context obtained from SVDCreate()
-.  its    - iteration number
-.  nconv  - number of converged singular triplets
-.  sigma  - singular values
-.  errest - relative error estimates for each singular triplet
-.  nest   - number of error estimates
--  mctx   - optional monitoring context, as set by SVDMonitorSet()
 
    Options Database Keys:
 +    -svd_monitor        - print only the first error estimate
@@ -66,21 +56,33 @@ $  PetscErrorCode monitor(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,P
       the options database.
 
    Notes:
-   Several different monitoring routines may be set by calling
-   SVDMonitorSet() multiple times; all will be called in the
-   order in which they were set.
+   The options database option -svd_monitor and related options are the easiest way
+   to turn on SVD iteration monitoring.
+
+   SVDMonitorRegister() provides a way to associate an options database key with SVD
+   monitor function.
+
+   Several different monitoring routines may be set by calling SVDMonitorSet() multiple
+   times; all will be called in the order in which they were set.
 
    Level: intermediate
 
 .seealso: SVDMonitorFirst(), SVDMonitorAll(), SVDMonitorConditioning(), SVDMonitorCancel()
 @*/
-PetscErrorCode SVDMonitorSet(SVD svd,PetscErrorCode (*monitor)(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,void *mctx),void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
+  PetscInt  i;
+  PetscBool identical;
+
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
+  for (i=0;i<svd->numbermonitors;i++) {
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))svd->monitor[i],svd->monitorcontext[i],svd->monitordestroy[i],&identical));
+    if (identical) PetscFunctionReturn(PETSC_SUCCESS);
+  }
   PetscCheck(svd->numbermonitors<MAXSVDMONITORS,PetscObjectComm((PetscObject)svd),PETSC_ERR_ARG_OUTOFRANGE,"Too many SVD monitors set");
   svd->monitor[svd->numbermonitors]           = monitor;
-  svd->monitorcontext[svd->numbermonitors]    = (void*)mctx;
+  svd->monitorcontext[svd->numbermonitors]    = mctx;
   svd->monitordestroy[svd->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

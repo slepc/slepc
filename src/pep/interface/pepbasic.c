@@ -237,7 +237,7 @@ PetscErrorCode PEPRegister(const char *name,PetscErrorCode (*function)(PEP))
 }
 
 /*@C
-   PEPMonitorRegister - Adds PEP monitor routine.
+   PEPMonitorRegister - Registers a PEP monitor routine that may be accessed with PEPMonitorSetFromOptions().
 
    Not Collective
 
@@ -245,12 +245,16 @@ PetscErrorCode PEPRegister(const char *name,PetscErrorCode (*function)(PEP))
 +  name    - name of a new monitor routine
 .  vtype   - a PetscViewerType for the output
 .  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine
+.  monitor - monitor routine, see PEPMonitorRegisterFn
 .  create  - creation routine, or NULL
 -  destroy - destruction routine, or NULL
 
    Notes:
    PEPMonitorRegister() may be called multiple times to add several user-defined monitors.
+
+   The calling sequence for the given function matches the calling sequence of PEPMonitorFn
+   functions passed to PEPMonitorSet() with the additional requirement that its final argument
+   be a PetscViewerAndFormat.
 
    Example Usage:
 .vb
@@ -264,9 +268,9 @@ $      -pep_monitor_my_monitor
 
    Level: advanced
 
-.seealso: PEPMonitorRegisterAll()
+.seealso: PEPMonitorSet(), PEPMonitorRegisterAll()
 @*/
-PetscErrorCode PEPMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,PetscErrorCode (*monitor)(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*),PetscErrorCode (*create)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode (*destroy)(PetscViewerAndFormat**))
+PetscErrorCode PEPMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,PEPMonitorRegisterFn *monitor,PEPMonitorRegisterCreateFn *create,PEPMonitorRegisterDestroyFn *destroy)
 {
   char           key[PETSC_MAX_PATH_LEN];
 

@@ -97,15 +97,75 @@ SLEPC_EXTERN PetscErrorCode LMEDenseLyapunov(LME,PetscInt,PetscScalar*,PetscInt,
 SLEPC_EXTERN PetscErrorCode LMEDenseHessLyapunovChol(LME,PetscInt,PetscScalar*,PetscInt,PetscInt,PetscScalar*,PetscInt,PetscScalar*,PetscInt,PetscReal*);
 PETSC_DEPRECATED_FUNCTION(3, 8, 0, "LMEDenseHessLyapunovChol()", ) static inline PetscErrorCode LMEDenseLyapunovChol(LME lme,PetscScalar *H,PetscInt m,PetscInt ldh,PetscScalar *r,PetscScalar *L,PetscInt ldl,PetscReal *res) {return LMEDenseHessLyapunovChol(lme,m,H,ldh,1,r,m,L,ldl,res);}
 
+/*S
+  LMEMonitorFn - A function prototype for functions provided to LMEMonitorSet()
+
+  Calling Sequence:
++   lme    - linear matrix equation solver context obtained from LMECreate()
+.   its    - iteration number
+.   errest - error estimate
+-   ctx    - optional monitoring context, as provided with LMEMonitorSet()
+
+  Level: beginner
+
+.seealso: LMEMonitorSet()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorFn(LME lme,PetscInt its,PetscReal errest,void *ctx);
+
+/*S
+  LMEMonitorRegisterFn - A function prototype for functions provided to LMEMonitorRegister()
+
+  Calling Sequence:
++   lme    - linear matrix equation solver context obtained from LMECreate()
+.   its    - iteration number
+.   errest - error estimate
+-   ctx    - PetscViewerAndFormat object
+
+  Level: beginner
+
+  Note:
+  This is an LMEMonitorFn specialized for a context of PetscViewerAndFormat.
+
+.seealso: LMEMonitorSet(), LMEMonitorRegister(), LMEMonitorFn, LMEMonitorRegisterCreateFn, LMEMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterFn(LME lme,PetscInt its,PetscReal errest,PetscViewerAndFormat *ctx);
+
+/*S
+  LMEMonitorRegisterCreateFn - A function prototype for functions that do the creation when provided to LMEMonitorRegister()
+
+  Calling Sequence:
++   viewer - the viewer to be used with the LMEMonitorRegisterFn
+.   format - the format of the viewer
+.   ctx    - a context for the monitor
+-   result - a PetscViewerAndFormat object
+
+  Level: beginner
+
+.seealso: LMEMonitorRegisterFn, LMEMonitorSet(), LMEMonitorRegister(), LMEMonitorFn, LMEMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+
+/*S
+  LMEMonitorRegisterDestroyFn - A function prototype for functions that do the after use destruction when provided to LMEMonitorRegister()
+
+  Calling Sequence:
+.   vf - a PetscViewerAndFormat object to be destroyed, including any context
+
+  Level: beginner
+
+.seealso: LMEMonitorRegisterFn, LMEMonitorSet(), LMEMonitorRegister(), LMEMonitorFn, LMEMonitorRegisterCreateFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
+
 SLEPC_EXTERN PetscErrorCode LMEMonitor(LME,PetscInt,PetscReal);
-SLEPC_EXTERN PetscErrorCode LMEMonitorSet(LME,PetscErrorCode (*)(LME,PetscInt,PetscReal,void*),void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode LMEMonitorSet(LME,LMEMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode LMEMonitorCancel(LME);
 SLEPC_EXTERN PetscErrorCode LMEGetMonitorContext(LME,void*);
 
 SLEPC_EXTERN PetscErrorCode LMEMonitorSetFromOptions(LME,const char[],const char[],void*);
-SLEPC_EXTERN PetscErrorCode LMEMonitorDefault(LME,PetscInt,PetscReal,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode LMEMonitorDefaultDrawLG(LME,PetscInt,PetscReal,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode LMEMonitorDefaultDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN LMEMonitorRegisterFn       LMEMonitorDefault;
+SLEPC_EXTERN LMEMonitorRegisterFn       LMEMonitorDefaultDrawLG;
+SLEPC_EXTERN LMEMonitorRegisterCreateFn LMEMonitorDefaultDrawLGCreate;
 
 SLEPC_EXTERN PetscErrorCode LMESetOptionsPrefix(LME,const char*);
 SLEPC_EXTERN PetscErrorCode LMEAppendOptionsPrefix(LME,const char*);
@@ -134,6 +194,6 @@ SLEPC_EXTERN PetscFunctionList LMEMonitorList;
 SLEPC_EXTERN PetscFunctionList LMEMonitorCreateList;
 SLEPC_EXTERN PetscFunctionList LMEMonitorDestroyList;
 SLEPC_EXTERN PetscErrorCode LMERegister(const char[],PetscErrorCode(*)(LME));
-SLEPC_EXTERN PetscErrorCode LMEMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,PetscErrorCode(*)(LME,PetscInt,PetscReal,PetscViewerAndFormat*),PetscErrorCode(*)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode(*)(PetscViewerAndFormat**));
+SLEPC_EXTERN PetscErrorCode LMEMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,LMEMonitorRegisterFn*,LMEMonitorRegisterCreateFn*,LMEMonitorRegisterDestroyFn*);
 
 SLEPC_EXTERN PetscErrorCode LMEAllocateSolution(LME,PetscInt);

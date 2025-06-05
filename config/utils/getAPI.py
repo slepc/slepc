@@ -438,13 +438,13 @@ def getpossiblefunctions():
      functiontoinclude[f] = file.replace('types','')
 
    try:
-     output = check_output('grep "SLEPC_EXTERN [a-zA-Z]* [a-zA-Z]*;" include/*.h', shell=True).decode('utf-8')
+     output = check_output('grep "SLEPC_EXTERN [a-zA-Z]* *[a-zA-Z]*;" include/*.h', shell=True).decode('utf-8')
    except subprocess.CalledProcessError as e:
      raise RuntimeError('Unable to find possible functions in the include files')
    funs = output.replace('SLEPC_EXTERN','')
    for i in funs.split('\n'):
      if not i: continue
-     i = i.replace(';','').split(' ')
+     i = i.replace(';','').split()
      file = i[0][i[0].find('/') + 1:i[0].find('.') + 2]
      functiontoinclude[i[2]] = file.replace('types','')
    return functiontoinclude

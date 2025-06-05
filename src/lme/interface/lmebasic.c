@@ -352,7 +352,7 @@ PetscErrorCode LMERegister(const char *name,PetscErrorCode (*function)(LME))
 }
 
 /*@C
-   LMEMonitorRegister - Adds LME monitor routine.
+   LMEMonitorRegister - Registers an LME monitor routine that may be accessed with LMEMonitorSetFromOptions().
 
    Not Collective
 
@@ -360,12 +360,16 @@ PetscErrorCode LMERegister(const char *name,PetscErrorCode (*function)(LME))
 +  name    - name of a new monitor routine
 .  vtype   - a PetscViewerType for the output
 .  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine
+.  monitor - monitor routine, see LMEMonitorRegisterFn
 .  create  - creation routine, or NULL
 -  destroy - destruction routine, or NULL
 
    Notes:
    LMEMonitorRegister() may be called multiple times to add several user-defined monitors.
+
+   The calling sequence for the given function matches the calling sequence of LMEMonitorFn
+   functions passed to LMEMonitorSet() with the additional requirement that its final argument
+   be a PetscViewerAndFormat.
 
    Example Usage:
 .vb
@@ -379,9 +383,9 @@ $      -lme_monitor_my_monitor
 
    Level: advanced
 
-.seealso: LMEMonitorRegisterAll()
+.seealso: LMEMonitorSet(), LMEMonitorRegisterAll()
 @*/
-PetscErrorCode LMEMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,PetscErrorCode (*monitor)(LME,PetscInt,PetscReal,PetscViewerAndFormat*),PetscErrorCode (*create)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode (*destroy)(PetscViewerAndFormat**))
+PetscErrorCode LMEMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,LMEMonitorRegisterFn *monitor,LMEMonitorRegisterCreateFn *create,LMEMonitorRegisterDestroyFn *destroy)
 {
   char           key[PETSC_MAX_PATH_LEN];
 

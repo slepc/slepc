@@ -187,16 +187,6 @@ SLEPC_EXTERN PetscErrorCode SVDSetDSType(SVD);
 SLEPC_EXTERN PetscErrorCode SVDSetUp(SVD);
 SLEPC_EXTERN PetscErrorCode SVDSolve(SVD);
 SLEPC_EXTERN PetscErrorCode SVDGetIterationNumber(SVD,PetscInt*);
-SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTest(SVD,SVDConv);
-SLEPC_EXTERN PetscErrorCode SVDGetConvergenceTest(SVD,SVDConv*);
-SLEPC_EXTERN PetscErrorCode SVDConvergedAbsolute(SVD,PetscReal,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode SVDConvergedRelative(SVD,PetscReal,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode SVDConvergedNorm(SVD,PetscReal,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode SVDConvergedMaxIt(SVD,PetscReal,PetscReal,PetscReal*,void*);
-SLEPC_EXTERN PetscErrorCode SVDSetStoppingTest(SVD,SVDStop);
-SLEPC_EXTERN PetscErrorCode SVDGetStoppingTest(SVD,SVDStop*);
-SLEPC_EXTERN PetscErrorCode SVDStoppingBasic(SVD,PetscInt,PetscInt,PetscInt,PetscInt,SVDConvergedReason*,void*);
-SLEPC_EXTERN PetscErrorCode SVDStoppingThreshold(SVD,PetscInt,PetscInt,PetscInt,PetscInt,SVDConvergedReason*,void*);
 SLEPC_EXTERN PetscErrorCode SVDGetConvergedReason(SVD,SVDConvergedReason*);
 SLEPC_EXTERN PetscErrorCode SVDGetConverged(SVD,PetscInt*);
 SLEPC_EXTERN PetscErrorCode SVDGetSingularTriplet(SVD,PetscInt,PetscReal*,Vec,Vec);
@@ -222,31 +212,97 @@ SLEPC_EXTERN PetscErrorCode SVDSetWorkVecs(SVD,PetscInt,PetscInt);
 SLEPC_EXTERN PetscErrorCode SVDSetTrackAll(SVD,PetscBool);
 SLEPC_EXTERN PetscErrorCode SVDGetTrackAll(SVD,PetscBool*);
 
+/*S
+  SVDMonitorFn - A function prototype for functions provided to SVDMonitorSet()
+
+  Calling Sequence:
++   svd    - singular value solver context obtained from SVDCreate()
+.   its    - iteration number
+.   nconv  - number of converged singular triplets
+.   sigma  - singular values
+.   errest - relative error estimates for each singular triplet
+.   nest   - number of error estimates
+-   ctx    - optional monitoring context, as provided with SVDMonitorSet()
+
+  Level: beginner
+
+.seealso: SVDMonitorSet()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,void *ctx);
+
+/*S
+  SVDMonitorRegisterFn - A function prototype for functions provided to SVDMonitorRegister()
+
+  Calling Sequence:
++   svd    - singular value solver context obtained from SVDCreate()
+.   its    - iteration number
+.   nconv  - number of converged singular triplets
+.   sigma  - singular values
+.   errest - relative error estimates for each singular triplet
+.   nest   - number of error estimates
+-   ctx    - PetscViewerAndFormat object
+
+  Level: beginner
+
+  Note:
+  This is an SVDMonitorFn specialized for a context of PetscViewerAndFormat.
+
+.seealso: SVDMonitorSet(), SVDMonitorRegister(), SVDMonitorFn, SVDMonitorRegisterCreateFn, SVDMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
+
+/*S
+  SVDMonitorRegisterCreateFn - A function prototype for functions that do the creation when provided to SVDMonitorRegister()
+
+  Calling Sequence:
++   viewer - the viewer to be used with the SVDMonitorRegisterFn
+.   format - the format of the viewer
+.   ctx    - a context for the monitor
+-   result - a PetscViewerAndFormat object
+
+  Level: beginner
+
+.seealso: SVDMonitorRegisterFn, SVDMonitorSet(), SVDMonitorRegister(), SVDMonitorFn, SVDMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+
+/*S
+  SVDMonitorRegisterDestroyFn - A function prototype for functions that do the after use destruction when provided to SVDMonitorRegister()
+
+  Calling Sequence:
+.   vf - a PetscViewerAndFormat object to be destroyed, including any context
+
+  Level: beginner
+
+.seealso: SVDMonitorRegisterFn, SVDMonitorSet(), SVDMonitorRegister(), SVDMonitorFn, SVDMonitorRegisterCreateFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
+
 SLEPC_EXTERN PetscErrorCode SVDMonitor(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt);
-SLEPC_EXTERN PetscErrorCode SVDMonitorSet(SVD,PetscErrorCode (*)(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*),void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode SVDMonitorSet(SVD,SVDMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode SVDMonitorCancel(SVD);
 SLEPC_EXTERN PetscErrorCode SVDGetMonitorContext(SVD,void*);
 
 SLEPC_EXTERN PetscErrorCode SVDMonitorSetFromOptions(SVD,const char[],const char[],void*,PetscBool);
-SLEPC_EXTERN PetscErrorCode SVDMonitorFirst(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode SVDMonitorFirstDrawLG(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode SVDMonitorFirstDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode SVDMonitorAll(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode SVDMonitorAllDrawLG(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode SVDMonitorAllDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode SVDMonitorConverged(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode SVDMonitorConvergedCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode SVDMonitorConvergedDrawLG(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode SVDMonitorConvergedDrawLGCreate(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode SVDMonitorConvergedDestroy(PetscViewerAndFormat**);
-SLEPC_EXTERN PetscErrorCode SVDMonitorConditioning(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*);
+SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorFirst;
+SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorFirstDrawLG;
+SLEPC_EXTERN SVDMonitorRegisterCreateFn  SVDMonitorFirstDrawLGCreate;
+SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorAll;
+SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorAllDrawLG;
+SLEPC_EXTERN SVDMonitorRegisterCreateFn  SVDMonitorAllDrawLGCreate;
+SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorConverged;
+SLEPC_EXTERN SVDMonitorRegisterCreateFn  SVDMonitorConvergedCreate;
+SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorConvergedDrawLG;
+SLEPC_EXTERN SVDMonitorRegisterCreateFn  SVDMonitorConvergedDrawLGCreate;
+SLEPC_EXTERN SVDMonitorRegisterDestroyFn SVDMonitorConvergedDestroy;
+SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorConditioning;
 
 SLEPC_EXTERN PetscFunctionList SVDList;
 SLEPC_EXTERN PetscFunctionList SVDMonitorList;
 SLEPC_EXTERN PetscFunctionList SVDMonitorCreateList;
 SLEPC_EXTERN PetscFunctionList SVDMonitorDestroyList;
 SLEPC_EXTERN PetscErrorCode SVDRegister(const char[],PetscErrorCode(*)(SVD));
-SLEPC_EXTERN PetscErrorCode SVDMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,PetscErrorCode(*)(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*),PetscErrorCode(*)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode(*)(PetscViewerAndFormat**));
+SLEPC_EXTERN PetscErrorCode SVDMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,SVDMonitorRegisterFn*,SVDMonitorRegisterCreateFn*,SVDMonitorRegisterDestroyFn*);
 
 SLEPC_EXTERN PetscErrorCode SVDAllocateSolution(SVD,PetscInt);
 SLEPC_EXTERN PetscErrorCode SVDReallocateSolution(SVD,PetscInt);
@@ -268,6 +324,14 @@ SLEPC_EXTERN PetscErrorCode SVDReallocateSolution(SVD,PetscInt);
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDConvergenceTestFn(SVD svd,PetscReal sigma,PetscReal res,PetscReal *errest,void *ctx);
 
+SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTest(SVD,SVDConv);
+SLEPC_EXTERN PetscErrorCode SVDGetConvergenceTest(SVD,SVDConv*);
+SLEPC_EXTERN SVDConvergenceTestFn SVDConvergedAbsolute;
+SLEPC_EXTERN SVDConvergenceTestFn SVDConvergedRelative;
+SLEPC_EXTERN SVDConvergenceTestFn SVDConvergedNorm;
+SLEPC_EXTERN SVDConvergenceTestFn SVDConvergedMaxIt;
+SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTestFunction(SVD,SVDConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+
 /*S
   SVDStoppingTestFn - A prototype of an SVD stopping test function that would be passed to SVDSetStoppingTestFunction()
 
@@ -287,7 +351,10 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDConvergenceTestFn(SVD svd,PetscRe
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDStoppingTestFn(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx);
 
-SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTestFunction(SVD,SVDConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode SVDSetStoppingTest(SVD,SVDStop);
+SLEPC_EXTERN PetscErrorCode SVDGetStoppingTest(SVD,SVDStop*);
+SLEPC_EXTERN SVDStoppingTestFn SVDStoppingBasic;
+SLEPC_EXTERN SVDStoppingTestFn SVDStoppingThreshold;
 SLEPC_EXTERN PetscErrorCode SVDSetStoppingTestFunction(SVD,SVDStoppingTestFn*,void*,PetscCtxDestroyFn*);
 
 /* --------- options specific to particular solvers -------- */

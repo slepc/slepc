@@ -101,7 +101,7 @@ struct _p_NEP {
   PetscCtxDestroyFn    *stoppingdestroy;
   void                 *convergedctx;
   void                 *stoppingctx;
-  PetscErrorCode       (*monitor[MAXNEPMONITORS])(NEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
+  NEPMonitorFn         *monitor[MAXNEPMONITORS];
   PetscCtxDestroyFn    *monitordestroy[MAXNEPMONITORS];
   void                 *monitorcontext[MAXNEPMONITORS];
   PetscInt             numbermonitors;

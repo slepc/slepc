@@ -34,22 +34,11 @@ PetscErrorCode EPSMonitor(EPS eps,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 
    Input Parameters:
 +  eps     - eigensolver context obtained from EPSCreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring)
+.  monitor - pointer to function (if this is NULL, it turns off monitoring), see EPSMonitorFn
 .  mctx    - [optional] context for private data for the
              monitor routine (use NULL if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be NULL),
              see PetscCtxDestroyFn for the calling sequence
-
-   Calling sequence of monitor:
-$  PetscErrorCode monitor(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *mctx)
-+  eps    - eigensolver context obtained from EPSCreate()
-.  its    - iteration number
-.  nconv  - number of converged eigenpairs
-.  eigr   - real part of the eigenvalues
-.  eigi   - imaginary part of the eigenvalues
-.  errest - relative error estimates for each eigenpair
-.  nest   - number of error estimates
--  mctx   - optional monitoring context, as set by EPSMonitorSet()
 
    Options Database Keys:
 +    -eps_monitor        - print only the first error estimate
@@ -66,21 +55,33 @@ $  PetscErrorCode monitor(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,
       the options database.
 
    Notes:
-   Several different monitoring routines may be set by calling
-   EPSMonitorSet() multiple times; all will be called in the
-   order in which they were set.
+   The options database option -eps_monitor and related options are the easiest way
+   to turn on EPS iteration monitoring.
+
+   EPSMonitorRegister() provides a way to associate an options database key with EPS
+   monitor function.
+
+   Several different monitoring routines may be set by calling EPSMonitorSet() multiple
+   times; all will be called in the order in which they were set.
 
    Level: intermediate
 
 .seealso: EPSMonitorFirst(), EPSMonitorAll(), EPSMonitorCancel()
 @*/
-PetscErrorCode EPSMonitorSet(EPS eps,PetscErrorCode (*monitor)(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *mctx),void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode EPSMonitorSet(EPS eps,EPSMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
+  PetscInt  i;
+  PetscBool identical;
+
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
+  for (i=0;i<eps->numbermonitors;i++) {
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))eps->monitor[i],eps->monitorcontext[i],eps->monitordestroy[i],&identical));
+    if (identical) PetscFunctionReturn(PETSC_SUCCESS);
+  }
   PetscCheck(eps->numbermonitors<MAXEPSMONITORS,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_OUTOFRANGE,"Too many EPS monitors set");
   eps->monitor[eps->numbermonitors]           = monitor;
-  eps->monitorcontext[eps->numbermonitors]    = (void*)mctx;
+  eps->monitorcontext[eps->numbermonitors]    = mctx;
   eps->monitordestroy[eps->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

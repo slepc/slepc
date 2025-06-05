@@ -75,15 +75,75 @@ SLEPC_EXTERN PetscErrorCode MFNGetIterationNumber(MFN,PetscInt*);
 SLEPC_EXTERN PetscErrorCode MFNSetErrorIfNotConverged(MFN,PetscBool);
 SLEPC_EXTERN PetscErrorCode MFNGetErrorIfNotConverged(MFN,PetscBool*);
 
+/*S
+  MFNMonitorFn - A function prototype for functions provided to MFNMonitorSet()
+
+  Calling Sequence:
++   mfn    - matrix function context obtained from MFNCreate()
+.   its    - iteration number
+.   errest - error estimate
+-   ctx    - optional monitoring context, as provided with MFNMonitorSet()
+
+  Level: beginner
+
+.seealso: MFNMonitorSet()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorFn(MFN mfn,PetscInt its,PetscReal errest,void *ctx);
+
+/*S
+  MFNMonitorRegisterFn - A function prototype for functions provided to MFNMonitorRegister()
+
+  Calling Sequence:
++   mfn    - matrix function context obtained from MFNCreate()
+.   its    - iteration number
+.   errest - error estimate
+-   ctx    - PetscViewerAndFormat object
+
+  Level: beginner
+
+  Note:
+  This is an MFNMonitorFn specialized for a context of PetscViewerAndFormat.
+
+.seealso: MFNMonitorSet(), MFNMonitorRegister(), MFNMonitorFn, MFNMonitorRegisterCreateFn, MFNMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterFn(MFN mfn,PetscInt its,PetscReal errest,PetscViewerAndFormat *ctx);
+
+/*S
+  MFNMonitorRegisterCreateFn - A function prototype for functions that do the creation when provided to MFNMonitorRegister()
+
+  Calling Sequence:
++   viewer - the viewer to be used with the MFNMonitorRegisterFn
+.   format - the format of the viewer
+.   ctx    - a context for the monitor
+-   result - a PetscViewerAndFormat object
+
+  Level: beginner
+
+.seealso: MFNMonitorRegisterFn, MFNMonitorSet(), MFNMonitorRegister(), MFNMonitorFn, MFNMonitorRegisterDestroyFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+
+/*S
+  MFNMonitorRegisterDestroyFn - A function prototype for functions that do the after use destruction when provided to MFNMonitorRegister()
+
+  Calling Sequence:
+.   vf - a PetscViewerAndFormat object to be destroyed, including any context
+
+  Level: beginner
+
+.seealso: MFNMonitorRegisterFn, MFNMonitorSet(), MFNMonitorRegister(), MFNMonitorFn, MFNMonitorRegisterCreateFn
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
+
 SLEPC_EXTERN PetscErrorCode MFNMonitor(MFN,PetscInt,PetscReal);
-SLEPC_EXTERN PetscErrorCode MFNMonitorSet(MFN,PetscErrorCode (*)(MFN,PetscInt,PetscReal,void*),void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode MFNMonitorSet(MFN,MFNMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode MFNMonitorCancel(MFN);
 SLEPC_EXTERN PetscErrorCode MFNGetMonitorContext(MFN,void*);
 
 SLEPC_EXTERN PetscErrorCode MFNMonitorSetFromOptions(MFN,const char[],const char[],void*);
-SLEPC_EXTERN PetscErrorCode MFNMonitorDefault(MFN,PetscInt,PetscReal,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode MFNMonitorDefaultDrawLG(MFN,PetscInt,PetscReal,PetscViewerAndFormat*);
-SLEPC_EXTERN PetscErrorCode MFNMonitorDefaultDrawLGCreate(PetscViewer,PetscViewerFormat,void *,PetscViewerAndFormat**);
+SLEPC_EXTERN MFNMonitorRegisterFn       MFNMonitorDefault;
+SLEPC_EXTERN MFNMonitorRegisterFn       MFNMonitorDefaultDrawLG;
+SLEPC_EXTERN MFNMonitorRegisterCreateFn MFNMonitorDefaultDrawLGCreate;
 
 SLEPC_EXTERN PetscErrorCode MFNSetOptionsPrefix(MFN,const char*);
 SLEPC_EXTERN PetscErrorCode MFNAppendOptionsPrefix(MFN,const char*);
@@ -113,6 +173,6 @@ SLEPC_EXTERN PetscFunctionList MFNMonitorList;
 SLEPC_EXTERN PetscFunctionList MFNMonitorCreateList;
 SLEPC_EXTERN PetscFunctionList MFNMonitorDestroyList;
 SLEPC_EXTERN PetscErrorCode MFNRegister(const char[],PetscErrorCode(*)(MFN));
-SLEPC_EXTERN PetscErrorCode MFNMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,PetscErrorCode(*)(MFN,PetscInt,PetscReal,PetscViewerAndFormat*),PetscErrorCode(*)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode(*)(PetscViewerAndFormat**));
+SLEPC_EXTERN PetscErrorCode MFNMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,MFNMonitorRegisterFn*,MFNMonitorRegisterCreateFn*,MFNMonitorRegisterDestroyFn*);
 
 SLEPC_EXTERN PetscErrorCode MFNAllocateSolution(MFN,PetscInt);

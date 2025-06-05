@@ -241,7 +241,7 @@ PetscErrorCode EPSRegister(const char *name,PetscErrorCode (*function)(EPS))
 }
 
 /*@C
-   EPSMonitorRegister - Adds EPS monitor routine.
+   EPSMonitorRegister - Registers an EPS monitor routine that may be accessed with EPSMonitorSetFromOptions().
 
    Not Collective
 
@@ -249,12 +249,16 @@ PetscErrorCode EPSRegister(const char *name,PetscErrorCode (*function)(EPS))
 +  name    - name of a new monitor routine
 .  vtype   - a PetscViewerType for the output
 .  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine
+.  monitor - monitor routine, see EPSMonitorRegisterFn
 .  create  - creation routine, or NULL
 -  destroy - destruction routine, or NULL
 
    Notes:
    EPSMonitorRegister() may be called multiple times to add several user-defined monitors.
+
+   The calling sequence for the given function matches the calling sequence of EPSMonitorFn
+   functions passed to EPSMonitorSet() with the additional requirement that its final argument
+   be a PetscViewerAndFormat.
 
    Example Usage:
 .vb
@@ -268,9 +272,9 @@ $      -eps_monitor_my_monitor
 
    Level: advanced
 
-.seealso: EPSMonitorRegisterAll()
+.seealso: EPSMonitorSet(), EPSMonitorRegisterAll()
 @*/
-PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,PetscErrorCode (*monitor)(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,PetscViewerAndFormat*),PetscErrorCode (*create)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode (*destroy)(PetscViewerAndFormat**))
+PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,EPSMonitorRegisterFn *monitor,EPSMonitorRegisterCreateFn *create,EPSMonitorRegisterDestroyFn *destroy)
 {
   char           key[PETSC_MAX_PATH_LEN];
 

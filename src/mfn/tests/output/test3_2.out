@@ -26,11 +26,7 @@ row 15: (11, -1.)  (14, -1.)  (15, 4.)
  Erroring out if convergence fails
   Error estimates for check_myprefix_ solve.
   1 MFN Error estimate (removed)
-  Error estimates for check_myprefix_ solve.
-  1 MFN Error estimate (removed)
   2 MFN Error estimate (removed)
-  2 MFN Error estimate (removed)
-  3 MFN Error estimate (removed)
   3 MFN Error estimate (removed)
  Finished - converged reason = 1
  sqrt(A)*v has norm 2.

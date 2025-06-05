@@ -301,7 +301,7 @@ PetscErrorCode SVDRegister(const char *name,PetscErrorCode (*function)(SVD))
 }
 
 /*@C
-   SVDMonitorRegister - Adds SVD monitor routine.
+   SVDMonitorRegister - Registers an SVD monitor routine that may be accessed with SVDMonitorSetFromOptions().
 
    Not Collective
 
@@ -309,12 +309,16 @@ PetscErrorCode SVDRegister(const char *name,PetscErrorCode (*function)(SVD))
 +  name    - name of a new monitor routine
 .  vtype   - a PetscViewerType for the output
 .  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine
+.  monitor - monitor routine, see SVDMonitorRegisterFn
 .  create  - creation routine, or NULL
 -  destroy - destruction routine, or NULL
 
    Notes:
    SVDMonitorRegister() may be called multiple times to add several user-defined monitors.
+
+   The calling sequence for the given function matches the calling sequence of SVDMonitorFn
+   functions passed to SVDMonitorSet() with the additional requirement that its final argument
+   be a PetscViewerAndFormat.
 
    Example Usage:
 .vb
@@ -328,9 +332,9 @@ $      -svd_monitor_my_monitor
 
    Level: advanced
 
-.seealso: SVDMonitorRegisterAll()
+.seealso: SVDMonitorSet(), SVDMonitorRegisterAll()
 @*/
-PetscErrorCode SVDMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,PetscErrorCode (*monitor)(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,PetscViewerAndFormat*),PetscErrorCode (*create)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**),PetscErrorCode (*destroy)(PetscViewerAndFormat**))
+PetscErrorCode SVDMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,SVDMonitorRegisterFn *monitor,SVDMonitorRegisterCreateFn *create,SVDMonitorRegisterDestroyFn *destroy)
 {
   char           key[PETSC_MAX_PATH_LEN];
 
