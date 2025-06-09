@@ -852,7 +852,7 @@ PetscErrorCode EPSGetStartVector(EPS eps,PetscInt i,PetscBool *breakdown)
   /* For the first step, use the first initial vector, otherwise a random one */
   if (i>0 || eps->nini==0) PetscCall(BVSetRandomColumn(eps->V,i));
 
-  /* Force the vector to be in the range of OP for definite generalized problems */
+  /* Force the vector to be in the range of OP for generalized problems with B-inner product */
   if (eps->ispositive || (eps->isgeneralized && eps->ishermitian)) {
     PetscCall(BVCreateVec(eps->V,&w));
     PetscCall(BVCopyVec(eps->V,i,w));
@@ -881,6 +881,7 @@ PetscErrorCode EPSGetLeftStartVector(EPS eps,PetscInt i,PetscBool *breakdown)
 {
   PetscReal      norm;
   PetscBool      lindep;
+  Vec            w,z;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -889,12 +890,22 @@ PetscErrorCode EPSGetLeftStartVector(EPS eps,PetscInt i,PetscBool *breakdown)
   /* For the first step, use the first initial vector, otherwise a random one */
   if (i>0 || eps->ninil==0) PetscCall(BVSetRandomColumn(eps->W,i));
 
+  /* Force the vector to be in the range of OP' for generalized problems with B-inner product */
+  if (eps->ispositive || (eps->isgeneralized && eps->ishermitian)) {
+    PetscCall(BVCreateVec(eps->W,&w));
+    PetscCall(BVCopyVec(eps->W,i,w));
+    PetscCall(BVGetColumn(eps->W,i,&z));
+    PetscCall(STApplyHermitianTranspose(eps->st,w,z));
+    PetscCall(BVRestoreColumn(eps->W,i,&z));
+    PetscCall(VecDestroy(&w));
+  }
+
   /* Orthonormalize the vector with respect to previous vectors */
   PetscCall(BVOrthogonalizeColumn(eps->W,i,NULL,&norm,&lindep));
   if (breakdown) *breakdown = lindep;
   else if (lindep || norm == 0.0) {
     PetscCheck(i,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Left initial vector is zero");
-    SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_CONV_FAILED,"Unable to generate more left start vectors");
+    PetscCheck(!i,PetscObjectComm((PetscObject)eps),PETSC_ERR_CONV_FAILED,"Unable to generate more left start vectors");
   }
   PetscCall(BVScaleColumn(eps->W,i,1.0/norm));
   PetscFunctionReturn(PETSC_SUCCESS);
