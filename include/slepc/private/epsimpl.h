@@ -309,6 +309,7 @@ static inline PetscErrorCode EPS_SetInnerProduct(EPS eps)
   if (eps->ispositive || (eps->isgeneralized && eps->ishermitian)) {
     PetscCall(STGetBilinearForm(eps->st,&B));
     PetscCall(BVSetMatrix(eps->V,B,PetscNot(eps->ispositive)));
+    if (eps->twosided) PetscCall(BVSetMatrix(eps->W,B,PetscNot(eps->ispositive)));
     PetscCall(MatDestroy(&B));
   } else PetscCall(BVSetMatrix(eps->V,NULL,PETSC_FALSE));
   PetscFunctionReturn(PETSC_SUCCESS);
