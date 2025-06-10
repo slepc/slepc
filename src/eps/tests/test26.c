@@ -96,7 +96,7 @@ int main(int argc,char **argv)
       requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
       output_file: output/test26_1.out
       test:
-         args: -eps_true_residual {{0 1}}
+         args: -eps_true_residual {{0 1}} -eps_two_sided {{0 1}} -eps_ncv 32
          suffix: 1
       test:
          args: -eps_type arpack
@@ -108,6 +108,7 @@ int main(int argc,char **argv)
       requires: double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
       output_file: output/test26_2.out
       test:
+         args: -eps_two_sided {{0 1}}
          suffix: 2
       test:
          args: -eps_type arpack
