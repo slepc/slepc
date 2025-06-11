@@ -16,7 +16,7 @@
 
 #include <petscsys.h>
 
-/* SUBMANSEC = sys */
+/* SUBMANSEC = Sys */
 
 #if defined(slepc_EXPORTS)
 #define SLEPC_VISIBILITY_PUBLIC PETSC_DLLEXPORT

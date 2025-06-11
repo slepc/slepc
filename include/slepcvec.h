@@ -15,7 +15,7 @@
 
 #include <slepcsys.h>
 
-/* SUBMANSEC = sys */
+/* SUBMANSEC = Sys */
 
 /* VecComp: Vec composed of several smaller Vecs */
 #define VECCOMP  "comp"

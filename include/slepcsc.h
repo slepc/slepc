@@ -16,7 +16,7 @@
 #include <slepcsys.h>
 #include <slepcrgtypes.h>
 
-/* SUBMANSEC = sys */
+/* SUBMANSEC = Sys */
 
 /*S
   SlepcEigenvalueComparisonFn - A prototype of an eigenvalue comparison function that would be passed to EPSSetEigenvalueComparison() and analogue functions in other solver types

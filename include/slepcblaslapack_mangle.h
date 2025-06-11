@@ -10,6 +10,8 @@
 
 #pragma once
 
+/* MANSEC = Sys */
+
 /* LAPACK functions without string parameters */
 #define BLASrot_     PETSCBLAS(rot,ROT)
 #define BLASMIXEDrot_ PETSCBLASMIXED(rot,ROT)

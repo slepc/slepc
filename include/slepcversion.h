@@ -11,6 +11,8 @@
 #ifndef SLEPCVERSION_H
 #define SLEPCVERSION_H
 
+/* MANSEC = Sys */
+
 #define SLEPC_VERSION_RELEASE    0
 #define SLEPC_VERSION_MAJOR      3
 #define SLEPC_VERSION_MINOR      23
