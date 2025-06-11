@@ -14,6 +14,8 @@
 #include <slepc/private/stimpl.h>
 #include "filter.h"
 
+#define DAMPING_LANCZOS_POW 2
+
 /*
    Gateway to Chebyshev for evaluating y=p(A)*x
    (Clenshaw with a vector)
@@ -148,19 +150,20 @@ static PetscErrorCode Chebyshev_Compute_Damping_Coefficients(ST st)
   degree = ctx->polyDegree;
   PetscCall(PetscFree(cheby->damping_coeffs));
   PetscCall(PetscMalloc1(degree+1,&cheby->damping_coeffs));
+  cheby->damping_coeffs[0] = 1;
   switch (ctx->damping) {
     case ST_FILTER_DAMPING_NONE:
-      for (i=0;i<=degree;i++) cheby->damping_coeffs[i] = 1;
+      for (i=1;i<=degree;i++) cheby->damping_coeffs[i] = 1;
       break;
     case ST_FILTER_DAMPING_LANCZOS:
-      for (i=0;i<=degree;i++) cheby->damping_coeffs[i] = PetscSinReal((i+1)*PETSC_PI/(degree+1))/((i+1)*PETSC_PI/(degree+1));
+      for (i=1;i<=degree;i++) cheby->damping_coeffs[i] = PetscPowRealInt(PetscSinReal(i*PETSC_PI/(degree+1))/(i*PETSC_PI/(degree+1)),DAMPING_LANCZOS_POW);
       break;
     case ST_FILTER_DAMPING_JACKSON:
-      invdeg = 1/(PetscReal)degree;
-      for (i=0;i<=degree;i++) cheby->damping_coeffs[i] = invdeg*((degree-(i+1))*PetscCosReal(PETSC_PI*(i+1)*invdeg)+PetscSinReal(PETSC_PI*(i+1)*invdeg)/PetscTanReal(PETSC_PI*invdeg));
+      invdeg = 1/((PetscReal)degree+2);
+      for (i=1;i<=degree;i++) cheby->damping_coeffs[i] = invdeg*((degree+2-i)*PetscCosReal(PETSC_PI*i*invdeg)+PetscSinReal(PETSC_PI*i*invdeg)/PetscTanReal(PETSC_PI*invdeg));
       break;
     case ST_FILTER_DAMPING_FEJER:
-      for (i=0;i<=degree;i++) cheby->damping_coeffs[i] = (degree - (i+2))/(PetscReal)(degree+1);
+      for (i=1;i<=degree;i++) cheby->damping_coeffs[i] = 1-i/(PetscReal)(degree+1);
       break;
     default:
       SETERRQ(PetscObjectComm((PetscObject)st),PETSC_ERR_ARG_WRONG,"Invalid Chebyshev filter damping type");
