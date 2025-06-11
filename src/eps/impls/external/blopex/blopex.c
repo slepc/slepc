@@ -352,7 +352,6 @@ static PetscErrorCode EPSReset_BLOPEX(EPS eps)
 static PetscErrorCode EPSDestroy_BLOPEX(EPS eps)
 {
   PetscFunctionBegin;
-  LOBPCG_DestroyRandomContext();
   PetscCall(PetscFree(eps->data));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSBLOPEXSetBlockSize_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSBLOPEXGetBlockSize_C",NULL));
@@ -382,8 +381,6 @@ static PetscErrorCode EPSSetFromOptions_BLOPEX(EPS eps,PetscOptionItems PetscOpt
     if (flg) PetscCall(EPSBLOPEXSetBlockSize(eps,bs));
 
   PetscOptionsHeadEnd();
-
-  LOBPCG_SetFromOptionsRandomContext();
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -407,7 +404,6 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_BLOPEX(EPS eps)
   eps->ops->backtransform  = EPSBackTransform_Default;
   eps->ops->setdefaultst   = EPSSetDefaultST_GMRES;
 
-  LOBPCG_InitRandomContext(PetscObjectComm((PetscObject)eps),NULL);
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSBLOPEXSetBlockSize_C",EPSBLOPEXSetBlockSize_BLOPEX));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSBLOPEXGetBlockSize_C",EPSBLOPEXGetBlockSize_BLOPEX));
   if (slepc_blopex_useconstr < 0) PetscCall(PetscObjectComposedDataRegister(&slepc_blopex_useconstr));

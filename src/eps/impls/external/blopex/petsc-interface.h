@@ -15,7 +15,4 @@ SLEPC_INTERN BlopexInt PETSC_zpotrf_interface(char*,BlopexInt*,komplex*,BlopexIn
 SLEPC_INTERN BlopexInt PETSC_zsygv_interface(BlopexInt*,char*,char*,BlopexInt*,komplex*,BlopexInt*,komplex*,BlopexInt*,double*,komplex*,BlopexInt*,double*,BlopexInt*);
 #endif
 
-SLEPC_INTERN int LOBPCG_InitRandomContext(MPI_Comm,PetscRandom);
-SLEPC_INTERN int LOBPCG_SetFromOptionsRandomContext(void);
-SLEPC_INTERN int LOBPCG_DestroyRandomContext(void);
 SLEPC_INTERN int PETSCSetupInterpreter(mv_InterfaceInterpreter*);
