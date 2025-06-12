@@ -145,5 +145,22 @@ int main(int argc,char **argv)
       test:
          suffix: 1_linear_h2
          args: -pep_type linear -pep_linear_explicitmatrix -pep_linear_linearization 0,1
+      test:
+         suffix: 1_linear_other
+         args: -pep_type linear -pep_linear_explicitmatrix -pep_linear_linearization .3,.7
+
+   testset:
+      args: -pep_nev 4 -eta 0.1 -terse
+      requires: double
+      output_file: output/wiresaw_2.out
+      test:
+         suffix: 2
+         args: -pep_type {{toar qarnoldi}}
+      test:
+         suffix: 2_linear
+         args: -pep_type linear -pep_linear_explicitmatrix -pep_linear_linearization {{1,0 0,1}} -pep_linear_st_ksp_type bcgs -pep_linear_st_pc_type kaczmarz
+      test:
+         suffix: 2_linear_other
+         args: -pep_type linear -pep_linear_explicitmatrix -pep_linear_linearization .3,.7
 
 TEST*/

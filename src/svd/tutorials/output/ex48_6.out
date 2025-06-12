@@ -1,0 +1,9 @@
+
+Generalized singular value problem stored in file.
+
+ Reading REAL matrix from a binary file...
+ Using B=tridiag(-1,2,-1) with p=198
+
+ All requested generalized singular values computed up to the required tolerance:
+     0.03711, 0.03816, 0.06505, 0.06534
+

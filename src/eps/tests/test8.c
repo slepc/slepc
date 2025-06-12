@@ -228,7 +228,7 @@ PetscErrorCode MatGetDiagonal_Laplacian2D(Mat A,Vec diag)
          args: -eps_type lanczos -eps_lanczos_reorthog local
       test:
          suffix: 3_lobpcg
-         args: -eps_type lobpcg -eps_lobpcg_blocksize 3 -eps_lobpcg_locking 0 -st_ksp_type preonly -st_pc_type jacobi
+         args: -eps_type lobpcg -eps_lobpcg_blocksize 3 -eps_lobpcg_locking 0 -st_ksp_type preonly -st_pc_type jacobi -eps_lobpcg_checkprecond
          requires: !__float128
       test:
          suffix: 3_lobpcg_quad

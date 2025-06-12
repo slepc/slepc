@@ -26,7 +26,6 @@ static char help[] = "Illustrates use of NEPSetEigenvalueComparison().\n\n"
    User-defined routines
 */
 PetscErrorCode FormFunction(NEP,PetscScalar,Mat,Mat,void*);
-PetscErrorCode FormJacobian(NEP,PetscScalar,Mat,void*);
 PetscErrorCode MyEigenSort(PetscScalar,PetscScalar,PetscScalar,PetscScalar,PetscInt*,void*);
 
 /*
@@ -40,7 +39,7 @@ typedef struct {
 int main(int argc,char **argv)
 {
   NEP            nep;             /* nonlinear eigensolver context */
-  Mat            F,J;             /* Function and Jacobian matrices */
+  Mat            F;               /* Function matrix */
   ApplicationCtx ctx;             /* user-defined context */
   PetscScalar    target;
   RG             rg;
@@ -66,13 +65,6 @@ int main(int argc,char **argv)
   PetscCall(MatSeqAIJSetPreallocation(F,3,NULL));
   PetscCall(MatMPIAIJSetPreallocation(F,3,NULL,1,NULL));
   PetscCall(NEPSetFunction(nep,F,F,FormFunction,&ctx));
-
-  PetscCall(MatCreate(PETSC_COMM_WORLD,&J));
-  PetscCall(MatSetSizes(J,PETSC_DECIDE,PETSC_DECIDE,n,n));
-  PetscCall(MatSetFromOptions(J));
-  PetscCall(MatSeqAIJSetPreallocation(J,3,NULL));
-  PetscCall(MatMPIAIJSetPreallocation(F,3,NULL,1,NULL));
-  PetscCall(NEPSetJacobian(nep,J,FormJacobian,&ctx));
 
   PetscCall(NEPSetType(nep,NEPNLEIGS));
   PetscCall(NEPGetRG(nep,&rg));
@@ -106,7 +98,6 @@ int main(int argc,char **argv)
 
   PetscCall(NEPDestroy(&nep));
   PetscCall(MatDestroy(&F));
-  PetscCall(MatDestroy(&J));
   PetscCall(SlepcFinalize());
   return 0;
 }
@@ -179,72 +170,6 @@ PetscErrorCode FormFunction(NEP nep,PetscScalar lambda,Mat fun,Mat B,void *ctx)
     PetscCall(MatAssemblyBegin(fun,MAT_FINAL_ASSEMBLY));
     PetscCall(MatAssemblyEnd(fun,MAT_FINAL_ASSEMBLY));
   }
-  PetscFunctionReturn(PETSC_SUCCESS);
-}
-
-/* ------------------------------------------------------------------- */
-/*
-   FormJacobian - Computes Jacobian matrix  T'(lambda)
-
-   Input Parameters:
-.  nep    - the NEP context
-.  lambda - the scalar argument
-.  ctx    - optional user-defined context, as set by NEPSetJacobian()
-
-   Output Parameters:
-.  jac - Jacobian matrix
-.  B   - optionally different preconditioning matrix
-*/
-PetscErrorCode FormJacobian(NEP nep,PetscScalar lambda,Mat jac,void *ctx)
-{
-  ApplicationCtx *user = (ApplicationCtx*)ctx;
-  PetscScalar    A[3],c;
-  PetscReal      h;
-  PetscInt       i,n,j[3],Istart,Iend;
-  PetscBool      FirstBlock=PETSC_FALSE,LastBlock=PETSC_FALSE;
-
-  PetscFunctionBeginUser;
-  /*
-     Compute Jacobian entries and insert into matrix
-  */
-  PetscCall(MatGetSize(jac,&n,NULL));
-  PetscCall(MatGetOwnershipRange(jac,&Istart,&Iend));
-  if (Istart==0) FirstBlock=PETSC_TRUE;
-  if (Iend==n) LastBlock=PETSC_TRUE;
-  h = user->h;
-  c = user->kappa/(lambda-user->kappa);
-
-  /*
-     Interior grid points
-  */
-  for (i=(FirstBlock? Istart+1: Istart);i<(LastBlock? Iend-1: Iend);i++) {
-    j[0] = i-1; j[1] = i; j[2] = i+1;
-    A[0] = A[2] = -h/6.0; A[1] = -2.0*h/3.0;
-    PetscCall(MatSetValues(jac,1,&i,3,j,A,INSERT_VALUES));
-  }
-
-  /*
-     Boundary points
-  */
-  if (FirstBlock) {
-    i = 0;
-    j[0] = 0; j[1] = 1;
-    A[0] = -2.0*h/3.0; A[1] = -h/6.0;
-    PetscCall(MatSetValues(jac,1,&i,2,j,A,INSERT_VALUES));
-  }
-
-  if (LastBlock) {
-    i = n-1;
-    j[0] = n-2; j[1] = n-1;
-    A[0] = -h/6.0; A[1] = -h/3.0-c*c;
-    PetscCall(MatSetValues(jac,1,&i,2,j,A,INSERT_VALUES));
-  }
-
-  /*
-     Assemble matrix
-  */
-  PetscCall(MatAssemblyBegin(jac,MAT_FINAL_ASSEMBLY));
-  PetscCall(MatAssemblyEnd(jac,MAT_FINAL_ASSEMBLY));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

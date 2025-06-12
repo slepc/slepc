@@ -1,6 +1,14 @@
 
 Spectrum slicing on GHEP, N=100 (10x10 grid)
 
+Subintervals (after setup):
+Shift 0.1  Inertia 3
+Shift 0.2  Inertia 6
+
+All shifts (after solve):
+Shift 0.1  Inertia 3
+Shift 0.2  Inertia 6
+
  Solution method: krylovschur
 
  3 eigenvalues found in [0.1, 0.2]

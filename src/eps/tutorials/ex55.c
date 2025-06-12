@@ -160,6 +160,26 @@ int main(int argc,char **argv)
          args: -mat_type dense
          requires: complex
          output_file: output/ex55_1.out
+      test:
+         suffix: 1_cuda
+         args: -mat_type aijcusparse
+         requires: cuda complex
+         output_file: output/ex55_1.out
+      test:
+         suffix: 1_real_cuda
+         args: -mat_type aijcusparse
+         requires: cuda !complex
+         output_file: output/ex55_1_real.out
+      test:
+         suffix: 1_hip
+         args: -mat_type aijhipsparse
+         requires: hip complex
+         output_file: output/ex55_1.out
+      test:
+         suffix: 1_real_hip
+         args: -mat_type aijhipsparse
+         requires: hip !complex
+         output_file: output/ex55_1_real.out
 
    testset:
       args: -eps_nev 4 -eps_ncv 16 -eps_krylovschur_bse_type {{shao gruning projectedbse}} -st_type sinvert -terse

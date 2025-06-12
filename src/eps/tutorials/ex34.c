@@ -388,7 +388,7 @@ PetscErrorCode FormFunctionAB(SNES snes,Vec x,Vec Ax,Vec Bx,void *ctx)
   PetscFunctionBegin;
   /*
    * In real applications, users should have a generic formFunctionAB which
-   * forms Ax and Bx simultaneously for an more efficient calculation.
+   * forms Ax and Bx simultaneously for a more efficient calculation.
    * In this example, we just call FormFunctionA+FormFunctionB to mimic how
    * to use FormFunctionAB
    */

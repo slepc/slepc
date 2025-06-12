@@ -262,4 +262,10 @@ int main(int argc,char **argv)
          args: -eps_type blopex -eps_tol 1e-7 -eps_blopex_blocksize 4 -st_ksp_type preonly
          requires: blopex
 
+   test:
+      args: -eps_nev 4 -da_grid_x 10 -da_grid_y 11 -da_grid_z 12
+      requires: !single
+      filter: grep -v method | grep -v Stopping | sed -e "s/[+-]0\.0*i//g" | sed -e "s/[0-9]\.[0-9]*e[+-]\([0-9]*\)/removed/g"
+      suffix: 2
+
 TEST*/

@@ -11,8 +11,6 @@
 #include <fortran_matrix.h>
 #include "petsc-interface.h"
 
-static PetscRandom LOBPCG_RandomContext = NULL;
-
 #if !defined(PETSC_USE_COMPLEX)
 BlopexInt PETSC_dpotrf_interface (char *uplo,BlopexInt *n,double *a,BlopexInt * lda,BlopexInt *info)
 {
@@ -115,65 +113,10 @@ static BlopexInt PETSC_ClearVector(void *x)
   return 0;
 }
 
-static BlopexInt PETSC_SetRandomValues(void *v,BlopexInt seed)
-{
-
-  /* note: without previous call to LOBPCG_InitRandomContext LOBPCG_RandomContext will be null,
-    and VecSetRandom will use internal PetscRandom context */
-
-  PetscCall(VecSetRandom((Vec)v,LOBPCG_RandomContext));
-  return 0;
-}
-
-static BlopexInt PETSC_ScaleVector(double alpha,void *x)
-{
-
-  PetscCall(VecScale((Vec)x,alpha));
-  return 0;
-}
-
 static BlopexInt PETSC_Axpy(void *alpha,void *x,void *y)
 {
 
   PetscCall(VecAXPY((Vec)y,*(PetscScalar*)alpha,(Vec)x));
-  return 0;
-}
-
-static BlopexInt PETSC_VectorSize(void *x)
-{
-  PetscInt N;
-  (void)VecGetSize((Vec)x,&N);
-  return N;
-}
-
-int LOBPCG_InitRandomContext(MPI_Comm comm,PetscRandom rand)
-{
-  /* PetscScalar rnd_bound = 1.0; */
-
-  if (rand) {
-    PetscCall(PetscObjectReference((PetscObject)rand));
-    PetscCall(PetscRandomDestroy(&LOBPCG_RandomContext));
-    LOBPCG_RandomContext = rand;
-  } else PetscCall(PetscRandomCreate(comm,&LOBPCG_RandomContext));
-  return 0;
-}
-
-int LOBPCG_SetFromOptionsRandomContext(void)
-{
-  PetscCall(PetscRandomSetFromOptions(LOBPCG_RandomContext));
-
-#if defined(PETSC_USE_COMPLEX)
-  PetscCall(PetscRandomSetInterval(LOBPCG_RandomContext,(PetscScalar)PetscCMPLX(-1.0,-1.0),(PetscScalar)PetscCMPLX(1.0,1.0)));
-#else
-  PetscCall(PetscRandomSetInterval(LOBPCG_RandomContext,(PetscScalar)-1.0,(PetscScalar)1.0));
-#endif
-  return 0;
-}
-
-int LOBPCG_DestroyRandomContext(void)
-{
-
-  PetscCall(PetscRandomDestroy(&LOBPCG_RandomContext));
   return 0;
 }
 
@@ -184,10 +127,7 @@ int PETSCSetupInterpreter(mv_InterfaceInterpreter *i)
   i->InnerProd = PETSC_InnerProd;
   i->CopyVector = PETSC_CopyVector;
   i->ClearVector = PETSC_ClearVector;
-  i->SetRandomValues = PETSC_SetRandomValues;
-  i->ScaleVector = PETSC_ScaleVector;
   i->Axpy = PETSC_Axpy;
-  i->VectorSize = PETSC_VectorSize;
 
   /* Multivector part */
 

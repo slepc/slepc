@@ -145,4 +145,10 @@ int main(int argc,char **argv)
          suffix: 2
          args: -eps_lyapii_ranks 8,20 -options_left no
 
+   test:
+      suffix: 3
+      args: -file ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -shift 35 -eps_type {{krylovschur lyapii}} -terse
+      requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
+      filter: grep -v method
+
 TEST*/
