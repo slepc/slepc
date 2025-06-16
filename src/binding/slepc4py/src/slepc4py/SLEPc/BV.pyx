@@ -443,13 +443,19 @@ cdef class BV(Object):
 
         Returns
         -------
-        mat: the matrix of the inner product
+        mat: Mat
+             The matrix of the inner product
+        indef: bool
+               Whether the matrix is indefinite
         """
         cdef Mat mat = Mat()
         cdef PetscBool indef = PETSC_FALSE
         CHKERR( BVGetMatrix(self.bv, &mat.mat, &indef) )
-        CHKERR( PetscINCREF(mat.obj) )
-        return (mat, toBool(indef))
+        if mat.mat:
+            CHKERR( PetscINCREF(mat.obj) )
+            return (mat, toBool(indef))
+        else:
+            return (None, False)
 
     def setMatrix(self, Mat mat or None, bint indef):
         """
