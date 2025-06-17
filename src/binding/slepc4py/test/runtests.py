@@ -1,5 +1,3 @@
-# Author:  Lisandro Dalcin
-# Contact: dalcinl@gmail.com
 import os
 import sys
 import optparse

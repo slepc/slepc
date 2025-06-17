@@ -1,5 +1,3 @@
-# Author:  Lisandro Dalcin
-# Contact: dalcinl@gmail.com
 """Typing support."""
 
 from __future__ import annotations  # novermin

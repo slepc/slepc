@@ -1,6 +1,3 @@
-/* Author:  Lisandro Dalcin   */
-/* Contact: dalcinl@gmail.com */
-
 /* ---------------------------------------------------------------- */
 
 %include petsc4py/petsc4py.i
