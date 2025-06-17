@@ -134,6 +134,20 @@ cdef class FN(Object):
         prefix = str2bytes(prefix, &cval)
         CHKERR( FNSetOptionsPrefix(self.fn, cval) )
 
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
+        """
+        Appends to the prefix used for searching for all FN options
+        in the database.
+
+        Parameters
+        ----------
+        prefix
+            The prefix string to prepend to all FN option requests.
+        """
+        cdef const char *cval = NULL
+        prefix = str2bytes(prefix, &cval)
+        CHKERR( FNAppendOptionsPrefix(self.fn, cval) )
+
     def getOptionsPrefix(self) -> str:
         """
         Gets the prefix used for searching for all FN options in the

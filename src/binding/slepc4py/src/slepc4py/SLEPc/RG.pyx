@@ -130,6 +130,20 @@ cdef class RG(Object):
         CHKERR( RGGetOptionsPrefix(self.rg, &prefix) )
         return bytes2str(prefix)
 
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
+        """
+        Appends to the prefix used for searching for all RG options
+        in the database.
+
+        Parameters
+        ----------
+        prefix
+            The prefix string to prepend to all RG option requests.
+        """
+        cdef const char *cval = NULL
+        prefix = str2bytes(prefix, &cval)
+        CHKERR( RGAppendOptionsPrefix(self.rg, cval) )
+
     def setFromOptions(self) -> None:
         """
         Sets RG options from the options database.

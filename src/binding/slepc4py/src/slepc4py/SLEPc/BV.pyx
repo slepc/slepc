@@ -319,6 +319,20 @@ cdef class BV(Object):
         prefix = str2bytes(prefix, &cval)
         CHKERR( BVSetOptionsPrefix(self.bv, cval) )
 
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
+        """
+        Appends to the prefix used for searching for all BV options
+        in the database.
+
+        Parameters
+        ----------
+        prefix
+            The prefix string to prepend to all BV option requests.
+        """
+        cdef const char *cval = NULL
+        prefix = str2bytes(prefix, &cval)
+        CHKERR( BVAppendOptionsPrefix(self.bv, cval) )
+
     def getOptionsPrefix(self) -> str:
         """
         Gets the prefix used for searching for all BV options in the

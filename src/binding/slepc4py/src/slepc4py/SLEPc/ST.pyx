@@ -183,6 +183,20 @@ cdef class ST(Object):
         CHKERR( STGetOptionsPrefix(self.st, &prefix) )
         return bytes2str(prefix)
 
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
+        """
+        Appends to the prefix used for searching for all ST options
+        in the database.
+
+        Parameters
+        ----------
+        prefix
+            The prefix string to prepend to all ST option requests.
+        """
+        cdef const char *cval = NULL
+        prefix = str2bytes(prefix, &cval)
+        CHKERR( STAppendOptionsPrefix(self.st, cval) )
+
     def setFromOptions(self) -> None:
         """
         Sets ST options from the options database. This routine must

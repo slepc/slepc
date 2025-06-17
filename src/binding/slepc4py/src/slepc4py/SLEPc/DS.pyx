@@ -177,6 +177,20 @@ cdef class DS(Object):
         prefix = str2bytes(prefix, &cval)
         CHKERR( DSSetOptionsPrefix(self.ds, cval) )
 
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
+        """
+        Appends to the prefix used for searching for all DS options
+        in the database.
+
+        Parameters
+        ----------
+        prefix
+            The prefix string to prepend to all DS option requests.
+        """
+        cdef const char *cval = NULL
+        prefix = str2bytes(prefix, &cval)
+        CHKERR( DSAppendOptionsPrefix(self.ds, cval) )
+
     def getOptionsPrefix(self) -> str:
         """
         Gets the prefix used for searching for all DS options in the
