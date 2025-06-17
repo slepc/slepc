@@ -803,7 +803,7 @@ cdef class NEP(Object):
         CHKERR( NEPGetConverged(self.nep, &ival) )
         return toInt(ival)
 
-    def getEigenpair(self, i: int, Vec Vr=None, Vec Vi=None) -> None:
+    def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> None:
         """
         Gets the i-th solution of the eigenproblem as computed by
         `solve()`.  The solution consists of both the eigenvalue and
@@ -853,7 +853,7 @@ cdef class NEP(Object):
         Left eigenvectors are available only if the twosided flag was set
         with `setTwoSided()`.
         """
-        cdef PetscVec vecr = Wr.vec
+        cdef PetscVec vecr = Wr.vec if Wr is not None else <PetscVec>NULL
         cdef PetscVec veci = Wi.vec if Wi is not None else <PetscVec>NULL
         CHKERR( NEPGetLeftEigenvector(self.nep, i, vecr, veci) )
 

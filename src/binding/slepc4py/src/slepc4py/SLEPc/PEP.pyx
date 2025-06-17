@@ -1109,7 +1109,7 @@ cdef class PEP(Object):
         CHKERR( PEPGetConverged(self.pep, &ival) )
         return toInt(ival)
 
-    def getEigenpair(self, i: int, Vec Vr=None, Vec Vi=None) -> None:
+    def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> None:
         """
         Gets the i-th solution of the eigenproblem as computed by
         `solve()`.  The solution consists of both the eigenvalue and

@@ -1436,7 +1436,7 @@ cdef class EPS(Object):
         else:
             return toComplex(sval1, sval2)
 
-    def getEigenvector(self, i: int, Vec Vr, Vec Vi=None) -> None:
+    def getEigenvector(self, i: int, Vec Vr = None, Vec Vi = None) -> None:
         """
         Gets the i-th eigenvector as computed by `solve()`.
 
@@ -1456,11 +1456,11 @@ cdef class EPS(Object):
         according to the ordering criterion established with
         `setWhichEigenpairs()`.
         """
-        cdef PetscVec vecr = Vr.vec
+        cdef PetscVec vecr = Vr.vec if Vr is not None else <PetscVec>NULL
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
         CHKERR( EPSGetEigenvector(self.eps, i, vecr, veci) )
 
-    def getLeftEigenvector(self, i: int, Vec Wr, Vec Wi=None) -> None:
+    def getLeftEigenvector(self, i: int, Vec Wr = None, Vec Wi = None) -> None:
         """
         Gets the i-th left eigenvector as computed by `solve()`.
 
@@ -1483,11 +1483,11 @@ cdef class EPS(Object):
         Left eigenvectors are available only if the twosided flag was set
         with `setTwoSided()`.
         """
-        cdef PetscVec vecr = Wr.vec
+        cdef PetscVec vecr = Wr.vec if Wr is not None else <PetscVec>NULL
         cdef PetscVec veci = Wi.vec if Wi is not None else <PetscVec>NULL
         CHKERR( EPSGetLeftEigenvector(self.eps, i, vecr, veci) )
 
-    def getEigenpair(self, i: int, Vec Vr=None, Vec Vi=None) -> Scalar:
+    def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> Scalar:
         """
         Gets the i-th solution of the eigenproblem as computed by
         `solve()`.  The solution consists of both the eigenvalue and
