@@ -13,6 +13,8 @@
 
 #pragma once
 
+/* MANSEC = Sys */
+
 #include <slepcsvd.h>
 #include <slepcpep.h>
 #include <slepcnep.h>

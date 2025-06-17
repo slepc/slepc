@@ -16,6 +16,8 @@
 #include <petscdevice.h>
 #include <petsc/private/petsclegacycupmblas.h>
 
+/* MANSEC = Sys */
+
 #if defined(PETSC_HAVE_CUDA)
 
 /* complex single */

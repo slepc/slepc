@@ -13,6 +13,8 @@
 
 #pragma once
 
+/* MANSEC = Sys */
+
 #if defined(PETSC_HAVE_MAGMA)
 
 #include <magma_v2.h>

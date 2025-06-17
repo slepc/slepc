@@ -36,7 +36,7 @@
       PetscInt       n, i, Istart, Iend
       PetscInt       nev, nini
       PetscInt       col(3)
-      PetscInt       i1,i2,i3
+      PetscInt       i0, i1, i2, i3
       PetscMPIInt    rank
       PetscErrorCode ierr
       PetscBool      flg
@@ -65,6 +65,7 @@
       PetscCallA(MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,n,n,ierr))
       PetscCallA(MatSetFromOptions(A,ierr))
 
+      i0 = 0
       i1 = 1
       i2 = 2
       i3 = 3
@@ -103,7 +104,7 @@
       PetscCallA(MatCreateVecs(A,v(1),PETSC_NULL_VEC,ierr))
       one = 1.0
       if (Istart .eq. 0) then
-        PetscCallA(VecSetValue(v(1),0,one,INSERT_VALUES,ierr))
+        PetscCallA(VecSetValue(v(1),i0,one,INSERT_VALUES,ierr))
       endif
       PetscCallA(VecAssemblyBegin(v(1),ierr))
       PetscCallA(VecAssemblyEnd(v(1),ierr))

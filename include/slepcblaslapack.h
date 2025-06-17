@@ -15,6 +15,8 @@
 
 #include <petscblaslapack.h>
 
+/* MANSEC = Sys */
+
 /* Macro to check nonzero info after LAPACK call */
 #define SlepcCheckLapackInfo(routine,info) \
   do { \
