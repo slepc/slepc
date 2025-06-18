@@ -147,20 +147,20 @@ cdef class SVD(Object):
         self.obj = <PetscObject*> &self.svd
         self.svd = NULL
 
-    def view(self, Viewer viewer=None):
+    def view(self, Viewer viewer=None) -> None:
         """
         Prints the SVD data structure.
 
         Parameters
         ----------
-        viewer: Viewer, optional
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( SVDView(self.svd, vwr) )
 
-    def destroy(self):
+    def destroy(self) -> Self:
         """
         Destroys the SVD object.
         """
@@ -168,21 +168,20 @@ cdef class SVD(Object):
         self.svd = NULL
         return self
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Resets the SVD object.
         """
         CHKERR( SVDReset(self.svd) )
 
-    def create(self, comm=None):
+    def create(self, comm: Comm | None = None) -> Self:
         """
         Creates the SVD object.
 
         Parameters
         ----------
-        comm: Comm, optional
-              MPI communicator; if not provided, it defaults to all
-              processes.
+        comm
+            MPI communicator; if not provided, it defaults to all processes.
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcSVD newsvd = NULL
@@ -190,14 +189,14 @@ cdef class SVD(Object):
         CHKERR( SlepcCLEAR(self.obj) ); self.svd = newsvd
         return self
 
-    def setType(self, svd_type):
+    def setType(self, svd_type: Type | str) -> None:
         """
         Selects the particular solver to be used in the SVD object.
 
         Parameters
         ----------
-        svd_type: `SVD.Type` enumerate
-                  The solver to be used.
+        svd_type
+            The solver to be used.
 
         Notes
         -----
@@ -212,43 +211,42 @@ cdef class SVD(Object):
         svd_type = str2bytes(svd_type, &cval)
         CHKERR( SVDSetType(self.svd, cval) )
 
-    def getType(self):
+    def getType(self) -> str:
         """
         Gets the SVD type of this object.
 
         Returns
         -------
-        type: `SVD.Type` enumerate
-              The solver currently being used.
+        str
+            The solver currently being used.
         """
         cdef SlepcSVDType svd_type = NULL
         CHKERR( SVDGetType(self.svd, &svd_type) )
         return bytes2str(svd_type)
 
-    def getOptionsPrefix(self):
+    def getOptionsPrefix(self) -> str:
         """
         Gets the prefix used for searching for all SVD options in the
         database.
 
         Returns
         -------
-        prefix: string
-                The prefix string set for this SVD object.
+        str
+            The prefix string set for this SVD object.
         """
         cdef const char *prefix = NULL
         CHKERR( SVDGetOptionsPrefix(self.svd, &prefix) )
         return bytes2str(prefix)
 
-    def setOptionsPrefix(self, prefix):
+    def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Sets the prefix used for searching for all SVD options in the
         database.
 
         Parameters
         ----------
-        prefix: string
-                The prefix string to prepend to all SVD option
-                requests.
+        prefix
+            The prefix string to prepend to all SVD option requests.
 
         Notes
         -----
@@ -266,21 +264,21 @@ cdef class SVD(Object):
         prefix = str2bytes(prefix, &cval)
         CHKERR( SVDSetOptionsPrefix(self.svd, cval) )
 
-    def appendOptionsPrefix(self, prefix):
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Appends to the prefix used for searching for all SVD options
         in the database.
 
         Parameters
         ----------
-        prefix: string
-                The prefix string to prepend to all SVD option requests.
+        prefix
+            The prefix string to prepend to all SVD option requests.
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
         CHKERR( SVDAppendOptionsPrefix(self.svd, cval) )
 
-    def setFromOptions(self):
+    def setFromOptions(self) -> None:
         """
         Sets SVD options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
@@ -293,54 +291,54 @@ cdef class SVD(Object):
         """
         CHKERR( SVDSetFromOptions(self.svd) )
 
-    def getProblemType(self):
+    def getProblemType(self) -> ProblemType:
         """
         Gets the problem type from the SVD object.
 
         Returns
         -------
-        problem_type: `SVD.ProblemType` enumerate
-                      The problem type that was previously set.
+        ProblemType
+            The problem type that was previously set.
         """
         cdef SlepcSVDProblemType val = SVD_STANDARD
         CHKERR( SVDGetProblemType(self.svd, &val) )
         return val
 
-    def setProblemType(self, problem_type):
+    def setProblemType(self, problem_type: ProblemType) -> None:
         """
         Specifies the type of the singular value problem.
 
         Parameters
         ----------
-        problem_type: `SVD.ProblemType` enumerate
-               The problem type to be set.
+        problem_type
+            The problem type to be set.
         """
         cdef SlepcSVDProblemType val = problem_type
         CHKERR( SVDSetProblemType(self.svd, val) )
 
-    def isGeneralized(self):
+    def isGeneralized(self) -> bool:
         """
         Tells whether the SVD object corresponds to a generalized
         singular value problem.
 
         Returns
         -------
-        flag: bool
-              True if two matrices were set with `setOperators()`.
+        bool
+            True if two matrices were set with `setOperators()`.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDIsGeneralized(self.svd, &tval) )
         return toBool(tval)
 
-    def isHyperbolic(self):
+    def isHyperbolic(self) -> bool:
         """
         Tells whether the SVD object corresponds to a hyperbolic
         singular value problem.
 
         Returns
         -------
-        flag: bool
-              True if the problem was specified as hyperbolic.
+        bool
+            True if the problem was specified as hyperbolic.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDIsHyperbolic(self.svd, &tval) )
@@ -348,29 +346,29 @@ cdef class SVD(Object):
 
     #
 
-    def getImplicitTranspose(self):
+    def getImplicitTranspose(self) -> bool:
         """
         Gets the mode used to handle the transpose of the matrix
         associated with the singular value problem.
 
         Returns
         -------
-        impl: bool
-              How to handle the transpose (implicitly or not).
+        bool
+            How to handle the transpose (implicitly or not).
         """
         cdef PetscBool val = PETSC_FALSE
         CHKERR( SVDGetImplicitTranspose(self.svd, &val) )
         return toBool(val)
 
-    def setImplicitTranspose(self, mode):
+    def setImplicitTranspose(self, mode: bool) -> None:
         """
         Indicates how to handle the transpose of the matrix
         associated with the singular value problem.
 
         Parameters
         ----------
-        impl: bool
-              How to handle the transpose (implicitly or not).
+        impl
+            How to handle the transpose (implicitly or not).
 
         Notes
         -----
@@ -383,59 +381,57 @@ cdef class SVD(Object):
         cdef PetscBool val = asBool(mode)
         CHKERR( SVDSetImplicitTranspose(self.svd, val) )
 
-    def getWhichSingularTriplets(self):
+    def getWhichSingularTriplets(self) -> Which:
         """
         Returns which singular triplets are to be sought.
 
         Returns
         -------
-        which: `SVD.Which` enumerate
-               The singular values to be sought (either largest or
-               smallest).
+        Which
+            The singular values to be sought (either largest or smallest).
         """
         cdef SlepcSVDWhich val = SVD_LARGEST
         CHKERR( SVDGetWhichSingularTriplets(self.svd, &val) )
         return val
 
-    def setWhichSingularTriplets(self, which):
+    def setWhichSingularTriplets(self, which: Which) -> None:
         """
         Specifies which singular triplets are to be sought.
 
         Parameters
         ----------
-        which: `SVD.Which` enumerate
-               The singular values to be sought (either largest or
-               smallest).
+        which
+            The singular values to be sought (either largest or smallest).
         """
         cdef SlepcSVDWhich val = which
         CHKERR( SVDSetWhichSingularTriplets(self.svd, val) )
 
-    def getThreshold(self):
+    def getThreshold(self) -> tuple[float, bool]:
         """
         Gets the threshold used in the threshold stopping test.
 
         Returns
         -------
         thres: float
-             The threshold.
+            The threshold.
         rel: bool
-             Whether the threshold is relative or not.
+            Whether the threshold is relative or not.
         """
         cdef PetscReal rval = 0
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDGetThreshold(self.svd, &rval, &tval) )
         return (toReal(rval), toBool(tval))
 
-    def setThreshold(self, thres, rel=False):
+    def setThreshold(self, thres: float, rel: bool = False) -> None:
         """
         Sets the threshold used in the threshold stopping test.
 
         Parameters
         ----------
-        thres: float
-             The threshold.
-        rel: bool, optional
-             Whether the threshold is relative or not.
+        thres
+            The threshold.
+        rel
+            Whether the threshold is relative or not.
 
         Notes
         -----
@@ -453,7 +449,7 @@ cdef class SVD(Object):
         cdef PetscBool tval = asBool(rel)
         CHKERR( SVDSetThreshold(self.svd, rval, tval) )
 
-    def getTolerances(self):
+    def getTolerances(self) -> tuple[float, int]:
         """
         Gets the tolerance and maximum iteration count used by the
         default SVD convergence tests.
@@ -461,26 +457,26 @@ cdef class SVD(Object):
         Returns
         -------
         tol: float
-             The convergence tolerance.
+            The convergence tolerance.
         max_it: int
-             The maximum number of iterations
+            The maximum number of iterations
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
         CHKERR( SVDGetTolerances(self.svd, &rval, &ival) )
         return (toReal(rval), toInt(ival))
 
-    def setTolerances(self, tol=None, max_it=None):
+    def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
         Sets the tolerance and maximum iteration count used by the
         default SVD convergence tests.
 
         Parameters
         ----------
-        tol: float, optional
-             The convergence tolerance.
-        max_it: int, optional
-             The maximum number of iterations
+        tol
+            The convergence tolerance.
+        max_it
+            The maximum number of iterations
 
         Notes
         -----
@@ -493,14 +489,14 @@ cdef class SVD(Object):
         if max_it is not None: ival = asInt(max_it)
         CHKERR( SVDSetTolerances(self.svd, rval, ival) )
 
-    def getConvergenceTest(self):
+    def getConvergenceTest(self) -> Conv:
         """
         Return the method used to compute the error estimate
         used in the convergence test.
 
         Returns
         -------
-        conv: SVD.Conv
+        Conv
             The method used to compute the error estimate
             used in the convergence test.
         """
@@ -508,48 +504,48 @@ cdef class SVD(Object):
         CHKERR( SVDGetConvergenceTest(self.svd, &conv) )
         return conv
 
-    def setConvergenceTest(self, conv):
+    def setConvergenceTest(self, conv: Conv) -> None:
         """
         Specifies how to compute the error estimate
         used in the convergence test.
 
         Parameters
         ----------
-        conv: SVD.Conv
+        conv
             The method used to compute the error estimate
             used in the convergence test.
         """
         cdef SlepcSVDConv tconv = conv
         CHKERR( SVDSetConvergenceTest(self.svd, tconv) )
 
-    def getTrackAll(self):
+    def getTrackAll(self) -> bool:
         """
         Returns the flag indicating whether all residual norms must be
         computed or not.
 
         Returns
         -------
-        trackall: bool
+        bool
             Whether the solver compute all residuals or not.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDGetTrackAll(self.svd, &tval) )
         return toBool(tval)
 
-    def setTrackAll(self, trackall):
+    def setTrackAll(self, trackall: bool) -> None:
         """
         Specifies if the solver must compute the residual of all
         approximate singular triplets or not.
 
         Parameters
         ----------
-        trackall: bool
+        trackall
             Whether compute all residuals or not.
         """
         cdef PetscBool tval = asBool(trackall)
         CHKERR( SVDSetTrackAll(self.svd, tval) )
 
-    def getDimensions(self):
+    def getDimensions(self) -> tuple[int, int, int]:
         """
         Gets the number of singular values to compute and the
         dimension of the subspace.
@@ -557,12 +553,11 @@ cdef class SVD(Object):
         Returns
         -------
         nsv: int
-             Number of singular values to compute.
+            Number of singular values to compute.
         ncv: int
-             Maximum dimension of the subspace to be used by the
-             solver.
+            Maximum dimension of the subspace to be used by the solver.
         mpd: int
-             Maximum dimension allowed for the projected problem.
+            Maximum dimension allowed for the projected problem.
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -570,20 +565,24 @@ cdef class SVD(Object):
         CHKERR( SVDGetDimensions(self.svd, &ival1, &ival2, &ival3) )
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
-    def setDimensions(self, nsv=None, ncv=None, mpd=None):
+    def setDimensions(
+        self,
+        nsv: int | None = None,
+        ncv: int | None = None,
+        mpd: int | None = None,
+    ) -> None:
         """
         Sets the number of singular values to compute and the
         dimension of the subspace.
 
         Parameters
         ----------
-        nsv: int, optional
-             Number of singular values to compute.
-        ncv: int, optional
-             Maximum dimension of the subspace to be used by the
-             solver.
-        mpd: int, optional
-             Maximum dimension allowed for the projected problem.
+        nsv
+            Number of singular values to compute.
+        ncv
+            Maximum dimension of the subspace to be used by the solver.
+        mpd
+            Maximum dimension allowed for the projected problem.
 
         Notes
         -----
@@ -611,7 +610,7 @@ cdef class SVD(Object):
         if mpd is not None: ival3 = asInt(mpd)
         CHKERR( SVDSetDimensions(self.svd, ival1, ival2, ival3) )
 
-    def getBV(self):
+    def getBV(self) -> tuple[BV, BV]:
         """
         Obtain the basis vectors objects associated to the SVD object.
 
@@ -629,28 +628,28 @@ cdef class SVD(Object):
         CHKERR( PetscINCREF(U.obj) )
         return (V,U)
 
-    def setBV(self, BV V,BV U=None):
+    def setBV(self, BV V,BV U=None) -> None:
         """
         Associates basis vectors objects to the SVD solver.
 
         Parameters
         ----------
-        V: BV
+        V
             The basis vectors context for right singular vectors.
-        U: BV
+        U
             The basis vectors context for left singular vectors.
         """
         cdef SlepcBV VBV = V.bv
         cdef SlepcBV UBV = U.bv if U is not None else <SlepcBV>NULL
         CHKERR( SVDSetBV(self.svd, VBV, UBV) )
 
-    def getDS(self):
+    def getDS(self) -> DS:
         """
         Obtain the direct solver associated to the singular value solver.
 
         Returns
         -------
-        ds: DS
+        DS
             The direct solver context.
         """
         cdef DS ds = DS()
@@ -658,27 +657,27 @@ cdef class SVD(Object):
         CHKERR( PetscINCREF(ds.obj) )
         return ds
 
-    def setDS(self, DS ds):
+    def setDS(self, DS ds) -> None:
         """
         Associates a direct solver object to the singular value solver.
 
         Parameters
         ----------
-        ds: DS
+        ds
             The direct solver context.
         """
         CHKERR( SVDSetDS(self.svd, ds.ds) )
 
-    def getOperators(self):
+    def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
         Gets the matrices associated with the singular value problem.
 
         Returns
         -------
         A: Mat
-           The matrix associated with the singular value problem.
+            The matrix associated with the singular value problem.
         B: Mat
-           The second matrix in the case of GSVD.
+            The second matrix in the case of GSVD.
         """
         cdef Mat A = Mat()
         cdef Mat B = Mat()
@@ -690,34 +689,34 @@ cdef class SVD(Object):
         else:
             return (A, None)
 
-    def setOperators(self, Mat A, Mat B=None):
+    def setOperators(self, Mat A, Mat B=None) -> None:
         """
         Sets the matrices associated with the singular value problem.
 
         Parameters
         ----------
-        A: Mat
-           The matrix associated with the singular value problem.
-        B: Mat, optional
-           The second matrix in the case of GSVD; if not provided,
-           a usual SVD is assumed.
+        A
+            The matrix associated with the singular value problem.
+        B
+            The second matrix in the case of GSVD; if not provided,
+            a usual SVD is assumed.
         """
         cdef PetscMat Bmat = B.mat if B is not None else <PetscMat>NULL
         CHKERR( SVDSetOperators(self.svd, A.mat, Bmat) )
 
-    def getSignature(self, Vec omega=None):
+    def getSignature(self, Vec omega=None) -> Vec:
         """
         Gets the signature matrix defining a hyperbolic singular value problem.
 
         Parameters
         ----------
-        omega: Vec
-           Optional vector to store the diagonal elements of the signature matrix.
+        omega
+            Optional vector to store the diagonal elements of the signature matrix.
 
         Returns
         -------
-        omega: Vec
-           A vector containing the diagonal elements of the signature matrix.
+        Vec
+            A vector containing the diagonal elements of the signature matrix.
         """
         cdef PetscMat A = NULL
         if omega is None:
@@ -728,31 +727,35 @@ cdef class SVD(Object):
         CHKERR( SVDGetSignature(self.svd, omega.vec) )
         return omega
 
-    def setSignature(self, Vec omega=None):
+    def setSignature(self, Vec omega=None) -> None:
         """
         Sets the signature matrix defining a hyperbolic singular value problem.
 
         Parameters
         ----------
-        omega: Vec, optional
-           A vector containing the diagonal elements of the signature matrix.
+        omega
+            A vector containing the diagonal elements of the signature matrix.
         """
         cdef PetscVec Ovec = omega.vec if omega is not None else <PetscVec>NULL
         CHKERR( SVDSetSignature(self.svd, Ovec) )
 
     #
 
-    def setInitialSpaces(self, spaceright=None, spaceleft=None):
+    def setInitialSpace(
+        self,
+        spaceright: list[Vec] | None = None,
+        spaceleft: list[Vec] | None = None,
+    ) -> None:
         """
         Sets the initial spaces from which the SVD solver starts to
         iterate.
 
         Parameters
         ----------
-        spaceright: sequence of Vec
-           The right initial space.
-        spaceleft: sequence of Vec
-           The left initial space.
+        spaceright
+            The right initial space.
+        spaceleft
+            The left initial space.
         """
         cdef Py_ssize_t i = 0
         if spaceright is None: spaceright = []
@@ -771,7 +774,12 @@ cdef class SVD(Object):
 
     #
 
-    def setStoppingTest(self, stopping, args=None, kargs=None):
+    def setStoppingTest(
+        self,
+        stopping: SVDStoppingFunction | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
         """
         Sets a function to decide when to stop the outer iteration of the eigensolver.
         """
@@ -784,7 +792,7 @@ cdef class SVD(Object):
             self.set_attr('__stopping__', None)
             CHKERR( SVDSetStoppingTestFunction(self.svd, SVDStoppingBasic, NULL, NULL) )
 
-    def getStoppingTest(self):
+    def getStoppingTest(self) -> SVDStoppingFunction:
         """
         Gets the stopping function.
         """
@@ -792,7 +800,12 @@ cdef class SVD(Object):
 
     #
 
-    def setMonitor(self, monitor, args=None, kargs=None):
+    def setMonitor(
+        self,
+        monitor: SVDMonitorFunction | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
         """
         Appends a monitor function to the list of monitors.
         """
@@ -806,13 +819,13 @@ cdef class SVD(Object):
         if kargs is None: kargs = {}
         monitorlist.append((monitor, args, kargs))
 
-    def getMonitor(self):
+    def getMonitor(self) -> SVDMonitorFunction:
         """
         Gets the list of monitor functions.
         """
         return self.get_attr('__monitor__')
 
-    def cancelMonitor(self):
+    def cancelMonitor(self) -> None:
         """
         Clears all monitors for an `SVD` object.
         """
@@ -821,7 +834,7 @@ cdef class SVD(Object):
 
     #
 
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Sets up all the internal data structures necessary for the
         execution of the singular value solver.
@@ -834,13 +847,13 @@ cdef class SVD(Object):
         """
         CHKERR( SVDSetUp(self.svd) )
 
-    def solve(self):
+    def solve(self) -> None:
         """
         Solves the singular value problem.
         """
         CHKERR( SVDSolve(self.svd) )
 
-    def getIterationNumber(self):
+    def getIterationNumber(self) -> int:
         """
         Gets the current iteration number. If the call to `solve()` is
         complete, then it returns the number of iterations carried out
@@ -848,35 +861,34 @@ cdef class SVD(Object):
 
         Returns
         -------
-        its: int
-             Iteration number.
+        int
+            Iteration number.
         """
         cdef PetscInt ival = 0
         CHKERR( SVDGetIterationNumber(self.svd, &ival) )
         return toInt(ival)
 
-    def getConvergedReason(self):
+    def getConvergedReason(self) -> ConvergedReason:
         """
         Gets the reason why the `solve()` iteration was stopped.
 
         Returns
         -------
-        reason: `SVD.ConvergedReason` enumerate
-                Negative value indicates diverged, positive value
-                converged.
+        ConvergedReason
+            Negative value indicates diverged, positive value converged.
         """
         cdef SlepcSVDConvergedReason val = SVD_CONVERGED_ITERATING
         CHKERR( SVDGetConvergedReason(self.svd, &val) )
         return val
 
-    def getConverged(self):
+    def getConverged(self) -> int:
         """
         Gets the number of converged singular triplets.
 
         Returns
         -------
-        nconv: int
-               Number of converged singular triplets.
+        int
+            Number of converged singular triplets.
 
         Notes
         -----
@@ -886,19 +898,19 @@ cdef class SVD(Object):
         CHKERR( SVDGetConverged(self.svd, &ival) )
         return toInt(ival)
 
-    def getValue(self, int i):
+    def getValue(self, i: int) -> float:
         """
         Gets the i-th singular value as computed by `solve()`.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be obtained.
+        i
+            Index of the solution to be obtained.
 
         Returns
         -------
-        s: float
-           The computed singular value.
+        float
+            The computed singular value.
 
         Notes
         -----
@@ -911,19 +923,19 @@ cdef class SVD(Object):
         CHKERR( SVDGetSingularTriplet(self.svd, i, &rval, NULL, NULL) )
         return toReal(rval)
 
-    def getVectors(self, int i, Vec U, Vec V):
+    def getVectors(self, i: int, Vec U, Vec V) -> None:
         """
         Gets the i-th left and right singular vectors as computed by
         `solve()`.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be obtained.
-        U: Vec
-           Placeholder for the returned left singular vector.
-        V: Vec
-           Placeholder for the returned right singular vector.
+        i
+            Index of the solution to be obtained.
+        U
+            Placeholder for the returned left singular vector.
+        V
+            Placeholder for the returned right singular vector.
 
         Notes
         -----
@@ -935,7 +947,7 @@ cdef class SVD(Object):
         cdef PetscReal dummy = 0
         CHKERR( SVDGetSingularTriplet(self.svd, i, &dummy, U.vec, V.vec) )
 
-    def getSingularTriplet(self, int i, Vec U=None, Vec V=None):
+    def getSingularTriplet(self, i: int, Vec U=None, Vec V=None) -> float:
         """
         Gets the i-th triplet of the singular value decomposition as
         computed by `solve()`. The solution consists of the singular
@@ -943,17 +955,17 @@ cdef class SVD(Object):
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be obtained.
-        U: Vec
-           Placeholder for the returned left singular vector.
-        V: Vec
+        i
+            Index of the solution to be obtained.
+        U
+            Placeholder for the returned left singular vector.
+        V
            Placeholder for the returned right singular vector.
 
         Returns
         -------
-        s: float
-           The computed singular value.
+        float
+            The computed singular value.
 
         Notes
         -----
@@ -970,26 +982,25 @@ cdef class SVD(Object):
 
     #
 
-    def computeError(self, int i, etype=None):
+    def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
         Computes the error (based on the residual norm) associated with the i-th
         singular triplet.
 
         Parameters
         ----------
-        i: int
-           Index of the solution to be considered.
-        etype: `SVD.ErrorType` enumerate
-           The error type to compute.
+        i
+            Index of the solution to be considered.
+        etype
+            The error type to compute.
 
         Returns
         -------
-        e: real
-           The relative error bound, computed in various ways from the residual norm
-           ``sqrt(n1^2+n2^2)`` where ``n1 = ||A*v-sigma*u||_2``,
-           ``n2 = ||A^T*u-sigma*v||_2``, ``sigma`` is the singular
-           value, ``u`` and ``v`` are the left and right singular
-           vectors.
+        float
+            The relative error bound, computed in various ways from the residual norm
+            ``sqrt(n1^2+n2^2)`` where ``n1 = ||A*v-sigma*u||_2``,
+            ``n2 = ||A^T*u-sigma*v||_2``, ``sigma`` is the singular
+            value, ``u`` and ``v`` are the left and right singular vectors.
 
         Notes
         -----
@@ -1002,18 +1013,18 @@ cdef class SVD(Object):
         CHKERR( SVDComputeError(self.svd, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype=None, Viewer viewer=None):
+    def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
         """
         Displays the errors associated with the computed solution
         (as well as the eigenvalues).
 
         Parameters
         ----------
-        etype: `SVD.ErrorType` enumerate, optional
-           The error type to compute.
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        etype
+            The error type to compute.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
 
         Notes
         -----
@@ -1028,150 +1039,150 @@ cdef class SVD(Object):
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( SVDErrorView(self.svd, et, vwr) )
 
-    def valuesView(self, Viewer viewer=None):
+    def valuesView(self, viewer: Viewer | None = None) -> None:
         """
         Displays the computed singular values in a viewer.
 
         Parameters
         ----------
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( SVDValuesView(self.svd, vwr) )
 
-    def vectorsView(self, Viewer viewer=None):
+    def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
         Outputs computed singular vectors to a viewer.
 
         Parameters
         ----------
-        viewer: Viewer, optional.
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( SVDVectorsView(self.svd, vwr) )
 
     #
 
-    def setCrossEPS(self, EPS eps):
+    def setCrossEPS(self, EPS eps) -> None:
         """
         Associate an eigensolver object (`EPS`) to the singular value
         solver.
 
         Parameters
         ----------
-        eps: EPS
-             The eigensolver object.
+        eps
+            The eigensolver object.
         """
         CHKERR( SVDCrossSetEPS(self.svd, eps.eps) )
 
-    def getCrossEPS(self):
+    def getCrossEPS(self) -> EPS:
         """
         Retrieve the eigensolver object (`EPS`) associated to the
         singular value solver.
 
         Returns
         -------
-        eps: EPS
-             The eigensolver object.
+        EPS
+            The eigensolver object.
         """
         cdef EPS eps = EPS()
         CHKERR( SVDCrossGetEPS(self.svd, &eps.eps) )
         CHKERR( PetscINCREF(eps.obj) )
         return eps
 
-    def setCrossExplicitMatrix(self, flag=True):
+    def setCrossExplicitMatrix(self, flag: bool = True) -> None:
         """
         Indicate if the eigensolver operator ``A^T*A`` must be
         computed explicitly.
 
         Parameters
         ----------
-        flag: bool
-              True if ``A^T*A`` is built explicitly.
+        flag
+            True if ``A^T*A`` is built explicitly.
         """
         cdef PetscBool tval = asBool(flag)
         CHKERR( SVDCrossSetExplicitMatrix(self.svd, tval) )
 
-    def getCrossExplicitMatrix(self):
+    def getCrossExplicitMatrix(self) -> bool:
         """
         Returns the flag indicating if ``A^T*A`` is built explicitly.
 
         Returns
         -------
-        flag: bool
-              True if ``A^T*A`` is built explicitly.
+        bool
+            True if ``A^T*A`` is built explicitly.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDCrossGetExplicitMatrix(self.svd, &tval) )
         return toBool(tval)
 
-    def setCyclicEPS(self, EPS eps):
+    def setCyclicEPS(self, EPS eps) -> None:
         """
         Associate an eigensolver object (`EPS`) to the singular value
         solver.
 
         Parameters
         ----------
-        eps: EPS
-             The eigensolver object.
+        eps
+            The eigensolver object.
         """
         CHKERR( SVDCyclicSetEPS(self.svd, eps.eps) )
 
-    def getCyclicEPS(self):
+    def getCyclicEPS(self) -> EPS:
         """
         Retrieve the eigensolver object (`EPS`) associated to the
         singular value solver.
 
         Returns
         -------
-        eps: EPS
-             The eigensolver object.
+        EPS
+            The eigensolver object.
         """
         cdef EPS eps = EPS()
         CHKERR( SVDCyclicGetEPS(self.svd, &eps.eps) )
         CHKERR( PetscINCREF(eps.obj) )
         return eps
 
-    def setCyclicExplicitMatrix(self, flag=True):
+    def setCyclicExplicitMatrix(self, flag: bool = True) -> None:
         """
         Indicate if the eigensolver operator ``H(A) = [ 0 A ; A^T 0
         ]`` must be computed explicitly.
 
         Parameters
         ----------
-        flag: bool
-              True if ``H(A)`` is built explicitly.
+        flag
+            True if ``H(A)`` is built explicitly.
         """
         cdef PetscBool tval = asBool(flag)
         CHKERR( SVDCyclicSetExplicitMatrix(self.svd, tval) )
 
-    def getCyclicExplicitMatrix(self):
+    def getCyclicExplicitMatrix(self) -> bool:
         """
         Returns the flag indicating if ``H(A) = [ 0 A ; A^T 0 ]`` is
         built explicitly.
 
         Returns
         -------
-        flag: bool
-              True if ``H(A)`` is built explicitly.
+        bool
+            True if ``H(A)`` is built explicitly.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDCyclicGetExplicitMatrix(self.svd, &tval) )
         return toBool(tval)
 
-    def setLanczosOneSide(self, flag=True):
+    def setLanczosOneSide(self, flag: bool = True) -> None:
         """
         Indicate if the variant of the Lanczos method to be used is
         one-sided or two-sided.
 
         Parameters
         ----------
-        flag: bool
-              True if the method is one-sided.
+        flag
+            True if the method is one-sided.
 
         Notes
         -----
@@ -1184,29 +1195,29 @@ cdef class SVD(Object):
         cdef PetscBool tval = asBool(flag)
         CHKERR( SVDLanczosSetOneSide(self.svd, tval) )
 
-    def getLanczosOneSide(self):
+    def getLanczosOneSide(self) -> bool:
         """
         Gets if the variant of the Lanczos method to be used is
         one-sided or two-sided.
 
         Returns
         -------
-        delayed: bool
-                 True if the method is one-sided.
+        bool
+            True if the method is one-sided.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDLanczosGetOneSide(self.svd, &tval) )
         return toBool(tval)
 
-    def setTRLanczosOneSide(self, flag=True):
+    def setTRLanczosOneSide(self, flag: bool = True) -> None:
         """
         Indicate if the variant of the thick-restart Lanczos method to
         be used is one-sided or two-sided.
 
         Parameters
         ----------
-        flag: bool
-              True if the method is one-sided.
+        flag
+            True if the method is one-sided.
 
         Notes
         -----
@@ -1218,48 +1229,48 @@ cdef class SVD(Object):
         cdef PetscBool tval = asBool(flag)
         CHKERR( SVDLanczosSetOneSide(self.svd, tval) )
 
-    def getTRLanczosOneSide(self):
+    def getTRLanczosOneSide(self) -> bool:
         """
         Gets if the variant of the thick-restart Lanczos method to be
         used is one-sided or two-sided.
 
         Returns
         -------
-        delayed: bool
-                 True if the method is one-sided.
+        bool
+            True if the method is one-sided.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDTRLanczosGetOneSide(self.svd, &tval) )
         return toBool(tval)
 
-    def setTRLanczosGBidiag(self, bidiag):
+    def setTRLanczosGBidiag(self, bidiag: TRLanczosGBidiag) -> None:
         """
         Sets the bidiagonalization choice to use in the GSVD
         TRLanczos solver.
 
         Parameters
         ----------
-        bidiag: `SVD.TRLanczosGBidiag` enumerate
-               The bidiagonalization choice.
+        bidiag
+            The bidiagonalization choice.
         """
         cdef SlepcSVDTRLanczosGBidiag val = bidiag
         CHKERR( SVDTRLanczosSetGBidiag(self.svd, val) )
 
-    def getTRLanczosGBidiag(self):
+    def getTRLanczosGBidiag(self) -> TRLanczosGBidiag:
         """
         Returns bidiagonalization choice used in the GSVD
         TRLanczos solver.
 
         Returns
         -------
-        bidiag: `SVD.TRLanczosGBidiag` enumerate
-               The bidiagonalization choice.
+        TRLanczosGBidiag
+            The bidiagonalization choice.
         """
         cdef SlepcSVDTRLanczosGBidiag val = SVD_TRLANCZOS_GBIDIAG_LOWER
         CHKERR( SVDTRLanczosGetGBidiag(self.svd, &val) )
         return val
 
-    def setTRLanczosRestart(self, keep):
+    def setTRLanczosRestart(self, keep: float) -> None:
         """
         Sets the restart parameter for the thick-restart Lanczos method, in
         particular the proportion of basis vectors that must be kept
@@ -1267,8 +1278,8 @@ cdef class SVD(Object):
 
         Parameters
         ----------
-        keep: float
-              The number of vectors to be kept at restart.
+        keep
+            The number of vectors to be kept at restart.
 
         Notes
         -----
@@ -1277,28 +1288,28 @@ cdef class SVD(Object):
         cdef PetscReal val = asReal(keep)
         CHKERR( SVDTRLanczosSetRestart(self.svd, val) )
 
-    def getTRLanczosRestart(self):
+    def getTRLanczosRestart(self) -> float:
         """
         Gets the restart parameter used in the thick-restart Lanczos method.
 
         Returns
         -------
-        keep: float
-              The number of vectors to be kept at restart.
+        float
+            The number of vectors to be kept at restart.
         """
         cdef PetscReal val = 0
         CHKERR( SVDTRLanczosGetRestart(self.svd, &val) )
         return toReal(val)
 
-    def setTRLanczosLocking(self, lock):
+    def setTRLanczosLocking(self, lock: bool) -> None:
         """
         Choose between locking and non-locking variants of the
         thick-restart Lanczos method.
 
         Parameters
         ----------
-        lock: bool
-              True if the locking variant must be selected.
+        lock
+            True if the locking variant must be selected.
 
         Notes
         -----
@@ -1310,64 +1321,64 @@ cdef class SVD(Object):
         cdef PetscBool val = asBool(lock)
         CHKERR( SVDTRLanczosSetLocking(self.svd, val) )
 
-    def getTRLanczosLocking(self):
+    def getTRLanczosLocking(self) -> bool:
         """
         Gets the locking flag used in the thick-restart Lanczos method.
 
         Returns
         -------
-        lock: bool
-              The locking flag.
+        bool
+            The locking flag.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDTRLanczosGetLocking(self.svd, &tval) )
         return toBool(tval)
 
-    def setTRLanczosKSP(self, KSP ksp):
+    def setTRLanczosKSP(self, KSP ksp) -> None:
         """
         Associate a linear solver object to the SVD solver.
 
         Parameters
         ----------
-        ksp: `KSP`
-             The linear solver object.
+        ksp
+            The linear solver object.
         """
         CHKERR( SVDTRLanczosSetKSP(self.svd, ksp.ksp) )
 
-    def getTRLanczosKSP(self):
+    def getTRLanczosKSP(self) -> KSP:
         """
         Retrieve the linear solver object associated with the SVD solver.
 
         Returns
         -------
-        ksp: `KSP`
-             The linear solver object.
+        KSP
+            The linear solver object.
         """
         cdef KSP ksp = KSP()
         CHKERR( SVDTRLanczosGetKSP(self.svd, &ksp.ksp) )
         CHKERR( PetscINCREF(ksp.obj) )
         return ksp
 
-    def setTRLanczosExplicitMatrix(self, flag=True):
+    def setTRLanczosExplicitMatrix(self, flag: bool = True) -> None:
         """
         Indicate if the matrix ``Z=[A;B]`` must be built explicitly.
 
         Parameters
         ----------
-        flag: bool
-              True if ``Z=[A;B]`` is built explicitly.
+        flag
+            True if ``Z=[A;B]`` is built explicitly.
         """
         cdef PetscBool tval = asBool(flag)
         CHKERR( SVDTRLanczosSetExplicitMatrix(self.svd, tval) )
 
-    def getTRLanczosExplicitMatrix(self):
+    def getTRLanczosExplicitMatrix(self) -> bool:
         """
         Returns the flag indicating if ``Z=[A;B]`` is built explicitly.
 
         Returns
         -------
-        flag: bool
-              True if ``Z=[A;B]`` is built explicitly.
+        bool
+            True if ``Z=[A;B]`` is built explicitly.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDTRLanczosGetExplicitMatrix(self.svd, &tval) )

@@ -180,6 +180,7 @@ cdef PetscErrorCode SVD_Stopping(
     elif reason is False: r[0] = SVD_CONVERGED_ITERATING
     elif reason is True:  r[0] = SVD_CONVERGED_USER
     else:                 r[0] = reason
+    return PETSC_SUCCESS
 
 # -----------------------------------------------------------------------------
 

@@ -52,20 +52,20 @@ cdef class FN(Object):
         self.obj = <PetscObject*> &self.fn
         self.fn = NULL
 
-    def view(self, Viewer viewer=None):
+    def view(self, Viewer viewer=None) -> None:
         """
         Prints the FN data structure.
 
         Parameters
         ----------
-        viewer: Viewer, optional
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( FNView(self.fn, vwr) )
 
-    def destroy(self):
+    def destroy(self) -> Self:
         """
         Destroys the FN object.
         """
@@ -73,15 +73,14 @@ cdef class FN(Object):
         self.fn = NULL
         return self
 
-    def create(self, comm=None):
+    def create(self, comm: Comm | None = None) -> Self:
         """
         Creates the FN object.
 
         Parameters
         ----------
-        comm: Comm, optional
-              MPI communicator; if not provided, it defaults to all
-              processes.
+        comm
+            MPI communicator; if not provided, it defaults to all processes.
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcFN newfn = NULL
@@ -89,42 +88,41 @@ cdef class FN(Object):
         CHKERR( SlepcCLEAR(self.obj) ); self.fn = newfn
         return self
 
-    def setType(self, fn_type):
+    def setType(self, fn_type: Type | str) -> None:
         """
         Selects the type for the FN object.
 
         Parameters
         ----------
-        fn_type: `FN.Type` enumerate
-                  The inner product type to be used.
+        fn_type
+            The inner product type to be used.
         """
         cdef SlepcFNType cval = NULL
         fn_type = str2bytes(fn_type, &cval)
         CHKERR( FNSetType(self.fn, cval) )
 
-    def getType(self):
+    def getType(self) -> str:
         """
         Gets the FN type of this object.
 
         Returns
         -------
-        type: `FN.Type` enumerate
-              The inner product type currently being used.
+        str
+            The inner product type currently being used.
         """
         cdef SlepcFNType fn_type = NULL
         CHKERR( FNGetType(self.fn, &fn_type) )
         return bytes2str(fn_type)
 
-    def setOptionsPrefix(self, prefix):
+    def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Sets the prefix used for searching for all FN options in the
         database.
 
         Parameters
         ----------
-        prefix: string
-                The prefix string to prepend to all FN option
-                requests.
+        prefix
+            The prefix string to prepend to all FN option requests.
 
         Notes
         -----
@@ -136,21 +134,35 @@ cdef class FN(Object):
         prefix = str2bytes(prefix, &cval)
         CHKERR( FNSetOptionsPrefix(self.fn, cval) )
 
-    def getOptionsPrefix(self):
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
+        """
+        Appends to the prefix used for searching for all FN options
+        in the database.
+
+        Parameters
+        ----------
+        prefix
+            The prefix string to prepend to all FN option requests.
+        """
+        cdef const char *cval = NULL
+        prefix = str2bytes(prefix, &cval)
+        CHKERR( FNAppendOptionsPrefix(self.fn, cval) )
+
+    def getOptionsPrefix(self) -> str:
         """
         Gets the prefix used for searching for all FN options in the
         database.
 
         Returns
         -------
-        prefix: string
-                The prefix string set for this FN object.
+        str
+            The prefix string set for this FN object.
         """
         cdef const char *prefix = NULL
         CHKERR( FNGetOptionsPrefix(self.fn, &prefix) )
         return bytes2str(prefix)
 
-    def setFromOptions(self):
+    def setFromOptions(self) -> None:
         """
         Sets FN options from the options database.
 
@@ -161,16 +173,16 @@ cdef class FN(Object):
         """
         CHKERR( FNSetFromOptions(self.fn) )
 
-    def duplicate(self, comm=None):
+    def duplicate(self, comm: Comm | None = None) -> FN:
         """
         Duplicate the FN object copying all parameters, possibly with a
         different communicator.
 
         Parameters
         ----------
-        comm: Comm, optional
-              MPI communicator; if not provided, it defaults to the
-              object's communicator.
+        comm
+            MPI communicator; if not provided, it defaults to the
+            object's communicator.
         """
         cdef MPI_Comm ccomm = def_Comm(comm, PetscObjectComm(<PetscObject>self.fn))
         cdef FN fn = type(self)()
@@ -179,90 +191,90 @@ cdef class FN(Object):
 
     #
 
-    def evaluateFunction(self, x):
+    def evaluateFunction(self, x: Scalar) -> Scalar:
         """
         Computes the value of the function f(x) for a given x.
 
         Parameters
         ----------
-        x: scalar
+        x
             Value where the function must be evaluated.
 
         Returns
         -------
-        y: scalar
+        Scalar
             The result of f(x).
         """
         cdef PetscScalar sval = 0
         CHKERR( FNEvaluateFunction(self.fn, x, &sval) )
         return toScalar(sval)
 
-    def evaluateDerivative(self, x):
+    def evaluateDerivative(self, x: Scalar) -> Scalar:
         """
         Computes the value of the derivative f'(x) for a given x.
 
         Parameters
         ----------
-        x: scalar
+        x
             Value where the derivative must be evaluated.
 
         Returns
         -------
-        y: scalar
+        Scalar
             The result of f'(x).
         """
         cdef PetscScalar sval = 0
         CHKERR( FNEvaluateDerivative(self.fn, x, &sval) )
         return toScalar(sval)
 
-    def evaluateFunctionMat(self, Mat A, Mat B=None):
+    def evaluateFunctionMat(self, Mat A, Mat B=None) -> Mat:
         """
         Computes the value of the function f(A) for a given matrix A.
 
         Parameters
         ----------
-        A: Mat
-           Matrix on which the function must be evaluated.
-        B: Mat, optional
-           Placeholder for the result.
+        A
+            Matrix on which the function must be evaluated.
+        B
+            Placeholder for the result.
 
         Returns
         -------
-        B: Mat
-           The result of f(A).
+        Mat
+            The result of f(A).
         """
         if B is None: B = A.duplicate()
         CHKERR( FNEvaluateFunctionMat(self.fn, A.mat, B.mat) )
         return B
 
-    def evaluateFunctionMatVec(self, Mat A, Vec v=None):
+    def evaluateFunctionMatVec(self, Mat A, Vec v=None) -> Vec:
         """
         Computes the first column of the matrix f(A) for a given matrix A.
 
         Parameters
         ----------
-        A: Mat
-           Matrix on which the function must be evaluated.
+        A
+            Matrix on which the function must be evaluated.
 
         Returns
         -------
-        v: Vec
-           The first column of the result f(A).
+        Vec
+            The first column of the result f(A).
         """
         if v is None: v = A.createVecs('left')
         CHKERR( FNEvaluateFunctionMatVec(self.fn, A.mat, v.vec) )
         return v
 
-    def setScale(self, alpha=None, beta=None):
+    def setScale(self, alpha: Scalar | None = None, beta: Scalar | None = None) -> None:
         """
         Sets the scaling parameters that define the matematical function.
 
         Parameters
         ----------
-        alpha: scalar (possibly complex), optional
-               Inner scaling (argument), default is 1.0.
-        beta: scalar (possibly complex), optional
-               Outer scaling (result), default is 1.0.
+        alpha
+            Inner scaling (argument), default is 1.0.
+        beta
+            Outer scaling (result), default is 1.0.
         """
         cdef PetscScalar aval = 1.0
         cdef PetscScalar bval = 1.0
@@ -270,29 +282,29 @@ cdef class FN(Object):
         if beta  is not None: bval = asScalar(beta)
         CHKERR( FNSetScale(self.fn, aval, bval) )
 
-    def getScale(self):
+    def getScale(self) -> tuple[Scalar, Scalar]:
         """
         Gets the scaling parameters that define the matematical function.
 
         Returns
         -------
-        alpha: scalar (possibly complex)
-               Inner scaling (argument).
-        beta: scalar (possibly complex)
-               Outer scaling (result).
+        alpha: Scalar
+            Inner scaling (argument).
+        beta: Scalar
+            Outer scaling (result).
         """
         cdef PetscScalar aval = 0, bval = 0
         CHKERR( FNGetScale(self.fn, &aval, &bval) )
         return (toScalar(aval), toScalar(bval))
 
-    def setMethod(self, meth):
+    def setMethod(self, meth: int) -> None:
         """
         Selects the method to be used to evaluate functions of matrices.
 
         Parameters
         ----------
-        meth: int
-              An index identifying the method.
+        meth
+            An index identifying the method.
 
         Notes
         -----
@@ -308,39 +320,39 @@ cdef class FN(Object):
         cdef PetscInt val = asInt(meth)
         CHKERR( FNSetMethod(self.fn, val) )
 
-    def getMethod(self):
+    def getMethod(self) -> int:
         """
         Gets the method currently used for matrix functions.
 
         Returns
         -------
-        meth: int
-              An index identifying the method.
+        int
+            An index identifying the method.
         """
         cdef PetscInt val = 0
         CHKERR( FNGetMethod(self.fn, &val) )
         return toInt(val)
 
-    def setParallel(self, pmode):
+    def setParallel(self, pmode: ParallelType) -> None:
         """
         Selects the mode of operation in parallel runs.
 
         Parameters
         ----------
-        pmode: `FN.ParallelType` enumerate
-               The parallel mode.
+        pmode
+            The parallel mode.
         """
         cdef SlepcFNParallelType val = pmode
         CHKERR( FNSetParallel(self.fn, val) )
 
-    def getParallel(self):
+    def getParallel(self) -> ParallelType:
         """
         Gets the mode of operation in parallel runs.
 
         Returns
         -------
-        pmode: `FN.ParallelType` enumerate
-               The parallel mode.
+        ParallelType
+            The parallel mode.
         """
         cdef SlepcFNParallelType val = FN_PARALLEL_REDUNDANT
         CHKERR( FNGetParallel(self.fn, &val) )
@@ -348,13 +360,13 @@ cdef class FN(Object):
 
     #
 
-    def setRationalNumerator(self, alpha):
+    def setRationalNumerator(self, alpha: Sequence[Scalar]) -> None:
         """
         Sets the coefficients of the numerator of the rational function.
 
         Parameters
         ----------
-        alpha: array of scalars
+        alpha
             Coefficients.
         """
         cdef PetscInt na = 0
@@ -362,13 +374,13 @@ cdef class FN(Object):
         cdef object tmp1 = iarray_s(alpha, &na, &a)
         CHKERR( FNRationalSetNumerator(self.fn, na, a) )
 
-    def getRationalNumerator(self):
+    def getRationalNumerator(self) -> ArrayScalar:
         """
         Gets the coefficients of the numerator of the rational function.
 
         Returns
         -------
-        alpha: array of scalars
+        ArrayScalar
             Coefficients.
         """
         cdef PetscInt np = 0
@@ -381,13 +393,13 @@ cdef class FN(Object):
             CHKERR( PetscFree(coeff) )
         return ocoeff
 
-    def setRationalDenominator(self, alpha):
+    def setRationalDenominator(self, alpha: Sequence[Scalar]) -> None:
         """
         Sets the coefficients of the denominator of the rational function.
 
         Parameters
         ----------
-        alpha: array of scalars
+        alpha
             Coefficients.
         """
         cdef PetscInt na = 0
@@ -395,13 +407,13 @@ cdef class FN(Object):
         cdef object tmp1 = iarray_s(alpha, &na, &a)
         CHKERR( FNRationalSetDenominator(self.fn, na, a) )
 
-    def getRationalDenominator(self):
+    def getRationalDenominator(self) -> ArrayScalar:
         """
         Gets the coefficients of the denominator of the rational function.
 
         Returns
         -------
-        alpha: array of scalars
+        ArrayScalar
             Coefficients.
         """
         cdef PetscInt np = 0
@@ -414,31 +426,31 @@ cdef class FN(Object):
             CHKERR( PetscFree(coeff) )
         return ocoeff
 
-    def setCombineChildren(self, comb, FN f1, FN f2):
+    def setCombineChildren(self, comb: CombineType, FN f1, FN f2) -> None:
         """
         Sets the two child functions that constitute this combined
         function, and the way they must be combined.
 
         Parameters
         ----------
-        comb: `FN.CombineType` enumerate
+        comb
             How to combine the functions (addition, multiplication, division, composition).
-        f1: FN
+        f1
             First function.
-        f2: FN
+        f2
             Second function.
         """
         cdef SlepcFNCombineType val = comb
         CHKERR( FNCombineSetChildren(self.fn, val, f1.fn, f2.fn) )
 
-    def getCombineChildren(self):
+    def getCombineChildren(self) -> tuple[CombineType, FN, FN]:
         """
         Gets the two child functions that constitute this combined
         function, and the way they must be combined.
 
         Returns
         -------
-        comb: `FN.CombineType` enumerate
+        comb: CombineType
             How to combine the functions (addition, multiplication, division, composition).
         f1: FN
             First function.
@@ -453,26 +465,26 @@ cdef class FN(Object):
         CHKERR( PetscINCREF(f2.obj) )
         return (comb, f1, f2)
 
-    def setPhiIndex(self, k):
+    def setPhiIndex(self, k: int) -> None:
         """
         Sets the index of the phi-function.
 
         Parameters
         ----------
-        k: int
-           The index.
+        k
+            The index.
         """
         cdef PetscInt val = asInt(k)
         CHKERR( FNPhiSetIndex(self.fn, val) )
 
-    def getPhiIndex(self):
+    def getPhiIndex(self) -> int:
         """
         Gets the index of the phi-function.
 
         Returns
         -------
-        k: int
-           The index.
+        int
+            The index.
         """
         cdef PetscInt val = 0
         CHKERR( FNPhiGetIndex(self.fn, &val) )

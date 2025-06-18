@@ -72,20 +72,20 @@ cdef class ST(Object):
         self.obj = <PetscObject*> &self.st
         self.st = NULL
 
-    def view(self, Viewer viewer=None):
+    def view(self, Viewer viewer=None) -> None:
         """
         Prints the ST data structure.
 
         Parameters
         ----------
-        viewer: Viewer, optional
-                Visualization context; if not provided, the standard
-                output is used.
+        viewer
+            Visualization context; if not provided, the standard
+            output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( STView(self.st, vwr) )
 
-    def destroy(self):
+    def destroy(self) -> Self:
         """
         Destroys the ST object.
         """
@@ -93,21 +93,20 @@ cdef class ST(Object):
         self.st = NULL
         return self
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Resets the ST object.
         """
         CHKERR( STReset(self.st) )
 
-    def create(self, comm=None):
+    def create(self, comm: Comm | None = None) -> Self:
         """
         Creates the ST object.
 
         Parameters
         ----------
-        comm: Comm, optional
-              MPI communicator; if not provided, it defaults to all
-              processes.
+        comm
+            MPI communicator; if not provided, it defaults to all processes.
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcST newst = NULL
@@ -115,14 +114,14 @@ cdef class ST(Object):
         CHKERR( SlepcCLEAR(self.obj) ); self.st = newst
         return self
 
-    def setType(self, st_type):
+    def setType(self, st_type: Type | str) -> None:
         """
         Builds ST for a particular spectral transformation.
 
         Parameters
         ----------
-        st_type: `ST.Type` enumerate
-                 The spectral transformation to be used.
+        st_type
+            The spectral transformation to be used.
 
         Notes
         -----
@@ -137,29 +136,28 @@ cdef class ST(Object):
         st_type = str2bytes(st_type, &cval)
         CHKERR( STSetType(self.st, cval) )
 
-    def getType(self):
+    def getType(self) -> str:
         """
         Gets the ST type of this object.
 
         Returns
         -------
-        type: `ST.Type` enumerate
-              The spectral transformation currently being used.
+        str
+            The spectral transformation currently being used.
         """
         cdef SlepcSTType st_type = NULL
         CHKERR( STGetType(self.st, &st_type) )
         return bytes2str(st_type)
 
-    def setOptionsPrefix(self, prefix):
+    def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Sets the prefix used for searching for all ST options in the
         database.
 
         Parameters
         ----------
-        prefix: string
-                The prefix string to prepend to all ST option
-                requests.
+        prefix
+            The prefix string to prepend to all ST option requests.
 
         Notes
         -----
@@ -171,21 +169,35 @@ cdef class ST(Object):
         prefix = str2bytes(prefix, &cval)
         CHKERR( STSetOptionsPrefix(self.st, cval) )
 
-    def getOptionsPrefix(self):
+    def getOptionsPrefix(self) -> str:
         """
         Gets the prefix used for searching for all ST options in the
         database.
 
         Returns
         -------
-        prefix: string
-                The prefix string set for this ST object.
+        str
+            The prefix string set for this ST object.
         """
         cdef const char *prefix = NULL
         CHKERR( STGetOptionsPrefix(self.st, &prefix) )
         return bytes2str(prefix)
 
-    def setFromOptions(self):
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
+        """
+        Appends to the prefix used for searching for all ST options
+        in the database.
+
+        Parameters
+        ----------
+        prefix
+            The prefix string to prepend to all ST option requests.
+        """
+        cdef const char *cval = NULL
+        prefix = str2bytes(prefix, &cval)
+        CHKERR( STAppendOptionsPrefix(self.st, cval) )
+
+    def setFromOptions(self) -> None:
         """
         Sets ST options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
@@ -199,14 +211,14 @@ cdef class ST(Object):
 
     #
 
-    def setShift(self, shift):
+    def setShift(self, shift: Scalar) -> None:
         """
         Sets the shift associated with the spectral transformation.
 
         Parameters
         ----------
-        shift: scalar (possibly complex)
-               The value of the shift.
+        shift
+            The value of the shift.
 
         Notes
         -----
@@ -217,63 +229,63 @@ cdef class ST(Object):
         cdef PetscScalar sval = asScalar(shift)
         CHKERR( STSetShift(self.st, sval) )
 
-    def getShift(self):
+    def getShift(self) -> Scalar:
         """
         Gets the shift associated with the spectral transformation.
 
         Returns
         -------
-        shift: scalar (possibly complex)
-               The value of the shift.
+        Scalar
+            The value of the shift.
         """
         cdef PetscScalar sval = 0
         CHKERR( STGetShift(self.st, &sval) )
         return toScalar(sval)
 
-    def setTransform(self, flag=True):
+    def setTransform(self, flag: bool = True) -> None:
         """
         Sets a flag to indicate whether the transformed matrices
         are computed or not.
 
         Parameters
         ----------
-        flag: bool, optional
-              This flag is intended for the case of polynomial
-              eigenproblems solved via linearization.
-              If this flag is False (default) the spectral transformation
-              is applied to the linearization (handled by the eigensolver),
-              otherwise it is applied to the original problem.
+        flag
+            This flag is intended for the case of polynomial
+            eigenproblems solved via linearization.
+            If this flag is False (default) the spectral transformation
+            is applied to the linearization (handled by the eigensolver),
+            otherwise it is applied to the original problem.
         """
         cdef PetscBool sval = asBool(flag)
         CHKERR( STSetTransform(self.st, sval) )
 
-    def getTransform(self):
+    def getTransform(self) -> bool:
         """
         Gets the flag indicating whether the transformed matrices
         are computed or not.
 
         Returns
         -------
-        flag: bool
-               This flag is intended for the case of polynomial
-               eigenproblems solved via linearization.
-               If this flag is False (default) the spectral transformation
-               is applied to the linearization (handled by the eigensolver),
-               otherwise it is applied to the original problem.
+        bool
+            This flag is intended for the case of polynomial
+            eigenproblems solved via linearization.
+            If this flag is False (default) the spectral transformation
+            is applied to the linearization (handled by the eigensolver),
+            otherwise it is applied to the original problem.
         """
         cdef PetscBool sval = PETSC_FALSE
         CHKERR( STGetTransform(self.st, &sval) )
         return toBool(sval)
 
-    def setMatMode(self, mode):
+    def setMatMode(self, mode: MatMode) -> None:
         """
         Sets a flag to indicate how the matrix is being shifted in the
         shift-and-invert and Cayley spectral transformations.
 
         Parameters
         ----------
-        mode: `ST.MatMode` enumerate
-              The mode flag.
+        mode
+            The mode flag.
 
         Notes
         -----
@@ -303,28 +315,28 @@ cdef class ST(Object):
         cdef SlepcSTMatMode val = mode
         CHKERR( STSetMatMode(self.st, val) )
 
-    def getMatMode(self):
+    def getMatMode(self) -> MatMode:
         """
         Gets a flag that indicates how the matrix is being shifted in
         the shift-and-invert and Cayley spectral transformations.
 
         Returns
         -------
-        mode: `ST.MatMode` enumerate
-              The mode flag.
+        MatMode
+            The mode flag.
         """
         cdef SlepcSTMatMode val = ST_MATMODE_INPLACE
         CHKERR( STGetMatMode(self.st, &val) )
         return val
 
-    def setMatrices(self, operators):
+    def setMatrices(self, operators: list[Mat]) -> None:
         """
         Sets the matrices associated with the eigenvalue problem.
 
         Parameters
         ----------
-        operators: sequence of Mat
-           The matrices associated with the eigensystem.
+        operators
+            The matrices associated with the eigensystem.
         """
         operators = tuple(operators)
         cdef PetscMat *mats = NULL
@@ -333,14 +345,14 @@ cdef class ST(Object):
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
         CHKERR( STSetMatrices(self.st, <PetscInt>n, mats) )
 
-    def getMatrices(self):
+    def getMatrices(self) -> list[Mat]:
         """
         Gets the matrices associated with the eigenvalue problem.
 
         Returns
         -------
-        operators: tuple of Mat
-           The matrices associated with the eigensystem.
+        list of Mat
+            The matrices associated with the eigensystem.
         """
         cdef Mat A
         cdef PetscMat mat = NULL
@@ -353,7 +365,7 @@ cdef class ST(Object):
             operators.append(A)
         return tuple(operators)
 
-    def setMatStructure(self, structure):
+    def setMatStructure(self, structure: Mat.Structure) -> None:
         """
         Sets an internal Mat.Structure attribute to indicate which is
         the relation of the sparsity pattern of the two matrices ``A``
@@ -363,9 +375,9 @@ cdef class ST(Object):
 
         Parameters
         ----------
-        structure: `PETSc.Mat.Structure` enumerate
-                   Either same, different, or a subset of the non-zero
-                   sparsity pattern.
+        structure
+            Either same, different, or a subset of the non-zero
+            sparsity pattern.
 
         Notes
         -----
@@ -377,41 +389,41 @@ cdef class ST(Object):
         cdef PetscMatStructure val = matstructure(structure)
         CHKERR( STSetMatStructure(self.st, val) )
 
-    def getMatStructure(self):
+    def getMatStructure(self) -> Mat.Structure:
         """
         Gets the internal Mat.Structure attribute to indicate which is
         the relation of the sparsity pattern of the matrices.
 
         Returns
         -------
-        structure: `PETSc.Mat.Structure` enumerate
-                   The structure flag.
+        Mat.Structure
+            The structure flag.
         """
         cdef PetscMatStructure val
         CHKERR( STGetMatStructure(self.st, &val) )
         return val
 
-    def setKSP(self, KSP ksp):
+    def setKSP(self, KSP ksp) -> None:
         """
         Sets the KSP object associated with the spectral
         transformation.
 
         Parameters
         ----------
-        ksp: KSP
-             The linear solver object.
+        ksp
+            The linear solver object.
         """
         CHKERR( STSetKSP(self.st, ksp.ksp) )
 
-    def getKSP(self):
+    def getKSP(self) -> KSP:
         """
         Gets the KSP object associated with the spectral
         transformation.
 
         Returns
         -------
-        ksp: KSP
-             The linear solver object.
+        KSP
+            The linear solver object.
 
         Notes
         -----
@@ -424,26 +436,26 @@ cdef class ST(Object):
         CHKERR( PetscINCREF(ksp.obj) )
         return ksp
 
-    def setPreconditionerMat(self, Mat P=None):
+    def setPreconditionerMat(self, Mat P = None) -> None:
         """
         Sets the matrix to be used to build the preconditioner.
 
         Parameters
         ----------
-        P: Mat, optional
-           The matrix that will be used in constructing the preconditioner.
+        P
+            The matrix that will be used in constructing the preconditioner.
         """
         cdef PetscMat Pmat = P.mat if P is not None else <PetscMat>NULL
         CHKERR( STSetPreconditionerMat(self.st, Pmat) )
 
-    def getPreconditionerMat(self):
+    def getPreconditionerMat(self) -> Mat:
         """
         Gets the matrix previously set by setPreconditionerMat().
 
         Returns
         -------
-        P: Mat
-           The matrix that will be used in constructing the preconditioner.
+        Mat
+            The matrix that will be used in constructing the preconditioner.
         """
         cdef Mat P = Mat()
         CHKERR( STGetPreconditionerMat(self.st, &P.mat) )
@@ -452,13 +464,13 @@ cdef class ST(Object):
 
     #
 
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Prepares for the use of a spectral transformation.
         """
         CHKERR( STSetUp(self.st) )
 
-    def apply(self, Vec x, Vec y):
+    def apply(self, Vec x, Vec y) -> None:
         """
         Applies the spectral transformation operator to a vector, for
         instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
@@ -466,14 +478,14 @@ cdef class ST(Object):
 
         Parameters
         ----------
-        x: Vec
-           The input vector.
-        y: Vec
-           The result vector.
+        x
+            The input vector.
+        y
+            The result vector.
         """
         CHKERR( STApply(self.st, x.vec, y.vec) )
 
-    def applyTranspose(self, Vec x, Vec y):
+    def applyTranspose(self, Vec x, Vec y) -> None:
         """
         Applies the transpose of the operator to a vector, for
         instance ``B^T(A - sB)^-T`` in the case of the
@@ -481,14 +493,14 @@ cdef class ST(Object):
 
         Parameters
         ----------
-        x: Vec
-           The input vector.
-        y: Vec
-           The result vector.
+        x
+            The input vector.
+        y
+            The result vector.
         """
         CHKERR( STApplyTranspose(self.st, x.vec, y.vec) )
 
-    def applyHermitianTranspose(self, Vec x, Vec y):
+    def applyHermitianTranspose(self, Vec x, Vec y) -> None:
         """
         Applies the hermitian-transpose of the operator to a vector, for
         instance ``B^H(A - sB)^-H`` in the case of the
@@ -496,14 +508,14 @@ cdef class ST(Object):
 
         Parameters
         ----------
-        x: Vec
-           The input vector.
-        y: Vec
-           The result vector.
+        x
+            The input vector.
+        y
+            The result vector.
         """
         CHKERR( STApplyHermitianTranspose(self.st, x.vec, y.vec) )
 
-    def applyMat(self, Mat x, Mat y):
+    def applyMat(self, Mat x, Mat y) -> None:
         """
         Applies the spectral transformation operator to a matrix, for
         instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
@@ -511,21 +523,21 @@ cdef class ST(Object):
 
         Parameters
         ----------
-        x: Mat
-           The input matrix.
-        y: Mat
-           The result matrix.
+        x
+            The input matrix.
+        y
+            The result matrix.
         """
         CHKERR( STApplyMat(self.st, x.mat, y.mat) )
 
-    def getOperator(self):
+    def getOperator(self) -> Mat:
         """
         Returns a shell matrix that represents the operator of the
         spectral transformation.
 
         Returns
         -------
-        op: Mat
+        Mat
             Operator matrix.
         """
         cdef Mat op = Mat()
@@ -533,13 +545,13 @@ cdef class ST(Object):
         CHKERR( PetscINCREF(op.obj) )
         return op
 
-    def restoreOperator(self, Mat op):
+    def restoreOperator(self, Mat op) -> None:
         """
         Restore the previously seized operator matrix.
 
         Parameters
         ----------
-        op: Mat
+        op
             Operator matrix previously obtained with getOperator().
         """
         CHKERR( PetscObjectDereference(<PetscObject>op.mat) )
@@ -547,15 +559,15 @@ cdef class ST(Object):
 
     #
 
-    def setCayleyAntishift(self, tau):
+    def setCayleyAntishift(self, tau: Scalar) -> None:
         """
         Sets the value of the anti-shift for the Cayley spectral
         transformation.
 
         Parameters
         ----------
-        tau: scalar (possibly complex)
-             The anti-shift.
+        tau
+            The anti-shift.
 
         Notes
         -----
@@ -567,55 +579,55 @@ cdef class ST(Object):
         cdef PetscScalar sval = asScalar(tau)
         CHKERR( STCayleySetAntishift(self.st, sval) )
 
-    def getCayleyAntishift(self):
+    def getCayleyAntishift(self) -> Scalar:
         """
         Gets the value of the anti-shift for the Cayley spectral
         transformation.
 
         Returns
         -------
-        tau: scalar (possibly complex)
-             The anti-shift.
+        Scalar
+            The anti-shift.
         """
         cdef PetscScalar sval = 0
         CHKERR( STCayleyGetAntishift(self.st, &sval) )
         return toScalar(sval)
 
-    def setFilterType(self, filter_type):
+    def setFilterType(self, filter_type: FilterType) -> None:
         """
         Sets the method to be used to build the polynomial filter.
 
         Parameter
         ---------
-        filter_type: `ST.FilterType` enumerate
-              The type of filter.
+        filter_type
+            The type of filter.
         """
         cdef SlepcSTFilterType val = filter_type
         CHKERR( STFilterSetType(self.st, val) )
 
-    def getFilterType(self):
+    def getFilterType(self) -> FilterType:
         """
         Gets the method to be used to build the polynomial filter.
 
         Returns
         -------
-        filter_type: `ST.FilterType` enumerate
-              The type of filter.
+        FilterType
+            The type of filter.
         """
         cdef SlepcSTFilterType val = ST_FILTER_FILTLAN
         CHKERR( STFilterGetType(self.st, &val) )
         return val
 
-    def setFilterInterval(self, inta, intb):
+    def setFilterInterval(self, inta: float, intb: float) -> None:
         """
         Defines the interval containing the desired eigenvalues.
 
         Parameters
         ----------
-        inta: float
-              The left end of the interval.
-        intb: float
-              The right end of the interval.
+        inta
+            The left end of the interval.
+        intb
+            The right end of the interval.
 
         Notes
         -----
@@ -633,33 +645,33 @@ cdef class ST(Object):
         cdef PetscReal rval2 = asReal(intb)
         CHKERR( STFilterSetInterval(self.st, rval1, rval2) )
 
-    def getFilterInterval(self):
+    def getFilterInterval(self) -> tuple[float, float]:
         """
         Gets the interval containing the desired eigenvalues.
 
         Returns
         -------
         inta: float
-              The left end of the interval.
+            The left end of the interval.
         intb: float
-              The right end of the interval.
+            The right end of the interval.
         """
         cdef PetscReal inta = 0
         cdef PetscReal intb = 0
         CHKERR( STFilterGetInterval(self.st, &inta, &intb) )
         return (toReal(inta), toReal(intb))
 
-    def setFilterRange(self, left, right):
+    def setFilterRange(self, left: float, right: float) -> None:
         """
         Defines the numerical range (or field of values) of the matrix, that is,
         the interval containing all eigenvalues.
 
         Parameters
         ----------
-        left: float
-              The left end of the interval.
-        right: float
-              The right end of the interval.
+        left
+            The left end of the interval.
+        right
+            The right end of the interval.
 
         Notes
         -----
@@ -671,67 +683,67 @@ cdef class ST(Object):
         cdef PetscReal rval2 = asReal(right)
         CHKERR( STFilterSetRange(self.st, rval1, rval2) )
 
-    def getFilterRange(self):
+    def getFilterRange(self) -> tuple[float, float]:
         """
         Gets the interval containing all eigenvalues.
 
         Returns
         -------
         left: float
-              The left end of the interval.
+            The left end of the interval.
         right: float
-              The right end of the interval.
+            The right end of the interval.
         """
         cdef PetscReal left = 0
         cdef PetscReal right = 0
         CHKERR( STFilterGetRange(self.st, &left, &right) )
         return (toReal(left), toReal(right))
 
-    def setFilterDegree(self, deg):
+    def setFilterDegree(self, deg: int) -> None:
         """
         Sets the degree of the filter polynomial.
 
         Parameters
         ----------
-        deg: int
-             The polynomial degree.
+        deg
+            The polynomial degree.
         """
         cdef PetscInt val = asInt(deg)
         CHKERR( STFilterSetDegree(self.st, val) )
 
-    def getFilterDegree(self):
+    def getFilterDegree(self) -> int:
         """
         Gets the degree of the filter polynomial.
 
         Returns
         -------
-        deg: int
-             The polynomial degree.
+        int
+            The polynomial degree.
         """
         cdef PetscInt val = 0
         CHKERR( STFilterGetDegree(self.st, &val) )
         return toInt(val)
 
-    def setFilterDamping(self, damping):
+    def setFilterDamping(self, damping: FilterDamping) -> None:
         """
         Sets the type of damping to be used in the polynomial filter.
 
         Parameter
         ---------
-        damping: `ST.FilterDamping` enumerate
-              The type of damping.
+        damping
+            The type of damping.
         """
         cdef SlepcSTFilterDamping val = damping
         CHKERR( STFilterSetDamping(self.st, val) )
 
-    def getFilterDamping(self):
+    def getFilterDamping(self) -> FilterDamping:
         """
         Gets the type of damping used in the polynomial filter.
 
         Returns
         -------
-        damping: `ST.FilterDamping` enumerate
-              The type of damping.
+        FilterDamping
+            The type of damping.
         """
         cdef SlepcSTFilterDamping val = ST_FILTER_DAMPING_NONE
         CHKERR( STFilterGetDamping(self.st, &val) )

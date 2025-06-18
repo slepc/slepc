@@ -35,20 +35,20 @@ cdef class MFN(Object):
         self.obj = <PetscObject*> &self.mfn
         self.mfn = NULL
 
-    def view(self, Viewer viewer=None):
+    def view(self, Viewer viewer=None) -> None:
         """
         Prints the MFN data structure.
 
         Parameters
         ----------
-        viewer: Viewer, optional.
+        viewer
             Visualization context; if not provided, the standard
             output is used.
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( MFNView(self.mfn, vwr) )
 
-    def destroy(self):
+    def destroy(self) -> Self:
         """
         Destroys the MFN object.
         """
@@ -56,21 +56,20 @@ cdef class MFN(Object):
         self.mfn = NULL
         return self
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Resets the MFN object.
         """
         CHKERR( MFNReset(self.mfn) )
 
-    def create(self, comm=None):
+    def create(self, comm: Comm | None = None) -> Self:
         """
         Creates the MFN object.
 
         Parameters
         ----------
-        comm: Comm, optional.
-            MPI communicator. If not provided, it defaults to all
-            processes.
+        comm
+            MPI communicator. If not provided, it defaults to all processes.
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcMFN newmfn = NULL
@@ -78,75 +77,75 @@ cdef class MFN(Object):
         CHKERR( SlepcCLEAR(self.obj) ); self.mfn = newmfn
         return self
 
-    def setType(self, mfn_type):
+    def setType(self, mfn_type: Type | str) -> None:
         """
         Selects the particular solver to be used in the MFN object.
 
         Parameters
         ----------
-        mfn_type: `MFN.Type` enumerate
+        mfn_type
             The solver to be used.
         """
         cdef SlepcMFNType cval = NULL
         mfn_type = str2bytes(mfn_type, &cval)
         CHKERR( MFNSetType(self.mfn, cval) )
 
-    def getType(self):
+    def getType(self) -> str:
         """
         Gets the MFN type of this object.
 
         Returns
         -------
-        type: `MFN.Type` enumerate
+        str
             The solver currently being used.
         """
         cdef SlepcMFNType mfn_type = NULL
         CHKERR( MFNGetType(self.mfn, &mfn_type) )
         return bytes2str(mfn_type)
 
-    def getOptionsPrefix(self):
+    def getOptionsPrefix(self) -> str:
         """
         Gets the prefix used for searching for all MFN options in the
         database.
 
         Returns
         -------
-        prefix: string
+        str
             The prefix string set for this MFN object.
         """
         cdef const char *prefix = NULL
         CHKERR( MFNGetOptionsPrefix(self.mfn, &prefix) )
         return bytes2str(prefix)
 
-    def setOptionsPrefix(self, prefix):
+    def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Sets the prefix used for searching for all MFN options in the
         database.
 
         Parameters
         ----------
-        prefix: string
+        prefix
             The prefix string to prepend to all MFN option requests.
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
         CHKERR( MFNSetOptionsPrefix(self.mfn, cval) )
 
-    def appendOptionsPrefix(self, prefix):
+    def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Appends to the prefix used for searching for all MFN options
         in the database.
 
         Parameters
         ----------
-        prefix: string
+        prefix
             The prefix string to prepend to all MFN option requests.
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
         CHKERR( MFNAppendOptionsPrefix(self.mfn, cval) )
 
-    def setFromOptions(self):
+    def setFromOptions(self) -> None:
         """
         Sets MFN options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
@@ -154,7 +153,7 @@ cdef class MFN(Object):
         """
         CHKERR( MFNSetFromOptions(self.mfn) )
 
-    def getTolerances(self):
+    def getTolerances(self) -> tuple[float, int]:
         """
         Gets the tolerance and maximum iteration count used by the
         default MFN convergence tests.
@@ -171,16 +170,16 @@ cdef class MFN(Object):
         CHKERR( MFNGetTolerances(self.mfn, &rval, &ival) )
         return (toReal(rval), toInt(ival))
 
-    def setTolerances(self, tol=None, max_it=None):
+    def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
         Sets the tolerance and maximum iteration count used by the
         default MFN convergence tests.
 
         Parameters
         ----------
-        tol: float, optional
+        tol
             The convergence tolerance.
-        max_it: int, optional
+        max_it
             The maximum number of iterations
         """
         cdef PetscReal rval = PETSC_DEFAULT
@@ -189,39 +188,38 @@ cdef class MFN(Object):
         if max_it is not None: ival = asInt(max_it)
         CHKERR( MFNSetTolerances(self.mfn, rval, ival) )
 
-    def getDimensions(self):
+    def getDimensions(self) -> int:
         """
         Gets the dimension of the subspace used by the solver.
 
         Returns
         -------
-        ncv: int
+        int
             Maximum dimension of the subspace to be used by the solver.
         """
         cdef PetscInt ival = 0
         CHKERR( MFNGetDimensions(self.mfn, &ival) )
         return toInt(ival)
 
-    def setDimensions(self, ncv):
+    def setDimensions(self, ncv: int) -> None:
         """
         Sets the dimension of the subspace to be used by the solver.
 
         Parameters
         ----------
-        ncv: int
-            Maximum dimension of the subspace to be used by the
-            solver.
+        ncv
+            Maximum dimension of the subspace to be used by the solver.
         """
         cdef PetscInt ival = asInt(ncv)
         CHKERR( MFNSetDimensions(self.mfn, ival) )
 
-    def getFN(self):
+    def getFN(self) -> FN:
         """
         Obtain the math function object associated to the MFN object.
 
         Returns
         -------
-        fn: FN
+        FN
             The math function context.
         """
         cdef FN fn = FN()
@@ -229,24 +227,24 @@ cdef class MFN(Object):
         CHKERR( PetscINCREF(fn.obj) )
         return fn
 
-    def setFN(self, FN fn):
+    def setFN(self, FN fn) -> None:
         """
         Associates a math function object to the MFN object.
 
         Parameters
         ----------
-        fn: FN
+        fn
             The math function context.
         """
         CHKERR( MFNSetFN(self.mfn, fn.fn) )
 
-    def getBV(self):
+    def getBV(self) -> BV:
         """
         Obtain the basis vector object associated to the MFN object.
 
         Returns
         -------
-        bv: BV
+        BV
             The basis vectors context.
         """
         cdef BV bv = BV()
@@ -254,24 +252,24 @@ cdef class MFN(Object):
         CHKERR( PetscINCREF(bv.obj) )
         return bv
 
-    def setBV(self, BV bv):
+    def setBV(self, BV bv) -> None:
         """
         Associates a basis vector object to the MFN object.
 
         Parameters
         ----------
-        bv: BV
+        bv
             The basis vectors context.
         """
         CHKERR( MFNSetBV(self.mfn, bv.bv) )
 
-    def getOperator(self):
+    def getOperator(self) -> Mat:
         """
         Gets the matrix associated with the MFN object.
 
         Returns
         -------
-        A: Mat
+        Mat
             The matrix for which the matrix function is to be computed.
         """
         cdef Mat A = Mat()
@@ -279,20 +277,25 @@ cdef class MFN(Object):
         CHKERR( PetscINCREF(A.obj) )
         return A
 
-    def setOperator(self, Mat A):
+    def setOperator(self, Mat A) -> None:
         """
         Sets the matrix associated with the MFN object.
 
         Parameters
         ----------
-        A: Mat
+        A
             The problem matrix.
         """
         CHKERR( MFNSetOperator(self.mfn, A.mat) )
 
     #
 
-    def setMonitor(self, monitor, args=None, kargs=None):
+    def setMonitor(
+        self,
+        monitor: MFNMonitorFunction | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
         """
         Appends a monitor function to the list of monitors.
         """
@@ -306,13 +309,13 @@ cdef class MFN(Object):
         if kargs is None: kargs = {}
         monitorlist.append((monitor, args, kargs))
 
-    def getMonitor(self):
+    def getMonitor(self) -> MFNMonitorFunction:
         """
         Gets the list of monitor functions.
         """
         return self.get_attr('__monitor__')
 
-    def cancelMonitor(self):
+    def cancelMonitor(self) -> None:
         """
         Clears all monitors for an `MFN` object.
         """
@@ -321,42 +324,42 @@ cdef class MFN(Object):
 
     #
 
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Sets up all the internal data structures necessary for the
         execution of the eigensolver.
         """
         CHKERR( MFNSetUp(self.mfn) )
 
-    def solve(self, Vec b, Vec x):
+    def solve(self, Vec b, Vec x) -> None:
         """
         Solves the matrix function problem. Given a vector b, the
         vector x = f(A)*b is returned.
 
         Parameters
         ----------
-        b: Vec
+        b
             The right hand side vector.
-        x: Vec
+        x
             The solution.
         """
         CHKERR( MFNSolve(self.mfn, b.vec, x.vec) )
 
-    def solveTranspose(self, Vec b, Vec x):
+    def solveTranspose(self, Vec b, Vec x) -> None:
         """
         Solves the transpose matrix function problem. Given a vector b, the
         vector x = f(A^T)*b is returned.
 
         Parameters
         ----------
-        b: Vec
+        b
             The right hand side vector.
-        x: Vec
+        x
             The solution.
         """
         CHKERR( MFNSolveTranspose(self.mfn, b.vec, x.vec) )
 
-    def getIterationNumber(self):
+    def getIterationNumber(self) -> int:
         """
         Gets the current iteration number. If the call to `solve()` is
         complete, then it returns the number of iterations carried out
@@ -364,47 +367,46 @@ cdef class MFN(Object):
 
         Returns
         -------
-        its: int
-             Iteration number.
+        int
+            Iteration number.
         """
         cdef PetscInt ival = 0
         CHKERR( MFNGetIterationNumber(self.mfn, &ival) )
         return toInt(ival)
 
-    def getConvergedReason(self):
+    def getConvergedReason(self) -> ConvergedReason:
         """
         Gets the reason why the `solve()` iteration was stopped.
 
         Returns
         -------
-        reason: `MFN.ConvergedReason` enumerate
-            Negative value indicates diverged, positive value
-            converged.
+        ConvergedReason
+            Negative value indicates diverged, positive value converged.
         """
         cdef SlepcMFNConvergedReason val = MFN_CONVERGED_ITERATING
         CHKERR( MFNGetConvergedReason(self.mfn, &val) )
         return val
 
-    def setErrorIfNotConverged(self, flg=True):
+    def setErrorIfNotConverged(self, flg: bool = True) -> None:
         """
         Causes `solve()` to generate an error if the solver has not converged.
 
         Parameters
         ----------
-        flg: bool
+        flg
             True indicates you want the error generated.
         """
         cdef PetscBool tval = flg
         CHKERR( MFNSetErrorIfNotConverged(self.mfn, tval) )
 
-    def getErrorIfNotConverged(self):
+    def getErrorIfNotConverged(self) -> bool:
         """
         Return a flag indicating whether `solve()` will generate an
         error if the solver does not converge.
 
         Returns
         -------
-        flg: bool
+        bool
             True indicates you want the error generated.
         """
         cdef PetscBool tval = PETSC_FALSE
