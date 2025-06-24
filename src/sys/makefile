@@ -8,6 +8,6 @@
 #  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #
 
-MANSEC   = sys
+MANSEC   = Sys
 
 include ${SLEPC_DIR}/lib/slepc/conf/slepc_common
