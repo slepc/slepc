@@ -163,7 +163,7 @@ gnu-c99-mlib-static:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-single-library=0 --with-shared-libraries=0 COPTFLAGS="-O -std=c99" FPPFLAGS=-fno-underscoring
     TEST_SEARCH: eps_tests-test10_1
 
@@ -434,7 +434,7 @@ gnu-c-hip:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3-rocm-6.3.3
+    LOAD_MODULES: mpich/4.3.0-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-hip --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
 
 clang-c:
@@ -454,7 +454,7 @@ gnu-c-complex-multilib:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-single-library=0 --with-library-name-suffix=Complex --download-metis --download-parmetis --download-scalapack --with-cxx-dialect=17
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --download-chase
 
@@ -690,7 +690,7 @@ gnu-c:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-cmake --download-sowing
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py
     SLEPC4PY: 1
@@ -747,7 +747,7 @@ gnu-cxx-complex-int64:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-clanguage=C++ --with-scalar-type=complex --with-64-bit-indices --with-petsc4py --download-scalapack --download-elemental --download-parmetis --download-metis --download-mumps --download-suitesparse --download-cmake
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-slepc4py --download-primme --download-hpddm
     SLEPC4PY: 1
@@ -914,7 +914,7 @@ gnu-c-complex128:
   tags:
     - name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-f2cblaslapack --with-precision=__float128 --with-clanguage=c++
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
 
@@ -936,7 +936,7 @@ gnu-c-hip-complex:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3-rocm-6.3.3
+    LOAD_MODULES: mpich/4.3.0-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
 
 gnu-c-hip-single:
@@ -946,7 +946,7 @@ gnu-c-hip-single:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3-rocm-6.3.3
+    LOAD_MODULES: mpich/4.3.0-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-precision=single --with-single-library=0 --with-hip
     TEST_OPTS: query=requires queryval=hip
 
@@ -957,7 +957,7 @@ gnu-c-hip-int64:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3-rocm-6.3.3
+    LOAD_MODULES: mpich/4.3.0-rocm-6.3.3
     PETSC_CONFIG_OPTS: --with-hip --with-64-bit-indices
     TEST_OPTS: query=requires queryval=hip
 
@@ -968,7 +968,7 @@ gnu-c-static-multilib:
   tags:
     - name:satet
   variables:
-    LOAD_MODULES: mpich/4.0.3
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-shared-libraries=0 --with-single-library=0
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme --download-blopex
 
