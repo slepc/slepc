@@ -13,7 +13,7 @@
 #include <slepcsys.h>
 #include <petsc/private/petscimpl.h>
 
-/* SUBMANSEC = sys */
+/* SUBMANSEC = Sys */
 
 SLEPC_INTERN PetscBool SlepcBeganPetsc;
 

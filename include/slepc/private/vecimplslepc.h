@@ -13,7 +13,7 @@
 #include <slepcvec.h>
 #include <slepc/private/slepcimpl.h>
 
-/* SUBMANSEC = sys */
+/* SUBMANSEC = Sys */
 
 #if !defined(PETSC_USE_DEBUG)
 

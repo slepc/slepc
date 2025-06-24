@@ -14,7 +14,7 @@
 
 #pragma once
 
-/* SUBMANSEC = sys */
+/* SUBMANSEC = Sys */
 
 /*
     Default tolerance for the different solvers, depending on the precision
