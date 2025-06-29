@@ -87,13 +87,13 @@ class Function:
 
 class Argument:
     '''Represents an argument in a Function'''
-    def __init__(self, *args, **kwargs):
-        self.name       = None
-        self.typename   = None
-        self.stars      = 0
-        self.array      = False
+    def __init__(self, name = None, typename = None, stars = 0, array = False, const = False, *args, **kwargs):
+        self.name       = name
+        self.typename   = typename
+        self.stars      = stars
+        self.array      = array
         self.optional   = False
-        self.const      = False
+        self.const      = const
         self.isfunction = False
         #  PETSc returns strings in two ways either
         #     with a pointer to an array: char *[]
