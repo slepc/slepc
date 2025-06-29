@@ -29,4 +29,17 @@
         end subroutine
       end interface EPSKrylovSchurGetInertias
 
+      interface EPSMonitorSet
+        subroutine EPSMonitorSet(a,b,c,d,z)
+          use, intrinsic :: ISO_C_BINDING
+          import tEPS
+          EPS a
+          external b
+          type(*) c
+          external d
+          PetscErrorCode z
+        end subroutine
+      end Interface
+
+      external EPSMonitorConvergedCreate
       external EPSMonitorConvergedDestroy

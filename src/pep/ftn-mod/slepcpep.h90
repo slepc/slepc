@@ -19,4 +19,17 @@
         end subroutine
       end interface PEPSTOARGetInertias
 
+      interface PEPMonitorSet
+        subroutine PEPMonitorSet(a,b,c,d,z)
+          use, intrinsic :: ISO_C_BINDING
+          import tPEP
+          PEP a
+          external b
+          type(*) c
+          external d
+          PetscErrorCode z
+        end subroutine
+      end Interface
+
+      external PEPMonitorConvergedCreate
       external PEPMonitorConvergedDestroy
