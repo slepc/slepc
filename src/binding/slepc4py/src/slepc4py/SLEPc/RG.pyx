@@ -32,7 +32,7 @@ cdef class RG(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the RG data structure.
+        Print the RG data structure.
 
         Parameters
         ----------
@@ -44,14 +44,14 @@ cdef class RG(Object):
         CHKERR( RGView(self.rg, vwr) )
 
     def destroy(self) -> Self:
-        """Destroys the RG object."""
+        """Destroy the RG object."""
         CHKERR( RGDestroy(&self.rg) )
         self.rg = NULL
         return self
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the RG object.
+        Create the RG object.
 
         Parameters
         ----------
@@ -66,7 +66,7 @@ cdef class RG(Object):
 
     def setType(self, rg_type: Type | str) -> None:
         """
-        Selects the type for the RG object.
+        Select the type for the RG object.
 
         Parameters
         ----------
@@ -79,7 +79,7 @@ cdef class RG(Object):
 
     def getType(self) -> str:
         """
-        Gets the RG type of this object.
+        Get the RG type of this object.
 
         Returns
         -------
@@ -92,7 +92,7 @@ cdef class RG(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all RG options in the
+        Set the prefix used for searching for all RG options in the
         database.
 
         Parameters
@@ -112,7 +112,7 @@ cdef class RG(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all RG options in the
+        Get the prefix used for searching for all RG options in the
         database.
 
         Returns
@@ -126,7 +126,7 @@ cdef class RG(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all RG options
+        Append to the prefix used for searching for all RG options
         in the database.
 
         Parameters
@@ -140,7 +140,7 @@ cdef class RG(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets RG options from the options database.
+        Set RG options from the options database.
 
         Notes
         -----
@@ -153,7 +153,7 @@ cdef class RG(Object):
 
     def isTrivial(self) -> bool:
         """
-        Tells whether it is the trivial region (whole complex plane).
+        Tell whether it is the trivial region (whole complex plane).
 
         Returns
         -------
@@ -168,7 +168,7 @@ cdef class RG(Object):
 
     def isAxisymmetric(self, vertical: bool = False) -> bool:
         """
-        Determines if the region is symmetric with respect to the real
+        Determine if the region is symmetric with respect to the real
         or imaginary axis.
 
         Parameters
@@ -188,7 +188,7 @@ cdef class RG(Object):
 
     def getComplement(self) -> bool:
         """
-        Returns the flag indicating whether the region is complemented or not.
+        Return the flag indicating whether the region is complemented or not.
 
         Returns
         -------
@@ -201,7 +201,7 @@ cdef class RG(Object):
 
     def setComplement(self, comp: bool = True) -> None:
         """
-        Sets a flag to indicate that the region is the complement
+        Set a flag to indicate that the region is the complement
         of the specified one.
 
         Parameters
@@ -214,7 +214,7 @@ cdef class RG(Object):
 
     def setScale(self, sfactor: float = None) -> None:
         """
-        Sets the scaling factor to be used when checking that a
+        Set the scaling factor to be used when checking that a
         point is inside the region and when computing the contour.
 
         Parameters
@@ -228,7 +228,7 @@ cdef class RG(Object):
 
     def getScale(self) -> float:
         """
-        Gets the scaling factor.
+        Get the scaling factor.
 
         Returns
         -------
@@ -241,7 +241,7 @@ cdef class RG(Object):
 
     def checkInside(self, a: Sequence[Complex]) -> ArrayInt:
         """
-        Determines if a set of given points are inside the region or not.
+        Determine if a set of given points are inside the region or not.
 
         Parameters
         ----------
@@ -271,7 +271,7 @@ cdef class RG(Object):
 
     def computeContour(self, n: int) -> list[Complex]:
         """
-        Computes the coordinates of several points lying on the contour
+        Compute the coordinates of several points lying on the contour
         of the region.
 
         Parameters
@@ -298,7 +298,7 @@ cdef class RG(Object):
 
     def computeBoundingBox(self) -> tuple[float, float, float, float]:
         """
-        Determines the endpoints of a rectangle in the complex plane that
+        Determine the endpoints of a rectangle in the complex plane that
         contains the region.
 
         Returns
@@ -338,7 +338,7 @@ cdef class RG(Object):
 
     def computeQuadrature(self, quad: QuadRule, n: int) -> tuple[ArrayScalar, ArrayScalar, ArrayScalar]:
         """
-        Computes the values of the parameters used in a quadrature rule
+        Compute the values of the parameters used in a quadrature rule
         for a contour integral around the boundary of the region.
 
         Parameters
@@ -370,7 +370,7 @@ cdef class RG(Object):
 
     def setEllipseParameters(self, center: Scalar, radius: float, vscale: float | None = None) -> None:
         """
-        Sets the parameters defining the ellipse region.
+        Set the parameters defining the ellipse region.
 
         Parameters
         ----------
@@ -389,7 +389,7 @@ cdef class RG(Object):
 
     def getEllipseParameters(self) -> tuple[Scalar, float, float]:
         """
-        Gets the parameters that define the ellipse region.
+        Get the parameters that define the ellipse region.
 
         Returns
         -------
@@ -408,7 +408,7 @@ cdef class RG(Object):
 
     def setIntervalEndpoints(self, a: float, b: float, c: float, d: float) -> None:
         """
-        Sets the parameters defining the interval region.
+        Set the parameters defining the interval region.
 
         Parameters
         ----------
@@ -429,7 +429,7 @@ cdef class RG(Object):
 
     def getIntervalEndpoints(self) -> tuple[float, float, float, float]:
         """
-        Gets the parameters that define the interval region.
+        Get the parameters that define the interval region.
 
         Returns
         -------
@@ -451,7 +451,7 @@ cdef class RG(Object):
 
     def setPolygonVertices(self, v: Sequence[Real]| Sequence[Scalar]) -> None:
         """
-        Sets the vertices that define the polygon region.
+        Set the vertices that define the polygon region.
 
         Parameters
         ----------
@@ -473,7 +473,7 @@ cdef class RG(Object):
 
     def getPolygonVertices(self) -> ArrayComplex:
         """
-        Gets the parameters that define the interval region.
+        Get the parameters that define the interval region.
 
         Returns
         -------
@@ -501,7 +501,7 @@ cdef class RG(Object):
         width: float,
     ) -> None:
         """
-        Sets the parameters defining the ring region.
+        Set the parameters defining the ring region.
 
         Parameters
         ----------
@@ -528,7 +528,7 @@ cdef class RG(Object):
 
     def getRingParameters(self) -> tuple[Scalar, float, float, float, float, float]:
         """
-        Gets the parameters that define the ring region.
+        Get the parameters that define the ring region.
 
         Returns
         -------

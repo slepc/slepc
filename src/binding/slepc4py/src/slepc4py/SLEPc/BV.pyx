@@ -147,7 +147,7 @@ cdef class BV(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the BV data structure.
+        Print the BV data structure.
 
         Parameters
         ----------
@@ -159,14 +159,14 @@ cdef class BV(Object):
         CHKERR( BVView(self.bv, vwr) )
 
     def destroy(self) -> Self:
-        """Destroys the BV object."""
+        """Destroy the BV object."""
         CHKERR( BVDestroy(&self.bv) )
         self.bv = NULL
         return self
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the BV object.
+        Create the BV object.
 
         Parameters
         ----------
@@ -182,7 +182,7 @@ cdef class BV(Object):
 
     def createFromMat(self, Mat A) -> Self:
         """
-        Creates a basis vectors object from a dense Mat object.
+        Create a basis vectors object from a dense Mat object.
 
         Parameters
         ----------
@@ -196,7 +196,7 @@ cdef class BV(Object):
 
     def createMat(self) -> Mat:
         """
-        Creates a new Mat object of dense type and copies the contents of the
+        Create a new Mat object of dense type and copy the contents of the
         BV object.
 
         Returns
@@ -218,7 +218,7 @@ cdef class BV(Object):
 
     def duplicateResize(self, m: int) -> BV:
         """
-        Creates a new BV object of the same type and dimensions as
+        Create a new BV object of the same type and dimensions as
         an existing one, but with possibly different number of columns.
 
         Parameters
@@ -233,7 +233,7 @@ cdef class BV(Object):
 
     def copy(self, BV result=None) -> BV:
         """
-        Copies a basis vector object into another one.
+        Copy a basis vector object into another one.
 
         Parameters
         ----------
@@ -249,7 +249,7 @@ cdef class BV(Object):
 
     def setType(self, bv_type: Type | str) -> None:
         """
-        Selects the type for the BV object.
+        Select the type for the BV object.
 
         Parameters
         ----------
@@ -262,7 +262,7 @@ cdef class BV(Object):
 
     def getType(self) -> str:
         """
-        Gets the BV type of this object.
+        Get the BV type of this object.
 
         Returns
         -------
@@ -275,7 +275,7 @@ cdef class BV(Object):
 
     def setSizes(self, sizes: LayoutSizeSpec, m: int) -> None:
         """
-        Sets the local and global sizes, and the number of columns.
+        Set the local and global sizes, and the number of columns.
 
         Parameters
         ----------
@@ -297,7 +297,7 @@ cdef class BV(Object):
 
     def setSizesFromVec(self, Vec w, m: int) -> None:
         """
-        Sets the local and global sizes, and the number of columns. Local and
+        Set the local and global sizes, and the number of columns. Local and
         global sizes are specified indirectly by passing a template vector.
 
         Parameters
@@ -312,7 +312,7 @@ cdef class BV(Object):
 
     def getSizes(self) -> tuple[LayoutSizeSpec, int]:
         """
-        Returns the local and global sizes, and the number of columns.
+        Return the local and global sizes, and the number of columns.
 
         Returns
         -------
@@ -327,7 +327,7 @@ cdef class BV(Object):
 
     def setLeadingDimension(self, ld: int) -> None:
         """
-        Sets the leading dimension.
+        Set the leading dimension.
 
         Parameters
         ----------
@@ -339,7 +339,7 @@ cdef class BV(Object):
 
     def getLeadingDimension(self) -> int:
         """
-        Gets the leading dimension.
+        Get the leading dimension.
 
         Returns
         -------
@@ -352,7 +352,7 @@ cdef class BV(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all BV options in the
+        Set the prefix used for searching for all BV options in the
         database.
 
         Parameters
@@ -372,7 +372,7 @@ cdef class BV(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all BV options
+        Append to the prefix used for searching for all BV options
         in the database.
 
         Parameters
@@ -386,7 +386,7 @@ cdef class BV(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all BV options in the
+        Get the prefix used for searching for all BV options in the
         database.
 
         Returns
@@ -400,7 +400,7 @@ cdef class BV(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets BV options from the options database.
+        Set BV options from the options database.
 
         Notes
         -----
@@ -413,7 +413,7 @@ cdef class BV(Object):
 
     def getOrthogonalization(self) -> tuple[OrthogType, OrthogRefineType, float, OrthogBlockType]:
         """
-        Gets the orthogonalization settings from the BV object.
+        Get the orthogonalization settings from the BV object.
 
         Returns
         -------
@@ -442,7 +442,7 @@ cdef class BV(Object):
         block: OrthogBlockType | None = None,
     ) -> None:
         """
-        Specifies the method used for the orthogonalization of vectors
+        Specify the method used for the orthogonalization of vectors
         (classical or modified Gram-Schmidt with or without refinement),
         and for the block-orthogonalization (simultaneous orthogonalization
         of a set of vectors).
@@ -485,7 +485,7 @@ cdef class BV(Object):
 
     def getMatMultMethod(self) -> MatMultType:
         """
-        Gets the method used for the `matMult()` operation.
+        Get the method used for the `matMult()` operation.
 
         Returns
         -------
@@ -498,7 +498,7 @@ cdef class BV(Object):
 
     def setMatMultMethod(self, method: MatMultType) -> None:
         """
-        Specifies the method used for the `matMult()` operation.
+        Specify the method used for the `matMult()` operation.
 
         Parameters
         ----------
@@ -512,7 +512,7 @@ cdef class BV(Object):
 
     def getMatrix(self) -> tuple[Mat, bool] | tuple[None, bool]:
         """
-        Retrieves the matrix representation of the inner product.
+        Retrieve the matrix representation of the inner product.
 
         Returns
         -------
@@ -532,7 +532,7 @@ cdef class BV(Object):
 
     def setMatrix(self, Mat mat or None, indef: bool = False) -> None:
         """
-        Sets the bilinear form to be used for inner products.
+        Set the bilinear form to be used for inner products.
 
         Parameters
         ----------
@@ -547,7 +547,7 @@ cdef class BV(Object):
 
     def applyMatrix(self, Vec x, Vec y) -> None:
         """
-        Multiplies a vector with the matrix associated to the bilinear
+        Multiply a vector with the matrix associated to the bilinear
         form.
 
         Parameters
@@ -581,7 +581,7 @@ cdef class BV(Object):
 
     def getActiveColumns(self) -> tuple[int, int]:
         """
-        Returns the current active dimensions.
+        Return the current active dimensions.
 
         Returns
         -------
@@ -708,7 +708,7 @@ cdef class BV(Object):
 
     def setNumConstraints(self, nc: int) -> None:
         """
-        Sets the number of constraints.
+        Set the number of constraints.
 
         Parameters
         ----------
@@ -720,7 +720,7 @@ cdef class BV(Object):
 
     def getNumConstraints(self) -> int:
         """
-        Gets the number of constraints.
+        Get the number of constraints.
 
         Returns
         -------
@@ -733,7 +733,7 @@ cdef class BV(Object):
 
     def createVec(self) -> Vec:
         """
-        Creates a new Vec object with the same type and dimensions as
+        Create a new Vec object with the same type and dimensions as
         the columns of the basis vectors object.
 
         Returns
@@ -766,7 +766,7 @@ cdef class BV(Object):
 
     def copyVec(self, j: int, Vec v) -> None:
         """
-        Copies one of the columns of a basis vectors object into a Vec.
+        Copy one of the columns of a basis vectors object into a Vec.
 
         Parameters
         ----------
@@ -780,7 +780,7 @@ cdef class BV(Object):
 
     def copyColumn(self, j: int, i: int) -> None:
         """
-        Copies the values from one of the columns to another one.
+        Copy the values from one of the columns to another one.
 
         Parameters
         ----------
@@ -795,7 +795,7 @@ cdef class BV(Object):
 
     def setDefiniteTolerance(self, deftol: float) -> None:
         """
-        Sets the tolerance to be used when checking a definite inner product.
+        Set the tolerance to be used when checking a definite inner product.
 
         Parameters
         ----------
@@ -807,7 +807,7 @@ cdef class BV(Object):
 
     def getDefiniteTolerance(self) -> float:
         """
-        Gets the tolerance to be used when checking a definite inner product.
+        Get the tolerance to be used when checking a definite inner product.
 
         Returns
         -------
@@ -820,7 +820,7 @@ cdef class BV(Object):
 
     def dotVec(self, Vec v) -> ArrayScalar:
         """
-        Computes multiple dot products of a vector against all the column
+        Compute multiple dot products of a vector against all the column
         vectors of a BV.
 
         Parameters
@@ -854,7 +854,7 @@ cdef class BV(Object):
 
     def dotColumn(self, j: int) -> ArrayScalar:
         """
-        Computes multiple dot products of a column against all the column
+        Compute multiple dot products of a column against all the column
         vectors of a BV.
 
         Parameters
@@ -880,7 +880,7 @@ cdef class BV(Object):
 
     def getColumn(self, j: int) -> Vec:
         """
-        Returns a Vec object that contains the entries of the requested column
+        Return a Vec object that contains the entries of the requested column
         of the basis vectors object.
 
         Parameters
@@ -924,7 +924,7 @@ cdef class BV(Object):
 
     def getMat(self) -> Mat:
         """
-        Returns a Mat object of dense type that shares the memory
+        Return a Mat object of dense type that shares the memory
         of the basis vectors object.
 
         Returns
@@ -945,7 +945,7 @@ cdef class BV(Object):
 
     def restoreMat(self, Mat A) -> None:
         """
-        Restores the Mat obtained with `getMat()`.
+        Restore the Mat obtained with `getMat()`.
 
         Parameters
         ----------
@@ -963,7 +963,7 @@ cdef class BV(Object):
 
     def dot(self, BV Y) -> Mat:
         """
-        Computes the 'block-dot' product of two basis vectors objects.
+        Compute the 'block-dot' product of two basis vectors objects.
             M = Y^H*X (m_ij = y_i^H x_j) or M = Y^H*B*X
 
         Parameters
@@ -1002,7 +1002,7 @@ cdef class BV(Object):
 
     def matProject(self, Mat A or None, BV Y) -> Mat:
         """
-        Computes the projection of a matrix onto a subspace.
+        Compute the projection of a matrix onto a subspace.
 
         M = Y^H A X
 
@@ -1029,7 +1029,7 @@ cdef class BV(Object):
 
     def matMult(self, Mat A, BV Y=None) -> BV:
         """
-        Computes the matrix-vector product for each column, Y = A*V.
+        Compute the matrix-vector product for each column, Y = A*V.
 
         Parameters
         ----------
@@ -1076,7 +1076,7 @@ cdef class BV(Object):
 
     def matMultHermitianTranspose(self, Mat A, BV Y=None) -> BV:
         """
-        Computes the matrix-vector product with the conjugate transpose of a
+        Compute the matrix-vector product with the conjugate transpose of a
         matrix for each column, Y=A^H*V.
 
         Parameters
@@ -1119,7 +1119,7 @@ cdef class BV(Object):
 
     def matMultColumn(self, Mat A, j: int) -> None:
         """
-        Computes the matrix-vector product for a specified column, storing
+        Compute the matrix-vector product for a specified column, storing
         the result in the next column: v_{j+1}=A*v_j.
 
         Parameters
@@ -1134,7 +1134,7 @@ cdef class BV(Object):
 
     def matMultTransposeColumn(self, Mat A, j: int) -> None:
         """
-        Computes the transpose matrix-vector product for a specified column,
+        Compute the transpose matrix-vector product for a specified column,
         storing the result in the next column: v_{j+1}=A^T*v_j.
 
         Parameters
@@ -1149,7 +1149,7 @@ cdef class BV(Object):
 
     def matMultHermitianTransposeColumn(self, Mat A, j: int) -> None:
         """
-        Computes the conjugate-transpose matrix-vector product for a specified column,
+        Compute the conjugate-transpose matrix-vector product for a specified column,
         storing the result in the next column: v_{j+1}=A^H*v_j.
 
         Parameters
@@ -1164,7 +1164,7 @@ cdef class BV(Object):
 
     def mult(self, alpha: Scalar, beta: Scalar, BV X, Mat Q or None) -> None:
         """
-        Computes Y = beta*Y + alpha*X*Q.
+        Compute Y = beta*Y + alpha*X*Q.
 
         Parameters
         ----------
@@ -1201,7 +1201,7 @@ cdef class BV(Object):
 
     def multColumn(self, alpha: Scalar, beta: Scalar, j: int, q: Sequence[Scalar]) -> None:
         """
-        Computes y = beta*y + alpha*X*q, where y is the j-th column.
+        Compute y = beta*y + alpha*X*q, where y is the j-th column.
 
         Parameters
         ----------
@@ -1227,7 +1227,7 @@ cdef class BV(Object):
 
     def multVec(self, alpha: Scalar, beta: Scalar, Vec y, q: Sequence[Scalar]) -> None:
         """
-        Computes y = beta*y + alpha*X*q.
+        Compute y = beta*y + alpha*X*q.
 
         Parameters
         ----------
@@ -1252,7 +1252,7 @@ cdef class BV(Object):
 
     def normColumn(self, j: int, norm_type: NormType | None = None) -> float:
         """
-        Computes the matrix norm of the BV.
+        Compute the matrix norm of the BV.
 
         Parameters
         ----------
@@ -1282,7 +1282,7 @@ cdef class BV(Object):
 
     def norm(self, norm_type: NormType | None = None) -> float:
         """
-        Computes the matrix norm of the BV.
+        Compute the matrix norm of the BV.
 
         Parameters
         ----------
@@ -1387,7 +1387,7 @@ cdef class BV(Object):
 
     def setRandomContext(self, Random rnd) -> None:
         """
-        Sets the `PETSc.Random` object associated with the BV, to be used
+        Set the `PETSc.Random` object associated with the BV, to be used
         in operations that need random numbers.
 
         Parameters
@@ -1399,7 +1399,7 @@ cdef class BV(Object):
 
     def getRandomContext(self) -> Random:
         """
-        Gets the `PETSc.Random` object associated with the BV.
+        Get the `PETSc.Random` object associated with the BV.
 
         Returns
         -------

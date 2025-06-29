@@ -87,7 +87,7 @@ cdef class DS(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the DS data structure.
+        Print the DS data structure.
 
         Parameters
         ----------
@@ -99,18 +99,18 @@ cdef class DS(Object):
         CHKERR( DSView(self.ds, vwr) )
 
     def destroy(self) -> Self:
-        """Destroys the DS object."""
+        """Destroy the DS object."""
         CHKERR( DSDestroy(&self.ds) )
         self.ds = NULL
         return self
 
     def reset(self) -> None:
-        """Resets the DS object."""
+        """Reset the DS object."""
         CHKERR( DSReset(self.ds) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the DS object.
+        Create the DS object.
 
         Parameters
         ----------
@@ -125,7 +125,7 @@ cdef class DS(Object):
 
     def setType(self, ds_type: Type | str) -> None:
         """
-        Selects the type for the DS object.
+        Select the type for the DS object.
 
         Parameters
         ----------
@@ -138,7 +138,7 @@ cdef class DS(Object):
 
     def getType(self) -> str:
         """
-        Gets the DS type of this object.
+        Get the DS type of this object.
 
         Returns
         -------
@@ -151,7 +151,7 @@ cdef class DS(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all DS options in the
+        Set the prefix used for searching for all DS options in the
         database.
 
         Parameters
@@ -171,7 +171,7 @@ cdef class DS(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all DS options
+        Append to the prefix used for searching for all DS options
         in the database.
 
         Parameters
@@ -185,7 +185,7 @@ cdef class DS(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all DS options in the
+        Get the prefix used for searching for all DS options in the
         database.
 
         Returns
@@ -199,7 +199,7 @@ cdef class DS(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets DS options from the options database.
+        Set DS options from the options database.
 
         Notes
         -----
@@ -218,7 +218,7 @@ cdef class DS(Object):
 
     def allocate(self, ld: int) -> None:
         """
-        Allocates memory for internal storage or matrices in DS.
+        Allocate memory for internal storage or matrices in DS.
 
         Parameters
         ----------
@@ -231,7 +231,7 @@ cdef class DS(Object):
 
     def getLeadingDimension(self) -> int:
         """
-        Returns the leading dimension of the allocated matrices.
+        Return the leading dimension of the allocated matrices.
 
         Returns
         -------
@@ -267,7 +267,7 @@ cdef class DS(Object):
 
     def getState(self) -> StateType:
         """
-        Returns the current state.
+        Return the current state.
 
         Returns
         -------
@@ -280,7 +280,7 @@ cdef class DS(Object):
 
     def setParallel(self, pmode: ParallelType) -> None:
         """
-        Selects the mode of operation in parallel runs.
+        Select the mode of operation in parallel runs.
 
         Parameters
         ----------
@@ -292,7 +292,7 @@ cdef class DS(Object):
 
     def getParallel(self) -> ParallelType:
         """
-        Gets the mode of operation in parallel runs.
+        Get the mode of operation in parallel runs.
 
         Returns
         -------
@@ -330,7 +330,7 @@ cdef class DS(Object):
 
     def getDimensions(self) -> tuple[int, int, int, int]:
         """
-        Returns the current dimensions.
+        Return the current dimensions.
 
         Returns
         -------
@@ -352,7 +352,7 @@ cdef class DS(Object):
 
     def setBlockSize(self, bs: int) -> None:
         """
-        Selects the block size.
+        Select the block size.
 
         Parameters
         ----------
@@ -364,7 +364,7 @@ cdef class DS(Object):
 
     def getBlockSize(self) -> int:
         """
-        Gets the block size.
+        Get the block size.
 
         Returns
         -------
@@ -377,7 +377,7 @@ cdef class DS(Object):
 
     def setMethod(self, meth: int) -> None:
         """
-        Selects the method to be used to solve the problem.
+        Select the method to be used to solve the problem.
 
         Parameters
         ----------
@@ -389,7 +389,7 @@ cdef class DS(Object):
 
     def getMethod(self) -> int:
         """
-        Gets the method currently used in the DS.
+        Get the method currently used in the DS.
 
         Returns
         -------
@@ -424,7 +424,7 @@ cdef class DS(Object):
 
     def getCompact(self) -> bool:
         """
-        Gets the compact storage flag.
+        Get the compact storage flag.
 
         Returns
         -------
@@ -437,7 +437,7 @@ cdef class DS(Object):
 
     def setExtraRow(self, ext: bool) -> None:
         """
-        Sets a flag to indicate that the matrix has one extra row.
+        Set a flag to indicate that the matrix has one extra row.
 
         Parameters
         ----------
@@ -460,7 +460,7 @@ cdef class DS(Object):
 
     def getExtraRow(self) -> bool:
         """
-        Gets the extra row flag.
+        Get the extra row flag.
 
         Returns
         -------
@@ -473,7 +473,7 @@ cdef class DS(Object):
 
     def setRefined(self, ref: bool) -> None:
         """
-        Sets a flag to indicate that refined vectors must be computed.
+        Set a flag to indicate that refined vectors must be computed.
 
         Parameters
         ----------
@@ -496,7 +496,7 @@ cdef class DS(Object):
 
     def getRefined(self) -> bool:
         """
-        Gets the refined vectors flag.
+        Get the refined vectors flag.
 
         Returns
         -------
@@ -509,7 +509,7 @@ cdef class DS(Object):
 
     def truncate(self, n: int, trim: bool = False) -> None:
         """
-        Truncates the system represented in the DS object.
+        Truncate the system represented in the DS object.
 
         Parameters
         ----------
@@ -523,12 +523,12 @@ cdef class DS(Object):
         CHKERR( DSTruncate(self.ds, val, flg) )
 
     def updateExtraRow(self) -> None:
-        """Performs all necessary operations so that the extra row gets up-to-date after a call to `solve()`."""
+        """Perform all necessary operations so that the extra row gets up-to-date after a call to `solve()`."""
         CHKERR( DSUpdateExtraRow(self.ds) )
 
     def getMat(self, matname: MatType) -> Mat:
         """
-        Returns the requested matrix as a sequential dense Mat object.
+        Return the requested matrix as a sequential dense Mat object.
 
         Parameters
         ----------
@@ -627,7 +627,7 @@ cdef class DS(Object):
 
     def setSVDDimensions(self, m: int) -> None:
         """
-        Sets the number of columns of a `DS` of type `SVD`.
+        Set the number of columns of a `DS` of type `SVD`.
 
         Parameters
         ----------
@@ -639,7 +639,7 @@ cdef class DS(Object):
 
     def getSVDDimensions(self) -> int:
         """
-        Gets the number of columns of a `DS` of type `SVD`.
+        Get the number of columns of a `DS` of type `SVD`.
 
         Returns
         -------
@@ -652,7 +652,7 @@ cdef class DS(Object):
 
     def setHSVDDimensions(self, m: int) -> None:
         """
-        Sets the number of columns of a `DS` of type `HSVD`.
+        Set the number of columns of a `DS` of type `HSVD`.
 
         Parameters
         ----------
@@ -664,7 +664,7 @@ cdef class DS(Object):
 
     def getHSVDDimensions(self) -> int:
         """
-        Gets the number of columns of a `DS` of type `HSVD`.
+        Get the number of columns of a `DS` of type `HSVD`.
 
         Returns
         -------
@@ -677,7 +677,7 @@ cdef class DS(Object):
 
     def setGSVDDimensions(self, m: int, p: int) -> None:
         """
-        Sets the number of columns and rows of a `DS` of type `GSVD`.
+        Set the number of columns and rows of a `DS` of type `GSVD`.
 
         Parameters
         ----------
@@ -692,7 +692,7 @@ cdef class DS(Object):
 
     def getGSVDDimensions(self) -> tuple[int, int]:
         """
-        Gets the number of columns and rows of a `DS` of type `GSVD`.
+        Get the number of columns and rows of a `DS` of type `GSVD`.
 
         Returns
         -------
@@ -708,7 +708,7 @@ cdef class DS(Object):
 
     def setPEPDegree(self, deg: int) -> None:
         """
-        Sets the polynomial degree of a `DS` of type `PEP`.
+        Set the polynomial degree of a `DS` of type `PEP`.
 
         Parameters
         ----------
@@ -720,7 +720,7 @@ cdef class DS(Object):
 
     def getPEPDegree(self) -> int:
         """
-        Gets the polynomial degree of a `DS` of type `PEP`.
+        Get the polynomial degree of a `DS` of type `PEP`.
 
         Returns
         -------
@@ -733,7 +733,7 @@ cdef class DS(Object):
 
     def setPEPCoefficients(self, pbc: Sequence[float]) -> None:
         """
-        Sets the polynomial basis coefficients of a `DS` of type `PEP`.
+        Set the polynomial basis coefficients of a `DS` of type `PEP`.
 
         Parameters
         ----------
@@ -747,7 +747,7 @@ cdef class DS(Object):
 
     def getPEPCoefficients(self) -> ArrayReal:
         """
-        Gets the polynomial basis coefficients of a `DS` of type `PEP`.
+        Get the polynomial basis coefficients of a `DS` of type `PEP`.
 
         Returns
         -------

@@ -118,7 +118,7 @@ cdef class FN(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the FN data structure.
+        Print the FN data structure.
 
         Parameters
         ----------
@@ -130,14 +130,14 @@ cdef class FN(Object):
         CHKERR( FNView(self.fn, vwr) )
 
     def destroy(self) -> Self:
-        """Destroys the FN object."""
+        """Destroy the FN object."""
         CHKERR( FNDestroy(&self.fn) )
         self.fn = NULL
         return self
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the FN object.
+        Create the FN object.
 
         Parameters
         ----------
@@ -152,7 +152,7 @@ cdef class FN(Object):
 
     def setType(self, fn_type: Type | str) -> None:
         """
-        Selects the type for the FN object.
+        Select the type for the FN object.
 
         Parameters
         ----------
@@ -165,7 +165,7 @@ cdef class FN(Object):
 
     def getType(self) -> str:
         """
-        Gets the FN type of this object.
+        Get the FN type of this object.
 
         Returns
         -------
@@ -178,7 +178,7 @@ cdef class FN(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all FN options in the
+        Set the prefix used for searching for all FN options in the
         database.
 
         Parameters
@@ -198,7 +198,7 @@ cdef class FN(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all FN options
+        Append to the prefix used for searching for all FN options
         in the database.
 
         Parameters
@@ -212,7 +212,7 @@ cdef class FN(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all FN options in the
+        Get the prefix used for searching for all FN options in the
         database.
 
         Returns
@@ -226,7 +226,7 @@ cdef class FN(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets FN options from the options database.
+        Set FN options from the options database.
 
         Notes
         -----
@@ -255,7 +255,7 @@ cdef class FN(Object):
 
     def evaluateFunction(self, x: Scalar) -> Scalar:
         """
-        Computes the value of the function f(x) for a given x.
+        Compute the value of the function f(x) for a given x.
 
         Parameters
         ----------
@@ -274,7 +274,7 @@ cdef class FN(Object):
 
     def evaluateDerivative(self, x: Scalar) -> Scalar:
         """
-        Computes the value of the derivative f'(x) for a given x.
+        Compute the value of the derivative f'(x) for a given x.
 
         Parameters
         ----------
@@ -293,7 +293,7 @@ cdef class FN(Object):
 
     def evaluateFunctionMat(self, Mat A, Mat B=None) -> Mat:
         """
-        Computes the value of the function f(A) for a given matrix A.
+        Compute the value of the function f(A) for a given matrix A.
 
         Parameters
         ----------
@@ -313,7 +313,7 @@ cdef class FN(Object):
 
     def evaluateFunctionMatVec(self, Mat A, Vec v=None) -> Vec:
         """
-        Computes the first column of the matrix f(A) for a given matrix A.
+        Compute the first column of the matrix f(A) for a given matrix A.
 
         Parameters
         ----------
@@ -331,7 +331,7 @@ cdef class FN(Object):
 
     def setScale(self, alpha: Scalar | None = None, beta: Scalar | None = None) -> None:
         """
-        Sets the scaling parameters that define the matematical function.
+        Set the scaling parameters that define the matematical function.
 
         Parameters
         ----------
@@ -348,7 +348,7 @@ cdef class FN(Object):
 
     def getScale(self) -> tuple[Scalar, Scalar]:
         """
-        Gets the scaling parameters that define the matematical function.
+        Get the scaling parameters that define the matematical function.
 
         Returns
         -------
@@ -363,7 +363,7 @@ cdef class FN(Object):
 
     def setMethod(self, meth: int) -> None:
         """
-        Selects the method to be used to evaluate functions of matrices.
+        Select the method to be used to evaluate functions of matrices.
 
         Parameters
         ----------
@@ -386,7 +386,7 @@ cdef class FN(Object):
 
     def getMethod(self) -> int:
         """
-        Gets the method currently used for matrix functions.
+        Get the method currently used for matrix functions.
 
         Returns
         -------
@@ -399,7 +399,7 @@ cdef class FN(Object):
 
     def setParallel(self, pmode: ParallelType) -> None:
         """
-        Selects the mode of operation in parallel runs.
+        Select the mode of operation in parallel runs.
 
         Parameters
         ----------
@@ -411,7 +411,7 @@ cdef class FN(Object):
 
     def getParallel(self) -> ParallelType:
         """
-        Gets the mode of operation in parallel runs.
+        Get the mode of operation in parallel runs.
 
         Returns
         -------
@@ -426,7 +426,7 @@ cdef class FN(Object):
 
     def setRationalNumerator(self, alpha: Sequence[Scalar]) -> None:
         """
-        Sets the coefficients of the numerator of the rational function.
+        Set the coefficients of the numerator of the rational function.
 
         Parameters
         ----------
@@ -440,7 +440,7 @@ cdef class FN(Object):
 
     def getRationalNumerator(self) -> ArrayScalar:
         """
-        Gets the coefficients of the numerator of the rational function.
+        Get the coefficients of the numerator of the rational function.
 
         Returns
         -------
@@ -459,7 +459,7 @@ cdef class FN(Object):
 
     def setRationalDenominator(self, alpha: Sequence[Scalar]) -> None:
         """
-        Sets the coefficients of the denominator of the rational function.
+        Set the coefficients of the denominator of the rational function.
 
         Parameters
         ----------
@@ -473,7 +473,7 @@ cdef class FN(Object):
 
     def getRationalDenominator(self) -> ArrayScalar:
         """
-        Gets the coefficients of the denominator of the rational function.
+        Get the coefficients of the denominator of the rational function.
 
         Returns
         -------
@@ -492,7 +492,7 @@ cdef class FN(Object):
 
     def setCombineChildren(self, comb: CombineType, FN f1, FN f2) -> None:
         """
-        Sets the two child functions that constitute this combined
+        Set the two child functions that constitute this combined
         function, and the way they must be combined.
 
         Parameters
@@ -509,7 +509,7 @@ cdef class FN(Object):
 
     def getCombineChildren(self) -> tuple[CombineType, FN, FN]:
         """
-        Gets the two child functions that constitute this combined
+        Get the two child functions that constitute this combined
         function, and the way they must be combined.
 
         Returns
@@ -531,7 +531,7 @@ cdef class FN(Object):
 
     def setPhiIndex(self, k: int) -> None:
         """
-        Sets the index of the phi-function.
+        Set the index of the phi-function.
 
         Parameters
         ----------
@@ -543,7 +543,7 @@ cdef class FN(Object):
 
     def getPhiIndex(self) -> int:
         """
-        Gets the index of the phi-function.
+        Get the index of the phi-function.
 
         Returns
         -------

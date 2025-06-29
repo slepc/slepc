@@ -175,7 +175,7 @@ cdef class NEP(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the NEP data structure.
+        Print the NEP data structure.
 
         Parameters
         ----------
@@ -187,18 +187,18 @@ cdef class NEP(Object):
         CHKERR( NEPView(self.nep, vwr) )
 
     def destroy(self) -> Self:
-        """Destroys the NEP object."""
+        """Destroy the NEP object."""
         CHKERR( NEPDestroy(&self.nep) )
         self.nep = NULL
         return self
 
     def reset(self) -> None:
-        """Resets the NEP object."""
+        """Reset the NEP object."""
         CHKERR( NEPReset(self.nep) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the NEP object.
+        Create the NEP object.
 
         Parameters
         ----------
@@ -213,7 +213,7 @@ cdef class NEP(Object):
 
     def setType(self, nep_type: Type | str) -> None:
         """
-        Selects the particular solver to be used in the NEP object.
+        Select the particular solver to be used in the NEP object.
 
         Parameters
         ----------
@@ -226,7 +226,7 @@ cdef class NEP(Object):
 
     def getType(self) -> str:
         """
-        Gets the NEP type of this object.
+        Get the NEP type of this object.
 
         Returns
         -------
@@ -239,7 +239,7 @@ cdef class NEP(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all NEP options in the
+        Get the prefix used for searching for all NEP options in the
         database.
 
         Returns
@@ -253,7 +253,7 @@ cdef class NEP(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all NEP options in the
+        Set the prefix used for searching for all NEP options in the
         database.
 
         Parameters
@@ -267,7 +267,7 @@ cdef class NEP(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all NEP options
+        Append to the prefix used for searching for all NEP options
         in the database.
 
         Parameters
@@ -281,7 +281,7 @@ cdef class NEP(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets NEP options from the options database. This routine must
+        Set NEP options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
         the solver type.
         """
@@ -289,7 +289,7 @@ cdef class NEP(Object):
 
     def getProblemType(self) -> ProblemType:
         """
-        Gets the problem type from the `NEP` object.
+        Get the problem type from the `NEP` object.
 
         Returns
         -------
@@ -302,7 +302,7 @@ cdef class NEP(Object):
 
     def setProblemType(self, problem_type: ProblemType) -> None:
         """
-        Specifies the type of the eigenvalue problem.
+        Specify the type of the eigenvalue problem.
 
         Parameters
         ----------
@@ -314,7 +314,7 @@ cdef class NEP(Object):
 
     def getWhichEigenpairs(self) -> Which:
         """
-        Returns which portion of the spectrum is to be sought.
+        Return which portion of the spectrum is to be sought.
 
         Returns
         -------
@@ -327,7 +327,7 @@ cdef class NEP(Object):
 
     def setWhichEigenpairs(self, which: Which) -> None:
         """
-        Specifies which portion of the spectrum is to be sought.
+        Specify which portion of the spectrum is to be sought.
 
         Parameters
         ----------
@@ -339,7 +339,7 @@ cdef class NEP(Object):
 
     def getTarget(self) -> Scalar:
         """
-        Gets the value of the target.
+        Get the value of the target.
 
         Returns
         -------
@@ -356,7 +356,7 @@ cdef class NEP(Object):
 
     def setTarget(self, target: Scalar) -> None:
         """
-        Sets the value of the target.
+        Set the value of the target.
 
         Parameters
         ----------
@@ -374,7 +374,7 @@ cdef class NEP(Object):
 
     def getTolerances(self) -> tuple[float, int]:
         """
-        Gets the tolerance and maximum iteration count used by the
+        Get the tolerance and maximum iteration count used by the
         default NEP convergence tests.
 
         Returns
@@ -391,7 +391,7 @@ cdef class NEP(Object):
 
     def setTolerances(self, tol: float | None = None, maxit: int | None = None) -> None:
         """
-        Sets the tolerance and maximum iteration count used in convergence tests.
+        Set the tolerance and maximum iteration count used in convergence tests.
 
         Parameters
         ----------
@@ -423,7 +423,7 @@ cdef class NEP(Object):
 
     def setConvergenceTest(self, conv: Conv) -> None:
         """
-        Specifies how to compute the error estimate
+        Specify how to compute the error estimate
         used in the convergence test.
 
         Parameters
@@ -437,7 +437,7 @@ cdef class NEP(Object):
 
     def getRefine(self) -> tuple[Refine, int, float, int, RefineScheme]:
         """
-        Gets the refinement strategy used by the NEP object,
+        Get the refinement strategy used by the NEP object,
         and the associated parameters.
 
         Returns
@@ -470,7 +470,7 @@ cdef class NEP(Object):
         scheme: RefineScheme | None = None,
     ) -> None:
         """
-        Sets the refinement strategy used by the NEP object,
+        Set the refinement strategy used by the NEP object,
         and the associated parameters.
 
         Parameters
@@ -514,7 +514,7 @@ cdef class NEP(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Returns the flag indicating whether all residual norms must be
+        Return the flag indicating whether all residual norms must be
         computed or not.
 
         Returns
@@ -528,7 +528,7 @@ cdef class NEP(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Specifies if the solver must compute the residual of all
+        Specify if the solver must compute the residual of all
         approximate eigenpairs or not.
 
         Parameters
@@ -541,7 +541,7 @@ cdef class NEP(Object):
 
     def getDimensions(self) -> tuple[int, int, int]:
         """
-        Gets the number of eigenvalues to compute and the dimension of
+        Get the number of eigenvalues to compute and the dimension of
         the subspace.
 
         Returns
@@ -566,7 +566,7 @@ cdef class NEP(Object):
         mpd: int | None = None,
     ) -> None:
         """
-        Sets the number of eigenvalues to compute and the dimension of
+        Set the number of eigenvalues to compute and the dimension of
         the subspace.
 
         Parameters
@@ -602,7 +602,7 @@ cdef class NEP(Object):
 
     def setBV(self, BV bv) -> None:
         """
-        Associates a basis vectors object to the eigensolver.
+        Associate a basis vectors object to the eigensolver.
 
         Parameters
         ----------
@@ -627,7 +627,7 @@ cdef class NEP(Object):
 
     def setRG(self, RG rg) -> None:
         """
-        Associates a region object to the eigensolver.
+        Associate a region object to the eigensolver.
 
         Parameters
         ----------
@@ -652,7 +652,7 @@ cdef class NEP(Object):
 
     def setDS(self, DS ds) -> None:
         """
-        Associates a direct solver object to the eigensolver.
+        Associate a direct solver object to the eigensolver.
 
         Parameters
         ----------
@@ -665,7 +665,7 @@ cdef class NEP(Object):
 
     def setInitialSpace(self, space: Vec or list[Vec]) -> None:
         """
-        Sets the initial space from which the eigensolver starts to
+        Set the initial space from which the eigensolver starts to
         iterate.
 
         Parameters
@@ -688,7 +688,7 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """Sets a function to decide when to stop the outer iteration of the eigensolver."""
+        """Set a function to decide when to stop the outer iteration of the eigensolver."""
         if stopping is not None:
             if args is None: args = ()
             if kargs is None: kargs = {}
@@ -699,7 +699,7 @@ cdef class NEP(Object):
             CHKERR( NEPSetStoppingTestFunction(self.nep, NEPStoppingBasic, NULL, NULL) )
 
     def getStoppingTest(self) -> NEPStoppingFunction:
-        """Gets the stopping function."""
+        """Get the stopping function."""
         return self.get_attr('__stopping__')
 
     #
@@ -710,7 +710,7 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """Appends a monitor function to the list of monitors."""
+        """Append a monitor function to the list of monitors."""
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
         if monitorlist is None:
@@ -722,27 +722,27 @@ cdef class NEP(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> NEPMonitorFunction:
-        """Gets the list of monitor functions."""
+        """Get the list of monitor functions."""
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
-        """Clears all monitors for a `NEP` object."""
+        """Clear all monitors for a `NEP` object."""
         CHKERR( NEPMonitorCancel(self.nep) )
         self.set_attr('__monitor__', None)
 
     #
 
     def setUp(self) -> None:
-        """Sets up all the internal data structures necessary for the execution of the eigensolver."""
+        """Set up all the internal data structures necessary for the execution of the eigensolver."""
         CHKERR( NEPSetUp(self.nep) )
 
     def solve(self) -> None:
-        """Solves the eigensystem."""
+        """Solve the eigensystem."""
         CHKERR( NEPSolve(self.nep) )
 
     def getIterationNumber(self) -> int:
         """
-        Gets the current iteration number. If the call to `solve()` is
+        Get the current iteration number. If the call to `solve()` is
         complete, then it returns the number of iterations carried out
         by the solution method.
 
@@ -757,7 +757,7 @@ cdef class NEP(Object):
 
     def getConvergedReason(self) -> ConvergedReason:
         """
-        Gets the reason why the `solve()` iteration was stopped.
+        Get the reason why the `solve()` iteration was stopped.
 
         Returns
         -------
@@ -771,7 +771,7 @@ cdef class NEP(Object):
 
     def getConverged(self) -> int:
         """
-        Gets the number of converged eigenpairs.
+        Get the number of converged eigenpairs.
 
         Returns
         -------
@@ -784,7 +784,7 @@ cdef class NEP(Object):
 
     def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> None:
         """
-        Gets the i-th solution of the eigenproblem as computed by
+        Get the i-th solution of the eigenproblem as computed by
         `solve()`.  The solution consists of both the eigenvalue and
         the eigenvector.
 
@@ -811,7 +811,7 @@ cdef class NEP(Object):
 
     def getLeftEigenvector(self, i: int, Vec Wr, Vec Wi=None) -> None:
         """
-        Gets the i-th left eigenvector as computed by `solve()`.
+        Get the i-th left eigenvector as computed by `solve()`.
 
         Parameters
         ----------
@@ -838,7 +838,7 @@ cdef class NEP(Object):
 
     def getErrorEstimate(self, i: int) -> float:
         """
-        Returns the error estimate associated to the i-th computed
+        Return the error estimate associated to the i-th computed
         eigenpair.
 
         Parameters
@@ -857,7 +857,7 @@ cdef class NEP(Object):
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
-        Computes the error (based on the residual norm) associated with the i-th
+        Compute the error (based on the residual norm) associated with the i-th
         computed eigenpair.
 
         Parameters
@@ -882,7 +882,7 @@ cdef class NEP(Object):
 
     def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
         """
-        Displays the errors associated with the computed solution
+        Display the errors associated with the computed solution
         (as well as the eigenvalues).
 
         Parameters
@@ -908,7 +908,7 @@ cdef class NEP(Object):
 
     def valuesView(self, viewer: Viewer | None = None) -> None:
         """
-        Displays the computed eigenvalues in a viewer.
+        Display the computed eigenvalues in a viewer.
 
         Parameters
         ----------
@@ -921,7 +921,7 @@ cdef class NEP(Object):
 
     def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
-        Outputs computed eigenvectors to a viewer.
+        Output computed eigenvectors to a viewer.
 
         Parameters
         ----------
@@ -943,7 +943,7 @@ cdef class NEP(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Sets the function to compute the nonlinear Function T(lambda)
+        Set the function to compute the nonlinear Function T(lambda)
         as well as the location to store the matrix.
 
         Parameters
@@ -968,7 +968,7 @@ cdef class NEP(Object):
 
     def getFunction(self) -> tuple[Mat, Mat, NEPFunction]:
         """
-        Returns the function to compute the nonlinear Function T(lambda) and the matrix.
+        Return the function to compute the nonlinear Function T(lambda) and the matrix.
 
         Parameters
         ----------
@@ -995,7 +995,7 @@ cdef class NEP(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Sets the function to compute the Jacobian T'(lambda) as well
+        Set the function to compute the Jacobian T'(lambda) as well
         as the location to store the matrix.
 
         Parameters
@@ -1017,7 +1017,7 @@ cdef class NEP(Object):
 
     def getJacobian(self) -> tuple[Mat, NEPJacobian]:
         """
-        Returns the function to compute the Jacobian T'(lambda) and the matrix.
+        Return the function to compute the Jacobian T'(lambda) and the matrix.
 
         Parameters
         ----------
@@ -1039,7 +1039,7 @@ cdef class NEP(Object):
         structure: Mat.Structure | None = None,
     ) -> None:
         """
-        Sets the operator of the nonlinear eigenvalue problem
+        Set the operator of the nonlinear eigenvalue problem
         in split form.
 
         Parameters
@@ -1067,7 +1067,7 @@ cdef class NEP(Object):
 
     def getSplitOperator(self) -> tuple[list[Mat], list[FN], Mat.Structure]:
         """
-        Returns the operator of the nonlinear eigenvalue problem
+        Return the operator of the nonlinear eigenvalue problem
         in split form.
 
         Returns
@@ -1102,7 +1102,7 @@ cdef class NEP(Object):
         structure: Mat.Structure | None = None,
     ) -> None:
         """
-        Sets the operator in split form from which to build
+        Set the operator in split form from which to build
         the preconditioner to be used when solving the nonlinear
         eigenvalue problem in split form.
 
@@ -1124,7 +1124,7 @@ cdef class NEP(Object):
 
     def getSplitPreconditioner(self) -> tuple[list[Mat], Mat.Structure]:
         """
-        Returns the operator of the split preconditioner.
+        Return the operator of the split preconditioner.
 
         Returns
         -------
@@ -1147,7 +1147,7 @@ cdef class NEP(Object):
 
     def getTwoSided(self) -> bool:
         """
-        Returns the flag indicating whether a two-sided variant
+        Return the flag indicating whether a two-sided variant
         of the algorithm is being used or not.
 
         Returns
@@ -1161,7 +1161,7 @@ cdef class NEP(Object):
 
     def setTwoSided(self, twosided: bool) -> None:
         """
-        Sets the solver to use a two-sided variant so that left
+        Set the solver to use a two-sided variant so that left
         eigenvectors are also computed.
 
         Parameters
@@ -1180,7 +1180,7 @@ cdef class NEP(Object):
         RG rg = None,
     ) -> None:
         """
-        Applies the resolvent T^{-1}(z) to a given vector.
+        Apply the resolvent T^{-1}(z) to a given vector.
 
         Parameters
         ----------
@@ -1201,7 +1201,7 @@ cdef class NEP(Object):
 
     def setRIILagPreconditioner(self, lag: int) -> None:
         """
-        Determines when the preconditioner is rebuilt in the
+        Determine when the preconditioner is rebuilt in the
         nonlinear solve.
 
         Parameters
@@ -1216,7 +1216,7 @@ cdef class NEP(Object):
 
     def getRIILagPreconditioner(self) -> int:
         """
-        Indicates how often the preconditioner is rebuilt.
+        Indicate how often the preconditioner is rebuilt.
 
         Returns
         -------
@@ -1229,7 +1229,7 @@ cdef class NEP(Object):
 
     def setRIIConstCorrectionTol(self, cct: bool) -> None:
         """
-        Sets a flag to keep the tolerance used in the linear solver constant.
+        Set a flag to keep the tolerance used in the linear solver constant.
 
         Parameters
         ----------
@@ -1241,7 +1241,7 @@ cdef class NEP(Object):
 
     def getRIIConstCorrectionTol(self) -> bool:
         """
-        Returns the constant tolerance flag.
+        Return the constant tolerance flag.
 
         Returns
         -------
@@ -1254,7 +1254,7 @@ cdef class NEP(Object):
 
     def setRIIMaximumIterations(self, its: int) -> None:
         """
-        Sets the maximum number of inner iterations to be used in
+        Set the maximum number of inner iterations to be used in
         the RII solver. These are the Newton iterations related to the
         computation of the nonlinear Rayleigh functional.
 
@@ -1268,7 +1268,7 @@ cdef class NEP(Object):
 
     def getRIIMaximumIterations(self) -> int:
         """
-        Gets the maximum number of inner iterations of RII.
+        Get the maximum number of inner iterations of RII.
 
         Returns
         -------
@@ -1281,7 +1281,7 @@ cdef class NEP(Object):
 
     def setRIIHermitian(self, herm: bool) -> None:
         """
-        Sets a flag to indicate if the Hermitian version of the scalar
+        Set a flag to indicate if the Hermitian version of the scalar
         nonlinear equation must be used by the solver.
 
         Parameters
@@ -1294,7 +1294,7 @@ cdef class NEP(Object):
 
     def getRIIHermitian(self) -> bool:
         """
-        Returns the flag about using the Hermitian version of the scalar
+        Return the flag about using the Hermitian version of the scalar
         nonlinear equation.
 
         Returns
@@ -1308,7 +1308,7 @@ cdef class NEP(Object):
 
     def setRIIDeflationThreshold(self, deftol: float) -> None:
         """
-        Sets the threshold value used to switch between deflated and
+        Set the threshold value used to switch between deflated and
         non-deflated iteration.
 
         Parameters
@@ -1321,7 +1321,7 @@ cdef class NEP(Object):
 
     def getRIIDeflationThreshold(self) -> float:
         """
-        Returns the threshold value that controls deflation.
+        Return the threshold value that controls deflation.
 
         Returns
         -------
@@ -1361,7 +1361,7 @@ cdef class NEP(Object):
 
     def setSLPDeflationThreshold(self, deftol: float) -> None:
         """
-        Sets the threshold value used to switch between deflated and
+        Set the threshold value used to switch between deflated and
         non-deflated iteration.
 
         Parameters
@@ -1374,7 +1374,7 @@ cdef class NEP(Object):
 
     def getSLPDeflationThreshold(self) -> float:
         """
-        Returns the threshold value that controls deflation.
+        Return the threshold value that controls deflation.
 
         Returns
         -------
@@ -1490,7 +1490,7 @@ cdef class NEP(Object):
 
     def setNArnoldiLagPreconditioner(self, lag: int) -> None:
         """
-        Determines when the preconditioner is rebuilt in the nonlinear solve.
+        Determine when the preconditioner is rebuilt in the nonlinear solve.
 
         Parameters
         ----------
@@ -1509,7 +1509,7 @@ cdef class NEP(Object):
 
     def getNArnoldiLagPreconditioner(self) -> int:
         """
-        Indicates how often the preconditioner is rebuilt.
+        Indicate how often the preconditioner is rebuilt.
 
         Returns
         -------
@@ -1549,7 +1549,7 @@ cdef class NEP(Object):
 
     def setInterpolInterpolation(self, tol: float | None = None, deg: int | None = None) -> None:
         """
-        Sets the tolerance and maximum degree when building the
+        Set the tolerance and maximum degree when building the
         interpolation polynomial.
 
         Parameters
@@ -1567,7 +1567,7 @@ cdef class NEP(Object):
 
     def getInterpolInterpolation(self) -> tuple[float, int]:
         """
-        Gets the tolerance and maximum degree when building the
+        Get the tolerance and maximum degree when building the
         interpolation polynomial.
 
         Returns
@@ -1586,7 +1586,7 @@ cdef class NEP(Object):
 
     def setNLEIGSRestart(self, keep: float) -> None:
         """
-        Sets the restart parameter for the NLEIGS method, in
+        Set the restart parameter for the NLEIGS method, in
         particular the proportion of basis vectors that must be kept
         after restart.
 
@@ -1604,7 +1604,7 @@ cdef class NEP(Object):
 
     def getNLEIGSRestart(self) -> float:
         """
-        Gets the restart parameter used in the NLEIGS method.
+        Get the restart parameter used in the NLEIGS method.
 
         Returns
         -------
@@ -1637,7 +1637,7 @@ cdef class NEP(Object):
 
     def getNLEIGSLocking(self) -> bool:
         """
-        Gets the locking flag used in the NLEIGS method.
+        Get the locking flag used in the NLEIGS method.
 
         Returns
         -------
@@ -1650,7 +1650,7 @@ cdef class NEP(Object):
 
     def setNLEIGSInterpolation(self, tol: float | None = None, deg: int | None = None) -> None:
         """
-        Sets the tolerance and maximum degree when building the
+        Set the tolerance and maximum degree when building the
         interpolation via divided differences.
 
         Parameters
@@ -1668,7 +1668,7 @@ cdef class NEP(Object):
 
     def getNLEIGSInterpolation(self) -> tuple[float, int]:
         """
-        Gets the tolerance and maximum degree when building the
+        Get the tolerance and maximum degree when building the
         interpolation via divided differences.
 
         Returns
@@ -1698,7 +1698,7 @@ cdef class NEP(Object):
 
     def getNLEIGSFullBasis(self) -> bool:
         """
-        Gets the flag that indicates if NLEIGS is using the full-basis variant.
+        Get the flag that indicates if NLEIGS is using the full-basis variant.
 
         Returns
         -------
@@ -1736,7 +1736,7 @@ cdef class NEP(Object):
 
     def setNLEIGSRKShifts(self, shifts: Sequence[Scalar]) -> None:
         """
-        Sets a list of shifts to be used in the Rational Krylov method.
+        Set a list of shifts to be used in the Rational Krylov method.
 
         Parameters
         ----------
@@ -1750,7 +1750,7 @@ cdef class NEP(Object):
 
     def getNLEIGSRKShifts(self) -> ArrayScalar:
         """
-        Gets the list of shifts used in the Rational Krylov method.
+        Get the list of shifts used in the Rational Krylov method.
 
         Returns
         -------
@@ -1791,7 +1791,7 @@ cdef class NEP(Object):
 
     def setCISSExtraction(self, extraction: CISSExtraction) -> None:
         """
-        Sets the extraction technique used in the CISS solver.
+        Set the extraction technique used in the CISS solver.
 
         Parameters
         ----------
@@ -1803,7 +1803,7 @@ cdef class NEP(Object):
 
     def getCISSExtraction(self) -> CISSExtraction:
         """
-        Gets the extraction technique used in the CISS solver.
+        Get the extraction technique used in the CISS solver.
 
         Returns
         -------
@@ -1824,7 +1824,7 @@ cdef class NEP(Object):
         realmats: bool = False,
     ) -> None:
         """
-        Sets the values of various size parameters in the CISS solver.
+        Set the values of various size parameters in the CISS solver.
 
         Parameters
         ----------
@@ -1863,7 +1863,7 @@ cdef class NEP(Object):
 
     def getCISSSizes(self) -> tuple[int, int, int, int, int, bool]:
         """
-        Gets the values of various size parameters in the CISS solver.
+        Get the values of various size parameters in the CISS solver.
 
         Returns
         -------
@@ -1891,7 +1891,7 @@ cdef class NEP(Object):
 
     def setCISSThreshold(self, delta: float | None = None, spur: float | None = None) -> None:
         """
-        Sets the values of various threshold parameters in the CISS solver.
+        Set the values of various threshold parameters in the CISS solver.
 
         Parameters
         ----------
@@ -1908,7 +1908,7 @@ cdef class NEP(Object):
 
     def getCISSThreshold(self) -> tuple[float, float]:
         """
-        Gets the values of various threshold parameters in the CISS solver.
+        Get the values of various threshold parameters in the CISS solver.
 
         Returns
         -------
@@ -1924,7 +1924,7 @@ cdef class NEP(Object):
 
     def setCISSRefinement(self, inner: int | None = None, blsize: int | None = None) -> None:
         """
-        Sets the values of various refinement parameters in the CISS solver.
+        Set the values of various refinement parameters in the CISS solver.
 
         Parameters
         ----------
@@ -1941,7 +1941,7 @@ cdef class NEP(Object):
 
     def getCISSRefinement(self) -> tuple[int, int]:
         """
-        Gets the values of various refinement parameters in the CISS solver.
+        Get the values of various refinement parameters in the CISS solver.
 
         Returns
         -------

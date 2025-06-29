@@ -72,7 +72,7 @@ cdef class ST(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the ST data structure.
+        Print the ST data structure.
 
         Parameters
         ----------
@@ -84,18 +84,18 @@ cdef class ST(Object):
         CHKERR( STView(self.st, vwr) )
 
     def destroy(self) -> Self:
-        """Destroys the ST object."""
+        """Destroy the ST object."""
         CHKERR( STDestroy(&self.st) )
         self.st = NULL
         return self
 
     def reset(self) -> None:
-        """Resets the ST object."""
+        """Reset the ST object."""
         CHKERR( STReset(self.st) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the ST object.
+        Create the ST object.
 
         Parameters
         ----------
@@ -110,7 +110,7 @@ cdef class ST(Object):
 
     def setType(self, st_type: Type | str) -> None:
         """
-        Builds ST for a particular spectral transformation.
+        Build ST for a particular spectral transformation.
 
         Parameters
         ----------
@@ -132,7 +132,7 @@ cdef class ST(Object):
 
     def getType(self) -> str:
         """
-        Gets the ST type of this object.
+        Get the ST type of this object.
 
         Returns
         -------
@@ -145,7 +145,7 @@ cdef class ST(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all ST options in the
+        Set the prefix used for searching for all ST options in the
         database.
 
         Parameters
@@ -165,7 +165,7 @@ cdef class ST(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all ST options in the
+        Get the prefix used for searching for all ST options in the
         database.
 
         Returns
@@ -179,7 +179,7 @@ cdef class ST(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all ST options
+        Append to the prefix used for searching for all ST options
         in the database.
 
         Parameters
@@ -193,7 +193,7 @@ cdef class ST(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets ST options from the options database. This routine must
+        Set ST options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
         the solver type.
 
@@ -207,7 +207,7 @@ cdef class ST(Object):
 
     def setShift(self, shift: Scalar) -> None:
         """
-        Sets the shift associated with the spectral transformation.
+        Set the shift associated with the spectral transformation.
 
         Parameters
         ----------
@@ -225,7 +225,7 @@ cdef class ST(Object):
 
     def getShift(self) -> Scalar:
         """
-        Gets the shift associated with the spectral transformation.
+        Get the shift associated with the spectral transformation.
 
         Returns
         -------
@@ -238,7 +238,7 @@ cdef class ST(Object):
 
     def setTransform(self, flag: bool = True) -> None:
         """
-        Sets a flag to indicate whether the transformed matrices
+        Set a flag to indicate whether the transformed matrices
         are computed or not.
 
         Parameters
@@ -255,7 +255,7 @@ cdef class ST(Object):
 
     def getTransform(self) -> bool:
         """
-        Gets the flag indicating whether the transformed matrices
+        Get the flag indicating whether the transformed matrices
         are computed or not.
 
         Returns
@@ -273,7 +273,7 @@ cdef class ST(Object):
 
     def setMatMode(self, mode: MatMode) -> None:
         """
-        Sets a flag to indicate how the matrix is being shifted in the
+        Set a flag to indicate how the matrix is being shifted in the
         shift-and-invert and Cayley spectral transformations.
 
         Parameters
@@ -311,7 +311,7 @@ cdef class ST(Object):
 
     def getMatMode(self) -> MatMode:
         """
-        Gets a flag that indicates how the matrix is being shifted in
+        Get a flag that indicates how the matrix is being shifted in
         the shift-and-invert and Cayley spectral transformations.
 
         Returns
@@ -325,7 +325,7 @@ cdef class ST(Object):
 
     def setMatrices(self, operators: list[Mat]) -> None:
         """
-        Sets the matrices associated with the eigenvalue problem.
+        Set the matrices associated with the eigenvalue problem.
 
         Parameters
         ----------
@@ -341,7 +341,7 @@ cdef class ST(Object):
 
     def getMatrices(self) -> list[Mat]:
         """
-        Gets the matrices associated with the eigenvalue problem.
+        Get the matrices associated with the eigenvalue problem.
 
         Returns
         -------
@@ -361,7 +361,7 @@ cdef class ST(Object):
 
     def setMatStructure(self, structure: Mat.Structure) -> None:
         """
-        Sets an internal Mat.Structure attribute to indicate which is
+        Set an internal Mat.Structure attribute to indicate which is
         the relation of the sparsity pattern of the two matrices ``A``
         and ``B`` constituting the generalized eigenvalue
         problem. This function has no effect in the case of standard
@@ -385,7 +385,7 @@ cdef class ST(Object):
 
     def getMatStructure(self) -> Mat.Structure:
         """
-        Gets the internal Mat.Structure attribute to indicate which is
+        Get the internal Mat.Structure attribute to indicate which is
         the relation of the sparsity pattern of the matrices.
 
         Returns
@@ -399,7 +399,7 @@ cdef class ST(Object):
 
     def setKSP(self, KSP ksp) -> None:
         """
-        Sets the KSP object associated with the spectral
+        Set the KSP object associated with the spectral
         transformation.
 
         Parameters
@@ -411,7 +411,7 @@ cdef class ST(Object):
 
     def getKSP(self) -> KSP:
         """
-        Gets the KSP object associated with the spectral
+        Get the KSP object associated with the spectral
         transformation.
 
         Returns
@@ -432,7 +432,7 @@ cdef class ST(Object):
 
     def setPreconditionerMat(self, Mat P = None) -> None:
         """
-        Sets the matrix to be used to build the preconditioner.
+        Set the matrix to be used to build the preconditioner.
 
         Parameters
         ----------
@@ -444,7 +444,7 @@ cdef class ST(Object):
 
     def getPreconditionerMat(self) -> Mat:
         """
-        Gets the matrix previously set by setPreconditionerMat().
+        Get the matrix previously set by setPreconditionerMat().
 
         Returns
         -------
@@ -459,12 +459,12 @@ cdef class ST(Object):
     #
 
     def setUp(self) -> None:
-        """Prepares for the use of a spectral transformation."""
+        """Prepare for the use of a spectral transformation."""
         CHKERR( STSetUp(self.st) )
 
     def apply(self, Vec x, Vec y) -> None:
         """
-        Applies the spectral transformation operator to a vector, for
+        Apply the spectral transformation operator to a vector, for
         instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
@@ -479,7 +479,7 @@ cdef class ST(Object):
 
     def applyTranspose(self, Vec x, Vec y) -> None:
         """
-        Applies the transpose of the operator to a vector, for
+        Apply the transpose of the operator to a vector, for
         instance ``B^T(A - sB)^-T`` in the case of the
         shift-and-invert transformation and generalized eigenproblem.
 
@@ -494,7 +494,7 @@ cdef class ST(Object):
 
     def applyHermitianTranspose(self, Vec x, Vec y) -> None:
         """
-        Applies the hermitian-transpose of the operator to a vector, for
+        Apply the hermitian-transpose of the operator to a vector, for
         instance ``B^H(A - sB)^-H`` in the case of the
         shift-and-invert transformation and generalized eigenproblem.
 
@@ -509,7 +509,7 @@ cdef class ST(Object):
 
     def applyMat(self, Mat x, Mat y) -> None:
         """
-        Applies the spectral transformation operator to a matrix, for
+        Apply the spectral transformation operator to a matrix, for
         instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
@@ -524,7 +524,7 @@ cdef class ST(Object):
 
     def getOperator(self) -> Mat:
         """
-        Returns a shell matrix that represents the operator of the
+        Return a shell matrix that represents the operator of the
         spectral transformation.
 
         Returns
@@ -553,7 +553,7 @@ cdef class ST(Object):
 
     def setCayleyAntishift(self, tau: Scalar) -> None:
         """
-        Sets the value of the anti-shift for the Cayley spectral
+        Set the value of the anti-shift for the Cayley spectral
         transformation.
 
         Parameters
@@ -573,7 +573,7 @@ cdef class ST(Object):
 
     def getCayleyAntishift(self) -> Scalar:
         """
-        Gets the value of the anti-shift for the Cayley spectral
+        Get the value of the anti-shift for the Cayley spectral
         transformation.
 
         Returns
@@ -587,7 +587,7 @@ cdef class ST(Object):
 
     def setFilterType(self, filter_type: FilterType) -> None:
         """
-        Sets the method to be used to build the polynomial filter.
+        Set the method to be used to build the polynomial filter.
 
         Parameter
         ---------
@@ -599,7 +599,7 @@ cdef class ST(Object):
 
     def getFilterType(self) -> FilterType:
         """
-        Gets the method to be used to build the polynomial filter.
+        Get the method to be used to build the polynomial filter.
 
         Returns
         -------
@@ -612,7 +612,7 @@ cdef class ST(Object):
 
     def setFilterInterval(self, inta: float, intb: float) -> None:
         """
-        Defines the interval containing the desired eigenvalues.
+        Define the interval containing the desired eigenvalues.
 
         Parameters
         ----------
@@ -639,7 +639,7 @@ cdef class ST(Object):
 
     def getFilterInterval(self) -> tuple[float, float]:
         """
-        Gets the interval containing the desired eigenvalues.
+        Get the interval containing the desired eigenvalues.
 
         Returns
         -------
@@ -655,7 +655,7 @@ cdef class ST(Object):
 
     def setFilterRange(self, left: float, right: float) -> None:
         """
-        Defines the numerical range (or field of values) of the matrix, that is,
+        Define the numerical range (or field of values) of the matrix, that is,
         the interval containing all eigenvalues.
 
         Parameters
@@ -677,7 +677,7 @@ cdef class ST(Object):
 
     def getFilterRange(self) -> tuple[float, float]:
         """
-        Gets the interval containing all eigenvalues.
+        Get the interval containing all eigenvalues.
 
         Returns
         -------
@@ -693,7 +693,7 @@ cdef class ST(Object):
 
     def setFilterDegree(self, deg: int) -> None:
         """
-        Sets the degree of the filter polynomial.
+        Set the degree of the filter polynomial.
 
         Parameters
         ----------
@@ -705,7 +705,7 @@ cdef class ST(Object):
 
     def getFilterDegree(self) -> int:
         """
-        Gets the degree of the filter polynomial.
+        Get the degree of the filter polynomial.
 
         Returns
         -------
@@ -718,7 +718,7 @@ cdef class ST(Object):
 
     def setFilterDamping(self, damping: FilterDamping) -> None:
         """
-        Sets the type of damping to be used in the polynomial filter.
+        Set the type of damping to be used in the polynomial filter.
 
         Parameter
         ---------
@@ -730,7 +730,7 @@ cdef class ST(Object):
 
     def getFilterDamping(self) -> FilterDamping:
         """
-        Gets the type of damping used in the polynomial filter.
+        Get the type of damping used in the polynomial filter.
 
         Returns
         -------
