@@ -2,7 +2,7 @@
 
 class EPSType(object):
     """
-    EPS type
+    EPS type.
 
     Native sparse eigensolvers.
 
@@ -58,7 +58,7 @@ class EPSType(object):
 
 class EPSProblemType(object):
     """
-    EPS problem type
+    EPS problem type.
 
     - `HEP`:    Hermitian eigenproblem.
     - `NHEP`:   Non-Hermitian eigenproblem.
@@ -79,7 +79,7 @@ class EPSProblemType(object):
 
 class EPSExtraction(object):
     """
-    EPS extraction technique
+    EPS extraction technique.
 
     - `RITZ`:              Standard Rayleigh-Ritz extraction.
     - `HARMONIC`:          Harmonic extraction.
@@ -99,7 +99,7 @@ class EPSExtraction(object):
 
 class EPSBalance(object):
     """
-    EPS type of balancing used for non-Hermitian problems
+    EPS type of balancing used for non-Hermitian problems.
 
     - `NONE`:     None.
     - `ONESIDE`:  One-sided balancing.
@@ -113,7 +113,7 @@ class EPSBalance(object):
 
 class EPSErrorType(object):
     """
-    EPS error type to assess accuracy of computed solutions
+    EPS error type to assess accuracy of computed solutions.
 
     - `ABSOLUTE`: Absolute error.
     - `RELATIVE`: Relative error.
@@ -125,7 +125,7 @@ class EPSErrorType(object):
 
 class EPSWhich(object):
     """
-    EPS desired part of spectrum
+    EPS desired part of spectrum.
 
     - `LARGEST_MAGNITUDE`:  Largest magnitude (default).
     - `SMALLEST_MAGNITUDE`: Smallest magnitude.
@@ -153,7 +153,7 @@ class EPSWhich(object):
 
 class EPSConv(object):
     """
-    EPS convergence test
+    EPS convergence test.
 
     - `ABS`:  Absolute convergence test.
     - `REL`:  Convergence test relative to the eigenvalue.
@@ -167,7 +167,7 @@ class EPSConv(object):
 
 class EPSStop(object):
     """
-    EPS stopping test
+    EPS stopping test.
 
     - `BASIC`:     Default stopping test.
     - `USER`:      User-defined stopping test.
@@ -179,7 +179,7 @@ class EPSStop(object):
 
 class EPSConvergedReason(object):
     """
-    EPS convergence reasons
+    EPS convergence reasons.
 
     - `CONVERGED_TOL`:          All eigenpairs converged to requested tolerance.
     - `CONVERGED_USER`:         User-defined convergence criterion satisfied.
@@ -210,7 +210,7 @@ class EPSPowerShiftType(object):
 
 class EPSKrylovSchurBSEType(object):
     """
-    EPS Krylov-Schur method for BSE problems
+    EPS Krylov-Schur method for BSE problems.
 
     - `SHAO`:         Lanczos recurrence for H square.
     - `GRUNING`:      Lanczos recurrence for H.
@@ -222,7 +222,7 @@ class EPSKrylovSchurBSEType(object):
 
 class EPSLanczosReorthogType(object):
     """
-    EPS Lanczos reorthogonalization type
+    EPS Lanczos reorthogonalization type.
 
     - `LOCAL`:     Local reorthogonalization only.
     - `FULL`:      Full reorthogonalization.
@@ -240,7 +240,7 @@ class EPSLanczosReorthogType(object):
 
 class EPSCISSQuadRule(object):
     """
-    EPS CISS quadrature rule
+    EPS CISS quadrature rule.
 
     - `TRAPEZOIDAL`: Trapezoidal rule.
     - `CHEBYSHEV`:   Chebyshev points.
@@ -250,7 +250,7 @@ class EPSCISSQuadRule(object):
 
 class EPSCISSExtraction(object):
     """
-    EPS CISS extraction technique
+    EPS CISS extraction technique.
 
     - `RITZ`:   Ritz extraction.
     - `HANKEL`: Extraction via Hankel eigenproblem.
@@ -263,7 +263,7 @@ class EPSCISSExtraction(object):
 cdef class EPS(Object):
 
     """
-    EPS
+    EPS.
     """
 
     Type            = EPSType

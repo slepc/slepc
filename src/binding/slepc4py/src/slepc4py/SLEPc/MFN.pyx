@@ -2,7 +2,7 @@
 
 class MFNType(object):
     """
-    MFN type
+    MFN type.
 
     Action of a matrix function on a vector.
 
@@ -25,7 +25,7 @@ class MFNConvergedReason(object):
 cdef class MFN(Object):
 
     """
-    MFN
+    MFN.
     """
 
     Type            = MFNType

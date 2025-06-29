@@ -2,7 +2,7 @@
 
 class FNType(object):
     """
-    FN type
+    FN type.
     """
     COMBINE  = S_(FNCOMBINE)
     RATIONAL = S_(FNRATIONAL)
@@ -14,7 +14,7 @@ class FNType(object):
 
 class FNCombineType(object):
     """
-    FN type of combination of child functions
+    FN type of combination of child functions.
 
     - `ADD`:       Addition         f(x) = f1(x)+f2(x)
     - `MULTIPLY`:  Multiplication   f(x) = f1(x)*f2(x)
@@ -28,7 +28,7 @@ class FNCombineType(object):
 
 class FNParallelType(object):
     """
-    FN parallel types
+    FN parallel types.
 
     - `REDUNDANT`:    Every process performs the computation redundantly.
     - `SYNCHRONIZED`: The first process sends the result to the rest.
@@ -41,7 +41,7 @@ class FNParallelType(object):
 cdef class FN(Object):
 
     """
-    FN
+    FN.
     """
 
     Type         = FNType

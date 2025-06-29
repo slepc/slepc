@@ -2,7 +2,7 @@
 
 class STType(object):
     """
-    ST types
+    ST types.
 
     - `SHELL`:   User-defined.
     - `SHIFT`:   Shift from origin.
@@ -20,7 +20,7 @@ class STType(object):
 
 class STMatMode(object):
     """
-    ST matrix mode
+    ST matrix mode.
 
     - `COPY`:    A working copy of the matrix is created.
     - `INPLACE`: The operation is computed in-place.
@@ -33,7 +33,7 @@ class STMatMode(object):
 
 class STFilterType(object):
     """
-    ST filter type
+    ST filter type.
 
     - `FILTLAN`:  An adapted implementation of the Filtered Lanczos Package.
     - `CHEBYSEV`: A polynomial filter based on a truncated Chebyshev series.
@@ -43,7 +43,7 @@ class STFilterType(object):
 
 class STFilterDamping(object):
     """
-    ST filter damping
+    ST filter damping.
 
     - `NONE`:    No damping
     - `JACKSON`: Jackson damping
@@ -60,7 +60,7 @@ class STFilterDamping(object):
 cdef class ST(Object):
 
     """
-    ST
+    ST.
     """
 
     Type          = STType

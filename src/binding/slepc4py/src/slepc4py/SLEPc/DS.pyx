@@ -2,7 +2,7 @@
 
 class DSType(object):
     """
-    DS type
+    DS type.
     """
     HEP     = S_(DSHEP)
     NHEP    = S_(DSNHEP)
@@ -18,7 +18,7 @@ class DSType(object):
 
 class DSStateType(object):
     """
-    DS state types
+    DS state types.
 
     - `RAW`:          Not processed yet.
     - `INTERMEDIATE`: Reduced to Hessenberg or tridiagonal form (or equivalent).
@@ -32,7 +32,7 @@ class DSStateType(object):
 
 class DSMatType(object):
     """
-    To refer to one of the matrices stored internally in DS
+    To refer to one of the matrices stored internally in DS.
 
     - `A`:  first matrix of eigenproblem/singular value problem.
     - `B`:  second matrix of a generalized eigenproblem.
@@ -62,7 +62,7 @@ class DSMatType(object):
 
 class DSParallelType(object):
     """
-    DS parallel types
+    DS parallel types.
 
     - `REDUNDANT`:    Every process performs the computation redundantly.
     - `SYNCHRONIZED`: The first process sends the result to the rest.
@@ -77,7 +77,7 @@ class DSParallelType(object):
 cdef class DS(Object):
 
     """
-    DS
+    DS.
     """
 
     Type         = DSType

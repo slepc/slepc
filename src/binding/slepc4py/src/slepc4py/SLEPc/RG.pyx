@@ -2,7 +2,7 @@
 
 class RGType(object):
     """
-    RG type
+    RG type.
     """
     INTERVAL   = S_(RGINTERVAL)
     POLYGON    = S_(RGPOLYGON)
@@ -11,7 +11,7 @@ class RGType(object):
 
 class RGQuadRule(object):
     """
-    RG quadrature rule for contour integral methods
+    RG quadrature rule for contour integral methods.
 
     - `TRAPEZOIDAL`: Trapezoidal rule.
     - `CHEBYSHEV`:   Chebyshev points.
@@ -24,7 +24,7 @@ class RGQuadRule(object):
 cdef class RG(Object):
 
     """
-    RG
+    RG.
     """
 
     Type     = RGType

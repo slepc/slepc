@@ -2,7 +2,7 @@
 
 class PEPType(object):
     """
-    PEP type
+    PEP type.
 
     Polynomial eigensolvers.
 
@@ -22,7 +22,7 @@ class PEPType(object):
 
 class PEPProblemType(object):
     """
-    PEP problem type
+    PEP problem type.
 
     - `GENERAL`:    No structure.
     - `HERMITIAN`:  Hermitian structure.
@@ -36,7 +36,7 @@ class PEPProblemType(object):
 
 class PEPWhich(object):
     """
-    PEP desired part of spectrum
+    PEP desired part of spectrum.
 
     - `LARGEST_MAGNITUDE`:  Largest magnitude (default).
     - `SMALLEST_MAGNITUDE`: Smallest magnitude.
@@ -64,7 +64,7 @@ class PEPWhich(object):
 
 class PEPBasis(object):
     """
-    PEP basis type for the representation of the polynomial
+    PEP basis type for the representation of the polynomial.
 
     - `MONOMIAL`:   Monomials (default).
     - `CHEBYSHEV1`: Chebyshev polynomials of the 1st kind.
@@ -82,7 +82,7 @@ class PEPBasis(object):
 
 class PEPScale(object):
     """
-    PEP scaling strategy
+    PEP scaling strategy.
 
     - `NONE`:     No scaling.
     - `SCALAR`:   Parameter scaling.
@@ -96,7 +96,7 @@ class PEPScale(object):
 
 class PEPRefine(object):
     """
-    PEP refinement strategy
+    PEP refinement strategy.
 
     - `NONE`:     No refinement.
     - `SIMPLE`:   Refine eigenpairs one by one.
@@ -108,7 +108,7 @@ class PEPRefine(object):
 
 class PEPRefineScheme(object):
     """
-    PEP scheme for solving linear systems during iterative refinement
+    PEP scheme for solving linear systems during iterative refinement.
 
     - `SCHUR`:    Schur complement.
     - `MBE`:      Mixed block elimination.
@@ -121,7 +121,7 @@ class PEPRefineScheme(object):
 class PEPExtract(object):
     """
     PEP extraction strategy used to obtain eigenvectors of the PEP from the
-    eigenvectors of the linearization
+    eigenvectors of the linearization.
 
     - `NONE`:       Use the first block.
     - `NORM`:       Use the first or last block depending on norm of H.
@@ -135,7 +135,7 @@ class PEPExtract(object):
 
 class PEPErrorType(object):
     """
-    PEP error type to assess accuracy of computed solutions
+    PEP error type to assess accuracy of computed solutions.
 
     - `ABSOLUTE`: Absolute error.
     - `RELATIVE`: Relative error.
@@ -147,7 +147,7 @@ class PEPErrorType(object):
 
 class PEPConv(object):
     """
-    PEP convergence test
+    PEP convergence test.
 
     - `ABS`:  Absolute convergence test.
     - `REL`:  Convergence test relative to the eigenvalue.
@@ -161,7 +161,7 @@ class PEPConv(object):
 
 class PEPStop(object):
     """
-    PEP stopping test
+    PEP stopping test.
 
     - `BASIC`: Default stopping test.
     - `USER`:  User-defined stopping test.
@@ -171,7 +171,7 @@ class PEPStop(object):
 
 class PEPConvergedReason(object):
     """
-    PEP convergence reasons
+    PEP convergence reasons.
 
     - `CONVERGED_TOL`:          All eigenpairs converged to requested tolerance.
     - `CONVERGED_USER`:         User-defined convergence criterion satisfied.
@@ -190,7 +190,7 @@ class PEPConvergedReason(object):
 
 class PEPJDProjection(object):
     """
-    PEP type of projection to be used in the Jacobi-Davidson solver
+    PEP type of projection to be used in the Jacobi-Davidson solver.
 
     - `HARMONIC`:   Harmonic projection.
     - `ORTHOGONAL`: Orthogonal projection.
@@ -200,7 +200,7 @@ class PEPJDProjection(object):
 
 class PEPCISSExtraction(object):
     """
-    PEP CISS extraction technique
+    PEP CISS extraction technique.
 
     - `RITZ`:   Ritz extraction.
     - `HANKEL`: Extraction via Hankel eigenproblem.
@@ -215,7 +215,7 @@ class PEPCISSExtraction(object):
 cdef class PEP(Object):
 
     """
-    PEP
+    PEP.
     """
 
     Type            = PEPType

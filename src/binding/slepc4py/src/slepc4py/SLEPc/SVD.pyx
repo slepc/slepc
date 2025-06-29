@@ -2,7 +2,7 @@
 
 class SVDType(object):
     """
-    SVD types
+    SVD types.
 
     - `CROSS`:      Eigenproblem with the cross-product matrix.
     - `CYCLIC`:     Eigenproblem with the cyclic matrix.
@@ -32,7 +32,7 @@ class SVDType(object):
 
 class SVDProblemType(object):
     """
-    SVD problem type
+    SVD problem type.
 
     - `STANDARD`:    Standard SVD.
     - `GENERALIZED`: Generalized singular value decomposition (GSVD).
@@ -44,7 +44,7 @@ class SVDProblemType(object):
 
 class SVDErrorType(object):
     """
-    SVD error type to assess accuracy of computed solutions
+    SVD error type to assess accuracy of computed solutions.
 
     - `ABSOLUTE`: Absolute error.
     - `RELATIVE`: Relative error.
@@ -56,7 +56,7 @@ class SVDErrorType(object):
 
 class SVDWhich(object):
     """
-    SVD desired part of spectrum
+    SVD desired part of spectrum.
 
     - `LARGEST`:  Largest singular values.
     - `SMALLEST`: Smallest singular values.
@@ -66,7 +66,7 @@ class SVDWhich(object):
 
 class SVDConv(object):
     """
-    SVD convergence test
+    SVD convergence test.
 
     - `ABS`:   Absolute convergence test.
     - `REL`:   Convergence test relative to the singular value.
@@ -82,7 +82,7 @@ class SVDConv(object):
 
 class SVDStop(object):
     """
-    SVD stopping test
+    SVD stopping test.
 
     - `BASIC`:     Default stopping test.
     - `USER`:      User-defined stopping test.
@@ -94,7 +94,7 @@ class SVDStop(object):
 
 class SVDConvergedReason(object):
     """
-    SVD convergence reasons
+    SVD convergence reasons.
 
     - `CONVERGED_TOL`:          All eigenpairs converged to requested tolerance.
     - `CONVERGED_USER`:         User-defined convergence criterion satisfied.
@@ -115,7 +115,7 @@ class SVDConvergedReason(object):
 
 class SVDTRLanczosGBidiag(object):
     """
-    SVD TRLanczos bidiagonalization choices for the GSVD case
+    SVD TRLanczos bidiagonalization choices for the GSVD case.
 
     - `SINGLE`: Single bidiagonalization (Qa).
     - `UPPER`:  Joint bidiagonalization, both Qa and Qb in upper bidiagonal form.
@@ -130,7 +130,7 @@ class SVDTRLanczosGBidiag(object):
 cdef class SVD(Object):
 
     """
-    SVD
+    SVD.
     """
 
     Type            = SVDType

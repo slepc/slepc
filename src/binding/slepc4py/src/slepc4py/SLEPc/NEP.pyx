@@ -2,7 +2,7 @@
 
 class NEPType(object):
     """
-    NEP type
+    NEP type.
 
     Nonlinear eigensolvers.
 
@@ -22,7 +22,7 @@ class NEPType(object):
 
 class NEPProblemType(object):
     """
-    NEP problem type
+    NEP problem type.
 
     - `GENERAL`:  General nonlinear eigenproblem.
     - `RATIONAL`: NEP defined in split form with all f_i rational.
@@ -32,7 +32,7 @@ class NEPProblemType(object):
 
 class NEPErrorType(object):
     """
-    NEP error type to assess accuracy of computed solutions
+    NEP error type to assess accuracy of computed solutions.
 
     - `ABSOLUTE`: Absolute error.
     - `RELATIVE`: Relative error.
@@ -44,7 +44,7 @@ class NEPErrorType(object):
 
 class NEPWhich(object):
     """
-    NEP desired part of spectrum
+    NEP desired part of spectrum.
 
     - `LARGEST_MAGNITUDE`:  Largest magnitude (default).
     - `SMALLEST_MAGNITUDE`: Smallest magnitude.
@@ -72,7 +72,7 @@ class NEPWhich(object):
 
 class NEPConvergedReason(object):
     """
-    NEP convergence reasons
+    NEP convergence reasons.
 
     - `CONVERGED_TOL`:               All eigenpairs converged to requested tolerance.
     - `CONVERGED_USER`:              User-defined convergence criterion satisfied.
@@ -93,7 +93,7 @@ class NEPConvergedReason(object):
 
 class NEPRefine(object):
     """
-    NEP refinement strategy
+    NEP refinement strategy.
 
     - `NONE`:     No refinement.
     - `SIMPLE`:   Refine eigenpairs one by one.
@@ -105,7 +105,7 @@ class NEPRefine(object):
 
 class NEPRefineScheme(object):
     """
-    NEP scheme for solving linear systems during iterative refinement
+    NEP scheme for solving linear systems during iterative refinement.
 
     - `SCHUR`:    Schur complement.
     - `MBE`:      Mixed block elimination.
@@ -117,7 +117,7 @@ class NEPRefineScheme(object):
 
 class NEPConv(object):
     """
-    NEP convergence test
+    NEP convergence test.
 
     - `ABS`:  Absolute convergence test.
     - `REL`:  Convergence test relative to the eigenvalue.
@@ -131,7 +131,7 @@ class NEPConv(object):
 
 class NEPStop(object):
     """
-    NEP stopping test
+    NEP stopping test.
 
     - `BASIC`: Default stopping test.
     - `USER`:  User-defined stopping test.
@@ -141,7 +141,7 @@ class NEPStop(object):
 
 class NEPCISSExtraction(object):
     """
-    NEP CISS extraction technique
+    NEP CISS extraction technique.
 
     - `RITZ`:   Ritz extraction.
     - `HANKEL`: Extraction via Hankel eigenproblem.
@@ -156,7 +156,7 @@ class NEPCISSExtraction(object):
 cdef class NEP(Object):
 
     """
-    NEP
+    NEP.
     """
 
     Type            = NEPType

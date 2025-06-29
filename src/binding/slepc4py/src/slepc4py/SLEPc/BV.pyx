@@ -2,7 +2,7 @@
 
 class BVType(object):
     """
-    BV type
+    BV type.
     """
     MAT        = S_(BVMAT)
     SVEC       = S_(BVSVEC)
@@ -12,7 +12,7 @@ class BVType(object):
 
 class BVOrthogType(object):
     """
-    BV orthogonalization types
+    BV orthogonalization types.
 
     - `CGS`: Classical Gram-Schmidt.
     - `MGS`: Modified Gram-Schmidt.
@@ -22,7 +22,7 @@ class BVOrthogType(object):
 
 class BVOrthogRefineType(object):
     """
-    BV orthogonalization refinement types
+    BV orthogonalization refinement types.
 
     - `IFNEEDED`: Reorthogonalize if a criterion is satisfied.
     - `NEVER`:    Never reorthogonalize.
@@ -34,7 +34,7 @@ class BVOrthogRefineType(object):
 
 class BVOrthogBlockType(object):
     """
-    BV block-orthogonalization types
+    BV block-orthogonalization types.
 
     - `GS`:       Gram-Schmidt.
     - `CHOL`:     Cholesky.
@@ -50,7 +50,7 @@ class BVOrthogBlockType(object):
 
 class BVMatMultType(object):
     """
-    BV mat-mult types
+    BV mat-mult types.
 
     - `VECS`: Perform a matrix-vector multiply per each column.
     - `MAT`:  Carry out a Mat-Mat product with a dense matrix.
@@ -60,7 +60,7 @@ class BVMatMultType(object):
 
 class BVSVDMethod(object):
     """
-    BV methods for computing the SVD
+    BV methods for computing the SVD.
 
     - `REFINE`: Based on the SVD of the cross product matrix S'*S, with refinement.
     - `QR`:     Based on the SVD of the triangular factor of qr(S).
@@ -75,7 +75,7 @@ class BVSVDMethod(object):
 cdef class BV(Object):
 
     """
-    BV
+    BV.
     """
 
     Type             = BVType
@@ -602,7 +602,7 @@ cdef class BV(Object):
 
     def scaleColumn(self, j: int, alpha: Scalar) -> None:
         """
-        Scale column j by alpha
+        Scale column j by alpha.
 
         Parameters
         ----------
