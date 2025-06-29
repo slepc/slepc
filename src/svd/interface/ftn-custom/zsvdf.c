@@ -110,7 +110,7 @@ static PetscErrorCode ourstopdestroy(void **ctx)
   PetscObjectUseFortranCallback(svd,_cb.stopdestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
-SLEPC_EXTERN void svdmonitorset_(SVD *svd,void (*monitor)(SVD*,PetscInt*,PetscInt*,PetscReal*,PetscReal*,PetscInt*,void*,PetscErrorCode*),void *mctx,void (*monitordestroy)(void *,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void svdmonitorset_(SVD *svd,SVDMonitorFn monitor,void *mctx,PetscCtxDestroyFn monitordestroy,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(mctx);
   CHKFORTRANNULLFUNCTION(monitordestroy);
@@ -132,7 +132,7 @@ SLEPC_EXTERN void svdconvergedrelative_(SVD*,PetscReal*,PetscReal*,PetscReal*,vo
 SLEPC_EXTERN void svdconvergednorm_(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 SLEPC_EXTERN void svdconvergedmaxit_(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void svdsetconvergencetestfunction_(SVD *svd,void (*func)(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void *ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void svdsetconvergencetestfunction_(SVD *svd,SVDConvergenceTestFn func,void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);
@@ -154,7 +154,7 @@ SLEPC_EXTERN void svdsetconvergencetestfunction_(SVD *svd,void (*func)(SVD*,Pets
 SLEPC_EXTERN void svdstoppingbasic_(SVD*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,SVDConvergedReason*,void*,PetscErrorCode*);
 SLEPC_EXTERN void svdstoppingthreshold_(SVD*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,SVDConvergedReason*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void svdsetstoppingtestfunction_(SVD *svd,void (*func)(SVD*,PetscInt,PetscInt,PetscInt,PetscInt,SVDConvergedReason*,void*,PetscErrorCode*),void *ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void svdsetstoppingtestfunction_(SVD *svd,SVDStoppingTestFn func,void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);

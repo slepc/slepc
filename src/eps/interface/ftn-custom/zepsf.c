@@ -123,7 +123,7 @@ static PetscErrorCode ourarbitraryfunc(PetscScalar er,PetscScalar ei,Vec xr,Vec 
   PetscObjectUseFortranCallback(eps,_cb.arbitrary,(PetscScalar*,PetscScalar*,Vec*,Vec*,PetscScalar*,PetscScalar*,void*,PetscErrorCode*),(&er,&ei,&xr,&xi,rr,ri,_ctx,&ierr));
 }
 
-SLEPC_EXTERN void epsmonitorset_(EPS *eps,void (*monitor)(EPS*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,void*,PetscErrorCode*),void *mctx,void (*monitordestroy)(void *,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void epsmonitorset_(EPS *eps,EPSMonitorFn monitor,void *mctx,PetscCtxDestroyFn monitordestroy,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(mctx);
   CHKFORTRANNULLFUNCTION(monitordestroy);
@@ -144,7 +144,7 @@ SLEPC_EXTERN void epsconvergedabsolute_(EPS*,PetscScalar*,PetscScalar*,PetscReal
 SLEPC_EXTERN void epsconvergedrelative_(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 SLEPC_EXTERN void epsconvergednorm_(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void epssetconvergencetestfunction_(EPS *eps,void (*func)(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void *ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void epssetconvergencetestfunction_(EPS *eps,EPSConvergenceTestFn func,void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);
@@ -164,7 +164,7 @@ SLEPC_EXTERN void epssetconvergencetestfunction_(EPS *eps,void (*func)(EPS*,Pets
 SLEPC_EXTERN void epsstoppingbasic_(EPS*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,EPSConvergedReason*,void*,PetscErrorCode*);
 SLEPC_EXTERN void epsstoppingthreshold_(EPS*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,EPSConvergedReason*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void epssetstoppingtestfunction_(EPS *eps,void (*func)(EPS*,PetscInt,PetscInt,PetscInt,PetscInt,EPSConvergedReason*,void*,PetscErrorCode*),void *ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void epssetstoppingtestfunction_(EPS *eps,EPSStoppingTestFn func,void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);
@@ -179,14 +179,14 @@ SLEPC_EXTERN void epssetstoppingtestfunction_(EPS *eps,void (*func)(EPS*,PetscIn
   }
 }
 
-SLEPC_EXTERN void epsseteigenvaluecomparison_(EPS *eps,void (*func)(PetscScalar*,PetscScalar*,PetscScalar*,PetscScalar*,PetscInt*,void*),void *ctx,PetscErrorCode *ierr)
+SLEPC_EXTERN void epsseteigenvaluecomparison_(EPS *eps,SlepcEigenvalueComparisonFn func,void *ctx,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   *ierr = PetscObjectSetFortranCallback((PetscObject)*eps,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.comparison,(PetscVoidFunction)func,ctx); if (*ierr) return;
   *ierr = EPSSetEigenvalueComparison(*eps,oureigenvaluecomparison,*eps);
 }
 
-SLEPC_EXTERN void epssetarbitraryselection_(EPS *eps,void (*func)(PetscScalar*,PetscScalar*,Vec*,Vec*,PetscScalar*,PetscScalar*,void*,PetscErrorCode*),void *ctx,PetscErrorCode *ierr)
+SLEPC_EXTERN void epssetarbitraryselection_(EPS *eps,SlepcArbitrarySelectionFn func,void *ctx,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   *ierr = PetscObjectSetFortranCallback((PetscObject)*eps,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.arbitrary,(PetscVoidFunction)func,ctx); if (*ierr) return;

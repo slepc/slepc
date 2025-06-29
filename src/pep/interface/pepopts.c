@@ -553,7 +553,7 @@ PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
 
 .seealso: PEPSetWhichEigenpairs(), PEPWhich
 @*/
-PetscErrorCode PEPSetEigenvalueComparison(PEP pep,PetscErrorCode (*comp)(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res,void *ctx),void *ctx)
+PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *comp,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);

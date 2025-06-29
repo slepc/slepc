@@ -517,7 +517,7 @@ PetscErrorCode NEPGetWhichEigenpairs(NEP nep,NEPWhich *which)
 
 .seealso: NEPSetWhichEigenpairs(), NEPWhich
 @*/
-PetscErrorCode NEPSetEigenvalueComparison(NEP nep,PetscErrorCode (*comp)(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res,void *ctx),void *ctx)
+PetscErrorCode NEPSetEigenvalueComparison(NEP nep,SlepcEigenvalueComparisonFn *comp,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
