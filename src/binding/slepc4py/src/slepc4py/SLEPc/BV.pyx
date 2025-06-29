@@ -1,9 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class BVType(object):
-    """
-    BV type.
-    """
+    """BV type."""
     MAT        = S_(BVMAT)
     SVEC       = S_(BVSVEC)
     VECS       = S_(BVVECS)
@@ -74,9 +72,7 @@ class BVSVDMethod(object):
 
 cdef class BV(Object):
 
-    """
-    BV.
-    """
+    """BV."""
 
     Type             = BVType
     OrthogType       = BVOrthogType
@@ -163,9 +159,7 @@ cdef class BV(Object):
         CHKERR( BVView(self.bv, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the BV object.
-        """
+        """Destroys the BV object."""
         CHKERR( BVDestroy(&self.bv) )
         self.bv = NULL
         return self
@@ -765,9 +759,7 @@ cdef class BV(Object):
         CHKERR( BVSetVecType(self.bv, cval) )
 
     def getVecType(self) -> str:
-        """
-        Return the vector type used by the basis vectors object.
-        """
+        """Return the vector type used by the basis vectors object."""
         cdef PetscVecType cval = NULL
         CHKERR( BVGetVecType(self.bv, &cval) )
         return bytes2str(cval)

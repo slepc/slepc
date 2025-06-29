@@ -155,9 +155,7 @@ class NEPCISSExtraction(object):
 
 cdef class NEP(Object):
 
-    """
-    NEP.
-    """
+    """NEP."""
 
     Type            = NEPType
     ProblemType     = NEPProblemType
@@ -189,17 +187,13 @@ cdef class NEP(Object):
         CHKERR( NEPView(self.nep, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the NEP object.
-        """
+        """Destroys the NEP object."""
         CHKERR( NEPDestroy(&self.nep) )
         self.nep = NULL
         return self
 
     def reset(self) -> None:
-        """
-        Resets the NEP object.
-        """
+        """Resets the NEP object."""
         CHKERR( NEPReset(self.nep) )
 
     def create(self, comm: Comm | None = None) -> Self:
@@ -694,9 +688,7 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Sets a function to decide when to stop the outer iteration of the eigensolver.
-        """
+        """Sets a function to decide when to stop the outer iteration of the eigensolver."""
         if stopping is not None:
             if args is None: args = ()
             if kargs is None: kargs = {}
@@ -707,9 +699,7 @@ cdef class NEP(Object):
             CHKERR( NEPSetStoppingTestFunction(self.nep, NEPStoppingBasic, NULL, NULL) )
 
     def getStoppingTest(self) -> NEPStoppingFunction:
-        """
-        Gets the stopping function.
-        """
+        """Gets the stopping function."""
         return self.get_attr('__stopping__')
 
     #
@@ -720,9 +710,7 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Appends a monitor function to the list of monitors.
-        """
+        """Appends a monitor function to the list of monitors."""
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
         if monitorlist is None:
@@ -734,31 +722,22 @@ cdef class NEP(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> NEPMonitorFunction:
-        """
-        Gets the list of monitor functions.
-        """
+        """Gets the list of monitor functions."""
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
-        """
-        Clears all monitors for a `NEP` object.
-        """
+        """Clears all monitors for a `NEP` object."""
         CHKERR( NEPMonitorCancel(self.nep) )
         self.set_attr('__monitor__', None)
 
     #
 
     def setUp(self) -> None:
-        """
-        Sets up all the internal data structures necessary for the
-        execution of the eigensolver.
-        """
+        """Sets up all the internal data structures necessary for the execution of the eigensolver."""
         CHKERR( NEPSetUp(self.nep) )
 
     def solve(self) -> None:
-        """
-        Solves the eigensystem.
-        """
+        """Solves the eigensystem."""
         CHKERR( NEPSolve(self.nep) )
 
     def getIterationNumber(self) -> int:

@@ -214,9 +214,7 @@ class PEPCISSExtraction(object):
 
 cdef class PEP(Object):
 
-    """
-    PEP.
-    """
+    """PEP."""
 
     Type            = PEPType
     ProblemType     = PEPProblemType
@@ -252,17 +250,13 @@ cdef class PEP(Object):
         CHKERR( PEPView(self.pep, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the PEP object.
-        """
+        """Destroys the PEP object."""
         CHKERR( PEPDestroy(&self.pep) )
         self.pep = NULL
         return self
 
     def reset(self) -> None:
-        """
-        Resets the PEP object.
-        """
+        """Resets the PEP object."""
         CHKERR( PEPReset(self.pep) )
 
     def create(self, comm: Comm | None = None) -> Self:
@@ -1000,9 +994,7 @@ cdef class PEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Sets a function to decide when to stop the outer iteration of the eigensolver.
-        """
+        """Sets a function to decide when to stop the outer iteration of the eigensolver."""
         if stopping is not None:
             if args is None: args = ()
             if kargs is None: kargs = {}
@@ -1013,9 +1005,7 @@ cdef class PEP(Object):
             CHKERR( PEPSetStoppingTestFunction(self.pep, PEPStoppingBasic, NULL, NULL) )
 
     def getStoppingTest(self) -> PEPStoppingFunction:
-        """
-        Gets the stopping function.
-        """
+        """Gets the stopping function."""
         return self.get_attr('__stopping__')
 
     #
@@ -1026,9 +1016,7 @@ cdef class PEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Appends a monitor function to the list of monitors.
-        """
+        """Appends a monitor function to the list of monitors."""
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
         if monitorlist is None:
@@ -1040,31 +1028,22 @@ cdef class PEP(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> PEPMonitorFunction:
-        """
-        Gets the list of monitor functions.
-        """
+        """Gets the list of monitor functions."""
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
-        """
-        Clears all monitors for a `PEP` object.
-        """
+        """Clears all monitors for a `PEP` object."""
         CHKERR( PEPMonitorCancel(self.pep) )
         self.set_attr('__monitor__', None)
 
     #
 
     def setUp(self) -> None:
-        """
-        Sets up all the internal data structures necessary for the
-        execution of the eigensolver.
-        """
+        """Sets up all the internal data structures necessary for the execution of the eigensolver."""
         CHKERR( PEPSetUp(self.pep) )
 
     def solve(self) -> None:
-        """
-        Solves the eigensystem.
-        """
+        """Solves the eigensystem."""
         CHKERR( PEPSolve(self.pep) )
 
     def getIterationNumber(self) -> int:

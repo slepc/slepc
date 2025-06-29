@@ -262,9 +262,7 @@ class EPSCISSExtraction(object):
 
 cdef class EPS(Object):
 
-    """
-    EPS.
-    """
+    """EPS."""
 
     Type            = EPSType
     ProblemType     = EPSProblemType
@@ -299,17 +297,13 @@ cdef class EPS(Object):
         CHKERR( EPSView(self.eps, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the EPS object.
-        """
+        """Destroys the EPS object."""
         CHKERR( EPSDestroy(&self.eps) )
         self.eps = NULL
         return self
 
     def reset(self) -> None:
-        """
-        Resets the EPS object.
-        """
+        """Resets the EPS object."""
         CHKERR( EPSReset(self.eps) )
 
     def create(self, comm: Comm | None = None) -> Self:
@@ -1241,9 +1235,7 @@ cdef class EPS(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Sets a function to decide when to stop the outer iteration of the eigensolver.
-        """
+        """Sets a function to decide when to stop the outer iteration of the eigensolver."""
         if stopping is not None:
             if args is None: args = ()
             if kargs is None: kargs = {}
@@ -1254,9 +1246,7 @@ cdef class EPS(Object):
             CHKERR( EPSSetStoppingTestFunction(self.eps, EPSStoppingBasic, NULL, NULL) )
 
     def getStoppingTest(self) -> EPSStoppingFunction:
-        """
-        Gets the stopping function.
-        """
+        """Gets the stopping function."""
         return self.get_attr('__stopping__')
 
     #
@@ -1267,11 +1257,7 @@ cdef class EPS(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Sets a function to look for eigenvalues according to an arbitrary selection
-        criterion. This criterion can be based on a computation involving the current
-        eigenvector approximation.
-        """
+        """Sets a function to look for eigenvalues according to an arbitrary selection criterion. This criterion can be based on a computation involving the current eigenvector approximation."""
         if arbitrary is not None:
             if args is None: args = ()
             if kargs is None: kargs = {}
@@ -1290,10 +1276,7 @@ cdef class EPS(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Specifies the eigenvalue comparison function when
-        `setWhichEigenpairs()` is set to `EPS.Which.USER`.
-        """
+        """Specifies the eigenvalue comparison function when `setWhichEigenpairs()` is set to `EPS.Which.USER`."""
         if comparison is not None:
             if args is None: args = ()
             if kargs is None: kargs = {}
@@ -1310,9 +1293,7 @@ cdef class EPS(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Appends a monitor function to the list of monitors.
-        """
+        """Appends a monitor function to the list of monitors."""
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
         if monitorlist is None:
@@ -1324,15 +1305,11 @@ cdef class EPS(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> EPSMonitorFunction:
-        """
-        Gets the list of monitor functions.
-        """
+        """Gets the list of monitor functions."""
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
-        """
-        Clears all monitors for an `EPS` object.
-        """
+        """Clears all monitors for an `EPS` object."""
         CHKERR( EPSMonitorCancel(self.eps) )
         self.set_attr('__monitor__', None)
 
@@ -1352,9 +1329,7 @@ cdef class EPS(Object):
         CHKERR( EPSSetUp(self.eps) )
 
     def solve(self) -> None:
-        """
-        Solves the eigensystem.
-        """
+        """Solves the eigensystem."""
         CHKERR( EPSSolve(self.eps) )
 
     def getIterationNumber(self) -> int:

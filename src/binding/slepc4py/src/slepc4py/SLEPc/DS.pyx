@@ -1,9 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class DSType(object):
-    """
-    DS type.
-    """
+    """DS type."""
     HEP     = S_(DSHEP)
     NHEP    = S_(DSNHEP)
     GHEP    = S_(DSGHEP)
@@ -76,9 +74,7 @@ class DSParallelType(object):
 
 cdef class DS(Object):
 
-    """
-    DS.
-    """
+    """DS."""
 
     Type         = DSType
     StateType    = DSStateType
@@ -103,17 +99,13 @@ cdef class DS(Object):
         CHKERR( DSView(self.ds, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the DS object.
-        """
+        """Destroys the DS object."""
         CHKERR( DSDestroy(&self.ds) )
         self.ds = NULL
         return self
 
     def reset(self) -> None:
-        """
-        Resets the DS object.
-        """
+        """Resets the DS object."""
         CHKERR( DSReset(self.ds) )
 
     def create(self, comm: Comm | None = None) -> Self:
@@ -217,9 +209,7 @@ cdef class DS(Object):
         CHKERR( DSSetFromOptions(self.ds) )
 
     def duplicate(self) -> DS:
-        """
-        Duplicate the DS object with the same type and dimensions.
-        """
+        """Duplicate the DS object with the same type and dimensions."""
         cdef DS ds = type(self)()
         CHKERR( DSDuplicate(self.ds, &ds.ds) )
         return ds
@@ -533,10 +523,7 @@ cdef class DS(Object):
         CHKERR( DSTruncate(self.ds, val, flg) )
 
     def updateExtraRow(self) -> None:
-        """
-        Performs all necessary operations so that the extra
-        row gets up-to-date after a call to `solve()`.
-        """
+        """Performs all necessary operations so that the extra row gets up-to-date after a call to `solve()`."""
         CHKERR( DSUpdateExtraRow(self.ds) )
 
     def getMat(self, matname: MatType) -> Mat:

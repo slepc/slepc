@@ -1,9 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class RGType(object):
-    """
-    RG type.
-    """
+    """RG type."""
     INTERVAL   = S_(RGINTERVAL)
     POLYGON    = S_(RGPOLYGON)
     ELLIPSE    = S_(RGELLIPSE)
@@ -23,9 +21,7 @@ class RGQuadRule(object):
 
 cdef class RG(Object):
 
-    """
-    RG.
-    """
+    """RG."""
 
     Type     = RGType
     QuadRule = RGQuadRule
@@ -48,9 +44,7 @@ cdef class RG(Object):
         CHKERR( RGView(self.rg, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the RG object.
-        """
+        """Destroys the RG object."""
         CHKERR( RGDestroy(&self.rg) )
         self.rg = NULL
         return self

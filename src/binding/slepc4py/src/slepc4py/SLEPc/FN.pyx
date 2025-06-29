@@ -1,9 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class FNType(object):
-    """
-    FN type.
-    """
+    """FN type."""
     COMBINE  = S_(FNCOMBINE)
     RATIONAL = S_(FNRATIONAL)
     EXP      = S_(FNEXP)
@@ -40,9 +38,7 @@ class FNParallelType(object):
 
 cdef class FN(Object):
 
-    """
-    FN.
-    """
+    """FN."""
 
     Type         = FNType
     CombineType  = FNCombineType
@@ -134,9 +130,7 @@ cdef class FN(Object):
         CHKERR( FNView(self.fn, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the FN object.
-        """
+        """Destroys the FN object."""
         CHKERR( FNDestroy(&self.fn) )
         self.fn = NULL
         return self

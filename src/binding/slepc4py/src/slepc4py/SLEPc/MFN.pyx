@@ -24,9 +24,7 @@ class MFNConvergedReason(object):
 
 cdef class MFN(Object):
 
-    """
-    MFN.
-    """
+    """MFN."""
 
     Type            = MFNType
     ConvergedReason = MFNConvergedReason
@@ -49,17 +47,13 @@ cdef class MFN(Object):
         CHKERR( MFNView(self.mfn, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the MFN object.
-        """
+        """Destroys the MFN object."""
         CHKERR( MFNDestroy(&self.mfn) )
         self.mfn = NULL
         return self
 
     def reset(self) -> None:
-        """
-        Resets the MFN object.
-        """
+        """Resets the MFN object."""
         CHKERR( MFNReset(self.mfn) )
 
     def create(self, comm: Comm | None = None) -> Self:
@@ -296,9 +290,7 @@ cdef class MFN(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Appends a monitor function to the list of monitors.
-        """
+        """Appends a monitor function to the list of monitors."""
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
         if monitorlist is None:
@@ -310,25 +302,18 @@ cdef class MFN(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> MFNMonitorFunction:
-        """
-        Gets the list of monitor functions.
-        """
+        """Gets the list of monitor functions."""
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
-        """
-        Clears all monitors for an `MFN` object.
-        """
+        """Clears all monitors for an `MFN` object."""
         CHKERR( MFNMonitorCancel(self.mfn) )
         self.set_attr('__monitor__', None)
 
     #
 
     def setUp(self) -> None:
-        """
-        Sets up all the internal data structures necessary for the
-        execution of the eigensolver.
-        """
+        """Sets up all the internal data structures necessary for the execution of the eigensolver."""
         CHKERR( MFNSetUp(self.mfn) )
 
     def solve(self, Vec b, Vec x) -> None:

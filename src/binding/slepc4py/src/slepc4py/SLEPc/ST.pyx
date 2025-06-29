@@ -59,9 +59,7 @@ class STFilterDamping(object):
 
 cdef class ST(Object):
 
-    """
-    ST.
-    """
+    """ST."""
 
     Type          = STType
     MatMode       = STMatMode
@@ -86,17 +84,13 @@ cdef class ST(Object):
         CHKERR( STView(self.st, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the ST object.
-        """
+        """Destroys the ST object."""
         CHKERR( STDestroy(&self.st) )
         self.st = NULL
         return self
 
     def reset(self) -> None:
-        """
-        Resets the ST object.
-        """
+        """Resets the ST object."""
         CHKERR( STReset(self.st) )
 
     def create(self, comm: Comm | None = None) -> Self:
@@ -465,9 +459,7 @@ cdef class ST(Object):
     #
 
     def setUp(self) -> None:
-        """
-        Prepares for the use of a spectral transformation.
-        """
+        """Prepares for the use of a spectral transformation."""
         CHKERR( STSetUp(self.st) )
 
     def apply(self, Vec x, Vec y) -> None:

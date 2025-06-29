@@ -129,9 +129,7 @@ class SVDTRLanczosGBidiag(object):
 
 cdef class SVD(Object):
 
-    """
-    SVD.
-    """
+    """SVD."""
 
     Type            = SVDType
     ProblemType     = SVDProblemType
@@ -161,17 +159,13 @@ cdef class SVD(Object):
         CHKERR( SVDView(self.svd, vwr) )
 
     def destroy(self) -> Self:
-        """
-        Destroys the SVD object.
-        """
+        """Destroys the SVD object."""
         CHKERR( SVDDestroy(&self.svd) )
         self.svd = NULL
         return self
 
     def reset(self) -> None:
-        """
-        Resets the SVD object.
-        """
+        """Resets the SVD object."""
         CHKERR( SVDReset(self.svd) )
 
     def create(self, comm: Comm | None = None) -> Self:
@@ -780,9 +774,7 @@ cdef class SVD(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Sets a function to decide when to stop the outer iteration of the eigensolver.
-        """
+        """Sets a function to decide when to stop the outer iteration of the eigensolver."""
         if stopping is not None:
             if args is None: args = ()
             if kargs is None: kargs = {}
@@ -793,9 +785,7 @@ cdef class SVD(Object):
             CHKERR( SVDSetStoppingTestFunction(self.svd, SVDStoppingBasic, NULL, NULL) )
 
     def getStoppingTest(self) -> SVDStoppingFunction:
-        """
-        Gets the stopping function.
-        """
+        """Gets the stopping function."""
         return self.get_attr('__stopping__')
 
     #
@@ -806,9 +796,7 @@ cdef class SVD(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Appends a monitor function to the list of monitors.
-        """
+        """Appends a monitor function to the list of monitors."""
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
         if monitorlist is None:
@@ -820,15 +808,11 @@ cdef class SVD(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> SVDMonitorFunction:
-        """
-        Gets the list of monitor functions.
-        """
+        """Gets the list of monitor functions."""
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
-        """
-        Clears all monitors for an `SVD` object.
-        """
+        """Clears all monitors for an `SVD` object."""
         CHKERR( SVDMonitorCancel(self.svd) )
         self.set_attr('__monitor__', None)
 
@@ -848,9 +832,7 @@ cdef class SVD(Object):
         CHKERR( SVDSetUp(self.svd) )
 
     def solve(self) -> None:
-        """
-        Solves the singular value problem.
-        """
+        """Solves the singular value problem."""
         CHKERR( SVDSolve(self.svd) )
 
     def getIterationNumber(self) -> int:
