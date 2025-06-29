@@ -1287,7 +1287,7 @@ PetscErrorCode NEPSolve_NLEIGS(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode NEPNLEIGSSetSingularitiesFunction_NLEIGS(NEP nep,PetscErrorCode (*fun)(NEP,PetscInt*,PetscScalar*,void*),void *ctx)
+static PetscErrorCode NEPNLEIGSSetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGSSingularitiesFn *fun,void *ctx)
 {
   NEP_NLEIGS *nepctx=(NEP_NLEIGS*)nep->data;
 
@@ -1310,13 +1310,6 @@ static PetscErrorCode NEPNLEIGSSetSingularitiesFunction_NLEIGS(NEP nep,PetscErro
 -  ctx - [optional] user-defined context for private data for the function
          (may be NULL, in which case NEP retains any previously set value)
 
-   Calling sequence of fun:
-$  PetscErrorCode fun(NEP nep,PetscInt *maxnp,PetscScalar *xi,void *ctx)
-+   nep   - the NEP context
-.   maxnp - on input number of requested points in the discretization (can be set)
-.   xi    - computed values of the discretization
--   ctx   - optional context, as set by NEPNLEIGSSetSingularitiesFunction()
-
    Notes:
    The user-defined function can set a smaller value of maxnp if necessary.
    It is wrong to return a larger value.
@@ -1329,7 +1322,7 @@ $  PetscErrorCode fun(NEP nep,PetscInt *maxnp,PetscScalar *xi,void *ctx)
 
 .seealso: NEPNLEIGSGetSingularitiesFunction(), NEPSetProblemType()
 @*/
-PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP nep,PetscErrorCode (*fun)(NEP nep,PetscInt *maxnp,PetscScalar *xi,void *ctx),void *ctx)
+PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesFn *fun,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
@@ -1337,7 +1330,7 @@ PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP nep,PetscErrorCode (*fun)(N
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,PetscErrorCode (**fun)(NEP,PetscInt*,PetscScalar*,void*),void **ctx)
+static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGSSingularitiesFn **fun,void **ctx)
 {
   NEP_NLEIGS *nepctx=(NEP_NLEIGS*)nep->data;
 
@@ -1364,7 +1357,7 @@ static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,PetscErro
 
 .seealso: NEPNLEIGSSetSingularitiesFunction()
 @*/
-PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP nep,PetscErrorCode (**fun)(NEP,PetscInt*,PetscScalar*,void*),void **ctx)
+PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesFn **fun,void **ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
