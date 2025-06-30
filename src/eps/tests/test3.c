@@ -131,10 +131,6 @@ int main(int argc,char **argv)
          args: -eps_type primme -eps_conv_abs -eps_primme_blocksize 4
          requires: primme
       test:
-         suffix: 1_trlan
-         args: -eps_type trlan
-         requires: trlan
-      test:
          suffix: 1_scalapack
          args: -eps_type scalapack
          requires: scalapack
@@ -164,10 +160,6 @@ int main(int argc,char **argv)
          suffix: 2_lanczos_delayed
          args: -eps_type lanczos -eps_lanczos_reorthog delayed -eps_tol 1e-8
          requires: !single
-      test:
-         suffix: 2_trlan
-         args: -eps_type trlan
-         requires: trlan
       test:
          suffix: 2_blopex
          args: -eps_type blopex -eps_conv_abs -st_shift -2

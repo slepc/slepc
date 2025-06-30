@@ -139,10 +139,6 @@ int main(int argc,char **argv)
         suffix: 2_blopex
         args: -eps_type blopex
         requires: blopex
-      test:
-        suffix: 2_trlan
-        args: -eps_type trlan
-        requires: trlan
 
    testset:
       args: -symm -eps_nev 4 -eps_smallest_real

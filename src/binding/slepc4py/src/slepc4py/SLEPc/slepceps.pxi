@@ -14,7 +14,6 @@ cdef extern from * nogil:
     SlepcEPSType EPSLYAPII
     SlepcEPSType EPSLAPACK
     SlepcEPSType EPSARPACK
-    SlepcEPSType EPSTRLAN
     SlepcEPSType EPSBLOPEX
     SlepcEPSType EPSPRIMME
     SlepcEPSType EPSFEAST

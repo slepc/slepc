@@ -119,7 +119,7 @@ else:
   packagesinpetsc = ''
 
 # Load classes for packages and process their command-line options
-import arpack, blopex, chase, elemental, elpa, evsl, feast, hpddm, ksvd, polar, primme, scalapack, slepc4py, slicot, trlan, lapack
+import arpack, blopex, chase, elemental, elpa, evsl, feast, hpddm, ksvd, polar, primme, scalapack, slepc4py, slicot, lapack
 arpack    = arpack.Arpack(argdb,log)
 blopex    = blopex.Blopex(argdb,log)
 chase     = chase.Chase(argdb,log)
@@ -130,7 +130,6 @@ feast     = feast.Feast(argdb,log,packagesinpetsc)
 ksvd      = ksvd.Ksvd(argdb,log)
 polar     = polar.Polar(argdb,log)
 primme    = primme.Primme(argdb,log)
-trlan     = trlan.Trlan(argdb,log)
 lapack    = lapack.Lapack(argdb,log)
 scalapack = scalapack.Scalapack(argdb,log,packagesinpetsc)
 slepc4py  = slepc4py.Slepc4py(argdb,log)
@@ -139,7 +138,7 @@ hpddm     = hpddm.HPDDM(argdb,log)
 
 # The next list sorts the packages in a way that dependencies of X appear before X.
 # SLEPc's configure does not build a graph of package dependencies, every dependency is searched linearly
-externalwithdeps = [arpack, blopex, chase, elpa, evsl, hpddm, polar, ksvd, primme, slicot, trlan]
+externalwithdeps = [arpack, blopex, chase, elpa, evsl, hpddm, polar, ksvd, primme, slicot]
 # List of packages in alphabetical order
 externalpackages = sorted(externalwithdeps, key=lambda p: p.packagename.upper())
 

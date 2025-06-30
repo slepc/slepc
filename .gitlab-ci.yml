@@ -466,7 +466,7 @@ gnu-c-libs:
     - name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-primme --download-blopex --download-chase --download-trlan --download-slicot --with-packages-download-dir=/var/local/downloads
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-primme --download-blopex --download-chase --download-slicot --with-packages-download-dir=/var/local/downloads
 
 gnu-cxx-int64:
   extends:
@@ -650,7 +650,7 @@ gnu-c-multilib:
   variables:
     LOAD_MODULES: cmake/4.0.1
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack --download-netlib-lapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-chase --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-chase --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex --with-packages-download-dir=/var/local/downloads
 
 gnu-c-c99-nompi:
   extends:
@@ -660,7 +660,7 @@ gnu-c-c99-nompi:
     - name:jepri
   variables:
     PETSC_CONFIG_OPTS: --CFLAGS='-std=c99 -pedantic -Wno-long-long -Wno-overlength-strings' --with-fortran-bindings=0 --with-mpi=0
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-lib='-L/usr/local/opt/arpack-ng-3.8.0/lib -Wl,-rpath,/usr/local/opt/arpack-ng-3.8.0/lib -lparpack -larpack' --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads --download-primme --download-primme-cflags=-std=c99
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-lib='-L/usr/local/opt/arpack-ng-3.8.0/lib -Wl,-rpath,/usr/local/opt/arpack-ng-3.8.0/lib -lparpack -larpack' --with-blopex-dir=/usr/local/opt/blopex --with-packages-download-dir=/var/local/downloads --download-primme --download-primme-cflags=-std=c99
 
 clang-c-valgrind:
   extends:
@@ -771,7 +771,7 @@ gnu-c-debug:
     - name:hapy
   variables:
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-primme --download-trlan --download-blopex --download-hpddm --download-evsl
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-primme --download-blopex --download-hpddm --download-evsl
     LOAD_MODULES: mpi
 
 gnu-c-complex-debug:

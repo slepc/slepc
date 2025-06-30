@@ -463,20 +463,6 @@ For changing the particular algorithm within \primme, use the function \ident{EP
 \item[Installation.] The option \texttt{-{}-download-evsl} is available in \slepc's configure for easy installation. Alternatively, one can use an already installed version.
 \end{description}
 
-\subsection*{\underline{\trlan}}
-\begin{description}
-\setlength{\itemsep}{0pt}
-\item[References.]\citep{Wu:2000:TLM}.
-\item[Website.] \url{https://sdm.lbl.gov/\~kewu/trlan.html}.
-\item[Version.] 201009.
-\item[Summary.] This package provides a Fortran 90 implementation of the dynamic thick-restart Lanczos algorithm. This is a specialized version of Lanczos that targets only the case in which one wants both eigenvalues and eigenvectors of a large real symmetric eigenvalue problem that cannot use the shift-and-invert scheme. In this case the standard non-restarted Lanczos algorithm requires to store a large number of Lanczos vectors, what can cause storage problems and make each iteration of the method very expensive.
-
-\trlan{} requires the user to provide a matrix-vector multiplication routine. The parallel version uses MPI as the message passing layer.
-\item[Installation.] To install this package, it is necessary to have access to a Fortran 90 compiler. The compiler name and the options used are specified in the file called \texttt{Make.inc}. To generate the library, type \texttt{make plib} in the \texttt{TRLan} directory. Alternatively, the \texttt{-{}-download-trlan} option is also available in \slepc's \texttt{configure}.
-
-It is possible to configure \slepc with the serial version of \trlan (built with \texttt{make lib}). For this, you have to configure \petsc with the option \texttt{-{}-with-mpi=0}.
-\end{description}
-
 \subsection*{\underline{\blopex}}
 \begin{description}
 \setlength{\itemsep}{0pt}

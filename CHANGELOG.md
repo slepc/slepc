@@ -7,6 +7,10 @@
 - `STFILTER`: new polynomial filter based on a truncated Chebyshev series. Use
   `STFilterSetType()` to choose among the available filters.
 
+### Removed
+
+- The interface to TRLAN has been removed since it is no longer available for download.
+
 ## [3.23] - 2025-03-29
 
 ### Added

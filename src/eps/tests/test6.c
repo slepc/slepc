@@ -89,9 +89,5 @@ int main(int argc,char **argv)
          suffix: 1_arpack
          args: -eps_type arpack
          requires: arpack
-      test:
-         suffix: 1_trlan
-         args: -eps_type trlan
-         requires: trlan
 
 TEST*/
