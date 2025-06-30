@@ -152,7 +152,7 @@ cdef class FN(Object):
 
     def setType(self, fn_type: Type | str) -> None:
         """
-        Select the type for the FN object.
+        Set the type for the FN object.
 
         Parameters
         ----------
@@ -363,7 +363,7 @@ cdef class FN(Object):
 
     def setMethod(self, meth: int) -> None:
         """
-        Select the method to be used to evaluate functions of matrices.
+        Set the method to be used to evaluate functions of matrices.
 
         Parameters
         ----------
@@ -399,7 +399,7 @@ cdef class FN(Object):
 
     def setParallel(self, pmode: ParallelType) -> None:
         """
-        Select the mode of operation in parallel runs.
+        Set the mode of operation in parallel runs.
 
         Parameters
         ----------

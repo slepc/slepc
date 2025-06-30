@@ -66,7 +66,7 @@ cdef class RG(Object):
 
     def setType(self, rg_type: Type | str) -> None:
         """
-        Select the type for the RG object.
+        Set the type for the RG object.
 
         Parameters
         ----------
@@ -188,7 +188,7 @@ cdef class RG(Object):
 
     def getComplement(self) -> bool:
         """
-        Return the flag indicating whether the region is complemented or not.
+        Get the flag indicating whether the region is complemented or not.
 
         Returns
         -------

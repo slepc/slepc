@@ -110,7 +110,7 @@ cdef class ST(Object):
 
     def setType(self, st_type: Type | str) -> None:
         """
-        Build ST for a particular spectral transformation.
+        Set the particular spectral transformation to be used.
 
         Parameters
         ----------
@@ -524,7 +524,7 @@ cdef class ST(Object):
 
     def getOperator(self) -> Mat:
         """
-        Return a shell matrix that represents the operator of the
+        Get a shell matrix that represents the operator of the
         spectral transformation.
 
         Returns
@@ -612,7 +612,7 @@ cdef class ST(Object):
 
     def setFilterInterval(self, inta: float, intb: float) -> None:
         """
-        Define the interval containing the desired eigenvalues.
+        Set the interval containing the desired eigenvalues.
 
         Parameters
         ----------
@@ -655,7 +655,7 @@ cdef class ST(Object):
 
     def setFilterRange(self, left: float, right: float) -> None:
         """
-        Define the numerical range (or field of values) of the matrix, that is,
+        Set the numerical range (or field of values) of the matrix, that is,
         the interval containing all eigenvalues.
 
         Parameters

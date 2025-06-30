@@ -125,7 +125,7 @@ cdef class DS(Object):
 
     def setType(self, ds_type: Type | str) -> None:
         """
-        Select the type for the DS object.
+        Set the type for the DS object.
 
         Parameters
         ----------
@@ -231,7 +231,7 @@ cdef class DS(Object):
 
     def getLeadingDimension(self) -> int:
         """
-        Return the leading dimension of the allocated matrices.
+        Get the leading dimension of the allocated matrices.
 
         Returns
         -------
@@ -244,7 +244,7 @@ cdef class DS(Object):
 
     def setState(self, state: StateType) -> None:
         """
-        Change the state of the DS object.
+        Set the state of the DS object.
 
         Parameters
         ----------
@@ -267,7 +267,7 @@ cdef class DS(Object):
 
     def getState(self) -> StateType:
         """
-        Return the current state.
+        Get the current state.
 
         Returns
         -------
@@ -280,7 +280,7 @@ cdef class DS(Object):
 
     def setParallel(self, pmode: ParallelType) -> None:
         """
-        Select the mode of operation in parallel runs.
+        Set the mode of operation in parallel runs.
 
         Parameters
         ----------
@@ -305,7 +305,7 @@ cdef class DS(Object):
 
     def setDimensions(self, n: int | None = None, l: int | None = None, k: int | None = None) -> None:
         """
-        Resize the matrices in the DS object.
+        Set the matrices sizes in the DS object.
 
         Parameters
         ----------
@@ -330,7 +330,7 @@ cdef class DS(Object):
 
     def getDimensions(self) -> tuple[int, int, int, int]:
         """
-        Return the current dimensions.
+        Get the current dimensions.
 
         Returns
         -------
@@ -352,7 +352,7 @@ cdef class DS(Object):
 
     def setBlockSize(self, bs: int) -> None:
         """
-        Select the block size.
+        Set the block size.
 
         Parameters
         ----------
@@ -377,7 +377,7 @@ cdef class DS(Object):
 
     def setMethod(self, meth: int) -> None:
         """
-        Select the method to be used to solve the problem.
+        Set the method to be used to solve the problem.
 
         Parameters
         ----------
@@ -402,7 +402,7 @@ cdef class DS(Object):
 
     def setCompact(self, comp: bool) -> None:
         """
-        Switch to compact storage of matrices.
+        Set the matrices' compact storage flag.
 
         Parameters
         ----------
@@ -528,7 +528,7 @@ cdef class DS(Object):
 
     def getMat(self, matname: MatType) -> Mat:
         """
-        Return the requested matrix as a sequential dense Mat object.
+        Get the requested matrix as a sequential dense Mat object.
 
         Parameters
         ----------
@@ -563,7 +563,7 @@ cdef class DS(Object):
 
     def setIdentity(self, matname: MatType) -> None:
         """
-        Copy the identity on the active part of a matrix.
+        Set the identity on the active part of a matrix.
 
         Parameters
         ----------

@@ -276,7 +276,7 @@ cdef class PEP(Object):
 
     def setType(self, pep_type: Type | str) -> None:
         """
-        Select the particular solver to be used in the PEP object.
+        Set the particular solver to be used in the PEP object.
 
         Parameters
         ----------
@@ -366,7 +366,7 @@ cdef class PEP(Object):
 
     def setBasis(self, basis: Basis) -> None:
         """
-        Specify the type of polynomial basis used to
+        Set the type of polynomial basis used to
         describe the polynomial eigenvalue problem.
 
         Parameters
@@ -392,7 +392,7 @@ cdef class PEP(Object):
 
     def setProblemType(self, problem_type: ProblemType) -> None:
         """
-        Specify the type of the eigenvalue problem.
+        Set the type of the eigenvalue problem.
 
         Parameters
         ----------
@@ -404,7 +404,7 @@ cdef class PEP(Object):
 
     def getWhichEigenpairs(self) -> Which:
         """
-        Return which portion of the spectrum is to be sought.
+        Get which portion of the spectrum is to be sought.
 
         Returns
         -------
@@ -417,7 +417,7 @@ cdef class PEP(Object):
 
     def setWhichEigenpairs(self, which: Which) -> None:
         """
-        Specify which portion of the spectrum is to be sought.
+        Set which portion of the spectrum is to be sought.
 
         Parameters
         ----------
@@ -519,7 +519,7 @@ cdef class PEP(Object):
 
     def setInterval(self, inta: float, intb: float) -> None:
         """
-        Define the computational interval for spectrum slicing.
+        Set the computational interval for spectrum slicing.
 
         Parameters
         ----------
@@ -542,7 +542,7 @@ cdef class PEP(Object):
 
     def getConvergenceTest(self) -> Conv:
         """
-        Return the method used to compute the error estimate
+        Get the method used to compute the error estimate
         used in the convergence test.
 
         Returns
@@ -557,7 +557,7 @@ cdef class PEP(Object):
 
     def setConvergenceTest(self, conv: Conv) -> None:
         """
-        Specify how to compute the error estimate
+        Set how to compute the error estimate
         used in the convergence test.
 
         Parameters
@@ -633,7 +633,7 @@ cdef class PEP(Object):
 
     def getRefineKSP(self) -> KSP:
         """
-        Obtain the `KSP` object used by the eigensolver in the
+        Get the `KSP` object used by the eigensolver in the
         refinement phase.
 
         Returns
@@ -648,7 +648,7 @@ cdef class PEP(Object):
 
     def setExtract(self, extract: Extract) -> None:
         """
-        Specify the extraction strategy to be used.
+        Set the extraction strategy to be used.
 
         Parameters
         ----------
@@ -673,7 +673,7 @@ cdef class PEP(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Return the flag indicating whether all residual norms must be
+        Get the flag indicating whether all residual norms must be
         computed or not.
 
         Returns
@@ -687,7 +687,7 @@ cdef class PEP(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Specify if the solver must compute the residual of all
+        Set if the solver must compute the residual of all
         approximate eigenpairs or not.
 
         Parameters
@@ -747,8 +747,12 @@ cdef class PEP(Object):
 
     def getST(self) -> ST:
         """
-        Obtain the spectral transformation (`ST`) object associated to
-        the eigensolver object.
+        Get the `ST` object associated to the eigensolver object.
+
+        Not collective.
+
+        Get the spectral transformation object associated to the eigensolver
+        object.
 
         Returns
         -------
@@ -762,7 +766,7 @@ cdef class PEP(Object):
 
     def setST(self, ST st) -> None:
         """
-        Associate a spectral transformation object to the
+        Set a spectral transformation object associated to the
         eigensolver.
 
         Parameters
@@ -858,7 +862,7 @@ cdef class PEP(Object):
 
     def getBV(self) -> BV:
         """
-        Obtain the basis vectors object associated to the eigensolver.
+        Get the basis vectors object associated to the eigensolver.
 
         Returns
         -------
@@ -872,7 +876,7 @@ cdef class PEP(Object):
 
     def setBV(self, BV bv) -> None:
         """
-        Associate a basis vectors object to the eigensolver.
+        Set a basis vectors object associated to the eigensolver.
 
         Parameters
         ----------
@@ -883,7 +887,7 @@ cdef class PEP(Object):
 
     def getRG(self) -> RG:
         """
-        Obtain the region object associated to the eigensolver.
+        Get the region object associated to the eigensolver.
 
         Returns
         -------
@@ -897,7 +901,7 @@ cdef class PEP(Object):
 
     def setRG(self, RG rg) -> None:
         """
-        Associate a region object to the eigensolver.
+        Set a region object associated to the eigensolver.
 
         Parameters
         ----------
@@ -908,7 +912,7 @@ cdef class PEP(Object):
 
     def getDS(self) -> DS:
         """
-        Obtain the direct solver associated to the eigensolver.
+        Get the direct solver associated to the eigensolver.
 
         Returns
         -------
@@ -922,7 +926,7 @@ cdef class PEP(Object):
 
     def setDS(self, DS ds) -> None:
         """
-        Associate a direct solver object to the eigensolver.
+        Set a direct solver object associated to the eigensolver.
 
         Parameters
         ----------
@@ -1117,7 +1121,7 @@ cdef class PEP(Object):
 
     def getErrorEstimate(self, i: int) -> float:
         """
-        Return the error estimate associated to the i-th computed
+        Get the error estimate associated to the i-th computed
         eigenpair.
 
         Parameters
@@ -1220,7 +1224,7 @@ cdef class PEP(Object):
 
     def setLinearEPS(self, EPS eps) -> None:
         """
-        Associate an eigensolver object to the polynomial eigenvalue solver.
+        Set an eigensolver object associated to the polynomial eigenvalue solver.
 
         Parameters
         ----------
@@ -1231,7 +1235,7 @@ cdef class PEP(Object):
 
     def getLinearEPS(self) -> EPS:
         """
-        Retrieve the eigensolver object associated to the polynomial
+        Get the eigensolver object associated to the polynomial
         eigenvalue solver.
 
         Returns
@@ -1277,7 +1281,7 @@ cdef class PEP(Object):
 
     def setLinearExplicitMatrix(self, flag: bool) -> None:
         """
-        Indicate if the matrices A and B for the linearization of the problem
+        Set (toggle) if the matrices A and B for the linearization of the problem
         must be built explicitly.
 
         Parameters
@@ -1290,7 +1294,7 @@ cdef class PEP(Object):
 
     def getLinearExplicitMatrix(self) -> bool:
         """
-        Return the flag indicating if the matrices A and B for the linearization
+        Get the flag indicating if the matrices A and B for the linearization
         are built explicitly.
 
         Returns
@@ -1337,7 +1341,7 @@ cdef class PEP(Object):
 
     def setQArnoldiLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
+        Set (toggle) between locking and non-locking variants of the
         Q-Arnoldi method.
 
         Parameters
@@ -1403,7 +1407,7 @@ cdef class PEP(Object):
 
     def setTOARLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
+        Set (toggle) between locking and non-locking variants of the
         TOAR method.
 
         Parameters
@@ -1453,7 +1457,7 @@ cdef class PEP(Object):
 
     def getSTOARLinearization(self) -> tuple[float, float]:
         """
-        Return the coefficients that define the linearization of a quadratic eigenproblem.
+        Get the coefficients that define the linearization of a quadratic eigenproblem.
 
         Returns
         -------
@@ -1469,7 +1473,7 @@ cdef class PEP(Object):
 
     def setSTOARLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
+        Set (toggle) between locking and non-locking variants of the
         STOAR method.
 
         Parameters
@@ -1714,7 +1718,7 @@ cdef class PEP(Object):
 
     def getJDReusePreconditioner(self) -> bool:
         """
-        Return the flag for reusing the preconditioner.
+        Get the flag for reusing the preconditioner.
 
         Returns
         -------
@@ -1739,7 +1743,7 @@ cdef class PEP(Object):
 
     def getJDMinimalityIndex(self) -> int:
         """
-        Return the maximum allowed value of the minimality index.
+        Get the maximum allowed value of the minimality index.
 
         Returns
         -------
@@ -1945,7 +1949,7 @@ cdef class PEP(Object):
 
     def getCISSKSPs(self) -> list[KSP]:
         """
-        Retrieve the array of linear solver objects associated with
+        Get the array of linear solver objects associated with
         the CISS solver.
 
         Returns

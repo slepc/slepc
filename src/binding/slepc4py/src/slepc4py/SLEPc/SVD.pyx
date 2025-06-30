@@ -185,7 +185,7 @@ cdef class SVD(Object):
 
     def setType(self, svd_type: Type | str) -> None:
         """
-        Select the particular solver to be used in the SVD object.
+        Set the particular solver to be used in the SVD object.
 
         Parameters
         ----------
@@ -300,7 +300,7 @@ cdef class SVD(Object):
 
     def setProblemType(self, problem_type: ProblemType) -> None:
         """
-        Specify the type of the singular value problem.
+        Set the type of the singular value problem.
 
         Parameters
         ----------
@@ -356,7 +356,7 @@ cdef class SVD(Object):
 
     def setImplicitTranspose(self, mode: bool) -> None:
         """
-        Indicate how to handle the transpose of the matrix
+        Set how to handle the transpose of the matrix
         associated with the singular value problem.
 
         Parameters
@@ -377,7 +377,7 @@ cdef class SVD(Object):
 
     def getWhichSingularTriplets(self) -> Which:
         """
-        Return which singular triplets are to be sought.
+        Get which singular triplets are to be sought.
 
         Returns
         -------
@@ -390,7 +390,7 @@ cdef class SVD(Object):
 
     def setWhichSingularTriplets(self, which: Which) -> None:
         """
-        Specify which singular triplets are to be sought.
+        Set which singular triplets are to be sought.
 
         Parameters
         ----------
@@ -485,7 +485,7 @@ cdef class SVD(Object):
 
     def getConvergenceTest(self) -> Conv:
         """
-        Return the method used to compute the error estimate
+        Get the method used to compute the error estimate
         used in the convergence test.
 
         Returns
@@ -500,7 +500,7 @@ cdef class SVD(Object):
 
     def setConvergenceTest(self, conv: Conv) -> None:
         """
-        Specify how to compute the error estimate
+        Set how to compute the error estimate
         used in the convergence test.
 
         Parameters
@@ -514,7 +514,7 @@ cdef class SVD(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Return the flag indicating whether all residual norms must be
+        Get the flag indicating whether all residual norms must be
         computed or not.
 
         Returns
@@ -528,7 +528,7 @@ cdef class SVD(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Specify if the solver must compute the residual of all
+        Set if the solver must compute the residual of all
         approximate singular triplets or not.
 
         Parameters
@@ -606,7 +606,7 @@ cdef class SVD(Object):
 
     def getBV(self) -> tuple[BV, BV]:
         """
-        Obtain the basis vectors objects associated to the SVD object.
+        Get the basis vectors objects associated to the SVD object.
 
         Returns
         -------
@@ -624,7 +624,7 @@ cdef class SVD(Object):
 
     def setBV(self, BV V,BV U=None) -> None:
         """
-        Associate basis vectors objects to the SVD solver.
+        Set basis vectors objects associated to the SVD solver.
 
         Parameters
         ----------
@@ -639,7 +639,7 @@ cdef class SVD(Object):
 
     def getDS(self) -> DS:
         """
-        Obtain the direct solver associated to the singular value solver.
+        Get the direct solver associated to the singular value solver.
 
         Returns
         -------
@@ -653,7 +653,7 @@ cdef class SVD(Object):
 
     def setDS(self, DS ds) -> None:
         """
-        Associate a direct solver object to the singular value solver.
+        Set a direct solver object associated to the singular value solver.
 
         Parameters
         ----------
@@ -1051,7 +1051,7 @@ cdef class SVD(Object):
 
     def setCrossEPS(self, EPS eps) -> None:
         """
-        Associat an eigensolver object (`EPS`) to the singular value
+        Set an eigensolver object (`EPS`) associated to the singular value
         solver.
 
         Parameters
@@ -1063,7 +1063,7 @@ cdef class SVD(Object):
 
     def getCrossEPS(self) -> EPS:
         """
-        Retrieve the eigensolver object (`EPS`) associated to the
+        Get the eigensolver object (`EPS`) associated to the
         singular value solver.
 
         Returns
@@ -1078,7 +1078,7 @@ cdef class SVD(Object):
 
     def setCrossExplicitMatrix(self, flag: bool = True) -> None:
         """
-        Indicate if the eigensolver operator ``A^T*A`` must be
+        Set if the eigensolver operator ``A^T*A`` must be
         computed explicitly.
 
         Parameters
@@ -1091,7 +1091,7 @@ cdef class SVD(Object):
 
     def getCrossExplicitMatrix(self) -> bool:
         """
-        Return the flag indicating if ``A^T*A`` is built explicitly.
+        Get the flag indicating if ``A^T*A`` is built explicitly.
 
         Returns
         -------
@@ -1104,7 +1104,7 @@ cdef class SVD(Object):
 
     def setCyclicEPS(self, EPS eps) -> None:
         """
-        Associate an eigensolver object (`EPS`) to the singular value
+        Set an eigensolver object (`EPS`) associated to the singular value
         solver.
 
         Parameters
@@ -1116,7 +1116,7 @@ cdef class SVD(Object):
 
     def getCyclicEPS(self) -> EPS:
         """
-        Retrieve the eigensolver object (`EPS`) associated to the
+        Get the eigensolver object (`EPS`) associated to the
         singular value solver.
 
         Returns
@@ -1131,7 +1131,7 @@ cdef class SVD(Object):
 
     def setCyclicExplicitMatrix(self, flag: bool = True) -> None:
         """
-        Indicate if the eigensolver operator ``H(A) = [ 0 A ; A^T 0
+        Set if the eigensolver operator ``H(A) = [ 0 A ; A^T 0
         ]`` must be computed explicitly.
 
         Parameters
@@ -1144,7 +1144,7 @@ cdef class SVD(Object):
 
     def getCyclicExplicitMatrix(self) -> bool:
         """
-        Return the flag indicating if ``H(A) = [ 0 A ; A^T 0 ]`` is
+        Get the flag indicating if ``H(A) = [ 0 A ; A^T 0 ]`` is
         built explicitly.
 
         Returns
@@ -1158,7 +1158,7 @@ cdef class SVD(Object):
 
     def setLanczosOneSide(self, flag: bool = True) -> None:
         """
-        Indicate if the variant of the Lanczos method to be used is
+        Set if the variant of the Lanczos method to be used is
         one-sided or two-sided.
 
         Parameters
@@ -1193,7 +1193,7 @@ cdef class SVD(Object):
 
     def setTRLanczosOneSide(self, flag: bool = True) -> None:
         """
-        Indicate if the variant of the thick-restart Lanczos method to
+        Set if the variant of the thick-restart Lanczos method to
         be used is one-sided or two-sided.
 
         Parameters
@@ -1240,7 +1240,7 @@ cdef class SVD(Object):
 
     def getTRLanczosGBidiag(self) -> TRLanczosGBidiag:
         """
-        Return bidiagonalization choice used in the GSVD
+        Get bidiagonalization choice used in the GSVD
         TRLanczos solver.
 
         Returns
@@ -1285,7 +1285,7 @@ cdef class SVD(Object):
 
     def setTRLanczosLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
+        Set (toggle) between locking and non-locking variants of the
         thick-restart Lanczos method.
 
         Parameters
@@ -1318,7 +1318,7 @@ cdef class SVD(Object):
 
     def setTRLanczosKSP(self, KSP ksp) -> None:
         """
-        Associate a linear solver object to the SVD solver.
+        Set a linear solver object associated to the SVD solver.
 
         Parameters
         ----------
@@ -1329,7 +1329,7 @@ cdef class SVD(Object):
 
     def getTRLanczosKSP(self) -> KSP:
         """
-        Retrieve the linear solver object associated with the SVD solver.
+        Get the linear solver object associated with the SVD solver.
 
         Returns
         -------
@@ -1343,7 +1343,7 @@ cdef class SVD(Object):
 
     def setTRLanczosExplicitMatrix(self, flag: bool = True) -> None:
         """
-        Indicate if the matrix ``Z=[A;B]`` must be built explicitly.
+        Set if the matrix ``Z=[A;B]`` must be built explicitly.
 
         Parameters
         ----------
@@ -1355,7 +1355,7 @@ cdef class SVD(Object):
 
     def getTRLanczosExplicitMatrix(self) -> bool:
         """
-        Return the flag indicating if ``Z=[A;B]`` is built explicitly.
+        Get the flag indicating if ``Z=[A;B]`` is built explicitly.
 
         Returns
         -------

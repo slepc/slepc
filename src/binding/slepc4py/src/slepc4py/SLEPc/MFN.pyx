@@ -73,7 +73,7 @@ cdef class MFN(Object):
 
     def setType(self, mfn_type: Type | str) -> None:
         """
-        Select the particular solver to be used in the MFN object.
+        Set the particular solver to be used in the MFN object.
 
         Parameters
         ----------
@@ -209,7 +209,7 @@ cdef class MFN(Object):
 
     def getFN(self) -> FN:
         """
-        Obtain the math function object associated to the MFN object.
+        Get the math function object associated to the MFN object.
 
         Returns
         -------
@@ -223,7 +223,7 @@ cdef class MFN(Object):
 
     def setFN(self, FN fn) -> None:
         """
-        Associate a math function object to the MFN object.
+        Set a math function object associated to the MFN object.
 
         Parameters
         ----------
@@ -234,7 +234,7 @@ cdef class MFN(Object):
 
     def getBV(self) -> BV:
         """
-        Obtain the basis vector object associated to the MFN object.
+        Get the basis vector object associated to the MFN object.
 
         Returns
         -------
@@ -248,7 +248,7 @@ cdef class MFN(Object):
 
     def setBV(self, BV bv) -> None:
         """
-        Associate a basis vector object to the MFN object.
+        Set a basis vector object associated to the MFN object.
 
         Parameters
         ----------
@@ -386,7 +386,7 @@ cdef class MFN(Object):
 
     def getErrorIfNotConverged(self) -> bool:
         """
-        Return a flag indicating whether `solve()` will generate an
+        Get a flag indicating whether `solve()` will generate an
         error if the solver does not converge.
 
         Returns

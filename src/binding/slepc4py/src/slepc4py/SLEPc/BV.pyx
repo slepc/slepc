@@ -249,7 +249,7 @@ cdef class BV(Object):
 
     def setType(self, bv_type: Type | str) -> None:
         """
-        Select the type for the BV object.
+        Set the type for the BV object.
 
         Parameters
         ----------
@@ -312,7 +312,7 @@ cdef class BV(Object):
 
     def getSizes(self) -> tuple[LayoutSizeSpec, int]:
         """
-        Return the local and global sizes, and the number of columns.
+        Get the local and global sizes, and the number of columns.
 
         Returns
         -------
@@ -442,7 +442,7 @@ cdef class BV(Object):
         block: OrthogBlockType | None = None,
     ) -> None:
         """
-        Specify the method used for the orthogonalization of vectors
+        Set the method used for the orthogonalization of vectors
         (classical or modified Gram-Schmidt with or without refinement),
         and for the block-orthogonalization (simultaneous orthogonalization
         of a set of vectors).
@@ -498,7 +498,7 @@ cdef class BV(Object):
 
     def setMatMultMethod(self, method: MatMultType) -> None:
         """
-        Specify the method used for the `matMult()` operation.
+        Set the method used for the `matMult()` operation.
 
         Parameters
         ----------
@@ -512,7 +512,7 @@ cdef class BV(Object):
 
     def getMatrix(self) -> tuple[Mat, bool] | tuple[None, bool]:
         """
-        Retrieve the matrix representation of the inner product.
+        Get the matrix representation of the inner product.
 
         Returns
         -------
@@ -566,7 +566,7 @@ cdef class BV(Object):
 
     def setActiveColumns(self, l: int, k: int) -> None:
         """
-        Specify the columns that will be involved in operations.
+        Set the columns that will be involved in operations.
 
         Parameters
         ----------
@@ -581,7 +581,7 @@ cdef class BV(Object):
 
     def getActiveColumns(self) -> tuple[int, int]:
         """
-        Return the current active dimensions.
+        Get the current active dimensions.
 
         Returns
         -------
@@ -759,7 +759,7 @@ cdef class BV(Object):
         CHKERR( BVSetVecType(self.bv, cval) )
 
     def getVecType(self) -> str:
-        """Return the vector type used by the basis vectors object."""
+        """Get the vector type used by the basis vectors object."""
         cdef PetscVecType cval = NULL
         CHKERR( BVGetVecType(self.bv, &cval) )
         return bytes2str(cval)
@@ -880,7 +880,7 @@ cdef class BV(Object):
 
     def getColumn(self, j: int) -> Vec:
         """
-        Return a Vec object that contains the entries of the requested column
+        Get a Vec object that contains the entries of the requested column
         of the basis vectors object.
 
         Parameters
@@ -924,7 +924,7 @@ cdef class BV(Object):
 
     def getMat(self) -> Mat:
         """
-        Return a Mat object of dense type that shares the memory
+        Get a Mat object of dense type that shares the memory
         of the basis vectors object.
 
         Returns

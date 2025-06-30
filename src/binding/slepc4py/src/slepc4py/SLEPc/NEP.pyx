@@ -213,7 +213,7 @@ cdef class NEP(Object):
 
     def setType(self, nep_type: Type | str) -> None:
         """
-        Select the particular solver to be used in the NEP object.
+        Set the particular solver to be used in the NEP object.
 
         Parameters
         ----------
@@ -302,7 +302,7 @@ cdef class NEP(Object):
 
     def setProblemType(self, problem_type: ProblemType) -> None:
         """
-        Specify the type of the eigenvalue problem.
+        Set the type of the eigenvalue problem.
 
         Parameters
         ----------
@@ -314,7 +314,7 @@ cdef class NEP(Object):
 
     def getWhichEigenpairs(self) -> Which:
         """
-        Return which portion of the spectrum is to be sought.
+        Get which portion of the spectrum is to be sought.
 
         Returns
         -------
@@ -327,7 +327,7 @@ cdef class NEP(Object):
 
     def setWhichEigenpairs(self, which: Which) -> None:
         """
-        Specify which portion of the spectrum is to be sought.
+        Set which portion of the spectrum is to be sought.
 
         Parameters
         ----------
@@ -408,7 +408,7 @@ cdef class NEP(Object):
 
     def getConvergenceTest(self) -> Conv:
         """
-        Return the method used to compute the error estimate
+        Get the method used to compute the error estimate
         used in the convergence test.
 
         Returns
@@ -423,7 +423,7 @@ cdef class NEP(Object):
 
     def setConvergenceTest(self, conv: Conv) -> None:
         """
-        Specify how to compute the error estimate
+        Set how to compute the error estimate
         used in the convergence test.
 
         Parameters
@@ -499,7 +499,7 @@ cdef class NEP(Object):
 
     def getRefineKSP(self) -> KSP:
         """
-        Obtain the `KSP` object used by the eigensolver in the
+        Get the `KSP` object used by the eigensolver in the
         refinement phase.
 
         Returns
@@ -514,7 +514,7 @@ cdef class NEP(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Return the flag indicating whether all residual norms must be
+        Get the flag indicating whether all residual norms must be
         computed or not.
 
         Returns
@@ -528,7 +528,7 @@ cdef class NEP(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Specify if the solver must compute the residual of all
+        Set if the solver must compute the residual of all
         approximate eigenpairs or not.
 
         Parameters
@@ -588,7 +588,7 @@ cdef class NEP(Object):
 
     def getBV(self) -> BV:
         """
-        Obtain the basis vectors object associated to the eigensolver.
+        Get the basis vectors object associated to the eigensolver.
 
         Returns
         -------
@@ -602,7 +602,7 @@ cdef class NEP(Object):
 
     def setBV(self, BV bv) -> None:
         """
-        Associate a basis vectors object to the eigensolver.
+        Set the basis vectors object associated to the eigensolver.
 
         Parameters
         ----------
@@ -613,7 +613,7 @@ cdef class NEP(Object):
 
     def getRG(self) -> RG:
         """
-        Obtain the region object associated to the eigensolver.
+        Get the region object associated to the eigensolver.
 
         Returns
         -------
@@ -627,7 +627,7 @@ cdef class NEP(Object):
 
     def setRG(self, RG rg) -> None:
         """
-        Associate a region object to the eigensolver.
+        Set a region object associated to the eigensolver.
 
         Parameters
         ----------
@@ -638,7 +638,7 @@ cdef class NEP(Object):
 
     def getDS(self) -> DS:
         """
-        Obtain the direct solver associated to the eigensolver.
+        Get the direct solver associated to the eigensolver.
 
         Returns
         -------
@@ -652,7 +652,7 @@ cdef class NEP(Object):
 
     def setDS(self, DS ds) -> None:
         """
-        Associate a direct solver object to the eigensolver.
+        Set a direct solver object associated to the eigensolver.
 
         Parameters
         ----------
@@ -838,7 +838,7 @@ cdef class NEP(Object):
 
     def getErrorEstimate(self, i: int) -> float:
         """
-        Return the error estimate associated to the i-th computed
+        Get the error estimate associated to the i-th computed
         eigenpair.
 
         Parameters
@@ -968,7 +968,7 @@ cdef class NEP(Object):
 
     def getFunction(self) -> tuple[Mat, Mat, NEPFunction]:
         """
-        Return the function to compute the nonlinear Function T(lambda) and the matrix.
+        Get the function to compute the nonlinear Function T(lambda) and the matrix.
 
         Parameters
         ----------
@@ -1017,7 +1017,7 @@ cdef class NEP(Object):
 
     def getJacobian(self) -> tuple[Mat, NEPJacobian]:
         """
-        Return the function to compute the Jacobian T'(lambda) and the matrix.
+        Get the function to compute the Jacobian T'(lambda) and the matrix.
 
         Parameters
         ----------
@@ -1067,7 +1067,7 @@ cdef class NEP(Object):
 
     def getSplitOperator(self) -> tuple[list[Mat], list[FN], Mat.Structure]:
         """
-        Return the operator of the nonlinear eigenvalue problem
+        Get the operator of the nonlinear eigenvalue problem
         in split form.
 
         Returns
@@ -1124,7 +1124,7 @@ cdef class NEP(Object):
 
     def getSplitPreconditioner(self) -> tuple[list[Mat], Mat.Structure]:
         """
-        Return the operator of the split preconditioner.
+        Get the operator of the split preconditioner.
 
         Returns
         -------
@@ -1147,7 +1147,7 @@ cdef class NEP(Object):
 
     def getTwoSided(self) -> bool:
         """
-        Return the flag indicating whether a two-sided variant
+        Get the flag indicating whether a two-sided variant
         of the algorithm is being used or not.
 
         Returns
@@ -1201,7 +1201,7 @@ cdef class NEP(Object):
 
     def setRIILagPreconditioner(self, lag: int) -> None:
         """
-        Determine when the preconditioner is rebuilt in the
+        Set when the preconditioner is rebuilt in the
         nonlinear solve.
 
         Parameters
@@ -1216,7 +1216,7 @@ cdef class NEP(Object):
 
     def getRIILagPreconditioner(self) -> int:
         """
-        Indicate how often the preconditioner is rebuilt.
+        Get how often the preconditioner is rebuilt.
 
         Returns
         -------
@@ -1241,7 +1241,7 @@ cdef class NEP(Object):
 
     def getRIIConstCorrectionTol(self) -> bool:
         """
-        Return the constant tolerance flag.
+        Get the constant tolerance flag.
 
         Returns
         -------
@@ -1294,7 +1294,7 @@ cdef class NEP(Object):
 
     def getRIIHermitian(self) -> bool:
         """
-        Return the flag about using the Hermitian version of the scalar
+        Get the flag about using the Hermitian version of the scalar
         nonlinear equation.
 
         Returns
@@ -1321,7 +1321,7 @@ cdef class NEP(Object):
 
     def getRIIDeflationThreshold(self) -> float:
         """
-        Return the threshold value that controls deflation.
+        Get the threshold value that controls deflation.
 
         Returns
         -------
@@ -1334,7 +1334,7 @@ cdef class NEP(Object):
 
     def setRIIKSP(self, KSP ksp) -> None:
         """
-        Associate a linear solver object to the nonlinear eigensolver.
+        Set a linear solver object associated to the nonlinear eigensolver.
 
         Parameters
         ----------
@@ -1345,7 +1345,7 @@ cdef class NEP(Object):
 
     def getRIIKSP(self) -> KSP:
         """
-        Retrieve the linear solver object associated with the nonlinear eigensolver.
+        Get the linear solver object associated with the nonlinear eigensolver.
 
         Returns
         -------
@@ -1374,7 +1374,7 @@ cdef class NEP(Object):
 
     def getSLPDeflationThreshold(self) -> float:
         """
-        Return the threshold value that controls deflation.
+        Get the threshold value that controls deflation.
 
         Returns
         -------
@@ -1387,7 +1387,7 @@ cdef class NEP(Object):
 
     def setSLPEPS(self, EPS eps) -> None:
         """
-        Associate a linear eigensolver object to the nonlinear eigensolver.
+        Set a linear eigensolver object associated to the nonlinear eigensolver.
 
         Parameters
         ----------
@@ -1398,7 +1398,7 @@ cdef class NEP(Object):
 
     def getSLPEPS(self) -> EPS:
         """
-        Retrieve the linear eigensolver object associated with the nonlinear eigensolver.
+        Get the linear eigensolver object associated with the nonlinear eigensolver.
 
         Returns
         -------
@@ -1412,7 +1412,7 @@ cdef class NEP(Object):
 
     def setSLPEPSLeft(self, EPS eps) -> None:
         """
-        Associate a linear eigensolver object to the nonlinear eigensolver,
+        Set a linear eigensolver object to the nonlinear eigensolver,
         used to compute left eigenvectors in the two-sided variant of SLP.
 
         Parameters
@@ -1424,7 +1424,7 @@ cdef class NEP(Object):
 
     def getSLPEPSLeft(self) -> EPS:
         """
-        Retrieve the left eigensolver.
+        Get the left eigensolver.
 
         Returns
         -------
@@ -1438,7 +1438,7 @@ cdef class NEP(Object):
 
     def setSLPKSP(self, KSP ksp) -> None:
         """
-        Associate a linear solver object to the nonlinear eigensolver.
+        Set a linear solver object associated to the nonlinear eigensolver.
 
         Parameters
         ----------
@@ -1449,7 +1449,7 @@ cdef class NEP(Object):
 
     def getSLPKSP(self) -> KSP:
         """
-        Retrieve the linear solver object associated with the nonlinear eigensolver.
+        Get the linear solver object associated with the nonlinear eigensolver.
 
         Returns
         -------
@@ -1465,7 +1465,7 @@ cdef class NEP(Object):
 
     def setNArnoldiKSP(self, KSP ksp) -> None:
         """
-        Associate a linear solver object to the nonlinear eigensolver.
+        Set a linear solver object associated to the nonlinear eigensolver.
 
         Parameters
         ----------
@@ -1476,7 +1476,7 @@ cdef class NEP(Object):
 
     def getNArnoldiKSP(self) -> KSP:
         """
-        Retrieve the linear solver object associated with the nonlinear eigensolver.
+        Get the linear solver object associated with the nonlinear eigensolver.
 
         Returns
         -------
@@ -1490,7 +1490,7 @@ cdef class NEP(Object):
 
     def setNArnoldiLagPreconditioner(self, lag: int) -> None:
         """
-        Determine when the preconditioner is rebuilt in the nonlinear solve.
+        Set when the preconditioner is rebuilt in the nonlinear solve.
 
         Parameters
         ----------
@@ -1509,7 +1509,7 @@ cdef class NEP(Object):
 
     def getNArnoldiLagPreconditioner(self) -> int:
         """
-        Indicate how often the preconditioner is rebuilt.
+        Get how often the preconditioner is rebuilt.
 
         Returns
         -------
@@ -1524,7 +1524,7 @@ cdef class NEP(Object):
 
     def setInterpolPEP(self, PEP pep) -> None:
         """
-        Associate a polynomial eigensolver object to the nonlinear eigensolver.
+        Set a polynomial eigensolver object associated to the nonlinear eigensolver.
 
         Parameters
         ----------
@@ -1535,7 +1535,7 @@ cdef class NEP(Object):
 
     def getInterpolPEP(self) -> PEP:
         """
-        Retrieve the polynomial eigensolver object associated with the nonlinear eigensolver.
+        Get the polynomial eigensolver object associated with the nonlinear eigensolver.
 
         Returns
         -------
@@ -1617,7 +1617,7 @@ cdef class NEP(Object):
 
     def setNLEIGSLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
+        Set (toggle) between locking and non-locking variants of the
         NLEIGS method.
 
         Parameters
@@ -1685,7 +1685,7 @@ cdef class NEP(Object):
 
     def setNLEIGSFullBasis(self, fullbasis: bool = True) -> None:
         """
-        Choose between TOAR-basis (default) and full-basis variants
+        Set (toggle) between TOAR-basis (default) and full-basis variants
         of the NLEIGS method.
 
         Parameters
@@ -1711,7 +1711,7 @@ cdef class NEP(Object):
 
     def setNLEIGSEPS(self, EPS eps) -> None:
         """
-        Associate a linear eigensolver object to the nonlinear eigensolver.
+        Set a linear eigensolver object associated to the nonlinear eigensolver.
 
         Parameters
         ----------
@@ -1722,7 +1722,7 @@ cdef class NEP(Object):
 
     def getNLEIGSEPS(self) -> EPS:
         """
-        Retrieve the linear eigensolver object associated with the nonlinear eigensolver.
+        Get the linear eigensolver object associated with the nonlinear eigensolver.
 
         Returns
         -------
@@ -1769,7 +1769,7 @@ cdef class NEP(Object):
 
     def getNLEIGSKSPs(self) -> list[KSP]:
         """
-        Retrieve the array of linear solver objects associated with
+        Get the array of linear solver objects associated with
         the NLEIGS solver.
 
         Returns
@@ -1957,7 +1957,7 @@ cdef class NEP(Object):
 
     def getCISSKSPs(self) -> list[KSP]:
         """
-        Retrieve the array of linear solver objects associated with
+        Get the array of linear solver objects associated with
         the CISS solver.
 
         Returns

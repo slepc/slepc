@@ -323,7 +323,7 @@ cdef class EPS(Object):
 
     def setType(self, eps_type: Type | str) -> None:
         """
-        Select the particular solver to be used in the EPS object.
+        Set the particular solver to be used in the EPS object.
 
         Parameters
         ----------
@@ -440,7 +440,7 @@ cdef class EPS(Object):
 
     def setProblemType(self, problem_type: ProblemType) -> None:
         """
-        Specify the type of the eigenvalue problem.
+        Set the type of the eigenvalue problem.
 
         Parameters
         ----------
@@ -548,7 +548,7 @@ cdef class EPS(Object):
         cutoff: float | None = None,
     ) -> None:
         """
-        Specify the balancing technique to be employed by the
+        Set the balancing technique to be employed by the
         eigensolver, and some parameters associated to it.
 
         Parameters
@@ -607,7 +607,7 @@ cdef class EPS(Object):
 
     def getWhichEigenpairs(self) -> Which:
         """
-        Return which portion of the spectrum is to be sought.
+        Get which portion of the spectrum is to be sought.
 
         Returns
         -------
@@ -620,7 +620,7 @@ cdef class EPS(Object):
 
     def setWhichEigenpairs(self, which: Which) -> None:
         """
-        Specify which portion of the spectrum is to be sought.
+        Set which portion of the spectrum is to be sought.
 
         Parameters
         ----------
@@ -735,7 +735,7 @@ cdef class EPS(Object):
 
     def setInterval(self, inta: float, intb: float) -> None:
         """
-        Define the computational interval for spectrum slicing.
+        Set the computational interval for spectrum slicing.
 
         Parameters
         ----------
@@ -800,7 +800,7 @@ cdef class EPS(Object):
 
     def getTwoSided(self) -> bool:
         """
-        Return the flag indicating whether a two-sided variant
+        Get the flag indicating whether a two-sided variant
         of the algorithm is being used or not.
 
         Returns
@@ -827,7 +827,7 @@ cdef class EPS(Object):
 
     def getPurify(self) -> bool:
         """
-        Return the flag indicating whether purification is activated
+        Get the flag indicating whether purification is activated
         or not.
 
         Returns
@@ -841,7 +841,7 @@ cdef class EPS(Object):
 
     def setPurify(self, purify: bool = True) -> None:
         """
-        Activate or deactivate eigenvector purification.
+        Set (toggle) eigenvector purification.
 
         Parameters
         ----------
@@ -853,7 +853,7 @@ cdef class EPS(Object):
 
     def getConvergenceTest(self) -> Conv:
         """
-        Return the method used to compute the error estimate
+        Get the method used to compute the error estimate
         used in the convergence test.
 
         Returns
@@ -868,7 +868,7 @@ cdef class EPS(Object):
 
     def setConvergenceTest(self, conv: Conv) -> None:
         """
-        Specify how to compute the error estimate
+        Set how to compute the error estimate
         used in the convergence test.
 
         Parameters
@@ -882,7 +882,7 @@ cdef class EPS(Object):
 
     def getTrueResidual(self) -> bool:
         """
-        Return the flag indicating whether true residual must be
+        Get the flag indicating whether true residual must be
         computed explicitly or not.
 
         Returns
@@ -896,7 +896,7 @@ cdef class EPS(Object):
 
     def setTrueResidual(self, trueres: bool) -> None:
         """
-        Specify if the solver must compute the true residual
+        Set if the solver must compute the true residual
         explicitly or not.
 
         Parameters
@@ -909,7 +909,7 @@ cdef class EPS(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Return the flag indicating whether all residual norms must be
+        Get the flag indicating whether all residual norms must be
         computed or not.
 
         Returns
@@ -923,7 +923,7 @@ cdef class EPS(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Specify if the solver must compute the residual of all
+        Set if the solver must compute the residual of all
         approximate eigenpairs or not.
 
         Parameters
@@ -1002,7 +1002,7 @@ cdef class EPS(Object):
 
     def getST(self) -> ST:
         """
-        Obtain the spectral transformation (`ST`) object associated to
+        Get the spectral transformation (`ST`) object associated to
         the eigensolver object.
 
         Returns
@@ -1017,7 +1017,7 @@ cdef class EPS(Object):
 
     def setST(self, ST st) -> None:
         """
-        Associate a spectral transformation object to the
+        Set a spectral transformation object to the
         eigensolver.
 
         Parameters
@@ -1029,7 +1029,7 @@ cdef class EPS(Object):
 
     def getBV(self) -> BV:
         """
-        Obtain the basis vector objects associated to the eigensolver.
+        Get the basis vector objects associated to the eigensolver.
 
         Returns
         -------
@@ -1043,7 +1043,7 @@ cdef class EPS(Object):
 
     def setBV(self, BV bv) -> None:
         """
-        Associate a basis vectors object to the eigensolver.
+        Set a basis vectors object associated to the eigensolver.
 
         Parameters
         ----------
@@ -1054,7 +1054,7 @@ cdef class EPS(Object):
 
     def getDS(self) -> DS:
         """
-        Obtain the direct solver associated to the eigensolver.
+        Get the direct solver associated to the eigensolver.
 
         Returns
         -------
@@ -1068,7 +1068,7 @@ cdef class EPS(Object):
 
     def setDS(self, DS ds) -> None:
         """
-        Associate a direct solver object to the eigensolver.
+        Set a direct solver object associated to the eigensolver.
 
         Parameters
         ----------
@@ -1079,7 +1079,7 @@ cdef class EPS(Object):
 
     def getRG(self) -> RG:
         """
-        Obtain the region object associated to the eigensolver.
+        Get the region object associated to the eigensolver.
 
         Returns
         -------
@@ -1093,7 +1093,7 @@ cdef class EPS(Object):
 
     def setRG(self, RG rg) -> None:
         """
-        Associate a region object to the eigensolver.
+        Set a region object associated to the eigensolver.
 
         Parameters
         ----------
@@ -1541,7 +1541,7 @@ cdef class EPS(Object):
 
     def getErrorEstimate(self, i: int) -> float:
         """
-        Return the error estimate associated to the i-th computed
+        Get the error estimate associated to the i-th computed
         eigenpair.
 
         Parameters
@@ -1691,7 +1691,7 @@ cdef class EPS(Object):
 
     def setArnoldiDelayed(self, delayed: bool) -> None:
         """
-        Activate or deactivate delayed reorthogonalization in the
+        Set (toggle) delayed reorthogonalization in the
         Arnoldi iteration.
 
         Parameters
@@ -1827,7 +1827,7 @@ cdef class EPS(Object):
 
     def setKrylovSchurLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
+        Set (toggle) locking or non-locking variants of the
         Krylov-Schur method.
 
         Parameters
@@ -2153,7 +2153,7 @@ cdef class EPS(Object):
 
     def getKrylovSchurSubintervals(self) -> ArrayReal:
         """
-        Return the points that delimit the subintervals used
+        Get the points that delimit the subintervals used
         in spectrum slicing with several partitions.
 
         Returns
@@ -2200,7 +2200,7 @@ cdef class EPS(Object):
 
     def getKrylovSchurKSP(self) -> KSP:
         """
-        Retrieve the linear solver object associated with the internal `EPS`
+        Get the linear solver object associated with the internal `EPS`
         object in case of doing spectrum slicing for a computational interval.
 
         Returns
@@ -2217,7 +2217,7 @@ cdef class EPS(Object):
 
     def setGDKrylovStart(self, krylovstart: bool = True) -> None:
         """
-        Activate or deactivate starting the search subspace
+        Set (toggle) starting the search subspace
         with a Krylov basis.
 
         Parameters
@@ -2331,7 +2331,7 @@ cdef class EPS(Object):
 
     def setGDBOrth(self, borth: bool) -> int:
         """
-        Select the orthogonalization that will be used in the search
+        Set the orthogonalization that will be used in the search
         subspace in case of generalized Hermitian problems.
 
         Parameters
@@ -2344,7 +2344,7 @@ cdef class EPS(Object):
 
     def getGDBOrth(self) -> bool:
         """
-        Return the orthogonalization used in the search subspace in
+        Get the orthogonalization used in the search subspace in
         case of generalized Hermitian problems.
 
         Returns
@@ -2358,7 +2358,11 @@ cdef class EPS(Object):
 
     def setGDDoubleExpansion(self, doubleexp: bool) -> None:
         """
-        Activate a variant where the search subspace is expanded  with
+        Set that the search subspace is expanded with double expansion.
+
+        Logically collective.
+
+        Set a variant where the search subspace is expanded with
         K*[A*x B*x] (double expansion) instead of the classic K*r, where
         K is the preconditioner, x the selected approximate eigenvector
         and r its associated residual vector.
@@ -2389,7 +2393,7 @@ cdef class EPS(Object):
 
     def setJDKrylovStart(self, krylovstart: bool = True) -> None:
         """
-        Activate or deactivate starting the search subspace
+        Set (toggle) starting the search subspace
         with a Krylov basis.
 
         Parameters
@@ -2548,7 +2552,7 @@ cdef class EPS(Object):
 
     def getJDConstCorrectionTol(self) -> bool:
         """
-        Return the flag indicating if the dynamic stopping is being used for
+        Get the flag indicating if the dynamic stopping is being used for
         solving the correction equation.
 
         Returns
@@ -2562,7 +2566,7 @@ cdef class EPS(Object):
 
     def setJDBOrth(self, borth: bool) -> None:
         """
-        Select the orthogonalization that will be used in the search
+        Set the orthogonalization that will be used in the search
         subspace in case of generalized Hermitian problems.
 
         Parameters
@@ -2575,7 +2579,7 @@ cdef class EPS(Object):
 
     def getJDBOrth(self) -> bool:
         """
-        Return the orthogonalization used in the search subspace in
+        Get the orthogonalization used in the search subspace in
         case of generalized Hermitian problems.
 
         Returns
@@ -2674,7 +2678,7 @@ cdef class EPS(Object):
 
     def setLOBPCGLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
+        Set (toggle) between locking and non-locking variants of the
         LOBPCG method.
 
         Parameters
@@ -2723,7 +2727,7 @@ cdef class EPS(Object):
 
     def getLyapIIRanks(self) -> tuple[int, int]:
         """
-        Return the rank values used for the Lyapunov step.
+        Get the rank values used for the Lyapunov step.
 
         Returns
         -------
@@ -2958,7 +2962,7 @@ cdef class EPS(Object):
 
     def getCISSKSPs(self) -> list[KSP]:
         """
-        Retrieve the array of linear solver objects associated with
+        Get the array of linear solver objects associated with
         the CISS solver.
 
         Returns
