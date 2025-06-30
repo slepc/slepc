@@ -177,7 +177,7 @@ static PetscErrorCode STDestroy_Shell(ST st)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode STShellSetApply_Shell(ST st,PetscErrorCode (*apply)(ST,Vec,Vec))
+static PetscErrorCode STShellSetApply_Shell(ST st,STShellApplyFn *apply)
 {
   ST_SHELL *shell = (ST_SHELL*)st->data;
 
@@ -196,25 +196,19 @@ static PetscErrorCode STShellSetApply_Shell(ST st,PetscErrorCode (*apply)(ST,Vec
 +  st    - the spectral transformation context
 -  apply - the application-provided transformation routine
 
-   Calling sequence of apply:
-$  PetscErrorCode apply(ST st,Vec xin,Vec xout)
-+  st   - the spectral transformation context
-.  xin  - input vector
--  xout - output vector
-
    Level: advanced
 
 .seealso: STShellSetBackTransform(), STShellSetApplyTranspose(), STShellSetApplyHermitianTranspose()
 @*/
-PetscErrorCode STShellSetApply(ST st,PetscErrorCode (*apply)(ST st,Vec xin,Vec xout))
+PetscErrorCode STShellSetApply(ST st,STShellApplyFn *apply)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
-  PetscTryMethod(st,"STShellSetApply_C",(ST,PetscErrorCode (*)(ST,Vec,Vec)),(st,apply));
+  PetscTryMethod(st,"STShellSetApply_C",(ST,STShellApplyFn*),(st,apply));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode STShellSetApplyTranspose_Shell(ST st,PetscErrorCode (*applytrans)(ST,Vec,Vec))
+static PetscErrorCode STShellSetApplyTranspose_Shell(ST st,STShellApplyTransposeFn *applytrans)
 {
   ST_SHELL *shell = (ST_SHELL*)st->data;
 
@@ -233,26 +227,20 @@ static PetscErrorCode STShellSetApplyTranspose_Shell(ST st,PetscErrorCode (*appl
 +  st    - the spectral transformation context
 -  applytrans - the application-provided transformation routine
 
-   Calling sequence of applytrans:
-$  PetscErrorCode applytrans(ST st,Vec xin,Vec xout)
-+  st   - the spectral transformation context
-.  xin  - input vector
--  xout - output vector
-
    Level: advanced
 
 .seealso: STShellSetApply(), STShellSetBackTransform()
 @*/
-PetscErrorCode STShellSetApplyTranspose(ST st,PetscErrorCode (*applytrans)(ST st,Vec xin,Vec xout))
+PetscErrorCode STShellSetApplyTranspose(ST st,STShellApplyTransposeFn *applytrans)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
-  PetscTryMethod(st,"STShellSetApplyTranspose_C",(ST,PetscErrorCode (*)(ST,Vec,Vec)),(st,applytrans));
+  PetscTryMethod(st,"STShellSetApplyTranspose_C",(ST,STShellApplyTransposeFn*),(st,applytrans));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
 #if defined(PETSC_USE_COMPLEX)
-static PetscErrorCode STShellSetApplyHermitianTranspose_Shell(ST st,PetscErrorCode (*applyhermtrans)(ST,Vec,Vec))
+static PetscErrorCode STShellSetApplyHermitianTranspose_Shell(ST st,STShellApplyHermitianTransposeFn *applyhermtrans)
 {
   ST_SHELL *shell = (ST_SHELL*)st->data;
 
@@ -272,12 +260,6 @@ static PetscErrorCode STShellSetApplyHermitianTranspose_Shell(ST st,PetscErrorCo
 +  st    - the spectral transformation context
 -  applyhermtrans - the application-provided transformation routine
 
-   Calling sequence of applyhermtrans:
-$  PetscErrorCode applyhermtrans(ST st,Vec xin,Vec xout)
-+  st   - the spectral transformation context
-.  xin  - input vector
--  xout - output vector
-
    Note:
    If configured with real scalars, this function has the same effect as STShellSetApplyTranspose(),
    so no need to call both.
@@ -286,15 +268,15 @@ $  PetscErrorCode applyhermtrans(ST st,Vec xin,Vec xout)
 
 .seealso: STShellSetApply(), STShellSetApplyTranspose(), STShellSetBackTransform()
 @*/
-PetscErrorCode STShellSetApplyHermitianTranspose(ST st,PetscErrorCode (*applyhermtrans)(ST st,Vec xin,Vec xout))
+PetscErrorCode STShellSetApplyHermitianTranspose(ST st,STShellApplyHermitianTransposeFn *applyhermtrans)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
-  PetscTryMethod(st,"STShellSetApplyHermitianTranspose_C",(ST,PetscErrorCode (*)(ST,Vec,Vec)),(st,applyhermtrans));
+  PetscTryMethod(st,"STShellSetApplyHermitianTranspose_C",(ST,STShellApplyHermitianTransposeFn*),(st,applyhermtrans));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode STShellSetBackTransform_Shell(ST st,PetscErrorCode (*backtr)(ST,PetscInt,PetscScalar*,PetscScalar*))
+static PetscErrorCode STShellSetBackTransform_Shell(ST st,STShellBackTransformFn *backtr)
 {
   ST_SHELL *shell = (ST_SHELL*)st->data;
 
@@ -314,22 +296,15 @@ static PetscErrorCode STShellSetBackTransform_Shell(ST st,PetscErrorCode (*backt
 +  st     - the spectral transformation context
 -  backtr - the application-provided backtransform routine
 
-   Calling sequence of backtr:
-$  PetscErrorCode backtr(ST st,PetscInt n,PetscScalar *eigr,PetscScalar *eigi)
-+  st   - the spectral transformation context
-.  n    - number of eigenvalues to be backtransformed
-.  eigr - pointer ot the real parts of the eigenvalues to transform back
--  eigi - pointer ot the imaginary parts
-
    Level: advanced
 
 .seealso: STShellSetApply(), STShellSetApplyTranspose()
 @*/
-PetscErrorCode STShellSetBackTransform(ST st,PetscErrorCode (*backtr)(ST st,PetscInt n,PetscScalar *eigr,PetscScalar *eigi))
+PetscErrorCode STShellSetBackTransform(ST st,STShellBackTransformFn *backtr)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
-  PetscTryMethod(st,"STShellSetBackTransform_C",(ST,PetscErrorCode (*)(ST,PetscInt,PetscScalar*,PetscScalar*)),(st,backtr));
+  PetscTryMethod(st,"STShellSetBackTransform_C",(ST,STShellBackTransformFn*),(st,backtr));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

@@ -153,12 +153,69 @@ SLEPC_EXTERN PetscErrorCode STRegister(const char[],PetscErrorCode(*)(ST));
 
 /* --------- options specific to particular spectral transformations-------- */
 
+/*S
+  STShellApplyFn - A prototype of a function for the apply() operation in STSHELL
+
+  Calling Sequence:
++   st   - the spectral transformation context
+.   xin  - input vector
+-   xout - output vector
+
+  Level: advanced
+
+.seealso: STShellSetApply()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyFn(ST st,Vec xin,Vec xout);
+
+/*S
+  STShellApplyTransposeFn - A prototype of a function for the applytrans() operation in STSHELL
+
+  Calling Sequence:
++   st   - the spectral transformation context
+.   xin  - input vector
+-   xout - output vector
+
+  Level: advanced
+
+.seealso: STShellSetApplyTranspose()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyTransposeFn(ST st,Vec xin,Vec xout);
+
+/*S
+  STShellApplyHermitianTransposeFn - A prototype of a function for the applyhermtrans() operation in STSHELL
+
+  Calling Sequence:
++   st   - the spectral transformation context
+.   xin  - input vector
+-   xout - output vector
+
+  Level: advanced
+
+.seealso: STShellSetApplyHermitianTranspose()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyHermitianTransposeFn(ST st,Vec xin,Vec xout);
+
+/*S
+  STShellBackTransformFn - A prototype of a function for the backtransform() operation in STSHELL
+
+  Calling Sequence:
++   st   - the spectral transformation context
+.   n    - number of eigenvalues to be backtransformed
+.   eigr - pointer to the real parts of the eigenvalues to transform back
+-   eigi - pointer to the imaginary parts
+
+  Level: advanced
+
+.seealso: STShellSetBackTransform()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellBackTransformFn(ST st,PetscInt n,PetscScalar *eigr,PetscScalar *eigi);
+
 SLEPC_EXTERN PetscErrorCode STShellGetContext(ST,void*);
 SLEPC_EXTERN PetscErrorCode STShellSetContext(ST,void*);
-SLEPC_EXTERN PetscErrorCode STShellSetApply(ST,PetscErrorCode (*)(ST,Vec,Vec));
-SLEPC_EXTERN PetscErrorCode STShellSetApplyTranspose(ST,PetscErrorCode (*)(ST,Vec,Vec));
-SLEPC_EXTERN PetscErrorCode STShellSetApplyHermitianTranspose(ST,PetscErrorCode (*)(ST,Vec,Vec));
-SLEPC_EXTERN PetscErrorCode STShellSetBackTransform(ST,PetscErrorCode (*)(ST,PetscInt,PetscScalar*,PetscScalar*));
+SLEPC_EXTERN PetscErrorCode STShellSetApply(ST,STShellApplyFn*);
+SLEPC_EXTERN PetscErrorCode STShellSetApplyTranspose(ST,STShellApplyTransposeFn*);
+SLEPC_EXTERN PetscErrorCode STShellSetApplyHermitianTranspose(ST,STShellApplyHermitianTransposeFn*);
+SLEPC_EXTERN PetscErrorCode STShellSetBackTransform(ST,STShellBackTransformFn*);
 
 SLEPC_EXTERN PetscErrorCode STCayleyGetAntishift(ST,PetscScalar*);
 SLEPC_EXTERN PetscErrorCode STCayleySetAntishift(ST,PetscScalar);
