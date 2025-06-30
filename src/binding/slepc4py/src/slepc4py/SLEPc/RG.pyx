@@ -92,8 +92,7 @@ cdef class RG(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Set the prefix used for searching for all RG options in the
-        database.
+        Set the prefix used for searching for all RG options in the database.
 
         Parameters
         ----------
@@ -112,8 +111,7 @@ cdef class RG(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Get the prefix used for searching for all RG options in the
-        database.
+        Get the prefix used for searching for all RG options in the database.
 
         Returns
         -------
@@ -126,8 +124,7 @@ cdef class RG(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Append to the prefix used for searching for all RG options
-        in the database.
+        Append to the prefix used for searching for all RG options in the database.
 
         Parameters
         ----------
@@ -168,8 +165,7 @@ cdef class RG(Object):
 
     def isAxisymmetric(self, vertical: bool = False) -> bool:
         """
-        Determine if the region is symmetric with respect to the real
-        or imaginary axis.
+        Determine if the region is symmetric with respect to the real or imaginary axis.
 
         Parameters
         ----------
@@ -201,8 +197,7 @@ cdef class RG(Object):
 
     def setComplement(self, comp: bool = True) -> None:
         """
-        Set a flag to indicate that the region is the complement
-        of the specified one.
+        Set a flag to indicate that the region is the complement of the specified one.
 
         Parameters
         ----------
@@ -214,6 +209,8 @@ cdef class RG(Object):
 
     def setScale(self, sfactor: float = None) -> None:
         """
+        Set the scaling factor to be used.
+
         Set the scaling factor to be used when checking that a
         point is inside the region and when computing the contour.
 
@@ -298,8 +295,7 @@ cdef class RG(Object):
 
     def computeBoundingBox(self) -> tuple[float, float, float, float]:
         """
-        Determine the endpoints of a rectangle in the complex plane that
-        contains the region.
+        Determine the endpoints of a rectangle in the complex plane that contains the region.
 
         Returns
         -------
@@ -318,6 +314,8 @@ cdef class RG(Object):
 
     def canUseConjugates(self, realmats: bool = True) -> bool:
         """
+        Half of integration points can be avoided (use their conjugates).
+
         Used in contour integral methods to determine whether half of
         integration points can be avoided (use their conjugates).
 
@@ -338,8 +336,10 @@ cdef class RG(Object):
 
     def computeQuadrature(self, quad: QuadRule, n: int) -> tuple[ArrayScalar, ArrayScalar, ArrayScalar]:
         """
-        Compute the values of the parameters used in a quadrature rule
-        for a contour integral around the boundary of the region.
+        Compute the values of the parameters used in a quadrature rule.
+
+        Compute the values of the parameters used in a quadrature rule for a
+        contour integral around the boundary of the region.
 
         Parameters
         ----------

@@ -99,8 +99,7 @@ cdef class MFN(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Get the prefix used for searching for all MFN options in the
-        database.
+        Get the prefix used for searching for all MFN options in the database.
 
         Returns
         -------
@@ -113,8 +112,7 @@ cdef class MFN(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Set the prefix used for searching for all MFN options in the
-        database.
+        Set the prefix used for searching for all MFN options in the database.
 
         Parameters
         ----------
@@ -127,8 +125,7 @@ cdef class MFN(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Append to the prefix used for searching for all MFN options
-        in the database.
+        Append to the prefix used for searching for all MFN options in the database.
 
         Parameters
         ----------
@@ -141,6 +138,8 @@ cdef class MFN(Object):
 
     def setFromOptions(self) -> None:
         """
+        Set MFN options from the options database.
+
         Set MFN options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
         the solver type.
@@ -149,6 +148,8 @@ cdef class MFN(Object):
 
     def getTolerances(self) -> tuple[float, int]:
         """
+        Get the tolerance and maximum iteration count.
+
         Get the tolerance and maximum iteration count used by the
         default MFN convergence tests.
 
@@ -166,6 +167,8 @@ cdef class MFN(Object):
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
+        Set the tolerance and maximum iteration count.
+
         Set the tolerance and maximum iteration count used by the
         default MFN convergence tests.
 
@@ -318,8 +321,9 @@ cdef class MFN(Object):
 
     def solve(self, Vec b, Vec x) -> None:
         """
-        Solve the matrix function problem. Given a vector b, the
-        vector x = f(A)*b is returned.
+        Solve the matrix function problem.
+
+        Given a vector b, the vector x = f(A)*b is returned.
 
         Parameters
         ----------
@@ -332,8 +336,9 @@ cdef class MFN(Object):
 
     def solveTranspose(self, Vec b, Vec x) -> None:
         """
-        Solve the transpose matrix function problem. Given a vector b, the
-        vector x = f(A^T)*b is returned.
+        Solve the transpose matrix function problem.
+
+        Given a vector b, the vector x = f(A^T)*b is returned.
 
         Parameters
         ----------
@@ -346,6 +351,8 @@ cdef class MFN(Object):
 
     def getIterationNumber(self) -> int:
         """
+        Get the current iteration number.
+
         Get the current iteration number. If the call to `solve()` is
         complete, then it returns the number of iterations carried out
         by the solution method.
@@ -374,7 +381,7 @@ cdef class MFN(Object):
 
     def setErrorIfNotConverged(self, flg: bool = True) -> None:
         """
-        Cause `solve()` to generate an error if the solver has not converged.
+        Set `solve()` to generate an error if the solver does not converge.
 
         Parameters
         ----------
@@ -386,8 +393,7 @@ cdef class MFN(Object):
 
     def getErrorIfNotConverged(self) -> bool:
         """
-        Get a flag indicating whether `solve()` will generate an
-        error if the solver does not converge.
+        Get a flag indicating whether `solve()` will generate an error if the solver does not converge.
 
         Returns
         -------

@@ -220,8 +220,7 @@ cdef class SVD(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Get the prefix used for searching for all SVD options in the
-        database.
+        Get the prefix used for searching for all SVD options in the database.
 
         Returns
         -------
@@ -234,8 +233,7 @@ cdef class SVD(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Set the prefix used for searching for all SVD options in the
-        database.
+        Set the prefix used for searching for all SVD options in the database.
 
         Parameters
         ----------
@@ -260,8 +258,7 @@ cdef class SVD(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Append to the prefix used for searching for all SVD options
-        in the database.
+        Append to the prefix used for searching for all SVD options in the database.
 
         Parameters
         ----------
@@ -274,9 +271,10 @@ cdef class SVD(Object):
 
     def setFromOptions(self) -> None:
         """
-        Set SVD options from the options database. This routine must
-        be called before `setUp()` if the user is to be allowed to set
-        the solver type.
+        Set SVD options from the options database.
+
+        This routine must be called before `setUp()` if the user is to be
+        allowed to set the solver type.
 
         Notes
         -----
@@ -312,8 +310,7 @@ cdef class SVD(Object):
 
     def isGeneralized(self) -> bool:
         """
-        Tell whether the SVD object corresponds to a generalized
-        singular value problem.
+        Tell whether the SVD object corresponds to a generalized singular value problem.
 
         Returns
         -------
@@ -326,8 +323,7 @@ cdef class SVD(Object):
 
     def isHyperbolic(self) -> bool:
         """
-        Tell whether the SVD object corresponds to a hyperbolic
-        singular value problem.
+        Tell whether the SVD object corresponds to a hyperbolic singular value problem.
 
         Returns
         -------
@@ -342,8 +338,7 @@ cdef class SVD(Object):
 
     def getImplicitTranspose(self) -> bool:
         """
-        Get the mode used to handle the transpose of the matrix
-        associated with the singular value problem.
+        Get the mode used to handle the transpose of the matrix associated with the singular value problem.
 
         Returns
         -------
@@ -356,8 +351,7 @@ cdef class SVD(Object):
 
     def setImplicitTranspose(self, mode: bool) -> None:
         """
-        Set how to handle the transpose of the matrix
-        associated with the singular value problem.
+        Set how to handle the transpose of the matrix associated with the singular value problem.
 
         Parameters
         ----------
@@ -445,8 +439,7 @@ cdef class SVD(Object):
 
     def getTolerances(self) -> tuple[float, int]:
         """
-        Get the tolerance and maximum iteration count used by the
-        default SVD convergence tests.
+        Get the tolerance and maximum iteration count used by the default SVD convergence tests.
 
         Returns
         -------
@@ -462,8 +455,7 @@ cdef class SVD(Object):
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
-        Set the tolerance and maximum iteration count used by the
-        default SVD convergence tests.
+        Set the tolerance and maximum iteration count used by the default SVD convergence tests.
 
         Parameters
         ----------
@@ -485,8 +477,7 @@ cdef class SVD(Object):
 
     def getConvergenceTest(self) -> Conv:
         """
-        Get the method used to compute the error estimate
-        used in the convergence test.
+        Get the method used to compute the error estimate used in the convergence test.
 
         Returns
         -------
@@ -500,8 +491,7 @@ cdef class SVD(Object):
 
     def setConvergenceTest(self, conv: Conv) -> None:
         """
-        Set how to compute the error estimate
-        used in the convergence test.
+        Set how to compute the error estimate used in the convergence test.
 
         Parameters
         ----------
@@ -514,8 +504,7 @@ cdef class SVD(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Get the flag indicating whether all residual norms must be
-        computed or not.
+        Get the flag indicating whether all residual norms must be computed or not.
 
         Returns
         -------
@@ -528,8 +517,7 @@ cdef class SVD(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Set if the solver must compute the residual of all
-        approximate singular triplets or not.
+        Set if the solver must compute the residual of all approximate singular triplets or not.
 
         Parameters
         ----------
@@ -541,8 +529,7 @@ cdef class SVD(Object):
 
     def getDimensions(self) -> tuple[int, int, int]:
         """
-        Get the number of singular values to compute and the
-        dimension of the subspace.
+        Get the number of singular values to compute and the dimension of the subspace.
 
         Returns
         -------
@@ -566,8 +553,7 @@ cdef class SVD(Object):
         mpd: int | None = None,
     ) -> None:
         """
-        Set the number of singular values to compute and the
-        dimension of the subspace.
+        Set the number of singular values to compute and the dimension of the subspace.
 
         Parameters
         ----------
@@ -741,8 +727,7 @@ cdef class SVD(Object):
         spaceleft: list[Vec] | None = None,
     ) -> None:
         """
-        Set the initial spaces from which the SVD solver starts to
-        iterate.
+        Set the initial spaces from which the SVD solver starts to iterate.
 
         Parameters
         ----------
@@ -820,8 +805,7 @@ cdef class SVD(Object):
 
     def setUp(self) -> None:
         """
-        Set up all the internal data structures necessary for the
-        execution of the singular value solver.
+        Set up all the internal data structures necessary for the execution of the singular value solver.
 
         Notes
         -----
@@ -907,8 +891,7 @@ cdef class SVD(Object):
 
     def getVectors(self, i: int, Vec U, Vec V) -> None:
         """
-        Get the i-th left and right singular vectors as computed by
-        `solve()`.
+        Get the i-th left and right singular vectors as computed by `solve()`.
 
         Parameters
         ----------
@@ -931,9 +914,10 @@ cdef class SVD(Object):
 
     def getSingularTriplet(self, i: int, Vec U=None, Vec V=None) -> float:
         """
-        Get the i-th triplet of the singular value decomposition as
-        computed by `solve()`. The solution consists of the singular
-        value and its left and right singular vectors.
+        Get the i-th triplet of the singular value decomposition as computed by `solve()`.
+
+        The solution consists of the singular value and its left and right
+        singular vectors.
 
         Parameters
         ----------
@@ -966,8 +950,7 @@ cdef class SVD(Object):
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
-        Compute the error (based on the residual norm) associated with the i-th
-        singular triplet.
+        Compute the error (based on the residual norm) associated with the i-th singular triplet.
 
         Parameters
         ----------
@@ -997,8 +980,9 @@ cdef class SVD(Object):
 
     def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
         """
-        Display the errors associated with the computed solution
-        (as well as the eigenvalues).
+        Display the errors associated with the computed solution.
+
+        Display the errors and the eigenvalues.
 
         Parameters
         ----------
@@ -1051,8 +1035,7 @@ cdef class SVD(Object):
 
     def setCrossEPS(self, EPS eps) -> None:
         """
-        Set an eigensolver object (`EPS`) associated to the singular value
-        solver.
+        Set an eigensolver object associated to the singular value solver.
 
         Parameters
         ----------
@@ -1063,8 +1046,7 @@ cdef class SVD(Object):
 
     def getCrossEPS(self) -> EPS:
         """
-        Get the eigensolver object (`EPS`) associated to the
-        singular value solver.
+        Get the eigensolver object associated to the singular value solver.
 
         Returns
         -------
@@ -1078,8 +1060,7 @@ cdef class SVD(Object):
 
     def setCrossExplicitMatrix(self, flag: bool = True) -> None:
         """
-        Set if the eigensolver operator ``A^T*A`` must be
-        computed explicitly.
+        Set if the eigensolver operator ``A^T*A`` must be computed explicitly.
 
         Parameters
         ----------
@@ -1104,8 +1085,7 @@ cdef class SVD(Object):
 
     def setCyclicEPS(self, EPS eps) -> None:
         """
-        Set an eigensolver object (`EPS`) associated to the singular value
-        solver.
+        Set an eigensolver object associated to the singular value solver.
 
         Parameters
         ----------
@@ -1116,8 +1096,7 @@ cdef class SVD(Object):
 
     def getCyclicEPS(self) -> EPS:
         """
-        Get the eigensolver object (`EPS`) associated to the
-        singular value solver.
+        Get the eigensolver object associated to the singular value solver.
 
         Returns
         -------
@@ -1131,8 +1110,7 @@ cdef class SVD(Object):
 
     def setCyclicExplicitMatrix(self, flag: bool = True) -> None:
         """
-        Set if the eigensolver operator ``H(A) = [ 0 A ; A^T 0
-        ]`` must be computed explicitly.
+        Set if the eigensolver operator ``H(A) = [ 0 A ; A^T 0 ]`` must be computed explicitly.
 
         Parameters
         ----------
@@ -1144,8 +1122,7 @@ cdef class SVD(Object):
 
     def getCyclicExplicitMatrix(self) -> bool:
         """
-        Get the flag indicating if ``H(A) = [ 0 A ; A^T 0 ]`` is
-        built explicitly.
+        Get the flag indicating if ``H(A) = [ 0 A ; A^T 0 ]`` is built explicitly.
 
         Returns
         -------
@@ -1158,8 +1135,7 @@ cdef class SVD(Object):
 
     def setLanczosOneSide(self, flag: bool = True) -> None:
         """
-        Set if the variant of the Lanczos method to be used is
-        one-sided or two-sided.
+        Set if the variant of the Lanczos method to be used is one-sided or two-sided.
 
         Parameters
         ----------
@@ -1179,8 +1155,7 @@ cdef class SVD(Object):
 
     def getLanczosOneSide(self) -> bool:
         """
-        Get if the variant of the Lanczos method to be used is
-        one-sided or two-sided.
+        Get if the variant of the Lanczos method to be used is one-sided or two-sided.
 
         Returns
         -------
@@ -1193,8 +1168,7 @@ cdef class SVD(Object):
 
     def setTRLanczosOneSide(self, flag: bool = True) -> None:
         """
-        Set if the variant of the thick-restart Lanczos method to
-        be used is one-sided or two-sided.
+        Set if the variant of the thick-restart Lanczos method to be used is one-sided or two-sided.
 
         Parameters
         ----------
@@ -1213,8 +1187,7 @@ cdef class SVD(Object):
 
     def getTRLanczosOneSide(self) -> bool:
         """
-        Get if the variant of the thick-restart Lanczos method to be
-        used is one-sided or two-sided.
+        Get if the variant of the thick-restart Lanczos method to be used is one-sided or two-sided.
 
         Returns
         -------
@@ -1227,8 +1200,7 @@ cdef class SVD(Object):
 
     def setTRLanczosGBidiag(self, bidiag: TRLanczosGBidiag) -> None:
         """
-        Set the bidiagonalization choice to use in the GSVD
-        TRLanczos solver.
+        Set the bidiagonalization choice to use in the GSVD TRLanczos solver.
 
         Parameters
         ----------
@@ -1240,8 +1212,7 @@ cdef class SVD(Object):
 
     def getTRLanczosGBidiag(self) -> TRLanczosGBidiag:
         """
-        Get bidiagonalization choice used in the GSVD
-        TRLanczos solver.
+        Get bidiagonalization choice used in the GSVD TRLanczos solver.
 
         Returns
         -------
@@ -1254,6 +1225,8 @@ cdef class SVD(Object):
 
     def setTRLanczosRestart(self, keep: float) -> None:
         """
+        Set the restart parameter for the thick-restart Lanczos method.
+
         Set the restart parameter for the thick-restart Lanczos method, in
         particular the proportion of basis vectors that must be kept
         after restart.
@@ -1285,8 +1258,7 @@ cdef class SVD(Object):
 
     def setTRLanczosLocking(self, lock: bool) -> None:
         """
-        Set (toggle) between locking and non-locking variants of the
-        thick-restart Lanczos method.
+        Set (toggle) between locking and non-locking variants of the thick-restart Lanczos method.
 
         Parameters
         ----------

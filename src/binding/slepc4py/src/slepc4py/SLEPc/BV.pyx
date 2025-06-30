@@ -196,8 +196,7 @@ cdef class BV(Object):
 
     def createMat(self) -> Mat:
         """
-        Create a new Mat object of dense type and copy the contents of the
-        BV object.
+        Create a new Mat object of dense type and copy the contents of the BV.
 
         Returns
         -------
@@ -218,13 +217,18 @@ cdef class BV(Object):
 
     def duplicateResize(self, m: int) -> BV:
         """
-        Create a new BV object of the same type and dimensions as
-        an existing one, but with possibly different number of columns.
+        Create a BV object of the same type and dimensions as an existing one.
+
 
         Parameters
         ----------
         m
             The number of columns.
+
+        Notes
+        -----
+        With possibly different number of columns.
+
         """
         cdef BV bv = type(self)()
         cdef PetscInt ival = asInt(m)
@@ -297,8 +301,10 @@ cdef class BV(Object):
 
     def setSizesFromVec(self, Vec w, m: int) -> None:
         """
-        Set the local and global sizes, and the number of columns. Local and
-        global sizes are specified indirectly by passing a template vector.
+        Set the local and global sizes, and the number of columns.
+
+        Local and global sizes are specified indirectly by passing a template
+        vector.
 
         Parameters
         ----------
@@ -352,8 +358,7 @@ cdef class BV(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Set the prefix used for searching for all BV options in the
-        database.
+        Set the prefix used for searching for all BV options in the database.
 
         Parameters
         ----------
@@ -372,8 +377,7 @@ cdef class BV(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Append to the prefix used for searching for all BV options
-        in the database.
+        Append to the prefix used for searching for all BV options in the database.
 
         Parameters
         ----------
@@ -386,8 +390,7 @@ cdef class BV(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Get the prefix used for searching for all BV options in the
-        database.
+        Get the prefix used for searching for all BV options in the database.
 
         Returns
         -------
@@ -442,10 +445,11 @@ cdef class BV(Object):
         block: OrthogBlockType | None = None,
     ) -> None:
         """
-        Set the method used for the orthogonalization of vectors
-        (classical or modified Gram-Schmidt with or without refinement),
-        and for the block-orthogonalization (simultaneous orthogonalization
-        of a set of vectors).
+        Set the method used for the (block-)orthogonalization of vectors.
+
+        Ortogonalization of vectors (classical or modified Gram-Schmidt
+        with or without refinement), and for the block-orthogonalization
+        (simultaneous orthogonalization of a set of vectors).
 
         Parameters
         ----------
@@ -547,8 +551,7 @@ cdef class BV(Object):
 
     def applyMatrix(self, Vec x, Vec y) -> None:
         """
-        Multiply a vector with the matrix associated to the bilinear
-        form.
+        Multiply a vector with the matrix associated to the bilinear form.
 
         Parameters
         ----------
@@ -733,8 +736,7 @@ cdef class BV(Object):
 
     def createVec(self) -> Vec:
         """
-        Create a new Vec object with the same type and dimensions as
-        the columns of the basis vectors object.
+        Create a Vec with the type and dimensions of the columns of the BV.
 
         Returns
         -------
@@ -820,8 +822,7 @@ cdef class BV(Object):
 
     def dotVec(self, Vec v) -> ArrayScalar:
         """
-        Compute multiple dot products of a vector against all the column
-        vectors of a BV.
+        Dot products of a vector against all the column vectors of the BV.
 
         Parameters
         ----------
@@ -854,8 +855,7 @@ cdef class BV(Object):
 
     def dotColumn(self, j: int) -> ArrayScalar:
         """
-        Compute multiple dot products of a column against all the column
-        vectors of a BV.
+        Dot products of a column against all the column vectors of a BV.
 
         Parameters
         ----------
@@ -880,8 +880,7 @@ cdef class BV(Object):
 
     def getColumn(self, j: int) -> Vec:
         """
-        Get a Vec object that contains the entries of the requested column
-        of the basis vectors object.
+        Get a Vec object with the entries of the column of the BV object.
 
         Parameters
         ----------
@@ -924,8 +923,7 @@ cdef class BV(Object):
 
     def getMat(self) -> Mat:
         """
-        Get a Mat object of dense type that shares the memory
-        of the basis vectors object.
+        Get a Mat object of dense type that shares the memory of the BV object.
 
         Returns
         -------
@@ -964,7 +962,8 @@ cdef class BV(Object):
     def dot(self, BV Y) -> Mat:
         """
         Compute the 'block-dot' product of two basis vectors objects.
-            M = Y^H*X (m_ij = y_i^H x_j) or M = Y^H*B*X
+
+        M = Y^H*X (m_ij = y_i^H x_j) or M = Y^H*B*X
 
         Parameters
         ----------
@@ -1076,8 +1075,9 @@ cdef class BV(Object):
 
     def matMultHermitianTranspose(self, Mat A, BV Y=None) -> BV:
         """
-        Compute the matrix-vector product with the conjugate transpose of a
-        matrix for each column, Y=A^H*V.
+        Pre-multiplication with the conjugate transpose of a matrix.
+
+        Y=A^H*V.
 
         Parameters
         ----------
@@ -1119,8 +1119,9 @@ cdef class BV(Object):
 
     def matMultColumn(self, Mat A, j: int) -> None:
         """
-        Compute the matrix-vector product for a specified column, storing
-        the result in the next column: v_{j+1}=A*v_j.
+        Mat-vec product for a column, storing the result in the next column.
+
+        v_{j+1}=A*v_j.
 
         Parameters
         ----------
@@ -1134,8 +1135,9 @@ cdef class BV(Object):
 
     def matMultTransposeColumn(self, Mat A, j: int) -> None:
         """
-        Compute the transpose matrix-vector product for a specified column,
-        storing the result in the next column: v_{j+1}=A^T*v_j.
+        Transpose matrix-vector product for a specified column.
+
+        Store the result in the next column: v_{j+1}=A^T*v_j.
 
         Parameters
         ----------
@@ -1149,8 +1151,9 @@ cdef class BV(Object):
 
     def matMultHermitianTransposeColumn(self, Mat A, j: int) -> None:
         """
-        Compute the conjugate-transpose matrix-vector product for a specified column,
-        storing the result in the next column: v_{j+1}=A^H*v_j.
+        Conjugate-transpose matrix-vector product for a specified column.
+
+        Store the result in the next column: v_{j+1}=A^H*v_j.
 
         Parameters
         ----------
@@ -1252,7 +1255,7 @@ cdef class BV(Object):
 
     def normColumn(self, j: int, norm_type: NormType | None = None) -> float:
         """
-        Compute the matrix norm of the BV.
+        Compute the vector norm of a selected column.
 
         Parameters
         ----------
@@ -1341,8 +1344,7 @@ cdef class BV(Object):
 
     def setRandomNormal(self) -> None:
         """
-        Set the active columns of the BV to random numbers (with normal
-        distribution).
+        Set the active columns of the BV to normal random numbers.
 
         Notes
         -----
@@ -1374,8 +1376,11 @@ cdef class BV(Object):
 
     def setRandomCond(self, condn: float) -> None:
         """
-        Set the columns of a BV to random numbers, in a way that the generated
-        matrix has a given condition number.
+        Set the columns of a BV to random numbers.
+
+        Logically collective.
+
+        The generated matrix has a prescribed condition number.
 
         Parameters
         ----------
@@ -1387,8 +1392,9 @@ cdef class BV(Object):
 
     def setRandomContext(self, Random rnd) -> None:
         """
-        Set the `PETSc.Random` object associated with the BV, to be used
-        in operations that need random numbers.
+        Set the `PETSc.Random` object associated with the BV.
+
+        To be used in operations that need random numbers.
 
         Parameters
         ----------
@@ -1443,7 +1449,7 @@ cdef class BV(Object):
 
     def orthogonalizeColumn(self, j: int) -> tuple[float, bool]:
         """
-        Orthogonalize one of the column vectors with respect to the previous ones.
+        Orthogonalize a column vector with respect to the previous ones.
 
         Parameters
         ----------
@@ -1475,9 +1481,10 @@ cdef class BV(Object):
 
     def orthonormalizeColumn(self, j: int, replace: bool = False) -> tuple[float, bool]:
         """
-        Orthonormalize one of the column vectors with respect to the previous
-        ones.  This is equivalent to a call to `orthogonalizeColumn()`
-        followed by a call to `scaleColumn()` with the reciprocal of the norm.
+        Orthonormalize a column vector with respect to the previous ones.
+
+        This is equivalent to a call to `orthogonalizeColumn()` followed by a
+        call to `scaleColumn()` with the reciprocal of the norm.
 
         Parameters
         ----------
@@ -1504,8 +1511,7 @@ cdef class BV(Object):
 
     def orthogonalize(self, Mat R=None, **kargs: Any) -> None:
         """
-        Orthogonalize all columns (except leading ones),
-        that is, compute the QR decomposition.
+        Orthogonalize all columns (except leading ones) (QR decomposition).
 
         Parameters
         ----------

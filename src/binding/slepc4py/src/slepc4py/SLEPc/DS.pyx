@@ -151,8 +151,7 @@ cdef class DS(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Set the prefix used for searching for all DS options in the
-        database.
+        Set the prefix used for searching for all DS options in the database.
 
         Parameters
         ----------
@@ -171,8 +170,7 @@ cdef class DS(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Append to the prefix used for searching for all DS options
-        in the database.
+        Append to the prefix used for searching for all DS options in the database.
 
         Parameters
         ----------
@@ -185,8 +183,7 @@ cdef class DS(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Get the prefix used for searching for all DS options in the
-        database.
+        Get the prefix used for searching for all DS options in the database.
 
         Returns
         -------

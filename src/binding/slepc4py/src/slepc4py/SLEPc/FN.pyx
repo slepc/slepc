@@ -178,8 +178,7 @@ cdef class FN(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Set the prefix used for searching for all FN options in the
-        database.
+        Set the prefix used for searching for all FN options in the database.
 
         Parameters
         ----------
@@ -198,8 +197,7 @@ cdef class FN(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Append to the prefix used for searching for all FN options
-        in the database.
+        Append to the prefix used for searching for all FN options in the database.
 
         Parameters
         ----------
@@ -212,8 +210,7 @@ cdef class FN(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Get the prefix used for searching for all FN options in the
-        database.
+        Get the prefix used for searching for all FN options in the database.
 
         Returns
         -------
@@ -237,6 +234,8 @@ cdef class FN(Object):
 
     def duplicate(self, comm: Comm | None = None) -> FN:
         """
+        Duplicate the FN object copying all parameters.
+
         Duplicate the FN object copying all parameters, possibly with a
         different communicator.
 
@@ -492,8 +491,10 @@ cdef class FN(Object):
 
     def setCombineChildren(self, comb: CombineType, FN f1, FN f2) -> None:
         """
-        Set the two child functions that constitute this combined
-        function, and the way they must be combined.
+        Set the two child functions that constitute this combined function.
+
+        Set the two child functions that constitute this combined function,
+        and the way they must be combined.
 
         Parameters
         ----------
@@ -509,6 +510,8 @@ cdef class FN(Object):
 
     def getCombineChildren(self) -> tuple[CombineType, FN, FN]:
         """
+        Get the two child functions that constitute this combined function.
+
         Get the two child functions that constitute this combined
         function, and the way they must be combined.
 
