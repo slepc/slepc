@@ -324,10 +324,4 @@ Winkelmann, J., P.~Springer, and E.~{Di Napoli} (2019).
   sequences of Hermitian eigenvalue problems.
 \newblock {\em ACM Trans. Math. Software\/}, 45(2):1--–34.
 
-\bibitem[{Wu and Simon(2000)}]{Wu:2000:TLM}
-Wu, K. and H.~Simon (2000).
-\newblock Thick-restart {Lanczos} method for large symmetric eigenvalue
-  problems.
-\newblock {\em {SIAM} J. Matrix Anal. Appl.\/}, 22(2):602--616.
-
 \end{thebibliography}

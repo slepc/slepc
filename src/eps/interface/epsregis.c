@@ -25,9 +25,6 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_LAPACK(EPS);
 #if defined(SLEPC_HAVE_ARPACK)
 SLEPC_EXTERN PetscErrorCode EPSCreate_ARPACK(EPS);
 #endif
-#if defined(SLEPC_HAVE_TRLAN)
-SLEPC_EXTERN PetscErrorCode EPSCreate_TRLAN(EPS);
-#endif
 #if defined(SLEPC_HAVE_BLOPEX)
 SLEPC_EXTERN PetscErrorCode EPSCreate_BLOPEX(EPS);
 #endif
@@ -81,9 +78,6 @@ PetscErrorCode EPSRegisterAll(void)
   PetscCall(EPSRegister(EPSLAPACK,EPSCreate_LAPACK));
 #if defined(SLEPC_HAVE_ARPACK)
   PetscCall(EPSRegister(EPSARPACK,EPSCreate_ARPACK));
-#endif
-#if defined(SLEPC_HAVE_TRLAN)
-  PetscCall(EPSRegister(EPSTRLAN,EPSCreate_TRLAN));
 #endif
 #if defined(SLEPC_HAVE_BLOPEX)
   PetscCall(EPSRegister(EPSBLOPEX,EPSCreate_BLOPEX));

@@ -326,7 +326,6 @@ Lyapunov Inverse Iteration & \texttt{EPSLYAPII}   & \texttt{lyapii} \\
 Wrapper to \arpack         & \texttt{EPSARPACK}   & \texttt{arpack} \\
 Wrapper to \primme         & \texttt{EPSPRIMME}   & \texttt{primme} \\
 Wrapper to \evsl           & \texttt{EPSEVSL}     & \texttt{evsl} \\
-Wrapper to \trlan          & \texttt{EPSTRLAN}    & \texttt{trlan} \\
 Wrapper to \blopex         & \texttt{EPSBLOPEX}   & \texttt{blopex} \\
 Wrapper to \scalapack      & \texttt{EPSSCALAPACK}& \texttt{scalapack} \\
 Wrapper to \elpa           & \texttt{EPSELPA}     & \texttt{elpa} \\
@@ -337,7 +336,7 @@ Wrapper to \feast          & \texttt{EPSFEAST}    & \texttt{feast} \\\hline
 \caption{\label{tab:solvers}Eigenvalue solvers available in the \ident{EPS} module.}
 \end{table}
 
-The default solver is Krylov-Schur. A detailed description of the implemented algorithms is provided in the \hyperlink{str}{\slepc Technical Reports}. In addition to these methods, \slepc also provides wrappers to external packages such as \arpack, or \trlan. A complete list of these interfaces can be found in \S\ref{sec:wrap}. Note that some of these packages (\lapack, \scalapack, \elpa, \elemental) perform \emph{dense} computations and hence return the full eigendecomposition (furthermore, take into account that \lapack is a sequential library so the corresponding solver should be used only for debugging purposes with small problem sizes).
+The default solver is Krylov-Schur. A detailed description of the implemented algorithms is provided in the \hyperlink{str}{\slepc Technical Reports}. In addition to these methods, \slepc also provides wrappers to external packages such as \arpack, or \primme. A complete list of these interfaces can be found in \S\ref{sec:wrap}. Note that some of these packages (\lapack, \scalapack, \elpa, \elemental) perform \emph{dense} computations and hence return the full eigendecomposition (furthermore, take into account that \lapack is a sequential library so the corresponding solver should be used only for debugging purposes with small problem sizes).
 
 The solution method can be specified procedurally or via the command line. The application programmer can set it by means of the command
         \findex{EPSSetType}
@@ -368,7 +367,6 @@ Method   &  Portion of spectrum & Problem type & \!Real/complex\! & \!Two-sided\
 \texttt{arpack}      & any    & any & both & \\
 \texttt{primme}      & Largest and smallest $\mathrm{Re}(\lambda)$ & \Verb!EPS_HEP!, \Verb!EPS_GHEP! & both & \\
 \texttt{evsl}        & All $\lambda$ in interval & \Verb!EPS_HEP! & real & \\
-\texttt{trlan}       & Largest and smallest $\mathrm{Re}(\lambda)$ & \Verb!EPS_HEP! & real & \\
 \texttt{blopex}      & Smallest $\mathrm{Re}(\lambda)$ & \Verb!EPS_HEP!, \Verb!EPS_GHEP! & both & \\
 \texttt{scalapack}   & All $\lambda$ & \Verb!EPS_HEP!, \Verb!EPS_GHEP! & both & \\
 \texttt{elpa}        & All $\lambda$ & \Verb!EPS_HEP!, \Verb!EPS_GHEP! & both & \\
@@ -397,7 +395,6 @@ Method   &  Portion of spectrum & Problem type & \!Real/complex\! & \!Two-sided\
 %\texttt{lapack}   &  $N$ &         -         & $N$  \\
 %\texttt{arpack}   &  $\max(20,2\!\cdot\!nev\!+\!\!1)$ & $\max(300,\lceil 2N/ncv\rceil)$ & $4$ \\
 %\texttt{primme}   &  $\max(20,2\!\cdot\!nev\!+\!\!1)$ & $\max(1000,N)$ & $3$ \\
-%\texttt{trlan}    &  $nev$ & $\max(1000,N)$ & $nev+1$ \\
 %\texttt{blopex}   &  $nev$ & $\max(100,\lceil 2N/ncv \rceil)$ & $nev$ \\ \hline
 %\end{tabular}
 %\caption{\label{tab:defaults}Default parameter values for all eigensolvers available in \slepc.}

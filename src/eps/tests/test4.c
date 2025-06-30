@@ -118,10 +118,6 @@ int main(int argc,char **argv)
          suffix: 1_primme
          args: -type primme
          requires: primme
-      test:
-         suffix: 1_trlan
-         args: -type trlan
-         requires: trlan
 
    test:
       suffix: 2

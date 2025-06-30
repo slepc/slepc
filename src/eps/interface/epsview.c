@@ -177,7 +177,7 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
     if (eps->ninil) PetscCall(PetscViewerASCIIPrintf(viewer,"  dimension of user-provided left initial space: %" PetscInt_FMT "\n",PetscAbs(eps->ninil)));
     if (eps->nds) PetscCall(PetscViewerASCIIPrintf(viewer,"  dimension of user-provided deflation space: %" PetscInt_FMT "\n",PetscAbs(eps->nds)));
   } else PetscTryTypeMethod(eps,view,viewer);
-  PetscCall(PetscObjectTypeCompareAny((PetscObject)eps,&isexternal,EPSARPACK,EPSBLOPEX,EPSELEMENTAL,EPSFEAST,EPSPRIMME,EPSSCALAPACK,EPSELPA,EPSEVSL,EPSTRLAN,""));
+  PetscCall(PetscObjectTypeCompareAny((PetscObject)eps,&isexternal,EPSARPACK,EPSBLOPEX,EPSELEMENTAL,EPSFEAST,EPSPRIMME,EPSSCALAPACK,EPSELPA,EPSEVSL,""));
   if (!isexternal) {
     PetscCall(PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_INFO));
     if (!eps->V) PetscCall(EPSGetBV(eps,&eps->V));
