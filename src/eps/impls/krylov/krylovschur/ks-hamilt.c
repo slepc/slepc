@@ -319,7 +319,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
 static PetscErrorCode EPSComputeVectors_Hamilt(EPS eps)
 {
   Mat         X,W,D;
-  Vec         vomegaold,vomega;
+  Vec         vomega,vomegacopy;
   BV          U,V;
   PetscInt    n;
 
@@ -332,16 +332,14 @@ static PetscErrorCode EPSComputeVectors_Hamilt(EPS eps)
   /* Update bases again, needed due to 2x2 blocks */
   PetscCall(DSGetDimensions(eps->ds,&n,NULL,NULL,NULL));
   PetscCall(DSGetMatAndColumn(eps->ds,DS_MAT_D,0,&D,&vomega));
-  PetscCall(VecDuplicate(vomega,&vomegaold));
-  PetscCall(VecCopy(vomega,vomegaold));
+  PetscCall(VecDuplicate(vomega,&vomegacopy));
+  PetscCall(VecCopy(vomega,vomegacopy));
   PetscCall(DSRestoreMatAndColumn(eps->ds,DS_MAT_D,0,&D,&vomega));
   PetscCall(DSVectors(eps->ds,DS_MAT_X,NULL,NULL));
   PetscCall(DSGetMat(eps->ds,DS_MAT_X,&X));
   PetscCall(MatDuplicate(X,MAT_COPY_VALUES,&W));
-  PetscCall(DSGetMatAndColumn(eps->ds,DS_MAT_D,0,&D,&vomega));
-  PetscCall(MatDiagonalScale(W,vomegaold,vomega));
-  PetscCall(DSRestoreMatAndColumn(eps->ds,DS_MAT_D,0,&D,&vomega));
-  PetscCall(VecDestroy(&vomegaold));
+  PetscCall(MatDiagonalScale(W,vomegacopy,NULL));
+  PetscCall(VecDestroy(&vomegacopy));
   PetscCall(BVSetActiveColumns(U,0,n));
   PetscCall(BVMultInPlace(U,W,0,n));
   PetscCall(MatDestroy(&W));

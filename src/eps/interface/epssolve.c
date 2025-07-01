@@ -461,8 +461,7 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
 {
   PetscInt  k,nconv;
 #if !defined(PETSC_USE_COMPLEX)
-  PetscInt  k2;
-  PetscBool second;
+  PetscInt  k2, iquad;
 #endif
 
   PetscFunctionBegin;
@@ -505,14 +504,14 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
       } else if (eps->eigr[k]==0.0) { /* purely imaginary eigenvalue */
         if (eigr) *eigr = 0.0;
         if (eigi) *eigi = (i%2)? -eps->eigi[k]: eps->eigi[k];
-      } else { /* quadruple eigenvalue (-lambda,-conj(lambda),lambda,conj(lambda)) */
-        second = PETSC_FALSE;  /* second pair */
+      } else { /* quadruple eigenvalue (-conj(lambda),-lambda,lambda,conj(lambda)) */
+        iquad = i%2;  /* index within the 4 values */
         if (i>1) {
           k2 = eps->perm[(i-2)/2];
-          if (eps->eigr[k]==eps->eigr[k2] && eps->eigi[k]==-eps->eigi[k2]) second = PETSC_TRUE;
+          if (eps->eigr[k]==eps->eigr[k2] && eps->eigi[k]==-eps->eigi[k2]) iquad += 2;
         }
-        if (eigr) *eigr = (!second)? -eps->eigr[k]: eps->eigr[k];
-        if (eigi) *eigi = ((i%2 && !second) || (i%2==0 && second))? -eps->eigi[k]: eps->eigi[k];
+        if (eigr) *eigr = (iquad<2)? -eps->eigr[k]: eps->eigr[k];
+        if (eigi) *eigi = (iquad%3)? -eps->eigi[k]: eps->eigi[k];
       }
 #endif
     }
