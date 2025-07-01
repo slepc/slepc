@@ -249,6 +249,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
     /* Check convergence */
     PetscCall(DSGetDimensions(eps->ds,NULL,NULL,NULL,&t));
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,1.0,&k));
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
 
@@ -284,6 +285,16 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
     if (eps->reason == EPS_CONVERGED_ITERATING && !breakdown) {
       PetscCall(BVCopyColumn(U,nv,k+l));
       PetscCall(BVCopyColumn(V,nv,k+l));
+      if (eps->stop==EPS_STOP_THRESHOLD && nv-k<5) {  /* reallocate */
+        eps->ncv = eps->mpd+k;
+        PetscCall(BVRestoreSplit(eps->V,&U,&V));
+        PetscCall(EPSReallocateSolution(eps,eps->ncv+2));
+        PetscCall(BVSetActiveColumns(eps->V,eps->ncv/2+1,eps->ncv+2));
+        PetscCall(BVGetSplit(eps->V,&U,&V));
+        for (i=nv;i<eps->ncv;i++) eps->perm[i] = i;
+        PetscCall(DSReallocate(eps->ds,eps->ncv/2+1));
+        PetscCall(DSGetLeadingDimension(eps->ds,&ld));
+      }
     }
     eps->nconv = k;
     for (i=0;i<nv;i++) {
@@ -342,26 +353,6 @@ static PetscErrorCode EPSComputeVectors_Hamilt(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSSetDimensions_Hamilt(EPS eps,PetscInt nev,PetscInt *ncv,PetscInt *mpd)
-{
-  PetscInt nev2=(eps->nev+1)/2;
-
-  PetscFunctionBegin;
-  if (*ncv!=PETSC_DETERMINE) { /* ncv set */
-    PetscCheck(*ncv>=nev+2 || (*ncv==nev && *ncv==eps->n/2),PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must be at least nev+2");
-  } else if (*mpd!=PETSC_DETERMINE) { /* mpd set */
-    *ncv = PetscMin(eps->n/2,nev+(*mpd));
-  } else { /* neither set: defaults depend on nev being small or large */
-    if (nev<500) *ncv = PetscMin(eps->n/2,PetscMax(4*nev,2*nev2+18));
-    else {
-      *mpd = 500;
-      *ncv = PetscMin(eps->n/2,nev+(*mpd));
-    }
-  }
-  if (*mpd==PETSC_DETERMINE) *mpd = *ncv;
-  PetscFunctionReturn(PETSC_SUCCESS);
-}
-
 PetscErrorCode EPSSetUp_KrylovSchur_Hamilt(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
@@ -370,9 +361,9 @@ PetscErrorCode EPSSetUp_KrylovSchur_Hamilt(EPS eps)
   PetscFunctionBegin;
   PetscCheck(eps->problem_type==EPS_HAMILT,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONGSTATE,"Problem type should be Hamiltonian");
   EPSCheckUnsupportedCondition(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_BALANCE,PETSC_TRUE," with Hamiltonian structure");
-  PetscCall(EPSSetDimensions_Hamilt(eps,eps->nev,&eps->ncv,&eps->mpd));
+  PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
   PetscCheck(eps->ncv<=eps->nev+eps->mpd,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nev+mpd");
-  if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
+  if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv)*((eps->stop==EPS_STOP_THRESHOLD)?10:1);
 
   PetscCall(PetscObjectTypeCompareAny((PetscObject)eps->st,&flg,STSINVERT,STSHIFT,""));
   PetscCheck(flg,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Hamiltonian Krylov-Schur only supports shift and shift-and-invert ST");
