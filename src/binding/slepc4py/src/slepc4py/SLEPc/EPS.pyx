@@ -3334,84 +3334,98 @@ cdef class EPS(Object):
 
     #
     property problem_type:
+        """The type of the eigenvalue problem."""
         def __get__(self):
             return self.getProblemType()
         def __set__(self, value):
             self.setProblemType(value)
 
     property extraction:
+        """The type of extraction technique to be employed."""
         def __get__(self):
             return self.getExtraction()
         def __set__(self, value):
             self.setExtraction(value)
 
     property which:
+        """The portion of the spectrum to be sought."""
         def __get__(self):
             return self.getWhichEigenpairs()
         def __set__(self, value):
             self.setWhichEigenpairs(value)
 
     property target:
+        """The value of the target."""
         def __get__(self):
             return self.getTarget()
         def __set__(self, value):
             self.setTarget(value)
 
     property tol:
+        """The tolerance."""
         def __get__(self):
             return self.getTolerances()[0]
         def __set__(self, value):
             self.setTolerances(tol=value)
 
     property max_it:
+        """The maximum iteration count."""
         def __get__(self):
             return self.getTolerances()[1]
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
     property two_sided:
+        """Two-sided that also computes left eigenvectors."""
         def __get__(self):
             return self.getTwoSided()
         def __set__(self, value):
             self.setTwoSided(value)
 
     property true_residual:
+        """Compute the true residual explicitly."""
         def __get__(self):
             return self.getTrueResidual()
         def __set__(self, value):
             self.setTrueResidual(value)
 
     property purify:
+        """Eigenvector purification."""
         def __get__(self):
             return self.getPurify()
         def __set__(self, value):
             self.setPurify(value)
 
     property track_all:
+        """Compute the residual norm of all approximate eigenpairs."""
         def __get__(self):
             return self.getTrackAll()
         def __set__(self, value):
             self.setTrackAll(value)
 
     property st:
+        """The spectral transformation (ST) object associated."""
         def __get__(self):
             return self.getST()
         def __set__(self, value):
             self.setST(value)
 
     property bv:
+        """The basis vectors (BV) object associated."""
         def __get__(self):
             return self.getBV()
         def __set__(self, value):
             self.setBV(value)
 
     property rg:
+        """The region (RG) object associated."""
         def __get__(self):
             return self.getRG()
         def __set__(self, value):
             self.setRG(value)
 
     property ds:
+        """The direct solver (DS) object associated."""
         def __get__(self):
             return self.getDS()
         def __set__(self, value):

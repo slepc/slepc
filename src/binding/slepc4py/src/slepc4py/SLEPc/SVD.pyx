@@ -1508,42 +1508,49 @@ cdef class SVD(Object):
     #
 
     property problem_type:
+        """The type of the eigenvalue problem."""
         def __get__(self):
             return self.getProblemType()
         def __set__(self, value):
             self.setProblemType(value)
 
     property transpose_mode:
+        """How to handle the transpose of the matrix."""
         def __get__(self):
             return self.getTransposeMode()
         def __set__(self, value):
             self.setTransposeMode(value)
 
     property which:
+        """The portion of the spectrum to be sought."""
         def __get__(self):
             return self.getWhichSingularTriplets()
         def __set__(self, value):
             self.setWhichSingularTriplets(value)
 
     property tol:
+        """The tolerance."""
         def __get__(self):
             return self.getTolerances()[0]
         def __set__(self, value):
             self.setTolerances(tol=value)
 
     property max_it:
+        """The maximum iteration count."""
         def __get__(self):
             return self.getTolerances()[1]
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
     property track_all:
+        """Compute the residual norm of all approximate eigenpairs."""
         def __get__(self):
             return self.getTrackAll()
         def __set__(self, value):
             self.setTrackAll(value)
 
     property ds:
+        """The direct solver (DS) object associated."""
         def __get__(self):
             return self.getDS()
         def __set__(self, value):

@@ -2222,54 +2222,63 @@ cdef class NEP(Object):
         return [ref_KSP(p[i]) for i from 0 <= i <n]
 
     property problem_type:
+        """The problem type from the NEP object."""
         def __get__(self):
             return self.getProblemType()
         def __set__(self, value):
             self.setProblemType(value)
 
     property which:
+        """The portion of the spectrum to be sought."""
         def __get__(self):
             return self.getWhichEigenpairs()
         def __set__(self, value):
             self.setWhichEigenpairs(value)
 
     property target:
+        """The value of the target."""
         def __get__(self):
             return self.getTarget()
         def __set__(self, value):
             self.setTarget(value)
 
     property tol:
+        """The tolerance used by the NEP convergence tests."""
         def __get__(self):
             return self.getTolerances()[0]
         def __set__(self, value):
             self.setTolerances(tol=value)
 
     property max_it:
+        """The maximum iteration count used by the NEP convergence tests."""
         def __get__(self):
             return self.getTolerances()[1]
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
     property track_all:
+        """Compute the residual of all approximate eigenpairs."""
         def __get__(self):
             return self.getTrackAll()
         def __set__(self, value):
             self.setTrackAll(value)
 
     property bv:
+        """The basis vectors (BV) object associated."""
         def __get__(self):
             return self.getBV()
         def __set__(self, value):
             self.setBV(value)
 
     property rg:
+        """The region (RG) object associated."""
         def __get__(self):
             return self.getRG()
         def __set__(self, value):
             self.setRG(value)
 
     property ds:
+        """The direct solver (DS) object associated."""
         def __get__(self):
             return self.getDS()
         def __set__(self, value):

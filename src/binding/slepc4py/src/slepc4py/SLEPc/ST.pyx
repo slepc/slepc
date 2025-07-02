@@ -845,30 +845,35 @@ cdef class ST(Object):
     #
 
     property shift:
+        """Value of the shift."""
         def __get__(self):
             return self.getShift()
         def __set__(self, value):
             self.setShift(value)
 
     property transform:
+        """If the transformed matrices are computed."""
         def __get__(self):
             return self.getTransform()
         def __set__(self, value):
             self.setTransform(value)
 
     property mat_mode:
+        """How the transformed matrices are being stored in the ST."""
         def __get__(self):
             return self.getMatMode()
         def __set__(self, value):
             self.setMatMode(value)
 
     property mat_structure:
+        """Relation of the sparsity pattern of all ST matrices."""
         def __get__(self):
             return self.getMatStructure()
         def __set__(self, value):
             self.setMatStructure(value)
 
     property ksp:
+        """KSP object associated with the spectral transformation."""
         def __get__(self):
             return self.getKSP()
         def __set__(self, value):

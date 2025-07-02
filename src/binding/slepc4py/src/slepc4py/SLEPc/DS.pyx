@@ -863,42 +863,49 @@ cdef class DS(Object):
     #
 
     property state:
+        """The state of the DS object."""
         def __get__(self):
             return self.getState()
         def __set__(self, value):
             self.setState(value)
 
     property parallel:
+        """The mode of operation in parallel runs."""
         def __get__(self):
             return self.getParallel()
         def __set__(self, value):
             self.setParallel(value)
 
     property block_size:
+        """The block size."""
         def __get__(self):
             return self.getBlockSize()
         def __set__(self, value):
             self.setBlockSize(value)
 
     property method:
+        """The method to be used to solve the problem."""
         def __get__(self):
             return self.getMethod()
         def __set__(self, value):
             self.setMethod(value)
 
     property compact:
+        """Compact storage of matrices."""
         def __get__(self):
             return self.getCompact()
         def __set__(self, value):
             self.setCompact(value)
 
     property extra_row:
+        """If the matrix has one extra row."""
         def __get__(self):
             return self.getExtraRow()
         def __set__(self, value):
             self.setExtraRow(value)
 
     property refined:
+        """If refined vectors must be computed."""
         def __get__(self):
             return self.getRefined()
         def __set__(self, value):
