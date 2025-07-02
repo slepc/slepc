@@ -619,14 +619,14 @@ cdef class FN(Object):
 
     property method:
         """The method to be used to evaluate functions of matrices."""
-        def __get__(self):
+        def __get__(self) -> int:
             return self.getMethod()
         def __set__(self, value):
             self.setMethod(value)
 
     property parallel:
         """The mode of operation in parallel runs."""
-        def __get__(self):
+        def __get__(self) -> FNParallelType:
             return self.getParallel()
         def __set__(self, value):
             self.setParallel(value)

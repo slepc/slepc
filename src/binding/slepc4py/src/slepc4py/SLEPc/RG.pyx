@@ -616,14 +616,14 @@ cdef class RG(Object):
 
     property complement:
         """If the region is the complement of the specified one."""
-        def __get__(self):
+        def __get__(self) -> bool:
             return self.getComplement()
         def __set__(self, value):
             self.setComplement(value)
 
     property scale:
         """The scaling factor to be used."""
-        def __get__(self):
+        def __get__(self) -> float:
             return self.getScale()
         def __set__(self, value):
             self.setScale(value)

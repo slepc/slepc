@@ -2185,77 +2185,77 @@ cdef class PEP(Object):
 
     property problem_type:
         """The type of the eigenvalue problem."""
-        def __get__(self):
+        def __get__(self) -> PEPProblemType:
             return self.getProblemType()
         def __set__(self, value):
             self.setProblemType(value)
 
     property which:
         """The portion of the spectrum to be sought."""
-        def __get__(self):
+        def __get__(self) -> PEPWhich:
             return self.getWhichEigenpairs()
         def __set__(self, value):
             self.setWhichEigenpairs(value)
 
     property target:
         """The value of the target."""
-        def __get__(self):
+        def __get__(self) -> float:
             return self.getTarget()
         def __set__(self, value):
             self.setTarget(value)
 
     property extract:
         """The type of extraction technique to be employed."""
-        def __get__(self):
+        def __get__(self) -> PEPExtract:
             return self.getExtract()
         def __set__(self, value):
             self.setExtract(value)
 
     property tol:
         """The tolerance."""
-        def __get__(self):
+        def __get__(self) -> float:
             return self.getTolerances()[0]
         def __set__(self, value):
             self.setTolerances(tol=value)
 
     property max_it:
         """The maximum iteration count."""
-        def __get__(self):
+        def __get__(self) -> int:
             return self.getTolerances()[1]
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
     property track_all:
         """Compute the residual norm of all approximate eigenpairs."""
-        def __get__(self):
+        def __get__(self) -> bool:
             return self.getTrackAll()
         def __set__(self, value):
             self.setTrackAll(value)
 
     property st:
         """The spectral transformation (ST) object associated."""
-        def __get__(self):
+        def __get__(self) -> ST:
             return self.getST()
         def __set__(self, value):
             self.setST(value)
 
     property bv:
         """The basis vectors (BV) object associated."""
-        def __get__(self):
+        def __get__(self) -> BV:
             return self.getBV()
         def __set__(self, value):
             self.setBV(value)
 
     property rg:
         """The region (RG) object associated."""
-        def __get__(self):
+        def __get__(self) -> RG:
             return self.getRG()
         def __set__(self, value):
             self.setRG(value)
 
     property ds:
         """The direct solver (DS) object associated."""
-        def __get__(self):
+        def __get__(self) -> DS:
             return self.getDS()
         def __set__(self, value):
             self.setDS(value)
