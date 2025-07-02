@@ -64,7 +64,8 @@ class DSParallelType(object):
 
     - `REDUNDANT`:    Every process performs the computation redundantly.
     - `SYNCHRONIZED`: The first process sends the result to the rest.
-    - `DISTRIBUTED`:  Used in some cases to distribute the computation among processes.
+    - `DISTRIBUTED`:  Used in some cases to distribute the computation among
+                      processes.
     """
     REDUNDANT    = DS_PARALLEL_REDUNDANT
     SYNCHRONIZED = DS_PARALLEL_SYNCHRONIZED
@@ -587,9 +588,12 @@ cdef class DS(Object):
 
     def updateExtraRow(self) -> None:
         """
-        Perform all necessary operations so that the extra row gets up-to-date after a call to `solve()`.
+        Ensure that the extra row gets up-to-date after a call to `solve()`.
 
         Logically collective.
+
+        Perform all necessary operations so that the extra row gets up-to-date
+        after a call to `solve()`.
         """
         CHKERR( DSUpdateExtraRow(self.ds) )
 

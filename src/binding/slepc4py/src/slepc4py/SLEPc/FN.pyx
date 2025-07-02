@@ -551,7 +551,8 @@ cdef class FN(Object):
         Parameters
         ----------
         comb
-            How to combine the functions (addition, multiplication, division, composition).
+            How to combine the functions (addition, multiplication, division,
+            composition).
         f1
             First function.
         f2
@@ -572,7 +573,8 @@ cdef class FN(Object):
         Returns
         -------
         comb: CombineType
-            How to combine the functions (addition, multiplication, division, composition).
+            How to combine the functions (addition, multiplication, division,
+            composition).
         f1: FN
             First function.
         f2: FN

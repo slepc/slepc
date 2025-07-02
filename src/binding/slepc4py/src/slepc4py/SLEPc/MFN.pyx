@@ -377,9 +377,12 @@ cdef class MFN(Object):
 
     def setUp(self) -> None:
         """
-        Set up all the internal data structures necessary for the execution of the eigensolver.
+        Set up all the necessary internal data structures.
 
         Collective.
+
+        Set up all the internal data structures necessary for the execution
+        of the eigensolver.
         """
         CHKERR( MFNSetUp(self.mfn) )
 
@@ -467,9 +470,12 @@ cdef class MFN(Object):
 
     def getErrorIfNotConverged(self) -> bool:
         """
-        Get a flag indicating whether `solve()` will generate an error if the solver does not converge.
+        Get if `solve()` generates an error if the solver does not converge.
 
         Not collective.
+
+        Get a flag indicating whether `solve()` will generate an error if the
+        solver does not converge.
 
         Returns
         -------

@@ -60,9 +60,11 @@ class BVSVDMethod(object):
     """
     BV methods for computing the SVD.
 
-    - `REFINE`: Based on the SVD of the cross product matrix S'*S, with refinement.
+    - `REFINE`: Based on the SVD of the cross product matrix S'*S, with
+                refinement.
     - `QR`:     Based on the SVD of the triangular factor of qr(S).
-    - `QR_CAA`: Variant of QR intended for use in cammunication-avoiding Arnoldi.
+    - `QR_CAA`: Variant of QR intended for use in communication-avoiding
+                Arnoldi.
     """
     REFINE   = BV_SVD_METHOD_REFINE
     QR       = BV_SVD_METHOD_QR
@@ -1667,7 +1669,8 @@ cdef class BV(Object):
 
         Notes
         -----
-        The output satisfies ``V0 = V*R`` (where V0 represent the input V) and ``V'*V = I``.
+        The output satisfies ``V0 = V*R`` (where V0 represent the input V) and
+        ``V'*V = I``.
         """
         if kargs: self.setOrthogonalization(**kargs)
         cdef PetscMat Rmat = <PetscMat>NULL if R is None else R.mat

@@ -187,9 +187,12 @@ cdef class RG(Object):
 
     def isAxisymmetric(self, vertical: bool = False) -> bool:
         """
-        Determine if the region is symmetric with respect to the real or imaginary axis.
+        Determine if the region is symmetric wrt. the real or imaginary axis.
 
         Not collective.
+
+        Determine if the region is symmetric with respect to the real or
+        imaginary axis.
 
         Parameters
         ----------
@@ -302,10 +305,12 @@ cdef class RG(Object):
 
     def computeContour(self, n: int) -> list[Complex]:
         """
-        Compute the coordinates of several points lying on the contour
-        of the region.
+        Compute the coordinates of several points of the contour on the region.
 
         Not collective.
+
+        Compute the coordinates of several points lying on the contour
+        of the region.
 
         Parameters
         ----------
@@ -331,9 +336,12 @@ cdef class RG(Object):
 
     def computeBoundingBox(self) -> tuple[float, float, float, float]:
         """
-        Determine the endpoints of a rectangle in the complex plane that contains the region.
+        Endpoints of a rectangle in the complex plane containing the region.
 
         Not collective.
+
+        Determine the endpoints of a rectangle in the complex plane that
+        contains the region.
 
         Returns
         -------

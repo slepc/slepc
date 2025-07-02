@@ -74,12 +74,15 @@ class NEPConvergedReason(object):
     """
     NEP convergence reasons.
 
-    - `CONVERGED_TOL`:               All eigenpairs converged to requested tolerance.
-    - `CONVERGED_USER`:              User-defined convergence criterion satisfied.
+    - `CONVERGED_TOL`:               All eigenpairs converged to requested
+                                     tolerance.
+    - `CONVERGED_USER`:              User-defined convergence criterion
+                                     satisfied.
     - `DIVERGED_ITS`:                Maximum number of iterations exceeded.
     - `DIVERGED_BREAKDOWN`:          Solver failed due to breakdown.
     - `DIVERGED_LINEAR_SOLVE`:       Inner linear solve failed.
-    - `DIVERGED_SUBSPACE_EXHAUSTED`: Run out of space for the basis in an unrestarted solver.
+    - `DIVERGED_SUBSPACE_EXHAUSTED`: Run out of space for the basis in an
+                                     unrestarted solver.
     - `CONVERGED_ITERATING`:         Iteration not finished yet.
     """
     CONVERGED_TOL               = NEP_CONVERGED_TOL
@@ -828,9 +831,12 @@ cdef class NEP(Object):
 
     def setUp(self) -> None:
         """
-        Set up all the internal data structures necessary for the execution of the eigensolver.
+        Set up all the necessary internal data structures.
 
         Collective.
+
+        Set up all the internal data structures necessary for the execution of
+        the eigensolver.
         """
         CHKERR( NEPSetUp(self.nep) )
 
@@ -975,7 +981,8 @@ cdef class NEP(Object):
 
         Collective.
 
-        Compute the error (based on the residual norm) associated with the i-th computed eigenpair.
+        Compute the error (based on the residual norm) associated with the
+        i-th computed eigenpair.
 
         Parameters
         ----------
@@ -1449,9 +1456,12 @@ cdef class NEP(Object):
 
     def setRIIHermitian(self, herm: bool) -> None:
         """
-        Set a flag to indicate if the Hermitian version of the scalar nonlinear equation must be used by the solver.
+        Set a flag to use the Hermitian version of the solver.
 
         Logically collective.
+
+        Set a flag to indicate if the Hermitian version of the scalar
+        nonlinear equation must be used by the solver.
 
         Parameters
         ----------
@@ -1463,9 +1473,12 @@ cdef class NEP(Object):
 
     def getRIIHermitian(self) -> bool:
         """
-        Get the flag about using the Hermitian version of the scalar nonlinear equation.
+        Get if the Hermitian version must be used by the solver.
 
         Not collective.
+
+        Get the flag about using the Hermitian version of the scalar nonlinear
+        equation.
 
         Returns
         -------
@@ -1478,9 +1491,12 @@ cdef class NEP(Object):
 
     def setRIIDeflationThreshold(self, deftol: float) -> None:
         """
-        Set the threshold value used to switch between deflated and non-deflated iteration.
+        Set the threshold used to switch between deflated and non-deflated.
 
         Logically collective.
+
+        Set the threshold value used to switch between deflated and
+        non-deflated iteration.
 
         Parameters
         ----------
@@ -1538,7 +1554,7 @@ cdef class NEP(Object):
 
     def setSLPDeflationThreshold(self, deftol: float) -> None:
         """
-        Set the threshold value used to switch between deflated and non-deflated iteration.
+        Set the threshold used to switch between deflated and non-deflated.
 
         Logically collective.
 
@@ -1738,9 +1754,12 @@ cdef class NEP(Object):
 
     def getInterpolPEP(self) -> PEP:
         """
-        Get the polynomial eigensolver object associated with the nonlinear eigensolver.
+        Get the associated polynomial eigensolver object.
 
         Collective.
+
+        Get the polynomial eigensolver object associated with the nonlinear
+        eigensolver.
 
         Returns
         -------
@@ -1754,9 +1773,12 @@ cdef class NEP(Object):
 
     def setInterpolInterpolation(self, tol: float | None = None, deg: int | None = None) -> None:
         """
-        Set the tolerance and maximum degree when building the interpolation polynomial.
+        Set the tolerance and maximum degree for the interpolation polynomial.
 
         Collective.
+
+        Set the tolerance and maximum degree when building the interpolation
+        polynomial.
 
         Parameters
         ----------
@@ -1773,7 +1795,7 @@ cdef class NEP(Object):
 
     def getInterpolInterpolation(self) -> tuple[float, int]:
         """
-        Get the tolerance and maximum degree when building the interpolation polynomial.
+        Get the tolerance and maximum degree for the interpolation polynomial.
 
         Not collective.
 
@@ -1864,9 +1886,12 @@ cdef class NEP(Object):
 
     def setNLEIGSInterpolation(self, tol: float | None = None, deg: int | None = None) -> None:
         """
-        Set the tolerance and maximum degree when building the interpolation via divided differences.
+        Set the tolerance and maximum degree for the interpolation polynomial.
 
         Collective.
+
+        Set the tolerance and maximum degree when building the interpolation
+        via divided differences.
 
         Parameters
         ----------
@@ -1883,9 +1908,12 @@ cdef class NEP(Object):
 
     def getNLEIGSInterpolation(self) -> tuple[float, int]:
         """
-        Get the tolerance and maximum degree when building the interpolation via divided differences.
+        Get the tolerance and maximum degree for the interpolation polynomial.
 
         Not collective.
+
+        Get the tolerance and maximum degree when building the interpolation
+        via divided differences.
 
         Returns
         -------
@@ -1901,9 +1929,12 @@ cdef class NEP(Object):
 
     def setNLEIGSFullBasis(self, fullbasis: bool = True) -> None:
         """
-        Set (toggle) between TOAR-basis (default) and full-basis variants of the NLEIGS method.
+        Set TOAR-basis (default) or full-basis variants of the NLEIGS method.
 
         Logically collective.
+
+        Toggle between TOAR-basis (default) and full-basis variants of the
+        NLEIGS method.
 
         Parameters
         ----------

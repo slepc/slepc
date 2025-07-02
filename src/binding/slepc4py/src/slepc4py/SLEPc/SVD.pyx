@@ -96,12 +96,15 @@ class SVDConvergedReason(object):
     """
     SVD convergence reasons.
 
-    - `CONVERGED_TOL`:          All eigenpairs converged to requested tolerance.
+    - `CONVERGED_TOL`:          All eigenpairs converged to requested
+                                tolerance.
     - `CONVERGED_USER`:         User-defined convergence criterion satisfied.
-    - `CONVERGED_MAXIT`:        Maximum iterations completed in case MAXIT convergence criterion.
+    - `CONVERGED_MAXIT`:        Maximum iterations completed in case MAXIT
+                                convergence criterion.
     - `DIVERGED_ITS`:           Maximum number of iterations exceeded.
     - `DIVERGED_BREAKDOWN`:     Solver failed due to breakdown.
-    - `DIVERGED_SYMMETRY_LOST`: Underlying indefinite eigensolver was not able to keep symmetry.
+    - `DIVERGED_SYMMETRY_LOST`: Underlying indefinite eigensolver was not able
+                                to keep symmetry.
     - `CONVERGED_ITERATING`:    Iteration not finished yet.
     """
     CONVERGED_TOL          = SVD_CONVERGED_TOL
@@ -118,8 +121,10 @@ class SVDTRLanczosGBidiag(object):
     SVD TRLanczos bidiagonalization choices for the GSVD case.
 
     - `SINGLE`: Single bidiagonalization (Qa).
-    - `UPPER`:  Joint bidiagonalization, both Qa and Qb in upper bidiagonal form.
-    - `LOWER`:  Joint bidiagonalization, Qa lower bidiagonal, Qb upper bidiagonal.
+    - `UPPER`:  Joint bidiagonalization, both Qa and Qb in upper bidiagonal
+                form.
+    - `LOWER`:  Joint bidiagonalization, Qa lower bidiagonal, Qb upper
+                bidiagonal.
     """
     SINGLE = SVD_TRLANCZOS_GBIDIAG_SINGLE
     UPPER  = SVD_TRLANCZOS_GBIDIAG_UPPER
@@ -338,9 +343,12 @@ cdef class SVD(Object):
 
     def isGeneralized(self) -> bool:
         """
-        Tell whether the SVD object corresponds to a generalized singular value problem.
+        Tell if the SVD corresponds to a generalized singular value problem.
 
         Not collective.
+
+        Tell whether the SVD object corresponds to a generalized singular
+        value problem.
 
         Returns
         -------
@@ -370,9 +378,12 @@ cdef class SVD(Object):
 
     def getImplicitTranspose(self) -> bool:
         """
-        Get the mode used to handle the transpose of the matrix associated with the singular value problem.
+        Get the mode used to handle the transpose of the matrix associated.
 
         Not collective.
+
+        Get the mode used to handle the transpose of the matrix associated
+        with the singular value problem.
 
         Returns
         -------
@@ -385,9 +396,12 @@ cdef class SVD(Object):
 
     def setImplicitTranspose(self, mode: bool) -> None:
         """
-        Set how to handle the transpose of the matrix associated with the singular value problem.
+        Set how to handle the transpose of the matrix associated.
 
         Logically collective.
+
+        Set how to handle the transpose of the matrix associated with the
+        singular value problem.
 
         Parameters
         ----------
@@ -483,9 +497,12 @@ cdef class SVD(Object):
 
     def getTolerances(self) -> tuple[float, int]:
         """
-        Get the tolerance and maximum iteration count used by the default SVD convergence tests.
+        Get the tolerance and maximum iteration count.
 
         Not collective.
+
+        Get the tolerance and maximum iteration count used by the default SVD
+        convergence tests.
 
         Returns
         -------
@@ -501,9 +518,12 @@ cdef class SVD(Object):
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
-        Set the tolerance and maximum iteration count used by the default SVD convergence tests.
+        Set the tolerance and maximum iteration count used.
 
         Logically collective.
+
+        Set the tolerance and maximum iteration count used by the default SVD
+        convergence tests.
 
         Parameters
         ----------
@@ -556,7 +576,7 @@ cdef class SVD(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Get the flag indicating whether all residual norms must be computed or not.
+        Get the flag indicating if all residual norms must be computed or not.
 
         Not collective.
 
@@ -571,9 +591,12 @@ cdef class SVD(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Set if the solver must compute the residual of all approximate singular triplets or not.
+        Set flag to compute the residual of all singular triplets.
 
         Logically collective.
+
+        Set if the solver must compute the residual of all approximate
+        singular triplets or not.
 
         Parameters
         ----------
@@ -899,9 +922,12 @@ cdef class SVD(Object):
 
     def setUp(self) -> None:
         """
-        Set up all the internal data structures necessary for the execution of the singular value solver.
+        Set up all the necessary internal data structures.
 
         Collective.
+
+        Set up all the internal data structures necessary for the execution of
+        the singular value solver.
 
         Notes
         -----
@@ -1025,12 +1051,13 @@ cdef class SVD(Object):
 
     def getSingularTriplet(self, i: int, Vec U=None, Vec V=None) -> float:
         """
-        Get the i-th triplet of the singular value decomposition as computed by `solve()`.
+        Get the i-th triplet of the singular value decomposition.
 
         Collective.
 
-        The solution consists of the singular value and its left and right
-        singular vectors.
+        Get the i-th triplet of the singular value decomposition as computed
+        by `solve()`. The solution consists of the singular value and its left
+        and right singular vectors.
 
         Parameters
         ----------
@@ -1063,9 +1090,12 @@ cdef class SVD(Object):
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
-        Compute the error (based on the residual norm) associated with the i-th singular triplet.
+        Compute the error associated with the i-th singular triplet.
 
         Collective.
+
+        Compute the error (based on the residual norm) associated with the
+        i-th singular triplet.
 
         Parameters
         ----------
@@ -1243,9 +1273,12 @@ cdef class SVD(Object):
 
     def setCyclicExplicitMatrix(self, flag: bool = True) -> None:
         """
-        Set if the eigensolver operator ``H(A) = [ 0 A ; A^T 0 ]`` must be computed explicitly.
+        Set if the eigensolver operator ``H(A)`` must be computed explicitly.
 
         Logically collective.
+
+        Set if the eigensolver operator ``H(A) = [ 0 A ; A^T 0 ]`` must be
+        computed explicitly.
 
         Parameters
         ----------
@@ -1309,9 +1342,12 @@ cdef class SVD(Object):
 
     def setTRLanczosOneSide(self, flag: bool = True) -> None:
         """
-        Set if the variant of the thick-restart Lanczos method to be used is one-sided or two-sided.
+        Set if the variant of the method to be used is one-sided or two-sided.
 
         Logically collective.
+
+        Set if the variant of the thick-restart Lanczos method to be used is
+        one-sided or two-sided.
 
         Parameters
         ----------
@@ -1330,9 +1366,12 @@ cdef class SVD(Object):
 
     def getTRLanczosOneSide(self) -> bool:
         """
-        Get if the variant of the thick-restart Lanczos method to be used is one-sided or two-sided.
+        Get if the variant of the method to be used is one-sided or two-sided.
 
         Not collective.
+
+        Get if the variant of the thick-restart Lanczos method to be used is
+        one-sided or two-sided.
 
         Returns
         -------
@@ -1411,9 +1450,12 @@ cdef class SVD(Object):
 
     def setTRLanczosLocking(self, lock: bool) -> None:
         """
-        Set (toggle) between locking and non-locking variants of the thick-restart Lanczos method.
+        Toggle between locking and non-locking variants of the method.
 
         Logically collective.
+
+        Toggle between locking and non-locking variants of the thick-restart
+        Lanczos method.
 
         Parameters
         ----------

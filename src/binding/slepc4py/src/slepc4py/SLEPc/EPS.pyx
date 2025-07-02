@@ -85,7 +85,8 @@ class EPSExtraction(object):
     - `HARMONIC`:          Harmonic extraction.
     - `HARMONIC_RELATIVE`: Harmonic extraction relative to the eigenvalue.
     - `HARMONIC_RIGHT`:    Harmonic extraction for rightmost eigenvalues.
-    - `HARMONIC_LARGEST`:  Harmonic extraction for largest magnitude (without target).
+    - `HARMONIC_LARGEST`:  Harmonic extraction for largest magnitude (without
+                           target).
     - `REFINED`:           Refined extraction.
     - `REFINED_HARMONIC`:  Refined harmonic extraction.
     """
@@ -524,9 +525,12 @@ cdef class EPS(Object):
 
     def isPositive(self) -> bool:
         """
-        Tell if the EPS corresponds to an eigenproblem requiring a positive (semi-) definite matrix B.
+        Eigenproblem requiring a positive (semi-) definite matrix B.
 
         Not collective.
+
+        Tell if the EPS corresponds to an eigenproblem requiring a positive
+        (semi-) definite matrix B.
 
         Returns
         -------
@@ -580,9 +584,12 @@ cdef class EPS(Object):
         cutoff: float | None = None,
     ) -> None:
         """
-        Set the balancing technique to be used by the eigensolver, and some parameters associated to it.
+        Set the balancing technique to be used by the eigensolver.
 
         Logically collective.
+
+        Set the balancing technique to be used by the eigensolver, and some
+        parameters associated to it.
 
         Parameters
         ----------
@@ -813,9 +820,12 @@ cdef class EPS(Object):
 
     def getTolerances(self) -> tuple[float, int]:
         """
-        Get the tolerance and max. iter. count used by the default EPS convergence tests.
+        Get the tolerance and max. iter. count used for convergence tests.
 
         Not collective.
+
+        Get the tolerance and iteration limit used by the default EPS
+        convergence tests.
 
         Returns
         -------
@@ -1387,7 +1397,8 @@ cdef class EPS(Object):
 
         Logically collective.
 
-        Specify the eigenvalue comparison function when `setWhichEigenpairs()` is set to `EPS.Which.USER`.
+        Specify the eigenvalue comparison function when `setWhichEigenpairs()`
+        is set to `EPS.Which.USER`.
         """
         if comparison is not None:
             if args is None: args = ()
@@ -1716,7 +1727,8 @@ cdef class EPS(Object):
 
         Collective.
 
-        Compute the error (based on the residual norm) associated with the i-th computed eigenpair.
+        Compute the error (based on the residual norm) associated with the
+        i-th computed eigenpair.
 
         Parameters
         ----------

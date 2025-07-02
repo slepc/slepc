@@ -120,7 +120,10 @@ class PEPRefineScheme(object):
 
 class PEPExtract(object):
     """
-    PEP extraction strategy used to obtain eigenvectors of the PEP from the eigenvectors of the linearization.
+    PEP extraction strategy used.
+
+    PEP extraction strategy used to obtain eigenvectors of the PEP from the
+    eigenvectors of the linearization.
 
     - `NONE`:       Use the first block.
     - `NORM`:       Use the first or last block depending on norm of H.
@@ -373,9 +376,12 @@ cdef class PEP(Object):
 
     def getBasis(self) -> Basis:
         """
-        Get the type of polynomial basis used to describe the polynomial eigenvalue problem.
+        Get the type of polynomial basis used.
 
         Not collective.
+
+        Get the type of polynomial basis used to describe the polynomial
+        eigenvalue problem.
 
         Returns
         -------
@@ -388,9 +394,12 @@ cdef class PEP(Object):
 
     def setBasis(self, basis: Basis) -> None:
         """
-        Set the type of polynomial basis used to describe the polynomial eigenvalue problem.
+        Set the type of polynomial basis used.
 
         Logically collective.
+
+        Set the type of polynomial basis used to describe the polynomial
+        eigenvalue problem.
 
         Parameters
         ----------
@@ -499,9 +508,12 @@ cdef class PEP(Object):
 
     def getTolerances(self) -> tuple[float, int]:
         """
-        Get the tolerance and maximum iteration count used by the default PEP convergence tests.
+        Get the tolerance and maximum iteration count.
 
         Not collective.
+
+        Get the tolerance and maximum iteration count used by the default PEP
+        convergence tests.
 
         Returns
         -------
@@ -517,9 +529,12 @@ cdef class PEP(Object):
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
-        Set the tolerance and maximum iteration count used by the default PEP convergence tests.
+        Set the tolerance and maximum iteration count.
 
         Logically collective.
+
+        Set the tolerance and maximum iteration count used by the default PEP
+        convergence tests.
 
         Parameters
         ----------
@@ -614,9 +629,12 @@ cdef class PEP(Object):
 
     def getRefine(self) -> tuple[Refine, int, float, int, RefineScheme]:
         """
-        Get the refinement strategy used by the PEP object, and the associated parameters.
+        Get the refinement strategy used by the PEP object.
 
         Not collective.
+
+        Get the refinement strategy used by the PEP object, and the associated
+        parameters.
 
         Returns
         -------
@@ -648,9 +666,12 @@ cdef class PEP(Object):
         scheme: RefineScheme | None = None,
     ) -> None:
         """
-        Set the refinement strategy used by the PEP object, and the associated parameters.
+        Set the refinement strategy used by the PEP object.
 
         Logically collective.
+
+        Set the refinement strategy used by the PEP object, and the associated
+        parameters.
 
         Parameters
         ----------
@@ -723,7 +744,7 @@ cdef class PEP(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Get the flag indicating whether all residual norms must be computed or not.
+        Get the flag indicating whether all residual norms must be computed.
 
         Not collective.
 
@@ -738,9 +759,12 @@ cdef class PEP(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Set if the solver must compute the residual of all approximate eigenpairs or not.
+        Set flag to compute the residual of all approximate eigenpairs.
 
         Logically collective.
+
+        Set if the solver must compute the residual of all approximate
+        eigenpairs or not.
 
         Parameters
         ----------
@@ -807,8 +831,6 @@ cdef class PEP(Object):
 
         Get the spectral transformation object associated to the eigensolver
         object.
-
-        Not collective.
 
         Returns
         -------
@@ -888,9 +910,12 @@ cdef class PEP(Object):
         lbda: float | None = None,
     ) -> None:
         """
-        Set the scaling strategy to be used for scaling the polynomial problem before attempting to solve.
+        Set the scaling strategy to be used.
 
         Collective.
+
+        Set the scaling strategy to be used for scaling the polynomial problem
+        before attempting to solve.
 
         Parameters
         ----------
@@ -1141,9 +1166,12 @@ cdef class PEP(Object):
 
     def setUp(self) -> None:
         """
-        Set up all the internal data structures necessary for the execution of the eigensolver.
+        Set up all the necessary internal data structures.
 
         Collective.
+
+        Set up all the internal data structures necessary for the execution of
+        the eigensolver.
         """
         CHKERR( PEPSetUp(self.pep) )
 
@@ -1255,9 +1283,12 @@ cdef class PEP(Object):
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
-        Compute the error (based on the residual norm) associated with the i-th computed eigenpair.
+        Compute the error associated with the i-th computed eigenpair.
 
         Collective.
+
+        Compute the error (based on the residual norm) associated with the i-th
+        computed eigenpair.
 
         Parameters
         ----------
@@ -1380,6 +1411,9 @@ cdef class PEP(Object):
 
         Logically collective.
 
+        Set the coefficients that define the linearization of a quadratic
+        eigenproblem.
+
         Parameters
         ----------
         alpha
@@ -1393,9 +1427,12 @@ cdef class PEP(Object):
 
     def getLinearLinearization(self) -> tuple[float, float]:
         """
-        Return the coefficients that define the linearization of a quadratic eigenproblem.
+        Get the coeffs. defining the linearization of a quadratic eigenproblem.
 
         Not collective.
+
+        Return the coefficients that define the linearization of a quadratic
+        eigenproblem.
 
         Returns
         -------
@@ -1411,9 +1448,12 @@ cdef class PEP(Object):
 
     def setLinearExplicitMatrix(self, flag: bool) -> None:
         """
-        Set (toggle) if the matrices A and B for the linearization of the problem must be built explicitly.
+        Set flag to explicitly build the matrices A and B.
 
         Logically collective.
+
+        Toggle if the matrices A and B for the linearization of the problem
+        must be built explicitly.
 
         Parameters
         ----------
@@ -1425,9 +1465,12 @@ cdef class PEP(Object):
 
     def getLinearExplicitMatrix(self) -> bool:
         """
-        Get the flag indicating if the matrices A and B for the linearization are built explicitly.
+        Get if the matrices A and B for the linearization are built explicitly.
 
         Not collective.
+
+        Get the flag indicating if the matrices A and B for the linearization
+        are built explicitly.
 
         Returns
         -------
@@ -1663,9 +1706,12 @@ cdef class PEP(Object):
 
     def setSTOARDetectZeros(self, detect: bool) -> None:
         """
-        Set a flag to enforce detection of zeros during the factorizations throughout the spectrum slicing computation.
+        Set flag to enforce detection of zeros during the factorizations.
 
         Logically collective.
+
+        Set a flag to enforce detection of zeros during the factorizations
+        throughout the spectrum slicing computation.
 
         Parameters
         ----------
@@ -1787,9 +1833,12 @@ cdef class PEP(Object):
 
     def setSTOARCheckEigenvalueType(self, flag: bool) -> None:
         """
-        Set a flag to check that all the eigenvalues obtained throughout the spectrum slicing computation have the same definite type.
+        Set flag to check if all eigenvalues have the same definite type.
 
         Logically collective.
+
+        Set a flag to check that all the eigenvalues obtained throughout the
+        spectrum slicing computation have the same definite type.
 
         Parameters
         ----------
