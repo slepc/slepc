@@ -13,6 +13,14 @@ class MFNType(object):
     EXPOKIT  = S_(MFNEXPOKIT)
 
 class MFNConvergedReason(object):
+    """
+    MFN convergence reasons.
+
+    - 'MFN_CONVERGED_TOL': All eigenpairs converged to requested tolerance.
+    - 'MFN_CONVERGED_ITS': Solver completed the requested number of steps.
+    - 'MFN_DIVERGED_ITS': Maximum number of iterations exceeded.
+    - 'MFN_DIVERGED_BREAKDOWN': Generic breakdown in method.
+    """
     CONVERGED_TOL       = MFN_CONVERGED_TOL
     CONVERGED_ITS       = MFN_CONVERGED_ITS
     DIVERGED_ITS        = MFN_DIVERGED_ITS

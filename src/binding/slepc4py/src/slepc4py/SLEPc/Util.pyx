@@ -1,6 +1,7 @@
 # -----------------------------------------------------------------------------
 
 cdef class Util:
+    """Util."""
 
     @classmethod
     def createMatBSE(cls, Mat R, Mat C) -> Mat:
