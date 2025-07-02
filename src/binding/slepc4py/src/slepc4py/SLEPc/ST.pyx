@@ -74,6 +74,8 @@ cdef class ST(Object):
         """
         Print the ST data structure.
 
+        Collective.
+
         Parameters
         ----------
         viewer
@@ -84,18 +86,28 @@ cdef class ST(Object):
         CHKERR( STView(self.st, vwr) )
 
     def destroy(self) -> Self:
-        """Destroy the ST object."""
+        """
+        Destroy the ST object.
+
+        Collective.
+        """
         CHKERR( STDestroy(&self.st) )
         self.st = NULL
         return self
 
     def reset(self) -> None:
-        """Reset the ST object."""
+        """
+        Reset the ST object.
+
+        Collective.
+        """
         CHKERR( STReset(self.st) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
         Create the ST object.
+
+        Collective.
 
         Parameters
         ----------
@@ -111,6 +123,8 @@ cdef class ST(Object):
     def setType(self, st_type: Type | str) -> None:
         """
         Set the particular spectral transformation to be used.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -134,6 +148,8 @@ cdef class ST(Object):
         """
         Get the ST type of this object.
 
+        Not collective.
+
         Returns
         -------
         str
@@ -146,6 +162,8 @@ cdef class ST(Object):
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Set the prefix used for searching for all ST options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -166,6 +184,8 @@ cdef class ST(Object):
         """
         Get the prefix used for searching for all ST options in the database.
 
+        Not collective.
+
         Returns
         -------
         str
@@ -179,6 +199,8 @@ cdef class ST(Object):
         """
         Append to the prefix used for searching for all ST options in the database.
 
+        Logically collective.
+
         Parameters
         ----------
         prefix
@@ -191,6 +213,8 @@ cdef class ST(Object):
     def setFromOptions(self) -> None:
         """
         Set ST options from the options database.
+
+        Collective.
 
         This routine must be called before `setUp()` if the user is to be
         allowed to set the solver type.
@@ -206,6 +230,8 @@ cdef class ST(Object):
     def setShift(self, shift: Scalar) -> None:
         """
         Set the shift associated with the spectral transformation.
+
+        Collective.
 
         Parameters
         ----------
@@ -225,6 +251,8 @@ cdef class ST(Object):
         """
         Get the shift associated with the spectral transformation.
 
+        Not collective.
+
         Returns
         -------
         Scalar
@@ -237,6 +265,8 @@ cdef class ST(Object):
     def setTransform(self, flag: bool = True) -> None:
         """
         Set a flag to indicate whether the transformed matrices are computed or not.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -254,6 +284,8 @@ cdef class ST(Object):
         """
         Get the flag indicating whether the transformed matrices are computed or not.
 
+        Not collective.
+
         Returns
         -------
         bool
@@ -270,6 +302,8 @@ cdef class ST(Object):
     def setMatMode(self, mode: MatMode) -> None:
         """
         Set a flag to indicate how the matrix is being shifted.
+
+        Logically collective.
 
         Set a flag to indicate how the matrix is being shifted in the
         shift-and-invert and Cayley spectral transformations.
@@ -311,6 +345,8 @@ cdef class ST(Object):
         """
         Get a flag that indicates how the matrix is being shifted.
 
+        Not collective.
+
         Get a flag that indicates how the matrix is being shifted in
         the shift-and-invert and Cayley spectral transformations.
 
@@ -327,6 +363,8 @@ cdef class ST(Object):
         """
         Set the matrices associated with the eigenvalue problem.
 
+        Collective.
+
         Parameters
         ----------
         operators
@@ -342,6 +380,8 @@ cdef class ST(Object):
     def getMatrices(self) -> list[Mat]:
         """
         Get the matrices associated with the eigenvalue problem.
+
+        Not collective.
 
         Returns
         -------
@@ -362,6 +402,8 @@ cdef class ST(Object):
     def setMatStructure(self, structure: Mat.Structure) -> None:
         """
         Set an internal Mat.Structure attribute.
+
+        Logically collective.
 
         Set an internal Mat.Structure attribute to indicate which is
         the relation of the sparsity pattern of the two matrices ``A``
@@ -389,6 +431,8 @@ cdef class ST(Object):
         """
         Get the internal Mat.Structure attribute.
 
+        Not collective.
+
         Get the internal Mat.Structure attribute to indicate which is
         the relation of the sparsity pattern of the matrices.
 
@@ -405,6 +449,8 @@ cdef class ST(Object):
         """
         Set the KSP object associated with the spectral transformation.
 
+        Collective.
+
         Parameters
         ----------
         ksp
@@ -415,6 +461,8 @@ cdef class ST(Object):
     def getKSP(self) -> KSP:
         """
         Get the KSP object associated with the spectral transformation.
+
+        Collective.
 
         Returns
         -------
@@ -436,6 +484,8 @@ cdef class ST(Object):
         """
         Set the matrix to be used to build the preconditioner.
 
+        Collective.
+
         Parameters
         ----------
         P
@@ -447,6 +497,8 @@ cdef class ST(Object):
     def getPreconditionerMat(self) -> Mat:
         """
         Get the matrix previously set by setPreconditionerMat().
+
+        Not collective.
 
         Returns
         -------
@@ -461,12 +513,18 @@ cdef class ST(Object):
     #
 
     def setUp(self) -> None:
-        """Prepare for the use of a spectral transformation."""
+        """
+        Prepare for the use of a spectral transformation.
+
+        Collective.
+        """
         CHKERR( STSetUp(self.st) )
 
     def apply(self, Vec x, Vec y) -> None:
         """
         Apply the spectral transformation operator to a vector.
+
+        Collective.
 
         Apply the spectral transformation operator to a vector, for
         instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
@@ -485,6 +543,8 @@ cdef class ST(Object):
         """
         Apply the transpose of the operator to a vector.
 
+        Collective.
+
         Apply the transpose of the operator to a vector, for
         instance ``B^T(A - sB)^-T`` in the case of the
         shift-and-invert transformation and generalized eigenproblem.
@@ -501,6 +561,8 @@ cdef class ST(Object):
     def applyHermitianTranspose(self, Vec x, Vec y) -> None:
         """
         Apply the hermitian-transpose of the operator to a vector.
+
+        Collective.
 
         Apply the hermitian-transpose of the operator to a vector, for
         instance ``B^H(A - sB)^-H`` in the case of the
@@ -519,6 +581,8 @@ cdef class ST(Object):
         """
         Apply the spectral transformation operator to a matrix.
 
+        Collective.
+
         Apply the spectral transformation operator to a matrix, for
         instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
@@ -536,6 +600,8 @@ cdef class ST(Object):
         """
         Get a shell matrix that represents the operator of the spectral transformation.
 
+        Collective.
+
         Returns
         -------
         Mat
@@ -550,6 +616,8 @@ cdef class ST(Object):
         """
         Restore the previously seized operator matrix.
 
+        Logically collective.
+
         Parameters
         ----------
         op
@@ -563,6 +631,8 @@ cdef class ST(Object):
     def setCayleyAntishift(self, tau: Scalar) -> None:
         """
         Set the value of the anti-shift for the Cayley spectral transformation.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -583,6 +653,8 @@ cdef class ST(Object):
         """
         Get the value of the anti-shift for the Cayley spectral transformation.
 
+        Not collective.
+
         Returns
         -------
         Scalar
@@ -596,6 +668,8 @@ cdef class ST(Object):
         """
         Set the method to be used to build the polynomial filter.
 
+        Logically collective.
+
         Parameter
         ---------
         filter_type
@@ -607,6 +681,8 @@ cdef class ST(Object):
     def getFilterType(self) -> FilterType:
         """
         Get the method to be used to build the polynomial filter.
+
+        Not collective.
 
         Returns
         -------
@@ -620,6 +696,8 @@ cdef class ST(Object):
     def setFilterInterval(self, inta: float, intb: float) -> None:
         """
         Set the interval containing the desired eigenvalues.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -648,6 +726,8 @@ cdef class ST(Object):
         """
         Get the interval containing the desired eigenvalues.
 
+        Not collective.
+
         Returns
         -------
         inta: float
@@ -663,6 +743,8 @@ cdef class ST(Object):
     def setFilterRange(self, left: float, right: float) -> None:
         """
         Set the numerical range (or field of values) of the matrix.
+
+        Logically collective.
 
         Set the numerical range (or field of values) of the matrix, that is,
         the interval containing all eigenvalues.
@@ -688,6 +770,8 @@ cdef class ST(Object):
         """
         Get the interval containing all eigenvalues.
 
+        Not collective.
+
         Returns
         -------
         left: float
@@ -704,6 +788,8 @@ cdef class ST(Object):
         """
         Set the degree of the filter polynomial.
 
+        Logically collective.
+
         Parameters
         ----------
         deg
@@ -715,6 +801,8 @@ cdef class ST(Object):
     def getFilterDegree(self) -> int:
         """
         Get the degree of the filter polynomial.
+
+        Not collective.
 
         Returns
         -------
@@ -729,6 +817,8 @@ cdef class ST(Object):
         """
         Set the type of damping to be used in the polynomial filter.
 
+        Logically collective.
+
         Parameter
         ---------
         damping
@@ -740,6 +830,8 @@ cdef class ST(Object):
     def getFilterDamping(self) -> FilterDamping:
         """
         Get the type of damping used in the polynomial filter.
+
+        Not collective.
 
         Returns
         -------

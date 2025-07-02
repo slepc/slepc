@@ -5,6 +5,10 @@ cdef class Util:
     @classmethod
     def createMatBSE(cls, Mat R, Mat C) -> Mat:
         """
+        Create a matrix that can be used to define a BSE type problem.
+
+        Collective.
+
         Create a matrix that can be used to define a structured eigenvalue
         problem of type BSE (Bethe-Salpeter Equation).
 

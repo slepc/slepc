@@ -149,6 +149,8 @@ cdef class BV(Object):
         """
         Print the BV data structure.
 
+        Collective.
+
         Parameters
         ----------
         viewer
@@ -159,7 +161,11 @@ cdef class BV(Object):
         CHKERR( BVView(self.bv, vwr) )
 
     def destroy(self) -> Self:
-        """Destroy the BV object."""
+        """
+        Destroy the BV object.
+
+        Collective.
+        """
         CHKERR( BVDestroy(&self.bv) )
         self.bv = NULL
         return self
@@ -167,6 +173,8 @@ cdef class BV(Object):
     def create(self, comm: Comm | None = None) -> Self:
         """
         Create the BV object.
+
+        Collective.
 
         Parameters
         ----------
@@ -184,6 +192,8 @@ cdef class BV(Object):
         """
         Create a basis vectors object from a dense Mat object.
 
+        Collective.
+
         Parameters
         ----------
         A
@@ -198,6 +208,8 @@ cdef class BV(Object):
         """
         Create a new Mat object of dense type and copy the contents of the BV.
 
+        Collective.
+
         Returns
         -------
         Mat
@@ -210,6 +222,8 @@ cdef class BV(Object):
     def duplicate(self) -> BV:
         """
         Duplicate the BV object with the same type and dimensions.
+
+        Collective.
         """
         cdef BV bv = type(self)()
         CHKERR( BVDuplicate(self.bv, &bv.bv) )
@@ -219,6 +233,7 @@ cdef class BV(Object):
         """
         Create a BV object of the same type and dimensions as an existing one.
 
+        Collective.
 
         Parameters
         ----------
@@ -239,6 +254,8 @@ cdef class BV(Object):
         """
         Copy a basis vector object into another one.
 
+        Logically collective.
+
         Parameters
         ----------
         result
@@ -255,6 +272,8 @@ cdef class BV(Object):
         """
         Set the type for the BV object.
 
+        Logically collective.
+
         Parameters
         ----------
         bv_type
@@ -268,6 +287,8 @@ cdef class BV(Object):
         """
         Get the BV type of this object.
 
+        Not collective.
+
         Returns
         -------
         str
@@ -280,6 +301,8 @@ cdef class BV(Object):
     def setSizes(self, sizes: LayoutSizeSpec, m: int) -> None:
         """
         Set the local and global sizes, and the number of columns.
+
+        Collective.
 
         Parameters
         ----------
@@ -303,6 +326,8 @@ cdef class BV(Object):
         """
         Set the local and global sizes, and the number of columns.
 
+        Collective.
+
         Local and global sizes are specified indirectly by passing a template
         vector.
 
@@ -320,6 +345,8 @@ cdef class BV(Object):
         """
         Get the local and global sizes, and the number of columns.
 
+        Not collective.
+
         Returns
         -------
         (n, N): tuple[int, int]
@@ -335,6 +362,8 @@ cdef class BV(Object):
         """
         Set the leading dimension.
 
+        Not collective.
+
         Parameters
         ----------
         ld
@@ -346,6 +375,8 @@ cdef class BV(Object):
     def getLeadingDimension(self) -> int:
         """
         Get the leading dimension.
+
+        Not collective.
 
         Returns
         -------
@@ -359,6 +390,8 @@ cdef class BV(Object):
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Set the prefix used for searching for all BV options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -379,6 +412,8 @@ cdef class BV(Object):
         """
         Append to the prefix used for searching for all BV options in the database.
 
+        Logically collective.
+
         Parameters
         ----------
         prefix
@@ -391,6 +426,8 @@ cdef class BV(Object):
     def getOptionsPrefix(self) -> str:
         """
         Get the prefix used for searching for all BV options in the database.
+
+        Not collective.
 
         Returns
         -------
@@ -405,6 +442,8 @@ cdef class BV(Object):
         """
         Set BV options from the options database.
 
+        Collective.
+
         Notes
         -----
         To see all options, run your program with the ``-help``
@@ -417,6 +456,8 @@ cdef class BV(Object):
     def getOrthogonalization(self) -> tuple[OrthogType, OrthogRefineType, float, OrthogBlockType]:
         """
         Get the orthogonalization settings from the BV object.
+
+        Not collective.
 
         Returns
         -------
@@ -446,6 +487,8 @@ cdef class BV(Object):
     ) -> None:
         """
         Set the method used for the (block-)orthogonalization of vectors.
+
+        Logically collective.
 
         Ortogonalization of vectors (classical or modified Gram-Schmidt
         with or without refinement), and for the block-orthogonalization
@@ -491,6 +534,8 @@ cdef class BV(Object):
         """
         Get the method used for the `matMult()` operation.
 
+        Not collective.
+
         Returns
         -------
         MatMultType
@@ -503,6 +548,8 @@ cdef class BV(Object):
     def setMatMultMethod(self, method: MatMultType) -> None:
         """
         Set the method used for the `matMult()` operation.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -517,6 +564,8 @@ cdef class BV(Object):
     def getMatrix(self) -> tuple[Mat, bool] | tuple[None, bool]:
         """
         Get the matrix representation of the inner product.
+
+        Not collective.
 
         Returns
         -------
@@ -538,6 +587,8 @@ cdef class BV(Object):
         """
         Set the bilinear form to be used for inner products.
 
+        Collective.
+
         Parameters
         ----------
         mat
@@ -552,6 +603,8 @@ cdef class BV(Object):
     def applyMatrix(self, Vec x, Vec y) -> None:
         """
         Multiply a vector with the matrix associated to the bilinear form.
+
+        Neighbor-wise collective.
 
         Parameters
         ----------
@@ -571,6 +624,8 @@ cdef class BV(Object):
         """
         Set the columns that will be involved in operations.
 
+        Logically collective.
+
         Parameters
         ----------
         l
@@ -585,6 +640,8 @@ cdef class BV(Object):
     def getActiveColumns(self) -> tuple[int, int]:
         """
         Get the current active dimensions.
+
+        Not collective.
 
         Returns
         -------
@@ -601,6 +658,8 @@ cdef class BV(Object):
         """
         Scale column j by alpha.
 
+        Logically collective.
+
         Parameters
         ----------
         j
@@ -615,6 +674,8 @@ cdef class BV(Object):
     def scale(self, alpha: Scalar) -> None:
         """
         Multiply the entries by a scalar value.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -632,6 +693,8 @@ cdef class BV(Object):
         """
         Insert a vector into the specified column.
 
+        Logically collective.
+
         Parameters
         ----------
         j
@@ -645,6 +708,8 @@ cdef class BV(Object):
     def insertVecs(self, s: int, W: Vec | list[Vec], orth: bool = False) -> int:
         """
         Insert a set of vectors into specified columns.
+
+        Collective.
 
         Parameters
         ----------
@@ -683,6 +748,8 @@ cdef class BV(Object):
         """
         Insert a set of vectors as constraints.
 
+        Collective.
+
         Parameters
         ----------
         C
@@ -713,6 +780,8 @@ cdef class BV(Object):
         """
         Set the number of constraints.
 
+        Logically collective.
+
         Parameters
         ----------
         nc
@@ -724,6 +793,8 @@ cdef class BV(Object):
     def getNumConstraints(self) -> int:
         """
         Get the number of constraints.
+
+        Not collective.
 
         Returns
         -------
@@ -738,6 +809,8 @@ cdef class BV(Object):
         """
         Create a Vec with the type and dimensions of the columns of the BV.
 
+        Collective.
+
         Returns
         -------
         Vec
@@ -751,6 +824,8 @@ cdef class BV(Object):
         """
         Set the vector type.
 
+        Collective.
+
         Parameters
         ----------
         vec_type
@@ -761,7 +836,11 @@ cdef class BV(Object):
         CHKERR( BVSetVecType(self.bv, cval) )
 
     def getVecType(self) -> str:
-        """Get the vector type used by the basis vectors object."""
+        """
+        Get the vector type used by the basis vectors object.
+
+        Not collective.
+        """
         cdef PetscVecType cval = NULL
         CHKERR( BVGetVecType(self.bv, &cval) )
         return bytes2str(cval)
@@ -769,6 +848,8 @@ cdef class BV(Object):
     def copyVec(self, j: int, Vec v) -> None:
         """
         Copy one of the columns of a basis vectors object into a Vec.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -783,6 +864,8 @@ cdef class BV(Object):
     def copyColumn(self, j: int, i: int) -> None:
         """
         Copy the values from one of the columns to another one.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -799,6 +882,8 @@ cdef class BV(Object):
         """
         Set the tolerance to be used when checking a definite inner product.
 
+        Logically collective.
+
         Parameters
         ----------
         deftol
@@ -810,6 +895,8 @@ cdef class BV(Object):
     def getDefiniteTolerance(self) -> float:
         """
         Get the tolerance to be used when checking a definite inner product.
+
+        Not collective.
 
         Returns
         -------
@@ -823,6 +910,8 @@ cdef class BV(Object):
     def dotVec(self, Vec v) -> ArrayScalar:
         """
         Dot products of a vector against all the column vectors of the BV.
+
+        Collective.
 
         Parameters
         ----------
@@ -857,6 +946,8 @@ cdef class BV(Object):
         """
         Dot products of a column against all the column vectors of a BV.
 
+        Collective.
+
         Parameters
         ----------
         j
@@ -882,6 +973,8 @@ cdef class BV(Object):
         """
         Get a Vec object with the entries of the column of the BV object.
 
+        Logically collective.
+
         Parameters
         ----------
         j
@@ -906,6 +999,8 @@ cdef class BV(Object):
         """
         Restore a column obtained with `getColumn()`.
 
+        Logically collective.
+
         Parameters
         ----------
         j
@@ -924,6 +1019,8 @@ cdef class BV(Object):
     def getMat(self) -> Mat:
         """
         Get a Mat object of dense type that shares the memory of the BV object.
+
+        Collective.
 
         Returns
         -------
@@ -945,6 +1042,8 @@ cdef class BV(Object):
         """
         Restore the Mat obtained with `getMat()`.
 
+        Logically collective.
+
         Parameters
         ----------
         A
@@ -962,6 +1061,8 @@ cdef class BV(Object):
     def dot(self, BV Y) -> Mat:
         """
         Compute the 'block-dot' product of two basis vectors objects.
+
+        Collective.
 
         M = Y^H*X (m_ij = y_i^H x_j) or M = Y^H*B*X
 
@@ -1003,6 +1104,8 @@ cdef class BV(Object):
         """
         Compute the projection of a matrix onto a subspace.
 
+        Collective.
+
         M = Y^H A X
 
         Parameters
@@ -1029,6 +1132,8 @@ cdef class BV(Object):
     def matMult(self, Mat A, BV Y=None) -> BV:
         """
         Compute the matrix-vector product for each column, Y = A*V.
+
+        Neighbor-wise collective.
 
         Parameters
         ----------
@@ -1077,6 +1182,8 @@ cdef class BV(Object):
         """
         Pre-multiplication with the conjugate transpose of a matrix.
 
+        Neighbor-wise collective.
+
         Y=A^H*V.
 
         Parameters
@@ -1121,6 +1228,8 @@ cdef class BV(Object):
         """
         Mat-vec product for a column, storing the result in the next column.
 
+        Neighbor-wise collective.
+
         v_{j+1}=A*v_j.
 
         Parameters
@@ -1136,6 +1245,8 @@ cdef class BV(Object):
     def matMultTransposeColumn(self, Mat A, j: int) -> None:
         """
         Transpose matrix-vector product for a specified column.
+
+        Neighbor-wise collective.
 
         Store the result in the next column: v_{j+1}=A^T*v_j.
 
@@ -1153,6 +1264,8 @@ cdef class BV(Object):
         """
         Conjugate-transpose matrix-vector product for a specified column.
 
+        Neighbor-wise collective.
+
         Store the result in the next column: v_{j+1}=A^H*v_j.
 
         Parameters
@@ -1168,6 +1281,8 @@ cdef class BV(Object):
     def mult(self, alpha: Scalar, beta: Scalar, BV X, Mat Q or None) -> None:
         """
         Compute Y = beta*Y + alpha*X*Q.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1189,6 +1304,8 @@ cdef class BV(Object):
         """
         Update a set of vectors as V(:,s:e-1) = V*Q(:,s:e-1).
 
+        Logically collective.
+
         Parameters
         ----------
         Q
@@ -1205,6 +1322,8 @@ cdef class BV(Object):
     def multColumn(self, alpha: Scalar, beta: Scalar, j: int, q: Sequence[Scalar]) -> None:
         """
         Compute y = beta*y + alpha*X*q, where y is the j-th column.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1232,6 +1351,8 @@ cdef class BV(Object):
         """
         Compute y = beta*y + alpha*X*q.
 
+        Logically collective.
+
         Parameters
         ----------
         alpha
@@ -1256,6 +1377,8 @@ cdef class BV(Object):
     def normColumn(self, j: int, norm_type: NormType | None = None) -> float:
         """
         Compute the vector norm of a selected column.
+
+        Collective.
 
         Parameters
         ----------
@@ -1287,6 +1410,8 @@ cdef class BV(Object):
         """
         Compute the matrix norm of the BV.
 
+        Collective.
+
         Parameters
         ----------
         norm_type
@@ -1316,6 +1441,8 @@ cdef class BV(Object):
         """
         Change the number of columns.
 
+        Collective.
+
         Parameters
         ----------
         m
@@ -1336,6 +1463,8 @@ cdef class BV(Object):
         """
         Set the active columns of the BV to random numbers.
 
+        Logically collective.
+
         Notes
         -----
         All active columns (except the leading ones) are modified.
@@ -1345,6 +1474,8 @@ cdef class BV(Object):
     def setRandomNormal(self) -> None:
         """
         Set the active columns of the BV to normal random numbers.
+
+        Logically collective.
 
         Notes
         -----
@@ -1356,6 +1487,8 @@ cdef class BV(Object):
         """
         Set the entries of a BV to values 1 or -1 with equal probability.
 
+        Logically collective.
+
         Notes
         -----
         All active columns (except the leading ones) are modified.
@@ -1365,6 +1498,8 @@ cdef class BV(Object):
     def setRandomColumn(self, j: int) -> None:
         """
         Set one column of the BV to random numbers.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1394,6 +1529,8 @@ cdef class BV(Object):
         """
         Set the `PETSc.Random` object associated with the BV.
 
+        Collective.
+
         To be used in operations that need random numbers.
 
         Parameters
@@ -1406,6 +1543,8 @@ cdef class BV(Object):
     def getRandomContext(self) -> Random:
         """
         Get the `PETSc.Random` object associated with the BV.
+
+        Collective.
 
         Returns
         -------
@@ -1420,6 +1559,8 @@ cdef class BV(Object):
     def orthogonalizeVec(self, Vec v) -> tuple[float, bool]:
         """
         Orthogonalize a vector with respect to a set of vectors.
+
+        Collective.
 
         Parameters
         ----------
@@ -1450,6 +1591,8 @@ cdef class BV(Object):
     def orthogonalizeColumn(self, j: int) -> tuple[float, bool]:
         """
         Orthogonalize a column vector with respect to the previous ones.
+
+        Collective.
 
         Parameters
         ----------
@@ -1483,6 +1626,8 @@ cdef class BV(Object):
         """
         Orthonormalize a column vector with respect to the previous ones.
 
+        Collective.
+
         This is equivalent to a call to `orthogonalizeColumn()` followed by a
         call to `scaleColumn()` with the reciprocal of the norm.
 
@@ -1512,6 +1657,8 @@ cdef class BV(Object):
     def orthogonalize(self, Mat R=None, **kargs: Any) -> None:
         """
         Orthogonalize all columns (except leading ones) (QR decomposition).
+
+        Collective.
 
         Parameters
         ----------

@@ -149,6 +149,8 @@ cdef class SVD(Object):
         """
         Print the SVD data structure.
 
+        Collective.
+
         Parameters
         ----------
         viewer
@@ -159,18 +161,28 @@ cdef class SVD(Object):
         CHKERR( SVDView(self.svd, vwr) )
 
     def destroy(self) -> Self:
-        """Destroy the SVD object."""
+        """
+        Destroy the SVD object.
+
+        Collective.
+        """
         CHKERR( SVDDestroy(&self.svd) )
         self.svd = NULL
         return self
 
     def reset(self) -> None:
-        """Reset the SVD object."""
+        """
+        Reset the SVD object.
+
+        Collective.
+        """
         CHKERR( SVDReset(self.svd) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
         Create the SVD object.
+
+        Collective.
 
         Parameters
         ----------
@@ -186,6 +198,8 @@ cdef class SVD(Object):
     def setType(self, svd_type: Type | str) -> None:
         """
         Set the particular solver to be used in the SVD object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -209,6 +223,8 @@ cdef class SVD(Object):
         """
         Get the SVD type of this object.
 
+        Not collective.
+
         Returns
         -------
         str
@@ -222,6 +238,8 @@ cdef class SVD(Object):
         """
         Get the prefix used for searching for all SVD options in the database.
 
+        Not collective.
+
         Returns
         -------
         str
@@ -234,6 +252,8 @@ cdef class SVD(Object):
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Set the prefix used for searching for all SVD options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -260,6 +280,8 @@ cdef class SVD(Object):
         """
         Append to the prefix used for searching for all SVD options in the database.
 
+        Logically collective.
+
         Parameters
         ----------
         prefix
@@ -272,6 +294,8 @@ cdef class SVD(Object):
     def setFromOptions(self) -> None:
         """
         Set SVD options from the options database.
+
+        Collective.
 
         This routine must be called before `setUp()` if the user is to be
         allowed to set the solver type.
@@ -287,6 +311,8 @@ cdef class SVD(Object):
         """
         Get the problem type from the SVD object.
 
+        Not collective.
+
         Returns
         -------
         ProblemType
@@ -300,6 +326,8 @@ cdef class SVD(Object):
         """
         Set the type of the singular value problem.
 
+        Logically collective.
+
         Parameters
         ----------
         problem_type
@@ -311,6 +339,8 @@ cdef class SVD(Object):
     def isGeneralized(self) -> bool:
         """
         Tell whether the SVD object corresponds to a generalized singular value problem.
+
+        Not collective.
 
         Returns
         -------
@@ -324,6 +354,8 @@ cdef class SVD(Object):
     def isHyperbolic(self) -> bool:
         """
         Tell whether the SVD object corresponds to a hyperbolic singular value problem.
+
+        Not collective.
 
         Returns
         -------
@@ -340,6 +372,8 @@ cdef class SVD(Object):
         """
         Get the mode used to handle the transpose of the matrix associated with the singular value problem.
 
+        Not collective.
+
         Returns
         -------
         bool
@@ -352,6 +386,8 @@ cdef class SVD(Object):
     def setImplicitTranspose(self, mode: bool) -> None:
         """
         Set how to handle the transpose of the matrix associated with the singular value problem.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -373,6 +409,8 @@ cdef class SVD(Object):
         """
         Get which singular triplets are to be sought.
 
+        Not collective.
+
         Returns
         -------
         Which
@@ -386,6 +424,8 @@ cdef class SVD(Object):
         """
         Set which singular triplets are to be sought.
 
+        Logically collective.
+
         Parameters
         ----------
         which
@@ -397,6 +437,8 @@ cdef class SVD(Object):
     def getThreshold(self) -> tuple[float, bool]:
         """
         Get the threshold used in the threshold stopping test.
+
+        Not collective.
 
         Returns
         -------
@@ -413,6 +455,8 @@ cdef class SVD(Object):
     def setThreshold(self, thres: float, rel: bool = False) -> None:
         """
         Set the threshold used in the threshold stopping test.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -441,6 +485,8 @@ cdef class SVD(Object):
         """
         Get the tolerance and maximum iteration count used by the default SVD convergence tests.
 
+        Not collective.
+
         Returns
         -------
         tol: float
@@ -456,6 +502,8 @@ cdef class SVD(Object):
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
         Set the tolerance and maximum iteration count used by the default SVD convergence tests.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -479,6 +527,8 @@ cdef class SVD(Object):
         """
         Get the method used to compute the error estimate used in the convergence test.
 
+        Not collective.
+
         Returns
         -------
         Conv
@@ -493,6 +543,8 @@ cdef class SVD(Object):
         """
         Set how to compute the error estimate used in the convergence test.
 
+        Logically collective.
+
         Parameters
         ----------
         conv
@@ -505,6 +557,8 @@ cdef class SVD(Object):
     def getTrackAll(self) -> bool:
         """
         Get the flag indicating whether all residual norms must be computed or not.
+
+        Not collective.
 
         Returns
         -------
@@ -519,6 +573,8 @@ cdef class SVD(Object):
         """
         Set if the solver must compute the residual of all approximate singular triplets or not.
 
+        Logically collective.
+
         Parameters
         ----------
         trackall
@@ -530,6 +586,8 @@ cdef class SVD(Object):
     def getDimensions(self) -> tuple[int, int, int]:
         """
         Get the number of singular values to compute and the dimension of the subspace.
+
+        Not collective.
 
         Returns
         -------
@@ -554,6 +612,8 @@ cdef class SVD(Object):
     ) -> None:
         """
         Set the number of singular values to compute and the dimension of the subspace.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -594,6 +654,8 @@ cdef class SVD(Object):
         """
         Get the basis vectors objects associated to the SVD object.
 
+        Not collective.
+
         Returns
         -------
         V: BV
@@ -612,6 +674,8 @@ cdef class SVD(Object):
         """
         Set basis vectors objects associated to the SVD solver.
 
+        Collective.
+
         Parameters
         ----------
         V
@@ -627,6 +691,8 @@ cdef class SVD(Object):
         """
         Get the direct solver associated to the singular value solver.
 
+        Not collective.
+
         Returns
         -------
         DS
@@ -641,6 +707,8 @@ cdef class SVD(Object):
         """
         Set a direct solver object associated to the singular value solver.
 
+        Collective.
+
         Parameters
         ----------
         ds
@@ -651,6 +719,8 @@ cdef class SVD(Object):
     def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
         Get the matrices associated with the singular value problem.
+
+        Not collective.
 
         Returns
         -------
@@ -673,6 +743,8 @@ cdef class SVD(Object):
         """
         Set the matrices associated with the singular value problem.
 
+        Collective.
+
         Parameters
         ----------
         A
@@ -687,6 +759,8 @@ cdef class SVD(Object):
     def getSignature(self, Vec omega=None) -> Vec:
         """
         Get the signature matrix defining a hyperbolic singular value problem.
+
+        Not collective.
 
         Parameters
         ----------
@@ -711,6 +785,8 @@ cdef class SVD(Object):
         """
         Set the signature matrix defining a hyperbolic singular value problem.
 
+        Collective.
+
         Parameters
         ----------
         omega
@@ -728,6 +804,8 @@ cdef class SVD(Object):
     ) -> None:
         """
         Set the initial spaces from which the SVD solver starts to iterate.
+
+        Collective.
 
         Parameters
         ----------
@@ -759,7 +837,11 @@ cdef class SVD(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """Set a function to decide when to stop the outer iteration of the eigensolver."""
+        """
+        Set a function to decide when to stop the outer iteration of the eigensolver.
+
+        Logically collective.
+        """
         if stopping is not None:
             if args is None: args = ()
             if kargs is None: kargs = {}
@@ -770,7 +852,11 @@ cdef class SVD(Object):
             CHKERR( SVDSetStoppingTestFunction(self.svd, SVDStoppingBasic, NULL, NULL) )
 
     def getStoppingTest(self) -> SVDStoppingFunction:
-        """Get the stopping function."""
+        """
+        Get the stopping function.
+
+        Not collective.
+        """
         return self.get_attr('__stopping__')
 
     #
@@ -781,7 +867,11 @@ cdef class SVD(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """Append a monitor function to the list of monitors."""
+        """
+        Append a monitor function to the list of monitors.
+
+        Logically collective.
+        """
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
         if monitorlist is None:
@@ -797,7 +887,11 @@ cdef class SVD(Object):
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
-        """Clear all monitors for an `SVD` object."""
+        """
+        Clear all monitors for an `SVD` object.
+
+        Logically collective.
+        """
         CHKERR( SVDMonitorCancel(self.svd) )
         self.set_attr('__monitor__', None)
 
@@ -806,6 +900,8 @@ cdef class SVD(Object):
     def setUp(self) -> None:
         """
         Set up all the internal data structures necessary for the execution of the singular value solver.
+
+        Collective.
 
         Notes
         -----
@@ -816,14 +912,21 @@ cdef class SVD(Object):
         CHKERR( SVDSetUp(self.svd) )
 
     def solve(self) -> None:
-        """Solve the singular value problem."""
+        """
+        Solve the singular value problem.
+
+        Collective.
+        """
         CHKERR( SVDSolve(self.svd) )
 
     def getIterationNumber(self) -> int:
         """
-        Get the current iteration number. If the call to `solve()` is
-        complete, then it returns the number of iterations carried out
-        by the solution method.
+        Get the current iteration number.
+
+        Not collective.
+
+        If the call to `solve()` is complete, then it returns the number of
+        iterations carried out by the solution method.
 
         Returns
         -------
@@ -838,6 +941,8 @@ cdef class SVD(Object):
         """
         Get the reason why the `solve()` iteration was stopped.
 
+        Not collective.
+
         Returns
         -------
         ConvergedReason
@@ -850,6 +955,8 @@ cdef class SVD(Object):
     def getConverged(self) -> int:
         """
         Get the number of converged singular triplets.
+
+        Not collective.
 
         Returns
         -------
@@ -867,6 +974,8 @@ cdef class SVD(Object):
     def getValue(self, i: int) -> float:
         """
         Get the i-th singular value as computed by `solve()`.
+
+        Collective.
 
         Parameters
         ----------
@@ -893,6 +1002,8 @@ cdef class SVD(Object):
         """
         Get the i-th left and right singular vectors as computed by `solve()`.
 
+        Collective.
+
         Parameters
         ----------
         i
@@ -915,6 +1026,8 @@ cdef class SVD(Object):
     def getSingularTriplet(self, i: int, Vec U=None, Vec V=None) -> float:
         """
         Get the i-th triplet of the singular value decomposition as computed by `solve()`.
+
+        Collective.
 
         The solution consists of the singular value and its left and right
         singular vectors.
@@ -952,6 +1065,8 @@ cdef class SVD(Object):
         """
         Compute the error (based on the residual norm) associated with the i-th singular triplet.
 
+        Collective.
+
         Parameters
         ----------
         i
@@ -982,6 +1097,8 @@ cdef class SVD(Object):
         """
         Display the errors associated with the computed solution.
 
+        Collective.
+
         Display the errors and the eigenvalues.
 
         Parameters
@@ -1009,6 +1126,8 @@ cdef class SVD(Object):
         """
         Display the computed singular values in a viewer.
 
+        Collective.
+
         Parameters
         ----------
         viewer
@@ -1021,6 +1140,8 @@ cdef class SVD(Object):
     def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
         Output computed singular vectors to a viewer.
+
+        Collective.
 
         Parameters
         ----------
@@ -1037,6 +1158,8 @@ cdef class SVD(Object):
         """
         Set an eigensolver object associated to the singular value solver.
 
+        Collective.
+
         Parameters
         ----------
         eps
@@ -1047,6 +1170,8 @@ cdef class SVD(Object):
     def getCrossEPS(self) -> EPS:
         """
         Get the eigensolver object associated to the singular value solver.
+
+        Collective.
 
         Returns
         -------
@@ -1062,6 +1187,8 @@ cdef class SVD(Object):
         """
         Set if the eigensolver operator ``A^T*A`` must be computed explicitly.
 
+        Logically collective.
+
         Parameters
         ----------
         flag
@@ -1073,6 +1200,8 @@ cdef class SVD(Object):
     def getCrossExplicitMatrix(self) -> bool:
         """
         Get the flag indicating if ``A^T*A`` is built explicitly.
+
+        Not collective.
 
         Returns
         -------
@@ -1087,6 +1216,8 @@ cdef class SVD(Object):
         """
         Set an eigensolver object associated to the singular value solver.
 
+        Collective.
+
         Parameters
         ----------
         eps
@@ -1097,6 +1228,8 @@ cdef class SVD(Object):
     def getCyclicEPS(self) -> EPS:
         """
         Get the eigensolver object associated to the singular value solver.
+
+        Collective.
 
         Returns
         -------
@@ -1112,6 +1245,8 @@ cdef class SVD(Object):
         """
         Set if the eigensolver operator ``H(A) = [ 0 A ; A^T 0 ]`` must be computed explicitly.
 
+        Logically collective.
+
         Parameters
         ----------
         flag
@@ -1123,6 +1258,8 @@ cdef class SVD(Object):
     def getCyclicExplicitMatrix(self) -> bool:
         """
         Get the flag indicating if ``H(A) = [ 0 A ; A^T 0 ]`` is built explicitly.
+
+        Not collective.
 
         Returns
         -------
@@ -1136,6 +1273,8 @@ cdef class SVD(Object):
     def setLanczosOneSide(self, flag: bool = True) -> None:
         """
         Set if the variant of the Lanczos method to be used is one-sided or two-sided.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1157,6 +1296,8 @@ cdef class SVD(Object):
         """
         Get if the variant of the Lanczos method to be used is one-sided or two-sided.
 
+        Not collective.
+
         Returns
         -------
         bool
@@ -1169,6 +1310,8 @@ cdef class SVD(Object):
     def setTRLanczosOneSide(self, flag: bool = True) -> None:
         """
         Set if the variant of the thick-restart Lanczos method to be used is one-sided or two-sided.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1189,6 +1332,8 @@ cdef class SVD(Object):
         """
         Get if the variant of the thick-restart Lanczos method to be used is one-sided or two-sided.
 
+        Not collective.
+
         Returns
         -------
         bool
@@ -1202,6 +1347,8 @@ cdef class SVD(Object):
         """
         Set the bidiagonalization choice to use in the GSVD TRLanczos solver.
 
+        Logically collective.
+
         Parameters
         ----------
         bidiag
@@ -1213,6 +1360,8 @@ cdef class SVD(Object):
     def getTRLanczosGBidiag(self) -> TRLanczosGBidiag:
         """
         Get bidiagonalization choice used in the GSVD TRLanczos solver.
+
+        Not collective.
 
         Returns
         -------
@@ -1226,6 +1375,8 @@ cdef class SVD(Object):
     def setTRLanczosRestart(self, keep: float) -> None:
         """
         Set the restart parameter for the thick-restart Lanczos method.
+
+        Logically collective.
 
         Set the restart parameter for the thick-restart Lanczos method, in
         particular the proportion of basis vectors that must be kept
@@ -1247,6 +1398,8 @@ cdef class SVD(Object):
         """
         Get the restart parameter used in the thick-restart Lanczos method.
 
+        Not collective.
+
         Returns
         -------
         float
@@ -1259,6 +1412,8 @@ cdef class SVD(Object):
     def setTRLanczosLocking(self, lock: bool) -> None:
         """
         Set (toggle) between locking and non-locking variants of the thick-restart Lanczos method.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1279,6 +1434,8 @@ cdef class SVD(Object):
         """
         Get the locking flag used in the thick-restart Lanczos method.
 
+        Not collective.
+
         Returns
         -------
         bool
@@ -1292,6 +1449,8 @@ cdef class SVD(Object):
         """
         Set a linear solver object associated to the SVD solver.
 
+        Collective.
+
         Parameters
         ----------
         ksp
@@ -1302,6 +1461,8 @@ cdef class SVD(Object):
     def getTRLanczosKSP(self) -> KSP:
         """
         Get the linear solver object associated with the SVD solver.
+
+        Collective.
 
         Returns
         -------
@@ -1317,6 +1478,8 @@ cdef class SVD(Object):
         """
         Set if the matrix ``Z=[A;B]`` must be built explicitly.
 
+        Logically collective.
+
         Parameters
         ----------
         flag
@@ -1328,6 +1491,8 @@ cdef class SVD(Object):
     def getTRLanczosExplicitMatrix(self) -> bool:
         """
         Get the flag indicating if ``Z=[A;B]`` is built explicitly.
+
+        Not collective.
 
         Returns
         -------

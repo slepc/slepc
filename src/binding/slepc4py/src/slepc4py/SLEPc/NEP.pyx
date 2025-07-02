@@ -177,6 +177,8 @@ cdef class NEP(Object):
         """
         Print the NEP data structure.
 
+        Collective.
+
         Parameters
         ----------
         viewer
@@ -187,18 +189,28 @@ cdef class NEP(Object):
         CHKERR( NEPView(self.nep, vwr) )
 
     def destroy(self) -> Self:
-        """Destroy the NEP object."""
+        """
+        Destroy the NEP object.
+
+        Collective.
+        """
         CHKERR( NEPDestroy(&self.nep) )
         self.nep = NULL
         return self
 
     def reset(self) -> None:
-        """Reset the NEP object."""
+        """
+        Reset the NEP object.
+
+        Collective.
+        """
         CHKERR( NEPReset(self.nep) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
         Create the NEP object.
+
+        Collective.
 
         Parameters
         ----------
@@ -215,6 +227,8 @@ cdef class NEP(Object):
         """
         Set the particular solver to be used in the NEP object.
 
+        Logically collective.
+
         Parameters
         ----------
         nep_type
@@ -227,6 +241,8 @@ cdef class NEP(Object):
     def getType(self) -> str:
         """
         Get the NEP type of this object.
+
+        Not collective.
 
         Returns
         -------
@@ -241,6 +257,8 @@ cdef class NEP(Object):
         """
         Get the prefix used for searching for all NEP options in the database.
 
+        Not collective.
+
         Returns
         -------
         str
@@ -253,6 +271,8 @@ cdef class NEP(Object):
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Set the prefix used for searching for all NEP options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -267,6 +287,8 @@ cdef class NEP(Object):
         """
         Append to the prefix used for searching for all NEP options in the database.
 
+        Logically collective.
+
         Parameters
         ----------
         prefix
@@ -280,6 +302,8 @@ cdef class NEP(Object):
         """
         Set NEP options from the options database.
 
+        Collective.
+
         This routine must be called before `setUp()` if the user is to be
         allowed to set the solver type.
         """
@@ -288,6 +312,8 @@ cdef class NEP(Object):
     def getProblemType(self) -> ProblemType:
         """
         Get the problem type from the `NEP` object.
+
+        Not collective.
 
         Returns
         -------
@@ -302,6 +328,8 @@ cdef class NEP(Object):
         """
         Set the type of the eigenvalue problem.
 
+        Logically collective.
+
         Parameters
         ----------
         problem_type
@@ -313,6 +341,8 @@ cdef class NEP(Object):
     def getWhichEigenpairs(self) -> Which:
         """
         Get which portion of the spectrum is to be sought.
+
+        Not collective.
 
         Returns
         -------
@@ -327,6 +357,8 @@ cdef class NEP(Object):
         """
         Set which portion of the spectrum is to be sought.
 
+        Logically collective.
+
         Parameters
         ----------
         which
@@ -338,6 +370,8 @@ cdef class NEP(Object):
     def getTarget(self) -> Scalar:
         """
         Get the value of the target.
+
+        Not collective.
 
         Returns
         -------
@@ -356,6 +390,8 @@ cdef class NEP(Object):
         """
         Set the value of the target.
 
+        Logically collective.
+
         Parameters
         ----------
         target
@@ -373,6 +409,8 @@ cdef class NEP(Object):
     def getTolerances(self) -> tuple[float, int]:
         """
         Get the tolerance and maximum iteration count.
+
+        Not collective.
 
         Get the tolerance and maximum iteration count used by the default
         NEP convergence tests.
@@ -393,6 +431,8 @@ cdef class NEP(Object):
         """
         Set the tolerance and max. iteration count used in convergence tests.
 
+        Logically collective.
+
         Parameters
         ----------
         tol
@@ -410,6 +450,8 @@ cdef class NEP(Object):
         """
         Get the method used to compute the error estimate used in the convergence test.
 
+        Not collective.
+
         Returns
         -------
         Conv
@@ -424,6 +466,8 @@ cdef class NEP(Object):
         """
         Set how to compute the error estimate used in the convergence test.
 
+        Logically collective.
+
         Parameters
         ----------
         conv
@@ -436,6 +480,8 @@ cdef class NEP(Object):
     def getRefine(self) -> tuple[Refine, int, float, int, RefineScheme]:
         """
         Get the refinement strategy used by the NEP object.
+
+        Not collective.
 
         Get the refinement strategy used by the NEP object and the associated
         parameters.
@@ -472,6 +518,8 @@ cdef class NEP(Object):
         """
         Set the refinement strategy used by the NEP object.
 
+        Logically collective.
+
         Set the refinement strategy used by the NEP object and the associated
         parameters.
 
@@ -503,6 +551,8 @@ cdef class NEP(Object):
         """
         Get the `KSP` object used by the eigensolver in the refinement phase.
 
+        Collective.
+
         Returns
         -------
         KSP
@@ -517,6 +567,8 @@ cdef class NEP(Object):
         """
         Get the flag indicating whether all residual norms must be computed.
 
+        Not collective.
+
         Returns
         -------
         bool
@@ -530,6 +582,8 @@ cdef class NEP(Object):
         """
         Set if the solver must compute the residual of all approximate eigenpairs.
 
+        Logically collective.
+
         Parameters
         ----------
         trackall
@@ -541,6 +595,8 @@ cdef class NEP(Object):
     def getDimensions(self) -> tuple[int, int, int]:
         """
         Get the number of eigenvalues to compute.
+
+        Not collective.
 
         Get the number of eigenvalues to compute, and the dimension of the
         subspace.
@@ -569,6 +625,8 @@ cdef class NEP(Object):
         """
         Set the number of eigenvalues to compute.
 
+        Logically collective.
+
         Set the number of eigenvalues to compute and the dimension of the
         subspace.
 
@@ -593,6 +651,8 @@ cdef class NEP(Object):
         """
         Get the basis vectors object associated to the eigensolver.
 
+        Not collective.
+
         Returns
         -------
         BV
@@ -607,6 +667,8 @@ cdef class NEP(Object):
         """
         Set the basis vectors object associated to the eigensolver.
 
+        Collective.
+
         Parameters
         ----------
         bv
@@ -617,6 +679,8 @@ cdef class NEP(Object):
     def getRG(self) -> RG:
         """
         Get the region object associated to the eigensolver.
+
+        Not collective.
 
         Returns
         -------
@@ -632,6 +696,8 @@ cdef class NEP(Object):
         """
         Set a region object associated to the eigensolver.
 
+        Collective.
+
         Parameters
         ----------
         rg
@@ -642,6 +708,8 @@ cdef class NEP(Object):
     def getDS(self) -> DS:
         """
         Get the direct solver associated to the eigensolver.
+
+        Not collective.
 
         Returns
         -------
@@ -657,6 +725,8 @@ cdef class NEP(Object):
         """
         Set a direct solver object associated to the eigensolver.
 
+        Collective.
+
         Parameters
         ----------
         ds
@@ -669,6 +739,8 @@ cdef class NEP(Object):
     def setInitialSpace(self, space: Vec or list[Vec]) -> None:
         """
         Set the initial space from which the eigensolver starts to iterate.
+
+        Collective.
 
         Parameters
         ----------
@@ -690,7 +762,11 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """Set a function to decide when to stop the outer iteration of the eigensolver."""
+        """
+        Set a function to decide when to stop the outer iteration of the eigensolver.
+
+        Logically collective.
+        """
         if stopping is not None:
             if args is None: args = ()
             if kargs is None: kargs = {}
@@ -701,7 +777,11 @@ cdef class NEP(Object):
             CHKERR( NEPSetStoppingTestFunction(self.nep, NEPStoppingBasic, NULL, NULL) )
 
     def getStoppingTest(self) -> NEPStoppingFunction:
-        """Get the stopping function."""
+        """
+        Get the stopping function.
+
+        Not collective.
+        """
         return self.get_attr('__stopping__')
 
     #
@@ -712,7 +792,11 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """Append a monitor function to the list of monitors."""
+        """
+        Append a monitor function to the list of monitors.
+
+        Logically collective.
+        """
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
         if monitorlist is None:
@@ -724,27 +808,45 @@ cdef class NEP(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> NEPMonitorFunction:
-        """Get the list of monitor functions."""
+        """
+        Get the list of monitor functions.
+
+        Not collective.
+        """
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
-        """Clear all monitors for a `NEP` object."""
+        """
+        Clear all monitors for a `NEP` object.
+
+        Logically collective.
+        """
         CHKERR( NEPMonitorCancel(self.nep) )
         self.set_attr('__monitor__', None)
 
     #
 
     def setUp(self) -> None:
-        """Set up all the internal data structures necessary for the execution of the eigensolver."""
+        """
+        Set up all the internal data structures necessary for the execution of the eigensolver.
+
+        Collective.
+        """
         CHKERR( NEPSetUp(self.nep) )
 
     def solve(self) -> None:
-        """Solve the eigensystem."""
+        """
+        Solve the eigensystem.
+
+        Collective.
+        """
         CHKERR( NEPSolve(self.nep) )
 
     def getIterationNumber(self) -> int:
         """
         Get the current iteration number.
+
+        Not collective.
 
         If the call to `solve()` is complete, then it returns the number of
         iterations carried out by the solution method.
@@ -762,6 +864,8 @@ cdef class NEP(Object):
         """
         Get the reason why the `solve()` iteration was stopped.
 
+        Not collective.
+
         Returns
         -------
         ConvergedReason
@@ -776,6 +880,8 @@ cdef class NEP(Object):
         """
         Get the number of converged eigenpairs.
 
+        Not collective.
+
         Returns
         -------
         int
@@ -788,6 +894,8 @@ cdef class NEP(Object):
     def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> None:
         """
         Get the i-th solution of the eigenproblem as computed by `solve()`.
+
+        Collective.
 
         The solution consists of both the eigenvalue and the eigenvector.
 
@@ -816,6 +924,8 @@ cdef class NEP(Object):
         """
         Get the i-th left eigenvector as computed by `solve()`.
 
+        Collective.
+
         Parameters
         ----------
         i
@@ -843,6 +953,8 @@ cdef class NEP(Object):
         """
         Get the error estimate associated to the i-th computed eigenpair.
 
+        Not collective.
+
         Parameters
         ----------
         i
@@ -860,6 +972,8 @@ cdef class NEP(Object):
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
         Compute the error  associated with the i-th computed eigenpair.
+
+        Collective.
 
         Compute the error (based on the residual norm) associated with the i-th computed eigenpair.
 
@@ -886,6 +1000,8 @@ cdef class NEP(Object):
     def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
         """
         Display the errors associated with the computed solution.
+
+        Collective.
 
         Display the eigenvalues and the errors associated with the computed solution
 
@@ -914,6 +1030,8 @@ cdef class NEP(Object):
         """
         Display the computed eigenvalues in a viewer.
 
+        Collective.
+
         Parameters
         ----------
         viewer
@@ -926,6 +1044,8 @@ cdef class NEP(Object):
     def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
         Output computed eigenvectors to a viewer.
+
+        Collective.
 
         Parameters
         ----------
@@ -948,6 +1068,8 @@ cdef class NEP(Object):
     ) -> None:
         """
         Set the function to compute the nonlinear Function T(lambda).
+
+        Collective.
 
         Set the function to compute the nonlinear Function T(lambda) as well
         as the location to store the matrix.
@@ -975,6 +1097,8 @@ cdef class NEP(Object):
     def getFunction(self) -> tuple[Mat, Mat, NEPFunction]:
         """
         Get the function to compute the nonlinear Function T(lambda).
+
+        Not collective.
 
         Get the function to compute the nonlinear Function T(lambda) and the
         matrix.
@@ -1006,6 +1130,8 @@ cdef class NEP(Object):
         """
         Set the function to compute the Jacobian T'(lambda).
 
+        Collective.
+
         Set the function to compute the Jacobian T'(lambda) as well
         as the location to store the matrix.
 
@@ -1030,6 +1156,8 @@ cdef class NEP(Object):
         """
         Get the function to compute the Jacobian T'(lambda) and the matrix.
 
+        Not collective.
+
         Parameters
         ----------
         J
@@ -1051,6 +1179,8 @@ cdef class NEP(Object):
     ) -> None:
         """
         Set the operator of the nonlinear eigenvalue problem in split form.
+
+        Collective.
 
         Parameters
         ----------
@@ -1078,6 +1208,8 @@ cdef class NEP(Object):
     def getSplitOperator(self) -> tuple[list[Mat], list[FN], Mat.Structure]:
         """
         Get the operator of the nonlinear eigenvalue problem in split form.
+
+        Not collective.
 
         Returns
         -------
@@ -1113,6 +1245,8 @@ cdef class NEP(Object):
         """
         Set the operator in split form.
 
+        Collective.
+
         Set the operator in split form from which to build the preconditioner
         to be used when solving the nonlinear eigenvalue problem in split form.
 
@@ -1135,6 +1269,8 @@ cdef class NEP(Object):
     def getSplitPreconditioner(self) -> tuple[list[Mat], Mat.Structure]:
         """
         Get the operator of the split preconditioner.
+
+        Not collective.
 
         Returns
         -------
@@ -1159,6 +1295,8 @@ cdef class NEP(Object):
         """
         Get the flag indicating if a two-sided variant is being used.
 
+        Not collective.
+
         Get the flag indicating whether a two-sided variant of the algorithm
         is being used or not.
 
@@ -1174,6 +1312,8 @@ cdef class NEP(Object):
     def setTwoSided(self, twosided: bool) -> None:
         """
         Set the solver to use a two-sided variant.
+
+        Logically collective.
 
         Set the solver to use a two-sided variant so that left eigenvectors
         are also computed.
@@ -1196,6 +1336,8 @@ cdef class NEP(Object):
         """
         Apply the resolvent T^{-1}(z) to a given vector.
 
+        Collective.
+
         Parameters
         ----------
         omega
@@ -1217,6 +1359,8 @@ cdef class NEP(Object):
         """
         Set when the preconditioner is rebuilt in the nonlinear solve.
 
+        Logically collective.
+
         Parameters
         ----------
         lag
@@ -1231,6 +1375,8 @@ cdef class NEP(Object):
         """
         Get how often the preconditioner is rebuilt.
 
+        Not collective.
+
         Returns
         -------
         int
@@ -1244,6 +1390,8 @@ cdef class NEP(Object):
         """
         Set a flag to keep the tolerance used in the linear solver constant.
 
+        Logically collective.
+
         Parameters
         ----------
         cct
@@ -1255,6 +1403,8 @@ cdef class NEP(Object):
     def getRIIConstCorrectionTol(self) -> bool:
         """
         Get the constant tolerance flag.
+
+        Not collective.
 
         Returns
         -------
@@ -1268,6 +1418,8 @@ cdef class NEP(Object):
     def setRIIMaximumIterations(self, its: int) -> None:
         """
         Set the max. number of inner iterations to be used in the RII solver.
+
+        Logically collective.
 
         These are the Newton iterations related to the computation of the
         nonlinear Rayleigh functional.
@@ -1284,6 +1436,8 @@ cdef class NEP(Object):
         """
         Get the maximum number of inner iterations of RII.
 
+        Not collective.
+
         Returns
         -------
         int
@@ -1297,6 +1451,8 @@ cdef class NEP(Object):
         """
         Set a flag to indicate if the Hermitian version of the scalar nonlinear equation must be used by the solver.
 
+        Logically collective.
+
         Parameters
         ----------
         herm
@@ -1308,6 +1464,8 @@ cdef class NEP(Object):
     def getRIIHermitian(self) -> bool:
         """
         Get the flag about using the Hermitian version of the scalar nonlinear equation.
+
+        Not collective.
 
         Returns
         -------
@@ -1322,6 +1480,8 @@ cdef class NEP(Object):
         """
         Set the threshold value used to switch between deflated and non-deflated iteration.
 
+        Logically collective.
+
         Parameters
         ----------
         deftol
@@ -1333,6 +1493,8 @@ cdef class NEP(Object):
     def getRIIDeflationThreshold(self) -> float:
         """
         Get the threshold value that controls deflation.
+
+        Not collective.
 
         Returns
         -------
@@ -1347,6 +1509,8 @@ cdef class NEP(Object):
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
+        Collective.
+
         Parameters
         ----------
         ksp
@@ -1357,6 +1521,8 @@ cdef class NEP(Object):
     def getRIIKSP(self) -> KSP:
         """
         Get the linear solver object associated with the nonlinear eigensolver.
+
+        Collective.
 
         Returns
         -------
@@ -1374,6 +1540,8 @@ cdef class NEP(Object):
         """
         Set the threshold value used to switch between deflated and non-deflated iteration.
 
+        Logically collective.
+
         Parameters
         ----------
         deftol
@@ -1385,6 +1553,8 @@ cdef class NEP(Object):
     def getSLPDeflationThreshold(self) -> float:
         """
         Get the threshold value that controls deflation.
+
+        Not collective.
 
         Returns
         -------
@@ -1399,6 +1569,8 @@ cdef class NEP(Object):
         """
         Set a linear eigensolver object associated to the nonlinear eigensolver.
 
+        Collective.
+
         Parameters
         ----------
         eps
@@ -1409,6 +1581,8 @@ cdef class NEP(Object):
     def getSLPEPS(self) -> EPS:
         """
         Get the linear eigensolver object associated with the nonlinear eigensolver.
+
+        Collective.
 
         Returns
         -------
@@ -1424,6 +1598,8 @@ cdef class NEP(Object):
         """
         Set a linear eigensolver object associated to the nonlinear eigensolver.
 
+        Collective.
+
         Used to compute left eigenvectors in the two-sided variant of SLP.
 
         Parameters
@@ -1436,6 +1612,8 @@ cdef class NEP(Object):
     def getSLPEPSLeft(self) -> EPS:
         """
         Get the left eigensolver.
+
+        Collective.
 
         Returns
         -------
@@ -1451,6 +1629,8 @@ cdef class NEP(Object):
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
+        Collective.
+
         Parameters
         ----------
         ksp
@@ -1461,6 +1641,8 @@ cdef class NEP(Object):
     def getSLPKSP(self) -> KSP:
         """
         Get the linear solver object associated with the nonlinear eigensolver.
+
+        Collective.
 
         Returns
         -------
@@ -1478,6 +1660,8 @@ cdef class NEP(Object):
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
+        Collective.
+
         Parameters
         ----------
         ksp
@@ -1488,6 +1672,8 @@ cdef class NEP(Object):
     def getNArnoldiKSP(self) -> KSP:
         """
         Get the linear solver object associated with the nonlinear eigensolver.
+
+        Collective.
 
         Returns
         -------
@@ -1502,6 +1688,8 @@ cdef class NEP(Object):
     def setNArnoldiLagPreconditioner(self, lag: int) -> None:
         """
         Set when the preconditioner is rebuilt in the nonlinear solve.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1522,6 +1710,8 @@ cdef class NEP(Object):
         """
         Get how often the preconditioner is rebuilt.
 
+        Not collective.
+
         Returns
         -------
         int
@@ -1537,6 +1727,8 @@ cdef class NEP(Object):
         """
         Set a polynomial eigensolver object associated to the nonlinear eigensolver.
 
+        Collective.
+
         Parameters
         ----------
         pep
@@ -1547,6 +1739,8 @@ cdef class NEP(Object):
     def getInterpolPEP(self) -> PEP:
         """
         Get the polynomial eigensolver object associated with the nonlinear eigensolver.
+
+        Collective.
 
         Returns
         -------
@@ -1561,6 +1755,8 @@ cdef class NEP(Object):
     def setInterpolInterpolation(self, tol: float | None = None, deg: int | None = None) -> None:
         """
         Set the tolerance and maximum degree when building the interpolation polynomial.
+
+        Collective.
 
         Parameters
         ----------
@@ -1578,6 +1774,8 @@ cdef class NEP(Object):
     def getInterpolInterpolation(self) -> tuple[float, int]:
         """
         Get the tolerance and maximum degree when building the interpolation polynomial.
+
+        Not collective.
 
         Returns
         -------
@@ -1597,6 +1795,8 @@ cdef class NEP(Object):
         """
         Set the restart parameter for the NLEIGS method.
 
+        Logically collective.
+
         The proportion of basis vectors that must be kept after restart.
 
         Parameters
@@ -1615,6 +1815,8 @@ cdef class NEP(Object):
         """
         Get the restart parameter used in the NLEIGS method.
 
+        Not collective.
+
         Returns
         -------
         float
@@ -1627,6 +1829,8 @@ cdef class NEP(Object):
     def setNLEIGSLocking(self, lock: bool) -> None:
         """
         Toggle between locking and non-locking variants of the NLEIGS method.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1647,6 +1851,8 @@ cdef class NEP(Object):
         """
         Get the locking flag used in the NLEIGS method.
 
+        Not collective.
+
         Returns
         -------
         bool
@@ -1659,6 +1865,8 @@ cdef class NEP(Object):
     def setNLEIGSInterpolation(self, tol: float | None = None, deg: int | None = None) -> None:
         """
         Set the tolerance and maximum degree when building the interpolation via divided differences.
+
+        Collective.
 
         Parameters
         ----------
@@ -1677,6 +1885,8 @@ cdef class NEP(Object):
         """
         Get the tolerance and maximum degree when building the interpolation via divided differences.
 
+        Not collective.
+
         Returns
         -------
         tol: float
@@ -1693,6 +1903,8 @@ cdef class NEP(Object):
         """
         Set (toggle) between TOAR-basis (default) and full-basis variants of the NLEIGS method.
 
+        Logically collective.
+
         Parameters
         ----------
         fullbasis
@@ -1704,6 +1916,8 @@ cdef class NEP(Object):
     def getNLEIGSFullBasis(self) -> bool:
         """
         Get the flag that indicates if NLEIGS is using the full-basis variant.
+
+        Not collective.
 
         Returns
         -------
@@ -1718,6 +1932,8 @@ cdef class NEP(Object):
         """
         Set a linear eigensolver object associated to the nonlinear eigensolver.
 
+        Collective.
+
         Parameters
         ----------
         eps
@@ -1728,6 +1944,8 @@ cdef class NEP(Object):
     def getNLEIGSEPS(self) -> EPS:
         """
         Get the linear eigensolver object associated with the nonlinear eigensolver.
+
+        Collective.
 
         Returns
         -------
@@ -1743,6 +1961,8 @@ cdef class NEP(Object):
         """
         Set a list of shifts to be used in the Rational Krylov method.
 
+        Collective.
+
         Parameters
         ----------
         shifts
@@ -1756,6 +1976,8 @@ cdef class NEP(Object):
     def getNLEIGSRKShifts(self) -> ArrayScalar:
         """
         Get the list of shifts used in the Rational Krylov method.
+
+        Not collective.
 
         Returns
         -------
@@ -1775,6 +1997,8 @@ cdef class NEP(Object):
     def getNLEIGSKSPs(self) -> list[KSP]:
         """
         Get the list of linear solver objects associated with the NLEIGS solver.
+
+        Collective.
 
         Returns
         -------
@@ -1797,6 +2021,8 @@ cdef class NEP(Object):
         """
         Set the extraction technique used in the CISS solver.
 
+        Logically collective.
+
         Parameters
         ----------
         extraction
@@ -1808,6 +2034,8 @@ cdef class NEP(Object):
     def getCISSExtraction(self) -> CISSExtraction:
         """
         Get the extraction technique used in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -1829,6 +2057,8 @@ cdef class NEP(Object):
     ) -> None:
         """
         Set the values of various size parameters in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1869,6 +2099,8 @@ cdef class NEP(Object):
         """
         Get the values of various size parameters in the CISS solver.
 
+        Not collective.
+
         Returns
         -------
         ip: int
@@ -1897,6 +2129,8 @@ cdef class NEP(Object):
         """
         Set the values of various threshold parameters in the CISS solver.
 
+        Logically collective.
+
         Parameters
         ----------
         delta
@@ -1914,6 +2148,8 @@ cdef class NEP(Object):
         """
         Get the values of various threshold parameters in the CISS solver.
 
+        Not collective.
+
         Returns
         -------
         delta: float
@@ -1929,6 +2165,8 @@ cdef class NEP(Object):
     def setCISSRefinement(self, inner: int | None = None, blsize: int | None = None) -> None:
         """
         Set the values of various refinement parameters in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1947,6 +2185,8 @@ cdef class NEP(Object):
         """
         Get the values of various refinement parameters in the CISS solver.
 
+        Not collective.
+
         Returns
         -------
         inner: int
@@ -1962,6 +2202,8 @@ cdef class NEP(Object):
     def getCISSKSPs(self) -> list[KSP]:
         """
         Get the list of linear solver objects associated with the CISS solver.
+
+        Collective.
 
         Returns
         -------

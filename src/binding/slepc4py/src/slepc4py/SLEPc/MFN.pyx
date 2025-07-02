@@ -37,6 +37,8 @@ cdef class MFN(Object):
         """
         Print the MFN data structure.
 
+        Collective.
+
         Parameters
         ----------
         viewer
@@ -47,18 +49,28 @@ cdef class MFN(Object):
         CHKERR( MFNView(self.mfn, vwr) )
 
     def destroy(self) -> Self:
-        """Destroy the MFN object."""
+        """
+        Destroy the MFN object.
+
+        Logically collective.
+        """
         CHKERR( MFNDestroy(&self.mfn) )
         self.mfn = NULL
         return self
 
     def reset(self) -> None:
-        """Reset the MFN object."""
+        """
+        Reset the MFN object.
+
+        Collective.
+        """
         CHKERR( MFNReset(self.mfn) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
         Create the MFN object.
+
+        Collective.
 
         Parameters
         ----------
@@ -75,6 +87,8 @@ cdef class MFN(Object):
         """
         Set the particular solver to be used in the MFN object.
 
+        Logically collective.
+
         Parameters
         ----------
         mfn_type
@@ -87,6 +101,8 @@ cdef class MFN(Object):
     def getType(self) -> str:
         """
         Get the MFN type of this object.
+
+        Not collective.
 
         Returns
         -------
@@ -101,6 +117,8 @@ cdef class MFN(Object):
         """
         Get the prefix used for searching for all MFN options in the database.
 
+        Not collective.
+
         Returns
         -------
         str
@@ -113,6 +131,8 @@ cdef class MFN(Object):
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Set the prefix used for searching for all MFN options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -127,6 +147,8 @@ cdef class MFN(Object):
         """
         Append to the prefix used for searching for all MFN options in the database.
 
+        Logically collective.
+
         Parameters
         ----------
         prefix
@@ -140,6 +162,8 @@ cdef class MFN(Object):
         """
         Set MFN options from the options database.
 
+        Collective.
+
         Set MFN options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
         the solver type.
@@ -149,6 +173,8 @@ cdef class MFN(Object):
     def getTolerances(self) -> tuple[float, int]:
         """
         Get the tolerance and maximum iteration count.
+
+        Not collective.
 
         Get the tolerance and maximum iteration count used by the
         default MFN convergence tests.
@@ -168,6 +194,8 @@ cdef class MFN(Object):
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
         Set the tolerance and maximum iteration count.
+
+        Logically collective.
 
         Set the tolerance and maximum iteration count used by the
         default MFN convergence tests.
@@ -189,6 +217,8 @@ cdef class MFN(Object):
         """
         Get the dimension of the subspace used by the solver.
 
+        Not collective.
+
         Returns
         -------
         int
@@ -202,6 +232,8 @@ cdef class MFN(Object):
         """
         Set the dimension of the subspace to be used by the solver.
 
+        Logically collective.
+
         Parameters
         ----------
         ncv
@@ -213,6 +245,8 @@ cdef class MFN(Object):
     def getFN(self) -> FN:
         """
         Get the math function object associated to the MFN object.
+
+        Not collective.
 
         Returns
         -------
@@ -228,6 +262,8 @@ cdef class MFN(Object):
         """
         Set a math function object associated to the MFN object.
 
+        Collective.
+
         Parameters
         ----------
         fn
@@ -238,6 +274,8 @@ cdef class MFN(Object):
     def getBV(self) -> BV:
         """
         Get the basis vector object associated to the MFN object.
+
+        Not collective.
 
         Returns
         -------
@@ -253,6 +291,8 @@ cdef class MFN(Object):
         """
         Set a basis vector object associated to the MFN object.
 
+        Collective.
+
         Parameters
         ----------
         bv
@@ -263,6 +303,8 @@ cdef class MFN(Object):
     def getOperator(self) -> Mat:
         """
         Get the matrix associated with the MFN object.
+
+        Not collective.
 
         Returns
         -------
@@ -277,6 +319,8 @@ cdef class MFN(Object):
     def setOperator(self, Mat A) -> None:
         """
         Set the matrix associated with the MFN object.
+
+        Collective.
 
         Parameters
         ----------
@@ -293,7 +337,11 @@ cdef class MFN(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """Append a monitor function to the list of monitors."""
+        """
+        Append a monitor function to the list of monitors.
+
+        Logically collective.
+        """
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
         if monitorlist is None:
@@ -309,19 +357,29 @@ cdef class MFN(Object):
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
-        """Clear all monitors for an `MFN` object."""
+        """
+        Clear all monitors for an `MFN` object.
+
+        Logically collective.
+        """
         CHKERR( MFNMonitorCancel(self.mfn) )
         self.set_attr('__monitor__', None)
 
     #
 
     def setUp(self) -> None:
-        """Set up all the internal data structures necessary for the execution of the eigensolver."""
+        """
+        Set up all the internal data structures necessary for the execution of the eigensolver.
+
+        Collective.
+        """
         CHKERR( MFNSetUp(self.mfn) )
 
     def solve(self, Vec b, Vec x) -> None:
         """
         Solve the matrix function problem.
+
+        Collective.
 
         Given a vector b, the vector x = f(A)*b is returned.
 
@@ -338,6 +396,8 @@ cdef class MFN(Object):
         """
         Solve the transpose matrix function problem.
 
+        Collective.
+
         Given a vector b, the vector x = f(A^T)*b is returned.
 
         Parameters
@@ -352,6 +412,8 @@ cdef class MFN(Object):
     def getIterationNumber(self) -> int:
         """
         Get the current iteration number.
+
+        Not collective.
 
         Get the current iteration number. If the call to `solve()` is
         complete, then it returns the number of iterations carried out
@@ -370,6 +432,8 @@ cdef class MFN(Object):
         """
         Get the reason why the `solve()` iteration was stopped.
 
+        Not collective.
+
         Returns
         -------
         ConvergedReason
@@ -383,6 +447,8 @@ cdef class MFN(Object):
         """
         Set `solve()` to generate an error if the solver does not converge.
 
+        Logically collective.
+
         Parameters
         ----------
         flg
@@ -394,6 +460,8 @@ cdef class MFN(Object):
     def getErrorIfNotConverged(self) -> bool:
         """
         Get a flag indicating whether `solve()` will generate an error if the solver does not converge.
+
+        Not collective.
 
         Returns
         -------

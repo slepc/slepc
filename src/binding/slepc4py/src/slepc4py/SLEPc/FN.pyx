@@ -120,6 +120,8 @@ cdef class FN(Object):
         """
         Print the FN data structure.
 
+        Collective.
+
         Parameters
         ----------
         viewer
@@ -130,7 +132,11 @@ cdef class FN(Object):
         CHKERR( FNView(self.fn, vwr) )
 
     def destroy(self) -> Self:
-        """Destroy the FN object."""
+        """
+        Destroy the FN object.
+
+        Collective.
+        """
         CHKERR( FNDestroy(&self.fn) )
         self.fn = NULL
         return self
@@ -138,6 +144,8 @@ cdef class FN(Object):
     def create(self, comm: Comm | None = None) -> Self:
         """
         Create the FN object.
+
+        Collective.
 
         Parameters
         ----------
@@ -154,6 +162,8 @@ cdef class FN(Object):
         """
         Set the type for the FN object.
 
+        Logically collective.
+
         Parameters
         ----------
         fn_type
@@ -167,6 +177,8 @@ cdef class FN(Object):
         """
         Get the FN type of this object.
 
+        Not collective.
+
         Returns
         -------
         str
@@ -179,6 +191,8 @@ cdef class FN(Object):
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Set the prefix used for searching for all FN options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -199,6 +213,8 @@ cdef class FN(Object):
         """
         Append to the prefix used for searching for all FN options in the database.
 
+        Logically collective.
+
         Parameters
         ----------
         prefix
@@ -211,6 +227,8 @@ cdef class FN(Object):
     def getOptionsPrefix(self) -> str:
         """
         Get the prefix used for searching for all FN options in the database.
+
+        Not collective.
 
         Returns
         -------
@@ -225,6 +243,8 @@ cdef class FN(Object):
         """
         Set FN options from the options database.
 
+        Collective.
+
         Notes
         -----
         To see all options, run your program with the ``-help``
@@ -235,6 +255,8 @@ cdef class FN(Object):
     def duplicate(self, comm: Comm | None = None) -> FN:
         """
         Duplicate the FN object copying all parameters.
+
+        Collective.
 
         Duplicate the FN object copying all parameters, possibly with a
         different communicator.
@@ -256,6 +278,8 @@ cdef class FN(Object):
         """
         Compute the value of the function f(x) for a given x.
 
+        Not collective.
+
         Parameters
         ----------
         x
@@ -275,6 +299,8 @@ cdef class FN(Object):
         """
         Compute the value of the derivative f'(x) for a given x.
 
+        Not collective.
+
         Parameters
         ----------
         x
@@ -293,6 +319,8 @@ cdef class FN(Object):
     def evaluateFunctionMat(self, Mat A, Mat B=None) -> Mat:
         """
         Compute the value of the function f(A) for a given matrix A.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -314,6 +342,8 @@ cdef class FN(Object):
         """
         Compute the first column of the matrix f(A) for a given matrix A.
 
+        Logically collective.
+
         Parameters
         ----------
         A
@@ -332,6 +362,8 @@ cdef class FN(Object):
         """
         Set the scaling parameters that define the matematical function.
 
+        Logically collective.
+
         Parameters
         ----------
         alpha
@@ -349,6 +381,8 @@ cdef class FN(Object):
         """
         Get the scaling parameters that define the matematical function.
 
+        Not collective.
+
         Returns
         -------
         alpha: Scalar
@@ -363,6 +397,8 @@ cdef class FN(Object):
     def setMethod(self, meth: int) -> None:
         """
         Set the method to be used to evaluate functions of matrices.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -387,6 +423,8 @@ cdef class FN(Object):
         """
         Get the method currently used for matrix functions.
 
+        Not collective.
+
         Returns
         -------
         int
@@ -400,6 +438,8 @@ cdef class FN(Object):
         """
         Set the mode of operation in parallel runs.
 
+        Logically collective.
+
         Parameters
         ----------
         pmode
@@ -411,6 +451,8 @@ cdef class FN(Object):
     def getParallel(self) -> ParallelType:
         """
         Get the mode of operation in parallel runs.
+
+        Not collective.
 
         Returns
         -------
@@ -427,6 +469,8 @@ cdef class FN(Object):
         """
         Set the coefficients of the numerator of the rational function.
 
+        Logically collective.
+
         Parameters
         ----------
         alpha
@@ -440,6 +484,8 @@ cdef class FN(Object):
     def getRationalNumerator(self) -> ArrayScalar:
         """
         Get the coefficients of the numerator of the rational function.
+
+        Not collective.
 
         Returns
         -------
@@ -460,6 +506,8 @@ cdef class FN(Object):
         """
         Set the coefficients of the denominator of the rational function.
 
+        Logically collective.
+
         Parameters
         ----------
         alpha
@@ -473,6 +521,8 @@ cdef class FN(Object):
     def getRationalDenominator(self) -> ArrayScalar:
         """
         Get the coefficients of the denominator of the rational function.
+
+        Not collective.
 
         Returns
         -------
@@ -493,6 +543,8 @@ cdef class FN(Object):
         """
         Set the two child functions that constitute this combined function.
 
+        Logically collective.
+
         Set the two child functions that constitute this combined function,
         and the way they must be combined.
 
@@ -511,6 +563,8 @@ cdef class FN(Object):
     def getCombineChildren(self) -> tuple[CombineType, FN, FN]:
         """
         Get the two child functions that constitute this combined function.
+
+        Not collective.
 
         Get the two child functions that constitute this combined
         function, and the way they must be combined.
@@ -536,6 +590,8 @@ cdef class FN(Object):
         """
         Set the index of the phi-function.
 
+        Logically collective.
+
         Parameters
         ----------
         k
@@ -547,6 +603,8 @@ cdef class FN(Object):
     def getPhiIndex(self) -> int:
         """
         Get the index of the phi-function.
+
+        Not collective.
 
         Returns
         -------
