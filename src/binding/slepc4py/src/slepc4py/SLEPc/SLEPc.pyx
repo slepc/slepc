@@ -2,6 +2,7 @@
 
 cdef extern from * nogil:
     """
+    #include "pyapicompat.h"
     #include "lib-slepc/compat.h"
     #include "lib-slepc/custom.h"
 
@@ -101,23 +102,17 @@ cdef inline PetscScalar asScalar(object value) except? <PetscScalar>-1.0:
     return PyPetscScalar_AsPetscScalar(value)
 
 cdef extern from "Python.h":
-     PyObject *PyErr_Occurred()
-     ctypedef struct Py_complex:
-         double real
-         double imag
-     Py_complex PyComplex_AsCComplex(object)
+     double PyComplex_RealAsDouble(object)
+     double PyComplex_ImagAsDouble(object)
 
 cdef inline object toComplex(PetscScalar rvalue, PetscScalar ivalue):
     return complex(toScalar(rvalue), toScalar(ivalue))
 
 cdef inline PetscReal asComplexReal(object value) except? <PetscReal>-1.0:
-    cdef Py_complex cval = PyComplex_AsCComplex(value)
-    return <PetscReal>cval.real
+    return <PetscReal>PyComplex_RealAsDouble(value)
 
 cdef inline PetscReal asComplexImag(object value) except? <PetscReal>-1.0:
-    cdef Py_complex cval = PyComplex_AsCComplex(value)
-    if cval.real == -1.0 and PyErr_Occurred() != NULL: cval.imag = -1.0
-    return <PetscReal>cval.imag
+    return <PetscReal>PyComplex_ImagAsDouble(value)
 
 cdef extern from * nogil:
     PetscReal PetscRealPart(PetscScalar v)
