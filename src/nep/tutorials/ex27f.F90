@@ -204,9 +204,11 @@ SUBROUTINE FormFunction(nep,lambda,fun,B,ctx,ierr)
   t = sqrt(lambda)
   PetscCall(MatGetSize(fun,n,PETSC_NULL_INTEGER,ierr))
   PetscCall(MatGetOwnershipRange(fun,Istart,Iend,ierr))
-  if (Istart.eq.0) FirstBlock=PETSC_TRUE;
-  if (Iend.eq.n) LastBlock=PETSC_TRUE;
-  val(0)=1.0; val(1)=t-2.0; val(2)=1.0;
+  if (Istart.eq.0) FirstBlock=PETSC_TRUE
+  if (Iend.eq.n) LastBlock=PETSC_TRUE
+  val(0)=1.0
+  val(1)=t-2.0
+  val(2)=1.0
 
   Istart0 = Istart
   if (FirstBlock) Istart0 = Istart+1

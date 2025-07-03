@@ -26,7 +26,7 @@
 
       Vec            t,v
       Mat            Q,M
-      BV             X,Y;
+      BV             X,Y
       PetscMPIInt    rank
       PetscInt       i,j,n,k,l,izero,ione
       PetscScalar    z(KMAX),val

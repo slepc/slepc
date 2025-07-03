@@ -239,7 +239,7 @@
 
       external MatMult_A,MatDestroy_A
 
-      PetscCall(MatGetLocalSize(A,ml,nl,ierr));
+      PetscCall(MatGetLocalSize(A,ml,nl,ierr))
       PetscCall(MatShellGetContext(A,ctxA,ierr))
       allocate(ctxM)
       ctxM%lambda = ctxA%lambda
