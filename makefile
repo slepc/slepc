@@ -362,6 +362,10 @@ allcleanhtml:
 
 # ******** Rules for checking coding standards *********************************************************
 
+# Run fortitude Fortran linter
+fortitude:
+	-@fortitude check --line-length 1000 --ignore C003,C121,S241 --verbose --fix --preview
+
 # Compare ABI/API of two versions of PETSc library with the old one defined by PETSC_{DIR,ARCH}_ABI_OLD
 abitest:
 	@if [ "x${SLEPC_DIR_ABI_OLD}" = "x" ] || [ "x${PETSC_ARCH_ABI_OLD}" = "x" ] || [ "x${PETSC_DIR_ABI_OLD}" = "x" ]; \
