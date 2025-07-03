@@ -32,7 +32,7 @@
         PetscScalar kappa
         PetscReal   h
       end type User
-      end module
+      end module UserModule
 
       program main
 #include <slepc/finclude/slepcnep.h>

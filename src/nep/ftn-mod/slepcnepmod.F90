@@ -29,4 +29,4 @@
         use slepcnep
         use slepcmfn
         use petsc
-        end module
+        end module slepc
