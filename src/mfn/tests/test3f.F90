@@ -28,7 +28,7 @@
       Mat                A, B
       MFN                mfn
       FN                 f
-      MFNConvergedReason reason;
+      MFNConvergedReason reason
       Vec                v, y
       PetscInt           Nt, n, i, j, II
       PetscInt           Istart, maxit, ncv

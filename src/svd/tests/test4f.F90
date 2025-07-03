@@ -36,10 +36,10 @@
 !
       Mat                A, B
       SVD                svd
-      SVDConv            conv;
-      SVDStop            stp;
-      SVDWhich           which;
-      SVDConvergedReason reason;
+      SVDConv            conv
+      SVDStop            stp
+      SVDWhich           which
+      SVDConvergedReason reason
       PetscInt           m, n, i, Istart
       PetscInt           col(2), its, Iend
       PetscScalar        val(2)
