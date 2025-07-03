@@ -212,4 +212,10 @@ int main(int argc,char **argv)
          suffix: 2_real
          requires: double !complex
 
+   testset:
+      args: -eps_nev 28 -eps_ncv 18 -terse
+      test:
+         suffix: 3
+         requires: !complex !single
+
 TEST*/
