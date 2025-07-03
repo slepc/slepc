@@ -334,11 +334,10 @@ PetscErrorCode EPSSetUp(EPS eps)
   }
 
   /* safeguard for small problems */
+  if (eps->nev > eps->n) eps->nev = eps->n;
   if (eps->isstructured) {
-    if (2*eps->nev > eps->n) eps->nev = eps->n/2;
     if (2*eps->ncv > eps->n) eps->ncv = eps->n/2;
   } else {
-    if (eps->nev > eps->n) eps->nev = eps->n;
     if (eps->ncv > eps->n) eps->ncv = eps->n;
   }
 
