@@ -6,6 +6,15 @@ CHANGES: SLEPc for Python
 :Contact: dalcinl@gmail.com
 
 
+Release 3.24.0
+==============
+
+- Update to SLEPc 3.24 release.
+
+- Support (opt-in via setting the environment variable
+  ``SLEPC4PY_BUILD_PYSABI=1``) for building with ``Py_LIMITED_API``
+  (Python Stable ABI) under Python 3.10+ (requires Cython 3.1+).
+
 Release 3.23.2
 ==============
 
