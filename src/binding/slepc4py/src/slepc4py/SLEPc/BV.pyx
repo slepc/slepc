@@ -257,16 +257,14 @@ cdef class BV(Object):
         cdef PetscInt ival = asInt(m)
         CHKERR( BVSetSizesFromVec(self.bv, w.vec, ival) )
 
-    def getSizes(self) -> tuple[int, int, int]:
+    def getSizes(self) -> tuple[LayoutSizeSpec, int]:
         """
         Returns the local and global sizes, and the number of columns.
 
         Returns
         -------
-        n: int
-            The local size
-        N: int
-            The global size
+        (n, N): tuple[int, int]
+            The local and global sizes
         m: int
             The number of columns.
         """
