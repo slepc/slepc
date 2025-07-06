@@ -139,3 +139,89 @@ cdef inline PetscErrorCode BV_Sizes(
     if _n != NULL: _n[0] = n
     if _N != NULL: _N[0] = N
     return PETSC_SUCCESS
+
+# --------------------------------------------------------------------
+
+# unary operations
+
+cdef BV bv_pos(BV self):
+    cdef BV bv = type(self)()
+    CHKERR(BVDuplicate(self.bv, &bv.bv))
+    CHKERR(BVCopy(self.bv, bv.bv))
+    return bv
+
+cdef BV bv_neg(BV self):
+    cdef BV bv = <BV> bv_pos(self)
+    CHKERR(BVScale(bv.bv, -1))
+    return bv
+
+# inplace binary operations
+
+cdef BV bv_iadd(BV self, other):
+    cdef PetscScalar alpha = 1, beta = 1
+    cdef BV bv
+    if isinstance(other, BV):
+        alpha = 1; bv = other
+        CHKERR(BVMult(self.bv, alpha, beta, bv.bv, NULL))
+        return self
+    elif isinstance(other, (tuple, list)):
+        other, bv = other
+        alpha = asScalar(other)
+        CHKERR(BVMult(self.bv, alpha, beta, bv.bv, NULL))
+        return self
+    return NotImplemented
+
+cdef BV bv_isub(BV self, other):
+    cdef PetscScalar alpha = 1, beta = 1
+    cdef BV bv
+    if isinstance(other, BV):
+        alpha = 1; bv = other
+        CHKERR(BVMult(self.bv, -alpha, beta, bv.bv, NULL))
+        return self
+    elif isinstance(other, (tuple, list)):
+        other, bv = other
+        alpha = asScalar(other)
+        CHKERR(BVMult(self.bv, -alpha, beta, bv.bv, NULL))
+        return self
+    return NotImplemented
+
+cdef BV bv_imul(BV self, other):
+    self.scale(other)
+    return self
+
+cdef BV bv_idiv(BV self, other):
+    other = 1/other
+    self.scale(other)
+    return self
+
+# binary operations
+
+cdef BV bv_add(BV self, other):
+    return bv_iadd(bv_pos(self), other)
+
+cdef BV bv_sub(BV self, other):
+    return bv_isub(bv_pos(self), other)
+
+cdef BV bv_mul(BV self, other):
+    return bv_imul(bv_pos(self), other)
+
+cdef BV bv_div(BV self, other):
+    return bv_idiv(bv_pos(self), other)
+
+# reflected binary operations
+
+cdef BV bv_radd(BV self, other):
+    return bv_add(self, other)
+
+cdef BV bv_rsub(BV self, other):
+    cdef BV bv = <BV> bv_sub(self, other)
+    CHKERR(BVScale(bv.bv, -1))
+    return bv
+
+cdef BV bv_rmul(BV self, other):
+    return bv_mul(self, other)
+
+cdef BV bv_rdiv(BV self, other):
+    <void>self; <void>other # unused
+    return NotImplemented
+

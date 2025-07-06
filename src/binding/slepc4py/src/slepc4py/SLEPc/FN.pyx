@@ -52,6 +52,68 @@ cdef class FN(Object):
         self.obj = <PetscObject*> &self.fn
         self.fn = NULL
 
+    # unary operations
+
+    def __pos__(self):
+        return fn_pos(self)
+
+    def __neg__(self):
+        return fn_neg(self)
+
+    # inplace binary operations
+
+    def __iadd__(self, other):
+        return fn_iadd(self, other)
+
+    def __isub__(self, other):
+        return fn_isub(self, other)
+
+    def __imul__(self, other):
+        return fn_imul(self, other)
+
+    def __idiv__(self, other):
+        return fn_idiv(self, other)
+
+    def __itruediv__(self, other):
+        return fn_idiv(self, other)
+
+    # binary operations
+
+    def __add__(self, other):
+        return fn_add(self, other)
+
+    def __radd__(self, other):
+        return fn_radd(self, other)
+
+    def __sub__(self, other):
+        return fn_sub(self, other)
+
+    def __rsub__(self, other):
+        return fn_rsub(self, other)
+
+    def __mul__(self, other):
+        return fn_mul(self, other)
+
+    def __rmul__(self, other):
+        return fn_rmul(self, other)
+
+    def __div__(self, other):
+        return fn_div(self, other)
+
+    def __rdiv__(self, other):
+        return fn_rdiv(self, other)
+
+    def __truediv__(self, other):
+        return fn_div(self, other)
+
+    def __rtruediv__(self, other):
+        return fn_rdiv(self, other)
+
+    def __matmul__(self, other):
+        return fn_matmul(self, other)
+
+    #
+
     def view(self, Viewer viewer=None) -> None:
         """
         Prints the FN data structure.
