@@ -9,6 +9,7 @@
 !
       interface EPSKrylovSchurGetSubintervals
         subroutine EPSKrylovSchurGetSubintervals(a,b,z)
+          use, intrinsic :: ISO_C_BINDING
           import tEPS
           EPS a
           PetscReal b(*)
@@ -18,6 +19,7 @@
 
       interface EPSKrylovSchurGetInertias
         subroutine EPSKrylovSchurGetInertias(a,b,c,d,z)
+          use, intrinsic :: ISO_C_BINDING
           import tEPS
           EPS a
           PetscInt b

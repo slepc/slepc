@@ -9,6 +9,7 @@
 !
       interface PEPSTOARGetInertias
         subroutine PEPSTOARGetInertias(a,b,c,d,z)
+          use, intrinsic :: ISO_C_BINDING
           import tPEP
           PEP a
           PetscInt b
