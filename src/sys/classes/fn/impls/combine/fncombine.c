@@ -182,10 +182,17 @@ static PetscErrorCode FNView_Combine(FN fn,PetscViewer viewer)
 {
   FN_COMBINE     *ctx = (FN_COMBINE*)fn->data;
   PetscBool      isascii;
+  char           str[50];
 
   PetscFunctionBegin;
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERASCII,&isascii));
   if (isascii) {
+    if (fn->alpha!=(PetscScalar)1.0 || fn->beta!=(PetscScalar)1.0) {
+      PetscCall(SlepcSNPrintfScalar(str,sizeof(str),fn->alpha,PETSC_TRUE));
+      PetscCall(PetscViewerASCIIPrintf(viewer,"  scaling factors: inner %s",str));
+      PetscCall(SlepcSNPrintfScalar(str,sizeof(str),fn->beta,PETSC_TRUE));
+      PetscCall(PetscViewerASCIIPrintf(viewer,"outer %s\n",str));
+    }
     switch (ctx->comb) {
       case FN_COMBINE_ADD:
         PetscCall(PetscViewerASCIIPrintf(viewer,"  two added functions f1+f2\n"));
