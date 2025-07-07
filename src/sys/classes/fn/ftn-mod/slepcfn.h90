@@ -9,6 +9,7 @@
 !
       interface FNRationalGetNumerator
         subroutine FNRationalGetNumerator(a,b,c,z)
+          use, intrinsic :: ISO_C_BINDING
           import tFN
           FN a
           PetscInt b
@@ -19,6 +20,7 @@
 
       interface FNRationalGetDenominator
         subroutine FNRationalGetDenominator(a,b,c,z)
+          use, intrinsic :: ISO_C_BINDING
           import tFN
           FN a
           PetscInt b

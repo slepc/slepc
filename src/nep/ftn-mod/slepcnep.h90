@@ -9,6 +9,7 @@
 !
       interface NEPNLEIGSGetRKShifts
         subroutine NEPNLEIGSGetRKShifts(a,b,c,z)
+          use, intrinsic :: ISO_C_BINDING
           import tNEP
           NEP a
           PetscInt b
