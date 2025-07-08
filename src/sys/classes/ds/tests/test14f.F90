@@ -111,7 +111,8 @@
 !     *** Clean up
       PetscCallA(DSDestroy(ds,ierr))
       PetscCallA(SlepcFinalize(ierr))
-      end
+
+      contains
 
 ! -----------------------------------------------------------------
 
@@ -129,6 +130,8 @@
       end do
 
       end
+
+      end program main
 
 !/*TEST
 !
