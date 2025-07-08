@@ -112,6 +112,12 @@ cdef class FN(Object):
     def __matmul__(self, other):
         return fn_matmul(self, other)
 
+    def __call__(self, arg):
+        if isinstance(arg, Mat):
+            return self.evaluateFunctionMat(arg)
+        else:
+            return self.evaluateFunction(arg)
+
     #
 
     def view(self, Viewer viewer=None) -> None:
