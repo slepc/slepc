@@ -200,7 +200,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
   Mat             Q,W,D;
   Vec             vomega,vomegaold;
   BV              U,V;
-  PetscReal       *a,*b,*omega,beta;
+  PetscReal       *a,*b,*omega,beta,u_norm;
   PetscBool       breakdown=PETSC_FALSE;
   PetscComplex    eig;
 
@@ -248,7 +248,8 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
 
     /* Check convergence */
     PetscCall(DSGetDimensions(eps->ds,NULL,NULL,NULL,&t));
-    PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,1.0,&k));
+    PetscCall(BVNormColumn(U,nv,NORM_2,&u_norm));
+    PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,u_norm,&k));
     EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
