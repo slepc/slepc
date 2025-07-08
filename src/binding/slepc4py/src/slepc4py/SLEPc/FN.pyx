@@ -194,7 +194,8 @@ cdef class FN(Object):
             The result of f(x).
         """
         cdef PetscScalar sval = 0
-        CHKERR( FNEvaluateFunction(self.fn, x, &sval) )
+        cdef PetscScalar sarg = asScalar(x)
+        CHKERR( FNEvaluateFunction(self.fn, sarg, &sval) )
         return toScalar(sval)
 
     def evaluateDerivative(self, x):
@@ -212,7 +213,8 @@ cdef class FN(Object):
             The result of f'(x).
         """
         cdef PetscScalar sval = 0
-        CHKERR( FNEvaluateDerivative(self.fn, x, &sval) )
+        cdef PetscScalar sarg = asScalar(x)
+        CHKERR( FNEvaluateDerivative(self.fn, sarg, &sval) )
         return toScalar(sval)
 
     def evaluateFunctionMat(self, Mat A, Mat B=None):
