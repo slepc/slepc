@@ -543,15 +543,6 @@ PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
 .  comp - a pointer to the comparison function
 -  ctx  - a context pointer (the last parameter to the comparison function)
 
-   Calling sequence of comp:
-$  PetscErrorCode comp(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res,void *ctx)
-+   ar     - real part of the 1st eigenvalue
-.   ai     - imaginary part of the 1st eigenvalue
-.   br     - real part of the 2nd eigenvalue
-.   bi     - imaginary part of the 2nd eigenvalue
-.   res    - result of comparison
--   ctx    - optional context, as set by PEPSetEigenvalueComparison()
-
    Note:
    The returning parameter 'res' can be
 +  negative - if the 1st eigenvalue is preferred to the 2st one
@@ -562,7 +553,7 @@ $  PetscErrorCode comp(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar 
 
 .seealso: PEPSetWhichEigenpairs(), PEPWhich
 @*/
-PetscErrorCode PEPSetEigenvalueComparison(PEP pep,PetscErrorCode (*comp)(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res,void *ctx),void *ctx)
+PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *comp,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);

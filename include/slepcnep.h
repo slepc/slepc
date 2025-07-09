@@ -498,8 +498,23 @@ SLEPC_EXTERN PetscErrorCode NEPInterpolGetPEP(NEP,PEP*);
 SLEPC_EXTERN PetscErrorCode NEPInterpolSetInterpolation(NEP,PetscReal,PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPInterpolGetInterpolation(NEP,PetscReal*,PetscInt*);
 
-SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP,PetscErrorCode (*)(NEP,PetscInt*,PetscScalar*,void*),void*);
-SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP,PetscErrorCode (**)(NEP,PetscInt*,PetscScalar*,void*),void**);
+/*S
+  NEPNLEIGSSingularitiesFn - A prototype of a function that would be passed to NEPNLEIGSSetSingularitiesFunction()
+
+  Calling Sequence:
++   nep   - eigensolver context obtained from NEPCreate()
+.   maxnp - on input number of requested points in the discretization (can be set)
+.   xi    - computed values of the discretization
+-   ctx   - optional context, as set by NEPNLEIGSSetSingularitiesFunction()
+
+  Level: advanced
+
+.seealso: NEPNLEIGSSetSingularitiesFunction()
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPNLEIGSSingularitiesFn(NEP nep,PetscInt *maxnp,PetscScalar *xi,void *ctx);
+
+SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP,NEPNLEIGSSingularitiesFn*,void*);
+SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP,NEPNLEIGSSingularitiesFn**,void**);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetRestart(NEP,PetscReal);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetRestart(NEP,PetscReal*);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetLocking(NEP,PetscBool);

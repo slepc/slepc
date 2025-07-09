@@ -51,25 +51,25 @@ static PetscErrorCode ourshellbacktransform(ST st,PetscInt n,PetscScalar *eigr,P
   PetscObjectUseFortranCallback(st,_cb.backtransform,(ST*,PetscInt*,PetscScalar*,PetscScalar*,PetscErrorCode*),(&st,&n,eigr,eigi,&ierr));
 }
 
-SLEPC_EXTERN void stshellsetapply_(ST *st,void (*apply)(void*,Vec*,Vec*,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void stshellsetapply_(ST *st,STShellApplyFn apply,PetscErrorCode *ierr)
 {
   *ierr = PetscObjectSetFortranCallback((PetscObject)*st,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.apply,(PetscVoidFunction)apply,NULL); if (*ierr) return;
   *ierr = STShellSetApply(*st,ourshellapply);
 }
 
-SLEPC_EXTERN void stshellsetapplytranspose_(ST *st,void (*applytranspose)(void*,Vec*,Vec*,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void stshellsetapplytranspose_(ST *st,STShellApplyTransposeFn applytranspose,PetscErrorCode *ierr)
 {
   *ierr = PetscObjectSetFortranCallback((PetscObject)*st,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.applytranspose,(PetscVoidFunction)applytranspose,NULL); if (*ierr) return;
   *ierr = STShellSetApplyTranspose(*st,ourshellapplytranspose);
 }
 
-SLEPC_EXTERN void stshellsetapplyhermitiantranspose_(ST *st,void (*applyhermtrans)(void*,Vec*,Vec*,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void stshellsetapplyhermitiantranspose_(ST *st,STShellApplyHermitianTransposeFn applyhermtrans,PetscErrorCode *ierr)
 {
   *ierr = PetscObjectSetFortranCallback((PetscObject)*st,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.applyhermtrans,(PetscVoidFunction)applyhermtrans,NULL); if (*ierr) return;
   *ierr = STShellSetApplyHermitianTranspose(*st,ourshellapplyhermitiantranspose);
 }
 
-SLEPC_EXTERN void stshellsetbacktransform_(ST *st,void (*backtransform)(void*,PetscScalar*,PetscScalar*,PetscErrorCode*),PetscErrorCode *ierr)
+SLEPC_EXTERN void stshellsetbacktransform_(ST *st,STShellBackTransformFn backtransform,PetscErrorCode *ierr)
 {
   *ierr = PetscObjectSetFortranCallback((PetscObject)*st,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.backtransform,(PetscVoidFunction)backtransform,NULL); if (*ierr) return;
   *ierr = STShellSetBackTransform(*st,ourshellbacktransform);
