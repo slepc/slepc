@@ -90,6 +90,65 @@ cdef class BV(Object):
         self.obj = <PetscObject*> &self.bv
         self.bv = NULL
 
+    # unary operations
+
+    def __pos__(self):
+        return bv_pos(self)
+
+    def __neg__(self):
+        return bv_neg(self)
+
+    # inplace binary operations
+
+    def __iadd__(self, other):
+        return bv_iadd(self, other)
+
+    def __isub__(self, other):
+        return bv_isub(self, other)
+
+    def __imul__(self, other):
+        return bv_imul(self, other)
+
+    def __idiv__(self, other):
+        return bv_idiv(self, other)
+
+    def __itruediv__(self, other):
+        return bv_idiv(self, other)
+
+    # binary operations
+
+    def __add__(self, other):
+        return bv_add(self, other)
+
+    def __radd__(self, other):
+        return bv_radd(self, other)
+
+    def __sub__(self, other):
+        return bv_sub(self, other)
+
+    def __rsub__(self, other):
+        return bv_rsub(self, other)
+
+    def __mul__(self, other):
+        return bv_mul(self, other)
+
+    def __rmul__(self, other):
+        return bv_rmul(self, other)
+
+    def __div__(self, other):
+        return bv_div(self, other)
+
+    def __rdiv__(self, other):
+        return bv_rdiv(self, other)
+
+    def __truediv__(self, other):
+        return bv_div(self, other)
+
+    def __rtruediv__(self, other):
+        return bv_rdiv(self, other)
+
+    #
+
     def view(self, Viewer viewer=None) -> None:
         """
         Prints the BV data structure.
@@ -1468,6 +1527,28 @@ cdef class BV(Object):
         if kargs: self.setOrthogonalization(**kargs)
         cdef PetscMat Rmat = <PetscMat>NULL if R is None else R.mat
         CHKERR( BVOrthogonalize(self.bv, Rmat) )
+
+    #
+
+    property sizes:
+        """Basis vectors local and global sizes, and the number of columns."""
+        def __get__(self) -> tuple[LayoutSizeSpec, int]:
+            return self.getSizes()
+
+    property size:
+        """Basis vectors global size."""
+        def __get__(self) -> tuple[int, int]:
+            return self.getSizes()[0][0]
+
+    property local_size:
+        """Basis vectors local size."""
+        def __get__(self) -> int:
+            return self.getSizes()[0][1]
+
+    property column_size:
+        """Basis vectors column size."""
+        def __get__(self) -> int:
+            return self.getSizes()[1]
 
 # -----------------------------------------------------------------------------
 
