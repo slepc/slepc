@@ -617,7 +617,7 @@ intel-c-complex-mkl:
   variables:
     LOAD_MODULES: compiler mpi mkl
     MAKE_CFLAGS: -Werror -Wno-higher-precision-fp
-    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso=1 --with-scalapack=1 --download-cmake
+    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso=1 --with-scalapack=1
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
 
 gnu-c-cuda-complex:
@@ -691,7 +691,7 @@ gnu-c:
     - linux-ubuntu, name:satet
   variables:
     LOAD_MODULES: mpich/4.3.0
-    PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-cmake --download-sowing
+    PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-sowing
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py
     SLEPC4PY: 1
     BUILD_DOCS: 1
@@ -745,10 +745,9 @@ gnu-cxx-complex-int64:
     - .stage-3
     - .linux_test
   tags:
-    - linux-ubuntu, name:satet
+    - linux-ubuntu, name:sejmet
   variables:
-    LOAD_MODULES: mpich/4.3.0
-    PETSC_CONFIG_OPTS: --with-clanguage=C++ --with-scalar-type=complex --with-64-bit-indices --with-petsc4py --download-scalapack --download-elemental --download-parmetis --download-metis --download-mumps --download-suitesparse --download-cmake
+    PETSC_CONFIG_OPTS: --with-clanguage=C++ --with-scalar-type=complex --with-64-bit-indices --with-petsc4py --download-scalapack --download-elemental --download-parmetis --download-metis --download-mumps --download-suitesparse
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-slepc4py --download-primme --download-hpddm
     SLEPC4PY: 1
 
