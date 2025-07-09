@@ -10,7 +10,7 @@
         module slepcsysdef
         use petscmatdef
 #include <../src/sys/ftn-mod/slepcsys.h>
-        end module
+        end module slepcsysdef
 
         module slepcsys
         use,intrinsic :: iso_c_binding
@@ -26,8 +26,8 @@
 !DEC$ ATTRIBUTES DLLEXPORT::SlepcInitializeWithHelp
 #endif
       subroutine SlepcInitializeWithHelp(filename,help,ierr)
-          character(len=*)           :: filename
-          character(len=*)           :: help
+          character(len=*),intent(in):: filename
+          character(len=*),intent(in):: help
           PetscErrorCode             :: ierr
 
           if (filename .ne. PETSC_NULL_CHARACTER) then
@@ -43,7 +43,7 @@
 !DEC$ ATTRIBUTES DLLEXPORT::SlepcInitializeNoHelp
 #endif
         subroutine SlepcInitializeNoHelp(filename,ierr)
-          character(len=*)           :: filename
+          character(len=*),intent(in):: filename
           PetscErrorCode             :: ierr
 
           if (filename .ne. PETSC_NULL_CHARACTER) then
@@ -66,4 +66,4 @@
         end subroutine SlepcInitializeNoArguments
 
 #include <../ftn/sys/slepcall.hf90>
-        end module
+        end module slepcsys
