@@ -158,3 +158,18 @@ cdef api SlepcMFN PySlepcMFN_Get(object arg) except ? NULL:
     return retv
 
 # -----------------------------------------------------------------------------
+
+# -- LME --
+
+cdef api object PySlepcLME_New(SlepcLME arg):
+    cdef LME retv = LME()
+    setref(&retv.lme, arg)
+    return retv
+
+cdef api SlepcLME PySlepcLME_Get(object arg) except ? NULL:
+    cdef SlepcLME retv = NULL
+    cdef LME ob = <LME?> arg
+    retv = ob.lme
+    return retv
+
+# -----------------------------------------------------------------------------

@@ -17,6 +17,9 @@ Release 3.24.0
 
 - Add support for standard Python operators for `BV` and `FN` classes.
 
+- Add new ``LME`` class.
+
+
 Release 3.23.2
 ==============
 
