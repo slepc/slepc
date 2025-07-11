@@ -66,6 +66,7 @@ PetscErrorCode LMESetUp(LME lme)
 
   /* Check problem dimensions */
   PetscCheck(lme->A,PetscObjectComm((PetscObject)lme),PETSC_ERR_ARG_WRONGSTATE,"LMESetCoefficients must be called first");
+  PetscCheck(lme->C,PetscObjectComm((PetscObject)lme),PETSC_ERR_ARG_WRONGSTATE,"LMESetRHS must be called first");
   PetscCall(MatGetSize(lme->A,&N,NULL));
   if (lme->ncv > N) lme->ncv = N;
 
