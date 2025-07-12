@@ -17,6 +17,9 @@
           PetscErrorCode z
         end subroutine
       end interface FNRationalGetNumerator
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::FNRationalGetNumerator
+#endif
 
       interface FNRationalGetDenominator
         subroutine FNRationalGetDenominator(a,b,c,z)
@@ -28,3 +31,6 @@
           PetscErrorCode z
         end subroutine
       end interface FNRationalGetDenominator
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::FNRationalGetDenominator
+#endif

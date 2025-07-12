@@ -16,3 +16,6 @@
           PetscErrorCode z
         end subroutine
       end interface DSPEPGetCoefficients
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::DSPEPGetCoefficients
+#endif

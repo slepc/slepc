@@ -17,6 +17,9 @@
           PetscErrorCode z
         end subroutine
       end interface NEPNLEIGSGetRKShifts
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::NEPNLEIGSGetRKShifts
+#endif
 
       interface NEPSetFunction
         subroutine NEPSetFunction(a,b,c,d,e,z)
@@ -29,7 +32,10 @@
           type(*) e
           PetscErrorCode z
         end subroutine
-      end Interface
+      end Interface NEPSetFunction
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::NEPSetFunction
+#endif
 
       interface NEPSetJacobian
         subroutine NEPSetJacobian(a,b,c,d,z)
@@ -41,7 +47,10 @@
           type(*) d
           PetscErrorCode z
         end subroutine
-      end Interface
+      end Interface NEPSetJacobian
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::NEPSetJacobian
+#endif
 
       interface NEPNLEIGSSetSingularitiesFunction
         subroutine NEPNLEIGSSetSingularitiesFunction(a,b,c,z)
@@ -52,7 +61,10 @@
           type(*) c
           PetscErrorCode z
         end subroutine
-      end Interface
+      end Interface NEPNLEIGSSetSingularitiesFunction
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::NEPNLEIGSSetSingularitiesFunction
+#endif
 
       interface NEPMonitorSet
         subroutine NEPMonitorSet(a,b,c,d,z)
@@ -64,7 +76,10 @@
           external d
           PetscErrorCode z
         end subroutine
-      end Interface
+      end Interface NEPMonitorSet
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::NEPMonitorSet
+#endif
 
       external NEPMonitorConvergedCreate
       external NEPMonitorConvergedDestroy
