@@ -312,7 +312,7 @@ cdef class MFN(Object):
         """
         Get the matrix associated with the MFN object.
 
-        Not collective.
+        Collective.
 
         Returns
         -------

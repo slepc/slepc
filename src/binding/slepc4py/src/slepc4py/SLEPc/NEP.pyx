@@ -1105,7 +1105,7 @@ cdef class NEP(Object):
         """
         Get the function to compute the nonlinear Function T(lambda).
 
-        Not collective.
+        Collective.
 
         Get the function to compute the nonlinear Function T(lambda) and the
         matrix.
@@ -1163,7 +1163,7 @@ cdef class NEP(Object):
         """
         Get the function to compute the Jacobian T'(lambda) and the matrix.
 
-        Not collective.
+        Collective.
 
         Parameters
         ----------
@@ -1216,7 +1216,7 @@ cdef class NEP(Object):
         """
         Get the operator of the nonlinear eigenvalue problem in split form.
 
-        Not collective.
+        Collective.
 
         Returns
         -------

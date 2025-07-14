@@ -381,7 +381,7 @@ cdef class ST(Object):
         """
         Get the matrices associated with the eigenvalue problem.
 
-        Not collective.
+        Collective.
 
         Returns
         -------

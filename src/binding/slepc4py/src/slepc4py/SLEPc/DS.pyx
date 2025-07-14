@@ -671,6 +671,8 @@ cdef class DS(Object):
         """
         Solve the problem.
 
+        Logically collective.
+
         Returns
         -------
         ArrayReal | ArrayComplex
@@ -691,8 +693,9 @@ cdef class DS(Object):
 
     def vectors(self, matname = MatType.X) -> None:
         """
-        Compute vectors associated to the dense system such
-        as eigenvectors.
+        Compute vectors associated to the dense system such as eigenvectors.
+
+        Logically collective.
 
         Parameters
         ----------

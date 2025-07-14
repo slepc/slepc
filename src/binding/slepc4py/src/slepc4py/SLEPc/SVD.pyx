@@ -743,7 +743,7 @@ cdef class SVD(Object):
         """
         Get the matrices associated with the singular value problem.
 
-        Not collective.
+        Collective.
 
         Returns
         -------
@@ -783,7 +783,7 @@ cdef class SVD(Object):
         """
         Get the signature matrix defining a hyperbolic singular value problem.
 
-        Not collective.
+        Collective.
 
         Parameters
         ----------
