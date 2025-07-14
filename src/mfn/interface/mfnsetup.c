@@ -104,7 +104,7 @@ PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
 /*@
    MFNGetOperator - Gets the matrix associated with the MFN object.
 
-   Not Collective
+   Collective
 
    Input Parameter:
 .  mfn - the MFN context
