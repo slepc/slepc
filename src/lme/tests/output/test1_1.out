@@ -113,7 +113,7 @@ Mat Object: 1 MPI process
  Erroring out if convergence fails
 LME Object: 1 MPI process
   type: krylov
-  equation type: continuous-time Lyapunov
+  equation type: LYAPUNOV
   number of column vectors (ncv): 21
   maximum number of iterations: 100
   tolerance: 1e-08

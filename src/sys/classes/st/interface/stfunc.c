@@ -312,7 +312,7 @@ PetscErrorCode STSetMatrices(ST st,PetscInt n,Mat A[])
 /*@
    STGetMatrix - Gets the matrices associated with the original eigensystem.
 
-   Not Collective
+   Collective
 
    Input Parameters:
 +  st - the spectral transformation context

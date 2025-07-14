@@ -81,7 +81,7 @@ PetscErrorCode SVDSetOperators(SVD svd,Mat A,Mat B)
 /*@
    SVDGetOperators - Get the matrices associated with the singular value problem.
 
-   Not Collective
+   Collective
 
    Input Parameter:
 .  svd - the singular value solver context
