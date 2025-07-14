@@ -57,14 +57,6 @@ PetscBool         LMEMonitorRegisterAllCalled = PETSC_FALSE;
 PetscErrorCode LMEView(LME lme,PetscViewer viewer)
 {
   PetscBool      isascii;
-  const char     *eqname[] = {
-                   "continuous-time Lyapunov",
-                   "continuous-time Sylvester",
-                   "generalized Lyapunov",
-                   "generalized Sylvester",
-                   "Stein",
-                   "discrete-time Lyapunov"
-  };
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(lme,LME_CLASSID,1);
@@ -78,7 +70,7 @@ PetscErrorCode LMEView(LME lme,PetscViewer viewer)
     PetscCall(PetscViewerASCIIPushTab(viewer));
     PetscTryTypeMethod(lme,view,viewer);
     PetscCall(PetscViewerASCIIPopTab(viewer));
-    PetscCall(PetscViewerASCIIPrintf(viewer,"  equation type: %s\n",eqname[lme->problem_type]));
+    PetscCall(PetscViewerASCIIPrintf(viewer,"  equation type: %s\n",LMEProblemTypes[lme->problem_type]));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  number of column vectors (ncv): %" PetscInt_FMT "\n",lme->ncv));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  maximum number of iterations: %" PetscInt_FMT "\n",lme->max_it));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  tolerance: %g\n",(double)lme->tol));
