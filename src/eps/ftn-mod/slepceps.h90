@@ -16,6 +16,9 @@
           PetscErrorCode z
         end subroutine
       end interface EPSKrylovSchurGetSubintervals
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::EPSKrylovSchurGetSubintervals
+#endif
 
       interface EPSKrylovSchurGetInertias
         subroutine EPSKrylovSchurGetInertias(a,b,c,d,z)
@@ -28,6 +31,9 @@
           PetscErrorCode z
         end subroutine
       end interface EPSKrylovSchurGetInertias
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::EPSKrylovSchurGetInertias
+#endif
 
       interface EPSMonitorSet
         subroutine EPSMonitorSet(a,b,c,d,z)
@@ -39,7 +45,10 @@
           external d
           PetscErrorCode z
         end subroutine
-      end Interface
+      end Interface EPSMonitorSet
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::EPSMonitorSet
+#endif
 
       external EPSMonitorConvergedCreate
       external EPSMonitorConvergedDestroy

@@ -18,6 +18,9 @@
           PetscErrorCode z
         end subroutine
       end interface PEPSTOARGetInertias
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::PEPSTOARGetInertias
+#endif
 
       interface PEPMonitorSet
         subroutine PEPMonitorSet(a,b,c,d,z)
@@ -29,7 +32,10 @@
           external d
           PetscErrorCode z
         end subroutine
-      end Interface
+      end Interface PEPMonitorSet
+#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
+!DEC$ ATTRIBUTES DLLEXPORT::PEPMonitorSet
+#endif
 
       external PEPMonitorConvergedCreate
       external PEPMonitorConvergedDestroy
