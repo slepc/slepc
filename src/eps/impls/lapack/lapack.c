@@ -25,6 +25,7 @@ static PetscErrorCode EPSSetUp_LAPACK(EPS eps)
   PC             pc;
 
   PetscFunctionBegin;
+  EPSCheckNotStructured(eps);
   if (eps->nev==0) eps->nev = 1;
   eps->ncv = eps->n;
   if (eps->mpd!=PETSC_DETERMINE) PetscCall(PetscInfo(eps,"Warning: parameter mpd ignored\n"));
