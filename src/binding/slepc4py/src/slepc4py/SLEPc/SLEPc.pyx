@@ -169,6 +169,7 @@ Scalable Library for Eigenvalue Problem Computations
 DECIDE    = PETSC_DECIDE
 DEFAULT   = PETSC_DEFAULT
 DETERMINE = PETSC_DETERMINE
+CURRENT   = PETSC_CURRENT
 
 include "Sys.pyx"
 include "Util.pyx"
