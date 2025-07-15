@@ -271,7 +271,7 @@ cdef class RG(Object):
         CHKERR( RGGetScale(self.rg, &rval) )
         return toReal(rval)
 
-    def checkInside(self, a: Sequence[Complex]) -> ArrayInt:
+    def checkInside(self, a: Sequence[complex]) -> ArrayInt:
         """
         Determine if a set of given points are inside the region or not.
 
@@ -303,7 +303,7 @@ cdef class RG(Object):
         CHKERR( RGCheckInside(self.rg, <PetscInt>n, ar, ai, inside) )
         return array_i(<PetscInt>n, inside)
 
-    def computeContour(self, n: int) -> list[Complex]:
+    def computeContour(self, n: int) -> list[complex]:
         """
         Compute the coordinates of several points of the contour on the region.
 
@@ -319,7 +319,7 @@ cdef class RG(Object):
 
         Returns
         -------
-        list of Complex
+        list of complex
             Computed points.
         """
         cdef PetscInt k = asInt(n), i = 0
@@ -507,7 +507,7 @@ cdef class RG(Object):
         CHKERR( RGIntervalGetEndpoints(self.rg, &va, &vb, &vc, &vd) )
         return (toReal(va), toReal(vb), toReal(vc), toReal(vd))
 
-    def setPolygonVertices(self, v: Sequence[Real]| Sequence[Scalar]) -> None:
+    def setPolygonVertices(self, v: Sequence[float] | Sequence[Scalar]) -> None:
         """
         Set the vertices that define the polygon region.
 

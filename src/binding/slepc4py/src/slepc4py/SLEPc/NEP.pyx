@@ -916,7 +916,7 @@ cdef class NEP(Object):
 
         Returns
         -------
-        Complex
+        complex
             The computed eigenvalue.
         """
         cdef PetscScalar sval1 = 0

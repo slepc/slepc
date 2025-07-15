@@ -351,7 +351,7 @@ cdef class BV(Object):
 
         Returns
         -------
-        (n, N): tuple[int, int]
+        (n, N): tuple of int
             The local and global sizes
         m: int
             The number of columns.

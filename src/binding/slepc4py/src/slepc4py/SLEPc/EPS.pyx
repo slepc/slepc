@@ -276,6 +276,7 @@ cdef class EPS(Object):
     ConvergedReason = EPSConvergedReason
 
     PowerShiftType      = EPSPowerShiftType
+    KrylovSchurBSEType  = EPSKrylovSchurBSEType
     LanczosReorthogType = EPSLanczosReorthogType
     CISSQuadRule        = EPSCISSQuadRule
     CISSExtraction      = EPSCISSExtraction
@@ -1523,7 +1524,7 @@ cdef class EPS(Object):
         CHKERR( EPSGetConverged(self.eps, &ival) )
         return toInt(ival)
 
-    def getEigenvalue(self, i: int) -> float | Scalar:
+    def getEigenvalue(self, i: int) -> Scalar:
         """
         Get the i-th eigenvalue as computed by `solve()`.
 
@@ -1536,7 +1537,7 @@ cdef class EPS(Object):
 
         Returns
         -------
-        float | complex
+        Scalar
             The computed eigenvalue. It will be a real variable in case
             of a Hermitian or generalized Hermitian eigenproblem. Otherwise
             it will be a complex variable (possibly with zero imaginary part).
@@ -1632,7 +1633,7 @@ cdef class EPS(Object):
 
         Returns
         -------
-        e: float | complex
+        e: Scalar
            The computed eigenvalue. It will be a real variable in case
            of a Hermitian or generalized Hermitian eigenproblem. Otherwise
            it will be a complex variable (possibly with zero imaginary part).
@@ -1901,7 +1902,7 @@ cdef class EPS(Object):
         CHKERR( EPSArnoldiGetDelayed(self.eps, &tval) )
         return toBool(tval)
 
-    def setLanczosReorthogType(self, reorthog: LanczosReorthog) -> None:
+    def setLanczosReorthogType(self, reorthog: LanczosReorthogType) -> None:
         """
         Set the type of reorthogonalization used during the Lanczos iteration.
 
@@ -1920,7 +1921,7 @@ cdef class EPS(Object):
         cdef SlepcEPSLanczosReorthogType val = reorthog
         CHKERR( EPSLanczosSetReorthog(self.eps, val) )
 
-    def getLanczosReorthogType(self) -> LanczosReorthog:
+    def getLanczosReorthogType(self) -> LanczosReorthogType:
         """
         Get the type of reorthogonalization used during the Lanczos iteration.
 

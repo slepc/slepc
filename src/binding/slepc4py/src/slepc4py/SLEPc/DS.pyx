@@ -667,7 +667,7 @@ cdef class DS(Object):
         CHKERR( DSCond(self.ds, &rval) )
         return toReal(rval)
 
-    def solve(self) -> ArrayReal | ArrayComplex:
+    def solve(self) -> ArrayScalar:
         """
         Solve the problem.
 
@@ -675,7 +675,7 @@ cdef class DS(Object):
 
         Returns
         -------
-        ArrayReal | ArrayComplex
+        ArrayScalar
             Eigenvalues or singular values.
         """
         n = self.getDimensions()[0]

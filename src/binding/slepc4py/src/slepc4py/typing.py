@@ -6,6 +6,13 @@ from typing import (  # novermin
     Sequence,
     Literal,
 )
+from numpy.typing import (
+    NDArray,
+)
+from petsc4py.PETSc import (
+    Vec,
+    Mat,
+)
 from .SLEPc import (
     BV,
     DS,
@@ -21,6 +28,9 @@ from .SLEPc import (
 )
 
 __all__ = [
+    'Scalar',
+    'ArrayReal',
+    'ArrayScalar',
     'EPSStoppingFunction',
     'EPSArbitraryFunction',
     'EPSEigenvalueComparison',
@@ -33,6 +43,22 @@ __all__ = [
     'SVDMonitorFunction',
 ]
 
+# --- PETSc Sys ---
+
+Scalar = float | complex
+"""Scalar type.
+
+Scalars can be either `float` or `complex` (but not both) depending on how
+PETSc was configured (``./configure --with-scalar-type=real|complex``).
+
+"""
+
+ArrayReal = NDArray[float]
+"""Array of `float`."""
+
+ArrayScalar = NDArray[Scalar]
+"""Array of `Scalar` numbers."""
+
 # --- EPS ---
 
 EPSStoppingFunction = Callable[[EPS, int, int, int, int], EPS.ConvergedReason]
@@ -44,7 +70,7 @@ EPSArbitraryFunction = Callable[[Scalar, Scalar, Vec, Vec, Scalar, Scalar], [Sca
 EPSEigenvalueComparison = Callable[[Scalar, Scalar, Scalar, Scalar], int]
 """`EPS` eigenvalue comparison callback."""
 
-EPSMonitorFunction = Callable[[EPS, int, int, ScalarArray, ScalarArray, RealArray, int], None]
+EPSMonitorFunction = Callable[[EPS, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
 """`EPS` monitor callback."""
 
 # --- PEP ---
@@ -52,7 +78,7 @@ EPSMonitorFunction = Callable[[EPS, int, int, ScalarArray, ScalarArray, RealArra
 PEPStoppingFunction = Callable[[PEP, int, int, int, int], PEP.ConvergedReason]
 """`PEP` stopping test callback."""
 
-PEPMonitorFunction = Callable[[PEP, int, int, ScalarArray, ScalarArray, RealArray, int], None]
+PEPMonitorFunction = Callable[[PEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
 """`PEP` monitor callback."""
 
 # --- NEP ---
@@ -60,7 +86,7 @@ PEPMonitorFunction = Callable[[PEP, int, int, ScalarArray, ScalarArray, RealArra
 NEPStoppingFunction = Callable[[NEP, int, int, int, int], NEP.ConvergedReason]
 """`NEP` stopping test callback."""
 
-NEPMonitorFunction = Callable[[NEP, int, int, ScalarArray, ScalarArray, RealArray, int], None]
+NEPMonitorFunction = Callable[[NEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
 """`NEP` monitor callback."""
 
 NEPFunction = Callable[[NEP, Scalar, Mat, Mat], None]
@@ -74,6 +100,6 @@ NEPJacobian = Callable[[NEP, Scalar, Mat], None]
 SVDStoppingFunction = Callable[[SVD, int, int, int, int], SVD.ConvergedReason]
 """`SVD` stopping test callback."""
 
-SVDMonitorFunction = Callable[[SVD, int, int, RealArray, RealArray, int], None]
+SVDMonitorFunction = Callable[[SVD, int, int, ArrayReal, ArrayReal, int], None]
 """`SVD` monitor callback."""
 
