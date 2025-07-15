@@ -57,6 +57,11 @@ def help(args=None):
         mfn.setFromOptions()
         mfn.destroy()
         del mfn
+    if 'lme' in args:
+        lme = SLEPc.LME().create(comm=COMM)
+        lme.setFromOptions()
+        lme.destroy()
+        del lme
     if 'st' in args:
         st = SLEPc.ST().create(comm=COMM)
         st.setFromOptions()

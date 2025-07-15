@@ -167,6 +167,9 @@ class TestObjectNEP(BaseTestObject, unittest.TestCase):
 class TestObjectMFN(BaseTestObject, unittest.TestCase):
     CLASS = SLEPc.MFN
 
+class TestObjectLME(BaseTestObject, unittest.TestCase):
+    CLASS = SLEPc.LME
+
 # --------------------------------------------------------------------
 
 if __name__ == '__main__':
