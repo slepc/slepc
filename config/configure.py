@@ -254,6 +254,10 @@ else:
 # Generate Fortran bindings
 if hasattr(petsc,'fc') and petsc.fortran:
   log.Print('\nGenerating Fortran bindings...')
+  # first remove any current Fortran bindings from previous ./configure runs
+  ftndir = os.path.join(archdir,'ftn')
+  if os.path.isdir(ftndir): shutil.rmtree(ftndir)
+  # run generatefortranbindings.py
   try:
     from utils import generatefortranbindings
     generatefortranbindings.main(petsc.dir,slepc.dir,petsc.archname)
