@@ -60,7 +60,7 @@ class BVSVDMethod(object):
     """
     BV methods for computing the SVD.
 
-    - `REFINE`: Based on the SVD of the cross product matrix S'*S, with
+    - `REFINE`: Based on the SVD of the cross product matrix S'\*S, with
                 refinement.
     - `QR`:     Based on the SVD of the triangular factor of qr(S).
     - `QR_CAA`: Variant of QR intended for use in communication-avoiding
