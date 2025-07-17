@@ -130,6 +130,15 @@ PetscErrorCode EPSSolve(EPS eps)
 
   /* Call setup */
   PetscCall(EPSSetUp(eps));
+
+  /* Safeguard for matrices of size 0 */
+  if (eps->n == 0) {
+    eps->nconv  = 0;
+    eps->reason = EPS_CONVERGED_TOL;
+    eps->state  = EPS_STATE_SOLVED;
+    PetscFunctionReturn(PETSC_SUCCESS);
+  }
+
   eps->nconv = 0;
   eps->its   = 0;
   for (i=0;i<eps->ncv;i++) {

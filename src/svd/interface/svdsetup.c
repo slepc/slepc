@@ -283,6 +283,7 @@ PetscErrorCode SVDSetUp(SVD svd)
 
   /* get matrix dimensions */
   PetscCall(MatGetSize(svd->OP,&M,&N));
+  if (M == 0 || N == 0) PetscFunctionReturn(PETSC_SUCCESS);
   if (svd->isgeneralized) {
     PetscCall(MatGetSize(svd->OPb,&P,NULL));
     PetscCheck(M+P>=N,PetscObjectComm((PetscObject)svd),PETSC_ERR_SUP,"The case when [A;B] has less rows than columns is not supported");
