@@ -28,7 +28,7 @@ class SLEPc(package.Package):
     print('  --with-packages-build-dir=<dir>'.ljust(wd)+': Location to unpack and run the build process for downloaded packages')
     print('\nSLEPc:')
     print('  --prefix=<dir>'.ljust(wd)+': Specify location to install SLEPc (e.g., /usr/local)')
-    print('  --DATAFILESPATH=<dir>'.ljust(wd)+': Location of datafiles (available at https://slepc.upv.es/datafiles)')
+    print('  --DATAFILESPATH=<dir>'.ljust(wd)+': Location of datafiles (available at https://gitlab.com/slepc/datafiles)')
 
   def ProcessArgs(self,argdb):
     self.clean       = argdb.PopBool('with-clean')[0]
