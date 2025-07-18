@@ -3,6 +3,7 @@ cdef extern from * nogil:
     enum: PETSC_DECIDE
     enum: PETSC_DEFAULT
     enum: PETSC_DETERMINE
+    enum: PETSC_CURRENT
 
     ctypedef enum PetscBool:
         PETSC_TRUE,  PETSC_YES,

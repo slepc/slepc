@@ -407,8 +407,8 @@ cdef class NEP(Object):
         maxit: int, optional
             The maximum number of iterations.
         """
-        cdef PetscReal rval = PETSC_DEFAULT
-        cdef PetscInt  ival = PETSC_DEFAULT
+        cdef PetscReal rval = PETSC_CURRENT
+        cdef PetscInt  ival = PETSC_CURRENT
         if tol   is not None: rval = asReal(tol)
         if maxit is not None: ival = asInt(maxit)
         CHKERR( NEPSetTolerances(self.nep, rval, ival) )
@@ -487,9 +487,9 @@ cdef class NEP(Object):
             Scheme for linear system solves
         """
         cdef SlepcNEPRefine tref = ref
-        cdef PetscInt tnpart = 1
-        cdef PetscReal ttol = PETSC_DEFAULT
-        cdef PetscInt tits = PETSC_DEFAULT
+        cdef PetscInt tnpart = PETSC_CURRENT
+        cdef PetscReal ttol = PETSC_CURRENT
+        cdef PetscInt tits = PETSC_CURRENT
         cdef SlepcNEPRefineScheme tscheme = NEP_REFINE_SCHEME_MBE
         if npart is not None: tnpart = asInt(npart)
         if tol is not None: ttol = asReal(tol)
@@ -574,9 +574,9 @@ cdef class NEP(Object):
         mpd: int, optional
             Maximum dimension allowed for the projected problem.
         """
-        cdef PetscInt ival1 = PETSC_DEFAULT
-        cdef PetscInt ival2 = PETSC_DEFAULT
-        cdef PetscInt ival3 = PETSC_DEFAULT
+        cdef PetscInt ival1 = PETSC_CURRENT
+        cdef PetscInt ival2 = PETSC_CURRENT
+        cdef PetscInt ival3 = PETSC_CURRENT
         if nev is not None: ival1 = asInt(nev)
         if ncv is not None: ival2 = asInt(ncv)
         if mpd is not None: ival3 = asInt(mpd)
@@ -1532,8 +1532,8 @@ cdef class NEP(Object):
         deg: int, optional
             The maximum degree of interpolation.
         """
-        cdef PetscReal rval = PETSC_DEFAULT
-        cdef PetscInt  ival = PETSC_DEFAULT
+        cdef PetscReal rval = PETSC_CURRENT
+        cdef PetscInt  ival = PETSC_CURRENT
         if tol is not None: rval = asReal(tol)
         if deg is not None: ival = asInt(deg)
         CHKERR( NEPInterpolSetInterpolation(self.nep, rval, ival) )
@@ -1633,8 +1633,8 @@ cdef class NEP(Object):
         deg: int, optional
             The maximum degree of interpolation.
         """
-        cdef PetscReal rval = PETSC_DEFAULT
-        cdef PetscInt  ival = PETSC_DEFAULT
+        cdef PetscReal rval = PETSC_CURRENT
+        cdef PetscInt  ival = PETSC_CURRENT
         if tol is not None: rval = asReal(tol)
         if deg is not None: ival = asInt(deg)
         CHKERR( NEPNLEIGSSetInterpolation(self.nep, rval, ival) )
@@ -1813,11 +1813,11 @@ cdef class NEP(Object):
         communicator is split into npart communicators, so that `npart` `KSP` solves
         proceed simultaneously.
         """
-        cdef PetscInt  ival1 = PETSC_DEFAULT
-        cdef PetscInt  ival2 = PETSC_DEFAULT
-        cdef PetscInt  ival3 = PETSC_DEFAULT
-        cdef PetscInt  ival4 = PETSC_DEFAULT
-        cdef PetscInt  ival5 = PETSC_DEFAULT
+        cdef PetscInt  ival1 = PETSC_CURRENT
+        cdef PetscInt  ival2 = PETSC_CURRENT
+        cdef PetscInt  ival3 = PETSC_CURRENT
+        cdef PetscInt  ival4 = PETSC_CURRENT
+        cdef PetscInt  ival5 = PETSC_CURRENT
         cdef PetscBool bval  = asBool(realmats)
         if ip    is not None: ival1 = asInt(ip)
         if bs    is not None: ival2 = asInt(bs)
@@ -1865,8 +1865,8 @@ cdef class NEP(Object):
         spur: float
                 Spurious threshold (to discard spurious eigenpairs).
         """
-        cdef PetscReal rval1 = PETSC_DEFAULT
-        cdef PetscReal rval2 = PETSC_DEFAULT
+        cdef PetscReal rval1 = PETSC_CURRENT
+        cdef PetscReal rval2 = PETSC_CURRENT
         if delta is not None: rval1 = asReal(delta)
         if spur  is not None: rval2 = asReal(spur)
         CHKERR( NEPCISSSetThreshold(self.nep, rval1, rval2) )
@@ -1898,8 +1898,8 @@ cdef class NEP(Object):
         blsize: int, optional
              Number of iterative refinement iterations (blocksize loop).
         """
-        cdef PetscInt ival1 = PETSC_DEFAULT
-        cdef PetscInt ival2 = PETSC_DEFAULT
+        cdef PetscInt ival1 = PETSC_CURRENT
+        cdef PetscInt ival2 = PETSC_CURRENT
         if inner  is not None: ival1 = asInt(inner)
         if blsize is not None: ival2 = asInt(blsize)
         CHKERR( NEPCISSSetRefinement(self.nep, ival1, ival2) )
