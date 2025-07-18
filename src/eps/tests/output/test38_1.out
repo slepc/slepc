@@ -6,7 +6,7 @@ EPS Object: 1 MPI process
     ranks: for Lyapunov solver=30, after compression=10
     LME Object: (eps_lyapii_) 1 MPI process
       type: krylov
-      equation type: continuous-time Lyapunov
+      equation type: LYAPUNOV
       number of column vectors (ncv): 30
       maximum number of iterations: 100
     BV Object: (eps_lyapii_) 1 MPI process

@@ -330,9 +330,9 @@ cdef class DS(Object):
         -----
         The internal arrays are not reallocated.
         """
-        cdef PetscInt ival1 = PETSC_DEFAULT
-        cdef PetscInt ival2 = 0
-        cdef PetscInt ival3 = 0
+        cdef PetscInt ival1 = PETSC_CURRENT
+        cdef PetscInt ival2 = PETSC_CURRENT
+        cdef PetscInt ival3 = PETSC_CURRENT
         if n is not None: ival1 = asInt(n)
         if l is not None: ival2 = asInt(l)
         if k is not None: ival3 = asInt(k)

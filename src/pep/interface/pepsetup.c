@@ -320,7 +320,7 @@ PetscErrorCode PEPSetOperators(PEP pep,PetscInt nmat,Mat A[])
 /*@
    PEPGetOperators - Gets the matrices associated with the polynomial eigensystem.
 
-   Not Collective
+   Collective
 
    Input Parameters:
 +  pep - the PEP context

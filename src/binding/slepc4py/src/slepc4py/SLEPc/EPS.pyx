@@ -566,10 +566,11 @@ cdef class EPS(Object):
         cutoff
             Cutoff value
         """
-        cdef SlepcEPSBalance val = <SlepcEPSBalance>PETSC_DEFAULT
-        cdef PetscInt  ival = PETSC_DEFAULT
-        cdef PetscReal rval = PETSC_DEFAULT
+        cdef SlepcEPSBalance val = EPS_BALANCE_NONE
+        cdef PetscInt  ival = PETSC_CURRENT
+        cdef PetscReal rval = PETSC_CURRENT
         if balance    is not None: val  = balance
+        else: CHKERR( EPSGetBalance(self.eps, &val, NULL, NULL) )
         if iterations is not None: ival = asInt(iterations)
         if cutoff     is not None: rval = asReal(cutoff)
         CHKERR( EPSSetBalance(self.eps, val, ival, rval) )
@@ -797,8 +798,8 @@ cdef class EPS(Object):
         Use `DECIDE` for maxits to assign a reasonably good value,
         which is dependent on the solution method.
         """
-        cdef PetscReal rval = PETSC_DEFAULT
-        cdef PetscInt  ival = PETSC_DEFAULT
+        cdef PetscReal rval = PETSC_CURRENT
+        cdef PetscInt  ival = PETSC_CURRENT
         if tol    is not None: rval = asReal(tol)
         if max_it is not None: ival = asInt(max_it)
         CHKERR( EPSSetTolerances(self.eps, rval, ival) )
@@ -997,9 +998,9 @@ cdef class EPS(Object):
         large, `mpd` = `nev` is a reasonable choice, otherwise a
         smaller value should be used.
         """
-        cdef PetscInt ival1 = PETSC_DEFAULT
-        cdef PetscInt ival2 = PETSC_DEFAULT
-        cdef PetscInt ival3 = PETSC_DEFAULT
+        cdef PetscInt ival1 = PETSC_CURRENT
+        cdef PetscInt ival2 = PETSC_CURRENT
+        cdef PetscInt ival3 = PETSC_CURRENT
         if nev is not None: ival1 = asInt(nev)
         if ncv is not None: ival2 = asInt(ncv)
         if mpd is not None: ival3 = asInt(mpd)
@@ -1973,9 +1974,9 @@ cdef class EPS(Object):
         mpd
             Maximum dimension allowed for the projected problem.
         """
-        cdef PetscInt ival1 = PETSC_DEFAULT
-        cdef PetscInt ival2 = PETSC_DEFAULT
-        cdef PetscInt ival3 = PETSC_DEFAULT
+        cdef PetscInt ival1 = PETSC_CURRENT
+        cdef PetscInt ival2 = PETSC_CURRENT
+        cdef PetscInt ival3 = PETSC_CURRENT
         if nev is not None: ival1 = asInt(nev)
         if ncv is not None: ival2 = asInt(ncv)
         if mpd is not None: ival3 = asInt(mpd)
@@ -2305,8 +2306,8 @@ cdef class EPS(Object):
         plusk
             The number of vectors saved from the previous iteration.
         """
-        cdef PetscInt ival1 = PETSC_DEFAULT
-        cdef PetscInt ival2 = PETSC_DEFAULT
+        cdef PetscInt ival1 = PETSC_CURRENT
+        cdef PetscInt ival2 = PETSC_CURRENT
         if minv  is not None: ival1 = asInt(minv)
         if plusk is not None: ival2 = asInt(plusk)
         CHKERR( EPSGDSetRestart(self.eps, ival1, ival2) )
@@ -2477,8 +2478,8 @@ cdef class EPS(Object):
         plusk
             The number of vectors saved from the previous iteration.
         """
-        cdef PetscInt ival1 = PETSC_DEFAULT
-        cdef PetscInt ival2 = PETSC_DEFAULT
+        cdef PetscInt ival1 = PETSC_CURRENT
+        cdef PetscInt ival2 = PETSC_CURRENT
         if minv  is not None: ival1 = asInt(minv)
         if plusk is not None: ival2 = asInt(plusk)
         CHKERR( EPSJDSetRestart(self.eps, ival1, ival2) )
@@ -2739,8 +2740,8 @@ cdef class EPS(Object):
         rkl
             The Lyapunov rank.
         """
-        cdef PetscInt ival1 = PETSC_DEFAULT
-        cdef PetscInt ival2 = PETSC_DEFAULT
+        cdef PetscInt ival1 = PETSC_CURRENT
+        cdef PetscInt ival2 = PETSC_CURRENT
         if rkc  is not None: ival1 = asInt(rkc)
         if rkl is not None: ival2 = asInt(rkl)
         CHKERR( EPSLyapIISetRanks(self.eps, ival1, ival2) )
@@ -2847,11 +2848,11 @@ cdef class EPS(Object):
         communicator is split into npart communicators, so that `npart` `KSP` solves
         proceed simultaneously.
         """
-        cdef PetscInt  ival1 = PETSC_DEFAULT
-        cdef PetscInt  ival2 = PETSC_DEFAULT
-        cdef PetscInt  ival3 = PETSC_DEFAULT
-        cdef PetscInt  ival4 = PETSC_DEFAULT
-        cdef PetscInt  ival5 = PETSC_DEFAULT
+        cdef PetscInt  ival1 = PETSC_CURRENT
+        cdef PetscInt  ival2 = PETSC_CURRENT
+        cdef PetscInt  ival3 = PETSC_CURRENT
+        cdef PetscInt  ival4 = PETSC_CURRENT
+        cdef PetscInt  ival5 = PETSC_CURRENT
         cdef PetscBool bval  = asBool(realmats)
         if ip    is not None: ival1 = asInt(ip)
         if bs    is not None: ival2 = asInt(bs)
@@ -2899,8 +2900,8 @@ cdef class EPS(Object):
         spur
             Spurious threshold (to discard spurious eigenpairs).
         """
-        cdef PetscReal rval1 = PETSC_DEFAULT
-        cdef PetscReal rval2 = PETSC_DEFAULT
+        cdef PetscReal rval1 = PETSC_CURRENT
+        cdef PetscReal rval2 = PETSC_CURRENT
         if delta is not None: rval1 = asReal(delta)
         if spur  is not None: rval2 = asReal(spur)
         CHKERR( EPSCISSSetThreshold(self.eps, rval1, rval2) )
@@ -2932,8 +2933,8 @@ cdef class EPS(Object):
         blsize
             Number of iterative refinement iterations (blocksize loop).
         """
-        cdef PetscInt ival1 = PETSC_DEFAULT
-        cdef PetscInt ival2 = PETSC_DEFAULT
+        cdef PetscInt ival1 = PETSC_CURRENT
+        cdef PetscInt ival2 = PETSC_CURRENT
         if inner  is not None: ival1 = asInt(inner)
         if blsize is not None: ival2 = asInt(blsize)
         CHKERR( EPSCISSSetRefinement(self.eps, ival1, ival2) )

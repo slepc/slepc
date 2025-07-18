@@ -334,6 +334,7 @@ PetscErrorCode EPSSetUp(EPS eps)
   }
 
   /* safeguard for small problems */
+  if (eps->n == 0) PetscFunctionReturn(PETSC_SUCCESS);
   if (eps->nev > eps->n) eps->nev = eps->n;
   if (eps->isstructured) {
     if (2*eps->ncv > eps->n) eps->ncv = eps->n/2;

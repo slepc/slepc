@@ -700,7 +700,7 @@ PetscErrorCode NEPSetFunction(NEP nep,Mat A,Mat B,NEPFunctionFn *fun,void *ctx)
    NEPGetFunction - Returns the Function matrix and optionally the user
    provided context for evaluating the Function.
 
-   Not Collective
+   Collective
 
    Input Parameter:
 .  nep - the nonlinear eigensolver context
@@ -772,7 +772,7 @@ PetscErrorCode NEPSetJacobian(NEP nep,Mat A,NEPJacobianFn *jac,void *ctx)
    NEPGetJacobian - Returns the Jacobian matrix and optionally the user
    provided routine and context for evaluating the Jacobian.
 
-   Not Collective
+   Collective
 
    Input Parameter:
 .  nep - the nonlinear eigensolver context
@@ -878,7 +878,7 @@ PetscErrorCode NEPSetSplitOperator(NEP nep,PetscInt nt,Mat A[],FN f[],MatStructu
    NEPGetSplitOperatorTerm - Gets the matrices and functions associated with
    the nonlinear operator in split form.
 
-   Not Collective
+   Collective
 
    Input Parameters:
 +  nep - the nonlinear eigensolver context

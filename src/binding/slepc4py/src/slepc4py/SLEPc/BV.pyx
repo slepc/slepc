@@ -469,7 +469,7 @@ cdef class BV(Object):
         The default settings work well for most problems.
 
         The parameter `eta` should be a real value between ``0`` and
-        ``1`` (or `DEFAULT`).  The value of `eta` is used only when
+        ``1`` (or `DETERMINE`).  The value of `eta` is used only when
         the refinement type is `BV.OrthogRefineType.IFNEEDED`.
 
         When using several processors, `BV.OrthogType.MGS` is likely to
@@ -481,8 +481,8 @@ cdef class BV(Object):
         cdef SlepcBVOrthogType val1 = BV_ORTHOG_CGS
         cdef SlepcBVOrthogRefineType val2 = BV_ORTHOG_REFINE_IFNEEDED
         cdef SlepcBVOrthogBlockType val3 = BV_ORTHOG_BLOCK_GS
-        cdef PetscReal rval = PETSC_DEFAULT
-        CHKERR( BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3) )
+        cdef PetscReal rval = PETSC_CURRENT
+        CHKERR( BVGetOrthogonalization(self.bv, &val1, &val2, NULL, &val3) )
         if otype  is not None: val1 = otype
         if refine is not None: val2 = refine
         if block  is not None: val3 = block
