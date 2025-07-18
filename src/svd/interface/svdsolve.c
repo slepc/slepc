@@ -115,7 +115,7 @@ PetscErrorCode SVDComputeVectors(SVD svd)
 @*/
 PetscErrorCode SVDSolve(SVD svd)
 {
-  PetscInt       i,*workperm;
+  PetscInt       i,m,n,*workperm;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -124,6 +124,16 @@ PetscErrorCode SVDSolve(SVD svd)
 
   /* call setup */
   PetscCall(SVDSetUp(svd));
+
+  /* safeguard for matrices with zero rows or columns */
+  PetscCall(MatGetSize(svd->OP,&m,&n));
+  if (m == 0 || n == 0) {
+    svd->nconv  = 0;
+    svd->reason = SVD_CONVERGED_TOL;
+    svd->state  = SVD_STATE_SOLVED;
+    PetscFunctionReturn(PETSC_SUCCESS);
+  }
+
   svd->its = 0;
   svd->nconv = 0;
   for (i=0;i<svd->ncv;i++) {
