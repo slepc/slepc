@@ -77,7 +77,7 @@ def crossCreate(L):
     else: opts.append('a')
   return cross(opts)
 
-def generateFortranInterface(petscarch, classes, enums, structs, senums, funname, fun):
+def generateFortranInterface(petscarch, classes, enums, structs, senums, petscsenums, funname, fun):
   '''Generates the interface definition for a function'''
   '''This is used both by class functions and standalone functions'''
   # check for functions for which we cannot build interfaces
@@ -164,7 +164,7 @@ def generateFortranInterface(petscarch, classes, enums, structs, senums, funname
           ktypename = k.typename
           if ktypename in CToFortranTypes:
             ktypename =CToFortranTypes[ktypename]
-          if ktypename in senums or ktypename == 'char':
+          if ktypename in senums or ktypename in petscsenums or ktypename == 'char':
             fd.write('  character(*) :: ' + Letters[cnt] + '\n')
           elif k.array and k.stars:
             if not dim or dim == '1d': fd.write('  ' + ktypename + ', pointer :: ' +  Letters[cnt]  + '(:)\n')
@@ -183,7 +183,7 @@ def generateFortranInterface(petscarch, classes, enums, structs, senums, funname
     fd.write('!DEC$ ATTRIBUTES DLLEXPORT::' + funname + func + dim  + '\n')
     fd.write('#endif\n')
 
-def generateCStub(petscarch,manualstubsfound,senums,classes,funname,fun):
+def generateCStub(petscarch,manualstubsfound,senums,petscsenums,classes,structs,funname,fun):
   '''Generates the C stub that is callable from Fortran for a function'''
   #
   #
@@ -209,6 +209,11 @@ def generateCStub(petscarch,manualstubsfound,senums,classes,funname,fun):
     if k.stars == 2 and k.typename == 'void': skipbody = True
     if k.isfunction: skipbody = True
   if skipbody and fun.name.lower() in manualstubsfound: return
+
+  # PETSc structs
+  import getAPI
+  petscstructs = {}
+  petscstructs['PetscViewerAndFormat'] = getAPI.Struct('PetscViewerAndFormat','sys','petscviewer.h',True,'')
 
   for k in fun.arguments:
     # no automatic stub if function returns an array, except if it is a string
@@ -261,10 +266,10 @@ def generateCStub(petscarch,manualstubsfound,senums,classes,funname,fun):
       if k.stringlen: continue
       ktypename = k.typename
       if cnt: fd.write(', ')
-      if k.const and not ((k.typename == 'char' or k.typename in senums) and k.array):
+      if k.const and not ((k.typename == 'char' or k.typename in senums or k.typename in petscsenums) and k.array):
         # see note one at the top of the file why const is not added for this case
         fd.write('const ')
-      if k.typename in senums:
+      if k.typename in senums or k.typename in petscsenums:
         fd.write('char *')
       else:
         if k.stars == 1 and k.array and not ktypename == 'char':
@@ -272,7 +277,9 @@ def generateCStub(petscarch,manualstubsfound,senums,classes,funname,fun):
         else:
           fd.write(ktypename)
           fd.write(' ')
-      if not (k.typename == 'char' or k.typename in senums or k.array or k.typename == 'PeCtx'):
+      if (k.typename in structs.keys() and structs[k.typename].opaque) or (k.typename in petscstructs.keys() and petscstructs[k.typename].opaque):
+        fd.write('*')
+      if not (k.typename == 'char' or k.typename in senums or k.typename in petscsenums or k.array or k.typename == 'PeCtx'):
         fd.write('*')
       fd.write(Letters[cnt])
       if k.typename == 'char' or (not k.stars and k.array): fd.write('[]')
@@ -283,7 +290,7 @@ def generateCStub(petscarch,manualstubsfound,senums,classes,funname,fun):
     cnt = 0
     for k in fun.arguments:
       if k.stringlen: continue
-      if k.typename in senums or k.typename == 'char':
+      if k.typename in senums or k.typename in petscsenums or k.typename == 'char':
         fd.write(', PETSC_FORTRAN_CHARLEN_T l_'  + Letters[cnt])
       cnt = cnt + 1
     fd.write(')\n{\n')
@@ -316,8 +323,8 @@ def generateCStub(petscarch,manualstubsfound,senums,classes,funname,fun):
       cnt = 0
       for k in fun.arguments:
         if k.stringlen: continue
-        if k.typename == 'char' or k.typename in senums:
-          if not k.stars and (k.const or (k.typename in senums)):
+        if k.typename == 'char' or k.typename in senums or k.typename in petscsenums:
+          if not k.stars and (k.const or (k.typename in senums or k.typename in petscsenums)):
             fd.write('  char* c_' + Letters[cnt] + ';\n')
             fd.write('  FIXCHAR(' + Letters[cnt] + ', l_' + Letters[cnt] + ', c_' + Letters[cnt] + ');\n')
           elif k.stars:
@@ -354,10 +361,10 @@ def generateCStub(petscarch,manualstubsfound,senums,classes,funname,fun):
       cnt = 0
       for k in fun.arguments:
         if cnt: fd.write(', ')
-        if k.typename in senums or k.typename == 'char':
+        if k.typename in senums or k.typename in petscsenums or k.typename == 'char':
           if k.stars:
             fd.write('(const char **)&')
-          if k.const or (k.typename in senums):
+          if k.const or (k.typename in senums or k.typename in petscsenums):
             fd.write('c_')
         elif k.typename == 'MPI_Fint':
           fd.write('MPI_Comm_f2c(*(')
@@ -370,6 +377,8 @@ def generateCStub(petscarch,manualstubsfound,senums,classes,funname,fun):
           continue
         if k.typename == 'PetscViewer' and not k.stars and not k.array:
           fd.write('v_')
+        if (k.typename in structs.keys() and structs[k.typename].opaque) or (k.typename in petscstructs.keys() and petscstructs[k.typename].opaque):
+          fd.write('*')
         fd.write(Letters[cnt])
         if k.typename == 'PetscBool' and not k.stars and not k.array:
           # handle bool argument fixes (-1 needs to be corrected to 1 for Intel compilers)
@@ -384,8 +393,8 @@ def generateCStub(petscarch,manualstubsfound,senums,classes,funname,fun):
       cnt = 0
       for k in fun.arguments:
         if k.stringlen: continue
-        if k.typename == 'char' or k.typename in senums:
-          if not k.stars and (k.const or (k.typename in senums)):
+        if k.typename == 'char' or k.typename in senums or k.typename in petscsenums:
+          if not k.stars and (k.const or (k.typename in senums or k.typename in petscsenums)):
             fd.write('  FREECHAR(' + Letters[cnt] + ', c_' + Letters[cnt] + ');\n')
           else:
             if k.stars:
@@ -716,6 +725,11 @@ def main(petscdir,slepcdir,petscarch):
   fun.arguments = [argpetscobj, argstring]
   petscobjectfunctions[fname] = fun
 
+  # PETSc string enums used in SLEPc API
+  petscsenums = {}
+  petscsenums['VecType'] = getAPI.Senum('VecType','vec','petscvec.h','')
+  petscsenums['PetscViewerType'] = getAPI.Senum('PetscViewerType','sys','petscviewer.h','')
+
 ##########  $PETSC_ARCH/include/petsc/finclude/*.h
 
   dir = os.path.join(petscarch,'include', 'slepc', 'finclude')
@@ -878,7 +892,7 @@ def main(petscdir,slepcdir,petscarch):
   for i in classes.keys():
     # generate interface definitions for all objects' methods
     for j in classes[i].functions: # loop over functions in class
-      generateFortranInterface(petscarch,classes,enums,structs,senums,j,classes[i].functions[j])
+      generateFortranInterface(petscarch,classes,enums,structs,senums,petscsenums,j,classes[i].functions[j])
 
     if i in ['SlepcConvMon']: continue
     file = classes[i].includefile + '90'
@@ -912,7 +926,7 @@ def main(petscdir,slepcdir,petscarch):
 
   # generate interface definitions for all standalone functions
   for j in funcs.keys():
-    generateFortranInterface(petscarch,classes,enums,structs,senums,funcs[j].name,funcs[j])
+    generateFortranInterface(petscarch,classes,enums,structs,senums,petscsenums,funcs[j].name,funcs[j])
 
   # generate .eq. and .neq. for enums
   for i in enums.keys():
@@ -1072,11 +1086,11 @@ def main(petscdir,slepcdir,petscarch):
   for i in classes.keys():
     if i in ['PetscIntStack']: continue
     for j in classes[i].functions: # loop over functions in class
-      generateCStub(petscarch,manualstubsfound,senums,classes,j,classes[i].functions[j])
+      generateCStub(petscarch,manualstubsfound,senums,petscsenums,classes,structs,j,classes[i].functions[j])
 
   for j in funcs.keys():
     if funcs[j].name in ['SlepcDebugViewMatrix']: continue
-    generateCStub(petscarch,manualstubsfound,senums,classes,funcs[j].name,funcs[j])
+    generateCStub(petscarch,manualstubsfound,senums,petscsenums,classes,structs,funcs[j].name,funcs[j])
 
 ##########  $PETSC_ARCH/ftn/MANSEC/petscall.*
 
