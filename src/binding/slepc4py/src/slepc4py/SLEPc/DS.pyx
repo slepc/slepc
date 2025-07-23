@@ -601,6 +601,41 @@ cdef class DS(Object):
         CHKERR( DSCond(self.ds, &rval) )
         return toReal(rval)
 
+    def solve(self):
+        """
+        Solve the problem.
+
+        Returns
+        -------
+        ArrayReal | ArrayComplex
+            Eigenvalues or singular values.
+        """
+        n = self.getDimensions()[0]
+        cdef PetscScalar *eigr = NULL
+        cdef PetscScalar *eigi = NULL
+        cdef tmpr = allocate(<size_t>n*sizeof(PetscScalar), <void**>&eigr)
+        cdef tmpi = allocate(<size_t>n*sizeof(PetscScalar), <void**>&eigi)
+        CHKERR( DSSolve(self.ds, eigr, eigi) )
+        cdef object kr = array_s(n, eigr)
+        cdef object ki = array_s(n, eigi)
+        if self.getType().upper() in ['HEP','GHEP','BSE','SVD','HSVD','GSVD']:
+            return kr.real.copy()
+        else:
+            return kr+1j*ki
+
+    def vectors(self, matname = MatType.X):
+        """
+        Compute vectors associated to the dense system such
+        as eigenvectors.
+
+        Parameters
+        ----------
+        matname: `DS.MatType` enumerate
+           The matrix, used to indicate which vectors are required.
+        """
+        cdef SlepcDSMatType mname = matname
+        CHKERR( DSVectors(self.ds, mname, NULL, NULL) )
+
     #
 
     def setSVDDimensions(self, m: int) -> None:
