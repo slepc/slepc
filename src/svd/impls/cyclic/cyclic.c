@@ -546,6 +546,7 @@ static PetscErrorCode SVDSolve_Cyclic(SVD svd)
   PetscFunctionBegin;
   PetscCall(EPSSolve(cyclic->eps));
   PetscCall(EPSGetConverged(cyclic->eps,&nconv));
+  nconv = PetscMin(nconv,svd->ncv);
   PetscCall(EPSGetIterationNumber(cyclic->eps,&svd->its));
   PetscCall(EPSGetConvergedReason(cyclic->eps,(EPSConvergedReason*)&svd->reason));
   for (i=0,j=0;i<nconv;i++) {
@@ -575,6 +576,7 @@ static PetscErrorCode SVDComputeVectors_Cyclic_Standard(SVD svd)
   PetscCall(MatGetLocalSize(svd->A,&m,NULL));
   PetscCall(MatCreateVecsEmpty(svd->A,&x2,&x1));
   PetscCall(EPSGetConverged(cyclic->eps,&nconv));
+  nconv = PetscMin(nconv,svd->ncv);
   for (i=0,j=0;i<nconv;i++) {
     PetscCall(EPSGetEigenpair(cyclic->eps,i,&er,&ei,x,NULL));
     PetscCall(SVDCyclicCheckEigenvalue(svd,er,ei,&sigma,NULL));
@@ -615,6 +617,7 @@ static PetscErrorCode SVDComputeVectors_Cyclic_Generalized(SVD svd)
   PetscCall(MatCreateVecs(svd->A,NULL,&u));
   PetscCall(MatCreateVecs(svd->B,NULL,&v));
   PetscCall(EPSGetConverged(cyclic->eps,&nconv));
+  nconv = PetscMin(nconv,svd->ncv);
   for (i=0,j=0;i<nconv;i++) {
     PetscCall(EPSGetEigenpair(cyclic->eps,i,&er,&ei,x,NULL));
     PetscCall(SVDCyclicCheckEigenvalue(svd,er,ei,&sigma,NULL));
@@ -729,6 +732,7 @@ static PetscErrorCode SVDComputeVectors_Cyclic_Hyperbolic(SVD svd)
   PetscCall(BVGetSizes(U,&n,NULL,NULL));
   PetscCall(BV_SetMatrixDiagonal(U,svd->omega,svd->A));
   PetscCall(EPSGetConverged(cyclic->eps,&nconv));
+  nconv = PetscMin(nconv,svd->ncv);
   for (i=0,j=0;i<nconv;i++) {
     PetscCall(EPSGetEigenpair(cyclic->eps,i,&er,&ei,x,xi));
     PetscCall(SVDCyclicCheckEigenvalue(svd,er,ei,&sigma,&isreal));
