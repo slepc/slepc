@@ -206,7 +206,7 @@ cdef class BV(Object):
         CHKERR( SlepcCLEAR(self.obj) ); self.bv = newbv
         return self
 
-    def createMat(self) -> Mat:
+    def createMat(self) -> petsc4py.PETSc.Mat:
         """
         Create a new Mat object of dense type and copy the contents of the BV.
 
@@ -214,7 +214,7 @@ cdef class BV(Object):
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The new matrix.
         """
         cdef Mat mat = Mat()
@@ -563,7 +563,7 @@ cdef class BV(Object):
 
     #
 
-    def getMatrix(self) -> tuple[Mat, bool] | tuple[None, bool]:
+    def getMatrix(self) -> tuple[petsc4py.PETSc.Mat, bool] | tuple[None, bool]:
         """
         Get the matrix representation of the inner product.
 
@@ -571,7 +571,7 @@ cdef class BV(Object):
 
         Returns
         -------
-        mat: Mat
+        mat: petsc4py.PETSc.Mat
             The matrix of the inner product
         indef: bool
             Whether the matrix is indefinite
@@ -807,7 +807,7 @@ cdef class BV(Object):
         CHKERR( BVGetNumConstraints(self.bv, &val) )
         return toInt(val)
 
-    def createVec(self) -> Vec:
+    def createVec(self) -> petsc4py.PETSc.Vec:
         """
         Create a Vec with the type and dimensions of the columns of the BV.
 
@@ -815,14 +815,14 @@ cdef class BV(Object):
 
         Returns
         -------
-        Vec
+        petsc4py.PETSc.Vec
             New vector.
         """
         cdef Vec v = Vec()
         CHKERR( BVCreateVec(self.bv, &v.vec) )
         return v
 
-    def setVecType(self, vec_type: Vec.Type | str) -> None:
+    def setVecType(self, vec_type: petsc4py.PETSc.Vec.Type | str) -> None:
         """
         Set the vector type.
 
@@ -971,7 +971,7 @@ cdef class BV(Object):
         m = array_s(k - l, mval)
         return m
 
-    def getColumn(self, j: int) -> Vec:
+    def getColumn(self, j: int) -> petsc4py.PETSc.Vec:
         """
         Get a Vec object with the entries of the column of the BV object.
 
@@ -984,7 +984,7 @@ cdef class BV(Object):
 
         Returns
         -------
-        Vec
+        petsc4py.PETSc.Vec
             The vector containing the jth column.
 
         Notes
@@ -1018,7 +1018,7 @@ cdef class BV(Object):
         CHKERR( PetscObjectDereference(<PetscObject>v.vec) )
         CHKERR( BVRestoreColumn(self.bv, ival, &v.vec) )
 
-    def getMat(self) -> Mat:
+    def getMat(self) -> petsc4py.PETSc.Mat:
         """
         Get a Mat object of dense type that shares the memory of the BV object.
 
@@ -1026,7 +1026,7 @@ cdef class BV(Object):
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The matrix.
 
         Notes
@@ -1060,7 +1060,7 @@ cdef class BV(Object):
         CHKERR( PetscObjectDereference(<PetscObject>A.mat) )
         CHKERR( BVRestoreMat(self.bv, &A.mat) )
 
-    def dot(self, BV Y) -> Mat:
+    def dot(self, BV Y) -> petsc4py.PETSc.Mat:
         """
         Compute the 'block-dot' product of two basis vectors objects.
 
@@ -1075,7 +1075,7 @@ cdef class BV(Object):
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The resulting matrix.
 
         Notes
@@ -1102,7 +1102,7 @@ cdef class BV(Object):
         CHKERR( BVDot(X.bv, Y.bv, M.mat) )
         return M
 
-    def matProject(self, Mat A or None, BV Y) -> Mat:
+    def matProject(self, Mat A: petsc4py.PETSc.Mat | None, BV Y) -> petsc4py.PETSc.Mat:
         """
         Compute the projection of a matrix onto a subspace.
 
@@ -1119,7 +1119,7 @@ cdef class BV(Object):
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             Projection of the matrix A onto the subspace.
         """
         cdef BV X = self
@@ -1529,7 +1529,7 @@ cdef class BV(Object):
 
     def setRandomContext(self, Random rnd) -> None:
         """
-        Set the `PETSc.Random` object associated with the BV.
+        Set the `petsc4py.PETSc.Random` object associated with the BV.
 
         Collective.
 
@@ -1544,13 +1544,13 @@ cdef class BV(Object):
 
     def getRandomContext(self) -> Random:
         """
-        Get the `PETSc.Random` object associated with the BV.
+        Get the `petsc4py.PETSc.Random` object associated with the BV.
 
         Collective.
 
         Returns
         -------
-        PETSc.Random
+        petsc4py.PETSc.Random
             The random number generator context.
         """
         cdef Random rnd = Random()

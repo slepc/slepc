@@ -739,7 +739,7 @@ cdef class SVD(Object):
         """
         CHKERR( SVDSetDS(self.svd, ds.ds) )
 
-    def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
+    def getOperators(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
         """
         Get the matrices associated with the singular value problem.
 
@@ -747,9 +747,9 @@ cdef class SVD(Object):
 
         Returns
         -------
-        A: Mat
+        A: petsc4py.PETSc.Mat
             The matrix associated with the singular value problem.
-        B: Mat
+        B: petsc4py.PETSc.Mat
             The second matrix in the case of GSVD.
         """
         cdef Mat A = Mat()
@@ -779,7 +779,7 @@ cdef class SVD(Object):
         cdef PetscMat Bmat = B.mat if B is not None else <PetscMat>NULL
         CHKERR( SVDSetOperators(self.svd, A.mat, Bmat) )
 
-    def getSignature(self, Vec omega=None) -> Vec:
+    def getSignature(self, Vec omega: petsc4py.PETSc.Vec | None = None) -> petsc4py.PETSc.Vec:
         """
         Get the signature matrix defining a hyperbolic singular value problem.
 
@@ -792,7 +792,7 @@ cdef class SVD(Object):
 
         Returns
         -------
-        Vec
+        petsc4py.PETSc.Vec
             A vector containing the diagonal elements of the signature matrix.
         """
         cdef PetscMat A = NULL
@@ -1123,7 +1123,7 @@ cdef class SVD(Object):
         CHKERR( SVDComputeError(self.svd, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
+    def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
         """
         Display the errors associated with the computed solution.
 
@@ -1487,7 +1487,7 @@ cdef class SVD(Object):
         CHKERR( SVDTRLanczosGetLocking(self.svd, &tval) )
         return toBool(tval)
 
-    def setTRLanczosKSP(self, KSP ksp) -> None:
+    def setTRLanczosKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
         """
         Set a linear solver object associated to the SVD solver.
 

@@ -588,16 +588,16 @@ cdef class DS(Object):
 
     def updateExtraRow(self) -> None:
         """
-        Ensure that the extra row gets up-to-date after a call to `solve()`.
+        Ensure that the extra row gets up-to-date after a call to `DS.solve()`.
 
         Logically collective.
 
         Perform all necessary operations so that the extra row gets up-to-date
-        after a call to `solve()`.
+        after a call to `DS.solve()`.
         """
         CHKERR( DSUpdateExtraRow(self.ds) )
 
-    def getMat(self, matname: MatType) -> Mat:
+    def getMat(self, matname: MatType) -> petsc4py.PETSc.Mat:
         """
         Get the requested matrix as a sequential dense Mat object.
 
@@ -610,7 +610,7 @@ cdef class DS(Object):
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The matrix.
         """
         cdef SlepcDSMatType mname = matname
@@ -619,7 +619,7 @@ cdef class DS(Object):
         CHKERR( PetscINCREF(mat.obj) )
         return mat
 
-    def restoreMat(self, matname: MatType, Mat mat) -> None:
+    def restoreMat(self, matname: MatType, Mat mat: petsc4py.PETSc.Mat) -> None:
         """
         Restore the previously seized matrix.
 

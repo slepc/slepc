@@ -316,7 +316,7 @@ cdef class FN(Object):
         CHKERR( FNEvaluateDerivative(self.fn, sarg, &sval) )
         return toScalar(sval)
 
-    def evaluateFunctionMat(self, Mat A, Mat B=None) -> Mat:
+    def evaluateFunctionMat(self, Mat A: petsc4py.PETSc.Mat, Mat B: petsc4py.PETSc.Mat | None = None) -> petsc4py.PETSc.Mat:
         """
         Compute the value of the function f(A) for a given matrix A.
 
@@ -331,14 +331,14 @@ cdef class FN(Object):
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The result of f(A).
         """
         if B is None: B = A.duplicate()
         CHKERR( FNEvaluateFunctionMat(self.fn, A.mat, B.mat) )
         return B
 
-    def evaluateFunctionMatVec(self, Mat A, Vec v=None) -> Vec:
+    def evaluateFunctionMatVec(self, Mat A: petsc4py.PETSc.Mat, Vec v: petsc4py.PETSc.Vec | None = None) -> petsc4py.PETSc.Vec:
         """
         Compute the first column of the matrix f(A) for a given matrix A.
 
@@ -351,7 +351,7 @@ cdef class FN(Object):
 
         Returns
         -------
-        Vec
+        petsc4py.PETSc.Vec
             The first column of the result f(A).
         """
         if v is None: v = A.createVecs('left')

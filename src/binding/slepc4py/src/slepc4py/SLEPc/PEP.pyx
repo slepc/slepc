@@ -855,7 +855,11 @@ cdef class PEP(Object):
         """
         CHKERR( PEPSetST(self.pep, st.st) )
 
-    def getScale(self, Vec Dl=None, Vec Dr=None) -> tuple[Scale, float, int, float]:
+    def getScale(
+        self,
+        Vec Dl: petsc4py.PETSc.Vec | None = None,
+        Vec Dr: petsc4py.PETSc.Vec | None = None
+    ) -> tuple[Scale, float, int, float]:
         """
         Get the strategy used for scaling the polynomial eigenproblem.
 
@@ -904,8 +908,8 @@ cdef class PEP(Object):
         self,
         scale: Scale,
         alpha: float | None = None,
-        Vec Dl = None,
-        Vec Dr = None,
+        Vec Dl: petsc4py.PETSc.Vec | None = None,
+        Vec Dr: petsc4py.PETSc.Vec | None = None,
         its: int | None = None,
         lbda: float | None = None,
     ) -> None:
@@ -1032,7 +1036,7 @@ cdef class PEP(Object):
         """
         CHKERR( PEPSetDS(self.pep, ds.ds) )
 
-    def getOperators(self) -> list[Mat]:
+    def getOperators(self) -> list[petsc4py.PETSc.Mat]:
         """
         Get the matrices associated with the eigenvalue problem.
 
@@ -1040,7 +1044,7 @@ cdef class PEP(Object):
 
         Returns
         -------
-        list of Mat
+        list of petsc4py.PETSc.Mat
             The matrices associated with the eigensystem.
         """
         cdef Mat A
@@ -1315,7 +1319,7 @@ cdef class PEP(Object):
         CHKERR( PEPComputeError(self.pep, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
+    def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
         """
         Display the errors associated with the computed solution.
 

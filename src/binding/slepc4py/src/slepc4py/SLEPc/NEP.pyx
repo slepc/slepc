@@ -1004,7 +1004,7 @@ cdef class NEP(Object):
         CHKERR( NEPComputeError(self.nep, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
+    def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
         """
         Display the errors associated with the computed solution.
 
@@ -1068,8 +1068,8 @@ cdef class NEP(Object):
     def setFunction(
         self,
         function: NEPFunction,
-        Mat F = None,
-        Mat P = None,
+        Mat F: petsc4py.PETSc.Mat | None = None,
+        Mat P: petsc4py.PETSc.Mat | None = None,
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
@@ -1101,7 +1101,7 @@ cdef class NEP(Object):
         else:
             CHKERR( NEPSetFunction(self.nep, Fmat, Pmat, NULL, NULL) )
 
-    def getFunction(self) -> tuple[Mat, Mat, NEPFunction]:
+    def getFunction(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat, NEPFunction]:
         """
         Get the function to compute the nonlinear Function T(lambda).
 
@@ -1130,7 +1130,7 @@ cdef class NEP(Object):
     def setJacobian(
         self,
         jacobian: NEPJacobian,
-        Mat J = None,
+        Mat J: petsc4py.PETSc.Mat | None = None,
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
@@ -1159,7 +1159,7 @@ cdef class NEP(Object):
         else:
             CHKERR( NEPSetJacobian(self.nep, Jmat, NULL, NULL) )
 
-    def getJacobian(self) -> tuple[Mat, NEPJacobian]:
+    def getJacobian(self) -> tuple[petsc4py.PETSc.Mat, NEPJacobian]:
         """
         Get the function to compute the Jacobian T'(lambda) and the matrix.
 
@@ -1180,9 +1180,9 @@ cdef class NEP(Object):
 
     def setSplitOperator(
         self,
-        A: Mat | list[Mat],
+        A: petsc4py.PETSc.Mat | list[petsc4py.PETSc.Mat],
         f: FN | list[FN],
-        structure: Mat.Structure | None = None,
+        structure: petsc4py.PETSc.Mat.Structure | None = None,
     ) -> None:
         """
         Set the operator of the nonlinear eigenvalue problem in split form.
@@ -1212,7 +1212,7 @@ cdef class NEP(Object):
             Fs[i] = (<FN?>f[i]).fn
         CHKERR( NEPSetSplitOperator(self.nep, <PetscInt>n, As, Fs, mstr) )
 
-    def getSplitOperator(self) -> tuple[list[Mat], list[FN], Mat.Structure]:
+    def getSplitOperator(self) -> tuple[list[petsc4py.PETSc.Mat], list[FN], petsc4py.PETSc.Mat.Structure]:
         """
         Get the operator of the nonlinear eigenvalue problem in split form.
 
@@ -1220,11 +1220,11 @@ cdef class NEP(Object):
 
         Returns
         -------
-        A: list of Mat
+        A: list of petsc4py.PETSc.Mat
             Coefficient matrices of the split form.
         f: list of FN
             Scalar functions of the split form.
-        structure: Mat.Structure
+        structure: petsc4py.PETSc.Mat.Structure
             Structure flag for matrices.
         """
         cdef Mat A
@@ -1246,8 +1246,8 @@ cdef class NEP(Object):
 
     def setSplitPreconditioner(
         self,
-        P: Mat | list[Mat],
-        structure: Mat.Structure | None = None,
+        P: petsc4py.PETSc.Mat | list[petsc4py.PETSc.Mat],
+        structure: petsc4py.PETSc.Mat.Structure | None = None,
     ) -> None:
         """
         Set the operator in split form.
@@ -1273,7 +1273,7 @@ cdef class NEP(Object):
             Ps[i] = (<Mat?>P[i]).mat
         CHKERR( NEPSetSplitPreconditioner(self.nep, <PetscInt>n, Ps, mstr) )
 
-    def getSplitPreconditioner(self) -> tuple[list[Mat], Mat.Structure]:
+    def getSplitPreconditioner(self) -> tuple[list[petsc4py.PETSc.Mat], petsc4py.PETSc.Mat.Structure]:
         """
         Get the operator of the split preconditioner.
 
@@ -1281,9 +1281,9 @@ cdef class NEP(Object):
 
         Returns
         -------
-        P: list of Mat
+        P: list of petsc4py.PETSc.Mat
             Coefficient matrices of the split preconditioner.
-        structure: Mat.Structure
+        structure: petsc4py.PETSc.Mat.Structure
             Structure flag for matrices.
         """
         cdef Mat P
@@ -1402,7 +1402,7 @@ cdef class NEP(Object):
         Parameters
         ----------
         cct
-             If True, the `KSP` relative tolerance is constant.
+             If True, the `petsc4py.PETSc.KSP` relative tolerance is constant.
         """
         cdef PetscBool val = asBool(cct)
         CHKERR( NEPRIISetConstCorrectionTol(self.nep, val) )
@@ -1416,7 +1416,7 @@ cdef class NEP(Object):
         Returns
         -------
         bool
-            If True, the `KSP` relative tolerance is constant.
+            If True, the `petsc4py.PETSc.KSP` relative tolerance is constant.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( NEPRIIGetConstCorrectionTol(self.nep, &tval) )
@@ -1521,7 +1521,7 @@ cdef class NEP(Object):
         CHKERR( NEPRIIGetDeflationThreshold(self.nep, &rval) )
         return toReal(rval)
 
-    def setRIIKSP(self, KSP ksp) -> None:
+    def setRIIKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
@@ -1641,7 +1641,7 @@ cdef class NEP(Object):
         CHKERR( PetscINCREF(eps.obj) )
         return eps
 
-    def setSLPKSP(self, KSP ksp) -> None:
+    def setSLPKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
@@ -1672,7 +1672,7 @@ cdef class NEP(Object):
 
     #
 
-    def setNArnoldiKSP(self, KSP ksp) -> None:
+    def setNArnoldiKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 

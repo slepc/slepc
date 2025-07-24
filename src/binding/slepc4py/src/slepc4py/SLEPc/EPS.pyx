@@ -1195,7 +1195,7 @@ cdef class EPS(Object):
         """
         CHKERR( EPSSetRG(self.eps, rg.rg) )
 
-    def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
+    def getOperators(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
         """
         Get the matrices associated with the eigenvalue problem.
 
@@ -1203,9 +1203,9 @@ cdef class EPS(Object):
 
         Returns
         -------
-        A: Mat
+        A: petsc4py.PETSc.Mat
             The matrix associated with the eigensystem.
-        B: Mat
+        B: petsc4py.PETSc.Mat
             The second matrix in the case of generalized eigenproblems.
         """
         cdef Mat A = Mat()
@@ -1654,7 +1654,7 @@ cdef class EPS(Object):
         else:
             return toComplex(sval1, sval2)
 
-    def getInvariantSubspace(self) -> list[Vec]:
+    def getInvariantSubspace(self) -> list[petsc4py.PETSc.Vec]:
         """
         Get an orthonormal basis of the computed invariant subspace.
 
@@ -1662,7 +1662,7 @@ cdef class EPS(Object):
 
         Returns
         -------
-        list of Vec
+        list of petsc4py.PETSc.Vec
             Basis of the invariant subspace.
 
         Notes
@@ -1753,7 +1753,7 @@ cdef class EPS(Object):
         CHKERR( EPSComputeError(self.eps, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
+    def errorView(self, etype: ErrorType | None = None, Viewer viewer or None: petsc4py.PETSc.Viewer | None = None) -> None:
         """
         Display the errors associated with the computed solution.
 
@@ -2180,7 +2180,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetDimensions(self.eps, &ival1, &ival2, &ival3) )
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
-    def getKrylovSchurSubcommInfo(self) -> tuple[int, int, Vec]:
+    def getKrylovSchurSubcommInfo(self) -> tuple[int, int, petsc4py.PETSc.Vec]:
         """
         Get information related to the case of doing spectrum slicing.
 
@@ -2195,7 +2195,7 @@ cdef class EPS(Object):
             Number of the subinterval for the calling process.
         n: int
             Number of eigenvalues found in the k-th subinterval.
-        v: Vec
+        v: petsc4py.PETSc.Vec
             A vector owned by processes in the subcommunicator with dimensions
             compatible for locally computed eigenvectors.
 
@@ -2243,7 +2243,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetSubcommPairs(self.eps, i, &sval, vec) )
         return toScalar(sval)
 
-    def getKrylovSchurSubcommMats(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
+    def getKrylovSchurSubcommMats(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
         """
         Get the eigenproblem matrices stored in the subcommunicator.
 
@@ -2254,9 +2254,9 @@ cdef class EPS(Object):
 
         Returns
         -------
-        A: Mat
+        A: petsc4py.PETSc.Mat
             The matrix associated with the eigensystem.
-        B: Mat
+        B: petsc4py.PETSc.Mat
             The second matrix in the case of generalized eigenproblems.
 
         Notes
@@ -2280,11 +2280,11 @@ cdef class EPS(Object):
         self,
         s: Scalar = 1.0,
         a: Scalar = 1.0,
-        Mat Au or None = None,
+        Mat Au: petsc4py.PETSc.Mat | None = None,
         t: Scalar = 1.0,
         b: Scalar = 1.0,
-        Mat Bu or None = None,
-        structure: Mat.Structure | None = None,
+        Mat Bu: petsc4py.PETSc.Mat | None = None,
+        structure: petsc4py.PETSc.Mat.Structure | None = None,
         globalup: bool = False,
     ) -> None:
         """

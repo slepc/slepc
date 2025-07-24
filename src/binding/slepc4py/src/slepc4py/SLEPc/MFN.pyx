@@ -308,7 +308,7 @@ cdef class MFN(Object):
         """
         CHKERR( MFNSetBV(self.mfn, bv.bv) )
 
-    def getOperator(self) -> Mat:
+    def getOperator(self) -> petsc4py.PETSc.Mat:
         """
         Get the matrix associated with the MFN object.
 
@@ -316,7 +316,7 @@ cdef class MFN(Object):
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The matrix for which the matrix function is to be computed.
         """
         cdef Mat A = Mat()

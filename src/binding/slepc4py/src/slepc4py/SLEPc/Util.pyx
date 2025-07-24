@@ -4,7 +4,7 @@ cdef class Util:
     """Util."""
 
     @classmethod
-    def createMatBSE(cls, Mat R, Mat C) -> Mat:
+    def createMatBSE(cls, Mat R: petsc4py.PETSc.Mat, Mat C: petsc4py.PETSc.Mat) -> petsc4py.PETSc.Mat:
         """
         Create a matrix that can be used to define a BSE type problem.
 
@@ -22,7 +22,7 @@ cdef class Util:
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The matrix with the block form H = [ R C; -C^H -R^T ].
         """
         cdef Mat H = Mat()
