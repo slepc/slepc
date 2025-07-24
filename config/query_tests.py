@@ -8,12 +8,12 @@ import pickle
 import re
 import sys
 
-thisfile = os.path.abspath(inspect.getfile(inspect.currentframe()))
-pdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(thisfile)))))
-
-
 """
-  Tool for querying the tests.
+   This is used by gmakefile.test for the following searches
+
+  - make test search=X (or s=X)
+  - make test query=X (or q=X) queryval=Y (or qv=Y)
+
 
   Which tests to query?  Two options:
       1. Query only the tests that are run for a given configuration.
@@ -34,6 +34,16 @@ pdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.d
       allows fast searching
 
 """
+
+def nameSpace(srcfile,srcdir):
+  """
+  Because the scripts have a non-unique naming, the pretty-printing
+  needs to convey the srcdir and srcfile. There are two ways of doing this.
+  """
+  if srcfile.startswith('run'): srcfile=re.sub('^run','',srcfile)
+  prefix=srcdir.replace("/","_")+"-"
+  nameString=prefix+srcfile
+  return nameString
 
 def isFile(maybeFile):
   ext=os.path.splitext(maybeFile)[1]
@@ -62,7 +72,7 @@ def get_value(varset):
   """
   Searching args is a bit funky:
   Consider
-      args:  -ksp_monitor_short -pc_type ml -ksp_max_it 3
+      args: -ksp_monitor_short -pc_type ml -ksp_max_it 3
   Search terms are:
     ksp_monitor, 'pc_type ml', ksp_max_it
   Also ignore all loops
@@ -144,7 +154,6 @@ def get_inverse_dictionary(dataDict,fields,srcdir,petsc_dir):
     """
     sys.path.insert(0, os.path.join(petsc_dir, 'config'))
     import testparse
-    from gmakegentest import nameSpace
     invDict={}
     # Comma-delimited lists denote union
     for field in fields.replace('|',',').split(','):
@@ -187,7 +196,7 @@ def get_inverse_dictionary(dataDict,fields,srcdir,petsc_dir):
 
     return invDict
 
-def get_gmakegentest_data(testdir,srcdir,petsc_dir,petsc_arch,slepc_dir):
+def get_gmakegentest_data(srcdir,testdir,petsc_dir,petsc_arch,slepc_dir):
     """
      Write out the dataDict into a pickle file
     """
@@ -248,7 +257,7 @@ def do_query(use_source, startdir, srcdir, testdir, petsc_dir, petsc_arch, slepc
     if use_source:
         dataDict=walktree(startdir,petsc_dir)
     else:
-        dataDict=get_gmakegentest_data(testdir, srcdir, petsc_dir, petsc_arch, slepc_dir)
+        dataDict=get_gmakegentest_data(srcdir,testdir, petsc_dir, petsc_arch, slepc_dir)
 
     # Get inverse dictionary for searching
     invDict=get_inverse_dictionary(dataDict, fields, srcdir, petsc_dir)
@@ -288,6 +297,7 @@ def expand_path_like(petscdir,petscarch,pathlike):
         if petscarch == '':
             pathlike = pathlike.replace(os.path.sep.join(('share','petsc','examples'))+'/','')
         pathlike += suffix
+    pathlike = pathlike.replace('diff-','')
     return pathlike
 
 def main():
@@ -371,7 +381,7 @@ def main():
 
     # Process arguments and options -- mostly just paths here
     field=alternate_command_preprocess(shell_unquote(args[0]))
-    match=alternate_command_preprocess(shell_unquote(args[1]))
+    labels=alternate_command_preprocess(shell_unquote(args[1]))
     searchin=opts.searchin
 
     petsc_dir = opts.petsc_dir
@@ -383,7 +393,7 @@ def main():
         slepc_full_src = os.path.join(petsc_dir, 'share', 'slepc', 'examples', 'src')
     else:
       if opts.srcdir == 'src':
-        slepc_full_src = os.path.join(petsc_dir, 'src')
+        slepc_full_src = os.path.join(slepc_dir, 'src')
       else:
         slepc_full_src = opts.srcdir
     if opts.testdir == 'tests':
@@ -415,11 +425,11 @@ def main():
             print("Source directory must be a directory"+slepc_full_src)
             return
 
-    match = expand_path_like(petsc_dir,petsc_arch,match)
+    labels = expand_path_like(petsc_dir,petsc_arch,labels)
 
     # Do the actual query
     do_query(opts.use_source, startdir, slepc_full_src, petsc_full_test,
-             petsc_dir, petsc_arch, slepc_dir, field, match, searchin)
+             petsc_dir, petsc_arch, slepc_dir, field, labels, searchin)
 
     return
 
