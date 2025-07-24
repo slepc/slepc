@@ -411,7 +411,7 @@ cdef class FN(Object):
         for computing matrix functions. In that case, this function allows
         choosing the wanted method.
 
-        If `meth` is currently set to 0 and the input argument of
+        If ``meth`` is currently set to 0 and the input argument of
         `FN.evaluateFunctionMat()` is a symmetric/Hermitian matrix, then
         the computation is done via the eigendecomposition, rather than
         with the general algorithm.

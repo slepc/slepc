@@ -35,8 +35,8 @@ class STFilterType(object):
     """
     ST filter type.
 
-    - `FILTLAN`:  An adapted implementation of the Filtered Lanczos Package.
-    - `CHEBYSEV`: A polynomial filter based on a truncated Chebyshev series.
+    - ``FILTLAN``:  An adapted implementation of the Filtered Lanczos Package.
+    - ``CHEBYSEV``: A polynomial filter based on a truncated Chebyshev series.
     """
     FILTLAN   = ST_FILTER_FILTLAN
     CHEBYSHEV = ST_FILTER_CHEBYSHEV
@@ -447,31 +447,31 @@ cdef class ST(Object):
 
     def setKSP(self, KSP ksp) -> None:
         """
-        Set the KSP object associated with the spectral transformation.
+        Set the ``KSP`` object associated with the spectral transformation.
 
         Collective.
 
         Parameters
         ----------
-        ksp
+        `petsc4py.PETSc.KSP`
             The linear solver object.
         """
         CHKERR( STSetKSP(self.st, ksp.ksp) )
 
     def getKSP(self) -> KSP:
         """
-        Get the KSP object associated with the spectral transformation.
+        Get the ``KSP`` object associated with the spectral transformation.
 
         Collective.
 
         Returns
         -------
-        KSP
+        `petsc4py.PETSc.KSP`
             The linear solver object.
 
         Notes
         -----
-        On output, the internal value of KSP can be ``NULL`` if the
+        On output, the internal value of `petsc4py.PETSc.KSP` can be ``NULL`` if the
         combination of eigenproblem type and selected transformation
         does not require to solve a linear system of equations.
         """
@@ -643,7 +643,7 @@ cdef class ST(Object):
         -----
         In the generalized Cayley transform, the operator can be
         expressed as ``OP = inv(A - sigma B)*(A + tau B)``. This
-        function sets the value of `tau`.  Use `setShift()` for
+        function sets the value of ``tau``.  Use `setShift()` for
         setting ``sigma``.
         """
         cdef PetscScalar sval = asScalar(tau)

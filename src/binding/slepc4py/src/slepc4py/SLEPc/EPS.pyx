@@ -1054,21 +1054,21 @@ cdef class EPS(Object):
 
         Notes
         -----
-        Use `DECIDE` for `ncv` and `mpd` to assign a reasonably good
+        Use `DECIDE` for ``ncv`` and ``mpd`` to assign a reasonably good
         value, which is dependent on the solution method.
 
-        The parameters `ncv` and `mpd` are intimately related, so that
+        The parameters ``ncv`` and ``mpd`` are intimately related, so that
         the user is advised to set one of them at most. Normal usage
         is the following:
 
-        + In cases where `nev` is small, the user sets `ncv`
-          (a reasonable default is 2 * `nev`).
+        + In cases where ``nev`` is small, the user sets ``ncv``
+          (a reasonable default is 2 * ``nev``).
 
-        + In cases where `nev` is large, the user sets `mpd`.
+        + In cases where ``nev`` is large, the user sets ``mpd``.
 
-        The value of `ncv` should always be between `nev` and (`nev` +
-        `mpd`), typically `ncv` = `nev` + `mpd`. If `nev` is not too
-        large, `mpd` = `nev` is a reasonable choice, otherwise a
+        The value of ``ncv`` should always be between ``nev`` and (``nev`` +
+        ``mpd``), typically ``ncv`` = ``nev`` + ``mpd``. If ``nev`` is not too
+        large, ``mpd`` = ``nev`` is a reasonable choice, otherwise a
         smaller value should be used.
         """
         cdef PetscInt ival1 = PETSC_CURRENT
@@ -1544,10 +1544,9 @@ cdef class EPS(Object):
 
         Notes
         -----
-        The index ``i`` should be a value between ``0`` and
-        ``nconv-1`` (see `getConverged()`). Eigenpairs are indexed
-        according to the ordering criterion established with
-        `setWhichEigenpairs()`.
+        The index ``i`` should be a value between ``0`` and ``nconv-1`` (see
+        `getConverged()`). Eigenpairs are indexed according to the ordering
+        criterion established with `setWhichEigenpairs()`.
         """
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
@@ -1602,10 +1601,9 @@ cdef class EPS(Object):
 
         Notes
         -----
-        The index ``i`` should be a value between ``0`` and
-        ``nconv-1`` (see `getConverged()`). Eigensolutions are indexed
-        according to the ordering criterion established with
-        `setWhichEigenpairs()`.
+        The index ``i`` should be a value between ``0`` and ``nconv-1`` (see
+        `getConverged()`). Eigensolutions are indexed according to the
+        ordering criterion established with `setWhichEigenpairs()`.
 
         Left eigenvectors are available only if the twosided flag was set
         with `setTwoSided()`.
@@ -1640,10 +1638,9 @@ cdef class EPS(Object):
 
         Notes
         -----
-        The index ``i`` should be a value between ``0`` and
-        ``nconv-1`` (see `getConverged()`). Eigenpairs are indexed
-        according to the ordering criterion established with
-        `setWhichEigenpairs()`.
+        The index ``i`` should be a value between ``0`` and ``nconv-1`` (see
+        `getConverged()`). Eigenpairs are indexed according to the ordering
+        criterion established with `setWhichEigenpairs()`.
         """
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
@@ -2319,20 +2316,20 @@ cdef class EPS(Object):
 
         Notes
         -----
-        This function modifies the eigenproblem matrices at
-        subcommunicator level, and optionally updates the global
-        matrices in the parent communicator.  The updates are
-        expressed as ``A <-- s*A + a*Au``, ``B <-- t*B + b*Bu``.
+        This function modifies the eigenproblem matrices at subcommunicator
+        level, and optionally updates the global matrices in the parent
+        communicator.  The updates are expressed as ``A <-- s*A + a*Au``,
+        ``B <-- t*B + b*Bu``.
 
         It is possible to update one of the matrices, or both.
 
-        The matrices `Au` and `Bu` must be equal in all subcommunicators.
+        The matrices ``Au`` and ``Bu`` must be equal in all subcommunicators.
 
-        The `structure` flag is passed to the `PETSc.Mat.axpy()` operations
-        to perform the updates.
+        The ``structure`` flag is passed to the `petsc4py.PETSc.Mat.axpy`
+        operations to perform the updates.
 
-        If `globalup` is True, communication is carried out to
-        reconstruct the updated matrices in the parent communicator.
+        If ``globalup`` is True, communication is carried out to reconstruct
+        the updated matrices in the parent communicator.
 
         """
         cdef PetscMat Amat = Au.mat if Au is not None else <PetscMat>NULL
@@ -2444,7 +2441,7 @@ cdef class EPS(Object):
 
         Returns
         -------
-        KSP
+        `petsc4py.PETSc.KSP`
             The linear solver object.
         """
         cdef KSP ksp = KSP()
@@ -2842,13 +2839,13 @@ cdef class EPS(Object):
         Logically collective.
 
         Deactivate the dynamic stopping criterion that sets the
-        `KSP` relative tolerance to `0.5**i`, where `i` is the number
-        of `EPS` iterations from the last converged value.
+        `petsc4py.PETSc.KSP` relative tolerance to ``0.5**i``, where ``i`` is
+        the number of `EPS` iterations from the last converged value.
 
         Parameters
         ----------
         constant
-            If False, the `KSP` relative tolerance is set to `0.5**i`.
+            If False, the `petsc4py.PETSc.KSP` relative tolerance is set to ``0.5**i``.
         """
         cdef PetscBool tval = asBool(constant)
         CHKERR( EPSJDSetConstCorrectionTol(self.eps, tval) )
@@ -3169,10 +3166,11 @@ cdef class EPS(Object):
 
         Notes
         -----
-        The default number of partitions is 1. This means the internal `KSP` object
-        is shared among all processes of the `EPS` communicator. Otherwise, the
-        communicator is split into npart communicators, so that `npart` `KSP` solves
-        proceed simultaneously.
+        The default number of partitions is 1. This means the internal
+        `petsc4py.PETSc.KSP` object is shared among all processes of the
+        `EPS` communicator. Otherwise, the communicator is split into npart
+        communicators, so that ``npart`` `petsc4py.PETSc.KSP` solves proceed
+        simultaneously.
         """
         cdef PetscInt  ival1 = PETSC_CURRENT
         cdef PetscInt  ival2 = PETSC_CURRENT
@@ -3331,14 +3329,15 @@ cdef class EPS(Object):
 
         Returns
         -------
-        list of KSP
+        list of `petsc4py.PETSc.KSP`
             The linear solver objects.
 
         Notes
         -----
-        The number of `KSP` solvers is equal to the number of integration
-        points divided by the number of partitions. This value is halved in
-        the case of real matrices with a region centered at the real axis.
+        The number of `petsc4py.PETSc.KSP` solvers is equal to the number of
+        integration points divided by the number of partitions. This value is
+        halved in the case of real matrices with a region centered at the real
+        axis.
         """
         cdef PetscInt i = 0, n = 0
         cdef PetscKSP *p = NULL

@@ -649,20 +649,20 @@ cdef class SVD(Object):
 
         Notes
         -----
-        Use `DECIDE` for `ncv` and `mpd` to assign a reasonably good
+        Use `DECIDE` for ``ncv`` and ``mpd`` to assign a reasonably good
         value, which is dependent on the solution method.
 
-        The parameters `ncv` and `mpd` are intimately related, so that
+        The parameters ``ncv`` and ``mpd`` are intimately related, so that
         the user is advised to set one of them at most. Normal usage
         is the following:
 
-         - In cases where `nsv` is small, the user sets `ncv`
-           (a reasonable default is 2 * `nsv`).
-         - In cases where `nsv` is large, the user sets `mpd`.
+         - In cases where ``nsv`` is small, the user sets ``ncv``
+           (a reasonable default is 2 * ``nsv``).
+         - In cases where ``nsv`` is large, the user sets ``mpd``.
 
-        The value of `ncv` should always be between `nsv` and (`nsv` +
-        `mpd`), typically `ncv` = `nsv` + `mpd`. If `nsv` is not too
-        large, `mpd` = `nsv` is a reasonable choice, otherwise a
+        The value of ``ncv`` should always be between ``nsv`` and (``nsv`` +
+        ``mpd``), typically ``ncv`` = ``nsv`` + ``mpd``. If ``nsv`` is not too
+        large, ``mpd`` = ``nsv`` is a reasonable choice, otherwise a
         smaller value should be used.
         """
         cdef PetscInt ival1 = PETSC_CURRENT
@@ -1495,7 +1495,7 @@ cdef class SVD(Object):
 
         Parameters
         ----------
-        ksp
+        ``ksp``
             The linear solver object.
         """
         CHKERR( SVDTRLanczosSetKSP(self.svd, ksp.ksp) )
@@ -1508,7 +1508,7 @@ cdef class SVD(Object):
 
         Returns
         -------
-        KSP
+        `petsc4py.PETSc.KSP`
             The linear solver object.
         """
         cdef KSP ksp = KSP()

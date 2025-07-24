@@ -699,13 +699,13 @@ cdef class PEP(Object):
 
     def getRefineKSP(self) -> KSP:
         """
-        Get the `KSP` object used by the eigensolver in the refinement phase.
+        Get the ``KSP`` object used by the eigensolver in the refinement phase.
 
         Collective.
 
         Returns
         -------
-        KSP
+        `petsc4py.PETSc.KSP`
             The linear solver object.
         """
         cdef KSP ksp = KSP()
@@ -2086,10 +2086,11 @@ cdef class PEP(Object):
 
         Notes
         -----
-        The default number of partitions is 1. This means the internal `KSP` object
-        is shared among all processes of the `PEP` communicator. Otherwise, the
-        communicator is split into npart communicators, so that `npart` `KSP` solves
-        proceed simultaneously.
+        The default number of partitions is 1. This means the internal
+        `petsc4py.PETSc.KSP` object is shared among all processes of the `PEP`
+        communicator. Otherwise, the communicator is split into npart
+        communicators, so that ``npart`` `petsc4py.PETSc.KSP` solves proceed
+        simultaneously.
         """
         cdef PetscInt  ival1 = PETSC_CURRENT
         cdef PetscInt  ival2 = PETSC_CURRENT
@@ -2216,14 +2217,15 @@ cdef class PEP(Object):
 
         Returns
         -------
-        list of KSP
+        list of `petsc4py.PETSc.KSP`
             The linear solver objects.
 
         Notes
         -----
-        The number of `KSP` solvers is equal to the number of integration
-        points divided by the number of partitions. This value is halved in
-        the case of real matrices with a region centered at the real axis.
+        The number of `petsc4py.PETSc.KSP` solvers is equal to the number of
+        integration points divided by the number of partitions. This value is
+        halved in the case of real matrices with a region centered at the real
+        axis.
         """
         cdef PetscInt i = 0, n = 0
         cdef PetscKSP *p = NULL

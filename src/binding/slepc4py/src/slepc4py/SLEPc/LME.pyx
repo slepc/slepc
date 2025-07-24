@@ -198,13 +198,13 @@ cdef class LME(Object):
 
         Returns
         -------
-        A
+        ``A``
             First coefficient matrix
-        B
+        ``B``
             Second coefficient matrix, if available
-        D
+        ``D``
             Third coefficient matrix, if available
-        E
+        ``E``
             Fourth coefficient matrix, if available
         """
         cdef PetscMat Amat, Bmat, Dmat, Emat

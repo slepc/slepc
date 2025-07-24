@@ -511,8 +511,8 @@ cdef class BV(Object):
         -----
         The default settings work well for most problems.
 
-        The parameter `eta` should be a real value between ``0`` and
-        ``1`` (or `DETERMINE`).  The value of `eta` is used only when
+        The parameter ``eta`` should be a real value between ``0`` and
+        ``1`` (or `DETERMINE`).  The value of ``eta`` is used only when
         the refinement type is `BV.OrthogRefineType.IFNEEDED`.
 
         When using several processors, `BV.OrthogType.MGS` is likely to
