@@ -601,7 +601,7 @@ cdef class DS(Object):
         CHKERR( DSCond(self.ds, &rval) )
         return toReal(rval)
 
-    def solve(self):
+    def solve(self) -> ArrayReal | ArrayComplex:
         """
         Solve the problem.
 
@@ -623,7 +623,7 @@ cdef class DS(Object):
         else:
             return kr+1j*ki
 
-    def vectors(self, matname = MatType.X):
+    def vectors(self, matname = MatType.X) -> None:
         """
         Compute vectors associated to the dense system such
         as eigenvectors.
