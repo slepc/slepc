@@ -1107,10 +1107,12 @@ cdef class SVD(Object):
         Returns
         -------
         float
-            The relative error bound, computed in various ways from the residual norm
-            ``sqrt(n1^2+n2^2)`` where ``n1 = ||A*v-sigma*u||_2``,
-            ``n2 = ||A^T*u-sigma*v||_2``, ``sigma`` is the singular
-            value, ``u`` and ``v`` are the left and right singular vectors.
+            The relative error bound, computed in various ways from the
+            residual norm :math:`\sqrt{n_1^2+n_2^2}` where
+            :math:`n_1 = \|A v - \sigma u\|_2`,
+            :math:`n_2 = \|A^T u - \sigma v\|_2`, :math:`\sigma`
+            is the singular value, :math:`u` and :math:`v` are the left and
+            right singular vectors.
 
         Notes
         -----
@@ -1215,14 +1217,14 @@ cdef class SVD(Object):
 
     def setCrossExplicitMatrix(self, flag: bool = True) -> None:
         """
-        Set if the eigensolver operator ``A^T*A`` must be computed explicitly.
+        Set if the eigensolver operator :math:`A^T A` must be computed.
 
         Logically collective.
 
         Parameters
         ----------
         flag
-            True if ``A^T*A`` is built explicitly.
+            True to build :math:`A^T A` explicitly.
         """
         cdef PetscBool tval = asBool(flag)
         CHKERR( SVDCrossSetExplicitMatrix(self.svd, tval) )
@@ -1277,27 +1279,30 @@ cdef class SVD(Object):
 
         Logically collective.
 
-        Set if the eigensolver operator ``H(A) = [ 0 A ; A^T 0 ]`` must be
+        Set if the eigensolver operator :math:`H(A) = [ 0\; A ; A^T\; 0 ]` must be
         computed explicitly.
 
         Parameters
         ----------
         flag
-            True if ``H(A)`` is built explicitly.
+            True if :math:`H(A)` is built explicitly.
         """
         cdef PetscBool tval = asBool(flag)
         CHKERR( SVDCyclicSetExplicitMatrix(self.svd, tval) )
 
     def getCyclicExplicitMatrix(self) -> bool:
         """
-        Get the flag indicating if ``H(A) = [ 0 A ; A^T 0 ]`` is built explicitly.
+        Get the flag indicating if :math:`H(A)` is built explicitly.
 
         Not collective.
+
+        Get the flag indicating if :math:`H(A) = [ 0\; A ; A^T\; 0 ]` is built
+        explicitly.
 
         Returns
         -------
         bool
-            True if ``H(A)`` is built explicitly.
+            True if :math:`H(A)` is built explicitly.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDCyclicGetExplicitMatrix(self.svd, &tval) )
@@ -1518,28 +1523,28 @@ cdef class SVD(Object):
 
     def setTRLanczosExplicitMatrix(self, flag: bool = True) -> None:
         """
-        Set if the matrix ``Z=[A;B]`` must be built explicitly.
+        Set if the matrix :math:`Z=[A;B]` must be built explicitly.
 
         Logically collective.
 
         Parameters
         ----------
         flag
-            True if ``Z=[A;B]`` is built explicitly.
+            True if :math:`Z=[A;B]` is built explicitly.
         """
         cdef PetscBool tval = asBool(flag)
         CHKERR( SVDTRLanczosSetExplicitMatrix(self.svd, tval) )
 
     def getTRLanczosExplicitMatrix(self) -> bool:
         """
-        Get the flag indicating if ``Z=[A;B]`` is built explicitly.
+        Get the flag indicating if :math:`Z=[A;B]` is built explicitly.
 
         Not collective.
 
         Returns
         -------
         bool
-            True if ``Z=[A;B]`` is built explicitly.
+            True if :math:`Z=[A;B]` is built explicitly.
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( SVDTRLanczosGetExplicitMatrix(self.svd, &tval) )

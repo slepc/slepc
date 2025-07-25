@@ -392,7 +392,8 @@ cdef class MFN(Object):
 
         Collective.
 
-        Given a vector b, the vector x = f(A)*b is returned.
+        Given a vector :math:`b`, the vector :math:`x = f(A) b` is
+        returned.
 
         Parameters
         ----------
@@ -409,7 +410,8 @@ cdef class MFN(Object):
 
         Collective.
 
-        Given a vector b, the vector x = f(A^T)*b is returned.
+        Given a vector :math:`b`, the vector :math:`x = f(A^T) b` is
+        returned.
 
         Parameters
         ----------

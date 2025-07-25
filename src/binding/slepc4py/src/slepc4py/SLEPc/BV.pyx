@@ -60,8 +60,8 @@ class BVSVDMethod(object):
     """
     BV methods for computing the SVD.
 
-    - `REFINE`: Based on the SVD of the cross product matrix S'\*S, with
-                refinement.
+    - `REFINE`: Based on the SVD of the cross product matrix :math:`S^H S`,
+                with refinement.
     - `QR`:     Based on the SVD of the triangular factor of qr(S).
     - `QR_CAA`: Variant of QR intended for use in communication-avoiding
                 Arnoldi.
@@ -928,11 +928,12 @@ cdef class BV(Object):
         Notes
         -----
         This is analogue to VecMDot(), but using BV to represent a collection
-        of vectors. The result is m = X^H*y, so m_i is equal to x_j^H y. Note
-        that here X is transposed as opposed to BVDot().
+        of vectors. The result is :math:`m = X^H y`, so :math:`m_i` is
+        equal to :math:`x_j^H y`. Note that here :math:`X` is transposed
+        as opposed to BVDot().
 
         If a non-standard inner product has been specified with BVSetMatrix(),
-        then the result is m = X^H*B*y.
+        then the result is :math:`m = X^H B y`.
         """
         l, k = self.getActiveColumns()
         cdef PetscScalar* mval = NULL
@@ -1066,12 +1067,14 @@ cdef class BV(Object):
 
         Collective.
 
-        M = Y^H*X (m_ij = y_i^H x_j) or M = Y^H*B*X
+        :math:`M = Y^H X` :math:`(m_{ij} = y_i^H x_j)` or
+        :math:`M = Y^H B X`
 
         Parameters
         ----------
         Y
-            Left basis vectors, can be the same as self, giving M = X^H X.
+            Left basis vectors, can be the same as self, giving
+            :math:`M = X^H X`.
 
         Returns
         -------
@@ -1080,19 +1083,20 @@ cdef class BV(Object):
 
         Notes
         -----
-        This is the generalization of VecDot() for a collection of vectors, M =
-        Y^H*X. The result is a matrix M whose entry m_ij is equal to y_i^H x_j
-        (where y_i^H denotes the conjugate transpose of y_i).
+        This is the generalization of VecDot() for a collection of vectors,
+        :math:`M = Y^H X`. The result is a matrix :math:`M` whose entry
+        :math:`m_{ij}` is equal to :math:`y_i^H x_j`
+        (where :math:`y_i^H` denotes the conjugate transpose of :math:`y_i`).
 
-        X and Y can be the same object.
+        :math:`X` and :math:`Y` can be the same object.
 
         If a non-standard inner product has been specified with setMatrix(),
-        then the result is M = Y^H*B*X. In this case, both X and Y must have
-        the same associated matrix.
+        then the result is :math:`M = Y^H B X`. In this case, both
+        :math:`X` and :math:`Y` must have the same associated matrix.
 
-        Only rows (resp. columns) of M starting from ly (resp. lx) are
-        computed, where ly (resp. lx) is the number of leading columns of Y
-        (resp. X).
+        Only rows (resp. columns) of :math:`M` starting from :math:`ly` (resp.
+        :math:`lx`) are computed, where :math:`ly` (resp. :math:`lx`) is the
+        number of leading columns of :math:`Y` (resp. :math:`X`).
         """
         cdef BV X = self
         cdef PetscInt ky=0, kx=0
@@ -1108,14 +1112,15 @@ cdef class BV(Object):
 
         Collective.
 
-        M = Y^H A X
+        :math:`M = Y^H A X`
 
         Parameters
         ----------
         A
             Matrix to be projected.
         Y
-            Left basis vectors, can be the same as self, giving M = X^H A X.
+            Left basis vectors, can be the same as self, giving
+            :math:`M = X^H A X`.
 
         Returns
         -------
@@ -1133,7 +1138,7 @@ cdef class BV(Object):
 
     def matMult(self, Mat A, BV Y=None) -> BV:
         """
-        Compute the matrix-vector product for each column, Y = A*V.
+        Compute the matrix-vector product for each column, :math:`Y = A V`.
 
         Neighbor-wise collective.
 
@@ -1186,7 +1191,7 @@ cdef class BV(Object):
 
         Neighbor-wise collective.
 
-        Y=A^H*V.
+        :math:`Y = A^H V`.
 
         Parameters
         ----------
@@ -1232,7 +1237,7 @@ cdef class BV(Object):
 
         Neighbor-wise collective.
 
-        v_{j+1}=A*v_j.
+        :math:`v_{j+1} = A v_j`.
 
         Parameters
         ----------
@@ -1250,7 +1255,7 @@ cdef class BV(Object):
 
         Neighbor-wise collective.
 
-        Store the result in the next column: v_{j+1}=A^T*v_j.
+        Store the result in the next column: :math:`v_{j+1} = A^T v_j`.
 
         Parameters
         ----------
@@ -1268,7 +1273,7 @@ cdef class BV(Object):
 
         Neighbor-wise collective.
 
-        Store the result in the next column: v_{j+1}=A^H*v_j.
+        Store the result in the next column: :math:`v_{j+1} = A^H v_j`.
 
         Parameters
         ----------
@@ -1281,8 +1286,8 @@ cdef class BV(Object):
         CHKERR( BVMatMultHermitianTransposeColumn(self.bv, A.mat, ival) )
 
     def mult(self, alpha: Scalar, beta: Scalar, BV X, Mat Q or None) -> None:
-        """
-        Compute Y = beta*Y + alpha*X*Q.
+        r"""
+        Compute :math:`Y = beta Y + alpha X Q`.
 
         Logically collective.
 
@@ -1304,7 +1309,7 @@ cdef class BV(Object):
 
     def multInPlace(self, Mat Q, s: int, e: int) -> None:
         """
-        Update a set of vectors as V(:,s:e-1) = V*Q(:,s:e-1).
+        Update a set of vectors as :math:`V(:,s:e-1) = V Q(:,s:e-1)`.
 
         Logically collective.
 
@@ -1322,10 +1327,13 @@ cdef class BV(Object):
         CHKERR( BVMultInPlace(self.bv, Q.mat, ival1, ival2) )
 
     def multColumn(self, alpha: Scalar, beta: Scalar, j: int, q: Sequence[Scalar]) -> None:
-        """
-        Compute y = beta*y + alpha*X*q, where y is the j-th column.
+        r"""
+        Compute :math:`y = beta y + alpha X q`.
 
         Logically collective.
+
+        Compute :math:`y = beta y + alpha X q`, where
+        :math:`y` is the :math:`j^{th}` column.
 
         Parameters
         ----------
@@ -1351,7 +1359,7 @@ cdef class BV(Object):
 
     def multVec(self, alpha: Scalar, beta: Scalar, Vec y, q: Sequence[Scalar]) -> None:
         """
-        Compute y = beta*y + alpha*X*q.
+        Compute :math:`y = beta y + alpha X q`.
 
         Logically collective.
 
@@ -1396,11 +1404,12 @@ cdef class BV(Object):
 
         Notes
         -----
-        The norm of V[j] is computed (NORM_1, NORM_2, or NORM_INFINITY).
+        The norm of :math:`V_j` is computed (NORM_1, NORM_2, or NORM_INFINITY).
 
         If a non-standard inner product has been specified with BVSetMatrix(),
-        then the returned value is ``sqrt(V[j]'* B*V[j])``, where B is the inner
-        product matrix (argument 'type' is ignored).
+        then the returned value is :math:`\sqrt{V_j^H B V_j}`,
+        where :math:`B` is the inner product matrix (argument 'type' is
+        ignored).
         """
         cdef PetscNormType ntype = PETSC_NORM_2
         if norm_type is not None: ntype = norm_type
@@ -1579,9 +1588,9 @@ cdef class BV(Object):
 
         Notes
         -----
-        This function applies an orthogonal projector to project
-        vector ``v`` onto the orthogonal complement of the span of the
-        columns of the BV.
+        This function applies an orthogonal projector to project vector
+        :math:`v` onto the orthogonal complement of the span of the columns
+        of the BV.
 
         This routine does not normalize the resulting vector.
         """
@@ -1611,10 +1620,10 @@ cdef class BV(Object):
 
         Notes
         -----
-        This function applies an orthogonal projector to project
-        vector ``V[j]`` onto the orthogonal complement of the span of the
-        columns ``V[0..j-1]``, where ``V[.]`` are the vectors of the BV.
-        The columns ``V[0..j-1]`` are assumed to be mutually orthonormal.
+        This function applies an orthogonal projector to project vector
+        :math:`V_j` onto the orthogonal complement of the span of the columns
+        :math:`V[0..j-1]`, where :math:`V[.]` are the vectors of the BV.
+        The columns :math:`V[0..j-1]` are assumed to be mutually orthonormal.
 
         This routine does not normalize the resulting vector.
         """
@@ -1669,8 +1678,8 @@ cdef class BV(Object):
 
         Notes
         -----
-        The output satisfies ``V0 = V*R`` (where V0 represent the input V) and
-        ``V'*V = I``.
+        The output satisfies :math:`V_0 = V R` (where :math:`V_0` represent the
+        input :math:`V`) and :math:`V' V = I`.
         """
         if kargs: self.setOrthogonalization(**kargs)
         cdef PetscMat Rmat = <PetscMat>NULL if R is None else R.mat

@@ -24,8 +24,8 @@ class STMatMode(object):
 
     - `COPY`:    A working copy of the matrix is created.
     - `INPLACE`: The operation is computed in-place.
-    - `SHELL`:   The matrix ``A-sigma*B`` is handled as an
-      implicit matrix.
+    - `SHELL`:   The matrix :math:`A - \sigma B` is handled as an
+                 implicit matrix.
     """
     COPY    = ST_MATMODE_COPY
     INPLACE = ST_MATMODE_INPLACE
@@ -315,28 +315,26 @@ cdef class ST(Object):
 
         Notes
         -----
-        By default (`ST.MatMode.COPY`), a copy of matrix ``A`` is made
-        and then this copy is shifted explicitly, e.g. ``A <- (A - s
-        B)``.
+        By default (`ST.MatMode.COPY`), a copy of matrix :math:`A` is made
+        and then this copy is shifted explicitly, e.g.
+        :math:`A \leftarrow (A - s B)`.
 
-        With `ST.MatMode.INPLACE`, the original matrix ``A`` is
-        shifted at `setUp()` and unshifted at the end of the
-        computations. With respect to the previous one, this mode
-        avoids a copy of matrix ``A``. However, a backdraw is that the
-        recovered matrix might be slightly different from the original
-        one (due to roundoff).
+        With `ST.MatMode.INPLACE`, the original matrix :math:`A` is shifted at
+        `setUp()` and unshifted at the end of the computations. With respect to
+        the previous one, this mode avoids a copy of matrix :math:`A`. However,
+        a backdraw is that the recovered matrix might be slightly different
+        from the original one (due to roundoff).
 
-        With `ST.MatMode.SHELL`, the solver works with an implicit
-        shell matrix that represents the shifted matrix. This mode is
-        the most efficient in creating the shifted matrix but it
-        places serious limitations to the linear solves performed in
-        each iteration of the eigensolver (typically, only iterative
-        solvers with Jacobi preconditioning can be used).
+        With `ST.MatMode.SHELL`, the solver works with an implicit shell matrix
+        that represents the shifted matrix. This mode is the most efficient in
+        creating the shifted matrix but it places serious limitations to the
+        linear solves performed in each iteration of the eigensolver
+        (typically, only iterative solvers with Jacobi preconditioning can be
+        used).
 
-        In the case of generalized problems, in the two first modes
-        the matrix ``A - s B`` has to be computed explicitly. The
-        efficiency of this computation can be controlled with
-        `setMatStructure()`.
+        In the case of generalized problems, in the two first modes the matrix
+        :math:`A - s B` has to be computed explicitly. The efficiency of
+        this computation can be controlled with `setMatStructure()`.
         """
         cdef SlepcSTMatMode val = mode
         CHKERR( STSetMatMode(self.st, val) )
@@ -405,11 +403,10 @@ cdef class ST(Object):
 
         Logically collective.
 
-        Set an internal Mat.Structure attribute to indicate which is
-        the relation of the sparsity pattern of the two matrices ``A``
-        and ``B`` constituting the generalized eigenvalue
-        problem. This function has no effect in the case of standard
-        eigenproblems.
+        Set an internal Mat.Structure attribute to indicate which is the
+        relation of the sparsity pattern of the two matrices :math:`A` and
+        :math:`B` constituting the generalized eigenvalue problem. This
+        function has no effect in the case of standard eigenproblems.
 
         Parameters
         ----------
@@ -526,8 +523,8 @@ cdef class ST(Object):
 
         Collective.
 
-        Apply the spectral transformation operator to a vector, for
-        instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
+        Apply the spectral transformation operator to a vector, for instance
+        :math:`(A - s B)^{-1} B` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
         Parameters
@@ -545,9 +542,9 @@ cdef class ST(Object):
 
         Collective.
 
-        Apply the transpose of the operator to a vector, for
-        instance ``B^T(A - sB)^-T`` in the case of the
-        shift-and-invert transformation and generalized eigenproblem.
+        Apply the transpose of the operator to a vector, for instance
+        :math:`B^T(A - s B)^{-T}` in the case of the shift-and-invert
+        transformation and generalized eigenproblem.
 
         Parameters
         ----------
@@ -564,9 +561,9 @@ cdef class ST(Object):
 
         Collective.
 
-        Apply the hermitian-transpose of the operator to a vector, for
-        instance ``B^H(A - sB)^-H`` in the case of the
-        shift-and-invert transformation and generalized eigenproblem.
+        Apply the hermitian-transpose of the operator to a vector, for instance
+        :math:`B^H(A - s B)^{-H}` in the case of the shift-and-invert
+        transformation and generalized eigenproblem.
 
         Parameters
         ----------
@@ -583,8 +580,8 @@ cdef class ST(Object):
 
         Collective.
 
-        Apply the spectral transformation operator to a matrix, for
-        instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
+        Apply the spectral transformation operator to a matrix, for instance
+        :math:`(A - s B)^{-1} B` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
         Parameters
@@ -641,10 +638,10 @@ cdef class ST(Object):
 
         Notes
         -----
-        In the generalized Cayley transform, the operator can be
-        expressed as ``OP = inv(A - sigma B)*(A + tau B)``. This
-        function sets the value of ``tau``.  Use `setShift()` for
-        setting ``sigma``.
+        In the generalized Cayley transform, the operator can be expressed as
+        :math:`OP = inv(A - \sigma B) (A + tau B)`. This function sets
+        the value of :math:`tau`.  Use `setShift()` for setting
+        :math:`\sigma`.
         """
         cdef PetscScalar sval = asScalar(tau)
         CHKERR( STCayleySetAntishift(self.st, sval) )

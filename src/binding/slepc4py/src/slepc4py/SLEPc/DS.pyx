@@ -502,12 +502,11 @@ cdef class DS(Object):
 
         Notes
         -----
-        In Krylov methods it is useful that the matrix representing
-        the direct solver has one extra row, i.e., has dimension
-        (n+1)*n . If this flag is activated, all transformations
-        applied to the right of the matrix also affect this additional
-        row. In that case, (n+1) must be less or equal than the
-        leading dimension.
+        In Krylov methods it is useful that the matrix representing the direct
+        solver has one extra row, i.e., has dimension :math:`(n+1) n`. If
+        this flag is activated, all transformations applied to the right of the
+        matrix also affect this additional row. In that case, :math:`(n+1)`
+        must be less or equal than the leading dimension.
 
         The default is ``False``.
         """
@@ -542,12 +541,12 @@ cdef class DS(Object):
 
         Notes
         -----
-        Normally the vectors returned in `DS.MatType.X` are eigenvectors
-        of the projected matrix. With this flag activated, `vectors()`
-        will return the right singular vector of the smallest singular
-        value of matrix At-theta*I, where At is the extended (n+1)xn
-        matrix and theta is the Ritz value. This is used in the
-        refined Ritz approximation.
+        Normally the vectors returned in `DS.MatType.X` are eigenvectors of
+        the projected matrix. With this flag activated, `vectors()` will return
+        the right singular vector of the smallest singular value of matrix
+        :math:`At - theta I`, where :math:`At` is the extended
+        :math:`(n+1) times n` matrix and :math:`theta` is the Ritz value.
+        This is used in the refined Ritz approximation.
 
         The default is ``False``.
         """

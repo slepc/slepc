@@ -23,7 +23,7 @@ cdef class Util:
         Returns
         -------
         petsc4py.PETSc.Mat
-            The matrix with the block form H = [ R C; -C^H -R^T ].
+            The matrix with the block form :math:`H = [ R\; C; {-C}^H\; {-R}^T ]`.
         """
         cdef Mat H = Mat()
         CHKERR( MatCreateBSE(R.mat, C.mat, &H.mat) )

@@ -297,7 +297,7 @@ cdef class FN(Object):
 
     def evaluateDerivative(self, x: Scalar) -> Scalar:
         """
-        Compute the value of the derivative f'(x) for a given x.
+        Compute the value of the derivative :math:`f'(x)` for a given x.
 
         Not collective.
 
@@ -309,7 +309,7 @@ cdef class FN(Object):
         Returns
         -------
         Scalar
-            The result of f'(x).
+            The result of :math:`f'(x)`.
         """
         cdef PetscScalar sval = 0
         cdef PetscScalar sarg = asScalar(x)
@@ -318,7 +318,7 @@ cdef class FN(Object):
 
     def evaluateFunctionMat(self, Mat A: petsc4py.PETSc.Mat, Mat B: petsc4py.PETSc.Mat | None = None) -> petsc4py.PETSc.Mat:
         """
-        Compute the value of the function f(A) for a given matrix A.
+        Compute the value of the function :math:`f(A)` for a given matrix A.
 
         Logically collective.
 
@@ -332,7 +332,7 @@ cdef class FN(Object):
         Returns
         -------
         petsc4py.PETSc.Mat
-            The result of f(A).
+            The result of :math:`f(A)`.
         """
         if B is None: B = A.duplicate()
         CHKERR( FNEvaluateFunctionMat(self.fn, A.mat, B.mat) )

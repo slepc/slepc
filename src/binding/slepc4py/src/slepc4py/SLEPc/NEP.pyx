@@ -25,7 +25,7 @@ class NEPProblemType(object):
     NEP problem type.
 
     - `GENERAL`:  General nonlinear eigenproblem.
-    - `RATIONAL`: NEP defined in split form with all f_i rational.
+    - `RATIONAL`: NEP defined in split form with all :math:`f_i` rational.
     """
     GENERAL  = NEP_GENERAL
     RATIONAL = NEP_RATIONAL
@@ -995,8 +995,8 @@ cdef class NEP(Object):
         -------
         float
             The error bound, computed in various ways from the residual norm
-            ``||T(lambda)x||_2`` where ``lambda`` is the eigenvalue and
-            ``x`` is the eigenvector.
+            :math:`\|T(\lambda)x\|_2` where :math:`\lambda` is the eigenvalue
+            and :math:`x` is the eigenvector.
         """
         cdef SlepcNEPErrorType et = NEP_ERROR_RELATIVE
         cdef PetscReal rval = 0
@@ -1074,12 +1074,12 @@ cdef class NEP(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Set the function to compute the nonlinear Function T(lambda).
+        Set the function to compute the nonlinear Function :math:`T(\lambda)`.
 
         Collective.
 
-        Set the function to compute the nonlinear Function T(lambda) as well
-        as the location to store the matrix.
+        Set the function to compute the nonlinear Function :math:`T(\lambda)`
+        as well as the location to store the matrix.
 
         Parameters
         ----------
@@ -1103,12 +1103,12 @@ cdef class NEP(Object):
 
     def getFunction(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat, NEPFunction]:
         """
-        Get the function to compute the nonlinear Function T(lambda).
+        Get the function to compute the nonlinear Function :math:`T(\lambda)`.
 
         Collective.
 
-        Get the function to compute the nonlinear Function T(lambda) and the
-        matrix.
+        Get the function to compute the nonlinear Function :math:`T(\lambda)`
+        and the matrix.
 
         Parameters
         ----------
@@ -1135,12 +1135,12 @@ cdef class NEP(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Set the function to compute the Jacobian T'(lambda).
+        Set the function to compute the Jacobian :math:`T'(\lambda)`.
 
         Collective.
 
-        Set the function to compute the Jacobian T'(lambda) as well
-        as the location to store the matrix.
+        Set the function to compute the Jacobian :math:`T'(\lambda)` as well as
+        the location to store the matrix.
 
         Parameters
         ----------
@@ -1161,9 +1161,12 @@ cdef class NEP(Object):
 
     def getJacobian(self) -> tuple[petsc4py.PETSc.Mat, NEPJacobian]:
         """
-        Get the function to compute the Jacobian T'(lambda) and the matrix.
+        Get the function to compute the Jacobian :math:`T'(\lambda)` and J.
 
         Collective.
+
+        Get the function to compute the Jacobian :math:`T'(\lambda)` and the
+        matrix.
 
         Parameters
         ----------
@@ -1341,7 +1344,7 @@ cdef class NEP(Object):
         RG rg = None,
     ) -> None:
         """
-        Apply the resolvent T^{-1}(z) to a given vector.
+        Apply the resolvent :math:`T^{-1}(z)` to a given vector.
 
         Collective.
 

@@ -26,8 +26,10 @@ class PEPProblemType(object):
 
     - `GENERAL`:    No structure.
     - `HERMITIAN`:  Hermitian structure.
-    - `HYPERBOLIC`: QEP with Hermitian matrices, M>0, (x'Cx)^2 > 4(x'Mx)(x'Kx).
-    - `GYROSCOPIC`: QEP with M, K  Hermitian, M>0, C skew-Hermitian.
+    - `HYPERBOLIC`: QEP with Hermitian matrices, :math:`M>0`,
+                    :math:`(x^TCx)^2 > 4(x^TMx)(x^TKx)`.
+    - `GYROSCOPIC`: QEP with :math:`M`, :math:`K`  Hermitian,
+                    :math:`M>0`, :math:`C` skew-Hermitian.
     """
     GENERAL    = PEP_GENERAL
     HERMITIAN  = PEP_HERMITIAN
@@ -1304,9 +1306,9 @@ cdef class PEP(Object):
         Returns
         -------
         float
-            The error bound, computed in various ways from the
-            residual norm ``||P(l)x||_2`` where ``l`` is the
-            eigenvalue and ``x`` is the eigenvector.
+            The error bound, computed in various ways from the residual norm
+            :math:`||P(l)x||_2` where :math:`l` is the eigenvalue and :math:`x`
+            is the eigenvector.
 
         Notes
         -----

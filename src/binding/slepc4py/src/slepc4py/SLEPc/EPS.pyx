@@ -65,7 +65,7 @@ class EPSProblemType(object):
     - `GHEP`:   Generalized Hermitian eigenproblem.
     - `GNHEP`:  Generalized Non-Hermitian eigenproblem.
     - `PGNHEP`: Generalized Non-Hermitian eigenproblem
-                with positive definite ``B``.
+                with positive definite :math:`B`.
     - `GHIEP`:  Generalized Hermitian-indefinite eigenproblem.
     - `BSE`:    Structured Bethe-Salpeter eigenproblem.
     """
@@ -477,19 +477,17 @@ cdef class EPS(Object):
 
         Notes
         -----
-        Allowed values are: Hermitian (HEP), non-Hermitian (NHEP),
-        generalized Hermitian (GHEP), generalized non-Hermitian
-        (GNHEP), and generalized non-Hermitian with positive
-        semi-definite B (PGNHEP).
+        Allowed values are: Hermitian (HEP), non-Hermitian (NHEP), generalized
+        Hermitian (GHEP), generalized non-Hermitian (GNHEP), and generalized
+        non-Hermitian with positive semi-definite B (PGNHEP).
 
-        This function must be used to instruct SLEPc to exploit
-        symmetry. If no problem type is specified, by default a
-        non-Hermitian problem is assumed (either standard or
-        generalized). If the user knows that the problem is Hermitian
-        (i.e. ``A=A^H``) or generalized Hermitian (i.e. ``A=A^H``,
-        ``B=B^H``, and ``B`` positive definite) then it is recommended
-        to set the problem type so that eigensolver can exploit these
-        properties.
+        This function must be used to instruct SLEPc to exploit symmetry. If
+        no problem type is specified, by default a non-Hermitian problem is
+        assumed (either standard or generalized). If the user knows that the
+        problem is Hermitian (i.e. :math:`A=A^H`) or generalized Hermitian
+        (i.e. :math:`A=A^H`, :math:`B=B^H`, and :math:`B` positive definite)
+        then it is recommended to set the problem type so that eigensolver can
+        exploit these properties.
         """
         cdef SlepcEPSProblemType val = problem_type
         CHKERR( EPSSetProblemType(self.eps, val) )
@@ -526,12 +524,12 @@ cdef class EPS(Object):
 
     def isPositive(self) -> bool:
         """
-        Eigenproblem requiring a positive (semi-) definite matrix B.
+        Eigenproblem requiring a positive (semi-) definite matrix :math:`B`.
 
         Not collective.
 
         Tell if the EPS corresponds to an eigenproblem requiring a positive
-        (semi-) definite matrix B.
+        (semi-) definite matrix :math:`B`.
 
         Returns
         -------
@@ -1739,8 +1737,8 @@ cdef class EPS(Object):
         -------
         float
             The error bound, computed in various ways from the residual norm
-            ``||Ax-kBx||_2`` where ``k`` is the eigenvalue and
-            ``x`` is the eigenvector.
+            :math:`\|Ax-kBx\|_2` where :math:`k` is the eigenvalue and
+            :math:`x` is the eigenvector.
 
         Notes
         -----
@@ -2318,8 +2316,9 @@ cdef class EPS(Object):
         -----
         This function modifies the eigenproblem matrices at subcommunicator
         level, and optionally updates the global matrices in the parent
-        communicator.  The updates are expressed as ``A <-- s*A + a*Au``,
-        ``B <-- t*B + b*Bu``.
+        communicator.  The updates are expressed as
+        :math:`A \leftarrow s A + a Au`,
+        :math:`B \leftarrow t B + b Bu`.
 
         It is possible to update one of the matrices, or both.
 
@@ -2629,9 +2628,10 @@ cdef class EPS(Object):
         Logically collective.
 
         Set a variant where the search subspace is expanded with
-        K*[A*x B*x] (double expansion) instead of the classic K*r, where
-        K is the preconditioner, x the selected approximate eigenvector
-        and r its associated residual vector.
+        :math:`K [A x, B x]` (double expansion) instead of the
+        classic :math:`K r`, where K is the preconditioner, x the
+        selected approximate eigenvector and :math:`r` its associated residual
+        vector.
 
         Parameters
         ----------
