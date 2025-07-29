@@ -2,7 +2,7 @@
 
 class PEPType(object):
     """
-    PEP type
+    PEP type.
 
     Polynomial eigensolvers.
 
@@ -22,12 +22,14 @@ class PEPType(object):
 
 class PEPProblemType(object):
     """
-    PEP problem type
+    PEP problem type.
 
     - `GENERAL`:    No structure.
     - `HERMITIAN`:  Hermitian structure.
-    - `HYPERBOLIC`: QEP with Hermitian matrices, M>0, (x'Cx)^2 > 4(x'Mx)(x'Kx).
-    - `GYROSCOPIC`: QEP with M, K  Hermitian, M>0, C skew-Hermitian.
+    - `HYPERBOLIC`: QEP with Hermitian matrices, :math:`M>0`,
+                    :math:`(x^TCx)^2 > 4(x^TMx)(x^TKx)`.
+    - `GYROSCOPIC`: QEP with :math:`M`, :math:`K`  Hermitian,
+                    :math:`M>0`, :math:`C` skew-Hermitian.
     """
     GENERAL    = PEP_GENERAL
     HERMITIAN  = PEP_HERMITIAN
@@ -36,7 +38,7 @@ class PEPProblemType(object):
 
 class PEPWhich(object):
     """
-    PEP desired part of spectrum
+    PEP desired part of spectrum.
 
     - `LARGEST_MAGNITUDE`:  Largest magnitude (default).
     - `SMALLEST_MAGNITUDE`: Smallest magnitude.
@@ -64,7 +66,7 @@ class PEPWhich(object):
 
 class PEPBasis(object):
     """
-    PEP basis type for the representation of the polynomial
+    PEP basis type for the representation of the polynomial.
 
     - `MONOMIAL`:   Monomials (default).
     - `CHEBYSHEV1`: Chebyshev polynomials of the 1st kind.
@@ -82,7 +84,7 @@ class PEPBasis(object):
 
 class PEPScale(object):
     """
-    PEP scaling strategy
+    PEP scaling strategy.
 
     - `NONE`:     No scaling.
     - `SCALAR`:   Parameter scaling.
@@ -96,7 +98,7 @@ class PEPScale(object):
 
 class PEPRefine(object):
     """
-    PEP refinement strategy
+    PEP refinement strategy.
 
     - `NONE`:     No refinement.
     - `SIMPLE`:   Refine eigenpairs one by one.
@@ -108,7 +110,7 @@ class PEPRefine(object):
 
 class PEPRefineScheme(object):
     """
-    PEP scheme for solving linear systems during iterative refinement
+    PEP scheme for solving linear systems during iterative refinement.
 
     - `SCHUR`:    Schur complement.
     - `MBE`:      Mixed block elimination.
@@ -120,8 +122,10 @@ class PEPRefineScheme(object):
 
 class PEPExtract(object):
     """
+    PEP extraction strategy used.
+
     PEP extraction strategy used to obtain eigenvectors of the PEP from the
-    eigenvectors of the linearization
+    eigenvectors of the linearization.
 
     - `NONE`:       Use the first block.
     - `NORM`:       Use the first or last block depending on norm of H.
@@ -135,7 +139,7 @@ class PEPExtract(object):
 
 class PEPErrorType(object):
     """
-    PEP error type to assess accuracy of computed solutions
+    PEP error type to assess accuracy of computed solutions.
 
     - `ABSOLUTE`: Absolute error.
     - `RELATIVE`: Relative error.
@@ -147,7 +151,7 @@ class PEPErrorType(object):
 
 class PEPConv(object):
     """
-    PEP convergence test
+    PEP convergence test.
 
     - `ABS`:  Absolute convergence test.
     - `REL`:  Convergence test relative to the eigenvalue.
@@ -161,7 +165,7 @@ class PEPConv(object):
 
 class PEPStop(object):
     """
-    PEP stopping test
+    PEP stopping test.
 
     - `BASIC`: Default stopping test.
     - `USER`:  User-defined stopping test.
@@ -171,7 +175,7 @@ class PEPStop(object):
 
 class PEPConvergedReason(object):
     """
-    PEP convergence reasons
+    PEP convergence reasons.
 
     - `CONVERGED_TOL`:          All eigenpairs converged to requested tolerance.
     - `CONVERGED_USER`:         User-defined convergence criterion satisfied.
@@ -190,7 +194,7 @@ class PEPConvergedReason(object):
 
 class PEPJDProjection(object):
     """
-    PEP type of projection to be used in the Jacobi-Davidson solver
+    PEP type of projection to be used in the Jacobi-Davidson solver.
 
     - `HARMONIC`:   Harmonic projection.
     - `ORTHOGONAL`: Orthogonal projection.
@@ -200,7 +204,7 @@ class PEPJDProjection(object):
 
 class PEPCISSExtraction(object):
     """
-    PEP CISS extraction technique
+    PEP CISS extraction technique.
 
     - `RITZ`:   Ritz extraction.
     - `HANKEL`: Extraction via Hankel eigenproblem.
@@ -214,9 +218,7 @@ class PEPCISSExtraction(object):
 
 cdef class PEP(Object):
 
-    """
-    PEP
-    """
+    """PEP."""
 
     Type            = PEPType
     ProblemType     = PEPProblemType
@@ -240,7 +242,9 @@ cdef class PEP(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the PEP data structure.
+        Print the PEP data structure.
+
+        Collective.
 
         Parameters
         ----------
@@ -253,7 +257,9 @@ cdef class PEP(Object):
 
     def destroy(self) -> Self:
         """
-        Destroys the PEP object.
+        Destroy the PEP object.
+
+        Collective.
         """
         CHKERR( PEPDestroy(&self.pep) )
         self.pep = NULL
@@ -261,13 +267,17 @@ cdef class PEP(Object):
 
     def reset(self) -> None:
         """
-        Resets the PEP object.
+        Reset the PEP object.
+
+        Collective.
         """
         CHKERR( PEPReset(self.pep) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the PEP object.
+        Create the PEP object.
+
+        Collective.
 
         Parameters
         ----------
@@ -282,7 +292,9 @@ cdef class PEP(Object):
 
     def setType(self, pep_type: Type | str) -> None:
         """
-        Selects the particular solver to be used in the PEP object.
+        Set the particular solver to be used in the PEP object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -295,7 +307,9 @@ cdef class PEP(Object):
 
     def getType(self) -> str:
         """
-        Gets the PEP type of this object.
+        Get the PEP type of this object.
+
+        Not collective.
 
         Returns
         -------
@@ -308,8 +322,9 @@ cdef class PEP(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all PEP options in the
-        database.
+        Get the prefix used for searching for all PEP options in the database.
+
+        Not collective.
 
         Returns
         -------
@@ -322,8 +337,9 @@ cdef class PEP(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all PEP options in the
-        database.
+        Set the prefix used for searching for all PEP options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -336,8 +352,9 @@ cdef class PEP(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all PEP options
-        in the database.
+        Append to the prefix used for searching for all PEP options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -350,16 +367,23 @@ cdef class PEP(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets PEP options from the options database. This routine must
-        be called before `setUp()` if the user is to be allowed to set
-        the solver type.
+        Set PEP options from the options database.
+
+        Collective.
+
+        This routine must be called before `setUp()` if the user is to be
+        allowed to set the solver type.
         """
         CHKERR( PEPSetFromOptions(self.pep) )
 
     def getBasis(self) -> Basis:
         """
-        Gets the type of polynomial basis used to
-        describe the polynomial eigenvalue problem.
+        Get the type of polynomial basis used.
+
+        Not collective.
+
+        Get the type of polynomial basis used to describe the polynomial
+        eigenvalue problem.
 
         Returns
         -------
@@ -372,8 +396,12 @@ cdef class PEP(Object):
 
     def setBasis(self, basis: Basis) -> None:
         """
-        Specifies the type of polynomial basis used to
-        describe the polynomial eigenvalue problem.
+        Set the type of polynomial basis used.
+
+        Logically collective.
+
+        Set the type of polynomial basis used to describe the polynomial
+        eigenvalue problem.
 
         Parameters
         ----------
@@ -385,7 +413,9 @@ cdef class PEP(Object):
 
     def getProblemType(self) -> ProblemType:
         """
-        Gets the problem type from the PEP object.
+        Get the problem type from the PEP object.
+
+        Not collective.
 
         Returns
         -------
@@ -398,7 +428,9 @@ cdef class PEP(Object):
 
     def setProblemType(self, problem_type: ProblemType) -> None:
         """
-        Specifies the type of the eigenvalue problem.
+        Set the type of the eigenvalue problem.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -410,7 +442,9 @@ cdef class PEP(Object):
 
     def getWhichEigenpairs(self) -> Which:
         """
-        Returns which portion of the spectrum is to be sought.
+        Get which portion of the spectrum is to be sought.
+
+        Not collective.
 
         Returns
         -------
@@ -423,7 +457,9 @@ cdef class PEP(Object):
 
     def setWhichEigenpairs(self, which: Which) -> None:
         """
-        Specifies which portion of the spectrum is to be sought.
+        Set which portion of the spectrum is to be sought.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -435,7 +471,9 @@ cdef class PEP(Object):
 
     def getTarget(self) -> Scalar:
         """
-        Gets the value of the target.
+        Get the value of the target.
+
+        Not collective.
 
         Returns
         -------
@@ -452,7 +490,9 @@ cdef class PEP(Object):
 
     def setTarget(self, target: Scalar) -> None:
         """
-        Sets the value of the target.
+        Set the value of the target.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -470,8 +510,12 @@ cdef class PEP(Object):
 
     def getTolerances(self) -> tuple[float, int]:
         """
-        Gets the tolerance and maximum iteration count used by the
-        default PEP convergence tests.
+        Get the tolerance and maximum iteration count.
+
+        Not collective.
+
+        Get the tolerance and maximum iteration count used by the default PEP
+        convergence tests.
 
         Returns
         -------
@@ -487,8 +531,12 @@ cdef class PEP(Object):
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
-        Sets the tolerance and maximum iteration count used by the
-        default PEP convergence tests.
+        Set the tolerance and maximum iteration count.
+
+        Logically collective.
+
+        Set the tolerance and maximum iteration count used by the default PEP
+        convergence tests.
 
         Parameters
         ----------
@@ -505,7 +553,9 @@ cdef class PEP(Object):
 
     def getInterval(self) -> tuple[float, float]:
         """
-        Gets the computational interval for spectrum slicing.
+        Get the computational interval for spectrum slicing.
+
+        Not collective.
 
         Returns
         -------
@@ -525,7 +575,9 @@ cdef class PEP(Object):
 
     def setInterval(self, inta: float, intb: float) -> None:
         """
-        Defines the computational interval for spectrum slicing.
+        Set the computational interval for spectrum slicing.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -548,8 +600,9 @@ cdef class PEP(Object):
 
     def getConvergenceTest(self) -> Conv:
         """
-        Return the method used to compute the error estimate
-        used in the convergence test.
+        Get the method used to compute the error estimate used in the convergence test.
+
+        Not collective.
 
         Returns
         -------
@@ -563,8 +616,9 @@ cdef class PEP(Object):
 
     def setConvergenceTest(self, conv: Conv) -> None:
         """
-        Specifies how to compute the error estimate
-        used in the convergence test.
+        Set how to compute the error estimate used in the convergence test.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -577,8 +631,12 @@ cdef class PEP(Object):
 
     def getRefine(self) -> tuple[Refine, int, float, int, RefineScheme]:
         """
-        Gets the refinement strategy used by the PEP object,
-        and the associated parameters.
+        Get the refinement strategy used by the PEP object.
+
+        Not collective.
+
+        Get the refinement strategy used by the PEP object, and the associated
+        parameters.
 
         Returns
         -------
@@ -610,8 +668,12 @@ cdef class PEP(Object):
         scheme: RefineScheme | None = None,
     ) -> None:
         """
-        Sets the refinement strategy used by the PEP object,
-        and the associated parameters.
+        Set the refinement strategy used by the PEP object.
+
+        Logically collective.
+
+        Set the refinement strategy used by the PEP object, and the associated
+        parameters.
 
         Parameters
         ----------
@@ -639,12 +701,13 @@ cdef class PEP(Object):
 
     def getRefineKSP(self) -> KSP:
         """
-        Obtain the `KSP` object used by the eigensolver in the
-        refinement phase.
+        Get the ``KSP`` object used by the eigensolver in the refinement phase.
+
+        Collective.
 
         Returns
         -------
-        KSP
+        `petsc4py.PETSc.KSP`
             The linear solver object.
         """
         cdef KSP ksp = KSP()
@@ -654,7 +717,9 @@ cdef class PEP(Object):
 
     def setExtract(self, extract: Extract) -> None:
         """
-        Specifies the extraction strategy to be used.
+        Set the extraction strategy to be used.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -666,7 +731,9 @@ cdef class PEP(Object):
 
     def getExtract(self) -> Extract:
         """
-        Gets the extraction technique used by the `PEP` object.
+        Get the extraction technique used by the `PEP` object.
+
+        Not collective.
 
         Returns
         -------
@@ -679,8 +746,9 @@ cdef class PEP(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Returns the flag indicating whether all residual norms must be
-        computed or not.
+        Get the flag indicating whether all residual norms must be computed.
+
+        Not collective.
 
         Returns
         -------
@@ -693,8 +761,12 @@ cdef class PEP(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Specifies if the solver must compute the residual of all
-        approximate eigenpairs or not.
+        Set flag to compute the residual of all approximate eigenpairs.
+
+        Logically collective.
+
+        Set if the solver must compute the residual of all approximate
+        eigenpairs or not.
 
         Parameters
         ----------
@@ -706,8 +778,9 @@ cdef class PEP(Object):
 
     def getDimensions(self) -> tuple[int, int, int]:
         """
-        Gets the number of eigenvalues to compute and the dimension of
-        the subspace.
+        Get the number of eigenvalues to compute and the dimension of the subspace.
+
+        Not collective.
 
         Returns
         -------
@@ -731,8 +804,9 @@ cdef class PEP(Object):
         mpd: int | None = None,
     ) -> None:
         """
-        Sets the number of eigenvalues to compute and the dimension of
-        the subspace.
+        Set the number of eigenvalues to compute and the dimension of the subspace.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -753,8 +827,12 @@ cdef class PEP(Object):
 
     def getST(self) -> ST:
         """
-        Obtain the spectral transformation (`ST`) object associated to
-        the eigensolver object.
+        Get the `ST` object associated to the eigensolver object.
+
+        Not collective.
+
+        Get the spectral transformation object associated to the eigensolver
+        object.
 
         Returns
         -------
@@ -768,8 +846,9 @@ cdef class PEP(Object):
 
     def setST(self, ST st) -> None:
         """
-        Associates a spectral transformation object to the
-        eigensolver.
+        Set a spectral transformation object associated to the eigensolver.
+
+        Collective.
 
         Parameters
         ----------
@@ -778,9 +857,15 @@ cdef class PEP(Object):
         """
         CHKERR( PEPSetST(self.pep, st.st) )
 
-    def getScale(self, Vec Dl=None, Vec Dr=None) -> tuple[Scale, float, int, float]:
+    def getScale(
+        self,
+        Vec Dl: petsc4py.PETSc.Vec | None = None,
+        Vec Dr: petsc4py.PETSc.Vec | None = None
+    ) -> tuple[Scale, float, int, float]:
         """
-        Gets the strategy used for scaling the polynomial eigenproblem.
+        Get the strategy used for scaling the polynomial eigenproblem.
+
+        Not collective.
 
         Parameters
         ----------
@@ -825,13 +910,17 @@ cdef class PEP(Object):
         self,
         scale: Scale,
         alpha: float | None = None,
-        Vec Dl = None,
-        Vec Dr = None,
+        Vec Dl: petsc4py.PETSc.Vec | None = None,
+        Vec Dr: petsc4py.PETSc.Vec | None = None,
         its: int | None = None,
         lbda: float | None = None,
     ) -> None:
         """
-        Sets the scaling strategy to be used for scaling the polynomial problem
+        Set the scaling strategy to be used.
+
+        Collective.
+
+        Set the scaling strategy to be used for scaling the polynomial problem
         before attempting to solve.
 
         Parameters
@@ -864,7 +953,9 @@ cdef class PEP(Object):
 
     def getBV(self) -> BV:
         """
-        Obtain the basis vectors object associated to the eigensolver.
+        Get the basis vectors object associated to the eigensolver.
+
+        Not collective.
 
         Returns
         -------
@@ -878,7 +969,9 @@ cdef class PEP(Object):
 
     def setBV(self, BV bv) -> None:
         """
-        Associates a basis vectors object to the eigensolver.
+        Set a basis vectors object associated to the eigensolver.
+
+        Collective.
 
         Parameters
         ----------
@@ -889,7 +982,9 @@ cdef class PEP(Object):
 
     def getRG(self) -> RG:
         """
-        Obtain the region object associated to the eigensolver.
+        Get the region object associated to the eigensolver.
+
+        Not collective.
 
         Returns
         -------
@@ -903,7 +998,9 @@ cdef class PEP(Object):
 
     def setRG(self, RG rg) -> None:
         """
-        Associates a region object to the eigensolver.
+        Set a region object associated to the eigensolver.
+
+        Collective.
 
         Parameters
         ----------
@@ -914,7 +1011,9 @@ cdef class PEP(Object):
 
     def getDS(self) -> DS:
         """
-        Obtain the direct solver associated to the eigensolver.
+        Get the direct solver associated to the eigensolver.
+
+        Not collective.
 
         Returns
         -------
@@ -928,7 +1027,9 @@ cdef class PEP(Object):
 
     def setDS(self, DS ds) -> None:
         """
-        Associates a direct solver object to the eigensolver.
+        Set a direct solver object associated to the eigensolver.
+
+        Collective.
 
         Parameters
         ----------
@@ -937,13 +1038,15 @@ cdef class PEP(Object):
         """
         CHKERR( PEPSetDS(self.pep, ds.ds) )
 
-    def getOperators(self) -> list[Mat]:
+    def getOperators(self) -> list[petsc4py.PETSc.Mat]:
         """
-        Gets the matrices associated with the eigenvalue problem.
+        Get the matrices associated with the eigenvalue problem.
+
+        Collective.
 
         Returns
         -------
-        list of Mat
+        list of petsc4py.PETSc.Mat
             The matrices associated with the eigensystem.
         """
         cdef Mat A
@@ -959,7 +1062,9 @@ cdef class PEP(Object):
 
     def setOperators(self, operators: list[Mat]) -> None:
         """
-        Sets the matrices associated with the eigenvalue problem.
+        Set the matrices associated with the eigenvalue problem.
+
+        Collective.
 
         Parameters
         ----------
@@ -977,8 +1082,9 @@ cdef class PEP(Object):
 
     def setInitialSpace(self, space: Vec | list[Vec]) -> None:
         """
-        Sets the initial space from which the eigensolver starts to
-        iterate.
+        Set the initial space from which the eigensolver starts to iterate.
+
+        Collective.
 
         Parameters
         ----------
@@ -1001,7 +1107,9 @@ cdef class PEP(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Sets a function to decide when to stop the outer iteration of the eigensolver.
+        Set a function to decide when to stop the outer iteration of the eigensolver.
+
+        Logically collective.
         """
         if stopping is not None:
             if args is None: args = ()
@@ -1014,7 +1122,9 @@ cdef class PEP(Object):
 
     def getStoppingTest(self) -> PEPStoppingFunction:
         """
-        Gets the stopping function.
+        Get the stopping function.
+
+        Not collective.
         """
         return self.get_attr('__stopping__')
 
@@ -1027,7 +1137,9 @@ cdef class PEP(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Appends a monitor function to the list of monitors.
+        Append a monitor function to the list of monitors.
+
+        Logically collective.
         """
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
@@ -1041,13 +1153,17 @@ cdef class PEP(Object):
 
     def getMonitor(self) -> PEPMonitorFunction:
         """
-        Gets the list of monitor functions.
+        Get the list of monitor functions.
+
+        Not collective.
         """
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
         """
-        Clears all monitors for a `PEP` object.
+        Clear all monitors for a `PEP` object.
+
+        Logically collective.
         """
         CHKERR( PEPMonitorCancel(self.pep) )
         self.set_attr('__monitor__', None)
@@ -1056,22 +1172,31 @@ cdef class PEP(Object):
 
     def setUp(self) -> None:
         """
-        Sets up all the internal data structures necessary for the
-        execution of the eigensolver.
+        Set up all the necessary internal data structures.
+
+        Collective.
+
+        Set up all the internal data structures necessary for the execution of
+        the eigensolver.
         """
         CHKERR( PEPSetUp(self.pep) )
 
     def solve(self) -> None:
         """
-        Solves the eigensystem.
+        Solve the eigensystem.
+
+        Collective.
         """
         CHKERR( PEPSolve(self.pep) )
 
     def getIterationNumber(self) -> int:
         """
-        Gets the current iteration number. If the call to `solve()` is
-        complete, then it returns the number of iterations carried out
-        by the solution method.
+        Get the current iteration number.
+
+        Not collective.
+
+        If the call to `solve()` is complete, then it returns the number of
+        iterations carried out by the solution method.
 
         Returns
         -------
@@ -1084,7 +1209,9 @@ cdef class PEP(Object):
 
     def getConvergedReason(self) -> ConvergedReason:
         """
-        Gets the reason why the `solve()` iteration was stopped.
+        Get the reason why the `solve()` iteration was stopped.
+
+        Not collective.
 
         Returns
         -------
@@ -1098,7 +1225,9 @@ cdef class PEP(Object):
 
     def getConverged(self) -> int:
         """
-        Gets the number of converged eigenpairs.
+        Get the number of converged eigenpairs.
+
+        Not collective.
 
         Returns
         -------
@@ -1109,11 +1238,13 @@ cdef class PEP(Object):
         CHKERR( PEPGetConverged(self.pep, &ival) )
         return toInt(ival)
 
-    def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> None:
+    def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> complex:
         """
-        Gets the i-th solution of the eigenproblem as computed by
-        `solve()`.  The solution consists of both the eigenvalue and
-        the eigenvector.
+        Get the i-th solution of the eigenproblem as computed by `solve()`.
+
+        Collective.
+
+        The solution consists of both the eigenvalue and the eigenvector.
 
         Parameters
         ----------
@@ -1126,7 +1257,7 @@ cdef class PEP(Object):
 
         Returns
         -------
-        Complex
+        complex
             The computed eigenvalue.
         """
         cdef PetscScalar sval1 = 0
@@ -1138,8 +1269,9 @@ cdef class PEP(Object):
 
     def getErrorEstimate(self, i: int) -> float:
         """
-        Returns the error estimate associated to the i-th computed
-        eigenpair.
+        Get the error estimate associated to the i-th computed eigenpair.
+
+        Not collective.
 
         Parameters
         ----------
@@ -1157,7 +1289,11 @@ cdef class PEP(Object):
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
-        Computes the error (based on the residual norm) associated with the i-th
+        Compute the error associated with the i-th computed eigenpair.
+
+        Collective.
+
+        Compute the error (based on the residual norm) associated with the i-th
         computed eigenpair.
 
         Parameters
@@ -1170,9 +1306,9 @@ cdef class PEP(Object):
         Returns
         -------
         float
-            The error bound, computed in various ways from the
-            residual norm ``||P(l)x||_2`` where ``l`` is the
-            eigenvalue and ``x`` is the eigenvector.
+            The error bound, computed in various ways from the residual norm
+            :math:`||P(l)x||_2` where :math:`l` is the eigenvalue and :math:`x`
+            is the eigenvector.
 
         Notes
         -----
@@ -1185,10 +1321,13 @@ cdef class PEP(Object):
         CHKERR( PEPComputeError(self.pep, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
+    def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
         """
-        Displays the errors associated with the computed solution
-        (as well as the eigenvalues).
+        Display the errors associated with the computed solution.
+
+        Collective.
+
+        Display the errors and the eigenvalues.
 
         Parameters
         ----------
@@ -1213,7 +1352,9 @@ cdef class PEP(Object):
 
     def valuesView(self, viewer: Viewer | None = None) -> None:
         """
-        Displays the computed eigenvalues in a viewer.
+        Display the computed eigenvalues in a viewer.
+
+        Collective.
 
         Parameters
         ----------
@@ -1226,7 +1367,9 @@ cdef class PEP(Object):
 
     def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
-        Outputs computed eigenvectors to a viewer.
+        Output computed eigenvectors to a viewer.
+
+        Collective.
 
         Parameters
         ----------
@@ -1241,7 +1384,9 @@ cdef class PEP(Object):
 
     def setLinearEPS(self, EPS eps) -> None:
         """
-        Associate an eigensolver object to the polynomial eigenvalue solver.
+        Set an eigensolver object associated to the polynomial eigenvalue solver.
+
+        Collective.
 
         Parameters
         ----------
@@ -1252,8 +1397,9 @@ cdef class PEP(Object):
 
     def getLinearEPS(self) -> EPS:
         """
-        Retrieve the eigensolver object associated to the polynomial
-        eigenvalue solver.
+        Get the eigensolver object associated to the polynomial eigenvalue solver.
+
+        Collective.
 
         Returns
         -------
@@ -1269,6 +1415,11 @@ cdef class PEP(Object):
         """
         Set the coefficients that define the linearization of a quadratic eigenproblem.
 
+        Logically collective.
+
+        Set the coefficients that define the linearization of a quadratic
+        eigenproblem.
+
         Parameters
         ----------
         alpha
@@ -1282,7 +1433,12 @@ cdef class PEP(Object):
 
     def getLinearLinearization(self) -> tuple[float, float]:
         """
-        Returns the coefficients that define the linearization of a quadratic eigenproblem.
+        Get the coeffs. defining the linearization of a quadratic eigenproblem.
+
+        Not collective.
+
+        Return the coefficients that define the linearization of a quadratic
+        eigenproblem.
 
         Returns
         -------
@@ -1298,7 +1454,11 @@ cdef class PEP(Object):
 
     def setLinearExplicitMatrix(self, flag: bool) -> None:
         """
-        Indicate if the matrices A and B for the linearization of the problem
+        Set flag to explicitly build the matrices A and B.
+
+        Logically collective.
+
+        Toggle if the matrices A and B for the linearization of the problem
         must be built explicitly.
 
         Parameters
@@ -1311,7 +1471,11 @@ cdef class PEP(Object):
 
     def getLinearExplicitMatrix(self) -> bool:
         """
-        Returns the flag indicating if the matrices A and B for the linearization
+        Get if the matrices A and B for the linearization are built explicitly.
+
+        Not collective.
+
+        Get the flag indicating if the matrices A and B for the linearization
         are built explicitly.
 
         Returns
@@ -1327,7 +1491,11 @@ cdef class PEP(Object):
 
     def setQArnoldiRestart(self, keep: float) -> None:
         """
-        Sets the restart parameter for the Q-Arnoldi method, in
+        Set the restart parameter for the Q-Arnoldi method.
+
+        Logically collective.
+
+        Set the restart parameter for the Q-Arnoldi method, in
         particular the proportion of basis vectors that must be kept
         after restart.
 
@@ -1345,7 +1513,9 @@ cdef class PEP(Object):
 
     def getQArnoldiRestart(self) -> float:
         """
-        Gets the restart parameter used in the Q-Arnoldi method.
+        Get the restart parameter used in the Q-Arnoldi method.
+
+        Not collective.
 
         Returns
         -------
@@ -1358,8 +1528,9 @@ cdef class PEP(Object):
 
     def setQArnoldiLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
-        Q-Arnoldi method.
+        Toggle between locking and non-locking variants of the Q-Arnoldi method.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1378,7 +1549,9 @@ cdef class PEP(Object):
 
     def getQArnoldiLocking(self) -> bool:
         """
-        Gets the locking flag used in the Q-Arnoldi method.
+        Get the locking flag used in the Q-Arnoldi method.
+
+        Not collective.
 
         Returns
         -------
@@ -1393,7 +1566,11 @@ cdef class PEP(Object):
 
     def setTOARRestart(self, keep: float) -> None:
         """
-        Sets the restart parameter for the TOAR method, in
+        Set the restart parameter for the TOAR method.
+
+        Logically collective.
+
+        Set the restart parameter for the TOAR method, in
         particular the proportion of basis vectors that must be kept
         after restart.
 
@@ -1411,7 +1588,9 @@ cdef class PEP(Object):
 
     def getTOARRestart(self) -> float:
         """
-        Gets the restart parameter used in the TOAR method.
+        Get the restart parameter used in the TOAR method.
+
+        Not collective.
 
         Returns
         -------
@@ -1424,8 +1603,9 @@ cdef class PEP(Object):
 
     def setTOARLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
-        TOAR method.
+        Toggle between locking and non-locking variants of the TOAR method.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1444,7 +1624,9 @@ cdef class PEP(Object):
 
     def getTOARLocking(self) -> bool:
         """
-        Gets the locking flag used in the TOAR method.
+        Get the locking flag used in the TOAR method.
+
+        Not collective.
 
         Returns
         -------
@@ -1461,6 +1643,8 @@ cdef class PEP(Object):
         """
         Set the coefficients that define the linearization of a quadratic eigenproblem.
 
+        Logically collective.
+
         Parameters
         ----------
         alpha
@@ -1474,7 +1658,9 @@ cdef class PEP(Object):
 
     def getSTOARLinearization(self) -> tuple[float, float]:
         """
-        Returns the coefficients that define the linearization of a quadratic eigenproblem.
+        Get the coefficients that define the linearization of a quadratic eigenproblem.
+
+        Not collective.
 
         Returns
         -------
@@ -1490,8 +1676,9 @@ cdef class PEP(Object):
 
     def setSTOARLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
-        STOAR method.
+        Toggle between locking and non-locking variants of the STOAR method.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1510,7 +1697,9 @@ cdef class PEP(Object):
 
     def getSTOARLocking(self) -> bool:
         """
-        Gets the locking flag used in the STOAR method.
+        Get the locking flag used in the STOAR method.
+
+        Not collective.
 
         Returns
         -------
@@ -1523,7 +1712,11 @@ cdef class PEP(Object):
 
     def setSTOARDetectZeros(self, detect: bool) -> None:
         """
-        Sets a flag to enforce detection of zeros during the factorizations
+        Set flag to enforce detection of zeros during the factorizations.
+
+        Logically collective.
+
+        Set a flag to enforce detection of zeros during the factorizations
         throughout the spectrum slicing computation.
 
         Parameters
@@ -1545,7 +1738,9 @@ cdef class PEP(Object):
 
     def getSTOARDetectZeros(self) -> bool:
         """
-        Gets the flag that enforces zero detection in spectrum slicing.
+        Get the flag that enforces zero detection in spectrum slicing.
+
+        Not collective.
 
         Returns
         -------
@@ -1563,7 +1758,11 @@ cdef class PEP(Object):
         mpd: int | None = None,
     ) -> None:
         """
-        Sets the dimensions used for each subsolve step in case of doing
+        Set the dimensions used for each subsolve step.
+
+        Logically collective.
+
+        Set the dimensions used for each subsolve step in case of doing
         spectrum slicing for a computational interval. The meaning of the
         parameters is the same as in `setDimensions()`.
 
@@ -1586,7 +1785,11 @@ cdef class PEP(Object):
 
     def getSTOARDimensions(self) -> tuple[int, int, int]:
         """
-        Gets the dimensions used for each subsolve step in case of doing
+        Get the dimensions used for each subsolve step.
+
+        Not collective.
+
+        Get the dimensions used for each subsolve step in case of doing
         spectrum slicing for a computational interval.
 
         Returns
@@ -1606,7 +1809,11 @@ cdef class PEP(Object):
 
     def getSTOARInertias(self) -> tuple[ArrayReal, ArrayInt]:
         """
-        Gets the values of the shifts and their corresponding inertias
+        Get the values of the shifts and their corresponding inertias.
+
+        Not collective.
+
+        Get the values of the shifts and their corresponding inertias
         in case of doing spectrum slicing for a computational interval.
 
         Returns
@@ -1632,8 +1839,12 @@ cdef class PEP(Object):
 
     def setSTOARCheckEigenvalueType(self, flag: bool) -> None:
         """
-        Sets a flag to check that all the eigenvalues obtained throughout
-        the spectrum slicing computation have the same definite type.
+        Set flag to check if all eigenvalues have the same definite type.
+
+        Logically collective.
+
+        Set a flag to check that all the eigenvalues obtained throughout the
+        spectrum slicing computation have the same definite type.
 
         Parameters
         ----------
@@ -1645,7 +1856,9 @@ cdef class PEP(Object):
 
     def getSTOARCheckEigenvalueType(self) -> bool:
         """
-        Gets the flag for the eigenvalue type check in spectrum slicing.
+        Get the flag for the eigenvalue type check in spectrum slicing.
+
+        Not collective.
 
         Returns
         -------
@@ -1660,7 +1873,11 @@ cdef class PEP(Object):
 
     def setJDRestart(self, keep: float) -> None:
         """
-        Sets the restart parameter for the Jacobi-Davidson method, in
+        Set the restart parameter for the Jacobi-Davidson method.
+
+        Logically collective.
+
+        Set the restart parameter for the Jacobi-Davidson method, in
         particular the proportion of basis vectors that must be kept
         after restart.
 
@@ -1678,7 +1895,9 @@ cdef class PEP(Object):
 
     def getJDRestart(self) -> float:
         """
-        Gets the restart parameter used in the Jacobi-Davidson method.
+        Get the restart parameter used in the Jacobi-Davidson method.
+
+        Not collective.
 
         Returns
         -------
@@ -1691,8 +1910,9 @@ cdef class PEP(Object):
 
     def setJDFix(self, fix: float) -> None:
         """
-        Sets the threshold for changing the target in the correction
-        equation.
+        Set the threshold for changing the target in the correction equation.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1710,7 +1930,9 @@ cdef class PEP(Object):
 
     def getJDFix(self) -> float:
         """
-        Gets threshold for changing the target in the correction equation.
+        Get threshold for changing the target in the correction equation.
+
+        Not collective.
 
         Returns
         -------
@@ -1723,7 +1945,9 @@ cdef class PEP(Object):
 
     def setJDReusePreconditioner(self, flag: bool) -> None:
         """
-        Sets a flag indicating whether the preconditioner must be reused or not.
+        Set a flag indicating whether the preconditioner must be reused or not.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1735,7 +1959,9 @@ cdef class PEP(Object):
 
     def getJDReusePreconditioner(self) -> bool:
         """
-        Returns the flag for reusing the preconditioner.
+        Get the flag for reusing the preconditioner.
+
+        Not collective.
 
         Returns
         -------
@@ -1748,7 +1974,9 @@ cdef class PEP(Object):
 
     def setJDMinimalityIndex(self, flag: int) -> None:
         """
-        Sets the maximum allowed value for the minimality index.
+        Set the maximum allowed value for the minimality index.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1760,7 +1988,9 @@ cdef class PEP(Object):
 
     def getJDMinimalityIndex(self) -> int:
         """
-        Returns the maximum allowed value of the minimality index.
+        Get the maximum allowed value of the minimality index.
+
+        Not collective.
 
         Returns
         -------
@@ -1773,7 +2003,9 @@ cdef class PEP(Object):
 
     def setJDProjection(self, proj: JDProjection) -> None:
         """
-        Sets the type of projection to be used in the Jacobi-Davidson solver.
+        Set the type of projection to be used in the Jacobi-Davidson solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1785,7 +2017,9 @@ cdef class PEP(Object):
 
     def getJDProjection(self) -> JDProjection:
         """
-        Gets the type of projection to be used in the Jacobi-Davidson solver.
+        Get the type of projection to be used in the Jacobi-Davidson solver.
+
+        Not collective.
 
         Returns
         -------
@@ -1800,7 +2034,9 @@ cdef class PEP(Object):
 
     def setCISSExtraction(self, extraction: CISSExtraction) -> None:
         """
-        Sets the extraction technique used in the CISS solver.
+        Set the extraction technique used in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1812,7 +2048,9 @@ cdef class PEP(Object):
 
     def getCISSExtraction(self) -> CISSExtraction:
         """
-        Gets the extraction technique used in the CISS solver.
+        Get the extraction technique used in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -1833,7 +2071,9 @@ cdef class PEP(Object):
         realmats: bool = False,
     ) -> None:
         """
-        Sets the values of various size parameters in the CISS solver.
+        Set the values of various size parameters in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1852,10 +2092,11 @@ cdef class PEP(Object):
 
         Notes
         -----
-        The default number of partitions is 1. This means the internal `KSP` object
-        is shared among all processes of the `PEP` communicator. Otherwise, the
-        communicator is split into npart communicators, so that `npart` `KSP` solves
-        proceed simultaneously.
+        The default number of partitions is 1. This means the internal
+        `petsc4py.PETSc.KSP` object is shared among all processes of the `PEP`
+        communicator. Otherwise, the communicator is split into npart
+        communicators, so that ``npart`` `petsc4py.PETSc.KSP` solves proceed
+        simultaneously.
         """
         cdef PetscInt  ival1 = PETSC_CURRENT
         cdef PetscInt  ival2 = PETSC_CURRENT
@@ -1872,7 +2113,9 @@ cdef class PEP(Object):
 
     def getCISSSizes(self) -> tuple[int, int, int, int, int, bool]:
         """
-        Gets the values of various size parameters in the CISS solver.
+        Get the values of various size parameters in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -1900,7 +2143,9 @@ cdef class PEP(Object):
 
     def setCISSThreshold(self, delta: float | None = None, spur: float | None = None) -> None:
         """
-        Sets the values of various threshold parameters in the CISS solver.
+        Set the values of various threshold parameters in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1917,7 +2162,9 @@ cdef class PEP(Object):
 
     def getCISSThreshold(self) -> tuple[float, float]:
         """
-        Gets the values of various threshold parameters in the CISS solver.
+        Get the values of various threshold parameters in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -1933,7 +2180,9 @@ cdef class PEP(Object):
 
     def setCISSRefinement(self, inner: int | None = None, blsize: int | None = None) -> None:
         """
-        Sets the values of various refinement parameters in the CISS solver.
+        Set the values of various refinement parameters in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1950,7 +2199,9 @@ cdef class PEP(Object):
 
     def getCISSRefinement(self) -> tuple[int, int]:
         """
-        Gets the values of various refinement parameters in the CISS solver.
+        Get the values of various refinement parameters in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -1966,19 +2217,21 @@ cdef class PEP(Object):
 
     def getCISSKSPs(self) -> list[KSP]:
         """
-        Retrieve the array of linear solver objects associated with
-        the CISS solver.
+        Get the array of linear solver objects associated with the CISS solver.
+
+        Collective.
 
         Returns
         -------
-        list of KSP
+        list of `petsc4py.PETSc.KSP`
             The linear solver objects.
 
         Notes
         -----
-        The number of `KSP` solvers is equal to the number of integration
-        points divided by the number of partitions. This value is halved in
-        the case of real matrices with a region centered at the real axis.
+        The number of `petsc4py.PETSc.KSP` solvers is equal to the number of
+        integration points divided by the number of partitions. This value is
+        halved in the case of real matrices with a region centered at the real
+        axis.
         """
         cdef PetscInt i = 0, n = 0
         cdef PetscKSP *p = NULL
@@ -1988,67 +2241,78 @@ cdef class PEP(Object):
     #
 
     property problem_type:
-        def __get__(self):
+        """The type of the eigenvalue problem."""
+        def __get__(self) -> PEPProblemType:
             return self.getProblemType()
         def __set__(self, value):
             self.setProblemType(value)
 
     property which:
-        def __get__(self):
+        """The portion of the spectrum to be sought."""
+        def __get__(self) -> PEPWhich:
             return self.getWhichEigenpairs()
         def __set__(self, value):
             self.setWhichEigenpairs(value)
 
     property target:
-        def __get__(self):
+        """The value of the target."""
+        def __get__(self) -> float:
             return self.getTarget()
         def __set__(self, value):
             self.setTarget(value)
 
     property extract:
-        def __get__(self):
+        """The type of extraction technique to be employed."""
+        def __get__(self) -> PEPExtract:
             return self.getExtract()
         def __set__(self, value):
             self.setExtract(value)
 
     property tol:
-        def __get__(self):
+        """The tolerance."""
+        def __get__(self) -> float:
             return self.getTolerances()[0]
         def __set__(self, value):
             self.setTolerances(tol=value)
 
     property max_it:
-        def __get__(self):
+        """The maximum iteration count."""
+        def __get__(self) -> int:
             return self.getTolerances()[1]
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
     property track_all:
-        def __get__(self):
+        """Compute the residual norm of all approximate eigenpairs."""
+        def __get__(self) -> bool:
             return self.getTrackAll()
         def __set__(self, value):
             self.setTrackAll(value)
 
     property st:
-        def __get__(self):
+        """The spectral transformation (ST) object associated."""
+        def __get__(self) -> ST:
             return self.getST()
         def __set__(self, value):
             self.setST(value)
 
     property bv:
-        def __get__(self):
+        """The basis vectors (BV) object associated."""
+        def __get__(self) -> BV:
             return self.getBV()
         def __set__(self, value):
             self.setBV(value)
 
     property rg:
-        def __get__(self):
+        """The region (RG) object associated."""
+        def __get__(self) -> RG:
             return self.getRG()
         def __set__(self, value):
             self.setRG(value)
 
     property ds:
-        def __get__(self):
+        """The direct solver (DS) object associated."""
+        def __get__(self) -> DS:
             return self.getDS()
         def __set__(self, value):
             self.setDS(value)

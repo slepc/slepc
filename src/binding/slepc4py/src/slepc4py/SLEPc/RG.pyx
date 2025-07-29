@@ -1,9 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class RGType(object):
-    """
-    RG type
-    """
+    """RG type."""
     INTERVAL   = S_(RGINTERVAL)
     POLYGON    = S_(RGPOLYGON)
     ELLIPSE    = S_(RGELLIPSE)
@@ -11,7 +9,7 @@ class RGType(object):
 
 class RGQuadRule(object):
     """
-    RG quadrature rule for contour integral methods
+    RG quadrature rule for contour integral methods.
 
     - `TRAPEZOIDAL`: Trapezoidal rule.
     - `CHEBYSHEV`:   Chebyshev points.
@@ -23,9 +21,7 @@ class RGQuadRule(object):
 
 cdef class RG(Object):
 
-    """
-    RG
-    """
+    """RG."""
 
     Type     = RGType
     QuadRule = RGQuadRule
@@ -36,7 +32,9 @@ cdef class RG(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the RG data structure.
+        Print the RG data structure.
+
+        Collective.
 
         Parameters
         ----------
@@ -49,7 +47,9 @@ cdef class RG(Object):
 
     def destroy(self) -> Self:
         """
-        Destroys the RG object.
+        Destroy the RG object.
+
+        Collective.
         """
         CHKERR( RGDestroy(&self.rg) )
         self.rg = NULL
@@ -57,7 +57,9 @@ cdef class RG(Object):
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the RG object.
+        Create the RG object.
+
+        Collective.
 
         Parameters
         ----------
@@ -72,7 +74,9 @@ cdef class RG(Object):
 
     def setType(self, rg_type: Type | str) -> None:
         """
-        Selects the type for the RG object.
+        Set the type for the RG object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -85,7 +89,9 @@ cdef class RG(Object):
 
     def getType(self) -> str:
         """
-        Gets the RG type of this object.
+        Get the RG type of this object.
+
+        Not collective.
 
         Returns
         -------
@@ -98,8 +104,9 @@ cdef class RG(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all RG options in the
-        database.
+        Set the prefix used for searching for all RG options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -118,8 +125,9 @@ cdef class RG(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all RG options in the
-        database.
+        Get the prefix used for searching for all RG options in the database.
+
+        Not collective.
 
         Returns
         -------
@@ -132,8 +140,9 @@ cdef class RG(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all RG options
-        in the database.
+        Append to the prefix used for searching for all RG options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -146,7 +155,9 @@ cdef class RG(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets RG options from the options database.
+        Set RG options from the options database.
+
+        Collective.
 
         Notes
         -----
@@ -159,7 +170,9 @@ cdef class RG(Object):
 
     def isTrivial(self) -> bool:
         """
-        Tells whether it is the trivial region (whole complex plane).
+        Tell whether it is the trivial region (whole complex plane).
+
+        Not collective.
 
         Returns
         -------
@@ -174,8 +187,12 @@ cdef class RG(Object):
 
     def isAxisymmetric(self, vertical: bool = False) -> bool:
         """
-        Determines if the region is symmetric with respect to the real
-        or imaginary axis.
+        Determine if the region is symmetric wrt. the real or imaginary axis.
+
+        Not collective.
+
+        Determine if the region is symmetric with respect to the real or
+        imaginary axis.
 
         Parameters
         ----------
@@ -194,7 +211,9 @@ cdef class RG(Object):
 
     def getComplement(self) -> bool:
         """
-        Returns the flag indicating whether the region is complemented or not.
+        Get the flag indicating whether the region is complemented or not.
+
+        Not collective.
 
         Returns
         -------
@@ -207,8 +226,9 @@ cdef class RG(Object):
 
     def setComplement(self, comp: bool = True) -> None:
         """
-        Sets a flag to indicate that the region is the complement
-        of the specified one.
+        Set a flag to indicate that the region is the complement of the specified one.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -220,7 +240,11 @@ cdef class RG(Object):
 
     def setScale(self, sfactor: float = None) -> None:
         """
-        Sets the scaling factor to be used when checking that a
+        Set the scaling factor to be used.
+
+        Logically collective.
+
+        Set the scaling factor to be used when checking that a
         point is inside the region and when computing the contour.
 
         Parameters
@@ -234,7 +258,9 @@ cdef class RG(Object):
 
     def getScale(self) -> float:
         """
-        Gets the scaling factor.
+        Get the scaling factor.
+
+        Not collective.
 
         Returns
         -------
@@ -245,9 +271,11 @@ cdef class RG(Object):
         CHKERR( RGGetScale(self.rg, &rval) )
         return toReal(rval)
 
-    def checkInside(self, a: Sequence[Complex]) -> ArrayInt:
+    def checkInside(self, a: Sequence[complex]) -> ArrayInt:
         """
-        Determines if a set of given points are inside the region or not.
+        Determine if a set of given points are inside the region or not.
+
+        Not collective.
 
         Parameters
         ----------
@@ -275,9 +303,13 @@ cdef class RG(Object):
         CHKERR( RGCheckInside(self.rg, <PetscInt>n, ar, ai, inside) )
         return array_i(<PetscInt>n, inside)
 
-    def computeContour(self, n: int) -> list[Complex]:
+    def computeContour(self, n: int) -> list[complex]:
         """
-        Computes the coordinates of several points lying on the contour
+        Compute the coordinates of several points of the contour on the region.
+
+        Not collective.
+
+        Compute the coordinates of several points lying on the contour
         of the region.
 
         Parameters
@@ -287,7 +319,7 @@ cdef class RG(Object):
 
         Returns
         -------
-        list of Complex
+        list of complex
             Computed points.
         """
         cdef PetscInt k = asInt(n), i = 0
@@ -304,7 +336,11 @@ cdef class RG(Object):
 
     def computeBoundingBox(self) -> tuple[float, float, float, float]:
         """
-        Determines the endpoints of a rectangle in the complex plane that
+        Endpoints of a rectangle in the complex plane containing the region.
+
+        Not collective.
+
+        Determine the endpoints of a rectangle in the complex plane that
         contains the region.
 
         Returns
@@ -324,6 +360,10 @@ cdef class RG(Object):
 
     def canUseConjugates(self, realmats: bool = True) -> bool:
         """
+        Half of integration points can be avoided (use their conjugates).
+
+        Not collective.
+
         Used in contour integral methods to determine whether half of
         integration points can be avoided (use their conjugates).
 
@@ -344,8 +384,12 @@ cdef class RG(Object):
 
     def computeQuadrature(self, quad: QuadRule, n: int) -> tuple[ArrayScalar, ArrayScalar, ArrayScalar]:
         """
-        Computes the values of the parameters used in a quadrature rule
-        for a contour integral around the boundary of the region.
+        Compute the values of the parameters used in a quadrature rule.
+
+        Not collective.
+
+        Compute the values of the parameters used in a quadrature rule for a
+        contour integral around the boundary of the region.
 
         Parameters
         ----------
@@ -376,7 +420,9 @@ cdef class RG(Object):
 
     def setEllipseParameters(self, center: Scalar, radius: float, vscale: float | None = None) -> None:
         """
-        Sets the parameters defining the ellipse region.
+        Set the parameters defining the ellipse region.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -395,7 +441,9 @@ cdef class RG(Object):
 
     def getEllipseParameters(self) -> tuple[Scalar, float, float]:
         """
-        Gets the parameters that define the ellipse region.
+        Get the parameters that define the ellipse region.
+
+        Not collective.
 
         Returns
         -------
@@ -414,7 +462,9 @@ cdef class RG(Object):
 
     def setIntervalEndpoints(self, a: float, b: float, c: float, d: float) -> None:
         """
-        Sets the parameters defining the interval region.
+        Set the parameters defining the interval region.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -435,7 +485,9 @@ cdef class RG(Object):
 
     def getIntervalEndpoints(self) -> tuple[float, float, float, float]:
         """
-        Gets the parameters that define the interval region.
+        Get the parameters that define the interval region.
+
+        Not collective.
 
         Returns
         -------
@@ -455,9 +507,11 @@ cdef class RG(Object):
         CHKERR( RGIntervalGetEndpoints(self.rg, &va, &vb, &vc, &vd) )
         return (toReal(va), toReal(vb), toReal(vc), toReal(vd))
 
-    def setPolygonVertices(self, v: Sequence[Real]| Sequence[Scalar]) -> None:
+    def setPolygonVertices(self, v: Sequence[float] | Sequence[Scalar]) -> None:
         """
-        Sets the vertices that define the polygon region.
+        Set the vertices that define the polygon region.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -479,7 +533,9 @@ cdef class RG(Object):
 
     def getPolygonVertices(self) -> ArrayComplex:
         """
-        Gets the parameters that define the interval region.
+        Get the parameters that define the interval region.
+
+        Not collective.
 
         Returns
         -------
@@ -507,7 +563,9 @@ cdef class RG(Object):
         width: float,
     ) -> None:
         """
-        Sets the parameters defining the ring region.
+        Set the parameters defining the ring region.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -534,7 +592,9 @@ cdef class RG(Object):
 
     def getRingParameters(self) -> tuple[Scalar, float, float, float, float, float]:
         """
-        Gets the parameters that define the ring region.
+        Get the parameters that define the ring region.
+
+        Not collective.
 
         Returns
         -------
@@ -563,13 +623,15 @@ cdef class RG(Object):
     #
 
     property complement:
-        def __get__(self):
+        """If the region is the complement of the specified one."""
+        def __get__(self) -> bool:
             return self.getComplement()
         def __set__(self, value):
             self.setComplement(value)
 
     property scale:
-        def __get__(self):
+        """The scaling factor to be used."""
+        def __get__(self) -> float:
             return self.getScale()
         def __set__(self, value):
             self.setScale(value)

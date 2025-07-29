@@ -1,9 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class DSType(object):
-    """
-    DS type
-    """
+    """DS type."""
     HEP     = S_(DSHEP)
     NHEP    = S_(DSNHEP)
     GHEP    = S_(DSGHEP)
@@ -18,7 +16,7 @@ class DSType(object):
 
 class DSStateType(object):
     """
-    DS state types
+    DS state types.
 
     - `RAW`:          Not processed yet.
     - `INTERMEDIATE`: Reduced to Hessenberg or tridiagonal form (or equivalent).
@@ -32,7 +30,7 @@ class DSStateType(object):
 
 class DSMatType(object):
     """
-    To refer to one of the matrices stored internally in DS
+    To refer to one of the matrices stored internally in DS.
 
     - `A`:  first matrix of eigenproblem/singular value problem.
     - `B`:  second matrix of a generalized eigenproblem.
@@ -62,11 +60,12 @@ class DSMatType(object):
 
 class DSParallelType(object):
     """
-    DS parallel types
+    DS parallel types.
 
     - `REDUNDANT`:    Every process performs the computation redundantly.
     - `SYNCHRONIZED`: The first process sends the result to the rest.
-    - `DISTRIBUTED`:  Used in some cases to distribute the computation among processes.
+    - `DISTRIBUTED`:  Used in some cases to distribute the computation among
+                      processes.
     """
     REDUNDANT    = DS_PARALLEL_REDUNDANT
     SYNCHRONIZED = DS_PARALLEL_SYNCHRONIZED
@@ -76,9 +75,7 @@ class DSParallelType(object):
 
 cdef class DS(Object):
 
-    """
-    DS
-    """
+    """DS."""
 
     Type         = DSType
     StateType    = DSStateType
@@ -91,7 +88,9 @@ cdef class DS(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the DS data structure.
+        Print the DS data structure.
+
+        Collective.
 
         Parameters
         ----------
@@ -104,7 +103,9 @@ cdef class DS(Object):
 
     def destroy(self) -> Self:
         """
-        Destroys the DS object.
+        Destroy the DS object.
+
+        Collective.
         """
         CHKERR( DSDestroy(&self.ds) )
         self.ds = NULL
@@ -112,13 +113,17 @@ cdef class DS(Object):
 
     def reset(self) -> None:
         """
-        Resets the DS object.
+        Reset the DS object.
+
+        Collective.
         """
         CHKERR( DSReset(self.ds) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the DS object.
+        Create the DS object.
+
+        Collective.
 
         Parameters
         ----------
@@ -133,7 +138,9 @@ cdef class DS(Object):
 
     def setType(self, ds_type: Type | str) -> None:
         """
-        Selects the type for the DS object.
+        Set the type for the DS object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -146,7 +153,9 @@ cdef class DS(Object):
 
     def getType(self) -> str:
         """
-        Gets the DS type of this object.
+        Get the DS type of this object.
+
+        Not collective.
 
         Returns
         -------
@@ -159,8 +168,9 @@ cdef class DS(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all DS options in the
-        database.
+        Set the prefix used for searching for all DS options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -179,8 +189,9 @@ cdef class DS(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all DS options
-        in the database.
+        Append to the prefix used for searching for all DS options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -193,8 +204,9 @@ cdef class DS(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all DS options in the
-        database.
+        Get the prefix used for searching for all DS options in the database.
+
+        Not collective.
 
         Returns
         -------
@@ -207,7 +219,9 @@ cdef class DS(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets DS options from the options database.
+        Set DS options from the options database.
+
+        Collective.
 
         Notes
         -----
@@ -219,6 +233,8 @@ cdef class DS(Object):
     def duplicate(self) -> DS:
         """
         Duplicate the DS object with the same type and dimensions.
+
+        Collective.
         """
         cdef DS ds = type(self)()
         CHKERR( DSDuplicate(self.ds, &ds.ds) )
@@ -228,7 +244,9 @@ cdef class DS(Object):
 
     def allocate(self, ld: int) -> None:
         """
-        Allocates memory for internal storage or matrices in DS.
+        Allocate memory for internal storage or matrices in DS.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -241,7 +259,9 @@ cdef class DS(Object):
 
     def getLeadingDimension(self) -> int:
         """
-        Returns the leading dimension of the allocated matrices.
+        Get the leading dimension of the allocated matrices.
+
+        Not collective.
 
         Returns
         -------
@@ -254,7 +274,9 @@ cdef class DS(Object):
 
     def setState(self, state: StateType) -> None:
         """
-        Change the state of the DS object.
+        Set the state of the DS object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -277,7 +299,9 @@ cdef class DS(Object):
 
     def getState(self) -> StateType:
         """
-        Returns the current state.
+        Get the current state.
+
+        Not collective.
 
         Returns
         -------
@@ -290,7 +314,9 @@ cdef class DS(Object):
 
     def setParallel(self, pmode: ParallelType) -> None:
         """
-        Selects the mode of operation in parallel runs.
+        Set the mode of operation in parallel runs.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -302,7 +328,9 @@ cdef class DS(Object):
 
     def getParallel(self) -> ParallelType:
         """
-        Gets the mode of operation in parallel runs.
+        Get the mode of operation in parallel runs.
+
+        Not collective.
 
         Returns
         -------
@@ -315,7 +343,9 @@ cdef class DS(Object):
 
     def setDimensions(self, n: int | None = None, l: int | None = None, k: int | None = None) -> None:
         """
-        Resize the matrices in the DS object.
+        Set the matrices sizes in the DS object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -340,7 +370,9 @@ cdef class DS(Object):
 
     def getDimensions(self) -> tuple[int, int, int, int]:
         """
-        Returns the current dimensions.
+        Get the current dimensions.
+
+        Not collective.
 
         Returns
         -------
@@ -362,7 +394,9 @@ cdef class DS(Object):
 
     def setBlockSize(self, bs: int) -> None:
         """
-        Selects the block size.
+        Set the block size.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -374,7 +408,9 @@ cdef class DS(Object):
 
     def getBlockSize(self) -> int:
         """
-        Gets the block size.
+        Get the block size.
+
+        Not collective.
 
         Returns
         -------
@@ -387,7 +423,9 @@ cdef class DS(Object):
 
     def setMethod(self, meth: int) -> None:
         """
-        Selects the method to be used to solve the problem.
+        Set the method to be used to solve the problem.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -399,7 +437,9 @@ cdef class DS(Object):
 
     def getMethod(self) -> int:
         """
-        Gets the method currently used in the DS.
+        Get the method currently used in the DS.
+
+        Not collective.
 
         Returns
         -------
@@ -412,7 +452,9 @@ cdef class DS(Object):
 
     def setCompact(self, comp: bool) -> None:
         """
-        Switch to compact storage of matrices.
+        Set the matrices' compact storage flag.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -434,7 +476,9 @@ cdef class DS(Object):
 
     def getCompact(self) -> bool:
         """
-        Gets the compact storage flag.
+        Get the compact storage flag.
+
+        Not collective.
 
         Returns
         -------
@@ -447,7 +491,9 @@ cdef class DS(Object):
 
     def setExtraRow(self, ext: bool) -> None:
         """
-        Sets a flag to indicate that the matrix has one extra row.
+        Set a flag to indicate that the matrix has one extra row.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -456,12 +502,11 @@ cdef class DS(Object):
 
         Notes
         -----
-        In Krylov methods it is useful that the matrix representing
-        the direct solver has one extra row, i.e., has dimension
-        (n+1)*n . If this flag is activated, all transformations
-        applied to the right of the matrix also affect this additional
-        row. In that case, (n+1) must be less or equal than the
-        leading dimension.
+        In Krylov methods it is useful that the matrix representing the direct
+        solver has one extra row, i.e., has dimension :math:`(n+1) n`. If
+        this flag is activated, all transformations applied to the right of the
+        matrix also affect this additional row. In that case, :math:`(n+1)`
+        must be less or equal than the leading dimension.
 
         The default is ``False``.
         """
@@ -470,7 +515,9 @@ cdef class DS(Object):
 
     def getExtraRow(self) -> bool:
         """
-        Gets the extra row flag.
+        Get the extra row flag.
+
+        Not collective.
 
         Returns
         -------
@@ -483,7 +530,9 @@ cdef class DS(Object):
 
     def setRefined(self, ref: bool) -> None:
         """
-        Sets a flag to indicate that refined vectors must be computed.
+        Set a flag to indicate that refined vectors must be computed.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -492,12 +541,12 @@ cdef class DS(Object):
 
         Notes
         -----
-        Normally the vectors returned in `DS.MatType.X` are eigenvectors
-        of the projected matrix. With this flag activated, `vectors()`
-        will return the right singular vector of the smallest singular
-        value of matrix At-theta*I, where At is the extended (n+1)xn
-        matrix and theta is the Ritz value. This is used in the
-        refined Ritz approximation.
+        Normally the vectors returned in `DS.MatType.X` are eigenvectors of
+        the projected matrix. With this flag activated, `vectors()` will return
+        the right singular vector of the smallest singular value of matrix
+        :math:`At - theta I`, where :math:`At` is the extended
+        :math:`(n+1) times n` matrix and :math:`theta` is the Ritz value.
+        This is used in the refined Ritz approximation.
 
         The default is ``False``.
         """
@@ -506,7 +555,9 @@ cdef class DS(Object):
 
     def getRefined(self) -> bool:
         """
-        Gets the refined vectors flag.
+        Get the refined vectors flag.
+
+        Not collective.
 
         Returns
         -------
@@ -519,7 +570,9 @@ cdef class DS(Object):
 
     def truncate(self, n: int, trim: bool = False) -> None:
         """
-        Truncates the system represented in the DS object.
+        Truncate the system represented in the DS object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -534,14 +587,20 @@ cdef class DS(Object):
 
     def updateExtraRow(self) -> None:
         """
-        Performs all necessary operations so that the extra
-        row gets up-to-date after a call to `solve()`.
+        Ensure that the extra row gets up-to-date after a call to `DS.solve()`.
+
+        Logically collective.
+
+        Perform all necessary operations so that the extra row gets up-to-date
+        after a call to `DS.solve()`.
         """
         CHKERR( DSUpdateExtraRow(self.ds) )
 
-    def getMat(self, matname: MatType) -> Mat:
+    def getMat(self, matname: MatType) -> petsc4py.PETSc.Mat:
         """
-        Returns the requested matrix as a sequential dense Mat object.
+        Get the requested matrix as a sequential dense Mat object.
+
+        Not collective.
 
         Parameters
         ----------
@@ -550,7 +609,7 @@ cdef class DS(Object):
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The matrix.
         """
         cdef SlepcDSMatType mname = matname
@@ -559,9 +618,11 @@ cdef class DS(Object):
         CHKERR( PetscINCREF(mat.obj) )
         return mat
 
-    def restoreMat(self, matname: MatType, Mat mat) -> None:
+    def restoreMat(self, matname: MatType, Mat mat: petsc4py.PETSc.Mat) -> None:
         """
         Restore the previously seized matrix.
+
+        Not collective.
 
         Parameters
         ----------
@@ -576,7 +637,9 @@ cdef class DS(Object):
 
     def setIdentity(self, matname: MatType) -> None:
         """
-        Copy the identity on the active part of a matrix.
+        Set the identity on the active part of a matrix.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -592,6 +655,8 @@ cdef class DS(Object):
         """
         Compute the inf-norm condition number of the first matrix.
 
+        Logically collective.
+
         Returns
         -------
         float
@@ -601,13 +666,15 @@ cdef class DS(Object):
         CHKERR( DSCond(self.ds, &rval) )
         return toReal(rval)
 
-    def solve(self) -> ArrayReal | ArrayComplex:
+    def solve(self) -> ArrayScalar:
         """
         Solve the problem.
 
+        Logically collective.
+
         Returns
         -------
-        ArrayReal | ArrayComplex
+        ArrayScalar
             Eigenvalues or singular values.
         """
         n = self.getDimensions()[0]
@@ -625,8 +692,9 @@ cdef class DS(Object):
 
     def vectors(self, matname = MatType.X) -> None:
         """
-        Compute vectors associated to the dense system such
-        as eigenvectors.
+        Compute vectors associated to the dense system such as eigenvectors.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -640,7 +708,9 @@ cdef class DS(Object):
 
     def setSVDDimensions(self, m: int) -> None:
         """
-        Sets the number of columns of a `DS` of type `SVD`.
+        Set the number of columns of a `DS` of type `SVD`.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -652,7 +722,9 @@ cdef class DS(Object):
 
     def getSVDDimensions(self) -> int:
         """
-        Gets the number of columns of a `DS` of type `SVD`.
+        Get the number of columns of a `DS` of type `SVD`.
+
+        Not collective.
 
         Returns
         -------
@@ -665,7 +737,9 @@ cdef class DS(Object):
 
     def setHSVDDimensions(self, m: int) -> None:
         """
-        Sets the number of columns of a `DS` of type `HSVD`.
+        Set the number of columns of a `DS` of type `HSVD`.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -677,7 +751,9 @@ cdef class DS(Object):
 
     def getHSVDDimensions(self) -> int:
         """
-        Gets the number of columns of a `DS` of type `HSVD`.
+        Get the number of columns of a `DS` of type `HSVD`.
+
+        Not collective.
 
         Returns
         -------
@@ -690,7 +766,9 @@ cdef class DS(Object):
 
     def setGSVDDimensions(self, m: int, p: int) -> None:
         """
-        Sets the number of columns and rows of a `DS` of type `GSVD`.
+        Set the number of columns and rows of a `DS` of type `GSVD`.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -705,7 +783,9 @@ cdef class DS(Object):
 
     def getGSVDDimensions(self) -> tuple[int, int]:
         """
-        Gets the number of columns and rows of a `DS` of type `GSVD`.
+        Get the number of columns and rows of a `DS` of type `GSVD`.
+
+        Not collective.
 
         Returns
         -------
@@ -721,7 +801,9 @@ cdef class DS(Object):
 
     def setPEPDegree(self, deg: int) -> None:
         """
-        Sets the polynomial degree of a `DS` of type `PEP`.
+        Set the polynomial degree of a `DS` of type `PEP`.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -733,7 +815,9 @@ cdef class DS(Object):
 
     def getPEPDegree(self) -> int:
         """
-        Gets the polynomial degree of a `DS` of type `PEP`.
+        Get the polynomial degree of a `DS` of type `PEP`.
+
+        Not collective.
 
         Returns
         -------
@@ -746,7 +830,9 @@ cdef class DS(Object):
 
     def setPEPCoefficients(self, pbc: Sequence[float]) -> None:
         """
-        Sets the polynomial basis coefficients of a `DS` of type `PEP`.
+        Set the polynomial basis coefficients of a `DS` of type `PEP`.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -760,7 +846,9 @@ cdef class DS(Object):
 
     def getPEPCoefficients(self) -> ArrayReal:
         """
-        Gets the polynomial basis coefficients of a `DS` of type `PEP`.
+        Get the polynomial basis coefficients of a `DS` of type `PEP`.
+
+        Not collective.
 
         Returns
         -------
@@ -781,43 +869,50 @@ cdef class DS(Object):
     #
 
     property state:
-        def __get__(self):
+        """The state of the DS object."""
+        def __get__(self) -> DSStateType:
             return self.getState()
         def __set__(self, value):
             self.setState(value)
 
     property parallel:
-        def __get__(self):
+        """The mode of operation in parallel runs."""
+        def __get__(self) -> DSParallelType:
             return self.getParallel()
         def __set__(self, value):
             self.setParallel(value)
 
     property block_size:
-        def __get__(self):
+        """The block size."""
+        def __get__(self) -> int:
             return self.getBlockSize()
         def __set__(self, value):
             self.setBlockSize(value)
 
     property method:
-        def __get__(self):
+        """The method to be used to solve the problem."""
+        def __get__(self) -> int:
             return self.getMethod()
         def __set__(self, value):
             self.setMethod(value)
 
     property compact:
-        def __get__(self):
+        """Compact storage of matrices."""
+        def __get__(self) -> bool:
             return self.getCompact()
         def __set__(self, value):
             self.setCompact(value)
 
     property extra_row:
-        def __get__(self):
+        """If the matrix has one extra row."""
+        def __get__(self) -> bool:
             return self.getExtraRow()
         def __set__(self, value):
             self.setExtraRow(value)
 
     property refined:
-        def __get__(self):
+        """If refined vectors must be computed."""
+        def __get__(self) -> bool:
             return self.getRefined()
         def __set__(self, value):
             self.setRefined(value)

@@ -198,13 +198,13 @@ cdef class LME(Object):
 
         Returns
         -------
-        A
+        ``A``
             First coefficient matrix
-        B
+        ``B``
             Second coefficient matrix, if available
-        D
+        ``D``
             Third coefficient matrix, if available
-        E
+        ``E``
             Fourth coefficient matrix, if available
         """
         cdef PetscMat Amat, Bmat, Dmat, Emat
@@ -596,30 +596,32 @@ cdef class LME(Object):
         CHKERR( LMEGetErrorIfNotConverged(self.lme, &tval) )
         return toBool(tval)
 
+    #
+
     property tol:
         """The tolerance value used by the LME convergence tests."""
-        def __get__(self):
+        def __get__(self) -> float:
             return self.getTolerances()[0]
         def __set__(self, value):
             self.setTolerances(tol=value)
 
     property max_it:
         """The maximum iteration count used by the LME convergence tests."""
-        def __get__(self):
+        def __get__(self) -> int:
             return self.getTolerances()[1]
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
     property fn:
         """The math function (FN) object associated to the LME object."""
-        def __get__(self):
+        def __get__(self) -> FN:
             return self.getFN()
         def __set__(self, value):
             self.setFN(value)
 
     property bv:
         """The basis vectors (BV) object associated to the LME object."""
-        def __get__(self):
+        def __get__(self) -> BV:
             return self.getBV()
         def __set__(self, value):
             self.setBV(value)

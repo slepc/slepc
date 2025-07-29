@@ -1,9 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class FNType(object):
-    """
-    FN type
-    """
+    """FN type."""
     COMBINE  = S_(FNCOMBINE)
     RATIONAL = S_(FNRATIONAL)
     EXP      = S_(FNEXP)
@@ -14,7 +12,7 @@ class FNType(object):
 
 class FNCombineType(object):
     """
-    FN type of combination of child functions
+    FN type of combination of child functions.
 
     - `ADD`:       Addition         f(x) = f1(x)+f2(x)
     - `MULTIPLY`:  Multiplication   f(x) = f1(x)*f2(x)
@@ -28,7 +26,7 @@ class FNCombineType(object):
 
 class FNParallelType(object):
     """
-    FN parallel types
+    FN parallel types.
 
     - `REDUNDANT`:    Every process performs the computation redundantly.
     - `SYNCHRONIZED`: The first process sends the result to the rest.
@@ -40,9 +38,7 @@ class FNParallelType(object):
 
 cdef class FN(Object):
 
-    """
-    FN
-    """
+    """FN."""
 
     Type         = FNType
     CombineType  = FNCombineType
@@ -122,7 +118,9 @@ cdef class FN(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the FN data structure.
+        Print the FN data structure.
+
+        Collective.
 
         Parameters
         ----------
@@ -135,7 +133,9 @@ cdef class FN(Object):
 
     def destroy(self) -> Self:
         """
-        Destroys the FN object.
+        Destroy the FN object.
+
+        Collective.
         """
         CHKERR( FNDestroy(&self.fn) )
         self.fn = NULL
@@ -143,7 +143,9 @@ cdef class FN(Object):
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the FN object.
+        Create the FN object.
+
+        Collective.
 
         Parameters
         ----------
@@ -158,7 +160,9 @@ cdef class FN(Object):
 
     def setType(self, fn_type: Type | str) -> None:
         """
-        Selects the type for the FN object.
+        Set the type for the FN object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -171,7 +175,9 @@ cdef class FN(Object):
 
     def getType(self) -> str:
         """
-        Gets the FN type of this object.
+        Get the FN type of this object.
+
+        Not collective.
 
         Returns
         -------
@@ -184,8 +190,9 @@ cdef class FN(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all FN options in the
-        database.
+        Set the prefix used for searching for all FN options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -204,8 +211,9 @@ cdef class FN(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all FN options
-        in the database.
+        Append to the prefix used for searching for all FN options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -218,8 +226,9 @@ cdef class FN(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all FN options in the
-        database.
+        Get the prefix used for searching for all FN options in the database.
+
+        Not collective.
 
         Returns
         -------
@@ -232,7 +241,9 @@ cdef class FN(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets FN options from the options database.
+        Set FN options from the options database.
+
+        Collective.
 
         Notes
         -----
@@ -243,6 +254,10 @@ cdef class FN(Object):
 
     def duplicate(self, comm: Comm | None = None) -> FN:
         """
+        Duplicate the FN object copying all parameters.
+
+        Collective.
+
         Duplicate the FN object copying all parameters, possibly with a
         different communicator.
 
@@ -261,7 +276,9 @@ cdef class FN(Object):
 
     def evaluateFunction(self, x: Scalar) -> Scalar:
         """
-        Computes the value of the function f(x) for a given x.
+        Compute the value of the function f(x) for a given x.
+
+        Not collective.
 
         Parameters
         ----------
@@ -280,7 +297,9 @@ cdef class FN(Object):
 
     def evaluateDerivative(self, x: Scalar) -> Scalar:
         """
-        Computes the value of the derivative f'(x) for a given x.
+        Compute the value of the derivative :math:`f'(x)` for a given x.
+
+        Not collective.
 
         Parameters
         ----------
@@ -290,16 +309,18 @@ cdef class FN(Object):
         Returns
         -------
         Scalar
-            The result of f'(x).
+            The result of :math:`f'(x)`.
         """
         cdef PetscScalar sval = 0
         cdef PetscScalar sarg = asScalar(x)
         CHKERR( FNEvaluateDerivative(self.fn, sarg, &sval) )
         return toScalar(sval)
 
-    def evaluateFunctionMat(self, Mat A, Mat B=None) -> Mat:
+    def evaluateFunctionMat(self, Mat A: petsc4py.PETSc.Mat, Mat B: petsc4py.PETSc.Mat | None = None) -> petsc4py.PETSc.Mat:
         """
-        Computes the value of the function f(A) for a given matrix A.
+        Compute the value of the function :math:`f(A)` for a given matrix A.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -310,16 +331,18 @@ cdef class FN(Object):
 
         Returns
         -------
-        Mat
-            The result of f(A).
+        petsc4py.PETSc.Mat
+            The result of :math:`f(A)`.
         """
         if B is None: B = A.duplicate()
         CHKERR( FNEvaluateFunctionMat(self.fn, A.mat, B.mat) )
         return B
 
-    def evaluateFunctionMatVec(self, Mat A, Vec v=None) -> Vec:
+    def evaluateFunctionMatVec(self, Mat A: petsc4py.PETSc.Mat, Vec v: petsc4py.PETSc.Vec | None = None) -> petsc4py.PETSc.Vec:
         """
-        Computes the first column of the matrix f(A) for a given matrix A.
+        Compute the first column of the matrix f(A) for a given matrix A.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -328,7 +351,7 @@ cdef class FN(Object):
 
         Returns
         -------
-        Vec
+        petsc4py.PETSc.Vec
             The first column of the result f(A).
         """
         if v is None: v = A.createVecs('left')
@@ -337,7 +360,9 @@ cdef class FN(Object):
 
     def setScale(self, alpha: Scalar | None = None, beta: Scalar | None = None) -> None:
         """
-        Sets the scaling parameters that define the matematical function.
+        Set the scaling parameters that define the matematical function.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -354,7 +379,9 @@ cdef class FN(Object):
 
     def getScale(self) -> tuple[Scalar, Scalar]:
         """
-        Gets the scaling parameters that define the matematical function.
+        Get the scaling parameters that define the matematical function.
+
+        Not collective.
 
         Returns
         -------
@@ -369,7 +396,9 @@ cdef class FN(Object):
 
     def setMethod(self, meth: int) -> None:
         """
-        Selects the method to be used to evaluate functions of matrices.
+        Set the method to be used to evaluate functions of matrices.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -382,7 +411,7 @@ cdef class FN(Object):
         for computing matrix functions. In that case, this function allows
         choosing the wanted method.
 
-        If `meth` is currently set to 0 and the input argument of
+        If ``meth`` is currently set to 0 and the input argument of
         `FN.evaluateFunctionMat()` is a symmetric/Hermitian matrix, then
         the computation is done via the eigendecomposition, rather than
         with the general algorithm.
@@ -392,7 +421,9 @@ cdef class FN(Object):
 
     def getMethod(self) -> int:
         """
-        Gets the method currently used for matrix functions.
+        Get the method currently used for matrix functions.
+
+        Not collective.
 
         Returns
         -------
@@ -405,7 +436,9 @@ cdef class FN(Object):
 
     def setParallel(self, pmode: ParallelType) -> None:
         """
-        Selects the mode of operation in parallel runs.
+        Set the mode of operation in parallel runs.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -417,7 +450,9 @@ cdef class FN(Object):
 
     def getParallel(self) -> ParallelType:
         """
-        Gets the mode of operation in parallel runs.
+        Get the mode of operation in parallel runs.
+
+        Not collective.
 
         Returns
         -------
@@ -432,7 +467,9 @@ cdef class FN(Object):
 
     def setRationalNumerator(self, alpha: Sequence[Scalar]) -> None:
         """
-        Sets the coefficients of the numerator of the rational function.
+        Set the coefficients of the numerator of the rational function.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -446,7 +483,9 @@ cdef class FN(Object):
 
     def getRationalNumerator(self) -> ArrayScalar:
         """
-        Gets the coefficients of the numerator of the rational function.
+        Get the coefficients of the numerator of the rational function.
+
+        Not collective.
 
         Returns
         -------
@@ -465,7 +504,9 @@ cdef class FN(Object):
 
     def setRationalDenominator(self, alpha: Sequence[Scalar]) -> None:
         """
-        Sets the coefficients of the denominator of the rational function.
+        Set the coefficients of the denominator of the rational function.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -479,7 +520,9 @@ cdef class FN(Object):
 
     def getRationalDenominator(self) -> ArrayScalar:
         """
-        Gets the coefficients of the denominator of the rational function.
+        Get the coefficients of the denominator of the rational function.
+
+        Not collective.
 
         Returns
         -------
@@ -498,13 +541,18 @@ cdef class FN(Object):
 
     def setCombineChildren(self, comb: CombineType, FN f1, FN f2) -> None:
         """
-        Sets the two child functions that constitute this combined
-        function, and the way they must be combined.
+        Set the two child functions that constitute this combined function.
+
+        Logically collective.
+
+        Set the two child functions that constitute this combined function,
+        and the way they must be combined.
 
         Parameters
         ----------
         comb
-            How to combine the functions (addition, multiplication, division, composition).
+            How to combine the functions (addition, multiplication, division,
+            composition).
         f1
             First function.
         f2
@@ -515,13 +563,18 @@ cdef class FN(Object):
 
     def getCombineChildren(self) -> tuple[CombineType, FN, FN]:
         """
-        Gets the two child functions that constitute this combined
+        Get the two child functions that constitute this combined function.
+
+        Not collective.
+
+        Get the two child functions that constitute this combined
         function, and the way they must be combined.
 
         Returns
         -------
         comb: CombineType
-            How to combine the functions (addition, multiplication, division, composition).
+            How to combine the functions (addition, multiplication, division,
+            composition).
         f1: FN
             First function.
         f2: FN
@@ -537,7 +590,9 @@ cdef class FN(Object):
 
     def setPhiIndex(self, k: int) -> None:
         """
-        Sets the index of the phi-function.
+        Set the index of the phi-function.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -549,7 +604,9 @@ cdef class FN(Object):
 
     def getPhiIndex(self) -> int:
         """
-        Gets the index of the phi-function.
+        Get the index of the phi-function.
+
+        Not collective.
 
         Returns
         -------
@@ -563,13 +620,15 @@ cdef class FN(Object):
     #
 
     property method:
-        def __get__(self):
+        """The method to be used to evaluate functions of matrices."""
+        def __get__(self) -> int:
             return self.getMethod()
         def __set__(self, value):
             self.setMethod(value)
 
     property parallel:
-        def __get__(self):
+        """The mode of operation in parallel runs."""
+        def __get__(self) -> FNParallelType:
             return self.getParallel()
         def __set__(self, value):
             self.setParallel(value)

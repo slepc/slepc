@@ -2,7 +2,7 @@
 
 class EPSType(object):
     """
-    EPS type
+    EPS type.
 
     Native sparse eigensolvers.
 
@@ -58,14 +58,14 @@ class EPSType(object):
 
 class EPSProblemType(object):
     """
-    EPS problem type
+    EPS problem type.
 
     - `HEP`:    Hermitian eigenproblem.
     - `NHEP`:   Non-Hermitian eigenproblem.
     - `GHEP`:   Generalized Hermitian eigenproblem.
     - `GNHEP`:  Generalized Non-Hermitian eigenproblem.
     - `PGNHEP`: Generalized Non-Hermitian eigenproblem
-                with positive definite ``B``.
+                with positive definite :math:`B`.
     - `GHIEP`:  Generalized Hermitian-indefinite eigenproblem.
     - `BSE`:    Structured Bethe-Salpeter eigenproblem.
     """
@@ -79,13 +79,14 @@ class EPSProblemType(object):
 
 class EPSExtraction(object):
     """
-    EPS extraction technique
+    EPS extraction technique.
 
     - `RITZ`:              Standard Rayleigh-Ritz extraction.
     - `HARMONIC`:          Harmonic extraction.
     - `HARMONIC_RELATIVE`: Harmonic extraction relative to the eigenvalue.
     - `HARMONIC_RIGHT`:    Harmonic extraction for rightmost eigenvalues.
-    - `HARMONIC_LARGEST`:  Harmonic extraction for largest magnitude (without target).
+    - `HARMONIC_LARGEST`:  Harmonic extraction for largest magnitude (without
+                           target).
     - `REFINED`:           Refined extraction.
     - `REFINED_HARMONIC`:  Refined harmonic extraction.
     """
@@ -99,7 +100,7 @@ class EPSExtraction(object):
 
 class EPSBalance(object):
     """
-    EPS type of balancing used for non-Hermitian problems
+    EPS type of balancing used for non-Hermitian problems.
 
     - `NONE`:     None.
     - `ONESIDE`:  One-sided balancing.
@@ -113,7 +114,7 @@ class EPSBalance(object):
 
 class EPSErrorType(object):
     """
-    EPS error type to assess accuracy of computed solutions
+    EPS error type to assess accuracy of computed solutions.
 
     - `ABSOLUTE`: Absolute error.
     - `RELATIVE`: Relative error.
@@ -125,7 +126,7 @@ class EPSErrorType(object):
 
 class EPSWhich(object):
     """
-    EPS desired part of spectrum
+    EPS desired part of spectrum.
 
     - `LARGEST_MAGNITUDE`:  Largest magnitude (default).
     - `SMALLEST_MAGNITUDE`: Smallest magnitude.
@@ -153,7 +154,7 @@ class EPSWhich(object):
 
 class EPSConv(object):
     """
-    EPS convergence test
+    EPS convergence test.
 
     - `ABS`:  Absolute convergence test.
     - `REL`:  Convergence test relative to the eigenvalue.
@@ -167,7 +168,7 @@ class EPSConv(object):
 
 class EPSStop(object):
     """
-    EPS stopping test
+    EPS stopping test.
 
     - `BASIC`:     Default stopping test.
     - `USER`:      User-defined stopping test.
@@ -179,7 +180,7 @@ class EPSStop(object):
 
 class EPSConvergedReason(object):
     """
-    EPS convergence reasons
+    EPS convergence reasons.
 
     - `CONVERGED_TOL`:          All eigenpairs converged to requested tolerance.
     - `CONVERGED_USER`:         User-defined convergence criterion satisfied.
@@ -210,7 +211,7 @@ class EPSPowerShiftType(object):
 
 class EPSKrylovSchurBSEType(object):
     """
-    EPS Krylov-Schur method for BSE problems
+    EPS Krylov-Schur method for BSE problems.
 
     - `SHAO`:         Lanczos recurrence for H square.
     - `GRUNING`:      Lanczos recurrence for H.
@@ -222,7 +223,7 @@ class EPSKrylovSchurBSEType(object):
 
 class EPSLanczosReorthogType(object):
     """
-    EPS Lanczos reorthogonalization type
+    EPS Lanczos reorthogonalization type.
 
     - `LOCAL`:     Local reorthogonalization only.
     - `FULL`:      Full reorthogonalization.
@@ -240,7 +241,7 @@ class EPSLanczosReorthogType(object):
 
 class EPSCISSQuadRule(object):
     """
-    EPS CISS quadrature rule
+    EPS CISS quadrature rule.
 
     - `TRAPEZOIDAL`: Trapezoidal rule.
     - `CHEBYSHEV`:   Chebyshev points.
@@ -250,7 +251,7 @@ class EPSCISSQuadRule(object):
 
 class EPSCISSExtraction(object):
     """
-    EPS CISS extraction technique
+    EPS CISS extraction technique.
 
     - `RITZ`:   Ritz extraction.
     - `HANKEL`: Extraction via Hankel eigenproblem.
@@ -262,9 +263,7 @@ class EPSCISSExtraction(object):
 
 cdef class EPS(Object):
 
-    """
-    EPS
-    """
+    """EPS."""
 
     Type            = EPSType
     ProblemType     = EPSProblemType
@@ -277,6 +276,7 @@ cdef class EPS(Object):
     ConvergedReason = EPSConvergedReason
 
     PowerShiftType      = EPSPowerShiftType
+    KrylovSchurBSEType  = EPSKrylovSchurBSEType
     LanczosReorthogType = EPSLanczosReorthogType
     CISSQuadRule        = EPSCISSQuadRule
     CISSExtraction      = EPSCISSExtraction
@@ -287,7 +287,9 @@ cdef class EPS(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the EPS data structure.
+        Print the EPS data structure.
+
+        Collective.
 
         Parameters
         ----------
@@ -300,7 +302,9 @@ cdef class EPS(Object):
 
     def destroy(self) -> Self:
         """
-        Destroys the EPS object.
+        Destroy the EPS object.
+
+        Collective.
         """
         CHKERR( EPSDestroy(&self.eps) )
         self.eps = NULL
@@ -308,13 +312,17 @@ cdef class EPS(Object):
 
     def reset(self) -> None:
         """
-        Resets the EPS object.
+        Reset the EPS object.
+
+        Collective.
         """
         CHKERR( EPSReset(self.eps) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the EPS object.
+        Create the EPS object.
+
+        Collective.
 
         Parameters
         ----------
@@ -329,7 +337,9 @@ cdef class EPS(Object):
 
     def setType(self, eps_type: Type | str) -> None:
         """
-        Selects the particular solver to be used in the EPS object.
+        Set the particular solver to be used in the EPS object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -351,7 +361,9 @@ cdef class EPS(Object):
 
     def getType(self) -> str:
         """
-        Gets the EPS type of this object.
+        Get the EPS type of this object.
+
+        Not collective.
 
         Returns
         -------
@@ -364,8 +376,9 @@ cdef class EPS(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all EPS options in the
-        database.
+        Get the prefix used for searching for all EPS options in the database.
+
+        Not collective.
 
         Returns
         -------
@@ -378,8 +391,9 @@ cdef class EPS(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all EPS options in the
-        database.
+        Set the prefix used for searching for all EPS options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -404,8 +418,9 @@ cdef class EPS(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all EPS options
-        in the database.
+        Append to the prefix used for searching for all EPS options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -418,9 +433,12 @@ cdef class EPS(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets EPS options from the options database. This routine must
-        be called before `setUp()` if the user is to be allowed to set
-        the solver type.
+        Set EPS options from the options database.
+
+        Collective.
+
+        This routine must be called before `setUp()` if the user is to be
+        allowed to set the solver type.
 
         Notes
         -----
@@ -433,7 +451,9 @@ cdef class EPS(Object):
 
     def getProblemType(self) -> ProblemType:
         """
-        Gets the problem type from the EPS object.
+        Get the problem type from the EPS object.
+
+        Not collective.
 
         Returns
         -------
@@ -446,7 +466,9 @@ cdef class EPS(Object):
 
     def setProblemType(self, problem_type: ProblemType) -> None:
         """
-        Specifies the type of the eigenvalue problem.
+        Set the type of the eigenvalue problem.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -455,27 +477,26 @@ cdef class EPS(Object):
 
         Notes
         -----
-        Allowed values are: Hermitian (HEP), non-Hermitian (NHEP),
-        generalized Hermitian (GHEP), generalized non-Hermitian
-        (GNHEP), and generalized non-Hermitian with positive
-        semi-definite B (PGNHEP).
+        Allowed values are: Hermitian (HEP), non-Hermitian (NHEP), generalized
+        Hermitian (GHEP), generalized non-Hermitian (GNHEP), and generalized
+        non-Hermitian with positive semi-definite B (PGNHEP).
 
-        This function must be used to instruct SLEPc to exploit
-        symmetry. If no problem type is specified, by default a
-        non-Hermitian problem is assumed (either standard or
-        generalized). If the user knows that the problem is Hermitian
-        (i.e. ``A=A^H``) or generalized Hermitian (i.e. ``A=A^H``,
-        ``B=B^H``, and ``B`` positive definite) then it is recommended
-        to set the problem type so that eigensolver can exploit these
-        properties.
+        This function must be used to instruct SLEPc to exploit symmetry. If
+        no problem type is specified, by default a non-Hermitian problem is
+        assumed (either standard or generalized). If the user knows that the
+        problem is Hermitian (i.e. :math:`A=A^H`) or generalized Hermitian
+        (i.e. :math:`A=A^H`, :math:`B=B^H`, and :math:`B` positive definite)
+        then it is recommended to set the problem type so that eigensolver can
+        exploit these properties.
         """
         cdef SlepcEPSProblemType val = problem_type
         CHKERR( EPSSetProblemType(self.eps, val) )
 
     def isGeneralized(self) -> bool:
         """
-        Tells whether the EPS object corresponds to a generalized
-        eigenvalue problem.
+        Tell if the EPS object corresponds to a generalized eigenproblem.
+
+        Not collective.
 
         Returns
         -------
@@ -488,8 +509,9 @@ cdef class EPS(Object):
 
     def isHermitian(self) -> bool:
         """
-        Tells whether the EPS object corresponds to a Hermitian
-        eigenvalue problem.
+        Tell if the EPS object corresponds to a Hermitian eigenproblem.
+
+        Not collective.
 
         Returns
         -------
@@ -502,8 +524,12 @@ cdef class EPS(Object):
 
     def isPositive(self) -> bool:
         """
-        Tells whether the EPS object corresponds to an eigenvalue problem
-        type that requires a positive (semi-) definite matrix B.
+        Eigenproblem requiring a positive (semi-) definite matrix :math:`B`.
+
+        Not collective.
+
+        Tell if the EPS corresponds to an eigenproblem requiring a positive
+        (semi-) definite matrix :math:`B`.
 
         Returns
         -------
@@ -516,7 +542,9 @@ cdef class EPS(Object):
 
     def isStructured(self) -> bool:
         """
-        Tells whether the EPS object corresponds to a structured eigenvalue problem.
+        Tell if the EPS object corresponds to a structured eigenvalue problem.
+
+        Not collective.
 
         Returns
         -------
@@ -529,8 +557,9 @@ cdef class EPS(Object):
 
     def getBalance(self) -> tuple[Balance, int, float]:
         """
-        Gets the balancing type used by the EPS object,
-        and the associated parameters.
+        Get the balancing type used by the EPS, and the associated parameters.
+
+        Not collective.
 
         Returns
         -------
@@ -554,8 +583,12 @@ cdef class EPS(Object):
         cutoff: float | None = None,
     ) -> None:
         """
-        Specifies the balancing technique to be employed by the
-        eigensolver, and some parameters associated to it.
+        Set the balancing technique to be used by the eigensolver.
+
+        Logically collective.
+
+        Set the balancing technique to be used by the eigensolver, and some
+        parameters associated to it.
 
         Parameters
         ----------
@@ -577,7 +610,9 @@ cdef class EPS(Object):
 
     def getExtraction(self) -> Extraction:
         """
-        Gets the extraction type used by the EPS object.
+        Get the extraction type used by the EPS object.
+
+        Not collective.
 
         Returns
         -------
@@ -590,7 +625,9 @@ cdef class EPS(Object):
 
     def setExtraction(self, extraction: Extraction) -> None:
         """
-        Sets the extraction type used by the EPS object.
+        Set the extraction type used by the EPS object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -613,7 +650,9 @@ cdef class EPS(Object):
 
     def getWhichEigenpairs(self) -> Which:
         """
-        Returns which portion of the spectrum is to be sought.
+        Get which portion of the spectrum is to be sought.
+
+        Not collective.
 
         Returns
         -------
@@ -626,7 +665,9 @@ cdef class EPS(Object):
 
     def setWhichEigenpairs(self, which: Which) -> None:
         """
-        Specifies which portion of the spectrum is to be sought.
+        Set which portion of the spectrum is to be sought.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -647,7 +688,9 @@ cdef class EPS(Object):
 
     def getThreshold(self) -> tuple[float, bool]:
         """
-        Gets the threshold used in the threshold stopping test.
+        Get the threshold used in the threshold stopping test.
+
+        Not collective.
 
         Returns
         -------
@@ -663,7 +706,9 @@ cdef class EPS(Object):
 
     def setThreshold(self, thres: float, rel: bool = False) -> None:
         """
-        Sets the threshold used in the threshold stopping test.
+        Set the threshold used in the threshold stopping test.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -686,7 +731,9 @@ cdef class EPS(Object):
 
     def getTarget(self) -> Scalar:
         """
-        Gets the value of the target.
+        Get the value of the target.
+
+        Not collective.
 
         Returns
         -------
@@ -703,7 +750,9 @@ cdef class EPS(Object):
 
     def setTarget(self, target: Scalar) -> None:
         """
-        Sets the value of the target.
+        Set the value of the target.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -721,7 +770,9 @@ cdef class EPS(Object):
 
     def getInterval(self) -> tuple[float, float]:
         """
-        Gets the computational interval for spectrum slicing.
+        Get the computational interval for spectrum slicing.
+
+        Not collective.
 
         Returns
         -------
@@ -741,7 +792,9 @@ cdef class EPS(Object):
 
     def setInterval(self, inta: float, intb: float) -> None:
         """
-        Defines the computational interval for spectrum slicing.
+        Set the computational interval for spectrum slicing.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -766,8 +819,12 @@ cdef class EPS(Object):
 
     def getTolerances(self) -> tuple[float, int]:
         """
-        Gets the tolerance and maximum iteration count used by the
-        default EPS convergence tests.
+        Get the tolerance and max. iter. count used for convergence tests.
+
+        Not collective.
+
+        Get the tolerance and iteration limit used by the default EPS
+        convergence tests.
 
         Returns
         -------
@@ -783,8 +840,9 @@ cdef class EPS(Object):
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
-        Sets the tolerance and maximum iteration count used by the
-        default EPS convergence tests.
+        Set the tolerance and max. iter. used by the default EPS convergence tests.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -806,8 +864,9 @@ cdef class EPS(Object):
 
     def getTwoSided(self) -> bool:
         """
-        Returns the flag indicating whether a two-sided variant
-        of the algorithm is being used or not.
+        Get the flag indicating if a two-sided variant of the algorithm is being used.
+
+        Not collective.
 
         Returns
         -------
@@ -820,8 +879,9 @@ cdef class EPS(Object):
 
     def setTwoSided(self, twosided: bool) -> None:
         """
-        Sets the solver to use a two-sided variant so that left
-        eigenvectors are also computed.
+        Set to use a two-sided variant that also computes left eigenvectors.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -833,8 +893,9 @@ cdef class EPS(Object):
 
     def getPurify(self) -> bool:
         """
-        Returns the flag indicating whether purification is activated
-        or not.
+        Get the flag indicating whether purification is activated or not.
+
+        Not collective.
 
         Returns
         -------
@@ -847,7 +908,9 @@ cdef class EPS(Object):
 
     def setPurify(self, purify: bool = True) -> None:
         """
-        Activate or deactivate eigenvector purification.
+        Set (toggle) eigenvector purification.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -859,8 +922,9 @@ cdef class EPS(Object):
 
     def getConvergenceTest(self) -> Conv:
         """
-        Return the method used to compute the error estimate
-        used in the convergence test.
+        Get how to compute the error estimate used in the convergence test.
+
+        Not collective.
 
         Returns
         -------
@@ -874,8 +938,9 @@ cdef class EPS(Object):
 
     def setConvergenceTest(self, conv: Conv) -> None:
         """
-        Specifies how to compute the error estimate
-        used in the convergence test.
+        Set how to compute the error estimate used in the convergence test.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -888,8 +953,9 @@ cdef class EPS(Object):
 
     def getTrueResidual(self) -> bool:
         """
-        Returns the flag indicating whether true residual must be
-        computed explicitly or not.
+        Get the flag indicating if true residual must be computed explicitly.
+
+        Not collective.
 
         Returns
         -------
@@ -902,8 +968,9 @@ cdef class EPS(Object):
 
     def setTrueResidual(self, trueres: bool) -> None:
         """
-        Specifies if the solver must compute the true residual
-        explicitly or not.
+        Set if the solver must compute the true residual explicitly or not.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -915,8 +982,9 @@ cdef class EPS(Object):
 
     def getTrackAll(self) -> bool:
         """
-        Returns the flag indicating whether all residual norms must be
-        computed or not.
+        Get the flag indicating if all residual norms must be computed or not.
+
+        Not collective.
 
         Returns
         -------
@@ -929,8 +997,9 @@ cdef class EPS(Object):
 
     def setTrackAll(self, trackall: bool) -> None:
         """
-        Specifies if the solver must compute the residual of all
-        approximate eigenpairs or not.
+        Set if the solver must compute the residual of all approximate eigenpairs.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -942,8 +1011,9 @@ cdef class EPS(Object):
 
     def getDimensions(self) -> tuple[int, int, int]:
         """
-        Gets the number of eigenvalues to compute and the dimension of
-        the subspace.
+        Get number of eigenvalues to compute and the dimension of the subspace.
+
+        Not collective.
 
         Returns
         -------
@@ -967,8 +1037,9 @@ cdef class EPS(Object):
         mpd: int | None = None,
     ) -> None:
         """
-        Sets the number of eigenvalues to compute and the dimension of
-        the subspace.
+        Set number of eigenvalues to compute and the dimension of the subspace.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -981,21 +1052,21 @@ cdef class EPS(Object):
 
         Notes
         -----
-        Use `DECIDE` for `ncv` and `mpd` to assign a reasonably good
+        Use `DECIDE` for ``ncv`` and ``mpd`` to assign a reasonably good
         value, which is dependent on the solution method.
 
-        The parameters `ncv` and `mpd` are intimately related, so that
+        The parameters ``ncv`` and ``mpd`` are intimately related, so that
         the user is advised to set one of them at most. Normal usage
         is the following:
 
-        + In cases where `nev` is small, the user sets `ncv`
-          (a reasonable default is 2 * `nev`).
+        + In cases where ``nev`` is small, the user sets ``ncv``
+          (a reasonable default is 2 * ``nev``).
 
-        + In cases where `nev` is large, the user sets `mpd`.
+        + In cases where ``nev`` is large, the user sets ``mpd``.
 
-        The value of `ncv` should always be between `nev` and (`nev` +
-        `mpd`), typically `ncv` = `nev` + `mpd`. If `nev` is not too
-        large, `mpd` = `nev` is a reasonable choice, otherwise a
+        The value of ``ncv`` should always be between ``nev`` and (``nev`` +
+        ``mpd``), typically ``ncv`` = ``nev`` + ``mpd``. If ``nev`` is not too
+        large, ``mpd`` = ``nev`` is a reasonable choice, otherwise a
         smaller value should be used.
         """
         cdef PetscInt ival1 = PETSC_CURRENT
@@ -1008,8 +1079,9 @@ cdef class EPS(Object):
 
     def getST(self) -> ST:
         """
-        Obtain the spectral transformation (`ST`) object associated to
-        the eigensolver object.
+        Get the spectral transformation object associated to the eigensolver.
+
+        Not collective.
 
         Returns
         -------
@@ -1023,8 +1095,9 @@ cdef class EPS(Object):
 
     def setST(self, ST st) -> None:
         """
-        Associates a spectral transformation object to the
-        eigensolver.
+        Set a spectral transformation object associated to the eigensolver.
+
+        Collective.
 
         Parameters
         ----------
@@ -1035,7 +1108,9 @@ cdef class EPS(Object):
 
     def getBV(self) -> BV:
         """
-        Obtain the basis vector objects associated to the eigensolver.
+        Get the basis vector objects associated to the eigensolver.
+
+        Not collective.
 
         Returns
         -------
@@ -1049,7 +1124,9 @@ cdef class EPS(Object):
 
     def setBV(self, BV bv) -> None:
         """
-        Associates a basis vectors object to the eigensolver.
+        Set a basis vectors object associated to the eigensolver.
+
+        Collective.
 
         Parameters
         ----------
@@ -1060,7 +1137,9 @@ cdef class EPS(Object):
 
     def getDS(self) -> DS:
         """
-        Obtain the direct solver associated to the eigensolver.
+        Get the direct solver associated to the eigensolver.
+
+        Not collective.
 
         Returns
         -------
@@ -1074,7 +1153,9 @@ cdef class EPS(Object):
 
     def setDS(self, DS ds) -> None:
         """
-        Associates a direct solver object to the eigensolver.
+        Set a direct solver object associated to the eigensolver.
+
+        Collective.
 
         Parameters
         ----------
@@ -1085,7 +1166,9 @@ cdef class EPS(Object):
 
     def getRG(self) -> RG:
         """
-        Obtain the region object associated to the eigensolver.
+        Get the region object associated to the eigensolver.
+
+        Not collective.
 
         Returns
         -------
@@ -1099,7 +1182,9 @@ cdef class EPS(Object):
 
     def setRG(self, RG rg) -> None:
         """
-        Associates a region object to the eigensolver.
+        Set a region object associated to the eigensolver.
+
+        Collective.
 
         Parameters
         ----------
@@ -1108,15 +1193,17 @@ cdef class EPS(Object):
         """
         CHKERR( EPSSetRG(self.eps, rg.rg) )
 
-    def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
+    def getOperators(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
         """
-        Gets the matrices associated with the eigenvalue problem.
+        Get the matrices associated with the eigenvalue problem.
+
+        Collective.
 
         Returns
         -------
-        A: Mat
+        A: petsc4py.PETSc.Mat
             The matrix associated with the eigensystem.
-        B: Mat
+        B: petsc4py.PETSc.Mat
             The second matrix in the case of generalized eigenproblems.
         """
         cdef Mat A = Mat()
@@ -1131,7 +1218,9 @@ cdef class EPS(Object):
 
     def setOperators(self, Mat A, Mat B=None) -> None:
         """
-        Sets the matrices associated with the eigenvalue problem.
+        Set the matrices associated with the eigenvalue problem.
+
+        Collective.
 
         Parameters
         ----------
@@ -1147,6 +1236,8 @@ cdef class EPS(Object):
     def setDeflationSpace(self, space: Vec | list[Vec]) -> None:
         """
         Add vectors to the basis of the deflation space.
+
+        Collective.
 
         Parameters
         ----------
@@ -1178,8 +1269,9 @@ cdef class EPS(Object):
 
     def setInitialSpace(self, space: Vec | list[Vec]) -> None:
         """
-        Sets the initial space from which the eigensolver starts to
-        iterate.
+        Set the initial space from which the eigensolver starts to iterate.
+
+        Collective.
 
         Parameters
         ----------
@@ -1210,8 +1302,9 @@ cdef class EPS(Object):
 
     def setLeftInitialSpace(self, space: Vec | list[Vec]) -> None:
         """
-        Sets the left initial space from which the eigensolver starts to
-        iterate.
+        Set a left initial space from which the eigensolver starts to iterate.
+
+        Collective.
 
         Parameters
         ----------
@@ -1242,7 +1335,9 @@ cdef class EPS(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Sets a function to decide when to stop the outer iteration of the eigensolver.
+        Set when to stop the outer iteration of the eigensolver.
+
+        Logically collective.
         """
         if stopping is not None:
             if args is None: args = ()
@@ -1255,7 +1350,9 @@ cdef class EPS(Object):
 
     def getStoppingTest(self) -> EPSStoppingFunction:
         """
-        Gets the stopping function.
+        Get the stopping function.
+
+        Not collective.
         """
         return self.get_attr('__stopping__')
 
@@ -1268,9 +1365,13 @@ cdef class EPS(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Sets a function to look for eigenvalues according to an arbitrary selection
-        criterion. This criterion can be based on a computation involving the current
-        eigenvector approximation.
+        Set an arbitrary selection criterion function.
+
+        Logically collective.
+
+        Set a function to look for eigenvalues according to an arbitrary
+        selection criterion. This criterion can be based on a computation
+        involving the current eigenvector approximation.
         """
         if arbitrary is not None:
             if args is None: args = ()
@@ -1291,8 +1392,12 @@ cdef class EPS(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Specifies the eigenvalue comparison function when
-        `setWhichEigenpairs()` is set to `EPS.Which.USER`.
+        Set an eigenvalue comparison function.
+
+        Logically collective.
+
+        Specify the eigenvalue comparison function when `setWhichEigenpairs()`
+        is set to `EPS.Which.USER`.
         """
         if comparison is not None:
             if args is None: args = ()
@@ -1311,7 +1416,9 @@ cdef class EPS(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Appends a monitor function to the list of monitors.
+        Append a monitor function to the list of monitors.
+
+        Logically collective.
         """
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
@@ -1324,14 +1431,14 @@ cdef class EPS(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> EPSMonitorFunction:
-        """
-        Gets the list of monitor functions.
-        """
+        """Get the list of monitor functions."""
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
         """
-        Clears all monitors for an `EPS` object.
+        Clear all monitors for an `EPS` object.
+
+        Logically collective.
         """
         CHKERR( EPSMonitorCancel(self.eps) )
         self.set_attr('__monitor__', None)
@@ -1340,8 +1447,12 @@ cdef class EPS(Object):
 
     def setUp(self) -> None:
         """
-        Sets up all the internal data structures necessary for the
-        execution of the eigensolver.
+        Set up all the internal data structures.
+
+        Collective.
+
+        Set up all the internal data structures necessary for the execution
+        of the eigensolver.
 
         Notes
         -----
@@ -1353,15 +1464,20 @@ cdef class EPS(Object):
 
     def solve(self) -> None:
         """
-        Solves the eigensystem.
+        Solve the eigensystem.
+
+        Collective.
         """
         CHKERR( EPSSolve(self.eps) )
 
     def getIterationNumber(self) -> int:
         """
-        Gets the current iteration number. If the call to `solve()` is
-        complete, then it returns the number of iterations carried out
-        by the solution method.
+        Get the current iteration number.
+
+        Not collective.
+
+        If the call to `solve()` is complete, then it returns the number of
+        iterations carried out by the solution method.
 
         Returns
         -------
@@ -1374,7 +1490,9 @@ cdef class EPS(Object):
 
     def getConvergedReason(self) -> ConvergedReason:
         """
-        Gets the reason why the `solve()` iteration was stopped.
+        Get the reason why the `solve()` iteration was stopped.
+
+        Not collective.
 
         Returns
         -------
@@ -1387,7 +1505,9 @@ cdef class EPS(Object):
 
     def getConverged(self) -> int:
         """
-        Gets the number of converged eigenpairs.
+        Get the number of converged eigenpairs.
+
+        Not collective.
 
         Returns
         -------
@@ -1402,9 +1522,11 @@ cdef class EPS(Object):
         CHKERR( EPSGetConverged(self.eps, &ival) )
         return toInt(ival)
 
-    def getEigenvalue(self, i: int) -> float | Scalar:
+    def getEigenvalue(self, i: int) -> Scalar:
         """
-        Gets the i-th eigenvalue as computed by `solve()`.
+        Get the i-th eigenvalue as computed by `solve()`.
+
+        Not collective.
 
         Parameters
         ----------
@@ -1413,17 +1535,16 @@ cdef class EPS(Object):
 
         Returns
         -------
-        float | complex
+        Scalar
             The computed eigenvalue. It will be a real variable in case
             of a Hermitian or generalized Hermitian eigenproblem. Otherwise
             it will be a complex variable (possibly with zero imaginary part).
 
         Notes
         -----
-        The index ``i`` should be a value between ``0`` and
-        ``nconv-1`` (see `getConverged()`). Eigenpairs are indexed
-        according to the ordering criterion established with
-        `setWhichEigenpairs()`.
+        The index ``i`` should be a value between ``0`` and ``nconv-1`` (see
+        `getConverged()`). Eigenpairs are indexed according to the ordering
+        criterion established with `setWhichEigenpairs()`.
         """
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
@@ -1437,7 +1558,9 @@ cdef class EPS(Object):
 
     def getEigenvector(self, i: int, Vec Vr = None, Vec Vi = None) -> None:
         """
-        Gets the i-th eigenvector as computed by `solve()`.
+        Get the i-th eigenvector as computed by `solve()`.
+
+        Collective.
 
         Parameters
         ----------
@@ -1461,7 +1584,9 @@ cdef class EPS(Object):
 
     def getLeftEigenvector(self, i: int, Vec Wr = None, Vec Wi = None) -> None:
         """
-        Gets the i-th left eigenvector as computed by `solve()`.
+        Get the i-th left eigenvector as computed by `solve()`.
+
+        Collective.
 
         Parameters
         ----------
@@ -1474,10 +1599,9 @@ cdef class EPS(Object):
 
         Notes
         -----
-        The index ``i`` should be a value between ``0`` and
-        ``nconv-1`` (see `getConverged()`). Eigensolutions are indexed
-        according to the ordering criterion established with
-        `setWhichEigenpairs()`.
+        The index ``i`` should be a value between ``0`` and ``nconv-1`` (see
+        `getConverged()`). Eigensolutions are indexed according to the
+        ordering criterion established with `setWhichEigenpairs()`.
 
         Left eigenvectors are available only if the twosided flag was set
         with `setTwoSided()`.
@@ -1488,9 +1612,11 @@ cdef class EPS(Object):
 
     def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> Scalar:
         """
-        Gets the i-th solution of the eigenproblem as computed by
-        `solve()`.  The solution consists of both the eigenvalue and
-        the eigenvector.
+        Get the i-th solution of the eigenproblem as computed by `solve()`.
+
+        Collective.
+
+        The solution consists of both the eigenvalue and the eigenvector.
 
         Parameters
         ----------
@@ -1503,17 +1629,16 @@ cdef class EPS(Object):
 
         Returns
         -------
-        e: float | complex
+        e: Scalar
            The computed eigenvalue. It will be a real variable in case
            of a Hermitian or generalized Hermitian eigenproblem. Otherwise
            it will be a complex variable (possibly with zero imaginary part).
 
         Notes
         -----
-        The index ``i`` should be a value between ``0`` and
-        ``nconv-1`` (see `getConverged()`). Eigenpairs are indexed
-        according to the ordering criterion established with
-        `setWhichEigenpairs()`.
+        The index ``i`` should be a value between ``0`` and ``nconv-1`` (see
+        `getConverged()`). Eigenpairs are indexed according to the ordering
+        criterion established with `setWhichEigenpairs()`.
         """
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
@@ -1527,13 +1652,15 @@ cdef class EPS(Object):
         else:
             return toComplex(sval1, sval2)
 
-    def getInvariantSubspace(self) -> list[Vec]:
+    def getInvariantSubspace(self) -> list[petsc4py.PETSc.Vec]:
         """
-        Gets an orthonormal basis of the computed invariant subspace.
+        Get an orthonormal basis of the computed invariant subspace.
+
+        Collective.
 
         Returns
         -------
-        list of Vec
+        list of petsc4py.PETSc.Vec
             Basis of the invariant subspace.
 
         Notes
@@ -1566,8 +1693,9 @@ cdef class EPS(Object):
 
     def getErrorEstimate(self, i: int) -> float:
         """
-        Returns the error estimate associated to the i-th computed
-        eigenpair.
+        Get the error estimate associated to the i-th computed eigenpair.
+
+        Not collective.
 
         Parameters
         ----------
@@ -1591,8 +1719,12 @@ cdef class EPS(Object):
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
-        Computes the error (based on the residual norm) associated with the i-th
-        computed eigenpair.
+        Compute the error associated with the i-th computed eigenpair.
+
+        Collective.
+
+        Compute the error (based on the residual norm) associated with the
+        i-th computed eigenpair.
 
         Parameters
         ----------
@@ -1605,8 +1737,8 @@ cdef class EPS(Object):
         -------
         float
             The error bound, computed in various ways from the residual norm
-            ``||Ax-kBx||_2`` where ``k`` is the eigenvalue and
-            ``x`` is the eigenvector.
+            :math:`\|Ax-kBx\|_2` where :math:`k` is the eigenvalue and
+            :math:`x` is the eigenvector.
 
         Notes
         -----
@@ -1619,10 +1751,13 @@ cdef class EPS(Object):
         CHKERR( EPSComputeError(self.eps, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype: ErrorType | None = None, viewer: Viewer | None = None) -> None:
+    def errorView(self, etype: ErrorType | None = None, Viewer viewer or None: petsc4py.PETSc.Viewer | None = None) -> None:
         """
-        Displays the errors associated with the computed solution
-        (as well as the eigenvalues).
+        Display the errors associated with the computed solution.
+
+        Collective.
+
+        Display the errors and the eigenvalues.
 
         Parameters
         ----------
@@ -1646,7 +1781,9 @@ cdef class EPS(Object):
 
     def valuesView(self, viewer: Viewer | None = None) -> None:
         """
-        Displays the computed eigenvalues in a viewer.
+        Display the computed eigenvalues in a viewer.
+
+        Collective.
 
         Parameters
         ----------
@@ -1659,7 +1796,9 @@ cdef class EPS(Object):
 
     def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
-        Outputs computed eigenvectors to a viewer.
+        Output computed eigenvectors to a viewer.
+
+        Collective.
 
         Parameters
         ----------
@@ -1674,8 +1813,11 @@ cdef class EPS(Object):
 
     def setPowerShiftType(self, shift: PowerShiftType) -> None:
         """
-        Sets the type of shifts used during the power iteration. This
-        can be used to emulate the Rayleigh Quotient Iteration (RQI)
+        Set the type of shifts used during the power iteration.
+
+        Logically collective.
+
+        This can be used to emulate the Rayleigh Quotient Iteration (RQI)
         method.
 
         Parameters
@@ -1703,7 +1845,9 @@ cdef class EPS(Object):
 
     def getPowerShiftType(self) -> PowerShiftType:
         """
-        Gets the type of shifts used during the power iteration.
+        Get the type of shifts used during the power iteration.
+
+        Not collective.
 
         Returns
         -------
@@ -1716,8 +1860,9 @@ cdef class EPS(Object):
 
     def setArnoldiDelayed(self, delayed: bool) -> None:
         """
-        Activates or deactivates delayed reorthogonalization in the
-        Arnoldi iteration.
+        Set (toggle) delayed reorthogonalization in the Arnoldi iteration.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1739,8 +1884,9 @@ cdef class EPS(Object):
 
     def getArnoldiDelayed(self) -> bool:
         """
-        Gets the type of reorthogonalization used during the Arnoldi
-        iteration.
+        Get the type of reorthogonalization used during the Arnoldi iteration.
+
+        Not collective.
 
         Returns
         -------
@@ -1751,10 +1897,11 @@ cdef class EPS(Object):
         CHKERR( EPSArnoldiGetDelayed(self.eps, &tval) )
         return toBool(tval)
 
-    def setLanczosReorthogType(self, reorthog: LanczosReorthog) -> None:
+    def setLanczosReorthogType(self, reorthog: LanczosReorthogType) -> None:
         """
-        Sets the type of reorthogonalization used during the Lanczos
-        iteration.
+        Set the type of reorthogonalization used during the Lanczos iteration.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1769,10 +1916,11 @@ cdef class EPS(Object):
         cdef SlepcEPSLanczosReorthogType val = reorthog
         CHKERR( EPSLanczosSetReorthog(self.eps, val) )
 
-    def getLanczosReorthogType(self) -> LanczosReorthog:
+    def getLanczosReorthogType(self) -> LanczosReorthogType:
         """
-        Gets the type of reorthogonalization used during the Lanczos
-        iteration.
+        Get the type of reorthogonalization used during the Lanczos iteration.
+
+        Not collective.
 
         Returns
         -------
@@ -1788,8 +1936,9 @@ cdef class EPS(Object):
 
     def setKrylovSchurBSEType(self, bse: KrylovSchurBSEType) -> None:
         """
-        Sets the method to be used for BSE structured eigenproblems in
-        the Krylov-Schur solver.
+        Set the Krylov-Schur variant used for BSE structured eigenproblems.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1807,8 +1956,9 @@ cdef class EPS(Object):
 
     def getKrylovSchurBSEType(self) -> KrylovSchurBSEType:
         """
-        Gets the method used for BSE structured eigenproblems in the
-        Krylov-Schur solver.
+        Get the method used for BSE structured eigenproblems (Krylov-Schur).
+
+        Not collective.
 
         Returns
         -------
@@ -1821,9 +1971,11 @@ cdef class EPS(Object):
 
     def setKrylovSchurRestart(self, keep: float) -> None:
         """
-        Sets the restart parameter for the Krylov-Schur method, in
-        particular the proportion of basis vectors that must be kept
-        after restart.
+        Set the restart parameter for the Krylov-Schur method.
+
+        Logically collective.
+
+        It is the proportion of basis vectors that must be kept after restart.
 
         Parameters
         ----------
@@ -1839,7 +1991,9 @@ cdef class EPS(Object):
 
     def getKrylovSchurRestart(self) -> float:
         """
-        Gets the restart parameter used in the Krylov-Schur method.
+        Get the restart parameter used in the Krylov-Schur method.
+
+        Not collective.
 
         Returns
         -------
@@ -1852,8 +2006,9 @@ cdef class EPS(Object):
 
     def setKrylovSchurLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
-        Krylov-Schur method.
+        Set (toggle) locking/non-locking variants of the Krylov-Schur method.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -1872,7 +2027,9 @@ cdef class EPS(Object):
 
     def getKrylovSchurLocking(self) -> bool:
         """
-        Gets the locking flag used in the Krylov-Schur method.
+        Get the locking flag used in the Krylov-Schur method.
+
+        Not collective.
 
         Returns
         -------
@@ -1885,7 +2042,11 @@ cdef class EPS(Object):
 
     def setKrylovSchurPartitions(self, npart: int) -> None:
         """
-        Sets the number of partitions for the case of doing spectrum
+        Set the number of partitions of the communicator (spectrum slicing).
+
+        Logically collective.
+
+        Set the number of partitions for the case of doing spectrum
         slicing for a computational interval with the communicator split
         in several sub-communicators.
 
@@ -1906,8 +2067,9 @@ cdef class EPS(Object):
 
     def getKrylovSchurPartitions(self) -> int:
         """
-        Gets the number of partitions of the communicator in case of
-        spectrum slicing.
+        Get the number of partitions of the communicator (spectrum slicing).
+
+        Not collective.
 
         Returns
         -------
@@ -1920,7 +2082,11 @@ cdef class EPS(Object):
 
     def setKrylovSchurDetectZeros(self, detect: bool) -> None:
         """
-        Sets a flag to enforce detection of zeros during the factorizations
+        Set the flag that enforces zero detection in spectrum slicing.
+
+        Logically collective.
+
+        Set a flag to enforce the detection of zeros during the factorizations
         throughout the spectrum slicing computation.
 
         Parameters
@@ -1943,7 +2109,9 @@ cdef class EPS(Object):
 
     def getKrylovSchurDetectZeros(self) -> bool:
         """
-        Gets the flag that enforces zero detection in spectrum slicing.
+        Get the flag that enforces zero detection in spectrum slicing.
+
+        Not collective.
 
         Returns
         -------
@@ -1961,7 +2129,11 @@ cdef class EPS(Object):
         mpd: int | None = None,
     ) -> None:
         """
-        Sets the dimensions used for each subsolve step in case of doing
+        Set the dimensions used for each subsolve step (spectrum slicing).
+
+        Logically collective.
+
+        Set the dimensions used for each subsolve step in case of doing
         spectrum slicing for a computational interval. The meaning of the
         parameters is the same as in `setDimensions()`.
 
@@ -1984,7 +2156,11 @@ cdef class EPS(Object):
 
     def getKrylovSchurDimensions(self) -> tuple[int, int, int]:
         """
-        Gets the dimensions used for each subsolve step in case of doing
+        Get the dimensions used for each subsolve step (spectrum slicing).
+
+        Not collective.
+
+        Get the dimensions used for each subsolve step in case of doing
         spectrum slicing for a computational interval.
 
         Returns
@@ -2002,9 +2178,13 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetDimensions(self.eps, &ival1, &ival2, &ival3) )
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
-    def getKrylovSchurSubcommInfo(self) -> tuple[int, int, Vec]:
+    def getKrylovSchurSubcommInfo(self) -> tuple[int, int, petsc4py.PETSc.Vec]:
         """
-        Gets information related to the case of doing spectrum slicing
+        Get information related to the case of doing spectrum slicing.
+
+        Collective on the subcommunicator (if v is given).
+
+        Get information related to the case of doing spectrum slicing
         for a computational interval with multiple communicators.
 
         Returns
@@ -2013,7 +2193,7 @@ cdef class EPS(Object):
             Number of the subinterval for the calling process.
         n: int
             Number of eigenvalues found in the k-th subinterval.
-        v: Vec
+        v: petsc4py.PETSc.Vec
             A vector owned by processes in the subcommunicator with dimensions
             compatible for locally computed eigenvectors.
 
@@ -2031,7 +2211,11 @@ cdef class EPS(Object):
 
     def getKrylovSchurSubcommPairs(self, i: int, Vec V) -> Scalar:
         """
-        Gets the i-th eigenpair stored internally in the multi-communicator
+        Get the i-th eigenpair stored in the multi-communicator of the process.
+
+        Collective on the subcommunicator (if v is given).
+
+        Get the i-th eigenpair stored internally in the multi-communicator
         to which the calling process belongs.
 
         Parameters
@@ -2057,16 +2241,20 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetSubcommPairs(self.eps, i, &sval, vec) )
         return toScalar(sval)
 
-    def getKrylovSchurSubcommMats(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
+    def getKrylovSchurSubcommMats(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
         """
-        Gets the eigenproblem matrices stored internally in the subcommunicator
+        Get the eigenproblem matrices stored in the subcommunicator.
+
+        Collective on the subcommunicator.
+
+        Get the eigenproblem matrices stored internally in the subcommunicator
         to which the calling process belongs.
 
         Returns
         -------
-        A: Mat
+        A: petsc4py.PETSc.Mat
             The matrix associated with the eigensystem.
-        B: Mat
+        B: petsc4py.PETSc.Mat
             The second matrix in the case of generalized eigenproblems.
 
         Notes
@@ -2090,14 +2278,18 @@ cdef class EPS(Object):
         self,
         s: Scalar = 1.0,
         a: Scalar = 1.0,
-        Mat Au or None = None,
+        Mat Au: petsc4py.PETSc.Mat | None = None,
         t: Scalar = 1.0,
         b: Scalar = 1.0,
-        Mat Bu or None = None,
-        structure: Mat.Structure | None = None,
+        Mat Bu: petsc4py.PETSc.Mat | None = None,
+        structure: petsc4py.PETSc.Mat.Structure | None = None,
         globalup: bool = False,
     ) -> None:
         """
+        Update the eigenproblem matrices stored internally in the communicator.
+
+        Collective.
+
         Update the eigenproblem matrices stored internally in the
         subcommunicator to which the calling process belongs.
 
@@ -2122,20 +2314,21 @@ cdef class EPS(Object):
 
         Notes
         -----
-        This function modifies the eigenproblem matrices at
-        subcommunicator level, and optionally updates the global
-        matrices in the parent communicator.  The updates are
-        expressed as ``A <-- s*A + a*Au``, ``B <-- t*B + b*Bu``.
+        This function modifies the eigenproblem matrices at subcommunicator
+        level, and optionally updates the global matrices in the parent
+        communicator.  The updates are expressed as
+        :math:`A \leftarrow s A + a Au`,
+        :math:`B \leftarrow t B + b Bu`.
 
         It is possible to update one of the matrices, or both.
 
-        The matrices `Au` and `Bu` must be equal in all subcommunicators.
+        The matrices ``Au`` and ``Bu`` must be equal in all subcommunicators.
 
-        The `structure` flag is passed to the `PETSc.Mat.axpy()` operations
-        to perform the updates.
+        The ``structure`` flag is passed to the `petsc4py.PETSc.Mat.axpy`
+        operations to perform the updates.
 
-        If `globalup` is True, communication is carried out to
-        reconstruct the updated matrices in the parent communicator.
+        If ``globalup`` is True, communication is carried out to reconstruct
+        the updated matrices in the parent communicator.
 
         """
         cdef PetscMat Amat = Au.mat if Au is not None else <PetscMat>NULL
@@ -2146,7 +2339,12 @@ cdef class EPS(Object):
 
     def setKrylovSchurSubintervals(self, subint: Sequence[float]) -> None:
         """
-        Sets the subinterval boundaries for spectrum slicing with a computational interval.
+        Set the subinterval boundaries.
+
+        Logically collective.
+
+        Set the subinterval boundaries for spectrum slicing with a
+        computational interval.
 
         Parameters
         ----------
@@ -2178,8 +2376,12 @@ cdef class EPS(Object):
 
     def getKrylovSchurSubintervals(self) -> ArrayReal:
         """
-        Returns the points that delimit the subintervals used
-        in spectrum slicing with several partitions.
+        Get the points that delimit the subintervals.
+
+        Not collective.
+
+        Get the points that delimit the subintervals used in spectrum slicing
+        with several partitions.
 
         Returns
         -------
@@ -2199,8 +2401,12 @@ cdef class EPS(Object):
 
     def getKrylovSchurInertias(self) -> tuple[ArrayReal, ArrayInt]:
         """
-        Gets the values of the shifts and their corresponding inertias
-        in case of doing spectrum slicing for a computational interval.
+        Get the values of the shifts and their corresponding inertias.
+
+        Not collective.
+
+        Get the values of the shifts and their corresponding inertias in case
+        of doing spectrum slicing for a computational interval.
 
         Returns
         -------
@@ -2225,12 +2431,16 @@ cdef class EPS(Object):
 
     def getKrylovSchurKSP(self) -> KSP:
         """
-        Retrieve the linear solver object associated with the internal `EPS`
+        Get the linear solver object associated with the internal `EPS` object.
+
+        Collective.
+
+        Get the linear solver object associated with the internal `EPS`
         object in case of doing spectrum slicing for a computational interval.
 
         Returns
         -------
-        KSP
+        `petsc4py.PETSc.KSP`
             The linear solver object.
         """
         cdef KSP ksp = KSP()
@@ -2242,8 +2452,9 @@ cdef class EPS(Object):
 
     def setGDKrylovStart(self, krylovstart: bool = True) -> None:
         """
-        Activates or deactivates starting the search subspace
-        with a Krylov basis.
+        Set (toggle) starting the search subspace with a Krylov basis.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2255,8 +2466,9 @@ cdef class EPS(Object):
 
     def getGDKrylovStart(self) -> bool:
         """
-        Gets a flag indicating if the search subspace is started with a
-        Krylov basis.
+        Get a flag indicating if the search subspace is started with a Krylov basis.
+
+        Not collective.
 
         Returns
         -------
@@ -2269,8 +2481,12 @@ cdef class EPS(Object):
 
     def setGDBlockSize(self, bs: int) -> None:
         """
-        Sets the number of vectors to be added to the searching space
-        in every iteration.
+        Set the number of vectors to be added to the searching space.
+
+        Logically collective.
+
+        Set the number of vectors to be added to the searching space in every
+        iteration.
 
         Parameters
         ----------
@@ -2282,8 +2498,12 @@ cdef class EPS(Object):
 
     def getGDBlockSize(self) -> int:
         """
-        Gets the number of vectors to be added to the searching space
-        in every iteration.
+        Get the number of vectors to be added to the searching space.
+
+        Not collective.
+
+        Get the number of vectors to be added to the searching space in every
+        iteration.
 
         Returns
         -------
@@ -2296,7 +2516,11 @@ cdef class EPS(Object):
 
     def setGDRestart(self, minv: int = None, plusk: int = None) -> None:
         """
-        Sets the number of vectors of the search space after restart and
+        Set the number of vectors of the search space after restart.
+
+        Logically collective.
+
+        Set the number of vectors of the search space after restart and
         the number of vectors saved from the previous iteration.
 
         Parameters
@@ -2314,7 +2538,11 @@ cdef class EPS(Object):
 
     def getGDRestart(self) -> tuple[int, int]:
         """
-        Gets the number of vectors of the search space after restart and
+        Get the number of vectors of the search space after restart.
+
+        Not collective.
+
+        Get the number of vectors of the search space after restart and
         the number of vectors saved from the previous iteration.
 
         Returns
@@ -2331,7 +2559,9 @@ cdef class EPS(Object):
 
     def setGDInitialSize(self, initialsize: int) -> None:
         """
-        Sets the initial size of the searching space.
+        Set the initial size of the searching space.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2343,7 +2573,9 @@ cdef class EPS(Object):
 
     def getGDInitialSize(self) -> int:
         """
-        Gets the initial size of the searching space.
+        Get the initial size of the searching space.
+
+        Not collective.
 
         Returns
         -------
@@ -2356,7 +2588,11 @@ cdef class EPS(Object):
 
     def setGDBOrth(self, borth: bool) -> int:
         """
-        Selects the orthogonalization that will be used in the search
+        Set the orthogonalization that will be used in the search subspace.
+
+        Logically collective.
+
+        Set the orthogonalization that will be used in the search
         subspace in case of generalized Hermitian problems.
 
         Parameters
@@ -2369,7 +2605,11 @@ cdef class EPS(Object):
 
     def getGDBOrth(self) -> bool:
         """
-        Returns the orthogonalization used in the search subspace in
+        Get the orthogonalization used in the search subspace.
+
+        Not collective.
+
+        Get the orthogonalization used in the search subspace in
         case of generalized Hermitian problems.
 
         Returns
@@ -2383,10 +2623,15 @@ cdef class EPS(Object):
 
     def setGDDoubleExpansion(self, doubleexp: bool) -> None:
         """
-        Activate a variant where the search subspace is expanded  with
-        K*[A*x B*x] (double expansion) instead of the classic K*r, where
-        K is the preconditioner, x the selected approximate eigenvector
-        and r its associated residual vector.
+        Set that the search subspace is expanded with double expansion.
+
+        Logically collective.
+
+        Set a variant where the search subspace is expanded with
+        :math:`K [A x, B x]` (double expansion) instead of the
+        classic :math:`K r`, where K is the preconditioner, x the
+        selected approximate eigenvector and :math:`r` its associated residual
+        vector.
 
         Parameters
         ----------
@@ -2398,7 +2643,11 @@ cdef class EPS(Object):
 
     def getGDDoubleExpansion(self) -> bool:
         """
-        Gets a flag indicating whether the double expansion variant
+        Get a flag indicating whether the double expansion variant is active.
+
+        Not collective.
+
+        Get a flag indicating whether the double expansion variant
         has been activated or not.
 
         Returns
@@ -2414,8 +2663,9 @@ cdef class EPS(Object):
 
     def setJDKrylovStart(self, krylovstart: bool = True) -> None:
         """
-        Activates or deactivates starting the search subspace
-        with a Krylov basis.
+        Set (toggle) starting the search subspace with a Krylov basis.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2427,8 +2677,9 @@ cdef class EPS(Object):
 
     def getJDKrylovStart(self) -> bool:
         """
-        Gets a flag indicating if the search subspace is started with a
-        Krylov basis.
+        Get a flag indicating if the search subspace is started with a Krylov basis.
+
+        Not collective.
 
         Returns
         -------
@@ -2441,8 +2692,12 @@ cdef class EPS(Object):
 
     def setJDBlockSize(self, bs: int) -> None:
         """
-        Sets the number of vectors to be added to the searching space
-        in every iteration.
+        Set the number of vectors to be added to the searching space.
+
+        Logically collective.
+
+        Set the number of vectors to be added to the searching space in every
+        iteration.
 
         Parameters
         ----------
@@ -2454,8 +2709,12 @@ cdef class EPS(Object):
 
     def getJDBlockSize(self) -> int:
         """
-        Gets the number of vectors to be added to the searching space
-        in every iteration.
+        Get the number of vectors to be added to the searching space.
+
+        Not collective.
+
+        Get the number of vectors to be added to the searching space in every
+        iteration.
 
         Returns
         -------
@@ -2468,7 +2727,11 @@ cdef class EPS(Object):
 
     def setJDRestart(self, minv: int | None = None, plusk: int | None = None) -> None:
         """
-        Sets the number of vectors of the search space after restart and
+        Set the number of vectors of the search space after restart.
+
+        Logically collective.
+
+        Set the number of vectors of the search space after restart and
         the number of vectors saved from the previous iteration.
 
         Parameters
@@ -2486,7 +2749,11 @@ cdef class EPS(Object):
 
     def getJDRestart(self) -> tuple[int, int]:
         """
-        Gets the number of vectors of the search space after restart and
+        Get the number of vectors of the search space after restart.
+
+        Not collective.
+
+        Get the number of vectors of the search space after restart and
         the number of vectors saved from the previous iteration.
 
         Returns
@@ -2503,7 +2770,9 @@ cdef class EPS(Object):
 
     def setJDInitialSize(self, initialsize: int) -> None:
         """
-        Sets the initial size of the searching space.
+        Set the initial size of the searching space.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2515,7 +2784,9 @@ cdef class EPS(Object):
 
     def getJDInitialSize(self) -> int:
         """
-        Gets the initial size of the searching space.
+        Get the initial size of the searching space.
+
+        Not collective.
 
         Returns
         -------
@@ -2528,7 +2799,9 @@ cdef class EPS(Object):
 
     def setJDFix(self, fix: float) -> None:
         """
-        Sets the threshold for changing the target in the correction equation.
+        Set the threshold for changing the target in the correction equation.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2546,7 +2819,9 @@ cdef class EPS(Object):
 
     def getJDFix(self) -> float:
         """
-        Gets the threshold for changing the target in the correction equation.
+        Get the threshold for changing the target in the correction equation.
+
+        Not collective.
 
         Returns
         -------
@@ -2559,21 +2834,29 @@ cdef class EPS(Object):
 
     def setJDConstCorrectionTol(self, constant: bool) -> None:
         """
-        Deactivates the dynamic stopping criterion that sets the
-        `KSP` relative tolerance to `0.5**i`, where `i` is the number
-        of `EPS` iterations from the last converged value.
+        Deactivate the dynamic stopping criterion.
+
+        Logically collective.
+
+        Deactivate the dynamic stopping criterion that sets the
+        `petsc4py.PETSc.KSP` relative tolerance to ``0.5**i``, where ``i`` is
+        the number of `EPS` iterations from the last converged value.
 
         Parameters
         ----------
         constant
-            If False, the `KSP` relative tolerance is set to `0.5**i`.
+            If False, the `petsc4py.PETSc.KSP` relative tolerance is set to ``0.5**i``.
         """
         cdef PetscBool tval = asBool(constant)
         CHKERR( EPSJDSetConstCorrectionTol(self.eps, tval) )
 
     def getJDConstCorrectionTol(self) -> bool:
         """
-        Returns the flag indicating if the dynamic stopping is being used for
+        Get the flag indicating if the dynamic stopping is being used.
+
+        Not collective.
+
+        Get the flag indicating if the dynamic stopping is being used for
         solving the correction equation.
 
         Returns
@@ -2587,7 +2870,11 @@ cdef class EPS(Object):
 
     def setJDBOrth(self, borth: bool) -> None:
         """
-        Selects the orthogonalization that will be used in the search
+        Set the orthogonalization that will be used in the search subspace.
+
+        Logically collective.
+
+        Set the orthogonalization that will be used in the search
         subspace in case of generalized Hermitian problems.
 
         Parameters
@@ -2600,7 +2887,11 @@ cdef class EPS(Object):
 
     def getJDBOrth(self) -> bool:
         """
-        Returns the orthogonalization used in the search subspace in
+        Get the orthogonalization used in the search subspace.
+
+        Not collective.
+
+        Get the orthogonalization used in the search subspace in
         case of generalized Hermitian problems.
 
         Returns
@@ -2616,8 +2907,12 @@ cdef class EPS(Object):
 
     def setRQCGReset(self, nrest: int) -> None:
         """
-        Sets the reset parameter of the RQCG iteration. Every nrest iterations,
-        the solver performs a Rayleigh-Ritz projection step.
+        Set the reset parameter of the RQCG iteration.
+
+        Logically collective.
+
+        Every nrest iterations the solver performs a Rayleigh-Ritz projection
+        step.
 
         Parameters
         ----------
@@ -2629,7 +2924,9 @@ cdef class EPS(Object):
 
     def getRQCGReset(self) -> int:
         """
-        Gets the reset parameter used in the RQCG method.
+        Get the reset parameter used in the RQCG method.
+
+        Not collective.
 
         Returns
         -------
@@ -2642,7 +2939,9 @@ cdef class EPS(Object):
 
     def setLOBPCGBlockSize(self, bs: int) -> None:
         """
-        Sets the block size of the LOBPCG method.
+        Set the block size of the LOBPCG method.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2654,7 +2953,9 @@ cdef class EPS(Object):
 
     def getLOBPCGBlockSize(self) -> int:
         """
-        Gets the block size used in the LOBPCG method.
+        Get the block size used in the LOBPCG method.
+
+        Not collective.
 
         Returns
         -------
@@ -2667,10 +2968,13 @@ cdef class EPS(Object):
 
     def setLOBPCGRestart(self, restart: float) -> None:
         """
-        Sets the restart parameter for the LOBPCG method. The meaning
-        of this parameter is the proportion of vectors within the
-        current block iterate that must have converged in order to force
-        a restart with hard locking.
+        Set the restart parameter for the LOBPCG method.
+
+        Logically collective.
+
+        The meaning of this parameter is the proportion of vectors within the
+        current block iterate that must have converged in order to force a
+        restart with hard locking.
 
         Parameters
         ----------
@@ -2686,7 +2990,9 @@ cdef class EPS(Object):
 
     def getLOBPCGRestart(self) -> float:
         """
-        Gets the restart parameter used in the LOBPCG method.
+        Get the restart parameter used in the LOBPCG method.
+
+        Not collective.
 
         Returns
         -------
@@ -2699,8 +3005,9 @@ cdef class EPS(Object):
 
     def setLOBPCGLocking(self, lock: bool) -> None:
         """
-        Choose between locking and non-locking variants of the
-        LOBPCG method.
+        Toggle between locking and non-locking (LOBPCG method).
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2718,7 +3025,9 @@ cdef class EPS(Object):
 
     def getLOBPCGLocking(self) -> bool:
         """
-        Gets the locking flag used in the LOBPCG method.
+        Get the locking flag used in the LOBPCG method.
+
+        Not collective.
 
         Returns
         -------
@@ -2732,6 +3041,8 @@ cdef class EPS(Object):
     def setLyapIIRanks(self, rkc: int | None = None, rkl: int | None = None) -> None:
         """
         Set the ranks used in the solution of the Lyapunov equation.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2748,7 +3059,9 @@ cdef class EPS(Object):
 
     def getLyapIIRanks(self) -> tuple[int, int]:
         """
-        Return the rank values used for the Lyapunov step.
+        Get the rank values used for the Lyapunov step.
+
+        Not collective.
 
         Returns
         -------
@@ -2766,7 +3079,9 @@ cdef class EPS(Object):
 
     def setCISSExtraction(self, extraction: CISSExtraction) -> None:
         """
-        Sets the extraction technique used in the CISS solver.
+        Set the extraction technique used in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2778,7 +3093,9 @@ cdef class EPS(Object):
 
     def getCISSExtraction(self) -> CISSExtraction:
         """
-        Gets the extraction technique used in the CISS solver.
+        Get the extraction technique used in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -2791,7 +3108,9 @@ cdef class EPS(Object):
 
     def setCISSQuadRule(self, quad: CISSQuadRule) -> None:
         """
-        Sets the quadrature rule used in the CISS solver.
+        Set the quadrature rule used in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2803,7 +3122,9 @@ cdef class EPS(Object):
 
     def getCISSQuadRule(self) -> CISSQuadRule:
         """
-        Gets the quadrature rule used in the CISS solver.
+        Get the quadrature rule used in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -2824,7 +3145,9 @@ cdef class EPS(Object):
         realmats: bool = False,
     ) -> None:
         """
-        Sets the values of various size parameters in the CISS solver.
+        Set the values of various size parameters in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2843,10 +3166,11 @@ cdef class EPS(Object):
 
         Notes
         -----
-        The default number of partitions is 1. This means the internal `KSP` object
-        is shared among all processes of the `EPS` communicator. Otherwise, the
-        communicator is split into npart communicators, so that `npart` `KSP` solves
-        proceed simultaneously.
+        The default number of partitions is 1. This means the internal
+        `petsc4py.PETSc.KSP` object is shared among all processes of the
+        `EPS` communicator. Otherwise, the communicator is split into npart
+        communicators, so that ``npart`` `petsc4py.PETSc.KSP` solves proceed
+        simultaneously.
         """
         cdef PetscInt  ival1 = PETSC_CURRENT
         cdef PetscInt  ival2 = PETSC_CURRENT
@@ -2863,7 +3187,9 @@ cdef class EPS(Object):
 
     def getCISSSizes(self) -> tuple[int, int, int, int, int, bool]:
         """
-        Gets the values of various size parameters in the CISS solver.
+        Get the values of various size parameters in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -2891,7 +3217,9 @@ cdef class EPS(Object):
 
     def setCISSThreshold(self, delta: float | None = None, spur: float | None = None) -> None:
         """
-        Sets the values of various threshold parameters in the CISS solver.
+        Set the values of various threshold parameters in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2908,7 +3236,9 @@ cdef class EPS(Object):
 
     def getCISSThreshold(self) -> tuple[float, float]:
         """
-        Gets the values of various threshold parameters in the CISS solver.
+        Get the values of various threshold parameters in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -2924,7 +3254,9 @@ cdef class EPS(Object):
 
     def setCISSRefinement(self, inner: int | None = None, blsize: int | None = None) -> None:
         """
-        Sets the values of various refinement parameters in the CISS solver.
+        Set the values of various refinement parameters in the CISS solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -2941,7 +3273,9 @@ cdef class EPS(Object):
 
     def getCISSRefinement(self) -> tuple[int, int]:
         """
-        Gets the values of various refinement parameters in the CISS solver.
+        Get the values of various refinement parameters in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -2957,7 +3291,11 @@ cdef class EPS(Object):
 
     def setCISSUseST(self, usest: bool) -> None:
         """
-        Sets a flag indicating that the CISS solver will use the `ST`
+        Set a flag indicating that the CISS solver will use the `ST` object.
+
+        Logically collective.
+
+        Set a flag indicating that the CISS solver will use the `ST`
         object for the linear solves.
 
         Parameters
@@ -2970,7 +3308,9 @@ cdef class EPS(Object):
 
     def getCISSUseST(self) -> bool:
         """
-        Gets the flag for using the `ST` object in the CISS solver.
+        Get the flag indicating the use of the `ST` object in the CISS solver.
+
+        Not collective.
 
         Returns
         -------
@@ -2983,19 +3323,21 @@ cdef class EPS(Object):
 
     def getCISSKSPs(self) -> list[KSP]:
         """
-        Retrieve the array of linear solver objects associated with
-        the CISS solver.
+        Get the array of linear solver objects associated with the CISS solver.
+
+        Not collective.
 
         Returns
         -------
-        list of KSP
+        list of `petsc4py.PETSc.KSP`
             The linear solver objects.
 
         Notes
         -----
-        The number of `KSP` solvers is equal to the number of integration
-        points divided by the number of partitions. This value is halved in
-        the case of real matrices with a region centered at the real axis.
+        The number of `petsc4py.PETSc.KSP` solvers is equal to the number of
+        integration points divided by the number of partitions. This value is
+        halved in the case of real matrices with a region centered at the real
+        axis.
         """
         cdef PetscInt i = 0, n = 0
         cdef PetscKSP *p = NULL
@@ -3004,85 +3346,99 @@ cdef class EPS(Object):
 
     #
     property problem_type:
-        def __get__(self):
+        """The type of the eigenvalue problem."""
+        def __get__(self) -> EPSProblemType:
             return self.getProblemType()
         def __set__(self, value):
             self.setProblemType(value)
 
     property extraction:
-        def __get__(self):
+        """The type of extraction technique to be employed."""
+        def __get__(self) -> EPSExtraction:
             return self.getExtraction()
         def __set__(self, value):
             self.setExtraction(value)
 
     property which:
-        def __get__(self):
+        """The portion of the spectrum to be sought."""
+        def __get__(self) -> EPSWhich:
             return self.getWhichEigenpairs()
         def __set__(self, value):
             self.setWhichEigenpairs(value)
 
     property target:
-        def __get__(self):
+        """The value of the target."""
+        def __get__(self) -> float:
             return self.getTarget()
         def __set__(self, value):
             self.setTarget(value)
 
     property tol:
-        def __get__(self):
+        """The tolerance."""
+        def __get__(self) -> float:
             return self.getTolerances()[0]
         def __set__(self, value):
             self.setTolerances(tol=value)
 
     property max_it:
-        def __get__(self):
+        """The maximum iteration count."""
+        def __get__(self) -> int:
             return self.getTolerances()[1]
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
     property two_sided:
-        def __get__(self):
+        """Two-sided that also computes left eigenvectors."""
+        def __get__(self) -> bool:
             return self.getTwoSided()
         def __set__(self, value):
             self.setTwoSided(value)
 
     property true_residual:
-        def __get__(self):
+        """Compute the true residual explicitly."""
+        def __get__(self) -> bool:
             return self.getTrueResidual()
         def __set__(self, value):
             self.setTrueResidual(value)
 
     property purify:
-        def __get__(self):
+        """Eigenvector purification."""
+        def __get__(self) -> bool:
             return self.getPurify()
         def __set__(self, value):
             self.setPurify(value)
 
     property track_all:
-        def __get__(self):
+        """Compute the residual norm of all approximate eigenpairs."""
+        def __get__(self) -> bool:
             return self.getTrackAll()
         def __set__(self, value):
             self.setTrackAll(value)
 
     property st:
-        def __get__(self):
+        """The spectral transformation (ST) object associated."""
+        def __get__(self) -> ST:
             return self.getST()
         def __set__(self, value):
             self.setST(value)
 
     property bv:
-        def __get__(self):
+        """The basis vectors (BV) object associated."""
+        def __get__(self) -> BV:
             return self.getBV()
         def __set__(self, value):
             self.setBV(value)
 
     property rg:
-        def __get__(self):
+        """The region (RG) object associated."""
+        def __get__(self) -> RG:
             return self.getRG()
         def __set__(self, value):
             self.setRG(value)
 
     property ds:
-        def __get__(self):
+        """The direct solver (DS) object associated."""
+        def __get__(self) -> DS:
             return self.getDS()
         def __set__(self, value):
             self.setDS(value)

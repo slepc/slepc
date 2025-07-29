@@ -2,7 +2,7 @@
 
 class MFNType(object):
     """
-    MFN type
+    MFN type.
 
     Action of a matrix function on a vector.
 
@@ -13,6 +13,14 @@ class MFNType(object):
     EXPOKIT  = S_(MFNEXPOKIT)
 
 class MFNConvergedReason(object):
+    """
+    MFN convergence reasons.
+
+    - 'MFN_CONVERGED_TOL': All eigenpairs converged to requested tolerance.
+    - 'MFN_CONVERGED_ITS': Solver completed the requested number of steps.
+    - 'MFN_DIVERGED_ITS': Maximum number of iterations exceeded.
+    - 'MFN_DIVERGED_BREAKDOWN': Generic breakdown in method.
+    """
     CONVERGED_TOL       = MFN_CONVERGED_TOL
     CONVERGED_ITS       = MFN_CONVERGED_ITS
     DIVERGED_ITS        = MFN_DIVERGED_ITS
@@ -24,9 +32,7 @@ class MFNConvergedReason(object):
 
 cdef class MFN(Object):
 
-    """
-    MFN
-    """
+    """MFN."""
 
     Type            = MFNType
     ConvergedReason = MFNConvergedReason
@@ -37,7 +43,9 @@ cdef class MFN(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the MFN data structure.
+        Print the MFN data structure.
+
+        Collective.
 
         Parameters
         ----------
@@ -50,7 +58,9 @@ cdef class MFN(Object):
 
     def destroy(self) -> Self:
         """
-        Destroys the MFN object.
+        Destroy the MFN object.
+
+        Logically collective.
         """
         CHKERR( MFNDestroy(&self.mfn) )
         self.mfn = NULL
@@ -58,13 +68,17 @@ cdef class MFN(Object):
 
     def reset(self) -> None:
         """
-        Resets the MFN object.
+        Reset the MFN object.
+
+        Collective.
         """
         CHKERR( MFNReset(self.mfn) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the MFN object.
+        Create the MFN object.
+
+        Collective.
 
         Parameters
         ----------
@@ -79,7 +93,9 @@ cdef class MFN(Object):
 
     def setType(self, mfn_type: Type | str) -> None:
         """
-        Selects the particular solver to be used in the MFN object.
+        Set the particular solver to be used in the MFN object.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -92,7 +108,9 @@ cdef class MFN(Object):
 
     def getType(self) -> str:
         """
-        Gets the MFN type of this object.
+        Get the MFN type of this object.
+
+        Not collective.
 
         Returns
         -------
@@ -105,8 +123,9 @@ cdef class MFN(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all MFN options in the
-        database.
+        Get the prefix used for searching for all MFN options in the database.
+
+        Not collective.
 
         Returns
         -------
@@ -119,8 +138,9 @@ cdef class MFN(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all MFN options in the
-        database.
+        Set the prefix used for searching for all MFN options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -133,8 +153,9 @@ cdef class MFN(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all MFN options
-        in the database.
+        Append to the prefix used for searching for all MFN options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -147,7 +168,11 @@ cdef class MFN(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets MFN options from the options database. This routine must
+        Set MFN options from the options database.
+
+        Collective.
+
+        Set MFN options from the options database. This routine must
         be called before `setUp()` if the user is to be allowed to set
         the solver type.
         """
@@ -155,7 +180,11 @@ cdef class MFN(Object):
 
     def getTolerances(self) -> tuple[float, int]:
         """
-        Gets the tolerance and maximum iteration count used by the
+        Get the tolerance and maximum iteration count.
+
+        Not collective.
+
+        Get the tolerance and maximum iteration count used by the
         default MFN convergence tests.
 
         Returns
@@ -172,7 +201,11 @@ cdef class MFN(Object):
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
         """
-        Sets the tolerance and maximum iteration count used by the
+        Set the tolerance and maximum iteration count.
+
+        Logically collective.
+
+        Set the tolerance and maximum iteration count used by the
         default MFN convergence tests.
 
         Parameters
@@ -190,7 +223,9 @@ cdef class MFN(Object):
 
     def getDimensions(self) -> int:
         """
-        Gets the dimension of the subspace used by the solver.
+        Get the dimension of the subspace used by the solver.
+
+        Not collective.
 
         Returns
         -------
@@ -203,7 +238,9 @@ cdef class MFN(Object):
 
     def setDimensions(self, ncv: int) -> None:
         """
-        Sets the dimension of the subspace to be used by the solver.
+        Set the dimension of the subspace to be used by the solver.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -215,7 +252,9 @@ cdef class MFN(Object):
 
     def getFN(self) -> FN:
         """
-        Obtain the math function object associated to the MFN object.
+        Get the math function object associated to the MFN object.
+
+        Not collective.
 
         Returns
         -------
@@ -229,7 +268,9 @@ cdef class MFN(Object):
 
     def setFN(self, FN fn) -> None:
         """
-        Associates a math function object to the MFN object.
+        Set a math function object associated to the MFN object.
+
+        Collective.
 
         Parameters
         ----------
@@ -240,7 +281,9 @@ cdef class MFN(Object):
 
     def getBV(self) -> BV:
         """
-        Obtain the basis vector object associated to the MFN object.
+        Get the basis vector object associated to the MFN object.
+
+        Not collective.
 
         Returns
         -------
@@ -254,7 +297,9 @@ cdef class MFN(Object):
 
     def setBV(self, BV bv) -> None:
         """
-        Associates a basis vector object to the MFN object.
+        Set a basis vector object associated to the MFN object.
+
+        Collective.
 
         Parameters
         ----------
@@ -263,13 +308,15 @@ cdef class MFN(Object):
         """
         CHKERR( MFNSetBV(self.mfn, bv.bv) )
 
-    def getOperator(self) -> Mat:
+    def getOperator(self) -> petsc4py.PETSc.Mat:
         """
-        Gets the matrix associated with the MFN object.
+        Get the matrix associated with the MFN object.
+
+        Collective.
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The matrix for which the matrix function is to be computed.
         """
         cdef Mat A = Mat()
@@ -279,7 +326,9 @@ cdef class MFN(Object):
 
     def setOperator(self, Mat A) -> None:
         """
-        Sets the matrix associated with the MFN object.
+        Set the matrix associated with the MFN object.
+
+        Collective.
 
         Parameters
         ----------
@@ -297,7 +346,9 @@ cdef class MFN(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Appends a monitor function to the list of monitors.
+        Append a monitor function to the list of monitors.
+
+        Logically collective.
         """
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
@@ -310,14 +361,14 @@ cdef class MFN(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> MFNMonitorFunction:
-        """
-        Gets the list of monitor functions.
-        """
+        """Get the list of monitor functions."""
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
         """
-        Clears all monitors for an `MFN` object.
+        Clear all monitors for an `MFN` object.
+
+        Logically collective.
         """
         CHKERR( MFNMonitorCancel(self.mfn) )
         self.set_attr('__monitor__', None)
@@ -326,15 +377,23 @@ cdef class MFN(Object):
 
     def setUp(self) -> None:
         """
-        Sets up all the internal data structures necessary for the
-        execution of the eigensolver.
+        Set up all the necessary internal data structures.
+
+        Collective.
+
+        Set up all the internal data structures necessary for the execution
+        of the eigensolver.
         """
         CHKERR( MFNSetUp(self.mfn) )
 
     def solve(self, Vec b, Vec x) -> None:
         """
-        Solves the matrix function problem. Given a vector b, the
-        vector x = f(A)*b is returned.
+        Solve the matrix function problem.
+
+        Collective.
+
+        Given a vector :math:`b`, the vector :math:`x = f(A) b` is
+        returned.
 
         Parameters
         ----------
@@ -347,8 +406,12 @@ cdef class MFN(Object):
 
     def solveTranspose(self, Vec b, Vec x) -> None:
         """
-        Solves the transpose matrix function problem. Given a vector b, the
-        vector x = f(A^T)*b is returned.
+        Solve the transpose matrix function problem.
+
+        Collective.
+
+        Given a vector :math:`b`, the vector :math:`x = f(A^T) b` is
+        returned.
 
         Parameters
         ----------
@@ -361,7 +424,11 @@ cdef class MFN(Object):
 
     def getIterationNumber(self) -> int:
         """
-        Gets the current iteration number. If the call to `solve()` is
+        Get the current iteration number.
+
+        Not collective.
+
+        Get the current iteration number. If the call to `solve()` is
         complete, then it returns the number of iterations carried out
         by the solution method.
 
@@ -376,7 +443,9 @@ cdef class MFN(Object):
 
     def getConvergedReason(self) -> ConvergedReason:
         """
-        Gets the reason why the `solve()` iteration was stopped.
+        Get the reason why the `solve()` iteration was stopped.
+
+        Not collective.
 
         Returns
         -------
@@ -389,7 +458,9 @@ cdef class MFN(Object):
 
     def setErrorIfNotConverged(self, flg: bool = True) -> None:
         """
-        Causes `solve()` to generate an error if the solver has not converged.
+        Set `solve()` to generate an error if the solver does not converge.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -401,8 +472,12 @@ cdef class MFN(Object):
 
     def getErrorIfNotConverged(self) -> bool:
         """
-        Return a flag indicating whether `solve()` will generate an
-        error if the solver does not converge.
+        Get if `solve()` generates an error if the solver does not converge.
+
+        Not collective.
+
+        Get a flag indicating whether `solve()` will generate an error if the
+        solver does not converge.
 
         Returns
         -------
@@ -416,25 +491,29 @@ cdef class MFN(Object):
     #
 
     property tol:
-        def __get__(self):
+        """The tolerance count used by the MFN convergence tests."""
+        def __get__(self) -> float:
             return self.getTolerances()[0]
         def __set__(self, value):
             self.setTolerances(tol=value)
 
     property max_it:
-        def __get__(self):
+        """The maximum iteration count used by the MFN convergence tests."""
+        def __get__(self) -> int:
             return self.getTolerances()[1]
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
     property fn:
-        def __get__(self):
+        """The math function (FN) object associated to the MFN object."""
+        def __get__(self) -> FN:
             return self.getFN()
         def __set__(self, value):
             self.setBV(value)
 
     property bv:
-        def __get__(self):
+        """The basis vectors (BV) object associated to the MFN object."""
+        def __get__(self) -> BV:
             return self.getFN()
         def __set__(self, value):
             self.setBV(value)

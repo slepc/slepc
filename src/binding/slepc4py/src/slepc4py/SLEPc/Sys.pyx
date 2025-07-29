@@ -1,6 +1,7 @@
 # -----------------------------------------------------------------------------
 
 cdef class Sys:
+    """Sys."""
 
     @classmethod
     def getVersion(
@@ -71,7 +72,7 @@ cdef class Sys:
 
         See Also
         --------
-        slepc.SelpcGetVersion, slepc.SelpcGetVersionNumber
+        slepc.SlepcGetVersion, slepc.SlepcGetVersionNumber
 
         """
         version, dev, date, author = cls.getVersion(True, True, True)

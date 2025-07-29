@@ -95,7 +95,7 @@ the distribution is ready for building.
 Some environment configuration is needed to inform the location of
 PETSc and SLEPc. You can set (using :command:`setenv`,
 :command:`export` or what applies to you shell or system) the
-environment variables :envvar:`SLEPC_DIR``, :envvar:`PETSC_DIR`, and
+environment variables :envvar:`SLEPC_DIR`, :envvar:`PETSC_DIR`, and
 :envvar:`PETSC_ARCH` indicating where you have built/installed SLEPc
 and PETSc::
 

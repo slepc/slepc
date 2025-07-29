@@ -29,7 +29,7 @@ def init(args=None, arch=None):
 
     :Parameters:
       - `args`: command-line arguments, usually the 'sys.argv' list.
-      - `arch`: specific configuration to use.
+      - ``arch``: specific configuration to use.
 
     .. note:: This function should be called only once, typically at
        the very beginning of the bootstrap script of an application.

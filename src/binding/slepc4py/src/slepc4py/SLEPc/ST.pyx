@@ -2,7 +2,7 @@
 
 class STType(object):
     """
-    ST types
+    ST types.
 
     - `SHELL`:   User-defined.
     - `SHIFT`:   Shift from origin.
@@ -20,12 +20,12 @@ class STType(object):
 
 class STMatMode(object):
     """
-    ST matrix mode
+    ST matrix mode.
 
     - `COPY`:    A working copy of the matrix is created.
     - `INPLACE`: The operation is computed in-place.
-    - `SHELL`:   The matrix ``A-sigma*B`` is handled as an
-      implicit matrix.
+    - `SHELL`:   The matrix :math:`A - \sigma B` is handled as an
+                 implicit matrix.
     """
     COPY    = ST_MATMODE_COPY
     INPLACE = ST_MATMODE_INPLACE
@@ -33,17 +33,17 @@ class STMatMode(object):
 
 class STFilterType(object):
     """
-    ST filter type
+    ST filter type.
 
-    - `FILTLAN`:  An adapted implementation of the Filtered Lanczos Package.
-    - `CHEBYSEV`: A polynomial filter based on a truncated Chebyshev series.
+    - ``FILTLAN``:  An adapted implementation of the Filtered Lanczos Package.
+    - ``CHEBYSEV``: A polynomial filter based on a truncated Chebyshev series.
     """
     FILTLAN   = ST_FILTER_FILTLAN
     CHEBYSHEV = ST_FILTER_CHEBYSHEV
 
 class STFilterDamping(object):
     """
-    ST filter damping
+    ST filter damping.
 
     - `NONE`:    No damping
     - `JACKSON`: Jackson damping
@@ -59,9 +59,7 @@ class STFilterDamping(object):
 
 cdef class ST(Object):
 
-    """
-    ST
-    """
+    """ST."""
 
     Type          = STType
     MatMode       = STMatMode
@@ -74,7 +72,9 @@ cdef class ST(Object):
 
     def view(self, Viewer viewer=None) -> None:
         """
-        Prints the ST data structure.
+        Print the ST data structure.
+
+        Collective.
 
         Parameters
         ----------
@@ -87,7 +87,9 @@ cdef class ST(Object):
 
     def destroy(self) -> Self:
         """
-        Destroys the ST object.
+        Destroy the ST object.
+
+        Collective.
         """
         CHKERR( STDestroy(&self.st) )
         self.st = NULL
@@ -95,13 +97,17 @@ cdef class ST(Object):
 
     def reset(self) -> None:
         """
-        Resets the ST object.
+        Reset the ST object.
+
+        Collective.
         """
         CHKERR( STReset(self.st) )
 
     def create(self, comm: Comm | None = None) -> Self:
         """
-        Creates the ST object.
+        Create the ST object.
+
+        Collective.
 
         Parameters
         ----------
@@ -116,7 +122,9 @@ cdef class ST(Object):
 
     def setType(self, st_type: Type | str) -> None:
         """
-        Builds ST for a particular spectral transformation.
+        Set the particular spectral transformation to be used.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -138,7 +146,9 @@ cdef class ST(Object):
 
     def getType(self) -> str:
         """
-        Gets the ST type of this object.
+        Get the ST type of this object.
+
+        Not collective.
 
         Returns
         -------
@@ -151,8 +161,9 @@ cdef class ST(Object):
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Sets the prefix used for searching for all ST options in the
-        database.
+        Set the prefix used for searching for all ST options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -171,8 +182,9 @@ cdef class ST(Object):
 
     def getOptionsPrefix(self) -> str:
         """
-        Gets the prefix used for searching for all ST options in the
-        database.
+        Get the prefix used for searching for all ST options in the database.
+
+        Not collective.
 
         Returns
         -------
@@ -185,8 +197,9 @@ cdef class ST(Object):
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
-        Appends to the prefix used for searching for all ST options
-        in the database.
+        Append to the prefix used for searching for all ST options in the database.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -199,9 +212,12 @@ cdef class ST(Object):
 
     def setFromOptions(self) -> None:
         """
-        Sets ST options from the options database. This routine must
-        be called before `setUp()` if the user is to be allowed to set
-        the solver type.
+        Set ST options from the options database.
+
+        Collective.
+
+        This routine must be called before `setUp()` if the user is to be
+        allowed to set the solver type.
 
         Notes
         -----
@@ -213,7 +229,9 @@ cdef class ST(Object):
 
     def setShift(self, shift: Scalar) -> None:
         """
-        Sets the shift associated with the spectral transformation.
+        Set the shift associated with the spectral transformation.
+
+        Collective.
 
         Parameters
         ----------
@@ -231,7 +249,9 @@ cdef class ST(Object):
 
     def getShift(self) -> Scalar:
         """
-        Gets the shift associated with the spectral transformation.
+        Get the shift associated with the spectral transformation.
+
+        Not collective.
 
         Returns
         -------
@@ -244,8 +264,9 @@ cdef class ST(Object):
 
     def setTransform(self, flag: bool = True) -> None:
         """
-        Sets a flag to indicate whether the transformed matrices
-        are computed or not.
+        Set a flag to indicate whether the transformed matrices are computed or not.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -261,8 +282,9 @@ cdef class ST(Object):
 
     def getTransform(self) -> bool:
         """
-        Gets the flag indicating whether the transformed matrices
-        are computed or not.
+        Get the flag indicating whether the transformed matrices are computed or not.
+
+        Not collective.
 
         Returns
         -------
@@ -279,7 +301,11 @@ cdef class ST(Object):
 
     def setMatMode(self, mode: MatMode) -> None:
         """
-        Sets a flag to indicate how the matrix is being shifted in the
+        Set a flag to indicate how the matrix is being shifted.
+
+        Logically collective.
+
+        Set a flag to indicate how the matrix is being shifted in the
         shift-and-invert and Cayley spectral transformations.
 
         Parameters
@@ -289,35 +315,37 @@ cdef class ST(Object):
 
         Notes
         -----
-        By default (`ST.MatMode.COPY`), a copy of matrix ``A`` is made
-        and then this copy is shifted explicitly, e.g. ``A <- (A - s
-        B)``.
+        By default (`ST.MatMode.COPY`), a copy of matrix :math:`A` is made
+        and then this copy is shifted explicitly, e.g.
+        :math:`A \leftarrow (A - s B)`.
 
-        With `ST.MatMode.INPLACE`, the original matrix ``A`` is
-        shifted at `setUp()` and unshifted at the end of the
-        computations. With respect to the previous one, this mode
-        avoids a copy of matrix ``A``. However, a backdraw is that the
-        recovered matrix might be slightly different from the original
-        one (due to roundoff).
+        With `ST.MatMode.INPLACE`, the original matrix :math:`A` is shifted at
+        `setUp()` and unshifted at the end of the computations. With respect to
+        the previous one, this mode avoids a copy of matrix :math:`A`. However,
+        a backdraw is that the recovered matrix might be slightly different
+        from the original one (due to roundoff).
 
-        With `ST.MatMode.SHELL`, the solver works with an implicit
-        shell matrix that represents the shifted matrix. This mode is
-        the most efficient in creating the shifted matrix but it
-        places serious limitations to the linear solves performed in
-        each iteration of the eigensolver (typically, only iterative
-        solvers with Jacobi preconditioning can be used).
+        With `ST.MatMode.SHELL`, the solver works with an implicit shell matrix
+        that represents the shifted matrix. This mode is the most efficient in
+        creating the shifted matrix but it places serious limitations to the
+        linear solves performed in each iteration of the eigensolver
+        (typically, only iterative solvers with Jacobi preconditioning can be
+        used).
 
-        In the case of generalized problems, in the two first modes
-        the matrix ``A - s B`` has to be computed explicitly. The
-        efficiency of this computation can be controlled with
-        `setMatStructure()`.
+        In the case of generalized problems, in the two first modes the matrix
+        :math:`A - s B` has to be computed explicitly. The efficiency of
+        this computation can be controlled with `setMatStructure()`.
         """
         cdef SlepcSTMatMode val = mode
         CHKERR( STSetMatMode(self.st, val) )
 
     def getMatMode(self) -> MatMode:
         """
-        Gets a flag that indicates how the matrix is being shifted in
+        Get a flag that indicates how the matrix is being shifted.
+
+        Not collective.
+
+        Get a flag that indicates how the matrix is being shifted in
         the shift-and-invert and Cayley spectral transformations.
 
         Returns
@@ -331,7 +359,9 @@ cdef class ST(Object):
 
     def setMatrices(self, operators: list[Mat]) -> None:
         """
-        Sets the matrices associated with the eigenvalue problem.
+        Set the matrices associated with the eigenvalue problem.
+
+        Collective.
 
         Parameters
         ----------
@@ -345,13 +375,15 @@ cdef class ST(Object):
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
         CHKERR( STSetMatrices(self.st, <PetscInt>n, mats) )
 
-    def getMatrices(self) -> list[Mat]:
+    def getMatrices(self) -> list[petsc4py.PETSc.Mat]:
         """
-        Gets the matrices associated with the eigenvalue problem.
+        Get the matrices associated with the eigenvalue problem.
+
+        Collective.
 
         Returns
         -------
-        list of Mat
+        list of petsc4py.PETSc.Mat
             The matrices associated with the eigensystem.
         """
         cdef Mat A
@@ -365,13 +397,16 @@ cdef class ST(Object):
             operators.append(A)
         return tuple(operators)
 
-    def setMatStructure(self, structure: Mat.Structure) -> None:
+    def setMatStructure(self, structure: petsc4py.PETSc.Mat.Structure) -> None:
         """
-        Sets an internal Mat.Structure attribute to indicate which is
-        the relation of the sparsity pattern of the two matrices ``A``
-        and ``B`` constituting the generalized eigenvalue
-        problem. This function has no effect in the case of standard
-        eigenproblems.
+        Set an internal Mat.Structure attribute.
+
+        Logically collective.
+
+        Set an internal Mat.Structure attribute to indicate which is the
+        relation of the sparsity pattern of the two matrices :math:`A` and
+        :math:`B` constituting the generalized eigenvalue problem. This
+        function has no effect in the case of standard eigenproblems.
 
         Parameters
         ----------
@@ -389,45 +424,51 @@ cdef class ST(Object):
         cdef PetscMatStructure val = matstructure(structure)
         CHKERR( STSetMatStructure(self.st, val) )
 
-    def getMatStructure(self) -> Mat.Structure:
+    def getMatStructure(self) -> petsc4py.PETSc.Mat.Structure:
         """
-        Gets the internal Mat.Structure attribute to indicate which is
+        Get the internal Mat.Structure attribute.
+
+        Not collective.
+
+        Get the internal Mat.Structure attribute to indicate which is
         the relation of the sparsity pattern of the matrices.
 
         Returns
         -------
-        Mat.Structure
+        petsc4py.PETSc.Mat.Structure
             The structure flag.
         """
         cdef PetscMatStructure val
         CHKERR( STGetMatStructure(self.st, &val) )
         return val
 
-    def setKSP(self, KSP ksp) -> None:
+    def setKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
         """
-        Sets the KSP object associated with the spectral
-        transformation.
+        Set the ``KSP`` object associated with the spectral transformation.
+
+        Collective.
 
         Parameters
         ----------
-        ksp
+        `petsc4py.PETSc.KSP`
             The linear solver object.
         """
         CHKERR( STSetKSP(self.st, ksp.ksp) )
 
     def getKSP(self) -> KSP:
         """
-        Gets the KSP object associated with the spectral
-        transformation.
+        Get the ``KSP`` object associated with the spectral transformation.
+
+        Collective.
 
         Returns
         -------
-        KSP
+        `petsc4py.PETSc.KSP`
             The linear solver object.
 
         Notes
         -----
-        On output, the internal value of KSP can be ``NULL`` if the
+        On output, the internal value of `petsc4py.PETSc.KSP` can be ``NULL`` if the
         combination of eigenproblem type and selected transformation
         does not require to solve a linear system of equations.
         """
@@ -438,7 +479,9 @@ cdef class ST(Object):
 
     def setPreconditionerMat(self, Mat P = None) -> None:
         """
-        Sets the matrix to be used to build the preconditioner.
+        Set the matrix to be used to build the preconditioner.
+
+        Collective.
 
         Parameters
         ----------
@@ -448,13 +491,15 @@ cdef class ST(Object):
         cdef PetscMat Pmat = P.mat if P is not None else <PetscMat>NULL
         CHKERR( STSetPreconditionerMat(self.st, Pmat) )
 
-    def getPreconditionerMat(self) -> Mat:
+    def getPreconditionerMat(self) -> petsc4py.PETSc.Mat:
         """
-        Gets the matrix previously set by setPreconditionerMat().
+        Get the matrix previously set by setPreconditionerMat().
+
+        Not collective.
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             The matrix that will be used in constructing the preconditioner.
         """
         cdef Mat P = Mat()
@@ -466,14 +511,20 @@ cdef class ST(Object):
 
     def setUp(self) -> None:
         """
-        Prepares for the use of a spectral transformation.
+        Prepare for the use of a spectral transformation.
+
+        Collective.
         """
         CHKERR( STSetUp(self.st) )
 
     def apply(self, Vec x, Vec y) -> None:
         """
-        Applies the spectral transformation operator to a vector, for
-        instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
+        Apply the spectral transformation operator to a vector.
+
+        Collective.
+
+        Apply the spectral transformation operator to a vector, for instance
+        :math:`(A - s B)^{-1} B` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
         Parameters
@@ -487,9 +538,13 @@ cdef class ST(Object):
 
     def applyTranspose(self, Vec x, Vec y) -> None:
         """
-        Applies the transpose of the operator to a vector, for
-        instance ``B^T(A - sB)^-T`` in the case of the
-        shift-and-invert transformation and generalized eigenproblem.
+        Apply the transpose of the operator to a vector.
+
+        Collective.
+
+        Apply the transpose of the operator to a vector, for instance
+        :math:`B^T(A - s B)^{-T}` in the case of the shift-and-invert
+        transformation and generalized eigenproblem.
 
         Parameters
         ----------
@@ -502,9 +557,13 @@ cdef class ST(Object):
 
     def applyHermitianTranspose(self, Vec x, Vec y) -> None:
         """
-        Applies the hermitian-transpose of the operator to a vector, for
-        instance ``B^H(A - sB)^-H`` in the case of the
-        shift-and-invert transformation and generalized eigenproblem.
+        Apply the hermitian-transpose of the operator to a vector.
+
+        Collective.
+
+        Apply the hermitian-transpose of the operator to a vector, for instance
+        :math:`B^H(A - s B)^{-H}` in the case of the shift-and-invert
+        transformation and generalized eigenproblem.
 
         Parameters
         ----------
@@ -517,8 +576,12 @@ cdef class ST(Object):
 
     def applyMat(self, Mat x, Mat y) -> None:
         """
-        Applies the spectral transformation operator to a matrix, for
-        instance ``(A - sB)^-1 B`` in the case of the shift-and-invert
+        Apply the spectral transformation operator to a matrix.
+
+        Collective.
+
+        Apply the spectral transformation operator to a matrix, for instance
+        :math:`(A - s B)^{-1} B` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
         Parameters
@@ -530,14 +593,15 @@ cdef class ST(Object):
         """
         CHKERR( STApplyMat(self.st, x.mat, y.mat) )
 
-    def getOperator(self) -> Mat:
+    def getOperator(self) -> petsc4py.PETSc.Mat:
         """
-        Returns a shell matrix that represents the operator of the
-        spectral transformation.
+        Get a shell matrix that represents the operator of the spectral transformation.
+
+        Collective.
 
         Returns
         -------
-        Mat
+        petsc4py.PETSc.Mat
             Operator matrix.
         """
         cdef Mat op = Mat()
@@ -548,6 +612,8 @@ cdef class ST(Object):
     def restoreOperator(self, Mat op) -> None:
         """
         Restore the previously seized operator matrix.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -561,8 +627,9 @@ cdef class ST(Object):
 
     def setCayleyAntishift(self, tau: Scalar) -> None:
         """
-        Sets the value of the anti-shift for the Cayley spectral
-        transformation.
+        Set the value of the anti-shift for the Cayley spectral transformation.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -571,18 +638,19 @@ cdef class ST(Object):
 
         Notes
         -----
-        In the generalized Cayley transform, the operator can be
-        expressed as ``OP = inv(A - sigma B)*(A + tau B)``. This
-        function sets the value of `tau`.  Use `setShift()` for
-        setting ``sigma``.
+        In the generalized Cayley transform, the operator can be expressed as
+        :math:`OP = inv(A - \sigma B) (A + tau B)`. This function sets
+        the value of :math:`tau`.  Use `setShift()` for setting
+        :math:`\sigma`.
         """
         cdef PetscScalar sval = asScalar(tau)
         CHKERR( STCayleySetAntishift(self.st, sval) )
 
     def getCayleyAntishift(self) -> Scalar:
         """
-        Gets the value of the anti-shift for the Cayley spectral
-        transformation.
+        Get the value of the anti-shift for the Cayley spectral transformation.
+
+        Not collective.
 
         Returns
         -------
@@ -595,7 +663,9 @@ cdef class ST(Object):
 
     def setFilterType(self, filter_type: FilterType) -> None:
         """
-        Sets the method to be used to build the polynomial filter.
+        Set the method to be used to build the polynomial filter.
+
+        Logically collective.
 
         Parameter
         ---------
@@ -607,7 +677,9 @@ cdef class ST(Object):
 
     def getFilterType(self) -> FilterType:
         """
-        Gets the method to be used to build the polynomial filter.
+        Get the method to be used to build the polynomial filter.
+
+        Not collective.
 
         Returns
         -------
@@ -620,7 +692,9 @@ cdef class ST(Object):
 
     def setFilterInterval(self, inta: float, intb: float) -> None:
         """
-        Defines the interval containing the desired eigenvalues.
+        Set the interval containing the desired eigenvalues.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -647,7 +721,9 @@ cdef class ST(Object):
 
     def getFilterInterval(self) -> tuple[float, float]:
         """
-        Gets the interval containing the desired eigenvalues.
+        Get the interval containing the desired eigenvalues.
+
+        Not collective.
 
         Returns
         -------
@@ -663,7 +739,11 @@ cdef class ST(Object):
 
     def setFilterRange(self, left: float, right: float) -> None:
         """
-        Defines the numerical range (or field of values) of the matrix, that is,
+        Set the numerical range (or field of values) of the matrix.
+
+        Logically collective.
+
+        Set the numerical range (or field of values) of the matrix, that is,
         the interval containing all eigenvalues.
 
         Parameters
@@ -685,7 +765,9 @@ cdef class ST(Object):
 
     def getFilterRange(self) -> tuple[float, float]:
         """
-        Gets the interval containing all eigenvalues.
+        Get the interval containing all eigenvalues.
+
+        Not collective.
 
         Returns
         -------
@@ -701,7 +783,9 @@ cdef class ST(Object):
 
     def setFilterDegree(self, deg: int) -> None:
         """
-        Sets the degree of the filter polynomial.
+        Set the degree of the filter polynomial.
+
+        Logically collective.
 
         Parameters
         ----------
@@ -713,7 +797,9 @@ cdef class ST(Object):
 
     def getFilterDegree(self) -> int:
         """
-        Gets the degree of the filter polynomial.
+        Get the degree of the filter polynomial.
+
+        Not collective.
 
         Returns
         -------
@@ -726,7 +812,9 @@ cdef class ST(Object):
 
     def setFilterDamping(self, damping: FilterDamping) -> None:
         """
-        Sets the type of damping to be used in the polynomial filter.
+        Set the type of damping to be used in the polynomial filter.
+
+        Logically collective.
 
         Parameter
         ---------
@@ -738,7 +826,9 @@ cdef class ST(Object):
 
     def getFilterDamping(self) -> FilterDamping:
         """
-        Gets the type of damping used in the polynomial filter.
+        Get the type of damping used in the polynomial filter.
+
+        Not collective.
 
         Returns
         -------
@@ -752,31 +842,36 @@ cdef class ST(Object):
     #
 
     property shift:
-        def __get__(self):
+        """Value of the shift."""
+        def __get__(self) -> float:
             return self.getShift()
         def __set__(self, value):
             self.setShift(value)
 
     property transform:
-        def __get__(self):
+        """If the transformed matrices are computed."""
+        def __get__(self) -> bool:
             return self.getTransform()
         def __set__(self, value):
             self.setTransform(value)
 
     property mat_mode:
-        def __get__(self):
+        """How the transformed matrices are being stored in the ST."""
+        def __get__(self) -> STMatMode:
             return self.getMatMode()
         def __set__(self, value):
             self.setMatMode(value)
 
     property mat_structure:
-        def __get__(self):
+        """Relation of the sparsity pattern of all ST matrices."""
+        def __get__(self) -> MatStructure:
             return self.getMatStructure()
         def __set__(self, value):
             self.setMatStructure(value)
 
     property ksp:
-        def __get__(self):
+        """KSP object associated with the spectral transformation."""
+        def __get__(self) -> KSP:
             return self.getKSP()
         def __set__(self, value):
             self.setKSP(value)

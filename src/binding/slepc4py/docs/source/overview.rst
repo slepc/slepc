@@ -164,6 +164,10 @@ auxiliary object.
       the call MFNSolve(mfn,b,x) computes x=f(A)b, where f is a function
       such as the exponential.
 
+:LME: This component provides the functionality for solving linear matrix
+      equations such as Lyapunov or Sylvester where the solution has low
+      rank.
+
 :ST:  The Spectral Transformation is a component that provides
       convenient implementations of common spectral
       transformations. These are simple transformations that map

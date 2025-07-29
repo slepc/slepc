@@ -1,10 +1,15 @@
 # -----------------------------------------------------------------------------
 
 cdef class Util:
+    """Util."""
 
     @classmethod
-    def createMatBSE(cls, Mat R, Mat C) -> Mat:
+    def createMatBSE(cls, Mat R: petsc4py.PETSc.Mat, Mat C: petsc4py.PETSc.Mat) -> petsc4py.PETSc.Mat:
         """
+        Create a matrix that can be used to define a BSE type problem.
+
+        Collective.
+
         Create a matrix that can be used to define a structured eigenvalue
         problem of type BSE (Bethe-Salpeter Equation).
 
@@ -17,8 +22,8 @@ cdef class Util:
 
         Returns
         -------
-        Mat
-            The matrix with the block form H = [ R C; -C^H -R^T ].
+        petsc4py.PETSc.Mat
+            The matrix with the block form :math:`H = [ R\; C; {-C}^H\; {-R}^T ]`.
         """
         cdef Mat H = Mat()
         CHKERR( MatCreateBSE(R.mat, C.mat, &H.mat) )
