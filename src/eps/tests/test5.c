@@ -19,7 +19,7 @@ int main(int argc,char **argv)
 {
   Mat            A;               /* operator matrix */
   EPS            eps;             /* eigenproblem solver context */
-  char           filename[PETSC_MAX_PATH_LEN];
+  char           filename[PETSC_MAX_PATH_LEN],path[PETSC_MAX_PATH_LEN];
   const char     *prefix,*scalar,*ints,*floats;
   PetscReal      tol=PETSC_SMALL;
   PetscViewer    viewer;
@@ -52,7 +52,9 @@ int main(int argc,char **argv)
   floats = "float32";
 #endif
 
-  PetscCall(PetscSNPrintf(filename,sizeof(filename),"%s/share/petsc/datafiles/matrices/%s-%s-%s-%s",PETSC_DIR,prefix,scalar,ints,floats));
+  PetscCall(PetscOptionsGetString(NULL,NULL,"-path",path,sizeof(path),&flg));
+  if (flg) PetscCall(PetscSNPrintf(filename,sizeof(filename),"%s/%s-%s-%s-%s",path,prefix,scalar,ints,floats));
+  else PetscCall(PetscSNPrintf(filename,sizeof(filename),"%s/share/petsc/datafiles/matrices/%s-%s-%s-%s",PETSC_DIR,prefix,scalar,ints,floats));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nReading matrix from binary file...\n\n"));
   PetscCall(PetscViewerBinaryOpen(PETSC_COMM_WORLD,filename,FILE_MODE_READ,&viewer));
   PetscCall(MatCreate(PETSC_COMM_WORLD,&A));
@@ -87,8 +89,8 @@ int main(int argc,char **argv)
       requires: !__float128
 
    testset:
-      args: -eps_nev 3
-      requires: !complex
+      args: -eps_nev 3 -path ${DATAFILESPATH}/matrices/petsc-small
+      requires: !complex datafilespath
       filter: sed -e "s/92073/92072/" | sed -e "s/80649/80648/" | sed -e "s/80647/80648/" | sed -e "s/45755/45756/"
       output_file: output/test5_1.out
       test:
@@ -108,8 +110,8 @@ int main(int argc,char **argv)
          args: -eps_type gd -eps_gd_double_expansion
 
    testset:
-      args: -eps_nev 3
-      requires: double complex
+      args: -eps_nev 3 -path ${DATAFILESPATH}/matrices/petsc-small
+      requires: double complex datafilespath
       output_file: output/test5_1_complex.out
       test:
          suffix: 1_complex
@@ -128,8 +130,8 @@ int main(int argc,char **argv)
          args: -eps_type gd -eps_gd_double_expansion
 
    testset:
-      args: -symm -eps_nev 4 -eps_smallest_real
-      requires: double !complex
+      args: -symm -eps_nev 4 -eps_smallest_real -path ${DATAFILESPATH}/matrices/petsc-small
+      requires: double !complex datafilespath
       output_file: output/test5_2.out
       test:
         suffix: 2_arpack
@@ -145,8 +147,8 @@ int main(int argc,char **argv)
         requires: trlan
 
    testset:
-      args: -symm -eps_nev 4 -eps_smallest_real
-      requires: double complex
+      args: -symm -eps_nev 4 -eps_smallest_real -path ${DATAFILESPATH}/matrices/petsc-small
+      requires: double complex datafilespath
       output_file: output/test5_2_complex.out
       test:
         suffix: 2_blopex_complex
