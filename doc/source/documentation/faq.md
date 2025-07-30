@@ -57,7 +57,7 @@ The shift-and-invert spectral transformation (and Cayley as well) is intended fo
 
     $ ./ex1 -st_type sinvert -st_shift 3.5 -eps_largest_magnitude
 
-In contrast, in SLEPc 3.1 the approach is to specify the target value directly in EPS (with [EPSSetTarget](manualpages/EPS/EPSSetTarget)) and indicate that we want to compute eigenvalues closest to the target, with `EPS_TARGET_MAGNITUDE`. For example (again, the last option can be omitted):
+In contrast, in SLEPc 3.1 the approach is to specify the target value directly in EPS (with [EPSSetTarget](../manualpages/EPS/EPSSetTarget)) and indicate that we want to compute eigenvalues closest to the target, with `EPS_TARGET_MAGNITUDE`. For example (again, the last option can be omitted):
 
     $ ./ex1 -st_type sinvert -eps_target 3.5 -eps_target_magnitude
 
@@ -67,7 +67,7 @@ Note that another difference is that in 3.1 eigenvalues are returned in the corr
 
 ## 9.  I get an error when retrieving the eigenvector
 
-After the solver has finished, the solution can be retrieved with [EPSGetEigenpair](manualpages/EPS/EPSGetEigenpair).  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ `Vec` object. This means the vector must have been created, for example with `VecCreate`, `VecDuplicate`, or `MatCreateVecs`, see for instance [ex7](../../../src/eps/tutorials/ex7.c). The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
+After the solver has finished, the solution can be retrieved with [EPSGetEigenpair](../manualpages/EPS/EPSGetEigenpair).  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ `Vec` object. This means the vector must have been created, for example with `VecCreate`, `VecDuplicate`, or `MatCreateVecs`, see for instance [ex7](../../../src/eps/tutorials/ex7.c). The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
 
 ## 10. I get an error when running shift-and-invert in parallel
 

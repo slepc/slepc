@@ -39,25 +39,25 @@ The following video-tutorials have a 10 minute duration each, and include demons
 
 ## SLEPc Manual Pages
 
-[Index](current/docs/manualpages/singleindex) of all manual pages
+[Index](../manualpages/singleindex) of all manual pages
 
 Main solver classes:
 
-- [Eigenvalue Problem Solver (EPS)](current/docs/manualpages/EPS/index)
-- [Singular Value Decomposition (SVD)](current/docs/manualpages/SVD/index)
-- [Polynomial Eigenvalue Problem (PEP)](current/docs/manualpages/PEP/index)
-- [Nonlinear Eigenvalue Problem (NEP)](current/docs/manualpages/NEP/index)
-- [Matrix Function (MFN)](current/docs/manualpages/MFN/index)
-- [Linear Matrix Equation (LME)](current/docs/manualpages/LME/index)
+- [Eigenvalue Problem Solver (EPS)](../manualpages/EPS/index)
+- [Singular Value Decomposition (SVD)](../manualpages/SVD/index)
+- [Polynomial Eigenvalue Problem (PEP)](../manualpages/PEP/index)
+- [Nonlinear Eigenvalue Problem (NEP)](../manualpages/NEP/index)
+- [Matrix Function (MFN)](../manualpages/MFN/index)
+- [Linear Matrix Equation (LME)](../manualpages/LME/index)
 
 Auxiliary classes and system routines:
 
-- [Spectral Transformation (ST)](current/docs/manualpages/ST/index)
-- [Direct Solver (DS)](current/docs/manualpages/DS/index)
-- [Basis Vectors (BV)](current/docs/manualpages/BV/index)
-- [Mathematical Function (FN)](current/docs/manualpages/FN/index)
-- [Region (RG)](current/docs/manualpages/RG/index)
-- [System Routines](current/docs/manualpages/sys/index)
+- [Spectral Transformation (ST)](../manualpages/ST/index)
+- [Direct Solver (DS)](../manualpages/DS/index)
+- [Basis Vectors (BV)](../manualpages/BV/index)
+- [Mathematical Function (FN)](../manualpages/FN/index)
+- [Region (RG)](../manualpages/RG/index)
+- [System Routines](../manualpages/Sys/index)
 
 :::{note}
 The manual pages are organized in four categories:
@@ -71,7 +71,7 @@ The manual pages are organized in four categories:
 
 ## Additional Online Documentation
 
-[Documentation of SLEPc's Python interface (slepc4py)](/slepc4py-current/docs), also available at [readthedocs](https://slepc4py.readthedocs.io/en/stable/)
+[Documentation of SLEPc's Python interface (slepc4py)](../slepc4py/index), also available at [readthedocs](https://slepc4py.readthedocs.io/en/stable/)
 
 ## PETSc Manual Pages
 

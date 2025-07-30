@@ -76,7 +76,7 @@ The source code in the repository can be browsed at [gitlab.com](https://gitlab.
 
 Additional information can be found at [PETSc Developer's Documentation](https://petsc.org/release/developers/).
 
-Users of the development version may also want to check the [nightly tests](https://gitlab.com/slepc/slepc/-/pipeline_schedules) for various builds of SLEPc's `main` branch with PETSc's `main` branch, as well as the source [coverage](https://slepc.upv.es/coverage/) of these tests. The [development copy of the documentation](/slepc-main/docs/) is also available, also for the python interface ([slepc4py docs](/slepc4py-main/docs/)).
+Users of the development version may also want to check the [nightly tests](https://gitlab.com/slepc/slepc/-/pipeline_schedules) for various builds of SLEPc's `main` branch with PETSc's `main` branch, as well as the source [coverage](https://slepc.upv.es/coverage/) of these tests.
 
 ## Previous Versions
 
