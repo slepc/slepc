@@ -61,3 +61,4 @@ The list below shows software packages that use SLEPc or expose part of its func
   9. [VFI-MEMS](https://gitlab.tuwien.ac.at/andre.gesing/non_linear_eigenvalue): solve the dynamics of a MEMS resonator in a fluid with a nonlinear eigensolver.
   10. [helmholtz-x](https://doi.org/10.17863/CAM.112694): a python library built upon DOLFINx to solve a non-homogeneous Helmholtz equation, specifically thermoacoustic Helmholtz.
   11. [RSVD-{math}`\Delta`t](https://github.com/AliFarghadan/RSVD-Delta-t/tree/Resolvent-analysis): Randomized Singular Value Decomposition with Time-stepping for large-scale resolvent analysis
+  12. [OpenParEM](https://openparem.org): Open-source parallel electromagnetic simulators
