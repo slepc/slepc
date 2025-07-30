@@ -14,17 +14,22 @@ import shutil
 
 print('cwd:', os.getcwd())
 sys.path.append(os.getcwd())
+sys.path.append(os.path.abspath('./ext'))
 
 import build_manpages_c2html
-
+import update_htmlmap_links
+import make_links_relative
+import fix_man_page_edit_links
+import fix_pydata_margins
+import add_man_page_redirects
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'SLEPc'
 author = 'SLEPc Team'
-version = 'development'
-release = 'development'
+version = 'main'
+release = 'main'
 
 with open(os.path.join('../..', 'include', 'slepcversion.h'),'r') as version_file:
     buf = version_file.read()
@@ -118,13 +123,12 @@ myst_enable_extensions = [
 
 myst_dmath_double_inline = True
 myst_dmath_allow_labels = True # the default
-# XXX check these two
 myst_dmath_allow_space = True
 myst_dmath_allow_digits=False
 
 myst_substitutions = {
             'release_date': release_date,
-            'release_year': release_year
+            'release_year': release_year,
             }
 
 myst_url_schemes = {
@@ -145,8 +149,6 @@ copybutton_prompt_text = '$ ' # the prompt is not copied
 
 templates_path = ['_templates']
 exclude_patterns = []
-
-
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -169,27 +171,15 @@ html_css_files = [ # relative to the html_static_path
             'css/slepc.css',
             ]
 
+# Files here are included in all the pages
 #html_js_files = [ # relative to the html_static_path
-# XXX these are included in all the pages!
-#        'js/slepc.js',
-#        'js/news.js',
-#        'js/apps.js',
 #        ]
 
-
 html_theme_options = {
-#        "gitlab_url": "https://gitlab.com/slepc/slepc2.old",
-#        "external_links": [
-#            {"name": "link-one-name", "url": "https://<link-one>"},
-#            {"name": "link-two-name", "url":
-#             "https://<link-two>"}
-#            ],
-
         "icon_links": [ # icon links at the top (right)
             {
                 "name": "GitLab",
                 "url": "https://gitlab.com/slepc/slepc",
-                #"icon": "fa-brands fa-gitlab",
                 "icon": "fa-brands fa-square-gitlab",
                 "type": "fontawesome",
                 },
@@ -207,11 +197,8 @@ html_theme_options = {
                 }
             ],
         "use_edit_page_button": True,
-#        "footer_end": ["theme-version", "last-updated"],
-#        "secondary_sidebar_items" : ["edit-this-page"],
         "header_links_before_dropdown": 10, # before "more"
         "logo": {
-#            "text": 'SLEPc-ng',
             "alt_text": "SLEPc Home",
             "image_light": '_static/images/logo-slepc.gif',
             "image_dark": '_static/images/logo-slepc.gif'
@@ -235,7 +222,7 @@ html_context = {
         "doc_path": "doc",
         }
 
-# remove the primary (left) sidebar from all pages
+# Remove the primary (left) sidebar from all pages
 #html_sidebars = {
 #        "**": []
 #        }
@@ -254,11 +241,6 @@ latex_additional_files = [
      '_static/images/manual/pdf/logo-upv.pdf',
      '_static/images/manual/pdf/logo-dsic-black.pdf',
 ]
-#     'documentation/manual/latex/lastpage.tex.txt',
-
-#latex_appendices = [
-#        'documentation/manual/latex/lastpage.md',
-#        ]
 
 latex_show_pagerefs = True
 latex_show_urls = 'footnote'
@@ -283,7 +265,6 @@ r'''
         \printindex
         ''',
 }
-#        \input{lastpage.tex.txt}
 
 def setup(app):
 
@@ -305,7 +286,7 @@ def setup(app):
         print('\nPlease configure PETSc and SLEPc before building the documentation')
         raise Exception('PETSC_ARCH not set')
     else:
-        # We know where we are, don't we?
+        # We should know where we are
         app.slepc_dir = os.path.abspath('../')
         app.petsc_dir = os.path.abspath(os.environ['PETSC_DIR'])
         app.petsc_arch = os.environ['PETSC_ARCH']
@@ -358,20 +339,18 @@ def setup(app):
     if doctext and c2html:
         app.connect('builder-inited', builder_init_handler)
         app.connect('build-finished', build_finished_handler)
-#    app.srcdir = os.path.abspath(os.getcwd())
 
 def builder_init_handler(app):
     global xtime
     if app.builder.name.endswith('html'):
         build_manpages_c2html.pre(app.doctext,app.slepc_dir,app.srcdir,app.outdir)
-#        _update_htmlmap_links(app)
+        _update_htmlmap_links(app)
         ptype = 'html'
     else: ptype = 'pdf'
     print("============================================")
     print("    Running Sphinx on SLEPc " + ptype)
     xtime = time.clock_gettime(time.CLOCK_REALTIME)
 
-# XXX pending
 def build_finished_handler(app, exception):
     global xtime
     print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - xtime))
@@ -380,18 +359,29 @@ def build_finished_handler(app, exception):
         build_manpages_c2html.post(app.c2html,app.mapnames,app.slepc_dir,app.srcdir,app.outdir)
         if app.slepc4py:
             build_slepc4py_docs(app)
-#        _fix_links(app, exception)
-#        _fix_man_page_edit_links(app, exception)
-#        fix_pydata_margins.fix_pydata_margins(app.outdir)
+        _fix_links(app, exception)
+        _fix_man_page_edit_links(app, exception)
+        fix_pydata_margins.fix_pydata_margins(app.outdir)
 #        if app.builder.name == 'dirhtml':
 #            _add_man_page_redirects(app, exception)
-#        # remove sources for manual pages since they are automatically generated and should not be looked at on the website
-#        if os.path.isdir(os.path.join(app.outdir,'_sources','manualpages')):
-#            shutil.rmtree(os.path.join(app.outdir,'_sources','manualpages'))
-#        if app.builder.name == 'html':
-#            print("==========================================================================")
-#            print("    open %s/index.html in your browser to view the documentation " % app.outdir)
-#            print("==========================================================================")
+        _add_man_page_redirects(app, exception)
+        # remove sources for manual pages since they are automatically generated and should not be looked at on the website
+        if os.path.isdir(os.path.join(app.outdir,'_sources','manualpages')):
+            shutil.rmtree(os.path.join(app.outdir,'_sources','manualpages'))
+        if app.builder.name == 'html':
+            print('==========================================================================')
+            print(f'    open {app.outdir}/index.html in your browser to view the documentation')
+            print('==========================================================================')
+
+def _add_man_page_redirects(app, exception):
+    if exception is None:
+        import time
+        print("============================================")
+        print("    Adding man pages redirects")
+        x = time.clock_gettime(time.CLOCK_REALTIME)
+        add_man_page_redirects.add_man_page_redirects(app.outdir)
+        print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+        print("============================================")
 
 def build_slepc4py_docs(app):
     '''Builds the slepc4py docs and puts the results into the same directory tree as the SLEPc docs'''
@@ -400,8 +390,6 @@ def build_slepc4py_docs(app):
     print('============================================')
     print('Cleaning slepc4py docs')
     subprocess.run(command, cwd=os.path.join(app.slepc_dir,'src','binding','slepc4py'), check=True)
-
-
 
     command = ['make', 'website',
                'SLEPC_DIR={}'.format(app.slepc_dir),
@@ -416,3 +404,45 @@ def build_slepc4py_docs(app):
     subprocess.run(command, cwd=os.path.join(app.slepc_dir,'src','binding','slepc4py'), check=True)
     print("End slepc4py docs Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
     print('============================================')
+
+def _fix_man_page_edit_links(app, exception):
+    if exception is None:
+        import time
+        print("============================================")
+        print("    Fixing manual page edit links")
+        x = time.clock_gettime(time.CLOCK_REALTIME)
+        fix_man_page_edit_links.fix_man_page_edit_links(app.outdir)
+        print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+        print("============================================")
+
+#   The following two scripts are needed because the Sphinx html and dirhtml builds save the output html
+#   files at different levels of the directory hierarchy. file.rst/md -> file.html with html but
+#   file.rst/md -> file/index.html with dirhtml and we want both to work correctly using relative links.
+
+def _fix_links(app, exception):
+    """We need to manage our own relative paths in the User's Manual for the source code files which
+       are auto-generated by c2html outside of Sphinx so Sphinx cannot directly handle those links for use.
+       We use the string PETSC_DOC_OUT_ROOT_PLACEHOLDER in URLs in the Sphinx .rst files as a stand in
+       for the root directory that needs to be constructed based on if the Sphinx build is html or dirhtml
+    """
+    if exception is None:
+        import time
+        print("============================================")
+        print("    Fixing relative links")
+        x = time.clock_gettime(time.CLOCK_REALTIME)
+        make_links_relative.make_links_relative(app.outdir)
+        print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+        print("============================================")
+
+def _update_htmlmap_links(app):
+    """htmlmap maps from manualpage names to relative locations in the generated documentation directory
+       hierarchy. The format of the directory location needs to be different for the Sphinx html and dirhtml
+       builds
+    """
+    import time
+    print("============================================")
+    print("    Updating htmlmap")
+    x = time.clock_gettime(time.CLOCK_REALTIME)
+    update_htmlmap_links.update_htmlmap_links(app.builder,os.path.join('source','manualpages','htmlmap'))
+    print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+    print("============================================")
