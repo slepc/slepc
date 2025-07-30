@@ -17,10 +17,11 @@ int main(int argc,char **argv)
 {
   Mat            A;               /* operator matrix */
   SVD            svd;             /* singular value problem solver context */
-  char           filename[PETSC_MAX_PATH_LEN];
+  char           filename[PETSC_MAX_PATH_LEN],path[PETSC_MAX_PATH_LEN];
   const char     *prefix,*scalar,*ints,*floats;
   PetscReal      tol=PETSC_SMALL;
   PetscViewer    viewer;
+  PetscBool      flg;
 
   PetscFunctionBeginUser;
   PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
@@ -46,7 +47,9 @@ int main(int argc,char **argv)
   floats = "float32";
 #endif
 
-  PetscCall(PetscSNPrintf(filename,sizeof(filename),"%s/share/petsc/datafiles/matrices/%s-%s-%s-%s",PETSC_DIR,prefix,scalar,ints,floats));
+  PetscCall(PetscOptionsGetString(NULL,NULL,"-path",path,sizeof(path),&flg));
+  if (flg) PetscCall(PetscSNPrintf(filename,sizeof(filename),"%s/%s-%s-%s-%s",path,prefix,scalar,ints,floats));
+  else PetscCall(PetscSNPrintf(filename,sizeof(filename),"%s/share/petsc/datafiles/matrices/%s-%s-%s-%s",PETSC_DIR,prefix,scalar,ints,floats));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nReading matrix from binary file...\n\n"));
   PetscCall(PetscViewerBinaryOpen(PETSC_COMM_WORLD,filename,FILE_MODE_READ,&viewer));
   PetscCall(MatCreate(PETSC_COMM_WORLD,&A));
@@ -79,12 +82,12 @@ int main(int argc,char **argv)
       requires: !__float128
 
    test:
-      args: -svd_nsv 7 -svd_type {{lanczos trlanczos cross cyclic lapack randomized}}
-      requires: !single
+      args: -svd_nsv 7 -svd_type {{lanczos trlanczos cross cyclic lapack randomized}} -path ${DATAFILESPATH}/matrices/petsc-small
+      requires: !single datafilespath
 
    testset:
-      args: -svd_nsv 7 -svd_mpd 11 -svd_type primme
-      requires: primme !single
+      args: -svd_nsv 7 -svd_mpd 11 -svd_type primme -path ${DATAFILESPATH}/matrices/petsc-small
+      requires: primme !single datafilespath
       output_file: output/test2_1.out
       test:
          suffix: 1_primme

@@ -1,5 +1,7 @@
 # -*- mode: makefile-gmake -*-
 
+# If $(PETSC_ARCH) is empty, this defines it and SLEPC_DIR
+include ./$(PETSC_ARCH)/lib/slepc/conf/slepcvariables
 include ./lib/slepc/conf/slepc_variables
 
 OBJDIR := $(PETSC_ARCH)/obj
@@ -64,7 +66,7 @@ $(generated) : $(slepcconf) $(slepcvariables) $(PETSCCONFIGDIR)/gmakegen.py
 	$(PYTHON) $(PETSCCONFIGDIR)/gmakegen.py --petsc-arch=$(PETSC_ARCH_DIR) --pkg-dir=$(SLEPC_DIR) --pkg-name=slepc --pkg-pkgs=$(spkgs) --pkg-arch=$(PETSC_ARCH)
 
 # Skip including generated files (which triggers rebuilding them) when we're just going to clean anyway.
-ifneq ($(filter-out help clean distclean check info gmakeinfo checkbadSource deletefortranbindings fortranbindings alletags lint_slepc get%,$(MAKECMDGOALS:clean%=clean)),)
+ifneq ($(filter-out help clean distclean check info gmakeinfo checkbadSource deletefortranbindings fortranbindings alletags lint_slepc cleantest allgtest% get%,$(MAKECMDGOALS:clean%=clean)),)
 include $(generated)
 endif
 
@@ -147,7 +149,7 @@ define ARCHIVE_RECIPE_DEFAULT
   $(call quiet,RANLIB) $@
 endef
 
-%${LIB_NAME_SUFFIX}.$(AR_LIB_SUFFIX) : $$(obj) | $$(@D)/.DIR
+%$(LIB_NAME_SUFFIX).$(AR_LIB_SUFFIX) : $$(obj) | $$(@D)/.DIR
 	$(if $(findstring win32fe_lib,$(AR)),$(ARCHIVE_RECIPE_WIN32FE_LIB),$(if $(findstring yes,$(AR_ARGFILE)),$(if $(GMAKE4),$(ARCHIVE_RECIPE_ARGFILE),$(ARCHIVE_RECIPE_DEFAULT)),$(ARCHIVE_RECIPE_DEFAULT)))
 
 # with-single-library=0
@@ -181,7 +183,7 @@ ifneq ($(DSYMUTIL),true)
 	$(call quiet,DSYMUTIL) $@
 endif
 
-%${LIB_NAME_SUFFIX}.$(SL_LINKER_SUFFIX) : $(call libname_function,%) | $(call soname_function,%)
+%$(LIB_NAME_SUFFIX).$(SL_LINKER_SUFFIX) : $(call libname_function,%) | $(call soname_function,%)
 	@ln -sf $(notdir $<) $@
 
 $(call soname_function,%) : $(call libname_function,%)

@@ -42,29 +42,32 @@ OMAKE_SELF_PRINTDIR = $(OMAKE_PRINTDIR) -f makefile
 all:
 	+@${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} chk_slepcdir | tee ${PETSC_ARCH}/lib/slepc/conf/make.log
 	@ln -sf ${PETSC_ARCH}/lib/slepc/conf/make.log make.log
-	+@${OMAKE_SELF_PRINTDIR} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} all-local 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log;
-	@grep -E '(out of memory allocating.*after a total of|gfortran: fatal error: Killed signal terminated program f951|f95: fatal error: Killed signal terminated program f951)' ${PETSC_ARCH}/lib/slepc/conf/make.log | tee ${PETSC_ARCH}/lib/slepc/conf/memoryerror.log > /dev/null
-	@grep -v "using error" ${PETSC_ARCH}/lib/slepc/conf/make.log > /dev/null | grep -E -i "( error | error: |no such file or directory)" | tee ./${PETSC_ARCH}/lib/slepc/conf/error.log
-	+@if test -s ${PETSC_ARCH}/lib/slepc/conf/memoryerror.log; then \
-           printf ${PETSC_TEXT_HILIGHT}"**************************ERROR*************************************\n" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
-           echo "  Error during compile, you need to increase the memory allocated to the VM and rerun " 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
-           printf "********************************************************************"${PETSC_TEXT_NORMAL}"\n" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log;\
-         elif test -s ${PETSC_ARCH}/lib/slepc/conf/error.log; then \
-           printf ${PETSC_TEXT_HILIGHT}"*******************************ERROR************************************\n" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
-           echo "  Error during compile, check ${PETSC_ARCH}/lib/slepc/conf/make.log" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
-           echo "  Send all contents of ./${PETSC_ARCH}/lib/slepc/conf to slepc-maint@upv.es" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log;\
-           printf "************************************************************************"${PETSC_TEXT_NORMAL}"\n" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
-         elif [ "${SLEPC_INSTALLDIR}" = "${SLEPC_DIR:/=}/${PETSC_ARCH}" ]; then \
-           echo "Now to check if the library is working do:";\
-           echo "make SLEPC_DIR=${SLEPC_DIR} PETSC_DIR=${PETSC_DIR} check";\
+	+@(${OMAKE_SELF_PRINTDIR} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} all-local; echo "$$?" > ${PETSC_ARCH}/lib/slepc/conf/error.log) 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log;
+	+@if [ "`cat ${PETSC_ARCH}/lib/slepc/conf/error.log 2> /dev/null`" != "0" ]; then \
+	    grep -E '(out of memory allocating.*after a total of|gfortran: fatal error: Killed signal terminated program f951|f95: fatal error: Killed signal terminated program f951)' ${PETSC_ARCH}/lib/slepc/conf/make.log | tee ${PETSC_ARCH}/lib/slepc/conf/memoryerror.log > /dev/null; \
+	    if test -s ${PETSC_ARCH}/lib/slepc/conf/memoryerror.log; then \
+              printf ${PETSC_TEXT_HILIGHT}"**************************ERROR*************************************\n" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
+              echo "  Error during compile, you need to increase the memory allocated to the VM and rerun " 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
+              printf "********************************************************************"${PETSC_TEXT_NORMAL}"\n" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log;\
+            else \
+              printf ${PETSC_TEXT_HILIGHT}"*******************************ERROR************************************\n" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
+              echo "  Error during compile, check ${PETSC_ARCH}/lib/slepc/conf/make.log" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
+              echo "  Send all contents of ./${PETSC_ARCH}/lib/slepc/conf to slepc-maint@upv.es" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log;\
+              printf "************************************************************************"${PETSC_TEXT_NORMAL}"\n" 2>&1 | tee -a ${PETSC_ARCH}/lib/slepc/conf/make.log; \
+            fi; \
+          elif [ "${SLEPC_INSTALLDIR}" = "${SLEPC_DIR:/=}/${PETSC_ARCH}" ]; then \
+           echo "=========================================";\
+           echo "Now to check if the libraries are working do:";\
+           echo "make SLEPC_DIR=${SLEPC_DIR} PETSC_DIR=${PETSC_DIR} PETSC_ARCH=${PETSC_ARCH} check";\
            echo "=========================================";\
          else \
+           echo "=========================================";\
            echo "Now to install the library do:";\
            echo "make SLEPC_DIR=${SLEPC_DIR} PETSC_DIR=${PETSC_DIR} install";\
            echo "=========================================";\
          fi
 	@echo "Finishing make run at `date +'%a, %d %b %Y %H:%M:%S %z'`" >> ${PETSC_ARCH}/lib/slepc/conf/make.log
-	@if test -s ./${PETSC_ARCH}/lib/slepc/conf/error.log; then exit 1; fi
+	@if [ "`cat ${PETSC_ARCH}/lib/slepc/conf/error.log 2> /dev/null`" != "0" ]; then exit 1; fi
 
 all-local: info slepc_libs slepc4py-build
 
