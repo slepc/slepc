@@ -18,14 +18,28 @@ help:
 	$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) ;\
 	deactivate \
 	-@echo "--"
+	-@echo ""
 	-@echo "SLEPc targets:"
-	-@echo "  sphinxhtml  to build the HTML website"
+	-@echo ""
+	-@echo "  website     to build the HTML website"
 
 .PHONY: help Makefile
 
 clean:
 	-@${RM} -rf ${BUILDDIR}/*
 	-@${RM} -rf source/_static
+	-@${RM} -rf source/manualpages/DS
+	-@${RM} -rf source/manualpages/PEP
+	-@${RM} -rf source/manualpages/LME
+	-@${RM} -rf source/manualpages/FN
+	-@${RM} -rf source/manualpages/SVD
+	-@${RM} -rf source/manualpages/MFN
+	-@${RM} -rf source/manualpages/NEP
+	-@${RM} -rf source/manualpages/BV
+	-@${RM} -rf source/manualpages/EPS
+	-@${RM} -rf source/manualpages/Sys
+	-@${RM} -rf source/manualpages/RG
+	-@${RM} -rf source/manualpages/ST
 
 webstatic:
 	git clone https://gitlab.com/slepc/webstatic.git -b main --depth=1 source/_static

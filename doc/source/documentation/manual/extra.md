@@ -144,6 +144,7 @@ Apart from the main solver classes listed in table [](#tab:modules), SLEPc conta
 
 -   `RG`: Region, a way to define a region of the complex plane.
 
+{#sec:fn}
 ### FN: Mathematical Functions
 
 :::{table} Mathematical functions available as `FN` objects.
@@ -222,6 +223,7 @@ FNCombineSetChildren(FN fn,FNCombineType comb,FN f1,FN f2)
 
 The combination of $f_1$ and $f_2$ with division will result in $f_1(x)/f_2(x)$ and $f_2(A)^{-1}f_1(A)$ in the case of matrices.
 
+{#sec:bv}
 ### BV: Basis Vectors
 
 The `BV` class may be useful for advanced users, so we briefly describe it here for completeness. `BV` is a convenient way of handling a collection of vectors that often operate together, rather than working with an array of `Vec`. It can be seen as a generalization of `Vec` to a tall-skinny matrix with several columns.
@@ -246,6 +248,7 @@ Table [](#tab:bv) shows a summary of the operations offered by the `BV` class, w
 
 Most SLEPc solvers use a `BV` object to represent the working subspace basis. In particular, orthogonalization operations are mostly confined within `BV`. Hence, `BV` provides options for specifying the method of orthogonalization of vectors (Gram-Schmidt) as well as the method of block orthogonalization, see `BVSetOrthogonalization`.
 
+{#sec:rg}
 ### RG: Region
 
 The `RG` object defines a region of the complex plane, that can be used to specify where eigenvalues must be sought. Currently, the following types of regions are available:

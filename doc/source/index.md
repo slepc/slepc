@@ -58,6 +58,8 @@ for (var i=0;i<newsitems;i++) {
 about/index
 installation/index
 documentation/index
+manualpages/index
+slepc4py/index
 material/index
 contact/index
 ```

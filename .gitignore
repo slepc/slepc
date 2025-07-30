@@ -72,3 +72,5 @@ docs/manual/slepc.pdf
 pkg.gitcommit
 **/f90module*.f90
 doc/.venv-sphinx
+doc/source/manualpages
+doc/source/__pycache__/

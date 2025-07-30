@@ -3,10 +3,19 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-from os import path
+#from os import path
+import sys
+import os
 import re
 import subprocess
 from datetime import datetime
+import time
+import shutil
+
+print('cwd:', os.getcwd())
+sys.path.append(os.getcwd())
+
+import build_manpages_c2html
 
 
 # -- Project information -----------------------------------------------------
@@ -17,7 +26,7 @@ author = 'SLEPc Team'
 version = 'development'
 release = 'development'
 
-with open(path.join('../..', 'include', 'slepcversion.h'),'r') as version_file:
+with open(os.path.join('../..', 'include', 'slepcversion.h'),'r') as version_file:
     buf = version_file.read()
     petsc_release_flag = re.search(' SLEPC_VERSION_RELEASE[ ]*([0-9]*)',buf).group(1)
     major_version      = re.search(' SLEPC_VERSION_MAJOR[ ]*([0-9]*)',buf).group(1)
@@ -275,3 +284,135 @@ r'''
         ''',
 }
 #        \input{lastpage.tex.txt}
+
+def setup(app):
+
+    print('-----------------------------8<--------------------------------')
+#    print(app.project)
+    print('app.srcdir: {}'.format(app.srcdir))
+    print('app.confdir: {}'.format(app.confdir))
+    print('app.doctreedir: {}'.format(app.doctreedir))
+    print('app.outdir: {}'.format(app.outdir))
+    print('app.fresh_env_used: {}'.format(app.fresh_env_used))
+    print('-----------------------------8<--------------------------------')
+
+    if 'PETSC_DIR' not in os.environ:
+        print('\nUnable to build the documentation, PETSC_DIR environment variable is not set')
+        print('\nPlease configure PETSc and SLEPc before building the documentation')
+        raise Exception('PETSC_DIR not set')
+    if 'PETSC_ARCH' not in os.environ:
+        print('\nUnable to build the documentation, PETSC_ARCH environment variable is not set')
+        print('\nPlease configure PETSc and SLEPc before building the documentation')
+        raise Exception('PETSC_ARCH not set')
+    else:
+        # We know where we are, don't we?
+        app.slepc_dir = os.path.abspath('../')
+        app.petsc_dir = os.path.abspath(os.environ['PETSC_DIR'])
+        app.petsc_arch = os.environ['PETSC_ARCH']
+
+    doctext = shutil.which('doctext')
+    if not doctext:
+        with open(os.path.join(app.petsc_dir,app.petsc_arch,'lib','petsc','conf','petscvariables')) as f:
+            doctext = [line for line in f if line.find('DOCTEXT ') > -1]
+        if not doctext:
+            print('PETSc has been configured without DOCTEXT. Not building manpages.')
+        else:
+            doctext = re.sub('[ ]*DOCTEXT[ ]*=[ ]*','',doctext[0]).strip('\n').strip()
+            app.doctext = doctext
+            print('Using DOCTEXT:', doctext)
+
+    c2html = shutil.which('c2html')
+    if not c2html:
+        with open(os.path.join(app.petsc_dir,app.petsc_arch,'lib','petsc','conf','petscvariables')) as f:
+            c2html = [line for line in f if line.find('C2HTML ') > -1]
+        if not c2html:
+            print('PETSc has been configured without C2HTML. Not building source pages.')
+        else:
+            c2html = re.sub('[ ]*C2HTML[ ]*=[ ]*','',c2html[0]).strip('\n').strip()
+            app.c2html = c2html
+            print('Using C2HTML:', c2html)
+
+    mapnames = shutil.which('mapnames')
+    if not mapnames:
+        with open(os.path.join(app.petsc_dir,app.petsc_arch,'lib','petsc','conf','petscvariables')) as f:
+            mapnames = [line for line in f if line.find('MAPNAMES ') > -1]
+        if not mapnames:
+            print('PETSc has been configured without MAPNAMES. Not building source pages.')
+        else:
+            mapnames = re.sub('[ ]*MAPNAMES[ ]*=[ ]*','',mapnames[0]).strip('\n').strip()
+            app.mapnames = mapnames
+            print('Using MAPNAMES:', mapnames)
+
+
+    with open(os.path.join(app.slepc_dir, app.petsc_arch, 'include', 'slepcconf.h'),'r') as slepcconf_file:
+        buf = slepcconf_file.read()
+        slepc4py = re.search(' SLEPC_HAVE_SLEPC4PY[ ]*(1)',buf)
+        if slepc4py is not None:
+            app.slepc4py = True
+            print('slepc4py: ',app.slepc4py)
+        else:
+            print('SLEPc configured without slepc4py: '
+                  'slepc4py documentation will not be created')
+            app.slepc4py = False
+
+    if doctext and c2html:
+        app.connect('builder-inited', builder_init_handler)
+        app.connect('build-finished', build_finished_handler)
+#    app.srcdir = os.path.abspath(os.getcwd())
+
+def builder_init_handler(app):
+    global xtime
+    if app.builder.name.endswith('html'):
+        build_manpages_c2html.pre(app.doctext,app.slepc_dir,app.srcdir,app.outdir)
+#        _update_htmlmap_links(app)
+        ptype = 'html'
+    else: ptype = 'pdf'
+    print("============================================")
+    print("    Running Sphinx on SLEPc " + ptype)
+    xtime = time.clock_gettime(time.CLOCK_REALTIME)
+
+# XXX pending
+def build_finished_handler(app, exception):
+    global xtime
+    print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - xtime))
+    print("============================================")
+    if app.builder.name.endswith('html'):
+        build_manpages_c2html.post(app.c2html,app.mapnames,app.slepc_dir,app.srcdir,app.outdir)
+        if app.slepc4py:
+            build_slepc4py_docs(app)
+#        _fix_links(app, exception)
+#        _fix_man_page_edit_links(app, exception)
+#        fix_pydata_margins.fix_pydata_margins(app.outdir)
+#        if app.builder.name == 'dirhtml':
+#            _add_man_page_redirects(app, exception)
+#        # remove sources for manual pages since they are automatically generated and should not be looked at on the website
+#        if os.path.isdir(os.path.join(app.outdir,'_sources','manualpages')):
+#            shutil.rmtree(os.path.join(app.outdir,'_sources','manualpages'))
+#        if app.builder.name == 'html':
+#            print("==========================================================================")
+#            print("    open %s/index.html in your browser to view the documentation " % app.outdir)
+#            print("==========================================================================")
+
+def build_slepc4py_docs(app):
+    '''Builds the slepc4py docs and puts the results into the same directory tree as the SLEPc docs'''
+    import time
+    command = ['make', 'docsclean']
+    print('============================================')
+    print('Cleaning slepc4py docs')
+    subprocess.run(command, cwd=os.path.join(app.slepc_dir,'src','binding','slepc4py'), check=True)
+
+
+
+    command = ['make', 'website',
+               'SLEPC_DIR={}'.format(app.slepc_dir),
+               'PETSC_DIR={}'.format(app.petsc_dir),
+               'PETSC_ARCH={}'.format(app.petsc_arch),
+               'LOC={}'.format(app.outdir)]
+    print('============================================')
+
+    print('Building slepc4py docs')
+    print(command)
+    x = time.clock_gettime(time.CLOCK_REALTIME)
+    subprocess.run(command, cwd=os.path.join(app.slepc_dir,'src','binding','slepc4py'), check=True)
+    print("End slepc4py docs Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+    print('============================================')
