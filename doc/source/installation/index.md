@@ -20,6 +20,14 @@ SLEPc is available on some package managers.
     $ sudo apt install slepc-dev
 :::
 
+:::{tab-item} E4S
+<https://e4s.io/download.html>
+
+Extreme-scale Scientific Software Stack (E4S) provides container images for docker and singularity.
+
+E4S packages are available as pre-built Spack binaries.
+:::
+
 :::{tab-item} Homebrew
 <https://formulae.brew.sh/formula/slepc>
 
