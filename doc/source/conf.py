@@ -64,7 +64,7 @@ copyright = '2002-{}, Universitat Politecnica de Valencia, Spain'.format(
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-needs_sphinx='8.1'
+needs_sphinx='7.3.7'
 
 nitpicky = True # warn about all references where the target cannot be found
 
@@ -293,7 +293,7 @@ def setup(app):
     print('app.confdir: {}'.format(app.confdir))
     print('app.doctreedir: {}'.format(app.doctreedir))
     print('app.outdir: {}'.format(app.outdir))
-    print('app.fresh_env_used: {}'.format(app.fresh_env_used))
+#    print('app.fresh_env_used: {}'.format(app.fresh_env_used))
     print('-----------------------------8<--------------------------------')
 
     if 'PETSC_DIR' not in os.environ:
