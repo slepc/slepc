@@ -188,10 +188,12 @@ gnu-lint:
     - printf "PETSC_OPTIONS:$PETSC_OPTIONS\n"
     - printf "PETSC_CONFIG_OPTS:${PETSC_CONFIG_OPTS}\n"
     - printf "PETSC_COVERAGE_OPTS:${PETSC_COVERAGE_OPTS}\n"
-    - printf "SLEPC_CONFIG_OPTS:${SLEPC_CONFIG_OPTS}\n"
+    - printf "SLEPC_CONFIG_OPTS:${SLEPC_CONFIG_OPTS/replace_dfp/${SLEPC_DIR}/../slepcdatafiles}\n"
     - export SLEPC_DIR=$PWD
     - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
     - cd ..
+    - if [ ! -d slepcdatafiles ]; then git clone -q https://gitlab.com/slepc/datafiles.git slepcdatafiles; else cd slepcdatafiles; git pull -q; fi
+    - cd ${SLEPC_DIR}/..
     - if [ ! -z ${INSTALL+x} ]; then export INSTALL_DIR=$PWD/install; rm -rf $INSTALL_DIR; fi
     - if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
     - cd petsc
@@ -225,17 +227,17 @@ gnu-lint:
     - echo -e "section_start:`date +%s`:build_slepc\r\e[0KSLEPc configure and make"
     - cd $SLEPC_DIR
     - if [ ! -z ${BUILD_DIR+x} ]; then rm -rf ${BUILD_DIR}; mkdir ${BUILD_DIR}; fi
-    - bash -c "${PYTHON} ./configure ${SLEPC_CONFIG_OPTS}"
+    - bash -c "${PYTHON} ./configure ${SLEPC_CONFIG_OPTS/replace_dfp/${SLEPC_DIR}/../slepcdatafiles}"
     - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}"
     - if [ ! -z ${INSTALL+x} ]; then make install; SLEPC_DIR=$INSTALL_DIR; fi
-    - if [ -z ${DISABLE_TESTS+x} ]; then make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" check; fi
+    - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" check
     - if [ ! -z ${PKG_CONFIG+x} ]; then make check_usermakefile PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$PETSC_DIR/$PETSC_ARCH/lib/pkgconfig; fi
     - if [ ! -z ${BUILD_DOCS+x} ]; then make alldoc LOC=$SLEPC_DIR; tar czf ${CI_JOB_NAME}-docs.tar.gz --exclude "*.out" --exclude "makefile*" --exclude slepc4py docs include src; fi
     - if [ ! -z ${BUILD_DOCS+x} ] && [ ! -z ${SLEPC4PY+x} ]; then make -C src/binding/slepc4py rst2html sphinx-html sphinx-pdf PYTHON=${PYTHON}; tar czf ${CI_JOB_NAME}-docs-py.tar.gz -C src/binding/slepc4py docs; fi
     - echo -e "section_end:`date +%s`:build_slepc\r\e[0K"
     - echo -e "section_start:`date +%s`:tests_slepc\r\e[0KSLEPc test suite"
     - if [ ! -z ${SLEPC4PY+x} ]; then make slepc4pytest; make -C src/binding/slepc4py/demo PYTHON=${PYTHON}; fi
-    - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest; make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" allgtests-tap TIMEOUT=${TIMEOUT} ${TEST_OPTS}; fi
+    - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest && make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" allgtests-tap TIMEOUT=${TIMEOUT} ${TEST_OPTS}; fi
     - |
       if [ ! -z "${COVERAGE+x}" -a -z "${DISABLE_TESTS+x}" ]; then
         rm -rf ${PWD}/.venv-gcovr
@@ -415,7 +417,7 @@ gnu-cxx-complex:
     - name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-clanguage=C++ --with-scalar-type=complex --with-fortran-bindings=0
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.0 --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.0 --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex
 
 gnu-c-cuda:
   extends:
@@ -445,7 +447,7 @@ clang-c:
     - linux-ubuntu, compiler:clang, name:maat
   variables:
     PETSC_CONFIG_OPTS: --with-cc=/opt/mpich/clang/bin/mpicc --with-cxx=/opt/mpich/clang/bin/mpicxx --with-fc=0 --with-mpiexec=/opt/mpich/clang/bin/mpiexec
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --with-slicot
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --with-slicot
 
 gnu-c-complex-multilib:
   extends:
@@ -456,7 +458,7 @@ gnu-c-complex-multilib:
   variables:
     LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-single-library=0 --with-library-name-suffix=Complex --download-metis --download-parmetis --download-scalapack --with-cxx-dialect=17
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --download-chase
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-elpa --download-chase
 
 gnu-c-libs:
   extends:
@@ -466,7 +468,7 @@ gnu-c-libs:
     - name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-primme --download-blopex --download-chase --download-trlan --download-slicot --with-packages-download-dir=/var/local/downloads
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-evsl --download-primme --download-blopex --download-chase --download-trlan --download-slicot --with-packages-download-dir=/var/local/downloads
 
 gnu-cxx-int64:
   extends:
@@ -476,7 +478,7 @@ gnu-cxx-int64:
     - name:jepri
   variables:
     PETSC_CONFIG_OPTS: --with-clanguage=C++ --with-64-bit-indices --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-primme-dir=/usr/local/opt/primme-3.2
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-primme-dir=/usr/local/opt/primme-3.2
 
 #
 # Special job in stage-3 to check pip install.
@@ -617,8 +619,8 @@ intel-c-complex-mkl:
   variables:
     LOAD_MODULES: compiler mpi mkl
     MAKE_CFLAGS: -Werror -Wno-higher-precision-fp
-    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso=1 --with-scalapack=1 --download-cmake
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
+    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso=1 --with-scalapack=1
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
 gnu-c-cuda-complex:
   extends:
@@ -650,7 +652,7 @@ gnu-c-multilib:
   variables:
     LOAD_MODULES: cmake/4.0.1
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack --download-netlib-lapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-evsl --download-chase --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-evsl --download-chase --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads
 
 gnu-c-c99-nompi:
   extends:
@@ -660,7 +662,7 @@ gnu-c-c99-nompi:
     - name:jepri
   variables:
     PETSC_CONFIG_OPTS: --CFLAGS='-std=c99 -pedantic -Wno-long-long -Wno-overlength-strings' --with-fortran-bindings=0 --with-mpi=0
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-lib='-L/usr/local/opt/arpack-ng-3.8.0/lib -Wl,-rpath,/usr/local/opt/arpack-ng-3.8.0/lib -lparpack -larpack' --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads --download-primme --download-primme-cflags=-std=c99
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-lib='-L/usr/local/opt/arpack-ng-3.8.0/lib -Wl,-rpath,/usr/local/opt/arpack-ng-3.8.0/lib -lparpack -larpack' --with-blopex-dir=/usr/local/opt/blopex --with-trlan-dir=/usr/local/opt/trlan-201009 --with-packages-download-dir=/var/local/downloads --download-primme --download-primme-cflags=-std=c99
 
 clang-c-valgrind:
   extends:
@@ -670,7 +672,7 @@ clang-c-valgrind:
     - linux-ubuntu, compiler:clang, name:maat
   variables:
     PETSC_CONFIG_OPTS: --with-cc=/opt/mpich/clang/bin/mpicc --with-cxx=/opt/mpich/clang/bin/mpicxx --with-fc=0 --with-mpiexec=/opt/mpich/clang/bin/mpiexec --with-shared-libraries=0
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
 gnu-c-complex:
   extends:
@@ -680,7 +682,7 @@ gnu-c-complex:
     - name:jepri
   variables:
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-petsc4py --download-netlib-lapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-lib="/usr/local/opt/arpack-ng-3.8.0/lib/libparpack.so /usr/local/opt/arpack-ng-3.8.0/lib/libarpack.so" --download-primme --download-blopex --with-packages-download-dir=/var/local/downloads --with-slepc4py
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-lib="/usr/local/opt/arpack-ng-3.8.0/lib/libparpack.so /usr/local/opt/arpack-ng-3.8.0/lib/libarpack.so" --download-primme --download-blopex --with-packages-download-dir=/var/local/downloads --with-slepc4py
     SLEPC4PY: 1
 
 gnu-c:
@@ -691,8 +693,8 @@ gnu-c:
     - linux-ubuntu, name:satet
   variables:
     LOAD_MODULES: mpich/4.3.0
-    PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-cmake --download-sowing
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py
+    PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-sowing
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py
     SLEPC4PY: 1
     BUILD_DOCS: 1
     PKG_CONFIG: 1
@@ -705,7 +707,7 @@ gnu-c-complex-libs:
     - name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-scalapack --download-metis --download-parmetis --download-elemental
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-packages-build-dir=${BUILD_DIR} --download-primme --download-chase --download-blopex
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --with-packages-build-dir=${BUILD_DIR} --download-primme --download-chase --download-blopex
     BUILD_DIR: ../externalpackages
 
 clang-c-complex:
@@ -716,7 +718,7 @@ clang-c-complex:
     - compiler:clang, name:sejmet
   variables:
     PETSC_CONFIG_OPTS: --with-cc=/opt/mpich/clang/bin/mpicc --with-cxx=0 --with-fc=0 --with-mpiexec=/opt/mpich/clang/bin/mpiexec --with-scalar-type=complex
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex
 
 intel-cxx-mkl:
   extends:
@@ -728,7 +730,7 @@ intel-cxx-mkl:
     LOAD_MODULES: compiler mpi mkl
     MAKE_CXXFLAGS: -Werror -Wno-deprecated
     PETSC_CONFIG_OPTS: --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso=1 --with-scalapack=1 --with-clanguage=C++ --with-memalign=64
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
 gnu-c-float128:
   extends:
@@ -738,18 +740,17 @@ gnu-c-float128:
     - name:jepri
   variables:
     PETSC_CONFIG_OPTS: --download-f2cblaslapack --with-precision=__float128
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
 gnu-cxx-complex-int64:
   extends:
     - .stage-3
     - .linux_test
   tags:
-    - linux-ubuntu, name:satet
+    - linux-ubuntu, name:sejmet
   variables:
-    LOAD_MODULES: mpich/4.3.0
-    PETSC_CONFIG_OPTS: --with-clanguage=C++ --with-scalar-type=complex --with-64-bit-indices --with-petsc4py --download-scalapack --download-elemental --download-parmetis --download-metis --download-mumps --download-suitesparse --download-cmake
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-slepc4py --download-primme --download-hpddm
+    PETSC_CONFIG_OPTS: --with-clanguage=C++ --with-scalar-type=complex --with-64-bit-indices --with-petsc4py --download-scalapack --download-elemental --download-parmetis --download-metis --download-mumps --download-suitesparse
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --with-slepc4py --download-primme --download-hpddm
     SLEPC4PY: 1
 
 gnu-c-single:
@@ -760,7 +761,7 @@ gnu-c-single:
     - name:jepri
   variables:
     PETSC_CONFIG_OPTS: --with-precision=single --download-scalapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0
     LOAD_MODULES: cmake/4.0.1
 
 gnu-c-debug:
@@ -771,7 +772,7 @@ gnu-c-debug:
     - name:hapy
   variables:
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --download-arpack --download-primme --download-trlan --download-blopex --download-hpddm --download-evsl
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-primme --download-trlan --download-blopex --download-hpddm --download-evsl
     LOAD_MODULES: mpi
 
 gnu-c-complex-debug:
@@ -782,7 +783,7 @@ gnu-c-complex-debug:
     - name:jepri
   variables:
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-scalar-type=complex --with-debugging=1
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0 --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --download-hpddm
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0 --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --download-hpddm
 
 intel-c-complex-int64-mkl:
   extends:
@@ -794,7 +795,7 @@ intel-c-complex-int64-mkl:
     LOAD_MODULES: compiler mpi mkl
     MAKE_CFLAGS: -Werror -Wno-higher-precision-fp
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso --with-64-bit-indices --with-64-bit-blas-indices
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
 nvidia-c-nompi:
   extends:
@@ -805,7 +806,7 @@ nvidia-c-nompi:
   variables:
     LOAD_MODULES: nvhpc-nompi
     PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme=/var/local/downloads/primme-3.2.tar.gz --download-arpack
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme=/var/local/downloads/primme-3.2.tar.gz --download-arpack
     TEST_OPTS: -j4 -l12
 
 clang-c-complex-valgrind:
@@ -816,7 +817,7 @@ clang-c-complex-valgrind:
     - linux-ubuntu, compiler:clang, name:maat
   variables:
     PETSC_CONFIG_OPTS: --with-cc=/opt/mpich/clang/bin/mpicc --with-cxx=/opt/mpich/clang/bin/mpicxx --with-fc=0 --with-mpiexec=/opt/mpich/clang/bin/mpiexec --with-shared-libraries=0 --with-scalar-type=complex --download-f2cblaslapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
 intel-c-mkl-libs:
   extends:
@@ -827,7 +828,7 @@ intel-c-mkl-libs:
   variables:
     LOAD_MODULES: compiler mpi mkl
     PETSC_CONFIG_OPTS: --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso --with-scalapack --download-mumps --download-metis --download-parmetis --download-suitesparse
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-elpa --download-arpack --download-primme --download-blopex --download-polar --download-ksvd --download-chase
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-elpa --download-arpack --download-primme --download-blopex --download-polar --download-ksvd --download-chase
 
 nvidia-c-complex-nompi:
   extends:
@@ -838,7 +839,7 @@ nvidia-c-complex-nompi:
   variables:
     LOAD_MODULES: nvhpc-nompi/23.5
     PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-scalar-type=complex --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
     TEST_OPTS: -j4 -l12
 
 nvidia-cxx-mpi:
@@ -850,7 +851,7 @@ nvidia-cxx-mpi:
   variables:
     LOAD_MODULES: nvhpc/23.5
     PETSC_CONFIG_OPTS: --with-cc=mpicc --with-fc=mpifort --with-cxx=mpicxx --with-fortran-bindings=0 --with-clanguage=c++ --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
     TEST_OPTS: -j4 -l12
 
 intel-c-mkl-install:
@@ -862,7 +863,7 @@ intel-c-mkl-install:
   variables:
     LOAD_MODULES: icc mpi mkl
     PETSC_CONFIG_OPTS: --with-cc=mpiicc --with-fc=mpiifort --with-cxx=mpiicpc --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso=1 --with-scalapack=1 --prefix=../install
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --prefix=../install --download-hpddm
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --prefix=../install --download-hpddm
     INSTALL: 1
 
 clang-c-single:
@@ -873,7 +874,7 @@ clang-c-single:
     - compiler:clang, name:maat
   variables:
     PETSC_CONFIG_OPTS: --with-cc=/opt/mpich/clang/bin/mpicc --with-cxx=/opt/mpich/clang/bin/mpicxx --with-fc=0 --with-mpiexec=/opt/mpich/clang/bin/mpiexec --with-precision=single
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme
 
 gnu-c-complex-single:
   extends:
@@ -883,7 +884,7 @@ gnu-c-complex-single:
     - name:jepri
   variables:
     PETSC_CONFIG_OPTS: --with-precision=single --with-scalar-type=complex
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme --download-arpack
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme --download-arpack
 
 gnu-c-cuda-int64:
   extends:
@@ -905,7 +906,7 @@ gnu-c-nocxx:
     - name:jepri
   variables:
     PETSC_CONFIG_OPTS: --with-cxx=0 --COPTFLAGS='-g -O -fsanitize=address' --FOPTFLAGS='-g -O -fsanitize=address' FPPFLAGS=-fsecond-underscore
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme
 
 gnu-c-complex128:
   extends:
@@ -916,7 +917,7 @@ gnu-c-complex128:
   variables:
     LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-f2cblaslapack --with-precision=__float128 --with-clanguage=c++
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
 intel-c-int64-nompi-mkl:
   extends:
@@ -927,7 +928,7 @@ intel-c-int64-nompi-mkl:
   variables:
     LOAD_MODULES: compiler mpi mkl
     PETSC_CONFIG_OPTS: --with-cc=icx --with-fc=ifx --with-cxx=icpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-64-bit-indices --with-64-bit-blas-indices --with-mpi=0 --COPTFLAGS='-O -g -fp-model=precise' --CXXOPTFLAGS='-O -g -fp-model=precise' --FOPTFLAGS='-O -g -fp-model=precise'
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme --download-arpack
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme --download-arpack
 
 gnu-c-hip-complex:
   extends:
@@ -970,7 +971,7 @@ gnu-c-static-multilib:
   variables:
     LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-shared-libraries=0 --with-single-library=0
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local --with-packages-download-dir=/var/local/downloads --download-primme --download-blopex
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme --download-blopex
 
 aocc-c:
   extends:
@@ -981,7 +982,7 @@ aocc-c:
   variables:
     LOAD_MODULES: aocc/5.0.0 openmpi/5.0.7-aocc-5.0.0
     PETSC_CONFIG_OPTS: --with-debugging=1 --with-fc=0
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=/var/local
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
 aocc-c-hip:
   extends:

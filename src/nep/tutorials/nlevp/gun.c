@@ -19,7 +19,7 @@
    the complex nonlinear function
    T(lambda) = K-lambda*M+i*lambda^(1/2)*W1+i*(lambda-108.8774^2)^(1/2)*W2
 
-   Data files can be downloaded from https://slepc.upv.es/datafiles
+   Data files can be downloaded from https://gitlab.com/slepc/datafiles
 */
 
 static char help[] = "Radio-frequency gun cavity.\n\n"
