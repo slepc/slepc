@@ -338,7 +338,6 @@ The available methods for solving the eigenvalue problems are the following:
   Wrapper to ARPACK           |`EPSARPACK`       |`arpack`
   Wrapper to PRIMME           |`EPSPRIMME`       |`primme`
   Wrapper to EVSL             |`EPSEVSL`         |`evsl`
-  Wrapper to TRLAN            |`EPSTRLAN`        |`trlan`
   Wrapper to BLOPEX           |`EPSBLOPEX`       |`blopex`
   Wrapper to SCALAPAck        |`EPSSCALAPACK`    |`scalapack`
   Wrapper to ELPA             |`EPSELPA`         |`elpa`
@@ -348,7 +347,7 @@ The available methods for solving the eigenvalue problems are the following:
 
 :::
 
-The default solver is Krylov-Schur. A detailed description of the implemented algorithms is provided in the [SLEPc Technical Reports](#str). In addition to these methods, SLEPc also provides wrappers to external packages such as ARPACK, or TRLAN. A complete list of these interfaces can be found in section [](#sec:wrap). Note that some of these packages (LAPACK, SCALAPAck, ELPA, ELEMENTAL) perform *dense* computations and hence return the full eigendecomposition (furthermore, take into account that LAPACK is a sequential library so the corresponding solver should be used only for debugging purposes with small problem sizes).
+The default solver is Krylov-Schur. A detailed description of the implemented algorithms is provided in the [SLEPc Technical Reports](#str). In addition to these methods, SLEPc also provides wrappers to external packages such as ARPACK, or PRIMME. A complete list of these interfaces can be found in section [](#sec:wrap). Note that some of these packages (LAPACK, SCALAPAck, ELPA, ELEMENTAL) perform *dense* computations and hence return the full eigendecomposition (furthermore, take into account that LAPACK is a sequential library so the corresponding solver should be used only for debugging purposes with small problem sizes).
 
 The solution method can be specified procedurally or via the command line. The application programmer can set it by means of the command `EPSSetType`
 
@@ -380,7 +379,6 @@ Not all the methods can be used for all problem types. Table [](#tab:support) su
   `arpack`      |                     any                     |          any          |     both
   `primme`      | Largest and smallest $\mathrm{Re}(\lambda)$ | `EPS_HEP`, `EPS_GHEP` |     both
   `evsl`        |          All $\lambda$ in interval          |       `EPS_HEP`       |     real
-  `trlan`       | Largest and smallest $\mathrm{Re}(\lambda)$ |       `EPS_HEP`       |     real
   `blopex`      |       Smallest $\mathrm{Re}(\lambda)$       | `EPS_HEP`, `EPS_GHEP` |     both
   `scalapack`   |                All $\lambda$                | `EPS_HEP`, `EPS_GHEP` |     both
   `elpa`        |                All $\lambda$                | `EPS_HEP`, `EPS_GHEP` |     both

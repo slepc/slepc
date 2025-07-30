@@ -430,21 +430,6 @@ Exceptions to the above rule are LAPACK, which should be enabled during PETSc's 
 :Summary: EVSL is a sequential library that implements methods for computing all eigenvalues located in a given interval for real symmetric (standard or generalized) eigenvalue problems. Currently SLEPc only supports standard problems.
 :Installation: The option `--download-evsl` is available in SLEPc's configure for easy installation. Alternatively, one can use an already installed version.
 
-{#trlan .unnumbered}
-### [TRLAN]
-
-:References: {cite:p}`Wu:2000:TLM`.
-:Website: <https://sdm.lbl.gov/~kewu/trlan.html>.
-:Version: 201009.
-
-:Summary: This package provides a Fortran 90 implementation of the dynamic thick-restart Lanczos algorithm. This is a specialized version of Lanczos that targets only the case in which one wants both eigenvalues and eigenvectors of a large real symmetric eigenvalue problem that cannot use the shift-and-invert scheme. In this case the standard non-restarted Lanczos algorithm requires to store a large number of Lanczos vectors, what can cause storage problems and make each iteration of the method very expensive.
-
-          TRLAN requires the user to provide a matrix-vector multiplication routine. The parallel version uses MPI as the message passing layer.
-
-:Installation: To install this package, it is necessary to have access to a Fortran 90 compiler. The compiler name and the options used are specified in the file called `Make.inc`. To generate the library, type `make plib` in the `TRLan` directory. Alternatively, the `--download-trlan` option is also available in SLEPc's `configure`.
-
-               It is possible to configure SLEPc with the serial version of TRLAN (built with `make lib`). For this, you have to configure PETSc with the option `--with-mpi=0`.
-
 {#blopex .unnumbered}
 ### [BLOPEX]
 ::: description
