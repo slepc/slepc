@@ -5,8 +5,9 @@
 # from the environment for the first two.
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = source
-BUILDDIR      = ${SLEPC_DIR}/${PETSC_ARCH}/doc
+SOURCEDIR     := source
+PETSC_ARCH    ?= arch-doc
+BUILDDIR      = ../${PETSC_ARCH}/doc
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -34,7 +35,7 @@ website: latexpdf
 	-@python3 -m venv .venv-sphinx ;\
 	. .venv-sphinx/bin/activate ;\
 	python3 -m pip install --quiet -r requirements.txt ;\
-	${RM} -rf build ;\
+	${RM} -rf ${BUILDDIR}/* ;\
 	make SPHINXOPTS="-T -E -W -j 4" html ;\
 	deactivate
 
