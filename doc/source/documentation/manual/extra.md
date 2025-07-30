@@ -1,4 +1,4 @@
-{#cap:add label="cap:add"}
+(cap:add)=
 # Additional Information
 
 This chapter contains miscellaneous information as a complement to the previous chapters, which can be regarded as less important.

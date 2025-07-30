@@ -1,4 +1,4 @@
-{#cap:eps label="cap:eps"}
+(cap:eps)=
 # EPS: Eigenvalue Problem Solver
 
 The Eigenvalue Problem Solver (`EPS`) is the main object provided by SLEPc. It is used to specify a linear eigenvalue problem, either in standard or generalized form, and provides uniform and efficient access to all of the linear eigensolvers included in the package. Conceptually, the level of abstraction occupied by `EPS` is similar to other solvers in PETSc such as `KSP` for solving linear systems of equations.
@@ -273,7 +273,7 @@ which is equivalent to `-eps_interval a,b`.
 
 [^eps-real]: If SLEPc is compiled for real scalars, then the absolute value of the imaginary part, $\|\mathrm{Im}(\lambda)\|$, is used for eigenvalue selection and sorting.
 
-There is also support for specifying a region of the complex plane so that the eigensolver finds eigenvalues within that region only. This possibility is described in section [](#sec:region). If *all* eigenvalues inside the region are required, then a contour-integral method must be used, as described in [\[STR-11\]](#str).
+There is also support for specifying a region of the complex plane so that the eigensolver finds eigenvalues within that region only. This possibility is described in section [](#sec:region). If *all* eigenvalues inside the region are required, then a contour-integral method must be used, as described in {cite:t}`str-11`.
 
 Finally, we mention the possibility of defining an arbitrary sorting criterion by means of `EPS_WHICH_USER` in combination with `EPSSetEigenvalueComparison`.
 
@@ -345,7 +345,6 @@ The available methods for solving the eigenvalue problems are the following:
   Wrapper to ELEMENTAL        |`EPSELEMENTAL`    |`elemental`
   Wrapper to CHASE            |`EPSCHASE`        |`chase`
   Wrapper to FEAST            |`EPSFEAST`        |`feast`
-  ----------------------------|------------------|---------------|---------
 
 :::
 
@@ -580,27 +579,20 @@ Again, only the error estimate of one eigenvalue is drawn. The spikes in the las
 ```{figure} ../../_static/images/manual/png/monitor.png
 :alt: SLEPc convergence monitor
 :name: fig:plot-monitor
+:scale: 60
 
 Default convergence monitor.
 ```
 
+The two previously mentioned monitors have an alternative version (`*_all`) that processes all eigenvalues instead of just the first one. Figure [Monitor-all](#fig:plot-monitorall) corresponds to the same example but with `-eps_monitor_all draw::draw_lg`. Note that these variants have a side effect: they force the computation of all error estimates even if the method would not normally do so.
+
 ```{figure} ../../_static/images/manual/png/monitorall.png
 :alt: SLEPc convergence monitor (all eigenvalues)
 :name: fig:plot-monitorall
+:scale: 60
 
 Simultaneous convergence monitor for all eigenvalues.
 ```
-
-```{figure} ../../_static/images/manual/png/ploteigs.png
-:alt: SLEPc eigenvalues plot
-:name: fig:plot-eigs
-
-Eigenvalues plot.
-```
-
-
-
-The two previously mentioned monitors have an alternative version (`*_all`) that processes all eigenvalues instead of just the first one. Figure [Monitor-all](#fig:plot-monitorall) corresponds to the same example but with `-eps_monitor_all draw::draw_lg`. Note that these variants have a side effect: they force the computation of all error estimates even if the method would not normally do so.
 
 A less verbose monitor is `-eps_monitor_conv`, which simply displays the iteration number at which convergence takes place. Note that several monitors can be used at the same time.
 
@@ -642,6 +634,14 @@ Lambda_EPS_0xb430f0_0 = [
 ```
 
 One particular instance of this option is `-eps_view_values draw`, that will plot the computed approximations of the eigenvalues on an X window. See Figure [Eigenvalues](#fig:plot-eigs) for an example.
+
+```{figure} ../../_static/images/manual/png/ploteigs.png
+:alt: SLEPc eigenvalues plot
+:name: fig:plot-eigs
+:scale: 60
+
+Eigenvalues plot.
+```
 
 Similarly, eigenvectors may be viewed with `-eps_view_vectors`, either in text form, in Matlab format, in binary format, or as a draw. All eigenvectors are viewed, one after the other. As an example, the next line will dump eigenvectors to the binary file `evec.bin`:
 
@@ -715,7 +715,7 @@ The deflation space can be any subspace but typically it is most useful in the c
 {#sec:orthog}
 ### Orthogonalization
 
-Internally, eigensolvers in `EPS` often need to orthogonalize a vector against a set of vectors (for instance, when building an orthonormal basis of a Krylov subspace). This operation is carried out typically by a Gram-Schmidt orthogonalization procedure. The user is able to adjust several options related to this algorithm, although the default behavior is good for most cases, and we strongly suggest not to change any of these settings. This topic is covered in detail in [\[STR-1\]](#str).
+Internally, eigensolvers in `EPS` often need to orthogonalize a vector against a set of vectors (for instance, when building an orthonormal basis of a Krylov subspace). This operation is carried out typically by a Gram-Schmidt orthogonalization procedure. The user is able to adjust several options related to this algorithm, although the default behavior is good for most cases, and we strongly suggest not to change any of these settings. This topic is covered in detail in {cite:t}`str-1`.
 
 {#sec:region}
 ### Specifying a Region for Filtering
@@ -826,7 +826,7 @@ Unless otherwise stated, the structured eigenproblems discussed below are only s
 
 #### Bethe-Salpeter
 
-One structured eigenproblem that has raised interest recently is related to the Bethe--Salpeter equation, which is relevant in many state-of-the-art computational physics codes. For instance, in the Yambo software {cite:p}`Sangalli:2019:MBP` it is used to evaluate optical properties. It is commonly formulated as an eigenvalue problem with a block-structured matrix,
+One structured eigenproblem that has raised interest recently is related to the Bethe--Salpeter equation, which is relevant in many state-of-the-art computational physics codes. For instance, in the Yambo software {cite:p}`Sangalli:2019:MPT` it is used to evaluate optical properties. It is commonly formulated as an eigenvalue problem with a block-structured matrix,
 
 $$
 H = \begin{bmatrix}

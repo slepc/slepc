@@ -1,4 +1,4 @@
-{#cap:int label="cap:int"}
+(cap:int)=
 # Getting Started
 
 SLEPc, the *Scalable Library for Eigenvalue Problem Computations*, is a software library for the solution of large sparse eigenvalue problems on parallel computers.
@@ -17,7 +17,7 @@ The first implementations of algorithms for sparse matrices required a prescribe
 
 A better solution for the matrix representation problem is the well-known reverse communication interface, a technique that allows the development of iterative methods disregarding the implementation details of various operations. Whenever the iterative method subroutine needs the results of one of the operations, it returns control to the user's subroutine that called it. The user's subroutine then invokes the module that performs the operation. The iterative method subroutine is invoked again with the results of the operation.
 
-Several libraries with any of the interface schemes mentioned above are publicly available. For a survey of such software see the SLEPc Technical Report [\[STR-6\]](#str), "A Survey of Software for Sparse Eigenvalue Problems", and references therein. Some of the most recent libraries are even prepared for parallel execution (some of them can be used from within SLEPc, see section [](#sec:wrap)). However, they still lack some flexibility or require too much programming effort from the user, especially in the case that the eigensolution requires to employ advanced techniques such as spectral transformations or preconditioning.
+Several libraries with any of the interface schemes mentioned above are publicly available. For a survey of such software see the SLEPc Technical Report {cite:t}`str-6`, "A Survey of Software for Sparse Eigenvalue Problems", and references therein. Some of the most recent libraries are even prepared for parallel execution (some of them can be used from within SLEPc, see section [](#sec:wrap)). However, they still lack some flexibility or require too much programming effort from the user, especially in the case that the eigensolution requires to employ advanced techniques such as spectral transformations or preconditioning.
 
 A further obstacle appears when these libraries have to be used in the context of large software projects carried out by inter-disciplinary teams. In this scenery, libraries must be able to interoperate with already existing software and with other libraries. In order to cope with the complexity associated with such projects, libraries must be designed carefully in order to overcome hurdles such as different storage formats or programming languages. In the case of parallel software, care must be taken also to achieve portability to a wide range of platforms with good performance and still retain flexibility and usability.
 

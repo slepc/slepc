@@ -1,4 +1,4 @@
-{#cap:nep label="cap:nep"}
+(cap:nep)=
 # NEP: Nonlinear Eigenvalue Problems
 
 The Nonlinear Eigenvalue Problem (`NEP`) solver object covers the general case where the eigenproblem is nonlinear with respect to the eigenvalue, but it cannot be expressed in terms of a polynomial. We will write the problem as $T(\lambda)x=0$, where $T$ is a matrix-valued function of the eigenvalue $\lambda$. Note that `NEP` does not cover the even more general case of having a nonlinear dependence on the eigenvector $x$.
@@ -137,7 +137,7 @@ NEPSetWhichEigenpairs(NEP nep,NEPWhich which);
 
 The default is to compute the largest magnitude eigenvalues. For the sorting criteria relative to a target value, $\tau$ must be specified with `NEPSetTarget` or in the command-line with `-nep_target`.
 
-`NEP` solvers can also work with a region of the complex plane (`RG`), as discussed in section [](#sec:region) for linear problems. Some eigensolvers (NLEIGS) use the definition of the region to compute `nev` eigenvalues in its interior. If *all* eigenvalues inside the region are required, then a contour-integral method is required, see discussion in [\[STR-11\]](#str).
+`NEP` solvers can also work with a region of the complex plane (`RG`), as discussed in section [](#sec:region) for linear problems. Some eigensolvers (NLEIGS) use the definition of the region to compute `nev` eigenvalues in its interior. If *all* eigenvalues inside the region are required, then a contour-integral method is required, see discussion in {cite:t}`str-11`.
 
 #### Left Eigenvectors
 
@@ -241,7 +241,6 @@ or via the options database command `-nep_type` followed by the name of the meth
  |Rational Krylov (NLEIGS)    |`NEPNLEIGS`    |`nleigs`         |       no          |    yes
  |Contour integral SS         |`NEPCISS`      |`ciss`           |       yes         |
  |Polynomial interpolation    |`NEPINTERPOL`  |`interpol`       |       no          |
- |----------------------------|---------------|-----------------|-------------------|--------------
 
 :::
 

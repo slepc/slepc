@@ -6,7 +6,7 @@
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
-BUILDDIR      = build
+BUILDDIR      = ${SLEPC_DIR}/${PETSC_ARCH}/doc
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -23,7 +23,7 @@ help:
 .PHONY: help Makefile
 
 clean:
-	-@${RM} -rf build/*
+	-@${RM} -rf ${BUILDDIR}/*
 	-@${RM} -rf source/_static
 
 webstatic:

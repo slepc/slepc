@@ -13,7 +13,6 @@ from datetime import datetime
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'SLEPc'
-copyright = '2002-%Y, Universitat Politecnica de Valencia, Spain'
 author = 'SLEPc Team'
 version = 'development'
 release = 'development'
@@ -39,15 +38,26 @@ release_date = subprocess.check_output(['git',
                                  'refs/tags/v{}.0'.format(version)]
                                 ).strip().decode('utf-8').strip('"')
 
+release_year = subprocess.check_output(['git',
+                                 'for-each-ref',
+                                 '--format="%(creatordate:format:%Y)"',
+                                 'refs/tags/v{}.0'.format(version)]
+                                ).strip().decode('utf-8').strip('"')
+
 if release_date == '':
     release_date = datetime.strftime(datetime.now(), '%B, %Y')
+if release_year == '':
+    release_year = datetime.strftime(datetime.now(), '%Y')
+
+copyright = '2002-{}, Universitat Politecnica de Valencia, Spain'.format(
+        release_year)
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 needs_sphinx='8.1'
 
-#nitpicky = True # warn about all references where the target cannot be found
+nitpicky = True # warn about all references where the target cannot be found
 
 extensions = [
         'myst_parser',         # use structured markdown
@@ -56,6 +66,7 @@ extensions = [
         'sphinx_design',       # tabs
         'sphinx_togglebutton', # dropdown box
         'sphinxcontrib.bibtex',
+        'sphinxcontrib.rsvgconverter', # svg to pdf (manual)
         ]
 
 myst_links_external_new_tab = True # open all external links in new tabs
@@ -64,9 +75,9 @@ bibtex_bibfiles = ['slepc.bib']
 ##########################################################################
 import pybtex.plugin
 from pybtex.style.formatting.alpha import Style as AlphaStyle
-from pybtex.style.labels.alpha import LabelStyle
+from pybtex.style.labels.alpha import LabelStyle as AlphaLabelStyle
 
-class SLEPcLabelStyle(LabelStyle):
+class SLEPcLabelStyle(AlphaLabelStyle):
     def format_labels(self, sorted_entries):
         for entry in sorted_entries:
             yield entry.key
@@ -103,7 +114,8 @@ myst_dmath_allow_space = True
 myst_dmath_allow_digits=False
 
 myst_substitutions = {
-            'release_date': release_date
+            'release_date': release_date,
+            'release_year': release_year
             }
 
 myst_url_schemes = {
@@ -218,3 +230,48 @@ html_context = {
 #html_sidebars = {
 #        "**": []
 #        }
+
+# -- Options for LaTeX output --------------------------------------------------
+latex_engine = 'xelatex'
+
+# How to arrange the documents into LaTeX files, building only the manual.
+latex_documents = [
+        ('documentation/manual/index', 'slepc-manual.tex', 'SLEPc Users Manual',
+        'J. E. Roman, C. Campos, L. Dalcin, E. Romero, A. Tomas', 'manual', False)
+        ]
+
+latex_additional_files = [
+     'documentation/manual/latex/frontpage.tex.txt',
+     '_static/images/manual/pdf/logo-upv.pdf',
+     '_static/images/manual/pdf/logo-dsic-black.pdf',
+]
+#     'documentation/manual/latex/lastpage.tex.txt',
+
+#latex_appendices = [
+#        'documentation/manual/latex/lastpage.md',
+#        ]
+
+latex_show_pagerefs = True
+latex_show_urls = 'footnote'
+
+latex_elements = {
+        'papersize' : 'a4paper',
+        'pointsize' : '10pt',
+        'extrapackages': r'\usepackage{xspace}',
+        'sphinxsetup' : 'TableRowColorHeader={white},'
+                        + 'TableRowColorOdd={gray}{0.97},'
+                        + 'TableRowColorEven={white},'
+                        + 'VerbatimColor={white},'
+                        + 'noteBgColor={white},',
+        'maketitle': r'\newcommand{\slepcversion}{%s}' % version
+                     + r'\newcommand{\releasedate}{%s}' % release_date
+                     + r'\makeatletter\@ifundefined{bibfont}{\newcommand{\bibfont}{\small}}{\renewcommand{\bibfont}{\small}}\makeatother'
+r'''
+\input{frontpage.tex.txt}
+''',
+        'tableofcontents' : r'',
+        'printindex': r'''
+        \printindex
+        ''',
+}
+#        \input{lastpage.tex.txt}

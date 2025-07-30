@@ -1,4 +1,4 @@
-{#cap:pep label="cap:pep"}
+(cap:pep)=
 # PEP: Polynomial Eigenvalue Problems
 
 The Polynomial Eigenvalue Problem (`PEP`) solver object is intended for addressing polynomial eigenproblems of arbitrary degree, $P(\lambda)x=0$. A particular instance is the quadratic eigenvalue problem (degree 2), which is the case more often encountered in practice. For this reason, part of the description of this chapter focuses specifically on quadratic eigenproblems.
@@ -149,7 +149,7 @@ $$ (eq:pepnonmon)
 
 #### Avoiding the Linearization
 
-An alternative to linearization is to directly perform a projection of the polynomial eigenproblem. These methods enforce a Galerkin condition on the polynomial residual, $P(\theta)u\perp \mathcal{K}$. Here, the subspace $\mathcal{K}$ can be built in various ways, for instance with the Jacobi-Davidson method. This family of methods need not worry about operating with vectors of dimension $dn$. The downside is that computing more than one eigenvalue is more difficult, since usual deflation strategies cannot be applied. For a detailed description of the polynomial Jacobi-Davidson method in SLEPc, see {cite:p}`Campos:2020:PJS`.
+An alternative to linearization is to directly perform a projection of the polynomial eigenproblem. These methods enforce a Galerkin condition on the polynomial residual, $P(\theta)u\perp \mathcal{K}$. Here, the subspace $\mathcal{K}$ can be built in various ways, for instance with the Jacobi-Davidson method. This family of methods need not worry about operating with vectors of dimension $dn$. The downside is that computing more than one eigenvalue is more difficult, since usual deflation strategies cannot be applied. For a detailed description of the polynomial Jacobi-Davidson method in SLEPc, see {cite:p}`Campos:2020:PJD`.
 
 ## Basic Usage
 

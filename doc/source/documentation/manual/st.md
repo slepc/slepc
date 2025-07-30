@@ -1,4 +1,4 @@
-{#cap:st label="cap:st"}
+(cap:st)=
 # ST: Spectral Transformation
 
 The Spectral Transformation (`ST`) is the object that encapsulates the functionality required for acceleration techniques based on the transformation of the spectrum. Most eigensolvers in `EPS` work by applying an operator to a set of vectors and this operator can adopt different forms. The `ST` object handles all the different possibilities in a uniform way, so that the solver can proceed without knowing which transformation has been selected. The spectral transformation can be specified at run time, as well as related options such as which linear solver to use.
@@ -466,7 +466,7 @@ Apart from the above recommendations, the following must be taken into account:
 
 #### Usage with Complex Scalars
 
-Some external packages that provide inertia information (MUMPS, Pardiso) do so only in real scalars, but not in the case of complex scalars. Hence, with complex scalars spectrum slicing is available only sequentially (with PETSc's Cholesky factorization) or via SuperLU_DIST (as in the last example above). An alternative to spectrum slicing is to use the CISS solver with a region enclosing an interval on the real axis, see [\[STR-11\]](#str) for details.
+Some external packages that provide inertia information (MUMPS, Pardiso) do so only in real scalars, but not in the case of complex scalars. Hence, with complex scalars spectrum slicing is available only sequentially (with PETSc's Cholesky factorization) or via SuperLU_DIST (as in the last example above). An alternative to spectrum slicing is to use the CISS solver with a region enclosing an interval on the real axis, see {cite:t}`str-11` for details.
 
 #### Use of Multiple Communicators
 

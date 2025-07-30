@@ -1,4 +1,4 @@
-{#cap:mfn label="cap:mfn"}
+(cap:mfn)=
 # MFN: Matrix Function
 
 The Matrix Function (`MFN`) solver object provides algorithms that compute the action of a matrix function on a given vector, without evaluating the matrix function itself. This is not an eigenvalue problem, but some methods rely on approximating eigenvalues (for instance with Krylov subspaces) and that is why we have this in SLEPc.
