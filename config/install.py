@@ -542,8 +542,7 @@ for dir in dirs:
     if arch.startswith('installed-'): arch='""'
     print('''\
 ====================================
-Install complete.
-Now to check if the libraries are working do (in current directory):
+To check if the libraries are working do (in current directory):
 make SLEPC_DIR=%s PETSC_DIR=%s PETSC_ARCH=%s check
 ====================================\
 ''' % (self.installDir,self.petscDir,arch))

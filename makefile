@@ -58,18 +58,18 @@ all:
           elif [ "${SLEPC_INSTALLDIR}" = "${SLEPC_DIR:/=}/${PETSC_ARCH}" ]; then \
            echo "=========================================";\
            echo "Now to check if the libraries are working do:";\
-           echo "make SLEPC_DIR=${SLEPC_DIR} PETSC_DIR=${PETSC_DIR} PETSC_ARCH=${PETSC_ARCH} check";\
+           echo "${MAKE_USER} SLEPC_DIR=${SLEPC_DIR} PETSC_DIR=${PETSC_DIR} PETSC_ARCH=${PETSC_ARCH} check";\
            echo "=========================================";\
          else \
            echo "=========================================";\
            echo "Now to install the library do:";\
-           echo "make SLEPC_DIR=${SLEPC_DIR} PETSC_DIR=${PETSC_DIR} install";\
+           echo "${MAKE_USER} SLEPC_DIR=${SLEPC_DIR} PETSC_DIR=${PETSC_DIR} install";\
            echo "=========================================";\
          fi
 	@echo "Finishing make run at `date +'%a, %d %b %Y %H:%M:%S %z'`" >> ${PETSC_ARCH}/lib/slepc/conf/make.log
 	@if [ "`cat ${PETSC_ARCH}/lib/slepc/conf/error.log 2> /dev/null`" != "0" ]; then exit 1; fi
 
-all-local: info slepc_libs slepc4py-build
+all-local: info slepc_libs ${SLEPC_POST_BUILDS}
 
 ${SLEPC_DIR}/${PETSC_ARCH}/lib/slepc/conf/files:
 	@touch -t 197102020000 ${SLEPC_DIR}/${PETSC_ARCH}/lib/slepc/conf/files
@@ -112,8 +112,11 @@ reconfigure: allclean
 
 RUN_TEST = ${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR}
 
+check: check_body ${SLEPC_POST_CHECKS}
+
 check_install: check
-check:
+
+check_body:
 	-@echo "Running SLEPc check examples to verify correct installation"
 	-@echo "Using SLEPC_DIR=${SLEPC_DIR}, PETSC_DIR=${PETSC_DIR}, and PETSC_ARCH=${PETSC_ARCH}"
 	@if [ "${PETSC_WITH_BATCH}" != "" ]; then \
@@ -154,15 +157,16 @@ check_build:
 
 install:
 	@${PYTHON} ./config/install.py ${SLEPC_DIR} ${PETSC_DIR} ${SLEPC_INSTALLDIR} -destDir=${DESTDIR} ${PETSC_ARCH} ${AR_LIB_SUFFIX} ${RANLIB}
-	+${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} install-builtafterslepc
+	+${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} SLEPC_INSTALL=$@ install-builtafterslepc
 
 # A smaller install with fewer extras
 install-lib:
 	@${PYTHON} ./config/install.py ${SLEPC_DIR} ${PETSC_DIR} ${SLEPC_INSTALLDIR} -destDir=${DESTDIR} -no-examples ${PETSC_ARCH} ${AR_LIB_SUFFIX} ${RANLIB}
-	+${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} install-builtafterslepc
+	+${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} SLEPC_INSTALL=$@ install-builtafterslepc
 
 install-builtafterslepc:
-	+${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} slepc4py-install
+	@if [ "${SLEPC_POST_INSTALLS}" != "" ]; then ${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} SLEPC_INSTALL=${PETSC_INSTALL} ${SLEPC_POST_INSTALLS}; fi
+	@echo "*** Install of SLEPc (and any other packages) complete ***"
 
 # ******** Rules for running the full test suite *******************************************************
 
