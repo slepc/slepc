@@ -275,12 +275,12 @@ with slepc.CreateFile(confdir,'slepcvariables') as slepcvars:
         pkg.Process(slepcconf,slepcvars,slepcrules,slepc,petsc,archdir)
       slepcconf.write('#define SLEPC_HAVE_PACKAGES ":')
       for pkg in petscpackages + externalpackages:
-        if hasattr(pkg,'havepackage') and pkg.havepackage: slepcconf.write(pkg.packagename+':')
+        if getattr(pkg,'havepackage',False): slepcconf.write(pkg.packagename+':')
       slepcconf.write('"\n#endif\n')
       libflags = []
       includeflags = []
       for pkg in externalwithdeps:
-        if hasattr(pkg,'havepackage') and pkg.havepackage:
+        if getattr(pkg,'havepackage',False):
           for entry in pkg.libflags.split():
             if entry not in libflags:
                libflags.append(entry)

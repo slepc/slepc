@@ -30,7 +30,7 @@ class Chase(package.Package):
     pkg = self.packagename.upper()
     if not 'scalapack' in petsc.packages:
       self.log.Exit(pkg+' requires PETSc to be configured with ScaLAPACK')
-    if hasattr(self,'download') and self.download:
+    if getattr(self,'download',False):
       if not hasattr(petsc,'cmake'):
         self.log.Exit(pkg+' requires CMake for building')
       if petsc.maxcxxdialect == '':

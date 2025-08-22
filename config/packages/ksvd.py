@@ -28,7 +28,7 @@ class Ksvd(package.Package):
   def Precondition(self,slepc,petsc):
     self.elpa  = self.Require('elpa')
     self.polar = self.Require('polar')
-    if hasattr(self,'download') and self.download and not hasattr(petsc,'cmake'):
+    if getattr(self,'download',False) and not hasattr(petsc,'cmake'):
       self.log.Exit('The KSVD interface requires CMake for building')
     package.Package.Precondition(self,slepc,petsc)
 

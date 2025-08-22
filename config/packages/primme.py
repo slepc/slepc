@@ -111,7 +111,7 @@ class Primme(package.Package):
     cont += 'export SONAMELIBRARY = libprimme.'+petsc.sl_linker_suffix+'.'+self.version+'\n'
     cont += 'export CC            = '+petsc.cc+'\n'
     if hasattr(petsc,'fc'):
-      cont += 'export F77           = '+petsc.fc+'\n'
+      cont += 'export F77         = '+petsc.fc+'\n'
     cont += 'export DEFINES       = '
     if petsc.blaslapackmangling == 'underscore':
       cont += '-DF77UNDERSCORE '
