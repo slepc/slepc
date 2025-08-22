@@ -18,7 +18,7 @@ class Elpa(package.Package):
     self.packagetype    = 'gnu'
     self.installable    = True
     self.downloadable   = True
-    self.version        = '2025.01.001'
+    self.version        = '2025.06.001'
     self.archive        = 'elpa-'+self.version+'.tar.gz'
     self.url            = 'https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/'+self.version+'/'+self.archive
     self.supportssingle = True
