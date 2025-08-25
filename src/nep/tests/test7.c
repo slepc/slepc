@@ -92,17 +92,17 @@ int main(int argc,char **argv)
   if (split) {
     /* Create matrix A0 (tridiagonal) */
     PetscCall(MatCreateShell(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,n,n,NULL,&A[0]));
-    PetscCall(MatShellSetOperation(A[0],MATOP_MULT,(void(*)(void))MatMult_A0));
-    PetscCall(MatShellSetOperation(A[0],MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_A0));
-    PetscCall(MatShellSetOperation(A[0],MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_A0));
-    PetscCall(MatShellSetOperation(A[0],MATOP_DUPLICATE,(void(*)(void))MatDuplicate_A0));
+    PetscCall(MatShellSetOperation(A[0],MATOP_MULT,(PetscErrorCodeFn*)MatMult_A0));
+    PetscCall(MatShellSetOperation(A[0],MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_A0));
+    PetscCall(MatShellSetOperation(A[0],MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_A0));
+    PetscCall(MatShellSetOperation(A[0],MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_A0));
 
     /* Create matrix A0 (identity) */
     PetscCall(MatCreateShell(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,n,n,NULL,&A[1]));
-    PetscCall(MatShellSetOperation(A[1],MATOP_MULT,(void(*)(void))MatMult_A1));
-    PetscCall(MatShellSetOperation(A[1],MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_A1));
-    PetscCall(MatShellSetOperation(A[1],MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_A1));
-    PetscCall(MatShellSetOperation(A[1],MATOP_DUPLICATE,(void(*)(void))MatDuplicate_A1));
+    PetscCall(MatShellSetOperation(A[1],MATOP_MULT,(PetscErrorCodeFn*)MatMult_A1));
+    PetscCall(MatShellSetOperation(A[1],MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_A1));
+    PetscCall(MatShellSetOperation(A[1],MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_A1));
+    PetscCall(MatShellSetOperation(A[1],MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_A1));
 
     /* Define functions for the split form */
     PetscCall(FNCreate(PETSC_COMM_WORLD,&f[0]));
@@ -116,11 +116,11 @@ int main(int argc,char **argv)
     /* Callback form: create shell matrix for F=A0+sqrt(lambda)*A1  */
     PetscCall(PetscNew(&ctx));
     PetscCall(MatCreateShell(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,n,n,(void*)ctx,&F));
-    PetscCall(MatShellSetOperation(F,MATOP_MULT,(void(*)(void))MatMult_F));
-    PetscCall(MatShellSetOperation(F,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_F));
-    PetscCall(MatShellSetOperation(F,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_F));
-    PetscCall(MatShellSetOperation(F,MATOP_DUPLICATE,(void(*)(void))MatDuplicate_F));
-    PetscCall(MatShellSetOperation(F,MATOP_DESTROY,(void(*)(void))MatDestroy_F));
+    PetscCall(MatShellSetOperation(F,MATOP_MULT,(PetscErrorCodeFn*)MatMult_F));
+    PetscCall(MatShellSetOperation(F,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_F));
+    PetscCall(MatShellSetOperation(F,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_F));
+    PetscCall(MatShellSetOperation(F,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_F));
+    PetscCall(MatShellSetOperation(F,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_F));
     /* Set Function evaluation routine */
     PetscCall(NEPSetFunction(nep,F,F,FormFunction,NULL));
   }
@@ -251,10 +251,10 @@ PetscErrorCode MatDuplicate_A0(Mat A,MatDuplicateOption op,Mat *B)
   PetscCall(MatGetLocalSize(A,&m,&n));
   PetscCall(PetscObjectGetComm((PetscObject)A,&comm));
   PetscCall(MatCreateShell(comm,m,n,M,N,NULL,B));
-  PetscCall(MatShellSetOperation(*B,MATOP_MULT,(void(*)(void))MatMult_A0));
-  PetscCall(MatShellSetOperation(*B,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_A0));
-  PetscCall(MatShellSetOperation(*B,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_A0));
-  PetscCall(MatShellSetOperation(*B,MATOP_DUPLICATE,(void(*)(void))MatDuplicate_A0));
+  PetscCall(MatShellSetOperation(*B,MATOP_MULT,(PetscErrorCodeFn*)MatMult_A0));
+  PetscCall(MatShellSetOperation(*B,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_A0));
+  PetscCall(MatShellSetOperation(*B,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_A0));
+  PetscCall(MatShellSetOperation(*B,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_A0));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -284,10 +284,10 @@ PetscErrorCode MatDuplicate_A1(Mat A,MatDuplicateOption op,Mat *B)
   PetscCall(MatGetLocalSize(A,&m,&n));
   PetscCall(PetscObjectGetComm((PetscObject)A,&comm));
   PetscCall(MatCreateShell(comm,m,n,M,N,NULL,B));
-  PetscCall(MatShellSetOperation(*B,MATOP_MULT,(void(*)(void))MatMult_A1));
-  PetscCall(MatShellSetOperation(*B,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_A1));
-  PetscCall(MatShellSetOperation(*B,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_A1));
-  PetscCall(MatShellSetOperation(*B,MATOP_DUPLICATE,(void(*)(void))MatDuplicate_A1));
+  PetscCall(MatShellSetOperation(*B,MATOP_MULT,(PetscErrorCodeFn*)MatMult_A1));
+  PetscCall(MatShellSetOperation(*B,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_A1));
+  PetscCall(MatShellSetOperation(*B,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_A1));
+  PetscCall(MatShellSetOperation(*B,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_A1));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -350,11 +350,11 @@ PetscErrorCode MatDuplicate_F(Mat A,MatDuplicateOption op,Mat *B)
   bctx->t = actx->t;
   PetscCall(PetscObjectGetComm((PetscObject)A,&comm));
   PetscCall(MatCreateShell(comm,m,n,M,N,(void*)bctx,B));
-  PetscCall(MatShellSetOperation(*B,MATOP_MULT,(void(*)(void))MatMult_F));
-  PetscCall(MatShellSetOperation(*B,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_F));
-  PetscCall(MatShellSetOperation(*B,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_F));
-  PetscCall(MatShellSetOperation(*B,MATOP_DUPLICATE,(void(*)(void))MatDuplicate_F));
-  PetscCall(MatShellSetOperation(*B,MATOP_DESTROY,(void(*)(void))MatDestroy_F));
+  PetscCall(MatShellSetOperation(*B,MATOP_MULT,(PetscErrorCodeFn*)MatMult_F));
+  PetscCall(MatShellSetOperation(*B,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_F));
+  PetscCall(MatShellSetOperation(*B,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_F));
+  PetscCall(MatShellSetOperation(*B,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_F));
+  PetscCall(MatShellSetOperation(*B,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_F));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

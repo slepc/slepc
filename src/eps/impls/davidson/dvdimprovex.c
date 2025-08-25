@@ -471,9 +471,9 @@ static PetscErrorCode dvd_improvex_jd_start(dvdDashboard *d)
     PetscCall(MatGetSize(d->A,&rA,&cA));
     PetscCall(MatGetLocalSize(d->A,&rlA,&clA));
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)d->A),rlA*data->ksp_max_size,clA*data->ksp_max_size,rA*data->ksp_max_size,cA*data->ksp_max_size,data,&A));
-    PetscCall(MatShellSetOperation(A,MATOP_MULT,(void(*)(void))MatMult_dvd_jd));
-    PetscCall(MatShellSetOperation(A,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_dvd_jd));
-    PetscCall(MatShellSetOperation(A,MATOP_CREATE_VECS,(void(*)(void))MatCreateVecs_dvd_jd));
+    PetscCall(MatShellSetOperation(A,MATOP_MULT,(PetscErrorCodeFn*)MatMult_dvd_jd));
+    PetscCall(MatShellSetOperation(A,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_dvd_jd));
+    PetscCall(MatShellSetOperation(A,MATOP_CREATE_VECS,(PetscErrorCodeFn*)MatCreateVecs_dvd_jd));
 
     /* Try to avoid KSPReset */
     PetscCall(KSPGetOperatorsSet(data->ksp,&t,NULL));

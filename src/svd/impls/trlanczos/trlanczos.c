@@ -238,14 +238,14 @@ static PetscErrorCode SVDSetUp_TRLanczos(SVD svd)
       PetscCall(MatDestroy(&lanczos->Z));
       PetscCall(MatZCreateContext(svd,&zdata));
       PetscCall(MatCreateShell(PetscObjectComm((PetscObject)svd),m+p,n,PETSC_DECIDE,PETSC_DECIDE,zdata,&lanczos->Z));
-      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_MULT,(void(*)(void))MatMult_Z));
+      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Z));
 #if defined(PETSC_USE_COMPLEX)
-      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_MULT_HERMITIAN_TRANSPOSE,(void(*)(void))MatMultTranspose_Z));
+      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Z));
 #else
-      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_Z));
+      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Z));
 #endif
-      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_CREATE_VECS,(void(*)(void))MatCreateVecs_Z));
-      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_DESTROY,(void(*)(void))MatDestroy_Z));
+      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_CREATE_VECS,(PetscErrorCodeFn*)MatCreateVecs_Z));
+      PetscCall(MatShellSetOperation(lanczos->Z,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Z));
     }
     /* Explicit matrix is created here, when updating the scale */
     PetscCall(MatZUpdateScale(svd));

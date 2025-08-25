@@ -76,9 +76,9 @@ int main(int argc,char **argv)
     PetscCall(MatGetLocalSize(P,&m,&n));
     PetscCall(MatGetSize(P,&M,&N));
     PetscCall(MatCreateShell(comm,m,n,M,N,&user,&A));
-    PetscCall(MatShellSetOperation(A,MATOP_MULT,(void(*)(void))MatMult_A));
+    PetscCall(MatShellSetOperation(A,MATOP_MULT,(PetscErrorCodeFn*)MatMult_A));
     PetscCall(MatCreateShell(comm,m,n,M,N,&user,&B));
-    PetscCall(MatShellSetOperation(B,MATOP_MULT,(void(*)(void))MatMult_B));
+    PetscCall(MatShellSetOperation(B,MATOP_MULT,(PetscErrorCodeFn*)MatMult_B));
   } else {
     PetscCall(DMCreateMatrix(dm,&A));
     PetscCall(MatDuplicate(A,MAT_COPY_VALUES,&B));

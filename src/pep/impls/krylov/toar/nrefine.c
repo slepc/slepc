@@ -1132,7 +1132,7 @@ static PetscErrorCode PEPNRefSetUp(PEP pep,PetscInt k,PetscScalar *H,PetscInt ld
       for (i=0;i<nmat;i++) ctx->A[i] = At[i];
       PetscCall(PetscArrayzero(ctx->M4,k*k));
       PetscCall(MatCreateShell(comm,PETSC_DECIDE,PETSC_DECIDE,m0,n0,ctx,&M));
-      PetscCall(MatShellSetOperation(M,MATOP_MULT,(void(*)(void))MatMult_FS));
+      PetscCall(MatShellSetOperation(M,MATOP_MULT,(PetscErrorCodeFn*)MatMult_FS));
       PetscCall(BVDuplicateResize(ctx->V,PetscMax(k,pep->nmat),&ctx->W));
       PetscCall(BVDuplicateResize(ctx->V,k,&ctx->M2));
       PetscCall(BVDuplicate(ctx->M2,&ctx->M3));

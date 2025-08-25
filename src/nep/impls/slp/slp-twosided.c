@@ -99,11 +99,11 @@ static PetscErrorCode NEPSLPSetUpEPSMat(NEP nep,Mat F,Mat J,PetscBool left,Mat *
   shellctx->Jt = J;
   PetscCall(MatGetLocalSize(nep->function,&mloc,&nloc));
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)nep),nloc,mloc,PETSC_DETERMINE,PETSC_DETERMINE,shellctx,&Mshell));
-  if (left) PetscCall(MatShellSetOperation(Mshell,MATOP_MULT,(void(*)(void))MatMult_SLPTS_Left));
-  else PetscCall(MatShellSetOperation(Mshell,MATOP_MULT,(void(*)(void))MatMult_SLPTS_Right));
-  PetscCall(MatShellSetOperation(Mshell,MATOP_DESTROY,(void(*)(void))MatDestroy_SLPTS));
+  if (left) PetscCall(MatShellSetOperation(Mshell,MATOP_MULT,(PetscErrorCodeFn*)MatMult_SLPTS_Left));
+  else PetscCall(MatShellSetOperation(Mshell,MATOP_MULT,(PetscErrorCodeFn*)MatMult_SLPTS_Right));
+  PetscCall(MatShellSetOperation(Mshell,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_SLPTS));
 #if defined(PETSC_HAVE_CUDA) || defined(PETSC_HAVE_HIP)
-  PetscCall(MatShellSetOperation(Mshell,MATOP_CREATE_VECS,(void(*)(void))MatCreateVecs_SLPTS));
+  PetscCall(MatShellSetOperation(Mshell,MATOP_CREATE_VECS,(PetscErrorCodeFn*)MatCreateVecs_SLPTS));
 #endif
   *M = Mshell;
   PetscCall(MatCreateVecs(nep->function,&shellctx->w,NULL));
@@ -317,12 +317,12 @@ static PetscErrorCode NEPDeflationNEFunctionCreate(NEP_NEDEF_CTX defctx,NEP nep,
   matctx->lambda = PETSC_MAX_REAL;
   PetscCall(MatCreateVecs(F,&matctx->w[0],NULL));
   PetscCall(VecDuplicate(matctx->w[0],&matctx->w[1]));
-  PetscCall(MatShellSetOperation(*Mshell,MATOP_MULT,(void(*)(void))MatMult_NEPDeflationNE));
-  PetscCall(MatShellSetOperation(*Mshell,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_NEPDeflationNE));
-  PetscCall(MatShellSetOperation(*Mshell,MATOP_SOLVE,(void(*)(void))MatSolve_NEPDeflationNE));
-  PetscCall(MatShellSetOperation(*Mshell,MATOP_SOLVE_TRANSPOSE,(void(*)(void))MatSolveTranspose_NEPDeflationNE));
-  PetscCall(MatShellSetOperation(*Mshell,MATOP_DESTROY,(void(*)(void))MatDestroy_NEPDeflationNE));
-  PetscCall(MatShellSetOperation(*Mshell,MATOP_CREATE_VECS,(void(*)(void))MatCreateVecs_NEPDeflationNE));
+  PetscCall(MatShellSetOperation(*Mshell,MATOP_MULT,(PetscErrorCodeFn*)MatMult_NEPDeflationNE));
+  PetscCall(MatShellSetOperation(*Mshell,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_NEPDeflationNE));
+  PetscCall(MatShellSetOperation(*Mshell,MATOP_SOLVE,(PetscErrorCodeFn*)MatSolve_NEPDeflationNE));
+  PetscCall(MatShellSetOperation(*Mshell,MATOP_SOLVE_TRANSPOSE,(PetscErrorCodeFn*)MatSolveTranspose_NEPDeflationNE));
+  PetscCall(MatShellSetOperation(*Mshell,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_NEPDeflationNE));
+  PetscCall(MatShellSetOperation(*Mshell,MATOP_CREATE_VECS,(PetscErrorCodeFn*)MatCreateVecs_NEPDeflationNE));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

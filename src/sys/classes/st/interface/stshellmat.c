@@ -180,14 +180,14 @@ PetscErrorCode STMatShellCreate(ST st,PetscScalar alpha,PetscInt nmat,PetscInt *
   }
   PetscCall(MatCreateVecs(st->A[0],&ctx->z,NULL));
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)st),m,n,M,N,(void*)ctx,mat));
-  PetscCall(MatShellSetOperation(*mat,MATOP_MULT,(void(*)(void))MatMult_Shell));
-  PetscCall(MatShellSetOperation(*mat,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_Shell));
+  PetscCall(MatShellSetOperation(*mat,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Shell));
+  PetscCall(MatShellSetOperation(*mat,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Shell));
 #if defined(PETSC_USE_COMPLEX)
-  PetscCall(MatShellSetOperation(*mat,MATOP_MULT_HERMITIAN_TRANSPOSE,(void(*)(void))MatMultHermitianTranspose_Shell));
+  PetscCall(MatShellSetOperation(*mat,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultHermitianTranspose_Shell));
 #else
-  PetscCall(MatShellSetOperation(*mat,MATOP_MULT_HERMITIAN_TRANSPOSE,(void(*)(void))MatMultTranspose_Shell));
+  PetscCall(MatShellSetOperation(*mat,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Shell));
 #endif
-  PetscCall(MatShellSetOperation(*mat,MATOP_DESTROY,(void(*)(void))MatDestroy_Shell));
+  PetscCall(MatShellSetOperation(*mat,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Shell));
 
   PetscCall(MatHasOperation(st->A[ctx->matIdx[0]],MATOP_GET_DIAGONAL,&hasA));
   if (st->nmat>1) {
@@ -197,6 +197,6 @@ PetscErrorCode STMatShellCreate(ST st,PetscScalar alpha,PetscInt nmat,PetscInt *
       has = (has && hasB)? PETSC_TRUE: PETSC_FALSE;
     }
   }
-  if ((hasA && st->nmat==1) || has) PetscCall(MatShellSetOperation(*mat,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Shell));
+  if ((hasA && st->nmat==1) || has) PetscCall(MatShellSetOperation(*mat,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Shell));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

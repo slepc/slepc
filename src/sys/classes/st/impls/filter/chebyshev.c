@@ -197,7 +197,7 @@ static PetscErrorCode STComputeOperator_Filter_Chebyshev(ST st,Mat *G)
     PetscCall(MatGetSize(ctx->T,&N,&M));
     PetscCall(MatGetLocalSize(ctx->T,&n,&m));
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)st),n,m,N,M,st,G));
-    PetscCall(MatShellSetOperation(*G,MATOP_MULT,(void(*)(void))MatMult_Chebyshev));
+    PetscCall(MatShellSetOperation(*G,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Chebyshev));
     PetscCall(MatShellSetMatProductOperation(*G,MATPRODUCT_AB,NULL,MatMatMult_Chebyshev,NULL,MATDENSE,MATDENSE));
     PetscCall(MatShellSetMatProductOperation(*G,MATPRODUCT_AB,NULL,MatMatMult_Chebyshev,NULL,MATDENSECUDA,MATDENSECUDA));
     PetscCall(MatShellSetMatProductOperation(*G,MATPRODUCT_AB,NULL,MatMatMult_Chebyshev,NULL,MATDENSEHIP,MATDENSEHIP));

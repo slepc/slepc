@@ -140,9 +140,9 @@ static PetscErrorCode SVDCrossGetProductMat(SVD svd,Mat A,Mat AT,Mat *C)
     PetscCall(MatCreateVecs(A,NULL,&ctx->w));
     PetscCall(MatGetLocalSize(A,NULL,&n));
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)svd),n,n,PETSC_DETERMINE,PETSC_DETERMINE,(void*)ctx,C));
-    PetscCall(MatShellSetOperation(*C,MATOP_MULT,(void(*)(void))MatMult_Cross));
-    if (!svd->ishyperbolic || svd->swapped) PetscCall(MatShellSetOperation(*C,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Cross));
-    PetscCall(MatShellSetOperation(*C,MATOP_DESTROY,(void(*)(void))MatDestroy_Cross));
+    PetscCall(MatShellSetOperation(*C,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Cross));
+    if (!svd->ishyperbolic || svd->swapped) PetscCall(MatShellSetOperation(*C,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Cross));
+    PetscCall(MatShellSetOperation(*C,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Cross));
     PetscCall(MatGetVecType(A,&vtype));
     PetscCall(MatSetVecType(*C,vtype));
   }

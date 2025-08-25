@@ -146,8 +146,8 @@ static PetscErrorCode STComputeOperator_Cayley(ST st)
   if (st->matmode==ST_MATMODE_INPLACE) {
     PetscCall(MatGetLocalSize(st->A[0],&n,&m));
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)st),n,m,PETSC_DETERMINE,PETSC_DETERMINE,st,&st->T[0]));
-    PetscCall(MatShellSetOperation(st->T[0],MATOP_MULT,(void(*)(void))MatMult_Cayley));
-    PetscCall(MatShellSetOperation(st->T[0],MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_Cayley));
+    PetscCall(MatShellSetOperation(st->T[0],MATOP_MULT,(PetscErrorCodeFn*)MatMult_Cayley));
+    PetscCall(MatShellSetOperation(st->T[0],MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Cayley));
   } else PetscCall(STMatMAXPY_Private(st,ctx->nu,0.0,0,NULL,PetscNot(st->state==ST_STATE_UPDATED),PETSC_FALSE,&st->T[0]));
   st->M = st->T[0];
 

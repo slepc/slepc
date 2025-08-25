@@ -49,21 +49,21 @@ int main(int argc,char **argv)
 
   /* K is the 2-D Laplacian */
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,N,N,N,N,&n,&K));
-  PetscCall(MatShellSetOperation(K,MATOP_MULT,(void(*)(void))MatMult_Laplacian2D));
-  PetscCall(MatShellSetOperation(K,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_Laplacian2D));
-  PetscCall(MatShellSetOperation(K,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Laplacian2D));
+  PetscCall(MatShellSetOperation(K,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Laplacian2D));
+  PetscCall(MatShellSetOperation(K,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_Laplacian2D));
+  PetscCall(MatShellSetOperation(K,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Laplacian2D));
 
   /* C is the zero matrix */
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,N,N,N,N,NULL,&C));
-  PetscCall(MatShellSetOperation(C,MATOP_MULT,(void(*)(void))MatMult_Zero));
-  PetscCall(MatShellSetOperation(C,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_Zero));
-  PetscCall(MatShellSetOperation(C,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Zero));
+  PetscCall(MatShellSetOperation(C,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Zero));
+  PetscCall(MatShellSetOperation(C,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_Zero));
+  PetscCall(MatShellSetOperation(C,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Zero));
 
   /* M is the identity matrix */
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,N,N,N,N,NULL,&M));
-  PetscCall(MatShellSetOperation(M,MATOP_MULT,(void(*)(void))MatMult_Identity));
-  PetscCall(MatShellSetOperation(M,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_Identity));
-  PetscCall(MatShellSetOperation(M,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Identity));
+  PetscCall(MatShellSetOperation(M,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Identity));
+  PetscCall(MatShellSetOperation(M,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_Identity));
+  PetscCall(MatShellSetOperation(M,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Identity));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 Create the eigensolver and set various options

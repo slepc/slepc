@@ -408,9 +408,9 @@ static PetscErrorCode NEPDeflationComputeShellMat(NEP_EXT_OP extop,PetscScalar l
     PetscCall(MatGetLocalSize(extop->nep->function,&mloc,&nloc));
     nloc += szd; mloc += szd;
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)extop->nep),nloc,mloc,PETSC_DETERMINE,PETSC_DETERMINE,matctx,&Mshell));
-    PetscCall(MatShellSetOperation(Mshell,MATOP_MULT,(void(*)(void))MatMult_NEPDeflation));
-    PetscCall(MatShellSetOperation(Mshell,MATOP_CREATE_VECS,(void(*)(void))MatCreateVecs_NEPDeflation));
-    PetscCall(MatShellSetOperation(Mshell,MATOP_DESTROY,(void(*)(void))MatDestroy_NEPDeflation));
+    PetscCall(MatShellSetOperation(Mshell,MATOP_MULT,(PetscErrorCodeFn*)MatMult_NEPDeflation));
+    PetscCall(MatShellSetOperation(Mshell,MATOP_CREATE_VECS,(PetscErrorCodeFn*)MatCreateVecs_NEPDeflation));
+    PetscCall(MatShellSetOperation(Mshell,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_NEPDeflation));
     matctx->nep = extop->nep;
     matctx->extop = extop;
     if (!M) {

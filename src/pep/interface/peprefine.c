@@ -215,7 +215,7 @@ static PetscErrorCode PEPSimpleNRefSetUpSystem(PEP pep,Mat *A,PEPSimpNRefctx *ct
       PetscCall(PetscCalloc1(1,&fctx));
       PetscCall(MatGetSize(A[0],&m0,&n0));
       PetscCall(MatCreateShell(PetscObjectComm((PetscObject)A[0]),PETSC_DECIDE,PETSC_DECIDE,m0,n0,fctx,T));
-      PetscCall(MatShellSetOperation(*T,MATOP_MULT,(void(*)(void))MatMult_FS));
+      PetscCall(MatShellSetOperation(*T,MATOP_MULT,(PetscErrorCodeFn*)MatMult_FS));
     } else PetscCall(MatShellGetContext(*T,&fctx));
     M=fctx->M1;
     break;

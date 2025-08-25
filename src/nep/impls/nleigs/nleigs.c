@@ -477,7 +477,7 @@ static PetscErrorCode MatDuplicate_Fun(Mat A,MatDuplicateOption op,Mat *B)
 {
   PetscInt            m,n,M,N,i;
   NEP_NLEIGS_MATSHELL *ctxnew,*ctx;
-  void                (*fun)(void);
+  PetscErrorCodeFn    *fun;
 
   PetscFunctionBeginUser;
   PetscCall(MatShellGetContext(A,&ctx));
@@ -583,13 +583,13 @@ static PetscErrorCode NLEIGSMatToMatShellArray(Mat A,Mat *Ms,PetscInt maxnmat)
   PetscCall(MatGetLocalSize(A,&m,&n));
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)A),m,n,M,N,(void*)ctx,Ms));
   PetscCall(MatShellSetManageScalingShifts(*Ms));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_MULT,(void(*)(void))MatMult_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_DUPLICATE,(void(*)(void))MatDuplicate_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_DESTROY,(void(*)(void))MatDestroy_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_AXPY,(void(*)(void))MatAXPY_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_SCALE,(void(*)(void))MatScale_Fun));
+  PetscCall(MatShellSetOperation(*Ms,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Fun));
+  PetscCall(MatShellSetOperation(*Ms,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Fun));
+  PetscCall(MatShellSetOperation(*Ms,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Fun));
+  PetscCall(MatShellSetOperation(*Ms,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_Fun));
+  PetscCall(MatShellSetOperation(*Ms,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Fun));
+  PetscCall(MatShellSetOperation(*Ms,MATOP_AXPY,(PetscErrorCodeFn*)MatAXPY_Fun));
+  PetscCall(MatShellSetOperation(*Ms,MATOP_SCALE,(PetscErrorCodeFn*)MatScale_Fun));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

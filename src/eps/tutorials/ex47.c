@@ -100,7 +100,7 @@ int main(int argc,char **argv)
   ctx->B = B;
   PetscCall(MatCreateVecs(A,&ctx->w,NULL));
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,N,N,(void*)ctx,&S));
-  PetscCall(MatShellSetOperation(S,MATOP_MULT,(void(*)(void))MatMult_Sinvert0));
+  PetscCall(MatShellSetOperation(S,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Sinvert0));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 Create the eigensolver and set various options

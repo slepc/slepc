@@ -1012,8 +1012,8 @@ static PetscErrorCode PEPJDCreateShellPC(PEP pep,Vec *ww)
   }
   PetscCall(PetscNew(&matctx));
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)pep),kspsf*nloc,kspsf*mloc,PETSC_DETERMINE,PETSC_DETERMINE,matctx,&pjd->Pshell));
-  PetscCall(MatShellSetOperation(pjd->Pshell,MATOP_MULT,(void(*)(void))MatMult_PEPJD));
-  PetscCall(MatShellSetOperation(pjd->Pshell,MATOP_CREATE_VECS,(void(*)(void))MatCreateVecs_PEPJD));
+  PetscCall(MatShellSetOperation(pjd->Pshell,MATOP_MULT,(PetscErrorCodeFn*)MatMult_PEPJD));
+  PetscCall(MatShellSetOperation(pjd->Pshell,MATOP_CREATE_VECS,(PetscErrorCodeFn*)MatCreateVecs_PEPJD));
   matctx->pep = pep;
   target[0] = pep->target; target[1] = 0.0;
   PetscCall(PEPJDMatSetUp(pep,1,target));

@@ -80,12 +80,12 @@ int main(int argc,char **argv)
   ctx->c = 4.5;
 
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,n,n,(void*)ctx,&R));
-  PetscCall(MatShellSetOperation(R,MATOP_MULT,(void(*)(void))MatMult_R));
-  PetscCall(MatShellSetOperation(R,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_R));
+  PetscCall(MatShellSetOperation(R,MATOP_MULT,(PetscErrorCodeFn*)MatMult_R));
+  PetscCall(MatShellSetOperation(R,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_R));
   PetscCall(MatSetOption(R,MAT_HERMITIAN,PETSC_TRUE));
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,n,n,(void*)ctx,&C));
-  PetscCall(MatShellSetOperation(C,MATOP_MULT,(void(*)(void))MatMult_C));
-  PetscCall(MatShellSetOperation(C,MATOP_MULT_HERMITIAN_TRANSPOSE,(void(*)(void))MatMultHermitianTranspose_C));
+  PetscCall(MatShellSetOperation(C,MATOP_MULT,(PetscErrorCodeFn*)MatMult_C));
+  PetscCall(MatShellSetOperation(C,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultHermitianTranspose_C));
   PetscCall(MatSetOption(C,MAT_SYMMETRIC,PETSC_TRUE));
 
   PetscCall(MatCreateBSE(R,C,&H));

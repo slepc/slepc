@@ -44,9 +44,9 @@ int main(int argc,char **argv)
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,N,N,N,N,&n,&A));
-  PetscCall(MatShellSetOperation(A,MATOP_MULT,(void(*)(void))MatMult_Laplacian2D));
-  PetscCall(MatShellSetOperation(A,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMult_Laplacian2D));
-  PetscCall(MatShellSetOperation(A,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Laplacian2D));
+  PetscCall(MatShellSetOperation(A,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Laplacian2D));
+  PetscCall(MatShellSetOperation(A,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMult_Laplacian2D));
+  PetscCall(MatShellSetOperation(A,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Laplacian2D));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 Create the eigensolver and set various options

@@ -29,13 +29,13 @@ static PetscErrorCode MyShellMatCreate(Mat *A,Mat *M)
   PetscCall(MatGetSize(*A,&n,NULL));
   PetscCall(PetscObjectGetComm((PetscObject)*A,&comm));
   PetscCall(MatCreateShell(comm,PETSC_DECIDE,PETSC_DECIDE,n,n,A,M));
-  PetscCall(MatShellSetOperation(*M,MATOP_MULT,(void(*)(void))MatMult_Shell));
-  PetscCall(MatShellSetOperation(*M,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_Shell));
+  PetscCall(MatShellSetOperation(*M,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Shell));
+  PetscCall(MatShellSetOperation(*M,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Shell));
 #if defined(PETSC_USE_COMPLEX)
-  PetscCall(MatShellSetOperation(*M,MATOP_MULT_HERMITIAN_TRANSPOSE,(void(*)(void))MatMultHermitianTranspose_Shell));
+  PetscCall(MatShellSetOperation(*M,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultHermitianTranspose_Shell));
 #endif
-  PetscCall(MatShellSetOperation(*M,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Shell));
-  PetscCall(MatShellSetOperation(*M,MATOP_DUPLICATE,(void(*)(void))MatDuplicate_Shell));
+  PetscCall(MatShellSetOperation(*M,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Shell));
+  PetscCall(MatShellSetOperation(*M,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_Shell));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

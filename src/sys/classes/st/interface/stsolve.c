@@ -334,12 +334,12 @@ PetscErrorCode STGetOperator_Private(ST st,Mat *Op)
     PetscCall(MatGetLocalSize(st->A[0],&m,&n));
     PetscCall(MatGetSize(st->A[0],&M,&N));
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)st),m,n,M,N,st,&st->Op));
-    PetscCall(MatShellSetOperation(st->Op,MATOP_MULT,(void(*)(void))MatMult_STOperator));
-    PetscCall(MatShellSetOperation(st->Op,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_STOperator));
+    PetscCall(MatShellSetOperation(st->Op,MATOP_MULT,(PetscErrorCodeFn*)MatMult_STOperator));
+    PetscCall(MatShellSetOperation(st->Op,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_STOperator));
 #if defined(PETSC_USE_COMPLEX)
-    PetscCall(MatShellSetOperation(st->Op,MATOP_MULT_HERMITIAN_TRANSPOSE,(void(*)(void))MatMultHermitianTranspose_STOperator));
+    PetscCall(MatShellSetOperation(st->Op,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultHermitianTranspose_STOperator));
 #else
-    PetscCall(MatShellSetOperation(st->Op,MATOP_MULT_HERMITIAN_TRANSPOSE,(void(*)(void))MatMultTranspose_STOperator));
+    PetscCall(MatShellSetOperation(st->Op,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_STOperator));
 #endif
     if (!st->D && st->ops->apply==STApply_Generic) {
       PetscCall(MatShellSetMatProductOperation(st->Op,MATPRODUCT_AB,NULL,MatMatMult_STOperator,NULL,MATDENSE,MATDENSE));

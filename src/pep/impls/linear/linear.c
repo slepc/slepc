@@ -316,8 +316,8 @@ static PetscErrorCode PEPSetUp_Linear(PEP pep)
     PetscCall(MatCreateVecsEmpty(pep->A[0],&ctx->w[2],&ctx->w[3]));
     PetscCall(MatCreateVecs(pep->A[0],&ctx->w[4],&ctx->w[5]));
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)pep),deg*pep->nloc,deg*pep->nloc,deg*pep->n,deg*pep->n,ctx,&ctx->A));
-    if (sinv && !transf) PetscCall(MatShellSetOperation(ctx->A,MATOP_MULT,(void(*)(void))MatMult_Linear_Sinvert));
-    else PetscCall(MatShellSetOperation(ctx->A,MATOP_MULT,(void(*)(void))MatMult_Linear_Shift));
+    if (sinv && !transf) PetscCall(MatShellSetOperation(ctx->A,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Linear_Sinvert));
+    else PetscCall(MatShellSetOperation(ctx->A,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Linear_Shift));
     PetscCall(STShellSetApply(st,Apply_Linear));
     ctx->pep = pep;
 
