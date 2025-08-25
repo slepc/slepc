@@ -99,7 +99,7 @@ class Package:
         self.packageurl = url
         self.downloadpackage = flag
       if flagsfound:
-        if not hasattr(self,'download') or not self.download:
+        if not getattr(self,'download',False):
           if self.packagetype == 'gnu':
             self.log.Exit('--download-'+self.packagename+'-configure-arguments must be used together with --download-'+self.packagename)
           elif self.packagetype == 'cmake':
@@ -211,7 +211,7 @@ class Package:
 
   def MissingTarball(self,downloaddir):
     '''Check if tarball is missing in downloaddir'''
-    if self.downloadable and hasattr(self,'download') and self.download:
+    if self.downloadable and getattr(self,'download',False):
       localFile = os.path.join(downloaddir,self.GetArchiveName())
       if not os.path.exists(localFile):
         url = self.packageurl
@@ -335,7 +335,7 @@ Downloaded package %s from: %s is not a tarball.
       elif self.packagetype == 'source_c':
         print(('  --download-'+self.packagename+'-cflags=<flags>').ljust(wd)+': Indicate extra flags to compile '+self.packagename.upper())
     if self.installable:
-      print(('  --with-'+self.packagename+'=<bool>').ljust(wd)+': Test for '+self.packagename.upper()+(' (requires PETSc with %s)'%self.petscdepend.upper() if hasattr(self,'petscdepend') else ''))
+      print(('  --with-'+self.packagename+'=<bool>').ljust(wd)+': Test for '+self.packagename.upper()+' (requires PETSc with %s)'%getattr(self,petscdepend,'').upper())
     if self.installable and not hasattr(self,'petscdepend'):
       print(('  --with-'+self.packagename+'-dir=<dir>').ljust(wd)+': Indicate the root directory of the '+self.packagename.upper()+' installation')
       print(('  --with-'+self.packagename+'-lib=<libraries>').ljust(wd)+': Indicate quoted list of libraries and link flags for '+self.packagename.upper())

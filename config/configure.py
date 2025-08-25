@@ -118,6 +118,20 @@ if not showhelp:
 else:
   packagesinpetsc = ''
 
+# Create directories for configuration files
+archdir, archdirexisted = slepc.CreateDirTest(slepc.dir,petsc.archname)
+libdir  = slepc.CreateDir(archdir,'lib')
+confdir = slepc.CreateDirTwo(libdir,'slepc','conf')
+
+# Open log file
+log.Open(slepc.dir,confdir,'configure.log')
+log.write('='*80)
+log.write('Starting Configure Run at '+time.ctime(time.time()))
+log.write('Configure Options: '+' '.join(sys.argv[1:]))
+log.write('Working directory: '+os.getcwd())
+log.write('Python version:\n'+sys.version)
+log.write('make: '+petsc.make)
+
 # Load classes for packages and process their command-line options
 import arpack, blopex, chase, elemental, elpa, evsl, feast, hpddm, ksvd, polar, primme, scalapack, slepc4py, slicot, lapack
 arpack    = arpack.Arpack(argdb,log)
@@ -176,20 +190,6 @@ if slepc.downloaddir:
     log.Println('\n\nDownload the following packages and run the script again:')
     for pkg in l: log.Println(pkg)
     log.Exit('Missing files in packages-download directory')
-
-# Create directories for configuration files
-archdir, archdirexisted = slepc.CreateDirTest(slepc.dir,petsc.archname)
-libdir  = slepc.CreateDir(archdir,'lib')
-confdir = slepc.CreateDirTwo(libdir,'slepc','conf')
-
-# Open log file
-log.Open(slepc.dir,confdir,'configure.log')
-log.write('='*80)
-log.write('Starting Configure Run at '+time.ctime(time.time()))
-log.write('Configure Options: '+' '.join(sys.argv[1:]))
-log.write('Working directory: '+os.getcwd())
-log.write('Python version:\n'+sys.version)
-log.write('make: '+petsc.make)
 
 # Some checks related to PETSc configuration
 if petsc.nversion < slepc.nversion:
@@ -275,12 +275,12 @@ with slepc.CreateFile(confdir,'slepcvariables') as slepcvars:
         pkg.Process(slepcconf,slepcvars,slepcrules,slepc,petsc,archdir)
       slepcconf.write('#define SLEPC_HAVE_PACKAGES ":')
       for pkg in petscpackages + externalpackages:
-        if hasattr(pkg,'havepackage') and pkg.havepackage: slepcconf.write(pkg.packagename+':')
+        if getattr(pkg,'havepackage',False): slepcconf.write(pkg.packagename+':')
       slepcconf.write('"\n#endif\n')
       libflags = []
       includeflags = []
       for pkg in externalwithdeps:
-        if hasattr(pkg,'havepackage') and pkg.havepackage:
+        if getattr(pkg,'havepackage',False):
           for entry in pkg.libflags.split():
             if entry not in libflags:
                libflags.append(entry)

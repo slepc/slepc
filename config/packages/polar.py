@@ -29,7 +29,7 @@ class Polar(package.Package):
     pkg = self.packagename.upper()
     if not 'mkl' in petsc.packages:
       self.log.Exit('The '+pkg+' interface requires that PETSc has been built with Intel MKL (libraries and includes)')
-    if hasattr(self,'download') and self.download and not hasattr(petsc,'cmake'):
+    if getattr(self,'download',False) and not hasattr(petsc,'cmake'):
       self.log.Exit('The POLAR interface requires CMake for building')
     package.Package.Precondition(self,slepc,petsc)
 
