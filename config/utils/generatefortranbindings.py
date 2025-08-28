@@ -940,6 +940,13 @@ def main(petscdir,slepcdir,petscarch):
 
       for funname in petscobjectfunctions:
         fi = petscobjectfunctions[funname]
+
+        # cannot print Fortran interface definition if any arguments are void * or void **
+        opaque = False
+        for k in fi.arguments:
+          if k.typename == 'void' or k.typename == 'PeCtx': opaque = True
+        if opaque: continue
+
         fd.write('  interface ' + funname + '\n')
         fd.write('    module procedure ' + funname  + ii + '\n')
         fd.write('  end interface\n')
@@ -999,6 +1006,13 @@ def main(petscdir,slepcdir,petscarch):
 
         for funname in petscobjectfunctions:
           fi = petscobjectfunctions[funname]
+
+          # cannot generate Fortran functions if any argument is void or PeCtx
+          opaque = False
+          for k in fi.arguments:
+            if k.typename == 'void' or k.typename == 'PeCtx': opaque = True
+          if opaque: continue
+
           fd.write('  subroutine ' + funname + ii + '(')
           cnt = 0
           for k in fi.arguments:
