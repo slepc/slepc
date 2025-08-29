@@ -73,12 +73,15 @@ include "allocate.pxi"
 # -----------------------------------------------------------------------------
 
 cdef extern from * nogil:
-    ctypedef long   PetscInt
-    ctypedef double PetscReal
-    ctypedef double PetscScalar
+    ctypedef bint      PetscBool
+    const    PetscBool PETSC_TRUE
+    const    PetscBool PETSC_FALSE
+    ctypedef long      PetscInt
+    ctypedef double    PetscReal
+    ctypedef double    PetscScalar
 
 cdef inline object toBool(PetscBool value):
-    return True if value else False
+    return True if value == PETSC_TRUE else False
 cdef inline PetscBool asBool(object value) except? <PetscBool>0:
     return PETSC_TRUE if value else PETSC_FALSE
 

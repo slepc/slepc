@@ -5,10 +5,6 @@ cdef extern from * nogil:
     enum: PETSC_DETERMINE
     enum: PETSC_CURRENT
 
-    ctypedef enum PetscBool:
-        PETSC_TRUE,  PETSC_YES,
-        PETSC_FALSE, PETSC_NO,
-
     ctypedef const char* PetscVecType "VecType"
 
     ctypedef enum  PetscNormType "NormType":
