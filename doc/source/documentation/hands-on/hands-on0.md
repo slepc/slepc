@@ -39,7 +39,7 @@ Also place the following source code into a file named "hello.c" in the same dir
 ```{code} c
 static char help[] = "Simple Hello World example program in SLEPc\n";
 
-#include
+#include <slepcsys.h>
 
 int main( int argc, char **argv )
 {

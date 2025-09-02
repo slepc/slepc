@@ -387,7 +387,7 @@ The default solver is the one that uses the cross product matrix (`cross`), usua
  |Cross Product          |`SVDCROSS`       |        `cross`        |           G,H        |$\star$
  |Cyclic Matrix          |`SVDCYCLIC`      |        `cyclic`       |           G,H
  |Lanczos                |`SVDLANCZOS`     |        `lanczos`      |
- |Thick-restart Lanczos  |`SVDTRLANCZOS`   |        `trlanczos`    |           G
+ |Thick-restart Lanczos  |`SVDTRLANCZOS`   |        `trlanczos`    |           G,H
  |Randomized SVD (RSVD)  |`SVDRANDOMIZED`  |        `randomized`   |
  |LAPACK solver          |`SVDLAPACK`      |        `lapack`       |           G
  |Wrapper to SCALAPAck   |`SVDSCALAPACK`   |        `scalapack`    |

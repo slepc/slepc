@@ -115,7 +115,7 @@ myst_enable_extensions = [
 #        'replacements', # convert some common typographic texts (c) copyright
         'deflist', # definition lists
         'attrs_block',  # parsing of block attributes XXX user manual
-#        'attrs_inline', # parsing of inline attributes
+        'attrs_inline', # parsing of inline attributes
         'dollarmath',   # use of $$ latex math
 #        'html_image',
         'fieldlist',
