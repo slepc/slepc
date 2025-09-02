@@ -42,7 +42,11 @@ clean:
 	-@${RM} -rf source/manualpages/ST
 
 webstatic:
-	git clone https://gitlab.com/slepc/webstatic.git -b main --depth=1 source/_static
+	@if [ ! -d source/_static ]; then \
+		git clone -b main --depth=1 https://gitlab.com/slepc/webstatic.git source/_static; \
+	else \
+		cd source/_static && git pull; \
+	fi
 
 # use this rule to build the documentation on your machine when working on SLEPc documentation
 website: latexpdf
