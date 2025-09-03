@@ -566,7 +566,7 @@ PetscErrorCode MatMult_B(Mat B,Vec x,Vec y)
       test:
          suffix: 11
          requires: complex
-         args: -use_custom_norm {{0 1}} -sign_normalization 0 -eps_power_snes_type nrichardson -eps_power_snes_atol 1e-12
+         args: -use_custom_norm {{0 1}} -sign_normalization 0 -eps_power_snes_type nrichardson -eps_power_snes_atol 1e-12 -eps_power_snes_linesearch_atol 1e-22
       test:
          suffix: 12
          requires: complex
