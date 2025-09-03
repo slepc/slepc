@@ -23,7 +23,7 @@ help:
 	-@echo ""
 	-@echo "  website     to build the HTML website"
 
-.PHONY: help Makefile
+.PHONY: help makefile
 
 clean:
 	-@${RM} -rf ${BUILDDIR}/*
@@ -101,7 +101,7 @@ latexpdf: webstatic logo_upv
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%:
+%: webstatic
 	-@echo "Preparing python virtual environment (.venv-sphinx)"
 	-@python3 -m venv .venv-sphinx ;\
 	. .venv-sphinx/bin/activate ;\
