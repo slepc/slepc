@@ -26,7 +26,7 @@ variables:
 # The most basic template that most tests will expand upon. In particular merge requests and branch pushes DO NOT trigger testing
 #
 
-.test:
+.test-basic:
   interruptible: true
   only:
     refs:
@@ -34,7 +34,33 @@ variables:
       - schedules
 #     Set with CI/CD Pipelines - Run Pipeline
       - web
+      - merge_requests
   dependencies: []
+
+.test:
+  extends: .test-basic
+  except:
+    variables:
+      # Skip if the docs-only label is attached to a merge request
+      - $CI_MERGE_REQUEST_LABELS =~ /(^|,)docs-only($|,)/
+
+pause-for-approval:
+  extends: .test
+  stage: .pre
+  tags:
+    - name:maat
+  only:
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_EVENT_TYPE == "merged_result"
+      - $CI_MERGE_REQUEST_EVENT_TYPE == "detached"
+  script:
+    - echo "pause-for-approval has no script to run"
+  variables:
+    GIT_STRATEGY: none
+  when: manual
+  allow_failure: false
 
 #
 #  This provides the basic order of operations and options template for cloud based stage 1 tests.
@@ -55,6 +81,7 @@ variables:
     - printf "PYTHON:${PYTHON}\n"
   script:
     - printf "PETSC_CONFIG_OPTS:${PETSC_CONFIG_OPTS}\n"
+    - if [ ! -z ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME+x} ]; then printf "CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME\n"; fi
     - export SLEPC_DIR=$PWD
     - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
     - cd ..
@@ -189,6 +216,7 @@ gnu-lint:
     - printf "PETSC_CONFIG_OPTS:${PETSC_CONFIG_OPTS}\n"
     - printf "PETSC_COVERAGE_OPTS:${PETSC_COVERAGE_OPTS}\n"
     - printf "SLEPC_CONFIG_OPTS:${SLEPC_CONFIG_OPTS/replace_dfp/${SLEPC_DIR}/../slepcdatafiles}\n"
+    - if [ ! -z ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME+x} ]; then printf "CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME\n"; fi
     - export SLEPC_DIR=$PWD
     - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
     - cd ..
