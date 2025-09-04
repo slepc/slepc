@@ -53,7 +53,7 @@ website: latexpdf
 	-@python3 -m venv .venv-sphinx ;\
 	. .venv-sphinx/bin/activate ;\
 	python3 -m pip install --quiet -r requirements.txt ;\
-	${RM} -rf ${BUILDDIR}/* ;\
+	${RM} -rf ${BUILDDIR}/html ;\
 	make SPHINXOPTS="-T -E -W -j 4" html ;\
 	deactivate
 
