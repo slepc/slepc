@@ -74,8 +74,8 @@ static PetscErrorCode VecCheckOrthogonality_Private(Vec V[],PetscInt nv,Vec W[],
   if (lev) *lev = 0.0;
   for (i=0;i<nw;i++) {
     if (B) {
-      if (W) PetscCall(MatMultTranspose(B,W[i],w));
-      else PetscCall(MatMultTranspose(B,V[i],w));
+      if (W) PetscCall(MatMult(B,W[i],w));
+      else PetscCall(MatMult(B,V[i],w));
     } else {
       if (W) w = W[i];
       else w = V[i];
@@ -114,7 +114,7 @@ static PetscErrorCode VecCheckOrthogonality_Private(Vec V[],PetscInt nv,Vec W[],
 .  nv - number of V vectors
 .  W  - an alternative set of vectors (optional)
 .  nw - number of W vectors
-.  B  - matrix defining the inner product (optional)
+.  B  - Hermitian matrix defining the inner product (optional)
 -  viewer - optional visualization context
 
    Output Parameter:
@@ -125,7 +125,11 @@ static PetscErrorCode VecCheckOrthogonality_Private(Vec V[],PetscInt nv,Vec W[],
    the level of bi-orthogonality of the vectors in the two sets. If W is equal
    to NULL then V is used, thus checking the orthogonality of the V vectors.
 
-   If matrix B is provided then the check uses the B-inner product, W'*B*V.
+   If matrix B is provided then the check uses the B-inner product, W'*B*V,
+   where B is assumed to be Hermitian.
+
+   If V, W represent eigenvectors computed by SLEPc, this function will not work
+   correctly if one of the eigenvalues is complex when running with real scalars.
 
    If lev is not NULL, it will contain the maximum entry of matrix
    W'*V - I (in absolute value) omitting the diagonal. Otherwise, the matrix W'*V
@@ -163,7 +167,7 @@ PetscErrorCode VecCheckOrthogonality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Mat
 .  nv - number of V vectors
 .  W  - an alternative set of vectors (optional)
 .  nw - number of W vectors
-.  B  - matrix defining the inner product (optional)
+.  B  - Hermitian matrix defining the inner product (optional)
 -  viewer - optional visualization context
 
    Output Parameter:
