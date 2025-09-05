@@ -275,7 +275,7 @@ alletags:
 
 # ******** Rules for building documentation ************************************************************
 
-alldoc: allcite allpdf alldoc_pre alldoc_post docsetdate
+alldoc: alldoc_pdf alldoc_html
 
 chk_loc:
 	@if [ ${LOC}foo = foo ] ; then \
@@ -287,85 +287,26 @@ chk_loc:
 chk_c2html:
 	@if [ ${C2HTML}foo = foo ] ; then \
           printf ${PETSC_TEXT_HILIGHT}"*********************** ERROR ************************\n" ; \
-          echo "Require c2html for html docs. Please reconfigure PETSc with --download-c2html=1"; \
+          echo "Require c1html for html docs. Please reconfigure PETSc with --download-c2html=1"; \
           printf "******************************************************"${PETSC_TEXT_NORMAL}"\n" ;false; fi
 
-# Build just citations
-allcite: chk_loc deletemanualpages petsc_manualpages_buildcite
-	-${OMAKE_SELF} ACTION=slepc_manualpages_buildcite slepc_tree_src LOC=${LOC}
-	-@cat ${LOC}/docs/manualpages/manualpages.cit > ${LOC}/docs/manualpages/htmlmap
-	-@cat ${LOC}/docs/manualpages/petscmanualpages.cit >> ${LOC}/docs/manualpages/htmlmap
-	-@cat ${PETSC_DIR}/doc/manualpages/mpi.www.index >> ${LOC}/docs/manualpages/htmlmap
+chk_doctext:
+	@if [ ${DOCTEXT}foo = foo ] ; then \
+          printf ${PETSC_TEXT_HILIGHT}"*********************** ERROR ************************\n" ; \
+          echo "Require sowing for html docs. Please reconfigure PETSc with --download-sowing=1"; \
+          printf "******************************************************"${PETSC_TEXT_NORMAL}"\n" ;false; fi
 
 # Build just PDF manual + prerequisites
-allpdf:
-	-cd docs/manual; ${OMAKE_SELF} slepc.pdf clean; mv slepc.pdf ../../docs
-
-# Build just manual pages + prerequisites
-allmanpages: chk_loc allcite
-	-${RM} ${SLEPC_DIR}/${PETSC_ARCH}/manualpages.err
-	-${OMAKE_SELF} ACTION=slepc_manualpages slepc_tree_src LOC=${LOC}
-	cat ${SLEPC_DIR}/${PETSC_ARCH}/manualpages.err
-	@a=`cat ${SLEPC_DIR}/${PETSC_ARCH}/manualpages.err | wc -l`; test ! $$a -gt 0
-
-# Build just manual examples + prerequisites
-allmanexamples: chk_loc allmanpages
-	-${OMAKE_SELF} ACTION=slepc_manexamples tree LOC=${LOC}
-
-# Build everything that goes into 'doc' dir except html sources
-alldoc_pre: chk_loc allcite allmanpages allmanexamples
-	-${PYTHON} ${SLEPC_DIR}/lib/slepc/bin/maint/wwwindex.py ${SLEPC_DIR} ${LOC} "src/docs/manualpages-sec"
-	-@echo "<html>" > singleindex.html
-	-@echo "<head>" >> singleindex.html
-	-@echo "  <title>Subroutine Index</title>" >> singleindex.html
-	-@echo "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">" >> singleindex.html
-	-@echo "  <link rel=\"stylesheet\" href=\"/slepc.css\" type=\"text/css\">" >> singleindex.html
-	-@echo "</head>" >> singleindex.html
-	-@echo "<body>" >> singleindex.html
-	-@cat ${LOC}/docs/manualpages/singleindex.html >> singleindex.html
-	-@sed -e 's/CC3333/883300/' singleindex.html > ${LOC}/docs/manualpages/singleindex.html
-	-@${RM} singleindex.html
+alldoc_pdf: chk_loc
+	-cd doc; ${OMAKE_SELF} latexpdf PETSC_DIR=${PETSC_DIR} LOC=${LOC}
 
 # Builds .html versions of the source
-alldoc_post: chk_loc chk_c2html allcite
-	-${OMAKE_SELF} ACTION=slepc_html PETSC_DIR=${PETSC_DIR} tree LOC=${LOC}
-	cp ${LOC}/docs/manual.html ${LOC}/docs/index.html
-
-# modify all generated html files and add in version number, date, canonical URL info.
-docsetdate:
-	@echo "Updating generated html files with slepc version, date, canonical URL info";\
-        version_release=`grep '^#define SLEPC_VERSION_RELEASE ' include/slepcversion.h |tr -s ' ' | cut -d ' ' -f 3`; \
-        version_major=`grep '^#define SLEPC_VERSION_MAJOR ' include/slepcversion.h |tr -s ' ' | cut -d ' ' -f 3`; \
-        version_minor=`grep '^#define SLEPC_VERSION_MINOR ' include/slepcversion.h |tr -s ' ' | cut -d ' ' -f 3`; \
-        version_subminor=`grep '^#define SLEPC_VERSION_SUBMINOR ' include/slepcversion.h |tr -s ' ' | cut -d ' ' -f 3`; \
-        if  [ $${version_release} = 0 ]; then \
-          slepcversion=slepc-main; \
-          export slepcversion; \
-        elif [ $${version_release} = 1 ]; then \
-          slepcversion=slepc-$${version_major}.$${version_minor}.$${version_subminor}; \
-          export slepcversion; \
-        else \
-          echo "Unknown SLEPC_VERSION_RELEASE: $${version_release}"; \
-          exit; \
-        fi; \
-        datestr=`git log -1 --pretty=format:%ci | cut -d ' ' -f 1`; \
-        export datestr; \
-        gitver=`git describe --match "v*"`; \
-        export gitver; \
-        find include src ${LOC}/docs/manualpages -type f -name \*.html \
-          -exec perl -pi -e 's^(<body.*>)^$$1\n   <div id=\"version\" align=right><b>$$ENV{slepcversion} $$ENV{datestr}</b></div>\n   <div id="bugreport" align=right><a href="mailto:slepc-maint\@upv.es?subject=Typo or Error in Documentation &body=Please describe the typo or error in the documentation: $$ENV{slepcversion} $$ENV{gitver} {} "><small>Report Typos and Errors</small></a></div>^i' {} \; \
-          -exec perl -pi -e 's^(<head>)^$$1 <link rel="canonical" href="https://slepc.upv.es/documentation/current/{}" />^i' {} \; ; \
-        echo "Done fixing version number, date, canonical URL info"
+alldoc_html: chk_loc chk_c2html chk_doctext
+	-cd doc; ${OMAKE_SELF} html PETSC_DIR=${PETSC_DIR} LOC=${LOC}
 
 # Deletes documentation
-alldocclean: deletemanualpages allcleanhtml
-deletemanualpages: chk_loc
-	-@if [ -d ${LOC} -a -d ${LOC}/docs/manualpages ]; then \
-          ${RM} -rf ${LOC}/docs/manualpages ;\
-          ${RM} -f ${LOC}/docs/slepc.pdf ;\
-        fi
-allcleanhtml:
-	-${OMAKE_SELF} ACTION=cleanhtml PETSC_DIR=${PETSC_DIR} tree
+alldocclean:
+	-cd doc; ${OMAKE_SELF} clean PETSC_DIR=${PETSC_DIR} LOC=${LOC}
 
 # ******** Rules for checking coding standards *********************************************************
 
