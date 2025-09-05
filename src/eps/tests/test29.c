@@ -18,6 +18,7 @@ static char help[] = "Illustrates the computation of left eigenvectors for gener
    User-defined routines
 */
 PetscErrorCode ComputeResidualNorm(Mat,Mat,PetscBool,PetscScalar,PetscScalar,Vec,Vec,Vec*,PetscReal*);
+PetscErrorCode CheckBiorthogonality(Vec*,Vec*,PetscScalar*,PetscInt,Mat,PetscReal*);
 
 int main(int argc,char **argv)
 {
@@ -147,7 +148,7 @@ int main(int argc,char **argv)
        Check bi-orthogonality of eigenvectors
     */
     if (twosided) {
-      PetscCall(VecCheckOrthogonality(xr,nconv,yr,nconv,B,NULL,&lev));
+      PetscCall(CheckBiorthogonality(xr,yr,ki,nconv,B,&lev));
       if (lev<100*PETSC_MACHINE_EPSILON) PetscCall(PetscPrintf(PETSC_COMM_WORLD,"  Level of bi-orthogonality of eigenvectors < 100*eps\n\n"));
       else PetscCall(PetscPrintf(PETSC_COMM_WORLD,"  Level of bi-orthogonality of eigenvectors: %g\n\n",(double)lev));
     }
@@ -229,6 +230,79 @@ PetscErrorCode ComputeResidualNorm(Mat A,Mat B,PetscBool trans,PetscScalar kr,Pe
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*
+   CheckOrthogonality - Similar to VecCheckOrthogonality but taking into account complex eigenvalues.
+
+   Input Parameters:
+     V - right eigenvectors
+     W - left eigenvectors
+     eigi - imaginary part of eigenvalues (only to check if the corresponding vector is complex)
+     n - number of V,W vectors
+     B - matrix defining the inner product
+   Output Parameter:
+     lev - level of bi-orthogonality
+*/
+PetscErrorCode CheckBiorthogonality(Vec *V,Vec *W,PetscScalar *ki,PetscInt n,Mat B,PetscReal *lev)
+{
+  PetscInt       i,j;
+  PetscScalar    val1;
+  PetscBool      wcmplx;
+  Vec            wr;
+#if !defined(PETSC_USE_COMPLEX)
+  Vec            wi;
+  PetscScalar    val2,dotr,doti;
+#endif
+
+  PetscFunctionBegin;
+  if (n<=0) PetscFunctionReturn(PETSC_SUCCESS);
+  PetscCall(VecDuplicate(V[0],&wr));
+#if !defined(PETSC_USE_COMPLEX)
+  PetscCall(VecDuplicate(V[0],&wi));
+#endif
+  *lev = 0.0;
+  for (i=0;i<n;i++) {
+    wcmplx = PETSC_FALSE;
+    PetscCall(MatMult(B,W[i],wr));
+#if !defined(PETSC_USE_COMPLEX)
+    if (ki[i] != 0.0) {
+      PetscCall(MatMult(B,W[i+1],wi));
+      wcmplx = PETSC_TRUE;
+    }
+#endif
+    for (j=0;j<n;j++) {
+      if (j==i || (wcmplx && j==i+1)) continue;
+      PetscCall(VecDot(wr,V[j],&val1));
+#if !defined(PETSC_USE_COMPLEX)
+      dotr = val1;
+      if (ki[j] != 0.0) {  /* V complex */
+        if (wcmplx) {
+          PetscCall(VecDot(wi,V[j+1],&val2));
+          dotr = val1+val2;
+          PetscCall(VecDot(wi,V[j],&val1));
+          PetscCall(VecDot(wr,V[j+1],&val2));
+          doti = val1-val2;
+        } else {
+          PetscCall(VecDot(wr,V[j+1],&val1));
+          doti = -val1;
+        }
+      } else if (wcmplx) {
+        PetscCall(VecDot(wi,V[j],&doti));
+      } else doti = 0.0;
+      *lev = PetscMax(*lev,SlepcAbsEigenvalue(dotr,doti));
+      if (ki[j] != 0.0) j++;
+#else
+      *lev = PetscMax(*lev,PetscAbsScalar(val1));
+#endif
+    }
+    if (wcmplx) i++;
+  }
+  PetscCall(VecDestroy(&wr));
+#if !defined(PETSC_USE_COMPLEX)
+  PetscCall(VecDestroy(&wi));
+#endif
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 /*TEST
 
    testset:
@@ -237,6 +311,9 @@ PetscErrorCode ComputeResidualNorm(Mat A,Mat B,PetscBool trans,PetscScalar kr,Pe
       requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
       test:
          suffix: 1
+      test:
+         suffix: 1_cmplxvals
+         args: -eps_target -250000
       test:
          suffix: 1_rqi
          args: -eps_type power -eps_power_shift_type rayleigh -eps_nev 2 -eps_target -2000
