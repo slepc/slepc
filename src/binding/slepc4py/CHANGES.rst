@@ -20,6 +20,12 @@ Release 3.24.0
 - Add new ``LME`` class.
 
 
+Release 3.23.3
+==============
+
+- Update to SLEPc 3.23.3.
+
+
 Release 3.23.2
 ==============
 
