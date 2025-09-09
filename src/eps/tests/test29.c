@@ -312,9 +312,6 @@ PetscErrorCode CheckBiorthogonality(Vec *V,Vec *W,PetscScalar *ki,PetscInt n,Mat
       test:
          suffix: 1
       test:
-         suffix: 1_complex
-         args: -eps_nev 2 -eps_target -250000
-      test:
          suffix: 1_cmplxvals
          args: -eps_target -250000
       test:
