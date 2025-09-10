@@ -41,16 +41,16 @@ static PetscErrorCode MatMult_Chebyshev(Mat A,Vec x,Vec y)
   PetscCall(VecScale(y,cheby->damping_coeffs[degree]*cheby->coeffs[degree]));
 
   for (i=0;i<degree;i++) {
-      PetscCall(VecCopy(st->work[0],st->work[1]));
-      PetscCall(VecCopy(y,st->work[0]));
-      if (i == degree-1) {
-          s1 = s1/2;
-          s2 = s2/2;
-      }
-      PetscCall(VecAXPBYPCZ(y,cheby->damping_coeffs[degree-i-1]*cheby->coeffs[degree-i-1],-1,s2,x,st->work[1]));
-      PetscCall(MatMult(ctx->T,st->work[0],st->work[1]));
-      PetscCall(VecScale(st->work[1],s1));
-      PetscCall(VecAXPY(y,1.0,st->work[1]));
+    PetscCall(VecCopy(st->work[0],st->work[1]));
+    PetscCall(VecCopy(y,st->work[0]));
+    if (i == degree-1) {
+      s1 = s1/2;
+      s2 = s2/2;
+    }
+    PetscCall(VecAXPBYPCZ(y,cheby->damping_coeffs[degree-i-1]*cheby->coeffs[degree-i-1],-1,s2,x,st->work[1]));
+    PetscCall(MatMult(ctx->T,st->work[0],st->work[1]));
+    PetscCall(VecScale(st->work[1],s1));
+    PetscCall(VecAXPY(y,1.0,st->work[1]));
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -94,17 +94,17 @@ static PetscErrorCode MatMatMult_Chebyshev(Mat A,Mat B,Mat C,void *pctx)
   PetscCall(MatScale(C,cheby->damping_coeffs[degree]*cheby->coeffs[degree]));
 
   for (i=0;i<degree;i++) {
-      PetscCall(MatCopy(ctx->W[0],ctx->W[1],SAME_NONZERO_PATTERN));
-      PetscCall(MatCopy(C,ctx->W[0],SAME_NONZERO_PATTERN));
-      if (i == degree-1) {
-          s1 = s1/2;
-          s2 = s2/2;
-      }
-      PetscCall(MatScale(C,s2));
-      PetscCall(MatAXPY(C,-1,ctx->W[1],SAME_NONZERO_PATTERN));
-      PetscCall(MatAXPY(C,cheby->damping_coeffs[degree-i-1]*cheby->coeffs[degree-i-1],B,SAME_NONZERO_PATTERN));
-      PetscCall(MatMatMult(ctx->T,ctx->W[0],MAT_REUSE_MATRIX,PETSC_CURRENT,&ctx->W[1]));
-      PetscCall(MatAXPY(C,s1,ctx->W[1],SAME_NONZERO_PATTERN));
+    PetscCall(MatCopy(ctx->W[0],ctx->W[1],SAME_NONZERO_PATTERN));
+    PetscCall(MatCopy(C,ctx->W[0],SAME_NONZERO_PATTERN));
+    if (i == degree-1) {
+      s1 = s1/2;
+      s2 = s2/2;
+    }
+    PetscCall(MatScale(C,s2));
+    PetscCall(MatAXPY(C,-1,ctx->W[1],SAME_NONZERO_PATTERN));
+    PetscCall(MatAXPY(C,cheby->damping_coeffs[degree-i-1]*cheby->coeffs[degree-i-1],B,SAME_NONZERO_PATTERN));
+    PetscCall(MatMatMult(ctx->T,ctx->W[0],MAT_REUSE_MATRIX,PETSC_CURRENT,&ctx->W[1]));
+    PetscCall(MatAXPY(C,s1,ctx->W[1],SAME_NONZERO_PATTERN));
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
