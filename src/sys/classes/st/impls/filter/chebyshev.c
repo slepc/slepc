@@ -49,8 +49,7 @@ static PetscErrorCode MatMult_Chebyshev(Mat A,Vec x,Vec y)
     }
     PetscCall(VecAXPBYPCZ(y,cheby->damping_coeffs[degree-i-1]*cheby->coeffs[degree-i-1],-1,s2,x,st->work[1]));
     PetscCall(MatMult(ctx->T,st->work[0],st->work[1]));
-    PetscCall(VecScale(st->work[1],s1));
-    PetscCall(VecAXPY(y,1.0,st->work[1]));
+    PetscCall(VecAXPY(y,s1,st->work[1]));
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
