@@ -15,15 +15,17 @@ In this section, we review some basic properties of the polynomial eigenvalue pr
 
 In many applications, e.g., problems arising from second-order differential equations such as the analysis of damped vibrating systems, the eigenproblem to be solved is quadratic,
 
-$$
+```{math}
+:label: eq:eigquad
+
 (K+\lambda C+\lambda^2M)x=0,
-$$ (eq:eigquad)
+```
 
  where $K,C,M\in\mathbb{C}^{n\times n}$ are the coefficients of a matrix polynomial of degree 2, $\lambda\in\mathbb{C}$ is the eigenvalue and $x\in\mathbb{C}^n$ is the eigenvector. As in the case of linear eigenproblems, the eigenvalues and eigenvectors can be complex even in the case that all three matrices are real.
 
 It is important to point out some outstanding differences with respect to the linear eigenproblem. In the quadratic eigenproblem, the number of eigenvalues is $2n$, and the corresponding eigenvectors do not form a linearly independent set. If $M$ is singular, some eigenvalues are infinite. Even when the three matrices are symmetric and positive definite, there is no guarantee that the eigenvalues are real, but still methods can exploit symmetry to some extent. Furthermore, numerical difficulties are more likely than in the linear case, so the computed solution can sometimes be untrustworthy.
 
-If equation [](#eq:eigquad) is written as $P(\lambda)x=0$, where $P$ is the matrix polynomial, then multiplication by $\lambda^{-2}$ results in $rev P(\lambda^{-1})x=0$, where $rev P$ denotes the matrix polynomial with the coefficients of $P$ in the reverse order. In other words, if a method is available for computing the largest eigenvalues, then reversing the roles of $M$ and $K$ results in the computation of the smallest eigenvalues. In general, it is also possible to formulate a spectral transformation for computing eigenvalues closest to a given target, as discussed in section [](#sec:qst).
+If equation {math:numref}`eq:eigquad` is written as $P(\lambda)x=0$, where $P$ is the matrix polynomial, then multiplication by $\lambda^{-2}$ results in $rev P(\lambda^{-1})x=0$, where $rev P$ denotes the matrix polynomial with the coefficients of $P$ in the reverse order. In other words, if a method is available for computing the largest eigenvalues, then reversing the roles of $M$ and $K$ results in the computation of the smallest eigenvalues. In general, it is also possible to formulate a spectral transformation for computing eigenvalues closest to a given target, as discussed in section [](#sec:qst).
 
 #### Problem Types
 
@@ -41,80 +43,102 @@ Currently, the problem type is not exploited by `PEP` solvers, except for a few 
 
 It is possible to transform the quadratic eigenvalue problem to a linear generalized eigenproblem $L_0y=\lambda L_1y$ by doubling the order of the system, i.e., $L_0,L_1\in\mathbb{C}^{2n\times 2n}$. There are many ways of doing this. For instance, consider the following two pencils $L(\lambda)=L_0-\lambda L_1$,
 
-$$
-\begin{bmatrix}0 & I\\-K & -C\end{bmatrix}-\lambda\begin{bmatrix}I & 0\\0 & M\end{bmatrix},
-$$ (eq:n1)
+```{math}
+:label: eq:n1
 
-$$
+\begin{bmatrix}0 & I\\-K & -C\end{bmatrix}-\lambda\begin{bmatrix}I & 0\\0 & M\end{bmatrix},
+```
+
+```{math}
+:label: eq:n2
+
 \begin{bmatrix}-K & 0\\0 & I\end{bmatrix}-\lambda\begin{bmatrix}C & M\\I & 0\end{bmatrix}.
-$$ (eq:n2)
+```
 
  Both of them have the same eigenvalues as the quadratic eigenproblem, and the corresponding eigenvectors can be expressed as
 
-$$
+```{math}
+:label: eq:linevec
+
 y=\begin{bmatrix}x\\x\lambda\end{bmatrix},
-$$ (eq:linevec)
+```
 
  where $x$ is the eigenvector of the quadratic eigenproblem.
 
-Other **non-symmetric** linearizations can be obtained by a linear combination of equations [](#eq:n1) and [](#eq:n2),
+Other **non-symmetric** linearizations can be obtained by a linear combination of equations {math:numref}`eq:n1` and {math:numref}`eq:n2`,
 
-$$
+```{math}
+:label: eq:lingen
+
 \begin{bmatrix}-\beta K & \alpha I\\-\alpha K & -\alpha C+\beta I\end{bmatrix}-\lambda\begin{bmatrix}\alpha I+\beta C & \beta M\\\beta I & \alpha M\end{bmatrix}.
-$$ (eq:lingen)
+```
 
- for any $\alpha,\beta\in\mathbb{R}$. The linearizations equations [](#eq:n1) and [](#eq:n2) are particular cases of equation [](#eq:lingen) taking $(\alpha,\beta)=(1,0)$ and $(0,1)$, respectively.
+ for any $\alpha,\beta\in\mathbb{R}$. The linearizations equations {math:numref}`eq:n1` and {math:numref}`eq:n2` are particular cases of equation {math:numref}`eq:lingen` taking $(\alpha,\beta)=(1,0)$ and $(0,1)$, respectively.
 
 **Symmetric** linearizations are useful for the case that $M$, $C$, and $K$ are all symmetric (Hermitian), because the resulting matrix pencil is symmetric (Hermitian), although indefinite:
 
-$$
+```{math}
+:label: eq:linsym
+
 \begin{bmatrix}\beta K&\alpha K\\\alpha K&\alpha C-\beta M\end{bmatrix}-\lambda\begin{bmatrix}\alpha K-\beta C&-\beta M\\-\beta M&-\alpha M\end{bmatrix},
-$$ (eq:linsym)
+```
 
 And for gyroscopic problems, we can consider **Hamiltonian** linearizations,
 
-$$
+```{math}
+:label: eq:linham
+
 \begin{bmatrix}\alpha K & -\beta K\\\alpha C+\beta M & \alpha K\end{bmatrix}-\lambda\begin{bmatrix}\beta M & \alpha K+\beta C\\-\alpha M & \beta M\end{bmatrix},
-$$ (eq:linham)
+```
 
  where one of the matrices is Hamiltonian and the other one is skew-Hamiltonian if $(\alpha,\beta)$ is $(1,0)$ or $(0,1)$.
 
 In SLEPc, the `PEPLINEAR` solver is based on using one of the above linearizations for solving the quadratic eigenproblem. This solver makes use of linear eigensolvers from the `EPS` package.
 
-We could also consider the *reversed* forms, e.g., the reversed form of equation [](#eq:n2) is
+We could also consider the *reversed* forms, e.g., the reversed form of equation {math:numref}`eq:n2` is
 
-$$
+```{math}
+:label: eq:n2r
+
 \begin{bmatrix}-C & -M\\I & 0\end{bmatrix}-\frac{1}{\lambda}\begin{bmatrix}K & 0\\0 & I\end{bmatrix},
-$$ (eq:n2r)
+```
 
- which is equivalent to the form equation [](#eq:n1) for the problem $rev P(\lambda^{-1})x=0$. These reversed forms are not implemented in SLEPc, but the user can use them simply by reversing the roles of $M$ and $K$, and considering the reciprocals of the computed eigenvalues. Alternatively, this can be viewed as a particular case of the spectral transformation (with $\sigma=0$), see section [](#sec:qst).
+ which is equivalent to the form equation {math:numref}`eq:n1` for the problem $rev P(\lambda^{-1})x=0$. These reversed forms are not implemented in SLEPc, but the user can use them simply by reversing the roles of $M$ and $K$, and considering the reciprocals of the computed eigenvalues. Alternatively, this can be viewed as a particular case of the spectral transformation (with $\sigma=0$), see section [](#sec:qst).
 
 {#sec:pep1 label="sec:pep1"}
 ### Polynomials of Arbitrary Degree
 
 In general, the polynomial eigenvalue problem can be formulated as
 
-$$
+```{math}
+:label: eq:pep
+
 P(\lambda)x=0,
-$$ (eq:pep)
+```
 
  where $P$ is an $n\times n$ matrix polynomial of degree $d$. An $n$-vector $x\neq 0$ satisfying this equation is called an eigenvector associated with the corresponding eigenvalue $\lambda$.
 
 We start by considering the case where $P$ is expressed in terms of the monomial basis,
 
-$$
+```{math}
+:label: eq:pepmon
+
 P(\lambda)=A_0+A_1 \lambda+A_2\lambda^2 +  \dotsb + A_d \lambda^d,
-$$ (eq:pepmon)
+```
 
  where $A_0,\ldots,A_d$ are the $n\times n$ coefficient matrices. As before, the problem can be solved via some kind of linearization. One of the most commonly used ones is the first companion form
 
-$$
+```{math}
+:label: eq:firstcomp
+
 L(\lambda)=L_0 -\lambda L_1,
-$$ (eq:firstcomp)
+```
 
  where the related linear eigenproblem is $L(\lambda)y=0$, with
 
-$$
+```{math}
+:label: eq:firstcompfull
+
 L_0 =
 \begin{bmatrix}
   & I \\
@@ -133,19 +157,21 @@ y=
 \begin{bmatrix}
   x \\ x\lambda\\ \vdots \\ x\lambda^{d-1}
 \end{bmatrix}.
-$$ (eq:firstcompfull)
+```
 
- This is the generalization of equation [](#eq:n1).
+ This is the generalization of equation {math:numref}`eq:n1`.
 
 The definition of vector $y$ above contains the successive powers of $\lambda$. For large polynomial degree, these values may produce overflow in finite precision computations, or at least lead to numerical instability of the algorithms due to the wide difference in magnitude of the eigenvector entries. For this reason, it is generally recommended to work with non-monomial polynomial bases whenever the degree is not small, e.g., for $d>5$.
 
 In the most general formulation of the polynomial eigenvalue problem, $P$ is expressed as
 
-$$
-P(\lambda)=A_0\phi_0(\lambda)+A_1\phi_1(\lambda)+\dots+A_d\phi_d(\lambda),
-$$ (eq:pepnonmon)
+```{math}
+:label: eq:pepnonmon
 
- where $\phi_i$ are the members of a given polynomial basis, for instance, some kind of orthogonal polynomials such as Chebyshev polynomials of the first kind. In that case, the expression of $y$ in equation [](#eq:firstcompfull) contains $\phi_0(\lambda),\dots,\phi_d(\lambda)$ instead of the powers of $\lambda$. Correspondingly, the form of $L_0$ and $L_1$ is different for each type of polynomial basis.
+P(\lambda)=A_0\phi_0(\lambda)+A_1\phi_1(\lambda)+\dots+A_d\phi_d(\lambda),
+```
+
+ where $\phi_i$ are the members of a given polynomial basis, for instance, some kind of orthogonal polynomials such as Chebyshev polynomials of the first kind. In that case, the expression of $y$ in equation {math:numref}`eq:firstcompfull` contains $\phi_0(\lambda),\dots,\phi_d(\lambda)$ instead of the powers of $\lambda$. Correspondingly, the form of $L_0$ and $L_1$ is different for each type of polynomial basis.
 
 #### Avoiding the Linearization
 
@@ -198,7 +224,7 @@ PEPDestroy( &pep );
 
 :::
 
-As explained in section [](#sec:pep1), the matrix polynomial $P(\lambda)$ can be expressed in term of the monomials $1$, $\lambda$, $\lambda^2,\ldots$, or in a non-monomial basis as in equation [](#eq:pepnonmon). Hence, when defining the problem we must indicate which is the polynomial basis to be used as well as the coefficient matrices $A_i$ in that basis representation. By default, a monomial basis is used. Other possible bases are listed in table [](#tab:pepbasis), and can be set with `PEPSetBasis`
+As explained in section [](#sec:pep1), the matrix polynomial $P(\lambda)$ can be expressed in term of the monomials $1$, $\lambda$, $\lambda^2,\ldots$, or in a non-monomial basis as in equation {math:numref}`eq:pepnonmon`. Hence, when defining the problem we must indicate which is the polynomial basis to be used as well as the coefficient matrices $A_i$ in that basis representation. By default, a monomial basis is used. Other possible bases are listed in table [](#tab:pepbasis), and can be set with `PEPSetBasis`
 
 ```{code} c
 PEPSetBasis(PEP pep,PEPBasis basis);
@@ -297,7 +323,7 @@ PEPSetType(PEP pep,PEPType method);
 
 or via the options database command `-pep_type` followed by the name of the method. The methods currently available in `PEP` are listed in table [](#tab:solversp). The solvers in the first group are based on the linearization explained above, whereas solvers in the second group perform a projection on the polynomial problem (without linearizing).
 
-The default solver is `PEPTOAR`. TOAR is a stable algorithm for building an Arnoldi factorization of the linearization (equation [](#eq:firstcomp)) without explicitly creating matrices $L_0,L_1$, and represents the Krylov basis in a compact way. STOAR is a variant of TOAR that exploits symmetry (requires `PEP_HERMITIAN` or `PEP_HYPERBOLIC` problem types). Q-Arnoldi is related to TOAR and follows a similar approach.
+The default solver is `PEPTOAR`. TOAR is a stable algorithm for building an Arnoldi factorization of the linearization (equation {math:numref}`eq:firstcomp`) without explicitly creating matrices $L_0,L_1$, and represents the Krylov basis in a compact way. STOAR is a variant of TOAR that exploits symmetry (requires `PEP_HERMITIAN` or `PEP_HYPERBOLIC` problem types). Q-Arnoldi is related to TOAR and follows a similar approach.
 
 :::{table} Polynomial eigenvalue solvers available in the `PEP` module.
 :name: tab:solversp
@@ -320,7 +346,7 @@ PEPLinearGetEPS(PEP pep,EPS *eps);
 
 This allows the application programmer to set any of the `EPS` options directly within the code. Also, it is possible to change the `EPS` options through the command-line, simply by prefixing the `EPS` options with `-pep_linear_`.
 
-In `PEPLINEAR`, if the eigenproblem is quadratic, the expression used in the linearization is dictated by the problem type set with `PEPProblemType`, which chooses from non-symmetric [](#eq:lingen), symmetric [](#eq:linsym), and Hamiltonian [](#eq:linham) linearizations. The parameters $(\alpha,\beta)$ of these linearizations can be set with `PEPLinearSetLinearization`
+In `PEPLINEAR`, if the eigenproblem is quadratic, the expression used in the linearization is dictated by the problem type set with `PEPProblemType`, which chooses from non-symmetric {math:numref}`eq:lingen`, symmetric {math:numref}`eq:linsym`, and Hamiltonian {math:numref}`eq:linham` linearizations. The parameters $(\alpha,\beta)$ of these linearizations can be set with `PEPLinearSetLinearization`
 
 ```{code} c
 PEPLinearSetLinearization(PEP pep,PetscReal alpha,PetscReal beta);
@@ -343,48 +369,41 @@ For computing eigenvalues in the interior of the spectrum (closest to a target $
 
 The spectral transformation can be applied either to the polynomial problem or its linearization. We illustrate it first for the quadratic case.
 
-Given the quadratic eigenproblem in equation [](#eq:eigquad), it is possible to define the transformed problem
+Given the quadratic eigenproblem in equation {math:numref}`eq:eigquad`, it is possible to define the transformed problem
 
-$$
+```{math}
+:label: eq:sinvquad
+
 (K_\sigma+\theta C_\sigma+\theta^2M_\sigma)x=0,
-$$ (eq:sinvquad)
+```
 
  where the coefficient matrices are
 
-% XXX alignment lost
-%$$
-%\begin{eqnarray}
-%K_\sigma&\!\!=\!\!&M,\\
-%C_\sigma&\!\!=\!\!&C+2\sigma M,\\
-%M_\sigma&\!\!=\!\!&\sigma^2 M+\sigma C+K,
-%\end{eqnarray}
-%$$ (eq:coef-matrices)
+```{math}
+:label: eq:coef-matrices
 
-$$
-K_\sigma \!\!=\!\! M,
-$$ (eq:coef-matrix-K)
+K_\sigma&= M,\\
+C_\sigma&= C+2\sigma M,\\
+M_\sigma&= \sigma^2 M+\sigma C+K,
+```
 
-$$
-C_\sigma \!\!=\!\! C+2\sigma M,
-$$ (eq:coef-matrix-C)
+and the relation between the eigenvalue of the original eigenproblem, $\lambda$, and the transformed one, $\theta$, is $\theta=(\lambda-\sigma)^{-1}$ as in the case of the linear eigenvalue problem. See chapter [](#cap:st) for additional details.
 
-$$
-M_\sigma \!\!=\!\! \sigma^2 M+\sigma C+K,
-$$ (eq:coef-matrix-M)
+The polynomial eigenvalue problem of equation {math:numref}`eq:sinvquad` corresponds to the reversed form of the shifted polynomial, $rev P(\theta)$. The extension to matrix polynomials of arbitrary degree is also possible, where the coefficients of $rev P(\theta)$ have the general form
 
- and the relation between the eigenvalue of the original eigenproblem, $\lambda$, and the transformed one, $\theta$, is $\theta=(\lambda-\sigma)^{-1}$ as in the case of the linear eigenvalue problem. See chapter [](#cap:st) for additional details.
+```{math}
+:label: eq:sinvpep
 
-The polynomial eigenvalue problem of equation [](#eq:sinvquad) corresponds to the reversed form of the shifted polynomial, $rev P(\theta)$. The extension to matrix polynomials of arbitrary degree is also possible, where the coefficients of $rev P(\theta)$ have the general form
-
-$$
 T_k=\sum_{j=0}^{d-k}\binom{j+k}{k}\sigma^{j}A_{j+k},\qquad k=0,\ldots,d.
-$$ (eq:sinvpep)
+```
 
  The way this is implemented in SLEPc is that the `ST` object is in charge of computing the $T_k$ matrices, so that the `PEP` solver operates with these matrices as it would with the original $A_i$ matrices, without changing its behaviour. We say that `ST` performs the transformation.
 
-An alternative would be to apply the shift-and-invert spectral transformation to the linearization equation [](#eq:firstcomp) in a smart way, making the polynomial eigensolver aware of this fact so that it can exploit the block structure of the linearization. Let $S_\sigma:=(L_0-\sigma L_1)^{-1}L_1$, then when the solver needs to extend the Arnoldi basis with an operation such as $z=S_\sigma w$, a linear solve is required with the form
+An alternative would be to apply the shift-and-invert spectral transformation to the linearization equation {math:numref}`eq:firstcomp` in a smart way, making the polynomial eigensolver aware of this fact so that it can exploit the block structure of the linearization. Let $S_\sigma:=(L_0-\sigma L_1)^{-1}L_1$, then when the solver needs to extend the Arnoldi basis with an operation such as $z=S_\sigma w$, a linear solve is required with the form
 
-$$
+```{math}
+:label: eq:sinvpeplin
+
 \begin{bmatrix}
   -\sigma I  & I \\
   & -\sigma I & \ddots \\
@@ -399,7 +418,7 @@ $$
 \begin{bmatrix}
   w^0\\w^1\\\vdots\\w^{d-2}\\A_dw^{d-1}
 \end{bmatrix},
-$$ (eq:sinvpeplin)
+```
 
  with $\tilde{A}_{d-2}=A_{d-2}+\sigma I$ and $\tilde{A}_{d-1}=A_{d-1}+\sigma A_d$. From the block LU factorization, it is possible to derive a simple recurrence to compute $z^i$, with one of the steps involving a linear solve with $P(\sigma)$.
 
@@ -489,15 +508,19 @@ PEPComputeError(PEP pep,PetscInt j,PEPErrorType type,PetscReal *error);
 
 is available to assess the accuracy of the computed solutions. This error is based on the computation of the 2-norm of the residual vector, defined as
 
-$$
+```{math}
+:label: eq:respol
+
 r=P(\tilde{\lambda})\tilde{x},
-$$ (eq:respol)
+```
 
  where $\tilde{\lambda}$ and $\tilde{x}$ represent any of the `nconv` computed eigenpairs delivered by `PEPGetEigenpair`. From the residual norm, the error bound can be computed in different ways, see table [](#tab:peperrors). It is usually recommended to assess the accuracy of the solution using the backward error, defined as
 
-$$
+```{math}
+:label: eq:backward
+
 \eta(\tilde{\lambda},\tilde{x})=\frac{\|r\|}{\sum_{j=0}^d\|A_j\||\tilde\lambda|^j\|\tilde{x}\|},
-$$ (eq:backward)
+```
 
  where $d$ is the degree of the polynomial. Note that the eigenvector is always assumed to have unit norm.
 
@@ -521,13 +544,15 @@ PEPSetConvergenceTest(PEP pep,PEPConv conv);
 
 ### Scaling
 
-When solving a quadratic eigenproblem via linearization, an accurate solution of the generalized eigenproblem does not necessarily imply a similar level of accuracy for the quadratic problem. {cite:t}`Tisseur:2000:BEC` shows that in the case of the linearization equation [](#eq:n1), a small backward error in the generalized eigenproblem guarantees a small backward error in the quadratic eigenproblem. However, this holds only if $M$, $C$ and $K$ have a similar norm.
+When solving a quadratic eigenproblem via linearization, an accurate solution of the generalized eigenproblem does not necessarily imply a similar level of accuracy for the quadratic problem. {cite:t}`Tisseur:2000:BEC` shows that in the case of the linearization equation {math:numref}`eq:n1`, a small backward error in the generalized eigenproblem guarantees a small backward error in the quadratic eigenproblem. However, this holds only if $M$, $C$ and $K$ have a similar norm.
 
 When the norm of $M$, $C$ and $K$ vary widely, {cite:t}`Tisseur:2000:BEC` recommends to solve the scaled problem, defined as
 
-$$
+```{math}
+:label: eq:scaled
+
 (\mu^2M_\alpha+\mu C_\alpha+K)x=0,
-$$ (eq:scaled)
+```
 
  with $\mu=\lambda/\alpha$, $M_\alpha=\alpha^2M$ and $C_\alpha=\alpha C$, where $\alpha$ is a scaling factor. Ideally, $\alpha$ should be chosen in such a way that the norms of $M_\alpha$, $C_\alpha$ and $K$ have similar magnitude. A tentative value would be $\alpha=\sqrt{\frac{\|K\|_\infty}{\|M\|_\infty}}$.
 
@@ -542,7 +567,7 @@ See the manual page for details and the description in {cite:p}`Campos:2016:PKS`
 
 ### Extraction
 
-Some of the eigensolvers provided in the `PEP` package are based on solving the linearized eigenproblem of equation [](#eq:firstcompfull). From the eigenvector $y$ of the linearization, it is possible to extract the eigenvector $x$ of the polynomial eigenproblem. The most straightforward way is to take the first block of $y$, but there are other, more elaborate extraction strategies. For instance, one may compute the norm of the residual (equation [](#eq:respol)) for every block of $y$, and take the one that gives the smallest residual. The different extraction techniques may be selected with `PEPSetExtract`
+Some of the eigensolvers provided in the `PEP` package are based on solving the linearized eigenproblem of equation {math:numref}`eq:firstcompfull`. From the eigenvector $y$ of the linearization, it is possible to extract the eigenvector $x$ of the polynomial eigenproblem. The most straightforward way is to take the first block of $y$, but there are other, more elaborate extraction strategies. For instance, one may compute the norm of the residual (equation {math:numref}`eq:respol`) for every block of $y$, and take the one that gives the smallest residual. The different extraction techniques may be selected with `PEPSetExtract`
 
 ```{code} c
 PEPSetExtract(PEP pep,PEPExtract extract);

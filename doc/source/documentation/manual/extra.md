@@ -50,10 +50,12 @@ In many applications, the matrices that define the eigenvalue problem are not av
 
 An intermediate case is when the matrices have some block structure and the different blocks are stored separately. There are numerous situations in which this occurs, such as the discretization of equations with a mixed finite-element scheme. An example is the eigenproblem arising in the stability analysis associated with Stokes problems,
 
-$$
+```{math}
+:label: eq:stokes
+
 \begin{bmatrix}A & C\\C^* & 0\end{bmatrix}\begin{bmatrix}x\\p\end{bmatrix}
 =\lambda\begin{bmatrix}B & 0\\0 & 0\end{bmatrix}\begin{bmatrix}x\\p\end{bmatrix}\;\;,
-$$ (eq:stokes)
+```
 
 where $x$ and $p$ denote the velocity and pressure fields. Similar formulations also appear in many other situations.
 
@@ -172,16 +174,20 @@ FNSetScale(FN fn,PetscScalar alpha,PetscScalar beta);
 
 where `alpha` multiplies the argument and `beta` multiplies the result. With this, the actual function is $\beta\cdot f(\alpha\cdot x)$ for a given function $f(\cdot)$. For instance, an exponential function $f(x)=e^x$ will turn into
 
-$$
+```{math}
+:label: eq:exp-function
+
 g(x)=\beta e^{\alpha x}.
-$$ (eq:exp-function)
+```
 
 In a rational function there are specific parameters, namely the coefficients of the numerator and denominator,
 
-$$
+```{math}
+:label: eq:num-denum-coefficients
+
 r(x)=\frac{p(x)}{q(x)}
 =\frac{\nu_{n-1}x^{n-1}+\cdots+\nu_1x+\nu_0}{\delta_{m-1}x^{m-1}+\cdots+\delta_1x+\delta_0}.
-$$ (eq:num-denum-coefficients)
+```
 
 These parameters are specified with `FNRationalSetNumerator``FNRationalSetDenominator`
 
@@ -194,9 +200,11 @@ Here, polynomials are passed as an array with high order coefficients appearing 
 
 The $\varphi$-functions are given by
 
-$$
+```{math}
+:label: eq:phi-functions
+
 \varphi_0(x)=e^x,\qquad \varphi_1(x)=\frac{e^x-1}{x},\qquad \varphi_k(x)=\frac{\varphi_{k-1}(x)-1/(k-1)!}{x},
-$$ (eq:phi-functions)
+```
 
 where the index $k$ must be specified with `FNPhiSetIndex`.
 
@@ -211,9 +219,11 @@ The function can also be evaluated as a matrix function, $B=f(A)$, where $A,B$ a
 
 Finally, there is a mechanism to combine simple functions in order to create more complicated functions. For instance, the function
 
-$$
+```{math}
+:label: eq:combined-funct
+
 f(x) = (1-x^2) \exp\left( \frac{-x}{1+x^2} \right)
-$$ (eq:combined-funct)
+```
 
 can be represented with an expression tree with three leaves (one exponential function and two rational functions) and two interior nodes (one of them is the root, $f(x)$). Interior nodes are simply `FN` objects of type `FNCOMBINE` that specify how the two children must be combined (with either addition, multiplication, division or function composition): `FNCombineSetChildren`
 

@@ -10,15 +10,19 @@ The need to evaluate a function $f(A)\in\mathbb{C}^{n\times n}$ of a matrix $A\i
 
 In the sequel, we concentrate on the exponential function, which is one of the most demanded in applications, although the concepts are easily generalizable to other functions as well. Using the Taylor series expansion of $e^A$, we have
 
-$$
+```{math}
+:label: eq:taylor-series
+
 y=e^Av=v+\frac{A}{1!}v+\frac{A^2}{2!}v+\cdots,
-$$ (eq:taylor-series)
+```
 
-so, in principle, the vector $y$ can be approximated by an element of the Krylov subspace $\mathcal{K}_m(A,v)$ defined in equation [](#eq:krylov). This is the basis of the method implemented in EXPOKIt {cite:p}`Sidje:1998:ESP`. Let $AV_m=V_{m+1}\underline{H}_m$ be an Arnoldi decomposition, where the columns of $V_m$ form an orthogonal basis of the Krylov subspace, then the approximation can be computed as
+so, in principle, the vector $y$ can be approximated by an element of the Krylov subspace $\mathcal{K}_m(A,v)$ defined in equation {math:numref}`eq:krylov`. This is the basis of the method implemented in EXPOKIt {cite:p}`Sidje:1998:ESP`. Let $AV_m=V_{m+1}\underline{H}_m$ be an Arnoldi decomposition, where the columns of $V_m$ form an orthogonal basis of the Krylov subspace, then the approximation can be computed as
 
-$$
+```{math}
+:label: eq:aprox-solution
+
 \tilde y=\beta V_m\exp(H_m)e_1,
-$$ (eq:aprox-solution)
+```
 
  where $\beta=\|v\|_2$ and $e_1$ is the first coordinate vector. Hence, the problem of computing the exponential of a large matrix $A$ of order $n$ is reduced to computing the exponential of a small matrix $H_m$ of order $m$. For the latter task, we employ algorithms implemented in the `FN` auxiliary class, see section [](#sec:sys).
 

@@ -99,35 +99,45 @@ In all transformations except `STSHIFT`, there is a direct connection between th
 
 By default, no spectral transformation is performed. This is equivalent to a shift of origin (`STSHIFT`) with $\sigma=0$, that is, the first line of table [](#tab:op). The solver works with the original expressions of the eigenvalue problems,
 
-$$
+```{math}
+:label: eq:std-eig-problem
+
 Ax=\lambda x,
-$$ (eq:std-eig-problem)
+```
 
  for standard problems, and $Ax=\lambda Bx$ for generalized ones. Note that this last equation is actually treated internally as
 
-$$
+```{math}
+:label: eq:gen-eig-problem
+
 B^{-1}Ax=\lambda x.
-$$ (eq:gen-eig-problem)
+```
 
  When the eigensolver in `EPS` requests the application of the operator to a vector, a matrix-vector multiplication by matrix $A$ is carried out (in the standard case) or a matrix-vector multiplication by matrix $A$ followed by a linear system solve with coefficient matrix $B$ (in the generalized case). Note that in the last case, the operation will fail if matrix $B$ is singular.
 
 When the shift, $\sigma$, is given a value different from the default, 0, the effect is to move the whole spectrum by that exact quantity, $\sigma$, which is called *shift of origin*. To achieve this, the solver works with the shifted matrix, that is, the expressions it has to cope with are
 
-$$
+```{math}
+:label: eq:std-eig-problem-shift
+
 (A-\sigma I)x=\theta x,
-$$ (eq:std-eig-problem-shift)
+```
 
  for standard problems, and
 
-$$
+```{math}
+:label: eq:gen-eig-problem-shift
+
 (B^{-1}A-\sigma I) x=\theta x,
-$$ (eq:gen-eig-problem-shift)
+```
 
  for generalized ones. The important property that is used is that shifting does not alter the eigenvectors and that it does change the eigenvalues in a simple known way, it shifts them by $\sigma$. In both the standard and the generalized problems, the following relation holds
 
-$$
+```{math}
+:label: eq:eig-problem-shift
+
 \theta=\lambda-\sigma.
-$$ (eq:eig-problem-shift)
+```
 
 This means that after the solution process, the value $\sigma$ has to be added[^slepc-v3.5] to the computed eigenvalues, $\theta$, in order to retrieve the solution of the original problem, $\lambda$. This is done by means of the function `STBackTransform`, which does not need to be called directly by the user.
 
@@ -142,19 +152,25 @@ The shift-and-invert spectral transformation.
 
 The shift-and-invert spectral transformation (`STSINVERT`) is used to enhance convergence of eigenvalues in the neighborhood of a given value. In this case, the solver deals with the expressions
 
-$$
-(A-\sigma I)^{-1}x=\theta x,
-$$ (eq:std-eig-problem-shift-and-invert)
+```{math}
+:label: eq:std-eig-problem-shift-and-invert
 
-$$
+(A-\sigma I)^{-1}x=\theta x,
+```
+
+```{math}
+:label: eq:gen-eig-problem-shift-and-invert
+
 (A-\sigma B)^{-1}B x=\theta x,
-$$ (eq:gen-eig-problem-shift-and-invert)
+```
 
  for standard and generalized problems, respectively. This transformation is effective for finding eigenvalues near $\sigma$ since the eigenvalues $\theta$ of the operator that are largest in magnitude correspond to the eigenvalues $\lambda$ of the original problem that are closest to the shift $\sigma$ in absolute value, as illustrated in figure [](#fig:sinvert) for an example with real eigenvalues. Once the wanted eigenvalues have been found, they may be transformed back to eigenvalues of the original problem. Again, the eigenvectors remain unchanged. In this case, the relation between the eigenvalues of both problems is
 
-$$
+```{math}
+:label: eq:eig-problem-shift-and-invert
+
 \theta=1/(\lambda-\sigma).
-$$ (eq:eig-problem-shift-and-invert)
+```
 
 Therefore, after the solution process, the operation to be performed in function `STBackTransform` is $\lambda=\sigma+1/\theta$ for each of the computed eigenvalues.
 
@@ -165,13 +181,17 @@ This spectral transformation is used in the spectrum slicing technique, see sect
 
 The generalized Cayley transform (`STCAYLEY`) is defined from the expressions
 
-$$
-(A-\sigma I)^{-1}(A+\nu I)x=\theta x,
-$$ (eq:std-eig-problem-cayley)
+```{math}
+:label: eq:std-eig-problem-cayley
 
-$$
+(A-\sigma I)^{-1}(A+\nu I)x=\theta x,
+```
+
+```{math}
+:label: eq:gen-eig-problem-cayley
+
 (A-\sigma B)^{-1}(A+\nu B)x=\theta x,
-$$ (eq:gen-eig-problem-cayley)
+```
 
  for standard and generalized problems, respectively. Sometimes, the term Cayley transform is applied for the particular case in which $\nu=\sigma$. This is the default if $\nu$ is not given a value explicitly. The value of $\nu$ (the anti-shift) can be set with the following function `STCayleySetAntishift`
 
@@ -185,9 +205,11 @@ This transformation is mathematically equivalent to shift-and-invert and, theref
 
 In this case, the relation between the eigenvalues of both problems is
 
-$$
+```{math}
+:label: eq:eig-problem-cayley
+
 \theta=(\lambda+\nu)/(\lambda-\sigma).
-$$ (eq:eig-problem-cayley)
+```
 
  Therefore, after the solution process, the operation to be performed in function `STBackTransform` is $\lambda=(\theta\sigma+\nu)/(\theta-1)$ for each of the computed eigenvalues.
 
@@ -196,17 +218,29 @@ $$ (eq:eig-problem-cayley)
 
 As mentioned in the introduction of this chapter, the special type `STPRECOND` is used for handling preconditioners or preconditioned iterative linear solvers, which are used in the context of preconditioned eigensolvers for expanding the subspace. For instance, in the GD solver the so-called correction vector $d_i$ to be added to the subspace in each iteration is computed as
 
-$$
+```{math}
+:label: eq:correction-vector
+
 d_i=K^{-1}P_i(A-\theta_i B)x_i,
-$$ (eq:correction-vector)
+```
 
  where $(\theta_i,x_i)$ is the current approximation of the sought-after eigenpair, and $P_i$ is a projector involving $x_i$ and $K^{-1}x_i$. In the above expressions, $K$ is a preconditioner matrix that is built from $A-\theta_i B$. However, since $\theta_i$ changes at each iteration, which would force recomputation of the preconditioner, we opt for using
 
-$$
-K^{-1}\approx (A-\sigma B)^{-1}.
-$$ (eq:precon)
+```{math}
+:label: eq:precon
 
-Similarly, in the JD eigensolver the expansion of the subspace is carried out by solving a correction equation similar to $$(I-x_ix_i^*)(A-\theta_i B)(I-x_ix_i^*)d_i=-(A-\theta_i B)x_i,$$ where the system is solved approximately with a preconditioned iterative linear solver. For building the preconditioner of this linear system, the projectors $I-x_ix_i^*$ are ignored, and again it is not recomputed in each iteration. Therefore, the preconditioner is built as in equation [](#eq:precon) as well.
+K^{-1}\approx (A-\sigma B)^{-1}.
+```
+
+Similarly, in the JD eigensolver the expansion of the subspace is carried out by solving a correction equation similar to
+
+```{math}
+:label: eq:jd-correction
+
+(I-x_ix_i^*)(A-\theta_i B)(I-x_ix_i^*)d_i=-(A-\theta_i B)x_i,
+```
+
+ where the system is solved approximately with a preconditioned iterative linear solver. For building the preconditioner of this linear system, the projectors $I-x_ix_i^*$ are ignored, and again it is not recomputed in each iteration. Therefore, the preconditioner is built as in equation {math:numref}`eq:precon` as well.
 
 It should be clear from the previous discussion, that `STPRECOND` does not work in the same way as the rest of spectral transformations. In particular, it does not rely on `STBackTransform`. It is rather a convenient mechanism for handling the preconditioner and linear solver (see examples in section [](#sec:lin)). The expressions shown in tables [](#tab:transforms) and [](#tab:op) are just a reference to indicate from which matrix the preconditioner is built by default.
 
@@ -229,8 +263,15 @@ Note that preconditioned eigensolvers in `EPS` select `STPRECOND` by default, so
 
 The type `STFILTER` is also special. It is used in the case of standard symmetric (or Hermitian) eigenvalue problems when the eigenvalues of interest are interior to the spectrum and we want to avoid the high cost associated with the matrix factorization of the shift-and-invert spectral transformation. The techniques generically known as *polynomial filtering* aim at this goal.
 
-The polynomial filtering methods address the eigenvalue problem $$\label{eq:polyfilt}
-p(A)x=\theta x,$$ where $p(\cdot)$ is a suitable high-degree polynomial. Once the polynomial is built, the eigensolver relies on `STApply` to compute approximations of the eigenvalues $\theta$ of the transformed problem. These approximations must be processed in some way in order to recover the $\lambda$ eigenvalues. Note that in this case there is no `STBackTransform` operation. Details of the method can be found in {cite:p}`Fang:2012:FLP`.
+The polynomial filtering methods address the eigenvalue problem
+
+```{math}
+:label: eq:polyfilt
+
+p(A)x=\theta x,
+```
+
+ where $p(\cdot)$ is a suitable high-degree polynomial. Once the polynomial is built, the eigensolver relies on `STApply` to compute approximations of the eigenvalues $\theta$ of the transformed problem. These approximations must be processed in some way in order to recover the $\lambda$ eigenvalues. Note that in this case there is no `STBackTransform` operation. Details of the method can be found in {cite:p}`Fang:2012:FLP`.
 
 Polynomial filtering techniques are still under development in SLEPc, and will be improved in future versions. Note that the external package EVSL also implements polynomial filters to compute all eigenvalues in an interval.
 
@@ -424,7 +465,23 @@ In the context of symmetric-definite generalized eigenvalue problems (`EPS_GHEP`
 
 -   In some applications, the interval is open in one end, i.e., either $a$ or $b$ can be infinite.
 
-One possible strategy to solve this problem is to sweep the interval from one end to the other, computing chunks of eigenvalues with a spectral transformation that updates the shift dynamically. This is generally referred to as *spectrum slicing*. The method implemented in SLEPc is similar to that proposed by {cite:t}`Grimes:1994:SBL`, where inertia information is used to validate sub-intervals. Given a symmetric-indefinite triangular factorization $$A-\sigma B=LDL^T,$$ by Sylvester's law of inertia we know that the number of eigenvalues on the left of $\sigma$ is equal to the number of negative eigenvalues of $D$, $$\nu(A-\sigma B)=\nu(D).$$ A detailed description of the method available in SLEPc can be found in {cite:p}`Campos:2012:SSS`. The SLEPc interface hides all the complications of the algorithm. However, the user must be aware of all the restrictions for this technique to be employed:
+One possible strategy to solve this problem is to sweep the interval from one end to the other, computing chunks of eigenvalues with a spectral transformation that updates the shift dynamically. This is generally referred to as *spectrum slicing*. The method implemented in SLEPc is similar to that proposed by {cite:t}`Grimes:1994:SBL`, where inertia information is used to validate sub-intervals. Given a symmetric-indefinite triangular factorization
+
+```{math}
+:label: eq-symindtri
+
+A-\sigma B=LDL^T,
+```
+
+ by Sylvester's law of inertia we know that the number of eigenvalues on the left of $\sigma$ is equal to the number of negative eigenvalues of $D$,
+
+```{math}
+:label: eq-inertia
+
+\nu(A-\sigma B)=\nu(D).
+```
+
+ A detailed description of the method available in SLEPc can be found in {cite:p}`Campos:2012:SSS`. The SLEPc interface hides all the complications of the algorithm. However, the user must be aware of all the restrictions for this technique to be employed:
 
 -   This is currently implemented only in Krylov-Schur.
 
@@ -507,15 +564,19 @@ In SLEPc versions prior to 3.5, `ST` had another type intended to perform the sp
 
 Spectrum folding involves squaring in addition to shifting. This makes sense for standard Hermitian eigenvalue problems, where the transformed problem to be addressed is
 
-$$
+```{math}
+:label: eq:spectrum-folding
+
 (A-\sigma I)^2x=\theta x.
-$$ (eq:spectrum-folding)
+```
 
 The following relation holds
 
-$$
+```{math}
+:label: eq:spectrum-folding-relation
+
 \theta=(\lambda-\sigma)^2.
-$$ (eq:spectrum-folding-relation)
+```
 
  Note that the mapping between $\lambda$ and $\theta$ is not injective, and hence this cannot be considered a true spectral transformation.
 

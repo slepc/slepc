@@ -14,34 +14,42 @@ As in previous chapters, we first set up the notation and briefly review basic p
 
 We consider nonlinear eigenvalue problems of the form
 
-$$
-T(\lambda)x=0,\qquad x\neq 0,
-$$ (eq:nep)
+```{math}
+:label: eq:nep
 
- where $T:\Omega\rightarrow\mathbb{C}^{n\times n}$ is a matrix-valued function that is analytic on an open set of the complex plane $\Omega\subseteq\mathbb{C}$. Assuming that the problem is regular, that is, $\det T(\lambda)$ does not vanish identically, any pair $(\lambda,x)$ satisfying equation [](#eq:nep) is an eigenpair, where $\lambda\in\Omega$ is the eigenvalue and $x\in\mathbb{C}^n$ is the eigenvector. Linear and polynomial eigenproblems are particular cases of equation [](#eq:nep).
+T(\lambda)x=0,\qquad x\neq 0,
+```
+
+ where $T:\Omega\rightarrow\mathbb{C}^{n\times n}$ is a matrix-valued function that is analytic on an open set of the complex plane $\Omega\subseteq\mathbb{C}$. Assuming that the problem is regular, that is, $\det T(\lambda)$ does not vanish identically, any pair $(\lambda,x)$ satisfying equation {math:numref}`eq:nep` is an eigenpair, where $\lambda\in\Omega$ is the eigenvalue and $x\in\mathbb{C}^n$ is the eigenvector. Linear and polynomial eigenproblems are particular cases of equation {math:numref}`eq:nep`.
 
 An example application is the rational eigenvalue problem
 
-$$
+```{math}
+:label: eq:rep
+
 -Kx+\lambda Mx+\sum_{j=1}^k\frac{\lambda}{\sigma_j-\lambda}C_jx=0,
-$$ (eq:rep)
+```
 
  arising in the study of free vibration of plates with elastically attached masses. Here, all matrices are symmetric, $K$ and $M$ are positive-definite and $C_j$ have small rank. Another example comes from the discretization of parabolic partial differential equations with time delay $\tau$, resulting in
 
-$$
+```{math}
+:label: eq:delay
+
 (-\lambda I + A + e^{-\tau\lambda}B)x = 0.
-$$ (eq:delay)
+```
 
 ### Split Form
 
-Equation [](#eq:nep) can always be rewritten as
+Equation {math:numref}`eq:nep` can always be rewritten as
 
-$$
+```{math}
+:label: eq:split
+
 \big(A_0f_0(\lambda)+A_1f_1(\lambda)+\cdots+A_{\ell-1}f_{\ell-1}(\lambda)\big)x=
 \left(\sum_{i=0}^{\ell-1}A_if_i(\lambda)\right)x = 0,
-$$ (eq:split)
+```
 
- where $A_i$ are $n\times n$ matrices and $f_i:\Omega\rightarrow\mathbb{C}$ are analytic functions. We will call equation [](#eq:split) the split form of the nonlinear eigenvalue problem. Often, the formulation arising from applications already has this form, as illustrated by the examples above. Also, a polynomial eigenvalue problem fits this form, where in this case the $f_i$ functions are the polynomial bases of degree $i$, either monomial or non-monomial.
+ where $A_i$ are $n\times n$ matrices and $f_i:\Omega\rightarrow\mathbb{C}$ are analytic functions. We will call equation {math:numref}`eq:split` the split form of the nonlinear eigenvalue problem. Often, the formulation arising from applications already has this form, as illustrated by the examples above. Also, a polynomial eigenvalue problem fits this form, where in this case the $f_i$ functions are the polynomial bases of degree $i$, either monomial or non-monomial.
 
 ## Defining the Problem
 
@@ -80,9 +88,11 @@ NEPDestroy( &nep );
 
 In `SNES`, the usual way to define a set of nonlinear equations $F(x)=0$ is to provide two user-defined callback functions, one to compute the residual vector, $r=F(x)$ for a given $x$, and another one to evaluate the Jacobian matrix, $J(x)=F'(x)$. In the case of `NEP` there are some differences, since the function $T$ depends on the parameter $\lambda$ only. For a given value of $\lambda$ and its associated vector $x$, the residual vector is defined as
 
-$$
+```{math}
+:label: eq:nlres
+
 r=T(\lambda)x.
-$$ (eq:nlres)
+```
 
  We require the user to provide a callback function to evaluate $T(\lambda)$, rather than computing the residual $r$. Once $T(\lambda)$ has been built, `NEP` solvers can compute its action on any vector $x$. Regarding the derivative, in `NEP` we use $T'(\lambda)$, which will be referred to as the Jacobian matrix by analogy to `SNES`. This matrix must be computed with another callback function.
 
@@ -141,7 +151,15 @@ The default is to compute the largest magnitude eigenvalues. For the sorting cri
 
 #### Left Eigenvectors
 
-As in the case of linear eigensolvers, some `NEP` solvers have two-sided variants to compute also left eigenvectors. In the case of `NEP`, left eigenvectors are defined as $$y^*T(\lambda)=0^*,\qquad y\neq 0.\label{eq:nepleft}$$ Two-sided variants can be selected with `NEPSetTwoSided`
+As in the case of linear eigensolvers, some `NEP` solvers have two-sided variants to compute also left eigenvectors. In the case of `NEP`, left eigenvectors are defined as
+
+```{math}
+:label: eq:nepleft
+
+y^*T(\lambda)=0^*,\qquad y\neq 0.
+```
+
+ Two-sided variants can be selected with `NEPSetTwoSided`
 
 ```{code} c
 NEPSetTwoSided(NEP eps,PetscBool twosided);
@@ -174,7 +192,7 @@ mats[2] = B;  funs[2] = f3;
 NEPSetSplitOperator(nep,3,mats,funs,SUBSET_NONZERO_PATTERN);
 ```
 
-Instead of implementing callback functions for $T(\lambda)$ and $T'(\lambda)$, a usually simpler alternative is to use the split form of the nonlinear eigenproblem, equation [](#eq:split). Note that in split form, we have $T'(\lambda)=\sum_{i=0}^{\ell-1}A_if'_i(\lambda)$, so the derivatives of $f_i(\lambda)$ are also required. As described below, we will represent each of the analytic functions $f_i$ by means of an auxiliary object `FN` that holds both the function and its derivative.
+Instead of implementing callback functions for $T(\lambda)$ and $T'(\lambda)$, a usually simpler alternative is to use the split form of the nonlinear eigenproblem, equation {math:numref}`eq:split`. Note that in split form, we have $T'(\lambda)=\sum_{i=0}^{\ell-1}A_if'_i(\lambda)$, so the derivatives of $f_i(\lambda)$ are also required. As described below, we will represent each of the analytic functions $f_i$ by means of an auxiliary object `FN` that holds both the function and its derivative.
 
 Hence, for the split form representation we must provide $\ell$ matrices $A_i$ and the corresponding functions $f_i(\lambda)$, by means of `NEPSetSplitOperator`
 
@@ -182,7 +200,7 @@ Hence, for the split form representation we must provide $\ell$ matrices $A_i$ a
 NEPSetSplitOperator(NEP nep,PetscInt l,Mat A[],FN f[],MatStructure str);
 ```
 
-Here, the `MatStructure` flag is used to indicate whether all matrices have the same (or subset) nonzero pattern with respect to the first one. Figure [](#fig:ex-split) illustrates this usage with the problem of equation [](#eq:delay), where $\ell=3$ and the matrices are $I$, $A$ and $B$ (note that in the code we have changed the order for efficiency reasons, since the nonzero pattern of $I$ and $B$ is a subset of $A$'s in this case). Two of the associated functions are polynomials ($-\lambda$ and $1$) and the other one is the exponential $e^{-\tau\lambda}$.
+Here, the `MatStructure` flag is used to indicate whether all matrices have the same (or subset) nonzero pattern with respect to the first one. Figure [](#fig:ex-split) illustrates this usage with the problem of equation {math:numref}`eq:delay`, where $\ell=3$ and the matrices are $I$, $A$ and $B$ (note that in the code we have changed the order for efficiency reasons, since the nonzero pattern of $I$ and $B$ is a subset of $A$'s in this case). Two of the associated functions are polynomials ($-\lambda$ and $1$) and the other one is the exponential $e^{-\tau\lambda}$.
 
 Note that using the split form is required in order to be able to use some eigensolvers, in particular, those that project the nonlinear eigenproblem onto a low dimensional subspace and then use a dense nonlinear solver for the projected problem.
 
@@ -198,7 +216,7 @@ Details of how to define the $f_i$ functions by using the `FN` class are provide
 
 :::
 
-When defining the problem in split form, it may also be useful to specify a problem type. For example, if the user knows that all $f_i$ functions are rational, as in equation [](#eq:rep), then setting the problem type to `NEP_RATIONAL` gives a hint to the solver that may simplify the solution process. The problem types currently supported for `NEP` are listed in table [](#tab:ntypeq). When in doubt, use the default problem type (`NEP_GENERAL`).
+When defining the problem in split form, it may also be useful to specify a problem type. For example, if the user knows that all $f_i$ functions are rational, as in equation {math:numref}`eq:rep`, then setting the problem type to `NEP_RATIONAL` gives a hint to the solver that may simplify the solution process. The problem types currently supported for `NEP` are listed in table [](#tab:ntypeq). When in doubt, use the default problem type (`NEP_GENERAL`).
 
 The problem type can be specified at run time with the corresponding command line key or, more usually, within the program with the function `NEPSetProblemType`
 
@@ -323,7 +341,7 @@ The function `NEPComputeError`
 NEPComputeError(NEP nep,PetscInt j,NEPErrorType type,PetscReal *error);
 ```
 
-can be used to assess the accuracy of the computed solutions. The error is based on the 2-norm of the residual vector $r$ defined in equation [](#eq:nlres).
+can be used to assess the accuracy of the computed solutions. The error is based on the 2-norm of the residual vector $r$ defined in equation {math:numref}`eq:nlres`.
 
 As in the case of `EPS`, in `NEP` the number of iterations carried out by the solver can be determined with `NEPGetIterationNumber`, and the tolerance and maximum number of iterations can be set with `NEPSetTolerances`. Also, convergence can be monitored with either textual monitors `-nep_monitor`, `-nep_monitor_all`, `-nep_monitor_conv`, or graphical monitors `-nep_monitor draw::draw_lg`, `-nep_monitor_all draw::draw_lg`. See section [](#sec:monitor) for additional details. Similarly, there is support for viewing the computed solution as explained in section [](#sec:epsviewers).
 

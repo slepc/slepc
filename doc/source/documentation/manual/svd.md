@@ -17,9 +17,11 @@ For background material about the SVD, see for instance {cite:p}`Bai:2000:TSA{ch
 
 The singular value decomposition (SVD) of an $m\times n$ matrix $A$ can be written as
 
-$$
+```{math}
+:label: eq:svd
+
 A=U\Sigma V^*,
-$$ (eq:svd)
+```
 
  where $U=[u_1,\ldots,u_m]$ is an $m\times m$ unitary matrix ($U^*U=I$), $V=[v_1,\ldots,v_n]$ is an $n\times n$ unitary matrix ($V^*V=I$), and $\Sigma$ is an $m\times n$ diagonal matrix with real diagonal entries $\Sigma_{ii}=\sigma_i$ for $i=1,\ldots,\min\{m,n\}$. If $A$ is real, $U$ and $V$ are real and orthogonal. The vectors $u_i$ are called the left singular vectors, the $v_i$ are the right singular vectors, and the $\sigma_i$ are the singular values.
 
@@ -30,41 +32,49 @@ $$ (eq:svd)
 Scheme of the thin SVD of a rectangular matrix $A$.
 ```
 
-In the following, we will assume that $m\geq n$. If $m<n$ then $A$ should be replaced by $A^*$ (note that in SLEPc this is done transparently as described later in this chapter and the user need not worry about this). In the case that $m\geq n$, the top $n$ rows of $\Sigma$ contain $\mathrm{diag}(\sigma_1,\ldots,\sigma_n)$ and its bottom $m-n$ rows are zero. The relation equation [](#eq:svd) may also be written as $AV=U\Sigma$, or
+In the following, we will assume that $m\geq n$. If $m<n$ then $A$ should be replaced by $A^*$ (note that in SLEPc this is done transparently as described later in this chapter and the user need not worry about this). In the case that $m\geq n$, the top $n$ rows of $\Sigma$ contain $\mathrm{diag}(\sigma_1,\ldots,\sigma_n)$ and its bottom $m-n$ rows are zero. The relation equation {math:numref}`eq:svd` may also be written as $AV=U\Sigma$, or
 
-$$
+```{math}
+:label: eq:svdleft
+
 Av_i=u_i\sigma_i\;,\quad i=1,\ldots,n,
-$$ (eq:svdleft)
+```
 
  and also as $A^*U=V\Sigma^*$, or
 
-$$
+```{math}
+:label: eq:svdright
+
 \begin{aligned}
 A^*u_i&=v_i\sigma_i\;,\quad i=1,\ldots,n,\\
 \end{aligned}
-$$ (eq:svdright)
+```
 
-$$
+```{math}
+:label: eq:svdright2
+
 \begin{aligned}
 A^*u_i&=0\;,\quad i=n+1,\ldots,m.
 \end{aligned}
-$$ (eq:svdright2)
+```
 
- The last left singular vectors corresponding to equation [](#eq:svdright2) are often not computed, especially if $m\gg n$. In that case, the resulting factorization is sometimes called the *thin* SVD, $A=U_n\Sigma_n V_n^*$, and is depicted in figure [](#fig:svd). This factorization can also be written as
+ The last left singular vectors corresponding to equation {math:numref}`eq:svdright2` are often not computed, especially if $m\gg n$. In that case, the resulting factorization is sometimes called the *thin* SVD, $A=U_n\Sigma_n V_n^*$, and is depicted in figure [](#fig:svd). This factorization can also be written as
 
-$$
+```{math}
+:label: eq:svdouter
+
 A=\sum_{i=1}^{n}\sigma_iu_iv_i^*.
-$$ (eq:svdouter)
+```
 
  Each $(\sigma_i,u_i,v_i)$ is called a singular triplet.
 
 The singular values are real and nonnegative, $\sigma_1\geq\sigma_2\geq\ldots\geq\sigma_r>\sigma_{r+1}=\ldots=\sigma_n=0$, where $r=\mathrm{rank}(A)$. It can be shown that $\{u_1,\ldots,u_r\}$ span the range of $A$, $\mathcal{R}(A)$, whereas $\{v_{r+1},\ldots,v_n\}$ span the null space of $A$, $\mathcal{N}(A)$.
 
-If the zero singular values are dropped from the sum in equation [](#eq:svdouter), the resulting factorization, $A=\sum_{i=1}^{r}\sigma_iu_iv_i^*$, is called the *compact* SVD, $A=U_r\Sigma_r V_r^*$.
+If the zero singular values are dropped from the sum in equation {math:numref}`eq:svdouter`, the resulting factorization, $A=\sum_{i=1}^{r}\sigma_iu_iv_i^*$, is called the *compact* SVD, $A=U_r\Sigma_r V_r^*$.
 
 In the case of a very large and sparse $A$, it is usual to compute only a subset of $k\leq r$ singular triplets. We will refer to this decomposition as the *truncated* SVD of $A$. It can be shown that the matrix $A_k=U_k\Sigma_k V_k^*$ is the best rank-$k$ approximation to matrix $A$, in the least squares sense.
 
-In general, one can take an arbitrary subset of the summands in equation [](#eq:svdouter), and the resulting factorization is called the *partial* SVD of $A$. As described later in this chapter, SLEPc allows the computation of a partial SVD corresponding to either the $k$ largest or smallest singular triplets.
+In general, one can take an arbitrary subset of the summands in equation {math:numref}`eq:svdouter`, and the resulting factorization is called the *partial* SVD of $A$. As described later in this chapter, SLEPc allows the computation of a partial SVD corresponding to either the $k$ largest or smallest singular triplets.
 
 #### Equivalent Eigenvalue Problems
 
@@ -76,29 +86,35 @@ It is possible to formulate the problem of computing the singular triplets of a 
 
 In SLEPc, the computation of the SVD is usually based on one of these two alternatives, either by passing one of these matrices to an `EPS` object or by performing the computation implicitly.
 
-By pre-multiplying equation [](#eq:svdleft) by $A^*$ and then using equation [](#eq:svdright), the following relation results
+By pre-multiplying equation {math:numref}`eq:svdleft` by $A^*$ and then using equation {math:numref}`eq:svdright`, the following relation results
 
-$$
+```{math}
+:label: eq:eigleft
+
 A^*Av_i=\sigma_i^2v_i,
-$$ (eq:eigleft)
+```
 
- that is, the $v_i$ are the eigenvectors of matrix $A^*A$ with corresponding eigenvalues equal to $\sigma_i^2$. Note that after computing $v_i$ the corresponding left singular vector, $u_i$, is readily available through equation [](#eq:svdleft) with just a matrix-vector product, $u_i=\frac{1}{\sigma_i}Av_i$.
+ that is, the $v_i$ are the eigenvectors of matrix $A^*A$ with corresponding eigenvalues equal to $\sigma_i^2$. Note that after computing $v_i$ the corresponding left singular vector, $u_i$, is readily available through equation {math:numref}`eq:svdleft` with just a matrix-vector product, $u_i=\frac{1}{\sigma_i}Av_i$.
 
-Alternatively, one could first compute the left vectors and then the right ones. For this, pre-multiply equation [](#eq:svdright) by $A$ and then use equation [](#eq:svdleft) to get
+Alternatively, one could first compute the left vectors and then the right ones. For this, pre-multiply equation {math:numref}`eq:svdright` by $A$ and then use equation {math:numref}`eq:svdleft` to get
 
-$$
+```{math}
+:label: eq:eigright
+
 AA^*u_i=\sigma_i^2u_i.
-$$ (eq:eigright)
+```
 
  In this case, the right singular vectors are obtained as $v_i=\frac{1}{\sigma_i}A^*u_i$.
 
-The two approaches represented in equations [](#eq:eigleft) and [](#eq:eigright) are very similar. Note however that $A^*A$ is a square matrix of order $n$ whereas $AA^*$ is of order $m$. In cases where $m\gg n$, the computational effort will favor the $A^*A$ approach. On the other hand, the eigenproblem equation [](#eq:eigleft) has $n-r$ zero eigenvalues and the eigenproblem equation [](#eq:eigright) has $m-r$ zero eigenvalues. Therefore, continuing with the assumption that $m\geq n$, even in the full rank case the $AA^*$ approach may have a large null space resulting in difficulties if the smallest singular values are sought. In SLEPc, this will be referred to as the cross product approach and will use whichever matrix is smaller, either $A^*A$ or $AA^*$.
+The two approaches represented in equations {math:numref}`eq:eigleft` and {math:numref}`eq:eigright` are very similar. Note however that $A^*A$ is a square matrix of order $n$ whereas $AA^*$ is of order $m$. In cases where $m\gg n$, the computational effort will favor the $A^*A$ approach. On the other hand, the eigenproblem equation {math:numref}`eq:eigleft` has $n-r$ zero eigenvalues and the eigenproblem equation {math:numref}`eq:eigright` has $m-r$ zero eigenvalues. Therefore, continuing with the assumption that $m\geq n$, even in the full rank case the $AA^*$ approach may have a large null space resulting in difficulties if the smallest singular values are sought. In SLEPc, this will be referred to as the cross product approach and will use whichever matrix is smaller, either $A^*A$ or $AA^*$.
 
 Computing the SVD via the cross product approach may be adequate for determining the largest singular triplets of $A$, but the loss of accuracy can be severe for the smallest singular triplets. The cyclic matrix approach is an alternative that avoids this problem, but at the expense of significantly increasing the cost of the computation. Consider the eigendecomposition of
 
-$$
+```{math}
+:label: eq:cyclic
+
 H(A)=\begin{bmatrix}0&A\\A^*&0\end{bmatrix},
-$$ (eq:cyclic)
+```
 
  which is a Hermitian matrix of order $(m+n)$. It can be shown that $\pm\sigma_i$ is a pair of eigenvalues of $H(A)$ for $i=1,\ldots,r$ and the other $m+n-2r$ eigenvalues are zero. The unit eigenvectors associated with $\pm\sigma_i$ are $\frac{1}{\sqrt{2}}\left[\begin{smallmatrix}\pm u_i\\v_i\end{smallmatrix}\right]$. Thus it is possible to extract the singular values and the left and right singular vectors of $A$ directly from the eigenvalues and eigenvectors of $H(A)$. Note that in this case the singular values are not squared, and therefore the computed values will be more accurate (especially the small ones). The drawback in this case is that small eigenvalues are located in the interior of the spectrum.
 
@@ -109,23 +125,29 @@ An extension of the SVD to the case of two matrices is the generalized singular 
 
 Consider two matrices, $A\in\mathbb{C}^{m\times n}$ with $m\geq n$ and $B\in\mathbb{C}^{p\times n}$. Note that both matrices must have the same column dimension. Then there exist two unitary matrices $U\in\mathbb{C}^{m\times m}$ and $V\in\mathbb{C}^{p\times p}$ and an invertible matrix $X\in\mathbb{C}^{n\times n}$ such that
 
-$$
+```{math}
+:label: eq:gsvd
+
 U^*AX=C,\qquad V^*BX=S,
-$$ (eq:gsvd)
+```
 
  where $C=\mathrm{diag}(c_1,\dots,c_n)$ and $S=\mathrm{diag}(s_{n-q+1},\dots,s_n)$ with $q=\min(p,n)$. The values $c_i$ and $s_i$ are real and nonnegative, and the ratios define the generalized singular values,
 
-$$
-\sigma(A,B)\equiv\{c_1/s_1,\dots,c_q/s_q\},
-$$ (eq:gsvd-values)
+```{math}
+:label: eq:gsvd-values
 
-and if $p<n$ we can consider that the first $n-p$ generalized singular values are infinite, as if $s_1=\dots=s_{n-p}=0$. Note that if $B$ is the identity matrix, $X$ can be taken to be unitary and then we recover the standard SVD, $\sigma(A,I)=\sigma(A)$, that is why equation [](#eq:gsvd) is considered a generalization of the SVD.
+\sigma(A,B)\equiv\{c_1/s_1,\dots,c_q/s_q\},
+```
+
+and if $p<n$ we can consider that the first $n-p$ generalized singular values are infinite, as if $s_1=\dots=s_{n-p}=0$. Note that if $B$ is the identity matrix, $X$ can be taken to be unitary and then we recover the standard SVD, $\sigma(A,I)=\sigma(A)$, that is why equation {math:numref}`eq:gsvd` is considered a generalization of the SVD.
 
 The diagonal matrices $C$ and $S$ satisfy $C^*C+S^*S=I$, and are related to the CS decomposition {cite:p}`Golub:1996:MC{2.6.4}` associated with the orthogonal factor of the QR factorization of matrices $A$ and $B$ stacked, that is, if
 
-$$
+```{math}
+:label: eq:qr
+
 Z:=\begin{bmatrix}A\\B\end{bmatrix}=\begin{bmatrix}Q_1\\Q_2\end{bmatrix}R,
-$$ (eq:qr)
+```
 
  then $C$ and $S$ can be obtained from the singular values of $Q_1$ and $Q_2$, respectively. The matrix $Z$ is relevant for algorithms and is often built explicitly.
 
@@ -146,15 +168,19 @@ The columns of $X$, $x_i$, are called the (right) generalized singular vectors. 
 
 In the GSVD it is also possible to formulate the problem as an eigenvalue problem, which opens the door to approach its solution via `EPS`. The columns of $X$ satisfy
 
-$$
+```{math}
+:label: eq:gsvdeigcross
+
 s_i^2A^*Ax_i=c_i^2B^*Bx_i,
-$$ (eq:gsvdeigcross)
+```
 
-and so if $s_i\neq 0$ then $A^*Ax_i=\sigma_i^2B^*Bx_i$, a generalized eigenvalue problem for the matrix pair $(A^*A,B^*B)$. This is the analog of the cross product matrix eigenproblem of equation [](#eq:eigleft).
+and so if $s_i\neq 0$ then $A^*Ax_i=\sigma_i^2B^*Bx_i$, a generalized eigenvalue problem for the matrix pair $(A^*A,B^*B)$. This is the analog of the cross product matrix eigenproblem of equation {math:numref}`eq:eigleft`.
 
-The formulation that is analog to the eigenproblem associated with the cyclic matrix equation [](#eq:cyclic) is to solve the generalized eigenvalue problem defined by any of the matrix pairs
+The formulation that is analog to the eigenproblem associated with the cyclic matrix equation {math:numref}`eq:cyclic` is to solve the generalized eigenvalue problem defined by any of the matrix pairs
 
-$$
+```{math}
+:label: eq:gsvdeigcyclic
+
 \left(
 \begin{bmatrix}0&A\\A^*&0\end{bmatrix},
 \begin{bmatrix}I&0\\0&B^*B\end{bmatrix}
@@ -164,34 +190,40 @@ $$
 \begin{bmatrix}0&B\\B^*&0\end{bmatrix},
 \begin{bmatrix}I&0\\0&A^*A\end{bmatrix}
 \right).
-$$ (eq:gsvdeigcyclic)
+```
 
 {#sec:hsvd label="sec:hsvd"}
 ### The Hyperbolic Singular Value Decomposition (HSVD)
 
 The hyperbolic singular value decomposition (HSVD) was introduced in {cite:p}`Onn:1991:HSV`, motivated by some signal processing applications such as the so-called covariance differencing problem. The formulation of the HSVD is similar to that of the SVD, except that $U$ is orthogonal with respect to a signature matrix,
 
-$$
+```{math}
+:label: eq:hsvd
+
 A=U\Sigma V^*,\qquad U^*\Omega U=\tilde\Omega,
-$$ (eq:hsvd)
+```
 
  where $\Omega=\mathrm{diag}(\pm 1)$ is an $m\times m$ signature matrix provided by the user, while $\tilde\Omega$ is another signature matrix obtained as part of the solution. Sometimes $U$ is said to be a hyperexchange matrix, or also an $(\Omega,\tilde\Omega)$-orthogonal matrix. Note that in the problem definition normally found in the literature it is $V$ that is $(\Omega,\tilde\Omega)$-orthogonal and not $U$. We choose this definition for consistency with respect to the generalized HSVD of two matrices. If the user wants to compute the HSVD according to the alternative definition, then it suffices to (conjugate) transpose the input matrix $A$, using for instance `MatHermitianTranspose`.
 
 As in the case of the SVD, the solution of the problem consists in singular triplets $(\sigma_i,u_i,v_i)$, with $\sigma_i$ real and nonnegative and sorted in nonincreasing order. Note that these quantities are different from those of section [](#sec:svd), even though we use the same notation here. With each singular triplet, there is an associated sign $\tilde\omega_i$ (either 1 or $-1$), the corresponding diagonal element of $\tilde\Omega$. In SLEPc, this value is not returned by the user interface, but if required it can be easily computed as $u_i^*\Omega u_i$.
 
-The relations between left and right singular vectors are slightly different from those of the standard SVD. We have $AV=U\Sigma$ and $A^*\Omega U=V\Sigma^*\tilde\Omega$, so for $m\geq n$ the following relations hold, together with equation [](#eq:svdleft):
+The relations between left and right singular vectors are slightly different from those of the standard SVD. We have $AV=U\Sigma$ and $A^*\Omega U=V\Sigma^*\tilde\Omega$, so for $m\geq n$ the following relations hold, together with equation {math:numref}`eq:svdleft`:
 
-$$
+```{math}
+:label: eq:hsvdright
+
 \begin{aligned}
 A^*\Omega u_i&=v_i\sigma_i\tilde\omega_i\;,\quad i=1,\ldots,n,\\
 \end{aligned}
-$$ (eq:hsvdright)
+```
 
-$$
+```{math}
+:label: eq:hsvdright2
+
 \begin{aligned}
 A^*\Omega u_i&=0\;,\quad i=n+1,\ldots,m.
 \end{aligned}
-$$ (eq:hsvdright2)
+```
 
  In SLEPc we will compute a partial HSVD consisting of either the largest or smallest hyperbolic singular triplets. Note that the sign $\tilde\omega_i$ is not used when sorting for largest or smallest $\sigma_i$.
 
@@ -199,34 +231,42 @@ $$ (eq:hsvdright2)
 
 Once again, we can derive cross and cyclic schemes to compute the decomposition by solving an eigenvalue problem. The cross product matrix approach has two forms, to be selected depending on whether $m\geq n$ or not, as discussed in section [](#sec:svd). The first form,
 
-$$
+```{math}
+:label: eq:heigleft
+
 A^*\Omega Av_i=\sigma_i^2\tilde\omega_iv_i,
-$$ (eq:heigleft)
+```
 
-is derived by pre-multiplying equation [](#eq:svdleft) by $A^*\Omega$ and then using equation [](#eq:hsvdright). This eigenproblem can be solved as a HEP (cf. section [](#sec:defprob)) and may have both positive and negative eigenvalues, corresponding to $\tilde\omega_i=1$ and $\tilde\omega_i=-1$, respectively. Once the right vector $v_i$ has been computed, the corresponding left vector can be obtained using equation [](#eq:svdleft) with just a matrix-vector product, $u_i=\sigma_i^{-1}Av_i$.
+is derived by pre-multiplying equation {math:numref}`eq:svdleft` by $A^*\Omega$ and then using equation {math:numref}`eq:hsvdright`. This eigenproblem can be solved as a HEP (cf. section [](#sec:defprob)) and may have both positive and negative eigenvalues, corresponding to $\tilde\omega_i=1$ and $\tilde\omega_i=-1$, respectively. Once the right vector $v_i$ has been computed, the corresponding left vector can be obtained using equation {math:numref}`eq:svdleft` with just a matrix-vector product, $u_i=\sigma_i^{-1}Av_i$.
 
-The second form of cross computes the left vectors first, by pre-multiplying equation [](#eq:hsvdright) by $A$ and then using equation [](#eq:svdleft),
+The second form of cross computes the left vectors first, by pre-multiplying equation {math:numref}`eq:hsvdright` by $A$ and then using equation {math:numref}`eq:svdleft`,
 
-$$
+```{math}
+:label: eq:heigright
+
 AA^*\Omega u_i=\sigma_i^2\tilde\omega_iu_i.
-$$ (eq:heigright)
+```
 
- In this case, the right singular vectors are obtained as $v_i=(\sigma_i\tilde\omega_i)^{-1}A^*\Omega u_i$. The coefficient matrix of [](#eq:heigright) is non-Hermitian, so the eigenproblem has to be solved as non-Hermitian, or alternatively it can be formulated as a generalized eigenvalue problem of GHIEP type (cf. section [](#sec:defprob)) for the indefinite pencil $(AA^*,\Omega)$,
+ In this case, the right singular vectors are obtained as $v_i=(\sigma_i\tilde\omega_i)^{-1}A^*\Omega u_i$. The coefficient matrix of {math:numref}`eq:heigright` is non-Hermitian, so the eigenproblem has to be solved as non-Hermitian, or alternatively it can be formulated as a generalized eigenvalue problem of GHIEP type (cf. section [](#sec:defprob)) for the indefinite pencil $(AA^*,\Omega)$,
 
-$$
+```{math}
+:label: eq:heigright2
+
 AA^*\hat{u}_i=\sigma_i^2\tilde\omega_i\Omega \hat{u}_i,
-$$ (eq:heigright2)
+```
 
- with $\hat{u}_i=\Omega u_i$. The eigenvectors obtained from equation [](#eq:heigright) or equation [](#eq:heigright2) must be normalized so that $U^*\Omega U=\tilde\Omega$ holds.
+ with $\hat{u}_i=\Omega u_i$. The eigenvectors obtained from equation {math:numref}`eq:heigright` or equation {math:numref}`eq:heigright2` must be normalized so that $U^*\Omega U=\tilde\Omega$ holds.
 
 Finally, in the cyclic matrix approach for the HSVD we must solve a generalized eigenvalue problem defined by the matrices of order $(m+n)$
 
-$$
+```{math}
+:label: eq:hcyclic
+
 H(A)=\begin{bmatrix}0&A\\A^*&0\end{bmatrix},\qquad
 \hat\Omega=\begin{bmatrix}\Omega&0\\0&I\end{bmatrix}.
-$$ (eq:hcyclic)
+```
 
-As in the case of equation [](#eq:heigright2), this pencil is Hermitian-indefinite and hence it may have complex eigenvalues. However, it can be shown that nonzero eigenvalues of the pencil $(H(A),\hat\Omega)$ are either real (equal to $\pm\sigma_i$ for a certain hyperbolic singular value $\sigma_i$) or purely imaginary (equal to $\pm\sigma_ij$ for a certain $\sigma_i$ with $j=\sqrt{-1}$). The associated eigenvectors are $\left[\begin{smallmatrix}\varsigma_i u_i\\v_i\end{smallmatrix}\right]$, where $\varsigma_i$ is either $\pm 1$ or $\pm j$.
+As in the case of equation {math:numref}`eq:heigright2`, this pencil is Hermitian-indefinite and hence it may have complex eigenvalues. However, it can be shown that nonzero eigenvalues of the pencil $(H(A),\hat\Omega)$ are either real (equal to $\pm\sigma_i$ for a certain hyperbolic singular value $\sigma_i$) or purely imaginary (equal to $\pm\sigma_ij$ for a certain $\sigma_i$ with $j=\sqrt{-1}$). The associated eigenvectors are $\left[\begin{smallmatrix}\varsigma_i u_i\\v_i\end{smallmatrix}\right]$, where $\varsigma_i$ is either $\pm 1$ or $\pm j$.
 
 ## Basic Usage
 
@@ -448,7 +488,7 @@ Similarly, in the case of GSVD the thick-restart Lanczos solver uses a `KSP` sol
 SVDTRLanczosGetKSP(SVD svd,KSP *ksp);
 ```
 
-or with the corresponding command-line options prefixed with `-svd_trlanczos_`. This `KSP` object is used to solve a linear least squares problem at each Lanczos step with coefficient matrix $Z$ equation [](#eq:qr), which by default is a shell matrix but the user can choose to create it explicitly with the function `SVDTRLanczosSetExplicitMatrix`.
+or with the corresponding command-line options prefixed with `-svd_trlanczos_`. This `KSP` object is used to solve a linear least squares problem at each Lanczos step with coefficient matrix $Z$ equation {math:numref}`eq:qr`, which by default is a shell matrix but the user can choose to create it explicitly with the function `SVDTRLanczosSetExplicitMatrix`.
 
 ## Retrieving the Solution
 
@@ -478,17 +518,21 @@ In the case of the GSVD, the `sigma` argument of `SVDGetSingularTriplet` contain
 
 In SVD computations, a-posteriori error bounds are much the same as in the case of Hermitian eigenproblems, due to the equivalence discussed in section [](#sec:svd). The residual vector is defined in terms of the cyclic matrix, $H(A)$, so its norm is
 
-$$
+```{math}
+:label: eq:svd-residual-norm
+
 \|r_\mathrm{SVD}\|_2=\left(\|A\tilde{v}-\tilde{\sigma}\tilde{u}\|_2^2+\|A^*\tilde{u}-\tilde{\sigma}\tilde{v}\|_2^2\right)^{\frac{1}{2}},
-$$ (eq:svd-residual-norm)
+```
 
 where $\tilde{\sigma}$, $\tilde{u}$ and $\tilde{v}$ represent any of the `nconv` computed singular triplets delivered by `SVDGetSingularTriplet`.
 
 Given the above definition, the following relation holds
 
-$$
+```{math}
+:label: eq:svd-residual-norm-relation
+
 |\sigma-\tilde{\sigma}|\leq \|r_\mathrm{SVD}\|_2,
-$$ (eq:svd-residual-norm-relation)
+```
 
 where $\sigma$ is an exact singular value. The associated error can be obtained in terms of $\|r_\mathrm{SVD}\|_2$ with the following function: `SVDComputeError`
 
@@ -496,27 +540,31 @@ where $\sigma$ is an exact singular value. The associated error can be obtained 
 SVDComputeError(SVD svd,PetscInt j,SVDErrorType type,PetscReal *error);
 ```
 
-In the case of the GSVD, the function `SVDComputeError` will compute a residual norm based on the two relations equation [](#eq:gsvd),
+In the case of the GSVD, the function `SVDComputeError` will compute a residual norm based on the two relations equation {math:numref}`eq:gsvd`,
 
-$$
+```{math}
+:label: eq:gsvd-residual-norm
+
 \|r_\mathrm{GSVD}\|_2=\left(\|\tilde{s}^2A^*\tilde{u}-\tilde{c}B^*B\tilde{x}\|_2^2+\|\tilde{c}^2B^*\tilde{v}-\tilde{s}A^*A\tilde{x}\|_2^2\right)^{\frac{1}{2}},
-$$ (eq:gsvd-residual-norm)
+```
 
  where $\tilde{x}$, $\tilde{u}$, $\tilde{v}$ are the computed singular vectors corresponding to $\tilde{\sigma}$, and $\tilde{c}$, $\tilde{s}$ are obtained from $\tilde{\sigma}$ as $\tilde{s}=1/\sqrt{1+\tilde{\sigma}^2}$ and $\tilde{c}=\tilde{\sigma}\tilde{s}$. See {cite:p}`Alvarruiz:2024:TLB` for details.
 
 Similarly, in the HSVD we employ a modified residual
 
-$$
-\|r_\mathrm{HSVD}\|_2=\left(\|A\tilde{v}-\tilde{\sigma}\tilde{u}\|_2^2+\|A^*\Omega\tilde{u}-\tilde{\sigma}\tilde{\omega}\tilde{v}\|_2^2\right)^{\frac{1}{2}},
-$$ (eq:hsvd-residual-norm)
+```{math}
+:label: eq:hsvd-residual-norm
 
- where $\tilde\omega$ is the corresponding element of the signature $\tilde\Omega$ of the definition equation [](#eq:hsvd).
+\|r_\mathrm{HSVD}\|_2=\left(\|A\tilde{v}-\tilde{\sigma}\tilde{u}\|_2^2+\|A^*\Omega\tilde{u}-\tilde{\sigma}\tilde{\omega}\tilde{v}\|_2^2\right)^{\frac{1}{2}},
+```
+
+ where $\tilde\omega$ is the corresponding element of the signature $\tilde\Omega$ of the definition equation {math:numref}`eq:hsvd`.
 
 ### Controlling and Monitoring Convergence
 
 Similarly to the case of eigensolvers, in `SVD` the number of iterations carried out by the solver can be determined with `SVDGetIterationNumber`, and the tolerance and maximum number of iterations can be set with `SVDSetTolerances`. Also, convergence can be monitored with command-line keys `-svd_monitor`, `-svd_monitor_all`, `-svd_monitor_conv`, or graphically with `-svd_monitor draw::draw_lg`, or alternatively with `-svd_monitor_all draw::draw_lg`. See section [](#sec:monitor) for additional details.
 
-:::{table} Available possibilities for the convergence criterion, with $Z=A$ in the standard SVD or as defined in equation [](#eq:qr) for the GSVD.
+:::{table} Available possibilities for the convergence criterion, with $Z=A$ in the standard SVD or as defined in equation {math:numref}`eq:qr` for the GSVD.
 :name: tab:svdconvergence
 
  |Convergence criterion       |`SVDConv`         |Command line key   |Error bound

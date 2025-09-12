@@ -85,7 +85,8 @@ The basic steps for the installation are described next. Note that prior to thes
 
     The rationale for `PETSC_ARCH` is explained in section [](#sec:mult-inst) (see section [](#sec:prefix-inst) for a case in which `PETSC_ARCH` is not required).
 
-{#step-config label="step-config"}
+
+(step-config)=
 3.  Change to the SLEPc directory and run the configuration script:
 
     ```{code} console
@@ -180,7 +181,7 @@ The configuration of two versions of SLEPc in the same directory tree is very si
 
 Both PETSc and SLEPc allow for prefix-based installation. This consists in specifying a directory to which the files generated during the building process are to be copied.
 
-In PETSc, if an installation directory has been specified during configuration (with option `--prefix` in step [](#step-config) of section [](#sec:std-inst)), then after building the libraries the relevant files are copied to that directory by typing
+In PETSc, if an installation directory has been specified during configuration (with option `--prefix` in step [configuration](#step-config) of section [](#sec:std-inst)), then after building the libraries the relevant files are copied to that directory by typing
 
 ```{code} console
 $ make install

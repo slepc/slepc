@@ -91,13 +91,13 @@ The following table provides an overview of the functionality offered by SLEPc, 
   Nonlinear eigenvalue problem   |              $T(\lambda)x=0$               | `NEP`  | [](#cap:nep)
   Singular value decomposition   |               $Av=\sigma u$                | `SVD`  | [](#cap:svd)
   Matrix function (action of)    |                 $y=f(A)v$                  | `MFN`  | [](#cap:mfn)
-  Linear matrix equation         |                $AXE+DXB=C$                 | `LME`  | See [](#notes)
+  Linear matrix equation         |                $AXE+DXB=C$                 | `LME`  | See [Notes](#notes)
 :::
 
 In order to solve a given problem, one should create a solver object corresponding to the solver class (module) that better fits the problem (the less general one; e.g., we do not recommend using `NEP` to solve a linear eigenproblem).
 
+(notes)=
 :::{admonition} Notes
-:name: notes
 
 -   Most users are typically interested in linear eigenproblems only.
 
