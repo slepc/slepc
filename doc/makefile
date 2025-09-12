@@ -14,7 +14,7 @@ help:
 	-@echo "Preparing python virtual environment (.venv-sphinx)"
 	-@python3 -m venv .venv-sphinx ;\
 	. .venv-sphinx/bin/activate ;\
-	python3 -m pip install --quiet -r requirements.txt ;\
+	python3 -m pip install -r requirements.txt ;\
 	$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) ;\
 	deactivate \
 	-@echo "--"
@@ -45,14 +45,20 @@ webstatic:
 	@if [ ! -d source/_static ]; then \
 		git clone -b main --depth=1 https://gitlab.com/slepc/webstatic.git source/_static; \
 	else \
-		cd source/_static && git pull; \
+		cd source/_static; \
+		git pull; \
+		if [ $$? -ne 0 ]; then \
+			cd - ; \
+			rm -rf source/_static; \
+			git clone -b main --depth=1 https://gitlab.com/slepc/webstatic.git source/_static; \
+		fi \
 	fi
 
 # use this rule to build the documentation on your machine when working on SLEPc documentation
 website: latexpdf
 	-@python3 -m venv .venv-sphinx ;\
 	. .venv-sphinx/bin/activate ;\
-	python3 -m pip install --quiet -r requirements.txt ;\
+	python3 -m pip install -r requirements.txt ;\
 	${RM} -rf ${BUILDDIR}/html ;\
 	make SPHINXOPTS="-T -E -W -j 4" html ;\
 	deactivate
@@ -105,6 +111,6 @@ latexpdf: webstatic logo_upv
 	-@echo "Preparing python virtual environment (.venv-sphinx)"
 	-@python3 -m venv .venv-sphinx ;\
 	. .venv-sphinx/bin/activate ;\
-	python3 -m pip install --quiet -r requirements.txt ;\
+	python3 -m pip install -r requirements.txt ;\
 	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) ;\
 	deactivate \

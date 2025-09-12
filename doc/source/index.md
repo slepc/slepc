@@ -36,17 +36,19 @@ for (var i=0;i<newsitems;i++) {
 <div class="hideLink"><a style="float: right" onclick="batch=4;expandTable(newsitems,batch);newsitems+=batch;">[Show older news]</a></div>
 
 ***
+<br/>
+
+```{image} https://www.upv.es/imagenes/svg/logo-upv.svg
+:alt: logo-upv
+:align: left
+:width: 340px
+:target: https://www.upv.es/
+```
 
 ```{image} _static/images/logo-dsic.svg
 :alt: logo-dsic
-:align: left
-:target: https://www.dsic.upv.es/
-```
-
-```{image} _static/images/logo-upv.svg
-:alt: logo-upv
 :align: right
-:target: https://www.upv.es/
+:target: https://www.dsic.upv.es/
 ```
 
 ***

@@ -165,7 +165,7 @@ html_logo = '_static/images/logo-slepc.gif' # width should not exceed 200 pixels
 # html_logo_dark =
 # html_logo = html_logo_light
 
-html_title = 'SLEPc' #defaults to '{} {} documentation'.format(project,release)
+#html_title = 'SLEPc' #defaults to '{} {} documentation'.format(project,release)
 
 html_css_files = [ # relative to the html_static_path
             'css/slepc.css',
@@ -186,7 +186,7 @@ html_theme_options = {
             {
                 "name": "UPV",
                 "url": "https://www.upv.es",
-                "icon": "_static/images/new/favicon-upv.ico",
+                "icon": "https://www.upv.es/favicon.ico",
                 "type": "local"
                 },
             {
