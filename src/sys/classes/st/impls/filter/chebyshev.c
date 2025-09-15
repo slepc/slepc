@@ -25,7 +25,7 @@ static PetscErrorCode MatMult_Chebyshev(Mat A,Vec x,Vec y)
   ST             st;
   ST_FILTER      *ctx;
   CHEBYSHEV_CTX  cheby;
-  PetscInt       degree,i;
+  PetscInt       degree,i,w0=0,w1=1;
   PetscReal      s1,s2;
 
   PetscFunctionBegin;
@@ -36,21 +36,23 @@ static PetscErrorCode MatMult_Chebyshev(Mat A,Vec x,Vec y)
   s1 = 4/(ctx->right - ctx->left);
   s2 = -2*(ctx->right+ctx->left)/(ctx->right-ctx->left);
 
-  PetscCall(VecSet(st->work[0],0));
+  PetscCall(VecSet(st->work[w0],0.0));
   PetscCall(VecCopy(x,y));
   PetscCall(VecScale(y,cheby->damping_coeffs[degree]*cheby->coeffs[degree]));
 
   for (i=0;i<degree;i++) {
-      PetscCall(VecCopy(st->work[0],st->work[1]));
-      PetscCall(VecCopy(y,st->work[0]));
-      if (i == degree-1) {
-          s1 = s1/2;
-          s2 = s2/2;
-      }
-      PetscCall(VecAXPBYPCZ(y,cheby->damping_coeffs[degree-i-1]*cheby->coeffs[degree-i-1],-1,s2,x,st->work[1]));
-      PetscCall(MatMult(ctx->T,st->work[0],st->work[1]));
-      PetscCall(VecScale(st->work[1],s1));
-      PetscCall(VecAXPY(y,1.0,st->work[1]));
+    /* swap work vectors, save a copy of current y */
+    w0 = 1-w0;
+    w1 = 1-w1;
+    PetscCall(VecCopy(y,st->work[w0]));
+    /* compute next y */
+    if (i == degree-1) {
+      s1 = s1/2;
+      s2 = s2/2;
+    }
+    PetscCall(VecAXPBYPCZ(y,cheby->damping_coeffs[degree-i-1]*cheby->coeffs[degree-i-1],-1,s2,x,st->work[w1]));
+    PetscCall(MatMult(ctx->T,st->work[w0],st->work[w1]));
+    PetscCall(VecAXPY(y,s1,st->work[w1]));
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -64,7 +66,7 @@ static PetscErrorCode MatMatMult_Chebyshev(Mat A,Mat B,Mat C,void *pctx)
   ST             st;
   ST_FILTER      *ctx;
   CHEBYSHEV_CTX  cheby;
-  PetscInt       degree,i,m1,m2;
+  PetscInt       degree,i,m1,m2,w0=0,w1=1;
   PetscReal      s1,s2;
 
   PetscFunctionBegin;
@@ -89,22 +91,24 @@ static PetscErrorCode MatMatMult_Chebyshev(Mat A,Mat B,Mat C,void *pctx)
     for (i=0;i<ctx->nW;i++) PetscCall(MatDuplicate(B,MAT_DO_NOT_COPY_VALUES,&ctx->W[i]));
   }
 
-  PetscCall(MatScale(ctx->W[0],0));
+  PetscCall(MatScale(ctx->W[w0],0));
   PetscCall(MatCopy(B,C,SAME_NONZERO_PATTERN));
   PetscCall(MatScale(C,cheby->damping_coeffs[degree]*cheby->coeffs[degree]));
 
   for (i=0;i<degree;i++) {
-      PetscCall(MatCopy(ctx->W[0],ctx->W[1],SAME_NONZERO_PATTERN));
-      PetscCall(MatCopy(C,ctx->W[0],SAME_NONZERO_PATTERN));
-      if (i == degree-1) {
-          s1 = s1/2;
-          s2 = s2/2;
-      }
-      PetscCall(MatScale(C,s2));
-      PetscCall(MatAXPY(C,-1,ctx->W[1],SAME_NONZERO_PATTERN));
-      PetscCall(MatAXPY(C,cheby->damping_coeffs[degree-i-1]*cheby->coeffs[degree-i-1],B,SAME_NONZERO_PATTERN));
-      PetscCall(MatMatMult(ctx->T,ctx->W[0],MAT_REUSE_MATRIX,PETSC_CURRENT,&ctx->W[1]));
-      PetscCall(MatAXPY(C,s1,ctx->W[1],SAME_NONZERO_PATTERN));
+    /* swap work matrices, save a copy of current C */
+    w0 = 1-w0;
+    w1 = 1-w1;
+    PetscCall(MatCopy(C,ctx->W[w0],SAME_NONZERO_PATTERN));
+    if (i == degree-1) {
+      s1 = s1/2;
+      s2 = s2/2;
+    }
+    PetscCall(MatScale(C,s2));
+    PetscCall(MatAXPY(C,-1,ctx->W[w1],SAME_NONZERO_PATTERN));
+    PetscCall(MatAXPY(C,cheby->damping_coeffs[degree-i-1]*cheby->coeffs[degree-i-1],B,SAME_NONZERO_PATTERN));
+    PetscCall(MatMatMult(ctx->T,ctx->W[w0],MAT_REUSE_MATRIX,PETSC_CURRENT,&ctx->W[w1]));
+    PetscCall(MatAXPY(C,s1,ctx->W[w1],SAME_NONZERO_PATTERN));
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
