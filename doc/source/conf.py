@@ -12,7 +12,7 @@ from datetime import datetime
 import time
 import shutil
 
-print('cwd:', os.getcwd())
+#print('cwd:', os.getcwd())
 sys.path.append(os.getcwd())
 sys.path.append(os.path.abspath('./ext'))
 
@@ -267,14 +267,14 @@ r'''
 
 def setup(app):
 
-    print('-----------------------------8<--------------------------------')
+#    print('-----------------------------8<--------------------------------')
 #    print(app.project)
-    print('app.srcdir: {}'.format(app.srcdir))
-    print('app.confdir: {}'.format(app.confdir))
-    print('app.doctreedir: {}'.format(app.doctreedir))
-    print('app.outdir: {}'.format(app.outdir))
+#    print('app.srcdir: {}'.format(app.srcdir))
+#    print('app.confdir: {}'.format(app.confdir))
+#    print('app.doctreedir: {}'.format(app.doctreedir))
+#    print('app.outdir: {}'.format(app.outdir))
 #    print('app.fresh_env_used: {}'.format(app.fresh_env_used))
-    print('-----------------------------8<--------------------------------')
+#    print('-----------------------------8<--------------------------------')
 
     if 'PETSC_DIR' not in os.environ:
         print('\nUnable to build the documentation, PETSC_DIR environment variable is not set')
