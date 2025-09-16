@@ -28,7 +28,6 @@ ALL: all
 include ./${PETSC_ARCH}/lib/slepc/conf/slepcvariables
 include ${SLEPC_DIR}/${PETSC_ARCH}/lib/slepc/conf/slepcvariables  # required in prefix builds
 include ${SLEPC_DIR}/lib/slepc/conf/slepc_rules
-include ${SLEPC_DIR}/lib/slepc/conf/slepc_rules_doc.mk
 include ${SLEPC_DIR}/lib/slepc/conf/slepc_rules_util.mk
 
 # This makefile doesn't really do any work. Sub-makes still benefit from parallelism.
@@ -275,19 +274,12 @@ alletags:
 
 # ******** Rules for building documentation ************************************************************
 
-alldoc: alldoc_pdf alldoc_html
-
-chk_loc:
-	@if [ ${LOC}foo = foo ] ; then \
-          printf ${PETSC_TEXT_HILIGHT}"*********************** ERROR **********************************************\n" ; \
-          echo " Please specify LOC variable for eg: make allmanpages LOC=/sandbox/slepc "; \
-          printf "****************************************************************************"${PETSC_TEXT_NORMAL}"\n" ;  false; fi
-	@${MKDIR} ${LOC}/docs/manualpages
+alldoc: alldoc_html
 
 chk_c2html:
 	@if [ ${C2HTML}foo = foo ] ; then \
           printf ${PETSC_TEXT_HILIGHT}"*********************** ERROR ************************\n" ; \
-          echo "Require c1html for html docs. Please reconfigure PETSc with --download-c2html=1"; \
+          echo "Require c2html for html docs. Please reconfigure PETSc with --download-c2html=1"; \
           printf "******************************************************"${PETSC_TEXT_NORMAL}"\n" ;false; fi
 
 chk_doctext:
@@ -297,16 +289,16 @@ chk_doctext:
           printf "******************************************************"${PETSC_TEXT_NORMAL}"\n" ;false; fi
 
 # Build just PDF manual + prerequisites
-alldoc_pdf: chk_loc
-	-cd doc; ${OMAKE_SELF} latexpdf PETSC_DIR=${PETSC_DIR} LOC=${LOC}
+alldoc_pdf:
+	-${OMAKE_SELF} -C doc latexpdf PETSC_DIR=${PETSC_DIR}
 
 # Builds .html versions of the source
-alldoc_html: chk_loc chk_c2html chk_doctext
-	-cd doc; ${OMAKE_SELF} html PETSC_DIR=${PETSC_DIR} LOC=${LOC}
+alldoc_html: chk_c2html chk_doctext
+	-${OMAKE_SELF} -C doc website PETSC_DIR=${PETSC_DIR}
 
 # Deletes documentation
 alldocclean:
-	-cd doc; ${OMAKE_SELF} clean PETSC_DIR=${PETSC_DIR} LOC=${LOC}
+	-@${OMAKE_SELF} -C doc clean PETSC_DIR=${PETSC_DIR}
 
 # ******** Rules for checking coding standards *********************************************************
 

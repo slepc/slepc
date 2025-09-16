@@ -118,12 +118,12 @@ sphinx-info:
 
 .PHONY: docsclean
 docsclean:
-	-${RM} docs/*.info docs/*.[137]
-	-${RM} docs/*.html docs/*.pdf
-	-${RM} -r docs/html
-	-${RM} -r docs/source/demo
-	-${RM} -r docs/source/reference
-	-${RM} docs/source/*.inv
+	-@${RM} docs/*.info docs/*.[137]
+	-@${RM} docs/*.html docs/*.pdf
+	-@${RM} -r docs/html
+	-@${RM} -r docs/source/demo
+	-@${RM} -r docs/source/reference
+	-@${RM} docs/source/*.inv
 
 website:
 #	CFLAGS=-O0 python -m pip install .

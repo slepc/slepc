@@ -1133,14 +1133,10 @@ docs-review:
     - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" check
     - echo -e "section_end:`date +%s`:build_slepc\r\e[0K"
     # build docs
-    - cd doc
     - echo -e "section_start:`date +%s`:build_slepc_docs\r\e[0KSLEPc docs"
-    - (time make latexpdf) || (printf "Sphinx pdf build failed (warnings count as errors)\n" && false)
-    - (time make website) || (printf "Sphinx html build failed (warnings count as errors)\n" && false)
+    - (time make alldoc) || (printf "Sphinx documentation build failed (warnings count as errors)\n" && false)
     - echo -e "section_end:`date +%s`:build_slepc_docs\r\e[0K"
-    - cd ..
     - cp -a ${PETSC_ARCH}/doc public
-    - cp public/latex/slepc-manual.pdf public/html/documentation/manual/
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/html/index.html

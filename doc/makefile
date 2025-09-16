@@ -40,6 +40,8 @@ clean:
 	-@${RM} -rf source/manualpages/Sys
 	-@${RM} -rf source/manualpages/RG
 	-@${RM} -rf source/manualpages/ST
+	-@${RM} -rf logo-upv
+	-@${MAKE} --no-print-directory -C $(SLEPC_DIR)/src/binding/slepc4py docsclean
 
 webstatic:
 	@if [ ! -d source/_static ]; then \
