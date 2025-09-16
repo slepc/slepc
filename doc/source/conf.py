@@ -20,7 +20,6 @@ import build_manpages_c2html
 import update_htmlmap_links
 import make_links_relative
 import fix_man_page_edit_links
-import fix_pydata_margins
 import add_man_page_redirects
 
 # -- Project information -----------------------------------------------------
@@ -361,7 +360,6 @@ def build_finished_handler(app, exception):
             build_slepc4py_docs(app)
         _fix_links(app, exception)
         _fix_man_page_edit_links(app, exception)
-        fix_pydata_margins.fix_pydata_margins(app.outdir)
 #        if app.builder.name == 'dirhtml':
 #            _add_man_page_redirects(app, exception)
         _add_man_page_redirects(app, exception)
