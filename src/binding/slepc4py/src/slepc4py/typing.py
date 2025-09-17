@@ -12,6 +12,7 @@ from numpy.typing import (
 from petsc4py.PETSc import (
     Vec,
     Mat,
+    KSP,
 )
 from .SLEPc import (
     BV,
@@ -29,8 +30,11 @@ from .SLEPc import (
 
 __all__ = [
     'Scalar',
+    'ArrayInt',
     'ArrayReal',
+    'ArrayComplex',
     'ArrayScalar',
+    'LayoutSizeSpec',
     'EPSStoppingFunction',
     'EPSArbitraryFunction',
     'EPSEigenvalueComparison',
@@ -41,6 +45,8 @@ __all__ = [
     'NEPMonitorFunction',
     'SVDStoppingFunction',
     'SVDMonitorFunction',
+    'MFNMonitorFunction',
+    'LMEMonitorFunction',
 ]
 
 # --- PETSc Sys ---
@@ -53,11 +59,24 @@ PETSc was configured (``./configure --with-scalar-type=real|complex``).
 
 """
 
+ArrayInt = NDArray[int]
+"""Array of `int`."""
+
 ArrayReal = NDArray[float]
 """Array of `float`."""
 
+ArrayComplex = NDArray[complex]
+"""Array of `complex`."""
+
 ArrayScalar = NDArray[Scalar]
 """Array of `Scalar` numbers."""
+
+LayoutSizeSpec = int | tuple[int, int]
+"""`int` or 2-`tuple` of `int` describing the layout sizes.
+
+   A single `int` indicates global size.
+   A `tuple` of `int` indicates ``(local_size, global_size)``.
+"""
 
 # --- EPS ---
 
@@ -76,30 +95,35 @@ EPSMonitorFunction = Callable[[EPS, int, int, ArrayScalar, ArrayScalar, ArrayRea
 # --- PEP ---
 
 PEPStoppingFunction = Callable[[PEP, int, int, int, int], PEP.ConvergedReason]
-"""`PEP` stopping test callback."""
+""":py:class:`PEP <slepc4py.SLEPc.PEP>` stopping test callback."""
 
 PEPMonitorFunction = Callable[[PEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
-"""`PEP` monitor callback."""
+""":py:class:`PEP <slepc4py.SLEPc.PEP>` monitor callback."""
 
 # --- NEP ---
 
 NEPStoppingFunction = Callable[[NEP, int, int, int, int], NEP.ConvergedReason]
-"""`NEP` stopping test callback."""
+""":py:class:`NEP <slepc4py.SLEPc.NEP>` stopping test callback."""
 
 NEPMonitorFunction = Callable[[NEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
-"""`NEP` monitor callback."""
+""":py:class:`NEP <slepc4py.SLEPc.NEP>` monitor callback."""
 
 NEPFunction = Callable[[NEP, Scalar, Mat, Mat], None]
-"""`NEP` Function callback."""
+""":py:class:`NEP <slepc4py.SLEPc.NEP>` Function callback."""
 
 NEPJacobian = Callable[[NEP, Scalar, Mat], None]
-"""`NEP` Jacobian callback."""
+""":py:class:`NEP <slepc4py.SLEPc.NEP>` Jacobian callback."""
 
 # --- SVD ---
 
 SVDStoppingFunction = Callable[[SVD, int, int, int, int], SVD.ConvergedReason]
-"""`SVD` stopping test callback."""
+""":py:class:`SVD <slepc4py.SLEPc.SVD>` stopping test callback."""
 
 SVDMonitorFunction = Callable[[SVD, int, int, ArrayReal, ArrayReal, int], None]
-"""`SVD` monitor callback."""
+""":py:class:`SVD <slepc4py.SLEPc.SVD>` monitor callback."""
 
+MFNMonitorFunction = Callable[[MFN, int, float], None]
+"""`MFN` monitor callback."""
+
+LMEMonitorFunction = Callable[[LME, int, float], None]
+"""`LME` monitor callback."""

@@ -1,0 +1,73 @@
+%\documentclass[titlepage,10pt,a4paper]{book}
+
+\titleformat{\chapter}[display]
+  {\bfseries\Large}
+  {\filleft\setlength{\fboxsep}{2mm}\fbox{\large\sc\chaptertitlename}\hspace*{-0.5mm}\setlength{\fboxsep}{4mm}\setlength{\fboxrule}{.5mm}\fbox{\Huge\bfseries\thechapter}}
+  {4ex}
+  {\huge\bf\sffamily
+   \filright}
+  [\hfill\rule{10cm}{1pt}]
+
+%\begin{document}
+
+\hypersetup{
+  colorlinks,
+  linkcolor=purple,
+  citecolor=violet,
+  filecolor=blue,
+  urlcolor=magenta,
+  bookmarksnumbered,
+  pdfstartview=FitH,
+  pdftitle={SLEPc Users Manual},
+  pdfauthor={J. E. Roman, C. Campos, L. Dalcin, E. Romero, A. Tomas},
+  pdfsubject={SLEPc: Scalable Library for Eigenvalue Problem Computations},
+  pdfkeywords={SLEPc, PETSc, eigenvalue problems}
+}
+
+\title{
+
+   \vspace*{-1cm}
+   \framebox[12cm][l]{
+   \includegraphics[height=1.4cm]{logo-upv}
+   \hfill
+   \parbox[b]{5cm}{\begin{flushright}\vspace*{-7mm}\normalsize\sl\sffamily
+   Departamento de\\[-0.8mm] Sistemas Inform\'aticos\\[-0.8mm]
+   y Computaci\'on\\[0.8mm]
+   \vspace{-0.0mm}\end{flushright}}
+   \raisebox{3mm}{\includegraphics[height=0.8cm]{logo-dsic-black}}
+   }
+   \\[2cm]
+   \normalsize Technical Report DSIC-II/24/02
+   \\[2cm]
+   \vspace*{6mm}
+   {\Large\bf\sffamily
+   SLEPc Users Manual\\[2mm]}
+   {\large\bf\sffamily
+   Scalable Library for Eigenvalue Problem Computations}\\[2mm]
+   \vspace*{6mm}
+   \vspace*{6mm}
+   \textbf{\texttt{\url{https://slepc.upv.es}}}
+   \\[6mm]
+}
+
+\author{
+  Jose E. Roman\\
+  Carmen Campos\\
+  Lisandro Dalcin\\
+  Eloy Romero\\
+  Andr\'es Tom\'as\\[3mm]
+}
+
+\date{
+   To be used with SLEPc \slepcversion\\
+   \releasedate
+}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+\pagestyle{empty}
+\cleardoublepage
+\hypersetup{pageanchor=true}

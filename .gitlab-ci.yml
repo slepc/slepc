@@ -260,8 +260,6 @@ gnu-lint:
     - if [ ! -z ${INSTALL+x} ]; then make install; SLEPC_DIR=$INSTALL_DIR; fi
     - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" EXTRA_OPTIONS="${EXTRA_OPTIONS} ${BASE_EXTRA_OPTIONS}" check
     - if [ ! -z ${PKG_CONFIG+x} ]; then make check_usermakefile PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$PETSC_DIR/$PETSC_ARCH/lib/pkgconfig; fi
-    - if [ ! -z ${BUILD_DOCS+x} ]; then make alldoc LOC=$SLEPC_DIR; tar czf ${CI_JOB_NAME}-docs.tar.gz --exclude "*.out" --exclude "makefile*" --exclude slepc4py docs include src; fi
-    - if [ ! -z ${BUILD_DOCS+x} ] && [ ! -z ${SLEPC4PY+x} ]; then make -C src/binding/slepc4py rst2html sphinx-html sphinx-pdf PYTHON=${PYTHON}; tar czf ${CI_JOB_NAME}-docs-py.tar.gz -C src/binding/slepc4py docs; fi
     - echo -e "section_end:`date +%s`:build_slepc\r\e[0K"
     - echo -e "section_start:`date +%s`:tests_slepc\r\e[0KSLEPc test suite"
     - if [ ! -z ${SLEPC4PY+x} ]; then make EXTRA_OPTIONS="${EXTRA_OPTIONS} ${BASE_EXTRA_OPTIONS}" slepc4pytest && make -C src/binding/slepc4py/demo PYTHON=${PYTHON}; fi
@@ -302,7 +300,6 @@ gnu-lint:
     - arch-*/tests/testresults.xml
     - arch-*/tests/test_*_tap.log
     - arch-*/tests/test_*_err.log
-    - ${CI_JOB_NAME}-docs*.tar.gz
     expire_in: 4 days
   variables:
     OPENBLAS_NUM_THREADS: 1
@@ -724,7 +721,6 @@ gnu-c:
     PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-sowing
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py
     SLEPC4PY: 1
-    BUILD_DOCS: 1
     PKG_CONFIG: 1
 
 gnu-c-complex-libs:
@@ -1080,3 +1076,86 @@ total-coverage:
       coverage_report:
         coverage_format: cobertura
         path: coverage.xml
+
+#
+# Base job for a documentation build (runs in venv to allow installing additional packages without root)
+#
+.docs:
+  stage: stage-1
+  tags:
+    - name:satet
+  before_script:
+    - git fetch --unshallow --tags origin +release:remotes/origin/release +main:remotes/origin/main
+    - printf "PATH:$PATH\n"
+    - printf "PYTHONPATH:$PYTHONPATH\n"
+    - VENV="doc/.venv-sphinx" &&
+      ${PYTHON} -m venv $VENV &&
+      . $VENV/bin/activate &&
+      cd doc &&
+      ${PYTHON} -m pip install -r requirements.txt &&
+      cd ..
+
+#
+# Build documentation and make available for review using GitLab pages
+#
+docs-review:
+  extends:
+    - .docs
+    - .test-basic
+  script:
+    - if [ ! -z ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME+x} ]; then printf "CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME\n"; fi
+    - export SLEPC_DIR=$PWD
+    - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
+    - cd ..
+    - if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
+    - cd petsc
+    - git clean ${GIT_CLEAN_FLAGS}
+    - git fetch
+    - |
+      if [ -z ${PETSC_BRANCH+x} ]; then
+        if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
+          then git checkout origin/release;
+          else git checkout origin/main;
+        fi
+      else
+        echo "Using PETSC_BRANCH=" $PETSC_BRANCH
+        git checkout origin/$PETSC_BRANCH
+      fi
+    - export PETSC_DIR=$PWD
+    - export PETSC_ARCH=arch-$CI_JOB_NAME
+    - bash -c "${PYTHON} ./configure --with-debugging=0 ${PETSC_CONFIG_OPTS}"
+    - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}"
+    - echo -e "section_end:`date +%s`:build_petsc\r\e[0K"
+    - echo -e "section_start:`date +%s`:build_slepc\r\e[0KSLEPc configure and make"
+    - cd $SLEPC_DIR
+    - ${PYTHON} ./configure ${SLEPC_CONFIG_OPTS}
+    - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}"
+    - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" check
+    - echo -e "section_end:`date +%s`:build_slepc\r\e[0K"
+    # build docs
+    - echo -e "section_start:`date +%s`:build_slepc_docs\r\e[0KSLEPc docs"
+    - (time make alldoc) || (printf "Sphinx documentation build failed (warnings count as errors)\n" && false)
+    - echo -e "section_end:`date +%s`:build_slepc_docs\r\e[0K"
+    - cp -a ${PETSC_ARCH}/doc public
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/html/index.html
+    auto_stop_in: one week
+    deployment_tier: development
+  artifacts:
+    paths:
+      - public
+    expire_in: 4 days
+  except:
+    variables:
+      - $PETSC_CI_SCHEDULED =~ /yes/
+  variables:
+    PYTHON: python3
+    MAKE_CFLAGS: -Werror
+    MAKE_CXXFLAGS: -Werror -Wzero-as-null-pointer-constant
+    MAKE_FFLAGS: -Werror
+    MAKE_TEST_CFLAGS: -Werror
+    MAKE_TEST_CXXFLAGS: -Werror
+    MAKE_TEST_FFLAGS: -Werror
+    PETSC_CONFIG_OPTS: COPTFLAGS='-O0' CXXOPTFLAGS='-O0' FOPTFLAGS='-O0' HIPOPTFLAGS='-O0' --with-fortran-bindings=0 --with-petsc4py --download-sowing --download-c2html --with-mpi=0
+    SLEPC_CONFIG_OPTS: --with-slepc4py

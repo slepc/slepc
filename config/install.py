@@ -296,7 +296,7 @@ class Installer:
 
   def fixConf(self):
     import shutil
-    for file in ['slepc_rules', 'slepc_rules_doc.mk', 'slepc_rules_util.mk', 'slepc_variables', 'slepcrules', 'slepcvariables']:
+    for file in ['slepc_rules', 'slepc_rules_util.mk', 'slepc_variables', 'slepcrules', 'slepcvariables']:
       self.fixConfFile(os.path.join(self.destConfDir,file))
     self.fixConfFile(os.path.join(self.destLibDir,'pkgconfig','slepc.pc'))
     self.fixConfFile(os.path.join(self.destIncludeDir,'slepcconf.h'))
@@ -328,7 +328,6 @@ class Installer:
     for filename in (
       self.destIncludeDir + '/slepcconf.h',
       self.destShareDir + '/slepc/examples/gmakefile.test',
-      self.destConfDir + '/slepc_rules_doc.mk',
       self.destConfDir + '/slepc_rules_util.mk',
       self.destConfDir + '/slepc_rules',
       self.destConfDir + '/slepcrules',

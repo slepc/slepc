@@ -1,0 +1,5 @@
+# SLEPc System routines
+
+SLEPc provides a variety of "system" level routines. These routines are generally tools used by other SLEPc routines and are not intended for application programmers (except the basic SlepcInitialize() / SlepcFinalize()).
+
+Useful tools for application programmers can be found in PETSc's system routines, including parallel file access, synchronized printing to screen, and many other programming aids.

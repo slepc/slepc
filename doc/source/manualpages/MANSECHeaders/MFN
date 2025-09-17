@@ -1,0 +1,5 @@
+# Matrix Function - MFN: Examples
+
+Matrix Function (MFN) is the object provided by SLEPc for computing the action of a matrix function on a vector. Given a matrix A and a vector b, the call MFNSolve(mfn,b,x) computes x=f(A)b, where f is a function such as the exponential.
+
+Users guide section: [](cap:mfn).
