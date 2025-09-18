@@ -2,7 +2,7 @@
 
 SLEPc is distributed under a 2-clause BSD license.
 
-> Copyright (c) 2002-2025, Universitat Politecnica de Valencia, Spain
+> Copyright (c) 2002-2025, Universitat Polit&egrave;cnica de Val&egrave;ncia, Spain
 >
 > Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 >
