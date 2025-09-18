@@ -218,7 +218,7 @@ html_context = {
         "gitlab_user": "slepc",
         "gitlab_repo": "slepc",
         "gitlab_version": edit_branch,
-        "doc_path": "doc",
+        "doc_path": "doc/source",
         }
 
 # Remove the primary (left) sidebar from all pages
