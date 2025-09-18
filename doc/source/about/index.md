@@ -83,7 +83,7 @@ Regarding the matrix function computation, SLEPc currently provides a basic Kryl
 
 ## Highlights
 
-  * Easy programming with PETSc's object-oriented style. See an example in [C](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex1.c) and [Fortran](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex1f.F). More examples are available in the documentation section.
+  * Easy programming with PETSc's object-oriented style. See an example in {{'[C](https://slepc.upv.es/{}/src/eps/tutorials/ex1.c.html)'.format(branch)}} and {{'[Fortran](https://slepc.upv.es/{}/src/eps/tutorials/ex1f.F90.html)'.format(branch)}}. More examples are available in the documentation section.
   * Data-structure neutral implementation. Problems can be solved with matrices stored in parallel and serial, sparse and dense formats, and even without explicit storage.
   * Run-time flexibility, giving full control over the solution process. See some command-line examples below.
   * Portability to a wide range of parallel platforms, including Linux clusters, IBM Bluegene, MacOSX, and many others.

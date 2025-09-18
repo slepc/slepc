@@ -5,8 +5,8 @@ Tutorials
 The objective of this exercise is to run an example program with different number of processors to see how execution time is reduced. This time, we are going to solve a standard eigensystem {math}`Ax= \lambda x` with the matrix loaded from a file. In particular, the matrix we are going to use is QC2534. It is a complex matrix of order 2534 arising from a quantum chemistry application (more details can be found at [Matrix Market](https://math.nist.gov/MatrixMarket/data/NEP/h2plus/h2plus)).
 
 ## Compiling
-
-Copy the file [ex4.c](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex4.c) [[plain text]](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex4.c) to your directory and add these lines to the makefile
+c
+Copy the file {{'[ex4.c](https://slepc.upv.es/{}/src/eps/tutorials/ex4.c.html)'.format(branch)}} to your directory and add these lines to the makefile
 
 ```{code} make
 ex4: ex4.o
@@ -54,7 +54,7 @@ Try to find out how much time was spent is solving the eigenvalue problem. Is th
 
 ## Instrumenting the Source Code
 
-If we are just interested in knowing the time used by the eigensolver, then it may be better to let our example program inform us. With the function [PetscTime](https://petsc.org/release/manualpages/Sys/PetscTime), it is possible to obtain the current time of day (wall-clock time) in seconds. Edit the source code and add two calls to this function just before and after the [EPSSolve](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSolve) call, as in the following fragment of code
+If we are just interested in knowing the time used by the eigensolver, then it may be better to let our example program inform us. With the function [PetscTime](https://petsc.org/release/manualpages/Sys/PetscTime), it is possible to obtain the current time of day (wall-clock time) in seconds. Edit the source code and add two calls to this function just before and after the [EPSSolve](../../manualpages/EPS/EPSSolve) call, as in the following fragment of code
 
 ```{code} c
 PetscCall(PetscTime(&t1;));

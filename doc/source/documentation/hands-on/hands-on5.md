@@ -6,7 +6,7 @@ In many applications, it may be better to keep the matrix (or matrices) that def
 
 ## Compiling
 
-Copy the file [ex3.c](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex3.c) [[plain text]](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex3.c) to your directory and add these lines to the makefile
+Copy the file {{'[ex3.c](https://slepc.upv.es/{}/src/eps/tutorials/ex3.c.html)'.format(branch)}} to your directory and add these lines to the makefile
 
 ```{code} make
 ex3: ex3.o

@@ -15,7 +15,7 @@ A =  | 0 -1  2 -1  0  0 |
 
 ## Compiling
 
-Copy the file [ex1.c](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex1.c) [[plain text]](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex1.c) to the working directory and add these lines to the makefile
+Copy the file {{'[ex1.c](https://slepc.upv.es/{}/src/eps/tutorials/ex1.c.html)'.format(branch)}} to the working directory and add these lines to the makefile
 
 ```{code} make
 ex1: ex1.o
@@ -34,7 +34,7 @@ $ make ex1
 ```
 
 :::{note}
-Example ex1 is also available in Fortran [ex1f.F90](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex1f.F90) [[plain text]](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex1f.F90).
+Example ex1 is also available in Fortran {{'[ex1f.F90](https://slepc.upv.es/{}/src/eps/tutorials/ex1f.F90.html)'.format(branch)}}.
 :::
 
 ## Running the Program
@@ -74,18 +74,18 @@ Examine the source code of the sample program and locate the function calls ment
 
 **Solving the Eigenvalue Problem** : Usage of eigensolvers is very similar to other kinds of solvers provided by PETSc. After creating the matrix, the problem is solved by means of an EPS object (Eigenvalue Problem Solver) via the following sequence of function calls:
 
-* [EPSCreate](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSCreate)`(MPI_Comm comm,EPS *eps);`
-* [EPSSetOperators](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetOperators)`(EPS eps,Mat A,Mat B);`
-* [EPSSetProblemType](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetProblemType)`(EPS eps,EPSProblemType type);`
-* [EPSSetFromOptions](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetFromOptions)`(EPS eps);`
-* [EPSSolve](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSolve)`(EPS eps);`
-* [EPSGetConverged](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSGetConverged)`(EPS eps, int *nconv);`
-* [EPSGetEigenpair](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSGetEigenpair)`(EPS eps,int i,PetscScalar *kr,PetscScalar *ki,Vec xr,Vec xi);`
-* [EPSDestroy](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSDestroy)`(EPS eps)`;
+* [EPSCreate](../../manualpages/EPS/EPSCreate)`(MPI_Comm comm,EPS *eps);`
+* [EPSSetOperators](../../manualpages/EPS/EPSSetOperators)`(EPS eps,Mat A,Mat B);`
+* [EPSSetProblemType](../../manualpages/EPS/EPSSetProblemType)`(EPS eps,EPSProblemType type);`
+* [EPSSetFromOptions](../../manualpages/EPS/EPSSetFromOptions)`(EPS eps);`
+* [EPSSolve](../../manualpages/EPS/EPSSolve)`(EPS eps);`
+* [EPSGetConverged](../../manualpages/EPS/EPSGetConverged)`(EPS eps, int *nconv);`
+* [EPSGetEigenpair](../../manualpages/EPS/EPSGetEigenpair)`(EPS eps,int i,PetscScalar *kr,PetscScalar *ki,Vec xr,Vec xi);`
+* [EPSDestroy](../../manualpages/EPS/EPSDestroy)`(EPS eps)`;
 
 First, the eigenproblem solver (EPS) context is created and the operator(s) associated with the eigensystem are set, as well as the problem type. Then various options are set for customized solution. After that, the program solves the problem, retrieves the solution, and finally destroys the EPS context.
 
-The above function calls are very important and will be present in most SLEPc programs. In the example source code [ex1.c](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex1.c) you will find other functions apart from these. What do they do?
+The above function calls are very important and will be present in most SLEPc programs. In the example source code [ex1.c](../manual/ex1.c) you will find other functions apart from these. What do they do?
 
 ## Playing with EPS Options
 
@@ -98,7 +98,7 @@ $ ./ex1 -eps_view
 ```
 
 :::{note}
-This option internally calls the function [EPSView](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSView).  Alternatively, we could include a direct call to this function in the source code. Almost all command-line options have a related function call.
+This option internally calls the function [EPSView](../../manualpages/EPS/EPSView).  Alternatively, we could include a direct call to this function in the source code. Almost all command-line options have a related function call.
 :::
 :::{note}
 All the command-line options related to the EPS object have the `-eps_` prefix.
@@ -165,7 +165,7 @@ $ ./ex1 -n 400 -eps_nev 3 -eps_ncv 24
 
 Note that the default value of `ncv` depends on the value of `nev`.
 
-Try to set some of the above options directly in the source code by calling the related functions [EPSSetTolerances](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetTolerances) and [EPSSetDimensions](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetDimensions).  Modify and recompile the program. Use `-eps_view` to check that the values are correctly set. Is it now possible to change these options from the command- line? Does this change whether you place the calls before or after the call to [EPSSetFromOptions](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetFromOptions)?
+Try to set some of the above options directly in the source code by calling the related functions [EPSSetTolerances](../../manualpages/EPS/EPSSetTolerances) and [EPSSetDimensions](../../manualpages/EPS/EPSSetDimensions).  Modify and recompile the program. Use `-eps_view` to check that the values are correctly set. Is it now possible to change these options from the command- line? Does this change whether you place the calls before or after the call to [EPSSetFromOptions](../../manualpages/EPS/EPSSetFromOptions)?
 
 Convergence is usually bad when eigenvalues are close to each other, which is the case in this example. In order to see what is happening while the eigensolver iterates, we can use a monitor to display information associated to the convergence of eigenpairs at each iteration:
 
@@ -189,7 +189,7 @@ The plot is drawn in an X11 pop-up window. So this requires that the display is 
 
 ## Changing the Eigensolver
 
-The convergence behavior for a particular problem also depends on the properties of the eigensolver being used. SLEPc provides several eigensolvers which can be selected in the source code with the function [EPSSetType](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetType), or at run time:
+The convergence behavior for a particular problem also depends on the properties of the eigensolver being used. SLEPc provides several eigensolvers which can be selected in the source code with the function [EPSSetType](../../manualpages/EPS/EPSSetType), or at run time:
 
 ```{code} console
 $ ./ex1 -eps_nev 4 -eps_type lobpcg

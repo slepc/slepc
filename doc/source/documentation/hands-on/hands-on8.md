@@ -6,7 +6,7 @@ Now we are going to focus on the solution of quadratic eigenvalue problems with 
 
 ## Compiling
 
-Copy the file [ex16.c](https://slepc.upv.es/documentation/current/src/pep/tutorials/ex16.c) [[plain text]](https://slepc.upv.es/documentation/current/src/pep/tutorials/ex16.c) to your directory and add these lines to the makefile
+Copy the file {{'[ex16.c](https://slepc.upv.es/{}/src/pep/tutorials/ex16.c.html)'.format(branch)}} to your directory and add these lines to the makefile
 
 ```{code} make
 ex16: ex16.o
@@ -43,14 +43,14 @@ Quadratic Eigenproblem, N=100 (10x10 grid)
 
 The PEP object is used very much like EPS or SVD, as can be seen in the source code. Here is a summary of the main function calls:
 
-* [PEPCreate](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPCreate)`(MPI_Comm comm,PEP *pep);`
-* [PEPSetOperators](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPSetOperators)`(PEP pep,PetscInt nmat,Mat A[]);`
-* [PEPSetProblemType](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPSetProblemType)`(PEP pep,PEPProblemType type);`
-* [PEPSetFromOptions](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPSetFromOptions)`(PEP pep);`
-* [PEPSolve](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPSolve)`(PEP pep);`
-* [PEPGetConverged](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPGetConverged)`(PEP pep, int *nconv);`
-* [PEPGetEigenpair](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPGetEigenpair)`(PEP pep,int i,PetscScalar *kr,PetscScalar *ki,Vec xr,Vec xi);`
-* [PEPDestroy](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPDestroy)`(PEP pep)`;
+* [PEPCreate](../../manualpages/PEP/PEPCreate)`(MPI_Comm comm,PEP *pep);`
+* [PEPSetOperators](../../manualpages/PEP/PEPSetOperators)`(PEP pep,PetscInt nmat,Mat A[]);`
+* [PEPSetProblemType](../../manualpages/PEP/PEPSetProblemType)`(PEP pep,PEPProblemType type);`
+* [PEPSetFromOptions](../../manualpages/PEP/PEPSetFromOptions)`(PEP pep);`
+* [PEPSolve](../../manualpages/PEP/PEPSolve)`(PEP pep);`
+* [PEPGetConverged](../../manualpages/PEP/PEPGetConverged)`(PEP pep, int *nconv);`
+* [PEPGetEigenpair](../../manualpages/PEP/PEPGetEigenpair)`(PEP pep,int i,PetscScalar *kr,PetscScalar *ki,Vec xr,Vec xi);`
+* [PEPDestroy](../../manualpages/PEP/PEPDestroy)`(PEP pep)`;
 
 First, the solver context (PEP) is created and the three problem matrices are specified. Then various options are set for customized solution. After that, the program solves the problem, retrieves the solution, and finally destroys the context.
 
@@ -131,7 +131,7 @@ $ ./ex16 -pep_nev 4 -pep_ncv 24 -pep_smallest_magnitude -pep_tol 1e-5
 
 ## Choosing the Solver Method
 
-Several polynomial eigensolvers are available, which can be selected in the source code with the function [PEPSetType](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPSetType), or at run time:
+Several polynomial eigensolvers are available, which can be selected in the source code with the function [PEPSetType](../../manualpages/PEP/PEPSetType), or at run time:
 
 ```{code} console
 $ ./ex16 -pep_type qarnoldi
@@ -158,7 +158,7 @@ The `linear` solver performs an explicit linearization of the quadratic eigenpro
 $ ./ex16 -pep_type linear -pep_linear_linearization 1,0 -pep_linear_explicitmatrix
 ```
 
-Since in this problem all matrices are symmetric, the problem type is set to `PEP_HERMITIAN` in the source code with [PEPSetProblemType](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPSetProblemType), and this obliges us to set the explicit matrix flag, see [PEPLinearSetExplicitMatrix](https://slepc.upv.es/documentation/current/docs/manualpages/PEP/PEPLinearSetExplicitMatrix).  It is also possible to use a non-symmetric linearization by choosing the corresponding problem type:
+Since in this problem all matrices are symmetric, the problem type is set to `PEP_HERMITIAN` in the source code with [PEPSetProblemType](../../manualpages/PEP/PEPSetProblemType), and this obliges us to set the explicit matrix flag, see [PEPLinearSetExplicitMatrix](../../manualpages/PEP/PEPLinearSetExplicitMatrix).  It is also possible to use a non-symmetric linearization by choosing the corresponding problem type:
 
 ```{code} console
 $ ./ex16 -pep_type linear -pep_general

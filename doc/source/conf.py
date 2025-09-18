@@ -125,9 +125,18 @@ myst_dmath_allow_labels = True # the default
 myst_dmath_allow_space = True
 myst_dmath_allow_digits=False
 
+try:
+    git_ref = subprocess.check_output(["git", "rev-parse", "HEAD"]).rstrip()
+    git_ref_release = subprocess.check_output(["git", "rev-parse", "origin/release"]).rstrip()
+    edit_branch = "release" if git_ref == git_ref_release else "main"
+except subprocess.CalledProcessError:
+    print("WARNING: determining branch for page edit links failed")
+    edit_branch = "main"
+
 myst_substitutions = {
             'release_date': release_date,
             'release_year': release_year,
+            'branch': edit_branch,
             }
 
 myst_url_schemes = {
@@ -204,14 +213,6 @@ html_theme_options = {
             },
         "navigation_with_keys":True
         }
-
-try:
-    git_ref = subprocess.check_output(["git", "rev-parse", "HEAD"]).rstrip()
-    git_ref_release = subprocess.check_output(["git", "rev-parse", "origin/release"]).rstrip()
-    edit_branch = "release" if git_ref == git_ref_release else "main"
-except subprocess.CalledProcessError:
-    print("WARNING: determining branch for page edit links failed")
-    edit_branch = "main"
 
 html_context = {
         "display_gitlab": True,
