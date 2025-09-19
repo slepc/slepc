@@ -156,7 +156,7 @@ myst_url_schemes = {
 copybutton_prompt_text = '$ ' # the prompt is not copied
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = ['_static/README.md']
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
