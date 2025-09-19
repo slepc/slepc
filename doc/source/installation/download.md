@@ -74,7 +74,7 @@ $ git pull
 
 The source code in the repository can be browsed at [gitlab.com](https://gitlab.com/slepc/slepc). Some statistics related to source code development can be found at [openhub.net](https://www.openhub.net/p/slepc).
 
-Additional information can be found at [PETSc Developer's Documentation](https://petsc.org/release/developers/).
+Additional information can be found at {{'[PETSc Developer\'s Documentation](https://petsc.org/{}/developers/)'.format(branch)}}.
 
 Users of the development version may also want to check the [nightly tests](https://gitlab.com/slepc/slepc/-/pipeline_schedules) for various builds of SLEPc's `main` branch with PETSc's `main` branch, as well as the source [coverage](https://slepc.upv.es/coverage/) of these tests.
 

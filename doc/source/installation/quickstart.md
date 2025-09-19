@@ -2,7 +2,7 @@
 
 The following is a quick-start guide for installing SLEPc. For further details, the user is referred to the SLEPc Users Manual.
 
-Previously to the installation of SLEPc, the system must have an appropriate version of PETSc installed (see the [PETSc installation documentation](https://petsc.org/release/install/) for details).
+Previously to the installation of SLEPc, the system must have an appropriate version of PETSc installed (see the {{'[PETSc installation documentation](https://petsc.org/{}/install/)'.format(branch)}} for details).
 
 The installation process for SLEPc is very similar to PETSc, with two main stages: configuration and compilation. SLEPc configuration is much simpler because most of the configuration information is taken from PETSc, including compiler options and scalar type (real or complex). Several configurations can coexist in the same directory tree, being selected by different values of `PETSC_ARCH`, so that one can, for instance, have a SLEPc compiled with real scalars and another one with complex scalars.
 

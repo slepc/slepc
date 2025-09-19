@@ -19,7 +19,7 @@ The following is a list of presentations of SLEPc-related tutorials, seminars or
 
   * 2023 Annual PETSc Meeting \- Chicago, June 5-7, 2023.
     * Title of the talk: _"Experiences in solving nonlinear eigenvalue problems with SLEPc"_
-    * Further details about the event: [[link]](https://petsc.org/release/community/meetings/2023)
+    * Further details about the event: {{'[[link]](https://petsc.org/{}/community/meetings/2023)'.format(branch)}}
     * Slides: [[PDF]](https://petsc.gitlab.io/annual-meetings/2023/slides/JoseERoman.pdf).
     * Video: [[youtube]](https://www.youtube.com/watch?v=2qhtMsvYw4o&list=PLgFMPm27S9Jqd9_Nn8YlyNX_fGP3DZuLL&index=9).
   * PETSc User Meeting 2018 \- London, June 4-6, 2018.

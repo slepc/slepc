@@ -6,7 +6,7 @@
 ```
 
 :::{seealso}
-[PETSc FAQ](https://petsc.org/release/faq/).
+{{'[PETSc FAQ](https://petsc.org/{}/faq/)'.format(branch)}}.
 :::
 
 ## 1.  Where should I send SLEPc bug reports and questions?
@@ -15,7 +15,7 @@ Send all maintenance requests to the SLEPc developers via <slepc-maint@upv.es>.
 
 ## 2.  Is there a SLEPc users mailing list?
 
-No, but SLEPc-related queries can be posted in the [petsc-users mailing list](https://petsc.org/release/community/mailing/).
+No, but SLEPc-related queries can be posted in the {{'[petsc-users mailing list](https://petsc.org/{}/community/mailing/)'.format(branch)}}.
 
 ## 3.  How can I receive announcements of new SLEPc versions?
 
@@ -43,7 +43,7 @@ Probably you are dealing with a generalized eigenproblem (or a standard eigenpro
 
 Possibly, the best way of learning to use SLEPc is to follow these steps:
 
-  - First of all, get acquainted with PETSc if you are not already familiar with it (see the [PETSc tutorials page](https://petsc.org/release/tutorials/)).
+  - First of all, get acquainted with PETSc if you are not already familiar with it (see the {{'[PETSc tutorials page](https://petsc.org/{}/tutorials/)'.format(branch)}}).
   - Read through the entire SLEPc Users Manual. In a first reading, one may skip the "advanced usage" sections.
   - Follow the steps provided by the [hands-on](hands-on/index) exercises, trying the examples in an available SLEPc installation.
   - Use the example programs available in the SLEPc distribution as a basis for your own programs.
@@ -83,7 +83,7 @@ Krylov methods (and in particular the default SLEPc eigensolver, Krylov-Schur) a
 
 ## 13. Creating a sparse matrix gets terribly slow when I increase the matrix size
 
-Matrix preallocation is extremely important, especially for large matrices.  See the [performance chapter of the PETSc users manual](https://petsc.org/release/docs/manual/performance/#memory-allocation-for-sparse-matrix-assembly).
+Matrix preallocation is extremely important, especially for large matrices.  See the {{'[performance chapter of the PETSc users manual](https://petsc.org/{}/docs/manual/performance/#memory-allocation-for-sparse-matrix-assembly)'.format(branch)}}.
 
 :::{note}
 Since PETSc version 3.19 the `Mat` data structures have been changed so that the performance is reasonably good without preallocation.
