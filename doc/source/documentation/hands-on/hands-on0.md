@@ -67,7 +67,7 @@ Examine the source code of the sample program. The following comments will help 
 SLEPc header files automatically include some PETSc header files.
 :::
 
-**Library Initialization** : All SLEPc programs must begin with a call to [SlepcInitialize](../../manualpages/Sys/SlepcInitialize), which in turn initializes PETSc and MPI. Similarly, at the end of the program [SlepcFinalize](../../manualpages/Sys/SlepcFinalize) must be called for library cleanup.
+**Library Initialization** : All SLEPc programs must begin with a call to `SlepcInitialize`, which in turn initializes PETSc and MPI. Similarly, at the end of the program `SlepcFinalize` must be called for library cleanup.
 
 **Input/Output** : In this example, we do input/output via a call to a PETSc function, {{'[PetscPrintf](https://petsc.org/{}/manualpages/Sys/PetscPrintf)'.format(branch)}}.  Remember that in parallel programs input/output cannot be done simply via C standard library functions. Note that in SLEPc programs we can freely use any PETSc function.
 
@@ -118,6 +118,6 @@ When using the debug versions some options are available to support debugging.  
 $ ./hello -start_in_debugger
 ```
 
-opens the program in a debugger stopped at the [SlepcInitialize](../../manualpages/Sys/SlepcInitialize) function.
+opens the program in a debugger stopped at the `SlepcInitialize` function.
 
 Other useful options are: `-info` to get informative messages about progress of the calculations, `-malloc_info` to print memory usage at end of run, `-log_trace [filename]` to get a full trace of the execution (in a file), `-malloc_dump` to list memory blocks not freed at the end of the program, and `-log_view` to get a summary including performance results.

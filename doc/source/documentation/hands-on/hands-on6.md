@@ -54,7 +54,7 @@ Try to find out how much time was spent is solving the eigenvalue problem. Is th
 
 ## Instrumenting the Source Code
 
-If we are just interested in knowing the time used by the eigensolver, then it may be better to let our example program inform us. With the function {{'[PetscTime](https://petsc.org/{}/manualpages/Sys/PetscTime)'.format(branch)}}, it is possible to obtain the current time of day (wall-clock time) in seconds. Edit the source code and add two calls to this function just before and after the [EPSSolve](../../manualpages/EPS/EPSSolve) call, as in the following fragment of code
+If we are just interested in knowing the time used by the eigensolver, then it may be better to let our example program inform us. With the function {{'[PetscTime](https://petsc.org/{}/manualpages/Sys/PetscTime)'.format(branch)}}, it is possible to obtain the current time of day (wall-clock time) in seconds. Edit the source code and add two calls to this function just before and after the `EPSSolve` call, as in the following fragment of code
 
 ```{code} c
 PetscCall(PetscTime(&t1;));

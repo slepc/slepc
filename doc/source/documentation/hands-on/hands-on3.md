@@ -30,7 +30,7 @@ $ make ex7
 
 This example uses the PETSc function {{'[MatLoad](https://petsc.org/{}/manualpages/Mat/MatLoad)'.format(branch)}} to load a matrix from a file. The two matrix files are specified in the command line.  Note that these files have been converted from Matrix Market format to PETSc binary format.
 
-Compare the source code of the example program with the previous ones. Note that, in this case, two matrix objects are passed in the [EPSSetOperators](../../manualpages/EPS/EPSSetOperators) function call:
+Compare the source code of the example program with the previous ones. Note that, in this case, two matrix objects are passed in the `EPSSetOperators` function call:
 
 ```{code} c
 PetscCall(EPSSetOperators(eps,A,B));
