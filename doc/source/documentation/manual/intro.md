@@ -233,7 +233,7 @@ Most SLEPc programs begin with a call to `SlepcInitialize`
 SlepcInitialize(int *argc,char ***argv,char *file,char *help);
 ```
 
-which initializes SLEPc, PETSc and MPI. This subroutine is very similar to `PetscInitialize`, and the arguments have the same meaning. In fact, internally `SlepcInitialize` calls `PetscInitialize`.
+which initializes SLEPc, PETSc and MPI. This subroutine is very similar to {external:doc}`PetscInitialize`, and the arguments have the same meaning. In fact, internally `SlepcInitialize` calls {external:doc}`PetscInitialize`.
 
 After this initialization, SLEPc programs can use communicators defined by PETSc. In most cases users can employ the communicator `PETSC_COMM_WORLD` to indicate all processes in a given run and `PETSC_COMM_SELF` to indicate a single process. MPI provides routines for generating new communicators consisting of subsets of processes, though most users rarely need to use these features. SLEPc users need not program much message passing directly with MPI, but they must be familiar with the basic concepts of message passing and distributed memory computing.
 

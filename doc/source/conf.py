@@ -11,6 +11,7 @@ import subprocess
 from datetime import datetime
 import time
 import shutil
+import sphobjinv
 
 #print('cwd:', os.getcwd())
 sys.path.append(os.getcwd())
@@ -62,6 +63,14 @@ if release_date == '':
 if release_year == '':
     release_year = datetime.strftime(datetime.now(), '%Y')
 
+try:
+    git_ref = subprocess.check_output(["git", "rev-parse", "HEAD"]).rstrip()
+    git_ref_release = subprocess.check_output(["git", "rev-parse", "origin/release"]).rstrip()
+    edit_branch = "release" if git_ref == git_ref_release else "main"
+except subprocess.CalledProcessError:
+    print("WARNING: determining branch for page edit links failed")
+    edit_branch = "main"
+
 copyright = '2002-{}, Universitat Politecnica de Valencia, Spain'.format(
         release_year)
 
@@ -80,7 +89,44 @@ extensions = [
         'sphinx_togglebutton', # dropdown box
         'sphinxcontrib.bibtex',
         'sphinxcontrib.rsvgconverter', # svg to pdf (manual)
+        'sphinx.ext.intersphinx',
         ]
+
+# intersphinx
+intersphinx_mapping = {
+    'petsc': ('https://petsc.org/release/', None),
+}
+
+def _mangle_petsc_intersphinx(branch):
+    """Preprocess the keys in PETSc's intersphinx inventory.
+
+    PETSc have intersphinx keys of the form:
+
+        manualpages/Vec/VecShift
+
+    This function downloads their object inventory and strips the leading path
+    elements so that references to PETSc names actually resolve."""
+
+    website = intersphinx_mapping['petsc'][0].partition('/release/')[0]
+    doc_url = f'{website}/{branch}/'
+    inventory_url = f'{doc_url}objects.inv'
+    print('Using PETSC inventory from ' + inventory_url)
+    inventory = sphobjinv.Inventory(url=inventory_url)
+    print(inventory)
+
+    for obj in inventory.objects:
+        if obj.name.startswith('manualpages'):
+            name = obj.name.split('/')[-1]
+            if not name == 'index':
+                obj.name = obj.name.split('/')[-1]
+
+    new_inventory_filename = 'petsc_objects.inv'
+    sphobjinv.writebytes(
+        new_inventory_filename, sphobjinv.compress(inventory.data_file(contract=True))
+    )
+    intersphinx_mapping['petsc'] = (doc_url, new_inventory_filename)
+
+_mangle_petsc_intersphinx(edit_branch)
 
 myst_links_external_new_tab = True # open all external links in new tabs
 
@@ -124,14 +170,6 @@ myst_dmath_double_inline = True
 myst_dmath_allow_labels = True # the default
 myst_dmath_allow_space = True
 myst_dmath_allow_digits=False
-
-try:
-    git_ref = subprocess.check_output(["git", "rev-parse", "HEAD"]).rstrip()
-    git_ref_release = subprocess.check_output(["git", "rev-parse", "origin/release"]).rstrip()
-    edit_branch = "release" if git_ref == git_ref_release else "main"
-except subprocess.CalledProcessError:
-    print("WARNING: determining branch for page edit links failed")
-    edit_branch = "main"
 
 myst_substitutions = {
             'release_date': release_date,
