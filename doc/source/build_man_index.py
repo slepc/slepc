@@ -137,7 +137,7 @@ def modifylevel(filename,secname,edit_branch):
       tmpbuf = re.sub('.cxx#', '.cxx.html#', tmpbuf)
 
       # Add footer links
-      outbuf = tmpbuf + '\n[Index of all %s routines](index.md)  \n' % secname + '[Table of Contents for all manual pages](/manualpages/index.md)  \n' + '[Index of all manual pages](/manualpages/singleindex.md)  \n'
+      outbuf = tmpbuf + '\n[Index of all %s routines](index.md)\n' % secname + '[Table of Contents for all manual pages](/manualpages/index.md)\n' + '[Index of all manual pages](/manualpages/singleindex.md)\n'
 
       # write the modified manpage
       with open(filename, "w") as fd:
