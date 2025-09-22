@@ -155,7 +155,7 @@ def generateFortranInterface(petscarch, classes, enums, structs, senums, petscse
           cnt = cnt + 1
         if cnt: fd.write(',')
         fd.write(' z)\n')
-        fd.write('  use, intrinsic :: ISO_C_BINDING\n')
+        fd.write('  use, intrinsic :: ISO_C_binding\n')
         if simport: fd.write('  import ' + simport + '\n')
 
         cnt = 0
@@ -164,7 +164,12 @@ def generateFortranInterface(petscarch, classes, enums, structs, senums, petscse
           ktypename = k.typename
           if ktypename in CToFortranTypes:
             ktypename =CToFortranTypes[ktypename]
-          if ktypename in senums or ktypename in petscsenums or ktypename == 'char':
+          if ktypename == 'char':
+            if getattr(k, 'char_type', None) == 'single':
+              fd.write(' character :: ' + Letters[cnt] + '\n')
+            else:
+              fd.write(' character(len=*) :: ' + Letters[cnt] + '\n')
+          elif ktypename in senums or ktypename in petscsenums:
             fd.write('  character(*) :: ' + Letters[cnt] + '\n')
           elif k.array and k.stars:
             if not dim or dim == '1d': fd.write('  ' + ktypename + ', pointer :: ' +  Letters[cnt]  + '(:)\n')
@@ -271,6 +276,8 @@ def generateCStub(petscarch,manualstubsfound,senums,petscsenums,classes,structs,
         fd.write('const ')
       if k.typename in senums or k.typename in petscsenums:
         fd.write('char *')
+      elif k.typename == 'char' and not k.array and not k.stars and getattr(k, 'char_type', None) == 'single':
+        fd.write('char *')
       else:
         if k.stars == 1 and k.array and not ktypename == 'char':
           fd.write('F90Array1d *')
@@ -282,7 +289,7 @@ def generateCStub(petscarch,manualstubsfound,senums,petscsenums,classes,structs,
       if not (k.typename == 'char' or k.typename in senums or k.typename in petscsenums or k.array or k.typename == 'PeCtx'):
         fd.write('*')
       fd.write(Letters[cnt])
-      if k.typename == 'char' or (not k.stars and k.array): fd.write('[]')
+      if (k.typename == 'char' and getattr(k, 'char_type', None) != 'single') or (not k.stars and k.array): fd.write('[]')
       cnt = cnt + 1
     if cnt: fd.write(', ')
     fd.write('PetscErrorCode *ierr')
@@ -323,8 +330,16 @@ def generateCStub(petscarch,manualstubsfound,senums,petscsenums,classes,structs,
       cnt = 0
       for k in fun.arguments:
         if k.stringlen: continue
-        if k.typename == 'char' or k.typename in senums or k.typename in petscsenums:
-          if not k.stars and (k.const or (k.typename in senums or k.typename in petscsenums)):
+        if k.typename == 'char':
+          if getattr(k, 'char_type', None) == 'single': pass
+          elif not k.stars:
+            if k.const:
+              fd.write('  char* c_' + Letters[cnt] + ';\n')
+              fd.write('  FIXCHAR(' + Letters[cnt] + ', l_' + Letters[cnt] + ', c_' + Letters[cnt] + ');\n')
+          elif k.stars:
+            fd.write('  char* c_' + Letters[cnt] + ' = PETSC_NULLPTR;\n')
+        elif k.typename in senums or k.typename in petscsenums:
+          if not k.stars:
             fd.write('  char* c_' + Letters[cnt] + ';\n')
             fd.write('  FIXCHAR(' + Letters[cnt] + ', l_' + Letters[cnt] + ', c_' + Letters[cnt] + ');\n')
           elif k.stars:
@@ -361,11 +376,15 @@ def generateCStub(petscarch,manualstubsfound,senums,petscsenums,classes,structs,
       cnt = 0
       for k in fun.arguments:
         if cnt: fd.write(', ')
-        if k.typename in senums or k.typename in petscsenums or k.typename == 'char':
-          if k.stars:
-            fd.write('(const char **)&')
-          if k.const or (k.typename in senums or k.typename in petscsenums):
+        if (k.typename in senums or k.typename in petscsenums or k.typename == 'char') and k.stars:
+          fd.write('(const char **)&')
+        if k.typename == 'char':
+          if getattr(k, 'char_type', None) == 'single':
+            fd.write('*')
+          elif k.const:
             fd.write('c_')
+        elif k.typename in senums or k.typename in petscsenums:
+          fd.write('c_')
         elif k.typename == 'MPI_Fint':
           fd.write('MPI_Comm_f2c(*(')
         elif not k.stars and not k.array and not k.stringlen and not k.typename == 'PetscViewer' and not k.typename == 'PeCtx':
@@ -394,7 +413,8 @@ def generateCStub(petscarch,manualstubsfound,senums,petscsenums,classes,structs,
       for k in fun.arguments:
         if k.stringlen: continue
         if k.typename == 'char' or k.typename in senums or k.typename in petscsenums:
-          if not k.stars and (k.const or (k.typename in senums or k.typename in petscsenums)):
+          if k.typename == 'char' and getattr(k, 'char_type', None) == 'single': pass
+          elif not k.stars and (k.const or k.typename in senums or k.typename in petscsenums):
             fd.write('  FREECHAR(' + Letters[cnt] + ', c_' + Letters[cnt] + ');\n')
           else:
             if k.stars:
@@ -809,7 +829,7 @@ def main(petscdir,slepcdir,petscarch):
 
   for i in classes.keys():
     mansecpath = (os.path.join('sys','classes',classes[i].mansec) if classes[i].mansec in ['bv','ds','fn','rg','st'] else classes[i].mansec)
-    with open(os.path.join(petscarch,'ftn', mansecpath, classes[i].includefile),"a") as fd:
+    with open(os.path.join(petscarch,'ftn', mansecpath,classes[i].includefile),"a") as fd:
       if not classes[i].petscobject:
         fd.write('  type t' + i + '\n')
         fd.write('    PetscFortranAddr:: v PETSC_FORTRAN_TYPE_INITIALIZE\n')
@@ -920,6 +940,13 @@ def main(petscdir,slepcdir,petscarch):
 
       for funname in petscobjectfunctions:
         fi = petscobjectfunctions[funname]
+
+        # cannot print Fortran interface definition if any arguments are void * or void **
+        opaque = False
+        for k in fi.arguments:
+          if k.typename == 'void' or k.typename == 'PeCtx': opaque = True
+        if opaque: continue
+
         fd.write('  interface ' + funname + '\n')
         fd.write('    module procedure ' + funname  + ii + '\n')
         fd.write('  end interface\n')
@@ -979,6 +1006,13 @@ def main(petscdir,slepcdir,petscarch):
 
         for funname in petscobjectfunctions:
           fi = petscobjectfunctions[funname]
+
+          # cannot generate Fortran functions if any argument is void or PeCtx
+          opaque = False
+          for k in fi.arguments:
+            if k.typename == 'void' or k.typename == 'PeCtx': opaque = True
+          if opaque: continue
+
           fd.write('  subroutine ' + funname + ii + '(')
           cnt = 0
           for k in fi.arguments:
@@ -994,8 +1028,13 @@ def main(petscdir,slepcdir,petscarch):
             ktypename = k.typename
             if ktypename in CToFortranTypes:
               ktypename = CToFortranTypes[ktypename]
-            if ktypename in senums or ktypename == 'char':
+            if ktypename in senums or ktypename in petscsenums:
               fd.write('  character(*) :: ' + Letters[cnt] + '\n')
+            elif ktypename == 'char':
+              if k.char_type != 'single':
+                fd.write('  character(*) :: ' + Letters[cnt] + '\n')
+              elif k.char_type == 'single':
+                fd.write('  character(len=1) :: ' + Letters[cnt] + '\n')
             elif k.array and k.stars:
               fd.write('  ' + ktypename + ', pointer :: ' +  Letters[cnt]  + '(:)\n')
             elif k.array:
