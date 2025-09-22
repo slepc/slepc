@@ -83,7 +83,7 @@ Krylov methods (and in particular the default SLEPc eigensolver, Krylov-Schur) a
 
 ## 13. Creating a sparse matrix gets terribly slow when I increase the matrix size
 
-Matrix preallocation is extremely important, especially for large matrices.  See the {{'[performance chapter of the PETSc users manual](https://petsc.org/{}/docs/manual/performance/#memory-allocation-for-sparse-matrix-assembly)'.format(branch)}}.
+Matrix preallocation is extremely important, especially for large matrices.  See the {{'[chapter on matrices in the PETSc users manual](https://petsc.org/{}/manual/mat/#preallocation-of-memory-for-sequential-aij-sparse-matrices)'.format(branch)}}.
 
 :::{note}
 Since PETSc version 3.19 the `Mat` data structures have been changed so that the performance is reasonably good without preallocation.

@@ -67,7 +67,7 @@ The way in which the SVD object works is very similar to that of EPS. However, s
 
 First, the singular value solver (SVD) context is created and the matrix associated with the problem is specified. Then various options are set for customized solution. After that, the program solves the problem, retrieves the solution, and finally destroys the SVD context.
 
-Note that the singular value, `sigma`, is defined as a `PetscReal`, and that the singular vectors are simple `Vec`'s.
+Note that the singular value, `sigma`, is defined as a {external:doc}`PetscReal`, and that the singular vectors are simple {external:doc}`Vec`'s.
 
 ## SVD Options
 

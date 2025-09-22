@@ -69,9 +69,9 @@ SLEPc header files automatically include some PETSc header files.
 
 **Library Initialization** : All SLEPc programs must begin with a call to `SlepcInitialize`, which in turn initializes PETSc and MPI. Similarly, at the end of the program `SlepcFinalize` must be called for library cleanup.
 
-**Input/Output** : In this example, we do input/output via a call to a PETSc function, {{'[PetscPrintf](https://petsc.org/{}/manualpages/Sys/PetscPrintf)'.format(branch)}}.  Remember that in parallel programs input/output cannot be done simply via C standard library functions. Note that in SLEPc programs we can freely use any PETSc function.
+**Input/Output** : In this example, we do input/output via a call to a PETSc function, {external:doc}`PetscPrintf`. Remember that in parallel programs input/output cannot be done simply via C standard library functions. Note that in SLEPc programs we can freely use any PETSc function.
 
-**Error Checking** : All SLEPc routines return an integer indicating whether an error has occurred during the call. The PETSc macro {{'[PetscCall](https://petsc.org/{}/manualpages/Sys/PetscCall)'.format(branch)}} checks the return value and calls the PETSc error handler upon error detection. All function calls should be wrapped around `PetscCall` to enable a complete error traceback.
+**Error Checking** : All SLEPc routines return an integer indicating whether an error has occurred during the call. The PETSc macro {external:doc}`PetscCall` checks the return value and calls the PETSc error handler upon error detection. All function calls should be wrapped around {external:doc}`PetscCall` to enable a complete error traceback.
 
 ## Running the Program
 

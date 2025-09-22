@@ -68,9 +68,9 @@ You should get an output similar to this
 
 Examine the source code of the sample program and locate the function calls mentioned in the following comments.
 
-**The Options Database** : All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the function {{'[PetscOptionsGetInt](https://petsc.org/{}/manualpages/Sys/PetscOptionsGetInt)'.format(branch)}} is used to check whether the user has provided a command line option to set the value of n, the problem dimension. If so, the variable n is set accordingly; otherwise, n remains unchanged.
+**The Options Database** : All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the function {external:doc}`PetscOptionsGetInt` is used to check whether the user has provided a command line option to set the value of n, the problem dimension. If so, the variable n is set accordingly; otherwise, n remains unchanged.
 
-**Vectors and Matrices** : Usage of matrices and vectors in SLEPc is exactly the same as in PETSc. The user can create a new parallel or sequential matrix, A, with subroutine {{'[MatCreate](https://petsc.org/{}/manualpages/Mat/MatCreate)'.format(branch)}}, where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with {{'[MatSetValues](https://petsc.org/{}/manualpages/Mat/MatSetValues)'.format(branch)}} and then assembles it.
+**Vectors and Matrices** : Usage of matrices and vectors in SLEPc is exactly the same as in PETSc. The user can create a new parallel or sequential matrix, A, with subroutine {external:doc}`MatCreate`, where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with {external:doc}`MatSetValues` and then assembles it.
 
 **Solving the Eigenvalue Problem** : Usage of eigensolvers is very similar to other kinds of solvers provided by PETSc. After creating the matrix, the problem is solved by means of an EPS object (Eigenvalue Problem Solver) via the following sequence of function calls:
 

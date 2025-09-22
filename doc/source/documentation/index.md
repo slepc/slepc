@@ -77,7 +77,7 @@ The manual pages are organized in four categories:
 
 SLEPc is based on PETSc and therefore users are recommended to use the SLEPc documentation together with the one provided with PETSc.
 
-PETSc Documentation: {{'[[PETSc website]](https://petsc.org/{}/docs/)'.format(branch)}}
+PETSc Documentation: {{'[[PETSc website]](https://petsc.org/{}/)'.format(branch)}}
 
 ```{toctree}
 :maxdepth: 2
