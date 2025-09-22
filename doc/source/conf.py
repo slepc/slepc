@@ -90,6 +90,7 @@ extensions = [
         'sphinxcontrib.bibtex',
         'sphinxcontrib.rsvgconverter', # svg to pdf (manual)
         'sphinx.ext.intersphinx',
+        'html5_petsc',
         ]
 
 # intersphinx
