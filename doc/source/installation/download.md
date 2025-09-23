@@ -19,7 +19,6 @@ $ git pull
 ```
 The `release` branch tracks the latest release version, including all the patches. It is also possible to check out a specific version with the tag name, for instance:
 
-%```{code} console
 ```{parsed-literal}
 $ git checkout v{{env.config.release}}
 ```

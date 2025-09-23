@@ -53,7 +53,7 @@ The components enable easy customization and extension of both algorithms and im
 {#sec:inst}
 ## Installation
 
-This section describes SLEPc's installation procedure. Previously to the installation of SLEPc, the system must have an appropriate version of PETSc installed. Compatible versions of PETSc and SLEPc are those with coincident major and minor version number, the third number (patch level) being irrelevant for this. For instance, SLEPc 3.23.x may be built with PETSc 3.23.x. Also note that, if using git repositories, both PETSc and SLEPc must be either release versions or development versions, so make sure you select the appropriate branch in both repositories (`git checkout release` or `git checkout main`).
+This section describes SLEPc's installation procedure. Previously to the installation of SLEPc, the system must have an appropriate version of PETSc installed. Compatible versions of PETSc and SLEPc are those with coincident major and minor version number, the third number (patch level) being irrelevant for this. For instance, SLEPc {{env.config.version}}.x may be built with PETSc {{env.config.version}}.x. Also note that, if using git repositories, both PETSc and SLEPc must be either release versions or development versions, so make sure you select the appropriate branch in both repositories (`git checkout release` or `git checkout main`).
 
 The installation process for SLEPc is very similar to PETSc, with two stages: configuration and compilation. SLEPc's configuration is much simpler because most of the configuration information is taken from PETSc, including compiler options and scalar type (real or complex). See section [](#sec:opt-inst) for a discussion of options that are most relevant for SLEPc. Several configurations can coexist in the same directory tree, so that for instance one can have SLEPc libraries compiled with real scalars as well as with complex scalars. This is explained in section [](#sec:mult-inst). Also, system-based installation is also possible with the `--prefix` option, as discussed in section [](#sec:prefix-inst).
 
@@ -64,23 +64,23 @@ The basic steps for the installation are described next. Note that prior to thes
 
 1.  Unbundle the distribution file with
 
-    ```{code} console
-    $ tar xzf slepc-3.23.0.tar.gz
+    ```{parsed-literal}
+    tar xzf slepc-{{env.config.release}}.tar.gz
     ```
 
     or an equivalent command. This will create a directory and unpack the software there.
 
 2.  Set the environment variable `SLEPC_DIR` to the full path of the SLEPc home directory. For example, under the `bash` shell:
 
-    ```{code} console
-    $ export SLEPC_DIR=/home/username/slepc-3.23.0
+    ```{parsed-literal}
+    export SLEPC_DIR=/home/username/slepc-{{env.config.release}}
     ```
 
     In addition, the variables `PETSC_DIR` and `PETSC_ARCH` must also be set appropriately, e.g.
 
-    ```{code} console
-    $ export PETSC_DIR=/home/username/PETSc-3.23.0
-    $ export PETSC_ARCH=arch-darwin-c-debug
+    ```{parsed-literal}
+    export PETSC_DIR=/home/username/petsc-{{env.config.release}}
+    export PETSC_ARCH=arch-darwin-c-debug
     ```
 
     The rationale for `PETSC_ARCH` is explained in section [](#sec:mult-inst) (see section [](#sec:prefix-inst) for a case in which `PETSC_ARCH` is not required).
@@ -189,18 +189,18 @@ $ make install
 
 This is useful for building as a regular user and then copying the libraries and include files to the system directories as root.
 
-To be more precise, suppose that the configuration was done with `--prefix=/opt/PETSc-3.23.0-linux-gnu-c-debug`. Then, `make install` will create directory `/opt/PETSc-3.23.0-linux-gnu-c-debug` if it does not exist, and several subdirectories containing the libraries, the configuration files, and the header files. Note that the source code files are not copied, nor the documentation, so the size of the installed directory will be much smaller than the original one. For that reason, it is no longer necessary to allow for several configurations to share a directory tree. In other words, in a prefix-based installation, variable `PETSC_ARCH` loses significance and must be unset. To maintain several configurations, one should specify different prefix directories, typically with a name that informs about the configuration options used.
+To be more precise, suppose that the configuration was done with `--prefix=/opt/petsc-x.x-linux-gnu-c-debug`. Then, `make install` will create directory `/opt/petsc-x.x-linux-gnu-c-debug` if it does not exist, and several subdirectories containing the libraries, the configuration files, and the header files. Note that the source code files are not copied, nor the documentation, so the size of the installed directory will be much smaller than the original one. For that reason, it is no longer necessary to allow for several configurations to share a directory tree. In other words, in a prefix-based installation, variable `PETSC_ARCH` loses significance and must be unset. To maintain several configurations, one should specify different prefix directories, typically with a name that informs about the configuration options used.
 
 In order to prepare a prefix-based installation of SLEPc that uses a prefix-based installation of PETSc, start by setting the appropriate value of `PETSC_DIR`. Then, run SLEPc's configure with a prefix directory.
 
-```{code} console
-$ export PETSC_DIR=/opt/PETSc-3.23.0-linux-gnu-c-debug
-$ unset PETSC_ARCH
-$ cd $SLEPC_DIR
-$ ./configure --prefix=/opt/slepc-3.23.0-linux-gnu-c-debug
-$ make
-$ make install
-$ export SLEPC_DIR=/opt/slepc-3.23.0-linux-gnu-c-debug
+```{parsed-literal}
+export PETSC_DIR=/opt/petsc-{{env.config.release}}-linux-gnu-c-debug
+unset PETSC_ARCH
+cd $SLEPC_DIR
+./configure --prefix=/opt/slepc-{{env.config.release}}-linux-gnu-c-debug
+make
+make install
+export SLEPC_DIR=/opt/slepc-{{env.config.release}}-linux-gnu-c-debug
 ```
 
 Note that the variable `PETSC_ARCH` has been unset before SLEPc's configure. SLEPc will use a temporary arch name during the build (this temporary arch is named `installed-arch-xxx`, where the `arch-xxx` string represents the configuration of the installed PETSc version). Although it is not a common case, it is also possible to configure SLEPc without prefix, in which case the `PETSC_ARCH` variable must still be empty and the arch directory `installed-xxx` is picked automatically (it is hardwired in file `$SLEPC_DIR/lib/slepc/conf/slepcvariables`). The combination PETSc without prefix and SLEPc with prefix is also allowed, in which case `PETSC_ARCH` should not be unset.
@@ -209,8 +209,8 @@ Note that the variable `PETSC_ARCH` has been unset before SLEPc's configure. SLE
 
 Before using SLEPc, the user must first set the environment variable `SLEPC_DIR`, indicating the full path of the directory containing SLEPc. For example, under the `bash` shell, a command of the form
 
-```{code} console
-$ export SLEPC_DIR=/software/slepc-3.23.0
+```{parsed-literal}
+export SLEPC_DIR=/software/slepc-{{env.config.release}}
 ```
 
 can be placed in the user's `.bashrc` file. The `SLEPC_DIR` directory can be either a standard installation SLEPc directory, or a prefix-based installation directory, see section [](#sec:prefix-inst). In addition, the user must set the environment variables required by PETSc, that is, `PETSC_DIR`, to indicate the full path of the PETSc directory, and `PETSC_ARCH` to specify a particular architecture and set of options. Note that `PETSC_ARCH` should not be set in the case of prefix-based installations.

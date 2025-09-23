@@ -33,18 +33,17 @@ release = 'main'
 
 with open(os.path.join('../..', 'include', 'slepcversion.h'),'r') as version_file:
     buf = version_file.read()
-    petsc_release_flag = re.search(' SLEPC_VERSION_RELEASE[ ]*([0-9]*)',buf).group(1)
+    slepc_release_flag = re.search(' SLEPC_VERSION_RELEASE[ ]*([0-9]*)',buf).group(1)
     major_version      = re.search(' SLEPC_VERSION_MAJOR[ ]*([0-9]*)',buf).group(1)
     minor_version      = re.search(' SLEPC_VERSION_MINOR[ ]*([0-9]*)',buf).group(1)
     subminor_version   = re.search(' SLEPC_VERSION_SUBMINOR[ ]*([0-9]*)',buf).group(1)
 
-    git_describe_version = subprocess.check_output(['git', 'describe', '--always']).strip().decode('utf-8')
-    if petsc_release_flag == '0':
-        version = git_describe_version
-        release = git_describe_version
+    version = '.'.join([major_version, minor_version])
+    if slepc_release_flag == '0':
+        release = '.'.join([major_version,minor_version]) + '-dev'
     else:
-        version = '.'.join([major_version, minor_version])
         release = '.'.join([major_version,minor_version,subminor_version])
+
 
 release_date = subprocess.check_output(['git',
                                  'for-each-ref',

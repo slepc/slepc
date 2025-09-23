@@ -10,7 +10,6 @@ The main steps for the installation are:
 
   1. Unbundle the distribution file **[slepc-{{env.config.release}}.tar.gz](https://slepc.upv.es/download/distrib/slepc-{{env.config.release}}.tar.gz)** with a usual command such as
 
-%```{code} console
 ```{parsed-literal}
 $ tar xzf slepc-{{env.config.release}}.tar.gz
 ```
@@ -19,7 +18,6 @@ This will create a directory and unpack the software there.
 
   2. Set the environment variable `SLEPC_DIR` to the full path of the SLEPc home directory, for example,
 
-%```{code} console
 ```{parsed-literal}
 $ export SLEPC_DIR=/home/username/slepc-{{env.config.release}}
 ```
