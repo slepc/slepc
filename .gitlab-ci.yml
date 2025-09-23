@@ -1094,6 +1094,16 @@ total-coverage:
       cd doc &&
       ${PYTHON} -m pip install -r requirements.txt &&
       cd ..
+  variables:
+    PYTHON: python3
+    MAKE_CFLAGS: -Werror
+    MAKE_CXXFLAGS: -Werror -Wzero-as-null-pointer-constant
+    MAKE_FFLAGS: -Werror
+    MAKE_TEST_CFLAGS: -Werror
+    MAKE_TEST_CXXFLAGS: -Werror
+    MAKE_TEST_FFLAGS: -Werror
+    PETSC_CONFIG_OPTS: COPTFLAGS='-O0' CXXOPTFLAGS='-O0' FOPTFLAGS='-O0' HIPOPTFLAGS='-O0' --with-fortran-bindings=0 --with-petsc4py --download-sowing --download-c2html --with-mpi=0
+    SLEPC_CONFIG_OPTS: --with-slepc4py
 
 #
 # Build documentation and make available for review using GitLab pages
@@ -1148,14 +1158,50 @@ docs-review:
     expire_in: 4 days
   except:
     variables:
-      - $PETSC_CI_SCHEDULED =~ /yes/
-  variables:
-    PYTHON: python3
-    MAKE_CFLAGS: -Werror
-    MAKE_CXXFLAGS: -Werror -Wzero-as-null-pointer-constant
-    MAKE_FFLAGS: -Werror
-    MAKE_TEST_CFLAGS: -Werror
-    MAKE_TEST_CXXFLAGS: -Werror
-    MAKE_TEST_FFLAGS: -Werror
-    PETSC_CONFIG_OPTS: COPTFLAGS='-O0' CXXOPTFLAGS='-O0' FOPTFLAGS='-O0' HIPOPTFLAGS='-O0' --with-fortran-bindings=0 --with-petsc4py --download-sowing --download-c2html --with-mpi=0
-    SLEPC_CONFIG_OPTS: --with-slepc4py
+      - $SLEPC_CI_SCHEDULED =~ /yes/
+
+#
+# Build documentation for deployment
+#
+docs-deploy:
+  extends: .docs
+  interruptible: true
+  script:
+    - export SLEPC_DIR=$PWD
+    # build main
+    - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
+    - cd ..
+    - if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
+    - cd petsc
+    - git clean ${GIT_CLEAN_FLAGS}
+    - git fetch
+    - git checkout origin/main;
+    - export PETSC_DIR=$PWD
+    - export PETSC_ARCH=arch-$CI_JOB_NAME-main
+    - bash -c "${PYTHON} ./configure --with-debugging=0 ${PETSC_CONFIG_OPTS}"
+    - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}"
+    - echo -e "section_end:`date +%s`:build_petsc\r\e[0K"
+    - echo -e "section_start:`date +%s`:build_slepc\r\e[0KSLEPc configure and make"
+    - cd $SLEPC_DIR
+    - git checkout origin/main;
+    - ${PYTHON} ./configure ${SLEPC_CONFIG_OPTS}
+    - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}"
+    - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" check
+    - echo -e "section_end:`date +%s`:build_slepc\r\e[0K"
+    # build docs
+    - echo -e "section_start:`date +%s`:build_slepc_docs\r\e[0KSLEPc docs"
+    - cd doc
+    - mkdir ../public || true
+    - (make website BUILDDIR="../build/main" && mv ../build/main/html ../public/main) || (printf "Sphinx documentation build failed (warnings count as errors)\n" && false)
+    - echo -e "section_end:`date +%s`:build_slepc_docs\r\e[0K"
+    - cd ..
+    - rm -rf public/*/doctrees
+    - rm -rf public/*/latex
+    - tar --zstd -cf public.tar.zstd public
+  only:
+    variables:
+      - $SLEPC_CI_SCHEDULED == "yes"
+  artifacts:
+    paths:
+      - public.tar.zstd
+    expire_in: 4 days
