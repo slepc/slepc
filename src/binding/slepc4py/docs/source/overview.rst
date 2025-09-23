@@ -22,7 +22,7 @@ such method is to use a spectral transformation. Cheaper alternatives
 are also available.
 
 .. [1] J. E. Roman, C. Campos, L. Dalcin, E. Romero, A. Tomas.
-   SLEPc Users Manual. DSIC-II/24/02 - Revision 3.23.
+   SLEPc Users Manual. DSIC-II/24/02 - Revision 3.24.
    D. Sistemas Informaticos y Computacion, Universitat Politecnica de
    Valencia. 2025.
 

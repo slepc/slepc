@@ -44,7 +44,7 @@ Also, you can run the application code with all the options you usually use and 
 
 :::
 
-[3] J. E. Roman, C. Campos, L. Dalcin, E. Romero, A. Tomas. SLEPc Users Manual. Tech. Rep. DSIC-II/24/02 - Revision 3.23, Universitat Polit&egrave;cnica de Val&egrave;ncia, 2025.
+[3] J. E. Roman, C. Campos, L. Dalcin, E. Romero, A. Tomas. SLEPc Users Manual. Tech. Rep. DSIC-II/24/02 - Revision 3.24, Universitat Polit&egrave;cnica de Val&egrave;ncia, 2025.
 
 :::{admonition} BibTeX
 :class: dropdown admonition-bibtex
@@ -52,7 +52,7 @@ Also, you can run the application code with all the options you usually use and 
     @TechReport{slepc-users-manual,
        author      = "J. E. Roman and C. Campos and L. Dalcin and E. Romero and A. Tomas",
        title       = "{SLEPc} Users Manual",
-       number      = "DSIC-II/24/02 - Revision 3.23",
+       number      = "DSIC-II/24/02 - Revision 3.24",
        institution = "D. Sistemes Inform\`atics i Computaci\'o, Universitat Polit\`ecnica de Val\`encia",
        year        = "2025"
 }

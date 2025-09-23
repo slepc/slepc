@@ -13,11 +13,11 @@
 
 /* MANSEC = Sys */
 
-#define SLEPC_VERSION_RELEASE    0
+#define SLEPC_VERSION_RELEASE    1
 #define SLEPC_VERSION_MAJOR      3
-#define SLEPC_VERSION_MINOR      23
-#define SLEPC_VERSION_SUBMINOR   3
-#define SLEPC_RELEASE_DATE       "March 29, 2025"
+#define SLEPC_VERSION_MINOR      24
+#define SLEPC_VERSION_SUBMINOR   0
+#define SLEPC_RELEASE_DATE       "September 30, 2025"
 #define SLEPC_VERSION_DATE       "unknown"
 
 #if !defined (SLEPC_VERSION_GIT)

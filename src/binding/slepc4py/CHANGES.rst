@@ -9,7 +9,7 @@ CHANGES: SLEPc for Python
 Release 3.24.0
 ==============
 
-- Update to SLEPc 3.24 release.
+- Update to SLEPc 3.24.0.
 
 - Support (opt-in via setting the environment variable
   ``SLEPC4PY_BUILD_PYSABI=1``) for building with ``Py_LIMITED_API``
