@@ -75,12 +75,12 @@ Examine the source code of the sample program and locate the function calls ment
 **Solving the Eigenvalue Problem** : Usage of eigensolvers is very similar to other kinds of solvers provided by PETSc. After creating the matrix, the problem is solved by means of an EPS object (Eigenvalue Problem Solver) via the following sequence of function calls:
 
 * `EPSCreate(MPI_Comm comm,EPS *eps);`
-* `EPSSetOperators(EPS eps,Mat A,Mat B);`
+* `EPSSetOperators`(`EPS` eps,{external:doc}`Mat` A,{external:doc}`Mat` B);`
 * `EPSSetProblemType(EPS eps,EPSProblemType type);`
 * `EPSSetFromOptions(EPS eps);`
 * `EPSSolve(EPS eps);`
 * `EPSGetConverged(EPS eps, int *nconv);`
-* `EPSGetEigenpair(EPS eps,int i,PetscScalar *kr,PetscScalar *ki,Vec xr,Vec xi);`
+* `EPSGetEigenpair`(`EPS` eps,int i,{external:doc}`PetscScalar` *kr,{external:doc}`PetscScalar` *ki,{external:doc}`Vec` xr,{external:doc}`Vec` xi);`
 * `EPSDestroy(EPS eps)`;
 
 First, the eigenproblem solver (EPS) context is created and the operator(s) associated with the eigensystem are set, as well as the problem type. Then various options are set for customized solution. After that, the program solves the problem, retrieves the solution, and finally destroys the EPS context.

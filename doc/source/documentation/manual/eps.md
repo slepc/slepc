@@ -1,7 +1,7 @@
 (cap:eps)=
 # EPS: Eigenvalue Problem Solver
 
-The Eigenvalue Problem Solver (`EPS`) is the main object provided by SLEPc. It is used to specify a linear eigenvalue problem, either in standard or generalized form, and provides uniform and efficient access to all of the linear eigensolvers included in the package. Conceptually, the level of abstraction occupied by `EPS` is similar to other solvers in PETSc such as `KSP` for solving linear systems of equations.
+The Eigenvalue Problem Solver (`EPS`) is the main object provided by SLEPc. It is used to specify a linear eigenvalue problem, either in standard or generalized form, and provides uniform and efficient access to all of the linear eigensolvers included in the package. Conceptually, the level of abstraction occupied by `EPS` is similar to other solvers in PETSc such as {external:doc}`KSP` for solving linear systems of equations.
 
 {#sec:eig label="sec:eig"}
 ## Eigenvalue Problems
@@ -94,7 +94,7 @@ In many applications such as the analysis of damped vibrating systems the proble
 
 ## Basic Usage
 
-The `EPS` module in SLEPc is used in a similar way as PETSc modules such as `KSP`. All the information related to an eigenvalue problem is handled via a context variable. The usual object management functions are available (`EPSCreate`, `EPSDestroy`, `EPSView`, `EPSSetFromOptions`). In addition, the `EPS` object provides functions for setting several parameters such as the number of eigenvalues to compute, the dimension of the subspace, the portion of the spectrum of interest, the requested tolerance or the maximum number of iterations allowed.
+The `EPS` module in SLEPc is used in a similar way as PETSc modules such as {external:doc}`KSP`. All the information related to an eigenvalue problem is handled via a context variable. The usual object management functions are available (`EPSCreate`, `EPSDestroy`, `EPSView`, `EPSSetFromOptions`). In addition, the `EPS` object provides functions for setting several parameters such as the number of eigenvalues to compute, the dimension of the subspace, the portion of the spectrum of interest, the requested tolerance or the maximum number of iterations allowed.
 
 The solution of the problem is obtained in several steps. First of all, the matrices associated with the eigenproblem are specified via `EPSSetOperators` and `EPSSetProblemType` is used to specify the type of problem. Then, a call to `EPSSolve` is done that invokes the subroutine for the selected eigensolver. `EPSGetConverged` can be used afterwards to determine how many of the requested eigenpairs have converged to working accuracy. `EPSGetEigenpair` is finally used to retrieve the eigenvalues and eigenvectors.
 
@@ -138,7 +138,7 @@ Before actually solving an eigenvalue problem with `EPS`, the user must specify 
 EPSSetOperators(EPS eps,Mat A,Mat B);
 ```
 
-The example specifies a standard eigenproblem. In the case of a generalized problem, it would be necessary also to provide matrix $B$ as the third argument to the call. The matrices specified in this call can be in any PETSc format. In particular, `EPS` allows the user to solve matrix-free problems by specifying matrices created via `MatCreateShell`. A more detailed discussion of this issue is given in section [](#sec:supported).
+The example specifies a standard eigenproblem. In the case of a generalized problem, it would be necessary also to provide matrix $B$ as the third argument to the call. The matrices specified in this call can be in any PETSc format. In particular, `EPS` allows the user to solve matrix-free problems by specifying matrices created via {external:doc}`MatCreateShell`. A more detailed discussion of this issue is given in section [](#sec:supported).
 
 After setting the problem matrices, the problem type is set with `EPSSetProblemType`. This is not strictly necessary since if this step is skipped then the problem type is assumed to be non-symmetric. More details are given in section [](#sec:defprob). At this point, the value of the different options could optionally be set by means of a function call such as `EPSSetTolerances` (explained later in this chapter). After this, a call to `EPSSetFromOptions` should be made as in line 11, `EPSSetFromOptions`
 
@@ -164,7 +164,7 @@ Once the `EPS` context is no longer needed, it should be destroyed with the comm
 EPSDestroy(EPS *eps);
 ```
 
-The above procedure is sufficient for general use of the `EPS` package. As in the case of the `KSP` solver, the user can optionally explicitly call `EPSSetUp`
+The above procedure is sufficient for general use of the `EPS` package. As in the case of the {external:doc}`KSP` solver, the user can optionally explicitly call `EPSSetUp`
 
 ```{code} c
 EPSSetUp(EPS eps);
@@ -262,7 +262,7 @@ For the sorting criteria relative to a target value, the following function must
 EPSSetTarget(EPS eps,PetscScalar target);
 ```
 
-or, alternatively, with the command-line key `-eps_target`. Note that, since the target is defined as a `PetscScalar`, complex values of $\tau$ are allowed only in the case of complex scalar builds of the SLEPc library.
+or, alternatively, with the command-line key `-eps_target`. Note that, since the target is defined as a {external:doc}`PetscScalar`, complex values of $\tau$ are allowed only in the case of complex scalar builds of the SLEPc library.
 
 The use of a target value makes sense if the eigenvalues of interest are located in the interior of the spectrum. Since these eigenvalues are usually more difficult to compute, the eigensolver by itself may not be able to obtain them, and additional tools are normally required. There are two possibilities for this:
 
@@ -445,7 +445,7 @@ EPSGetLeftEigenvector(EPS eps,PetscInt j,Vec yr,Vec yi);
 
 #### Real SLEPc
 
-In this case, all `Mat` and `Vec` objects are real. The computed approximate solution returned by the function `EPSGetEigenpair` is stored in the following way: `kr` and `ki` contain the real and imaginary parts of the eigenvalue, respectively, and `xr` and `xi` contain the associated eigenvector. Two cases can be distinguished:
+In this case, all {external:doc}`Mat` and {external:doc}`Vec` objects are real. The computed approximate solution returned by the function `EPSGetEigenpair` is stored in the following way: `kr` and `ki` contain the real and imaginary parts of the eigenvalue, respectively, and `xr` and `xi` contain the associated eigenvector. Two cases can be distinguished:
 
 -   When `ki` is zero, it means that the $j$-th eigenvalue is a real number. In this case, `kr` is the eigenvalue and `xr` is the corresponding eigenvector. The vector `xi` is set to all zeros.
 
@@ -453,7 +453,7 @@ In this case, all `Mat` and `Vec` objects are real. The computed approximate sol
 
 #### Complex SLEPc
 
-In this case, all `Mat` and `Vec` objects are complex. The computed solution returned by function `EPSGetEigenpair` is the following: `kr` contains the (complex) eigenvalue and `xr` contains the corresponding (complex) eigenvector. In this case, `ki` and `xi` are not used (set to all zeros).
+In this case, all {external:doc}`Mat` and {external:doc}`Vec` objects are complex. The computed solution returned by function `EPSGetEigenpair` is the following: `kr` contains the (complex) eigenvalue and `xr` contains the corresponding (complex) eigenvector. In this case, `ki` and `xi` are not used (set to all zeros).
 
 {#sec:errbnd}
 ### Reliability of the Computed Solution
@@ -642,9 +642,9 @@ $ ./ex9 -n 200 -eps_nev 8 -eps_tol 1e-12 -eps_monitor_conv
 {#sec:epsviewers}
 ### Viewing the Solution
 
-The computed solution (eigenvalues and eigenvectors) can be viewed in different ways, exploiting the flexibility of `PetscViewer`s. The API functions for this are `EPSValuesView` and `EPSVectorsView`. We next illustrate their usage via the command line.
+The computed solution (eigenvalues and eigenvectors) can be viewed in different ways, exploiting the flexibility of {external:doc}`PetscViewer`s. The API functions for this are `EPSValuesView` and `EPSVectorsView`. We next illustrate their usage via the command line.
 
-The command-line option `-eps_view_values` shows the computed eigenvalues on the standard output at the end of `EPSSolve`. It admits an argument to specify `PetscViewer` options, for instance the following will create a Matlab command file `myeigenvalues.m` to load the eigenvalues in Matlab:
+The command-line option `-eps_view_values` shows the computed eigenvalues on the standard output at the end of `EPSSolve`. It admits an argument to specify {external:doc}`PetscViewer` options, for instance the following will create a Matlab command file `myeigenvalues.m` to load the eigenvalues in Matlab:
 
 ```{code} console
 $ ./ex1 -n 120 -eps_nev 8 -eps_view_values :myeigenvalues.m:ascii_matlab
@@ -748,7 +748,7 @@ EPSSetDeflationSpace(EPS eps,PetscInt n,Vec defl[])
 
 The value `n` indicates how many vectors are passed in argument `defl`.
 
-The deflation space can be any subspace but typically it is most useful in the case of an invariant subspace or a null-space. In any case, SLEPc internally checks to see if all (or part of) the provided subspace is a null-space of the associated linear system (see section [](#sec:lin)). In this case, this null-space is attached to the coefficient matrix of the linear solver (see PETSc's function `MatSetNullSpace`) to enable the solution of singular systems. In practice, this allows the computation of eigenvalues of singular pencils (i.e., when $A$ and $B$ share a common null-space).
+The deflation space can be any subspace but typically it is most useful in the case of an invariant subspace or a null-space. In any case, SLEPc internally checks to see if all (or part of) the provided subspace is a null-space of the associated linear system (see section [](#sec:lin)). In this case, this null-space is attached to the coefficient matrix of the linear solver (see PETSc's function {external:doc}`MatSetNullSpace`) to enable the solution of singular systems. In practice, this allows the computation of eigenvalues of singular pencils (i.e., when $A$ and $B$ share a common null-space).
 
 {#sec:orthog}
 ### Orthogonalization

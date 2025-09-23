@@ -67,7 +67,7 @@ Note that another difference is that in 3.1 eigenvalues are returned in the corr
 
 ## 9.  I get an error when retrieving the eigenvector
 
-After the solver has finished, the solution can be retrieved with `EPSGetEigenpair`.  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ `Vec` object. This means the vector must have been created, for example with `VecCreate`, `VecDuplicate`, or `MatCreateVecs`, see for instance [ex7](../../../src/eps/tutorials/ex7.c). The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
+After the solver has finished, the solution can be retrieved with `EPSGetEigenpair`.  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ `Vec` object. This means the vector must have been created, for example with {external:doc}`VecCreate`, {external:doc}`VecDuplicate`, or {external:doc}`MatCreateVecs`, see for instance [ex7](../../../src/eps/tutorials/ex7.c). The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
 
 ## 10. I get an error when running shift-and-invert in parallel
 
@@ -86,7 +86,7 @@ Krylov methods (and in particular the default SLEPc eigensolver, Krylov-Schur) a
 Matrix preallocation is extremely important, especially for large matrices.  See the {{'[chapter on matrices in the PETSc users manual](https://petsc.org/{}/manual/mat/#preallocation-of-memory-for-sequential-aij-sparse-matrices)'.format(branch)}}.
 
 :::{note}
-Since PETSc version 3.19 the `Mat` data structures have been changed so that the performance is reasonably good without preallocation.
+Since PETSc version 3.19 the {external:doc}`Mat` data structures have been changed so that the performance is reasonably good without preallocation.
 :::
 
 ## 14. conda-forge: how to install slepc4py with complex scalars

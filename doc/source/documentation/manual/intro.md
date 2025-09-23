@@ -42,7 +42,7 @@ SLEPc can be considered an extension of PETSc providing all the functionality ne
 Numerical components of PETSc and SLEPc
 ```
 
-Each of these components consists of an abstract interface (simply a set of calling sequences) and one or more implementations using particular data structures. Both PETSc and SLEPc are written in C, which lacks direct support for object-oriented programming. However, it is still possible to take advantage of the three basic principles of object-oriented programming to manage the complexity of such large packages. PETSc uses data *encapsulation* in both vector and matrix data objects. Application code accesses data through function calls. Also, all the operations are supported through *polymorphism*. The user calls a generic interface routine, which then selects the underlying routine that handles the particular data structure. Finally, PETSc also uses *inheritance* in its design. All the objects are derived from an abstract base object. From this fundamental object, an abstract base object is defined for each PETSc object (`Mat`, `Vec` and so on), which in turn has a variety of instantiations that, for example, implement different matrix storage formats.
+Each of these components consists of an abstract interface (simply a set of calling sequences) and one or more implementations using particular data structures. Both PETSc and SLEPc are written in C, which lacks direct support for object-oriented programming. However, it is still possible to take advantage of the three basic principles of object-oriented programming to manage the complexity of such large packages. PETSc uses data *encapsulation* in both vector and matrix data objects. Application code accesses data through function calls. Also, all the operations are supported through *polymorphism*. The user calls a generic interface routine, which then selects the underlying routine that handles the particular data structure. Finally, PETSc also uses *inheritance* in its design. All the objects are derived from an abstract base object. From this fundamental object, an abstract base object is defined for each PETSc object ({external:doc}`Mat`, {external:doc}`Vec` and so on), which in turn has a variety of instantiations that, for example, implement different matrix storage formats.
 
 PETSc/SLEPc provide clean and effective codes for the various phases of solving PDEs, with a uniform approach for each class of problems. This design enables easy comparison and use of different algorithms (for example, to experiment with different Krylov subspace methods, preconditioners, or eigensolvers). Hence, PETSc, together with SLEPc, provides a rich environment for modeling scientific applications as well as for rapid algorithm design and prototyping.
 
@@ -147,7 +147,7 @@ Additionally, PETSc's configuration script provides a very long list of options 
 
 -   The option `--with-mpi=0` allows building PETSc and SLEPc without MPI support (only sequential).
 
-**Note about complex scalar versions**: PETSc supports the use of complex scalars by defining the data type `PetscScalar` either as a real or complex number. This implies that two different versions of the PETSc libraries can be built separately, one for real numbers and one for complex numbers, but they cannot be used at the same time. SLEPc inherits this property. In SLEPc it is not possible to completely separate real numbers and complex numbers because the solution of non-symmetric real-valued eigenvalue problems may be complex. SLEPc has been designed trying to provide a uniform interface to manage all the possible cases. However, there are slight differences between the interface in each of the two versions. In this manual, differences are clearly identified.
+**Note about complex scalar versions**: PETSc supports the use of complex scalars by defining the data type {external:doc}`PetscScalar` either as a real or complex number. This implies that two different versions of the PETSc libraries can be built separately, one for real numbers and one for complex numbers, but they cannot be used at the same time. SLEPc inherits this property. In SLEPc it is not possible to completely separate real numbers and complex numbers because the solution of non-symmetric real-valued eigenvalue problems may be complex. SLEPc has been designed trying to provide a uniform interface to manage all the possible cases. However, there are slight differences between the interface in each of the two versions. In this manual, differences are clearly identified.
 
 {#sec:mult-inst}
 ### Installing Multiple Configurations in a Single Directory Tree
@@ -235,7 +235,7 @@ SlepcInitialize(int *argc,char ***argv,char *file,char *help);
 
 which initializes SLEPc, PETSc and MPI. This subroutine is very similar to {external:doc}`PetscInitialize`, and the arguments have the same meaning. In fact, internally `SlepcInitialize` calls {external:doc}`PetscInitialize`.
 
-After this initialization, SLEPc programs can use communicators defined by PETSc. In most cases users can employ the communicator `PETSC_COMM_WORLD` to indicate all processes in a given run and `PETSC_COMM_SELF` to indicate a single process. MPI provides routines for generating new communicators consisting of subsets of processes, though most users rarely need to use these features. SLEPc users need not program much message passing directly with MPI, but they must be familiar with the basic concepts of message passing and distributed memory computing.
+After this initialization, SLEPc programs can use communicators defined by PETSc. In most cases users can employ the communicator {external:doc}`PETSC_COMM_WORLD` to indicate all processes in a given run and {external:doc}`PETSC_COMM_SELF` to indicate a single process. MPI provides routines for generating new communicators consisting of subsets of processes, though most users rarely need to use these features. SLEPc users need not program much message passing directly with MPI, but they must be familiar with the basic concepts of message passing and distributed memory computing.
 
 All SLEPc programs should call `SlepcFinalize` as their final (or nearly final) statement
 
@@ -243,7 +243,7 @@ All SLEPc programs should call `SlepcFinalize` as their final (or nearly final) 
 SlepcFinalize();
 ```
 
-This routine handles operations to be executed at the conclusion of the program, and calls `PetscFinalize` if `SlepcInitialize` began PETSc.
+This routine handles operations to be executed at the conclusion of the program, and calls {external:doc}`PetscFinalize` if `SlepcInitialize` began PETSc.
 
 **Note to Fortran Programmers**: In this manual all the examples and calling sequences are given for the C/C++ programming languages. However, Fortran programmers can use most of the functionality of SLEPc and PETSc from Fortran, with only minor differences in the user interface. For instance, the two functions mentioned above have their corresponding Fortran equivalent:
 
@@ -276,7 +276,7 @@ where `slepceps.h` is the include file for the `EPS` component. Each SLEPc progr
 
 #### The Options Database.
 
-All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the call `PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL)` checks whether the user has provided a command line option to set the value of `n`, the problem dimension. If so, the variable `n` is set accordingly; otherwise, `n` remains unchanged.
+All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the call {external:doc}`PetscOptionsGetInt``(NULL,NULL,"-n",&n,NULL)` checks whether the user has provided a command line option to set the value of `n`, the problem dimension. If so, the variable `n` is set accordingly; otherwise, `n` remains unchanged.
 
 #### Vectors and Matrices.
 
@@ -288,7 +288,7 @@ MatSetSizes(Mat A,PetscInt m,PetscInt n,PetscInt M,PetscInt N);
 MatSetFromOptions(Mat A);
 ```
 
-where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with `MatSetValues` and then assembles it.
+where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with {external:doc}`MatSetValues` and then assembles it.
 
 #### Eigensolvers.
 
@@ -313,7 +313,7 @@ In the example program shown above there is no explicit reference to spectral tr
 
 #### Error Checking.
 
-All SLEPc routines return an integer indicating whether an error has occurred during the call. The error code is set to be nonzero if an error has been detected; otherwise, it is zero. The PETSc macro `PetscCall(...)` checks the return value and calls the PETSc error handler upon error detection. `PetscCall(...)` should be used in all subroutine calls to enable a complete error traceback. See the PETSc documentation for full details.
+All SLEPc routines return an integer indicating whether an error has occurred during the call. The error code is set to be nonzero if an error has been detected; otherwise, it is zero. The PETSc macro {external:doc}`PetscCall``(...)` checks the return value and calls the PETSc error handler upon error detection. {external:doc}`PetscCall``(...)` should be used in all subroutine calls to enable a complete error traceback. See the PETSc documentation for full details.
 
 ### Writing Application Codes with SLEPc
 

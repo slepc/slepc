@@ -58,11 +58,11 @@ Singular value problem stored in file.
 The way in which the SVD object works is very similar to that of EPS. However, some important differences exist. Examine the source code of the example program and pay attention to the differences with respect to EPS. After loading the matrix, the problem is solved by the following sequence of function calls:
 
 * `SVDCreate(MPI_Comm comm,SVD *svd);`
-* `SVDSetOperators(SVD svd,Mat A,Mat B);`
+* `SVDSetOperators`(`SVD` svd,{external:doc}`Mat` A,{external:doc}`Mat` B);`
 * `SVDSetFromOptions(SVD svd);`
 * `SVDSolve(SVD svd);`
 * `SVDGetConverged(SVD svd, int *nconv);`
-* `SVDGetSingularTriplet(SVD svd,int i,PetscReal *sigma,Vec u,Vec v);`
+* `SVDGetSingularTriplet`(`SVD` svd,int i,{external:doc}`PetscReal` *sigma,{external:doc}`Vec` u,{external:doc}`Vec` v);
 * `SVDDestroy(SVD svd)`;
 
 First, the singular value solver (SVD) context is created and the matrix associated with the problem is specified. Then various options are set for customized solution. After that, the program solves the problem, retrieves the solution, and finally destroys the SVD context.

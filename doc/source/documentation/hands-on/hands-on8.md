@@ -44,12 +44,12 @@ Quadratic Eigenproblem, N=100 (10x10 grid)
 The PEP object is used very much like EPS or SVD, as can be seen in the source code. Here is a summary of the main function calls:
 
 * `PEPCreate(MPI_Comm comm,PEP *pep);`
-* `PEPSetOperators(PEP pep,PetscInt nmat,Mat A[]);`
+* `PEPSetOperators`(`PEP` pep,{external:doc}`PetscInt` nmat,{external:doc}`Mat` A[]);`
 * `PEPSetProblemType(PEP pep,PEPProblemType type);`
 * `PEPSetFromOptions(PEP pep);`
 * `PEPSolve(PEP pep);`
 * `PEPGetConverged(PEP pep, int *nconv);`
-* `PEPGetEigenpair(PEP pep,int i,PetscScalar *kr,PetscScalar *ki,Vec xr,Vec xi);`
+* `PEPGetEigenpair`(`PEP` pep,int i,{external:doc}`PetscScalar` *kr,{external:doc}`PetscScalar` *ki,{external:doc}`Vec` xr,{external:doc}`Vec` xi);`
 * `PEPDestroy(PEP pep)`;
 
 First, the solver context (PEP) is created and the three problem matrices are specified. Then various options are set for customized solution. After that, the program solves the problem, retrieves the solution, and finally destroys the context.
