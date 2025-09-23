@@ -103,7 +103,7 @@ Distribution files:
 [[3.20]](https://slepc.upv.es/download/distrib/slepc-3.20.2.tar.gz)
 [[3.21]](https://slepc.upv.es/download/distrib/slepc-3.21.2.tar.gz)
 [[3.22]](https://slepc.upv.es/download/distrib/slepc-3.22.2.tar.gz)
-[[3.23]](https://slepc.upv.es/download/distrib/slepc-3.23.0.tar.gz)
+[[3.23]](https://slepc.upv.es/download/distrib/slepc-3.23.2.tar.gz)
 
 :::{note}
 Users of previous versions are strongly recommended to upgrade to the latest one.
