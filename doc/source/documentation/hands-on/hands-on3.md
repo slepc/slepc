@@ -8,7 +8,7 @@ The matrices we are going to work with are BFW62A and BFW62B, which are availabl
 
 ## Compiling
 
-Copy the file [ex7.c](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex7.c) [[plain text]](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex7.c) to your directory and add these lines to the makefile
+Copy the file {{'[ex7.c](https://slepc.upv.es/{}/src/eps/tutorials/ex7.c.html)'.format(branch)}} to your directory and add these lines to the makefile
 
 ```{code} make
 ex7: ex7.o
@@ -28,9 +28,9 @@ $ make ex7
 
 ## Source Code Details
 
-This example uses the PETSc function [MatLoad](https://petsc.org/release/manualpages/Mat/MatLoad) to load a matrix from a file. The two matrix files are specified in the command line.  Note that these files have been converted from Matrix Market format to PETSc binary format.
+This example uses the PETSc function {external:doc}`MatLoad` to load a matrix from a file. The two matrix files are specified in the command line.  Note that these files have been converted from Matrix Market format to PETSc binary format.
 
-Compare the source code of the example program with the previous ones. Note that, in this case, two matrix objects are passed in the [EPSSetOperators](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetOperators) function call:
+Compare the source code of the example program with the previous ones. Note that, in this case, two matrix objects are passed in the `EPSSetOperators` function call:
 
 ```{code} c
 PetscCall(EPSSetOperators(eps,A,B));

@@ -179,7 +179,7 @@ An alternative to linearization is to directly perform a projection of the polyn
 
 ## Basic Usage
 
-The user interface of the `PEP` package is very similar to `EPS`. For basic usage, the most noteworthy difference is that all coefficient matrices $A_i$ have to be supplied in the form of an array of `Mat`.
+The user interface of the `PEP` package is very similar to `EPS`. For basic usage, the most noteworthy difference is that all coefficient matrices $A_i$ have to be supplied in the form of an array of {external:doc}`Mat`.
 
 A basic example code for solving a polynomial eigenproblem with `PEP` is shown in figure [](#fig:ex-pep), where the code for building matrices `A[0]`, `A[1]`, ... is omitted. The required steps are the same as those described in chapter [](#cap:eps) for the linear eigenproblem. As always, the solver context is created with `PEPCreate`. The coefficient matrices are provided with `PEPSetOperators`, and the problem type is specified with `PEPSetProblemType`. Calling `PEPSetFromOptions` allows the user to set up various options through the command line. The call to `PEPSolve` invokes the actual solver. Then, the solution is retrieved with `PEPGetConverged` and `PEPGetEigenpair`. Finally, `PEPDestroy` destroys the object.
 
@@ -360,7 +360,7 @@ Another option of the `PEPLINEAR` solver is whether the matrices of the lineariz
 PEPLinearSetExplicitMatrix(PEP pep,PetscBool exp);
 ```
 
-The explicit matrix option is available only for quadratic eigenproblems (higher degree polynomials are always handled implicitly). In the case of explicit creation, matrices $L_0$ and $L_1$ are created as true `Mat`'s, with explicit storage, whereas the implicit option works with *shell* `Mat`'s that operate only with the constituent blocks $M$, $C$ and $K$ (or $A_i$ in the general case). The explicit case requires more memory but gives more flexibility, e.g., for choosing a preconditioner. Some examples of usage via the command line are shown at the end of next section.
+The explicit matrix option is available only for quadratic eigenproblems (higher degree polynomials are always handled implicitly). In the case of explicit creation, matrices $L_0$ and $L_1$ are created as true {external:doc}`Mat`'s, with explicit storage, whereas the implicit option works with *shell* {external:doc}`Mat`'s that operate only with the constituent blocks $M$, $C$ and $K$ (or $A_i$ in the general case). The explicit case requires more memory but gives more flexibility, e.g., for choosing a preconditioner. Some examples of usage via the command line are shown at the end of next section.
 
 {#sec:qst label="sec:qst"}
 ## Spectral Transformation

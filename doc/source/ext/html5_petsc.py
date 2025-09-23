@@ -87,7 +87,7 @@ class PETScHTMLTranslatorMixin:
     def _get_manpage_map(self) -> Dict[str,str]:
         """ Return the manpage strings to link, as a dict.  """
         if not self._manpage_map:
-            htmlmap_filename = os.path.join('manualpages', 'htmlmap')
+            htmlmap_filename = os.path.join('source','manualpages', 'htmlmap')
             if not os.path.isfile(htmlmap_filename):
                 raise Exception("Expected file %s not found. " %  htmlmap_filename)
             manpage_map_raw = htmlmap_to_dict(htmlmap_filename)

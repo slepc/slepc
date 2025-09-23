@@ -28,7 +28,7 @@ so, in principle, the vector $y$ can be approximated by an element of the Krylov
 
 ## Basic Usage
 
-The user interface of the `MFN` package is simpler than the interface of eigensolvers. In some ways, it is more similar to `KSP`, in the sense that the solver maps a vector $v$ to a vector $y$.
+The user interface of the `MFN` package is simpler than the interface of eigensolvers. In some ways, it is more similar to {external:doc}`KSP`, in the sense that the solver maps a vector $v$ to a vector $y$.
 
 ```{code-block} c
 :name: fig:ex-mfn

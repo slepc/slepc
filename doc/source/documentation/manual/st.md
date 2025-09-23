@@ -27,7 +27,7 @@ As explained in the previous chapter, `EPS` contains preconditioned eigensolvers
 
 ## Basic Usage
 
-The `ST` module is the analog of some PETSc modules such as `PC`. The user does not usually need to create a stand-alone `ST` object explicitly. Instead, every `EPS` object internally sets up an associated `ST`. Therefore, the usual object management methods such as `STCreate`, `STDestroy`, `STView`, `STSetFromOptions`, are not usually called by the user.
+The `ST` module is the analog of some PETSc modules such as {external:doc}`PC`. The user does not usually need to create a stand-alone `ST` object explicitly. Instead, every `EPS` object internally sets up an associated `ST`. Therefore, the usual object management methods such as `STCreate`, `STDestroy`, `STView`, `STSetFromOptions`, are not usually called by the user.
 
 Although the `ST` context is hidden inside the `EPS` object, the user still has control over all the options, by means of the command line, or also inside the program. To allow application programmers to set any of the spectral transformation options directly within the code, the following routine is provided to extract the `ST` context from the `EPS` object, `EPSGetST`
 
@@ -41,7 +41,7 @@ After this, one is able to set any options associated with the `ST` object. For 
 STSetShift(ST st,PetscScalar shift);
 ```
 
-This can also be done with the command line option `-st_shift <shift>`. Note that the argument `shift` is defined as a `PetscScalar`, and this means that complex shifts are not allowed unless the complex version of SLEPc is used.
+This can also be done with the command line option `-st_shift <shift>`. Note that the argument `shift` is defined as a {external:doc}`PetscScalar`, and this means that complex shifts are not allowed unless the complex version of SLEPc is used.
 
 Other object operations are available, which are not usually called by the user. The most important of such functions are `STApply`, which applies the operator to a vector, and `STSetUp`, which prepares all the necessary data structures before the solution process starts. The term "operator" refers to one of $A$, $B^{-1}\!A$, $A-\sigma I$, \... depending on which kind of spectral transformation is being used.
 
@@ -89,7 +89,7 @@ The last column of table [](#tab:transforms) shows a general form of the operato
 
 :::
 
-The expressions shown in table [](#tab:op) are not built explicitly. Instead, the appropriate operations are carried out when applying the operator to a certain vector. The inverses imply the solution of a linear system of equations that is managed by setting up an associated `KSP` object. The user can control the behavior of this object by adjusting the appropriate options, as will be illustrated with examples in section [](#sec:lin).
+The expressions shown in table [](#tab:op) are not built explicitly. Instead, the appropriate operations are carried out when applying the operator to a certain vector. The inverses imply the solution of a linear system of equations that is managed by setting up an associated {external:doc}`KSP` object. The user can control the behavior of this object by adjusting the appropriate options, as will be illustrated with examples in section [](#sec:lin).
 
 ### Relation between Target and Shift
 
@@ -282,7 +282,7 @@ Using the `ST` object is very straightforward. However, when using spectral tran
 {#sec:lin}
 ### Solution of Linear Systems
 
-In many of the cases shown in table [](#tab:op), the operator contains an inverted matrix, which means that a linear system of equations must be solved whenever the application of the operator to a vector is required. These cases are handled internally by means of a `KSP` object.
+In many of the cases shown in table [](#tab:op), the operator contains an inverted matrix, which means that a linear system of equations must be solved whenever the application of the operator to a vector is required. These cases are handled internally by means of a {external:doc}`KSP` object.
 
 In the simplest case, a generalized problem is to be solved with a zero shift. Suppose you run a program that solves a generalized eigenproblem, with default options:
 
@@ -290,7 +290,7 @@ In the simplest case, a generalized problem is to be solved with a zero shift. S
 $ ./program
 ```
 
-In this case, the `ST` object associated with the `EPS` solver creates a `KSP` object whose coefficient matrix is $B$. By default, this `KSP` object is set to use a direct solver, in particular an LU factorization. However, default settings can be changed, as illustrated below.
+In this case, the `ST` object associated with the `EPS` solver creates a {external:doc}`KSP` object whose coefficient matrix is $B$. By default, this {external:doc}`KSP` object is set to use a direct solver, in particular an LU factorization. However, default settings can be changed, as illustrated below.
 
 The following command-line is equivalent to the previous one:
 
@@ -317,7 +317,7 @@ selects the GMRES solver with block Jacobi preconditioning. In the case of itera
 
 Although the direct solver approach may seem too costly, note that the factorization is only carried out at the beginning of the eigenvalue calculation and this cost is amortized in each subsequent application of the operator. This is also the case for iterative methods with preconditioners with high-cost set-up such as ILU.
 
-The application programmer is able to set the desired linear systems solver options also from within the code. In order to do this, first the context of the `KSP` object must be retrieved with the following function `STGetKSP`
+The application programmer is able to set the desired linear systems solver options also from within the code. In order to do this, first the context of the {external:doc}`KSP` object must be retrieved with the following function `STGetKSP`
 
 ```{code} c
 STGetKSP(ST st,KSP *ksp);
@@ -341,9 +341,9 @@ If this happens, it is necessary to use a direct method for solving the linear s
 
 #### The Case of Preconditioned Eigensolvers
 
-The `KSP` object contained internally in `ST` is also used for applying the preconditioner or solving the correction equation in preconditioned eigensolvers.
+The {external:doc}`KSP` object contained internally in `ST` is also used for applying the preconditioner or solving the correction equation in preconditioned eigensolvers.
 
-The GD eigensolver employs just a preconditioner. Therefore, by default it sets the `KSP` type to `preonly` (no other `KSP` is allowed) and the `PC` type to `jacobi`. The user may change the preconditioner, for example as
+The GD eigensolver employs just a preconditioner. Therefore, by default it sets the {external:doc}`KSP` type to `preonly` (no other {external:doc}`KSP` is allowed) and the {external:doc}`PC` type to `jacobi`. The user may change the preconditioner, for example as
 
 ```{code} console
 $ ./ex5 -eps_type gd -st_pc_type asm
@@ -372,11 +372,11 @@ The first case has already been described and presents no difficulty. In the oth
 
 "`shell`"
 
-:   To work with the corresponding expression without forming the matrix explicitly. This is achieved by internally setting a matrix-free matrix with `MatCreateShell`.
+:   To work with the corresponding expression without forming the matrix explicitly. This is achieved by internally setting a matrix-free matrix with {external:doc}`MatCreateShell`.
 
 "`inplace`"
 
-:   To build the coefficient matrix explicitly. This is done by means of a `MatShift` or a `MatAXPY` operation, which overwrites matrix $A$ with the corresponding expression. This alteration of matrix $A$ is reversed after the eigensolution process has finished.
+:   To build the coefficient matrix explicitly. This is done by means of a {external:doc}`MatShift` or a {external:doc}`MatAXPY` operation, which overwrites matrix $A$ with the corresponding expression. This alteration of matrix $A$ is reversed after the eigensolution process has finished.
 
 "`copy`"
 
@@ -397,7 +397,7 @@ STSetMatMode(ST st,STMatMode mode);
 
 The user must consider which approach is the most appropriate for the particular application. The different options have advantages and drawbacks. The "`shell`" approach is the simplest one but severely restricts the number of possibilities available for solving the system, in particular most of the PETSc preconditioners would not be available, including direct methods. The only preconditioners that can be used in this case are Jacobi (only if matrices $A$ and $B$ have the operation `MATOP_GET_DIAGONAL`) or a user-defined one.
 
-The second approach ("`inplace`") can be much faster, specially in the generalized case. A more important advantage of this approach is that, in this case, the linear system solver can be combined with any of the preconditioners available in PETSc, including those which need to access internal matrix data-structures such as ILU. The main drawback is that, in the generalized problem, this approach probably makes sense only in the case that $A$ and $B$ have the same sparse pattern, because otherwise the function `MatAXPY` might be inefficient. If the user knows that the pattern is the same (or a subset), then this can be specified with the function `STSetMatStructure`
+The second approach ("`inplace`") can be much faster, specially in the generalized case. A more important advantage of this approach is that, in this case, the linear system solver can be combined with any of the preconditioners available in PETSc, including those which need to access internal matrix data-structures such as ILU. The main drawback is that, in the generalized problem, this approach probably makes sense only in the case that $A$ and $B$ have the same sparse pattern, because otherwise the function {external:doc}`MatAXPY` might be inefficient. If the user knows that the pattern is the same (or a subset), then this can be specified with the function `STSetMatStructure`
 
 ```{code} c
 STSetMatStructure(ST st,MatStructure str);
@@ -487,7 +487,7 @@ A-\sigma B=LDL^T,
 
 -   The method is based on shift-and-invert, so `STSINVERT` must be used. Furthermore, direct linear solvers are required.
 
--   The direct linear solver must provide the matrix inertia (see PETSc's `MatGetInertia`).
+-   The direct linear solver must provide the matrix inertia (see PETSc's {external:doc}`MatGetInertia`).
 
 An example command-line that sets up all the required options is:
 
@@ -513,7 +513,7 @@ $ ./ex2 -n 50 -eps_interval 0.4,0.8 -st_type sinvert
               -st_mat_superlu_dist_rowperm NOROWPERM
 ```
 
-In the latter example, `MatSetOption` must be used in both matrices to explicitly state that they are symmetric (or Hermitian in the complex case).
+In the latter example, {external:doc}`MatSetOption` must be used in both matrices to explicitly state that they are symmetric (or Hermitian in the complex case).
 
 Apart from the above recommendations, the following must be taken into account:
 

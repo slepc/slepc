@@ -2,7 +2,7 @@
 
 The following is a quick-start guide for installing SLEPc. For further details, the user is referred to the SLEPc Users Manual.
 
-Previously to the installation of SLEPc, the system must have an appropriate version of PETSc installed (see the [PETSc installation documentation](https://petsc.org/release/install/) for details).
+Previously to the installation of SLEPc, the system must have an appropriate version of PETSc installed (see the {{'[PETSc installation documentation](https://petsc.org/{}/install/)'.format(branch)}} for details).
 
 The installation process for SLEPc is very similar to PETSc, with two main stages: configuration and compilation. SLEPc configuration is much simpler because most of the configuration information is taken from PETSc, including compiler options and scalar type (real or complex). Several configurations can coexist in the same directory tree, being selected by different values of `PETSC_ARCH`, so that one can, for instance, have a SLEPc compiled with real scalars and another one with complex scalars.
 
@@ -10,7 +10,6 @@ The main steps for the installation are:
 
   1. Unbundle the distribution file **[slepc-{{env.config.release}}.tar.gz](https://slepc.upv.es/download/distrib/slepc-{{env.config.release}}.tar.gz)** with a usual command such as
 
-%```{code} console
 ```{parsed-literal}
 $ tar xzf slepc-{{env.config.release}}.tar.gz
 ```
@@ -19,7 +18,6 @@ This will create a directory and unpack the software there.
 
   2. Set the environment variable `SLEPC_DIR` to the full path of the SLEPc home directory, for example,
 
-%```{code} console
 ```{parsed-literal}
 $ export SLEPC_DIR=/home/username/slepc-{{env.config.release}}
 ```

@@ -71,7 +71,7 @@ Development of SLEPc has been partially funded by the following grants:
 Starting from version 3.8, SLEPc is released under a 2-clause BSD license (see `LICENSE` file).
 
 > ::: sffamily
-> Copyright 2002--{{release_year}} Universitat Polit&egrave;cnica de Valencia, Spain
+> Copyright 2002--{{release_year}} Universitat Polit&egrave;cnica de Val&egrave;ncia, Spain
 > :::
 ```
 

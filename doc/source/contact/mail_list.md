@@ -2,7 +2,7 @@
 
 We will update users regarding new releases, changes, etc. through the **slepc-announce** mailing list. This is a low traffic mailing list, with messages sent only from time to time.
 
-There is no SLEPc users mailing list, but you can post SLEPc-related questions in the [petsc-users mailing list](https://petsc.org/release/community/mailing/).
+There is no SLEPc users mailing list, but you can post SLEPc-related questions in the {{'[petsc-users mailing list](https://petsc.org/{}/community/mailing/)'.format(branch)}}.
 
 ## Subscription
 

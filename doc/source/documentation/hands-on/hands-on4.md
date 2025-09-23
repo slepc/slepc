@@ -8,7 +8,7 @@ This example works also by reading a matrix from a file. In particular, the matr
 
 ## Compiling
 
-Copy the file [ex14.c](https://slepc.upv.es/documentation/current/src/svd/tutorials/ex14.c) [[plain text]](https://slepc.upv.es/documentation/current/src/svd/tutorials/ex14.c) to your directory and add these lines to the makefile
+Copy the file {{'[ex14.c](https://slepc.upv.es/{}/src/svd/tutorials/ex14.c.html)'.format(branch)}} to your directory and add these lines to the makefile
 
 ```{code} make
 ex14: ex14.o
@@ -57,17 +57,17 @@ Singular value problem stored in file.
 
 The way in which the SVD object works is very similar to that of EPS. However, some important differences exist. Examine the source code of the example program and pay attention to the differences with respect to EPS. After loading the matrix, the problem is solved by the following sequence of function calls:
 
-* [SVDCreate](https://slepc.upv.es/documentation/current/docs/manualpages/SVD/SVDCreate)`(MPI_Comm comm,SVD *svd);`
-* [SVDSetOperators](https://slepc.upv.es/documentation/current/docs/manualpages/SVD/SVDSetOperators)`(SVD svd,Mat A,Mat B);`
-* [SVDSetFromOptions](https://slepc.upv.es/documentation/current/docs/manualpages/SVD/SVDSetFromOptions)`(SVD svd);`
-* [SVDSolve](https://slepc.upv.es/documentation/current/docs/manualpages/SVD/SVDSolve)`(SVD svd);`
-* [SVDGetConverged](https://slepc.upv.es/documentation/current/docs/manualpages/SVD/SVDGetConverged)`(SVD svd, int *nconv);`
-* [SVDGetSingularTriplet](https://slepc.upv.es/documentation/current/docs/manualpages/SVD/SVDGetSingularTriplet)`(SVD svd,int i,PetscReal *sigma,Vec u,Vec v);`
-* [SVDDestroy](https://slepc.upv.es/documentation/current/docs/manualpages/SVD/SVDDestroy)`(SVD svd)`;
+* `SVDCreate(MPI_Comm comm,SVD *svd);`
+* `SVDSetOperators`(`SVD` svd,{external:doc}`Mat` A,{external:doc}`Mat` B);`
+* `SVDSetFromOptions(SVD svd);`
+* `SVDSolve(SVD svd);`
+* `SVDGetConverged(SVD svd, int *nconv);`
+* `SVDGetSingularTriplet`(`SVD` svd,int i,{external:doc}`PetscReal` *sigma,{external:doc}`Vec` u,{external:doc}`Vec` v);
+* `SVDDestroy(SVD svd)`;
 
 First, the singular value solver (SVD) context is created and the matrix associated with the problem is specified. Then various options are set for customized solution. After that, the program solves the problem, retrieves the solution, and finally destroys the SVD context.
 
-Note that the singular value, `sigma`, is defined as a `PetscReal`, and that the singular vectors are simple `Vec`'s.
+Note that the singular value, `sigma`, is defined as a {external:doc}`PetscReal`, and that the singular vectors are simple {external:doc}`Vec`'s.
 
 ## SVD Options
 
@@ -134,13 +134,13 @@ Try to change some of the values, for instance:
 $ ./ex14 -file $SLEPC_DIR/share/slepc/datafiles/matrices/rdb200.petsc -svd_nsv 10 -svd_ncv 40 -svd_smallest
 ```
 
-The "transpose mode" refers to whether the transpose of matrix A is being built explicitly or not (see [SVDSetImplicitTranspose](https://slepc.upv.es/documentation/current/docs/manualpages/SVD/SVDSetImplicitTranspose) for an explanation).
+The "transpose mode" refers to whether the transpose of matrix A is being built explicitly or not (see `SVDSetImplicitTranspose` for an explanation).
 
 Note that in the sample output above, the SVD object contains an EPS object.  This only happens in some SVD solver types, as detailed below.
 
 ## Changing the Singular Value Solver
 
-SLEPc provides several solvers for computing the SVD, which can be selected in the source code with the function [SVDSetType](https://slepc.upv.es/documentation/current/docs/manualpages/SVD/SVDSetType), or at run time:
+SLEPc provides several solvers for computing the SVD, which can be selected in the source code with the function `SVDSetType`, or at run time:
 
 ```{code} console
 $ ./ex14 -file $SLEPC_DIR/share/slepc/datafiles/matrices/rdb200.petsc -svd_type trlanczos

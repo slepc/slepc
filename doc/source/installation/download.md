@@ -19,7 +19,6 @@ $ git pull
 ```
 The `release` branch tracks the latest release version, including all the patches. It is also possible to check out a specific version with the tag name, for instance:
 
-%```{code} console
 ```{parsed-literal}
 $ git checkout v{{env.config.release}}
 ```
@@ -74,7 +73,7 @@ $ git pull
 
 The source code in the repository can be browsed at [gitlab.com](https://gitlab.com/slepc/slepc). Some statistics related to source code development can be found at [openhub.net](https://www.openhub.net/p/slepc).
 
-Additional information can be found at [PETSc Developer's Documentation](https://petsc.org/release/developers/).
+Additional information can be found at {{'[PETSc Developer\'s Documentation](https://petsc.org/{}/developers/)'.format(branch)}}.
 
 Users of the development version may also want to check the [nightly tests](https://gitlab.com/slepc/slepc/-/pipeline_schedules) for various builds of SLEPc's `main` branch with PETSc's `main` branch, as well as the source [coverage](https://slepc.upv.es/coverage/) of these tests.
 
@@ -104,7 +103,7 @@ Distribution files:
 [[3.20]](https://slepc.upv.es/download/distrib/slepc-3.20.2.tar.gz)
 [[3.21]](https://slepc.upv.es/download/distrib/slepc-3.21.2.tar.gz)
 [[3.22]](https://slepc.upv.es/download/distrib/slepc-3.22.2.tar.gz)
-[[3.23]](https://slepc.upv.es/download/distrib/slepc-3.23.0.tar.gz)
+[[3.23]](https://slepc.upv.es/download/distrib/slepc-3.23.2.tar.gz)
 
 :::{note}
 Users of previous versions are strongly recommended to upgrade to the latest one.

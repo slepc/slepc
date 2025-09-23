@@ -203,7 +203,7 @@ The hyperbolic singular value decomposition (HSVD) was introduced in {cite:p}`On
 A=U\Sigma V^*,\qquad U^*\Omega U=\tilde\Omega,
 ```
 
- where $\Omega=\mathrm{diag}(\pm 1)$ is an $m\times m$ signature matrix provided by the user, while $\tilde\Omega$ is another signature matrix obtained as part of the solution. Sometimes $U$ is said to be a hyperexchange matrix, or also an $(\Omega,\tilde\Omega)$-orthogonal matrix. Note that in the problem definition normally found in the literature it is $V$ that is $(\Omega,\tilde\Omega)$-orthogonal and not $U$. We choose this definition for consistency with respect to the generalized HSVD of two matrices. If the user wants to compute the HSVD according to the alternative definition, then it suffices to (conjugate) transpose the input matrix $A$, using for instance `MatHermitianTranspose`.
+ where $\Omega=\mathrm{diag}(\pm 1)$ is an $m\times m$ signature matrix provided by the user, while $\tilde\Omega$ is another signature matrix obtained as part of the solution. Sometimes $U$ is said to be a hyperexchange matrix, or also an $(\Omega,\tilde\Omega)$-orthogonal matrix. Note that in the problem definition normally found in the literature it is $V$ that is $(\Omega,\tilde\Omega)$-orthogonal and not $U$. We choose this definition for consistency with respect to the generalized HSVD of two matrices. If the user wants to compute the HSVD according to the alternative definition, then it suffices to (conjugate) transpose the input matrix $A$, using for instance {external:doc}`MatHermitianTranspose`.
 
 As in the case of the SVD, the solution of the problem consists in singular triplets $(\sigma_i,u_i,v_i)$, with $\sigma_i$ real and nonnegative and sorted in nonincreasing order. Note that these quantities are different from those of section [](#sec:svd), even though we use the same notation here. With each singular triplet, there is an associated sign $\tilde\omega_i$ (either 1 or $-1$), the corresponding diagonal element of $\tilde\Omega$. In SLEPc, this value is not returned by the user interface, but if required it can be easily computed as $u_i^*\Omega u_i$.
 
@@ -300,9 +300,9 @@ The basic steps for computing a partial SVD with SLEPc are illustrated in figure
 
 If one compares this example code with the `EPS` example in figure [](#fig:ex-eps), the most outstanding differences are the following:
 
--   The singular value is a `PetscReal`, not a `PetscScalar`.
+-   The singular value is a {external:doc}`PetscReal`, not a {external:doc}`PetscScalar`.
 
--   Each singular vector is defined with a single `Vec` object, not two as was the case for eigenvectors.
+-   Each singular vector is defined with a single {external:doc}`Vec` object, not two as was the case for eigenvectors.
 
 ## Defining the Problem
 
@@ -341,7 +341,7 @@ Note that in `SVD` calling it is currently not strictly required, since the prob
 
 :::
 
-It is important to note that all SVD solvers in SLEPc make use of both $A$ and $A^*$, as suggested by the description in section [](#sec:svd). $A^*$ is not explicitly passed as an argument to `SVDSetOperators`, therefore it will have to stem from $A$. There are two possibilities for this: either $A$ is transposed explicitly and $A^*$ is created as a distinct matrix, or $A^*$ is handled implicitly via `MatMultTranspose` (or `MatMultHermitianTranspose` in the complex case) operations whenever a matrix-vector product is required in the algorithm. The default is to build $A^*$ explicitly, but this behavior can be changed with `SVDSetImplicitTranspose`
+It is important to note that all SVD solvers in SLEPc make use of both $A$ and $A^*$, as suggested by the description in section [](#sec:svd). $A^*$ is not explicitly passed as an argument to `SVDSetOperators`, therefore it will have to stem from $A$. There are two possibilities for this: either $A$ is transposed explicitly and $A^*$ is created as a distinct matrix, or $A^*$ is handled implicitly via {external:doc}`MatMultTranspose` (or {external:doc}`MatMultHermitianTranspose` in the complex case) operations whenever a matrix-vector product is required in the algorithm. The default is to build $A^*$ explicitly, but this behavior can be changed with `SVDSetImplicitTranspose`
 
 ```{code} c
 SVDSetImplicitTranspose(SVD svd,PetscBool impl);
@@ -392,16 +392,16 @@ The threshold $\delta$ can be set with `SVDSetThreshold`
 SVDSetThreshold(SVD svd,PetscReal thres,PetscBool rel);
 ```
 
-When `rel` is `PETSC_TRUE`, the solver will compute $k$ singular values, with $\sigma_j\geq\delta\cdot\sigma_1$, for $j=1,\dots,k-1$, where $k$ is computed internally. In this case, the threshold is relative to the largest singular value $\sigma_1$, i.e., the matrix norm. It can be interpreted as a percentage, for instance $\delta=0.8$ means compute singular values that are at least 80% of the matrix norm. Alternatively, an absolute threshold can be used by setting `rel` to `PETSC_FALSE`
+When `rel` is {external:doc}`PETSC_TRUE`, the solver will compute $k$ singular values, with $\sigma_j\geq\delta\cdot\sigma_1$, for $j=1,\dots,k-1$, where $k$ is computed internally. In this case, the threshold is relative to the largest singular value $\sigma_1$, i.e., the matrix norm. It can be interpreted as a percentage, for instance $\delta=0.8$ means compute singular values that are at least 80% of the matrix norm. Alternatively, an absolute threshold can be used by setting `rel` to {external:doc}`PETSC_FALSE`
 
 ```{figure} ../../_static/images/manual/svg/fig-thres.svg
-:alt: Illustration of threshold usage with the singular values of the \texttt{rdb200} matrix. The red line represents a threshold of $\delta=0.8$.
+:alt: Illustration of threshold usage with the singular values of the `rdb200` matrix. The red line represents a threshold of {math}`\delta=0.8`.
 :name: fig:thres
 
-Illustration of threshold usage with the singular values of the \texttt{rdb200} matrix. The red line represents a threshold of $\delta=0.8$.
+Illustration of threshold usage with the singular values of the `rdb200` matrix. The red line represents a threshold of {math}`\delta=0.8`.
 ```
 
-In the low-rank example suggested above, the singular values will decay fast for a relatively small $k$, so a relative threshold $\delta=0.5$ or less could do the job. But care must be taken in matrices whose singular values decay progressively, as in the example of figure [](#fig:thres), since a small $\delta$ would imply computing many singular triplets and hence a very high cost, both computationally and in memory. Since the number of computed singular values is not known a priori, the solver will need to reallocate the basis of vectors internally, to have enough room to accommodate all the singular vectors, so this option must be used with caution to avoid out-of-memory problems. The recommendation is to set the value of `ncv` to be larger than the estimated number of singular values, to minimize the number of reallocations. You can also use the `nsv` parameter in combination with the threshold to stop in case the number of computed singular triplets exceeds that value.
+In the low-rank example suggested above, the singular values will decay fast for a relatively small $k$, so a relative threshold $\delta=0.5$ or less could do the job. But care must be taken in matrices whose singular values decay progressively, as in the example of figure [Illustration of threshold usage with the singular values of the `rdb200` matrix](#fig:thres), since a small $\delta$ would imply computing many singular triplets and hence a very high cost, both computationally and in memory. Since the number of computed singular values is not known a priori, the solver will need to reallocate the basis of vectors internally, to have enough room to accommodate all the singular vectors, so this option must be used with caution to avoid out-of-memory problems. The recommendation is to set the value of `ncv` to be larger than the estimated number of singular values, to minimize the number of reallocations. You can also use the `nsv` parameter in combination with the threshold to stop in case the number of computed singular triplets exceeds that value.
 
 An absolute threshold is also available when computing smallest singular values, in which case the solver will compute the $k$ smallest singular values, where $\sigma_j<\delta$, $j=n-k+1,\dots,n$.
 
@@ -461,7 +461,7 @@ In the `cyclic` solver the user can also choose between handling $H(A)$ implicit
 SVDCyclicSetExplicitMatrix(SVD svd,PetscBool explicit);
 ```
 
-The `EPS` object associated with the `cross` and `cyclic` SVD solvers is created with a set of reasonable default parameters. However, it may sometimes be necessary to change some of the `EPS` options such as the eigensolver. To allow application programmers to set any of the `EPS` options directly within the code, the following routines are provided to extract the `EPS` context from the `SVD` object, `SVDCrossGetEPS``SVDCyclicGetEPS`
+The `EPS` object associated with the `cross` and `cyclic` SVD solvers is created with a set of reasonable default parameters. However, it may sometimes be necessary to change some of the `EPS` options such as the eigensolver. To allow application programmers to set any of the `EPS` options directly within the code, the following routines are provided to extract the `EPS` context from the `SVD` object, `SVDCrossGetEPS` `SVDCyclicGetEPS`
 
 ```{code} c
 SVDCrossGetEPS(SVD svd,EPS *eps);
@@ -482,13 +482,13 @@ $ ./program -svd_type cyclic -svd_cyclic_explicitmatrix
             -svd_cyclic_st_ksp_type preonly -svd_cyclic_st_pc_type lu
 ```
 
-Similarly, in the case of GSVD the thick-restart Lanczos solver uses a `KSP` solver internally, that can be configured by accessing it with `SVDTRLanczosGetKSP`
+Similarly, in the case of GSVD the thick-restart Lanczos solver uses a {external:doc}`KSP` solver internally, that can be configured by accessing it with `SVDTRLanczosGetKSP`
 
 ```{code} c
 SVDTRLanczosGetKSP(SVD svd,KSP *ksp);
 ```
 
-or with the corresponding command-line options prefixed with `-svd_trlanczos_`. This `KSP` object is used to solve a linear least squares problem at each Lanczos step with coefficient matrix $Z$ equation {math:numref}`eq:qr`, which by default is a shell matrix but the user can choose to create it explicitly with the function `SVDTRLanczosSetExplicitMatrix`.
+or with the corresponding command-line options prefixed with `-svd_trlanczos_`. This {external:doc}`KSP` object is used to solve a linear least squares problem at each Lanczos step with coefficient matrix $Z$ equation {math:numref}`eq:qr`, which by default is a shell matrix but the user can choose to create it explicitly with the function `SVDTRLanczosSetExplicitMatrix`.
 
 ## Retrieving the Solution
 
@@ -512,7 +512,7 @@ returns the $j$-th computed singular triplet, $(\sigma_j,u_j,v_j)$, where both $
 
 In some applications, it may be enough to compute only the right singular vectors. This is especially important in cases in which memory requirements are critical (remember that both $U_k$ and $V_k$ are dense matrices, and $U_k$ may require much more storage than $V_k$, see figure [](#fig:svd)). In SLEPc, there is no general option for specifying this, but the default behavior of some solvers is to compute only right vectors and allocate/compute left vectors only in the case that the user requests them. This is done in the `cross` solver and in some special variants of other solvers such as one-sided Lanczos (consult the {cite:t}`str-8` technical report for specific solver options).
 
-In the case of the GSVD, the `sigma` argument of `SVDGetSingularTriplet` contains $\sigma_i=c_i/s_i$ and the second `Vec` argument (`v`) contains the right singular vectors ($x_i$), while the first `Vec` argument (`u`) contains the other vectors of the decomposition stacked on top of each other, as a single $(m+p)$-vector: $\left[\begin{smallmatrix}u_i\\v_i\end{smallmatrix}\right]$.
+In the case of the GSVD, the `sigma` argument of `SVDGetSingularTriplet` contains $\sigma_i=c_i/s_i$ and the second {external:doc}`Vec` argument (`v`) contains the right singular vectors ($x_i$), while the first {external:doc}`Vec` argument (`u`) contains the other vectors of the decomposition stacked on top of each other, as a single $(m+p)$-vector: $\left[\begin{smallmatrix}u_i\\v_i\end{smallmatrix}\right]$.
 
 ### Reliability of the Computed Solution
 

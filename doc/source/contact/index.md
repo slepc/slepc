@@ -36,7 +36,7 @@ An alternative to e-mail is to [open an issue at SLEPc's GitLab site](https://gi
 
 ### Users Mailing List
 
-We do not maintain a mailing list specific for SLEPc users to share experiences and ask questions, but SLEPc-related queries can be posted in the [petsc-users mailing list](https://petsc.org/release/community/mailing/).
+We do not maintain a mailing list specific for SLEPc users to share experiences and ask questions, but SLEPc-related queries can be posted in the {{'[petsc-users mailing list](https://petsc.org/{}/community/mailing/)'.format(branch)}}.
 
 ### Consulting Services
 

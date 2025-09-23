@@ -6,7 +6,7 @@ In this exercise we are going to work with a non-symmetric problem. The example 
 
 ## Compiling
 
-Copy the file [ex5.c](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex5.c) [[plain text]](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex5.c) to your directory and add these lines to the makefile
+Copy the file {{'[ex5.c](https://slepc.upv.es/{}/src/eps/tutorials/ex5.c.html)'.format(branch)}} to your directory and add these lines to the makefile
 
 ```{code} make
 ex5: ex5.o
@@ -26,13 +26,13 @@ $ make ex5
 
 ## Source Code Details
 
-The example program is very similar to that in Exercise 1. The main difference is that the problem is set to be non-symmetric with [EPSSetProblemType](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetProblemType):
+The example program is very similar to that in Exercise 1. The main difference is that the problem is set to be non-symmetric with `EPSSetProblemType`:
 
 ```{code} c
 PetscCall(EPSSetProblemType(eps,EPS_NHEP));
 ```
 
-In this example we also illustrate the use of [EPSSetInitialSpace](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetInitialSpace).
+In this example we also illustrate the use of `EPSSetInitialSpace`.
 
 ## Running the Program
 
@@ -63,7 +63,7 @@ Markov Model, N=120 (m=15)
 
 You can see that the solver returns both positive and negative eigenvalues.  This is because largest magnitude eigenvalues are computed by default, that is, internally the solver sorts the eigenvalue approximations according to {math}`|\lambda|`, and the same criterion is used for sorting the finally computed eigenvalues.
 
-Other criteria can be used, see [EPSSetWhichEigenpairs](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetWhichEigenpairs) for details. For instance, for computing only the rightmost eigenvalues, try the following.
+Other criteria can be used, see `EPSSetWhichEigenpairs` for details. For instance, for computing only the rightmost eigenvalues, try the following.
 
 ```{code} console
 $ ./ex5 -eps_nev 4 -eps_largest_real
@@ -106,7 +106,7 @@ We have obtained eigenvalues both on the left and on the right of the target val
 
 The number of iterations is higher than in the default case. The theory says that Krylov methods (and other methods as well) approximate eigenvalues from the periphery to the interior, meaning that before getting eigenvalues closest to 0.75 the solver has to find out the eigenvalues from 0.75 to the rightmost extreme. If we choose a target close to the extreme the number of iterations will be small, and they will increase as {math}`\tau` is moved inside of the spectrum. Therefore, this is not a good strategy because it will not be viable for difficult problems.
 
-Sometimes, an improvement may come from changing the way in which the method extracts the spectral information from the built subspace; see [EPSSetExtraction](https://slepc.upv.es/documentation/current/docs/manualpages/EPS/EPSSetExtraction) for details. One such technique is called harmonic extraction. Try the following:
+Sometimes, an improvement may come from changing the way in which the method extracts the spectral information from the built subspace; see `EPSSetExtraction` for details. One such technique is called harmonic extraction. Try the following:
 
 ```{code} console
 $ ./ex5 -eps_nev 4 -eps_target 0.75 -eps_harmonic
@@ -119,7 +119,7 @@ A better solution may be to use a spectral transformation, but with several cons
 
 The general idea of the spectral transformation is to substitute the original problem, {math}`Ax=\lambda x`, by another one, {math}`Tx= \theta x`, in which the eigenvalues are mapped to a different position but eigenvectors remain unchanged. With this strategy, one can move interior eigenvalues to the periphery.
 
-Each EPS object uses an ST object internally to manage the spectral transformation. The following table shows the available spectral transformations, which can be selected with the function [STSetType](https://slepc.upv.es/documentation/current/docs/manualpages/ST/STSetType) or at run time.
+Each EPS object uses an ST object internally to manage the spectral transformation. The following table shows the available spectral transformations, which can be selected with the function `STSetType` or at run time.
 
 Spectral Transformation  |  Operator                                   |  Command-line Name  |  Parameter
 ---                      |  ---                                        |  ---                |  ---

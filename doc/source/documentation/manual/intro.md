@@ -42,7 +42,7 @@ SLEPc can be considered an extension of PETSc providing all the functionality ne
 Numerical components of PETSc and SLEPc
 ```
 
-Each of these components consists of an abstract interface (simply a set of calling sequences) and one or more implementations using particular data structures. Both PETSc and SLEPc are written in C, which lacks direct support for object-oriented programming. However, it is still possible to take advantage of the three basic principles of object-oriented programming to manage the complexity of such large packages. PETSc uses data *encapsulation* in both vector and matrix data objects. Application code accesses data through function calls. Also, all the operations are supported through *polymorphism*. The user calls a generic interface routine, which then selects the underlying routine that handles the particular data structure. Finally, PETSc also uses *inheritance* in its design. All the objects are derived from an abstract base object. From this fundamental object, an abstract base object is defined for each PETSc object (`Mat`, `Vec` and so on), which in turn has a variety of instantiations that, for example, implement different matrix storage formats.
+Each of these components consists of an abstract interface (simply a set of calling sequences) and one or more implementations using particular data structures. Both PETSc and SLEPc are written in C, which lacks direct support for object-oriented programming. However, it is still possible to take advantage of the three basic principles of object-oriented programming to manage the complexity of such large packages. PETSc uses data *encapsulation* in both vector and matrix data objects. Application code accesses data through function calls. Also, all the operations are supported through *polymorphism*. The user calls a generic interface routine, which then selects the underlying routine that handles the particular data structure. Finally, PETSc also uses *inheritance* in its design. All the objects are derived from an abstract base object. From this fundamental object, an abstract base object is defined for each PETSc object ({external:doc}`Mat`, {external:doc}`Vec` and so on), which in turn has a variety of instantiations that, for example, implement different matrix storage formats.
 
 PETSc/SLEPc provide clean and effective codes for the various phases of solving PDEs, with a uniform approach for each class of problems. This design enables easy comparison and use of different algorithms (for example, to experiment with different Krylov subspace methods, preconditioners, or eigensolvers). Hence, PETSc, together with SLEPc, provides a rich environment for modeling scientific applications as well as for rapid algorithm design and prototyping.
 
@@ -53,7 +53,7 @@ The components enable easy customization and extension of both algorithms and im
 {#sec:inst}
 ## Installation
 
-This section describes SLEPc's installation procedure. Previously to the installation of SLEPc, the system must have an appropriate version of PETSc installed. Compatible versions of PETSc and SLEPc are those with coincident major and minor version number, the third number (patch level) being irrelevant for this. For instance, SLEPc 3.23.x may be built with PETSc 3.23.x. Also note that, if using git repositories, both PETSc and SLEPc must be either release versions or development versions, so make sure you select the appropriate branch in both repositories (`git checkout release` or `git checkout main`).
+This section describes SLEPc's installation procedure. Previously to the installation of SLEPc, the system must have an appropriate version of PETSc installed. Compatible versions of PETSc and SLEPc are those with coincident major and minor version number, the third number (patch level) being irrelevant for this. For instance, SLEPc {{env.config.version}}.x may be built with PETSc {{env.config.version}}.x. Also note that, if using git repositories, both PETSc and SLEPc must be either release versions or development versions, so make sure you select the appropriate branch in both repositories (`git checkout release` or `git checkout main`).
 
 The installation process for SLEPc is very similar to PETSc, with two stages: configuration and compilation. SLEPc's configuration is much simpler because most of the configuration information is taken from PETSc, including compiler options and scalar type (real or complex). See section [](#sec:opt-inst) for a discussion of options that are most relevant for SLEPc. Several configurations can coexist in the same directory tree, so that for instance one can have SLEPc libraries compiled with real scalars as well as with complex scalars. This is explained in section [](#sec:mult-inst). Also, system-based installation is also possible with the `--prefix` option, as discussed in section [](#sec:prefix-inst).
 
@@ -64,23 +64,23 @@ The basic steps for the installation are described next. Note that prior to thes
 
 1.  Unbundle the distribution file with
 
-    ```{code} console
-    $ tar xzf slepc-3.23.0.tar.gz
+    ```{parsed-literal}
+    tar xzf slepc-{{env.config.release}}.tar.gz
     ```
 
     or an equivalent command. This will create a directory and unpack the software there.
 
 2.  Set the environment variable `SLEPC_DIR` to the full path of the SLEPc home directory. For example, under the `bash` shell:
 
-    ```{code} console
-    $ export SLEPC_DIR=/home/username/slepc-3.23.0
+    ```{parsed-literal}
+    export SLEPC_DIR=/home/username/slepc-{{env.config.release}}
     ```
 
     In addition, the variables `PETSC_DIR` and `PETSC_ARCH` must also be set appropriately, e.g.
 
-    ```{code} console
-    $ export PETSC_DIR=/home/username/PETSc-3.23.0
-    $ export PETSC_ARCH=arch-darwin-c-debug
+    ```{parsed-literal}
+    export PETSC_DIR=/home/username/petsc-{{env.config.release}}
+    export PETSC_ARCH=arch-darwin-c-debug
     ```
 
     The rationale for `PETSC_ARCH` is explained in section [](#sec:mult-inst) (see section [](#sec:prefix-inst) for a case in which `PETSC_ARCH` is not required).
@@ -147,7 +147,7 @@ Additionally, PETSc's configuration script provides a very long list of options 
 
 -   The option `--with-mpi=0` allows building PETSc and SLEPc without MPI support (only sequential).
 
-**Note about complex scalar versions**: PETSc supports the use of complex scalars by defining the data type `PetscScalar` either as a real or complex number. This implies that two different versions of the PETSc libraries can be built separately, one for real numbers and one for complex numbers, but they cannot be used at the same time. SLEPc inherits this property. In SLEPc it is not possible to completely separate real numbers and complex numbers because the solution of non-symmetric real-valued eigenvalue problems may be complex. SLEPc has been designed trying to provide a uniform interface to manage all the possible cases. However, there are slight differences between the interface in each of the two versions. In this manual, differences are clearly identified.
+**Note about complex scalar versions**: PETSc supports the use of complex scalars by defining the data type {external:doc}`PetscScalar` either as a real or complex number. This implies that two different versions of the PETSc libraries can be built separately, one for real numbers and one for complex numbers, but they cannot be used at the same time. SLEPc inherits this property. In SLEPc it is not possible to completely separate real numbers and complex numbers because the solution of non-symmetric real-valued eigenvalue problems may be complex. SLEPc has been designed trying to provide a uniform interface to manage all the possible cases. However, there are slight differences between the interface in each of the two versions. In this manual, differences are clearly identified.
 
 {#sec:mult-inst}
 ### Installing Multiple Configurations in a Single Directory Tree
@@ -189,18 +189,18 @@ $ make install
 
 This is useful for building as a regular user and then copying the libraries and include files to the system directories as root.
 
-To be more precise, suppose that the configuration was done with `--prefix=/opt/PETSc-3.23.0-linux-gnu-c-debug`. Then, `make install` will create directory `/opt/PETSc-3.23.0-linux-gnu-c-debug` if it does not exist, and several subdirectories containing the libraries, the configuration files, and the header files. Note that the source code files are not copied, nor the documentation, so the size of the installed directory will be much smaller than the original one. For that reason, it is no longer necessary to allow for several configurations to share a directory tree. In other words, in a prefix-based installation, variable `PETSC_ARCH` loses significance and must be unset. To maintain several configurations, one should specify different prefix directories, typically with a name that informs about the configuration options used.
+To be more precise, suppose that the configuration was done with `--prefix=/opt/petsc-x.x-linux-gnu-c-debug`. Then, `make install` will create directory `/opt/petsc-x.x-linux-gnu-c-debug` if it does not exist, and several subdirectories containing the libraries, the configuration files, and the header files. Note that the source code files are not copied, nor the documentation, so the size of the installed directory will be much smaller than the original one. For that reason, it is no longer necessary to allow for several configurations to share a directory tree. In other words, in a prefix-based installation, variable `PETSC_ARCH` loses significance and must be unset. To maintain several configurations, one should specify different prefix directories, typically with a name that informs about the configuration options used.
 
 In order to prepare a prefix-based installation of SLEPc that uses a prefix-based installation of PETSc, start by setting the appropriate value of `PETSC_DIR`. Then, run SLEPc's configure with a prefix directory.
 
-```{code} console
-$ export PETSC_DIR=/opt/PETSc-3.23.0-linux-gnu-c-debug
-$ unset PETSC_ARCH
-$ cd $SLEPC_DIR
-$ ./configure --prefix=/opt/slepc-3.23.0-linux-gnu-c-debug
-$ make
-$ make install
-$ export SLEPC_DIR=/opt/slepc-3.23.0-linux-gnu-c-debug
+```{parsed-literal}
+export PETSC_DIR=/opt/petsc-{{env.config.release}}-linux-gnu-c-debug
+unset PETSC_ARCH
+cd $SLEPC_DIR
+./configure --prefix=/opt/slepc-{{env.config.release}}-linux-gnu-c-debug
+make
+make install
+export SLEPC_DIR=/opt/slepc-{{env.config.release}}-linux-gnu-c-debug
 ```
 
 Note that the variable `PETSC_ARCH` has been unset before SLEPc's configure. SLEPc will use a temporary arch name during the build (this temporary arch is named `installed-arch-xxx`, where the `arch-xxx` string represents the configuration of the installed PETSc version). Although it is not a common case, it is also possible to configure SLEPc without prefix, in which case the `PETSC_ARCH` variable must still be empty and the arch directory `installed-xxx` is picked automatically (it is hardwired in file `$SLEPC_DIR/lib/slepc/conf/slepcvariables`). The combination PETSc without prefix and SLEPc with prefix is also allowed, in which case `PETSC_ARCH` should not be unset.
@@ -209,8 +209,8 @@ Note that the variable `PETSC_ARCH` has been unset before SLEPc's configure. SLE
 
 Before using SLEPc, the user must first set the environment variable `SLEPC_DIR`, indicating the full path of the directory containing SLEPc. For example, under the `bash` shell, a command of the form
 
-```{code} console
-$ export SLEPC_DIR=/software/slepc-3.23.0
+```{parsed-literal}
+export SLEPC_DIR=/software/slepc-{{env.config.release}}
 ```
 
 can be placed in the user's `.bashrc` file. The `SLEPC_DIR` directory can be either a standard installation SLEPc directory, or a prefix-based installation directory, see section [](#sec:prefix-inst). In addition, the user must set the environment variables required by PETSc, that is, `PETSC_DIR`, to indicate the full path of the PETSc directory, and `PETSC_ARCH` to specify a particular architecture and set of options. Note that `PETSC_ARCH` should not be set in the case of prefix-based installations.
@@ -233,9 +233,9 @@ Most SLEPc programs begin with a call to `SlepcInitialize`
 SlepcInitialize(int *argc,char ***argv,char *file,char *help);
 ```
 
-which initializes SLEPc, PETSc and MPI. This subroutine is very similar to `PetscInitialize`, and the arguments have the same meaning. In fact, internally `SlepcInitialize` calls `PetscInitialize`.
+which initializes SLEPc, PETSc and MPI. This subroutine is very similar to {external:doc}`PetscInitialize`, and the arguments have the same meaning. In fact, internally `SlepcInitialize` calls {external:doc}`PetscInitialize`.
 
-After this initialization, SLEPc programs can use communicators defined by PETSc. In most cases users can employ the communicator `PETSC_COMM_WORLD` to indicate all processes in a given run and `PETSC_COMM_SELF` to indicate a single process. MPI provides routines for generating new communicators consisting of subsets of processes, though most users rarely need to use these features. SLEPc users need not program much message passing directly with MPI, but they must be familiar with the basic concepts of message passing and distributed memory computing.
+After this initialization, SLEPc programs can use communicators defined by PETSc. In most cases users can employ the communicator {external:doc}`PETSC_COMM_WORLD` to indicate all processes in a given run and {external:doc}`PETSC_COMM_SELF` to indicate a single process. MPI provides routines for generating new communicators consisting of subsets of processes, though most users rarely need to use these features. SLEPc users need not program much message passing directly with MPI, but they must be familiar with the basic concepts of message passing and distributed memory computing.
 
 All SLEPc programs should call `SlepcFinalize` as their final (or nearly final) statement
 
@@ -243,7 +243,7 @@ All SLEPc programs should call `SlepcFinalize` as their final (or nearly final) 
 SlepcFinalize();
 ```
 
-This routine handles operations to be executed at the conclusion of the program, and calls `PetscFinalize` if `SlepcInitialize` began PETSc.
+This routine handles operations to be executed at the conclusion of the program, and calls {external:doc}`PetscFinalize` if `SlepcInitialize` began PETSc.
 
 **Note to Fortran Programmers**: In this manual all the examples and calling sequences are given for the C/C++ programming languages. However, Fortran programmers can use most of the functionality of SLEPc and PETSc from Fortran, with only minor differences in the user interface. For instance, the two functions mentioned above have their corresponding Fortran equivalent:
 
@@ -259,147 +259,9 @@ Section [](#sec:fortran) provides a summary of the differences between using SLE
 
 A simple example is listed next that solves an eigenvalue problem associated with the one-dimensional Laplacian operator discretized with finite differences. This example can be found in `${SLEPC_DIR}/src/eps/tutorials/ex1.c`. Following the code we highlight a few of the most important parts of this example.
 
-
-```{code} c
-/*
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-   SLEPc - Scalable Library for Eigenvalue Problem Computations
-   Copyright (c) 2002-, Universitat Politecnica de Valencia, Spain
-
-   This file is part of SLEPc.
-   SLEPc is distributed under a 2-clause BSD license (see LICENSE).
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-static char help[] = "Standard symmetric eigenproblem corresponding to the Laplacian operator in 1 dimension.\n\n"
-  "The command line options are:\n"
-  "  -n <n>, where <n> = number of grid subdivisions = matrix dimension.\n\n";
-
-#include <slepceps.h>
-
-int main(int argc,char **argv)
-{
-  Mat            A;           /* problem matrix */
-  EPS            eps;         /* eigenproblem solver context */
-  EPSType        type;
-  PetscReal      error,tol,re,im;
-  PetscScalar    kr,ki;
-  Vec            xr,xi;
-  PetscInt       n=30,i,Istart,Iend,nev,maxit,its,nconv;
-
-  PetscFunctionBeginUser;
-  PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
-
-  PetscCall(PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\n1-D Laplacian Eigenproblem, n=%" PetscInt_FMT "\n\n",n));
-
-  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-     Compute the operator matrix that defines the eigensystem, Ax=kx
-     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-  PetscCall(MatCreate(PETSC_COMM_WORLD,&A));
-  PetscCall(MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,n,n));
-  PetscCall(MatSetFromOptions(A));
-
-  PetscCall(MatGetOwnershipRange(A,&Istart,&Iend));
-  for (i=Istart;i<Iend;i++) {
-    if (i>0) PetscCall(MatSetValue(A,i,i-1,-1.0,INSERT_VALUES));
-    if (i<n-1) PetscCall(MatSetValue(A,i,i+1,-1.0,INSERT_VALUES));
-    PetscCall(MatSetValue(A,i,i,2.0,INSERT_VALUES));
-  }
-  PetscCall(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY));
-  PetscCall(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY));
-
-  PetscCall(MatCreateVecs(A,NULL,&xr));
-  PetscCall(MatCreateVecs(A,NULL,&xi));
-
-  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                Create the eigensolver and set various options
-     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-  /*
-     Create eigensolver context
-  */
-  PetscCall(EPSCreate(PETSC_COMM_WORLD,&eps));
-
-  /*
-     Set operators. In this case, it is a standard eigenvalue problem
-  */
-  PetscCall(EPSSetOperators(eps,A,NULL));
-  PetscCall(EPSSetProblemType(eps,EPS_HEP));
-
-  /*
-     Set solver parameters at runtime
-  */
-  PetscCall(EPSSetFromOptions(eps));
-
-  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                      Solve the eigensystem
-     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-  PetscCall(EPSSolve(eps));
-  /*
-     Optional: Get some information from the solver and display it
-  */
-  PetscCall(EPSGetIterationNumber(eps,&its));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD," Number of iterations of the method: %" PetscInt_FMT "\n",its));
-  PetscCall(EPSGetType(eps,&type));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD," Solution method: %s\n\n",type));
-  PetscCall(EPSGetDimensions(eps,&nev,NULL,NULL));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD," Number of requested eigenvalues: %" PetscInt_FMT "\n",nev));
-  PetscCall(EPSGetTolerances(eps,&tol,&maxit));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD," Stopping condition: tol=%.4g, maxit=%" PetscInt_FMT "\n",(double)tol,maxit));
-
-  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                    Display solution and clean up
-     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-  /*
-     Get number of converged approximate eigenpairs
-  */
-  PetscCall(EPSGetConverged(eps,&nconv));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD," Number of converged eigenpairs: %" PetscInt_FMT "\n\n",nconv));
-
-  if (nconv>0) {
-    /*
-       Display eigenvalues and relative errors
-    */
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD,
-         "           k          ||Ax-kx||/||kx||\n"
-         "   ----------------- ------------------\n"));
-
-    for (i=0;i<nconv;i++) {
-      /*
-        Get converged eigenpairs: i-th eigenvalue is stored in kr (real part) and
-        ki (imaginary part)
-      */
-      PetscCall(EPSGetEigenpair(eps,i,&kr,&ki,xr,xi));
-      /*
-         Compute the relative error associated to each eigenpair
-      */
-      PetscCall(EPSComputeError(eps,i,EPS_ERROR_RELATIVE,&error));
-
-#if defined(PETSC_USE_COMPLEX)
-      re = PetscRealPart(kr);
-      im = PetscImaginaryPart(kr);
-#else
-      re = kr;
-      im = ki;
-#endif
-      if (im!=0.0) PetscCall(PetscPrintf(PETSC_COMM_WORLD," %9f%+9fi %12g\n",(double)re,(double)im,(double)error));
-      else PetscCall(PetscPrintf(PETSC_COMM_WORLD,"   %12f       %12g\n",(double)re,(double)error));
-    }
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\n"));
-  }
-
-  /*
-     Free work space
-  */
-  PetscCall(EPSDestroy(&eps));
-  PetscCall(MatDestroy(&A));
-  PetscCall(VecDestroy(&xr));
-  PetscCall(VecDestroy(&xi));
-  PetscCall(SlepcFinalize());
-  return 0;
-}
+```{include} ex1.c
+:name: ex1.c
+:code: c
 ```
 
 #### Include Files.
@@ -414,7 +276,7 @@ where `slepceps.h` is the include file for the `EPS` component. Each SLEPc progr
 
 #### The Options Database.
 
-All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the call `PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL)` checks whether the user has provided a command line option to set the value of `n`, the problem dimension. If so, the variable `n` is set accordingly; otherwise, `n` remains unchanged.
+All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the call {external:doc}`PetscOptionsGetInt``(NULL,NULL,"-n",&n,NULL)` checks whether the user has provided a command line option to set the value of `n`, the problem dimension. If so, the variable `n` is set accordingly; otherwise, `n` remains unchanged.
 
 #### Vectors and Matrices.
 
@@ -426,7 +288,7 @@ MatSetSizes(Mat A,PetscInt m,PetscInt n,PetscInt M,PetscInt N);
 MatSetFromOptions(Mat A);
 ```
 
-where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with `MatSetValues` and then assembles it.
+where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with {external:doc}`MatSetValues` and then assembles it.
 
 #### Eigensolvers.
 
@@ -451,7 +313,7 @@ In the example program shown above there is no explicit reference to spectral tr
 
 #### Error Checking.
 
-All SLEPc routines return an integer indicating whether an error has occurred during the call. The error code is set to be nonzero if an error has been detected; otherwise, it is zero. The PETSc macro `PetscCall(...)` checks the return value and calls the PETSc error handler upon error detection. `PetscCall(...)` should be used in all subroutine calls to enable a complete error traceback. See the PETSc documentation for full details.
+All SLEPc routines return an integer indicating whether an error has occurred during the call. The error code is set to be nonzero if an error has been detected; otherwise, it is zero. The PETSc macro {external:doc}`PetscCall``(...)` checks the return value and calls the PETSc error handler upon error detection. {external:doc}`PetscCall``(...)` should be used in all subroutine calls to enable a complete error traceback. See the PETSc documentation for full details.
 
 ### Writing Application Codes with SLEPc
 

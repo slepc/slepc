@@ -10,7 +10,7 @@ The `NEP` module of SLEPc has been explained with more detail in {cite:p}`Campos
 {#sec:nep label="sec:nep"}
 ## General Nonlinear Eigenproblems
 
-As in previous chapters, we first set up the notation and briefly review basic properties of the eigenvalue problems to be addressed. In this case, we focus on general nonlinear eigenproblems, that is, those that cannot be expressed in a simpler form such as a polynomial eigenproblem. These problems arise in many applications, such as the discretization of delay differential equations. Some of the methods designed to solve such problems are based on Newton-type iterations, so in some ways `NEP` has similarities to PETSc's nonlinear solvers `SNES`. For background material on the nonlinear eigenproblem, the reader is referred to {cite:p}`Guttel:2017:NEP`, {cite:p}`Mehrmann:2004:NEP`.
+As in previous chapters, we first set up the notation and briefly review basic properties of the eigenvalue problems to be addressed. In this case, we focus on general nonlinear eigenproblems, that is, those that cannot be expressed in a simpler form such as a polynomial eigenproblem. These problems arise in many applications, such as the discretization of delay differential equations. Some of the methods designed to solve such problems are based on Newton-type iterations, so in some ways `NEP` has similarities to PETSc's nonlinear solvers {external:doc}`SNES`. For background material on the nonlinear eigenproblem, the reader is referred to {cite:p}`Guttel:2017:NEP`, {cite:p}`Mehrmann:2004:NEP`.
 
 We consider nonlinear eigenvalue problems of the form
 
@@ -53,7 +53,7 @@ Equation {math:numref}`eq:nep` can always be rewritten as
 
 ## Defining the Problem
 
-The user interface of the `NEP` package is quite similar to `EPS` and `PEP`. As mentioned above, the main difference is the way in which the eigenproblem is defined. In equation [](#sec:nepjac), we focus on the case where the problem is defined as in PETSc's nonlinear solvers `SNES`, that is, providing user-defined callback functions to compute the nonlinear function matrix, $T(\lambda)$, and its derivative, $T'(\lambda)$. We defer the discussion of using the split form of the nonlinear eigenproblem to section [](#sec:nepsplit).
+The user interface of the `NEP` package is quite similar to `EPS` and `PEP`. As mentioned above, the main difference is the way in which the eigenproblem is defined. In equation [](#sec:nepjac), we focus on the case where the problem is defined as in PETSc's nonlinear solvers {external:doc}`SNES`, that is, providing user-defined callback functions to compute the nonlinear function matrix, $T(\lambda)$, and its derivative, $T'(\lambda)$. We defer the discussion of using the split form of the nonlinear eigenproblem to section [](#sec:nepsplit).
 
 {#sec:nepjac label="sec:nepjac"}
 ### Using Callback Functions
@@ -86,7 +86,7 @@ for (j=0; j<nconv; j++) {
 NEPDestroy( &nep );
 ```
 
-In `SNES`, the usual way to define a set of nonlinear equations $F(x)=0$ is to provide two user-defined callback functions, one to compute the residual vector, $r=F(x)$ for a given $x$, and another one to evaluate the Jacobian matrix, $J(x)=F'(x)$. In the case of `NEP` there are some differences, since the function $T$ depends on the parameter $\lambda$ only. For a given value of $\lambda$ and its associated vector $x$, the residual vector is defined as
+In {external:doc}`SNES`, the usual way to define a set of nonlinear equations $F(x)=0$ is to provide two user-defined callback functions, one to compute the residual vector, $r=F(x)$ for a given $x$, and another one to evaluate the Jacobian matrix, $J(x)=F'(x)$. In the case of `NEP` there are some differences, since the function $T$ depends on the parameter $\lambda$ only. For a given value of $\lambda$ and its associated vector $x$, the residual vector is defined as
 
 ```{math}
 :label: eq:nlres
@@ -96,7 +96,7 @@ r=T(\lambda)x.
 
  We require the user to provide a callback function to evaluate $T(\lambda)$, rather than computing the residual $r$. Once $T(\lambda)$ has been built, `NEP` solvers can compute its action on any vector $x$. Regarding the derivative, in `NEP` we use $T'(\lambda)$, which will be referred to as the Jacobian matrix by analogy to `SNES`. This matrix must be computed with another callback function.
 
-Hence, both callback functions must compute a matrix. The nonzero pattern of these matrices does not usually change, so they must be created and preallocated at the beginning of the solution process. Then, these `Mat` objects are passed to the solver, together with the pointers to the callback functions, with `NEPSetFunction``NEPSetJacobian`
+Hence, both callback functions must compute a matrix. The nonzero pattern of these matrices does not usually change, so they must be created and preallocated at the beginning of the solution process. Then, these {external:doc}`Mat` objects are passed to the solver, together with the pointers to the callback functions, with `NEPSetFunction NEPSetJacobian`
 
 ```{code} c
 NEPSetFunction(NEP nep,Mat F,Mat P,PetscErrorCode (*fun)(NEP,PetscScalar,
@@ -105,7 +105,7 @@ NEPSetJacobian(NEP nep,Mat J,PetscErrorCode (*jac)(NEP,PetscScalar,
                Mat,void*),void *ctx)
 ```
 
-The argument `ctx` is an optional user-defined context intended to contain application-specific parameters required to build $T(\lambda)$ or $T'(\lambda)$, and it is received as the last argument in the callback functions. The callback routines also get an argument containing the value of $\lambda$ at which $T$ or $T'$ must be evaluated. Note that the `NEPSetFunction` callback takes two `Mat` arguments instead of one. The rationale for this is that some `NEP` solvers require to perform linear solves with $T(\lambda)$ within the iteration (in `SNES` this is done with the Jacobian), so $T(\lambda)$ will be passed as the coefficient matrix to a `KSP` object. The second `Mat` argument `P` is the matrix from which the preconditioner is constructed (which is usually the same as `F`).
+The argument `ctx` is an optional user-defined context intended to contain application-specific parameters required to build $T(\lambda)$ or $T'(\lambda)$, and it is received as the last argument in the callback functions. The callback routines also get an argument containing the value of $\lambda$ at which $T$ or $T'$ must be evaluated. Note that the `NEPSetFunction` callback takes two {external:doc}`Mat` arguments instead of one. The rationale for this is that some `NEP` solvers require to perform linear solves with $T(\lambda)$ within the iteration (in {external:doc}`SNES` this is done with the Jacobian), so $T(\lambda)$ will be passed as the coefficient matrix to a {external:doc}`KSP` object. The second {external:doc}`Mat` argument `P` is the matrix from which the preconditioner is constructed (which is usually the same as `F`).
 
 There is the possibility of solving the problem in a matrix-free fashion, that is, just implementing subroutines that compute the action of $T(\lambda)$ or $T'(\lambda)$ on a vector, instead of having to explicitly compute all nonzero entries of these two matrices. The SLEPc distribution contains an example illustrating this, using the concept of *shell* matrices (see section [](#sec:supported) for details).
 
@@ -200,7 +200,7 @@ Hence, for the split form representation we must provide $\ell$ matrices $A_i$ a
 NEPSetSplitOperator(NEP nep,PetscInt l,Mat A[],FN f[],MatStructure str);
 ```
 
-Here, the `MatStructure` flag is used to indicate whether all matrices have the same (or subset) nonzero pattern with respect to the first one. Figure [](#fig:ex-split) illustrates this usage with the problem of equation {math:numref}`eq:delay`, where $\ell=3$ and the matrices are $I$, $A$ and $B$ (note that in the code we have changed the order for efficiency reasons, since the nonzero pattern of $I$ and $B$ is a subset of $A$'s in this case). Two of the associated functions are polynomials ($-\lambda$ and $1$) and the other one is the exponential $e^{-\tau\lambda}$.
+Here, the {external:doc}`MatStructure` flag is used to indicate whether all matrices have the same (or subset) nonzero pattern with respect to the first one. Figure [](#fig:ex-split) illustrates this usage with the problem of equation {math:numref}`eq:delay`, where $\ell=3$ and the matrices are $I$, $A$ and $B$ (note that in the code we have changed the order for efficiency reasons, since the nonzero pattern of $I$ and $B$ is a subset of $A$'s in this case). Two of the associated functions are polynomials ($-\lambda$ and $1$) and the other one is the exponential $e^{-\tau\lambda}$.
 
 Note that using the split form is required in order to be able to use some eigensolvers, in particular, those that project the nonlinear eigenproblem onto a low dimensional subspace and then use a dense nonlinear solver for the projected problem.
 
@@ -285,13 +285,13 @@ $ ./ex22 -nep_type interpol -rg_interval_endpoints 0.1,14.0,-0.1,0.1
 
 For details about specifying a region, see section [](#sec:sys).
 
-Some solvers such as `NEPRII` and `NEPNARNOLDI` need a `KSP` object to handle the solution of linear systems of equations. This `KSP` and can be retrieved with e.g. `NEPRIIGetKSP`
+Some solvers such as `NEPRII` and `NEPNARNOLDI` need a {external:doc}`KSP` object to handle the solution of linear systems of equations. This {external:doc}`KSP` and can be retrieved with e.g. `NEPRIIGetKSP`
 
 ```{code} c
 NEPRIIGetKSP(NEP nep,KSP *ksp);
 ```
 
-This `KSP` object is typically used to compute the action of $T(\sigma)^{-1}$ on a given vector. In principle, $\sigma$ is an approximation of an eigenvalue, but it is usually more efficient to keep this value constant, otherwise the factorization or preconditioner must be recomputed every time since eigensolvers update eigenvalue approximations in each iteration. This behaviour can be changed with `NEPSetLagPreconditioner`
+This {external:doc}`KSP` object is typically used to compute the action of $T(\sigma)^{-1}$ on a given vector. In principle, $\sigma$ is an approximation of an eigenvalue, but it is usually more efficient to keep this value constant, otherwise the factorization or preconditioner must be recomputed every time since eigensolvers update eigenvalue approximations in each iteration. This behaviour can be changed with `NEPSetLagPreconditioner`
 
 ```{code} c
 NEPRIISetLagPreconditioner(NEP nep,PetscInt lag);
@@ -333,7 +333,7 @@ In two-sided solvers (see table [](#tab:solversn)), it is also possible to retri
 NEPGetLeftEigenvector(NEP nep,PetscInt j,Vec yr,Vec yi);
 ```
 
-**Note about real/complex scalar versions**: The interface makes provision for returning a complex eigenvalue (or eigenvector) when doing the computation in a PETSc/SLEPc version built with real scalars, as is done in other eigensolvers such as `EPS`. However, in some cases this will not be possible. In particular, when callback functions are used and a complex eigenvalue approximation is hit, the solver will fail unless configured with complex scalars. The reason is that the user interface for callback functions only have a single `PetscScalar lambda` argument and hence cannot handle complex arguments in real arithmetic.
+**Note about real/complex scalar versions**: The interface makes provision for returning a complex eigenvalue (or eigenvector) when doing the computation in a PETSc/SLEPc version built with real scalars, as is done in other eigensolvers such as `EPS`. However, in some cases this will not be possible. In particular, when callback functions are used and a complex eigenvalue approximation is hit, the solver will fail unless configured with complex scalars. The reason is that the user interface for callback functions only have a single {external:doc}`PetscScalar` `lambda` argument and hence cannot handle complex arguments in real arithmetic.
 
 The function `NEPComputeError`
 

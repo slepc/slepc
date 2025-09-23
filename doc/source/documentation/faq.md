@@ -6,7 +6,7 @@
 ```
 
 :::{seealso}
-[PETSc FAQ](https://petsc.org/release/faq/).
+{{'[PETSc FAQ](https://petsc.org/{}/faq/)'.format(branch)}}.
 :::
 
 ## 1.  Where should I send SLEPc bug reports and questions?
@@ -15,7 +15,7 @@ Send all maintenance requests to the SLEPc developers via <slepc-maint@upv.es>.
 
 ## 2.  Is there a SLEPc users mailing list?
 
-No, but SLEPc-related queries can be posted in the [petsc-users mailing list](https://petsc.org/release/community/mailing/).
+No, but SLEPc-related queries can be posted in the {{'[petsc-users mailing list](https://petsc.org/{}/community/mailing/)'.format(branch)}}.
 
 ## 3.  How can I receive announcements of new SLEPc versions?
 
@@ -43,7 +43,7 @@ Probably you are dealing with a generalized eigenproblem (or a standard eigenpro
 
 Possibly, the best way of learning to use SLEPc is to follow these steps:
 
-  - First of all, get acquainted with PETSc if you are not already familiar with it (see the [PETSc tutorials page](https://petsc.org/release/tutorials/)).
+  - First of all, get acquainted with PETSc if you are not already familiar with it (see the {{'[PETSc tutorials page](https://petsc.org/{}/tutorials/)'.format(branch)}}).
   - Read through the entire SLEPc Users Manual. In a first reading, one may skip the "advanced usage" sections.
   - Follow the steps provided by the [hands-on](hands-on/index) exercises, trying the examples in an available SLEPc installation.
   - Use the example programs available in the SLEPc distribution as a basis for your own programs.
@@ -57,7 +57,7 @@ The shift-and-invert spectral transformation (and Cayley as well) is intended fo
 
     $ ./ex1 -st_type sinvert -st_shift 3.5 -eps_largest_magnitude
 
-In contrast, in SLEPc 3.1 the approach is to specify the target value directly in EPS (with [EPSSetTarget](../manualpages/EPS/EPSSetTarget)) and indicate that we want to compute eigenvalues closest to the target, with `EPS_TARGET_MAGNITUDE`. For example (again, the last option can be omitted):
+In contrast, in SLEPc 3.1 the approach is to specify the target value directly in EPS (with `EPSSetTarget`) and indicate that we want to compute eigenvalues closest to the target, with `EPS_TARGET_MAGNITUDE`. For example (again, the last option can be omitted):
 
     $ ./ex1 -st_type sinvert -eps_target 3.5 -eps_target_magnitude
 
@@ -67,7 +67,7 @@ Note that another difference is that in 3.1 eigenvalues are returned in the corr
 
 ## 9.  I get an error when retrieving the eigenvector
 
-After the solver has finished, the solution can be retrieved with [EPSGetEigenpair](../manualpages/EPS/EPSGetEigenpair).  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ `Vec` object. This means the vector must have been created, for example with `VecCreate`, `VecDuplicate`, or `MatCreateVecs`, see for instance [ex7](../../../src/eps/tutorials/ex7.c). The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
+After the solver has finished, the solution can be retrieved with `EPSGetEigenpair`.  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ `Vec` object. This means the vector must have been created, for example with {external:doc}`VecCreate`, {external:doc}`VecDuplicate`, or {external:doc}`MatCreateVecs`, see for instance [ex7](../../../src/eps/tutorials/ex7.c). The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
 
 ## 10. I get an error when running shift-and-invert in parallel
 
@@ -83,10 +83,10 @@ Krylov methods (and in particular the default SLEPc eigensolver, Krylov-Schur) a
 
 ## 13. Creating a sparse matrix gets terribly slow when I increase the matrix size
 
-Matrix preallocation is extremely important, especially for large matrices.  See the [performance chapter of the PETSc users manual](https://petsc.org/release/docs/manual/performance/#memory-allocation-for-sparse-matrix-assembly).
+Matrix preallocation is extremely important, especially for large matrices.  See the {{'[chapter on matrices in the PETSc users manual](https://petsc.org/{}/manual/mat/#preallocation-of-memory-for-sequential-aij-sparse-matrices)'.format(branch)}}.
 
 :::{note}
-Since PETSc version 3.19 the `Mat` data structures have been changed so that the performance is reasonably good without preallocation.
+Since PETSc version 3.19 the {external:doc}`Mat` data structures have been changed so that the performance is reasonably good without preallocation.
 :::
 
 ## 14. conda-forge: how to install slepc4py with complex scalars

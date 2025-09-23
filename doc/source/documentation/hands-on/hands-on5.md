@@ -6,7 +6,7 @@ In many applications, it may be better to keep the matrix (or matrices) that def
 
 ## Compiling
 
-Copy the file [ex3.c](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex3.c) [[plain text]](https://slepc.upv.es/documentation/current/src/eps/tutorials/ex3.c) to your directory and add these lines to the makefile
+Copy the file {{'[ex3.c](https://slepc.upv.es/{}/src/eps/tutorials/ex3.c.html)'.format(branch)}} to your directory and add these lines to the makefile
 
 ```{code} make
 ex3: ex3.o
@@ -27,7 +27,7 @@ $ make ex3
 ## Source Code Details
 
 PETSc provides support for matrix-free problems via the _shell_ matrix type.
-This kind of matrices is created with a call to [MatCreateShell](https://petsc.org/release/manualpages/Mat/MatCreateShell), and their operations are specified with [MatShellSetOperation](https://petsc.org/release/manualpages/Mat/MatShellSetOperation).
+This kind of matrices is created with a call to {external:doc}`MatCreateShell`, and their operations are specified with {external:doc}`MatShellSetOperation`.
 For basic use of these matrices with EPS solvers only the matrix-vector product operation is required. In the example, this operation is performed by a separate function `MatMult_Laplacian2D`.
 
 ## Running the Program

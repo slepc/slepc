@@ -17,7 +17,7 @@ SLEPc mainly contains high level objects, as depicted in figure [](#fig:slepc). 
 
     -   Event logging, including user-defined events.
 
-    -   Direct wall-clock timing with `PetscTime`.
+    -   Direct wall-clock timing with {external:doc}`PetscTime`.
 
     -   Display detailed profile information and trace of events.
 
@@ -63,7 +63,7 @@ In some cases, these problems can be solved by reformulating them as a reduced-o
 
 All these cases can be easily handled in SLEPc by means of shell matrices. These are matrices that do not require explicit storage of the matrix entries. Instead, the user must provide subroutines for all the necessary matrix operations, typically only the application of the linear operator to a vector.
 
-Shell matrices, also called matrix-free matrices, are created in PETSc with the command `MatCreateShell`. Then, the function `MatShellSetOperation` is used to provide any user-defined shell matrix operations (see the PETSc documentation for additional details). Several examples are available in SLEPc that illustrate how to solve a matrix-free eigenvalue problem.
+Shell matrices, also called matrix-free matrices, are created in PETSc with the command {external:doc}`MatCreateShell`. Then, the function {external:doc}`MatShellSetOperation` is used to provide any user-defined shell matrix operations (see the PETSc documentation for additional details). Several examples are available in SLEPc that illustrate how to solve a matrix-free eigenvalue problem.
 
 In the simplest case, defining matrix-vector product operations (`MATOP_MULT`) is enough for using `EPS` with shell matrices. However, in the case of generalized problems, if matrix $B$ is also a shell matrix then it may be necessary to define other operations in order to be able to solve the linear system successfully, for example `MATOP_GET_DIAGONAL` to use an iterative linear solver with Jacobi preconditioning. On the other hand, if the shift-and-invert `ST` is to be used, then in addition it may also be necessary to define `MATOP_SHIFT` or `MATOP_AXPY` (see section [](#sec:explicit) for discussion).
 
@@ -72,7 +72,7 @@ In the case of `SVD`, both $A$ and $A^*$ are required to solve the problem. So w
 {#sec:gpu}
 ## GPU Computing
 
-Support for graphics processor unit (GPU) computing is included in SLEPc. This is related to section [](#sec:supported) because GPU support in PETSc is based on using special types of `Mat` and `Vec`. GPU support in SLEPc has been tested in all solver classes and most solvers should work, although the performance gain to be expected depends on the particular algorithm. Regarding PETSc, all iterative linear solvers are prepared to run on the GPU, but this is not the case for direct solvers and preconditioners (see PETSc documentation for details). The user must not expect a spectacular performance boost, but in general moderate gains can be achieved by running the eigensolver on the GPU instead of the CPU (in some cases a 10-fold improvement).
+Support for graphics processor unit (GPU) computing is included in SLEPc. This is related to section [](#sec:supported) because GPU support in PETSc is based on using special types of {external:doc}`Mat` and {external:doc}`Vec`. GPU support in SLEPc has been tested in all solver classes and most solvers should work, although the performance gain to be expected depends on the particular algorithm. Regarding PETSc, all iterative linear solvers are prepared to run on the GPU, but this is not the case for direct solvers and preconditioners (see PETSc documentation for details). The user must not expect a spectacular performance boost, but in general moderate gains can be achieved by running the eigensolver on the GPU instead of the CPU (in some cases a 10-fold improvement).
 
 SLEPc currently provides support for NVIDIA GPUs using CUDA[^cuda] as well as AMD GPUs using HIP and ROCm[^rocm].
 
@@ -82,13 +82,13 @@ CUDA provides a C/C++ compiler with CUDA extensions as well as the cuBLAS and cu
 $ ./configure --with-precision=single --with-cuda
 ```
 
-`VECCUDA` and `MATAIJCUSPARSE` are currently the mechanism in PETSc to run a computation on the GPU. `VECCUDA` is a special type of `Vec` whose array is mirrored in the GPU (and similarly for `MATAIJCUSPARSE`). PETSc takes care of keeping memory coherence between the two copies of the array, and performs the computation on the GPU when possible, trying to avoid unnecessary copies between the host and the device. For maximum efficiency, the user has to make sure that all vectors and matrices are of these types. If they are created in the standard way (`VecCreate` plus `VecSetFromOptions`) then it is sufficient to run the SLEPc program with
+{external:doc}`VECCUDA` and {external:doc}`MATAIJCUSPARSE` are currently the mechanism in PETSc to run a computation on the GPU. {external:doc}`VECCUDA` is a special type of {external:doc}`Vec` whose array is mirrored in the GPU (and similarly for {external:doc}`MATAIJCUSPARSE`). PETSc takes care of keeping memory coherence between the two copies of the array, and performs the computation on the GPU when possible, trying to avoid unnecessary copies between the host and the device. For maximum efficiency, the user has to make sure that all vectors and matrices are of these types. If they are created in the standard way ({external:doc}`VecCreate` plus {external:doc}`VecSetFromOptions`) then it is sufficient to run the SLEPc program with
 
 ```{code} console
 $ ./program -vec_type cuda -mat_type aijcusparse
 ```
 
-Note that the first option is unnecessary if no `Vec` is created in the main program.
+Note that the first option is unnecessary if no {external:doc}`Vec` is created in the main program.
 
 For AMD GPUs the procedure is very similar, with HIP providing the compiler and ROCm providing the analogue libraries hipBLAS and hipSPARSE. To configure PETSc with HIP do:
 
@@ -96,7 +96,7 @@ For AMD GPUs the procedure is very similar, with HIP providing the compiler and 
 $ ./configure --with-precision=single --with-hip
 ```
 
-Then the equivalent vector and matrix types are `VECHIP` and `MATAIJHIPSPARSE`, which can be used in the command line with
+Then the equivalent vector and matrix types are {external:doc}`VECHIP` and {external:doc}`MATAIJHIPSPARSE`, which can be used in the command line with
 
 ```{code} console
 $ ./program -vec_type hip -mat_type aijhipsparse
@@ -189,7 +189,7 @@ r(x)=\frac{p(x)}{q(x)}
 =\frac{\nu_{n-1}x^{n-1}+\cdots+\nu_1x+\nu_0}{\delta_{m-1}x^{m-1}+\cdots+\delta_1x+\delta_0}.
 ```
 
-These parameters are specified with `FNRationalSetNumerator``FNRationalSetDenominator`
+These parameters are specified with `FNRationalSetNumerator` `FNRationalSetDenominator`
 
 ```{code} c
 FNRationalSetNumerator(FN fn,PetscInt np,PetscScalar *pcoeff);
@@ -208,7 +208,7 @@ The $\varphi$-functions are given by
 
 where the index $k$ must be specified with `FNPhiSetIndex`.
 
-Whenever the solvers need to compute $f(x)$ or $f'(x)$ on a given scalar $x$, the following functions are invoked: `FNEvaluateFunction``FNEvaluateDerivative`
+Whenever the solvers need to compute $f(x)$ or $f'(x)$ on a given scalar $x$, the following functions are invoked: `FNEvaluateFunction` `FNEvaluateDerivative`
 
 ```{code} c
 FNEvaluateFunction(FN fn,PetscScalar x,PetscScalar *y)
@@ -236,7 +236,7 @@ The combination of $f_1$ and $f_2$ with division will result in $f_1(x)/f_2(x)$ 
 {#sec:bv}
 ### BV: Basis Vectors
 
-The `BV` class may be useful for advanced users, so we briefly describe it here for completeness. `BV` is a convenient way of handling a collection of vectors that often operate together, rather than working with an array of `Vec`. It can be seen as a generalization of `Vec` to a tall-skinny matrix with several columns.
+The `BV` class may be useful for advanced users, so we briefly describe it here for completeness. `BV` is a convenient way of handling a collection of vectors that often operate together, rather than working with an array of {external:doc}`Vec`. It can be seen as a generalization of {external:doc}`Vec` to a tall-skinny matrix with several columns.
 
 :::{table} Operations available for `BV` objects.
 :name: tab:bv
@@ -254,7 +254,7 @@ The `BV` class may be useful for advanced users, so we briefly describe it here 
 
 :::
 
-Table [](#tab:bv) shows a summary of the operations offered by the `BV` class, with variants that operate on the whole `BV`, on a single column, or on an external `Vec` object. Missing variants can be achieved simply with `Vec` and `Mat` operations. Other available variants not shown in the table are `BVMultInPlace`, `BVMultInPlaceHermitianTranspose` and `BVOrthogonalizeSomeColumn`.
+Table [](#tab:bv) shows a summary of the operations offered by the `BV` class, with variants that operate on the whole `BV`, on a single column, or on an external {external:doc}`Vec` object. Missing variants can be achieved simply with {external:doc}`Vec` and {external:doc}`Mat` operations. Other available variants not shown in the table are `BVMultInPlace`, `BVMultInPlaceHermitianTranspose` and `BVOrthogonalizeSomeColumn`.
 
 Most SLEPc solvers use a `BV` object to represent the working subspace basis. In particular, orthogonalization operations are mostly confined within `BV`. Hence, `BV` provides options for specifying the method of orthogonalization of vectors (Gram-Schmidt) as well as the method of block orthogonalization, see `BVSetOrthogonalization`.
 
@@ -315,7 +315,7 @@ Another useful operation is to check whether a given point of the complex plane 
 RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,PetscInt *inside)
 ```
 
-Note that the point is represented as two `PetscScalar`'s, similarly to eigenvalues in SLEPc.
+Note that the point is represented as two {external:doc}`PetscScalar`'s, similarly to eigenvalues in SLEPc.
 
 :::{table} Regions available as `RG` objects.
 :name: tab:rg
@@ -335,7 +335,7 @@ The directory structure of the SLEPc software is very similar to that in PETSc. 
 
 - `lib/slepc/conf` - Directory containing the base SLEPc makefile, to be included in application makefiles.
 - `config` - SLEPc configuration scripts.
-- `docs` - All documentation for SLEPc, including this manual. The subdirectory `manualpages` contains the on-line manual pages of each SLEPc routine.
+- `doc` - All documentation for SLEPc, including this manual. The subdirectory `manualpages` contains the on-line manual pages of each SLEPc routine.
 - `include` - All include files for SLEPc. The following subdirectories exist:
   - `slepc/finclude` - include files for Fortran programmers.
   - `slepc/private` - include files containing implementation details, for developer use only.
@@ -352,7 +352,7 @@ The directory structure of the SLEPc software is very similar to that in PETSc. 
 - `$PETSC_ARCH` - For each value of `PETSC_ARCH`, a directory exists containing files generated during installation of that particular configuration. The following subdirectories exist:
   - `lib` - all the generated libraries.
   - `lib/slepc/conf` - configuration parameters and log files.
-  - `include` - automatically generated include files, such as Fortran 90 \texttt{*.mod} files.
+  - `include` - automatically generated include files, such as Fortran 90 `*.mod` files.
 
 Each SLEPc source code component directory has the following subdirectories:
 
@@ -507,175 +507,9 @@ SLEPc provides an interface for Fortran programmers, very much like PETSc. As in
 
 The following is a Fortran example. It is the Fortran equivalent of the program given in section [](#sec:simpleex) and can be found in `${SLEPC_DIR}/src/eps/tutorials` (file `ex1f.F90`).
 
-```{code} fortran
-!
-!  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!  SLEPc - Scalable Library for Eigenvalue Problem Computations
-!  Copyright (c) 2002-, Universitat Politecnica de Valencia, Spain
-!
-!  This file is part of SLEPc.
-!  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
-!  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
-!  Program usage: mpiexec -n <np> ./ex1f [-help] [-n <n>] [all SLEPc options]
-!
-!  Description: Simple example that solves an eigensystem with the EPS object.
-!  The standard symmetric eigenvalue problem to be solved corresponds to the
-!  Laplacian operator in 1 dimension.
-!
-!  The command line options are:
-!    -n <n>, where <n> = number of grid points = matrix size
-!
-! ----------------------------------------------------------------------
-!
-      program main
-#include <slepc/finclude/slepceps.h>
-      use slepceps
-      implicit none
-
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
-!  Variables:
-!     A      operator matrix
-!     eps    eigenproblem solver context
-
-      Mat            A
-      EPS            eps
-      EPSType        tname
-      PetscInt       n, i, Istart, Iend, one, two, three
-      PetscInt       nev
-      PetscInt       row(1), col(3)
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscBool      flg, terse
-      PetscScalar    val(3)
-
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-      one = 1
-      two = 2
-      three = 3
-      PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,"ex1f test"//c_new_line,ierr))
-      if (ierr .ne. 0) then
-        print*,'SlepcInitialize failed'
-        stop
-      endif
-      PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
-      n = 30
-      PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
-
-      if (rank .eq. 0) then
-        write(*,100) n
-      endif
- 100  format (/'1-D Laplacian Eigenproblem, n =',I4,' (Fortran)')
-
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute the operator matrix that defines the eigensystem, Ax=kx
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-      PetscCallA(MatCreate(PETSC_COMM_WORLD,A,ierr))
-      PetscCallA(MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,n,n,ierr))
-      PetscCallA(MatSetFromOptions(A,ierr))
-
-      PetscCallA(MatGetOwnershipRange(A,Istart,Iend,ierr))
-      if (Istart .eq. 0) then
-        row(1) = 0
-        col(1) = 0
-        col(2) = 1
-        val(1) =  2.0
-        val(2) = -1.0
-        PetscCallA(MatSetValues(A,one,row,two,col,val,INSERT_VALUES,ierr))
-        Istart = Istart+1
-      endif
-      if (Iend .eq. n) then
-        row(1) = n-1
-        col(1) = n-2
-        col(2) = n-1
-        val(1) = -1.0
-        val(2) =  2.0
-        PetscCallA(MatSetValues(A,one,row,two,col,val,INSERT_VALUES,ierr))
-        Iend = Iend-1
-      endif
-      val(1) = -1.0
-      val(2) =  2.0
-      val(3) = -1.0
-      do i=Istart,Iend-1
-        row(1) = i
-        col(1) = i-1
-        col(2) = i
-        col(3) = i+1
-        PetscCallA(MatSetValues(A,one,row,three,col,val,INSERT_VALUES,ierr))
-      enddo
-
-      PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
-      PetscCallA(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr))
-
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the eigensolver and display info
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-!     ** Create eigensolver context
-      PetscCallA(EPSCreate(PETSC_COMM_WORLD,eps,ierr))
-
-!     ** Set operators. In this case, it is a standard eigenvalue problem
-      PetscCallA(EPSSetOperators(eps,A,PETSC_NULL_MAT,ierr))
-      PetscCallA(EPSSetProblemType(eps,EPS_HEP,ierr))
-
-!     ** Set solver parameters at runtime
-      PetscCallA(EPSSetFromOptions(eps,ierr))
-
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the eigensystem
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-      PetscCallA(EPSSolve(eps,ierr))
-
-!     ** Optional: Get some information from the solver and display it
-      PetscCallA(EPSGetType(eps,tname,ierr))
-      if (rank .eq. 0) then
-        write(*,120) tname
-      endif
- 120  format (' Solution method: ',A)
-      PetscCallA(EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
-      if (rank .eq. 0) then
-        write(*,130) nev
-      endif
- 130  format (' Number of requested eigenvalues:',I4)
-
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-!     ** show detailed info unless -terse option is given by user
-      PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-terse',terse,ierr))
-      if (terse) then
-        PetscCallA(EPSErrorView(eps,EPS_ERROR_RELATIVE,PETSC_NULL_VIEWER,ierr))
-      else
-        PetscCallA(PetscViewerPushFormat(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_ASCII_INFO_DETAIL,ierr))
-        PetscCallA(EPSConvergedReasonView(eps,PETSC_VIEWER_STDOUT_WORLD,ierr))
-        PetscCallA(EPSErrorView(eps,EPS_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD,ierr))
-        PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr))
-      endif
-      PetscCallA(EPSDestroy(eps,ierr))
-      PetscCallA(MatDestroy(A,ierr))
-
-      PetscCallA(SlepcFinalize(ierr))
-      end
-
-!/*TEST
-!
-!   build:
-!      requires: defined(PETSC_USING_F2003) defined(PETSC_USING_F90FREEFORM)
-!
-!   test:
-!      args: -eps_nev 4 -terse
-!      filter: sed -e "s/3.83791/3.83792/"
-!
-!TEST*/
+```{include} ex1f.F90
+:name: ex1f.F90
+:code: fortran
 ```
 
 ```{rubric} Footnotes

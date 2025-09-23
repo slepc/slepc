@@ -11,6 +11,7 @@ import subprocess
 from datetime import datetime
 import time
 import shutil
+import sphobjinv
 
 #print('cwd:', os.getcwd())
 sys.path.append(os.getcwd())
@@ -32,18 +33,18 @@ release = 'main'
 
 with open(os.path.join('../..', 'include', 'slepcversion.h'),'r') as version_file:
     buf = version_file.read()
-    petsc_release_flag = re.search(' SLEPC_VERSION_RELEASE[ ]*([0-9]*)',buf).group(1)
+    slepc_release_flag = re.search(' SLEPC_VERSION_RELEASE[ ]*([0-9]*)',buf).group(1)
     major_version      = re.search(' SLEPC_VERSION_MAJOR[ ]*([0-9]*)',buf).group(1)
     minor_version      = re.search(' SLEPC_VERSION_MINOR[ ]*([0-9]*)',buf).group(1)
     subminor_version   = re.search(' SLEPC_VERSION_SUBMINOR[ ]*([0-9]*)',buf).group(1)
 
-    git_describe_version = subprocess.check_output(['git', 'describe', '--always']).strip().decode('utf-8')
-    if petsc_release_flag == '0':
-        version = git_describe_version
-        release = git_describe_version
+    version = '.'.join([major_version, minor_version])
+    if slepc_release_flag == '0':
+        release = '.'.join([major_version,minor_version]) + '-dev'
+        edit_branch = 'main'
     else:
-        version = '.'.join([major_version, minor_version])
         release = '.'.join([major_version,minor_version,subminor_version])
+        edit_branch = 'release'
 
 release_date = subprocess.check_output(['git',
                                  'for-each-ref',
@@ -80,7 +81,45 @@ extensions = [
         'sphinx_togglebutton', # dropdown box
         'sphinxcontrib.bibtex',
         'sphinxcontrib.rsvgconverter', # svg to pdf (manual)
+        'sphinx.ext.intersphinx',
+        'html5_petsc',
         ]
+
+# intersphinx
+intersphinx_mapping = {
+    'petsc': ('https://petsc.org/release/', None),
+}
+
+def _mangle_petsc_intersphinx(branch):
+    """Preprocess the keys in PETSc's intersphinx inventory.
+
+    PETSc have intersphinx keys of the form:
+
+        manualpages/Vec/VecShift
+
+    This function downloads their object inventory and strips the leading path
+    elements so that references to PETSc names actually resolve."""
+
+    website = intersphinx_mapping['petsc'][0].partition('/release/')[0]
+    doc_url = f'{website}/{branch}/'
+    inventory_url = f'{doc_url}objects.inv'
+    print('Using PETSC inventory from ' + inventory_url)
+    inventory = sphobjinv.Inventory(url=inventory_url)
+    print(inventory)
+
+    for obj in inventory.objects:
+        if obj.name.startswith('manualpages'):
+            name = obj.name.split('/')[-1]
+            if not name == 'index':
+                obj.name = obj.name.split('/')[-1]
+
+    new_inventory_filename = 'petsc_objects.inv'
+    sphobjinv.writebytes(
+        new_inventory_filename, sphobjinv.compress(inventory.data_file(contract=True))
+    )
+    intersphinx_mapping['petsc'] = (doc_url, new_inventory_filename)
+
+_mangle_petsc_intersphinx(edit_branch)
 
 myst_links_external_new_tab = True # open all external links in new tabs
 
@@ -128,6 +167,7 @@ myst_dmath_allow_digits=False
 myst_substitutions = {
             'release_date': release_date,
             'release_year': release_year,
+            'branch': edit_branch,
             }
 
 myst_url_schemes = {
@@ -147,7 +187,7 @@ myst_url_schemes = {
 copybutton_prompt_text = '$ ' # the prompt is not copied
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = ['_static/README.md']
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -205,20 +245,12 @@ html_theme_options = {
         "navigation_with_keys":True
         }
 
-try:
-    git_ref = subprocess.check_output(["git", "rev-parse", "HEAD"]).rstrip()
-    git_ref_release = subprocess.check_output(["git", "rev-parse", "origin/release"]).rstrip()
-    edit_branch = "release" if git_ref == git_ref_release else "main"
-except subprocess.CalledProcessError:
-    print("WARNING: determining branch for page edit links failed")
-    edit_branch = "main"
-
 html_context = {
         "display_gitlab": True,
         "gitlab_user": "slepc",
         "gitlab_repo": "slepc",
         "gitlab_version": edit_branch,
-        "doc_path": "doc",
+        "doc_path": "doc/source",
         }
 
 # Remove the primary (left) sidebar from all pages
