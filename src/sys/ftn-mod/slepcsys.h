@@ -13,7 +13,7 @@
 #include "slepc/finclude/slepcsys.h"
 
       type tSlepcSC
-        PetscFortranAddr:: v PETSC_FORTRAN_TYPE_INITIALIZE
+        PetscFortranAddr:: v = PETSC_FORTRAN_TYPE_INITIALIZE
       end type tSlepcSC
 
 ! Default tolerance for the different solvers, depending on the precision
