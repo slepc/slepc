@@ -352,7 +352,7 @@ The directory structure of the SLEPc software is very similar to that in PETSc. 
 - `$PETSC_ARCH` - For each value of `PETSC_ARCH`, a directory exists containing files generated during installation of that particular configuration. The following subdirectories exist:
   - `lib` - all the generated libraries.
   - `lib/slepc/conf` - configuration parameters and log files.
-  - `include` - automatically generated include files, such as Fortran 90 \texttt{*.mod} files.
+  - `include` - automatically generated include files, such as Fortran 90 `*.mod` files.
 
 Each SLEPc source code component directory has the following subdirectories:
 
