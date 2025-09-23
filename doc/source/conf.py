@@ -41,9 +41,10 @@ with open(os.path.join('../..', 'include', 'slepcversion.h'),'r') as version_fil
     version = '.'.join([major_version, minor_version])
     if slepc_release_flag == '0':
         release = '.'.join([major_version,minor_version]) + '-dev'
+        edit_branch = 'main'
     else:
         release = '.'.join([major_version,minor_version,subminor_version])
-
+        edit_branch = 'release'
 
 release_date = subprocess.check_output(['git',
                                  'for-each-ref',
@@ -61,14 +62,6 @@ if release_date == '':
     release_date = datetime.strftime(datetime.now(), '%B, %Y')
 if release_year == '':
     release_year = datetime.strftime(datetime.now(), '%Y')
-
-try:
-    git_ref = subprocess.check_output(["git", "rev-parse", "HEAD"]).rstrip()
-    git_ref_release = subprocess.check_output(["git", "rev-parse", "origin/release"]).rstrip()
-    edit_branch = "release" if git_ref == git_ref_release else "main"
-except subprocess.CalledProcessError:
-    print("WARNING: determining branch for page edit links failed")
-    edit_branch = "main"
 
 copyright = '2002-{}, Universitat Politecnica de Valencia, Spain'.format(
         release_year)
