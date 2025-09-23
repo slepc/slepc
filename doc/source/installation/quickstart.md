@@ -8,7 +8,7 @@ The installation process for SLEPc is very similar to PETSc, with two main stage
 
 The main steps for the installation are:
 
-  1. Unbundle the distribution file **[slepc-{{env.config.release}}.tar.gz](https://slepc.upv.es/download/distrib/slepc-{{env.config.release}}.tar.gz)** with a usual command such as
+  1. Unbundle the distribution file {{'**[slepc-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc-{}.tar.gz)**'.format(env.config.release,env.config.release)}} with a usual command such as
 
 ```{parsed-literal}
 $ tar xzf slepc-{{env.config.release}}.tar.gz
