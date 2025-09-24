@@ -33,6 +33,8 @@ def main(slepc_dir,srcdir,loc,c2html,mapnames):
   # walk directories generating list of all source code that needs processing and creating index.html for each directory
   SKIPDIRS = set('public html benchmarks output arch doc binding config lib bin .git systems share mpiuni kernels valgrind interfaces data linter'.split())
   SUFFIXES = set('.F90 .F .c .cxx .cpp .h .cu .hpp'.split())
+  SUFFIXES_C = set('.c .cxx .cpp .h .cu .hpp'.split())
+  SUFFIXES_F = set('.F90 .F'.split())
   allfiles = []
   for root, dirs, files in chain.from_iterable(os.walk(path) for path in [slepc_dir]):
     dirs[:] = [d for d in dirs if not any([s for s in SKIPDIRS if d.startswith(s)])]
@@ -65,16 +67,34 @@ def main(slepc_dir,srcdir,loc,c2html,mapnames):
       # list examples
       if root.find('/tests') > -1 or root.find('tutorials') > -1:
         fdw.write('\n<p>\nExamples\n<p>')
+        examples = {}
         for f in files:
-          if any([s for s in SUFFIXES if f.endswith(s)]):
+          if any([s for s in SUFFIXES_C if f.endswith(s)]):
             with open(os.path.join(root,f)) as fd:
-              line = fd.readline()
-              l = line.find('char help[] = ')
-              if l > -1:
-                s = line.find('\\n')
-                line = line[l + 15:s]
-              else: line = ''
-              fdw.write('<a href="' + f + '.html">' + f + ': ' + line + '</a><br>\n')
+              examples[f] = ''
+              for line in fd:
+                l = line.find('char help[] = ')
+                if l > -1:
+                  s = line.find('\\n')
+                  examples[f] = line[l + 15:s]
+                  break
+        for f in files:
+          if any([s for s in SUFFIXES_F if f.endswith(s)]):
+            with open(os.path.join(root,f)) as fd:
+              examples[f] = ''
+              for line in fd:
+                l = line.find('Description:')
+                if l > -1:
+                  examples[f] = line[l + 13:]
+                  break
+        # simple natural sorting
+        examples = dict(sorted(examples.items(), key=lambda i: [int(s) if
+                                                           s.isdigit() else
+                                                           s.lower() for s in
+                                                           re.split(r'(\d+)',
+                                                                    i[0])]))
+        for f in examples.keys():
+          fdw.write('<a href="' + f + '.html">' + f + ': ' + examples[f] + '</a><br>\n')
 
       # list source code
       else:
