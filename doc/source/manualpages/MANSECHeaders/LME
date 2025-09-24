@@ -1,5 +1,7 @@
-# Linear Matrix Equation - LME: Examples
+# Linear Matrix Equation - LME
 
 Linear Matrix Equation (LME) is the object provided by SLEPc for solving linear matrix equations such as Lyapunov or Sylvester where the solution has low rank.
 
 %Users guide section: [](sec:foo).
+
+<a href="PETSC_DOC_OUT_ROOT_PLACEHOLDER/src/lme/tutorials/index.html">Examples</a><br>

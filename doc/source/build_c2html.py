@@ -6,6 +6,7 @@ import re
 import subprocess
 import pathlib
 from itertools import chain
+from myst_parser.parsers.docutils_ import to_html5_demo
 
 def compute_make_np(i):
   '''Number of cores to run make c2html on'''
@@ -30,7 +31,7 @@ def main(slepc_dir,srcdir,loc,c2html,mapnames):
     fdw.write(fd.read())
 
   # walk directories generating list of all source code that needs processing and creating index.html for each directory
-  SKIPDIRS = set('public html benchmarks output arch doc docs binding config petsc-doc lib bin .git systems share mpiuni kernels khash valgrind interfaces data linter'.split())
+  SKIPDIRS = set('public html benchmarks output arch doc binding config lib bin .git systems share mpiuni kernels valgrind interfaces data linter'.split())
   SUFFIXES = set('.F90 .F .c .cxx .cpp .h .cu .hpp'.split())
   allfiles = []
   for root, dirs, files in chain.from_iterable(os.walk(path) for path in [slepc_dir]):
@@ -45,14 +46,17 @@ def main(slepc_dir,srcdir,loc,c2html,mapnames):
       if root.startswith('src'):
 
         # get MANSEC from the makefile and copy the MANSEC basic information into the index
-        # TODO: the text is actually .md so needs processing
         if os.path.isfile(os.path.join(root,'makefile')):
           with open(os.path.join(root,'makefile')) as mklines:
             mansecl = [line for line in mklines if line.startswith('MANSEC')]
             if mansecl:
               mansec = re.sub('MANSEC[ ]*=[ ]*','',mansecl[0]).strip('\n').strip()
               with open(os.path.join('doc','source','manualpages','MANSECHeaders',mansec)) as fd:
-                fdw.write(fd.read())
+                for line in fd:
+                  if (line.find('Users guide section:') > -1 or
+                      line.find('>Examples</a>') > -1):
+                    continue
+                  fdw.write(to_html5_demo(line))
 
       fdw.write('\n<p>\n')
 
