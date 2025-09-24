@@ -64,13 +64,17 @@ static PetscErrorCode Orthog_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscI
 }
 
 /* J-orthogonalize vector x against first j vectors in U and V */
-static PetscErrorCode OrthogonalizeVector_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscInt j,PetscReal *alpha,PetscReal *beta,PetscScalar *h,PetscBool *breakdown)
+static PetscErrorCode OrthogonalizeVector_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscInt j,PetscReal *alpha,PetscReal *beta,PetscInt k,PetscScalar *h,PetscBool *breakdown)
 {
   PetscScalar p,p1,p2;
-  Vec         u1,u2,v1,v2;
+  Vec         v1,v2;
+  PetscInt    i,l;
 
   PetscFunctionBegin;
   PetscCall(PetscArrayzero(h,3*j));
+
+  /* Local orthogonalization */
+  l = j==k+1?0:j-2;  /* 1st column to orthogonalize against */
   /* compute p=-V(:,j).'*J*x */
   PetscCall(BVGetColumn(V1,j-1,&v1));
   PetscCall(BVGetColumn(V2,j-1,&v2));
@@ -81,23 +85,16 @@ static PetscErrorCode OrthogonalizeVector_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1
   PetscCall(BVRestoreColumn(V1,j-1,&v1));
   PetscCall(BVRestoreColumn(V2,j-1,&v2));
   p = p1-p2;
-  /* update x = x - U(:,j)*p */
-  PetscCall(BVGetColumn(U1,j-1,&u1));
-  PetscCall(BVGetColumn(U2,j-1,&u2));
-  PetscCall(VecAXPY(x1,-p,u1));
-  PetscCall(VecAXPY(x2,-p,u2));
-  PetscCall(BVRestoreColumn(U1,j-1,&u1));
-  PetscCall(BVRestoreColumn(U2,j-1,&u2));
-  if (j>1) {   /* u = u - U(:,j-1)*bb(j-1) */
-    PetscCall(BVGetColumn(U1,j-2,&u1));
-    PetscCall(BVGetColumn(U2,j-2,&u2));
-    PetscCall(VecAXPY(x1,-beta[j-2],u1));
-    PetscCall(VecAXPY(x2,-beta[j-2],u2));
-    PetscCall(BVRestoreColumn(U1,j-2,&u1));
-    PetscCall(BVRestoreColumn(U2,j-2,&u2));
-  }
+  for (i=l; i<j-1; i++) h[i] = beta[i];
+  h[j-1] = p;
+  /* x = x - U(:,l:j)*h(l:j) */
+  PetscCall(BVSetActiveColumns(U1,l,j));
+  PetscCall(BVSetActiveColumns(U2,l,j));
+  PetscCall(BVMultVec(U1,-1.0,1.0,x1,h+l));
+  PetscCall(BVMultVec(U2,-1.0,1.0,x2,h+l));
   alpha[j-1] = PetscRealPart(p);
-  /* J-orthogonalize x */
+
+  /* J-orthogonalize x (full orthogonalization) */
   PetscCall(Orthog_Hamilt(x1,x2,U1,U2,V1,V2,j,h,h+j,h+2*j,&alpha[j-1],breakdown));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -173,7 +170,7 @@ static PetscErrorCode EPSHamiltonianKS(EPS eps,BV U,BV V,PetscReal *alpha,PetscR
     PetscCall(BVRestoreColumn(V,j,&v));
     PetscCall(BVGetColumn(U1,j+1,&u1));
     PetscCall(BVGetColumn(U2,j+1,&u2));
-    PetscCall(OrthogonalizeVector_Hamilt(u1,u2,U1,U2,V1,V2,j+1,alpha,beta,hwork,breakdown));
+    PetscCall(OrthogonalizeVector_Hamilt(u1,u2,U1,U2,V1,V2,j+1,alpha,beta,k,hwork,breakdown));
     PetscCall(BVGetColumn(V,j+1,&v));
     PetscCall(STApply(eps->st,u,v));
     PetscCall(BVRestoreColumn(U,j+1,&u));
@@ -200,7 +197,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
   Mat             Q,W,D;
   Vec             vomega,vomegaold;
   BV              U,V;
-  PetscReal       *a,*b,*omega,beta,u_norm;
+  PetscReal       *a,*a2,*b,*omega,beta,u_norm;
   PetscBool       breakdown=PETSC_FALSE;
   PetscComplex    eig;
 
@@ -223,9 +220,13 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
     nv = PetscMin(eps->nconv+eps->mpd/2,eps->ncv/2);
     PetscCall(DSSetDimensions(eps->ds,nv,eps->nconv,eps->nconv+l));
     PetscCall(DSGetArrayReal(eps->ds,DS_MAT_T,&a));
-    b = a + ld;
+    /* FIXME: low level access to array a internals. This is obscure */
+    a2 = a + ld;
+    b = a + 2*ld;
     PetscCall(DSGetArrayReal(eps->ds,DS_MAT_D,&omega));
     PetscCall(EPSHamiltonianKS(eps,U,V,a,b,omega,eps->nconv+l,&nv,&breakdown));
+    for (i=eps->nconv+l; i<nv; i++)
+      a2[i] = b[i];
     beta = b[nv-1];
     PetscCall(DSRestoreArrayReal(eps->ds,DS_MAT_T,&a));
     PetscCall(DSRestoreArrayReal(eps->ds,DS_MAT_D,&omega));
