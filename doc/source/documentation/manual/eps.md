@@ -103,6 +103,7 @@ In order to illustrate the basic functionality of the `EPS` package, a simple ex
 ```{code-block} c
 :name: fig:ex-eps
 :caption: Example code for basic solution with `EPS`
+:linenos:
 
 EPS         eps;       /*  eigensolver context  */
 Mat         A;         /*  matrix of Ax=kx      */
@@ -124,7 +125,7 @@ for (j=0; j<nconv; j++) {
 EPSDestroy( &eps );
 ```
 
-All the operations of the program are done over a single `EPS` object. This solver context is created in line 8 with the command `EPSCreate`
+All the operations of the program are done over a single `EPS` object. This solver context is created in line 8 of [](fig:ex-eps) with the command `EPSCreate`
 
 ```{code} c
 EPSCreate(MPI_Comm comm,EPS *eps);
@@ -132,7 +133,7 @@ EPSCreate(MPI_Comm comm,EPS *eps);
 
 Here `comm` is the MPI communicator, and `eps` is the newly formed solver context. The communicator indicates which processes are involved in the `EPS` object. Most of the `EPS` operations are collective, meaning that all the processes collaborate to perform the operation in parallel.
 
-Before actually solving an eigenvalue problem with `EPS`, the user must specify the matrices associated with the problem, as in line 9, with the following routine `EPSSetOperators`
+Before actually solving an eigenvalue problem with `EPS`, the user must specify the matrices associated with the problem, as in line 9 of [](fig:ex-eps), with the following routine `EPSSetOperators`
 
 ```{code} c
 EPSSetOperators(EPS eps,Mat A,Mat B);
@@ -140,7 +141,7 @@ EPSSetOperators(EPS eps,Mat A,Mat B);
 
 The example specifies a standard eigenproblem. In the case of a generalized problem, it would be necessary also to provide matrix $B$ as the third argument to the call. The matrices specified in this call can be in any PETSc format. In particular, `EPS` allows the user to solve matrix-free problems by specifying matrices created via {external:doc}`MatCreateShell`. A more detailed discussion of this issue is given in section [](#sec:supported).
 
-After setting the problem matrices, the problem type is set with `EPSSetProblemType`. This is not strictly necessary since if this step is skipped then the problem type is assumed to be non-symmetric. More details are given in section [](#sec:defprob). At this point, the value of the different options could optionally be set by means of a function call such as `EPSSetTolerances` (explained later in this chapter). After this, a call to `EPSSetFromOptions` should be made as in line 11, `EPSSetFromOptions`
+After setting the problem matrices, the problem type is set with `EPSSetProblemType`. This is not strictly necessary since if this step is skipped then the problem type is assumed to be non-symmetric. More details are given in section [](#sec:defprob). At this point, the value of the different options could optionally be set by means of a function call such as `EPSSetTolerances` (explained later in this chapter). After this, a call to `EPSSetFromOptions` should be made as in line 11 of [](fig:ex-eps), `EPSSetFromOptions`
 
 ```{code} c
 EPSSetFromOptions(EPS eps);
@@ -156,7 +157,7 @@ EPSSolve(EPS eps);
 
 The subroutine that is actually invoked depends on which solver has been selected by the user.
 
-After the call to `EPSSolve` has finished, all the data associated with the solution of the eigenproblem are kept internally. This information can be retrieved with different function calls, as in lines 13 to 17. This part is described in detail in section [](#sec:retrsol).
+After the call to `EPSSolve` has finished, all the data associated with the solution of the eigenproblem are kept internally. This information can be retrieved with different function calls, as in lines 13 to 17 of [](fig:ex-eps). This part is described in detail in section [](#sec:retrsol).
 
 Once the `EPS` context is no longer needed, it should be destroyed with the command `EPSDestroy`
 
