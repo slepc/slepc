@@ -2,7 +2,7 @@
 
 ## Scalable Library for Eigenvalue Problem Computations
 
-SLEPc is a software library for the solution of large scale eigenvalue problems on parallel computers. It is an extension of [PETSc](https://petsc.org) and can be used for several related linear algebra problems such as:
+SLEPc is a software library for the solution of large scale eigenvalue problems on parallel computers. It is an extension of [PETSc](https://petsc.org/release/) and can be used for several related linear algebra problems such as:
 
 - _Linear eigenvalue problems_ in either standard or generalized form, with real or complex arithmetic.
 - _Partial SVD_ of a large, sparse, rectangular matrix, as well as other types of singular value problems.
@@ -54,7 +54,7 @@ for (var i=0;i<newsitems;i++) {
 :alt: logo-dsic
 :align: right
 :width: 180px
-:target: https://www.dsic.upv.es/
+:target: https://www.upv.es/entidades/DSIC/index.html
 ```
 
 ***

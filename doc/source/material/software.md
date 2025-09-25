@@ -5,32 +5,32 @@ The list below shows software packages that use SLEPc or expose part of its func
 ## Finite elements and high-level computational toolkits
 
   1. [FEniCS](https://fenicsproject.org): a toolkit for the Automation of Computational Mathematical Modeling (ACMM).
-  2. [RBniCS](https://gitlab.com/RBniCS/RBniCS): reduced order modelling in FEniCS.
+  2. [RBniCS](https://www.rbnicsproject.org/): reduced order modelling in FEniCS.
   3. [dolfin-adjoint](http://www.dolfin-adjoint.org): automatic computation of adjoint linear models using DOLFIN (FEniCS). See also [tlm_adjoint](https://github.com/jrmaddison/tlm_adjoint).
-  4. [Firedrake](https://firedrakeproject.org): an automated system for the solution of PDEs with FEM. See [here](https://firedrakeproject.org/demos/qgbasinmodes.py) an example that uses SLEPc.
+  4. [Firedrake](https://www.firedrakeproject.org/): an automated system for the solution of PDEs with FEM. See [here](https://www.firedrakeproject.org/demos/qgbasinmodes.py) an example that uses SLEPc.
   5. [libMesh](https://libmesh.github.io): a C++ framework for the numerical simulation of partial differential equations.
-  6. [deal.II](https://www.dealii.org): a finite element Differential Equations Analysis Library. See [here](https://www.dealii.org/9.0.0/doxygen/deal.II/step_36) an example that uses SLEPc.
-  7. [GetDP](https://www.getdp.info): a General Environment for the Treatment of Discrete Problems. See [here](https://gitlab.onelab.info/doc/models/wikis/Bloch-modes-in-periodic-waveguides) an example that computes eigenvalues.
-  8. [MOOSE](https://moose.inl.gov): Multiphysics Object Oriented Simulation Environment.
-  9. [PHAML](https://math.nist.gov/phaml): adaptive finite elements for elliptic PDEs.
+  6. [deal.II](https://dealii.org/): a finite element Differential Equations Analysis Library. See [here](https://dealii.org/9.0.0/doxygen/deal.II/step_36) an example that uses SLEPc.
+  7. [GetDP](https://www.getdp.info): a General Environment for the Treatment of Discrete Problems. See [here](https://gitlab.onelab.info/doc/models/-/wikis/Bloch-modes-in-periodic-waveguides) an example that computes eigenvalues.
+  8. [MOOSE](https://mooseframework.inl.gov/): Multiphysics Object Oriented Simulation Environment.
+  9. [PHAML](https://www.nist.gov/programs-projects/parallel-hierarchical-adaptive-multilevel-project-phaml): adaptive finite elements for elliptic PDEs.
   10. [FreeFEM](https://freefem.org): A high level multiphysics finite element software.
   11. [MFEM](https://mfem.org): a free, lightweight, scalable C++ library for finite element methods.
   12. [OOFEM](http://www.oofem.org): an Object Oriented Finite Element code.
-  13. [PHG](http://lsec.cc.ac.cn/phg/index_en): Parallel Hierarchical Grid, an adaptive mesh refinement FEM framework.
-  14. [Feel++](http://www.feelpp.org): a C++ library for partial differential equation solves using generalized Galerkin methods.
+  13. [PHG](https://lsec.cc.ac.cn/phg/index_en.htm): Parallel Hierarchical Grid, an adaptive mesh refinement FEM framework.
+  14. [Feel++](https://docs.feelpp.org/home/index.html): a C++ library for partial differential equation solves using generalized Galerkin methods.
   15. [FEMuS](https://github.com/eaulisa/MyFEMuS): open-source Finite Element C++ library.
-  16. [OpenCMISS](http://www.opencmiss.org): Open Continuum Mechanics, Imaging, Signal processing and System identification.
-  17. [SfePy](https://sfepy.org/doc-devel/index): Simple Finite Elements in Python.
+  16. [OpenCMISS](https://opencmiss.org/): Open Continuum Mechanics, Imaging, Signal processing and System identification.
+  17. [SfePy](https://sfepy.org/doc-devel/): Simple Finite Elements in Python.
 
 ## Many-body calculations, quantum systems, photonics
 
-  1. [ELSI](http://www.elsi-interchange.org): ELectronic Structure Infrastructure.
+  1. [ELSI](https://wordpress.elsi-interchange.org/): ELectronic Structure Infrastructure.
   2. [DFT-FE](https://sites.google.com/umich.edu/dftfe): real-space DFT calculations using Finite Elements.
   3. [TiberCAD](http://www.tibercad.org): multiscale device simulator.
-  4. [NEMO5](https://engineering.purdue.edu/gekcogrp/software-projects/nemo5): NanoElectronics MOdeling Tools, which is the basis of other tools such as [Quantum Dot Lab](http://nanohub.org/tools/qdot).
+  4. [NEMO5](https://engineering.purdue.edu/gekcogrp/software-projects/nemo5): NanoElectronics MOdeling Tools, which is the basis of other tools such as [Quantum Dot Lab](https://nanohub.org/tools/qdot).
   5. [Femwell](https://helgegehring.github.io/femwell/): simulation tool for integrated circuits, electric and photonic.
   6. [Hammer](http://www.thphys.nuim.ie/hammer): numerical tools for treating systems of strongly interacting quantum many body systems.
-  7. [Yambo](http://www.yambo-code.org): many-body calculations in solid state and molecular physics.
+  7. [Yambo](https://www.yambo-code.org/): many-body calculations in solid state and molecular physics.
   8. [pyCTQW](https://pyctqw.readthedocs.io): Continuous-Time Quantum Walk simulator.
   9. [PsiQuaSP](https://github.com/modmido/psiquasp): Permutation symmetry for identical Quantum Systems Package.
   10. [dynamite](https://dynamite.readthedocs.io): fast full quantum dynamics.
@@ -44,15 +44,14 @@ The list below shows software packages that use SLEPc or expose part of its func
   3. [PB3D](https://pb3d.github.io): Peeling-Ballooning in 3-D.
   4. [VERA](https://vera.ornl.gov): Virtual Environment for Reactor Applications.
   5. [BOUT++](https://boutproject.github.io): Plasma simulation in curvilinear coordinate systems.
-  6. [FEMFFUSION](https://www.femffusion.webs.upv.es): a finite element method code for nuclear reactor modelling.
+  6. [FEMFFUSION](https://femffusion.webs.upv.es/): a finite element method code for nuclear reactor modelling.
   7. [Milonga](https://www.seamplex.com/milonga): a free nuclear reactor core analysis code.
-  8. [Rattlesnake](https://rattlesnake.inl.gov): a radiation transport solver for the linearized Boltzmann radiation transport equation.
 
 ## Other
 
-  1. [SALSA](https://icl.cs.utk.edu/salsa): Self-Adapting Large-scale Solver Architecture.
-  2. [Cubica](http://www.mat.ucsb.edu/~kim/cubica): a toolkit for subspace deformations.
-  3. [Dome](http://faraday1.ucd.ie/dome): a power system analysis toolbox.
+  1. [SALSA](https://icl.utk.edu/salsa/): Self-Adapting Large-scale Solver Architecture.
+  2. [Cubica](http://www.tkim.graphics/cubica/): a toolkit for subspace deformations.
+  3. [Dome](http://faraday1.ucd.ie/dome.html): a power system analysis toolbox.
   4. [ncpaprop](https://github.com/chetzer-ncpa/ncpaprop-release): NCPA Infrasound Propagation Modeling Package.
   5. [EasterEig](https://github.com/nennigb/EasterEig): parametric eigenvalue problem depending on a parameter.
   6. [pyGPCCA](https://github.com/msmdev/pyGPCCA): Generalized Perron Cluster Cluster Analysis.

@@ -179,9 +179,7 @@ Reference [16] below (polynomial Jacobi-Davidson).
 
 ## SVD and GSVD
 
-[11] V. Hernandez, J. E. Roman, A. Tomas. _A robust and efficient parallel SVD solver based on restarted Lanczos bidiagonalization._ Electron. Trans. Numer.  Anal., 31:68-85, 2008. [[URL]](https://etna.math.kent.edu/vol.31.2008/pp68-85.dir/pp68-85.pdf)
-
-% [[URL]](https://etna.math.kent.edu/volumes/2001-2010/vol31/abstract.php?vol=31&pages=68-85)
+[11] V. Hernandez, J. E. Roman, A. Tomas. _A robust and efficient parallel SVD solver based on restarted Lanczos bidiagonalization._ Electron. Trans. Numer.  Anal., 31:68-85, 2008. [[URL]](https://etna.ricam.oeaw.ac.at/volumes/2001-2010/vol31/abstract.php?pages=68-85)
 
 :::{admonition} BibTeX
 :class: dropdown admonition-bibtex

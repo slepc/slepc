@@ -33,7 +33,7 @@ SLEPc distribution file (source code only)                |  {{'**[slepc-{}.tar.
 SLEPc distribution file (source code with documentation)  |  {{'**[slepc-with-docs-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc-with-docs-{}.tar.gz)**'.format(env.config.release,env.config.release)}} | a60a883312aac300f4aebdf0efb6d063
 slepc4py distribution file (enables separate install)     |  {{'**[slepc4py-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc4py-{}.tar.gz)**'.format(env.config.release,env.config.release)}}               | c42805c1a3472668f0cba73c53c6242b
 
-There are no separate patch files, the current fixes are included in the tar file. Patches are documented at: [slepc-{{env.config.version}} changelog](https://gitlab.com/slepc/slepc/commits/release)
+There are no separate patch files, the current fixes are included in the tar file. Patches are documented at: [slepc-{{env.config.version}} changelog](https://gitlab.com/slepc/slepc/-/commits/release)
 
 :::{note}
 slepc4py source (without documentation) is already included in the SLEPc tarball.
@@ -67,7 +67,7 @@ $ git pull
 <iframe src='https://www.openhub.net/p/slepc/widgets/project_basic_stats' style='height: 225px; width: 350px; border: none'></iframe>
 </div>
 
-The source code in the repository can be browsed at [gitlab.com](https://gitlab.com/slepc/slepc). Some statistics related to source code development can be found at [openhub.net](https://www.openhub.net/p/slepc).
+The source code in the repository can be browsed at [gitlab.com](https://gitlab.com/slepc/slepc). Some statistics related to source code development can be found at [openhub.net](https://openhub.net/p/slepc).
 
 Additional information can be found at {{'[PETSc Developer\'s Documentation](https://petsc.org/{}/developers/)'.format(branch)}}.
 
