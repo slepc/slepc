@@ -110,19 +110,19 @@ static PetscErrorCode ourstopdestroy(void **ctx)
   PetscObjectUseFortranCallback(svd,_cb.stopdestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
-SLEPC_EXTERN void svdmonitorset_(SVD *svd,SVDMonitorFn monitor,void *mctx,PetscCtxDestroyFn monitordestroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void svdmonitorset_(SVD *svd,void (*monitor)(SVD*,PetscInt*,PetscInt*,PetscReal*,PetscReal*,PetscInt*,void*,PetscErrorCode*),void *mctx,PetscCtxDestroyFn monitordestroy,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(mctx);
   CHKFORTRANNULLFUNCTION(monitordestroy);
-  if ((PetscVoidFunction)monitor == (PetscVoidFunction)svdmonitorall_) {
-    *ierr = SVDMonitorSet(*svd,(PetscErrorCode (*)(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*))SVDMonitorAll,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
-  } else if ((PetscVoidFunction)monitor == (PetscVoidFunction)svdmonitorconverged_) {
-    *ierr = SVDMonitorSet(*svd,(PetscErrorCode (*)(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*))SVDMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)SVDMonitorConvergedDestroy);
-  } else if ((PetscVoidFunction)monitor == (PetscVoidFunction)svdmonitorfirst_) {
-    *ierr = SVDMonitorSet(*svd,(PetscErrorCode (*)(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*))SVDMonitorFirst,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
+  if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)svdmonitorall_) {
+    *ierr = SVDMonitorSet(*svd,(SVDMonitorFn*)SVDMonitorAll,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
+  } else if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)svdmonitorconverged_) {
+    *ierr = SVDMonitorSet(*svd,(SVDMonitorFn*)SVDMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)SVDMonitorConvergedDestroy);
+  } else if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)svdmonitorfirst_) {
+    *ierr = SVDMonitorSet(*svd,(SVDMonitorFn*)SVDMonitorFirst,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else {
-    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.monitor,(PetscVoidFunction)monitor,mctx); if (*ierr) return;
-    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.monitordestroy,(PetscVoidFunction)monitordestroy,mctx); if (*ierr) return;
+    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.monitor,(PetscFortranCallbackFn*)monitor,mctx); if (*ierr) return;
+    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.monitordestroy,(PetscFortranCallbackFn*)monitordestroy,mctx); if (*ierr) return;
     *ierr = SVDMonitorSet(*svd,ourmonitor,*svd,ourdestroy);
   }
 }
@@ -132,21 +132,21 @@ SLEPC_EXTERN void svdconvergedrelative_(SVD*,PetscReal*,PetscReal*,PetscReal*,vo
 SLEPC_EXTERN void svdconvergednorm_(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 SLEPC_EXTERN void svdconvergedmaxit_(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void svdsetconvergencetestfunction_(SVD *svd,SVDConvergenceTestFn func,void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void svdsetconvergencetestfunction_(SVD *svd,void (*func)(SVD*,PetscReal*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);
-  if ((PetscVoidFunction)func == (PetscVoidFunction)svdconvergedabsolute_) {
+  if (func == svdconvergedabsolute_) {
     *ierr = SVDSetConvergenceTest(*svd,SVD_CONV_ABS);
-  } else if ((PetscVoidFunction)func == (PetscVoidFunction)svdconvergedrelative_) {
+  } else if (func == svdconvergedrelative_) {
     *ierr = SVDSetConvergenceTest(*svd,SVD_CONV_REL);
-  } else if ((PetscVoidFunction)func == (PetscVoidFunction)svdconvergednorm_) {
+  } else if (func == svdconvergednorm_) {
     *ierr = SVDSetConvergenceTest(*svd,SVD_CONV_NORM);
-  } else if ((PetscVoidFunction)func == (PetscVoidFunction)svdconvergedmaxit_) {
+  } else if (func == svdconvergedmaxit_) {
     *ierr = SVDSetConvergenceTest(*svd,SVD_CONV_MAXIT);
   } else {
-    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.convergence,(PetscVoidFunction)func,ctx); if (*ierr) return;
-    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.convdestroy,(PetscVoidFunction)destroy,ctx); if (*ierr) return;
+    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.convergence,(PetscFortranCallbackFn*)func,ctx); if (*ierr) return;
+    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.convdestroy,(PetscFortranCallbackFn*)destroy,ctx); if (*ierr) return;
     *ierr = SVDSetConvergenceTestFunction(*svd,ourconvergence,*svd,ourconvdestroy);
   }
 }
@@ -154,17 +154,17 @@ SLEPC_EXTERN void svdsetconvergencetestfunction_(SVD *svd,SVDConvergenceTestFn f
 SLEPC_EXTERN void svdstoppingbasic_(SVD*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,SVDConvergedReason*,void*,PetscErrorCode*);
 SLEPC_EXTERN void svdstoppingthreshold_(SVD*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,SVDConvergedReason*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void svdsetstoppingtestfunction_(SVD *svd,SVDStoppingTestFn func,void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void svdsetstoppingtestfunction_(SVD *svd,void (*func)(SVD*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,SVDConvergedReason*,void*,PetscErrorCode*),void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);
-  if ((PetscVoidFunction)func == (PetscVoidFunction)svdstoppingbasic_) {
+  if (func == svdstoppingbasic_) {
     *ierr = SVDSetStoppingTest(*svd,SVD_STOP_BASIC);
-  } else if ((PetscVoidFunction)func == (PetscVoidFunction)svdstoppingthreshold_) {
+  } else if (func == svdstoppingthreshold_) {
     *ierr = SVDSetStoppingTest(*svd,SVD_STOP_THRESHOLD);
   } else {
-    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.stopping,(PetscVoidFunction)func,ctx); if (*ierr) return;
-    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.stopdestroy,(PetscVoidFunction)destroy,ctx); if (*ierr) return;
+    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.stopping,(PetscFortranCallbackFn*)func,ctx); if (*ierr) return;
+    *ierr = PetscObjectSetFortranCallback((PetscObject)*svd,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.stopdestroy,(PetscFortranCallbackFn*)destroy,ctx); if (*ierr) return;
     *ierr = SVDSetStoppingTestFunction(*svd,ourstopping,*svd,ourstopdestroy);
   }
 }

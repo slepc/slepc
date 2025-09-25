@@ -268,8 +268,8 @@ static PetscErrorCode LyapIIBuildEigenMat(LME lme,Mat S,Mat *Op,Vec *v0)
     PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,n,n,NULL,&matctx->S));
 #endif
     PetscCall(MatCreateShell(PETSC_COMM_SELF,n*n,n*n,PETSC_DETERMINE,PETSC_DETERMINE,matctx,Op));
-    PetscCall(MatShellSetOperation(*Op,MATOP_MULT,(void(*)(void))MatMult_EigOperator));
-    PetscCall(MatShellSetOperation(*Op,MATOP_DESTROY,(void(*)(void))MatDestroy_EigOperator));
+    PetscCall(MatShellSetOperation(*Op,MATOP_MULT,(PetscErrorCodeFn*)MatMult_EigOperator));
+    PetscCall(MatShellSetOperation(*Op,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_EigOperator));
     PetscCall(MatCreateVecs(*Op,NULL,v0));
   } else {
     PetscCall(MatShellGetContext(*Op,&matctx));
@@ -334,8 +334,8 @@ static PetscErrorCode EPSSolve_LyapII(EPS eps)
   PetscCall(MatGetLocalSize(matctx->S,&mloc,&nloc));
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)eps),mloc,nloc,PETSC_DETERMINE,PETSC_DETERMINE,matctx,&S));
   matctx->Q = eps->V;
-  PetscCall(MatShellSetOperation(S,MATOP_MULT,(void(*)(void))MatMult_EPSLyapIIOperator));
-  PetscCall(MatShellSetOperation(S,MATOP_DESTROY,(void(*)(void))MatDestroy_EPSLyapIIOperator));
+  PetscCall(MatShellSetOperation(S,MATOP_MULT,(PetscErrorCodeFn*)MatMult_EPSLyapIIOperator));
+  PetscCall(MatShellSetOperation(S,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_EPSLyapIIOperator));
   PetscCall(LMESetCoefficients(ctx->lme,S,NULL,NULL,NULL));
 
   /* Right-hand side */

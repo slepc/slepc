@@ -90,10 +90,10 @@ int main(int argc,char **argv)
   ctxF->prev = rank==0? MPI_PROC_NULL: rank-1;
 
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,n,n,(void*)ctxF,&F));
-  PetscCall(MatShellSetOperation(F,MATOP_MULT,(void(*)(void))MatMult_Fun));
-  PetscCall(MatShellSetOperation(F,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Fun));
-  PetscCall(MatShellSetOperation(F,MATOP_DESTROY,(void(*)(void))MatDestroy_Fun));
-  PetscCall(MatShellSetOperation(F,MATOP_DUPLICATE,(void(*)(void))MatDuplicate_Fun));
+  PetscCall(MatShellSetOperation(F,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Fun));
+  PetscCall(MatShellSetOperation(F,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Fun));
+  PetscCall(MatShellSetOperation(F,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Fun));
+  PetscCall(MatShellSetOperation(F,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_Fun));
 
   /*
      Set Function matrix data structure and default Function evaluation
@@ -112,9 +112,9 @@ int main(int argc,char **argv)
   ctxJ->prev = rank==0? MPI_PROC_NULL: rank-1;
 
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,n,n,(void*)ctxJ,&J));
-  PetscCall(MatShellSetOperation(J,MATOP_MULT,(void(*)(void))MatMult_Jac));
-  PetscCall(MatShellSetOperation(J,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Jac));
-  PetscCall(MatShellSetOperation(J,MATOP_DESTROY,(void(*)(void))MatDestroy_Jac));
+  PetscCall(MatShellSetOperation(J,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Jac));
+  PetscCall(MatShellSetOperation(J,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Jac));
+  PetscCall(MatShellSetOperation(J,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Jac));
 
   /*
      Set Jacobian matrix data structure and default Jacobian evaluation
@@ -301,10 +301,10 @@ PetscErrorCode MatDuplicate_Fun(Mat A,MatDuplicateOption op,Mat *B)
 
   PetscCall(PetscObjectGetComm((PetscObject)A,&comm));
   PetscCall(MatCreateShell(comm,m,n,M,N,(void*)bctx,B));
-  PetscCall(MatShellSetOperation(*B,MATOP_MULT,(void(*)(void))MatMult_Fun));
-  PetscCall(MatShellSetOperation(*B,MATOP_GET_DIAGONAL,(void(*)(void))MatGetDiagonal_Fun));
-  PetscCall(MatShellSetOperation(*B,MATOP_DESTROY,(void(*)(void))MatDestroy_Fun));
-  PetscCall(MatShellSetOperation(*B,MATOP_DUPLICATE,(void(*)(void))MatDuplicate_Fun));
+  PetscCall(MatShellSetOperation(*B,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Fun));
+  PetscCall(MatShellSetOperation(*B,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Fun));
+  PetscCall(MatShellSetOperation(*B,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Fun));
+  PetscCall(MatShellSetOperation(*B,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_Fun));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

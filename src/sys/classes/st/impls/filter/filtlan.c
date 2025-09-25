@@ -1153,7 +1153,7 @@ static PetscErrorCode STComputeOperator_Filter_FILTLAN(ST st,Mat *G)
     PetscCall(MatGetSize(ctx->T,&N,&M));
     PetscCall(MatGetLocalSize(ctx->T,&n,&m));
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)st),n,m,N,M,st,G));
-    PetscCall(MatShellSetOperation(*G,MATOP_MULT,(void(*)(void))MatMult_FILTLAN));
+    PetscCall(MatShellSetOperation(*G,MATOP_MULT,(PetscErrorCodeFn*)MatMult_FILTLAN));
     PetscCall(MatShellSetMatProductOperation(*G,MATPRODUCT_AB,NULL,MatMatMult_FILTLAN,NULL,MATDENSE,MATDENSE));
     PetscCall(MatShellSetMatProductOperation(*G,MATPRODUCT_AB,NULL,MatMatMult_FILTLAN,NULL,MATDENSECUDA,MATDENSECUDA));
     PetscCall(MatShellSetMatProductOperation(*G,MATPRODUCT_AB,NULL,MatMatMult_FILTLAN,NULL,MATDENSEHIP,MATDENSEHIP));

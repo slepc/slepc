@@ -127,10 +127,10 @@ static PetscErrorCode NEPSLPSetUpLinearEP(NEP nep,NEP_EXT_OP extop,PetscScalar l
     PetscCall(MatGetLocalSize(nep->function,&mloc,&nloc));
     nloc += extop->szd; mloc += extop->szd;
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)nep),nloc,mloc,PETSC_DETERMINE,PETSC_DETERMINE,shellctx,&Mshell));
-    PetscCall(MatShellSetOperation(Mshell,MATOP_MULT,(void(*)(void))MatMult_SLP));
-    PetscCall(MatShellSetOperation(Mshell,MATOP_DESTROY,(void(*)(void))MatDestroy_SLP));
+    PetscCall(MatShellSetOperation(Mshell,MATOP_MULT,(PetscErrorCodeFn*)MatMult_SLP));
+    PetscCall(MatShellSetOperation(Mshell,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_SLP));
 #if defined(PETSC_HAVE_CUDA) || defined(PETSC_HAVE_HIP)
-    PetscCall(MatShellSetOperation(Mshell,MATOP_CREATE_VECS,(void(*)(void))MatCreateVecs_SLP));
+    PetscCall(MatShellSetOperation(Mshell,MATOP_CREATE_VECS,(PetscErrorCodeFn*)MatCreateVecs_SLP));
 #endif
     PetscCall(EPSSetOperators(slpctx->eps,Mshell,NULL));
     PetscCall(MatDestroy(&Mshell));

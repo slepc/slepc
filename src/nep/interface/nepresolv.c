@@ -123,8 +123,8 @@ PetscErrorCode NEPApplyResolvent(NEP nep,RG rg,PetscScalar omega,Vec v,Vec r)
     ctx->nep = nep;
     PetscCall(PetscCalloc4(nep->nconv,&ctx->nfactor,nep->nconv,&ctx->nfactor_avail,nep->nconv,&ctx->dots,nep->nconv,&ctx->dots_avail));
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)nep),nep->nloc,nep->nloc,nep->n,nep->n,ctx,&nep->resolvent));
-    PetscCall(MatShellSetOperation(nep->resolvent,MATOP_MULT,(void(*)(void))MatMult_Resolvent));
-    PetscCall(MatShellSetOperation(nep->resolvent,MATOP_DESTROY,(void(*)(void))MatDestroy_Resolvent));
+    PetscCall(MatShellSetOperation(nep->resolvent,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Resolvent));
+    PetscCall(MatShellSetOperation(nep->resolvent,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Resolvent));
   } else PetscCall(MatShellGetContext(nep->resolvent,&ctx));
   PetscCall(NEPComputeVectors(nep));
   PetscCall(NEPSetWorkVecs(nep,2));

@@ -258,8 +258,8 @@ PetscErrorCode NEPSetUp_NLEIGS_FullBasis(NEP nep)
   PetscCall(MatCreateVecsEmpty(Q,&ctx->w[0],&ctx->w[1]));
   PetscCall(MatCreateVecsEmpty(Q,&ctx->w[2],&ctx->w[3]));
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)nep),deg*nep->nloc,deg*nep->nloc,deg*nep->n,deg*nep->n,nep,&ctx->A));
-  PetscCall(MatShellSetOperation(ctx->A,MATOP_MULT,(void(*)(void))MatMult_FullBasis_Sinvert));
-  PetscCall(MatShellSetOperation(ctx->A,MATOP_MULT_TRANSPOSE,(void(*)(void))MatMultTranspose_FullBasis_Sinvert));
+  PetscCall(MatShellSetOperation(ctx->A,MATOP_MULT,(PetscErrorCodeFn*)MatMult_FullBasis_Sinvert));
+  PetscCall(MatShellSetOperation(ctx->A,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_FullBasis_Sinvert));
   PetscCall(STShellSetApply(st,Apply_FullBasis));
   PetscCall(STShellSetApplyTranspose(st,ApplyTranspose_FullBasis));
   PetscCall(EPSSetOperators(ctx->eps,ctx->A,NULL));

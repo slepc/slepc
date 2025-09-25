@@ -89,7 +89,7 @@ int main(int argc,char **argv)
   PetscCall(VecDuplicate(x,&ctx->w));
 
   PetscCall(MatCreateShell(PETSC_COMM_WORLD,nloc,mloc,N,N,ctx,&M));
-  PetscCall(MatShellSetOperation(M,MATOP_MULT,(void(*)(void))MatMult_Fold));
+  PetscCall(MatShellSetOperation(M,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Fold));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 Create the eigensolver and set various options

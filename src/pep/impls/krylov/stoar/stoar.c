@@ -88,8 +88,8 @@ PetscErrorCode PEPSTOARSetUpInnerMatrix(PEP pep,Mat *B)
   for (j=0;j<3;j++) {
     PetscCall(PetscNew(ctxMat+j));
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)pep),m,n,PETSC_DETERMINE,PETSC_DETERMINE,ctxMat[j],&Bs[j]));
-    PetscCall(MatShellSetOperation(Bs[j],MATOP_MULT,(void(*)(void))MatMult_STOAR));
-    PetscCall(MatShellSetOperation(Bs[j],MATOP_DESTROY,(void(*)(void))MatDestroy_STOAR));
+    PetscCall(MatShellSetOperation(Bs[j],MATOP_MULT,(PetscErrorCodeFn*)MatMult_STOAR));
+    PetscCall(MatShellSetOperation(Bs[j],MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_STOAR));
   }
   for (i=0;i<4;i++) pB[i] = NULL;
   if (ctx->alpha) {
