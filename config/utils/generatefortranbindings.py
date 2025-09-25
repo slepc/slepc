@@ -832,7 +832,7 @@ def main(petscdir,slepcdir,petscarch):
     with open(os.path.join(petscarch,'ftn', mansecpath,classes[i].includefile),"a") as fd:
       if not classes[i].petscobject:
         fd.write('  type t' + i + '\n')
-        fd.write('    PetscFortranAddr:: v PETSC_FORTRAN_TYPE_INITIALIZE\n')
+        fd.write('    PetscFortranAddr:: v = PETSC_FORTRAN_TYPE_INITIALIZE\n')
         fd.write('  end type t' + i + '\n')
       else:
         fd.write('  type, extends(tPetscObject) ::  t' + i + '\n')
@@ -852,7 +852,7 @@ def main(petscdir,slepcdir,petscarch):
     mansecpath = (os.path.join('sys','classes',enums[i].mansec) if enums[i].mansec in ['bv','ds','fn','rg','st'] else enums[i].mansec)
     with open(os.path.join(petscarch,'ftn', mansecpath,enums[i].includefile),"a") as fd:
       fd.write('  type e' + i + '\n')
-      fd.write('    PetscEnum:: v PETSC_FORTRAN_TYPE_INITIALIZE\n')
+      fd.write('    PetscEnum:: v = PETSC_FORTRAN_TYPE_INITIALIZE\n')
       fd.write('  end type e' + i + '\n\n')
       v = ('SLEPC_NULL_' + i.upper().replace('SLEPC','').replace('NULL','')).strip('_').replace('_NULL_NULL','_NULL')
       fd.write('  ' + i + ', parameter :: ' + v + ' = e' + i + '(-50)\n')
