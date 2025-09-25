@@ -1,6 +1,5 @@
 # About
 
-%SLEPc,
 The Scalable Library for Eigenvalue Problem Computations is a software library for the solution of large sparse eigenproblems on parallel computers. It can be used for the solution of linear eigenvalue problems formulated in either standard or generalized form, as well as other related problems such as the singular value decomposition. It can also be used to solve nonlinear eigenvalue problems, either those formulated as polynomial eigenproblems or more general nonlinear problems. Finally, SLEPc provides solvers for the computation of the action of a matrix function on a vector.
 
 The emphasis of the software is on methods and techniques appropriate for problems in which the associated matrices are sparse, for example, those arising after the discretization of partial differential equations. Therefore, most of the methods offered by the library are projection methods or other methods with similar properties. Examples of these methods are Krylov-Schur, Jacobi-Davidson, and Conjugate Gradient, to name a few. SLEPc provides implementations of these methods. It also provides built-in support for spectral transformations such as the shift-and-invert technique. SLEPc is a general library in the sense that it covers both Hermitian and non-Hermitian problems, with either real or complex arithmetic.
@@ -8,14 +7,6 @@ The emphasis of the software is on methods and techniques appropriate for proble
 SLEPc is built on top of [PETSc](https://petsc.org), the Portable, Extensible Toolkit for Scientific Computation. It can be considered an extension of PETSc providing all the functionality necessary for the solution of eigenvalue problems. This means that PETSc must be previously installed in order to use SLEPc. PETSc users will find SLEPc very easy to use, since it enforces the same programming paradigm. For those users who are not familiar with PETSc yet, our recommendation is to fully understand its basic concepts before proceeding with SLEPc. Parallelism in SLEPc is obtaned by means of MPI, and in addition there is some support for GPU computing.
 
 SLEPc can be used directly, and also indirectly via many [software packages that interface to it](../material/software). In turn, SLEPc interfaces to other external software packages such as [ARPACK](https://github.com/opencollab/arpack-ng) or [BLOPEX](https://github.com/lobpcg/blopex).
-
-%## Description
-
-%SLEPc, the Scalable Library for Eigenvalue Problem Computations, is a software library for the solution of large, sparse eigenproblems on parallel computers. It can be used for the solution of linear eigenvalue problems formulated in either standard or generalized form, both Hermitian and non-Hermitian, with either real or complex arithmetic, as well as other related problems such as the singular value decomposition or the nonlinear eigenvalue problem.
-
-%SLEPc focuses on sparse problems, for example, those arising after the discretization of partial differential equations. It provides projection methods or other methods with similar properties, such as Krylov-Schur or Jacobi-Davidson. It also provides built-in support for different types of problems and spectral transformations such as the shift-and-invert technique.
-
-%SLEPc is built on top of [PETSc](https://petsc.org) (Portable, Extensible Toolkit for Scientific Computation) and extends it with all the functionality necessary for the solution of eigenvalue problems.
 
 ## Linear Eigensolvers
 

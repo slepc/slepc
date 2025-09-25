@@ -12,7 +12,7 @@ SLEPc is built on top of PETSc, the Portable, Extensible Toolkit for Scientific 
 {#how-to-get-slepc}
 ```{only} latex
 % Only for latex as it would be duplicated on the web
-%{#how-to-get-slepc .unnumbered}
+
 **How to Get SLEPc**
 
 All the information related to SLEPc can be found at the following web site:

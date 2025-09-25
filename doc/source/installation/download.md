@@ -45,10 +45,6 @@ Major releases are announced via the [slepc-announce](../contact/mail_list) mail
 
 ## Development Version
 
-%The development repository is hosted at [gitlab.com](https://gitlab.com/slepc/slepc) and uses the `git` version control system. Note that using the development version requires also a development version of PETSc.
-
-%The development process follows the methodology used by PETSc, with two integration branches (`main` and `release`), together with various feature branches. One can expect SLEPc's `main` branch to be synchronized with PETSc's `main` branch.
-
 In order to get the development version of SLEPc, you need to clone the repository:
 
 ```{code} console

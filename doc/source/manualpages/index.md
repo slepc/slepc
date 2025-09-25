@@ -19,4 +19,3 @@ auxiliary_classes
 
 singleindex.md
 ```
-%../changes/index.rst
