@@ -22,8 +22,12 @@
 */
 #include <slepc/private/epsimpl.h>
 #include "krylovschur.h"
+#include <slepcblaslapack.h>
 
-static PetscErrorCode Orthog_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscInt j,PetscScalar *c,PetscScalar *d,PetscScalar *w,PetscReal *alpha,PetscBool *breakdown)
+/* J-orthogonalize vector [x1;x2] against first j vectors in U and V (full orthogonalization)
+   Coeffs c are updated, coeffs d are computed from scratch.
+*/
+static PetscErrorCode Orthog_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscInt j,PetscScalar *c,PetscScalar *d,PetscScalar *w,PetscBool *breakdown)
 {
   PetscInt i;
   Vec      Jx1,Jx2;
@@ -40,6 +44,7 @@ static PetscErrorCode Orthog_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscI
   PetscCall(VecScale(Jx2,-1.0));
   PetscCall(VecConjugate(Jx1));
   PetscCall(VecConjugate(Jx2));
+  for (i=0;i<j;i++) w[j+i] = c[i]; /* Copy initial values of c */
   /* c = -V.'*J*x  computed as -conj(c) = V'*conj(J*x) */
   PetscCall(BVDotVecBegin(V1,Jx1,c));
   PetscCall(BVDotVecBegin(V2,Jx2,w));
@@ -57,13 +62,13 @@ static PetscErrorCode Orthog_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscI
   PetscCall(BVMultVec(U2,-1.0,1.0,x2,c));
   PetscCall(BVMultVec(V1,-1.0,1.0,x1,d));
   PetscCall(BVMultVec(V2,-1.0,1.0,x2,d));
-  *alpha += PetscRealPart(c[j-1]);
+  for (i=0;i<j;i++) c[i] += w[j+i]; /* Add initial values of c */
   PetscCall(VecDestroy(&Jx1));
   PetscCall(VecDestroy(&Jx2));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/* J-orthogonalize vector x against first j vectors in U and V */
+/* J-orthogonalize vector [x1;x2] against first j vectors in U and V (local+full orthogonalization)*/
 static PetscErrorCode OrthogonalizeVector_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscInt j,PetscReal *alpha,PetscReal *beta,PetscInt k,PetscScalar *h,PetscBool *breakdown)
 {
   PetscScalar p,p1,p2;
@@ -71,7 +76,7 @@ static PetscErrorCode OrthogonalizeVector_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1
   PetscInt    i,l;
 
   PetscFunctionBegin;
-  PetscCall(PetscArrayzero(h,3*j));
+  PetscCall(PetscArrayzero(h,4*j));
 
   /* Local orthogonalization */
   l = j==k+1?0:j-2;  /* 1st column to orthogonalize against */
@@ -92,10 +97,10 @@ static PetscErrorCode OrthogonalizeVector_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1
   PetscCall(BVSetActiveColumns(U2,l,j));
   PetscCall(BVMultVec(U1,-1.0,1.0,x1,h+l));
   PetscCall(BVMultVec(U2,-1.0,1.0,x2,h+l));
-  alpha[j-1] = PetscRealPart(p);
 
   /* J-orthogonalize x (full orthogonalization) */
-  PetscCall(Orthog_Hamilt(x1,x2,U1,U2,V1,V2,j,h,h+j,h+2*j,&alpha[j-1],breakdown));
+  PetscCall(Orthog_Hamilt(x1,x2,U1,U2,V1,V2,j,h,h+j,h+2*j,breakdown));
+  alpha[j-1] = PetscRealPart(h[j-1]);
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -126,17 +131,21 @@ static PetscErrorCode NormalizeVector_Hamilt(Vec u1,Vec u2,Vec v1,Vec v2,PetscRe
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSHamiltonianKS(EPS eps,BV U,BV V,PetscReal *alpha,PetscReal *beta,PetscReal *omega,PetscInt k,PetscInt *M,PetscBool *breakdown)
+static PetscErrorCode EPSHamiltonianKS(EPS eps,BV U,BV V,PetscReal *alpha,PetscReal *beta,PetscReal *omega,PetscInt k,PetscInt *M,PetscBool *symmlost,PetscBool *breakdown)
 {
-  PetscInt       j,m = *M;
+  PetscInt       i,j,m = *M,ld,l,work_len=4*m;
   Vec            u,v,u1,u2,v1,v2;
   Mat            H;
   IS             is[2];
   BV             U1,U2,V1,V2;
   PetscScalar    *hwork,lhwork[100];
+  PetscReal      sym=0.0,fro=0.0;
+  PetscBLASInt   j2_,one=1;
 
   PetscFunctionBegin;
-  if (3*m > 100) PetscCall(PetscMalloc1(3*m,&hwork));
+  PetscCall(DSGetLeadingDimension(eps->ds,&ld));
+  PetscCall(DSGetDimensions(eps->ds,NULL,&l,NULL,NULL));
+  if (work_len > 100) PetscCall(PetscMalloc1(work_len,&hwork));
   else hwork = lhwork;
   PetscCall(STGetMatrix(eps->st,0,&H));
   PetscCall(MatNestGetISs(H,is,NULL));
@@ -178,15 +187,42 @@ static PetscErrorCode EPSHamiltonianKS(EPS eps,BV U,BV V,PetscReal *alpha,PetscR
     PetscCall(BVGetColumn(V1,j+1,&v1));
     PetscCall(BVGetColumn(V2,j+1,&v2));
     PetscCall(NormalizeVector_Hamilt(u1,u2,v1,v2,&beta[j],&omega[j+1],breakdown));
+
+    /* Update norm of asymmetry (sym) */
+    if (j==k) {
+      PetscReal *f;
+
+      PetscCall(DSGetArrayReal(eps->ds,DS_MAT_T,&f));
+      for (i=0;i<l;i++) hwork[i]  = 0.0;
+      for (;i<j-1;i++)  hwork[i] -= f[2*ld+i];
+      PetscCall(DSRestoreArrayReal(eps->ds,DS_MAT_T,&f));
+    }
+    if (j>0) {
+      hwork[j-1] -= beta[j-1];
+      hwork[j] = 0;
+      PetscCall(PetscBLASIntCast(2*(j+1),&j2_));
+      sym = SlepcAbs(BLASnrm2_(&j2_,hwork,&one),sym);
+    }
+    /* Update norm of tridiagonal elements (fro) */
+    fro = SlepcAbs(fro,SlepcAbs(alpha[j],beta[j]));
+    if (j>0) fro = SlepcAbs(fro,beta[j-1]);
+
     PetscCheck(!*breakdown,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Breakdown in Hamiltonian Krylov-Schur");
     PetscCall(BVRestoreColumn(U1,j+1,&u1));
     PetscCall(BVRestoreColumn(U2,j+1,&u2));
     PetscCall(BVRestoreColumn(V1,j+1,&v1));
     PetscCall(BVRestoreColumn(V2,j+1,&v2));
+
+    /* Check if relative asymmetry is too large */
+    if (sym/fro>PetscMax(PETSC_SQRT_MACHINE_EPSILON,100*eps->tol)) {
+      *symmlost = PETSC_TRUE;
+      *M=j;
+      break;
+    }
   }
   PetscCall(BVRestoreSplitRows(U,is[0],is[1],&U1,&U2));
   PetscCall(BVRestoreSplitRows(V,is[0],is[1],&V1,&V2));
-  if (3*m > 100) PetscCall(PetscFree(hwork));
+  if (work_len > 100) PetscCall(PetscFree(hwork));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -198,7 +234,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
   Vec             vomega,vomegaold;
   BV              U,V;
   PetscReal       *a,*a2,*b,*omega,beta,u_norm;
-  PetscBool       breakdown=PETSC_FALSE;
+  PetscBool       breakdown=PETSC_FALSE,symmlost=PETSC_FALSE;
   PetscComplex    eig;
 
   PetscFunctionBegin;
@@ -224,12 +260,16 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
     a2 = a + ld;
     b = a + 2*ld;
     PetscCall(DSGetArrayReal(eps->ds,DS_MAT_D,&omega));
-    PetscCall(EPSHamiltonianKS(eps,U,V,a,b,omega,eps->nconv+l,&nv,&breakdown));
+    PetscCall(EPSHamiltonianKS(eps,U,V,a,b,omega,eps->nconv+l,&nv,&symmlost,&breakdown));
     for (i=eps->nconv+l; i<nv; i++)
       a2[i] = b[i];
     beta = b[nv-1];
     PetscCall(DSRestoreArrayReal(eps->ds,DS_MAT_T,&a));
     PetscCall(DSRestoreArrayReal(eps->ds,DS_MAT_D,&omega));
+    if (symmlost) {
+      eps->reason = EPS_DIVERGED_SYMMETRY_LOST;
+      if (nv==eps->nconv+l) { eps->nconv = nconv; break; }
+    }
     PetscCall(DSSetDimensions(eps->ds,nv,eps->nconv,eps->nconv+l));
     PetscCall(DSSetState(eps->ds,l?DS_STATE_RAW:DS_STATE_INTERMEDIATE));
     PetscCall(BVSetActiveColumns(U,eps->nconv,nv));
@@ -252,7 +292,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
     PetscCall(BVNormColumn(U,nv,NORM_2,&u_norm));
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,u_norm,&k));
     EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
-    PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
+    if (!symmlost) PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
 
     /* Update l */
