@@ -120,10 +120,3 @@ The following scheme represents the functionality provided by SLEPc and how it r
   * Additionally, several auxiliary classes are provided: BV (Basis Vectors), DS (Dense System), RG (Region), FN (Mathematical Function).
 
 ![petsc-slepc](../_static/images/petsc-slepc-3.7.png)
-
-%```{toctree}
-%:maxdepth: 2
-%:hidden:
-%
-%to_do
-%```

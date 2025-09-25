@@ -256,6 +256,10 @@ html_context = {
 #html_sidebars = {
 #        "**": []
 #        }
+# Remove the primary (left) sidebar from about page
+html_sidebars = {
+        'about/index': []
+        }
 
 # -- Options for LaTeX output --------------------------------------------------
 latex_engine = 'xelatex'
