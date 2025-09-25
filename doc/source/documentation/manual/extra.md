@@ -436,7 +436,7 @@ Exceptions to the above rule are LAPACK, which should be enabled during PETSc's 
 ### [EVSL]
 
 :References: {cite:p}`Li:2019:EVS`.
-:Website: <https://www-users.cs.umn.edu/~saad/software/EVSL/>.
+:Website: <https://www-users.cse.umn.edu/~saad/software/EVSL/>.
 :Summary: EVSL is a sequential library that implements methods for computing all eigenvalues located in a given interval for real symmetric (standard or generalized) eigenvalue problems. Currently SLEPc only supports standard problems.
 :Installation: The option `--download-evsl` is available in SLEPc's configure for easy installation. Alternatively, one can use an already installed version.
 

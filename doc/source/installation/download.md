@@ -29,11 +29,11 @@ Alternatively, the following downloads correspond to the latest available releas
 
 Description                                               |  File                                                                          |  MD5 checksum
 ---                                                       |  ---                                                                           |  ---
-SLEPc distribution file (source code only)                |  **[slepc-{{env.config.release}}.tar.gz](https://slepc.upv.es/download/distrib/slepc-{{env.config.release}}.tar.gz)**                     | a3495dead368f6ee144e8f268e978151
-SLEPc distribution file (source code with documentation)  |  **[slepc-with-docs-{{env.config.release}}.tar.gz](https://slepc.upv.es/download/distrib/slepc-with-docs-{{env.config.release}}.tar.gz)** | a60a883312aac300f4aebdf0efb6d063
-slepc4py distribution file (enables separate install)     |  **[slepc4py-{{env.config.release}}.tar.gz](https://slepc.upv.es/download/distrib/slepc4py-{{env.config.release}}.tar.gz)**               | c42805c1a3472668f0cba73c53c6242b
+SLEPc distribution file (source code only)                |  {{'**[slepc-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc-{}.tar.gz)**'.format(env.config.release,env.config.release)}} | a3495dead368f6ee144e8f268e978151
+SLEPc distribution file (source code with documentation)  |  {{'**[slepc-with-docs-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc-with-docs-{}.tar.gz)**'.format(env.config.release,env.config.release)}} | a60a883312aac300f4aebdf0efb6d063
+slepc4py distribution file (enables separate install)     |  {{'**[slepc4py-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc4py-{}.tar.gz)**'.format(env.config.release,env.config.release)}}               | c42805c1a3472668f0cba73c53c6242b
 
-There are no separate patch files, the current fixes are included in the tar file. Patches are documented at: [slepc-{{env.config.version}} changelog](https://gitlab.com/slepc/slepc/commits/release)
+There are no separate patch files, the current fixes are included in the tar file. Patches are documented at: [slepc-{{env.config.version}} changelog](https://gitlab.com/slepc/slepc/-/commits/release)
 
 :::{note}
 slepc4py source (without documentation) is already included in the SLEPc tarball.
@@ -44,10 +44,6 @@ Major releases are announced via the [slepc-announce](../contact/mail_list) mail
 :::
 
 ## Development Version
-
-%The development repository is hosted at [gitlab.com](https://gitlab.com/slepc/slepc) and uses the `git` version control system. Note that using the development version requires also a development version of PETSc.
-
-%The development process follows the methodology used by PETSc, with two integration branches (`main` and `release`), together with various feature branches. One can expect SLEPc's `main` branch to be synchronized with PETSc's `main` branch.
 
 In order to get the development version of SLEPc, you need to clone the repository:
 
@@ -71,7 +67,7 @@ $ git pull
 <iframe src='https://www.openhub.net/p/slepc/widgets/project_basic_stats' style='height: 225px; width: 350px; border: none'></iframe>
 </div>
 
-The source code in the repository can be browsed at [gitlab.com](https://gitlab.com/slepc/slepc). Some statistics related to source code development can be found at [openhub.net](https://www.openhub.net/p/slepc).
+The source code in the repository can be browsed at [gitlab.com](https://gitlab.com/slepc/slepc). Some statistics related to source code development can be found at [openhub.net](https://openhub.net/p/slepc).
 
 Additional information can be found at {{'[PETSc Developer\'s Documentation](https://petsc.org/{}/developers/)'.format(branch)}}.
 

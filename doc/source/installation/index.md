@@ -15,7 +15,7 @@ SLEPc is available on some package managers.
 :::
 
 :::{tab-item} Debian
-<https://packages.debian.org/slepc-dev>
+<https://packages.debian.org/search?keywords=slepc-dev>
 
     $ sudo apt install slepc-dev
 :::
@@ -79,7 +79,7 @@ E4S packages are available as pre-built Spack binaries.
 :::
 
 :::{tab-item} Ubuntu
- <https://packages.ubuntu.com/slepc-dev>
+ <https://packages.ubuntu.com/search?keywords=slepc-dev>
 
     $ sudo apt install slepc-dev
 :::

@@ -42,6 +42,7 @@ clean:
 	-@${RM} -rf source/manualpages/ST
 	-@${RM} -rf logo-upv
 	-@${RM} -rf .venv-sphinx
+	-@${RM} -f source/petsc_objects.inv
 	-@${MAKE} --no-print-directory -C $(SLEPC_DIR)/src/binding/slepc4py docsclean
 
 webstatic:

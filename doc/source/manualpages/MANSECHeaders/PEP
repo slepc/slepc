@@ -1,7 +1,9 @@
-# Polynomial Eigenvalue Problem Solvers - PEP: Examples NLEVP
+# Polynomial Eigenvalue Problem Solvers - PEP
 
 The Polynomial Eigenvalue Problem (PEP) solver is the object provided by SLEPc for specifying a polynomial eigenvalue problem. Apart from the specific solvers for this type of problems, there is an EPS-based solver, i.e., it uses a solver from EPS to solve a generalized eigenproblem obtained after linearization.
 
 As in the other solver objects, users can set various options at runtime via the options database (e.g., -pep_nev 4 -pep_type linear). Options can also be set directly in application codes by calling the corresponding routines (e.g., PEPSetDimensions() / PEPSetType()).
 
 Users guide section: [](cap:pep).
+
+<a href="PETSC_DOC_OUT_ROOT_PLACEHOLDER/src/pep/tutorials/index.html">Examples</a><br>

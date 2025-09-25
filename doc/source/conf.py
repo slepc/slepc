@@ -39,11 +39,10 @@ with open(os.path.join('../..', 'include', 'slepcversion.h'),'r') as version_fil
     subminor_version   = re.search(' SLEPC_VERSION_SUBMINOR[ ]*([0-9]*)',buf).group(1)
 
     version = '.'.join([major_version, minor_version])
+    release = '.'.join([major_version,minor_version,subminor_version])
     if slepc_release_flag == '0':
-        release = '.'.join([major_version,minor_version]) + '-dev'
         edit_branch = 'main'
     else:
-        release = '.'.join([major_version,minor_version,subminor_version])
         edit_branch = 'release'
 
 release_date = subprocess.check_output(['git',
@@ -257,6 +256,10 @@ html_context = {
 #html_sidebars = {
 #        "**": []
 #        }
+# Remove the primary (left) sidebar from about page
+html_sidebars = {
+        'about/index': []
+        }
 
 # -- Options for LaTeX output --------------------------------------------------
 latex_engine = 'xelatex'

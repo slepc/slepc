@@ -67,7 +67,7 @@ Note that another difference is that in 3.1 eigenvalues are returned in the corr
 
 ## 9.  I get an error when retrieving the eigenvector
 
-After the solver has finished, the solution can be retrieved with `EPSGetEigenpair`.  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ `Vec` object. This means the vector must have been created, for example with {external:doc}`VecCreate`, {external:doc}`VecDuplicate`, or {external:doc}`MatCreateVecs`, see for instance [ex7](../../../src/eps/tutorials/ex7.c). The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
+After the solver has finished, the solution can be retrieved with `EPSGetEigenpair`.  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ {external:doc}`Vec` object. This means the vector must have been created, for example with {external:doc}`VecCreate`, {external:doc}`VecDuplicate`, or {external:doc}`MatCreateVecs`, see for instance [ex7](../../../src/eps/tutorials/ex7.c). The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
 
 ## 10. I get an error when running shift-and-invert in parallel
 

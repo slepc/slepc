@@ -31,13 +31,15 @@ Also, you can run the application code with all the options you usually use and 
 :::{admonition} BibTeX
 :class: dropdown admonition-bibtex
 
-    @TechReport{slepc-users-manual,
-       author      = "J. E. Roman and C. Campos and L. Dalcin and E. Romero and A. Tomas",
-       title       = "{SLEPc} Users Manual",
-       number      = "DSIC-II/24/02 - Revision 3.23",
-       institution = "D. Sistemes Inform\`atics i Computaci\'o, Universitat Polit\`ecnica de Val\`encia",
-       year        = "2025"
+    @Article{Hernandez:2003:SSL,
+       author  = "V. Hernandez and J. E. Roman and V. Vidal",
+       title   = "{SLEPc}: {Scalable} {Library} for {Eigenvalue} {Problem} {Computations}",
+       journal = "Lect. Notes Comput. Sci.",
+       volume  = "2565",
+       pages   = "377--391",
+       year    = "2003"
     }
+
 :::
 
 [3] J. E. Roman, C. Campos, L. Dalcin, E. Romero, A. Tomas. SLEPc Users Manual. Tech. Rep. DSIC-II/24/02 - Revision 3.23, Universitat Polit&egrave;cnica de Val&egrave;ncia, 2025.
@@ -177,9 +179,7 @@ Reference [16] below (polynomial Jacobi-Davidson).
 
 ## SVD and GSVD
 
-[11] V. Hernandez, J. E. Roman, A. Tomas. _A robust and efficient parallel SVD solver based on restarted Lanczos bidiagonalization._ Electron. Trans. Numer.  Anal., 31:68-85, 2008. [[URL]](https://etna.math.kent.edu/vol.31.2008/pp68-85.dir/pp68-85.pdf)
-
-% [[URL]](https://etna.math.kent.edu/volumes/2001-2010/vol31/abstract.php?vol=31&pages=68-85)
+[11] V. Hernandez, J. E. Roman, A. Tomas. _A robust and efficient parallel SVD solver based on restarted Lanczos bidiagonalization._ Electron. Trans. Numer.  Anal., 31:68-85, 2008. [[URL]](https://etna.ricam.oeaw.ac.at/volumes/2001-2010/vol31/abstract.php?pages=68-85)
 
 :::{admonition} BibTeX
 :class: dropdown admonition-bibtex

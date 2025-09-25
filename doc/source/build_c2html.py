@@ -6,6 +6,7 @@ import re
 import subprocess
 import pathlib
 from itertools import chain
+from myst_parser.parsers.docutils_ import to_html5_demo
 
 def compute_make_np(i):
   '''Number of cores to run make c2html on'''
@@ -30,8 +31,10 @@ def main(slepc_dir,srcdir,loc,c2html,mapnames):
     fdw.write(fd.read())
 
   # walk directories generating list of all source code that needs processing and creating index.html for each directory
-  SKIPDIRS = set('public html benchmarks output arch doc docs binding config petsc-doc lib bin .git systems share mpiuni kernels khash valgrind interfaces data linter'.split())
+  SKIPDIRS = set('public html benchmarks output arch doc binding config lib bin .git systems share mpiuni kernels valgrind interfaces data linter'.split())
   SUFFIXES = set('.F90 .F .c .cxx .cpp .h .cu .hpp'.split())
+  SUFFIXES_C = set('.c .cxx .cpp .h .cu .hpp'.split())
+  SUFFIXES_F = set('.F90 .F'.split())
   allfiles = []
   for root, dirs, files in chain.from_iterable(os.walk(path) for path in [slepc_dir]):
     dirs[:] = [d for d in dirs if not any([s for s in SKIPDIRS if d.startswith(s)])]
@@ -45,14 +48,17 @@ def main(slepc_dir,srcdir,loc,c2html,mapnames):
       if root.startswith('src'):
 
         # get MANSEC from the makefile and copy the MANSEC basic information into the index
-        # TODO: the text is actually .md so needs processing
         if os.path.isfile(os.path.join(root,'makefile')):
           with open(os.path.join(root,'makefile')) as mklines:
             mansecl = [line for line in mklines if line.startswith('MANSEC')]
             if mansecl:
               mansec = re.sub('MANSEC[ ]*=[ ]*','',mansecl[0]).strip('\n').strip()
               with open(os.path.join('doc','source','manualpages','MANSECHeaders',mansec)) as fd:
-                fdw.write(fd.read())
+                for line in fd:
+                  if (line.find('Users guide section:') > -1 or
+                      line.find('>Examples</a>') > -1):
+                    continue
+                  fdw.write(to_html5_demo(line))
 
       fdw.write('\n<p>\n')
 
@@ -61,16 +67,34 @@ def main(slepc_dir,srcdir,loc,c2html,mapnames):
       # list examples
       if root.find('/tests') > -1 or root.find('tutorials') > -1:
         fdw.write('\n<p>\nExamples\n<p>')
+        examples = {}
         for f in files:
-          if any([s for s in SUFFIXES if f.endswith(s)]):
+          if any([s for s in SUFFIXES_C if f.endswith(s)]):
             with open(os.path.join(root,f)) as fd:
-              line = fd.readline()
-              l = line.find('char help[] = ')
-              if l > -1:
-                s = line.find('\\n')
-                line = line[l + 15:s]
-              else: line = ''
-              fdw.write('<a href="' + f + '.html">' + f + ': ' + line + '</a><br>\n')
+              examples[f] = ''
+              for line in fd:
+                l = line.find('char help[] = ')
+                if l > -1:
+                  s = line.find('\\n')
+                  examples[f] = line[l + 15:s]
+                  break
+        for f in files:
+          if any([s for s in SUFFIXES_F if f.endswith(s)]):
+            with open(os.path.join(root,f)) as fd:
+              examples[f] = ''
+              for line in fd:
+                l = line.find('Description:')
+                if l > -1:
+                  examples[f] = line[l + 13:]
+                  break
+        # simple natural sorting
+        examples = dict(sorted(examples.items(), key=lambda i: [int(s) if
+                                                           s.isdigit() else
+                                                           s.lower() for s in
+                                                           re.split(r'(\d+)',
+                                                                    i[0])]))
+        for f in examples.keys():
+          fdw.write('<a href="' + f + '.html">' + f + ': ' + examples[f] + '</a><br>\n')
 
       # list source code
       else:
