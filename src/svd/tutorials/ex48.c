@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Solves a GSVD problem with matrices loaded from a file.\n"
+static char help[] = "Solves a GSVD problem with matrices loaded from a file.\n\n"
   "The command line options are:\n"
   "  -f1 <filename>, PETSc binary file containing matrix A.\n"
   "  -f2 <filename>, PETSc binary file containing matrix B (optional). Instead of"

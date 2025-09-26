@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Solves a generalized eigensystem Ax=kBx with matrices loaded from a file.\n"
+static char help[] = "Solves a generalized eigensystem Ax=kBx with matrices loaded from a file.\n\n"
   "The command line options are:\n"
   "  -f1 <filename> -f2 <filename>, PETSc binary files containing A and B.\n"
   "  -evecs <filename>, output file to save computed eigenvectors.\n"

@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Solves a GNHEP problem with contour integral. "
+static char help[] = "Solves a GNHEP problem with contour integral.\n\n"
   "Based on ex7.\n"
   "The command line options are:\n"
   "  -f1 <filename> -f2 <filename>, PETSc binary files containing A and B.\n\n";

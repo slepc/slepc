@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Solves the same problem as in ex5, with a user-defined stopping test."
+static char help[] = "Solves the same problem as in ex5, with a user-defined stopping test.\n\n"
   "It is a standard nonsymmetric eigenproblem with real eigenvalues and the rightmost eigenvalue is known to be 1.\n"
   "This example illustrates how the user can set a custom stopping test function.\n\n"
   "The command line options are:\n"

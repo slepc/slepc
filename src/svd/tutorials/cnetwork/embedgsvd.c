@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Computes a GSVD associated with a complex network analysis problem.\n"
+static char help[] = "Computes a GSVD associated with a complex network analysis problem.\n\n"
   "The command line options are:\n"
   "  -file <filename>, text file in TSV format containing undirected graph.\n"
   "  -beta <beta>, optional decay parameter.\n\n";

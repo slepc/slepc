@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Solves the same problem as in ex5, but with a user-defined sorting criterion."
+static char help[] = "Solves the same problem as in ex5, but with a user-defined sorting criterion.\n\n"
   "It is a standard nonsymmetric eigenproblem with real eigenvalues and the rightmost eigenvalue is known to be 1.\n"
   "This example illustrates how the user can set a custom spectrum selection.\n\n"
   "The command line options are:\n"

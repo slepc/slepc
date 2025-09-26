@@ -19,8 +19,8 @@
        April 2000.
 */
 
-static char help[] = "Test the solution of a PEP from a finite element model of "
-  "damped mass-spring system (problem from NLEVP collection).\n\n"
+static char help[] = "Test the solution of a PEP from a finite element model of damped mass-spring system.\n\n"
+  "Problem from NLEVP collection.\n"
   "The command line options are:\n"
   "  -n <n> ... number of grid subdivisions.\n"
   "  -mu <value> ... mass (default 1).\n"

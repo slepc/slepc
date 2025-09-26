@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Test setting and getting the signature in HSVD.\n"
+static char help[] = "Test setting and getting the signature in HSVD.\n\n"
   "Based on ex15.c. The command line options are:\n"
   "  -n <n>, where <n> = matrix dimension.\n"
   "  -mu <mu>, where <mu> = subdiagonal value.\n\n";

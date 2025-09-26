@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Shell spectral transformations with a non-injective mapping. "
+static char help[] = "Shell spectral transformations with a non-injective mapping.\n\n"
   "Implements spectrum folding for the 2-D Laplacian, as in ex24.c.\n\n"
   "The command line options are:\n"
   "  -n <n>, where <n> = number of grid subdivisions in x dimension.\n"

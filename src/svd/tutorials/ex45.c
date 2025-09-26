@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Computes a partial generalized singular value decomposition (GSVD).\n"
+static char help[] = "Computes a partial generalized singular value decomposition (GSVD).\n\n"
   "The command line options are:\n"
   "  -m <m>, where <m> = number of rows of A.\n"
   "  -n <n>, where <n> = number of columns of A.\n"

@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Singular value decomposition of the Lauchli matrix.\n"
+static char help[] = "Singular value decomposition of the Lauchli matrix.\n\n"
   "The command line options are:\n"
   "  -n <n>, where <n> = matrix dimension.\n"
   "  -mu <mu>, where <mu> = subdiagonal value.\n\n";
