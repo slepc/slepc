@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Illustrates the PGNHEP problem type. "
+static char help[] = "Illustrates the PGNHEP problem type.\n\n"
   "Based on ex7.\n"
   "The command line options are:\n"
   "  -f1 <filename> -f2 <filename>, PETSc binary files containing A and B.\n\n";

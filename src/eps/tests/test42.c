@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Block-diagonal orthogonal eigenproblem.\n"
+static char help[] = "Block-diagonal orthogonal eigenproblem.\n\n"
   "The command line options are:\n"
   "  -n <n>, where <n> = matrix dimension.\n"
   "  -seed <s>, where <s> = seed for random number generation.\n\n";

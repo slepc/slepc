@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Test EPS with different builds with a matrix loaded from a file.\n"
+static char help[] = "Test EPS with different builds with a matrix loaded from a file.\n\n"
   "This test is based on ex4.c in tutorials.\n"
   "It loads test matrices available in PETSc's distribution.\n"
   "Add -symm or -herm to select the symmetric/Hermitian matrix.\n\n";

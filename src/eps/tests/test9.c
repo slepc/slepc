@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Eigenvalue problem associated with a Markov model of a random walk on a triangular grid. "
+static char help[] = "Eigenvalue problem associated with a Markov model of a random walk on a triangular grid.\n\n"
   "It is a standard nonsymmetric eigenproblem with real eigenvalues and the rightmost eigenvalue is known to be 1.\n"
   "This example illustrates how the user can set the initial vector.\n\n"
   "The command line options are:\n"

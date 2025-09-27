@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Test SVD with different builds with a matrix loaded from a file"
+static char help[] = "Test SVD with different builds with a matrix loaded from a file.\n\n"
   " (matrices available in PETSc's distribution).\n\n";
 
 #include <slepcsvd.h>

@@ -1081,7 +1081,7 @@ total-coverage:
 # Base job for a documentation build (runs in venv to allow installing additional packages without root)
 #
 .docs:
-  stage: stage-1
+  stage: stage-2
   tags:
     - name:satet
   before_script:
@@ -1144,7 +1144,7 @@ docs-review:
     - echo -e "section_end:`date +%s`:build_slepc\r\e[0K"
     # build docs
     - echo -e "section_start:`date +%s`:build_slepc_docs\r\e[0KSLEPc docs"
-    - (time make alldoc) || (printf "Sphinx documentation build failed (warnings count as errors)\n" && false)
+    - make alldoc || (printf "Sphinx documentation build failed (warnings count as errors)\n" && false)
     - echo -e "section_end:`date +%s`:build_slepc_docs\r\e[0K"
     - cp -a ${PETSC_ARCH}/doc public
   environment:

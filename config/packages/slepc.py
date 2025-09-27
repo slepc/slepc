@@ -117,8 +117,8 @@ class SLEPc(package.Package):
 
     # Check whether this is a working copy of the repository
     self.isrepo = False
-    if os.path.exists(os.path.join(self.dir,'src','docs')):
-      self.log.write('This appears to be a repository clone - src/docs exists')
+    if os.path.exists(os.path.join(self.dir,'.mailmap')):
+      self.log.write('This appears to be a repository clone - .mailmap exists')
       self.isrepo = True
       if os.path.exists(os.path.join(self.dir,'.git')):
         self.log.write('.git directory exists')

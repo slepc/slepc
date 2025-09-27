@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Partial hyperbolic singular value decomposition (HSVD) from a file.\n"
+static char help[] = "Partial hyperbolic singular value decomposition (HSVD) from a file.\n\n"
   "The command line options are:\n"
   "  -file <filename>, PETSc binary file containing matrix A.\n"
   "  -p <p>, where <p> = number of -1's in signature.\n"

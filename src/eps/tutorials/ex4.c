@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Solves a standard eigensystem Ax=kx with the matrix loaded from a file.\n"
+static char help[] = "Solves a standard eigensystem Ax=kx with the matrix loaded from a file.\n\n"
   "This example works for both real and complex numbers.\n\n"
   "The command line options are:\n"
   "  -file <filename>, where <filename> = matrix file in PETSc binary form.\n\n";

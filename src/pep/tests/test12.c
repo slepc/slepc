@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Illustrates region filtering in PEP (based on spring).\n"
+static char help[] = "Illustrates region filtering in PEP (based on spring).\n\n"
   "The command line options are:\n"
   "  -n <n> ... number of grid subdivisions.\n"
   "  -mu <value> ... mass (default 1).\n"

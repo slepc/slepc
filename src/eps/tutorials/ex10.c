@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Illustrates the use of shell spectral transformations. "
+static char help[] = "Illustrates the use of shell spectral transformations.\n\n"
   "The problem to be solved is the same as ex1.c and"
   "corresponds to the Laplacian operator in 1 dimension.\n\n"
   "The command line options are:\n"

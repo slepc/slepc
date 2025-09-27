@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Illustrates region filtering. "
+static char help[] = "Illustrates region filtering.\n\n"
   "Based on ex5.\n"
   "The command line options are:\n"
   "  -m <m>, where <m> = number of grid subdivisions in each dimension.\n\n";

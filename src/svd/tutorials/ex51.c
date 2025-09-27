@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Computes a partial GSVD of two matrices from IR Tools example.\n"
+static char help[] = "Computes a partial GSVD of two matrices from IR Tools example.\n\n"
   "The command line options are:\n"
   "  -n <n>, where <n> = number of grid subdivisions in x and y dimensions.\n\n";
 

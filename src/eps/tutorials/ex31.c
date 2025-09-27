@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Power grid small signal stability analysis of WECC 9 bus system.\n\
+static char help[] = "Power grid small signal stability analysis of WECC 9 bus system.\n\n\
 This example is based on the 9-bus (node) example given in the book Power\n\
 Systems Dynamics and Stability (Chapter 8) by P. Sauer and M. A. Pai.\n\
 The power grid in this example consists of 9 buses (nodes), 3 generators,\n\

@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Solves a linear system using PCHPDDM.\n"
+static char help[] = "Solves a linear system using PCHPDDM.\n\n"
   "Modification of ${PETSC_DIR}/src/ksp/ksp/tutorials/ex76.c where concurrent EPS are instantiated explicitly by the user.\n\n";
 
 #include <slepceps.h>

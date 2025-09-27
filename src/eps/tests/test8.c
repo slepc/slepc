@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Solves the same eigenproblem as in example ex2, but using a shell matrix. "
+static char help[] = "Solves the same eigenproblem as in example ex2, but using a shell matrix.\n\n"
   "The problem is a standard symmetric eigenproblem corresponding to the 2-D Laplacian operator.\n\n"
   "The command line options are:\n"
   "  -n <n>, where <n> = number of grid subdivisions in both x and y dimensions.\n\n";

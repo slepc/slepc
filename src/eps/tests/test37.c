@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-static char help[] = "Tests solving an eigenproblem defined with MatNest. "
+static char help[] = "Tests solving an eigenproblem defined with MatNest.\n\n"
   "Based on ex9.\n"
   "The command line options are:\n"
   "  -n <n>, where <n> = block dimension of the 2x2 block matrix.\n"
