@@ -8,4 +8,4 @@ Polynomial eigensolvers in PEP also support spectral transformation, see the use
 
 ST objects are always related to a solver object (either EPS or PEP). Users should not create a standalone ST object. ST options can also be set directly in application codes by first extracting the ST context from the EPS context via EPSGetST() and then directly calling the ST routines (e.g., STSetType() / STSetShift()).
 
-Users guide section: [](cap:st).
+Users guide section: [](ch:st).

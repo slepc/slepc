@@ -1,4 +1,4 @@
-(cap:nep)=
+(ch:nep)=
 # NEP: Nonlinear Eigenvalue Problems
 
 The Nonlinear Eigenvalue Problem (`NEP`) solver object covers the general case where the eigenproblem is nonlinear with respect to the eigenvalue, but it cannot be expressed in terms of a polynomial. We will write the problem as $T(\lambda)x=0$, where $T$ is a matrix-valued function of the eigenvalue $\lambda$. Note that `NEP` does not cover the even more general case of having a nonlinear dependence on the eigenvector $x$.

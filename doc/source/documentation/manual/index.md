@@ -34,7 +34,7 @@ This manual provides a general description of SLEPc. In addition, manual pages f
 {#how-to-read-this-manual .unnumbered}
 **How to Read this Manual**
 
-Users that are already familiar with PETSc can read chapter [](#cap:int) very fast. Section [](#sec:eig) provides a brief overview of eigenproblems and the general concepts used by eigensolvers, so it can be skipped by experienced users. Chapters [](#cap:eps)--[](#cap:mfn) describe the main SLEPc functionality. Some of them include an advanced usage section that can be skipped at a first reading. Finally, chapter [](#cap:add) contains less important, additional information.
+Users that are already familiar with PETSc can read chapter [](#ch:int) very fast. Section [](#sec:eig) provides a brief overview of eigenproblems and the general concepts used by eigensolvers, so it can be skipped by experienced users. Chapters [](#ch:eps)--[](#ch:mfn) describe the main SLEPc functionality. Some of them include an advanced usage section that can be skipped at a first reading. Finally, chapter [](#ch:add) contains less important, additional information.
 
 {#slepc-technical-reports .unnumbered}
 **SLEPc Technical Reports**
@@ -85,12 +85,12 @@ The following table provides an overview of the functionality offered by SLEPc, 
 
   Problem class                  |               Model equation               | Module | Chapter
   -------------------------------|--------------------------------------------|--------|-------------------------------------------------------------------
-  Linear eigenvalue problem      |     $Ax=\lambda x,\quad Ax=\lambda Bx$     | `EPS`  | [](#cap:eps)
+  Linear eigenvalue problem      |     $Ax=\lambda x,\quad Ax=\lambda Bx$     | `EPS`  | [](#ch:eps)
   Quadratic eigenvalue problem   |       $(K+\lambda C+\lambda^2M)x=0$        |   --   | --
-  Polynomial eigenvalue problem  | $(A_0+\lambda A_1+\cdots+\lambda^dA_d)x=0$ | `PEP`  | [](#cap:pep)
-  Nonlinear eigenvalue problem   |              $T(\lambda)x=0$               | `NEP`  | [](#cap:nep)
-  Singular value decomposition   |               $Av=\sigma u$                | `SVD`  | [](#cap:svd)
-  Matrix function (action of)    |                 $y=f(A)v$                  | `MFN`  | [](#cap:mfn)
+  Polynomial eigenvalue problem  | $(A_0+\lambda A_1+\cdots+\lambda^dA_d)x=0$ | `PEP`  | [](#ch:pep)
+  Nonlinear eigenvalue problem   |              $T(\lambda)x=0$               | `NEP`  | [](#ch:nep)
+  Singular value decomposition   |               $Av=\sigma u$                | `SVD`  | [](#ch:svd)
+  Matrix function (action of)    |                 $y=f(A)v$                  | `MFN`  | [](#ch:mfn)
   Linear matrix equation         |                $AXE+DXB=C$                 | `LME`  | See [Notes](#notes)
 :::
 

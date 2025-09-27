@@ -12,9 +12,7 @@ SLEPc can be used directly, and also indirectly via many [software packages that
 
 > Parallel Solution of Large-scale Sparse Linear Eigenvalue Problems
 >```{math}
->Ax=\lambda x
->```
->```{math}
+>Ax=\lambda x \\
 >Ax=\lambda Bx
 >```
 
@@ -26,27 +24,22 @@ The solvers for linear eigenvalue problems currently provided by SLEPc are the f
   * Locally optimal block preconditioned conjugate gradient (LOBPCG).
   * Rayleigh quotient conjugate gradient minimization with Rayleigh-Ritz acceleration.
   * Contour integral spectrum slicing, based on Sakurai-Sugiura method.
-  * Basic solvers:
-    * Power Iteration with deflation. When combined with shift-and-invert, it is equivalent to the Inverse Iteration. Also, this solver embeds the Rayleigh Quotient Iteration (RQI) by allowing variable shifts.
-    * Subspace Iteration with Rayleigh-Ritz projection and locking.
-    * Arnoldi method with explicit restart and deflation.
-    * Lanczos method for symmetric/Hermitian problems, with explicit restart and deflation, using different reorthogonalization strategies.
+
+For a full list of implemented solvers, check the Users Manual chapter [](#ch:eps).
 
 ## Nonlinear Eigensolvers
 
 >Polynomial and General Nonlinear Eigenproblems
 >```{math}
->P(\lambda)x=0
->```
->```{math}
+>P(\lambda)x=0 \\
 >T(\lambda)x=0
 >```
 
 Apart from the linear eigenvalue solvers, SLEPc also provides specific solvers for nonlinear eigenvalue problems, either polynomial (PEP) or general nonlinear (NEP).
 
-We provide several Krylov subspace methods specific for the polynomial eigenvalue problem, mainly Q-Arnoldi (and derivatives thereof) and a polynomial Jacobi-Davidson. It is also possible to linearize the polynomial problem and use any of the above mentioned linear eigensolvers.
+We provide a robust and efficient implementation of TOAR, a Krylov subspace method specific for the polynomial eigenvalue problem, as well as a polynomial Jacobi-Davidson. It is also possible to linearize the polynomial problem and use any of the above mentioned linear eigensolvers. For additional details, check the Users Manual chapter [](#ch:pep).
 
-For general nonlinear eigenproblems, the user provides the nonlinear function _T( *)_ either by means of callback routines or in split form (matrices combined with simple nonlinear functions). So far, the following solvers are available:
+For general nonlinear eigenproblems, the user provides the nonlinear function $T(\cdot)$ either by means of callback routines or in split form (matrices combined with scalar nonlinear functions). So far, the following solvers are available:
 
   * NLEIGS.
   * Contour integral.
@@ -56,29 +49,35 @@ For general nonlinear eigenproblems, the user provides the nonlinear function _T
     * Successive linear problems, a Newton-type iteration based on first order Taylor approximation.
     * Nonlinear Arnoldi.
 
-## Solvers for SVD and Matrix Functions
+For a full list of nonlinear eigensolvers, check the Users Manual chapter [](#ch:nep).
 
->Partial SVD and Matrix Function
+## Solvers for SVD and Related Problems
+
+>Partial SVD
 >```{math}
 >Av=\sigma u
 >```
+
+In addition to eigensolvers, SLEPc includes functionality for computing the partial singular value decomposition (SVD) of a large sparse rectangular matrix. For the computation of singular values and vectors, any of the above mentioned linear eigensolvers can be used, together with some specific SVD solvers such as Lanczos and thick-restart Lanczos bidiagonalization.
+
+SLEPc also provides functionality for other related problems such as the GSVD and the HSVD. For additional details, check the Users Manual chapter [](#ch:svd).
+
+## Matrix Functions
+
+>Matrix Function
 >```{math}
 >w=f(\alpha A)v
 >```
 
-In addition to eigensolvers, SLEPc includes functionality for computing the partial singular value decomposition (SVD) of a large sparse rectangular matrix, and also for computing the action of the function of a large sparse matrix on a vector (MFN).
-
-For the computation of singular values and vectors, any of the above mentioned linear eigensolvers can be used, together with some specific SVD solvers such as Lanczos and thick-restart Lanczos bidiagonalization.
-
-Regarding the matrix function computation, SLEPc currently provides a basic Krylov method for computing the action of a matrix function on a vector, where the function can be the exponential, the square root, a rational function, or combinations thereof.
+There are also solvers for computing the action of the function of a large sparse matrix on a vector (MFN). For this, SLEPc currently provides a restarted Krylov method, where the function can be the exponential, the square root, a rational function, or combinations thereof. More details are provided in the corrsponding chapter of the Users Manual [](#ch:mfn).
 
 ## Highlights
 
-  * Easy programming with PETSc's object-oriented style. See an example in {{'[C](https://slepc.upv.es/{}/src/eps/tutorials/ex1.c.html)'.format(branch)}} and {{'[Fortran](https://slepc.upv.es/{}/src/eps/tutorials/ex1f.F90.html)'.format(branch)}}. More examples are available in the documentation section.
+  * Easy programming with PETSc's object-oriented style. See an example in {{'[C](https://slepc.upv.es/{}/src/eps/tutorials/ex1.c.html)'.format(branch)}} and {{'[Fortran](https://slepc.upv.es/{}/src/eps/tutorials/ex1f.F90.html)'.format(branch)}}. More examples are available in the [documentation section](../documentation/index).
   * Data-structure neutral implementation. Problems can be solved with matrices stored in parallel and serial, sparse and dense formats, and even without explicit storage.
   * Run-time flexibility, giving full control over the solution process. See some command-line examples below.
-  * Portability to a wide range of parallel platforms, including Linux clusters, IBM Bluegene, MacOSX, and many others.
-  * Usable from code written in C, C++, Fortran77, and Fortran90, as well as python (note that slepc4py is now part of the SLEPc distribution).
+  * Portability to a wide range of parallel platforms, including Linux clusters, MacOSX, and many others.
+  * Usable from code written in C, C++, and Fortran0, as well as Python (note that slepc4py is now part of the SLEPc distribution).
   * Extensive documentation, including a users manual, on-line tutorial exercises, example programs and on-line manual pages for every subroutine.
   * Seamless integration of other eigensolver packages such as [ARPACK](https://github.com/opencollab/arpack-ng) or [BLOPEX](https://github.com/lobpcg/blopex).
 
@@ -113,10 +112,10 @@ $ ./expep -pep_type toar
 
 The following scheme represents the functionality provided by SLEPc and how it relates to PETSc.
 
-  * SLEPc provides five main objects: EPS (Eigenvalue Problem Solver), SVD (Singular Value Decomposition), PEP (Polynomial Eigenvalue Problem), NEP (Nonlinear Eigenvalue Problem), and MFN (Matrix Function).
-  * These objects occupy a level of abstraction similar to other PETSc solvers such as KSP or SNES and use low-level infrastructure such as Mat and Vec.
+  * SLEPc provides five main objects: `EPS` (Eigenvalue Problem Solver), `SVD` (Singular Value Decomposition), `PEP` (Polynomial Eigenvalue Problem), `NEP` (Nonlinear Eigenvalue Problem), and `MFN` (Matrix Function).
+  * These objects occupy a level of abstraction similar to other PETSc solvers such as `KSP` or `SNES` and use low-level infrastructure such as `Mat` and `Vec`.
   * The shaded blocks represent the generic interface of the object while the white boxes represent different implementations. The programmer usually interacts with the object via its interface and the particular implementation is typically picked at run time.
-  * ST (Spectral Transformation) is used in combination of most solvers to compute interior eigenvalues.
-  * Additionally, several auxiliary classes are provided: BV (Basis Vectors), DS (Dense System), RG (Region), FN (Mathematical Function).
+  * `ST` (Spectral Transformation) is used in combination with most solvers to compute interior eigenvalues.
+  * Additionally, several auxiliary classes are provided: `BV` (Basis Vectors), `DS` (Dense System), `RG` (Region), `FN` (Mathematical Function).
 
 ![petsc-slepc](../_static/images/petsc-slepc-3.7.png)

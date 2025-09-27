@@ -1,4 +1,4 @@
-(cap:add)=
+(ch:add)=
 # Additional Information
 
 This chapter contains miscellaneous information as a complement to the previous chapters, which can be regarded as less important.
@@ -42,7 +42,7 @@ SLEPc mainly contains high level objects, as depicted in figure [](#fig:slepc). 
 
 Methods implemented in `EPS` merely require vector operations and matrix-vector products. In PETSc, mathematical objects such as vectors and matrices have an interface that is independent of the underlying data structures. SLEPc manipulates vectors and matrices via this interface and, therefore, it can be used with any of the matrix representations provided by PETSc, including dense, sparse, and symmetric formats, either sequential or parallel.
 
-The above statement must be reconsidered when using `EPS` in combination with `ST`. As explained in chapter [](#cap:st), in many cases the operator associated with a spectral transformation not only consists in pure matrix-vector products but also other operations may be required as well, most notably a linear system solve (see Table [](#tab:op)). In this case, the limitation is that there must be support for the requested operation for the selected matrix representation.
+The above statement must be reconsidered when using `EPS` in combination with `ST`. As explained in chapter [](#ch:st), in many cases the operator associated with a spectral transformation not only consists in pure matrix-vector products but also other operations may be required as well, most notably a linear system solve (see Table [](#tab:op)). In this case, the limitation is that there must be support for the requested operation for the selected matrix representation.
 
 ### Shell Matrices
 
@@ -136,9 +136,9 @@ After this call, the new solver could be used in the same way as the rest of SLE
 
 Apart from the main solver classes listed in table [](#tab:modules), SLEPc contains several auxiliary classes:
 
--   `ST`: Spectral Transformation, fully described in chapter [](#cap:st).
+-   `ST`: Spectral Transformation, fully described in chapter [](#ch:st).
 
--   `FN`: Mathematical Function, required in application code to represent the constituent functions of the nonlinear operator in split form (chapter [](#cap:nep)), as well as the function to be used when computing the action of a matrix function on a vector (chapter [](#cap:mfn)).
+-   `FN`: Mathematical Function, required in application code to represent the constituent functions of the nonlinear operator in split form (chapter [](#ch:nep)), as well as the function to be used when computing the action of a matrix function on a vector (chapter [](#ch:mfn)).
 
 -   `DS`: Direct Solver (or Dense System), can be seen as a wrapper to LAPACK functions used within SLEPc. It is mostly an internal object that need not be called by end users.
 
@@ -429,7 +429,7 @@ Exceptions to the above rule are LAPACK, which should be enabled during PETSc's 
 
                    The SLEPc interface to this package allows the user to specify the maximum allowed block size with the function `EPSPRIMMESetBlockSize` or at run time with the option `-eps_primme_blocksize <size>`. For changing the particular algorithm within PRIMME, use the function `EPSPRIMMESetMethod`.
 
-                   PRIMME also provides a solver for the singular value decomposition that is interfaced in SLEPc's `SVD`, see chapter [](#cap:svd).
+                   PRIMME also provides a solver for the singular value decomposition that is interfaced in SLEPc's `SVD`, see chapter [](#ch:svd).
 :::
 
 {#evsl .unnumbered}

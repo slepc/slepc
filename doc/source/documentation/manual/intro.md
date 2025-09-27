@@ -1,4 +1,4 @@
-(cap:int)=
+(ch:int)=
 # Getting Started
 
 SLEPc, the *Scalable Library for Eigenvalue Problem Computations*, is a software library for the solution of large sparse eigenvalue problems on parallel computers.
@@ -135,7 +135,7 @@ Additionally, PETSc's configuration script provides a very long list of options 
 
 -   If not detected, use `--with-blas-lapack-lib` to specify the location of BLAS and LAPACK. If SLEPc's configure complains about some missing LAPACK subroutines, reconfigure PETSc with option `--download-f2cblaslapack`.
 
--   Enable external libraries that provide direct linear solvers or preconditioners, such as MUMPS, hypre, or SuperLU; for example, `--download-mumps`. These are especially relevant for SLEPc in the case that a spectral transformation is used, see chapter [](#cap:st).
+-   Enable external libraries that provide direct linear solvers or preconditioners, such as MUMPS, hypre, or SuperLU; for example, `--download-mumps`. These are especially relevant for SLEPc in the case that a spectral transformation is used, see chapter [](#ch:st).
 
 -   Add `--with-64-bit-indices=1` to use 8 byte integers (`long long`) for indexing in vectors and matrices. This is only needed when working with over roughly 2 billion unknowns.
 
@@ -305,11 +305,11 @@ EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *kr,PetscScalar *ki,Vec xr,Vec xi
 EPSDestroy(EPS *eps);
 ```
 
-The user first creates the `EPS` context and sets the operators associated with the eigensystem as well as the problem type. The user then sets various options for customized solution, solves the problem, retrieves the solution, and finally destroys the `EPS` context. Chapter [](#cap:eps) describes in detail the `EPS` package, including the options database that enables the user to customize the solution process at runtime by selecting the solution algorithm and also specifying the convergence tolerance, the number of eigenvalues, the dimension of the subspace, etc.
+The user first creates the `EPS` context and sets the operators associated with the eigensystem as well as the problem type. The user then sets various options for customized solution, solves the problem, retrieves the solution, and finally destroys the `EPS` context. Chapter [](#ch:eps) describes in detail the `EPS` package, including the options database that enables the user to customize the solution process at runtime by selecting the solution algorithm and also specifying the convergence tolerance, the number of eigenvalues, the dimension of the subspace, etc.
 
 #### Spectral Transformation.
 
-In the example program shown above there is no explicit reference to spectral transformations. However, an `ST` object is handled internally so that the user is able to request different transformations such as shift-and-invert. Chapter [](#cap:st) describes the `ST` package in detail.
+In the example program shown above there is no explicit reference to spectral transformations. However, an `ST` object is handled internally so that the user is able to request different transformations such as shift-and-invert. Chapter [](#ch:st) describes the `ST` package in detail.
 
 #### Error Checking.
 

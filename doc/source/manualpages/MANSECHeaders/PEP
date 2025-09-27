@@ -4,6 +4,6 @@ The Polynomial Eigenvalue Problem (PEP) solver is the object provided by SLEPc f
 
 As in the other solver objects, users can set various options at runtime via the options database (e.g., -pep_nev 4 -pep_type linear). Options can also be set directly in application codes by calling the corresponding routines (e.g., PEPSetDimensions() / PEPSetType()).
 
-Users guide section: [](cap:pep).
+Users guide section: [](ch:pep).
 
 <a href="PETSC_DOC_OUT_ROOT_PLACEHOLDER/src/pep/tutorials/index.html">Examples</a><br>

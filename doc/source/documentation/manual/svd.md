@@ -1,9 +1,9 @@
-(cap:svd)=
+(ch:svd)=
 # SVD: Singular Value Decomposition
 
 The Singular Value Decomposition (`SVD`) solver object can be used for computing a partial SVD of a rectangular matrix, and other related problems. It provides uniform and efficient access to several specific SVD solvers included in SLEPc, and also gives the possibility to compute the decomposition via the eigensolvers provided in the `EPS` package.
 
-In many aspects, the user interface of `SVD` resembles that of `EPS`. For this reason, this chapter and chapter [](#cap:eps) have a very similar structure.
+In many aspects, the user interface of `SVD` resembles that of `EPS`. For this reason, this chapter and chapter [](#ch:eps) have a very similar structure.
 
 {#sec:svdback label="sec:svdback"}
 ## Mathematical Background
@@ -296,7 +296,7 @@ for (j=0; j<nconv; j++) {
 SVDDestroy( &svd );
 ```
 
-The basic steps for computing a partial SVD with SLEPc are illustrated in figure [](#fig:ex-svd). The steps are more or less the same as those described in chapter [](#cap:eps) for the eigenvalue problem. First, the solver context is created with `SVDCreate`. Then the problem matrices have to be specified with `SVDSetOperators` and the type of problem can be selected via `SVDSetProblemType`. Then, a call to `SVDSolve` invokes the actual solver. After that, `SVDGetConverged` is used to determine how many solutions have been computed, which are retrieved with `SVDGetSingularTriplet`. Finally, `SVDDestroy` gets rid of the object.
+The basic steps for computing a partial SVD with SLEPc are illustrated in figure [](#fig:ex-svd). The steps are more or less the same as those described in chapter [](#ch:eps) for the eigenvalue problem. First, the solver context is created with `SVDCreate`. Then the problem matrices have to be specified with `SVDSetOperators` and the type of problem can be selected via `SVDSetProblemType`. Then, a call to `SVDSolve` invokes the actual solver. After that, `SVDGetConverged` is used to determine how many solutions have been computed, which are retrieved with `SVDGetSingularTriplet`. Finally, `SVDDestroy` gets rid of the object.
 
 If one compares this example code with the `EPS` example in figure [](#fig:ex-eps), the most outstanding differences are the following:
 
