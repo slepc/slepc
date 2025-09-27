@@ -898,6 +898,10 @@ H = \begin{bmatrix}
 
 where $A$, $B$ and $C$ are either real with $B=B^T$, $C=C^T$, or complex with $B=B^*$, $C=C^*$. In the real case, eigenvalues appear in pairs $\{\lambda,-\lambda\}$ and for complex eigenvalues in quadruples $\{\lambda,-\lambda,\bar\lambda,-\bar\lambda\}$. For a complex Hamiltonian matrix, if $\lambda$ is an eigenvalue, then $-\bar\lambda$ is also an eigenvalue. A structure-preserving eigensolver has been implemented in `EPS` (in Krylov-Schur), which is activated by selecting the `EPS_HAMILT` problem type (or `-eps_hamiltonian` from the command line). Note that matrix $H$ {math:numref}`eq:hamilt` must be created with the helper function `MatCreateHamiltonian` in order to use this solver.
 
+:::{warning}
+The structure-preserving eigensolver for Hamiltonian eigenvalue problems should be considered experimental. Depending on the problem, it may become numerically unstable after some iterations, in which case the solver will abort, returning less eigenvalues than requested.
+:::
+
 ```{rubric} Footnotes
 ```
 
