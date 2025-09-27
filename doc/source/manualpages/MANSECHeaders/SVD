@@ -4,6 +4,6 @@ The Singular Value Decomposition Solver (SVD) is very similar to the EPS object,
 
 The user interface is very similar to that of EPS, both for the options database (e.g., -svd_nsv 4 -svd_type lanczos), and for the programmatic interface (e.g., SVDSetDimensions() / SVDSetType()).
 
-Users guide section: [](cap:svd).
+Users guide section: [](ch:svd).
 
 <a href="PETSC_DOC_OUT_ROOT_PLACEHOLDER/src/svd/tutorials/index.html">Examples</a><br>

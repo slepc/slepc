@@ -1,4 +1,4 @@
-(cap:eps)=
+(ch:eps)=
 # EPS: Eigenvalue Problem Solver
 
 The Eigenvalue Problem Solver (`EPS`) is the main object provided by SLEPc. It is used to specify a linear eigenvalue problem, either in standard or generalized form, and provides uniform and efficient access to all of the linear eigensolvers included in the package. Conceptually, the level of abstraction occupied by `EPS` is similar to other solvers in PETSc such as {external:doc}`KSP` for solving linear systems of equations.
@@ -90,7 +90,7 @@ In many applications, Krylov eigensolvers perform very well because Krylov subsp
 
 ### Related Problems
 
-In many applications such as the analysis of damped vibrating systems the problem to be solved is a *polynomial eigenvalue problem* (PEP), or more generally a *nonlinear eigenvalue problem* (NEP). For these, the reader is referred to chapters [](#cap:pep) and [](#cap:nep). Another linear algebra problem that is very closely related to the eigenvalue problem is the *singular value decomposition* (SVD), see chapter [](#cap:svd).
+In many applications such as the analysis of damped vibrating systems the problem to be solved is a *polynomial eigenvalue problem* (PEP), or more generally a *nonlinear eigenvalue problem* (NEP). For these, the reader is referred to chapters [](#ch:pep) and [](#ch:nep). Another linear algebra problem that is very closely related to the eigenvalue problem is the *singular value decomposition* (SVD), see chapter [](#ch:svd).
 
 ## Basic Usage
 
@@ -173,7 +173,7 @@ EPSSetUp(EPS eps);
 
 before calling `EPSSolve` to perform any setup required for the eigensolver.
 
-Internally, the `EPS` object works with an `ST` object (spectral transformation, described in chapter [](#cap:st). To allow application programmers to set any of the spectral transformation options directly within the code, the following routine is provided to extract the `ST` context, `EPSGetST`
+Internally, the `EPS` object works with an `ST` object (spectral transformation, described in chapter [](#ch:st). To allow application programmers to set any of the spectral transformation options directly within the code, the following routine is provided to extract the `ST` context, `EPSGetST`
 
 ```{code} c
 EPSGetST(EPS eps,ST *st);
@@ -255,7 +255,7 @@ For the selection of the portion of the spectrum of interest, there are several 
 EPSSetWhichEigenpairs(EPS eps,EPSWhich which);
 ```
 
-which can also be specified at the command line. This criterion is used both for configuring how the eigensolver seeks eigenvalues (note that not all these possibilities are available for all the solvers) and also for sorting the computed values. The default is to compute the largest magnitude eigenvalues, except for those solvers in which this option is not available. There is another exception related to the use of some spectral transformations, see chapter [](#cap:st).
+which can also be specified at the command line. This criterion is used both for configuring how the eigensolver seeks eigenvalues (note that not all these possibilities are available for all the solvers) and also for sorting the computed values. The default is to compute the largest magnitude eigenvalues, except for those solvers in which this option is not available. There is another exception related to the use of some spectral transformations, see chapter [](#ch:st).
 
 For the sorting criteria relative to a target value, the following function must be called in order to specify such value $\tau$: `EPSSetTarget`
 
@@ -269,7 +269,7 @@ The use of a target value makes sense if the eigenvalues of interest are located
 
 -   To use harmonic extraction (see section [](#sec:harmonic)), a variant of some solvers that allows a better approximation of interior eigenvalues without changing the way the subspace is built.
 
--   To use a spectral transformation such as shift-and-invert (see chapter [](#cap:st)), where the subspace is built from a transformed problem (usually much more costly).
+-   To use a spectral transformation such as shift-and-invert (see chapter [](#ch:st)), where the subspace is built from a transformed problem (usually much more costly).
 
 The special case of computing all eigenvalues in an interval is discussed in the next chapter (sections [](#sec:filter) and [](#sec:slice)), since it is related also to spectral transformations. In this case, instead of a target value the user has to specify the computational interval with `EPSSetInterval`
 
@@ -322,7 +322,7 @@ The available methods for solving the eigenvalue problems are the following:
 
 -   Basic methods (not recommended except for simple problems):
 
-    -   Power Iteration with deflation. When combined with shift-and-invert (see chapter [](#cap:st)), it is equivalent to the inverse iteration. Also, this solver embeds the Rayleigh Quotient iteration (RQI) by allowing variable shifts. Additionally, it provides the nonlinear inverse iteration method for the case that the problem matrix is a nonlinear operator (for this advanced usage, see `EPSPowerSetNonlinear`).
+    -   Power Iteration with deflation. When combined with shift-and-invert (see chapter [](#ch:st)), it is equivalent to the inverse iteration. Also, this solver embeds the Rayleigh Quotient iteration (RQI) by allowing variable shifts. Additionally, it provides the nonlinear inverse iteration method for the case that the problem matrix is a nonlinear operator (for this advanced usage, see `EPSPowerSetNonlinear`).
 
     -   Subspace Iteration with Rayleigh-Ritz projection and locking.
 

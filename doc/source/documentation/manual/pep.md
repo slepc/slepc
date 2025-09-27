@@ -1,4 +1,4 @@
-(cap:pep)=
+(ch:pep)=
 # PEP: Polynomial Eigenvalue Problems
 
 The Polynomial Eigenvalue Problem (`PEP`) solver object is intended for addressing polynomial eigenproblems of arbitrary degree, $P(\lambda)x=0$. A particular instance is the quadratic eigenvalue problem (degree 2), which is the case more often encountered in practice. For this reason, part of the description of this chapter focuses specifically on quadratic eigenproblems.
@@ -181,7 +181,7 @@ An alternative to linearization is to directly perform a projection of the polyn
 
 The user interface of the `PEP` package is very similar to `EPS`. For basic usage, the most noteworthy difference is that all coefficient matrices $A_i$ have to be supplied in the form of an array of {external:doc}`Mat`.
 
-A basic example code for solving a polynomial eigenproblem with `PEP` is shown in figure [](#fig:ex-pep), where the code for building matrices `A[0]`, `A[1]`, ... is omitted. The required steps are the same as those described in chapter [](#cap:eps) for the linear eigenproblem. As always, the solver context is created with `PEPCreate`. The coefficient matrices are provided with `PEPSetOperators`, and the problem type is specified with `PEPSetProblemType`. Calling `PEPSetFromOptions` allows the user to set up various options through the command line. The call to `PEPSolve` invokes the actual solver. Then, the solution is retrieved with `PEPGetConverged` and `PEPGetEigenpair`. Finally, `PEPDestroy` destroys the object.
+A basic example code for solving a polynomial eigenproblem with `PEP` is shown in figure [](#fig:ex-pep), where the code for building matrices `A[0]`, `A[1]`, ... is omitted. The required steps are the same as those described in chapter [](#ch:eps) for the linear eigenproblem. As always, the solver context is created with `PEPCreate`. The coefficient matrices are provided with `PEPSetOperators`, and the problem type is specified with `PEPSetProblemType`. Calling `PEPSetFromOptions` allows the user to set up various options through the command line. The call to `PEPSolve` invokes the actual solver. Then, the solution is retrieved with `PEPGetConverged` and `PEPGetEigenpair`. Finally, `PEPDestroy` destroys the object.
 
 ```{code-block} c
 :name: fig:ex-pep
@@ -387,7 +387,7 @@ C_\sigma&= C+2\sigma M,\\
 M_\sigma&= \sigma^2 M+\sigma C+K,
 ```
 
-and the relation between the eigenvalue of the original eigenproblem, $\lambda$, and the transformed one, $\theta$, is $\theta=(\lambda-\sigma)^{-1}$ as in the case of the linear eigenvalue problem. See chapter [](#cap:st) for additional details.
+and the relation between the eigenvalue of the original eigenproblem, $\lambda$, and the transformed one, $\theta$, is $\theta=(\lambda-\sigma)^{-1}$ as in the case of the linear eigenvalue problem. See chapter [](#ch:st) for additional details.
 
 The polynomial eigenvalue problem of equation {math:numref}`eq:sinvquad` corresponds to the reversed form of the shifted polynomial, $rev P(\theta)$. The extension to matrix polynomials of arbitrary degree is also possible, where the coefficients of $rev P(\theta)$ have the general form
 
