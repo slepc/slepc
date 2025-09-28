@@ -93,6 +93,5 @@ And as a direct [download](download)
 :hidden:
 
 download
-older
 quickstart
 ```
