@@ -4,7 +4,7 @@
 
 ### Git
 
-The source repository is hosted at [gitlab.com](https://gitlab.com/slepc/slepc) and uses the `git` version control system. The development process follows the methodology used by PETSc, with two integration branches (`main` and `release`), together with various feature branches. One can expect SLEPc's `release` branch to be synchronized with PETSc's `release` branch.
+The source repository is hosted at [gitlab.com](https://gitlab.com/slepc/slepc) and uses the `git` version control system. The development process follows the methodology used by PETSc, with two integration branches (`main` and `release`), together with various feature branches. One can expect SLEPc's `release` branch to be synchronized with PETSc's `release` branch, and similarly for `main`.
 
 In order to get the release version of SLEPc, you need to clone the repository indicating `release` as the branch name:
 
@@ -101,7 +101,7 @@ Distribution files:
 [[3.22]](https://slepc.upv.es/download/distrib/slepc-3.22.2.tar.gz)
 [[3.23]](https://slepc.upv.es/download/distrib/slepc-3.23.2.tar.gz)
 
-:::{note}
+:::{warning}
 Users of previous versions are strongly recommended to upgrade to the latest one.
 :::
 
