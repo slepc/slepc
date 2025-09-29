@@ -33,9 +33,9 @@ SLEPc is built on top of [PETSc](https://petsc.org/), the Portable Extensible To
 Documentation
 -------------
 
-The Users Manual as well as the HTML man pages for the detailed reference of each individual SLEPc routines are included in the SLEPc distribution and can also be found at the [online documentation](https://slepc.upv.es/documentation).
+The Users Manual as well as the HTML man pages for the detailed reference of each individual SLEPc routines are included in the SLEPc distribution and can also be found at the [online documentation](https://slepc.upv.es/release/documentation).
 
-The main reference for SLEPc is the following paper (see [other references at the SLEPc website](https://slepc.upv.es/material)):
+The main reference for SLEPc is the following paper (see [other references at the SLEPc website](https://slepc.upv.es/release/material)):
 
 - V. Hernandez, J. E. Roman, and V. Vidal, *SLEPc: A scalable and flexible toolkit for the solution of eigenvalue problems*, ACM Trans. Math. Software 31: 351-362 (2005). [DOI](https://doi.org/10.1145%2F1089014.1089019)
 
@@ -43,7 +43,7 @@ The main reference for SLEPc is the following paper (see [other references at th
 Installation
 ------------
 
-The installation procedure of SLEPc is very similar to that of PETSc. Briefly, the environment variables `$SLEPC_DIR` and `$PETSC_DIR` must be set, then the `configure` script is executed and finally the libraries are built with the command `make`. More details can be found in the Users Manual or in the online [installation instructions](https://slepc.upv.es/documentation/instal.htm).
+The installation procedure of SLEPc is very similar to that of PETSc. Briefly, the environment variables `$SLEPC_DIR` and `$PETSC_DIR` must be set, then the `configure` script is executed and finally the libraries are built with the command `make`. More details can be found in the Users Manual or in the online [installation instructions](https://slepc.upv.es/release/installation).
 
 
 License

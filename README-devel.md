@@ -26,10 +26,3 @@ Code
 
 - In SLEPc, code style is not enforced via `clang-format`. Still, most coding conventions should be followed. They are the same as the ones from PETSc prior to the switch to `clang-format`, see the [PETSc Style and Usage Guide](https://petsc.org/release/developers/style/).
 
-Documentation
--------------
-
-- SLEPc does not yet use the Sphinx-based documentation system implemented by PETSc.
-- The SLEPc website is not included in the repository.
-- The SLEPc users manual in PDF is generated directly from LaTeX source.
-- The `alldoc` rule in the makefile uses the old rules, see file `slepc_rules_doc.mk`. In particular, Sowing is used to generate HTML man pages directly, not Markdown as in PETSc.
