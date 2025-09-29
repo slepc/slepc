@@ -68,6 +68,7 @@ class EPSProblemType(object):
                 with positive definite :math:`B`.
     - `GHIEP`:  Generalized Hermitian-indefinite eigenproblem.
     - `BSE`:    Structured Bethe-Salpeter eigenproblem.
+    - `HAMILT`: Hamiltonian eigenproblem.
     """
     HEP    = EPS_HEP
     NHEP   = EPS_NHEP
@@ -76,6 +77,7 @@ class EPSProblemType(object):
     PGNHEP = EPS_PGNHEP
     GHIEP  = EPS_GHIEP
     BSE    = EPS_BSE
+    HAMILT = EPS_HAMILT
 
 class EPSExtraction(object):
     """

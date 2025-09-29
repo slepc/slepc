@@ -364,6 +364,7 @@ static inline PetscErrorCode EPS_GetActualConverged(EPS eps,PetscInt *nconv)
   *nconv = eps->nconv;
   if (eps->isstructured) {
     if (eps->problem_type == EPS_BSE && (eps->which == EPS_SMALLEST_MAGNITUDE || eps->which == EPS_LARGEST_MAGNITUDE || eps->which == EPS_TARGET_MAGNITUDE)) *nconv *= 2;
+    if (eps->problem_type == EPS_HAMILT && (eps->which == EPS_SMALLEST_MAGNITUDE || eps->which == EPS_LARGEST_MAGNITUDE || eps->which == EPS_TARGET_MAGNITUDE)) *nconv *= 2;
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -375,10 +376,14 @@ static inline PetscErrorCode EPS_GetActualConverged(EPS eps,PetscInt *nconv)
 */
 static inline PetscErrorCode EPS_GetEigenvector(EPS eps,BV V,PetscInt i,Vec Vr,Vec Vi)
 {
-  PetscInt k;
-  Vec      v0,v1,w,w0,w1;
-  Mat      H;
-  IS       is[2];
+  PetscInt  k;
+  Vec       v0,v1,w,w0,w1;
+  Mat       H;
+  IS        is[2];
+#if !defined(PETSC_USE_COMPLEX)
+  PetscInt  k0,k1,k2,iquad;
+  PetscReal nrm,nrmr=0.0,nrmi=0.0,sgn;
+#endif
 
   PetscFunctionBegin;
   if (!eps->isstructured) {
@@ -427,6 +432,77 @@ static inline PetscErrorCode EPS_GetEigenvector(EPS eps,BV V,PetscInt i,Vec Vr,V
       } else {
         PetscCall(BV_GetEigenvector(V,k,eps->eigi[k],Vr,Vi));
       }
+    } else if (eps->problem_type == EPS_HAMILT) {
+      k = eps->perm[i/2];
+#if !defined(PETSC_USE_COMPLEX)
+      if (eps->eigi[k]==0.0) { /* real eigenvalue */
+        if (Vr) {
+          PetscCall(BVCopyVec(V,k+eps->ncv/2+1,Vr));
+          PetscCall(BVGetColumn(V,k,&w));
+          PetscCall(VecAXPY(Vr,(i%2)?-eps->eigr[k]:eps->eigr[k],w));
+          PetscCall(BVRestoreColumn(V,k,&w));
+          PetscCall(VecNorm(Vr,NORM_2,&nrmr));
+        }
+        if (Vi) PetscCall(VecZeroEntries(Vi));
+        nrm = nrmr;
+      } else if (eps->eigr[k]==0.0 ) { /* purely imaginary eigenvalue */
+        if (Vr) {
+          PetscCall(BVCopyVec(V,k+eps->ncv/2+1,Vr));
+          PetscCall(VecNorm(Vr,NORM_2,&nrmr));
+        }
+        if (Vi) {
+          PetscCall(BVCopyVec(V,k,Vi));
+          PetscCall(VecScale(Vi,(i%2)?-eps->eigi[k]:eps->eigi[k]));
+          PetscCall(VecNorm(Vi,NORM_2,&nrmi));
+        }
+        nrm = SlepcAbs(nrmr,nrmi);
+      } else { /* quadruple eigenvalue (-conj(lambda),-lambda,lambda,conj(lambda)) */
+        iquad = i%2;  /* index within the 4 values */
+        if (i>=2) {
+          k2 = eps->perm[(i-2)/2];
+          if (eps->eigr[k]==eps->eigr[k2] && eps->eigi[k]==-eps->eigi[k2]) iquad += 2;
+        }
+        k0 = (iquad<2)? k: k2;
+        k1 = k0+1;
+        /* Vr+Vi*i obtained as eig*u+v where u=ur+ui*i is stored in cols k0 (ur) and k1 (ui) and
+           v=vr+vi*i is in cols shifted by ncv/2+1.
+           For lambda=eigr+eigi*i:
+            Vr+Vi*i = (eigr+eigi*i)(ur+ui*i) + vr+vi*i
+            Vr+Vi*i = eigr*(ur+ui*i) - eigi*ui+eigi*ur*i + vr+vi*i
+            Vr+Vi*i = eigr*ur-eigi*ui+vr + (eigi*ur+eigr*ui+vi)*i
+           For -conj(lambda): eigr, ui and vi have the signs changed
+           For       -lambda: eigr and eigi have the signs changed
+           For  conj(lambda): eigi, ui and vi have the signs changed   */
+        if (Vr) {
+          sgn = (iquad<2)? -1.0: 1.0;
+          PetscCall(BVCopyVec(V,k0,Vr));                  /* ur */
+          PetscCall(VecScale(Vr,sgn*eps->eigr[k0]));
+          PetscCall(BVGetColumn(V,k1,&w));                /* ui */
+          PetscCall(VecAXPY(Vr,-sgn*eps->eigi[k0],w));
+          PetscCall(BVRestoreColumn(V,k1,&w));
+          PetscCall(BVGetColumn(V,k0+eps->ncv/2+1,&w));   /* vr */
+          PetscCall(VecAXPY(Vr,1.0,w));
+          PetscCall(BVRestoreColumn(V,k0+eps->ncv/2+1,&w));
+          PetscCall(VecNorm(Vr,NORM_2,&nrmr));
+        }
+        if (Vi) {
+          sgn = (iquad%2)? -1.0: 1.0;
+          PetscCall(BVCopyVec(V,k0,Vi));                  /* ur */
+          PetscCall(VecScale(Vi,sgn*eps->eigi[k0]));
+          PetscCall(BVGetColumn(V,k1,&w));                /* ui */
+          PetscCall(VecAXPY(Vi,sgn*eps->eigr[k0],w));
+          PetscCall(BVRestoreColumn(V,k1,&w));
+          PetscCall(BVGetColumn(V,k1+eps->ncv/2+1,&w));   /* vi */
+          sgn = (iquad%3)? 1.0: -1.0;
+          PetscCall(VecAXPY(Vi,sgn,w));
+          PetscCall(BVRestoreColumn(V,k1+eps->ncv/2+1,&w));
+          PetscCall(VecNorm(Vi,NORM_2,&nrmi));
+        }
+        nrm = SlepcAbs(nrmr,nrmi);
+      }
+      if (Vr) PetscCall(VecScale(Vr,1.0/nrm));
+      if (Vi) PetscCall(VecScale(Vi,1.0/nrm));
+#endif
     } else SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_LIB,"Inconsistent state");
   }
   PetscFunctionReturn(PETSC_SUCCESS);

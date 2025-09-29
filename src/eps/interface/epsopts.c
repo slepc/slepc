@@ -110,8 +110,10 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
     if (flg) PetscCall(EPSSetProblemType(eps,EPS_PGNHEP));
     PetscCall(PetscOptionsBoolGroup("-eps_gen_indefinite","Generalized Hermitian-indefinite eigenvalue problem","EPSSetProblemType",&flg));
     if (flg) PetscCall(EPSSetProblemType(eps,EPS_GHIEP));
-    PetscCall(PetscOptionsBoolGroupEnd("-eps_bse","Structured Bethe-Salpeter eigenvalue problem","EPSSetProblemType",&flg));
+    PetscCall(PetscOptionsBoolGroup("-eps_bse","Structured Bethe-Salpeter eigenvalue problem","EPSSetProblemType",&flg));
     if (flg) PetscCall(EPSSetProblemType(eps,EPS_BSE));
+    PetscCall(PetscOptionsBoolGroupEnd("-eps_hamiltonian","Structured Hamiltonian eigenvalue problem","EPSSetProblemType",&flg));
+    if (flg) PetscCall(EPSSetProblemType(eps,EPS_HAMILT));
 
     PetscCall(PetscOptionsBoolGroupBegin("-eps_ritz","Rayleigh-Ritz extraction","EPSSetExtraction",&flg));
     if (flg) PetscCall(EPSSetExtraction(eps,EPS_RITZ));
@@ -963,7 +965,8 @@ PetscErrorCode EPSGetStoppingTest(EPS eps,EPSStop *stop)
 .  -eps_pos_gen_non_hermitian - generalized non-Hermitian eigenvalue problem
    with positive semi-definite B
 .  -eps_gen_indefinite - generalized Hermitian-indefinite eigenvalue problem
--  -eps_bse - structured Bethe-Salpeter eigenvalue problem
+.  -eps_bse - structured Bethe-Salpeter eigenvalue problem
+-  -eps_hamiltonian - structured Hamiltonian eigenvalue problem
 
    Notes:
    This function must be used to instruct SLEPc to exploit symmetry or other
@@ -1029,6 +1032,12 @@ PetscErrorCode EPSSetProblemType(EPS eps,EPSProblemType type)
       eps->isstructured = PETSC_FALSE;
       break;
     case EPS_BSE:
+      eps->isgeneralized = PETSC_FALSE;
+      eps->ishermitian = PETSC_FALSE;
+      eps->ispositive = PETSC_FALSE;
+      eps->isstructured = PETSC_TRUE;
+      break;
+    case EPS_HAMILT:
       eps->isgeneralized = PETSC_FALSE;
       eps->ishermitian = PETSC_FALSE;
       eps->ispositive = PETSC_FALSE;

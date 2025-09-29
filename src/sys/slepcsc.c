@@ -62,6 +62,54 @@ PetscErrorCode SlepcSCCompare(SlepcSC sc,PetscScalar ar,PetscScalar ai,PetscScal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode SlepcSortEigenvalues_Private(SlepcSC sc,PetscInt n,PetscScalar *eigr,PetscScalar *eigi,PetscInt *perm,PetscBool flg)
+{
+  PetscScalar    re,im;
+  PetscInt       i,j,result,tmp;
+
+  PetscFunctionBegin;
+  /* insertion sort */
+  for (i=n-1;i>=0;i--) {
+    re = eigr[perm[i]];
+    im = eigi[perm[i]];
+    j = i+1;
+#if !defined(PETSC_USE_COMPLEX)
+    if (im!=0 && (re!=0 || !flg)) {
+      /* complex eigenvalue */
+      i--;
+      im = eigi[perm[i]];
+    }
+#endif
+    while (j<n) {
+      PetscCall(SlepcSCCompare(sc,re,im,eigr[perm[j]],eigi[perm[j]],&result));
+      if (result<=0) break;
+#if !defined(PETSC_USE_COMPLEX)
+      /* keep together every complex conjugated eigenpair */
+      if (!im || (!re && flg)) {
+        if (eigi[perm[j]] == 0.0 || (flg && eigr[perm[j]] == 0.0)) {
+#endif
+          tmp = perm[j-1]; perm[j-1] = perm[j]; perm[j] = tmp;
+          j++;
+#if !defined(PETSC_USE_COMPLEX)
+        } else {
+          tmp = perm[j-1]; perm[j-1] = perm[j]; perm[j] = perm[j+1]; perm[j+1] = tmp;
+          j+=2;
+        }
+      } else {
+        if (eigi[perm[j]] == 0.0 || (flg && eigr[perm[j]] == 0.0)) {
+          tmp = perm[j-2]; perm[j-2] = perm[j]; perm[j] = perm[j-1]; perm[j-1] = tmp;
+          j++;
+        } else {
+          tmp = perm[j-2]; perm[j-2] = perm[j]; perm[j] = tmp;
+          tmp = perm[j-1]; perm[j-1] = perm[j+1]; perm[j+1] = tmp;
+          j+=2;
+        }
+      }
+#endif
+    }
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
 /*@
    SlepcSortEigenvalues - Sorts a list of eigenvalues according to the
    sorting criterion specified in a SlepcSC context.
@@ -77,10 +125,13 @@ PetscErrorCode SlepcSCCompare(SlepcSC sc,PetscScalar ar,PetscScalar ai,PetscScal
    Output Parameter:
 .  perm - permutation array. Must be initialized to 0:n-1 on input.
 
-   Note:
+   Notes:
    The result is a list of indices in the original eigenvalue array
    corresponding to the first n eigenvalues sorted in the specified
    criterion.
+
+   In real scalars, this functions assumes that complex values come in
+   conjugate pairs that are consecutive (including purely imaginary ones).
 
    Level: developer
 
@@ -88,54 +139,52 @@ PetscErrorCode SlepcSCCompare(SlepcSC sc,PetscScalar ar,PetscScalar ai,PetscScal
 @*/
 PetscErrorCode SlepcSortEigenvalues(SlepcSC sc,PetscInt n,PetscScalar *eigr,PetscScalar *eigi,PetscInt *perm)
 {
-  PetscScalar    re,im;
-  PetscInt       i,j,result,tmp;
-
   PetscFunctionBegin;
   PetscAssertPointer(sc,1);
   PetscAssertPointer(eigr,3);
   PetscAssertPointer(eigi,4);
   PetscAssertPointer(perm,5);
-  /* insertion sort */
-  for (i=n-1;i>=0;i--) {
-    re = eigr[perm[i]];
-    im = eigi[perm[i]];
-    j = i+1;
-#if !defined(PETSC_USE_COMPLEX)
-    if (im!=0) {
-      /* complex eigenvalue */
-      i--;
-      im = eigi[perm[i]];
-    }
-#endif
-    while (j<n) {
-      PetscCall(SlepcSCCompare(sc,re,im,eigr[perm[j]],eigi[perm[j]],&result));
-      if (result<=0) break;
-#if !defined(PETSC_USE_COMPLEX)
-      /* keep together every complex conjugated eigenpair */
-      if (!im) {
-        if (eigi[perm[j]] == 0.0) {
-#endif
-          tmp = perm[j-1]; perm[j-1] = perm[j]; perm[j] = tmp;
-          j++;
-#if !defined(PETSC_USE_COMPLEX)
-        } else {
-          tmp = perm[j-1]; perm[j-1] = perm[j]; perm[j] = perm[j+1]; perm[j+1] = tmp;
-          j+=2;
-        }
-      } else {
-        if (eigi[perm[j]] == 0.0) {
-          tmp = perm[j-2]; perm[j-2] = perm[j]; perm[j] = perm[j-1]; perm[j-1] = tmp;
-          j++;
-        } else {
-          tmp = perm[j-2]; perm[j-2] = perm[j]; perm[j] = tmp;
-          tmp = perm[j-1]; perm[j-1] = perm[j+1]; perm[j+1] = tmp;
-          j+=2;
-        }
-      }
-#endif
-    }
-  }
+  PetscCall(SlepcSortEigenvalues_Private(sc,n,eigr,eigi,perm,PETSC_FALSE));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   SlepcSortEigenvaluesSpecial - Sorts a list of eigenvalues according to the
+   sorting criterion specified in a SlepcSC context, with a special assumption
+   on the input values.
+
+   Not Collective
+
+   Input Parameters:
++  sc   - the sorting criterion context
+.  n    - number of eigenvalues in the list
+.  eigr - pointer to the array containing the eigenvalues
+-  eigi - imaginary part of the eigenvalues (only when using real numbers)
+
+   Output Parameter:
+.  perm - permutation array. Must be initialized to 0:n-1 on input.
+
+   Notes:
+   The result is a list of indices in the original eigenvalue array
+   corresponding to the first n eigenvalues sorted in the specified
+   criterion.
+
+   In real scalars, this functions assumes that complex values come in
+   conjugate pairs that are consecutive, but not purely imaginary ones in which
+   case only the one with positive imaginary part appears.
+
+   Level: developer
+
+.seealso: SlepcSCCompare(), SlepcSC
+@*/
+PetscErrorCode SlepcSortEigenvaluesSpecial(SlepcSC sc,PetscInt n,PetscScalar *eigr,PetscScalar *eigi,PetscInt *perm)
+{
+  PetscFunctionBegin;
+  PetscAssertPointer(sc,1);
+  PetscAssertPointer(eigr,3);
+  PetscAssertPointer(eigi,4);
+  PetscAssertPointer(perm,5);
+  PetscCall(SlepcSortEigenvalues_Private(sc,n,eigr,eigi,perm,PETSC_TRUE));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

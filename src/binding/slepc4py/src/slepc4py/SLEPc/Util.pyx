@@ -29,4 +29,30 @@ cdef class Util:
         CHKERR( MatCreateBSE(R.mat, C.mat, &H.mat) )
         return H
 
+    @classmethod
+    def createMatHamiltonian(cls, Mat A: petsc4py.PETSc.Mat, Mat B: petsc4py.PETSc.Mat, Mat C: petsc4py.PETSc.Mat) -> petsc4py.PETSc.Mat:
+        """
+        Create a matrix that can be used to define a structured eigenvalue
+        problem of Hamiltonian type.
+
+        Collective.
+
+        Parameters
+        ----------
+        A
+            The matrix for (0,0) block.
+        B
+            The matrix for (0,1) block, must be real symmetric or Hermitian.
+        C
+            The matrix for (1,0) block, must be real symmetric or Hermitian.
+
+        Returns
+        -------
+        petsc4py.PETSc.Mat
+            The matrix with the block form :math:`H = [ A B; C -A^* ]`.
+        """
+        cdef Mat H = Mat()
+        CHKERR( MatCreateHamiltonian(A.mat, B.mat, C.mat, &H.mat) )
+        return H
+
 # -----------------------------------------------------------------------------

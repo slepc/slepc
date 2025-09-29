@@ -170,7 +170,8 @@ PetscErrorCode EPSSolve(EPS eps)
 #if !defined(PETSC_USE_COMPLEX)
   /* Reorder conjugate eigenvalues (positive imaginary first) */
   for (i=0;i<eps->nconv-1;i++) {
-    if (eps->eigi[i] != 0) {
+    if (eps->eigi[i] != 0 && (eps->problem_type!=EPS_HAMILT || eps->eigr[i]!=0)) {
+      /* conjugate eigenvalues */
       if (eps->eigi[i] < 0) {
         eps->eigi[i] = -eps->eigi[i];
         eps->eigi[i+1] = -eps->eigi[i+1];
@@ -185,7 +186,8 @@ PetscErrorCode EPSSolve(EPS eps)
 #endif
 
   /* Sort eigenvalues according to eps->which parameter */
-  PetscCall(SlepcSortEigenvalues(eps->sc,eps->nconv,eps->eigr,eps->eigi,eps->perm));
+  if (eps->problem_type==EPS_HAMILT) PetscCall(SlepcSortEigenvaluesSpecial(eps->sc,eps->nconv,eps->eigr,eps->eigi,eps->perm));
+  else PetscCall(SlepcSortEigenvalues(eps->sc,eps->nconv,eps->eigr,eps->eigi,eps->perm));
   PetscCall(PetscLogEventEnd(EPS_Solve,eps,0,0,0));
 
   /* Various viewers */
@@ -457,7 +459,10 @@ PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar 
 @*/
 PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar *eigi)
 {
-  PetscInt k,nconv;
+  PetscInt  k,nconv;
+#if !defined(PETSC_USE_COMPLEX)
+  PetscInt  k2, iquad;
+#endif
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -475,16 +480,41 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
     if (eigi) *eigi = eps->eigi[k];
 #endif
   } else {
-    PetscCheck(eps->problem_type==EPS_BSE,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Problem type should be BSE");
-    /* BSE problem, even index is +lambda, odd index is -lambda */
-    k = eps->perm[i/2];
+    PetscCheck(eps->problem_type==EPS_BSE || eps->problem_type==EPS_HAMILT,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Problem type should be BSE or Hamiltonian");
+    if (eps->problem_type==EPS_BSE) {
+      /* BSE problem, even index is +lambda, odd index is -lambda */
+      k = eps->perm[i/2];
 #if defined(PETSC_USE_COMPLEX)
-    if (eigr) *eigr = (i%2)? -eps->eigr[k]: eps->eigr[k];
-    if (eigi) *eigi = 0;
+      if (eigr) *eigr = (i%2)? -eps->eigr[k]: eps->eigr[k];
+      if (eigi) *eigi = 0;
 #else
-    if (eigr) *eigr = (i%2)? -eps->eigr[k]: eps->eigr[k];
-    if (eigi) *eigi = eps->eigi[k];
+      if (eigr) *eigr = (i%2)? -eps->eigr[k]: eps->eigr[k];
+      if (eigi) *eigi = eps->eigi[k];
 #endif
+    } else if (eps->problem_type==EPS_HAMILT) {
+      /* Hamiltonian eigenproblem */
+      k = eps->perm[i/2];
+#if defined(PETSC_USE_COMPLEX)
+      if (eigr) *eigr = (i%2)? -eps->eigr[k]: eps->eigr[k];
+      if (eigi) *eigi = 0;
+#else
+      if (eps->eigi[k]==0.0) { /* real eigenvalue */
+        if (eigr) *eigr = (i%2)? -eps->eigr[k]: eps->eigr[k];
+        if (eigi) *eigi = 0.0;
+      } else if (eps->eigr[k]==0.0) { /* purely imaginary eigenvalue */
+        if (eigr) *eigr = 0.0;
+        if (eigi) *eigi = (i%2)? -eps->eigi[k]: eps->eigi[k];
+      } else { /* quadruple eigenvalue (-conj(lambda),-lambda,lambda,conj(lambda)) */
+        iquad = i%2;  /* index within the 4 values */
+        if (i>1) {
+          k2 = eps->perm[(i-2)/2];
+          if (eps->eigr[k]==eps->eigr[k2] && eps->eigi[k]==-eps->eigi[k2]) iquad += 2;
+        }
+        if (eigr) *eigr = (iquad<2)? -eps->eigr[k]: eps->eigr[k];
+        if (eigi) *eigi = (iquad%3)? -eps->eigi[k]: eps->eigi[k];
+      }
+#endif
+    }
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }

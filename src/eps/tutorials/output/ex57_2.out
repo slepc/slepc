@@ -1,0 +1,6 @@
+
+Hamiltonian eigenproblem, n=23 (m=12 vehicles)
+
+ All requested eigenvalues computed up to the required tolerance:
+     -0.81410+0.40344i, -0.81410-0.40344i, 0.81410+0.40344i, 0.81410-0.40344i
+

@@ -331,12 +331,13 @@ PetscErrorCode EPSSetUp(EPS eps)
     /* make sure the user has set the appropriate matrix */
     PetscCall(STGetMatrix(eps->st,0,&A));
     if (eps->problem_type==EPS_BSE) PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_BSE,NULL));
+    if (eps->problem_type==EPS_HAMILT) PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_HAMILT,NULL));
   }
 
   /* safeguard for small problems */
   if (eps->n == 0) PetscFunctionReturn(PETSC_SUCCESS);
   if (eps->nev > eps->n) eps->nev = eps->n;
-  if (eps->isstructured) {
+  if (eps->problem_type == EPS_BSE) {
     if (2*eps->ncv > eps->n) eps->ncv = eps->n/2;
   } else {
     if (eps->ncv > eps->n) eps->ncv = eps->n;
@@ -667,24 +668,25 @@ PetscErrorCode EPSSetLeftInitialSpace(EPS eps,PetscInt n,Vec isl[])
 PetscErrorCode EPSSetDimensions_Default(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
   PetscBool      krylov;
-  PetscInt       n = eps->isstructured? eps->n/2: eps->n;
+  PetscInt       nev2, n = eps->problem_type==EPS_BSE? eps->n/2: eps->n;
 
   PetscFunctionBegin;
   if (*nev==0 && eps->stop!=EPS_STOP_THRESHOLD) *nev = 1;
+  nev2 = eps->problem_type==EPS_BSE? (*nev+1)/2: *nev;
   if (*ncv!=PETSC_DETERMINE) { /* ncv set */
     PetscCall(PetscObjectTypeCompareAny((PetscObject)eps,&krylov,EPSKRYLOVSCHUR,EPSARNOLDI,EPSLANCZOS,""));
     if (krylov) {
-      PetscCheck(*ncv>=*nev+1 || (*ncv==*nev && *ncv==n),PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must be at least nev+1");
+      PetscCheck(*ncv>=nev2+1 || (*ncv==nev2 && *ncv==n),PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must be at least nev+1");
     } else {
-      PetscCheck(*ncv>=*nev,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must be at least nev");
+      PetscCheck(*ncv>=nev2,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must be at least nev");
     }
   } else if (*mpd!=PETSC_DETERMINE) { /* mpd set */
-    *ncv = PetscMin(n,*nev+(*mpd));
+    *ncv = PetscMin(n,nev2+(*mpd));
   } else { /* neither set: defaults depend on nev being small or large */
-    if (*nev<500) *ncv = PetscMin(n,PetscMax(2*(*nev),*nev+15));
+    if (nev2<500) *ncv = PetscMin(n,PetscMax(2*(nev2),nev2+15));
     else {
       *mpd = 500;
-      *ncv = PetscMin(n,*nev+(*mpd));
+      *ncv = PetscMin(n,nev2+(*mpd));
     }
   }
   if (*mpd==PETSC_DETERMINE) *mpd = *ncv;

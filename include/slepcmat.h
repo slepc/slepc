@@ -23,6 +23,7 @@ SLEPC_EXTERN PetscErrorCode MatNormEstimate(Mat,Vec,Vec,PetscReal*);
 
 /* Matrices for structured eigenproblems */
 SLEPC_EXTERN PetscErrorCode MatCreateBSE(Mat,Mat,Mat*);
+SLEPC_EXTERN PetscErrorCode MatCreateHamiltonian(Mat,Mat,Mat,Mat*);
 
 /* Deprecated functions */
 PETSC_DEPRECATED_FUNCTION(3, 6, 0, "MatCreateRedundantMatrix() followed by MatConvert()", ) static inline PetscErrorCode SlepcMatConvertSeqDense(Mat mat,Mat *newmat)
