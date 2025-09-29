@@ -203,4 +203,11 @@ int main(int argc,char **argv)
          args: -eps_non_hermitian -sort_hamilt
          suffix: 1_complex_nhep
 
+   testset:
+      args: -eps_nev 4 -eps_smallest_magnitude -eps_ncv 32 -terse
+      output_file: output/ex57_2.out
+      test:
+         requires: double !complex
+         suffix: 2
+
 TEST*/
