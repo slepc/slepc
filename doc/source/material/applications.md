@@ -1,8 +1,6 @@
-# Applications and Software that Use SLEPc
+# Applications that Use SLEPc
 
 The list below shows publications on applications that use SLEPc. If you want your application to be included in this list please [contact us](../contact/index).  This list helps us demonstrate to our sponsors the usefulness of our work, so additional entries help us to continue developing, improving, and supporting SLEPc.
-
-You can also see a list of [software packages that use SLEPc](./software).
 
 <script src="../_static/js/apps.js"></script>
 

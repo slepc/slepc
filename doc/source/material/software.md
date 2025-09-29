@@ -1,6 +1,6 @@
 # Software Packages that Use SLEPc
 
-The list below shows software packages that use SLEPc or expose part of its functionality in a higher-level context. You can also see the list of [applications that use SLEPc](./applications).
+The list below shows software packages that use SLEPc or expose part of its functionality in a higher-level context.
 
 ## Finite elements and high-level computational toolkits
 
@@ -21,6 +21,7 @@ The list below shows software packages that use SLEPc or expose part of its func
   15. [FEMuS](https://github.com/eaulisa/MyFEMuS): open-source Finite Element C++ library.
   16. [OpenCMISS](https://opencmiss.org/): Open Continuum Mechanics, Imaging, Signal processing and System identification.
   17. [SfePy](https://sfepy.org/doc-devel/): Simple Finite Elements in Python.
+  18. [ff-bifbox](https://github.com/cmdoug/ff-bifbox?tab=readme-ov-file): FreeFEM scripts for numerical continuation, bifurcation analysis, resolvent analysis, and time-integration of large-scale time-dependent nonlinear PDEs on adaptively refined meshes.
 
 ## Many-body calculations, quantum systems, photonics
 
