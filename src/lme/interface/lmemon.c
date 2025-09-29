@@ -69,7 +69,7 @@ PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,void *mctx,PetscCtxDe
   PetscFunctionBegin;
   PetscValidHeaderSpecific(lme,LME_CLASSID,1);
   for (i=0;i<lme->numbermonitors;i++) {
-    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))lme->monitor[i],lme->monitorcontext[i],lme->monitordestroy[i],&identical));
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)lme->monitor[i],lme->monitorcontext[i],lme->monitordestroy[i],&identical));
     if (identical) PetscFunctionReturn(PETSC_SUCCESS);
   }
   PetscCheck(lme->numbermonitors<MAXLMEMONITORS,PetscObjectComm((PetscObject)lme),PETSC_ERR_ARG_OUTOFRANGE,"Too many LME monitors set");

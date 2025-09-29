@@ -76,7 +76,7 @@ PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDe
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
   for (i=0;i<pep->numbermonitors;i++) {
-    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))pep->monitor[i],pep->monitorcontext[i],pep->monitordestroy[i],&identical));
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)pep->monitor[i],pep->monitorcontext[i],pep->monitordestroy[i],&identical));
     if (identical) PetscFunctionReturn(PETSC_SUCCESS);
   }
   PetscCheck(pep->numbermonitors<MAXPEPMONITORS,PetscObjectComm((PetscObject)pep),PETSC_ERR_ARG_OUTOFRANGE,"Too many PEP monitors set");
