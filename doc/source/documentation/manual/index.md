@@ -1,5 +1,18 @@
 # SLEPc Users Manual
 
+```{only} html
+**J. E. Roman** {sup}`1`,
+**C. Campos** {sup}`1,2`,
+**L. Dalcin** {sup}`3`,
+**E. Romero** {sup}`1,4`,
+**A. Tomas** {sup}`1`
+
+{sup}`1` Universitat Polit&egrave;cnica de Val&egrave;ncia<br>
+{sup}`2` Universitat de Val&egrave;ncia<br>
+{sup}`3` Extreme Computing Research Center, King Abdullah University of Science and Technology<br>
+{sup}`4` Jefferson Lab
+```
+
 (abstract)=
 **Abstract**
 
