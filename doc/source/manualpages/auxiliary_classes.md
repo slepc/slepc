@@ -1,4 +1,4 @@
-# Auxiliary classes and system routines:
+# Auxiliary classes and system routines
 
 ```{toctree}
 :maxdepth: 2

@@ -37,19 +37,21 @@ No, the only requirement to use SLEPc is to have PETSc installed on your system.
 Does not apply for version 3.6 or later, see FAQ #10 below.
 :::
 
+<span style="color:gray">
 Probably you are dealing with a generalized eigenproblem (or a standard eigenproblem with shift-and-invert) and solving the linear systems with the default direct solver. By default, SLEPc uses a direct linear solver via PETSc's `redundant` mechanism, which allows the use of direct solvers in parallel executions but is not a really parallel factorization. In order to get speedup in parallel executions, you need to configure PETSc with a parallel direct linear solver such as MUMPS. For details, see the section "Solution of Linear Systems" in SLEPc's user manual.
+</span>
 
 ## 7.  Which is the recommended way of learning SLEPc?
 
 Possibly, the best way of learning to use SLEPc is to follow these steps:
 
   - First of all, get acquainted with PETSc if you are not already familiar with it (see the {{'[PETSc tutorials page](https://petsc.org/{}/tutorials/)'.format(branch)}}).
-  - Read through the entire SLEPc Users Manual. In a first reading, one may skip the "advanced usage" sections.
-  - Follow the steps provided by the [hands-on](hands-on/index) exercises, trying the examples in an available SLEPc installation.
+  - Read through the entire [](manual/index). In a first reading, one may skip the "advanced usage" sections.
+  - Follow the steps provided by the [hands-on exercises](hands-on/index), trying the examples in an available SLEPc installation.
   - Use the example programs available in the SLEPc distribution as a basis for your own programs.
-  - Use the on-line [manual pages](manual/index) for reference for individual routines.
+  - Use the on-line [manual pages](../manualpages/index) for reference for individual routines.
 
-We also provide several [video-tutorials](manual/index).
+We also provide several [](#video-tutorials).
 
 ## 8.  From 3.0.0 to 3.1 the behaviour of shift-and-invert has changed
 
@@ -67,19 +69,19 @@ Note that another difference is that in 3.1 eigenvalues are returned in the corr
 
 ## 9.  I get an error when retrieving the eigenvector
 
-After the solver has finished, the solution can be retrieved with `EPSGetEigenpair`.  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ {external:doc}`Vec` object. This means the vector must have been created, for example with {external:doc}`VecCreate`, {external:doc}`VecDuplicate`, or {external:doc}`MatCreateVecs`, see for instance [ex7](../../../src/eps/tutorials/ex7.c). The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
+After the solver has finished, the solution can be retrieved with `EPSGetEigenpair`.  In the `Vr` (and `Vi`) argument, one can pass `NULL` (if the eigenvector is not required), or a _valid_ {external:doc}`Vec` object. This means the vector must have been created, for example with {external:doc}`VecCreate`, {external:doc}`VecDuplicate`, or {external:doc}`MatCreateVecs`, see for instance {{'[ex7.c](https://slepc.upv.es/{}/src/eps/tutorials/ex7.c.html)'.format(branch)}}. The same occurs with analog functions in `SVD`, `PEP`, and `NEP`.
 
 ## 10. I get an error when running shift-and-invert in parallel
 
-In 3.6 and later versions, the shift-and-invert spectral transformation defaults to using `preonly`+`lu` for solving linear systems. If you run with more than one MPI process this will fail, unless you use an external package for the parallel LU factorization. This is explained in section "Solution of Linear Systems" in SLEPc's user manual. In previous versions of SLEPc, this would not generate an error since it was using `redundant` rather than plain `lu`.
+In 3.6 and later versions, the shift-and-invert spectral transformation defaults to using `preonly`+`lu` for solving linear systems. If you run with more than one MPI process this will fail, unless you use an external package for the parallel LU factorization. This is explained in section [](#sec:lin) in the Users Manual. In previous versions of SLEPc, this would not generate an error since it was using `redundant` rather than plain `lu`.
 
 ## 11. Building an application with CMake or pkg_config
 
-SLEPc (and PETSc) provides pkg_config files that can be used from makefiles as well as from CMake files. See the discussion at <gl-issue:19>.
+SLEPc (and PETSc) provides `pkg_config` files that can be used from makefiles as well as from CMake files. See the discussion at <gl-issue:19>.
 
 ## 12. Why is it generally a bad idea to use EPS_SMALLEST_MAGNITUDE?
 
-Krylov methods (and in particular the default SLEPc eigensolver, Krylov-Schur) are good for approximating eigenvalues in the periphery of the spectrum.  Assuming an eigenproblem with real eigenvalues only, the use of `EPS_SMALLEST_MAGNITUDE` will be appropriate only if all eigenvalues are either positive or negative. Otherwise, the smallest magnitude eigenvalues lie in the interior of the spectrum, and therefore the convergence will likely be very slow. The usual approach for computing interior eigenvalues is the shift- and-invert spectral transformation (see chapter 3 of the users manual). Hence, instead of `-eps_smallest_magnitude` one would generally prefer `-st_type sinvert -eps_target 0`.
+Krylov methods (and in particular the default SLEPc eigensolver, Krylov-Schur) are good for approximating eigenvalues in the periphery of the spectrum. Assuming an eigenproblem with real eigenvalues only, the use of `EPS_SMALLEST_MAGNITUDE` will be appropriate only if all eigenvalues are either positive or negative. Otherwise, the smallest magnitude eigenvalues lie in the interior of the spectrum, and therefore the convergence will likely be very slow. The usual approach for computing interior eigenvalues is the shift- and-invert spectral transformation (see [](ch:st) in the Users Manual). Hence, instead of `-eps_smallest_magnitude` one would generally prefer `-st_type sinvert -eps_target 0`.
 
 ## 13. Creating a sparse matrix gets terribly slow when I increase the matrix size
 
@@ -129,10 +131,10 @@ The following instructions can be followed to install the conda-forge variant of
 > Verify we are running the complex variant
 > ```{code} console
 > $ python -c '
-> $ from slepc4py import SLEPc
-> $ from petsc4py import PETSc
-> $ print(PETSc.ScalarType)
-> $ '
+>   from slepc4py import SLEPc
+>   from petsc4py import PETSc
+>   print(PETSc.ScalarType)
+> '
 > ```
 
 ## 15. spack: how to install slepc4py with complex scalars
@@ -147,6 +149,6 @@ This will install PETSc with complex scalars, together with SLEPc as well as pet
 
 ## 16. Eigenvectors have nonzero imaginary part
 
-A real symmetric matrix has real eigenvectors, but when building SLEPc with complex scalars the computed eigenvectors have nonzero imaginary part. The rationale is the following. In real scalars, if `x` is a unit-norm eigenvector then `-x` is also a valid eigenvector. In complex scalars, if `x` is a unit-norm eigenvector then `alpha*x` is also a valid eigenvector, where `alpha` is a generalized sign, i.e., `alpha=exp(theta*j)` for any `theta`. So if one wants the imaginary part to be zero, the eigenvectors returned by SLEPc must be normalized a posteriori, as is done for example in [ex20.c](../../../src/nep/tutorials/ex20.c) (or the equivalent python example `ex7.py`). SLEPc does not know if the input matrix is real or complex, so it cannot normalize the vectors internally.
+A real symmetric matrix has real eigenvectors, but when building SLEPc with complex scalars the computed eigenvectors have nonzero imaginary part. The rationale is the following. In real scalars, if $x$ is a unit-norm eigenvector then $-x$ is also a valid eigenvector. In complex scalars, if $x$ is a unit-norm eigenvector then $\alpha x$ is also a valid eigenvector, where $\alpha$ is a generalized sign, i.e., $\alpha=\exp(\theta j)$ for any $\theta$. So if one wants the imaginary part to be zero, the eigenvectors returned by SLEPc must be normalized a posteriori, as is done for example in {{'[ex20.c](https://slepc.upv.es/{}/src/eps/tutorials/ex20.c.html)'.format(branch)}} (or the equivalent python example `ex7.py`). SLEPc does not know if the input matrix is real or complex, so it cannot normalize the vectors internally.
 
 Note that the simple scaling strategy shown in those examples will not be sufficient in case of degenerate eigenvalues, i.e., eigenvalues with multiplicity larger than one.

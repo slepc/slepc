@@ -1,8 +1,6 @@
-Tutorials
+# Exercise 8: Quadratic Eigenvalue Problem
 
-# Quadratic Eigenvalue Problem
-
-Now we are going to focus on the solution of quadratic eigenvalue problems with PEP solvers. In this case, the problem to be solved is formulated as {math}`(\lambda^{2}M+ \lambda C+K)x=0`. In our simple example, {math}`M` is a diagonal matrix, {math}`C` is tridiagonal, and {math}`K` is the 2-D Laplacian.
+Now we are going to focus on the solution of quadratic eigenvalue problems with `PEP` solvers. In this case, the problem to be solved is formulated as {math}`(\lambda^{2}M+ \lambda C+K)x=0`. In our simple example, {math}`M` is a diagonal matrix, {math}`C` is tridiagonal, and {math}`K` is the 2-D Laplacian.
 
 ## Compiling
 
@@ -13,10 +11,6 @@ ex16: ex16.o
 	-${CLINKER} -o ex16 ex16.o ${SLEPC_PEP_LIB}
 	${RM} ex16.o
 ```
-
-:::{note}
-In the above text, the blank space in the 2nd and 3rd lines is a tab.
-:::
 
 Build the executable with the command
 
@@ -41,25 +35,25 @@ Quadratic Eigenproblem, N=100 (10x10 grid)
 
 ## Source Code Details
 
-The PEP object is used very much like EPS or SVD, as can be seen in the source code. Here is a summary of the main function calls:
+The `PEP` object is used very much like `EPS` or `SVD`, as can be seen in the source code. Here is a summary of the main function calls:
 
 * `PEPCreate(MPI_Comm comm,PEP *pep);`
-* `PEPSetOperators`(`PEP` pep,{external:doc}`PetscInt` nmat,{external:doc}`Mat` A[]);`
+* `PEPSetOperators`(`PEP` pep,{external:doc}`PetscInt` `nmat`,{external:doc}`Mat` `A[]`);
 * `PEPSetProblemType(PEP pep,PEPProblemType type);`
 * `PEPSetFromOptions(PEP pep);`
 * `PEPSolve(PEP pep);`
-* `PEPGetConverged(PEP pep, int *nconv);`
-* `PEPGetEigenpair`(`PEP` pep,int i,{external:doc}`PetscScalar` *kr,{external:doc}`PetscScalar` *ki,{external:doc}`Vec` xr,{external:doc}`Vec` xi);`
+* `PEPGetConverged`(`PEP` `pep`, {external:doc}`PetscInt` `*nconv`);
+* `PEPGetEigenpair`(`PEP` `pep`,{external:doc}`PetscInt` `i`,{external:doc}`PetscScalar` `*kr`,{external:doc}`PetscScalar` `*ki`,{external:doc}`Vec` `xr`,{external:doc}`Vec` `xi`);
 * `PEPDestroy(PEP pep)`;
 
-First, the solver context (PEP) is created and the three problem matrices are specified. Then various options are set for customized solution. After that, the program solves the problem, retrieves the solution, and finally destroys the context.
+First, the solver context (`PEP`) is created and the three problem matrices are specified. Then various options are set for customized solution. After that, the program solves the problem, retrieves the solution, and finally destroys the context.
 
 ## PEP Options
 
-Most of the options available in the EPS object have their equivalent in PEP.  A full list of command-line options can be obtained by running the example
+Most of the options available in the `EPS` object have their equivalent in `PEP`.  A full list of command-line options can be obtained by running the example
 with the option `-help`.
 
-To show information about the PEP solver, add the `-pep_view` option:
+To show information about the `PEP` solver, add the `-pep_view` option:
 
 ```{code}
 PEP Object: 1 MPI processes
@@ -120,7 +114,7 @@ ST Object: 1 MPI processes
 ```
 
 :::{note}
-All the command-line options related to the PEP object have the `-pep_` prefix.
+All the command-line options related to the `PEP` object have the `-pep_` prefix.
 :::
 
 Try changing some of the values, for example:
@@ -137,7 +131,7 @@ Several polynomial eigensolvers are available, which can be selected in the sour
 $ ./ex16 -pep_type qarnoldi
 ```
 
-The following table shows the list of PEP solvers available in SLEPc.
+The following table shows the list of `PEP` solvers available in SLEPc.
 
 Solver                        |  Command-line Name  |  Parameter
 ---                           |---                  |---
@@ -152,7 +146,7 @@ Contour integral              |  ciss               |  PEPCISS
 The default solver is `toar`.
 :::
 
-The `linear` solver performs an explicit linearization of the quadratic eigenproblem, resulting in a generalized eigenproblem. This linearization can be customized, see the Users Manual for details. For instance:
+The `linear` solver performs an explicit linearization of the quadratic eigenproblem, resulting in a generalized eigenproblem. This linearization can be customized, see section [](#sec:linearization) in the Users Manual for details. For instance:
 
 ```{code} console
 $ ./ex16 -pep_type linear -pep_linear_linearization 1,0 -pep_linear_explicitmatrix
@@ -164,7 +158,7 @@ Since in this problem all matrices are symmetric, the problem type is set to `PE
 $ ./ex16 -pep_type linear -pep_general
 ```
 
-In the `linear` solver it is also possible to tune any of the EPS options, including those corresponding to ST and the linear solvers. For instance:
+In the `linear` solver it is also possible to tune any of the `EPS` options, including those corresponding to `ST` and the linear solvers. For instance:
 
 ```{code} console
 $ ./ex16 -pep_type linear -pep_general -pep_linear_st_ksp_type bcgs -pep_linear_st_pc_type jacobi

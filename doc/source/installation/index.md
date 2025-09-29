@@ -1,6 +1,6 @@
 # Installation
 
-SLEPc is available on some package managers.
+SLEPc is available on some package managers. Select the tabs below to show the corresponding information. Note that some of them provide separate packages for the real and complex versions.
 
 ::::{tab-set}
 
@@ -11,7 +11,7 @@ SLEPc is available on some package managers.
 :::{tab-item} Conda
 <https://anaconda.org/conda-forge/slepc>
 
-    $ conda install -c conda-forge slepc
+    $ conda install conda-forge::slepc
 :::
 
 :::{tab-item} Debian
@@ -49,6 +49,7 @@ E4S packages are available as pre-built Spack binaries.
 :::{tab-item} openSUSE
 <https://software.opensuse.org/package/slepc>
 
+    $ sudo zypper install slepc
 :::
 
 :::{tab-item} python
@@ -86,13 +87,15 @@ E4S packages are available as pre-built Spack binaries.
 
 ::::
 
-And as a direct [download](download)
+```{raw} html
+<br>
+```
+
+Alternatively, you can download and install it from source code, according to the following instructions:
 
 ```{toctree}
-:maxdepth: 2
-:hidden:
+:maxdepth: 1
 
 download
-older
 quickstart
 ```

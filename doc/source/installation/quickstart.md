@@ -1,6 +1,6 @@
 # Basic Installation Instructions
 
-The following is a quick-start guide for installing SLEPc. For further details, the user is referred to the SLEPc Users Manual.
+The following is a quick-start guide for installing SLEPc. For further details, see the [](#sec:inst) section of the Users Manual.
 
 Previously to the installation of SLEPc, the system must have an appropriate version of PETSc installed (see the {{'[PETSc installation documentation](https://petsc.org/{}/install/)'.format(branch)}} for details).
 
@@ -69,10 +69,8 @@ $ ./configure --with-arpack-dir=/usr/software/ARPACK
 
   * Build the SLEPc libraries.
 
-SLEPc currently interfaces to the following libraries:
+:::{note}
+For some external packages, the SLEPc `configure` script can handle handle automatic download and installation, for example adding the option `--download-arpack`.
+:::
 
-  * [ARPACK](https://github.com/opencollab/arpack-ng) (Implicitly Restarted Arnoldi/Lanczos solver).
-  * [PRIMME](https://www.cs.wm.edu/~andreas/software/) (PReconditioned Iterative MultiMethod Eigensolver).
-  * [BLOPEX](https://github.com/lobpcg/blopex) (Block Locally Optimal Preconditioned Eigenvalue Xolvers).
-
-Additional information about these packages can be found in the SLEPc Users Manual.
+For a full list of external packages currently supported by SLEPc, see the [](#sec:wrap) section of the Users Manual.

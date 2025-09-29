@@ -1,10 +1,8 @@
-Tutorials
-
-# Generalized Eigenvalue Problem Stored in a File
+# Exercise 3: Generalized Eigenvalue Problem Stored in a File
 
 In this exercise we are going to work with a generalized eigenvalue problem, {math}`Ax=\lambda Bx`. The example program loads two matrices A and B from a file and then solves the associated eigensystem.
 
-The matrices we are going to work with are BFW62A and BFW62B, which are available at [Matrix Market](https://math.nist.gov/MatrixMarket/data/NEP/bfwave/bfwave). This particular problem is non-symmetric. Some of the eigenvalues (those of largest magnitude) come in complex conjugate pairs while the rest are real.
+The matrices we are going to work with are BFW62A and BFW62B, which are available at [Matrix Market](https://math.nist.gov/MatrixMarket/data/NEP/bfwave/bfwave.html). This particular problem is non-symmetric. Some of the eigenvalues (those of largest magnitude) come in complex conjugate pairs while the rest are real.
 
 ## Compiling
 
@@ -15,10 +13,6 @@ ex7: ex7.o
 	-${CLINKER} -o ex7 ex7.o ${SLEPC_EPS_LIB}
 	${RM} ex7.o
 ```
-
-:::{note}
-In the above text, the blank space in the 2nd and 3rd lines is a tab.
-:::
 
 Build the executable with the command
 
@@ -51,7 +45,7 @@ $ ./ex7 -f1 ${SLEPC_DIR}/share/slepc/datafiles/matrices/bfw62a.petsc -f2 ${SLEPC
 ```
 
 :::{note}
-The plot is drawn in an X11 pop-up window. So this requires that the display is correctly exported.
+The plot is drawn in an X11 pop-up window, so this requires that the display is set up correctly.
 :::
 
 ## Spectral Transformations in Generalized Problems
@@ -60,7 +54,7 @@ The following table shows the expressions of the operator in each of the availab
 
 Spectral Transformation  |  Operator
 ---                      |  ---
-Shift of Origin          |  {math}`B^{-1} A + \sigma I`
+Shift of origin          |  {math}`B^{-1} A + \sigma I`
 Shift-and-invert         |  {math}`(A - \sigma B)^{-1} B`
 Cayley                   |  {math}`(A- \sigma B)^{-1} (A+ \nu B)`
 Preconditioner           |  {math}`K^{-1} \approx (A - \sigma B)^{-1}`

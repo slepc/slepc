@@ -39,6 +39,7 @@ As in the case of linear eigenproblems, there are some particular properties of 
 
 Currently, the problem type is not exploited by `PEP` solvers, except for a few exceptions. In the future, we may add more support for structure-preserving solvers.
 
+{#sec:linearization}
 #### Linearization
 
 It is possible to transform the quadratic eigenvalue problem to a linear generalized eigenproblem $L_0y=\lambda L_1y$ by doubling the order of the system, i.e., $L_0,L_1\in\mathbb{C}^{2n\times 2n}$. There are many ways of doing this. For instance, consider the following two pencils $L(\lambda)=L_0-\lambda L_1$,

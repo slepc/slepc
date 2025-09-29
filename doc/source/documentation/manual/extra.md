@@ -451,12 +451,12 @@ Exceptions to the above rule are LAPACK, which should be enabled during PETSc's 
 :::
 
 {#scalapack .unnumbered}
-### [SCALAPAck]
+### [ScaLAPACK]
 
 :References: {cite:p}`Blackford:1997:SUG`.
 :Website: <https://www.netlib.org/scalapack>.
-:Summary: SCALAPAck is a library of high-performance linear algebra routines for parallel distributed memory machines. It contains eigensolvers for dense Hermitian eigenvalue problems, as well as solvers for the (dense) SVD.
-:Installation: For using SCALAPAck from SLEPc it is necessary to select it during configuration of PETSc.
+:Summary: ScaLAPACK is a library of high-performance linear algebra routines for parallel distributed memory machines. It contains eigensolvers for dense Hermitian eigenvalue problems, as well as solvers for the (dense) SVD.
+:Installation: For using ScaLAPACK from SLEPc it is necessary to select it during configuration of PETSc.
 
 {#elpa .unnumbered}
 ### [ELPA]
@@ -465,7 +465,7 @@ Exceptions to the above rule are LAPACK, which should be enabled during PETSc's 
 :Website: <https://elpa.mpcdf.mpg.de/>.
 :Summary: ELPA is a high-performance library for the parallel solution of dense symmetric (or Hermitian) eigenvalue problems on distributed memory computers. It uses a ScaLAPACK-compatible matrix distribution.
 
-:Installation: The SLEPc wrapper to ELPA can be activated at configure time with the option `--download_elpa`, in which case SCALAPAck support must have been enabled during the configuration of PETSc.
+:Installation: The SLEPc wrapper to ELPA can be activated at configure time with the option `--download_elpa`, in which case ScaLAPACK support must have been enabled during the configuration of PETSc.
 
 {#ksvd .unnumbered}
 ### [KSVD]
@@ -498,7 +498,7 @@ Exceptions to the above rule are LAPACK, which should be enabled during PETSc's 
 :References: {cite:p}`Winkelmann:2019:CCA`.
 :Website: <https://github.com/ChASE-library/ChASE>.
 :Summary: CHASE is a modern and scalable library based on subspace iteration with polynomial acceleration to solve dense Hermitian (symmetric) algebraic eigenvalue problems, especially solving dense Hermitian eigenproblems arranged in a sequence. Novel to ChASE is the computation of the spectral estimates that enter in the filter and an optimization of the polynomial degree that further reduces the necessary floating-point operations.
-:Installation: Currently, the CHASE interface in SLEPc is based on the MPI version with block-cyclic distribution, i.e., SCALAPAck matrix storage, so it is necessary to enable SCALAPAck during configuration of PETSc.
+:Installation: Currently, the CHASE interface in SLEPc is based on the MPI version with block-cyclic distribution, i.e., ScaLAPACK matrix storage, so it is necessary to enable ScaLAPACK during configuration of PETSc.
 
 {#sec:fortran}
 ## Fortran Interface

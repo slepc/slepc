@@ -1,8 +1,6 @@
-Tutorials
+# Exercise 2: Standard Non-Symmetric Eigenvalue Problem
 
-# Standard Non-Symmetric Eigenvalue Problem
-
-In this exercise we are going to work with a non-symmetric problem. The example solves the eigenvalue problem associated with a Markov model of a random walk on a triangular grid. Although the matrix is non-symmetric, all eigenvalues are real. Eigenvalues come in pairs with the same magnitude and different signs. The values 1 and -1 are eigenvalues for any matrix size. More details about this problem can be found at [Matrix Market](https://math.nist.gov/MatrixMarket/data/NEP/mvmrwk/mvmrwk).
+In this exercise we are going to work with a non-symmetric problem. The example solves the eigenvalue problem associated with a Markov model of a random walk on a triangular grid. Although the matrix is non-symmetric, all eigenvalues are real. Eigenvalues come in pairs with the same magnitude and different signs. The values 1 and -1 are eigenvalues for any matrix size. More details about this problem can be found at [Matrix Market](https://math.nist.gov/MatrixMarket/data/NEP/mvmrwk/mvmrwk.html).
 
 ## Compiling
 
@@ -13,10 +11,6 @@ ex5: ex5.o
 	-${CLINKER} -o ex5 ex5.o ${SLEPC_EPS_LIB}
 	${RM} ex5.o
 ```
-
-:::{note}
-In the above text, the blank space in the 2nd and 3rd lines is a tab.
-:::
 
 Build the executable with the command
 
@@ -119,11 +113,11 @@ A better solution may be to use a spectral transformation, but with several cons
 
 The general idea of the spectral transformation is to substitute the original problem, {math}`Ax=\lambda x`, by another one, {math}`Tx= \theta x`, in which the eigenvalues are mapped to a different position but eigenvectors remain unchanged. With this strategy, one can move interior eigenvalues to the periphery.
 
-Each EPS object uses an ST object internally to manage the spectral transformation. The following table shows the available spectral transformations, which can be selected with the function `STSetType` or at run time.
+Each `EPS` object uses an `ST` object internally to manage the spectral transformation. The following table shows the available spectral transformations, which can be selected with the function `STSetType` or at run time.
 
 Spectral Transformation  |  Operator                                   |  Command-line Name  |  Parameter
 ---                      |  ---                                        |  ---                |  ---
-Shift of Origin          |  {math}`A - \sigma I`                       |  shift              |  STSHIFT
+Shift of origin          |  {math}`A - \sigma I`                       |  shift              |  STSHIFT
 Shift-and-invert         |  {math}`(A- \sigma I)^{-1}`                 |  sinvert            |  STSINVERT
 Cayley                   |  {math}`(A- \sigma I)^{-1} (A + \nu I)`     |  cayley             |  STCAYLEY
 Preconditioner           |  {math}`K^{-1} \approx (A- \sigma I)^{-1}`  |  precond            |  STPRECOND
@@ -143,7 +137,7 @@ $ ./ex5 -eps_nev 4 -eps_target 0.75 -st_type sinvert
 ```
 
 :::{note}
-All the command-line options related to the ST object have the `-st_` prefix.
+All the command-line options related to the `ST` object have the `-st_` prefix.
 :::
 
 With the above execution, the number of iterations is very small, but each iteration is much more costly than in the previous cases because linear systems must be solved to handle the inverted operator (the issue of how to solve linear systems is discussed below). The value of the parameter {math}`\sigma` (the shift) is taken to be equal to {math}`\tau` (the target). Run with `-eps_view` to check that it is indeed the case.
@@ -152,19 +146,19 @@ Try also with `cayley`, which is nearly equivalent.
 
 ## Handling the Inverses
 
-In the table of spectral transformations shown above, there are some operators that include the inverse of a certain matrix. These operators are not computed explicitly in order to preserve sparsity. Instead, in the ST object the multiplication by these inverses is replaced by a linear equation solve via a KSP object from PETSc.
+In the table of spectral transformations shown above, there are some operators that include the inverse of a certain matrix. These operators are not computed explicitly in order to preserve sparsity. Instead, in the `ST` object the multiplication by these inverses is replaced by a linear equation solve via a `KSP` object from PETSc.
 
-SLEPc allows us to pass options to this KSP linear solver object. For instance,
+SLEPc allows us to pass options to this `KSP` linear solver object. For instance,
 
 ```{code} console
 $ ./ex5 -eps_nev 4 -eps_target 0.75 -st_type sinvert -st_ksp_type preonly -st_pc_type lu
 ```
 
 :::{note}
-In order to specify a command-line option related to the linear solver contained in ST, simply add the `-st_` prefix in front.
+In order to specify a command-line option related to the linear solver contained in `ST`, simply add the `-st_` prefix in front.
 :::
 
-The options of the above example specify a direct linear solver (LU factorization). This is what SLEPc does by default. This strategy is usually called _exact shift-and-invert_. Its main drawback is that direct solvers are more costly in terms of flops and storage and are less parallelizable.
+The options of the above example specify a direct linear solver (LU factorization). This is what SLEPc does by default. This strategy is usually called _exact shift-and-invert_. Its main drawback is that direct solvers are more costly in terms of flops and storage and are less scalable.
 
 An alternative is to do an _inexact shift-and-invert_ , that is, to use an iterative linear solver. The following line illustrates how to use an iterative solver
 
@@ -178,7 +172,7 @@ Note that in SLEPc it is extremely easy to switch between exact and inexact sche
 
 ## Preconditioned Eigensolvers
 
-As mentioned above, the inexact shift-and-invert scheme is very sensitive to the accuracy with which the linear systems are solved. This usually implies using a very stringent tolerance (10-12 in the example) and makes it impractical for difficult problems.
+As mentioned above, the inexact shift-and-invert scheme is very sensitive to the accuracy with which the linear systems are solved. This usually implies using a very stringent tolerance ($10^{-12}$ in the example) and makes it impractical for difficult problems.
 
 An alternative is to use a preconditioned eigensolver, such as those of Davidson type: `EPSGD` and `EPSJD`. These solvers try to emulate the idea of shift-and-invert but they are very robust with respect to bad accuracy (i.e., large tolerance) of the iterative linear solve.
 

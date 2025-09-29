@@ -1,5 +1,7 @@
 # Material
 
+This section provides information on how to cite SLEPc, as well as a list of citations from papers and software (see items on the left menu).
+
 ## Citing SLEPc
 
 When referencing SLEPc in a publication, please cite one or more of the following (at least the first one).
@@ -8,7 +10,7 @@ If you use functionality from a specific SLEPc version, you can also cite refere
 
 Also, you can run the application code with all the options you usually use and the option `-citations slepc.bib`. This will generate a list of BibTeX references appropriate for that computation.
 
-## General
+### General
 
 [1] V. Hernandez, J. E. Roman, V. Vidal. _SLEPc: A scalable and flexible toolkit for the solution of eigenvalue problems._ ACM Trans. Math. Software, 31(3):351-362, 2005. <doi:10.1145/1089014.1089019>
 
@@ -89,7 +91,7 @@ Also, you can run the application code with all the options you usually use and 
     }
 :::
 
-## Using a Computational Interval
+### Using a Computational Interval
 
 [6] C. Campos and J. E. Roman. _Strategies for spectrum slicing based on restarted Lanczos methods._ Numer. Algorithms, 62(2):279-295, 2012. <doi:10.1007/s11075-012-9564-z>
 
@@ -123,7 +125,7 @@ Also, you can run the application code with all the options you usually use and 
     }
 :::
 
-## Davidson-type Eigensolvers
+### Davidson-type Eigensolvers
 
 [8] E. Romero and J. E. Roman. _A parallel implementation of Davidson methods for large-scale eigenvalue problems in SLEPc._ ACM Trans. Math. Software, 40(2):13:1-13:29, 2014. <doi:10.1145/2543696>
 
@@ -161,7 +163,7 @@ Also, you can run the application code with all the options you usually use and 
 Reference [16] below (polynomial Jacobi-Davidson).
 :::
 
-## Structure-preserving Eigensolvers
+### Structure-preserving Eigensolvers
 
 [10] F. Alvarruiz, B. Mellado-Pinto, J. E. Roman. _Variants of thick-restart Lanczos for the Bethe-Salpeter eigenvalue problem._ arXiv:2503.20920, 2025. <doi:10.48550/arXiv.2503.20920>
 
@@ -177,7 +179,7 @@ Reference [16] below (polynomial Jacobi-Davidson).
     }
 :::
 
-## SVD and GSVD
+### SVD and GSVD
 
 [11] V. Hernandez, J. E. Roman, A. Tomas. _A robust and efficient parallel SVD solver based on restarted Lanczos bidiagonalization._ Electron. Trans. Numer.  Anal., 31:68-85, 2008. [[URL]](https://etna.ricam.oeaw.ac.at/volumes/2001-2010/vol31/abstract.php?pages=68-85)
 
@@ -209,7 +211,7 @@ Reference [16] below (polynomial Jacobi-Davidson).
     }
 :::
 
-## Polynomial Eigensolvers
+### Polynomial Eigensolvers
 
 [13] C. Campos and J. E. Roman. _Restarted Q-Arnoldi-type methods exploiting symmetry in quadratic eigenvalue problems._ BIT Numer. Math., 56(4):1213-1236, 2016. <doi:10.1007/s10543-016-0601-5>
 
@@ -278,7 +280,7 @@ Reference [16] below (polynomial Jacobi-Davidson).
 Reference [7] above (computational interval in quadratic eigenproblems).
 :::
 
-## General Nonlinear Eigensolvers
+### General Nonlinear Eigensolvers
 
 [17] C. Campos and J. E. Roman. _NEP: a module for the parallel solution of nonlinear eigenvalue problems in SLEPc._ ACM Trans. Math. Software, 47(3):23:1-23:29, 2021. <doi:10.1145/3447544>
 
@@ -296,7 +298,7 @@ Reference [7] above (computational interval in quadratic eigenproblems).
     }
 :::
 
-## Technical Reports
+### Technical Reports
 
 For referencing any of the [SLEPc Technical Reports](#str), use the following template:
 
