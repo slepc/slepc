@@ -7,6 +7,7 @@ MODULE  = SLEPc
 
 PYTHON  = python3$(py)
 MPIEXEC = mpiexec
+LOC    ?= ${SLEPC_DIR}/${PETSC_ARCH}/doc/html
 
 # ----
 
@@ -125,12 +126,29 @@ docsclean:
 	-@${RM} -r docs/source/reference
 	-@${RM} docs/source/*.inv
 
-website:
+webstatic:
+	@if [ ! -d ../../../doc/source/_static ]; then \
+		git clone -b main --depth=1 https://gitlab.com/slepc/webstatic.git ../../../doc/source/_static; \
+	else \
+		cd ../../../doc/source/_static; \
+		git pull; \
+		if [ $$? -ne 0 ]; then \
+			cd - ; \
+			rm -rf ../../../doc/source/_static; \
+			git clone -b main --depth=1 https://gitlab.com/slepc/webstatic.git ../../../doc/source/_static; \
+		fi ;\
+		cd - ;\
+	fi ;\
+	rm docs/source/_static ;\
+	ln -s ../../../../../doc/source/_static docs/source/_static
+
+website: webstatic
 #	CFLAGS=-O0 python -m pip install .
 	-@python3 -m venv ../../../doc/.venv-sphinx ;\
 	. ../../../doc/.venv-sphinx/bin/activate ;\
 	python3 -m pip install --quiet -r ../../../doc/requirements.txt ;\
 	${MAKE} sphinx-html SPHINXOPTS="-j4 -E -T -W"
+	rm -rf ${LOC}/slepc4py
 	mkdir -p ${LOC}/slepc4py
 	mv docs/html/* ${LOC}/slepc4py
 

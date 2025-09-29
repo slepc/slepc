@@ -388,7 +388,10 @@ slepc4py demos
         demofile.write('\n')
 
 
-html_static_path = []
+html_static_path = ['_static']
+html_css_files = [ # relative to the html_static_path
+                  'css/slepc.css',
+                  ]
 _process_demos('ex1.py')
 
 
