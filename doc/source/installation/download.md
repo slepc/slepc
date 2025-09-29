@@ -137,3 +137,48 @@ Patches:
 
 For 2.3.3 and older releases, apply the patch with GNU patch command in the SLEPc root directory as `patch -Np1 < patchfile`.
 :::
+
+## Changes
+
+A change log of the different versions can be found in [CHANGELOG.md](https://gitlab.com/slepc/slepc/-/blob/main/CHANGELOG.md). It includes the release date of each version. For easy comparison, the following table lists all versions of SLEPc, showing the correspondence between SLEPc and PETSc releases, as well as the release date.
+
+:::{admonition} Table of SLEPc/PETSc Releases
+:class: dropdown
+
+SLEPc version | PETSc versions      | Release date
+---           | ---                 | ---
+2.1.0         | 2.1.0               | Not released
+2.1.1         | 2.1.1, 2.1.2, 2.1.3 | Dec 2002
+2.1.5         | 2.1.5, 2.1.6        | May 2003
+2.2.0         | 2.2.0               | Apr 2004
+2.2.1         | 2.2.1               | Aug 2004
+2.3.0         | 2.3.0               | Jun 2005
+2.3.1         | 2.3.1               | Mar 2006
+2.3.2         | 2.3.1, 2.3.2        | Oct 2006
+2.3.3         | 2.3.3               | Jun 2007
+3.0.0         | 3.0.0               | Feb 2009
+3.1           | 3.1                 | Aug 2010
+3.2           | 3.2                 | Oct 2011
+3.3           | 3.3                 | Aug 2012
+3.4           | 3.4                 | Jul 2013
+3.5           | 3.5                 | Jul 2014
+3.6           | 3.6                 | Jun 2015
+3.7           | 3.7                 | May 2016
+3.8           | 3.8                 | Oct 2017
+3.9           | 3.9                 | Apr 2018
+3.10          | 3.10                | Sep 2018
+3.11          | 3.11                | Mar 2019
+3.12          | 3.12                | Sep 2019
+3.13          | 3.13                | Mar 2020
+3.14          | 3.14                | Sep 2020
+3.15          | 3.15                | Mar 2021
+3.16          | 3.16                | Sep 2021
+3.17          | 3.17                | Mar 2022
+3.18          | 3.18                | Oct 2022
+3.19          | 3.19                | Mar 2023
+3.20          | 3.20                | Sep 2023
+3.21          | 3.21                | Mar 2024
+3.22          | 3.22                | Sep 2024
+3.23          | 3.23                | Mar 2025
+
+:::
