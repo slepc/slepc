@@ -1,4 +1,4 @@
-# User manual
+# SLEPc Users Manual
 
 (abstract)=
 **Abstract**

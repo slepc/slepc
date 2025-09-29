@@ -1,6 +1,4 @@
-Tutorials
-
-# Problem without Explicit Matrix Storage
+# Exercise 5: Problem without Explicit Matrix Storage
 
 In many applications, it may be better to keep the matrix (or matrices) that define the eigenvalue problem implicit, that is, without storing its nonzero entries explicitly. An example is when we have a matrix-vector routine available. SLEPc allows easy management of this case. This exercise tries to illustrate it by solving a standard symmetric eigenproblem corresponding to the Laplacian operator in 2 dimensions in which the matrix is not built explicitly.
 
@@ -14,10 +12,6 @@ ex3: ex3.o
 	${RM} ex3.o
 ```
 
-:::{note}
-In the above text, the blank space in the 2nd and 3rd lines is a tab.
-:::
-
 Build the executable with the command
 
 ```{code} console
@@ -28,7 +22,7 @@ $ make ex3
 
 PETSc provides support for matrix-free problems via the _shell_ matrix type.
 This kind of matrices is created with a call to {external:doc}`MatCreateShell`, and their operations are specified with {external:doc}`MatShellSetOperation`.
-For basic use of these matrices with EPS solvers only the matrix-vector product operation is required. In the example, this operation is performed by a separate function `MatMult_Laplacian2D`.
+For basic use of these matrices with `EPS` solvers only the matrix-vector product operation is required. In the example, this operation is performed by a separate function `MatMult_Laplacian2D`.
 
 ## Running the Program
 
@@ -44,7 +38,7 @@ Now try running the program with shift-and-invert to get the eigenvalues closest
 $ ./ex3 -eps_target 0.0 -st_type sinvert
 ```
 
-Note that the above command yields a run-time error. Observe the information printed on the screen and try to deduce the reason of the error. In this case, the error is due to the fact that SLEPc tries to use a direct linear solver within the ST object, and this is not possible unless the matrix has been created explicitly as in previous examples.
+Note that the above command yields a run-time error. Observe the information printed on the screen and try to deduce the reason of the error. In this case, the error is due to the fact that SLEPc tries to use a direct linear solver within the `ST` object, and this is not possible unless the matrix has been created explicitly as in previous examples.
 
 There are more chances to have success if an inexact shift-and-invert scheme is used. Try using an interative linear solver without preconditioning:
 

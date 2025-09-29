@@ -2,7 +2,7 @@
 
 SLEPc is distributed under a 2-clause BSD license.
 
-> Copyright (c) 2002-2025, Universitat Polit&egrave;cnica de Val&egrave;ncia, Spain
+> Copyright (c) 2002-{{release_year}}, Universitat Polit&egrave;cnica de Val&egrave;ncia, Spain
 >
 > Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 >
@@ -11,4 +11,4 @@ SLEPc is distributed under a 2-clause BSD license.
 >
 > THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-This license DOES NOT apply to any software that may be obtained via the \--download-package option of the SLEPc configuration. Each of those packages are covered by their own licenses.
+This license DOES NOT apply to any software that may be obtained via the `--download-package` options of the SLEPc `configure` script. Each of those packages are covered by their own licenses.

@@ -1,6 +1,4 @@
-Tutorials
-
-# Hello World
+# Exercise 0: Hello World
 
 This exercise shows how to build and run a simple example program with SLEPc.
 
@@ -30,11 +28,7 @@ hello: hello.o
 include ${SLEPC_DIR}/lib/slepc/conf/slepc_common
 ```
 
-:::{note}
-In the above text, the blank space in the 2nd and 3rd lines is a tab.
-:::
-
-Also place the following source code into a file named "hello.c" in the same directory:
+Also place the following source code into a file named `hello.c` in the same directory:
 
 ```{code} c
 static char help[] = "Simple Hello World example program in SLEPc\n";
@@ -61,17 +55,17 @@ $ make hello
 
 Examine the source code of the sample program. The following comments will help you understand the code thoroughly.
 
-**Header File** : All SLEPc programs must include a header file with all the necessary definitions. In this simple example the file {{'[slepcsys.h](https://slepc.upv.es/{}/include/slepcsys.h.html)'.format(branch)}} (base SLEPc header) is enough because no solver components such as EPS are being used.
+**Header File** : All SLEPc programs must include a header file with all the necessary definitions. In this simple example the file {{'[slepcsys.h](https://slepc.upv.es/{}/include/slepcsys.h.html)'.format(branch)}} (the most basic SLEPc header) is enough because no solver components such as `EPS` are being used.
 
 :::{note}
 SLEPc header files automatically include some PETSc header files.
 :::
 
-**Library Initialization** : All SLEPc programs must begin with a call to `SlepcInitialize`, which in turn initializes PETSc and MPI. Similarly, at the end of the program `SlepcFinalize` must be called for library cleanup.
+**Library Initialization**: All SLEPc programs must begin with a call to `SlepcInitialize`, which in turn initializes PETSc and MPI. Similarly, at the end of the program `SlepcFinalize` must be called for library cleanup.
 
-**Input/Output** : In this example, we do input/output via a call to a PETSc function, {external:doc}`PetscPrintf`. Remember that in parallel programs input/output cannot be done simply via C standard library functions. Note that in SLEPc programs we can freely use any PETSc function.
+**Input/Output**: In this example, we do input/output via a call to a PETSc function, {external:doc}`PetscPrintf`. Remember that in parallel programs input/output cannot be done simply via C standard library functions. Note that in SLEPc programs we can freely use any PETSc function.
 
-**Error Checking** : All SLEPc routines return an integer indicating whether an error has occurred during the call. The PETSc macro {external:doc}`PetscCall` checks the return value and calls the PETSc error handler upon error detection. All function calls should be wrapped around {external:doc}`PetscCall` to enable a complete error traceback.
+**Error Checking**: All SLEPc routines return an integer indicating whether an error has occurred during the call. The PETSc macro {external:doc}`PetscCall` checks the return value and calls the PETSc error handler upon error detection. All function calls should be wrapped around {external:doc}`PetscCall` to enable a complete error traceback.
 
 ## Running the Program
 
