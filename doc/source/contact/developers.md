@@ -2,7 +2,7 @@
 
 Contributions are welcome.
 
-Contributions are preferred via [GitLab merge request](https://gitlab.com/slepc/slepc/-/merge_requests) or via patches (`git send-email` or `git format-patch`) sent to <slepc-maint@upv.es>. If you are planning a large contribution, we encourage you to discuss the concept with us and interact frequently to ensure that your effort is well-directed. The name of the contributors will be acknowledged in SLEPc's documentation and website.
+Contributions can be done via [GitLab merge request](https://gitlab.com/slepc/slepc/-/merge_requests) or via patches (`git send-email` or `git format-patch`) sent to <slepc-maint@upv.es>. The preferred way of accepting contributions is via merge requests, as described at [PETSc Developer’s Documentation](https://petsc.org/release/developers/). If you are planning a large contribution, we encourage you to discuss the concept with us and interact frequently to ensure that your effort is well-directed. The name of the contributors will be acknowledged in SLEPc's documentation and website.
 
 SLEPc is distributed under a [2-clause BSD license](../documentation/license). The act of submitting a pull request or patch (with or without an explicit Signed-off-by tag) will be understood as an affirmation of the following:
 
