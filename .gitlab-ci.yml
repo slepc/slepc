@@ -37,6 +37,17 @@ variables:
       - merge_requests
   dependencies: []
 
+.test-scheduled-main:
+  interruptible: true
+  only:
+    refs:
+#     Set with CI/CD Shedules - New Schedule
+      - schedules
+#     Set with CI/CD Pipelines - Run Pipeline
+      - web
+    variables:
+      - $CI_COMMIT_BRANCH == "main"
+
 .test:
   extends: .test-basic
   except:
@@ -1164,7 +1175,9 @@ docs-review:
 # Build documentation for deployment
 #
 docs-deploy:
-  extends: .docs
+  extends:
+    - .docs
+    - .test-scheduled-main
   interruptible: true
   script:
     - export SLEPC_DIR=$PWD
