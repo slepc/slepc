@@ -366,7 +366,7 @@ The available methods for solving the eigenvalue problems are the following:
   Wrapper to PRIMME           |`EPSPRIMME`       |`primme`
   Wrapper to EVSL             |`EPSEVSL`         |`evsl`
   Wrapper to BLOPEX           |`EPSBLOPEX`       |`blopex`
-  Wrapper to SCALAPAck        |`EPSSCALAPACK`    |`scalapack`
+  Wrapper to ScaLAPACK        |`EPSSCALAPACK`    |`scalapack`
   Wrapper to ELPA             |`EPSELPA`         |`elpa`
   Wrapper to ELEMENTAL        |`EPSELEMENTAL`    |`elemental`
   Wrapper to CHASE            |`EPSCHASE`        |`chase`
@@ -374,7 +374,7 @@ The available methods for solving the eigenvalue problems are the following:
 
 :::
 
-The default solver is Krylov-Schur. A detailed description of the implemented algorithms is provided in the [SLEPc Technical Reports](#str). In addition to these methods, SLEPc also provides wrappers to external packages such as ARPACK, or PRIMME. A complete list of these interfaces can be found in section [](#sec:wrap). Note that some of these packages (LAPACK, SCALAPAck, ELPA, ELEMENTAL) perform *dense* computations and hence return the full eigendecomposition (furthermore, take into account that LAPACK is a sequential library so the corresponding solver should be used only for debugging purposes with small problem sizes).
+The default solver is Krylov-Schur. A detailed description of the implemented algorithms is provided in the [SLEPc Technical Reports](#str). In addition to these methods, SLEPc also provides wrappers to external packages such as ARPACK, or PRIMME. A complete list of these interfaces can be found in section [](#sec:wrap). Note that some of these packages (LAPACK, ScaLAPACK, ELPA, ELEMENTAL) perform *dense* computations and hence return the full eigendecomposition (furthermore, take into account that LAPACK is a sequential library so the corresponding solver should be used only for debugging purposes with small problem sizes).
 
 The solution method can be specified procedurally or via the command line. The application programmer can set it by means of the command `EPSSetType`
 

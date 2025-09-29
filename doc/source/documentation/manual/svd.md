@@ -415,7 +415,7 @@ The available methods for computing the partial SVD are shown in table [](#tab:s
 
 -   The LAPACK solver. This is an interface to some LAPACK routines, analog of those in the case of eigenproblems. These routines operate in dense mode with only one processor and therefore are suitable only for moderate size problems. This solver should be used only for debugging purposes.
 
--   External packages: SCALAPAck and ELEMENTAL are dense packages and compute the complete SVD, while PRIMME offers Davidson-type methods to compute only a few singular triplets.
+-   External packages: ScaLAPACK and ELEMENTAL are dense packages and compute the complete SVD, while PRIMME offers Davidson-type methods to compute only a few singular triplets.
 
 The default solver is the one that uses the cross product matrix (`cross`), usually the fastest and most memory-efficient approach, at least for the standard SVD. See a more detailed explanation below.
 
@@ -430,7 +430,7 @@ The default solver is the one that uses the cross product matrix (`cross`), usua
  |Thick-restart Lanczos  |`SVDTRLANCZOS`   |        `trlanczos`    |           G,H
  |Randomized SVD (RSVD)  |`SVDRANDOMIZED`  |        `randomized`   |
  |LAPACK solver          |`SVDLAPACK`      |        `lapack`       |           G
- |Wrapper to SCALAPAck   |`SVDSCALAPACK`   |        `scalapack`    |
+ |Wrapper to ScaLAPACK   |`SVDSCALAPACK`   |        `scalapack`    |
  |Wrapper to KSVD        |`SVDKSVD`        |        `ksvd`         |
  |Wrapper to ELEMENTAL   |`SVDELEMENTAL`   |        `elemental`    |
  |Wrapper to PRIMME      |`SVDPRIMME`      |        `primme`       |
