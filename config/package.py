@@ -335,7 +335,7 @@ Downloaded package %s from: %s is not a tarball.
       elif self.packagetype == 'source_c':
         print(('  --download-'+self.packagename+'-cflags=<flags>').ljust(wd)+': Indicate extra flags to compile '+self.packagename.upper())
     if self.installable:
-      print(('  --with-'+self.packagename+'=<bool>').ljust(wd)+': Test for '+self.packagename.upper()+' (requires PETSc with %s)'%getattr(self,petscdepend,'').upper())
+      print(('  --with-'+self.packagename+'=<bool>').ljust(wd)+': Test for '+self.packagename.upper()+' (requires PETSc with %s)'%getattr(self,'petscdepend','').upper())
     if self.installable and not hasattr(self,'petscdepend'):
       print(('  --with-'+self.packagename+'-dir=<dir>').ljust(wd)+': Indicate the root directory of the '+self.packagename.upper()+' installation')
       print(('  --with-'+self.packagename+'-lib=<libraries>').ljust(wd)+': Indicate quoted list of libraries and link flags for '+self.packagename.upper())
