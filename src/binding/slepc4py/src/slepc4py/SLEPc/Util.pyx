@@ -32,8 +32,7 @@ cdef class Util:
     @classmethod
     def createMatHamiltonian(cls, Mat A: petsc4py.PETSc.Mat, Mat B: petsc4py.PETSc.Mat, Mat C: petsc4py.PETSc.Mat) -> petsc4py.PETSc.Mat:
         """
-        Create a matrix that can be used to define a structured eigenvalue
-        problem of Hamiltonian type.
+        Create matrix to be used for a structured Hamiltonian eigenproblem.
 
         Collective.
 
