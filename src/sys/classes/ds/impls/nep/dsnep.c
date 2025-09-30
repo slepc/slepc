@@ -1069,7 +1069,7 @@ static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
 
   PetscFunctionBegin;
   if (fun) *fun = dsctx->computematrix;
-  if (ctx) ctx = dsctx->computematrixctx;
+  if (ctx) *(void**)ctx = dsctx->computematrixctx;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
