@@ -125,6 +125,7 @@ docsclean:
 	-@${RM} -r docs/source/demo
 	-@${RM} -r docs/source/reference
 	-@${RM} docs/source/*.inv
+	-@${RM} -r docs/source/_static
 
 webstatic:
 	@if [ ! -d ../../../doc/source/_static ]; then \
@@ -139,8 +140,8 @@ webstatic:
 		fi ;\
 		cd - ;\
 	fi ;\
-	rm docs/source/_static ;\
-	ln -s ../../../../../doc/source/_static docs/source/_static
+	if [ ! -d docs/source/_static/css ]; then mkdir -p docs/source/_static/css ; fi;\
+	ln -s ../../../../../../../doc/source/_static/css/slepc.css docs/source/_static/css/slepc.css
 
 website: webstatic
 #	CFLAGS=-O0 python -m pip install .
@@ -151,6 +152,7 @@ website: webstatic
 	rm -rf ${LOC}/slepc4py
 	mkdir -p ${LOC}/slepc4py
 	mv docs/html/* ${LOC}/slepc4py
+	rm docs/source/_static/css/slepc.css
 
 # ----
 
