@@ -229,7 +229,7 @@ html_theme_options = {
                 },
             {
                 "name": "Feed",
-                "url": "_static/rss/slepc-news.xml",
+                "url": "https://slepc.upv.es/release/_static/rss/slepc-news.xml",
                 "icon": "fa-solid fa-square-rss",
                 "type": "fontawesome",
                 }
