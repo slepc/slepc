@@ -25,6 +25,7 @@ help:
 
 .PHONY: help makefile
 
+.PHONY: clean
 clean:
 	-@${RM} -rf ${BUILDDIR}/*
 	-@${RM} -rf source/_static
@@ -45,6 +46,7 @@ clean:
 	-@${RM} -f source/petsc_objects.inv
 	-@${MAKE} --no-print-directory -C $(SLEPC_DIR)/src/binding/slepc4py docsclean
 
+.PHONY: webstatic
 webstatic:
 	@if [ ! -d source/_static ]; then \
 		git clone -b main --depth=1 https://gitlab.com/slepc/webstatic.git source/_static; \
@@ -59,6 +61,7 @@ webstatic:
 	fi
 
 # use this rule to build the documentation on your machine when working on SLEPc documentation
+.PHONY: website
 website: latexpdf
 	-@python3 -m venv .venv-sphinx ;\
 	. .venv-sphinx/bin/activate ;\
@@ -67,6 +70,7 @@ website: latexpdf
 	make SPHINXOPTS="-T -E -W -j 4" html ;\
 	deactivate
 
+.PHONY: logo_upv
 logo_upv:
 	@echo "Preparing UPV images";
 	@if [ ! -f "source/_static/images/manual/pdf/logo-upv.pdf" ]; then \
@@ -97,6 +101,7 @@ logo_upv:
 		fi; \
 	fi
 
+.PHONY: latexpdf
 latexpdf: webstatic logo_upv
 	-@echo "Preparing python virtual environment (.venv-sphinx)"
 	-@python3 -m venv .venv-sphinx ;\

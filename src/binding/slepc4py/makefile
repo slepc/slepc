@@ -127,6 +127,7 @@ docsclean:
 	-@${RM} docs/source/*.inv
 	-@${RM} -r docs/source/_static
 
+.PHONY: webstatic
 webstatic:
 	@if [ ! -d ../../../doc/source/_static ]; then \
 		git clone -b main --depth=1 https://gitlab.com/slepc/webstatic.git ../../../doc/source/_static; \
@@ -143,6 +144,7 @@ webstatic:
 	if [ ! -d docs/source/_static/css ]; then mkdir -p docs/source/_static/css ; fi;\
 	ln -s ../../../../../../../doc/source/_static/css/slepc.css docs/source/_static/css/slepc.css
 
+.PHONY: website
 website: webstatic
 #	CFLAGS=-O0 python -m pip install .
 	-@python3 -m venv ../../../doc/.venv-sphinx ;\
