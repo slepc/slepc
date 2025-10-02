@@ -427,7 +427,7 @@ PetscErrorCode NEPNLEIGSSetEPS_NLEIGS(NEP nep,EPS eps)
 
    Level: advanced
 
-.seealso: NEPNLEIGSGetEPS()
+.seealso: `NEPNLEIGSGetEPS()`
 @*/
 PetscErrorCode NEPNLEIGSSetEPS(NEP nep,EPS eps)
 {
@@ -486,7 +486,7 @@ PetscErrorCode NEPNLEIGSGetEPS_NLEIGS(NEP nep,EPS *eps)
 
    Level: advanced
 
-.seealso: NEPNLEIGSSetEPS()
+.seealso: `NEPNLEIGSSetEPS()`
 @*/
 PetscErrorCode NEPNLEIGSGetEPS(NEP nep,EPS *eps)
 {

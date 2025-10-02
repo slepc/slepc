@@ -91,7 +91,7 @@ static PetscErrorCode BVBiorthogonalizeGS(BV V,BV W,Vec v)
 
    Level: advanced
 
-.seealso: BVOrthogonalizeColumn(), BVBiorthonormalizeColumn()
+.seealso: `BVOrthogonalizeColumn()`, `BVBiorthonormalizeColumn()`
 @*/
 PetscErrorCode BVBiorthogonalizeColumn(BV V,BV W,PetscInt j)
 {
@@ -163,7 +163,7 @@ PetscErrorCode BVBiorthogonalizeColumn(BV V,BV W,PetscInt j)
 
    Level: advanced
 
-.seealso: BVOrthonormalizeColumn(), BVBiorthogonalizeColumn()
+.seealso: `BVOrthonormalizeColumn()`, `BVBiorthogonalizeColumn()`
 @*/
 PetscErrorCode BVBiorthonormalizeColumn(BV V,BV W,PetscInt j,PetscReal *delta)
 {

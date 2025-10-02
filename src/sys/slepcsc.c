@@ -35,7 +35,7 @@
 
    Level: developer
 
-.seealso: SlepcSortEigenvalues(), SlepcSC
+.seealso: `SlepcSortEigenvalues()`, `SlepcSC`
 @*/
 PetscErrorCode SlepcSCCompare(SlepcSC sc,PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res)
 {
@@ -135,7 +135,7 @@ static PetscErrorCode SlepcSortEigenvalues_Private(SlepcSC sc,PetscInt n,PetscSc
 
    Level: developer
 
-.seealso: SlepcSCCompare(), SlepcSC
+.seealso: `SlepcSCCompare()`, `SlepcSC`
 @*/
 PetscErrorCode SlepcSortEigenvalues(SlepcSC sc,PetscInt n,PetscScalar *eigr,PetscScalar *eigi,PetscInt *perm)
 {
@@ -175,7 +175,7 @@ PetscErrorCode SlepcSortEigenvalues(SlepcSC sc,PetscInt n,PetscScalar *eigr,Pets
 
    Level: developer
 
-.seealso: SlepcSCCompare(), SlepcSC
+.seealso: `SlepcSCCompare()`, `SlepcSC`
 @*/
 PetscErrorCode SlepcSortEigenvaluesSpecial(SlepcSC sc,PetscInt n,PetscScalar *eigr,PetscScalar *eigi,PetscInt *perm)
 {

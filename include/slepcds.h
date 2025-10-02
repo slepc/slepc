@@ -31,7 +31,7 @@ SLEPC_EXTERN PetscErrorCode DSFinalizePackage(void);
 
     Level: beginner
 
-.seealso:  DSCreate()
+.seealso:  `DSCreate()`
 S*/
 typedef struct _p_DS* DS;
 
@@ -41,7 +41,7 @@ typedef struct _p_DS* DS;
 
     Level: advanced
 
-.seealso: DSSetType(), DS
+.seealso: `DSSetType()`, `DS`
 J*/
 typedef const char *DSType;
 #define DSHEP    "hep"
@@ -64,7 +64,7 @@ SLEPC_EXTERN PetscClassId DS_CLASSID;
 
     Level: advanced
 
-.seealso: DSSetState()
+.seealso: `DSSetState()`
 E*/
 typedef enum { DS_STATE_RAW,
                DS_STATE_INTERMEDIATE,
@@ -102,7 +102,7 @@ SLEPC_EXTERN const char *DSStateTypes[];
 
     Level: advanced
 
-.seealso: DSAllocate(), DSGetArray(), DSGetArrayReal(), DSVectors()
+.seealso: `DSAllocate()`, `DSGetArray()`, `DSGetArrayReal()`, `DSVectors()`
 E*/
 typedef enum { DS_MAT_A,
                DS_MAT_B,
@@ -137,7 +137,7 @@ SLEPC_EXTERN DSMatType DSMatExtra[];
 
     Level: advanced
 
-.seealso: DSSetParallel()
+.seealso: `DSSetParallel()`
 E*/
 typedef enum { DS_PARALLEL_REDUNDANT,
                DS_PARALLEL_SYNCHRONIZED,
@@ -262,7 +262,7 @@ SLEPC_EXTERN PetscErrorCode DSNEPGetRG(DS,RG*);
 
   Level: developer
 
-.seealso: DSNEPSetComputeMatrixFunction()
+.seealso: `DSNEPSetComputeMatrixFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode DSNEPMatrixFunctionFn(DS ds,PetscScalar lambda,PetscBool deriv,DSMatType mat,void *ctx);
 

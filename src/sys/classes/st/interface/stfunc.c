@@ -25,7 +25,7 @@ const char *STMatModes[] = {"COPY","INPLACE","SHELL","STMatMode","ST_MATMODE_",N
 
    Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode STFinalizePackage(void)
 {
@@ -43,7 +43,7 @@ PetscErrorCode STFinalizePackage(void)
 
    Level: developer
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode STInitializePackage(void)
 {
@@ -94,7 +94,7 @@ PetscErrorCode STInitializePackage(void)
 
    Level: advanced
 
-.seealso: STDestroy()
+.seealso: `STDestroy()`
 @*/
 PetscErrorCode STReset(ST st)
 {
@@ -133,7 +133,7 @@ PetscErrorCode STReset(ST st)
 
    Level: beginner
 
-.seealso: STCreate(), STSetUp()
+.seealso: `STCreate()`, `STSetUp()`
 @*/
 PetscErrorCode STDestroy(ST *st)
 {
@@ -161,7 +161,7 @@ PetscErrorCode STDestroy(ST *st)
 
    Level: beginner
 
-.seealso: STSetUp(), STApply(), STDestroy(), ST
+.seealso: `STSetUp()`, `STApply()`, `STDestroy()`, `ST`
 @*/
 PetscErrorCode STCreate(MPI_Comm comm,ST *newst)
 {
@@ -260,7 +260,7 @@ static inline PetscErrorCode STMatIsSymmetricKnown(ST st,PetscBool *symm,PetscBo
 
    Level: intermediate
 
-.seealso: STGetMatrix(), STGetNumMatrices(), STSetUp(), STReset()
+.seealso: `STGetMatrix()`, `STGetNumMatrices()`, `STSetUp()`, `STReset()`
 @*/
 PetscErrorCode STSetMatrices(ST st,PetscInt n,Mat A[])
 {
@@ -323,7 +323,7 @@ PetscErrorCode STSetMatrices(ST st,PetscInt n,Mat A[])
 
    Level: intermediate
 
-.seealso: STSetMatrices(), STGetNumMatrices()
+.seealso: `STSetMatrices()`, `STGetNumMatrices()`
 @*/
 PetscErrorCode STGetMatrix(ST st,PetscInt k,Mat *A)
 {
@@ -352,7 +352,7 @@ PetscErrorCode STGetMatrix(ST st,PetscInt k,Mat *A)
 
    Level: developer
 
-.seealso: STGetMatrix(), STGetNumMatrices()
+.seealso: `STGetMatrix()`, `STGetNumMatrices()`
 @*/
 PetscErrorCode STGetMatrixTransformed(ST st,PetscInt k,Mat *T)
 {
@@ -380,7 +380,7 @@ PetscErrorCode STGetMatrixTransformed(ST st,PetscInt k,Mat *T)
 
    Level: intermediate
 
-.seealso: STSetMatrices()
+.seealso: `STSetMatrices()`
 @*/
 PetscErrorCode STGetNumMatrices(ST st,PetscInt *n)
 {
@@ -407,7 +407,7 @@ PetscErrorCode STGetNumMatrices(ST st,PetscInt *n)
 
    Level: developer
 
-.seealso: STGetMatrix(), EPSPowerSetNonlinear()
+.seealso: `STGetMatrix()`, `EPSPowerSetNonlinear()`
 @*/
 PetscErrorCode STResetMatrixState(ST st)
 {
@@ -452,7 +452,7 @@ PetscErrorCode STResetMatrixState(ST st)
 
    Level: advanced
 
-.seealso: STGetPreconditionerMat(), STSetShift(), STGetOperator(), STSetSplitPreconditioner()
+.seealso: `STGetPreconditionerMat()`, `STSetShift()`, `STGetOperator()`, `STSetSplitPreconditioner()`
 @*/
 PetscErrorCode STSetPreconditionerMat(ST st,Mat mat)
 {
@@ -487,7 +487,7 @@ PetscErrorCode STSetPreconditionerMat(ST st,Mat mat)
 
    Level: advanced
 
-.seealso: STSetPreconditionerMat()
+.seealso: `STSetPreconditionerMat()`
 @*/
 PetscErrorCode STGetPreconditionerMat(ST st,Mat *mat)
 {
@@ -531,7 +531,7 @@ PetscErrorCode STGetPreconditionerMat(ST st,Mat *mat)
 
    Level: advanced
 
-.seealso: STGetSplitPreconditionerTerm(), STGetSplitPreconditionerInfo(), STSetPreconditionerMat(), STSetMatrices(), STSetMatStructure()
+.seealso: `STGetSplitPreconditionerTerm()`, `STGetSplitPreconditionerInfo()`, `STSetPreconditionerMat()`, `STSetMatrices()`, `STSetMatStructure()`
 @*/
 PetscErrorCode STSetSplitPreconditioner(ST st,PetscInt n,Mat Psplit[],MatStructure strp)
 {
@@ -588,7 +588,7 @@ PetscErrorCode STSetSplitPreconditioner(ST st,PetscInt n,Mat Psplit[],MatStructu
 
    Level: advanced
 
-.seealso: STSetSplitPreconditioner(), STGetSplitPreconditionerInfo()
+.seealso: `STSetSplitPreconditioner()`, `STGetSplitPreconditionerInfo()`
 @*/
 PetscErrorCode STGetSplitPreconditionerTerm(ST st,PetscInt k,Mat *Psplit)
 {
@@ -617,7 +617,7 @@ PetscErrorCode STGetSplitPreconditionerTerm(ST st,PetscInt k,Mat *Psplit)
 
    Level: advanced
 
-.seealso: STSetSplitPreconditioner(), STGetSplitPreconditionerTerm()
+.seealso: `STSetSplitPreconditioner()`, `STGetSplitPreconditionerTerm()`
 @*/
 PetscErrorCode STGetSplitPreconditionerInfo(ST st,PetscInt *n,MatStructure *strp)
 {
@@ -646,7 +646,7 @@ PetscErrorCode STGetSplitPreconditionerInfo(ST st,PetscInt *n,MatStructure *strp
 
    Level: intermediate
 
-.seealso: EPSSetTarget(), STGetShift(), STSetDefaultShift()
+.seealso: `EPSSetTarget()`, `STGetShift()`, `STSetDefaultShift()`
 @*/
 PetscErrorCode STSetShift(ST st,PetscScalar shift)
 {
@@ -676,7 +676,7 @@ PetscErrorCode STSetShift(ST st,PetscScalar shift)
 
    Level: intermediate
 
-.seealso: STSetShift()
+.seealso: `STSetShift()`
 @*/
 PetscErrorCode STGetShift(ST st,PetscScalar* shift)
 {
@@ -699,7 +699,7 @@ PetscErrorCode STGetShift(ST st,PetscScalar* shift)
 
    Level: developer
 
-.seealso: STSetShift()
+.seealso: `STSetShift()`
 @*/
 PetscErrorCode STSetDefaultShift(ST st,PetscScalar defaultshift)
 {
@@ -729,7 +729,7 @@ PetscErrorCode STSetDefaultShift(ST st,PetscScalar defaultshift)
 
    Level: developer
 
-.seealso: STSetShift()
+.seealso: `STSetShift()`
 @*/
 PetscErrorCode STScaleShift(ST st,PetscScalar factor)
 {
@@ -758,7 +758,7 @@ PetscErrorCode STScaleShift(ST st,PetscScalar factor)
 
    Level: developer
 
-.seealso: EPSSetBalance(), STApply(), STGetBalanceMatrix()
+.seealso: `EPSSetBalance()`, `STApply()`, `STGetBalanceMatrix()`
 @*/
 PetscErrorCode STSetBalanceMatrix(ST st,Vec D)
 {
@@ -794,7 +794,7 @@ PetscErrorCode STSetBalanceMatrix(ST st,Vec D)
 
    Level: developer
 
-.seealso: STSetBalanceMatrix()
+.seealso: `STSetBalanceMatrix()`
 @*/
 PetscErrorCode STGetBalanceMatrix(ST st,Vec *D)
 {
@@ -819,7 +819,7 @@ PetscErrorCode STGetBalanceMatrix(ST st,Vec *D)
 
    Level: developer
 
-.seealso: STMatCreateVecsEmpty()
+.seealso: `STMatCreateVecsEmpty()`
 @*/
 PetscErrorCode STMatCreateVecs(ST st,Vec *right,Vec *left)
 {
@@ -844,7 +844,7 @@ PetscErrorCode STMatCreateVecs(ST st,Vec *right,Vec *left)
 
    Level: developer
 
-.seealso: STMatCreateVecs(), MatCreateVecsEmpty()
+.seealso: `STMatCreateVecs()`, `MatCreateVecsEmpty()`
 @*/
 PetscErrorCode STMatCreateVecsEmpty(ST st,Vec *right,Vec *left)
 {
@@ -868,7 +868,7 @@ PetscErrorCode STMatCreateVecsEmpty(ST st,Vec *right,Vec *left)
 
    Level: developer
 
-.seealso: STMatGetLocalSize()
+.seealso: `STMatGetLocalSize()`
 @*/
 PetscErrorCode STMatGetSize(ST st,PetscInt *m,PetscInt *n)
 {
@@ -892,7 +892,7 @@ PetscErrorCode STMatGetSize(ST st,PetscInt *m,PetscInt *n)
 
    Level: developer
 
-.seealso: STMatGetSize()
+.seealso: `STMatGetSize()`
 @*/
 PetscErrorCode STMatGetLocalSize(ST st,PetscInt *m,PetscInt *n)
 {
@@ -919,7 +919,7 @@ PetscErrorCode STMatGetLocalSize(ST st,PetscInt *m,PetscInt *n)
 
    Level: advanced
 
-.seealso: STAppendOptionsPrefix(), STGetOptionsPrefix()
+.seealso: `STAppendOptionsPrefix()`, `STGetOptionsPrefix()`
 @*/
 PetscErrorCode STSetOptionsPrefix(ST st,const char *prefix)
 {
@@ -949,7 +949,7 @@ PetscErrorCode STSetOptionsPrefix(ST st,const char *prefix)
 
    Level: advanced
 
-.seealso: STSetOptionsPrefix(), STGetOptionsPrefix()
+.seealso: `STSetOptionsPrefix()`, `STGetOptionsPrefix()`
 @*/
 PetscErrorCode STAppendOptionsPrefix(ST st,const char *prefix)
 {
@@ -980,7 +980,7 @@ PetscErrorCode STAppendOptionsPrefix(ST st,const char *prefix)
 
    Level: advanced
 
-.seealso: STSetOptionsPrefix(), STAppendOptionsPrefix()
+.seealso: `STSetOptionsPrefix()`, `STAppendOptionsPrefix()`
 @*/
 PetscErrorCode STGetOptionsPrefix(ST st,const char *prefix[])
 {
@@ -1013,7 +1013,7 @@ PetscErrorCode STGetOptionsPrefix(ST st,const char *prefix[])
 
    Level: beginner
 
-.seealso: EPSView()
+.seealso: `EPSView()`
 @*/
 PetscErrorCode STView(ST st,PetscViewer viewer)
 {
@@ -1077,7 +1077,7 @@ PetscErrorCode STView(ST st,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: STView(), STCreate()
+.seealso: `STView()`, `STCreate()`
 @*/
 PetscErrorCode STViewFromOptions(ST st,PetscObject obj,const char name[])
 {
@@ -1112,7 +1112,7 @@ $     -st_type my_transform
 
    Level: advanced
 
-.seealso: STRegisterAll()
+.seealso: `STRegisterAll()`
 @*/
 PetscErrorCode STRegister(const char *name,PetscErrorCode (*function)(ST))
 {

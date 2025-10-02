@@ -28,7 +28,7 @@
 
    Level: developer
 
-.seealso: NEPSetUp()
+.seealso: `NEPSetUp()`
 @*/
 PetscErrorCode NEPSetWorkVecs(NEP nep,PetscInt nw)
 {
@@ -168,7 +168,7 @@ PetscErrorCode NEPConvergedNorm(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscR
 
    Level: advanced
 
-.seealso: NEPSetStoppingTest(), NEPConvergedReason, NEPGetConvergedReason()
+.seealso: `NEPSetStoppingTest()`, `NEPConvergedReason`, `NEPGetConvergedReason()`
 @*/
 PetscErrorCode NEPStoppingBasic(NEP nep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,NEPConvergedReason *reason,void *ctx)
 {

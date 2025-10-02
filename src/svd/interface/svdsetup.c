@@ -25,7 +25,7 @@
 
    Level: beginner
 
-.seealso: SVDSolve(), SVDGetOperators()
+.seealso: `SVDSolve()`, `SVDGetOperators()`
 @*/
 PetscErrorCode SVDSetOperators(SVD svd,Mat A,Mat B)
 {
@@ -92,7 +92,7 @@ PetscErrorCode SVDSetOperators(SVD svd,Mat A,Mat B)
 
    Level: intermediate
 
-.seealso: SVDSolve(), SVDSetOperators()
+.seealso: `SVDSolve()`, `SVDSetOperators()`
 @*/
 PetscErrorCode SVDGetOperators(SVD svd,Mat *A,Mat *B)
 {
@@ -118,7 +118,7 @@ PetscErrorCode SVDGetOperators(SVD svd,Mat *A,Mat *B)
 
    Level: intermediate
 
-.seealso: SVDSetProblemType(), SVDSetOperators(), SVDGetSignature()
+.seealso: `SVDSetProblemType()`, `SVDSetOperators()`, `SVDGetSignature()`
 @*/
 PetscErrorCode SVDSetSignature(SVD svd,Vec omega)
 {
@@ -168,7 +168,7 @@ PetscErrorCode SVDSetSignature(SVD svd,Vec omega)
 
    Level: intermediate
 
-.seealso: SVDSetSignature()
+.seealso: `SVDSetSignature()`
 @*/
 PetscErrorCode SVDGetSignature(SVD svd,Vec omega)
 {
@@ -195,7 +195,7 @@ PetscErrorCode SVDGetSignature(SVD svd,Vec omega)
 
    Level: developer
 
-.seealso: SVDSetFromOptions(), SVDSetUp()
+.seealso: `SVDSetFromOptions()`, `SVDSetUp()`
 @*/
 PetscErrorCode SVDSetDSType(SVD svd)
 {
@@ -221,7 +221,7 @@ PetscErrorCode SVDSetDSType(SVD svd)
 
    Level: developer
 
-.seealso: SVDCreate(), SVDSolve(), SVDDestroy()
+.seealso: `SVDCreate()`, `SVDSolve()`, `SVDDestroy()`
 @*/
 PetscErrorCode SVDSetUp(SVD svd)
 {
@@ -436,7 +436,7 @@ PetscErrorCode SVDSetUp(SVD svd)
 
    Level: intermediate
 
-.seealso: SVDSetUp()
+.seealso: `SVDSetUp()`
 @*/
 PetscErrorCode SVDSetInitialSpaces(SVD svd,PetscInt nr,Vec isr[],PetscInt nl,Vec isl[])
 {
@@ -510,7 +510,7 @@ PetscErrorCode SVDSetDimensions_Default(SVD svd)
 
    Level: developer
 
-.seealso: SVDSetUp()
+.seealso: `SVDSetUp()`
 @*/
 PetscErrorCode SVDAllocateSolution(SVD svd,PetscInt extra)
 {
@@ -578,7 +578,7 @@ PetscErrorCode SVDAllocateSolution(SVD svd,PetscInt extra)
 
    Level: developer
 
-.seealso: SVDAllocateSolution(), SVDSetThreshold()
+.seealso: `SVDAllocateSolution()`, `SVDSetThreshold()`
 @*/
 PetscErrorCode SVDReallocateSolution(SVD svd,PetscInt newsize)
 {

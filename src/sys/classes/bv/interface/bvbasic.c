@@ -30,7 +30,7 @@ PetscFunctionList BVList = NULL;
 
    Level: intermediate
 
-.seealso: BVGetType()
+.seealso: `BVGetType()`
 @*/
 PetscErrorCode BVSetType(BV bv,BVType type)
 {
@@ -76,7 +76,7 @@ PetscErrorCode BVSetType(BV bv,BVType type)
 
    Level: intermediate
 
-.seealso: BVSetType()
+.seealso: `BVSetType()`
 @*/
 PetscErrorCode BVGetType(BV bv,BVType *type)
 {
@@ -105,7 +105,7 @@ PetscErrorCode BVGetType(BV bv,BVType *type)
 
    Level: beginner
 
-.seealso: BVSetSizesFromVec(), BVGetSizes(), BVResize()
+.seealso: `BVSetSizesFromVec()`, `BVGetSizes()`, `BVResize()`
 @*/
 PetscErrorCode BVSetSizes(BV bv,PetscInt n,PetscInt N,PetscInt m)
 {
@@ -161,7 +161,7 @@ PetscErrorCode BVSetSizes(BV bv,PetscInt n,PetscInt N,PetscInt m)
 
    Level: beginner
 
-.seealso: BVSetSizes(), BVGetSizes(), BVResize()
+.seealso: `BVSetSizes()`, `BVGetSizes()`, `BVResize()`
 @*/
 PetscErrorCode BVSetSizesFromVec(BV bv,Vec t,PetscInt m)
 {
@@ -218,7 +218,7 @@ PetscErrorCode BVSetSizesFromVec(BV bv,Vec t,PetscInt m)
 
    Level: beginner
 
-.seealso: BVSetSizes(), BVSetSizesFromVec()
+.seealso: `BVSetSizes()`, `BVSetSizesFromVec()`
 @*/
 PetscErrorCode BVGetSizes(BV bv,PetscInt *n,PetscInt *N,PetscInt *m)
 {
@@ -255,7 +255,7 @@ PetscErrorCode BVGetSizes(BV bv,PetscInt *n,PetscInt *N,PetscInt *m)
 
    Level: developer
 
-.seealso: BVInsertConstraints()
+.seealso: `BVInsertConstraints()`
 @*/
 PetscErrorCode BVSetNumConstraints(BV V,PetscInt nc)
 {
@@ -306,7 +306,7 @@ PetscErrorCode BVSetNumConstraints(BV V,PetscInt nc)
 
    Level: advanced
 
-.seealso: BVGetSizes(), BVInsertConstraints()
+.seealso: `BVGetSizes()`, `BVInsertConstraints()`
 @*/
 PetscErrorCode BVGetNumConstraints(BV bv,PetscInt *nc)
 {
@@ -333,7 +333,7 @@ PetscErrorCode BVGetNumConstraints(BV bv,PetscInt *nc)
 
    Level: advanced
 
-.seealso: BVSetSizes(), BVSetSizesFromVec()
+.seealso: `BVSetSizes()`, `BVSetSizesFromVec()`
 @*/
 PetscErrorCode BVResize(BV bv,PetscInt m,PetscBool copy)
 {
@@ -416,7 +416,7 @@ PetscErrorCode BVResize(BV bv,PetscInt m,PetscBool copy)
 
    Level: intermediate
 
-.seealso: BVGetActiveColumns(), BVSetSizes()
+.seealso: `BVGetActiveColumns()`, `BVSetSizes()`
 @*/
 PetscErrorCode BVSetActiveColumns(BV bv,PetscInt l,PetscInt k)
 {
@@ -454,7 +454,7 @@ PetscErrorCode BVSetActiveColumns(BV bv,PetscInt l,PetscInt k)
 
    Level: intermediate
 
-.seealso: BVSetActiveColumns()
+.seealso: `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVGetActiveColumns(BV bv,PetscInt *l,PetscInt *k)
 {
@@ -492,7 +492,7 @@ PetscErrorCode BVGetActiveColumns(BV bv,PetscInt *l,PetscInt *k)
 
    Level: advanced
 
-.seealso: BVGetMatrix(), BVDot(), BVNorm(), BVOrthogonalize(), BVSetDefiniteTolerance()
+.seealso: `BVGetMatrix()`, `BVDot()`, `BVNorm()`, `BVOrthogonalize()`, `BVSetDefiniteTolerance()`
 @*/
 PetscErrorCode BVSetMatrix(BV bv,Mat B,PetscBool indef)
 {
@@ -533,7 +533,7 @@ PetscErrorCode BVSetMatrix(BV bv,Mat B,PetscBool indef)
 
    Level: advanced
 
-.seealso: BVSetMatrix()
+.seealso: `BVSetMatrix()`
 @*/
 PetscErrorCode BVGetMatrix(BV bv,Mat *B,PetscBool *indef)
 {
@@ -562,7 +562,7 @@ PetscErrorCode BVGetMatrix(BV bv,Mat *B,PetscBool *indef)
 
    Level: advanced
 
-.seealso: BVSetMatrix(), BVApplyMatrixBV()
+.seealso: `BVSetMatrix()`, `BVApplyMatrixBV()`
 @*/
 PetscErrorCode BVApplyMatrix(BV bv,Vec x,Vec y)
 {
@@ -598,7 +598,7 @@ PetscErrorCode BVApplyMatrix(BV bv,Vec x,Vec y)
 
    Level: developer
 
-.seealso: BVSetMatrix(), BVApplyMatrix(), BVMatMult(), BVGetCachedBV()
+.seealso: `BVSetMatrix()`, `BVApplyMatrix()`, `BVMatMult()`, `BVGetCachedBV()`
 @*/
 PetscErrorCode BVApplyMatrixBV(BV X,BV Y)
 {
@@ -626,7 +626,7 @@ PetscErrorCode BVApplyMatrixBV(BV X,BV Y)
 
    Level: developer
 
-.seealso: BVSetMatrix(), BVGetSignature()
+.seealso: `BVSetMatrix()`, `BVGetSignature()`
 @*/
 PetscErrorCode BVSetSignature(BV bv,Vec omega)
 {
@@ -670,7 +670,7 @@ PetscErrorCode BVSetSignature(BV bv,Vec omega)
 
    Level: developer
 
-.seealso: BVSetMatrix(), BVSetSignature()
+.seealso: `BVSetMatrix()`, `BVSetSignature()`
 @*/
 PetscErrorCode BVGetSignature(BV bv,Vec omega)
 {
@@ -715,7 +715,7 @@ PetscErrorCode BVGetSignature(BV bv,Vec omega)
 
    Level: developer
 
-.seealso: BVGetBufferVec(), BVSetSizes(), BVGetNumConstraints()
+.seealso: `BVGetBufferVec()`, `BVSetSizes()`, `BVGetNumConstraints()`
 @*/
 PetscErrorCode BVSetBufferVec(BV bv,Vec buffer)
 {
@@ -770,7 +770,7 @@ PetscErrorCode BVSetBufferVec(BV bv,Vec buffer)
 
    Level: developer
 
-.seealso: BVSetBufferVec(), BVSetSizes(), BVGetNumConstraints(), BVDotColumn(), BVMultColumn()
+.seealso: `BVSetBufferVec()`, `BVSetSizes()`, `BVGetNumConstraints()`, `BVDotColumn()`, `BVMultColumn()`
 @*/
 PetscErrorCode BVGetBufferVec(BV bv,Vec *buffer)
 {
@@ -802,7 +802,7 @@ PetscErrorCode BVGetBufferVec(BV bv,Vec *buffer)
 
    Level: advanced
 
-.seealso: BVGetRandomContext(), BVSetRandom(), BVSetRandomNormal(), BVSetRandomColumn(), BVSetRandomCond()
+.seealso: `BVGetRandomContext()`, `BVSetRandom()`, `BVSetRandomNormal()`, `BVSetRandomColumn()`, `BVSetRandomCond()`
 @*/
 PetscErrorCode BVSetRandomContext(BV bv,PetscRandom rand)
 {
@@ -829,7 +829,7 @@ PetscErrorCode BVSetRandomContext(BV bv,PetscRandom rand)
 
    Level: advanced
 
-.seealso: BVSetRandomContext(), BVSetRandom(), BVSetRandomNormal(), BVSetRandomColumn(), BVSetRandomCond()
+.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomNormal()`, `BVSetRandomColumn()`, `BVSetRandomCond()`
 @*/
 PetscErrorCode BVGetRandomContext(BV bv,PetscRandom* rand)
 {
@@ -859,7 +859,7 @@ PetscErrorCode BVGetRandomContext(BV bv,PetscRandom* rand)
 
    Level: beginner
 
-.seealso: BVSetOptionsPrefix()
+.seealso: `BVSetOptionsPrefix()`
 @*/
 PetscErrorCode BVSetFromOptions(BV bv)
 {
@@ -940,7 +940,7 @@ PetscErrorCode BVSetFromOptions(BV bv)
 
    Level: advanced
 
-.seealso: BVOrthogonalizeColumn(), BVGetOrthogonalization(), BVOrthogType, BVOrthogRefineType, BVOrthogBlockType
+.seealso: `BVOrthogonalizeColumn()`, `BVGetOrthogonalization()`, `BVOrthogType`, `BVOrthogRefineType`, `BVOrthogBlockType`
 @*/
 PetscErrorCode BVSetOrthogonalization(BV bv,BVOrthogType type,BVOrthogRefineType refine,PetscReal eta,BVOrthogBlockType block)
 {
@@ -1003,7 +1003,7 @@ PetscErrorCode BVSetOrthogonalization(BV bv,BVOrthogType type,BVOrthogRefineType
 
    Level: advanced
 
-.seealso: BVOrthogonalizeColumn(), BVSetOrthogonalization(), BVOrthogType, BVOrthogRefineType, BVOrthogBlockType
+.seealso: `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`, `BVOrthogType`, `BVOrthogRefineType`, `BVOrthogBlockType`
 @*/
 PetscErrorCode BVGetOrthogonalization(BV bv,BVOrthogType *type,BVOrthogRefineType *refine,PetscReal *eta,BVOrthogBlockType *block)
 {
@@ -1038,7 +1038,7 @@ PetscErrorCode BVGetOrthogonalization(BV bv,BVOrthogType *type,BVOrthogRefineTyp
 
    Level: advanced
 
-.seealso: BVMatMult(), BVGetMatMultMethod(), BVMatMultType
+.seealso: `BVMatMult()`, `BVGetMatMultMethod()`, `BVMatMultType`
 @*/
 PetscErrorCode BVSetMatMultMethod(BV bv,BVMatMultType method)
 {
@@ -1073,7 +1073,7 @@ PetscErrorCode BVSetMatMultMethod(BV bv,BVMatMultType method)
 
    Level: advanced
 
-.seealso: BVMatMult(), BVSetMatMultMethod(), BVMatMultType
+.seealso: `BVMatMult()`, `BVSetMatMultMethod()`, `BVMatMultType`
 @*/
 PetscErrorCode BVGetMatMultMethod(BV bv,BVMatMultType *method)
 {
@@ -1111,7 +1111,7 @@ PetscErrorCode BVGetMatMultMethod(BV bv,BVMatMultType *method)
 
    Level: beginner
 
-.seealso: BVRestoreColumn(), BVInsertConstraints()
+.seealso: `BVRestoreColumn()`, `BVInsertConstraints()`
 @*/
 PetscErrorCode BVGetColumn(BV bv,PetscInt j,Vec *v)
 {
@@ -1151,7 +1151,7 @@ PetscErrorCode BVGetColumn(BV bv,PetscInt j,Vec *v)
 
    Level: beginner
 
-.seealso: BVGetColumn()
+.seealso: `BVGetColumn()`
 @*/
 PetscErrorCode BVRestoreColumn(BV bv,PetscInt j,Vec *v)
 {
@@ -1210,7 +1210,7 @@ PetscErrorCode BVRestoreColumn(BV bv,PetscInt j,Vec *v)
 
    Level: advanced
 
-.seealso: BVRestoreArray(), BVInsertConstraints(), BVGetLeadingDimension(), BVGetArrayRead()
+.seealso: `BVRestoreArray()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArrayRead()`
 @*/
 PetscErrorCode BVGetArray(BV bv,PetscScalar **a)
 {
@@ -1238,7 +1238,7 @@ PetscErrorCode BVGetArray(BV bv,PetscScalar **a)
 
    Level: advanced
 
-.seealso: BVGetColumn()
+.seealso: `BVGetColumn()`
 @*/
 PetscErrorCode BVRestoreArray(BV bv,PetscScalar **a)
 {
@@ -1274,7 +1274,7 @@ PetscErrorCode BVRestoreArray(BV bv,PetscScalar **a)
 
    Level: advanced
 
-.seealso: BVRestoreArray(), BVInsertConstraints(), BVGetLeadingDimension(), BVGetArray()
+.seealso: `BVRestoreArray()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArray()`
 @*/
 PetscErrorCode BVGetArrayRead(BV bv,const PetscScalar **a)
 {
@@ -1299,7 +1299,7 @@ PetscErrorCode BVGetArrayRead(BV bv,const PetscScalar **a)
 
    Level: advanced
 
-.seealso: BVGetColumn()
+.seealso: `BVGetColumn()`
 @*/
 PetscErrorCode BVRestoreArrayRead(BV bv,const PetscScalar **a)
 {
@@ -1329,7 +1329,7 @@ PetscErrorCode BVRestoreArrayRead(BV bv,const PetscScalar **a)
 
    Level: beginner
 
-.seealso: BVCreateMat(), BVCreateVecEmpty()
+.seealso: `BVCreateMat()`, `BVCreateVecEmpty()`
 @*/
 PetscErrorCode BVCreateVec(BV bv,Vec *v)
 {
@@ -1362,7 +1362,7 @@ PetscErrorCode BVCreateVec(BV bv,Vec *v)
 
    Level: developer
 
-.seealso: BVCreateVec()
+.seealso: `BVCreateVec()`
 @*/
 PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
 {
@@ -1415,7 +1415,7 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
    This is not needed if the BV object is set up with BVSetSizesFromVec(), but may be
    required in the case of BVSetSizes() if one wants to work with non-standard vectors.
 
-.seealso: BVGetVecType(), BVSetSizesFromVec(), BVSetSizes()
+.seealso: `BVGetVecType()`, `BVSetSizesFromVec()`, `BVSetSizes()`
 @*/
 PetscErrorCode BVSetVecType(BV bv,VecType vtype)
 {
@@ -1446,7 +1446,7 @@ PetscErrorCode BVSetVecType(BV bv,VecType vtype)
 
    Level: advanced
 
-.seealso: BVSetVecType()
+.seealso: `BVSetVecType()`
 @*/
 PetscErrorCode BVGetVecType(BV bv,VecType *vtype)
 {
@@ -1476,7 +1476,7 @@ PetscErrorCode BVGetVecType(BV bv,VecType *vtype)
 
    Level: intermediate
 
-.seealso: BVCreateFromMat(), BVCreateVec(), BVGetMat()
+.seealso: `BVCreateFromMat()`, `BVCreateVec()`, `BVGetMat()`
 @*/
 PetscErrorCode BVCreateMat(BV bv,Mat *A)
 {
@@ -1551,7 +1551,7 @@ PetscErrorCode BVGetMat_Default(BV bv,Mat *A)
 
    Level: advanced
 
-.seealso: BVRestoreMat(), BVCreateMat(), BVGetArray()
+.seealso: `BVRestoreMat()`, `BVCreateMat()`, `BVGetArray()`
 @*/
 PetscErrorCode BVGetMat(BV bv,Mat *A)
 {
@@ -1599,7 +1599,7 @@ PetscErrorCode BVRestoreMat_Default(BV bv,Mat *A)
 
    Level: advanced
 
-.seealso: BVGetMat(), BVRestoreArray()
+.seealso: `BVGetMat()`, `BVRestoreArray()`
 @*/
 PetscErrorCode BVRestoreMat(BV bv,Mat *A)
 {
@@ -1662,7 +1662,7 @@ static inline PetscErrorCode BVDuplicate_Private(BV V,BV W)
 
    Level: intermediate
 
-.seealso: BVDuplicateResize(), BVCreate(), BVSetSizesFromVec(), BVCopy()
+.seealso: `BVDuplicateResize()`, `BVCreate()`, `BVSetSizesFromVec()`, `BVCopy()`
 @*/
 PetscErrorCode BVDuplicate(BV V,BV *W)
 {
@@ -1699,7 +1699,7 @@ PetscErrorCode BVDuplicate(BV V,BV *W)
 
    Level: intermediate
 
-.seealso: BVDuplicate(), BVResize()
+.seealso: `BVDuplicate()`, `BVResize()`
 @*/
 PetscErrorCode BVDuplicateResize(BV V,PetscInt m,BV *W)
 {
@@ -1735,7 +1735,7 @@ PetscErrorCode BVDuplicateResize(BV V,PetscInt m,BV *W)
 
    Level: developer
 
-.seealso: BVApplyMatrixBV()
+.seealso: `BVApplyMatrixBV()`
 @*/
 PetscErrorCode BVGetCachedBV(BV bv,BV *cached)
 {
@@ -1774,7 +1774,7 @@ PetscErrorCode BVGetCachedBV(BV bv,BV *cached)
 
    Level: beginner
 
-.seealso: BVCopyVec(), BVCopyColumn(), BVDuplicate(), BVSetActiveColumns()
+.seealso: `BVCopyVec()`, `BVCopyColumn()`, `BVDuplicate()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVCopy(BV V,BV W)
 {
@@ -1827,7 +1827,7 @@ PetscErrorCode BVCopy(BV V,BV W)
 
    Level: beginner
 
-.seealso: BVCopy(), BVCopyColumn(), BVInsertVec()
+.seealso: `BVCopy()`, `BVCopyColumn()`, `BVInsertVec()`
 @*/
 PetscErrorCode BVCopyVec(BV V,PetscInt j,Vec w)
 {
@@ -1866,7 +1866,7 @@ PetscErrorCode BVCopyVec(BV V,PetscInt j,Vec w)
 
    Level: beginner
 
-.seealso: BVCopy(), BVCopyVec()
+.seealso: `BVCopy()`, `BVCopyVec()`
 @*/
 PetscErrorCode BVCopyColumn(BV V,PetscInt j,PetscInt i)
 {
@@ -1952,7 +1952,7 @@ static PetscErrorCode BVGetSplit_Private(BV bv,PetscBool left,BV *split)
 
    Level: advanced
 
-.seealso: BVRestoreSplit(), BVSetActiveColumns(), BVSetNumConstraints(), BVGetSplitRows()
+.seealso: `BVRestoreSplit()`, `BVSetActiveColumns()`, `BVSetNumConstraints()`, `BVGetSplitRows()`
 @*/
 PetscErrorCode BVGetSplit(BV bv,BV *L,BV *R)
 {
@@ -1986,7 +1986,7 @@ PetscErrorCode BVGetSplit(BV bv,BV *L,BV *R)
 
    Level: advanced
 
-.seealso: BVGetSplit()
+.seealso: `BVGetSplit()`
 @*/
 PetscErrorCode BVRestoreSplit(BV bv,BV *L,BV *R)
 {
@@ -2103,7 +2103,7 @@ static PetscErrorCode BVGetSplitRows_Private(BV bv,PetscBool top,IS is,BV *split
 
    Level: advanced
 
-.seealso: BVRestoreSplitRows(), BVGetSplit()
+.seealso: `BVRestoreSplitRows()`, `BVGetSplit()`
 @*/
 PetscErrorCode BVGetSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 {
@@ -2143,7 +2143,7 @@ PetscErrorCode BVGetSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 
    Level: advanced
 
-.seealso: BVGetSplitRows()
+.seealso: `BVGetSplitRows()`
 @*/
 PetscErrorCode BVRestoreSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 {
@@ -2186,7 +2186,7 @@ PetscErrorCode BVRestoreSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 
    Level: advanced
 
-.seealso: BVSetMatrix()
+.seealso: `BVSetMatrix()`
 @*/
 PetscErrorCode BVSetDefiniteTolerance(BV bv,PetscReal deftol)
 {
@@ -2215,7 +2215,7 @@ PetscErrorCode BVSetDefiniteTolerance(BV bv,PetscReal deftol)
 
    Level: advanced
 
-.seealso: BVSetDefiniteTolerance()
+.seealso: `BVSetDefiniteTolerance()`
 @*/
 PetscErrorCode BVGetDefiniteTolerance(BV bv,PetscReal *deftol)
 {
@@ -2251,7 +2251,7 @@ PetscErrorCode BVGetDefiniteTolerance(BV bv,PetscReal *deftol)
 
    Level: advanced
 
-.seealso: BVGetLeadingDimension()
+.seealso: `BVGetLeadingDimension()`
 @*/
 PetscErrorCode BVSetLeadingDimension(BV bv,PetscInt ld)
 {
@@ -2286,7 +2286,7 @@ PetscErrorCode BVSetLeadingDimension(BV bv,PetscInt ld)
    The leading dimension must be used when accessing the internal array via
    BVGetArray() or BVGetArrayRead().
 
-.seealso: BVSetLeadingDimension(), BVGetArray(), BVGetArrayRead()
+.seealso: `BVSetLeadingDimension()`, `BVGetArray()`, `BVGetArrayRead()`
 @*/
 PetscErrorCode BVGetLeadingDimension(BV bv,PetscInt *ld)
 {

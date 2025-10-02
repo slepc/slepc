@@ -74,7 +74,7 @@ PetscErrorCode STSetDefaultKSP_Default(ST st)
 
    Level: developer
 
-.seealso: STMatMultTranspose(), STMatMultHermitianTranspose()
+.seealso: `STMatMultTranspose()`, `STMatMultHermitianTranspose()`
 @*/
 PetscErrorCode STMatMult(ST st,PetscInt k,Vec x,Vec y)
 {
@@ -114,7 +114,7 @@ PetscErrorCode STMatMult(ST st,PetscInt k,Vec x,Vec y)
 
    Level: developer
 
-.seealso: STMatMult(), STMatMultHermitianTranspose()
+.seealso: `STMatMult()`, `STMatMultHermitianTranspose()`
 @*/
 PetscErrorCode STMatMultTranspose(ST st,PetscInt k,Vec x,Vec y)
 {
@@ -154,7 +154,7 @@ PetscErrorCode STMatMultTranspose(ST st,PetscInt k,Vec x,Vec y)
 
    Level: developer
 
-.seealso: STMatMult(), STMatMultTranspose()
+.seealso: `STMatMult()`, `STMatMultTranspose()`
 @*/
 PetscErrorCode STMatMultHermitianTranspose(ST st,PetscInt k,Vec x,Vec y)
 {
@@ -193,7 +193,7 @@ PetscErrorCode STMatMultHermitianTranspose(ST st,PetscInt k,Vec x,Vec y)
 
    Level: developer
 
-.seealso: STMatSolveTranspose(), STMatSolveHermitianTranspose(), STMatMatSolve()
+.seealso: `STMatSolveTranspose()`, `STMatSolveHermitianTranspose()`, `STMatMatSolve()`
 @*/
 PetscErrorCode STMatSolve(ST st,Vec b,Vec x)
 {
@@ -230,7 +230,7 @@ PetscErrorCode STMatSolve(ST st,Vec b,Vec x)
 
    Level: developer
 
-.seealso: STMatSolve()
+.seealso: `STMatSolve()`
 @*/
 PetscErrorCode STMatMatSolve(ST st,Mat B,Mat X)
 {
@@ -263,7 +263,7 @@ PetscErrorCode STMatMatSolve(ST st,Mat B,Mat X)
 
    Level: developer
 
-.seealso: STMatSolve()
+.seealso: `STMatSolve()`
 @*/
 PetscErrorCode STMatSolveTranspose(ST st,Vec b,Vec x)
 {
@@ -300,7 +300,7 @@ PetscErrorCode STMatSolveTranspose(ST st,Vec b,Vec x)
 
    Level: developer
 
-.seealso: STMatSolve()
+.seealso: `STMatSolve()`
 @*/
 PetscErrorCode STMatSolveHermitianTranspose(ST st,Vec b,Vec x)
 {
@@ -362,7 +362,7 @@ PetscErrorCode STCheckFactorPackage(ST st)
 
    Level: advanced
 
-.seealso: STGetKSP()
+.seealso: `STGetKSP()`
 @*/
 PetscErrorCode STSetKSP(ST st,KSP ksp)
 {
@@ -391,7 +391,7 @@ PetscErrorCode STSetKSP(ST st,KSP ksp)
 
    Level: intermediate
 
-.seealso: STSetKSP()
+.seealso: `STSetKSP()`
 @*/
 PetscErrorCode STGetKSP(ST st,KSP* ksp)
 {
@@ -470,7 +470,7 @@ PetscErrorCode STCheckNullSpace_Default(ST st,BV V)
 
    Level: developer
 
-.seealso: EPSSetDeflationSpace()
+.seealso: `EPSSetDeflationSpace()`
 @*/
 PetscErrorCode STCheckNullSpace(ST st,BV V)
 {

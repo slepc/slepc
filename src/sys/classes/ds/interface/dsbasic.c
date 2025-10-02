@@ -30,7 +30,7 @@ DSMatType  DSMatExtra[DS_NUM_EXTRA] = {DS_MAT_E0,DS_MAT_E1,DS_MAT_E2,DS_MAT_E3,D
 
    Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode DSFinalizePackage(void)
 {
@@ -48,7 +48,7 @@ PetscErrorCode DSFinalizePackage(void)
 
   Level: developer
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode DSInitializePackage(void)
 {
@@ -99,7 +99,7 @@ PetscErrorCode DSInitializePackage(void)
    DS objects are not intended for normal users but only for
    advanced user that for instance implement their own solvers.
 
-.seealso: DSDestroy(), DS
+.seealso: `DSDestroy()`, `DS`
 @*/
 PetscErrorCode DSCreate(MPI_Comm comm,DS *newds)
 {
@@ -157,7 +157,7 @@ PetscErrorCode DSCreate(MPI_Comm comm,DS *newds)
 
    Level: advanced
 
-.seealso: DSAppendOptionsPrefix()
+.seealso: `DSAppendOptionsPrefix()`
 @*/
 PetscErrorCode DSSetOptionsPrefix(DS ds,const char *prefix)
 {
@@ -183,7 +183,7 @@ PetscErrorCode DSSetOptionsPrefix(DS ds,const char *prefix)
 
    Level: advanced
 
-.seealso: DSSetOptionsPrefix()
+.seealso: `DSSetOptionsPrefix()`
 @*/
 PetscErrorCode DSAppendOptionsPrefix(DS ds,const char *prefix)
 {
@@ -211,7 +211,7 @@ PetscErrorCode DSAppendOptionsPrefix(DS ds,const char *prefix)
 
    Level: advanced
 
-.seealso: DSSetOptionsPrefix(), DSAppendOptionsPrefix()
+.seealso: `DSSetOptionsPrefix()`, `DSAppendOptionsPrefix()`
 @*/
 PetscErrorCode DSGetOptionsPrefix(DS ds,const char *prefix[])
 {
@@ -233,7 +233,7 @@ PetscErrorCode DSGetOptionsPrefix(DS ds,const char *prefix[])
 
    Level: intermediate
 
-.seealso: DSGetType()
+.seealso: `DSGetType()`
 @*/
 PetscErrorCode DSSetType(DS ds,DSType type)
 {
@@ -272,7 +272,7 @@ PetscErrorCode DSSetType(DS ds,DSType type)
 
    Level: intermediate
 
-.seealso: DSSetType()
+.seealso: `DSSetType()`
 @*/
 PetscErrorCode DSGetType(DS ds,DSType *type)
 {
@@ -303,7 +303,7 @@ PetscErrorCode DSGetType(DS ds,DSType *type)
 
    Level: intermediate
 
-.seealso: DSCreate(), DSAllocate(), DSSetSlepcSC()
+.seealso: `DSCreate()`, `DSAllocate()`, `DSSetSlepcSC()`
 @*/
 PetscErrorCode DSDuplicate(DS ds,DS *dsnew)
 {
@@ -335,7 +335,7 @@ PetscErrorCode DSDuplicate(DS ds,DS *dsnew)
 
    Level: intermediate
 
-.seealso: DSGetMethod()
+.seealso: `DSGetMethod()`
 @*/
 PetscErrorCode DSSetMethod(DS ds,PetscInt meth)
 {
@@ -361,7 +361,7 @@ PetscErrorCode DSSetMethod(DS ds,PetscInt meth)
 
    Level: intermediate
 
-.seealso: DSSetMethod()
+.seealso: `DSSetMethod()`
 @*/
 PetscErrorCode DSGetMethod(DS ds,PetscInt *meth)
 {
@@ -402,7 +402,7 @@ PetscErrorCode DSGetMethod(DS ds,PetscInt *meth)
 
    Level: advanced
 
-.seealso: DSSynchronize(), DSGetParallel()
+.seealso: `DSSynchronize()`, `DSGetParallel()`
 @*/
 PetscErrorCode DSSetParallel(DS ds,DSParallelType pmode)
 {
@@ -426,7 +426,7 @@ PetscErrorCode DSSetParallel(DS ds,DSParallelType pmode)
 
    Level: advanced
 
-.seealso: DSSetParallel()
+.seealso: `DSSetParallel()`
 @*/
 PetscErrorCode DSGetParallel(DS ds,DSParallelType *pmode)
 {
@@ -456,7 +456,7 @@ PetscErrorCode DSGetParallel(DS ds,DSParallelType *pmode)
 
    Level: advanced
 
-.seealso: DSGetCompact()
+.seealso: `DSGetCompact()`
 @*/
 PetscErrorCode DSSetCompact(DS ds,PetscBool comp)
 {
@@ -481,7 +481,7 @@ PetscErrorCode DSSetCompact(DS ds,PetscBool comp)
 
    Level: advanced
 
-.seealso: DSSetCompact()
+.seealso: `DSSetCompact()`
 @*/
 PetscErrorCode DSGetCompact(DS ds,PetscBool *comp)
 {
@@ -512,7 +512,7 @@ PetscErrorCode DSGetCompact(DS ds,PetscBool *comp)
 
    Level: advanced
 
-.seealso: DSSolve(), DSAllocate(), DSGetExtraRow()
+.seealso: `DSSolve()`, `DSAllocate()`, `DSGetExtraRow()`
 @*/
 PetscErrorCode DSSetExtraRow(DS ds,PetscBool ext)
 {
@@ -537,7 +537,7 @@ PetscErrorCode DSSetExtraRow(DS ds,PetscBool ext)
 
    Level: advanced
 
-.seealso: DSSetExtraRow()
+.seealso: `DSSetExtraRow()`
 @*/
 PetscErrorCode DSGetExtraRow(DS ds,PetscBool *ext)
 {
@@ -570,7 +570,7 @@ PetscErrorCode DSGetExtraRow(DS ds,PetscBool *ext)
 
    Level: advanced
 
-.seealso: DSVectors(), DSGetRefined()
+.seealso: `DSVectors()`, `DSGetRefined()`
 @*/
 PetscErrorCode DSSetRefined(DS ds,PetscBool ref)
 {
@@ -594,7 +594,7 @@ PetscErrorCode DSSetRefined(DS ds,PetscBool ref)
 
    Level: advanced
 
-.seealso: DSSetRefined()
+.seealso: `DSSetRefined()`
 @*/
 PetscErrorCode DSGetRefined(DS ds,PetscBool *ref)
 {
@@ -619,7 +619,7 @@ PetscErrorCode DSGetRefined(DS ds,PetscBool *ref)
 
    Level: intermediate
 
-.seealso: DSGetBlockSize()
+.seealso: `DSGetBlockSize()`
 @*/
 PetscErrorCode DSSetBlockSize(DS ds,PetscInt bs)
 {
@@ -644,7 +644,7 @@ PetscErrorCode DSSetBlockSize(DS ds,PetscInt bs)
 
    Level: intermediate
 
-.seealso: DSSetBlockSize()
+.seealso: `DSSetBlockSize()`
 @*/
 PetscErrorCode DSGetBlockSize(DS ds,PetscInt *bs)
 {
@@ -669,7 +669,7 @@ PetscErrorCode DSGetBlockSize(DS ds,PetscInt *bs)
 
    Level: developer
 
-.seealso: DSGetSlepcSC(), DSSort()
+.seealso: `DSGetSlepcSC()`, `DSSort()`
 @*/
 PetscErrorCode DSSetSlepcSC(DS ds,SlepcSC sc)
 {
@@ -698,7 +698,7 @@ PetscErrorCode DSSetSlepcSC(DS ds,SlepcSC sc)
 
    Level: developer
 
-.seealso: DSSetSlepcSC(), DSSort()
+.seealso: `DSSetSlepcSC()`, `DSSort()`
 @*/
 PetscErrorCode DSGetSlepcSC(DS ds,SlepcSC *sc)
 {
@@ -723,7 +723,7 @@ PetscErrorCode DSGetSlepcSC(DS ds,SlepcSC *sc)
 
    Level: beginner
 
-.seealso: DSSetOptionsPrefix()
+.seealso: `DSSetOptionsPrefix()`
 @*/
 PetscErrorCode DSSetFromOptions(DS ds)
 {
@@ -775,7 +775,7 @@ PetscErrorCode DSSetFromOptions(DS ds)
 
    Level: beginner
 
-.seealso: DSViewMat()
+.seealso: `DSViewMat()`
 @*/
 PetscErrorCode DSView(DS ds,PetscViewer viewer)
 {
@@ -820,7 +820,7 @@ PetscErrorCode DSView(DS ds,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: DSView(), DSCreate()
+.seealso: `DSView()`, `DSCreate()`
 @*/
 PetscErrorCode DSViewFromOptions(DS ds,PetscObject obj,const char name[])
 {
@@ -846,7 +846,7 @@ PetscErrorCode DSViewFromOptions(DS ds,PetscObject obj,const char name[])
 
    Level: intermediate
 
-.seealso: DSGetLeadingDimension(), DSSetDimensions(), DSSetExtraRow(), DSReset(), DSReallocate()
+.seealso: `DSGetLeadingDimension()`, `DSSetDimensions()`, `DSSetExtraRow()`, `DSReset()`, `DSReallocate()`
 @*/
 PetscErrorCode DSAllocate(DS ds,PetscInt ld)
 {
@@ -882,7 +882,7 @@ PetscErrorCode DSAllocate(DS ds,PetscInt ld)
 
    Level: developer
 
-.seealso: DSAllocate()
+.seealso: `DSAllocate()`
 @*/
 PetscErrorCode DSReallocate(DS ds,PetscInt ld)
 {
@@ -912,7 +912,7 @@ PetscErrorCode DSReallocate(DS ds,PetscInt ld)
 
    Level: advanced
 
-.seealso: DSDestroy(), DSAllocate()
+.seealso: `DSDestroy()`, `DSAllocate()`
 @*/
 PetscErrorCode DSReset(DS ds)
 {
@@ -941,7 +941,7 @@ PetscErrorCode DSReset(DS ds)
 
    Level: beginner
 
-.seealso: DSCreate()
+.seealso: `DSCreate()`
 @*/
 PetscErrorCode DSDestroy(DS *ds)
 {
@@ -974,7 +974,7 @@ PetscErrorCode DSDestroy(DS *ds)
 
    Level: advanced
 
-.seealso: DSRegisterAll()
+.seealso: `DSRegisterAll()`
 @*/
 PetscErrorCode DSRegister(const char *name,PetscErrorCode (*function)(DS))
 {
@@ -1003,7 +1003,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_NEP(DS);
 
    Level: advanced
 
-.seealso: DSRegister()
+.seealso: `DSRegister()`
 @*/
 PetscErrorCode DSRegisterAll(void)
 {

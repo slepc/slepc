@@ -30,7 +30,7 @@ const char *BVSVDMethods[] = {"REFINE","QR","QR_CAA","BVSVDMethod","BV_SVD_METHO
 
    Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode BVFinalizePackage(void)
 {
@@ -50,7 +50,7 @@ PetscErrorCode BVFinalizePackage(void)
 
    Level: developer
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode BVInitializePackage(void)
 {
@@ -111,7 +111,7 @@ PetscErrorCode BVInitializePackage(void)
 
    Level: beginner
 
-.seealso: BVCreate()
+.seealso: `BVCreate()`
 @*/
 PetscErrorCode BVDestroy(BV *bv)
 {
@@ -153,7 +153,7 @@ PetscErrorCode BVDestroy(BV *bv)
 
    Level: beginner
 
-.seealso: BVSetUp(), BVDestroy(), BV
+.seealso: `BVSetUp()`, `BVDestroy()`, `BV`
 @*/
 PetscErrorCode BVCreate(MPI_Comm comm,BV *newbv)
 {
@@ -242,7 +242,7 @@ PetscErrorCode BVCreate(MPI_Comm comm,BV *newbv)
 
    Level: intermediate
 
-.seealso: BVCreate(), BVDestroy(), BVCreateMat()
+.seealso: `BVCreate()`, `BVDestroy()`, `BVCreateMat()`
 @*/
 PetscErrorCode BVCreateFromMat(Mat A,BV *bv)
 {
@@ -276,7 +276,7 @@ PetscErrorCode BVCreateFromMat(Mat A,BV *bv)
 
    Level: intermediate
 
-.seealso: BVInsertVecs()
+.seealso: `BVInsertVecs()`
 @*/
 PetscErrorCode BVInsertVec(BV V,PetscInt j,Vec w)
 {
@@ -326,7 +326,7 @@ PetscErrorCode BVInsertVec(BV V,PetscInt j,Vec w)
 
    Level: intermediate
 
-.seealso: BVInsertVec(), BVOrthogonalizeColumn()
+.seealso: `BVInsertVec()`, `BVOrthogonalizeColumn()`
 @*/
 PetscErrorCode BVInsertVecs(BV V,PetscInt s,PetscInt *m,Vec *W,PetscBool orth)
 {
@@ -406,7 +406,7 @@ PetscErrorCode BVInsertVecs(BV V,PetscInt s,PetscInt *m,Vec *W,PetscBool orth)
 
    Level: advanced
 
-.seealso: BVInsertVecs(), BVOrthogonalizeColumn(), BVGetColumn(), BVGetNumConstraints()
+.seealso: `BVInsertVecs()`, `BVOrthogonalizeColumn()`, `BVGetColumn()`, `BVGetNumConstraints()`
 @*/
 PetscErrorCode BVInsertConstraints(BV V,PetscInt *nc,Vec *C)
 {
@@ -455,7 +455,7 @@ PetscErrorCode BVInsertConstraints(BV V,PetscInt *nc,Vec *C)
 
    Level: advanced
 
-.seealso: BVAppendOptionsPrefix(), BVGetOptionsPrefix()
+.seealso: `BVAppendOptionsPrefix()`, `BVGetOptionsPrefix()`
 @*/
 PetscErrorCode BVSetOptionsPrefix(BV bv,const char *prefix)
 {
@@ -482,7 +482,7 @@ PetscErrorCode BVSetOptionsPrefix(BV bv,const char *prefix)
 
    Level: advanced
 
-.seealso: BVSetOptionsPrefix(), BVGetOptionsPrefix()
+.seealso: `BVSetOptionsPrefix()`, `BVGetOptionsPrefix()`
 @*/
 PetscErrorCode BVAppendOptionsPrefix(BV bv,const char *prefix)
 {
@@ -510,7 +510,7 @@ PetscErrorCode BVAppendOptionsPrefix(BV bv,const char *prefix)
 
    Level: advanced
 
-.seealso: BVSetOptionsPrefix(), BVAppendOptionsPrefix()
+.seealso: `BVSetOptionsPrefix()`, `BVAppendOptionsPrefix()`
 @*/
 PetscErrorCode BVGetOptionsPrefix(BV bv,const char *prefix[])
 {
@@ -543,7 +543,7 @@ PetscErrorCode BVGetOptionsPrefix(BV bv,const char *prefix[])
 
    Level: beginner
 
-.seealso: BVCreate()
+.seealso: `BVCreate()`
 @*/
 PetscErrorCode BVView(BV bv,PetscViewer viewer)
 {
@@ -616,7 +616,7 @@ PetscErrorCode BVView(BV bv,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: BVView(), BVCreate()
+.seealso: `BVView()`, `BVCreate()`
 @*/
 PetscErrorCode BVViewFromOptions(BV bv,PetscObject obj,const char name[])
 {
@@ -641,7 +641,7 @@ PetscErrorCode BVViewFromOptions(BV bv,PetscObject obj,const char name[])
 
    Level: advanced
 
-.seealso: BVRegisterAll()
+.seealso: `BVRegisterAll()`
 @*/
 PetscErrorCode BVRegister(const char *name,PetscErrorCode (*function)(BV))
 {

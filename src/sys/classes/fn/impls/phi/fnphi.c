@@ -140,7 +140,7 @@ static PetscErrorCode FNPhiSetIndex_Phi(FN fn,PetscInt k)
 
    Level: intermediate
 
-.seealso: FNPhiGetIndex()
+.seealso: `FNPhiGetIndex()`
 @*/
 PetscErrorCode FNPhiSetIndex(FN fn,PetscInt k)
 {
@@ -173,7 +173,7 @@ static PetscErrorCode FNPhiGetIndex_Phi(FN fn,PetscInt *k)
 
    Level: intermediate
 
-.seealso: FNPhiSetIndex()
+.seealso: `FNPhiSetIndex()`
 @*/
 PetscErrorCode FNPhiGetIndex(FN fn,PetscInt *k)
 {

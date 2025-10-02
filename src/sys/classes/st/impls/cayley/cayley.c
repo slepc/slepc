@@ -247,7 +247,7 @@ static PetscErrorCode STCayleySetAntishift_Cayley(ST st,PetscScalar newshift)
    OP = inv(A - sigma B)*(A + nu B). This function sets the value of nu.
    Use STSetShift() for setting sigma. The value nu=-sigma is not allowed.
 
-.seealso: STSetShift(), STCayleyGetAntishift()
+.seealso: `STSetShift()`, `STCayleyGetAntishift()`
 @*/
 PetscErrorCode STCayleySetAntishift(ST st,PetscScalar nu)
 {
@@ -281,7 +281,7 @@ static PetscErrorCode STCayleyGetAntishift_Cayley(ST st,PetscScalar *nu)
 
    Level: intermediate
 
-.seealso: STGetShift(), STCayleySetAntishift()
+.seealso: `STGetShift()`, `STCayleySetAntishift()`
 @*/
 PetscErrorCode STCayleyGetAntishift(ST st,PetscScalar *nu)
 {

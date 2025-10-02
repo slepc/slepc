@@ -46,7 +46,7 @@ static inline PetscErrorCode LMESetUp_Lyapunov(LME lme)
 
    Level: developer
 
-.seealso: LMECreate(), LMESolve(), LMEDestroy()
+.seealso: `LMECreate()`, `LMESolve()`, `LMEDestroy()`
 @*/
 PetscErrorCode LMESetUp(LME lme)
 {
@@ -144,7 +144,7 @@ static inline PetscErrorCode LMESetCoefficients_Private(LME lme,Mat A,Mat *lmeA)
 
    Level: beginner
 
-.seealso: LMESolve(), LMESetUp(), LMESetRHS(), LMESetProblemType()
+.seealso: `LMESolve()`, `LMESetUp()`, `LMESetRHS()`, `LMESetProblemType()`
 @*/
 PetscErrorCode LMESetCoefficients(LME lme,Mat A,Mat B,Mat D,Mat E)
 {
@@ -195,7 +195,7 @@ PetscErrorCode LMESetCoefficients(LME lme,Mat A,Mat B,Mat D,Mat E)
 
    Level: intermediate
 
-.seealso: LMESolve(), LMESetCoefficients()
+.seealso: `LMESolve()`, `LMESetCoefficients()`
 @*/
 PetscErrorCode LMEGetCoefficients(LME lme,Mat *A,Mat *B,Mat *D,Mat *E)
 {
@@ -230,7 +230,7 @@ PetscErrorCode LMEGetCoefficients(LME lme,Mat *A,Mat *B,Mat *D,Mat *E)
 
    Level: beginner
 
-.seealso: LMESetSolution(), LMESetProblemType()
+.seealso: `LMESetSolution()`, `LMESetProblemType()`
 @*/
 PetscErrorCode LMESetRHS(LME lme,Mat C)
 {
@@ -264,7 +264,7 @@ PetscErrorCode LMESetRHS(LME lme,Mat C)
 
    Level: intermediate
 
-.seealso: LMESolve(), LMESetRHS()
+.seealso: `LMESolve()`, `LMESetRHS()`
 @*/
 PetscErrorCode LMEGetRHS(LME lme,Mat *C)
 {
@@ -301,7 +301,7 @@ PetscErrorCode LMEGetRHS(LME lme,Mat *C)
 
    Level: intermediate
 
-.seealso: LMEGetSolution(), LMESetRHS(), LMESetProblemType(), LMESolve()
+.seealso: `LMEGetSolution()`, `LMESetRHS()`, `LMESetProblemType()`, `LMESolve()`
 @*/
 PetscErrorCode LMESetSolution(LME lme,Mat X)
 {
@@ -335,7 +335,7 @@ PetscErrorCode LMESetSolution(LME lme,Mat X)
 
    Level: intermediate
 
-.seealso: LMESolve(), LMESetSolution()
+.seealso: `LMESolve()`, `LMESetSolution()`
 @*/
 PetscErrorCode LMEGetSolution(LME lme,Mat *X)
 {
@@ -363,7 +363,7 @@ PetscErrorCode LMEGetSolution(LME lme,Mat *X)
 
    Level: developer
 
-.seealso: LMESetUp()
+.seealso: `LMESetUp()`
 @*/
 PetscErrorCode LMEAllocateSolution(LME lme,PetscInt extra)
 {

@@ -24,7 +24,7 @@ static PetscBool  RGPackageInitialized = PETSC_FALSE;
 
    Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode RGFinalizePackage(void)
 {
@@ -42,7 +42,7 @@ PetscErrorCode RGFinalizePackage(void)
 
   Level: developer
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode RGInitializePackage(void)
 {
@@ -84,7 +84,7 @@ PetscErrorCode RGInitializePackage(void)
 
    Level: beginner
 
-.seealso: RGDestroy(), RG
+.seealso: `RGDestroy()`, `RG`
 @*/
 PetscErrorCode RGCreate(MPI_Comm comm,RG *newrg)
 {
@@ -120,7 +120,7 @@ PetscErrorCode RGCreate(MPI_Comm comm,RG *newrg)
 
    Level: advanced
 
-.seealso: RGAppendOptionsPrefix()
+.seealso: `RGAppendOptionsPrefix()`
 @*/
 PetscErrorCode RGSetOptionsPrefix(RG rg,const char *prefix)
 {
@@ -146,7 +146,7 @@ PetscErrorCode RGSetOptionsPrefix(RG rg,const char *prefix)
 
    Level: advanced
 
-.seealso: RGSetOptionsPrefix()
+.seealso: `RGSetOptionsPrefix()`
 @*/
 PetscErrorCode RGAppendOptionsPrefix(RG rg,const char *prefix)
 {
@@ -174,7 +174,7 @@ PetscErrorCode RGAppendOptionsPrefix(RG rg,const char *prefix)
 
    Level: advanced
 
-.seealso: RGSetOptionsPrefix(), RGAppendOptionsPrefix()
+.seealso: `RGSetOptionsPrefix()`, `RGAppendOptionsPrefix()`
 @*/
 PetscErrorCode RGGetOptionsPrefix(RG rg,const char *prefix[])
 {
@@ -196,7 +196,7 @@ PetscErrorCode RGGetOptionsPrefix(RG rg,const char *prefix[])
 
    Level: intermediate
 
-.seealso: RGGetType()
+.seealso: `RGGetType()`
 @*/
 PetscErrorCode RGSetType(RG rg,RGType type)
 {
@@ -234,7 +234,7 @@ PetscErrorCode RGSetType(RG rg,RGType type)
 
    Level: intermediate
 
-.seealso: RGSetType()
+.seealso: `RGSetType()`
 @*/
 PetscErrorCode RGGetType(RG rg,RGType *type)
 {
@@ -258,7 +258,7 @@ PetscErrorCode RGGetType(RG rg,RGType *type)
 
    Level: beginner
 
-.seealso: RGSetOptionsPrefix()
+.seealso: `RGSetOptionsPrefix()`
 @*/
 PetscErrorCode RGSetFromOptions(RG rg)
 {
@@ -307,7 +307,7 @@ PetscErrorCode RGSetFromOptions(RG rg)
 
    Level: beginner
 
-.seealso: RGCreate()
+.seealso: `RGCreate()`
 @*/
 PetscErrorCode RGView(RG rg,PetscViewer viewer)
 {
@@ -343,7 +343,7 @@ PetscErrorCode RGView(RG rg,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: RGView(), RGCreate()
+.seealso: `RGView()`, `RGCreate()`
 @*/
 PetscErrorCode RGViewFromOptions(RG rg,PetscObject obj,const char name[])
 {
@@ -368,7 +368,7 @@ PetscErrorCode RGViewFromOptions(RG rg,PetscObject obj,const char name[])
 
    Level: beginner
 
-.seealso: RGCheckInside()
+.seealso: `RGCheckInside()`
 @*/
 PetscErrorCode RGIsTrivial(RG rg,PetscBool *trivial)
 {
@@ -404,7 +404,7 @@ PetscErrorCode RGIsTrivial(RG rg,PetscBool *trivial)
 
    Level: intermediate
 
-.seealso: RGSetScale(), RGSetComplement()
+.seealso: `RGSetScale()`, `RGSetComplement()`
 @*/
 PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,PetscInt *inside)
 {
@@ -457,7 +457,7 @@ PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,Pe
 
    Level: intermediate
 
-.seealso: RGCanUseConjugates()
+.seealso: `RGCanUseConjugates()`
 @*/
 PetscErrorCode RGIsAxisymmetric(RG rg,PetscBool vertical,PetscBool *symm)
 {
@@ -492,7 +492,7 @@ PetscErrorCode RGIsAxisymmetric(RG rg,PetscBool vertical,PetscBool *symm)
 
    Level: developer
 
-.seealso: RGIsAxisymmetric()
+.seealso: `RGIsAxisymmetric()`
 @*/
 PetscErrorCode RGCanUseConjugates(RG rg,PetscBool realmats,PetscBool *useconj)
 {
@@ -539,7 +539,7 @@ PetscErrorCode RGCanUseConjugates(RG rg,PetscBool realmats,PetscBool *useconj)
 
    Level: intermediate
 
-.seealso: RGComputeBoundingBox()
+.seealso: `RGComputeBoundingBox()`
 @*/
 PetscErrorCode RGComputeContour(RG rg,PetscInt n,PetscScalar cr[],PetscScalar ci[])
 {
@@ -584,7 +584,7 @@ PetscErrorCode RGComputeContour(RG rg,PetscInt n,PetscScalar cr[],PetscScalar ci
 
    Level: intermediate
 
-.seealso: RGComputeContour()
+.seealso: `RGComputeContour()`
 @*/
 PetscErrorCode RGComputeBoundingBox(RG rg,PetscReal *a,PetscReal *b,PetscReal *c,PetscReal *d)
 {
@@ -633,7 +633,7 @@ PetscErrorCode RGComputeBoundingBox(RG rg,PetscReal *a,PetscReal *b,PetscReal *c
 
    Level: intermediate
 
-.seealso: RGComputeContour()
+.seealso: `RGComputeContour()`
 @*/
 PetscErrorCode RGComputeQuadrature(RG rg,RGQuadRule quad,PetscInt n,PetscScalar z[],PetscScalar zn[],PetscScalar w[])
 {
@@ -664,7 +664,7 @@ PetscErrorCode RGComputeQuadrature(RG rg,RGQuadRule quad,PetscInt n,PetscScalar 
 
    Level: intermediate
 
-.seealso: RGGetComplement()
+.seealso: `RGGetComplement()`
 @*/
 PetscErrorCode RGSetComplement(RG rg,PetscBool flg)
 {
@@ -689,7 +689,7 @@ PetscErrorCode RGSetComplement(RG rg,PetscBool flg)
 
    Level: intermediate
 
-.seealso: RGSetComplement()
+.seealso: `RGSetComplement()`
 @*/
 PetscErrorCode RGGetComplement(RG rg,PetscBool *flg)
 {
@@ -715,7 +715,7 @@ PetscErrorCode RGGetComplement(RG rg,PetscBool *flg)
 
    Level: advanced
 
-.seealso: RGGetScale(), RGCheckInside()
+.seealso: `RGGetScale()`, `RGCheckInside()`
 @*/
 PetscErrorCode RGSetScale(RG rg,PetscReal sfactor)
 {
@@ -741,7 +741,7 @@ PetscErrorCode RGSetScale(RG rg,PetscReal sfactor)
 
    Level: advanced
 
-.seealso: RGSetScale()
+.seealso: `RGSetScale()`
 @*/
 PetscErrorCode RGGetScale(RG rg,PetscReal *sfactor)
 {
@@ -770,7 +770,7 @@ PetscErrorCode RGGetScale(RG rg,PetscReal *sfactor)
 
    Level: developer
 
-.seealso: RGPopScale(), RGSetScale()
+.seealso: `RGPopScale()`, `RGSetScale()`
 @*/
 PetscErrorCode RGPushScale(RG rg,PetscReal sfactor)
 {
@@ -794,7 +794,7 @@ PetscErrorCode RGPushScale(RG rg,PetscReal sfactor)
 
    Level: developer
 
-.seealso: RGPushScale()
+.seealso: `RGPushScale()`
 @*/
 PetscErrorCode RGPopScale(RG rg)
 {
@@ -816,7 +816,7 @@ PetscErrorCode RGPopScale(RG rg)
 
    Level: beginner
 
-.seealso: RGCreate()
+.seealso: `RGCreate()`
 @*/
 PetscErrorCode RGDestroy(RG *rg)
 {
@@ -843,7 +843,7 @@ PetscErrorCode RGDestroy(RG *rg)
 
    Level: advanced
 
-.seealso: RGRegisterAll()
+.seealso: `RGRegisterAll()`
 @*/
 PetscErrorCode RGRegister(const char *name,PetscErrorCode (*function)(RG))
 {

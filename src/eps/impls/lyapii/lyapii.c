@@ -595,7 +595,7 @@ static PetscErrorCode EPSLyapIISetRanks_LyapII(EPS eps,PetscInt rkc,PetscInt rkl
 
    Level: intermediate
 
-.seealso: EPSLyapIIGetRanks()
+.seealso: `EPSLyapIIGetRanks()`
 @*/
 PetscErrorCode EPSLyapIISetRanks(EPS eps,PetscInt rkc,PetscInt rkl)
 {
@@ -631,7 +631,7 @@ static PetscErrorCode EPSLyapIIGetRanks_LyapII(EPS eps,PetscInt *rkc,PetscInt *r
 
    Level: intermediate
 
-.seealso: EPSLyapIISetRanks()
+.seealso: `EPSLyapIISetRanks()`
 @*/
 PetscErrorCode EPSLyapIIGetRanks(EPS eps,PetscInt *rkc,PetscInt *rkl)
 {
@@ -665,7 +665,7 @@ static PetscErrorCode EPSLyapIISetLME_LyapII(EPS eps,LME lme)
 
    Level: advanced
 
-.seealso: EPSLyapIIGetLME()
+.seealso: `EPSLyapIIGetLME()`
 @*/
 PetscErrorCode EPSLyapIISetLME(EPS eps,LME lme)
 {
@@ -706,7 +706,7 @@ static PetscErrorCode EPSLyapIIGetLME_LyapII(EPS eps,LME *lme)
 
    Level: advanced
 
-.seealso: EPSLyapIISetLME()
+.seealso: `EPSLyapIISetLME()`
 @*/
 PetscErrorCode EPSLyapIIGetLME(EPS eps,LME *lme)
 {

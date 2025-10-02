@@ -31,7 +31,7 @@ const char *const*EPSConvergedReasons = EPSConvergedReasons_Shifted + 4;
 
   Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode EPSFinalizePackage(void)
 {
@@ -53,7 +53,7 @@ PetscErrorCode EPSFinalizePackage(void)
 
   Level: developer
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode EPSInitializePackage(void)
 {

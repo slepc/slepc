@@ -28,7 +28,7 @@ SLEPC_EXTERN PetscErrorCode STFinalizePackage(void);
 
     Level: beginner
 
-.seealso:  STCreate(), EPS
+.seealso:  `STCreate()`, `EPS`
 S*/
 typedef struct _p_ST* ST;
 
@@ -37,7 +37,7 @@ typedef struct _p_ST* ST;
 
     Level: beginner
 
-.seealso: STSetType(), ST
+.seealso: `STSetType()`, `ST`
 J*/
 typedef const char *STType;
 #define STSHELL     "shell"
@@ -136,7 +136,7 @@ SLEPC_EXTERN PetscErrorCode STMatGetLocalSize(ST,PetscInt*,PetscInt*);
 
     Level: intermediate
 
-.seealso: STSetMatMode(), STGetMatMode()
+.seealso: `STSetMatMode()`, `STGetMatMode()`
 E*/
 typedef enum { ST_MATMODE_COPY,
                ST_MATMODE_INPLACE,
@@ -163,7 +163,7 @@ SLEPC_EXTERN PetscErrorCode STRegister(const char[],PetscErrorCode(*)(ST));
 
   Level: advanced
 
-.seealso: STShellSetApply()
+.seealso: `STShellSetApply()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyFn(ST st,Vec xin,Vec xout);
 
@@ -177,7 +177,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyFn(ST st,Vec xin,Vec xou
 
   Level: advanced
 
-.seealso: STShellSetApplyTranspose()
+.seealso: `STShellSetApplyTranspose()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyTransposeFn(ST st,Vec xin,Vec xout);
 
@@ -191,7 +191,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyTransposeFn(ST st,Vec xi
 
   Level: advanced
 
-.seealso: STShellSetApplyHermitianTranspose()
+.seealso: `STShellSetApplyHermitianTranspose()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyHermitianTransposeFn(ST st,Vec xin,Vec xout);
 
@@ -206,7 +206,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyHermitianTransposeFn(ST 
 
   Level: advanced
 
-.seealso: STShellSetBackTransform()
+.seealso: `STShellSetBackTransform()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellBackTransformFn(ST st,PetscInt n,PetscScalar *eigr,PetscScalar *eigi);
 
@@ -230,7 +230,7 @@ SLEPC_EXTERN PetscErrorCode STPrecondSetKSPHasMat(ST,PetscBool);
 
     Level: intermediate
 
-.seealso: STSetFilterType(), STGetFilterType()
+.seealso: `STSetFilterType()`, `STGetFilterType()`
 E*/
 typedef enum { ST_FILTER_FILTLAN   = 1,
                ST_FILTER_CHEBYSHEV = 2 } STFilterType;
@@ -241,7 +241,7 @@ SLEPC_EXTERN const char *STFilterTypes[];
 
     Level: advanced
 
-.seealso: STSetFilterDamping(), STGetFilterDamping()
+.seealso: `STSetFilterDamping()`, `STGetFilterDamping()`
 E*/
 typedef enum { ST_FILTER_DAMPING_NONE,
                ST_FILTER_DAMPING_JACKSON,

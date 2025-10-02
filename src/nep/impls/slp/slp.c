@@ -309,7 +309,7 @@ static PetscErrorCode NEPSLPSetDeflationThreshold_SLP(NEP nep,PetscReal deftol)
 
    Level: advanced
 
-.seealso: NEPSLPGetDeflationThreshold()
+.seealso: `NEPSLPGetDeflationThreshold()`
 @*/
 PetscErrorCode NEPSLPSetDeflationThreshold(NEP nep,PetscReal deftol)
 {
@@ -342,7 +342,7 @@ static PetscErrorCode NEPSLPGetDeflationThreshold_SLP(NEP nep,PetscReal *deftol)
 
    Level: advanced
 
-.seealso: NEPSLPSetDeflationThreshold()
+.seealso: `NEPSLPSetDeflationThreshold()`
 @*/
 PetscErrorCode NEPSLPGetDeflationThreshold(NEP nep,PetscReal *deftol)
 {
@@ -377,7 +377,7 @@ static PetscErrorCode NEPSLPSetEPS_SLP(NEP nep,EPS eps)
 
    Level: advanced
 
-.seealso: NEPSLPGetEPS()
+.seealso: `NEPSLPGetEPS()`
 @*/
 PetscErrorCode NEPSLPSetEPS(NEP nep,EPS eps)
 {
@@ -419,7 +419,7 @@ static PetscErrorCode NEPSLPGetEPS_SLP(NEP nep,EPS *eps)
 
    Level: advanced
 
-.seealso: NEPSLPSetEPS()
+.seealso: `NEPSLPSetEPS()`
 @*/
 PetscErrorCode NEPSLPGetEPS(NEP nep,EPS *eps)
 {
@@ -455,7 +455,7 @@ static PetscErrorCode NEPSLPSetEPSLeft_SLP(NEP nep,EPS eps)
 
    Level: advanced
 
-.seealso: NEPSLPGetEPSLeft(), NEPSetTwoSided()
+.seealso: `NEPSLPGetEPSLeft()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPSLPSetEPSLeft(NEP nep,EPS eps)
 {
@@ -498,7 +498,7 @@ static PetscErrorCode NEPSLPGetEPSLeft_SLP(NEP nep,EPS *eps)
 
    Level: advanced
 
-.seealso: NEPSLPSetEPSLeft(), NEPSetTwoSided()
+.seealso: `NEPSLPSetEPSLeft()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPSLPGetEPSLeft(NEP nep,EPS *eps)
 {
@@ -533,7 +533,7 @@ static PetscErrorCode NEPSLPSetKSP_SLP(NEP nep,KSP ksp)
 
    Level: advanced
 
-.seealso: NEPSLPGetKSP()
+.seealso: `NEPSLPGetKSP()`
 @*/
 PetscErrorCode NEPSLPSetKSP(NEP nep,KSP ksp)
 {
@@ -577,7 +577,7 @@ static PetscErrorCode NEPSLPGetKSP_SLP(NEP nep,KSP *ksp)
 
    Level: advanced
 
-.seealso: NEPSLPSetKSP()
+.seealso: `NEPSLPSetKSP()`
 @*/
 PetscErrorCode NEPSLPGetKSP(NEP nep,KSP *ksp)
 {

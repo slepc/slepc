@@ -26,7 +26,7 @@ SLEPC_EXTERN PetscErrorCode RGFinalizePackage(void);
 
    Level: beginner
 
-.seealso: RGSetType(), RG
+.seealso: `RGSetType()`, `RG`
 J*/
 typedef const char *RGType;
 #define RGINTERVAL  "interval"
@@ -53,7 +53,7 @@ SLEPC_EXTERN PetscErrorCode RGDestroy(RG*);
 
     Level: advanced
 
-.seealso: RGComputeQuadrature()
+.seealso: `RGComputeQuadrature()`
 E*/
 typedef enum { RG_QUADRULE_TRAPEZOIDAL = 1,
                RG_QUADRULE_CHEBYSHEV   = 2 } RGQuadRule;

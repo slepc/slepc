@@ -383,7 +383,7 @@ static PetscErrorCode EPSKrylovSchurSetRestart_KrylovSchur(EPS eps,PetscReal kee
 
    Level: advanced
 
-.seealso: EPSKrylovSchurGetRestart()
+.seealso: `EPSKrylovSchurGetRestart()`
 @*/
 PetscErrorCode EPSKrylovSchurSetRestart(EPS eps,PetscReal keep)
 {
@@ -417,7 +417,7 @@ static PetscErrorCode EPSKrylovSchurGetRestart_KrylovSchur(EPS eps,PetscReal *ke
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetRestart()
+.seealso: `EPSKrylovSchurSetRestart()`
 @*/
 PetscErrorCode EPSKrylovSchurGetRestart(EPS eps,PetscReal *keep)
 {
@@ -458,7 +458,7 @@ static PetscErrorCode EPSKrylovSchurSetLocking_KrylovSchur(EPS eps,PetscBool loc
 
    Level: advanced
 
-.seealso: EPSKrylovSchurGetLocking()
+.seealso: `EPSKrylovSchurGetLocking()`
 @*/
 PetscErrorCode EPSKrylovSchurSetLocking(EPS eps,PetscBool lock)
 {
@@ -492,7 +492,7 @@ static PetscErrorCode EPSKrylovSchurGetLocking_KrylovSchur(EPS eps,PetscBool *lo
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetLocking()
+.seealso: `EPSKrylovSchurSetLocking()`
 @*/
 PetscErrorCode EPSKrylovSchurGetLocking(EPS eps,PetscBool *lock)
 {
@@ -557,7 +557,7 @@ static PetscErrorCode EPSKrylovSchurSetPartitions_KrylovSchur(EPS eps,PetscInt n
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetSubintervals(), EPSSetInterval()
+.seealso: `EPSKrylovSchurSetSubintervals()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetPartitions(EPS eps,PetscInt npart)
 {
@@ -591,7 +591,7 @@ static PetscErrorCode EPSKrylovSchurGetPartitions_KrylovSchur(EPS eps,PetscInt *
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetPartitions()
+.seealso: `EPSKrylovSchurSetPartitions()`
 @*/
 PetscErrorCode EPSKrylovSchurGetPartitions(EPS eps,PetscInt *npart)
 {
@@ -636,7 +636,7 @@ static PetscErrorCode EPSKrylovSchurSetDetectZeros_KrylovSchur(EPS eps,PetscBool
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetPartitions(), EPSSetInterval()
+.seealso: `EPSKrylovSchurSetPartitions()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetDetectZeros(EPS eps,PetscBool detect)
 {
@@ -670,7 +670,7 @@ static PetscErrorCode EPSKrylovSchurGetDetectZeros_KrylovSchur(EPS eps,PetscBool
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetDetectZeros()
+.seealso: `EPSKrylovSchurSetDetectZeros()`
 @*/
 PetscErrorCode EPSKrylovSchurGetDetectZeros(EPS eps,PetscBool *detect)
 {
@@ -730,7 +730,7 @@ static PetscErrorCode EPSKrylovSchurSetDimensions_KrylovSchur(EPS eps,PetscInt n
 
    Level: advanced
 
-.seealso: EPSKrylovSchurGetDimensions(), EPSSetDimensions(), EPSSetInterval()
+.seealso: `EPSKrylovSchurGetDimensions()`, `EPSSetDimensions()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -770,7 +770,7 @@ static PetscErrorCode EPSKrylovSchurGetDimensions_KrylovSchur(EPS eps,PetscInt *
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetDimensions()
+.seealso: `EPSKrylovSchurSetDimensions()`
 @*/
 PetscErrorCode EPSKrylovSchurGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -818,7 +818,7 @@ static PetscErrorCode EPSKrylovSchurSetSubintervals_KrylovSchur(EPS eps,PetscRea
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetPartitions(), EPSKrylovSchurGetSubintervals(), EPSSetInterval()
+.seealso: `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubintervals()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetSubintervals(EPS eps,PetscReal subint[])
 {
@@ -875,7 +875,7 @@ static PetscErrorCode EPSKrylovSchurGetSubintervals_KrylovSchur(EPS eps,PetscRea
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetSubintervals(), EPSKrylovSchurGetPartitions(), EPSSetInterval()
+.seealso: `EPSKrylovSchurSetSubintervals()`, `EPSKrylovSchurGetPartitions()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubintervals(EPS eps,PetscReal *subint[]) PeNS
 {
@@ -973,7 +973,7 @@ static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,
 
    Level: advanced
 
-.seealso: EPSSetInterval(), EPSKrylovSchurSetSubintervals()
+.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetSubintervals()`
 @*/
 PetscErrorCode EPSKrylovSchurGetInertias(EPS eps,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[]) PeNS
 {
@@ -1021,7 +1021,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommInfo_KrylovSchur(EPS eps,PetscInt 
 
    Level: advanced
 
-.seealso: EPSSetInterval(), EPSKrylovSchurSetPartitions(), EPSKrylovSchurGetSubcommPairs()
+.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommPairs()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubcommInfo(EPS eps,PetscInt *k,PetscInt *n,Vec *v)
 {
@@ -1069,7 +1069,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommPairs_KrylovSchur(EPS eps,PetscInt
 
    Level: advanced
 
-.seealso: EPSSetInterval(), EPSKrylovSchurSetPartitions(), EPSKrylovSchurGetSubcommInfo(), EPSKrylovSchurGetSubcommMats()
+.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`, `EPSKrylovSchurGetSubcommMats()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubcommPairs(EPS eps,PetscInt i,PetscScalar *eig,Vec v)
 {
@@ -1112,7 +1112,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommMats_KrylovSchur(EPS eps,Mat *A,Ma
 
    Level: advanced
 
-.seealso: EPSSetInterval(), EPSKrylovSchurSetPartitions(), EPSKrylovSchurGetSubcommInfo()
+.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubcommMats(EPS eps,Mat *A,Mat *B)
 {
@@ -1205,7 +1205,7 @@ static PetscErrorCode EPSKrylovSchurUpdateSubcommMats_KrylovSchur(EPS eps,PetscS
 
    Level: advanced
 
-.seealso: EPSSetInterval(), EPSKrylovSchurSetPartitions(), EPSKrylovSchurGetSubcommMats()
+.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommMats()`
 @*/
 PetscErrorCode EPSKrylovSchurUpdateSubcommMats(EPS eps,PetscScalar s,PetscScalar a,Mat Au,PetscScalar t,PetscScalar b,Mat Bu,MatStructure str,PetscBool globalup)
 {
@@ -1359,7 +1359,7 @@ static PetscErrorCode EPSKrylovSchurGetKSP_KrylovSchur(EPS eps,KSP *ksp)
 
    Level: advanced
 
-.seealso: EPSSetInterval(), EPSKrylovSchurSetPartitions()
+.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`
 @*/
 PetscErrorCode EPSKrylovSchurGetKSP(EPS eps,KSP *ksp)
 {
@@ -1404,7 +1404,7 @@ static PetscErrorCode EPSKrylovSchurSetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
 
    Level: advanced
 
-.seealso: EPSKrylovSchurGetBSEType(), EPSKrylovSchurBSEType, MatCreateBSE()
+.seealso: `EPSKrylovSchurGetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
 @*/
 PetscErrorCode EPSKrylovSchurSetBSEType(EPS eps,EPSKrylovSchurBSEType bse)
 {
@@ -1438,7 +1438,7 @@ static PetscErrorCode EPSKrylovSchurGetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
 
    Level: advanced
 
-.seealso: EPSKrylovSchurSetBSEType(), EPSKrylovSchurBSEType, MatCreateBSE()
+.seealso: `EPSKrylovSchurSetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
 @*/
 PetscErrorCode EPSKrylovSchurGetBSEType(EPS eps,EPSKrylovSchurBSEType *bse)
 {

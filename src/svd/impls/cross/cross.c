@@ -434,7 +434,7 @@ static PetscErrorCode SVDCrossSetExplicitMatrix_Cross(SVD svd,PetscBool explicit
 
    Level: advanced
 
-.seealso: SVDCrossGetExplicitMatrix()
+.seealso: `SVDCrossGetExplicitMatrix()`
 @*/
 PetscErrorCode SVDCrossSetExplicitMatrix(SVD svd,PetscBool explicitmat)
 {
@@ -467,7 +467,7 @@ static PetscErrorCode SVDCrossGetExplicitMatrix_Cross(SVD svd,PetscBool *explici
 
    Level: advanced
 
-.seealso: SVDCrossSetExplicitMatrix()
+.seealso: `SVDCrossSetExplicitMatrix()`
 @*/
 PetscErrorCode SVDCrossGetExplicitMatrix(SVD svd,PetscBool *explicitmat)
 {
@@ -503,7 +503,7 @@ static PetscErrorCode SVDCrossSetEPS_Cross(SVD svd,EPS eps)
 
    Level: advanced
 
-.seealso: SVDCrossGetEPS()
+.seealso: `SVDCrossGetEPS()`
 @*/
 PetscErrorCode SVDCrossSetEPS(SVD svd,EPS eps)
 {
@@ -547,7 +547,7 @@ static PetscErrorCode SVDCrossGetEPS_Cross(SVD svd,EPS *eps)
 
    Level: advanced
 
-.seealso: SVDCrossSetEPS()
+.seealso: `SVDCrossSetEPS()`
 @*/
 PetscErrorCode SVDCrossGetEPS(SVD svd,EPS *eps)
 {

@@ -51,7 +51,7 @@ $                    A * V - V * H = beta*v_m * e_m^T
 
    Level: advanced
 
-.seealso: BVMatLanczos(), BVSetActiveColumns(), BVOrthonormalizeColumn()
+.seealso: `BVMatLanczos()`, `BVSetActiveColumns()`, `BVOrthonormalizeColumn()`
 @*/
 PetscErrorCode BVMatArnoldi(BV V,Mat A,Mat H,PetscInt k,PetscInt *m,PetscReal *beta,PetscBool *breakdown)
 {
@@ -160,7 +160,7 @@ $                    A * V - V * T = beta*v_m * e_m^T
 
    Level: advanced
 
-.seealso: BVMatArnoldi(), BVSetActiveColumns(), BVOrthonormalizeColumn(), DSGetMat()
+.seealso: `BVMatArnoldi()`, `BVSetActiveColumns()`, `BVOrthonormalizeColumn()`, `DSGetMat()`
 @*/
 PetscErrorCode BVMatLanczos(BV V,Mat A,Mat T,PetscInt k,PetscInt *m,PetscReal *beta,PetscBool *breakdown)
 {

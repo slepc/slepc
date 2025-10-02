@@ -29,7 +29,7 @@ SLEPC_EXTERN PetscErrorCode PCCreate_HPDDM(PC);
 
     Level: intermediate
 
-.seealso: SlepcGetVersionNumber()
+.seealso: `SlepcGetVersionNumber()`
 @*/
 PetscErrorCode SlepcGetVersion(char version[],size_t len)
 {
@@ -64,7 +64,7 @@ PetscErrorCode SlepcGetVersion(char version[],size_t len)
 
     Level: intermediate
 
-.seealso: SlepcGetVersion(), SlepcInitialize()
+.seealso: `SlepcGetVersion()`, `SlepcInitialize()`
 @*/
 PetscErrorCode SlepcGetVersionNumber(PetscInt *major,PetscInt *minor,PetscInt *subminor,PetscInt *release)
 {
@@ -253,7 +253,7 @@ PetscErrorCode SlepcCitationsInitialize(void)
 
    Level: beginner
 
-.seealso: SlepcFinalize(), PetscInitialize(), SlepcInitializeFortran()
+.seealso: `SlepcFinalize()`, `PetscInitialize()`, `SlepcInitializeFortran()`
 @*/
 PetscErrorCode SlepcInitialize(int *argc,char ***args,const char file[],const char help[])
 {
@@ -287,7 +287,7 @@ PetscErrorCode SlepcInitialize(int *argc,char ***args,const char file[],const ch
 
    Level: beginner
 
-.seealso: SlepcInitialize(), PetscFinalize()
+.seealso: `SlepcInitialize()`, `PetscFinalize()`
 @*/
 PetscErrorCode SlepcFinalize(void)
 {
@@ -316,7 +316,7 @@ PetscErrorCode SlepcFinalize(void)
 
    Level: advanced
 
-.seealso: SlepcInitialize(), SlepcInitializeFortran()
+.seealso: `SlepcInitialize()`, `SlepcInitializeFortran()`
 @*/
 PetscErrorCode SlepcInitializeNoArguments(void) PeNS
 {
@@ -336,7 +336,7 @@ PetscErrorCode SlepcInitializeNoArguments(void) PeNS
 
    Level: beginner
 
-.seealso: SlepcInitialize(), SlepcInitializeFortran()
+.seealso: `SlepcInitialize()`, `SlepcInitializeFortran()`
 @*/
 PetscErrorCode SlepcInitialized(PetscBool *isInitialized)
 {
@@ -353,7 +353,7 @@ PetscErrorCode SlepcInitialized(PetscBool *isInitialized)
 
    Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode SlepcFinalized(PetscBool *isFinalized)
 {
@@ -379,7 +379,7 @@ PETSC_EXTERN PetscBool PetscBeganMPI;
 
    Level: advanced
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode SlepcInitializeNoPointers(int argc,char **args,const char *file,const char *help)
 {

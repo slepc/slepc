@@ -40,7 +40,7 @@ PetscErrorCode STApply_Generic(ST st,Vec x,Vec y)
 
    Level: developer
 
-.seealso: STApplyTranspose(), STApplyHermitianTranspose()
+.seealso: `STApplyTranspose()`, `STApplyHermitianTranspose()`
 @*/
 PetscErrorCode STApply(ST st,Vec x,Vec y)
 {
@@ -89,7 +89,7 @@ PetscErrorCode STApplyMat_Generic(ST st,Mat B,Mat C)
 
    Level: developer
 
-.seealso: STApply()
+.seealso: `STApply()`
 @*/
 PetscErrorCode STApplyMat(ST st,Mat X,Mat Y)
 {
@@ -131,7 +131,7 @@ PetscErrorCode STApplyTranspose_Generic(ST st,Vec x,Vec y)
 
    Level: developer
 
-.seealso: STApply(), STApplyHermitianTranspose()
+.seealso: `STApply()`, `STApplyHermitianTranspose()`
 @*/
 PetscErrorCode STApplyTranspose(ST st,Vec x,Vec y)
 {
@@ -180,7 +180,7 @@ PetscErrorCode STApplyHermitianTranspose_Generic(ST st,Vec x,Vec y)
 
    Level: developer
 
-.seealso: STApply(), STApplyTranspose()
+.seealso: `STApply()`, `STApplyTranspose()`
 @*/
 PetscErrorCode STApplyHermitianTranspose(ST st,Vec x,Vec y)
 {
@@ -217,7 +217,7 @@ PetscErrorCode STApplyHermitianTranspose(ST st,Vec x,Vec y)
 
    Level: developer
 
-.seealso: BVSetMatrix()
+.seealso: `BVSetMatrix()`
 @*/
 PetscErrorCode STGetBilinearForm(ST st,Mat *B)
 {
@@ -400,8 +400,8 @@ $     Op = D*inv(K)*M*inv(D)
 
    Level: advanced
 
-.seealso: STApply(), STApplyTranspose(), STSetBalanceMatrix(), STShellSetApply(),
-          STGetKSP(), STSetShift(), STRestoreOperator(), STSetMatrices()
+.seealso: `STApply()`, `STApplyTranspose()`, `STSetBalanceMatrix()`, `STShellSetApply()`,
+          `STGetKSP()`, `STSetShift()`, `STRestoreOperator()`, `STSetMatrices()`
 @*/
 PetscErrorCode STGetOperator(ST st,Mat *Op)
 {
@@ -430,7 +430,7 @@ PetscErrorCode STGetOperator(ST st,Mat *Op)
 
    Level: advanced
 
-.seealso: STGetOperator()
+.seealso: `STGetOperator()`
 @*/
 PetscErrorCode STRestoreOperator(ST st,Mat *Op)
 {
@@ -503,7 +503,7 @@ PetscErrorCode STComputeOperator(ST st)
 
    Level: advanced
 
-.seealso: STCreate(), STApply(), STDestroy()
+.seealso: `STCreate()`, `STApply()`, `STDestroy()`
 @*/
 PetscErrorCode STSetUp(ST st)
 {
@@ -666,7 +666,7 @@ PetscErrorCode STCoeffs_Monomial(ST st, PetscScalar *coeffs)
 
    Level: developer
 
-.seealso: EPSSolve()
+.seealso: `EPSSolve()`
 @*/
 PetscErrorCode STPostSolve(ST st)
 {
@@ -692,7 +692,7 @@ PetscErrorCode STPostSolve(ST st)
 
    Level: developer
 
-.seealso: STIsInjective()
+.seealso: `STIsInjective()`
 @*/
 PetscErrorCode STBackTransform(ST st,PetscInt n,PetscScalar* eigr,PetscScalar* eigi)
 {
@@ -718,7 +718,7 @@ PetscErrorCode STBackTransform(ST st,PetscInt n,PetscScalar* eigr,PetscScalar* e
 
    Level: developer
 
-.seealso: STBackTransform()
+.seealso: `STBackTransform()`
 @*/
 PetscErrorCode STIsInjective(ST st,PetscBool* is)
 {
@@ -755,7 +755,7 @@ PetscErrorCode STIsInjective(ST st,PetscBool* is)
 
    Level: developer
 
-.seealso: STMatSolve()
+.seealso: `STMatSolve()`
 @*/
 PetscErrorCode STMatSetUp(ST st,PetscScalar sigma,PetscScalar *coeffs)
 {
@@ -787,7 +787,7 @@ PetscErrorCode STMatSetUp(ST st,PetscScalar sigma,PetscScalar *coeffs)
 
    Level: developer
 
-.seealso: STMatCreateVecs()
+.seealso: `STMatCreateVecs()`
 @*/
 PetscErrorCode STSetWorkVecs(ST st,PetscInt nw)
 {

@@ -38,7 +38,7 @@ typedef struct {
    Notes:
    This routine is intended for use within various shell routines
 
-.seealso: STShellSetContext()
+.seealso: `STShellSetContext()`
 @*/
 PetscErrorCode STShellGetContext(ST st,void *ctx)
 {
@@ -69,7 +69,7 @@ PetscErrorCode STShellGetContext(ST st,void *ctx)
    for this function that tells Fortran the Fortran derived data type that
    you are passing in as the ctx argument.
 
-.seealso: STShellGetContext()
+.seealso: `STShellGetContext()`
 @*/
 PetscErrorCode STShellSetContext(ST st,void *ctx)
 {
@@ -198,7 +198,7 @@ static PetscErrorCode STShellSetApply_Shell(ST st,STShellApplyFn *apply)
 
    Level: advanced
 
-.seealso: STShellSetBackTransform(), STShellSetApplyTranspose(), STShellSetApplyHermitianTranspose()
+.seealso: `STShellSetBackTransform()`, `STShellSetApplyTranspose()`, `STShellSetApplyHermitianTranspose()`
 @*/
 PetscErrorCode STShellSetApply(ST st,STShellApplyFn *apply)
 {
@@ -229,7 +229,7 @@ static PetscErrorCode STShellSetApplyTranspose_Shell(ST st,STShellApplyTranspose
 
    Level: advanced
 
-.seealso: STShellSetApply(), STShellSetBackTransform()
+.seealso: `STShellSetApply()`, `STShellSetBackTransform()`
 @*/
 PetscErrorCode STShellSetApplyTranspose(ST st,STShellApplyTransposeFn *applytrans)
 {
@@ -266,7 +266,7 @@ static PetscErrorCode STShellSetApplyHermitianTranspose_Shell(ST st,STShellApply
 
    Level: advanced
 
-.seealso: STShellSetApply(), STShellSetApplyTranspose(), STShellSetBackTransform()
+.seealso: `STShellSetApply()`, `STShellSetApplyTranspose()`, `STShellSetBackTransform()`
 @*/
 PetscErrorCode STShellSetApplyHermitianTranspose(ST st,STShellApplyHermitianTransposeFn *applyhermtrans)
 {
@@ -298,7 +298,7 @@ static PetscErrorCode STShellSetBackTransform_Shell(ST st,STShellBackTransformFn
 
    Level: advanced
 
-.seealso: STShellSetApply(), STShellSetApplyTranspose()
+.seealso: `STShellSetApply()`, `STShellSetApplyTranspose()`
 @*/
 PetscErrorCode STShellSetBackTransform(ST st,STShellBackTransformFn *backtr)
 {

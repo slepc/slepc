@@ -28,7 +28,7 @@
 
    Level: developer
 
-.seealso: NEPSetFromOptions(), NEPSetUp()
+.seealso: `NEPSetFromOptions()`, `NEPSetUp()`
 @*/
 PetscErrorCode NEPSetDSType(NEP nep)
 {
@@ -54,7 +54,7 @@ PetscErrorCode NEPSetDSType(NEP nep)
 
    Level: developer
 
-.seealso: NEPCreate(), NEPSolve(), NEPDestroy()
+.seealso: `NEPCreate()`, `NEPSolve()`, `NEPDestroy()`
 @*/
 PetscErrorCode NEPSetUp(NEP nep)
 {
@@ -240,7 +240,7 @@ PetscErrorCode NEPSetUp(NEP nep)
 
    Level: intermediate
 
-.seealso: NEPSetUp()
+.seealso: `NEPSetUp()`
 @*/
 PetscErrorCode NEPSetInitialSpace(NEP nep,PetscInt n,Vec is[])
 {
@@ -296,7 +296,7 @@ PetscErrorCode NEPSetDimensions_Default(NEP nep,PetscInt nev,PetscInt *ncv,Petsc
 
    Level: developer
 
-.seealso: PEPSetUp()
+.seealso: `PEPSetUp()`
 @*/
 PetscErrorCode NEPAllocateSolution(NEP nep,PetscInt extra)
 {

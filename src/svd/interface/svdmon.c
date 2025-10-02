@@ -67,7 +67,7 @@ PetscErrorCode SVDMonitor(SVD svd,PetscInt it,PetscInt nconv,PetscReal *sigma,Pe
 
    Level: intermediate
 
-.seealso: SVDMonitorFirst(), SVDMonitorAll(), SVDMonitorConditioning(), SVDMonitorCancel()
+.seealso: `SVDMonitorFirst()`, `SVDMonitorAll()`, `SVDMonitorConditioning()`, `SVDMonitorCancel()`
 @*/
 PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
@@ -102,7 +102,7 @@ PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Level: intermediate
 
-.seealso: SVDMonitorSet()
+.seealso: `SVDMonitorSet()`
 @*/
 PetscErrorCode SVDMonitorCancel(SVD svd)
 {
@@ -131,7 +131,7 @@ PetscErrorCode SVDMonitorCancel(SVD svd)
 
    Level: intermediate
 
-.seealso: SVDMonitorSet()
+.seealso: `SVDMonitorSet()`
 @*/
 PetscErrorCode SVDGetMonitorContext(SVD svd,void *ctx)
 {
@@ -161,7 +161,7 @@ PetscErrorCode SVDGetMonitorContext(SVD svd,void *ctx)
 
    Level: intermediate
 
-.seealso: SVDMonitorSet(), SVDMonitorAll(), SVDMonitorConditioning(), SVDMonitorConverged()
+.seealso: `SVDMonitorSet()`, `SVDMonitorAll()`, `SVDMonitorConditioning()`, `SVDMonitorConverged()`
 @*/
 PetscErrorCode SVDMonitorFirst(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -204,7 +204,7 @@ PetscErrorCode SVDMonitorFirst(SVD svd,PetscInt its,PetscInt nconv,PetscReal *si
 
    Level: intermediate
 
-.seealso: SVDMonitorSet(), SVDMonitorFirst(), SVDMonitorConditioning(), SVDMonitorConverged()
+.seealso: `SVDMonitorSet()`, `SVDMonitorFirst()`, `SVDMonitorConditioning()`, `SVDMonitorConverged()`
 @*/
 PetscErrorCode SVDMonitorAll(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -247,7 +247,7 @@ PetscErrorCode SVDMonitorAll(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigm
 
    Level: intermediate
 
-.seealso: SVDMonitorSet(), SVDMonitorFirst(), SVDMonitorConditioning(), SVDMonitorAll()
+.seealso: `SVDMonitorSet()`, `SVDMonitorFirst()`, `SVDMonitorConditioning()`, `SVDMonitorAll()`
 @*/
 PetscErrorCode SVDMonitorConverged(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -319,7 +319,7 @@ PetscErrorCode SVDMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 
    Level: intermediate
 
-.seealso: SVDMonitorSet()
+.seealso: `SVDMonitorSet()`
 @*/
 PetscErrorCode SVDMonitorFirstDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -366,7 +366,7 @@ PetscErrorCode SVDMonitorFirstDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscRe
 
    Level: intermediate
 
-.seealso: SVDMonitorSet()
+.seealso: `SVDMonitorSet()`
 @*/
 PetscErrorCode SVDMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -397,7 +397,7 @@ PetscErrorCode SVDMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 
    Level: intermediate
 
-.seealso: SVDMonitorSet()
+.seealso: `SVDMonitorSet()`
 @*/
 PetscErrorCode SVDMonitorAllDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -447,7 +447,7 @@ PetscErrorCode SVDMonitorAllDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscReal
 
    Level: intermediate
 
-.seealso: SVDMonitorSet()
+.seealso: `SVDMonitorSet()`
 @*/
 PetscErrorCode SVDMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -478,7 +478,7 @@ PetscErrorCode SVDMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 
    Level: intermediate
 
-.seealso: SVDMonitorSet()
+.seealso: `SVDMonitorSet()`
 @*/
 PetscErrorCode SVDMonitorConvergedDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -522,7 +522,7 @@ PetscErrorCode SVDMonitorConvergedDrawLG(SVD svd,PetscInt its,PetscInt nconv,Pet
 
    Level: intermediate
 
-.seealso: SVDMonitorSet()
+.seealso: `SVDMonitorSet()`
 @*/
 PetscErrorCode SVDMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -561,7 +561,7 @@ PetscErrorCode SVDMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFor
 
    Level: intermediate
 
-.seealso: SVDMonitorSet(), SVDMonitorAll(), SVDMonitorFirst(), SVDMonitorConverged()
+.seealso: `SVDMonitorSet()`, `SVDMonitorAll()`, `SVDMonitorFirst()`, `SVDMonitorConverged()`
 @*/
 PetscErrorCode SVDMonitorConditioning(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {

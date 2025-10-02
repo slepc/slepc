@@ -53,7 +53,7 @@ PetscErrorCode PEPSetDefaultST_Transform(PEP pep)
 
    Level: developer
 
-.seealso: PEPSetFromOptions(), PEPSetUp()
+.seealso: `PEPSetFromOptions()`, `PEPSetUp()`
 @*/
 PetscErrorCode PEPSetDSType(PEP pep)
 {
@@ -79,7 +79,7 @@ PetscErrorCode PEPSetDSType(PEP pep)
 
    Level: developer
 
-.seealso: PEPCreate(), PEPSolve(), PEPDestroy()
+.seealso: `PEPCreate()`, `PEPSolve()`, `PEPDestroy()`
 @*/
 PetscErrorCode PEPSetUp(PEP pep)
 {
@@ -273,7 +273,7 @@ PetscErrorCode PEPSetUp(PEP pep)
 
    Level: beginner
 
-.seealso: PEPSolve(), PEPGetOperators(), PEPGetNumMatrices(), PEPSetBasis()
+.seealso: `PEPSolve()`, `PEPGetOperators()`, `PEPGetNumMatrices()`, `PEPSetBasis()`
 @*/
 PetscErrorCode PEPSetOperators(PEP pep,PetscInt nmat,Mat A[])
 {
@@ -331,7 +331,7 @@ PetscErrorCode PEPSetOperators(PEP pep,PetscInt nmat,Mat A[])
 
    Level: intermediate
 
-.seealso: PEPSolve(), PEPSetOperators(), PEPGetNumMatrices()
+.seealso: `PEPSolve()`, `PEPSetOperators()`, `PEPGetNumMatrices()`
 @*/
 PetscErrorCode PEPGetOperators(PEP pep,PetscInt k,Mat *A)
 {
@@ -356,7 +356,7 @@ PetscErrorCode PEPGetOperators(PEP pep,PetscInt k,Mat *A)
 
    Level: intermediate
 
-.seealso: PEPSetOperators()
+.seealso: `PEPSetOperators()`
 @*/
 PetscErrorCode PEPGetNumMatrices(PEP pep,PetscInt *nmat)
 {
@@ -393,7 +393,7 @@ PetscErrorCode PEPGetNumMatrices(PEP pep,PetscInt *nmat)
 
    Level: intermediate
 
-.seealso: PEPSetUp()
+.seealso: `PEPSetUp()`
 @*/
 PetscErrorCode PEPSetInitialSpace(PEP pep,PetscInt n,Vec is[])
 {
@@ -458,7 +458,7 @@ PetscErrorCode PEPSetDimensions_Default(PEP pep,PetscInt nev,PetscInt *ncv,Petsc
 
    Level: developer
 
-.seealso: PEPSetUp()
+.seealso: `PEPSetUp()`
 @*/
 PetscErrorCode PEPAllocateSolution(PEP pep,PetscInt extra)
 {

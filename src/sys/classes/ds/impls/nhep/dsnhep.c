@@ -578,7 +578,7 @@ static PetscErrorCode DSReallocate_NHEP(DS ds,PetscInt ld)
    Implemented methods:
 .  0 - Implicit QR (_hseqr)
 
-.seealso: DSCreate(), DSSetType(), DSType
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_NHEP(DS ds)
 {

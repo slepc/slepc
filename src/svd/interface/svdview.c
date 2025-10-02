@@ -39,7 +39,7 @@
 
    Level: beginner
 
-.seealso: EPSView()
+.seealso: `EPSView()`
 @*/
 PetscErrorCode SVDView(SVD svd,PetscViewer viewer)
 {
@@ -122,7 +122,7 @@ PetscErrorCode SVDView(SVD svd,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: SVDView(), SVDCreate()
+.seealso: `SVDView()`, `SVDCreate()`
 @*/
 PetscErrorCode SVDViewFromOptions(SVD svd,PetscObject obj,const char name[])
 {
@@ -152,7 +152,7 @@ PetscErrorCode SVDViewFromOptions(SVD svd,PetscObject obj,const char name[])
 
    Level: intermediate
 
-.seealso: SVDSetTolerances(), SVDGetIterationNumber(), SVDConvergedReasonViewFromOptions()
+.seealso: `SVDSetTolerances()`, `SVDGetIterationNumber()`, `SVDConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode SVDConvergedReasonView(SVD svd,PetscViewer viewer)
 {
@@ -183,7 +183,7 @@ PetscErrorCode SVDConvergedReasonView(SVD svd,PetscViewer viewer)
 
    Level: developer
 
-.seealso: SVDConvergedReasonView()
+.seealso: `SVDConvergedReasonView()`
 @*/
 PetscErrorCode SVDConvergedReasonViewFromOptions(SVD svd)
 {
@@ -308,7 +308,7 @@ static PetscErrorCode SVDErrorView_MATLAB(SVD svd,SVDErrorType etype,PetscViewer
 
    Level: intermediate
 
-.seealso: SVDSolve(), SVDValuesView(), SVDVectorsView()
+.seealso: `SVDSolve()`, `SVDValuesView()`, `SVDVectorsView()`
 @*/
 PetscErrorCode SVDErrorView(SVD svd,SVDErrorType etype,PetscViewer viewer)
 {
@@ -353,7 +353,7 @@ PetscErrorCode SVDErrorView(SVD svd,SVDErrorType etype,PetscViewer viewer)
 
    Level: developer
 
-.seealso: SVDErrorView()
+.seealso: `SVDErrorView()`
 @*/
 PetscErrorCode SVDErrorViewFromOptions(SVD svd)
 {
@@ -498,7 +498,7 @@ static PetscErrorCode SVDValuesView_MATLAB(SVD svd,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: SVDSolve(), SVDVectorsView(), SVDErrorView()
+.seealso: `SVDSolve()`, `SVDVectorsView()`, `SVDErrorView()`
 @*/
 PetscErrorCode SVDValuesView(SVD svd,PetscViewer viewer)
 {
@@ -554,7 +554,7 @@ PetscErrorCode SVDValuesView(SVD svd,PetscViewer viewer)
 
    Level: developer
 
-.seealso: SVDValuesView()
+.seealso: `SVDValuesView()`
 @*/
 PetscErrorCode SVDValuesViewFromOptions(SVD svd)
 {
@@ -595,7 +595,7 @@ PetscErrorCode SVDValuesViewFromOptions(SVD svd)
 
    Level: intermediate
 
-.seealso: SVDSolve(), SVDValuesView(), SVDErrorView()
+.seealso: `SVDSolve()`, `SVDValuesView()`, `SVDErrorView()`
 @*/
 PetscErrorCode SVDVectorsView(SVD svd,PetscViewer viewer)
 {
@@ -641,7 +641,7 @@ PetscErrorCode SVDVectorsView(SVD svd,PetscViewer viewer)
 
    Level: developer
 
-.seealso: SVDVectorsView()
+.seealso: `SVDVectorsView()`
 @*/
 PetscErrorCode SVDVectorsViewFromOptions(SVD svd)
 {

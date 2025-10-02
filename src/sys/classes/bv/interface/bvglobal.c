@@ -81,7 +81,7 @@ static inline PetscErrorCode BVDot_Private(BV X,BV Y,Mat M)
 
    Level: intermediate
 
-.seealso: BVDotVec(), BVDotColumn(), BVSetActiveColumns(), BVSetMatrix()
+.seealso: `BVDotVec()`, `BVDotColumn()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVDot(BV X,BV Y,Mat M)
 {
@@ -146,7 +146,7 @@ PetscErrorCode BVDot(BV X,BV Y,Mat M)
 
    Level: intermediate
 
-.seealso: BVDot(), BVDotColumn(), BVSetActiveColumns(), BVSetMatrix()
+.seealso: `BVDot()`, `BVDotColumn()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVDotVec(BV X,Vec y,PetscScalar m[])
 {
@@ -183,7 +183,7 @@ PetscErrorCode BVDotVec(BV X,Vec y,PetscScalar m[])
 
    Level: advanced
 
-.seealso: BVDotVecEnd(), BVDotVec()
+.seealso: `BVDotVecEnd()`, `BVDotVec()`
 @*/
 PetscErrorCode BVDotVecBegin(BV X,Vec y,PetscScalar *m)
 {
@@ -235,7 +235,7 @@ PetscErrorCode BVDotVecBegin(BV X,Vec y,PetscScalar *m)
 
    Level: advanced
 
-.seealso: BVDotVecBegin(), BVDotVec()
+.seealso: `BVDotVecBegin()`, `BVDotVec()`
 @*/
 PetscErrorCode BVDotVecEnd(BV X,Vec y,PetscScalar *m)
 {
@@ -297,7 +297,7 @@ PetscErrorCode BVDotVecEnd(BV X,Vec y,PetscScalar *m)
 
    Level: advanced
 
-.seealso: BVDot(), BVDotVec(), BVSetActiveColumns(), BVSetMatrix()
+.seealso: `BVDot()`, `BVDotVec()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVDotColumn(BV X,PetscInt j,PetscScalar *q)
 {
@@ -339,7 +339,7 @@ PetscErrorCode BVDotColumn(BV X,PetscInt j,PetscScalar *q)
 
    Level: advanced
 
-.seealso: BVDotColumnEnd(), BVDotColumn()
+.seealso: `BVDotColumnEnd()`, `BVDotColumn()`
 @*/
 PetscErrorCode BVDotColumnBegin(BV X,PetscInt j,PetscScalar *m)
 {
@@ -395,7 +395,7 @@ PetscErrorCode BVDotColumnBegin(BV X,PetscInt j,PetscScalar *m)
 
    Level: advanced
 
-.seealso: BVDotColumnBegin(), BVDotColumn()
+.seealso: `BVDotColumnBegin()`, `BVDotColumn()`
 @*/
 PetscErrorCode BVDotColumnEnd(BV X,PetscInt j,PetscScalar *m)
 {
@@ -493,7 +493,7 @@ static inline PetscErrorCode BVNorm_End_Private(BV bv,Vec z,NormType type,PetscR
 
    Level: intermediate
 
-.seealso: BVNormVec(), BVNormColumn(), BVNormalize(), BVSetActiveColumns(), BVSetMatrix()
+.seealso: `BVNormVec()`, `BVNormColumn()`, `BVNormalize()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVNorm(BV bv,NormType type,PetscReal *val)
 {
@@ -534,7 +534,7 @@ PetscErrorCode BVNorm(BV bv,NormType type,PetscReal *val)
 
    Level: developer
 
-.seealso: BVNorm(), BVNormColumn(), BVSetMatrix()
+.seealso: `BVNorm()`, `BVNormColumn()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVNormVec(BV bv,Vec v,NormType type,PetscReal *val)
 {
@@ -576,7 +576,7 @@ PetscErrorCode BVNormVec(BV bv,Vec v,NormType type,PetscReal *val)
 
    Level: advanced
 
-.seealso: BVNormVecEnd(), BVNormVec()
+.seealso: `BVNormVecEnd()`, `BVNormVec()`
 @*/
 PetscErrorCode BVNormVecBegin(BV bv,Vec v,NormType type,PetscReal *val)
 {
@@ -618,7 +618,7 @@ PetscErrorCode BVNormVecBegin(BV bv,Vec v,NormType type,PetscReal *val)
 
    Level: advanced
 
-.seealso: BVNormVecBegin(), BVNormVec()
+.seealso: `BVNormVecBegin()`, `BVNormVec()`
 @*/
 PetscErrorCode BVNormVecEnd(BV bv,Vec v,NormType type,PetscReal *val)
 {
@@ -657,7 +657,7 @@ PetscErrorCode BVNormVecEnd(BV bv,Vec v,NormType type,PetscReal *val)
 
    Level: intermediate
 
-.seealso: BVNorm(), BVNormVec(), BVNormalize(), BVSetActiveColumns(), BVSetMatrix()
+.seealso: `BVNorm()`, `BVNormVec()`, `BVNormalize()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVNormColumn(BV bv,PetscInt j,NormType type,PetscReal *val)
 {
@@ -698,7 +698,7 @@ PetscErrorCode BVNormColumn(BV bv,PetscInt j,NormType type,PetscReal *val)
 
    Level: advanced
 
-.seealso: BVNormColumnEnd(), BVNormColumn()
+.seealso: `BVNormColumnEnd()`, `BVNormColumn()`
 @*/
 PetscErrorCode BVNormColumnBegin(BV bv,PetscInt j,NormType type,PetscReal *val)
 {
@@ -754,7 +754,7 @@ PetscErrorCode BVNormColumnBegin(BV bv,PetscInt j,NormType type,PetscReal *val)
 
    Level: advanced
 
-.seealso: BVNormColumnBegin(), BVNormColumn()
+.seealso: `BVNormColumnBegin()`, `BVNormColumn()`
 @*/
 PetscErrorCode BVNormColumnEnd(BV bv,PetscInt j,NormType type,PetscReal *val)
 {
@@ -824,7 +824,7 @@ PetscErrorCode BVNormColumnEnd(BV bv,PetscInt j,NormType type,PetscReal *val)
 
    Level: intermediate
 
-.seealso: BVNormColumn()
+.seealso: `BVNormColumn()`
 @*/
 PetscErrorCode BVNormalize(BV bv,PetscScalar *eigi)
 {
@@ -1088,7 +1088,7 @@ static inline PetscErrorCode BVMatProject_Dot(BV X,BV Y,PetscScalar *marray,Pets
 
    Level: intermediate
 
-.seealso: BVDot(), BVSetActiveColumns(), BVSetMatrix()
+.seealso: `BVDot()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVMatProject(BV X,Mat A,BV Y,Mat M)
 {

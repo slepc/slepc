@@ -114,7 +114,7 @@ static PetscErrorCode EPSComputeValues(EPS eps)
 
    Level: beginner
 
-.seealso: EPSCreate(), EPSSetUp(), EPSDestroy(), EPSSetTolerances()
+.seealso: `EPSCreate()`, `EPSSetUp()`, `EPSDestroy()`, `EPSSetTolerances()`
 @*/
 PetscErrorCode EPSSolve(EPS eps)
 {
@@ -241,7 +241,7 @@ PetscErrorCode EPSSolve(EPS eps)
 
    Level: intermediate
 
-.seealso: EPSGetConvergedReason(), EPSSetTolerances()
+.seealso: `EPSGetConvergedReason()`, `EPSSetTolerances()`
 @*/
 PetscErrorCode EPSGetIterationNumber(EPS eps,PetscInt *its)
 {
@@ -268,7 +268,7 @@ PetscErrorCode EPSGetIterationNumber(EPS eps,PetscInt *its)
 
    Level: beginner
 
-.seealso: EPSSetDimensions(), EPSSolve(), EPSGetEigenpair()
+.seealso: `EPSSetDimensions()`, `EPSSolve()`, `EPSGetEigenpair()`
 @*/
 PetscErrorCode EPSGetConverged(EPS eps,PetscInt *nconv)
 {
@@ -307,7 +307,7 @@ PetscErrorCode EPSGetConverged(EPS eps,PetscInt *nconv)
 
    Level: intermediate
 
-.seealso: EPSSetTolerances(), EPSSolve(), EPSConvergedReason
+.seealso: `EPSSetTolerances()`, `EPSSolve()`, `EPSConvergedReason`
 @*/
 PetscErrorCode EPSGetConvergedReason(EPS eps,EPSConvergedReason *reason)
 {
@@ -346,7 +346,7 @@ PetscErrorCode EPSGetConvergedReason(EPS eps,EPSConvergedReason *reason)
 
    Level: intermediate
 
-.seealso: EPSGetEigenpair(), EPSGetConverged(), EPSSolve()
+.seealso: `EPSGetEigenpair()`, `EPSGetConverged()`, `EPSSolve()`
 @*/
 PetscErrorCode EPSGetInvariantSubspace(EPS eps,Vec v[])
 {
@@ -412,8 +412,8 @@ PetscErrorCode EPSGetInvariantSubspace(EPS eps,Vec v[])
 
    Level: beginner
 
-.seealso: EPSGetEigenvalue(), EPSGetEigenvector(), EPSGetLeftEigenvector(), EPSSolve(),
-          EPSGetConverged(), EPSSetWhichEigenpairs(), EPSGetInvariantSubspace()
+.seealso: `EPSGetEigenvalue()`, `EPSGetEigenvector()`, `EPSGetLeftEigenvector()`, `EPSSolve()`,
+          `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetInvariantSubspace()`
 @*/
 PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar *eigi,Vec Vr,Vec Vi)
 {
@@ -455,7 +455,7 @@ PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar 
 
    Level: beginner
 
-.seealso: EPSSolve(), EPSGetConverged(), EPSSetWhichEigenpairs(), EPSGetEigenpair()
+.seealso: `EPSSolve()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetEigenpair()`
 @*/
 PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar *eigi)
 {
@@ -551,7 +551,7 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
 
    Level: beginner
 
-.seealso: EPSSolve(), EPSGetConverged(), EPSSetWhichEigenpairs(), EPSGetEigenpair(), EPSGetLeftEigenvector()
+.seealso: `EPSSolve()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetEigenpair()`, `EPSGetLeftEigenvector()`
 @*/
 PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
 {
@@ -602,7 +602,7 @@ PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
 
    Level: intermediate
 
-.seealso: EPSGetEigenvector(), EPSGetConverged(), EPSSetWhichEigenpairs(), EPSSetTwoSided()
+.seealso: `EPSGetEigenvector()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSSetTwoSided()`
 @*/
 PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
 {
@@ -670,7 +670,7 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
 
    Level: advanced
 
-.seealso: EPSComputeError()
+.seealso: `EPSComputeError()`
 @*/
 PetscErrorCode EPSGetErrorEstimate(EPS eps,PetscInt i,PetscReal *errest)
 {
@@ -777,7 +777,7 @@ PetscErrorCode EPSComputeResidualNorm_Private(EPS eps,PetscBool trans,PetscScala
 
    Level: beginner
 
-.seealso: EPSErrorType, EPSSolve(), EPSGetErrorEstimate()
+.seealso: `EPSErrorType`, `EPSSolve()`, `EPSGetErrorEstimate()`
 @*/
 PetscErrorCode EPSComputeError(EPS eps,PetscInt i,EPSErrorType type,PetscReal *error)
 {

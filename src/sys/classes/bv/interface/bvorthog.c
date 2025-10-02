@@ -244,7 +244,7 @@ static PetscErrorCode BVOrthogonalizeGS(BV bv,PetscInt j,Vec v,PetscBool *which,
 
    Level: advanced
 
-.seealso: BVOrthogonalizeColumn(), BVSetOrthogonalization(), BVSetActiveColumns(), BVGetNumConstraints()
+.seealso: `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`, `BVSetActiveColumns()`, `BVGetNumConstraints()`
 @*/
 PetscErrorCode BVOrthogonalizeVec(BV bv,Vec v,PetscScalar *H,PetscReal *norm,PetscBool *lindep)
 {
@@ -310,7 +310,7 @@ PetscErrorCode BVOrthogonalizeVec(BV bv,Vec v,PetscScalar *H,PetscReal *norm,Pet
 
    Level: advanced
 
-.seealso: BVSetOrthogonalization(), BVSetMatrix(), BVSetActiveColumns(), BVOrthogonalize(), BVOrthogonalizeVec(), BVGetNumConstraints(), BVOrthonormalizeColumn()
+.seealso: `BVSetOrthogonalization()`, `BVSetMatrix()`, `BVSetActiveColumns()`, `BVOrthogonalize()`, `BVOrthogonalizeVec()`, `BVGetNumConstraints()`, `BVOrthonormalizeColumn()`
 @*/
 PetscErrorCode BVOrthogonalizeColumn(BV bv,PetscInt j,PetscScalar *H,PetscReal *norm,PetscBool *lindep)
 {
@@ -375,7 +375,7 @@ PetscErrorCode BVOrthogonalizeColumn(BV bv,PetscInt j,PetscScalar *H,PetscReal *
 
    Level: advanced
 
-.seealso: BVOrthogonalizeColumn(), BVScaleColumn()
+.seealso: `BVOrthogonalizeColumn()`, `BVScaleColumn()`
 @*/
 PetscErrorCode BVOrthonormalizeColumn(BV bv,PetscInt j,PetscBool replace,PetscReal *norm,PetscBool *lindep)
 {
@@ -455,7 +455,7 @@ PetscErrorCode BVOrthonormalizeColumn(BV bv,PetscInt j,PetscBool replace,PetscRe
 
    Level: advanced
 
-.seealso: BVOrthogonalizeColumn(), BVSetOrthogonalization()
+.seealso: `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`
 @*/
 PetscErrorCode BVOrthogonalizeSomeColumn(BV bv,PetscInt j,PetscBool *which,PetscScalar *H,PetscReal *norm,PetscBool *lindep)
 {
@@ -721,7 +721,7 @@ static PetscErrorCode BVOrthogonalize_SVQB(BV V,Mat Rin)
 
    Level: intermediate
 
-.seealso: BVOrthogonalizeColumn(), BVOrthogonalizeVec(), BVSetMatrix(), BVSetActiveColumns(), BVSetOrthogonalization(), BVOrthogBlockType
+.seealso: `BVOrthogonalizeColumn()`, `BVOrthogonalizeVec()`, `BVSetMatrix()`, `BVSetActiveColumns()`, `BVSetOrthogonalization()`, `BVOrthogBlockType`
 @*/
 PetscErrorCode BVOrthogonalize(BV V,Mat R)
 {

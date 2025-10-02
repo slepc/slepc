@@ -26,7 +26,7 @@ const char *const*SVDConvergedReasons = SVDConvergedReasons_Shifted + 4;
 
    Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode SVDFinalizePackage(void)
 {
@@ -48,7 +48,7 @@ PetscErrorCode SVDFinalizePackage(void)
 
    Level: developer
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode SVDInitializePackage(void)
 {
