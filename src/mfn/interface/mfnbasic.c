@@ -52,7 +52,7 @@ PetscBool         MFNMonitorRegisterAllCalled = PETSC_FALSE;
 
    Level: beginner
 
-.seealso: MFNCreate()
+.seealso: `MFNCreate()`
 @*/
 PetscErrorCode MFNView(MFN mfn,PetscViewer viewer)
 {
@@ -95,7 +95,7 @@ PetscErrorCode MFNView(MFN mfn,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: MFNView(), MFNCreate()
+.seealso: `MFNView()`, `MFNCreate()`
 @*/
 PetscErrorCode MFNViewFromOptions(MFN mfn,PetscObject obj,const char name[])
 {
@@ -124,7 +124,7 @@ PetscErrorCode MFNViewFromOptions(MFN mfn,PetscObject obj,const char name[])
 
    Level: intermediate
 
-.seealso: MFNSetTolerances(), MFNGetIterationNumber(), MFNConvergedReasonViewFromOptions()
+.seealso: `MFNSetTolerances()`, `MFNGetIterationNumber()`, `MFNConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode MFNConvergedReasonView(MFN mfn,PetscViewer viewer)
 {
@@ -155,7 +155,7 @@ PetscErrorCode MFNConvergedReasonView(MFN mfn,PetscViewer viewer)
 
    Level: developer
 
-.seealso: MFNConvergedReasonView()
+.seealso: `MFNConvergedReasonView()`
 @*/
 PetscErrorCode MFNConvergedReasonViewFromOptions(MFN mfn)
 {
@@ -194,7 +194,7 @@ PetscErrorCode MFNConvergedReasonViewFromOptions(MFN mfn)
 
    Level: beginner
 
-.seealso: MFNSetUp(), MFNSolve(), MFNDestroy(), MFN
+.seealso: `MFNSetUp()`, `MFNSolve()`, `MFNDestroy()`, `MFN`
 @*/
 PetscErrorCode MFNCreate(MPI_Comm comm,MFN *outmfn)
 {
@@ -256,7 +256,7 @@ PetscErrorCode MFNCreate(MPI_Comm comm,MFN *outmfn)
 
    Level: intermediate
 
-.seealso: MFNType
+.seealso: `MFNType`
 @*/
 PetscErrorCode MFNSetType(MFN mfn,MFNType type)
 {
@@ -295,7 +295,7 @@ PetscErrorCode MFNSetType(MFN mfn,MFNType type)
 
    Level: intermediate
 
-.seealso: MFNSetType()
+.seealso: `MFNSetType()`
 @*/
 PetscErrorCode MFNGetType(MFN mfn,MFNType *type)
 {
@@ -330,7 +330,7 @@ $     -mfn_type my_solver
 
    Level: advanced
 
-.seealso: MFNRegisterAll()
+.seealso: `MFNRegisterAll()`
 @*/
 PetscErrorCode MFNRegister(const char *name,PetscErrorCode (*function)(MFN))
 {
@@ -372,7 +372,7 @@ $      -mfn_monitor_my_monitor
 
    Level: advanced
 
-.seealso: MFNMonitorSet(), MFNMonitorRegisterAll()
+.seealso: `MFNMonitorSet()`, `MFNMonitorRegisterAll()`
 @*/
 PetscErrorCode MFNMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,MFNMonitorRegisterFn *monitor,MFNMonitorRegisterCreateFn *create,MFNMonitorRegisterDestroyFn *destroy)
 {
@@ -398,7 +398,7 @@ PetscErrorCode MFNMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 
    Level: advanced
 
-.seealso: MFNDestroy()
+.seealso: `MFNDestroy()`
 @*/
 PetscErrorCode MFNReset(MFN mfn)
 {
@@ -424,7 +424,7 @@ PetscErrorCode MFNReset(MFN mfn)
 
    Level: beginner
 
-.seealso: MFNCreate(), MFNSetUp(), MFNSolve()
+.seealso: `MFNCreate()`, `MFNSetUp()`, `MFNSolve()`
 @*/
 PetscErrorCode MFNDestroy(MFN *mfn)
 {
@@ -456,7 +456,7 @@ PetscErrorCode MFNDestroy(MFN *mfn)
 
    Level: advanced
 
-.seealso: MFNGetBV()
+.seealso: `MFNGetBV()`
 @*/
 PetscErrorCode MFNSetBV(MFN mfn,BV bv)
 {
@@ -484,7 +484,7 @@ PetscErrorCode MFNSetBV(MFN mfn,BV bv)
 
    Level: advanced
 
-.seealso: MFNSetBV()
+.seealso: `MFNSetBV()`
 @*/
 PetscErrorCode MFNGetBV(MFN mfn,BV *bv)
 {
@@ -515,7 +515,7 @@ PetscErrorCode MFNGetBV(MFN mfn,BV *bv)
 
    Level: beginner
 
-.seealso: MFNGetFN()
+.seealso: `MFNGetFN()`
 @*/
 PetscErrorCode MFNSetFN(MFN mfn,FN fn)
 {
@@ -542,7 +542,7 @@ PetscErrorCode MFNSetFN(MFN mfn,FN fn)
 
    Level: beginner
 
-.seealso: MFNSetFN()
+.seealso: `MFNSetFN()`
 @*/
 PetscErrorCode MFNGetFN(MFN mfn,FN *fn)
 {

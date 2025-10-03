@@ -17,6 +17,6 @@
 
    Level: beginner
 
-.seealso: RGCreate()
+.seealso: `RGCreate()`
 S*/
 typedef struct _p_RG* RG;

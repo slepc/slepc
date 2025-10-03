@@ -22,7 +22,7 @@ SLEPC_EXTERN PetscErrorCode RGCreate_Polygon(RG);
 
    Level: advanced
 
-.seealso: RGRegister()
+.seealso: `RGRegister()`
 @*/
 PetscErrorCode RGRegisterAll(void)
 {

@@ -130,7 +130,7 @@ PetscErrorCode DSAllocateWork_Private(DS ds,PetscInt s,PetscInt r,PetscInt i)
 
    Level: developer
 
-.seealso: DSView()
+.seealso: `DSView()`
 @*/
 PetscErrorCode DSViewMat(DS ds,PetscViewer viewer,DSMatType m)
 {
@@ -402,7 +402,7 @@ PetscErrorCode DSPermuteBoth_Private(DS ds,PetscInt istart,PetscInt iend,PetscIn
 
    Level: intermediate
 
-.seealso: DSGetMat()
+.seealso: `DSGetMat()`
 @*/
 PetscErrorCode DSSetIdentity(DS ds,DSMatType mat)
 {
@@ -440,7 +440,7 @@ PetscErrorCode DSSetIdentity(DS ds,DSMatType mat)
 
    Level: developer
 
-.seealso: DSPseudoOrthogonalize()
+.seealso: `DSPseudoOrthogonalize()`
 @*/
 PetscErrorCode DSOrthogonalize(DS ds,DSMatType mat,PetscInt cols,PetscInt *lindcols)
 {
@@ -558,7 +558,7 @@ static PetscErrorCode SlepcMatDenseMult(PetscScalar *C,PetscInt _ldC,PetscScalar
 
    Level: developer
 
-.seealso: DSOrthogonalize()
+.seealso: `DSOrthogonalize()`
 @*/
 PetscErrorCode DSPseudoOrthogonalize(DS ds,DSMatType mat,PetscInt cols,PetscReal s[],PetscInt *lindcols,PetscReal ns[])
 {

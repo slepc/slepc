@@ -43,7 +43,7 @@ PetscBool         PEPMonitorRegisterAllCalled = PETSC_FALSE;
 
    Level: beginner
 
-.seealso: PEPSetUp(), PEPSolve(), PEPDestroy(), PEP
+.seealso: `PEPSetUp()`, `PEPSolve()`, `PEPDestroy()`, `PEP`
 @*/
 PetscErrorCode PEPCreate(MPI_Comm comm,PEP *outpep)
 {
@@ -152,7 +152,7 @@ PetscErrorCode PEPCreate(MPI_Comm comm,PEP *outpep)
 
    Level: intermediate
 
-.seealso: PEPType
+.seealso: `PEPType`
 @*/
 PetscErrorCode PEPSetType(PEP pep,PEPType type)
 {
@@ -191,7 +191,7 @@ PetscErrorCode PEPSetType(PEP pep,PEPType type)
 
    Level: intermediate
 
-.seealso: PEPSetType()
+.seealso: `PEPSetType()`
 @*/
 PetscErrorCode PEPGetType(PEP pep,PEPType *type)
 {
@@ -226,7 +226,7 @@ $     -pep_type my_solver
 
    Level: advanced
 
-.seealso: PEPRegisterAll()
+.seealso: `PEPRegisterAll()`
 @*/
 PetscErrorCode PEPRegister(const char *name,PetscErrorCode (*function)(PEP))
 {
@@ -268,7 +268,7 @@ $      -pep_monitor_my_monitor
 
    Level: advanced
 
-.seealso: PEPMonitorSet(), PEPMonitorRegisterAll()
+.seealso: `PEPMonitorSet()`, `PEPMonitorRegisterAll()`
 @*/
 PetscErrorCode PEPMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,PEPMonitorRegisterFn *monitor,PEPMonitorRegisterCreateFn *create,PEPMonitorRegisterDestroyFn *destroy)
 {
@@ -294,7 +294,7 @@ PetscErrorCode PEPMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 
    Level: advanced
 
-.seealso: PEPDestroy()
+.seealso: `PEPDestroy()`
 @*/
 PetscErrorCode PEPReset(PEP pep)
 {
@@ -329,7 +329,7 @@ PetscErrorCode PEPReset(PEP pep)
 
    Level: beginner
 
-.seealso: PEPCreate(), PEPSetUp(), PEPSolve()
+.seealso: `PEPCreate()`, `PEPSetUp()`, `PEPSolve()`
 @*/
 PetscErrorCode PEPDestroy(PEP *pep)
 {
@@ -370,7 +370,7 @@ PetscErrorCode PEPDestroy(PEP *pep)
 
    Level: advanced
 
-.seealso: PEPGetBV()
+.seealso: `PEPGetBV()`
 @*/
 PetscErrorCode PEPSetBV(PEP pep,BV bv)
 {
@@ -398,7 +398,7 @@ PetscErrorCode PEPSetBV(PEP pep,BV bv)
 
    Level: advanced
 
-.seealso: PEPSetBV()
+.seealso: `PEPSetBV()`
 @*/
 PetscErrorCode PEPGetBV(PEP pep,BV *bv)
 {
@@ -429,7 +429,7 @@ PetscErrorCode PEPGetBV(PEP pep,BV *bv)
 
    Level: advanced
 
-.seealso: PEPGetRG()
+.seealso: `PEPGetRG()`
 @*/
 PetscErrorCode PEPSetRG(PEP pep,RG rg)
 {
@@ -459,7 +459,7 @@ PetscErrorCode PEPSetRG(PEP pep,RG rg)
 
    Level: advanced
 
-.seealso: PEPSetRG()
+.seealso: `PEPSetRG()`
 @*/
 PetscErrorCode PEPGetRG(PEP pep,RG *rg)
 {
@@ -490,7 +490,7 @@ PetscErrorCode PEPGetRG(PEP pep,RG *rg)
 
    Level: advanced
 
-.seealso: PEPGetDS()
+.seealso: `PEPGetDS()`
 @*/
 PetscErrorCode PEPSetDS(PEP pep,DS ds)
 {
@@ -518,7 +518,7 @@ PetscErrorCode PEPSetDS(PEP pep,DS ds)
 
    Level: advanced
 
-.seealso: PEPSetDS()
+.seealso: `PEPSetDS()`
 @*/
 PetscErrorCode PEPGetDS(PEP pep,DS *ds)
 {
@@ -549,7 +549,7 @@ PetscErrorCode PEPGetDS(PEP pep,DS *ds)
 
    Level: advanced
 
-.seealso: PEPGetST()
+.seealso: `PEPGetST()`
 @*/
 PetscErrorCode PEPSetST(PEP pep,ST st)
 {
@@ -577,7 +577,7 @@ PetscErrorCode PEPSetST(PEP pep,ST st)
 
    Level: intermediate
 
-.seealso: PEPSetST()
+.seealso: `PEPSetST()`
 @*/
 PetscErrorCode PEPGetST(PEP pep,ST *st)
 {
@@ -607,7 +607,7 @@ PetscErrorCode PEPGetST(PEP pep,ST *st)
 
    Level: advanced
 
-.seealso: PEPSetRefine()
+.seealso: `PEPSetRefine()`
 @*/
 PetscErrorCode PEPRefineGetKSP(PEP pep,KSP *ksp)
 {
@@ -657,7 +657,7 @@ PetscErrorCode PEPRefineGetKSP(PEP pep,KSP *ksp)
 
    Level: intermediate
 
-.seealso: PEPGetTarget(), PEPSetWhichEigenpairs()
+.seealso: `PEPGetTarget()`, `PEPSetWhichEigenpairs()`
 @*/
 PetscErrorCode PEPSetTarget(PEP pep,PetscScalar target)
 {
@@ -686,7 +686,7 @@ PetscErrorCode PEPSetTarget(PEP pep,PetscScalar target)
 
    Level: intermediate
 
-.seealso: PEPSetTarget()
+.seealso: `PEPSetTarget()`
 @*/
 PetscErrorCode PEPGetTarget(PEP pep,PetscScalar* target)
 {
@@ -723,7 +723,7 @@ PetscErrorCode PEPGetTarget(PEP pep,PetscScalar* target)
 
    Level: intermediate
 
-.seealso: PEPGetInterval(), PEPSetWhichEigenpairs()
+.seealso: `PEPGetInterval()`, `PEPSetWhichEigenpairs()`
 @*/
 PetscErrorCode PEPSetInterval(PEP pep,PetscReal inta,PetscReal intb)
 {
@@ -757,7 +757,7 @@ PetscErrorCode PEPSetInterval(PEP pep,PetscReal inta,PetscReal intb)
    Note:
    If the interval was not set by the user, then zeros are returned.
 
-.seealso: PEPSetInterval()
+.seealso: `PEPSetInterval()`
 @*/
 PetscErrorCode PEPGetInterval(PEP pep,PetscReal* inta,PetscReal* intb)
 {

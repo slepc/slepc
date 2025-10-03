@@ -512,7 +512,7 @@ static PetscErrorCode DSHSVDSetDimensions_HSVD(DS ds,PetscInt m)
 
    Level: intermediate
 
-.seealso: DSHSVDGetDimensions(), DSSetDimensions()
+.seealso: `DSHSVDGetDimensions()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSHSVDSetDimensions(DS ds,PetscInt m)
 {
@@ -545,7 +545,7 @@ static PetscErrorCode DSHSVDGetDimensions_HSVD(DS ds,PetscInt *m)
 
    Level: intermediate
 
-.seealso: DSHSVDSetDimensions()
+.seealso: `DSHSVDSetDimensions()`
 @*/
 PetscErrorCode DSHSVDGetDimensions(DS ds,PetscInt *m)
 {
@@ -584,7 +584,7 @@ static PetscErrorCode DSHSVDSetReorthogonalize_HSVD(DS ds,PetscBool reorth)
 
    Level: intermediate
 
-.seealso: DSHSVDGetReorthogonalize()
+.seealso: `DSHSVDGetReorthogonalize()`
 @*/
 PetscErrorCode DSHSVDSetReorthogonalize(DS ds,PetscBool reorth)
 {
@@ -617,7 +617,7 @@ static PetscErrorCode DSHSVDGetReorthogonalize_HSVD(DS ds,PetscBool *reorth)
 
    Level: intermediate
 
-.seealso: DSHSVDSetReorthogonalize()
+.seealso: `DSHSVDSetReorthogonalize()`
 @*/
 PetscErrorCode DSHSVDGetReorthogonalize(DS ds,PetscBool *reorth)
 {
@@ -712,7 +712,7 @@ static PetscErrorCode DSReallocate_HSVD(DS ds,PetscInt ld)
    Implemented methods:
 .  0 - Cross product A'*Omega*A
 
-.seealso: DSCreate(), DSSetType(), DSType, DSHSVDSetDimensions()
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`, `DSHSVDSetDimensions()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_HSVD(DS ds)
 {

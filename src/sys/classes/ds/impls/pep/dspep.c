@@ -313,7 +313,7 @@ static PetscErrorCode DSPEPSetDegree_PEP(DS ds,PetscInt d)
 
    Level: intermediate
 
-.seealso: DSPEPGetDegree()
+.seealso: `DSPEPGetDegree()`
 @*/
 PetscErrorCode DSPEPSetDegree(DS ds,PetscInt d)
 {
@@ -346,7 +346,7 @@ static PetscErrorCode DSPEPGetDegree_PEP(DS ds,PetscInt *d)
 
    Level: intermediate
 
-.seealso: DSPEPSetDegree()
+.seealso: `DSPEPSetDegree()`
 @*/
 PetscErrorCode DSPEPGetDegree(DS ds,PetscInt *d)
 {
@@ -395,7 +395,7 @@ static PetscErrorCode DSPEPSetCoefficients_PEP(DS ds,PetscReal *pbc)
 
    Level: advanced
 
-.seealso: DSPEPGetCoefficients(), DSPEPSetDegree()
+.seealso: `DSPEPGetCoefficients()`, `DSPEPSetDegree()`
 @*/
 PetscErrorCode DSPEPSetCoefficients(DS ds,PetscReal pbc[])
 {
@@ -442,7 +442,7 @@ static PetscErrorCode DSPEPGetCoefficients_PEP(DS ds,PetscReal *pbc[])
 
    Level: advanced
 
-.seealso: DSPEPSetCoefficients()
+.seealso: `DSPEPSetCoefficients()`
 @*/
 PetscErrorCode DSPEPGetCoefficients(DS ds,PetscReal *pbc[]) PeNS
 {
@@ -511,7 +511,7 @@ static PetscErrorCode DSMatGetSize_PEP(DS ds,DSMatType t,PetscInt *rows,PetscInt
    Implemented methods:
 .  0 - QZ iteration on the linearization (_ggev)
 
-.seealso: DSCreate(), DSSetType(), DSType, DSPEPSetDegree(), DSPEPSetCoefficients()
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`, `DSPEPSetDegree()`, `DSPEPSetCoefficients()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_PEP(DS ds)
 {

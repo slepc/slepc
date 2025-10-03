@@ -30,7 +30,7 @@
 
    Level: developer
 
-.seealso: EPSMonitorSet(), EPSSetTrackAll()
+.seealso: `EPSMonitorSet()`, `EPSSetTrackAll()`
 @*/
 PetscErrorCode EPSMonitorSetFromOptions(EPS eps,const char opt[],const char name[],void *ctx,PetscBool trackall)
 {
@@ -79,7 +79,7 @@ PetscErrorCode EPSMonitorSetFromOptions(EPS eps,const char opt[],const char name
 
    Level: beginner
 
-.seealso: EPSSetOptionsPrefix()
+.seealso: `EPSSetOptionsPrefix()`
 @*/
 PetscErrorCode EPSSetFromOptions(EPS eps)
 {
@@ -272,7 +272,7 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
 
    Level: intermediate
 
-.seealso: EPSSetTolerances()
+.seealso: `EPSSetTolerances()`
 @*/
 PetscErrorCode EPSGetTolerances(EPS eps,PetscReal *tol,PetscInt *maxits)
 {
@@ -306,7 +306,7 @@ PetscErrorCode EPSGetTolerances(EPS eps,PetscReal *tol,PetscInt *maxits)
 
    Level: intermediate
 
-.seealso: EPSGetTolerances()
+.seealso: `EPSGetTolerances()`
 @*/
 PetscErrorCode EPSSetTolerances(EPS eps,PetscReal tol,PetscInt maxits)
 {
@@ -349,7 +349,7 @@ PetscErrorCode EPSSetTolerances(EPS eps,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: EPSSetDimensions()
+.seealso: `EPSSetDimensions()`
 @*/
 PetscErrorCode EPSGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -398,7 +398,7 @@ PetscErrorCode EPSGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 
    Level: intermediate
 
-.seealso: EPSGetDimensions(), EPSSetInterval(), EPSKrylovSchurSetDimensions()
+.seealso: `EPSGetDimensions()`, `EPSSetInterval()`, `EPSKrylovSchurSetDimensions()`
 @*/
 PetscErrorCode EPSSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -483,8 +483,8 @@ PetscErrorCode EPSSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
 
    Level: intermediate
 
-.seealso: EPSGetWhichEigenpairs(), EPSSetTarget(), EPSSetInterval(),
-          EPSSetDimensions(), EPSSetEigenvalueComparison(), EPSWhich
+.seealso: `EPSGetWhichEigenpairs()`, `EPSSetTarget()`, `EPSSetInterval()`,
+          `EPSSetDimensions()`, `EPSSetEigenvalueComparison()`, `EPSWhich`
 @*/
 PetscErrorCode EPSSetWhichEigenpairs(EPS eps,EPSWhich which)
 {
@@ -537,7 +537,7 @@ PetscErrorCode EPSSetWhichEigenpairs(EPS eps,EPSWhich which)
 
    Level: intermediate
 
-.seealso: EPSSetWhichEigenpairs(), EPSWhich
+.seealso: `EPSSetWhichEigenpairs()`, `EPSWhich`
 @*/
 PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
 {
@@ -611,7 +611,7 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
 
    Level: advanced
 
-.seealso: EPSGetThreshold(), EPSSetStoppingTest(), EPSSetDimensions(), EPSSetWhichEigenpairs(), EPSSetProblemType()
+.seealso: `EPSGetThreshold()`, `EPSSetStoppingTest()`, `EPSSetDimensions()`, `EPSSetWhichEigenpairs()`, `EPSSetProblemType()`
 @*/
 PetscErrorCode EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel)
 {
@@ -642,7 +642,7 @@ PetscErrorCode EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel)
 
    Level: advanced
 
-.seealso: EPSSetThreshold()
+.seealso: `EPSSetThreshold()`
 @*/
 PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
 {
@@ -672,7 +672,7 @@ PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
 
    Level: advanced
 
-.seealso: EPSSetWhichEigenpairs(), EPSWhich
+.seealso: `EPSSetWhichEigenpairs()`, `EPSWhich`
 @*/
 PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *func,void *ctx)
 {
@@ -718,7 +718,7 @@ PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *f
 
    Level: advanced
 
-.seealso: EPSSetWhichEigenpairs()
+.seealso: `EPSSetWhichEigenpairs()`
 @*/
 PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,void *ctx)
 {
@@ -748,7 +748,7 @@ PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,
 
    Level: advanced
 
-.seealso: EPSSetConvergenceTest(), EPSSetTolerances()
+.seealso: `EPSSetConvergenceTest()`, `EPSSetTolerances()`
 @*/
 PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -793,7 +793,7 @@ PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,
 
    Level: intermediate
 
-.seealso: EPSGetConvergenceTest(), EPSSetConvergenceTestFunction(), EPSSetStoppingTest(), EPSConv
+.seealso: `EPSGetConvergenceTest()`, `EPSSetConvergenceTestFunction()`, `EPSSetStoppingTest()`, `EPSConv`
 @*/
 PetscErrorCode EPSSetConvergenceTest(EPS eps,EPSConv conv)
 {
@@ -829,7 +829,7 @@ PetscErrorCode EPSSetConvergenceTest(EPS eps,EPSConv conv)
 
    Level: intermediate
 
-.seealso: EPSSetConvergenceTest(), EPSConv
+.seealso: `EPSSetConvergenceTest()`, `EPSConv`
 @*/
 PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
 {
@@ -860,7 +860,7 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
 
    Level: advanced
 
-.seealso: EPSSetStoppingTest(), EPSStoppingBasic()
+.seealso: `EPSSetStoppingTest()`, `EPSStoppingBasic()`
 @*/
 PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -902,7 +902,7 @@ PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *
 
    Level: advanced
 
-.seealso: EPSGetStoppingTest(), EPSSetStoppingTestFunction(), EPSSetConvergenceTest(), EPSStop
+.seealso: `EPSGetStoppingTest()`, `EPSSetStoppingTestFunction()`, `EPSSetConvergenceTest()`, `EPSStop`
 @*/
 PetscErrorCode EPSSetStoppingTest(EPS eps,EPSStop stop)
 {
@@ -937,7 +937,7 @@ PetscErrorCode EPSSetStoppingTest(EPS eps,EPSStop stop)
 
    Level: advanced
 
-.seealso: EPSSetStoppingTest(), EPSStop
+.seealso: `EPSSetStoppingTest()`, `EPSStop`
 @*/
 PetscErrorCode EPSGetStoppingTest(EPS eps,EPSStop *stop)
 {
@@ -986,7 +986,7 @@ PetscErrorCode EPSGetStoppingTest(EPS eps,EPSStop *stop)
 
    Level: intermediate
 
-.seealso: EPSSetOperators(), EPSSetType(), EPSGetProblemType(), EPSProblemType
+.seealso: `EPSSetOperators()`, `EPSSetType()`, `EPSGetProblemType()`, `EPSProblemType`
 @*/
 PetscErrorCode EPSSetProblemType(EPS eps,EPSProblemType type)
 {
@@ -1064,7 +1064,7 @@ PetscErrorCode EPSSetProblemType(EPS eps,EPSProblemType type)
 
    Level: intermediate
 
-.seealso: EPSSetProblemType(), EPSProblemType
+.seealso: `EPSSetProblemType()`, `EPSProblemType`
 @*/
 PetscErrorCode EPSGetProblemType(EPS eps,EPSProblemType *type)
 {
@@ -1106,7 +1106,7 @@ PetscErrorCode EPSGetProblemType(EPS eps,EPSProblemType *type)
 
    Level: advanced
 
-.seealso: EPSSetTarget(), EPSGetExtraction(), EPSExtraction
+.seealso: `EPSSetTarget()`, `EPSGetExtraction()`, `EPSExtraction`
 @*/
 PetscErrorCode EPSSetExtraction(EPS eps,EPSExtraction extr)
 {
@@ -1133,7 +1133,7 @@ PetscErrorCode EPSSetExtraction(EPS eps,EPSExtraction extr)
 
    Level: advanced
 
-.seealso: EPSSetExtraction(), EPSExtraction
+.seealso: `EPSSetExtraction()`, `EPSExtraction`
 @*/
 PetscErrorCode EPSGetExtraction(EPS eps,EPSExtraction *extr)
 {
@@ -1184,7 +1184,7 @@ PetscErrorCode EPSGetExtraction(EPS eps,EPSExtraction *extr)
 
    Level: intermediate
 
-.seealso: EPSGetBalance(), EPSBalance, STSetBalanceMatrix()
+.seealso: `EPSGetBalance()`, `EPSBalance`, `STSetBalanceMatrix()`
 @*/
 PetscErrorCode EPSSetBalance(EPS eps,EPSBalance bal,PetscInt its,PetscReal cutoff)
 {
@@ -1238,7 +1238,7 @@ PetscErrorCode EPSSetBalance(EPS eps,EPSBalance bal,PetscInt its,PetscReal cutof
    Note:
    The user can specify NULL for any parameter that is not needed.
 
-.seealso: EPSSetBalance(), EPSBalance
+.seealso: `EPSSetBalance()`, `EPSBalance`
 @*/
 PetscErrorCode EPSGetBalance(EPS eps,EPSBalance *bal,PetscInt *its,PetscReal *cutoff)
 {
@@ -1273,7 +1273,7 @@ PetscErrorCode EPSGetBalance(EPS eps,EPSBalance *bal,PetscInt *its,PetscReal *cu
 
    Level: advanced
 
-.seealso: EPSGetTwoSided(), EPSGetLeftEigenvector()
+.seealso: `EPSGetTwoSided()`, `EPSGetLeftEigenvector()`
 @*/
 PetscErrorCode EPSSetTwoSided(EPS eps,PetscBool twosided)
 {
@@ -1301,7 +1301,7 @@ PetscErrorCode EPSSetTwoSided(EPS eps,PetscBool twosided)
 
    Level: advanced
 
-.seealso: EPSSetTwoSided()
+.seealso: `EPSSetTwoSided()`
 @*/
 PetscErrorCode EPSGetTwoSided(EPS eps,PetscBool *twosided)
 {
@@ -1337,7 +1337,7 @@ PetscErrorCode EPSGetTwoSided(EPS eps,PetscBool *twosided)
 
    Level: advanced
 
-.seealso: EPSGetTrueResidual()
+.seealso: `EPSGetTrueResidual()`
 @*/
 PetscErrorCode EPSSetTrueResidual(EPS eps,PetscBool trueres)
 {
@@ -1362,7 +1362,7 @@ PetscErrorCode EPSSetTrueResidual(EPS eps,PetscBool trueres)
 
    Level: advanced
 
-.seealso: EPSSetTrueResidual()
+.seealso: `EPSSetTrueResidual()`
 @*/
 PetscErrorCode EPSGetTrueResidual(EPS eps,PetscBool *trueres)
 {
@@ -1393,7 +1393,7 @@ PetscErrorCode EPSGetTrueResidual(EPS eps,PetscBool *trueres)
 
    Level: developer
 
-.seealso: EPSGetTrackAll()
+.seealso: `EPSGetTrackAll()`
 @*/
 PetscErrorCode EPSSetTrackAll(EPS eps,PetscBool trackall)
 {
@@ -1418,7 +1418,7 @@ PetscErrorCode EPSSetTrackAll(EPS eps,PetscBool trackall)
 
    Level: developer
 
-.seealso: EPSSetTrackAll()
+.seealso: `EPSSetTrackAll()`
 @*/
 PetscErrorCode EPSGetTrackAll(EPS eps,PetscBool *trackall)
 {
@@ -1449,7 +1449,7 @@ PetscErrorCode EPSGetTrackAll(EPS eps,PetscBool *trackall)
 
    Level: intermediate
 
-.seealso: EPSGetPurify(), EPSSetInterval()
+.seealso: `EPSGetPurify()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSSetPurify(EPS eps,PetscBool purify)
 {
@@ -1477,7 +1477,7 @@ PetscErrorCode EPSSetPurify(EPS eps,PetscBool purify)
 
    Level: intermediate
 
-.seealso: EPSSetPurify()
+.seealso: `EPSSetPurify()`
 @*/
 PetscErrorCode EPSGetPurify(EPS eps,PetscBool *purify)
 {
@@ -1512,7 +1512,7 @@ PetscErrorCode EPSGetPurify(EPS eps,PetscBool *purify)
 
    Level: advanced
 
-.seealso: EPSAppendOptionsPrefix(), EPSGetOptionsPrefix()
+.seealso: `EPSAppendOptionsPrefix()`, `EPSGetOptionsPrefix()`
 @*/
 PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char *prefix)
 {
@@ -1546,7 +1546,7 @@ PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char *prefix)
 
    Level: advanced
 
-.seealso: EPSSetOptionsPrefix(), EPSGetOptionsPrefix()
+.seealso: `EPSSetOptionsPrefix()`, `EPSGetOptionsPrefix()`
 @*/
 PetscErrorCode EPSAppendOptionsPrefix(EPS eps,const char *prefix)
 {
@@ -1582,7 +1582,7 @@ PetscErrorCode EPSAppendOptionsPrefix(EPS eps,const char *prefix)
 
    Level: advanced
 
-.seealso: EPSSetOptionsPrefix(), EPSAppendOptionsPrefix()
+.seealso: `EPSSetOptionsPrefix()`, `EPSAppendOptionsPrefix()`
 @*/
 PetscErrorCode EPSGetOptionsPrefix(EPS eps,const char *prefix[])
 {

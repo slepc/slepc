@@ -29,7 +29,7 @@
 
    Level: developer
 
-.seealso: LMEMonitorSet()
+.seealso: `LMEMonitorSet()`
 @*/
 PetscErrorCode LMEMonitorSetFromOptions(LME lme,const char opt[],const char name[],void *ctx)
 {
@@ -77,7 +77,7 @@ PetscErrorCode LMEMonitorSetFromOptions(LME lme,const char opt[],const char name
 
    Level: beginner
 
-.seealso: LMESetOptionsPrefix()
+.seealso: `LMESetOptionsPrefix()`
 @*/
 PetscErrorCode LMESetFromOptions(LME lme)
 {
@@ -181,7 +181,7 @@ PetscErrorCode LMESetFromOptions(LME lme)
 
    Level: beginner
 
-.seealso: LMESetCoefficients(), LMESetType(), LMEGetProblemType(), LMEProblemType
+.seealso: `LMESetCoefficients()`, `LMESetType()`, `LMEGetProblemType()`, `LMEProblemType`
 @*/
 PetscErrorCode LMESetProblemType(LME lme,LMEProblemType type)
 {
@@ -218,7 +218,7 @@ PetscErrorCode LMESetProblemType(LME lme,LMEProblemType type)
 
    Level: intermediate
 
-.seealso: LMESetProblemType(), LMEProblemType
+.seealso: `LMESetProblemType()`, `LMEProblemType`
 @*/
 PetscErrorCode LMEGetProblemType(LME lme,LMEProblemType *type)
 {
@@ -247,7 +247,7 @@ PetscErrorCode LMEGetProblemType(LME lme,LMEProblemType *type)
 
    Level: intermediate
 
-.seealso: LMESetTolerances()
+.seealso: `LMESetTolerances()`
 @*/
 PetscErrorCode LMEGetTolerances(LME lme,PetscReal *tol,PetscInt *maxits)
 {
@@ -281,7 +281,7 @@ PetscErrorCode LMEGetTolerances(LME lme,PetscReal *tol,PetscInt *maxits)
 
    Level: intermediate
 
-.seealso: LMEGetTolerances()
+.seealso: `LMEGetTolerances()`
 @*/
 PetscErrorCode LMESetTolerances(LME lme,PetscReal tol,PetscInt maxits)
 {
@@ -321,7 +321,7 @@ PetscErrorCode LMESetTolerances(LME lme,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: LMESetDimensions()
+.seealso: `LMESetDimensions()`
 @*/
 PetscErrorCode LMEGetDimensions(LME lme,PetscInt *ncv)
 {
@@ -350,7 +350,7 @@ PetscErrorCode LMEGetDimensions(LME lme,PetscInt *ncv)
 
    Level: intermediate
 
-.seealso: LMEGetDimensions()
+.seealso: `LMEGetDimensions()`
 @*/
 PetscErrorCode LMESetDimensions(LME lme,PetscInt ncv)
 {
@@ -386,7 +386,7 @@ PetscErrorCode LMESetDimensions(LME lme,PetscInt ncv)
    Normally SLEPc continues if the solver fails to converge, you can call
    LMEGetConvergedReason() after a LMESolve() to determine if it has converged.
 
-.seealso: LMEGetErrorIfNotConverged()
+.seealso: `LMEGetErrorIfNotConverged()`
 @*/
 PetscErrorCode LMESetErrorIfNotConverged(LME lme,PetscBool flg)
 {
@@ -411,7 +411,7 @@ PetscErrorCode LMESetErrorIfNotConverged(LME lme,PetscBool flg)
 
    Level: intermediate
 
-.seealso: LMESetErrorIfNotConverged()
+.seealso: `LMESetErrorIfNotConverged()`
 @*/
 PetscErrorCode LMEGetErrorIfNotConverged(LME lme,PetscBool *flag)
 {
@@ -446,7 +446,7 @@ PetscErrorCode LMEGetErrorIfNotConverged(LME lme,PetscBool *flag)
 
    Level: advanced
 
-.seealso: LMEAppendOptionsPrefix(), LMEGetOptionsPrefix()
+.seealso: `LMEAppendOptionsPrefix()`, `LMEGetOptionsPrefix()`
 @*/
 PetscErrorCode LMESetOptionsPrefix(LME lme,const char *prefix)
 {
@@ -474,7 +474,7 @@ PetscErrorCode LMESetOptionsPrefix(LME lme,const char *prefix)
 
    Level: advanced
 
-.seealso: LMESetOptionsPrefix(), LMEGetOptionsPrefix()
+.seealso: `LMESetOptionsPrefix()`, `LMEGetOptionsPrefix()`
 @*/
 PetscErrorCode LMEAppendOptionsPrefix(LME lme,const char *prefix)
 {
@@ -504,7 +504,7 @@ PetscErrorCode LMEAppendOptionsPrefix(LME lme,const char *prefix)
 
    Level: advanced
 
-.seealso: LMESetOptionsPrefix(), LMEAppendOptionsPrefix()
+.seealso: `LMESetOptionsPrefix()`, `LMEAppendOptionsPrefix()`
 @*/
 PetscErrorCode LMEGetOptionsPrefix(LME lme,const char *prefix[])
 {

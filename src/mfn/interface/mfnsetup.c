@@ -29,7 +29,7 @@
 
    Level: developer
 
-.seealso: MFNCreate(), MFNSolve(), MFNDestroy()
+.seealso: `MFNCreate()`, `MFNSolve()`, `MFNDestroy()`
 @*/
 PetscErrorCode MFNSetUp(MFN mfn)
 {
@@ -80,7 +80,7 @@ PetscErrorCode MFNSetUp(MFN mfn)
 
    Level: beginner
 
-.seealso: MFNSolve(), MFNSetUp(), MFNReset()
+.seealso: `MFNSolve()`, `MFNSetUp()`, `MFNReset()`
 @*/
 PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
 {
@@ -114,7 +114,7 @@ PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
 
    Level: intermediate
 
-.seealso: MFNSolve(), MFNSetOperator()
+.seealso: `MFNSolve()`, `MFNSetOperator()`
 @*/
 PetscErrorCode MFNGetOperator(MFN mfn,Mat *A)
 {
@@ -142,7 +142,7 @@ PetscErrorCode MFNGetOperator(MFN mfn,Mat *A)
 
    Level: developer
 
-.seealso: MFNSetUp()
+.seealso: `MFNSetUp()`
 @*/
 PetscErrorCode MFNAllocateSolution(MFN mfn,PetscInt extra)
 {

@@ -23,7 +23,7 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Tensor(BV);
 
    Level: advanced
 
-.seealso: BVRegister()
+.seealso: `BVRegister()`
 @*/
 PetscErrorCode BVRegisterAll(void)
 {

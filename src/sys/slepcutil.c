@@ -83,7 +83,7 @@ PetscErrorCode SlepcBasisDestroy_Private(PetscInt *m,Vec **W)
 
    Level: developer
 
-.seealso: PetscSNPrintf()
+.seealso: `PetscSNPrintf()`
 @*/
 PetscErrorCode SlepcSNPrintfScalar(char *str,size_t len,PetscScalar val,PetscBool exp)
 {
@@ -132,7 +132,7 @@ PetscErrorCode SlepcSNPrintfScalar(char *str,size_t len,PetscScalar val,PetscBoo
 
    The lookup is case insensitive, i.e. looking for "ARPACK" or "arpack" is the same.
 
-.seealso: EPSType, SVDType
+.seealso: `EPSType`, `SVDType`
 @*/
 PetscErrorCode SlepcHasExternalPackage(const char pkg[], PetscBool *has)
 {

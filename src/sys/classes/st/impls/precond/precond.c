@@ -159,7 +159,7 @@ static PetscErrorCode STPrecondSetKSPHasMat_Precond(ST st,PetscBool ksphasmat)
 
    Level: developer
 
-.seealso: STPrecondGetKSPHasMat(), STSetShift()
+.seealso: `STPrecondGetKSPHasMat()`, `STSetShift()`
 @*/
 PetscErrorCode STPrecondSetKSPHasMat(ST st,PetscBool ksphasmat)
 {
@@ -194,7 +194,7 @@ static PetscErrorCode STPrecondGetKSPHasMat_Precond(ST st,PetscBool *ksphasmat)
 
    Level: developer
 
-.seealso: STPrecondSetKSPHasMat(), STSetShift()
+.seealso: `STPrecondSetKSPHasMat()`, `STSetShift()`
 @*/
 PetscErrorCode STPrecondGetKSPHasMat(ST st,PetscBool *ksphasmat)
 {

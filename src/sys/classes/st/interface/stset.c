@@ -40,7 +40,7 @@ PetscFunctionList STList = NULL;
 
    Level: beginner
 
-.seealso: EPSSetType()
+.seealso: `EPSSetType()`
 
 @*/
 PetscErrorCode STSetType(ST st,STType type)
@@ -82,7 +82,7 @@ PetscErrorCode STSetType(ST st,STType type)
 
    Level: intermediate
 
-.seealso: STSetType()
+.seealso: `STSetType()`
 
 @*/
 PetscErrorCode STGetType(ST st,STType *type)
@@ -106,7 +106,7 @@ PetscErrorCode STGetType(ST st,STType *type)
 
    Level: beginner
 
-.seealso: STSetOptionsPrefix()
+.seealso: `STSetOptionsPrefix()`
 @*/
 PetscErrorCode STSetFromOptions(ST st)
 {
@@ -178,7 +178,7 @@ PetscErrorCode STSetFromOptions(ST st)
 
    Level: advanced
 
-.seealso: STSetMatrices(), MatAXPY()
+.seealso: `STSetMatrices()`, `MatAXPY()`
 @*/
 PetscErrorCode STSetMatStructure(ST st,MatStructure str)
 {
@@ -213,7 +213,7 @@ PetscErrorCode STSetMatStructure(ST st,MatStructure str)
 
    Level: advanced
 
-.seealso: STSetMatStructure(), STSetMatrices(), MatAXPY()
+.seealso: `STSetMatStructure()`, `STSetMatrices()`, `MatAXPY()`
 @*/
 PetscErrorCode STGetMatStructure(ST st,MatStructure *str)
 {
@@ -260,7 +260,7 @@ PetscErrorCode STGetMatStructure(ST st,MatStructure *str)
 
    Level: intermediate
 
-.seealso: STSetMatrices(), STSetMatStructure(), STGetMatMode(), STMatMode
+.seealso: `STSetMatrices()`, `STSetMatStructure()`, `STGetMatMode()`, `STMatMode`
 @*/
 PetscErrorCode STSetMatMode(ST st,STMatMode mode)
 {
@@ -290,7 +290,7 @@ PetscErrorCode STSetMatMode(ST st,STMatMode mode)
 
    Level: intermediate
 
-.seealso: STSetMatMode(), STMatMode
+.seealso: `STSetMatMode()`, `STMatMode`
 @*/
 PetscErrorCode STGetMatMode(ST st,STMatMode *mode)
 {
@@ -322,7 +322,7 @@ PetscErrorCode STGetMatMode(ST st,STMatMode *mode)
 
    Level: developer
 
-.seealso: STMatSolve(), STMatMult(), STSetMatStructure(), STGetTransform()
+.seealso: `STMatSolve()`, `STMatMult()`, `STSetMatStructure()`, `STGetTransform()`
 @*/
 PetscErrorCode STSetTransform(ST st,PetscBool flg)
 {
@@ -351,7 +351,7 @@ PetscErrorCode STSetTransform(ST st,PetscBool flg)
 
    Level: developer
 
-.seealso: STSetTransform()
+.seealso: `STSetTransform()`
 @*/
 PetscErrorCode STGetTransform(ST st,PetscBool *flg)
 {
@@ -378,7 +378,7 @@ PetscErrorCode STGetTransform(ST st,PetscBool *flg)
 
    Level: developer
 
-.seealso: STApply(), STGetStructured()
+.seealso: `STApply()`, `STGetStructured()`
 @*/
 PetscErrorCode STSetStructured(ST st,PetscBool flg)
 {
@@ -407,7 +407,7 @@ PetscErrorCode STSetStructured(ST st,PetscBool flg)
 
    Level: developer
 
-.seealso: STSetStructured()
+.seealso: `STSetStructured()`
 @*/
 PetscErrorCode STGetStructured(ST st,PetscBool *flg)
 {

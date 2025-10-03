@@ -26,7 +26,7 @@ SLEPC_EXTERN PetscErrorCode NEPCreate_NLEIGS(NEP);
 
    Level: advanced
 
-.seealso: NEPRegister()
+.seealso: `NEPRegister()`
 @*/
 PetscErrorCode NEPRegisterAll(void)
 {
@@ -51,7 +51,7 @@ PetscErrorCode NEPRegisterAll(void)
 
   Level: advanced
 
-.seealso: NEPMonitorRegister()
+.seealso: `NEPMonitorRegister()`
 @*/
 PetscErrorCode NEPMonitorRegisterAll(void)
 {

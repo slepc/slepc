@@ -36,7 +36,7 @@
 
    Level: beginner
 
-.seealso: LMECreate(), LMESetUp(), LMEDestroy(), LMESetTolerances(), LMESetCoefficients(), LMESetRHS(), LMESetSolution()
+.seealso: `LMECreate()`, `LMESetUp()`, `LMEDestroy()`, `LMESetTolerances()`, `LMESetCoefficients()`, `LMESetRHS()`, `LMESetSolution()`
 @*/
 PetscErrorCode LMESolve(LME lme)
 {
@@ -91,7 +91,7 @@ PetscErrorCode LMESolve(LME lme)
 
    Level: intermediate
 
-.seealso: LMEGetConvergedReason(), LMESetTolerances()
+.seealso: `LMEGetConvergedReason()`, `LMESetTolerances()`
 @*/
 PetscErrorCode LMEGetIterationNumber(LME lme,PetscInt *its)
 {
@@ -125,7 +125,7 @@ PetscErrorCode LMEGetIterationNumber(LME lme,PetscInt *its)
 
    Level: intermediate
 
-.seealso: LMESetTolerances(), LMESolve(), LMEConvergedReason, LMESetErrorIfNotConverged()
+.seealso: `LMESetTolerances()`, `LMESolve()`, `LMEConvergedReason`, `LMESetErrorIfNotConverged()`
 @*/
 PetscErrorCode LMEGetConvergedReason(LME lme,LMEConvergedReason *reason)
 {
@@ -154,7 +154,7 @@ PetscErrorCode LMEGetConvergedReason(LME lme,LMEConvergedReason *reason)
 
    Level: advanced
 
-.seealso: LMEComputeError()
+.seealso: `LMEComputeError()`
 @*/
 PetscErrorCode LMEGetErrorEstimate(LME lme,PetscReal *errest)
 {
@@ -302,7 +302,7 @@ static PetscErrorCode LMEComputeResidualNorm_Lyapunov(LME lme,PetscReal *norm)
 
    Level: advanced
 
-.seealso: LMESolve(), LMEGetErrorEstimate()
+.seealso: `LMESolve()`, `LMEGetErrorEstimate()`
 @*/
 PetscErrorCode LMEComputeError(LME lme,PetscReal *error)
 {

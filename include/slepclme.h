@@ -25,7 +25,7 @@ SLEPC_EXTERN PetscErrorCode LMEFinalizePackage(void);
 
     Level: beginner
 
-.seealso:  LMECreate()
+.seealso:  `LMECreate()`
 S*/
 typedef struct _p_LME* LME;
 
@@ -34,7 +34,7 @@ typedef struct _p_LME* LME;
 
     Level: beginner
 
-.seealso: LMESetType(), LME
+.seealso: `LMESetType()`, `LME`
 J*/
 typedef const char *LMEType;
 #define LMEKRYLOV   "krylov"
@@ -47,7 +47,7 @@ SLEPC_EXTERN PetscClassId LME_CLASSID;
 
     Level: beginner
 
-.seealso: LMESetProblemType(), LMEGetProblemType()
+.seealso: `LMESetProblemType()`, `LMEGetProblemType()`
 E*/
 typedef enum { LME_LYAPUNOV,
                LME_SYLVESTER,
@@ -108,7 +108,7 @@ PETSC_DEPRECATED_FUNCTION(3, 8, 0, "LMEDenseHessLyapunovChol()", ) static inline
 
   Level: beginner
 
-.seealso: LMEMonitorSet()
+.seealso: `LMEMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorFn(LME lme,PetscInt its,PetscReal errest,void *ctx);
 
@@ -126,7 +126,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorFn(LME lme,PetscInt its,Pe
   Note:
   This is an LMEMonitorFn specialized for a context of PetscViewerAndFormat.
 
-.seealso: LMEMonitorSet(), LMEMonitorRegister(), LMEMonitorFn, LMEMonitorRegisterCreateFn, LMEMonitorRegisterDestroyFn
+.seealso: `LMEMonitorSet()`, `LMEMonitorRegister()`, `LMEMonitorFn`, `LMEMonitorRegisterCreateFn`, `LMEMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterFn(LME lme,PetscInt its,PetscReal errest,PetscViewerAndFormat *ctx);
 
@@ -141,7 +141,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterFn(LME lme,PetscIn
 
   Level: beginner
 
-.seealso: LMEMonitorRegisterFn, LMEMonitorSet(), LMEMonitorRegister(), LMEMonitorFn, LMEMonitorRegisterDestroyFn
+.seealso: `LMEMonitorRegisterFn`, `LMEMonitorSet()`, `LMEMonitorRegister()`, `LMEMonitorFn`, `LMEMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
@@ -153,7 +153,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterCreateFn(PetscView
 
   Level: beginner
 
-.seealso: LMEMonitorRegisterFn, LMEMonitorSet(), LMEMonitorRegister(), LMEMonitorFn, LMEMonitorRegisterCreateFn
+.seealso: `LMEMonitorRegisterFn`, `LMEMonitorSet()`, `LMEMonitorRegister()`, `LMEMonitorFn`, `LMEMonitorRegisterCreateFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
@@ -177,7 +177,7 @@ SLEPC_EXTERN PetscErrorCode LMEGetOptionsPrefix(LME,const char*[]);
 
     Level: intermediate
 
-.seealso: LMESolve(), LMEGetConvergedReason(), LMESetTolerances()
+.seealso: `LMESolve()`, `LMEGetConvergedReason()`, `LMESetTolerances()`
 E*/
 typedef enum {/* converged */
               LME_CONVERGED_TOL                =  1,

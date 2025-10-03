@@ -66,7 +66,7 @@ PetscErrorCode NEPMonitor(NEP nep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 
    Level: intermediate
 
-.seealso: NEPMonitorFirst(), NEPMonitorAll(), NEPMonitorCancel()
+.seealso: `NEPMonitorFirst()`, `NEPMonitorAll()`, `NEPMonitorCancel()`
 @*/
 PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
@@ -101,7 +101,7 @@ PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Level: intermediate
 
-.seealso: NEPMonitorSet()
+.seealso: `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorCancel(NEP nep)
 {
@@ -130,7 +130,7 @@ PetscErrorCode NEPMonitorCancel(NEP nep)
 
    Level: intermediate
 
-.seealso: NEPMonitorSet(), NEPDefaultMonitor()
+.seealso: `NEPMonitorSet()`, `NEPDefaultMonitor()`
 @*/
 PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
 {
@@ -161,7 +161,7 @@ PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
 
    Level: intermediate
 
-.seealso: NEPMonitorSet(), NEPMonitorAll(), NEPMonitorConverged()
+.seealso: `NEPMonitorSet()`, `NEPMonitorAll()`, `NEPMonitorConverged()`
 @*/
 PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -211,7 +211,7 @@ PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *
 
    Level: intermediate
 
-.seealso: NEPMonitorSet(), NEPMonitorFirst(), NEPMonitorConverged()
+.seealso: `NEPMonitorSet()`, `NEPMonitorFirst()`, `NEPMonitorConverged()`
 @*/
 PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -263,7 +263,7 @@ PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *ei
 
    Level: intermediate
 
-.seealso: NEPMonitorSet(), NEPMonitorFirst(), NEPMonitorAll()
+.seealso: `NEPMonitorSet()`, `NEPMonitorFirst()`, `NEPMonitorAll()`
 @*/
 PetscErrorCode NEPMonitorConverged(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -342,7 +342,7 @@ PetscErrorCode NEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 
    Level: intermediate
 
-.seealso: NEPMonitorSet()
+.seealso: `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorFirstDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -389,7 +389,7 @@ PetscErrorCode NEPMonitorFirstDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscSc
 
    Level: intermediate
 
-.seealso: NEPMonitorSet()
+.seealso: `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -421,7 +421,7 @@ PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 
    Level: intermediate
 
-.seealso: NEPMonitorSet()
+.seealso: `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorAllDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -471,7 +471,7 @@ PetscErrorCode NEPMonitorAllDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScal
 
    Level: intermediate
 
-.seealso: NEPMonitorSet()
+.seealso: `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -503,7 +503,7 @@ PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 
    Level: intermediate
 
-.seealso: NEPMonitorSet()
+.seealso: `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorConvergedDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -547,7 +547,7 @@ PetscErrorCode NEPMonitorConvergedDrawLG(NEP nep,PetscInt its,PetscInt nconv,Pet
 
    Level: intermediate
 
-.seealso: NEPMonitorSet()
+.seealso: `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {

@@ -52,7 +52,7 @@ PetscBool         LMEMonitorRegisterAllCalled = PETSC_FALSE;
 
    Level: beginner
 
-.seealso: LMECreate()
+.seealso: `LMECreate()`
 @*/
 PetscErrorCode LMEView(LME lme,PetscViewer viewer)
 {
@@ -94,7 +94,7 @@ PetscErrorCode LMEView(LME lme,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: LMEView(), LMECreate()
+.seealso: `LMEView()`, `LMECreate()`
 @*/
 PetscErrorCode LMEViewFromOptions(LME lme,PetscObject obj,const char name[])
 {
@@ -123,7 +123,7 @@ PetscErrorCode LMEViewFromOptions(LME lme,PetscObject obj,const char name[])
 
    Level: intermediate
 
-.seealso: LMESetTolerances(), LMEGetIterationNumber(), LMEConvergedReasonViewFromOptions()
+.seealso: `LMESetTolerances()`, `LMEGetIterationNumber()`, `LMEConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode LMEConvergedReasonView(LME lme,PetscViewer viewer)
 {
@@ -154,7 +154,7 @@ PetscErrorCode LMEConvergedReasonView(LME lme,PetscViewer viewer)
 
    Level: developer
 
-.seealso: LMEConvergedReasonView()
+.seealso: `LMEConvergedReasonView()`
 @*/
 PetscErrorCode LMEConvergedReasonViewFromOptions(LME lme)
 {
@@ -193,7 +193,7 @@ PetscErrorCode LMEConvergedReasonViewFromOptions(LME lme)
 
    Level: beginner
 
-.seealso: LMESetUp(), LMESolve(), LMEDestroy(), LME
+.seealso: `LMESetUp()`, `LMESolve()`, `LMEDestroy()`, `LME`
 @*/
 PetscErrorCode LMECreate(MPI_Comm comm,LME *outlme)
 {
@@ -259,7 +259,7 @@ PetscErrorCode LMECreate(MPI_Comm comm,LME *outlme)
 
    Level: intermediate
 
-.seealso: LMEType
+.seealso: `LMEType`
 @*/
 PetscErrorCode LMESetType(LME lme,LMEType type)
 {
@@ -298,7 +298,7 @@ PetscErrorCode LMESetType(LME lme,LMEType type)
 
    Level: intermediate
 
-.seealso: LMESetType()
+.seealso: `LMESetType()`
 @*/
 PetscErrorCode LMEGetType(LME lme,LMEType *type)
 {
@@ -333,7 +333,7 @@ $     -lme_type my_solver
 
    Level: advanced
 
-.seealso: LMERegisterAll()
+.seealso: `LMERegisterAll()`
 @*/
 PetscErrorCode LMERegister(const char *name,PetscErrorCode (*function)(LME))
 {
@@ -375,7 +375,7 @@ $      -lme_monitor_my_monitor
 
    Level: advanced
 
-.seealso: LMEMonitorSet(), LMEMonitorRegisterAll()
+.seealso: `LMEMonitorSet()`, `LMEMonitorRegisterAll()`
 @*/
 PetscErrorCode LMEMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,LMEMonitorRegisterFn *monitor,LMEMonitorRegisterCreateFn *create,LMEMonitorRegisterDestroyFn *destroy)
 {
@@ -401,7 +401,7 @@ PetscErrorCode LMEMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 
    Level: advanced
 
-.seealso: LMEDestroy()
+.seealso: `LMEDestroy()`
 @*/
 PetscErrorCode LMEReset(LME lme)
 {
@@ -432,7 +432,7 @@ PetscErrorCode LMEReset(LME lme)
 
    Level: beginner
 
-.seealso: LMECreate(), LMESetUp(), LMESolve()
+.seealso: `LMECreate()`, `LMESetUp()`, `LMESolve()`
 @*/
 PetscErrorCode LMEDestroy(LME *lme)
 {
@@ -462,7 +462,7 @@ PetscErrorCode LMEDestroy(LME *lme)
 
    Level: advanced
 
-.seealso: LMEGetBV()
+.seealso: `LMEGetBV()`
 @*/
 PetscErrorCode LMESetBV(LME lme,BV bv)
 {
@@ -490,7 +490,7 @@ PetscErrorCode LMESetBV(LME lme,BV bv)
 
    Level: advanced
 
-.seealso: LMESetBV()
+.seealso: `LMESetBV()`
 @*/
 PetscErrorCode LMEGetBV(LME lme,BV *bv)
 {

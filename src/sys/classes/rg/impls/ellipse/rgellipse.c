@@ -69,7 +69,7 @@ static PetscErrorCode RGEllipseSetParameters_Ellipse(RG rg,PetscScalar center,Pe
 
    Level: advanced
 
-.seealso: RGEllipseGetParameters()
+.seealso: `RGEllipseGetParameters()`
 @*/
 PetscErrorCode RGEllipseSetParameters(RG rg,PetscScalar center,PetscReal radius,PetscReal vscale)
 {
@@ -108,7 +108,7 @@ static PetscErrorCode RGEllipseGetParameters_Ellipse(RG rg,PetscScalar *center,P
 
    Level: advanced
 
-.seealso: RGEllipseSetParameters()
+.seealso: `RGEllipseSetParameters()`
 @*/
 PetscErrorCode RGEllipseGetParameters(RG rg,PetscScalar *center,PetscReal *radius,PetscReal *vscale)
 {

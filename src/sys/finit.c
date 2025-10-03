@@ -26,7 +26,7 @@
    program is written in Fortran; in this case, just calling
    SlepcInitialize() in the main (Fortran) program is sufficient.
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode SlepcInitializeFortran(void)
 {

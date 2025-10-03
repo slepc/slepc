@@ -59,7 +59,7 @@ PetscErrorCode LMEMonitor(LME lme,PetscInt it,PetscReal errest)
 
    Level: intermediate
 
-.seealso: LMEMonitorCancel()
+.seealso: `LMEMonitorCancel()`
 @*/
 PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
@@ -94,7 +94,7 @@ PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Level: intermediate
 
-.seealso: LMEMonitorSet()
+.seealso: `LMEMonitorSet()`
 @*/
 PetscErrorCode LMEMonitorCancel(LME lme)
 {
@@ -123,7 +123,7 @@ PetscErrorCode LMEMonitorCancel(LME lme)
 
    Level: intermediate
 
-.seealso: LMEMonitorSet()
+.seealso: `LMEMonitorSet()`
 @*/
 PetscErrorCode LMEGetMonitorContext(LME lme,void *ctx)
 {
@@ -150,7 +150,7 @@ PetscErrorCode LMEGetMonitorContext(LME lme,void *ctx)
 
    Level: intermediate
 
-.seealso: LMEMonitorSet()
+.seealso: `LMEMonitorSet()`
 @*/
 PetscErrorCode LMEMonitorDefault(LME lme,PetscInt its,PetscReal errest,PetscViewerAndFormat *vf)
 {
@@ -185,7 +185,7 @@ PetscErrorCode LMEMonitorDefault(LME lme,PetscInt its,PetscReal errest,PetscView
 
    Level: intermediate
 
-.seealso: LMEMonitorSet()
+.seealso: `LMEMonitorSet()`
 @*/
 PetscErrorCode LMEMonitorDefaultDrawLG(LME lme,PetscInt its,PetscReal errest,PetscViewerAndFormat *vf)
 {
@@ -230,7 +230,7 @@ PetscErrorCode LMEMonitorDefaultDrawLG(LME lme,PetscInt its,PetscReal errest,Pet
 
    Level: intermediate
 
-.seealso: LMEMonitorSet()
+.seealso: `LMEMonitorSet()`
 @*/
 PetscErrorCode LMEMonitorDefaultDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {

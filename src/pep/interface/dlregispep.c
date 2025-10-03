@@ -29,7 +29,7 @@ const char *PEPCISSExtractions[] = {"RITZ","HANKEL","CAA","PEPCISSExtraction","P
 
    Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode PEPFinalizePackage(void)
 {
@@ -51,7 +51,7 @@ PetscErrorCode PEPFinalizePackage(void)
 
    Level: developer
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode PEPInitializePackage(void)
 {

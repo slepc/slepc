@@ -38,7 +38,7 @@
 
    Level: developer
 
-.seealso: BVGetColumn()
+.seealso: `BVGetColumn()`
 @*/
 PetscErrorCode BVScatter(BV Vin,BV Vout,VecScatter scat,Vec xdup)
 {
@@ -103,7 +103,7 @@ PetscErrorCode BVScatter(BV Vin,BV Vout,VecScatter scat,Vec xdup)
 
    Level: developer
 
-.seealso: BVMult(), BVScatter(), BVDotQuadrature(), RGComputeQuadrature(), RGCanUseConjugates()
+.seealso: `BVMult()`, `BVScatter()`, `BVDotQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
 @*/
 PetscErrorCode BVSumQuadrature(BV S,BV Y,PetscInt M,PetscInt L,PetscInt L_max,PetscScalar *w,PetscScalar *zn,VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
 {
@@ -182,7 +182,7 @@ PetscErrorCode BVSumQuadrature(BV S,BV Y,PetscInt M,PetscInt L,PetscInt L_max,Pe
 
    Level: developer
 
-.seealso: BVDot(), BVScatter(), BVSumQuadrature(), RGComputeQuadrature(), RGCanUseConjugates()
+.seealso: `BVDot()`, `BVScatter()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
 @*/
 PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar *Mu,PetscInt M,PetscInt L,PetscInt L_max,PetscScalar *w,PetscScalar *zn,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
 {
@@ -270,7 +270,7 @@ PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar *Mu,PetscInt M,PetscInt L,P
 
    Level: developer
 
-.seealso: BVScatter(), BVDotQuadrature(), BVSumQuadrature(), RGComputeQuadrature(), RGCanUseConjugates()
+.seealso: `BVScatter()`, `BVDotQuadrature()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
 @*/
 PetscErrorCode BVTraceQuadrature(BV Y,BV V,PetscInt L,PetscInt L_max,PetscScalar *w,VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj,PetscReal *est_eig)
 {
@@ -534,7 +534,7 @@ static PetscErrorCode BVSVDAndRank_QR_CAA(BV S,PetscInt M,PetscInt L,PetscReal d
 
    Level: developer
 
-.seealso: BVSetActiveColumns()
+.seealso: `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSVDAndRank(BV S,PetscInt m,PetscInt l,PetscReal delta,BVSVDMethod meth,PetscScalar *A,PetscReal *sigma,PetscInt *rank)
 {
@@ -581,7 +581,7 @@ PetscErrorCode BVSVDAndRank(BV S,PetscInt m,PetscInt l,PetscReal delta,BVSVDMeth
 
    Level: developer
 
-.seealso: BVResize()
+.seealso: `BVResize()`
 @*/
 PetscErrorCode BVCISSResizeBases(BV S,BV V,BV Y,PetscInt Lold,PetscInt Lnew,PetscInt M,PetscInt npoints)
 {

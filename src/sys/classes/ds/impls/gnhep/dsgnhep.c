@@ -673,7 +673,7 @@ static PetscErrorCode DSTruncate_GNHEP(DS ds,PetscInt n,PetscBool trim)
 +  0 - QZ iteration (_gges)
 -  1 - blocked QZ iteration (_gges3, if available)
 
-.seealso: DSCreate(), DSSetType(), DSType
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_GNHEP(DS ds)
 {

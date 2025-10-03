@@ -66,7 +66,7 @@ PetscErrorCode PEPMonitor(PEP pep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 
    Level: intermediate
 
-.seealso: PEPMonitorFirst(), PEPMonitorAll(), PEPMonitorCancel()
+.seealso: `PEPMonitorFirst()`, `PEPMonitorAll()`, `PEPMonitorCancel()`
 @*/
 PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
@@ -101,7 +101,7 @@ PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Level: intermediate
 
-.seealso: PEPMonitorSet()
+.seealso: `PEPMonitorSet()`
 @*/
 PetscErrorCode PEPMonitorCancel(PEP pep)
 {
@@ -130,7 +130,7 @@ PetscErrorCode PEPMonitorCancel(PEP pep)
 
    Level: intermediate
 
-.seealso: PEPMonitorSet(), PEPDefaultMonitor()
+.seealso: `PEPMonitorSet()`, `PEPDefaultMonitor()`
 @*/
 PetscErrorCode PEPGetMonitorContext(PEP pep,void *ctx)
 {
@@ -182,7 +182,7 @@ static PetscErrorCode PEPMonitorGetTrueEig(PEP pep,PetscScalar *er,PetscScalar *
 
    Level: intermediate
 
-.seealso: PEPMonitorSet(), PEPMonitorAll(), PEPMonitorConverged()
+.seealso: `PEPMonitorSet()`, `PEPMonitorAll()`, `PEPMonitorConverged()`
 @*/
 PetscErrorCode PEPMonitorFirst(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -235,7 +235,7 @@ PetscErrorCode PEPMonitorFirst(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *
 
    Level: intermediate
 
-.seealso: PEPMonitorSet(), PEPMonitorFirst(), PEPMonitorConverged()
+.seealso: `PEPMonitorSet()`, `PEPMonitorFirst()`, `PEPMonitorConverged()`
 @*/
 PetscErrorCode PEPMonitorAll(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -290,7 +290,7 @@ PetscErrorCode PEPMonitorAll(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *ei
 
    Level: intermediate
 
-.seealso: PEPMonitorSet(), PEPMonitorFirst(), PEPMonitorAll()
+.seealso: `PEPMonitorSet()`, `PEPMonitorFirst()`, `PEPMonitorAll()`
 @*/
 PetscErrorCode PEPMonitorConverged(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -372,7 +372,7 @@ PetscErrorCode PEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 
    Level: intermediate
 
-.seealso: PEPMonitorSet()
+.seealso: `PEPMonitorSet()`
 @*/
 PetscErrorCode PEPMonitorFirstDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -419,7 +419,7 @@ PetscErrorCode PEPMonitorFirstDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscSc
 
    Level: intermediate
 
-.seealso: PEPMonitorSet()
+.seealso: `PEPMonitorSet()`
 @*/
 PetscErrorCode PEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -451,7 +451,7 @@ PetscErrorCode PEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 
    Level: intermediate
 
-.seealso: PEPMonitorSet()
+.seealso: `PEPMonitorSet()`
 @*/
 PetscErrorCode PEPMonitorAllDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -501,7 +501,7 @@ PetscErrorCode PEPMonitorAllDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScal
 
    Level: intermediate
 
-.seealso: PEPMonitorSet()
+.seealso: `PEPMonitorSet()`
 @*/
 PetscErrorCode PEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -533,7 +533,7 @@ PetscErrorCode PEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 
    Level: intermediate
 
-.seealso: PEPMonitorSet()
+.seealso: `PEPMonitorSet()`
 @*/
 PetscErrorCode PEPMonitorConvergedDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -577,7 +577,7 @@ PetscErrorCode PEPMonitorConvergedDrawLG(PEP pep,PetscInt its,PetscInt nconv,Pet
 
    Level: intermediate
 
-.seealso: PEPMonitorSet()
+.seealso: `PEPMonitorSet()`
 @*/
 PetscErrorCode PEPMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {

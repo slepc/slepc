@@ -614,7 +614,7 @@ static PetscErrorCode DSNEPSetFN_NEP(DS ds,PetscInt n,FN fn[])
 
    Level: advanced
 
-.seealso: DSNEPGetFN(), DSAllocate()
+.seealso: `DSNEPGetFN()`, `DSAllocate()`
 @*/
 PetscErrorCode DSNEPSetFN(DS ds,PetscInt n,FN fn[])
 {
@@ -656,7 +656,7 @@ static PetscErrorCode DSNEPGetFN_NEP(DS ds,PetscInt k,FN *fn)
 
    Level: advanced
 
-.seealso: DSNEPSetFN()
+.seealso: `DSNEPSetFN()`
 @*/
 PetscErrorCode DSNEPGetFN(DS ds,PetscInt k,FN *fn)
 {
@@ -690,7 +690,7 @@ static PetscErrorCode DSNEPGetNumFN_NEP(DS ds,PetscInt *n)
 
    Level: advanced
 
-.seealso: DSNEPSetFN()
+.seealso: `DSNEPSetFN()`
 @*/
 PetscErrorCode DSNEPGetNumFN(DS ds,PetscInt *n)
 {
@@ -735,7 +735,7 @@ static PetscErrorCode DSNEPSetMinimality_NEP(DS ds,PetscInt n)
 
    Level: advanced
 
-.seealso: DSNEPGetMinimality()
+.seealso: `DSNEPGetMinimality()`
 @*/
 PetscErrorCode DSNEPSetMinimality(DS ds,PetscInt n)
 {
@@ -769,7 +769,7 @@ static PetscErrorCode DSNEPGetMinimality_NEP(DS ds,PetscInt *n)
 
    Level: advanced
 
-.seealso: DSNEPSetMinimality()
+.seealso: `DSNEPSetMinimality()`
 @*/
 PetscErrorCode DSNEPGetMinimality(DS ds,PetscInt *n)
 {
@@ -825,7 +825,7 @@ static PetscErrorCode DSNEPSetRefine_NEP(DS ds,PetscReal tol,PetscInt its)
 
    Level: advanced
 
-.seealso: DSNEPGetRefine()
+.seealso: `DSNEPGetRefine()`
 @*/
 PetscErrorCode DSNEPSetRefine(DS ds,PetscReal tol,PetscInt its)
 {
@@ -862,7 +862,7 @@ static PetscErrorCode DSNEPGetRefine_NEP(DS ds,PetscReal *tol,PetscInt *its)
 
    Level: advanced
 
-.seealso: DSNEPSetRefine()
+.seealso: `DSNEPSetRefine()`
 @*/
 PetscErrorCode DSNEPGetRefine(DS ds,PetscReal *tol,PetscInt *its)
 {
@@ -904,7 +904,7 @@ static PetscErrorCode DSNEPSetIntegrationPoints_NEP(DS ds,PetscInt ip)
 
    Level: advanced
 
-.seealso: DSNEPGetIntegrationPoints()
+.seealso: `DSNEPGetIntegrationPoints()`
 @*/
 PetscErrorCode DSNEPSetIntegrationPoints(DS ds,PetscInt ip)
 {
@@ -938,7 +938,7 @@ static PetscErrorCode DSNEPGetIntegrationPoints_NEP(DS ds,PetscInt *ip)
 
    Level: advanced
 
-.seealso: DSNEPSetIntegrationPoints()
+.seealso: `DSNEPSetIntegrationPoints()`
 @*/
 PetscErrorCode DSNEPGetIntegrationPoints(DS ds,PetscInt *ip)
 {
@@ -981,7 +981,7 @@ static PetscErrorCode DSNEPSetSamplingSize_NEP(DS ds,PetscInt p)
 
    Level: advanced
 
-.seealso: DSNEPGetSamplingSize()
+.seealso: `DSNEPGetSamplingSize()`
 @*/
 PetscErrorCode DSNEPSetSamplingSize(DS ds,PetscInt p)
 {
@@ -1015,7 +1015,7 @@ static PetscErrorCode DSNEPGetSamplingSize_NEP(DS ds,PetscInt *p)
 
    Level: advanced
 
-.seealso: DSNEPSetSamplingSize()
+.seealso: `DSNEPSetSamplingSize()`
 @*/
 PetscErrorCode DSNEPGetSamplingSize(DS ds,PetscInt *p)
 {
@@ -1053,7 +1053,7 @@ static PetscErrorCode DSNEPSetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
 
    Level: developer
 
-.seealso: DSNEPGetComputeMatrixFunction()
+.seealso: `DSNEPGetComputeMatrixFunction()`
 @*/
 PetscErrorCode DSNEPSetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn *fun,void *ctx)
 {
@@ -1088,7 +1088,7 @@ static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
 
    Level: developer
 
-.seealso: DSNEPSetComputeMatrixFunction()
+.seealso: `DSNEPSetComputeMatrixFunction()`
 @*/
 PetscErrorCode DSNEPGetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn **fun,void *ctx)
 {
@@ -1124,7 +1124,7 @@ static PetscErrorCode DSNEPSetRG_NEP(DS ds,RG rg)
 
    Level: developer
 
-.seealso: DSNEPGetRG()
+.seealso: `DSNEPGetRG()`
 @*/
 PetscErrorCode DSNEPSetRG(DS ds,RG rg)
 {
@@ -1167,7 +1167,7 @@ static PetscErrorCode DSNEPGetRG_NEP(DS ds,RG *rg)
 
    Level: developer
 
-.seealso: DSNEPSetRG()
+.seealso: `DSNEPSetRG()`
 @*/
 PetscErrorCode DSNEPGetRG(DS ds,RG *rg)
 {
@@ -1287,7 +1287,7 @@ static PetscErrorCode DSMatGetSize_NEP(DS ds,DSMatType t,PetscInt *rows,PetscInt
 +  0 - Successive Linear Problems (SLP), computes just one eigenpair
 -  1 - Contour integral, computes all eigenvalues inside a region
 
-.seealso: DSCreate(), DSSetType(), DSType, DSNEPSetFN(), DSNEPSetComputeMatrixFunction()
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`, `DSNEPSetFN()`, `DSNEPSetComputeMatrixFunction()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_NEP(DS ds)
 {

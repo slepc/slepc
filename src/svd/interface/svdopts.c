@@ -39,7 +39,7 @@
 
    Level: advanced
 
-.seealso: SVDGetImplicitTranspose(), SVDSolve(), SVDSetOperators()
+.seealso: `SVDGetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
 @*/
 PetscErrorCode SVDSetImplicitTranspose(SVD svd,PetscBool impl)
 {
@@ -67,7 +67,7 @@ PetscErrorCode SVDSetImplicitTranspose(SVD svd,PetscBool impl)
 
    Level: advanced
 
-.seealso: SVDSetImplicitTranspose(), SVDSolve(), SVDSetOperators()
+.seealso: `SVDSetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
 @*/
 PetscErrorCode SVDGetImplicitTranspose(SVD svd,PetscBool *impl)
 {
@@ -101,7 +101,7 @@ PetscErrorCode SVDGetImplicitTranspose(SVD svd,PetscBool *impl)
 
    Level: intermediate
 
-.seealso: SVDGetTolerances()
+.seealso: `SVDGetTolerances()`
 @*/
 PetscErrorCode SVDSetTolerances(SVD svd,PetscReal tol,PetscInt maxits)
 {
@@ -146,7 +146,7 @@ PetscErrorCode SVDSetTolerances(SVD svd,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: SVDSetTolerances()
+.seealso: `SVDSetTolerances()`
 @*/
 PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
 {
@@ -211,7 +211,7 @@ PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
 
    Level: advanced
 
-.seealso: SVDGetThreshold(), SVDSetStoppingTest(), SVDSetDimensions(), SVDSetWhichSingularTriplets()
+.seealso: `SVDGetThreshold()`, `SVDSetStoppingTest()`, `SVDSetDimensions()`, `SVDSetWhichSingularTriplets()`
 @*/
 PetscErrorCode SVDSetThreshold(SVD svd,PetscReal thres,PetscBool rel)
 {
@@ -243,7 +243,7 @@ PetscErrorCode SVDSetThreshold(SVD svd,PetscReal thres,PetscBool rel)
 
    Level: advanced
 
-.seealso: SVDSetThreshold()
+.seealso: `SVDSetThreshold()`
 @*/
 PetscErrorCode SVDGetThreshold(SVD svd,PetscReal *thres,PetscBool *rel)
 {
@@ -287,7 +287,7 @@ PetscErrorCode SVDGetThreshold(SVD svd,PetscReal *thres,PetscBool *rel)
 
    Level: intermediate
 
-.seealso: SVDGetDimensions()
+.seealso: `SVDGetDimensions()`
 @*/
 PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
 {
@@ -335,7 +335,7 @@ PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
 
    Level: intermediate
 
-.seealso: SVDSetDimensions()
+.seealso: `SVDSetDimensions()`
 @*/
 PetscErrorCode SVDGetDimensions(SVD svd,PetscInt *nsv,PetscInt *ncv,PetscInt *mpd)
 {
@@ -371,7 +371,7 @@ PetscErrorCode SVDGetDimensions(SVD svd,PetscInt *nsv,PetscInt *ncv,PetscInt *mp
 
     Level: intermediate
 
-.seealso: SVDGetWhichSingularTriplets(), SVDWhich
+.seealso: `SVDGetWhichSingularTriplets()`, `SVDWhich`
 @*/
 PetscErrorCode SVDSetWhichSingularTriplets(SVD svd,SVDWhich which)
 {
@@ -409,7 +409,7 @@ PetscErrorCode SVDSetWhichSingularTriplets(SVD svd,SVDWhich which)
 
     Level: intermediate
 
-.seealso: SVDSetWhichSingularTriplets(), SVDWhich
+.seealso: `SVDSetWhichSingularTriplets()`, `SVDWhich`
 @*/
 PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
 {
@@ -438,7 +438,7 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
 
    Level: advanced
 
-.seealso: SVDSetConvergenceTest(), SVDSetTolerances()
+.seealso: `SVDSetConvergenceTest()`, `SVDSetTolerances()`
 @*/
 PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -488,7 +488,7 @@ PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,
 
    Level: intermediate
 
-.seealso: SVDGetConvergenceTest(), SVDSetConvergenceTestFunction(), SVDSetStoppingTest(), SVDConv
+.seealso: `SVDGetConvergenceTest()`, `SVDSetConvergenceTestFunction()`, `SVDSetStoppingTest()`, `SVDConv`
 @*/
 PetscErrorCode SVDSetConvergenceTest(SVD svd,SVDConv conv)
 {
@@ -525,7 +525,7 @@ PetscErrorCode SVDSetConvergenceTest(SVD svd,SVDConv conv)
 
    Level: intermediate
 
-.seealso: SVDSetConvergenceTest(), SVDConv
+.seealso: `SVDSetConvergenceTest()`, `SVDConv`
 @*/
 PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
 {
@@ -556,7 +556,7 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
 
    Level: advanced
 
-.seealso: SVDSetStoppingTest(), SVDStoppingBasic()
+.seealso: `SVDSetStoppingTest()`, `SVDStoppingBasic()`
 @*/
 PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -598,7 +598,7 @@ PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *
 
    Level: advanced
 
-.seealso: SVDGetStoppingTest(), SVDSetStoppingTestFunction(), SVDSetConvergenceTest(), SVDStop
+.seealso: `SVDGetStoppingTest()`, `SVDSetStoppingTestFunction()`, `SVDSetConvergenceTest()`, `SVDStop`
 @*/
 PetscErrorCode SVDSetStoppingTest(SVD svd,SVDStop stop)
 {
@@ -633,7 +633,7 @@ PetscErrorCode SVDSetStoppingTest(SVD svd,SVDStop stop)
 
    Level: advanced
 
-.seealso: SVDSetStoppingTest(), SVDStop
+.seealso: `SVDSetStoppingTest()`, `SVDStop`
 @*/
 PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
 {
@@ -659,7 +659,7 @@ PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
 
    Level: developer
 
-.seealso: SVDMonitorSet(), SVDSetTrackAll()
+.seealso: `SVDMonitorSet()`, `SVDSetTrackAll()`
 @*/
 PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name[],void *ctx,PetscBool trackall)
 {
@@ -708,7 +708,7 @@ PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name
 
    Level: beginner
 
-.seealso: SVDSetOptionsPrefix()
+.seealso: `SVDSetOptionsPrefix()`
 @*/
 PetscErrorCode SVDSetFromOptions(SVD svd)
 {
@@ -833,7 +833,7 @@ PetscErrorCode SVDSetFromOptions(SVD svd)
 
    Level: intermediate
 
-.seealso: SVDSetOperators(), SVDSetSignature(), SVDSetType(), SVDGetProblemType(), SVDProblemType
+.seealso: `SVDSetOperators()`, `SVDSetSignature()`, `SVDSetType()`, `SVDGetProblemType()`, `SVDProblemType`
 @*/
 PetscErrorCode SVDSetProblemType(SVD svd,SVDProblemType type)
 {
@@ -875,7 +875,7 @@ PetscErrorCode SVDSetProblemType(SVD svd,SVDProblemType type)
 
    Level: intermediate
 
-.seealso: SVDSetProblemType(), SVDProblemType
+.seealso: `SVDSetProblemType()`, `SVDProblemType`
 @*/
 PetscErrorCode SVDGetProblemType(SVD svd,SVDProblemType *type)
 {
@@ -900,7 +900,7 @@ PetscErrorCode SVDGetProblemType(SVD svd,SVDProblemType *type)
 
    Level: intermediate
 
-.seealso: SVDIsHyperbolic()
+.seealso: `SVDIsHyperbolic()`
 @*/
 PetscErrorCode SVDIsGeneralized(SVD svd,PetscBool* is)
 {
@@ -925,7 +925,7 @@ PetscErrorCode SVDIsGeneralized(SVD svd,PetscBool* is)
 
    Level: intermediate
 
-.seealso: SVDIsGeneralized()
+.seealso: `SVDIsGeneralized()`
 @*/
 PetscErrorCode SVDIsHyperbolic(SVD svd,PetscBool* is)
 {
@@ -956,7 +956,7 @@ PetscErrorCode SVDIsHyperbolic(SVD svd,PetscBool* is)
 
    Level: developer
 
-.seealso: SVDGetTrackAll()
+.seealso: `SVDGetTrackAll()`
 @*/
 PetscErrorCode SVDSetTrackAll(SVD svd,PetscBool trackall)
 {
@@ -981,7 +981,7 @@ PetscErrorCode SVDSetTrackAll(SVD svd,PetscBool trackall)
 
    Level: developer
 
-.seealso: SVDSetTrackAll()
+.seealso: `SVDSetTrackAll()`
 @*/
 PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
 {
@@ -1016,7 +1016,7 @@ PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
 
    Level: advanced
 
-.seealso: SVDAppendOptionsPrefix(), SVDGetOptionsPrefix()
+.seealso: `SVDAppendOptionsPrefix()`, `SVDGetOptionsPrefix()`
 @*/
 PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char *prefix)
 {
@@ -1047,7 +1047,7 @@ PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char *prefix)
 
    Level: advanced
 
-.seealso: SVDSetOptionsPrefix(), SVDGetOptionsPrefix()
+.seealso: `SVDSetOptionsPrefix()`, `SVDGetOptionsPrefix()`
 @*/
 PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char *prefix)
 {
@@ -1080,7 +1080,7 @@ PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char *prefix)
 
    Level: advanced
 
-.seealso: SVDSetOptionsPrefix(), SVDAppendOptionsPrefix()
+.seealso: `SVDSetOptionsPrefix()`, `SVDAppendOptionsPrefix()`
 @*/
 PetscErrorCode SVDGetOptionsPrefix(SVD svd,const char *prefix[])
 {

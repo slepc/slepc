@@ -40,7 +40,7 @@
 
    Level: intermediate
 
-.seealso: MatCreateNest(), EPSSetOperators(), EPSSetProblemType(), MatCreateHamiltonian()
+.seealso: `MatCreateNest()`, `EPSSetOperators()`, `EPSSetProblemType()`, `MatCreateHamiltonian()`
 @*/
 PetscErrorCode MatCreateBSE(Mat R,Mat C,Mat *H)
 {
@@ -109,7 +109,7 @@ PetscErrorCode MatCreateBSE(Mat R,Mat C,Mat *H)
 
    Level: intermediate
 
-.seealso: MatCreateNest(), EPSSetOperators(), EPSSetProblemType(), MatCreateBSE()
+.seealso: `MatCreateNest()`, `EPSSetOperators()`, `EPSSetProblemType()`, `MatCreateBSE()`
 @*/
 PetscErrorCode MatCreateHamiltonian(Mat A,Mat B,Mat C,Mat *H)
 {

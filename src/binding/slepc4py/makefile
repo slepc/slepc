@@ -125,7 +125,9 @@ docsclean:
 	-@${RM} -r docs/source/demo
 	-@${RM} -r docs/source/reference
 	-@${RM} docs/source/*.inv
+	-@${RM} -r docs/source/_static
 
+.PHONY: webstatic
 webstatic:
 	@if [ ! -d ../../../doc/source/_static ]; then \
 		git clone -b main --depth=1 https://gitlab.com/slepc/webstatic.git ../../../doc/source/_static; \
@@ -139,18 +141,20 @@ webstatic:
 		fi ;\
 		cd - ;\
 	fi ;\
-	rm docs/source/_static ;\
-	ln -s ../../../../../doc/source/_static docs/source/_static
+	if [ ! -d docs/source/_static/css ]; then mkdir -p docs/source/_static/css ; fi;\
+	if [ ! -e docs/source/_static/css/slepc.css ]; then  ln -s ../../../../../../../doc/source/_static/css/slepc.css docs/source/_static/css/slepc.css ; fi
 
+.PHONY: website
 website: webstatic
 #	CFLAGS=-O0 python -m pip install .
-	-@python3 -m venv ../../../doc/.venv-sphinx ;\
-	. ../../../doc/.venv-sphinx/bin/activate ;\
-	python3 -m pip install --quiet -r ../../../doc/requirements.txt ;\
-	${MAKE} sphinx-html SPHINXOPTS="-j4 -E -T -W"
-	rm -rf ${LOC}/slepc4py
-	mkdir -p ${LOC}/slepc4py
-	mv docs/html/* ${LOC}/slepc4py
+	@python3 -m venv ../../../doc/.venv-sphinx && \
+	. ../../../doc/.venv-sphinx/bin/activate && \
+	python3 -m pip install --quiet -r ../../../doc/requirements.txt &&\
+	${MAKE} sphinx-html SPHINXOPTS="-j4 -E -T -W" && \
+	rm -rf ${LOC}/slepc4py && \
+	mkdir -p ${LOC}/slepc4py && \
+	mv docs/html/* ${LOC}/slepc4py && \
+	if [ -e docs/source/_static/css/slepc.css ]; then rm docs/source/_static/css/slepc.css; fi
 
 # ----
 

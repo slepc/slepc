@@ -296,7 +296,7 @@ static PetscErrorCode EPSBLOPEXSetBlockSize_BLOPEX(EPS eps,PetscInt bs)
 
    Level: advanced
 
-.seealso: EPSBLOPEXGetBlockSize()
+.seealso: `EPSBLOPEXGetBlockSize()`
 @*/
 PetscErrorCode EPSBLOPEXSetBlockSize(EPS eps,PetscInt bs)
 {
@@ -329,7 +329,7 @@ static PetscErrorCode EPSBLOPEXGetBlockSize_BLOPEX(EPS eps,PetscInt *bs)
 
    Level: advanced
 
-.seealso: EPSBLOPEXSetBlockSize()
+.seealso: `EPSBLOPEXSetBlockSize()`
 @*/
 PetscErrorCode EPSBLOPEXGetBlockSize(EPS eps,PetscInt *bs)
 {

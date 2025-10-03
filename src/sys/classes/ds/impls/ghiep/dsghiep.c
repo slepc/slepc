@@ -1114,7 +1114,7 @@ static PetscErrorCode DSHermitian_GHIEP(DS ds,DSMatType m,PetscBool *flg)
 .  1. - C. Campos and J. E. Roman, "Restarted Q-Arnoldi-type methods exploiting
    symmetry in quadratic eigenvalue problems", BIT Numer. Math. 56(4):1213-1236, 2016.
 
-.seealso: DSCreate(), DSSetType(), DSType
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_GHIEP(DS ds)
 {
