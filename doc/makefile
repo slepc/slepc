@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXOPTS    ?=
+SPHINXOPTS    ?= -T -E -W -j 4
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     := source
 PETSC_ARCH    ?= arch-doc
@@ -12,7 +12,7 @@ BUILDDIR      = ../${PETSC_ARCH}/doc
 # Put it first so that "make" without argument is like "make help".
 help:
 	-@echo "Preparing python virtual environment (.venv-sphinx)"
-	-@python3 -m venv .venv-sphinx ;\
+	@python3 -m venv .venv-sphinx ;\
 	. .venv-sphinx/bin/activate ;\
 	python3 -m pip install -r requirements.txt ;\
 	$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) ;\
@@ -63,11 +63,11 @@ webstatic:
 # use this rule to build the documentation on your machine when working on SLEPc documentation
 .PHONY: website
 website: latexpdf
-	-@python3 -m venv .venv-sphinx ;\
-	. .venv-sphinx/bin/activate ;\
-	python3 -m pip install -r requirements.txt ;\
-	${RM} -rf ${BUILDDIR}/html ;\
-	make SPHINXOPTS="-T -E -W -j 4" html ;\
+	@python3 -m venv .venv-sphinx && \
+	. .venv-sphinx/bin/activate && \
+	python3 -m pip install -r requirements.txt && \
+	${RM} -rf ${BUILDDIR}/html && \
+	$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) && \
 	deactivate
 
 .PHONY: logo_upv
@@ -104,22 +104,18 @@ logo_upv:
 .PHONY: latexpdf
 latexpdf: webstatic logo_upv
 	-@echo "Preparing python virtual environment (.venv-sphinx)"
-	-@python3 -m venv .venv-sphinx ;\
-	. .venv-sphinx/bin/activate ;\
-	python3 -m pip install -r requirements.txt ;\
-	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) ;\
+	@python3 -m venv .venv-sphinx && \
+	. .venv-sphinx/bin/activate && \
+	python3 -m pip install -r requirements.txt && \
+	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" -T -E -j 4 $(O) && \
 	if [ ! -d $(SOURCEDIR)/_static/manual ]; then \
 		mkdir $(SOURCEDIR)/_static/manual ;\
-	fi; \
-	cp $(BUILDDIR)/latex/slepc-manual.pdf $(SOURCEDIR)/_static/manual/; \
+	fi && \
+	cp $(BUILDDIR)/latex/slepc-manual.pdf $(SOURCEDIR)/_static/manual/ && \
 	deactivate \
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: webstatic
-	-@echo "Preparing python virtual environment (.venv-sphinx)"
-	-@python3 -m venv .venv-sphinx ;\
-	. .venv-sphinx/bin/activate ;\
-	python3 -m pip install -r requirements.txt ;\
-	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) ;\
-	deactivate \
+	-@echo "Running Sphinx"
+	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

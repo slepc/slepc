@@ -325,12 +325,12 @@ chk_doctext:
 # Build just PDF manual + prerequisites
 .PHONY: alldoc_pdf
 alldoc_pdf:
-	-${OMAKE_SELF} -C doc latexpdf PETSC_DIR=${PETSC_DIR}
+	${OMAKE_SELF} -C doc latexpdf PETSC_DIR=${PETSC_DIR}
 
 # Builds .html versions of the source
 .PHONY: alldoc_html
 alldoc_html: chk_c2html chk_doctext
-	-${OMAKE_SELF} -C doc website PETSC_DIR=${PETSC_DIR}
+	${OMAKE_SELF} -C doc website PETSC_DIR=${PETSC_DIR}
 
 # Deletes documentation
 .PHONY: alldocclean

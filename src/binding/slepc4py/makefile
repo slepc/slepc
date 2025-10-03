@@ -142,19 +142,19 @@ webstatic:
 		cd - ;\
 	fi ;\
 	if [ ! -d docs/source/_static/css ]; then mkdir -p docs/source/_static/css ; fi;\
-	ln -s ../../../../../../../doc/source/_static/css/slepc.css docs/source/_static/css/slepc.css
+	if [ ! -e docs/source/_static/css/slepc.css ]; then  ln -s ../../../../../../../doc/source/_static/css/slepc.css docs/source/_static/css/slepc.css ; fi
 
 .PHONY: website
 website: webstatic
 #	CFLAGS=-O0 python -m pip install .
-	-@python3 -m venv ../../../doc/.venv-sphinx ;\
-	. ../../../doc/.venv-sphinx/bin/activate ;\
-	python3 -m pip install --quiet -r ../../../doc/requirements.txt ;\
-	${MAKE} sphinx-html SPHINXOPTS="-j4 -E -T -W"
-	rm -rf ${LOC}/slepc4py
-	mkdir -p ${LOC}/slepc4py
-	mv docs/html/* ${LOC}/slepc4py
-	rm docs/source/_static/css/slepc.css
+	@python3 -m venv ../../../doc/.venv-sphinx && \
+	. ../../../doc/.venv-sphinx/bin/activate && \
+	python3 -m pip install --quiet -r ../../../doc/requirements.txt &&\
+	${MAKE} sphinx-html SPHINXOPTS="-j4 -E -T -W" && \
+	rm -rf ${LOC}/slepc4py && \
+	mkdir -p ${LOC}/slepc4py && \
+	mv docs/html/* ${LOC}/slepc4py && \
+	if [ -e docs/source/_static/css/slepc.css ]; then rm docs/source/_static/css/slepc.css; fi
 
 # ----
 
