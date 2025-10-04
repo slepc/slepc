@@ -1114,7 +1114,7 @@ static PetscErrorCode EPSCISSGetQuadRule_CISS(EPS eps,EPSCISSQuadRule *quad)
 
    Level: advanced
 
-.seealso: `EPSCISSSetQuadRule()` `EPSCISSQuadRule`
+.seealso: `EPSCISSSetQuadRule()`, `EPSCISSQuadRule`
 @*/
 PetscErrorCode EPSCISSGetQuadRule(EPS eps,EPSCISSQuadRule *quad)
 {
@@ -1191,7 +1191,7 @@ static PetscErrorCode EPSCISSGetExtraction_CISS(EPS eps,EPSCISSExtraction *extra
 
    Level: advanced
 
-.seealso: `EPSCISSSetExtraction()` `EPSCISSExtraction`
+.seealso: `EPSCISSSetExtraction()`, `EPSCISSExtraction`
 @*/
 PetscErrorCode EPSCISSGetExtraction(EPS eps,EPSCISSExtraction *extraction)
 {

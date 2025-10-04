@@ -888,7 +888,7 @@ static PetscErrorCode NEPCISSGetExtraction_CISS(NEP nep,NEPCISSExtraction *extra
 
    Level: advanced
 
-.seealso: `NEPCISSSetExtraction()` `NEPCISSExtraction`
+.seealso: `NEPCISSSetExtraction()`, `NEPCISSExtraction`
 @*/
 PetscErrorCode NEPCISSGetExtraction(NEP nep,NEPCISSExtraction *extraction)
 {
