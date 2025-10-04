@@ -507,6 +507,49 @@ cdef class ST(Object):
         CHKERR( PetscINCREF(P.obj) )
         return P
 
+    def setSplitPreconditioner(self, operators: list[petsc4py.PETSc.Mat], structure: petsc4py.PETSc.Mat.Structure | None = None) -> None:
+        """
+        Set the matrices to be used to build the preconditioner.
+
+        Collective.
+
+        Parameters
+        ----------
+        operators
+            The matrices associated with the preconditioner.
+        """
+        operators = tuple(operators)
+        cdef PetscMatStructure cstructure = matstructure(structure)
+        cdef PetscMat *mats = NULL
+        cdef Py_ssize_t k=0, n = len(operators)
+        cdef tmp = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
+        for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
+        CHKERR( STSetSplitPreconditioner(self.st, <PetscInt>n, mats, cstructure) )
+
+    def getSplitPreconditioner(self) -> tuple[list[petsc4py.PETSc.Mat], petsc4py.PETSc.Mat.Structure]:
+        """
+        Get the matrices to be used to build the preconditioner.
+
+        Not collective.
+
+        Returns
+        -------
+        list of petsc4py.PETSc.Mat
+            The list of matrices associated with the preconditioner.
+        petsc4py.PETSc.Mat.Structure
+            The structure flag.
+        """
+        cdef PetscInt k=0,n=0
+        cdef PetscMatStructure cstructure
+        cdef PetscMat mat = NULL
+        CHKERR( STGetSplitPreconditionerInfo(self.st, &n, &cstructure) )
+        cdef object operators = []
+        for k from 0 <= k < n:
+            CHKERR( STGetSplitPreconditionerTerm(self.st, k, &mat) )
+            A = Mat(); A.mat = mat; CHKERR( PetscINCREF(A.obj) )
+            operators.append(A)
+        return tuple(operators, cstructure)
+
     #
 
     def setUp(self) -> None:
