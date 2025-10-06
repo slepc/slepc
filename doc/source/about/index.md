@@ -118,4 +118,4 @@ The following scheme represents the functionality provided by SLEPc and how it r
   * `ST` (Spectral Transformation) is used in combination with most solvers to compute interior eigenvalues.
   * Additionally, several auxiliary classes are provided: `BV` (Basis Vectors), `DS` (Dense System), `RG` (Region), `FN` (Mathematical Function).
 
-![petsc-slepc](../_static/images/petsc-slepc-3.7.png)
+<img src="../_static/images/manual/svg/fig-slepc.svg" alt="petsc-slepc" width="120%" align="center">

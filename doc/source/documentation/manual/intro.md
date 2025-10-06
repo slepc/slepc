@@ -38,6 +38,7 @@ SLEPc can be considered an extension of PETSc providing all the functionality ne
 ```{figure} ../../_static/images/manual/svg/fig-slepc.svg
 :alt: Numerical components of PETSc and SLEPc
 :name: fig:slepc
+:width: 120%
 
 Numerical components of PETSc and SLEPc
 ```
