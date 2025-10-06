@@ -514,6 +514,10 @@ In some applications, it may be enough to compute only the right singular vector
 
 In the case of the GSVD, the `sigma` argument of `SVDGetSingularTriplet` contains $\sigma_i=c_i/s_i$ and the second {external:doc}`Vec` argument (`v`) contains the right singular vectors ($x_i$), while the first {external:doc}`Vec` argument (`u`) contains the other vectors of the decomposition stacked on top of each other, as a single $(m+p)$-vector: $\left[\begin{smallmatrix}u_i\\v_i\end{smallmatrix}\right]$.
 
+:::{warning}
+In the GSVD, one has to be careful when dealing with the $(m+p)$-vector `u` in parallel runs, since the entries of the upper and lower part will get mixed unless we manage it as a {external:doc}`VECNEST`. One should follow a procedure similar to the one discussed in section [](#sec:structured-vectors).
+:::
+
 ### Reliability of the Computed Solution
 
 In SVD computations, a-posteriori error bounds are much the same as in the case of Hermitian eigenproblems, due to the equivalence discussed in section [](#sec:svd). The residual vector is defined in terms of the cyclic matrix, $H(A)$, so its norm is
