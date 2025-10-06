@@ -853,7 +853,7 @@ static PetscErrorCode PEPCISSGetExtraction_CISS(PEP pep,PEPCISSExtraction *extra
 
    Level: advanced
 
-.seealso: `PEPCISSSetExtraction()` `PEPCISSExtraction`
+.seealso: `PEPCISSSetExtraction()`, `PEPCISSExtraction`
 @*/
 PetscErrorCode PEPCISSGetExtraction(PEP pep,PEPCISSExtraction *extraction)
 {

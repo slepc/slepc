@@ -262,7 +262,7 @@ html_sidebars = {
         }
 
 # -- Options for LaTeX output --------------------------------------------------
-latex_engine = 'xelatex'
+latex_engine = 'pdflatex'
 
 # How to arrange the documents into LaTeX files, building only the manual.
 latex_documents = [
@@ -277,7 +277,7 @@ latex_additional_files = [
 ]
 
 latex_show_pagerefs = True
-latex_show_urls = 'footnote'
+#latex_show_urls = 'footnote'
 
 latex_elements = {
         'papersize' : 'a4paper',
@@ -288,15 +288,67 @@ latex_elements = {
                         + 'TableRowColorEven={white},'
                         + 'VerbatimColor={white},'
                         + 'noteBgColor={white},',
-        'maketitle': r'\newcommand{\slepcversion}{%s}' % version
-                     + r'\newcommand{\releasedate}{%s}' % release_date
-                     + r'\makeatletter\@ifundefined{bibfont}{\newcommand{\bibfont}{\small}}{\renewcommand{\bibfont}{\small}}\makeatother'
-r'''
-\input{frontpage.tex.txt}
+        'fvset': r'\fvset{fontsize=\footnotesize}',
+        'maketitle': r'''
+\begin{titlepage}
+\begin{center}
+   \vspace*{15mm}
+   \framebox[14cm][l]{
+   \includegraphics[height=1.4cm]{logo-upv}
+   \hfill
+   \parbox[b]{7cm}{\begin{flushright}\vspace*{-7mm}\normalsize\sl\sffamily
+   Departament de\\[-0.8mm] Sistemes Inform\`atics\\[-0.8mm]
+   i Computaci\'o\\[0.8mm]
+   \vspace{-0.0mm}\end{flushright}}\;\;
+   \raisebox{3mm}{\includegraphics[height=0.8cm]{logo-dsic-black}}
+   }
+   \\[2cm]
+   \normalsize Technical Report DSIC-II/24/02
+   \\[2cm]
+   \vspace*{6mm}
+   {\Large\bf\sffamily
+   SLEPc Users Manual\\[2mm]}
+   {\large\bf\sffamily
+   Scalable Library for Eigenvalue Problem Computations}\\[2mm]
+   \vspace*{12mm}
+   \textbf{\texttt{\url{https://slepc.upv.es}}}
+   \\[20mm]
+   \begin{large}
+   Jose E. Roman\\
+   Carmen Campos\\
+   Lisandro Dalcin\\
+   Eloy Romero\\
+   Andr\'es Tom\'as
+   \\[12mm]
+   To be used with SLEPc ''' + version +r'\\[3mm]'+release_date+'''
+   \end{large}
+\end{center}
+\end{titlepage}
 ''',
         'tableofcontents' : r'',
         'printindex': r'''
         \printindex
+        ''',
+        'preamble': r'''
+\titleformat{\chapter}[display]
+  {\bfseries\Large}
+  {\filleft\setlength{\fboxsep}{2mm}\fbox{\large\sc\chaptertitlename}\hspace*{-0.5mm}\setlength{\fboxsep}{4mm}\setlength{\fboxrule}{.5mm}\fbox{\Huge\bfseries\thechapter}}
+  {4ex}
+  {\huge\bf\sffamily\filright}
+  [\hfill\rule{10cm}{1pt}]
+\hypersetup{
+  colorlinks,
+  linkcolor=purple,
+  citecolor=violet,
+  filecolor=blue,
+  urlcolor=magenta,
+  bookmarksnumbered,
+  pdfstartview=FitH,
+  pdftitle={SLEPc Users Manual},
+  pdfauthor={J. E. Roman, C. Campos, L. Dalcin, E. Romero, A. Tomas},
+  pdfsubject={SLEPc: Scalable Library for Eigenvalue Problem Computations},
+  pdfkeywords={SLEPc, PETSc, eigenvalue problems}
+}
         ''',
 }
 
