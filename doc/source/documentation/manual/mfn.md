@@ -1,7 +1,7 @@
 (ch:mfn)=
 # MFN: Matrix Function
 
-The Matrix Function (`MFN`) solver object provides algorithms that compute the action of a matrix function on a given vector, without evaluating the matrix function itself. This is not an eigenvalue problem, but some methods rely on approximating eigenvalues (for instance with Krylov subspaces) and that is why we have this in SLEPc.
+The Matrix Function (`MFN`) solver object provides algorithms that compute the action of a matrix function on a given vector, without evaluating the matrix function itself. This is not an eigenvalue problem, but there is a connection between matrix functions and some strategies for computing eigenvalues, and that is why we have this functionality in SLEPc.
 
 {#sec:mfn label="sec:mfn"}
 ## The Problem $f(A)v$
@@ -16,7 +16,7 @@ In the sequel, we concentrate on the exponential function, which is one of the m
 y=e^Av=v+\frac{A}{1!}v+\frac{A^2}{2!}v+\cdots,
 ```
 
-so, in principle, the vector $y$ can be approximated by an element of the Krylov subspace $\mathcal{K}_m(A,v)$ defined in equation {math:numref}`eq:krylov`. This is the basis of the method implemented in EXPOKIt {cite:p}`Sidje:1998:ESP`. Let $AV_m=V_{m+1}\underline{H}_m$ be an Arnoldi decomposition, where the columns of $V_m$ form an orthogonal basis of the Krylov subspace, then the approximation can be computed as
+so, in principle, the vector $y$ can be approximated by an element of the Krylov subspace $\mathcal{K}_m(A,v)$ defined in equation {math:numref}`eq:krylov`. This is the basis of the method implemented in Expokit {cite:p}`Sidje:1998:ESP`. Let $AV_m=V_{m+1}\underline{H}_m$ be an Arnoldi decomposition, where the columns of $V_m$ form an orthogonal basis of the Krylov subspace, then the approximation can be computed as
 
 ```{math}
 :label: eq:aprox-solution
@@ -50,25 +50,29 @@ MFNSolve( mfn, v, y );
 MFNDestroy( &mfn );
 ```
 
-Figure [](#fig:ex-mfn) shows a simple example with the basic steps for computing $y=\exp(\alpha A)v$. After creating the solver context with `MFNCreate`, the problem matrix has to be passed with `MFNSetOperator` and the function to compute $f(\cdot)$ must be specified with the aid of the auxiliary class `FN`, see details in section [](#sec:sys). Then, a call to `MFNSolve` runs the solver on a given vector $v$, returning the computed result $y$. Finally, `MFNDestroy` is used to reclaim memory. We give a few more details below.
+Listing [](#fig:ex-mfn) shows a simple example with the basic steps for computing $y=\exp(\alpha A)v$. After creating the solver context with `MFNCreate`, the problem matrix has to be passed with `MFNSetOperator` and the function to compute $f(\cdot)$ must be specified with the aid of the auxiliary class `FN`, see details in section [](#sec:sys). Then, a call to `MFNSolve` runs the solver on a given vector $v$, returning the computed result $y$. Finally, `MFNDestroy` is used to reclaim memory. We give a few more details below.
 
 ### Defining the Problem
 
-Defining the problem consists in specifying the matrix, $A$, and the function to compute, $f(\cdot)$. The problem matrix is provided with `MFNSetOperator`
+Defining the problem consists in specifying the matrix, $A$, and the function to compute, $f(\cdot)$. The problem matrix is provided with:
 
 ```{code} c
 MFNSetOperator(MFN mfn,Mat A);
 ```
 
-where `A` should be a square matrix, stored in any allowed PETSc format including the matrix-free mechanism (see section [](#sec:supported)). The function $f(\cdot)$ is defined with an `FN` object. One possibility is to extract the `FN` object handled internally by `MFN`: `MFNGetFN`
+where `A` should be a square matrix, stored in any allowed PETSc format including the matrix-free mechanism (see section [](#sec:supported)). The function $f(\cdot)$ is defined with an `FN` object. One possibility is to extract the `FN` object handled internally by `MFN`:
 
 ```{code} c
 MFNGetFN(MFN mfn,FN *f);
 ```
 
-An alternative would be to create a standalone `FN` object and pass it with `MFNSetFN`. In any case, the function is defined via its type and the relevant parameters, see section [](#sec:sys) for details. The scaling parameters can be used for instance for the exponential when used in the context of ODE integration, $y=e^{tA}v$, where $t$ represents the elapsed time. Note that some `MFN` solvers may be restricted to only some types of `FN` functions.
+An alternative would be to create a standalone `FN` object and pass it with `MFNSetFN`. In any case, the function is defined via its type and the relevant parameters, see section [](#sec:sys) for details. The scaling parameters can be used for instance for the exponential when used in the context of ODE integration, $y=e^{tA}v$, where $t$ represents the elapsed time.
 
-In `MFN` it makes no sense to specify the number of eigenvalues. However, there is a related operation that allows the user to specify the size of the subspace that will be used internally by the solver (`ncv`, the number of column vectors of the basis): `MFNSetDimensions`
+:::{note}
+Some `MFN` solvers may be restricted to only some types of `FN` functions.
+:::
+
+In `MFN` it makes no sense to specify the number of eigenvalues. However, there is a related operation that allows the user to specify the size of the subspace that will be used internally by the solver (`ncv`, the number of column vectors of the basis):
 
 ```{code} c
 MFNSetDimensions(EPS eps,PetscInt ncv);
@@ -81,14 +85,14 @@ This parameter can also be set at run time with the option `-mfn_ncv`.
 :::{table} List of solvers available in the `MFN` module.
 :name: tab:mfnsolvers
 
- |Method                   |`MFNType`     |Options Database Name  |Supported Functions
- |-------------------------|--------------|-----------------------|-----------------------
- |Restarted Krylov solver  |`MFNKRYLOV`   |        `krylov`       |          Any
- |Expokit algorithm        |`MFNEXPOKIT`  |        `expokit`      |          Exponential
+ |Method                   |`MFNType`     |Options Database |Supported Functions
+ |-------------------------|--------------|-----------------|-----------------------
+ |Restarted Krylov solver  |`MFNKRYLOV`   |     `krylov`    |    Any
+ |Expokit algorithm        |`MFNEXPOKIT`  |     `expokit`   |    Exponential
 
 :::
 
-The methods available in `MFN` are shown in table [](#tab:mfnsolvers). The solution method can be specified procedurally with `MFNSetType`
+The methods available in `MFN` are shown in table [](#tab:mfnsolvers). The solution method can be specified procedurally with:
 
 ```{code} c
 MFNSetType(MFN mfn,MFNType method);
@@ -100,7 +104,7 @@ Currently implemented methods are:
 
 -   A Krylov method with restarts as proposed by {cite:t}`Eiermann:2006:RKS`.
 
--   The method implemented in EXPOKIt {cite:p}`Sidje:1998:ESP` for the matrix exponential.
+-   The method implemented in Expokit {cite:p}`Sidje:1998:ESP` for the matrix exponential.
 
 ### Accuracy and Monitors
 
