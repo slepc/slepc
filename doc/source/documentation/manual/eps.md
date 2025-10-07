@@ -822,6 +822,10 @@ Structured eigenvalue problems are those whose defining matrices are structured,
 
 Unless otherwise stated, the structured eigenproblems discussed below are only supported in the default `EPS` solver, Krylov-Schur. The idea is that the user creates the structured matrix with a helper function such as `MatCreateBSE` (see below), and then selects the appropriate problem type with `EPSSetProblemType`, in this case `EPS_BSE`. This will instruct the solver to exploit the problem structure. Alternatively, one can solve the problem as `EPS_NHEP`, in which case the solver will neglect the structure.
 
+:::{warning}
+Check below the section [](#sec:structured-vectors), since the trivial approach may give vectors with disordered entries.
+:::
+
 #### Bethe-Salpeter
 
 One structured eigenproblem that has raised interest recently is related to the Bethe--Salpeter equation, which is relevant in many state-of-the-art computational physics codes. For instance, in the Yambo software {cite:p}`Sangalli:2019:MPT` it is used to evaluate optical properties of materials. It is commonly formulated as an eigenvalue problem with a block-structured matrix,
@@ -859,6 +863,38 @@ where $A$, $B$ and $C$ are either real with $B=B^T$, $C=C^T$, or complex with $B
 :::{warning}
 The structure-preserving eigensolver for Hamiltonian eigenvalue problems should be considered experimental. Depending on the problem, it may become numerically unstable after some iterations, in which case the solver will abort, returning less eigenvalues than requested.
 :::
+
+{#sec:structured-vectors}
+#### Extracting Eigenvectors of Structured Eigenproblems
+
+In the case of structured eigenproblems, one has to create the eigenvectors in a specific way, before passing them to functions such as `EPSGetEigenvector` or `EPSGetLeftEigenvector`. Otherwise, the obtained vector may have disordered entries when run with several processes, compared to sequential runs.
+
+To understand the problem, it is important to note that the block matrices {math:numref}`eq:bse` or {math:numref}`eq:hamilt` are represented as PETSc matrices of type {external:doc}`MATNEST`, which implies that the individual blocks are stored independently (in parallel). The vectors associated with those matrices have the same distribution. For instance, if we are using two MPI processes, then process 0 will store the first half of the top part of the vector, and the first half of the bottom part, while process 1 will store the second half of both parts. Hence, the entries assigned to the different processes are not consecutive, but interleaved, so if we access that vector as a standard {external:doc}`Vec` the order of entries will be different when we change the number of processes.
+
+The solution is to work with the top and bottom subvectors separately. There are two possible approaches for this, as explained next.
+
+The first solution is to create a vector of type {external:doc}`VECNEST` compatible with the {external:doc}`MATNEST`. For instance in BSE, {math:numref}`eq:bse`, we can create it from the $R$ and $C$ blocks, as follows (assuming both matrices have the same local and global sizes):
+
+```{code} c
+    MatCreateVecs(R,&x1,&x2);
+    aux[0] = x1;
+    aux[1] = x2;
+    VecCreateNest(PETSC_COMM_WORLD,2,NULL,aux,&x);
+```
+We would pass `x` to `EPSGetEigenvector`, and then the individual blocks of the eigenvector can be easily extracted with {external:doc}`VecNestGetSubVec`.
+
+The second alternative is to retrieve the index sets {external:doc}`IS` that define the splitting
+```{code} c
+    MatNestGetISs(H,is,NULL);
+```
+and then, after calling `EPSGetEigenvector` on a standard vector `x`, extract the subvectors using the index sets:
+```{code} c
+    VecGetSubVector(x,is[0],&x1);
+    VecGetSubVector(x,is[1],&x2);
+    /* do something with x1 and x2 */
+    VecRestoreSubVector(x,is[0],&x1);
+    VecRestoreSubVector(x,is[1],&x2);
+```
 
 ```{rubric} Footnotes
 ```
