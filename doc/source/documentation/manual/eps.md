@@ -226,6 +226,7 @@ EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel);
 
 This usage is discussed for the case of `SVD` in section [](#sec:thres). For details about the differences in case of `EPS`, we refer to the manual page of `EPSSetThreshold`.
 
+{#sec:which}
 ### Eigenvalues of Interest
 
 For the selection of the portion of the spectrum of interest, there are several alternatives. In real symmetric or complex Hermitian problems, one may want to compute the largest or smallest eigenvalues in magnitude, or the leftmost or rightmost ones, or even all eigenvalues in a given interval. In other problems, in which the eigenvalues can be complex, then one can select eigenvalues depending on the magnitude, or the real part or even the imaginary part. Sometimes the eigenvalues of interest are those closest to a given target value, $\tau$, measuring the distance either in the ordinary way or along the real (or imaginary) axis. In some other cases, wanted eigenvalues must be found in a given region of the complex plane. Table [](#tab:portion) summarizes all the available possibilities to be selected with the following function:
@@ -327,29 +328,29 @@ The available methods for solving the eigenvalue problems are the following:
 :::{table} Eigenvalue solvers available in the `EPS` module
 :name: tab:solvers
 
-  Method                      |`EPSType`         |Options Database Name  | Default
-  ----------------------------|------------------|-----------------------|---------
-  Power / Inverse / RQI       |`EPSPOWER`        |`power`                | ` `
-  Subspace Iteration          |`EPSSUBSPACE`     |`subspace`             | ` `
-  Arnoldi                     |`EPSARNOLDI`      |`arnoldi`              | ` `
-  Lanczos                     |`EPSLANCZOS`      |`lanczos`              | ` `
-  Krylov-Schur                |`EPSKRYLOVSCHUR`  |`krylovschur`          | $\star$
-  Generalized Davidson        |`EPSGD`           |`gd`                   | ` `
-  Jacobi-Davidson             |`EPSJD`           |`jd`                   | ` `
-  Rayleigh quotient CG        |`EPSRQCG`         |`rqcg`                 | ` `
-  LOBPCG                      |`EPSLOBPCG`       |`lobpcg`               | ` `
-  Contour integral SS         |`EPSCISS`         |`ciss`                 | ` `
-  Lyapunov Inverse Iteration  |`EPSLYAPII`       |`lyapii`               | ` `
-  Wrapper to LAPACK           |`EPSLAPACK`       |`lapack`               | ` `
-  Wrapper to ARPACK           |`EPSARPACK`       |`arpack`               | ` `
-  Wrapper to PRIMME           |`EPSPRIMME`       |`primme`               | ` `
-  Wrapper to EVSL             |`EPSEVSL`         |`evsl`                 | ` `
-  Wrapper to BLOPEX           |`EPSBLOPEX`       |`blopex`               | ` `
-  Wrapper to ScaLAPACK        |`EPSSCALAPACK`    |`scalapack`            | ` `
-  Wrapper to ELPA             |`EPSELPA`         |`elpa`                 | ` `
-  Wrapper to ELEMENTAL        |`EPSELEMENTAL`    |`elemental`            | ` `
-  Wrapper to CHASE            |`EPSCHASE`        |`chase`                | ` `
-  Wrapper to FEAST            |`EPSFEAST`        |`feast`                | ` `
+  Method                      |`EPSType`         |Options Database | Default
+  ----------------------------|------------------|-----------------|---------
+  Power / Inverse / RQI       |`EPSPOWER`        |`power`          | ` `
+  Subspace Iteration          |`EPSSUBSPACE`     |`subspace`       | ` `
+  Arnoldi                     |`EPSARNOLDI`      |`arnoldi`        | ` `
+  Lanczos                     |`EPSLANCZOS`      |`lanczos`        | ` `
+  Krylov-Schur                |`EPSKRYLOVSCHUR`  |`krylovschur`    | $\star$
+  Generalized Davidson        |`EPSGD`           |`gd`             | ` `
+  Jacobi-Davidson             |`EPSJD`           |`jd`             | ` `
+  Rayleigh quotient CG        |`EPSRQCG`         |`rqcg`           | ` `
+  LOBPCG                      |`EPSLOBPCG`       |`lobpcg`         | ` `
+  Contour integral SS         |`EPSCISS`         |`ciss`           | ` `
+  Lyapunov Inverse Iteration  |`EPSLYAPII`       |`lyapii`         | ` `
+  Wrapper to LAPACK           |`EPSLAPACK`       |`lapack`         | ` `
+  Wrapper to ARPACK           |`EPSARPACK`       |`arpack`         | ` `
+  Wrapper to PRIMME           |`EPSPRIMME`       |`primme`         | ` `
+  Wrapper to EVSL             |`EPSEVSL`         |`evsl`           | ` `
+  Wrapper to BLOPEX           |`EPSBLOPEX`       |`blopex`         | ` `
+  Wrapper to ScaLAPACK        |`EPSSCALAPACK`    |`scalapack`      | ` `
+  Wrapper to ELPA             |`EPSELPA`         |`elpa`           | ` `
+  Wrapper to ELEMENTAL        |`EPSELEMENTAL`    |`elemental`      | ` `
+  Wrapper to CHASE            |`EPSCHASE`        |`chase`          | ` `
+  Wrapper to FEAST            |`EPSFEAST`        |`feast`          | ` `
 
 :::
 
@@ -369,7 +370,7 @@ Not all the methods can be used for all problem types. Table [](#tab:support) su
 :name: tab:support
 
   Method        |             Portion of spectrum             |     Problem type      | Real/complex | Two-sided
-  --------------|---------------------------------------------|-----------------------|--------------|-----------
+  :------------:|:-------------------------------------------:|:---------------------:|:------------:|:---------:
   `power`       |             Largest $\|\lambda\|$           |          any          |     both     |    yes
   `subspace`    |             Largest $\|\lambda\|$           |          any          |     both     |    ` `
   `arnoldi`     |                     any                     |          any          |     both     |    ` `

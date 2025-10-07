@@ -364,7 +364,7 @@ PEPLinearSetExplicitMatrix(PEP pep,PetscBool exp);
 The explicit matrix option is available only for quadratic eigenproblems (higher degree polynomials are always handled implicitly). In the case of explicit creation, matrices $L_0$ and $L_1$ are created as true {external:doc}`Mat`'s, with explicit storage, whereas the implicit option works with *shell* {external:doc}`Mat`'s that operate only with the constituent blocks $M$, $C$ and $K$ (or $A_i$ in the general case). The explicit case requires more memory but gives more flexibility, e.g., for choosing a preconditioner. Some examples of usage via the command line are shown at the end of next section.
 
 {#sec:qst label="sec:qst"}
-## Spectral Transformation
+## Spectral Transformation for PEP
 
 For computing eigenvalues in the interior of the spectrum (closest to a target $\tau$), it is necessary to use a spectral transformation. In `PEP` solvers this is handled via an `ST` object as in the case of linear eigensolvers. It is possible to proceed with no spectral transformation (shift) or with shift-and-invert. Every `PEP` object has an `ST` object internally.
 
