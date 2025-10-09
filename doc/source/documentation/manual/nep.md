@@ -5,12 +5,12 @@ The Nonlinear Eigenvalue Problem (`NEP`) solver object covers the general case w
 
 In terms of the user interface, `NEP` is quite similar to previously discussed solvers. The main difference is how to represent the function $T$. We will show different alternatives for this.
 
-The `NEP` module of SLEPc has been explained with more detail in {cite:p}`Campos:2021:NEP`, including an algorithmic description of the implemented solvers.
+The `NEP` module of SLEPc has been explained with more detail in {cite:p}`Cam21`, including an algorithmic description of the implemented solvers.
 
 {#sec:nep label="sec:nep"}
 ## General Nonlinear Eigenproblems
 
-As in previous chapters, we first set up the notation and briefly review basic properties of the eigenvalue problems to be addressed. In this case, we focus on general nonlinear eigenproblems, that is, those that cannot be expressed in a simpler form such as a polynomial eigenproblem. These problems arise in many applications, such as the discretization of delay differential equations. Some of the methods designed to solve such problems are based on Newton-type iterations, so in some ways `NEP` has similarities to PETSc's nonlinear solvers {external:doc}`SNES`. For background material on the nonlinear eigenproblem, the reader is referred to {cite:p}`Guttel:2017:NEP`, {cite:p}`Mehrmann:2004:NEP`.
+As in previous chapters, we first set up the notation and briefly review basic properties of the eigenvalue problems to be addressed. In this case, we focus on general nonlinear eigenproblems, that is, those that cannot be expressed in a simpler form such as a polynomial eigenproblem. These problems arise in many applications, such as the discretization of delay differential equations. Some of the methods designed to solve such problems are based on Newton-type iterations, so in some ways `NEP` has similarities to PETSc's nonlinear solvers {external:doc}`SNES`. For background material on the nonlinear eigenproblem, the reader is referred to {cite:p}`Gut17,Meh04`.
 
 We consider nonlinear eigenvalue problems of the form
 
@@ -148,7 +148,7 @@ NEPSetWhichEigenpairs(NEP nep,NEPWhich which);
 
 The default is to compute the largest magnitude eigenvalues. For the sorting criteria relative to a target value, $\tau$ must be specified with `NEPSetTarget` or in the command-line with `-nep_target`.
 
-`NEP` solvers can also work with a region of the complex plane (`RG`), as discussed in section [](#sec:region) for linear problems. Some eigensolvers (NLEIGS) use the definition of the region to compute `nev` eigenvalues in its interior. If *all* eigenvalues inside the region are required, then a contour-integral method is required, see discussion in {cite:p}`str-11`.
+`NEP` solvers can also work with a region of the complex plane (`RG`), as discussed in section [](#sec:region) for linear problems. Some eigensolvers (NLEIGS) use the definition of the region to compute `nev` eigenvalues in its interior. If *all* eigenvalues inside the region are required, then a contour-integral method is required, see discussion in {cite:p}`Mae16`.
 
 #### Left Eigenvectors
 
@@ -347,9 +347,6 @@ The `NEP` class also provides some kind of iterative refinement, similar to the 
 
 ```{code} c
 NEPSetRefine(NEP nep,NEPRefine refine,PetscInt npart,PetscReal tol,PetscInt its,NEPRefineScheme scheme);
-```
-
-```{rubric} Footnotes
 ```
 
 ```{eval-rst}

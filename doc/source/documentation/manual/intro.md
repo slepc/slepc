@@ -17,7 +17,7 @@ The first implementations of algorithms for sparse matrices required a prescribe
 
 A better solution for the matrix representation problem is the well-known reverse communication interface, a technique that allows the development of iterative methods disregarding the implementation details of various operations. Whenever the iterative method subroutine needs the results of one of the operations, it returns control to the user's subroutine that called it. The user's subroutine then invokes the module that performs the operation. The iterative method subroutine is invoked again with the results of the operation.
 
-Several libraries with any of the interface schemes mentioned above are publicly available. For a survey of such software see the SLEPc Technical Report {cite:p}`str-6` and references therein. Some of the most recent libraries are even prepared for parallel execution (some of them can be used from within SLEPc, see section [](#sec:wrap)). However, they still lack some flexibility or require too much programming effort from the user, especially in the case that the eigensolution requires to employ advanced techniques such as spectral transformations or preconditioning.
+Several libraries with any of the interface schemes mentioned above are publicly available. For a survey of such software see the SLEPc Technical Report {cite:p}`Her09` and references therein. Some of the most recent libraries are even prepared for parallel execution (some of them can be used from within SLEPc, see section [](#sec:wrap)). However, they still lack some flexibility or require too much programming effort from the user, especially in the case that the eigensolution requires to employ advanced techniques such as spectral transformations or preconditioning.
 
 A further obstacle appears when these libraries have to be used in the context of large software projects carried out by inter-disciplinary teams. In this scenery, libraries must be able to interoperate with already existing software and with other libraries. In order to cope with the complexity associated with such projects, libraries must be designed carefully in order to overcome hurdles such as different storage formats or programming languages. In the case of parallel software, care must be taken also to achieve portability to a wide range of platforms with good performance and still retain flexibility and usability.
 
@@ -25,15 +25,15 @@ A further obstacle appears when these libraries have to be used in the context o
 
 The SLEPc library is an attempt to provide a solution to the situation described in the previous paragraphs. It is intended to be a general library for the solution of eigenvalue problems that arise in different contexts, covering standard and generalized problems, both Hermitian and non-Hermitian, with either real or complex arithmetic. Issues such as usability, portability, efficiency and interoperability are addressed, and special emphasis is put on flexibility, providing data-structure neutral implementations and multitude of run-time options. SLEPc offers a growing number of eigensolvers as well as interfaces to integrate well-established eigenvalue packages such as ARPACK. In addition to the linear eigenvalue problem, SLEPc also includes other solver classes for nonlinear eigenproblems, SVD and the computation of the action of a matrix function.
 
-SLEPc is based on PETSc, the Portable, Extensible Toolkit for Scientific Computation {cite:p}`Balay:PUM`, and, therefore, a large percentage of the software complexity is avoided since many PETSc developments are leveraged, including matrix storage formats and linear solvers, to name a few. SLEPc focuses on high level features for eigenproblems, structured around a few object classes as described below.
+SLEPc is based on PETSc, the Portable, Extensible Toolkit for Scientific Computation {cite:p}`BalPU`, and, therefore, a large percentage of the software complexity is avoided since many PETSc developments are leveraged, including matrix storage formats and linear solvers, to name a few. SLEPc focuses on high level features for eigenproblems, structured around a few object classes as described below.
 
 PETSc uses modern programming paradigms to ease the development of large-scale scientific application codes in Fortran, C/C++, and Python, and provides a powerful set of tools for the numerical solution of partial differential equations and related problems on high-performance computers. Its approach is to encapsulate mathematical algorithms using object-oriented programming techniques, which allow to manage the complexity of efficient numerical message-passing codes. All the PETSc software is free and used around the world in a variety of application areas.
 
-The design philosophy is not to try to completely conceal parallelism from the application programmer. Rather, the user initiates a combination of sequential and parallel phases of computations, but the library handles the detailed message passing required during the coordination of computations. Some of the design principles are described in {cite:p}`Balay:1997:EMP`.
+The design philosophy is not to try to completely conceal parallelism from the application programmer. Rather, the user initiates a combination of sequential and parallel phases of computations, but the library handles the detailed message passing required during the coordination of computations. Some of the design principles are described in {cite:p}`Bal97`.
 
 PETSc is built around a variety of data structures and algorithmic objects. The application programmer works directly with these objects rather than concentrating on the underlying data structures. Each component manipulates a particular family of objects (for instance, vectors) and the operations one would like to perform on the objects. The three basic abstract data objects are index sets, vectors and matrices. Built on top of this foundation are various classes of solver objects, which encapsulate virtually all information regarding the solution procedure for a particular class of problems, including the local state and various options such as convergence tolerances, etc.
 
-SLEPc can be considered an extension of PETSc providing all the functionality necessary for the solution of eigenvalue problems. Figure [](#fig:slepc) shows a diagram of all the different objects included in PETSc (on the left) and those added by SLEPc (on the right). PETSc is a prerequisite for SLEPc and users should be familiar with basic concepts such as vectors and matrices in order to use SLEPc. Therefore, together with this manual we recommend to use the PETSc Users Manual {cite:p}`Balay:PUM`.
+SLEPc can be considered an extension of PETSc providing all the functionality necessary for the solution of eigenvalue problems. Figure [](#fig:slepc) shows a diagram of all the different objects included in PETSc (on the left) and those added by SLEPc (on the right). PETSc is a prerequisite for SLEPc and users should be familiar with basic concepts such as vectors and matrices in order to use SLEPc. Therefore, together with this manual we recommend to use the PETSc Users Manual {cite:p}`BalPU`.
 
 ```{figure} ../../_static/images/manual/svg/fig-slepc.svg
 :alt: Numerical components of PETSc and SLEPc
@@ -218,7 +218,7 @@ export SLEPC_DIR=/software/slepc-{{env.config.release}}
 
 can be placed in the user's `.bashrc` file. The `SLEPC_DIR` directory can be either a standard installation SLEPc directory, or a prefix-based installation directory, see section [](#sec:prefix-inst). In addition, the user must set the environment variables required by PETSc, that is, `PETSC_DIR`, to indicate the full path of the PETSc directory, and `PETSC_ARCH` to specify a particular architecture and set of options. Note that `PETSC_ARCH` should not be set in the case of prefix-based installations.
 
-All PETSc programs use the MPI (Message Passing Interface) standard for message-passing communication {cite:p}`MPI-Forum:1994:MMI`. Thus, to execute SLEPc programs, users must know the procedure for launching MPI jobs on their selected computer system(s). Usually, the `mpiexec` command can be used to initiate a program as in the following example that uses eight processes:
+All PETSc programs use the MPI (Message Passing Interface) standard for message-passing communication {cite:p}`MPI94`. Thus, to execute SLEPc programs, users must know the procedure for launching MPI jobs on their selected computer system(s). Usually, the `mpiexec` command can be used to initiate a program as in the following example that uses eight processes:
 
 ```{code} console
 $ mpiexec -n 8 slepc_program [command-line options]
@@ -336,9 +336,6 @@ ex1f: ex1f.o
         ${RM} ex1f.o
 ```
 Replace `EPS` in `${SLEPC_EPS_LIB}` with the highest level module you are using in your program.
-
-```{rubric} Footnotes
-```
 
 ```{eval-rst}
 .. bibliography::

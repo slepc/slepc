@@ -19,7 +19,7 @@ Spectral transformations are powerful tools for adjusting the way in which eigen
 
 SLEPc separates spectral transformations from solution methods so that any combination of them can be specified by the user. To achieve this, most eigensolvers contained in `EPS` are implemented in such a way that they are independent of which transformation has been selected by the user (the exception are preconditioned solvers, see below). That is, the solver algorithm has to work with a generic operator, whose actual form depends on the transformation used. After convergence, eigenvalues are transformed back appropriately.
 
-For technical details of the transformations described in this chapter, the interested user is referred to {cite:p}`Ericsson:1980:STL`, {cite:p}`Scott:1982:AIO`, {cite:p}`Nour-Omid:1987:HIS`, and {cite:p}`Meerbergen:1994:SCT`.
+For technical details of the transformations described in this chapter, the interested user is referred to {cite:p}`Eri80,Sco82,Nou87,Mee94`.
 
 **Preconditioners**:
 As explained in the previous chapter, `EPS` contains preconditioned eigensolvers such as GD or JD. These solvers either apply a preconditioner at a certain step of the computation, or need to solve a correction equation with a preconditioned linear solver. One of the main goals of these solvers is to achieve a similar effect as an inverse-based spectral transformation such as shift-and-invert, but with less computational cost. For this reason, a "preconditioner" spectral transformation has been included in the `ST` object. However, this is just a convenient way of organizing the functionality, since this fake spectral transform cannot be used with non-preconditioned eigensolvers, and conversely preconditioned eigensolvers cannot be used with conventional spectral transformations.
@@ -199,7 +199,7 @@ STCayleySetAntishift(ST st,PetscScalar nu);
 
 or in the command line with `-st_cayley_antishift`.
 
-This transformation is mathematically equivalent to shift-and-invert and, therefore, it is effective for finding eigenvalues near $\sigma$ as well. However, in some situations it is numerically advantageous with respect to shift-and-invert (see {cite:p}`Bai:2000:TSA{11.2}`, {cite:p}`Lehoucq:2001:LEC`).
+This transformation is mathematically equivalent to shift-and-invert and, therefore, it is effective for finding eigenvalues near $\sigma$ as well. However, in some situations it is numerically advantageous with respect to shift-and-invert (see {cite:p}`Bai00{11.2},Leh01`).
 
 In this case, the relation between the eigenvalues of both problems is
 
@@ -269,7 +269,7 @@ The polynomial filtering methods address the eigenvalue problem
 p(A)x=\theta x,
 ```
 
- where $p(\cdot)$ is a suitable high-degree polynomial. Once the polynomial is built, the eigensolver relies on `STApply` to compute approximations of the eigenvalues $\theta$ of the transformed problem. These approximations must be processed in some way in order to recover the $\lambda$ eigenvalues. Note that in this case there is no `STBackTransform` operation. Details of the method can be found in {cite:p}`Fang:2012:FLP`.
+ where $p(\cdot)$ is a suitable high-degree polynomial. Once the polynomial is built, the eigensolver relies on `STApply` to compute approximations of the eigenvalues $\theta$ of the transformed problem. These approximations must be processed in some way in order to recover the $\lambda$ eigenvalues. Note that in this case there is no `STBackTransform` operation. Details of the method can be found in {cite:p}`Fan12`.
 
 Currently, SLEPc provides several types of polynomial filtering techniques, which can be selected via `STFilterSetType`. Note that the external package EVSL also implements polynomial filters to compute all eigenvalues in an interval.
 
@@ -356,7 +356,7 @@ The JD eigensolver uses both an iterative linear solver and a preconditioner, so
 $ ./ex5 -eps_type jd -st_ksp_type gmres -st_pc_type jacobi -st_ksp_max_it 10
 ```
 
-A discussion on the different options available for the Davidson solvers can be found in {cite:p}`Romero:2014:PID`.
+A discussion on the different options available for the Davidson solvers can be found in {cite:p}`Rom14`.
 
 {#sec:explicit}
 ### Explicit Computation of the Coefficient Matrix
@@ -444,7 +444,7 @@ In shift-and-invert with operator matrix $T=(A-\sigma B)^{-1}B$, when $B$ is sin
 
 The implication of all this is that, for singular $B$, if the $B$-inner product is used throughout the eigensolver then, assuming that the initial vector has been forced to lie in $\mathcal{R}(T)$, the computed eigenvectors should be correct, i.e., they should belong to $\mathcal{R}(T)$ as well. Nevertheless, finite precision arithmetic spoils this nice picture, and computed eigenvectors are easily corrupted by components of vectors in the null-space of $B$. Additional computation is required for achieving the desired property. This is usually referred to as *eigenvector purification*.
 
-Although more elaborate purification strategies have been proposed (usually trying to reduce the computational effort, see {cite:p}`Nour-Omid:1987:HIS` and {cite:p}`Meerbergen:1997:IRA`), the approach in SLEPc is simply to explicitly force the initial vector in the range of $T$, with $v_0\leftarrow Tv_0$, as well as the computed eigenvectors at the end, $x_i\leftarrow Tx_i$. Since this computation can be costly, it can be deactivated if the user knows that $B$ is non-singular, with:
+Although more elaborate purification strategies have been proposed (usually trying to reduce the computational effort, see {cite:p}`Nou87,Mee97`), the approach in SLEPc is simply to explicitly force the initial vector in the range of $T$, with $v_0\leftarrow Tv_0$, as well as the computed eigenvectors at the end, $x_i\leftarrow Tx_i$. Since this computation can be costly, it can be deactivated if the user knows that $B$ is non-singular, with:
 
 ```{code} c
 EPSSetPurify(EPS eps,PetscBool purify);
@@ -465,7 +465,7 @@ In the context of symmetric-definite generalized eigenvalue problems (`EPS_GHEP`
 
 -   In some applications, the interval is open in one end, i.e., either $a$ or $b$ can be infinite.
 
-One possible strategy to solve this problem is to sweep the interval from one end to the other, computing chunks of eigenvalues with a spectral transformation that updates the shift dynamically. This is generally referred to as *spectrum slicing*. The method implemented in SLEPc is similar to that proposed by {cite:t}`Grimes:1994:SBL`, where inertia information is used to validate sub-intervals. Given a symmetric-indefinite triangular factorization
+One possible strategy to solve this problem is to sweep the interval from one end to the other, computing chunks of eigenvalues with a spectral transformation that updates the shift dynamically. This is generally referred to as *spectrum slicing*. The method implemented in SLEPc is similar to that proposed by {cite:t}`Gri94`, where inertia information is used to validate sub-intervals. Given a symmetric-indefinite triangular factorization
 
 ```{math}
 :label: eq-symindtri
@@ -481,7 +481,7 @@ A-\sigma B=LDL^T,
 \nu(A-\sigma B)=\nu(D).
 ```
 
- A detailed description of the method available in SLEPc can be found in {cite:p}`Campos:2012:SSS`. The SLEPc interface hides all the complications of the algorithm. However, the user must be aware of all the restrictions for this technique to be employed:
+ A detailed description of the method available in SLEPc can be found in {cite:p}`Cam12`. The SLEPc interface hides all the complications of the algorithm. However, the user must be aware of all the restrictions for this technique to be employed:
 
 -   This is currently implemented only in Krylov-Schur.
 
@@ -517,7 +517,7 @@ Apart from the above recommendations, the following must be taken into account:
 
 :::{note}
 **Usage with Complex Scalars**:
-Some external packages that provide inertia information (MUMPS, Pardiso) do so only in real scalars, but not in the case of complex scalars. Hence, with complex scalars spectrum slicing is available only sequentially (with PETSc's Cholesky factorization) or via SuperLU_DIST (as in the last example above). An alternative to spectrum slicing is to use the CISS solver with a region enclosing an interval on the real axis, see {cite:p}`str-11` for details.
+Some external packages that provide inertia information (MUMPS, Pardiso) do so only in real scalars, but not in the case of complex scalars. Hence, with complex scalars spectrum slicing is available only sequentially (with PETSc's Cholesky factorization) or via SuperLU_DIST (as in the last example above). An alternative to spectrum slicing is to use the CISS solver with a region enclosing an interval on the real axis, see {cite:p}`Mae16` for details.
 :::
 
 #### Use of Multiple Communicators
@@ -579,14 +579,14 @@ Note that the mapping between $\lambda$ and $\theta$ is not injective, and hence
 Illustration of the effect of spectrum folding
 ```
 
-The effect is that the spectrum is folded around the value of $\sigma$. Thus, eigenvalues that are closest to the shift become the smallest eigenvalues in the folded spectrum, see figure [](#fig:fold). For this reason, spectrum folding is commonly used in combination with eigensolvers that compute the smallest eigenvalues, for instance in the context of electronic structure calculations {cite:p}`Canning:2000:PEP`. This transformation can be an effective, low-cost alternative to shift-and-invert.
-
-```{rubric} Footnotes
-```
-
-[^slepc-v3.5]: Note that the sign changed in SLEPc 3.5 with respect to previous versions.
+The effect is that the spectrum is folded around the value of $\sigma$. Thus, eigenvalues that are closest to the shift become the smallest eigenvalues in the folded spectrum, see figure [](#fig:fold). For this reason, spectrum folding is commonly used in combination with eigensolvers that compute the smallest eigenvalues, for instance in the context of electronic structure calculations {cite:p}`Can00`. This transformation can be an effective, low-cost alternative to shift-and-invert.
 
 ```{eval-rst}
 .. bibliography::
    :filter: docname in docnames
 ```
+
+```{rubric} Footnotes
+```
+
+[^slepc-v3.5]: Note that the sign changed in SLEPc 3.5 with respect to previous versions.

@@ -8,7 +8,7 @@ The Singular Value Decomposition (`SVD`) solver object can be used for computing
 
 This section provides some basic concepts about the singular value decomposition and other related problems. The objective is to set up the notation and also to justify some of the solution approaches, particularly those based on the `EPS` object. As in the case of eigensolvers, some of the implemented methods are described in detail in the SLEPc [technical reports](#str).
 
-For background material about the SVD, see for instance {cite:p}`Bai:2000:TSA{ch. 6}`. Many other books such as {cite:p}`Bjorck:1996:NML` or {cite:p}`Hansen:1998:RDI` present the SVD from the perspective of its application to the solution of least squares problems and other related linear algebra problems.
+For background material about the SVD, see for instance {cite:p}`Bai00{ch. 6}`. Many other books such as {cite:p}`Bjo96,Han98` present the SVD from the perspective of its application to the solution of least squares problems and other related linear algebra problems.
 
 {#sec:svd label="sec:svd"}
 ### The (Standard) Singular Value Decomposition (SVD)
@@ -119,7 +119,7 @@ H(A)=\begin{bmatrix}0&A\\A^*&0\end{bmatrix},
 {#sec:gsvd label="sec:gsvd"}
 ### The Generalized Singular Value Decomposition (GSVD)
 
-An extension of the SVD to the case of two matrices is the generalized singular value decomposition (GSVD), which can be applied in constrained least squares problems, among others. An overview of the problem can be found in {cite:p}`Golub:1996:MC{8.7.3}`.
+An extension of the SVD to the case of two matrices is the generalized singular value decomposition (GSVD), which can be applied in constrained least squares problems, among others. An overview of the problem can be found in {cite:p}`Gol96{8.7.3}`.
 
 Consider two matrices, $A\in\mathbb{C}^{m\times n}$ with $m\geq n$ and $B\in\mathbb{C}^{p\times n}$. Note that both matrices must have the same column dimension. Then there exist two unitary matrices $U\in\mathbb{C}^{m\times m}$ and $V\in\mathbb{C}^{p\times p}$ and an invertible matrix $X\in\mathbb{C}^{n\times n}$ such that
 
@@ -139,7 +139,7 @@ U^*AX=C,\qquad V^*BX=S,
 
 and if $p<n$ we can consider that the first $n-p$ generalized singular values are infinite, as if $s_1=\dots=s_{n-p}=0$. Note that if $B$ is the identity matrix, $X$ can be taken to be unitary and then we recover the standard SVD, $\sigma(A,I)=\sigma(A)$, that is why equation {math:numref}`eq:gsvd` is considered a generalization of the SVD.
 
-The diagonal matrices $C$ and $S$ satisfy $C^*C+S^*S=I$, and are related to the CS decomposition {cite:p}`Golub:1996:MC{2.6.4}` associated with the orthogonal factor of the QR factorization of matrices $A$ and $B$ stacked, that is, if
+The diagonal matrices $C$ and $S$ satisfy $C^*C+S^*S=I$, and are related to the CS decomposition {cite:p}`Gol96{2.6.4}` associated with the orthogonal factor of the QR factorization of matrices $A$ and $B$ stacked, that is, if
 
 ```{math}
 :label: eq:qr
@@ -156,7 +156,7 @@ Z:=\begin{bmatrix}A\\B\end{bmatrix}=\begin{bmatrix}Q_1\\Q_2\end{bmatrix}R,
 Scheme of the thin GSVD of two matrices $A$ and $B$, for the case $p < n$
 ```
 
-The above description assumes that matrix $Z$ has full column rank, and the rank of $B$ is also $q$. In the general case where these assumptions do not hold, the structure of matrices $C$ and $S$ is a bit more complicated. This includes also the case where $m<n$. A detailed description of those cases can be found in {cite:p}`Anderson:1999:LUG{2.3.5.3}`.
+The above description assumes that matrix $Z$ has full column rank, and the rank of $B$ is also $q$. In the general case where these assumptions do not hold, the structure of matrices $C$ and $S$ is a bit more complicated. This includes also the case where $m<n$. A detailed description of those cases can be found in {cite:p}`And99{2.3.5.3}`.
 
 As in the case of the SVD, one can consider thin, compact, truncated, and partial versions of the GSVD. A pictorial representation of the thin GSVD is shown in figure [](#fig:gsvd).
 
@@ -193,7 +193,7 @@ The formulation that is analog to the eigenproblem associated with the cyclic ma
 {#sec:hsvd label="sec:hsvd"}
 ### The Hyperbolic Singular Value Decomposition (HSVD)
 
-The hyperbolic singular value decomposition (HSVD) was introduced in {cite:p}`Onn:1991:HSV`, motivated by some signal processing applications such as the so-called covariance differencing problem. The formulation of the HSVD is similar to that of the SVD, except that $U$ is orthogonal with respect to a signature matrix,
+The hyperbolic singular value decomposition (HSVD) was introduced in {cite:p}`Onn91`, motivated by some signal processing applications such as the so-called covariance differencing problem. The formulation of the HSVD is similar to that of the SVD, except that $U$ is orthogonal with respect to a signature matrix,
 
 ```{math}
 :label: eq:hsvd
@@ -411,7 +411,7 @@ The available methods for computing the partial SVD are shown in table [List of 
 
 -   Solvers based on `EPS`. These solvers set up an `EPS` object internally, thus using the available eigensolvers for solving the SVD problem. The two possible approaches in this case are the cross product matrix and the cyclic matrix, as described in section [](#sec:svdback).
 
--   Specific SVD solvers. These are typically eigensolvers that have been adapted algorithmically to exploit the structure of the SVD or GSVD problems. There are two Lanczos-type solvers in this category: Lanczos and thick-restart Lanczos, see {cite:p}`str-8` for a detailed description of these methods. In this category, we could also add the randomized SVD (RSVD), a special solver that does not compute individual singular vectors accurately, but rather a low-rank approximation of $A$ by means of randomization techniques.
+-   Specific SVD solvers. These are typically eigensolvers that have been adapted algorithmically to exploit the structure of the SVD or GSVD problems. There are two Lanczos-type solvers in this category: Lanczos and thick-restart Lanczos, see {cite:p}`Her07b` for a detailed description of these methods. In this category, we could also add the randomized SVD (RSVD), a special solver that does not compute individual singular vectors accurately, but rather a low-rank approximation of $A$ by means of randomization techniques.
 
 -   The LAPACK solver. This is an interface to some LAPACK routines, analog of those in the case of eigenproblems. These routines operate in dense mode with only one processor and therefore are suitable only for moderate size problems. This solver should be used only for debugging purposes.
 
@@ -510,7 +510,7 @@ SVDGetSingularTriplet(SVD svd,PetscInt j,PetscReal *sigma,Vec u,Vec v);
 
 returns the $j$-th computed singular triplet, $(\sigma_j,u_j,v_j)$, where both $u_j$ and $v_j$ are normalized to have unit norm[^hsvd]. Typically, this function is called inside a loop for each value of `j` from 0 to `nconv`--1. Note that singular values are ordered according to the same criterion specified with function `SVDSetWhichSingularTriplets` for selecting the portion of the spectrum of interest.
 
-In some applications, it may be enough to compute only the right singular vectors. This is especially important in cases in which memory requirements are critical (remember that both $U_k$ and $V_k$ are dense matrices, and $U_k$ may require much more storage than $V_k$, see figure [](#fig:svd)). In SLEPc, there is no general option for specifying this, but the default behavior of some solvers is to compute only right vectors and allocate/compute left vectors only in the case that the user requests them. This is done in the `cross` solver and in some special variants of other solvers such as one-sided Lanczos (consult {cite:p}`str-8` for specific solver options).
+In some applications, it may be enough to compute only the right singular vectors. This is especially important in cases in which memory requirements are critical (remember that both $U_k$ and $V_k$ are dense matrices, and $U_k$ may require much more storage than $V_k$, see figure [](#fig:svd)). In SLEPc, there is no general option for specifying this, but the default behavior of some solvers is to compute only right vectors and allocate/compute left vectors only in the case that the user requests them. This is done in the `cross` solver and in some special variants of other solvers such as one-sided Lanczos (consult {cite:p}`Her07b` for specific solver options).
 
 In the case of the GSVD, the `sigma` argument of `SVDGetSingularTriplet` contains $\sigma_i=c_i/s_i$ and the second {external:doc}`Vec` argument (`v`) contains the right singular vectors ($x_i$), while the first {external:doc}`Vec` argument (`u`) contains the other vectors of the decomposition stacked on top of each other, as a single $(m+p)$-vector: $\left[\begin{smallmatrix}u_i\\v_i\end{smallmatrix}\right]$.
 
@@ -552,7 +552,7 @@ In the case of the GSVD, the function `SVDComputeError` will compute a residual 
 \|r_\mathrm{GSVD}\|_2=\left(\|\tilde{s}^2A^*\tilde{u}-\tilde{c}B^*B\tilde{x}\|_2^2+\|\tilde{c}^2B^*\tilde{v}-\tilde{s}A^*A\tilde{x}\|_2^2\right)^{\frac{1}{2}},
 ```
 
-where $\tilde{x}$, $\tilde{u}$, $\tilde{v}$ are the computed singular vectors corresponding to $\tilde{\sigma}$, and $\tilde{c}$, $\tilde{s}$ are obtained from $\tilde{\sigma}$ as $\tilde{s}=1/\sqrt{1+\tilde{\sigma}^2}$ and $\tilde{c}=\tilde{\sigma}\tilde{s}$. See {cite:p}`Alvarruiz:2024:TLB` for details.
+where $\tilde{x}$, $\tilde{u}$, $\tilde{v}$ are the computed singular vectors corresponding to $\tilde{\sigma}$, and $\tilde{c}$, $\tilde{s}$ are obtained from $\tilde{\sigma}$ as $\tilde{s}=1/\sqrt{1+\tilde{\sigma}^2}$ and $\tilde{c}=\tilde{\sigma}\tilde{s}$. See {cite:p}`Alv24` for details.
 
 Similarly, in the HSVD we employ a modified residual
 
@@ -587,12 +587,12 @@ As in the case of eigensolvers, the user can choose different convergence tests,
 
 There is support for different kinds of viewers for the solution, as in the case of eigensolvers. One can for instance use `-svd_view_values`, `-svd_view_vectors`, `-svd_error_relative`, or `-svd_converged_reason`. See the description in section [](#sec:epsviewers).
 
-```{rubric} Footnotes
-```
-
-[^hsvd]: The exception is in the HSVD, where $u_j$ is normalized so that $U^*\Omega U=\tilde\Omega$.
-
 ```{eval-rst}
 .. bibliography::
    :filter: docname in docnames
 ```
+
+```{rubric} Footnotes
+```
+
+[^hsvd]: The exception is in the HSVD, where $u_j$ is normalized so that $U^*\Omega U=\tilde\Omega$.

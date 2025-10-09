@@ -6,7 +6,7 @@ The Matrix Function (`MFN`) solver object provides algorithms that compute the a
 {#sec:mfn label="sec:mfn"}
 ## The Problem $f(A)v$
 
-The need to evaluate a function $f(A)\in\mathbb{C}^{n\times n}$ of a matrix $A\in\mathbb{C}^{n\times n}$ arises in many applications. There are many methods to compute matrix functions, see for instance the survey by {cite:t}`Higham:2010:CMF`. Here, we focus on the case that $A$ is large and sparse, or is available only as a matrix-vector product subroutine. In such cases, it is the action of $f(A)$ on a vector, $f(A)v$, that is required and not $f(A)$. For this, it is possible to adapt some of the methods used to approximate eigenvalues, such as those based on Krylov subspaces or on the concept of contour integral. The description below will be restricted to the case of Krylov methods.
+The need to evaluate a function $f(A)\in\mathbb{C}^{n\times n}$ of a matrix $A\in\mathbb{C}^{n\times n}$ arises in many applications. There are many methods to compute matrix functions, see for instance the survey by {cite:t}`Hig10`. Here, we focus on the case that $A$ is large and sparse, or is available only as a matrix-vector product subroutine. In such cases, it is the action of $f(A)$ on a vector, $f(A)v$, that is required and not $f(A)$. For this, it is possible to adapt some of the methods used to approximate eigenvalues, such as those based on Krylov subspaces or on the concept of contour integral. The description below will be restricted to the case of Krylov methods.
 
 In the sequel, we concentrate on the exponential function, which is one of the most demanded in applications, although the concepts are easily generalizable to other functions as well. Using the Taylor series expansion of $e^A$, we have
 
@@ -16,7 +16,7 @@ In the sequel, we concentrate on the exponential function, which is one of the m
 y=e^Av=v+\frac{A}{1!}v+\frac{A^2}{2!}v+\cdots,
 ```
 
-so, in principle, the vector $y$ can be approximated by an element of the Krylov subspace $\mathcal{K}_m(A,v)$ defined in equation {math:numref}`eq:krylov`. This is the basis of the method implemented in Expokit {cite:p}`Sidje:1998:ESP`. Let $AV_m=V_{m+1}\underline{H}_m$ be an Arnoldi decomposition, where the columns of $V_m$ form an orthogonal basis of the Krylov subspace, then the approximation can be computed as
+so, in principle, the vector $y$ can be approximated by an element of the Krylov subspace $\mathcal{K}_m(A,v)$ defined in equation {math:numref}`eq:krylov`. This is the basis of the method implemented in Expokit {cite:p}`Sid98`. Let $AV_m=V_{m+1}\underline{H}_m$ be an Arnoldi decomposition, where the columns of $V_m$ form an orthogonal basis of the Krylov subspace, then the approximation can be computed as
 
 ```{math}
 :label: eq:aprox-solution
@@ -102,18 +102,15 @@ or via the options database command `-mfn_type` followed by the method name (see
 
 Currently implemented methods are:
 
--   A Krylov method with restarts as proposed by {cite:t}`Eiermann:2006:RKS`.
+-   A Krylov method with restarts as proposed by {cite:t}`Eie06`.
 
--   The method implemented in Expokit {cite:p}`Sidje:1998:ESP` for the matrix exponential.
+-   The method implemented in Expokit {cite:p}`Sid98` for the matrix exponential.
 
 ### Accuracy and Monitors
 
 In the $f(A)v$ problem, there is no clear definition of residual, as opposed to the case of linear systems or eigenproblems. Still, the solvers have different ways of assessing the accuracy of the computed solution. The user can provide a tolerance and maximum number of iterations with `MFNSetTolerances`, but there is no guarantee that an analog of the residual is below the tolerance.
 
 After the solver has finished, the number of performed (outer) iterations can be obtained with `MFNGetIterationNumber`. There are also monitors that display the error estimate, which can be activated with command-line keys `-mfn_monitor`, or `-mfn_monitor draw::draw_lg`. See section [](#sec:monitor) for additional details.
-
-```{rubric} Footnotes
-```
 
 ```{eval-rst}
 .. bibliography::

@@ -20,7 +20,7 @@ This manual describes SLEPc, the *Scalable Library for Eigenvalue Problem Comput
 
 The emphasis of the software is on methods and techniques appropriate for problems in which the associated matrices are large and sparse, for example, those arising after the discretization of partial differential equations. Thus, most of the methods offered by the library are projection methods, including different variants of Krylov and Davidson iterations. In addition to its own solvers, SLEPc provides transparent access to some external software packages such as ARPACK. Apart from the solvers, SLEPc also provides built-in support for some operations commonly used in the context of eigenvalue computations, such as preconditioning or the shift-and-invert spectral transformation.
 
-SLEPc is built on top of PETSc, the Portable, Extensible Toolkit for Scientific Computation {cite:p}`Balay:PUM`. SLEPc extends PETSc with all the functionality necessary for the solution of eigenvalue problems. This means that PETSc must be previously installed in order to use SLEPc. PETSc users will find SLEPc very easy to use, since it enforces the same programming paradigm. Those readers that are not acquainted with PETSc are highly recommended to familiarize with it before proceeding with SLEPc.
+SLEPc is built on top of PETSc, the Portable, Extensible Toolkit for Scientific Computation. SLEPc extends PETSc with all the functionality necessary for the solution of eigenvalue problems. This means that PETSc must be previously installed in order to use SLEPc. PETSc users will find SLEPc very easy to use, since it enforces the same programming paradigm. Those readers that are not acquainted with PETSc are highly recommended to familiarize with it before proceeding with SLEPc.
 
 {#how-to-get-slepc}
 ```{only} latex
@@ -117,14 +117,6 @@ In order to solve a given problem, one should create a solver object correspondi
 
 -   The solver class `LME` is still experimental and it is not covered in this manual yet.
 :::
-
-```{rubric} Footnotes
-```
-
-```{eval-rst}
-.. bibliography::
-   :filter: docname in docnames
-```
 
 ```{raw} latex
 \sphinxtableofcontents

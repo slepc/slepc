@@ -8,7 +8,7 @@ Currently, most `PEP` solvers are based on linearization, either implicit or exp
 {#sec:pep label="sec:pep"}
 ## Overview of Polynomial Eigenproblems
 
-In this section, we review some basic properties of the polynomial eigenvalue problem. The main goal is to set up the notation as well as to describe the linearization approaches that will be employed for solving via an `EPS` object. To simplify, we initially restrict the description to the case of quadratic eigenproblems, and then extend it to the general case of arbitrary degree. For additional background material, the reader is referred to {cite:p}`Tisseur:2001:QEP`. More information can be found in a paper by {cite:t}`Campos:2016:PKS`, that focuses specifically on SLEPc implementation of methods based on Krylov iterations on the linearized problem.
+In this section, we review some basic properties of the polynomial eigenvalue problem. The main goal is to set up the notation as well as to describe the linearization approaches that will be employed for solving via an `EPS` object. To simplify, we initially restrict the description to the case of quadratic eigenproblems, and then extend it to the general case of arbitrary degree. For additional background material, the reader is referred to {cite:p}`Tis01`. More information can be found in a paper by {cite:t}`Cam16a`, that focuses specifically on SLEPc implementation of methods based on Krylov iterations on the linearized problem.
 
 {#sec:qep label="sec:qep"}
 ### Quadratic Eigenvalue Problems
@@ -178,7 +178,7 @@ P(\lambda)=A_0\phi_0(\lambda)+A_1\phi_1(\lambda)+\dots+A_d\phi_d(\lambda),
 
 #### Avoiding the Linearization
 
-An alternative to linearization is to directly perform a projection of the polynomial eigenproblem. These methods enforce a Galerkin condition on the polynomial residual, $P(\theta)u\perp \mathcal{K}$. Here, the subspace $\mathcal{K}$ can be built in various ways, for instance with the Jacobi-Davidson method. This family of methods need not worry about operating with vectors of dimension $dn$. The downside is that computing more than one eigenvalue is more difficult, since usual deflation strategies cannot be applied. For a detailed description of the polynomial Jacobi-Davidson method in SLEPc, see {cite:p}`Campos:2020:PJD`.
+An alternative to linearization is to directly perform a projection of the polynomial eigenproblem. These methods enforce a Galerkin condition on the polynomial residual, $P(\theta)u\perp \mathcal{K}$. Here, the subspace $\mathcal{K}$ can be built in various ways, for instance with the Jacobi-Davidson method. This family of methods need not worry about operating with vectors of dimension $dn$. The downside is that computing more than one eigenvalue is more difficult, since usual deflation strategies cannot be applied. For a detailed description of the polynomial Jacobi-Davidson method in SLEPc, see {cite:p}`Cam20a`.
 
 ## Basic Usage
 
@@ -478,7 +478,7 @@ $ ./spring -n 300 -pep_hermitian -pep_interval -10.1,-9.5 -pep_type stoar -st_ty
 
 In hyperbolic problems, where eigenvalues form two separate groups of $n$ eigenvalues, it will be necessary to explicitly set the problem type to `-pep_hyperbolic` if the interval $[a,b]$ includes eigenvalues from both groups.
 
-Additional details can be found in {cite:p}`Campos:2020:ISS`.
+Additional details can be found in {cite:p}`Cam20b`.
 
 ## Retrieving the Solution
 
@@ -543,9 +543,9 @@ Similar expressions can be used in the convergence criterion used to accept conv
 
 ### Scaling
 
-When solving a quadratic eigenproblem via linearization, an accurate solution of the generalized eigenproblem does not necessarily imply a similar level of accuracy for the quadratic problem. {cite:t}`Tisseur:2000:BEC` shows that in the case of the linearization {math:numref}`eq:n1`, a small backward error in the generalized eigenproblem guarantees a small backward error in the quadratic eigenproblem. However, this holds only if $M$, $C$ and $K$ have a similar norm.
+When solving a quadratic eigenproblem via linearization, an accurate solution of the generalized eigenproblem does not necessarily imply a similar level of accuracy for the quadratic problem. {cite:t}`Tis00` shows that in the case of the linearization {math:numref}`eq:n1`, a small backward error in the generalized eigenproblem guarantees a small backward error in the quadratic eigenproblem. However, this holds only if $M$, $C$ and $K$ have a similar norm.
 
-When the norm of $M$, $C$ and $K$ vary widely, {cite:t}`Tisseur:2000:BEC` recommends to solve the scaled problem, defined as
+When the norm of $M$, $C$ and $K$ vary widely, {cite:t}`Tis00` recommends to solve the scaled problem, defined as
 
 ```{math}
 :label: eq:scaled
@@ -555,13 +555,13 @@ When the norm of $M$, $C$ and $K$ vary widely, {cite:t}`Tisseur:2000:BEC` recomm
 
  with $\mu=\lambda/\alpha$, $M_\alpha=\alpha^2M$ and $C_\alpha=\alpha C$, where $\alpha$ is a scaling factor. Ideally, $\alpha$ should be chosen in such a way that the norms of $M_\alpha$, $C_\alpha$ and $K$ have similar magnitude. A tentative value would be $\alpha=\sqrt{\frac{\|K\|_\infty}{\|M\|_\infty}}$.
 
-In the general case of polynomials of arbitrary degree, a similar scheme is also possible, but it is not clear how to choose $\alpha$ to achieve the same goal. {cite:t}`Betcke:2008:OSG` proposes such a scaling scheme as well as more general diagonal scalings $D_\ell P(\lambda)D_r$. In SLEPc, we provide these types of scalings, whose settings can be tuned with:
+In the general case of polynomials of arbitrary degree, a similar scheme is also possible, but it is not clear how to choose $\alpha$ to achieve the same goal. {cite:t}`Bet08` proposes such a scaling scheme as well as more general diagonal scalings $D_\ell P(\lambda)D_r$. In SLEPc, we provide these types of scalings, whose settings can be tuned with:
 
 ```{code} c
 PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,PetscInt its,PetscReal w);
 ```
 
-See the manual page for details and the description in {cite:p}`Campos:2016:PKS`.
+See the manual page for details and the description in {cite:p}`Cam16a`.
 
 ### Extraction
 
@@ -571,14 +571,14 @@ Some of the eigensolvers provided in the `PEP` package are based on solving the 
 PEPSetExtract(PEP pep,PEPExtract extract);
 ```
 
-For additional information, see {cite:p}`Campos:2016:PKS`.
+For additional information, see {cite:p}`Cam16a`.
 
 {#sec:refine label="sec:refine"}
 ### Iterative Refinement
 
 As mentioned above, scaling can sometimes improve the accuracy of the computed solution considerably, in the case that the coefficient matrices $A_i$ are very different in norm. Still, even when the matrix norms are well balanced the accuracy can sometimes be unacceptably low. The reason is that methods based on linearization are not always backward stable, that is, even if the computation of the eigenpairs of the linearization is done in a stable way, there is no guarantee that the extracted polynomial eigenpairs satisfy the given tolerance.
 
-If good accuracy is required, one possibility is to perform a few steps of iterative refinement on the solution computed by the polynomial eigensolver algorithm. Iterative refinement can be seen as the Newton method applied to a set of nonlinear equations related to the polynomial eigenvalue problem {cite:p}`Betcke:2011:PER`. It is well known that global convergence of Newton's iteration is guaranteed only if the initial guess is close enough to the exact solution, so we still need an eigensolver such as TOAR to compute this initial guess.
+If good accuracy is required, one possibility is to perform a few steps of iterative refinement on the solution computed by the polynomial eigensolver algorithm. Iterative refinement can be seen as the Newton method applied to a set of nonlinear equations related to the polynomial eigenvalue problem {cite:p}`Bet11`. It is well known that global convergence of Newton's iteration is guaranteed only if the initial guess is close enough to the exact solution, so we still need an eigensolver such as TOAR to compute this initial guess.
 
 Iterative refinement can be very costly (sometimes a single refinement step is more expensive than the whole iteration to compute the initial guess with TOAR), that is why in SLEPc it is disabled by default. When the user activates it, the computation of Newton iterations will take place within `PEPSolve` as a final stage (identified as `PEPRefine` in the `-log_view` report).
 
@@ -590,12 +590,12 @@ There are two types of refinement, identified as *simple* and *multiple*. The fi
 
 In `PEPSetRefine`, the argument `npart` indicates the number of partitions in which the communicator must be split. This can sometimes improve the scalability when refining many eigenpairs.
 
-Additional details can be found in {cite:p}`Campos:2016:PIR`.
-
-```{rubric} Footnotes
-```
+Additional details can be found in {cite:p}`Cam16b`.
 
 ```{eval-rst}
 .. bibliography::
    :filter: docname in docnames
+```
+
+```{rubric} Footnotes
 ```

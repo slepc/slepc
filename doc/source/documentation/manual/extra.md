@@ -215,7 +215,7 @@ FNEvaluateFunction(FN fn,PetscScalar x,PetscScalar *y)
 FNEvaluateDerivative(FN fn,PetscScalar x,PetscScalar *y)
 ```
 
-The function can also be evaluated as a matrix function, $B=f(A)$, where $A,B$ are small, dense, square matrices. This is done with `FNEvaluateFunctionMat`. Note that for a rational function, the corresponding expression would be $q(A)^{-1}p(A)$. For computing functions such as the exponential of a small matrix $A$, several methods are available. When the matrix $A$ is symmetric, the default is to compute $f(A)$ using the eigendecomposition $A=Q\Lambda Q^*$, for instance the exponential would be computed as $\exp(A)=Q\,\mathrm{diag}(e^{\lambda_i})Q^*$. In the general case, it is necessary to have recourse to one of the methods discussed in, e.g., {cite:p}`Higham:2010:CMF`.
+The function can also be evaluated as a matrix function, $B=f(A)$, where $A,B$ are small, dense, square matrices. This is done with `FNEvaluateFunctionMat`. Note that for a rational function, the corresponding expression would be $q(A)^{-1}p(A)$. For computing functions such as the exponential of a small matrix $A$, several methods are available. When the matrix $A$ is symmetric, the default is to compute $f(A)$ using the eigendecomposition $A=Q\Lambda Q^*$, for instance the exponential would be computed as $\exp(A)=Q\,\mathrm{diag}(e^{\lambda_i})Q^*$. In the general case, it is necessary to have recourse to one of the methods discussed in, e.g., {cite:p}`Hig10`.
 
 Finally, there is a mechanism to combine simple functions in order to create more complicated functions. For instance, the function
 
@@ -391,7 +391,7 @@ This list might be incomplete. Check the output of `./configure --help` for othe
 
 <https://www.netlib.org/lapack>
 
-LAPACK {cite:p}`Anderson:1999:LUG` is a software package for the solution of many different dense linear algebra problems, including various types of eigenvalue problems and singular value decompositions. SLEPc explicitly creates the operator matrix in dense form and then the appropriate LAPACK driver routine is invoked. Therefore, this interface should be used only for testing and validation purposes and not in a production code. The operator matrix is created by applying the operator to the columns of the identity matrix.
+LAPACK {cite:p}`And99` is a software package for the solution of many different dense linear algebra problems, including various types of eigenvalue problems and singular value decompositions. SLEPc explicitly creates the operator matrix in dense form and then the appropriate LAPACK driver routine is invoked. Therefore, this interface should be used only for testing and validation purposes and not in a production code. The operator matrix is created by applying the operator to the columns of the identity matrix.
 
 **Installation**: PETSc already depends on LAPACK. The SLEPc interface to LAPACK can be used directly. If SLEPc's configure script complains about missing LAPACK functions, then reconfigure PETSc with option `--download-f2cblaslapack`.
 
@@ -401,7 +401,7 @@ LAPACK {cite:p}`Anderson:1999:LUG` is a software package for the solution of man
 
 <https://github.com/opencollab/arpack-ng>
 
-ARPACK {cite:p}`Lehoucq:1998:AUG` {cite:p}`Maschhoff:1996:PEP` is a software package for the computation of a few eigenvalues and corresponding eigenvectors of a general $n\times n$ matrix $A$. It is most appropriate for large sparse matrices. ARPACK is based upon an algorithmic variant of the Arnoldi process called the Implicitly Restarted Arnoldi Method (IRAM). When the matrix $A$ is symmetric it reduces to a variant of the Lanczos process called the Implicitly Restarted Lanczos Method (IRLM). These variants may be viewed as a synthesis of the Arnoldi/Lanczos process with the Implicitly Shifted QR technique that is suitable for large scale problems. It can be used for standard and generalized eigenvalue problems, both in real and complex arithmetic. It is implemented in Fortran 77 and it is based on the reverse communication interface. A parallel version, PARPACK, is available with support for both MPI and BLACS.
+ARPACK {cite:p}`Leh98,Mas96` is a software package for the computation of a few eigenvalues and corresponding eigenvectors of a general $n\times n$ matrix $A$. It is most appropriate for large sparse matrices. ARPACK is based upon an algorithmic variant of the Arnoldi process called the Implicitly Restarted Arnoldi Method (IRAM). When the matrix $A$ is symmetric it reduces to a variant of the Lanczos process called the Implicitly Restarted Lanczos Method (IRLM). These variants may be viewed as a synthesis of the Arnoldi/Lanczos process with the Implicitly Shifted QR technique that is suitable for large scale problems. It can be used for standard and generalized eigenvalue problems, both in real and complex arithmetic. It is implemented in Fortran 77 and it is based on the reverse communication interface. A parallel version, PARPACK, is available with support for both MPI and BLACS.
 
 **Installation**: To install ARPACK we recommend using the _arpack-ng_ distribution, available in `github.com`, that supports `configure`+`make` for installation. Also, SLEPc's `configure` allows to download this version automatically via the `--download-arpack` option. It is also possible to configure SLEPc with the serial version of ARPACK. For this, you have to configure PETSc with the option `--with-mpi=0`.
 
@@ -409,7 +409,7 @@ ARPACK {cite:p}`Lehoucq:1998:AUG` {cite:p}`Maschhoff:1996:PEP` is a software pac
 
 <https://www.cs.wm.edu/~andreas/software>
 
-PRIMME {cite:p}`Stathopoulos:2010:PMS` is a C library for finding a number of eigenvalues and their corresponding eigenvectors of a real symmetric (or complex Hermitian) matrix. This library provides a multimethod eigensolver, based on Davidson/Jacobi-Davidson. Particular methods include GD+1, JDQMR, and LOBPCG. It supports preconditioning as well as the computation of interior eigenvalues.
+PRIMME {cite:p}`Sta10` is a C library for finding a number of eigenvalues and their corresponding eigenvectors of a real symmetric (or complex Hermitian) matrix. This library provides a multimethod eigensolver, based on Davidson/Jacobi-Davidson. Particular methods include GD+1, JDQMR, and LOBPCG. It supports preconditioning as well as the computation of interior eigenvalues.
 
 **Installation**: Type `make lib` after customizing the file `Make_flags` appropriately. Alternatively, the `--download-primme` option is also available in SLEPc's `configure`.
 
@@ -419,7 +419,7 @@ PRIMME {cite:p}`Stathopoulos:2010:PMS` is a C library for finding a number of ei
 
 <https://www-users.cse.umn.edu/~saad/software/EVSL/>
 
-EVSL {cite:p}`Li:2019:EVS` is a sequential library that implements methods for computing all eigenvalues located in a given interval for real symmetric (standard or generalized) eigenvalue problems. Currently SLEPc only supports standard problems.
+EVSL {cite:p}`Li19` is a sequential library that implements methods for computing all eigenvalues located in a given interval for real symmetric (standard or generalized) eigenvalue problems. Currently SLEPc only supports standard problems.
 
 **Installation**: The option `--download-evsl` is available in SLEPc's configure for easy installation. Alternatively, one can use an already installed version.
 
@@ -427,7 +427,7 @@ EVSL {cite:p}`Li:2019:EVS` is a sequential library that implements methods for c
 
 <https://github.com/lobpcg/blopex>
 
-BLOPEX {cite:p}`Knyazev:2007:BLO` is a package that implements the Locally Optimal Block Preconditioned Conjugate Gradient (LOBPCG) method for computing several extreme eigenpairs of symmetric positive generalized eigenproblems. Numerical comparisons suggest that this method is a genuine analog for eigenproblems of the standard preconditioned conjugate gradient method for symmetric linear systems.
+BLOPEX {cite:p}`Kny07` is a package that implements the Locally Optimal Block Preconditioned Conjugate Gradient (LOBPCG) method for computing several extreme eigenpairs of symmetric positive generalized eigenproblems. Numerical comparisons suggest that this method is a genuine analog for eigenproblems of the standard preconditioned conjugate gradient method for symmetric linear systems.
 
 **Installation**: In order to use BLOPEX from SLEPc, it necessary to install it during SLEPc's configuration: `./configure --download-blopex`.
 
@@ -437,7 +437,7 @@ BLOPEX {cite:p}`Knyazev:2007:BLO` is a package that implements the Locally Optim
 
 <https://www.netlib.org/scalapack>
 
-ScaLAPACK {cite:p}`Blackford:1997:SUG` is a library of high-performance linear algebra routines for parallel distributed memory machines. It contains eigensolvers for dense Hermitian eigenvalue problems, as well as solvers for the (dense) SVD.
+ScaLAPACK {cite:p}`Bla97` is a library of high-performance linear algebra routines for parallel distributed memory machines. It contains eigensolvers for dense Hermitian eigenvalue problems, as well as solvers for the (dense) SVD.
 
 **Installation**: For using ScaLAPACK from SLEPc it is necessary to select it during configuration of PETSc.
 
@@ -445,7 +445,7 @@ ScaLAPACK {cite:p}`Blackford:1997:SUG` is a library of high-performance linear a
 
 <https://elpa.mpcdf.mpg.de/>
 
-ELPA {cite:p}`Auckenthaler:2011:ELP` is a high-performance library for the parallel solution of dense symmetric (or Hermitian) eigenvalue problems on distributed memory computers. It uses a ScaLAPACK-compatible matrix distribution.
+ELPA {cite:p}`Auc11` is a high-performance library for the parallel solution of dense symmetric (or Hermitian) eigenvalue problems on distributed memory computers. It uses a ScaLAPACK-compatible matrix distribution.
 
 **Installation**: The SLEPc wrapper to ELPA can be activated at configure time with the option `--download_elpa`, in which case ScaLAPACK support must have been enabled during the configuration of PETSc.
 
@@ -453,7 +453,7 @@ ELPA {cite:p}`Auckenthaler:2011:ELP` is a high-performance library for the paral
 
 <https://github.com/ecrc/ksvd/>
 
-KSVD {cite:p}`Sukkari:2019:QDW` is a high performance software framework for computing a dense SVD on distributed-memory manycore systems. The KSVD solver relies on the polar decomposition (PD) based on the QR Dynamically-Weighted Halley (QDWH) and ZOLO-PD algorithms.
+KSVD {cite:p}`Suk19` is a high performance software framework for computing a dense SVD on distributed-memory manycore systems. The KSVD solver relies on the polar decomposition (PD) based on the QR Dynamically-Weighted Halley (QDWH) and ZOLO-PD algorithms.
 
 **Installation**: The option `--download-ksvd` is available in SLEPc's configure for easy installation, which in turn requires adding `--download-polar` and `--download-elpa`.
 
@@ -461,7 +461,7 @@ KSVD {cite:p}`Sukkari:2019:QDW` is a high performance software framework for com
 
 <https://github.com/elemental/Elemental>
 
-ELEMENTAL {cite:p}`Poulson:2013:ELE` is a distributed-memory, dense and sparse-direct linear algebra package. It contains eigensolvers for dense Hermitian eigenvalue problems, as well as solvers for the SVD.
+ELEMENTAL {cite:p}`Pou13` is a distributed-memory, dense and sparse-direct linear algebra package. It contains eigensolvers for dense Hermitian eigenvalue problems, as well as solvers for the SVD.
 
 **Installation**: For using ELEMENTAL from SLEPc it is necessary to select it during configuration of PETSc.
 
@@ -469,7 +469,7 @@ ELEMENTAL {cite:p}`Poulson:2013:ELE` is a distributed-memory, dense and sparse-d
 
 <https://feast-solver.org/>
 
-FEAST {cite:p}`Polizzi:2009:DAS` is a numerical library for solving the standard or generalized symmetric eigenvalue problem, and obtaining all the eigenvalues and eigenvectors within a given search interval. It is based on an innovative fast and stable numerical algorithm which deviates fundamentally from the traditional Krylov subspace based iterations or Davidson-Jacobi techniques. The FEAST algorithm takes its inspiration from the density-matrix representation and contour integration technique in quantum mechanics. Latest versions also support non-symmetric problems.
+FEAST {cite:p}`Pol09` is a numerical library for solving the standard or generalized symmetric eigenvalue problem, and obtaining all the eigenvalues and eigenvectors within a given search interval. It is based on an innovative fast and stable numerical algorithm which deviates fundamentally from the traditional Krylov subspace based iterations or Davidson-Jacobi techniques. The FEAST algorithm takes its inspiration from the density-matrix representation and contour integration technique in quantum mechanics. Latest versions also support non-symmetric problems.
 
 **Installation**: We only support the FEAST implementation included in Intel MKL. For using it from SLEPc it is necessary to configure PETSc with MKL by adding the corresponding option, e.g., `--with-blas-lapack-dir=$MKLROOT`.
 
@@ -479,7 +479,7 @@ FEAST {cite:p}`Polizzi:2009:DAS` is a numerical library for solving the standard
 
 <https://github.com/ChASE-library/ChASE>
 
-CHASE {cite:p}`Winkelmann:2019:CCA` is a modern and scalable library based on subspace iteration with polynomial acceleration to solve dense Hermitian (symmetric) algebraic eigenvalue problems, especially solving dense Hermitian eigenproblems arranged in a sequence. Novel to ChASE is the computation of the spectral estimates that enter in the filter and an optimization of the polynomial degree that further reduces the necessary floating-point operations.
+CHASE {cite:p}`Win19` is a modern and scalable library based on subspace iteration with polynomial acceleration to solve dense Hermitian (symmetric) algebraic eigenvalue problems, especially solving dense Hermitian eigenproblems arranged in a sequence. Novel to ChASE is the computation of the spectral estimates that enter in the filter and an optimization of the polynomial degree that further reduces the necessary floating-point operations.
 
 **Installation**: Currently, the CHASE interface in SLEPc is based on the MPI version with block-cyclic distribution, i.e., ScaLAPACK matrix storage, so it is necessary to enable ScaLAPACK during configuration of PETSc.
 
@@ -499,14 +499,14 @@ The following is a Fortran example. It is the Fortran equivalent of the program 
 :end-before: '!/*TEST'
 ```
 
+```{eval-rst}
+.. bibliography::
+   :filter: docname in docnames
+```
+
 ```{rubric} Footnotes
 ```
 
 [^cuda]: <https://developer.nvidia.com/cuda-zone>
 
 [^rocm]: <https://rocm.docs.amd.com>
-
-```{eval-rst}
-.. bibliography::
-   :filter: docname in docnames
-```
