@@ -262,9 +262,10 @@ Section [](#sec:fortran) provides a summary of the differences between using SLE
 
 A simple example is listed next that solves an eigenvalue problem associated with the one-dimensional Laplacian operator discretized with finite differences. This example can be found in `${SLEPC_DIR}/src/eps/tutorials/ex1.c`. Following the code we highlight a few of the most important parts of this example.
 
-```{include} ex1.c
+```{literalinclude} /../../src/eps/tutorials/ex1.c
 :name: ex1.c
-:code: c
+:language: c
+:start-after: */
 ```
 
 **Include Files**. The C/C++ include files for SLEPc should be used via statements such as
