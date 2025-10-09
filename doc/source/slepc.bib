@@ -1,31 +1,33 @@
-@STRING{acmmathsoft="{ACM} Transactions on Mathematical Software" }
+@STRING{acmmathsoft="{ACM} Trans. Math. Software" }
 @STRING{actanum	= "Acta Numerica" }
 @STRING{birkhauser="Birkha{\"u}ser" }
-@STRING{bit	= "{BIT} Numerical Mathematics" }
-@STRING{compapplmath="Journal of Computational and Applied Mathematics" }
-@STRING{compphys= "Journal of Computational Physics" }
-@STRING{gammmitt= "{GAMM} Mitteilungen" }
-@STRING{ieeetranssign="{IEEE} Transactions on Signal Processing" }
-@STRING{intnumfluid="International Journal for Numerical Methods in Fluids" }
+@STRING{bit	= "{BIT}" }
+@String{compapplmath="J. Comput. Appl. Math." }
+@String{compphys="J. Comput. Phys." }
+@String{condmatt="J. Condens. Matter Phys." }
+@String{gammmitt="{GAMM} Mitt."}
+@String{ieeetranssign="{IEEE} Trans. Signal Proces." }
+@String{intnumfluid="Int. J. Numer. Methods Fluids" }
 @STRING{johnshopkinspress="The Johns Hopkins University Press" }
 @STRING{johnwileysons="John Wiley and Sons" }
-@STRING{linalgapp="Linear Algebra and its Applications" }
-@STRING{lncs	= "Lecture Notes in Computer Science" }
-@STRING{mathcomp= "Mathematics of Computation" }
-@STRING{numalg	= "Numerical Algorithms" }
-@STRING{numlinapp="Numerical Linear Algebra with Applications" }
-@STRING{physrevb= "Physical Review B" }
+@String{linalgapp="Linear Algebra Appl." }
+@String{lncs="Lect. Notes Comp. Sci." }
+@String{mathcomp="Math. Comp." }
+@String{numalg="Numer. Algorithms"}
+@String{numlinapp="Numer. Linear Algebra Appl." }
+@String{parcomputing="Parallel Computing" }
+@String{physrevb="Phys. Rev. B" }
 @STRING{prenticehall="Prentice-Hall" }
 @STRING{siam	= "Society for Industrial and Applied Mathematics" }
-@STRING{siammatrix="{SIAM} Journal on Matrix Analysis and Applications" }
-@STRING{siamnumanal="{SIAM} Journal on Numerical Analysis" }
-@STRING{siamreview="{SIAM} Review" }
-@STRING{siamsci	= "{SIAM} Journal on Scientific Computing" }
-@STRING{siamscistat="{SIAM} Journal on Scientific and Statistical Computing" }
-@String{intsuperhigh="International Journal of Supercomputer Applications and High Performance Computing" }
+@String{siammatrix="{SIAM} J. Matrix Anal. Appl." }
+@String{siamnumanal="{SIAM} J. Numer. Anal." }
+@String{siamreview="{SIAM} Rev." }
+@String{siamsci="{SIAM} J. Sci. Comput." }
+@String{siamscistat="{SIAM} J. Sci. Statist. Comput." }
+@String{intsuperhigh="Int. J. Supercomp. Applic. High Perf. Comp." }
 
 
-@Book{		  Anderson:1999:LUG,
+@Book{		  And99,
   author	= "E. Anderson and Z. Bai and C. Bischof and L. S. Blackford
 		  and J. Demmel and J. Dongarra and J. Du Croz and A.
 		  Greenbaum and S. Hammarling and A. McKenney and D.
@@ -37,17 +39,17 @@
   year		= "1999"
 }
 
-@Book{		  Bai:2000:TSA,
-  title		= "Templates for the Solution of Algebraic Eigenvalue
-		  Problems: A Practical Guide",
+@Book{		  Bai00,
   editor	= "Z. Bai and J. Demmel and J. Dongarra and A. Ruhe and H.
 		  van der Vorst",
+  title		= "Templates for the Solution of Algebraic Eigenvalue
+		  Problems: A Practical Guide",
   publisher	= siam,
   address	= "Philadelphia, PA",
   year		= "2000"
 }
 
-@InProceedings{	  Balay:1997:EMP,
+@InProceedings{	  Bal97,
   author	= "S. Balay and W. D. Gropp and L. C. McInnes and B. F.
 		  Smith",
   title		= "Efficient Management of Parallelism in Object Oriented
@@ -59,7 +61,7 @@
   year		= "1997"
 }
 
-@Book{		  Blackford:1997:SUG,
+@Book{		  Bla97,
   author	= "L. S. Blackford and J. Choi and A. Cleary and E. D'Azevedo
 		  and J. Demmel and I. Dhillon and J. Dongarra and S.
 		  Hammarling and G. Henry and A. Petitet and K. Stanley and
@@ -70,17 +72,18 @@
   address	= "Philadelphia, PA"
 }
 
-@Article{	  Golub:2000:EC2,
-  author	= "Gene H. Golub and Henk A. van der Vorst",
+@Article{	  Gol00,
+  author	= "G. H. Golub and H. A. van der Vorst",
   title		= "Eigenvalue Computation in the 20th Century",
   journal	= compapplmath,
   volume	= "123",
   number	= "1-2",
   pages		= "35--65",
-  year		= "2000"
+  year		= "2000",
+  doi           = "10.1016/S0377-0427(00)00413-1"
 }
 
-@Book{		  Lehoucq:1998:AUG,
+@Book{		  Leh98,
   author	= "R. B. Lehoucq and D. C. Sorensen and C. Yang",
   title		= "{ARPACK} Users' Guide, Solution of Large-Scale Eigenvalue
 		  Problems by Implicitly Restarted {A}rnoldi Methods",
@@ -89,7 +92,7 @@
   year		= "1998"
 }
 
-@Article{	  Maschhoff:1996:PEP,
+@Article{	  Mas96,
   author	= "K. J. Maschhoff and D. C. Sorensen",
   title		= "{PARPACK}: An Efficient Portable Large Scale Eigenvalue
 		  Package for Distributed Memory Parallel Architectures",
@@ -99,7 +102,7 @@
   year		= "1996"
 }
 
-@Book{		  Parlett:1980:SEP,
+@Book{		  Par80,
   author	= "B. N. Parlett",
   title		= "The Symmetric Eigenvalue Problem",
   year		= "1980",
@@ -108,7 +111,7 @@
   note		= "Reissued with revisions by SIAM, Philadelphia, 1998."
 }
 
-@Book{		  Golub:1996:MC,
+@Book{		  Gol96,
   author	= "G. H. Golub and van Loan, C. F.",
   title		= "Matrix Computations",
   year		= "1996",
@@ -117,7 +120,7 @@
   address	= "Baltimore, MD"
 }
 
-@Book{		  Bjorck:1996:NML,
+@Book{		  Bjo96,
   author	= "{\AA}. Bj{\"o}rck",
   title		= "Numerical Methods for Least Squares Problems",
   year		= "1996",
@@ -125,7 +128,7 @@
   address	= "Philadelphia"
 }
 
-@Book{		  Saad:1992:NML,
+@Book{		  Saa92,
   author	= "Y. Saad",
   title		= "Numerical Methods for Large Eigenvalue Problems: Theory
 		  and Algorithms",
@@ -134,7 +137,7 @@
   address	= "New York"
 }
 
-@Book{		  Stewart:2001:MAV,
+@Book{		  Ste01,
   author	= "G. W. Stewart",
   title		= "Matrix Algorithms. {Volume II}: Eigensystems",
   publisher	= siam,
@@ -142,7 +145,7 @@
   year		= "2001"
 }
 
-@Article{	  Canning:2000:PEP,
+@Article{	  Can00,
   author	= "A. Canning and L. W. Wang and A. Williamson and A. Zunger",
   title		= "Parallel Empirical Pseudopotential Electronic Structure
 		  Calculations for Million Atom Systems",
@@ -150,21 +153,23 @@
   volume	= "160",
   number	= "1",
   pages		= "29--41",
-  year		= "2000"
+  year		= "2000",
+  doi           = "10.1006/jcph.2000.6440"
 }
 
-@Article{	  Meerbergen:1997:IRA,
-  author	= "Karl Meerbergen and Alastair Spence",
+@Article{	  Mee97,
+  author	= "K. Meerbergen and A. Spence",
   title		= "Implicitly Restarted {Arnoldi} with Purification for the
 		  Shift-Invert Transformation",
   journal	= mathcomp,
   volume	= "66",
   number	= "218",
   pages		= "667--689",
-  year		= "1997"
+  year		= "1997",
+  doi           = "10.1090/S0025-5718-97-00844-2"
 }
 
-@Article{	  Knyazev:2007:BLO,
+@Article{	  Kny07,
   author	= "A. V. Knyazev and M. E. Argentati and I. Lashuk and E. E.
 		  Ovtchinnikov",
   title		= "{B}lock {L}ocally {O}ptimal {P}reconditioned {E}igenvalue
@@ -173,21 +178,23 @@
   number	= "5",
   pages		= "2224--2239",
   volume	= "29",
-  year		= "2007"
+  year		= "2007",
+  doi           = "10.1137/060661624"
 }
 
-@Article{	  Grimes:1994:SBL,
-  author	= "Roger G. Grimes and John G. Lewis and Horst D. Simon",
+@Article{	  Gri94,
+  author	= "R. G. Grimes and J. G. Lewis and H. D. Simon",
   title		= "A Shifted Block {Lanczos} Algorithm for Solving Sparse
 		  Symmetric Generalized Eigenproblems",
   journal	= siammatrix,
   volume	= "15",
   number	= "1",
   pages		= "228--272",
-  year		= "1994"
+  year		= "1994",
+  doi           = "10.1137/S0895479888151111"
 }
 
-@Article{	  Ericsson:1980:STL,
+@Article{	  Eri80,
   author	= "T. Ericsson and A. Ruhe",
   title		= "The Spectral Transformation {Lanczos} Method for the
 		  Numerical Solution of Large Sparse Generalized Symmetric
@@ -196,10 +203,11 @@
   volume	= "35",
   pages		= "1251--1268",
   number	= "152",
-  year		= "1980"
+  year		= "1980",
+  doi           = "10.1090/S0025-5718-1980-0583502-2"
 }
 
-@Article{	  Meerbergen:1994:SCT,
+@Article{	  Mee94,
   author	= "K. Meerbergen and A. Spence and D. Roose",
   title		= "Shift-invert and {Cayley} Transforms for Detection of
 		  Rightmost Eigenvalues of Nonsymmetric Matrices",
@@ -207,11 +215,12 @@
   volume	= "34",
   number	= "3",
   pages		= "409--423",
-  year		= "1994"
+  year		= "1994",
+  doi           = "10.1007/BF01935650"
 }
 
-@Book{		  Hansen:1998:RDI,
-  author	= "Per Christian Hansen",
+@Book{		  Han98,
+  author	= "P. C. Hansen",
   title		= "Rank-Deficient and Discrete Ill-Posed Problems: Numerical
 		  Aspects of Linear Inversion",
   publisher	= siam,
@@ -219,7 +228,7 @@
   year		= "1998"
 }
 
-@Article{	  Scott:1982:AIO,
+@Article{	  Sco82,
   author	= "D. S. Scott",
   title		= "The Advantages of Inverted Operators in {Rayleigh-Ritz}
 		  Approximations",
@@ -227,62 +236,68 @@
   volume	= "3",
   number	= "1",
   pages		= "68--75",
-  year		= "1982"
+  year		= "1982",
+  doi           = "10.1137/0903006"
 }
 
-@Article{	  Lehoucq:2001:LEC,
+@Article{	  Leh01,
   author	= "R. B. Lehoucq and A. G. Salinger",
   title		= "Large-Scale Eigenvalue Calculations for Stability Analysis
 		  of Steady Flows on Massively Parallel Computers",
   journal	= intnumfluid,
   volume	= "36",
   pages		= "309--327",
-  year		= "2001"
+  year		= "2001",
+  doi           = "10.1002/fld.135"
 }
 
-@Article{	  Morgan:2006:HRA,
-  author	= "Ronald B. Morgan and Min Zeng",
+@Article{	  Mor06,
+  author	= "R. B. Morgan and M. Zeng",
   title		= "A Harmonic Restarted {Arnoldi} Algorithm for Calculating
 		  Eigenvalues and Determining Multiplicity",
   journal	= linalgapp,
   volume	= "415",
   number	= "1",
   pages		= "96--113",
-  year		= "2006"
+  year		= "2006",
+  doi           = "10.1016/j.laa.2005.07.024"
 }
 
-@Article{	  Stathopoulos:2010:PMS,
-  author	= "Andreas Stathopoulos and James R. McCombs",
+@Article{	  Sta10,
+  author	= "A. Stathopoulos and J. R. McCombs",
   title		= "{PRIMME: PReconditioned Iterative MultiMethod
 		  Eigensolver}: Methods and Software Description",
   journal	= acmmathsoft,
   volume	= "37",
   number	= "2",
   pages		= "21:1--21:30",
-  year		= "2010"
+  year		= "2010",
+  doi           = "10.1145/1731022.1731031"
 }
 
-@Article{	  Chen:2000:BSM,
-  author	= "Tzu-Yi Chen and James W. Demmel",
+@Article{	  Che00,
+  author	= "T.-Y. Chen and J. W. Demmel",
   title		= "Balancing Sparse Matrices for Computing Eigenvalues",
   journal	= linalgapp,
   volume	= "309",
   number	= "1--3",
   pages		= "261--287",
-  year		= "2000"
+  year		= "2000",
+  doi           = "10.1016/S0024-3795(00)00014-8"
 }
 
-@Article{	  Tisseur:2001:QEP,
+@Article{	  Tis01,
   author	= "F. Tisseur and K. Meerbergen",
   title		= "The quadratic eigenvalue problem",
   journal	= siamreview,
   volume	= "43",
   number	= "2",
   pages		= "235--286",
-  year		= "2001"
+  year		= "2001",
+  doi           = "10.1137/S0036144500381988"
 }
 
-@Article{	  Tisseur:2000:BEC,
+@Article{	  Tis00,
   author	= "F. Tisseur",
   title		= "Backward Error and Condition of Polynomial Eigenvalue
 		  Problems",
@@ -290,10 +305,11 @@
   volume	= "309",
   number	= "1--3",
   pages		= "339--361",
-  year		= "2000"
+  year		= "2000",
+  doi           = "10.1016/S0024-3795(99)00063-4"
 }
 
-@Article{	  Polizzi:2009:DAS,
+@Article{	  Pol09,
   author	= "E. Polizzi",
   title		= "Density-matrix-based algorithm for solving eigenvalue
 		  problems",
@@ -301,10 +317,11 @@
   number	= "11",
   pages		= "115112",
   volume	= "79",
-  year		= "2009"
+  year		= "2009",
+  doi           = "10.1103/PhysRevB.79.115112"
 }
 
-@Article{	  Betcke:2011:PER,
+@Article{	  Bet11,
   author	= "T. Betcke and D. Kressner",
   title		= "Perturbation, extraction and refinement of invariant pairs
 		  for matrix polynomials",
@@ -312,10 +329,11 @@
   volume	= "435",
   number	= "3",
   pages		= "514--536",
-  year		= "2011"
+  year		= "2011",
+  doi           = "10.1016/j.laa.2010.06.029"
 }
 
-@Article{	  Mehrmann:2004:NEP,
+@Article{	  Meh04,
   author	= "V. Mehrmann and H. Voss",
   title		= "Nonlinear eigenvalue problems: a challenge for modern
 		  eigenvalue methods",
@@ -323,10 +341,11 @@
   number	= "2",
   pages		= "121--152",
   volume	= "27",
-  year		= "2004"
+  year		= "2004",
+  doi           = "10.1002/gamm.201490007"
 }
 
-@Article{	  Campos:2012:SSS,
+@Article{	  Cam12,
   author	= "C. Campos and J. E. Roman",
   title		= "Strategies for Spectrum Slicing based on Restarted
 		  {Lanczos} Methods",
@@ -334,19 +353,21 @@
   volume	= "60",
   number	= "2",
   pages		= "279--295",
-  year		= "2012"
+  year		= "2012",
+  doi           = "10.1007/s11075-012-9564-z"
 }
 
-@Article{	  Higham:2010:CMF,
+@Article{	  Hig10,
   author	= "N. J. Higham and A. H. Al-Mohy",
   title		= "Computing matrix functions",
   journal	= actanum,
   pages		= "159--208",
   volume	= "19",
-  year		= "2010"
+  year		= "2010",
+  doi           = "10.1017/S0962492910000036"
 }
 
-@Article{	  Sidje:1998:ESP,
+@Article{	  Sid98,
   author	= "R. B. Sidje",
   title		= "Expokit: a software package for computing matrix
 		  exponentials",
@@ -354,10 +375,11 @@
   number	= "1",
   pages		= "130--156",
   volume	= "24",
-  year		= "1998"
+  year		= "1998",
+  doi           = "10.1145/285861.285868"
 }
 
-@Article{	  Betcke:2008:OSG,
+@Article{	  Bet08,
   author	= "T. Betcke",
   title		= "Optimal scaling of generalized and polynomial eigenvalue
 		  problems",
@@ -365,10 +387,11 @@
   volume	= "30",
   number	= "4",
   pages		= "1320--1338",
-  year		= "2008"
+  year		= "2008",
+  doi           = "10.1137/070704769"
 }
 
-@Article{	  Campos:2016:PKS,
+@Article{	  Cam16a,
   author	= "C. Campos and J. E. Roman",
   title		= "Parallel {Krylov} solvers for the polynomial eigenvalue
 		  problem in {SLEPc}",
@@ -380,7 +403,7 @@
   doi		= "10.1137/15M1022458"
 }
 
-@Article{	  Campos:2016:PIR,
+@Article{	  Cam16b,
   author	= "C. Campos and J. E. Roman",
   title		= "Parallel iterative refinement in polynomial eigenvalue
 		  problems",
@@ -392,7 +415,7 @@
   doi		= "10.1002/nla.2052"
 }
 
-@Article{	  Eiermann:2006:RKS,
+@Article{	  Eie06,
   author	= "M. Eiermann and O. G. Ernst",
   title		= "A restarted {Krylov} subspace method for the evaluation of
 		  matrix functions",
@@ -400,10 +423,11 @@
   number	= "6",
   pages		= "2481--2504",
   volume	= "44",
-  year		= "2006"
+  year		= "2006",
+  doi           = "10.1137/050633846"
 }
 
-@Article{	  Romero:2014:PID,
+@Article{	  Rom14,
   author	= "E. Romero and J. E. Roman",
   title		= "A parallel implementation of {Davidson} methods for
 		  large-scale eigenvalue problems in {SLEPc}",
@@ -415,16 +439,17 @@
   doi		= "10.1145/2543696"
 }
 
-@Article{	  Guttel:2017:NEP,
+@Article{	  Gut17,
   author	= {S. G{\"u}ttel and F. Tisseur},
   title		= "The nonlinear eigenvalue problem",
   journal	= actanum,
   pages		= "1--94",
   volume	= "26",
-  year		= "2017"
+  year		= "2017",
+  doi           = "10.1017/S0962492917000034"
 }
 
-@Article{	  Fang:2012:FLP,
+@Article{	  Fan12,
   author	= "H. Fang and Y. Saad",
   title		= "A filtered {Lanczos} procedure for extreme and interior
 		  eigenvalue problems",
@@ -432,10 +457,11 @@
   number	= "4",
   pages		= "A2220--A2246",
   volume	= "34",
-  year		= "2012"
+  year		= "2012",
+  doi           = "10.1137/110836535"
 }
 
-@Article{	  Campos:2020:PJD,
+@Article{	  Cam20a,
   author	= "C. Campos and J. E. Roman",
   title		= "A polynomial {Jacobi-Davidson} solver with support for
 		  non-monomial bases and deflation",
@@ -447,7 +473,7 @@
   doi		= "10.1007/s10543-019-00778-z"
 }
 
-@Article{	  Campos:2021:NEP,
+@Article{	  Cam21,
   author	= "C. Campos and J. E. Roman",
   title		= "{NEP}: a module for the parallel solution of nonlinear
 		  eigenvalue problems in {SLEPc}",
@@ -459,7 +485,7 @@
   doi		= "10.1145/3447544"
 }
 
-@Article{	  Alvarruiz:2024:TLB,
+@Article{	  Alv24,
   author	= "F. Alvarruiz and C. Campos and J. E. Roman",
   title		= "Thick-restarted joint {Lanczos} bidiagonalization for the
 		  {GSVD}",
@@ -470,7 +496,7 @@
   doi		= "10.1016/j.cam.2023.115506"
 }
 
-@Article{	  Onn:1991:HSV,
+@Article{	  Onn91,
   author	= "R. Onn and A. O. Steinhardt and A. Bojanczyk",
   title		= "The hyperbolic singular value decomposition and
 		  applications",
@@ -482,7 +508,7 @@
   doi		= "10.1109/78.134396"
 }
 
-@Article{	  Sangalli:2019:MPT,
+@Article{	  San19,
   author	= "D. Sangalli and A. Ferretti and H. Miranda and C.
 		  Attaccalite and I. Marri and E. Cannuccia and P. Melo and
 		  M. Marsili and F. Paleari and A. Marrazzo and G. Prandini
@@ -491,7 +517,7 @@
 		  Gr{\"u}ning and D. Varsano and A. Marini",
   title		= "Many-body perturbation theory calculations using the yambo
 		  code",
-  journal	= {J. Condens. Matter Phys.},
+  journal	= condmatt,
   doi		= "10.1088/1361-648x/ab15d0",
   volume	= "31",
   number	= "32",
@@ -499,21 +525,20 @@
   year		= "2019"
 }
 
-@Article{	  Alvarruiz:2025:VTR,
-  author	= {Fernando Alvarruiz and Blanca Mellado-Pinto and Jose E.
-		  Roman},
-  title		= {Variants of thick-restart Lanczos for the Bethe-Salpeter
+@Article{	  Alv25,
+  author	= {F. Alvarruiz and B. Mellado-Pinto and J. E. Roman},
+  title		= {Variants of thick-restart {Lanczos} for the {Bethe-Salpeter}
 		  eigenvalue problem},
-  journal	= "arXiv:2503.20920 : retrieved 27 May 2025",
-  year		= {2025}
+  journal	= {arXiv:2503.20920 : retrieved 27 May 2025},
+  year		= {2025},
+  doi           = {10.48550/arXiv.2503.20920}
 }
 
-@Article{	  Li:2019:EVS,
-  author	= {Li, Ruipeng and Xi, Yuanzhe and Erlandson, Lucas and Saad,
-		  Yousef},
-  title		= {The Eigenvalues Slicing Library (EVSL): Algorithms,
+@Article{	  Li19,
+  author	= {R. Li and Y. Xi and L. Erlandson and Y. Saad},
+  title		= {The Eigenvalues Slicing Library ({EVSL}): Algorithms,
 		  Implementation, and Software},
-  journal	= {SIAM Journal on Scientific Computing},
+  journal	= siamsci,
   doi		= {10.1137/18M1170935},
   volume	= {41},
   number	= {4},
@@ -521,13 +546,13 @@
   year		= {2019}
 }
 
-@Article{	  Auckenthaler:2011:ELP,
+@Article{	  Auc11,
   author	= {T. Auckenthaler and V. Blum and H.-J. Bungartz and T.
 		  Huckle and R. Johanni and L. Kr{\"a}mer and B. Lang and H.
 		  Lederer and P.R. Willems},
   title		= {Parallel solution of partial symmetric eigenvalue problems
 		  from electronic structure calculations},
-  journal	= {Parallel Computing},
+  journal	= parcomputing,
   doi		= {10.1016/j.parco.2011.05.002},
   volume	= {37},
   number	= {12},
@@ -535,56 +560,50 @@
   year		= {2011}
 }
 
-@Article{	  Sukkari:2019:QDW,
-  author	= {Sukkari, Dalal and Ltaief, Hatem and Esposito, Aniello and
-		  Keyes, David},
-  title		= {A QDWH-based SVD Software Framework on Distributed-memory
+@Article{	  Suk19,
+  author	= {D. Sukkari and H. Ltaief and A. Esposito and D. Keyes},
+  title		= {A {QDWH}-based {SVD} Software Framework on Distributed-memory
 		  Manycore Systems},
-  journal	= {ACM Trans. Math. Softw.},
+  journal	= acmmathsoft,
   doi		= {10.1145/3309548},
   volume	= {45},
   number	= {2},
   year		= {2019}
 }
 
-@Article{	  Poulson:2013:ELE,
-  author	= {Poulson, Jack and Marker, Bryan and van de Geijn, Robert
-		  A. and Hammond, Jeff R. and Romero, Nichols A.},
+@Article{	  Pou13,
+  author	= {J. Poulson and B. Marker and van de Geijn, R. A. and J. R. Hammond and N. A. Romero},
   title		= {Elemental: A New Framework for Distributed Memory Dense
 		  Matrix Computations},
-  journal	= {ACM Trans. Math. Softw.},
+  journal	= acmmathsoft,
   doi		= {10.1145/2427023.2427030},
   volume	= {39},
   number	= {2},
   year		= {2013}
 }
 
-@Article{	  Winkelmann:2019:CCA,
-  author	= {Winkelmann, Jan and Springer, Paul and Napoli, Edoardo
-		  Di},
-  title		= {ChASE: Chebyshev Accelerated Subspace Iteration
+@Article{	  Win19,
+  author	= {J. Winkelmann and P. Springer and E. Di Napoli},
+  title		= {{ChASE}: {Chebyshev} Accelerated Subspace Iteration
 		  Eigensolver for Sequences of Hermitian Eigenvalue
 		  Problems},
-  journal	= {ACM Trans. Math. Softw.},
+  journal	= acmmathsoft,
   doi		= {10.1145/3313828},
   volume	= {45},
   number	= {2},
   year		= {2019}
 }
 
-@Manual{	  Balay:PUM,
-  author	= {Satish Balay and Shrirang Abhyankar and Mark~F. Adams and
-		  Steven Benson and Jed Brown and Peter Brune and Kris
-		  Buschelman and Emil Constantinescu and Lisandro Dalcin and
-		  Alp Dener and Victor Eijkhout and Jacob Faibussowitsch and
-		  William~D. Gropp and V\'{a}clav Hapla and Tobin Isaac and
-		  Pierre Jolivet and Dmitry Karpeev and Dinesh Kaushik and
-		  Matthew~G. Knepley and Fande Kong and Scott Kruger and
-		  Dave~A. May and Lois Curfman McInnes and Richard Tran Mills
-		  and Lawrence Mitchell and Todd Munson and Jose~E. Roman and
-		  Karl Rupp and Patrick Sanan and Jason Sarich and Barry~F.
-		  Smith and Hansol Suh and Stefano Zampini and Hong Zhang and
-		  Hong Zhang and Junchao Zhang},
+@Manual{	  BalPU,
+  author	= {S. Balay and S. Abhyankar and M. F. Adams and S. Benson and
+                  J. Brown and P. Brune and K. Buschelman and E. Constantinescu and
+                  L. Dalcin and A. Dener and V. Eijkhout and J. Faibussowitsch and
+		  W. D. Gropp and V. Hapla and T. Isaac and P. Jolivet and
+                  D. Karpeev and D. Kaushik and M. G. Knepley and F. Kong and
+                  S. Kruger and D. A. May and L. Curfman McInnes and R. Tran Mills and
+		  L. Mitchell and T. Munson and J. E. Roman and K. Rupp and P. Sanan and
+                  J. Sarich and B. F. Smith and H. Suh and S. Zampini and H. Zhang and
+		  H. Zhang and J. Zhang},
   title		= {{PETSc/TAO} Users Manual},
   institution	= {Argonne National Laboratory},
   number	= {ANL-21/39 - Revision 3.24},
@@ -592,11 +611,11 @@
   year		= {2025}
 }
 
-@Article{	  Campos:2020:ISS,
-  author	= {Campos, Carmen and Roman, Jose E.},
+@Article{	  Cam20b,
+  author	= {C. Campos and J. E. Roman},
   title		= {Inertia-based spectrum slicing for symmetric quadratic
 		  eigenvalue problems},
-  journal	= {Numerical Linear Algebra with Applications},
+  journal	= numlinapp,
   doi		= {10.1002/nla.2293},
   volume	= {27},
   number	= {4},
@@ -604,7 +623,7 @@
   year		= {2020}
 }
 
-@Article{	  MPI-Forum:1994:MMI,
+@Article{	  MPI94,
   author	= "{MPI Forum}",
   title		= "{MPI}: a Message-Passing Interface Standard",
   journal	= intsuperhigh,
@@ -614,49 +633,49 @@
   year		= "1994"
 }
 
-@Article{         Nour-Omid:1987:HIS,
-  author        = "Bahram Nour-Omid and Beresford N. Parlett and Thomas
-                  Ericsson and Paul S. Jensen",
+@Article{         Nou87,
+  author        = "B. Nour-Omid and B. N. Parlett and T. Ericsson and P. S. Jensen",
   title         = "How to Implement the Spectral Transformation",
   journal       = mathcomp,
   volume        = "48",
   number        = "178",
   pages         = "663--673",
-  year          = "1987"
+  year          = "1987",
+  doi           = "10.1090/S0025-5718-1987-0878698-5"
 }
 
-@TechReport{      str-1,
+@TechReport{      Her07a,
   author        = "V. Hernandez and J. E. Roman and A. Tomas and V. Vidal.",
-  title         = "{Orthogonalization Routines in SLEPc}",
+  title         = "Orthogonalization Routines in {SLEPc}",
   number        = "{STR-1}",
   institution   = "{Universitat Polit\`ecnica de Val\`encia}",
-  note          = "{Available at https://slepc.upv.es}",
-  year          = "{2007}"
+  url           = "https://slepc.upv.es/documentation",
+  year          = "2007"
 }
 
-@TechReport{      str-6,
+@TechReport{      Her09,
   author        = "V. Hernandez and J. E. Roman and A. Tomas and V. Vidal.",
-  title         = "{A survey of software for sparse eigenvalue problems}",
+  title         = "A survey of software for sparse eigenvalue problems",
   number        = "{STR-6}",
   institution   = "{Universitat Polit\`ecnica de Val\`encia}",
-  note          = "{Available at https://slepc.upv.es}",
-  year          = "{2009}"
+  url           = "https://slepc.upv.es/documentation",
+  year          = "2009"
 }
 
-@TechReport{      str-8,
+@TechReport{      Her07b,
   author        = "V. Hernandez and J. E. Roman and A. Tomas.",
-  title         = "{Restarted Lanczos Bidiagonalization for the SVD in SLEPc}",
+  title         = "Restarted {Lanczos} Bidiagonalization for the {SVD} in {SLEPc}",
   number        = "{STR-8}",
   institution   = "{Universitat Polit\`ecnica de Val\`encia}",
-  note          = "{Available at https://slepc.upv.es}",
-  year          = "{2007}"
+  url           = "https://slepc.upv.es/documentation",
+  year          = "2007"
 }
 
-@TechReport{      str-11,
+@TechReport{      Mae16,
   author        = "Y. Maeda and T. Sakurai and J. E. Roman.",
-  title         = "{Contour Integral Spectrum Slicing Method in SLEPc}",
+  title         = "Contour Integral Spectrum Slicing Method in {SLEPc}",
   number        = "{STR-11}",
   institution   = "{Universitat Polit\`ecnica de Val\`encia}",
-  note          = "{Available at https://slepc.upv.es}",
-  year          = "{2016}"
+  url           = "https://slepc.upv.es/documentation",
+  year          = "2016"
 }

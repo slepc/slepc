@@ -6,7 +6,7 @@ The Eigenvalue Problem Solver (`EPS`) is the main object provided by SLEPc. It i
 {#sec:eig label="sec:eig"}
 ## Eigenvalue Problems
 
-In this section, we briefly present some basic concepts about eigenvalue problems as well as general techniques used to solve them. The description is not intended to be exhaustive. The objective is simply to define terms that will be referred to throughout the rest of the manual. Readers who are familiar with the terminology and the solution approach can skip this section. For a more comprehensive description, we refer the reader to monographs such as {cite:p}`Stewart:2001:MAV`, {cite:p}`Bai:2000:TSA`, {cite:p}`Saad:1992:NML` or {cite:p}`Parlett:1980:SEP`. A historical perspective of the topic can be found in {cite:p}`Golub:2000:EC2`. See also the SLEPc [technical reports](#str).
+In this section, we briefly present some basic concepts about eigenvalue problems as well as general techniques used to solve them. The description is not intended to be exhaustive. The objective is simply to define terms that will be referred to throughout the rest of the manual. Readers who are familiar with the terminology and the solution approach can skip this section. For a more comprehensive description, we refer the reader to monographs such as {cite:p}`Ste01,Bai00,Saa92,Par80`. A historical perspective of the topic can be found in {cite:p}`Gol00`. See also the SLEPc [technical reports](#str).
 
 In the standard formulation, the linear eigenvalue problem consists in determining $\lambda\in\mathbb{C}$ for which the equation
 
@@ -226,6 +226,7 @@ EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel);
 
 This usage is discussed for the case of `SVD` in section [](#sec:thres). For details about the differences in case of `EPS`, we refer to the manual page of `EPSSetThreshold`.
 
+{#sec:which}
 ### Eigenvalues of Interest
 
 For the selection of the portion of the spectrum of interest, there are several alternatives. In real symmetric or complex Hermitian problems, one may want to compute the largest or smallest eigenvalues in magnitude, or the leftmost or rightmost ones, or even all eigenvalues in a given interval. In other problems, in which the eigenvalues can be complex, then one can select eigenvalues depending on the magnitude, or the real part or even the imaginary part. Sometimes the eigenvalues of interest are those closest to a given target value, $\tau$, measuring the distance either in the ordinary way or along the real (or imaginary) axis. In some other cases, wanted eigenvalues must be found in a given region of the complex plane. Table [](#tab:portion) summarizes all the available possibilities to be selected with the following function:
@@ -279,7 +280,7 @@ EPSSetInterval(EPS eps,PetscScalar a,PetscScalar b);
 
 which is equivalent to `-eps_interval a,b`.
 
-There is also support for specifying a region of the complex plane so that the eigensolver finds eigenvalues within that region only. This possibility is described in section [](#sec:region). If *all* eigenvalues inside the region are required, then a contour-integral method must be used, as described in {cite:p}`str-11`.
+There is also support for specifying a region of the complex plane so that the eigensolver finds eigenvalues within that region only. This possibility is described in section [](#sec:region). If *all* eigenvalues inside the region are required, then a contour-integral method must be used, as described in {cite:p}`Mae16`.
 
 Finally, we mention the possibility of defining an arbitrary sorting criterion by means of `EPS_WHICH_USER` in combination with `EPSSetEigenvalueComparison`.
 
@@ -327,29 +328,29 @@ The available methods for solving the eigenvalue problems are the following:
 :::{table} Eigenvalue solvers available in the `EPS` module
 :name: tab:solvers
 
-  Method                      |`EPSType`         |Options Database Name  | Default
-  ----------------------------|------------------|-----------------------|---------
-  Power / Inverse / RQI       |`EPSPOWER`        |`power`                | ` `
-  Subspace Iteration          |`EPSSUBSPACE`     |`subspace`             | ` `
-  Arnoldi                     |`EPSARNOLDI`      |`arnoldi`              | ` `
-  Lanczos                     |`EPSLANCZOS`      |`lanczos`              | ` `
-  Krylov-Schur                |`EPSKRYLOVSCHUR`  |`krylovschur`          | $\star$
-  Generalized Davidson        |`EPSGD`           |`gd`                   | ` `
-  Jacobi-Davidson             |`EPSJD`           |`jd`                   | ` `
-  Rayleigh quotient CG        |`EPSRQCG`         |`rqcg`                 | ` `
-  LOBPCG                      |`EPSLOBPCG`       |`lobpcg`               | ` `
-  Contour integral SS         |`EPSCISS`         |`ciss`                 | ` `
-  Lyapunov Inverse Iteration  |`EPSLYAPII`       |`lyapii`               | ` `
-  Wrapper to LAPACK           |`EPSLAPACK`       |`lapack`               | ` `
-  Wrapper to ARPACK           |`EPSARPACK`       |`arpack`               | ` `
-  Wrapper to PRIMME           |`EPSPRIMME`       |`primme`               | ` `
-  Wrapper to EVSL             |`EPSEVSL`         |`evsl`                 | ` `
-  Wrapper to BLOPEX           |`EPSBLOPEX`       |`blopex`               | ` `
-  Wrapper to ScaLAPACK        |`EPSSCALAPACK`    |`scalapack`            | ` `
-  Wrapper to ELPA             |`EPSELPA`         |`elpa`                 | ` `
-  Wrapper to ELEMENTAL        |`EPSELEMENTAL`    |`elemental`            | ` `
-  Wrapper to CHASE            |`EPSCHASE`        |`chase`                | ` `
-  Wrapper to FEAST            |`EPSFEAST`        |`feast`                | ` `
+  Method                      |`EPSType`         |Options Database | Default
+  ----------------------------|------------------|-----------------|---------
+  Power / Inverse / RQI       |`EPSPOWER`        |`power`          | ` `
+  Subspace Iteration          |`EPSSUBSPACE`     |`subspace`       | ` `
+  Arnoldi                     |`EPSARNOLDI`      |`arnoldi`        | ` `
+  Lanczos                     |`EPSLANCZOS`      |`lanczos`        | ` `
+  Krylov-Schur                |`EPSKRYLOVSCHUR`  |`krylovschur`    | $\star$
+  Generalized Davidson        |`EPSGD`           |`gd`             | ` `
+  Jacobi-Davidson             |`EPSJD`           |`jd`             | ` `
+  Rayleigh quotient CG        |`EPSRQCG`         |`rqcg`           | ` `
+  LOBPCG                      |`EPSLOBPCG`       |`lobpcg`         | ` `
+  Contour integral SS         |`EPSCISS`         |`ciss`           | ` `
+  Lyapunov Inverse Iteration  |`EPSLYAPII`       |`lyapii`         | ` `
+  Wrapper to LAPACK           |`EPSLAPACK`       |`lapack`         | ` `
+  Wrapper to ARPACK           |`EPSARPACK`       |`arpack`         | ` `
+  Wrapper to PRIMME           |`EPSPRIMME`       |`primme`         | ` `
+  Wrapper to EVSL             |`EPSEVSL`         |`evsl`           | ` `
+  Wrapper to BLOPEX           |`EPSBLOPEX`       |`blopex`         | ` `
+  Wrapper to ScaLAPACK        |`EPSSCALAPACK`    |`scalapack`      | ` `
+  Wrapper to ELPA             |`EPSELPA`         |`elpa`           | ` `
+  Wrapper to ELEMENTAL        |`EPSELEMENTAL`    |`elemental`      | ` `
+  Wrapper to CHASE            |`EPSCHASE`        |`chase`          | ` `
+  Wrapper to FEAST            |`EPSFEAST`        |`feast`          | ` `
 
 :::
 
@@ -369,7 +370,7 @@ Not all the methods can be used for all problem types. Table [](#tab:support) su
 :name: tab:support
 
   Method        |             Portion of spectrum             |     Problem type      | Real/complex | Two-sided
-  --------------|---------------------------------------------|-----------------------|--------------|-----------
+  :------------:|:-------------------------------------------:|:---------------------:|:------------:|:---------:
   `power`       |             Largest $\|\lambda\|$           |          any          |     both     |    yes
   `subspace`    |             Largest $\|\lambda\|$           |          any          |     both     |    ` `
   `arnoldi`     |                     any                     |          any          |     both     |    ` `
@@ -446,7 +447,7 @@ r=A\tilde{x}-\tilde{\lambda}\tilde{x},
 
 or $r=A\tilde{x}-\tilde{\lambda}B\tilde{x}$ in the case of a generalized problem, where $\tilde{\lambda}$ and $\tilde{x}$ represent any of the `nconv` computed eigenpairs delivered by `EPSGetEigenpair` (note that this function returns a normalized $\tilde{x}$).
 
-In the case of Hermitian problems, it is possible to demonstrate the following property (see for example {cite:p}`Saad:1992:NML{ch. 3}`):
+In the case of Hermitian problems, it is possible to demonstrate the following property (see for example {cite:p}`Saa92{ch. 3}`):
 
 ```{math}
 :label: eq:reserr
@@ -721,7 +722,7 @@ The deflation space can be any subspace but typically it is most useful in the c
 {#sec:orthog}
 ### Orthogonalization
 
-Internally, eigensolvers in `EPS` often need to orthogonalize a vector against a set of vectors (for instance, when building an orthonormal basis of a Krylov subspace). This operation is carried out typically by a Gram-Schmidt orthogonalization procedure. The user is able to adjust several options related to this algorithm, although the default behavior is good for most cases, and we strongly suggest not to change any of these settings. This topic is covered in detail in {cite:p}`str-1`.
+Internally, eigensolvers in `EPS` often need to orthogonalize a vector against a set of vectors (for instance, when building an orthonormal basis of a Krylov subspace). This operation is carried out typically by a Gram-Schmidt orthogonalization procedure. The user is able to adjust several options related to this algorithm, although the default behavior is good for most cases, and we strongly suggest not to change any of these settings. This topic is covered in detail in {cite:p}`Her07a`.
 
 {#sec:region}
 ### Specifying a Region for Filtering
@@ -780,7 +781,7 @@ The standard Rayleigh-Ritz projection procedure described in section [](#sec:eig
 
 Even though in theory eigensolvers could be able to approximate interior eigenvalues with a standard extraction technique, in practice convergence difficulties may arise that prevent success. The problem comes from the property that Ritz values (the approximate eigenvalues provided by the standard projection procedure) converge from the interior to the periphery of the spectrum. That is, the Ritz values that stabilize first are those in the periphery, so convergence of interior ones requires the previous convergence of all eigenvalues between them and the periphery. Furthermore, this convergence behaviour usually implies that restarting is carried out with bad approximations, so the restart is ineffective and global convergence is severely damaged.
 
-Harmonic projection is a variation that uses a target value, $\tau$, around which the user wants to compute eigenvalues (see, e.g., {cite:p}`Morgan:2006:HRA`). The theory establishes that harmonic Ritz values converge in such a way that eigenvalues closest to the target stabilize first, and also that no unconverged value is ever close to the target, so restarting is safe in this case. As a conclusion, eigensolvers with harmonic extraction may be effective in computing interior eigenvalues. Whether it works or not in practical cases depends on the particular distribution of the spectrum.
+Harmonic projection is a variation that uses a target value, $\tau$, around which the user wants to compute eigenvalues (see, e.g., {cite:p}`Mor06`). The theory establishes that harmonic Ritz values converge in such a way that eigenvalues closest to the target stabilize first, and also that no unconverged value is ever close to the target, so restarting is safe in this case. As a conclusion, eigensolvers with harmonic extraction may be effective in computing interior eigenvalues. Whether it works or not in practical cases depends on the particular distribution of the spectrum.
 
 In order to use harmonic extraction in SLEPc, it is necessary to indicate it explicitly, and provide the target value as described in section [](#sec:defprob) (default is $\tau=0$). The type of extraction can be set with:
 
@@ -807,7 +808,7 @@ In problems where the matrix has a large norm, $\|A\|_2$, the roundoff errors in
 
 In SLEPc, the matrix $DAD^{-1}$ is not formed explicitly. Instead, the operators of table [](#tab:op) are preceded by a multiplication by $D^{-1}$ and followed by a multiplication by $D$. This allows for balancing in the case of problems with an implicit matrix.
 
-A simple and effective Krylov balancing technique, described in {cite:p}`Chen:2000:BSM`, is implemented in SLEPc. The user calls the following subroutine to activate it:
+A simple and effective Krylov balancing technique, described in {cite:p}`Che00`, is implemented in SLEPc. The user calls the following subroutine to activate it:
 
 ```{code} c
 EPSSetBalance(EPS eps,EPSBalance bal,PetscInt its,PetscReal cutoff);
@@ -828,7 +829,7 @@ Check below the section [](#sec:structured-vectors), since the trivial approach 
 
 #### Bethe-Salpeter
 
-One structured eigenproblem that has raised interest recently is related to the Bethe--Salpeter equation, which is relevant in many state-of-the-art computational physics codes. For instance, in the Yambo software {cite:p}`Sangalli:2019:MPT` it is used to evaluate optical properties of materials. It is commonly formulated as an eigenvalue problem with a block-structured matrix,
+One structured eigenproblem that has raised interest recently is related to the Bethe--Salpeter equation, which is relevant in many state-of-the-art computational physics codes. For instance, in the Yambo software {cite:p}`San19` it is used to evaluate optical properties of materials. It is commonly formulated as an eigenvalue problem with a block-structured matrix,
 
 ```{math}
 :label: eq:bse
@@ -843,7 +844,7 @@ H = \begin{bmatrix}
 
 The helper function to generate the matrix $H$ of equation {math:numref}`eq:bse` from the blocks $R$ and $C$ is `MatCreateBSE`, and the associated problem type is `EPS_BSE` (or `-eps_bse` from the command line). It is possible to select a few variants of the solver with the function `EPSKrylovSchurSetBSEType`.
 
-Further details about the implementation of the SLEPc solvers for the BSE can be found in {cite:p}`Alvarruiz:2025:VTR`.
+Further details about the implementation of the SLEPc solvers for the BSE can be found in {cite:p}`Alv25`.
 
 #### Hamiltonian
 
@@ -896,10 +897,10 @@ and then, after calling `EPSGetEigenvector` on a standard vector `x`, extract th
     VecRestoreSubVector(x,is[1],&x2);
 ```
 
-```{rubric} Footnotes
-```
-
 ```{eval-rst}
 .. bibliography::
    :filter: docname in docnames
+```
+
+```{rubric} Footnotes
 ```

@@ -141,6 +141,7 @@ pybtex.plugin.register_plugin('pybtex.style.formatting', 'slepcstyle', SLEPcStyl
 #bibtex_default_style = 'unsrtalpha' # alpha, plain, unsrt, unsrtalpha, and custom
 bibtex_default_style = 'slepcstyle'
 bibtex_reference_style = 'author_year' # label, author_year, super
+bibtex_bibliography_header = ".. rubric:: References"
 
 # prevents incorrect WARNING: duplicate citation for key "xxxx" warnings
 suppress_warnings = ['bibtex.duplicate_citation']
@@ -320,7 +321,7 @@ latex_elements = {
    Eloy Romero\\
    Andr\'es Tom\'as
    \\[12mm]
-   To be used with SLEPc ''' + version +r'\\[3mm]'+release_date+'''
+   To be used with SLEPc ''' + version +r'\\[3mm]'+release_date+r'''
    \end{large}
 \end{center}
 \end{titlepage}
