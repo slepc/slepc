@@ -321,7 +321,7 @@ latex_elements = {
    Eloy Romero\\
    Andr\'es Tom\'as
    \\[12mm]
-   To be used with SLEPc ''' + version +r'\\[3mm]'+release_date+'''
+   To be used with SLEPc ''' + version +r'\\[3mm]'+release_date+r'''
    \end{large}
 \end{center}
 \end{titlepage}
