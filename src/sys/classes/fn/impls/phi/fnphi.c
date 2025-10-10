@@ -122,7 +122,7 @@ static PetscErrorCode FNPhiSetIndex_Phi(FN fn,PetscInt k)
 }
 
 /*@
-   FNPhiSetIndex - Sets the index of the phi-function.
+   FNPhiSetIndex - Sets the index of the $\varphi$-function.
 
    Logically Collective
 
@@ -131,16 +131,17 @@ static PetscErrorCode FNPhiSetIndex_Phi(FN fn,PetscInt k)
 -  k  - the index
 
    Notes:
-   The phi-functions are defined as follows. The default is k=1.
-.vb
-      phi_0(x) = exp(x)
-      phi_1(x) = (exp(x)-1)/x
-      phi_k(x) = (phi_{k-1}(x)-1/(k-1)!)/x
-.ve
+   The $\varphi$-functions are defined as
+   $$\begin{align}
+     \varphi_0(x)&=e^x,\\
+     \varphi_1(x)&=\frac{e^x-1}{x},\\
+     \varphi_k(x)&=\frac{\varphi_{k-1}(x)-1/(k-1)!}{x}.
+   \end{align}$$
+   The default index is $k=1$.
 
    Level: intermediate
 
-.seealso: `FNPhiGetIndex()`
+.seealso: [](sec:fn), `FNPhiGetIndex()`
 @*/
 PetscErrorCode FNPhiSetIndex(FN fn,PetscInt k)
 {
@@ -161,7 +162,7 @@ static PetscErrorCode FNPhiGetIndex_Phi(FN fn,PetscInt *k)
 }
 
 /*@
-   FNPhiGetIndex - Gets the index of the phi-function.
+   FNPhiGetIndex - Gets the index of the $\varphi$-function.
 
    Not Collective
 
@@ -173,7 +174,7 @@ static PetscErrorCode FNPhiGetIndex_Phi(FN fn,PetscInt *k)
 
    Level: intermediate
 
-.seealso: `FNPhiSetIndex()`
+.seealso: [](sec:fn), `FNPhiSetIndex()`
 @*/
 PetscErrorCode FNPhiGetIndex(FN fn,PetscInt *k)
 {
@@ -249,6 +250,24 @@ static PetscErrorCode FNDestroy_Phi(FN fn)
   PetscCall(PetscObjectComposeFunction((PetscObject)fn,"FNPhiGetIndex_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
+
+/*MC
+   FNPHI - FNPHI = "phi" - One of the $\varphi$-functions $\varphi_0(x)$, $\varphi_1(x)$, ...,
+   where the index of the $\varphi$-function is specified with `FNPhiSetIndex()`.
+
+   Level: beginner
+
+   Notes:
+   The $\varphi$-functions are defined as
+   $$\begin{align}
+     \varphi_0(x)&=e^x,\\
+     \varphi_1(x)&=\frac{e^x-1}{x},\\
+     \varphi_k(x)&=\frac{\varphi_{k-1}(x)-1/(k-1)!}{x}.
+   \end{align}$$
+   The default index is $k=1$.
+
+.seealso: [](sec:fn), `FN`, `FNType`, `FNSetType()`, `FNPhiSetIndex()`
+M*/
 
 SLEPC_EXTERN PetscErrorCode FNCreate_Phi(FN fn)
 {

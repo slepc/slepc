@@ -1690,6 +1690,14 @@ static PetscErrorCode FNView_Exp(FN fn,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   FNEXP - FNEXP = "exp" - The exponential function $f(x)=e^x$.
+
+   Level: beginner
+
+.seealso: [](sec:fn), `FN`, `FNType`, `FNSetType()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode FNCreate_Exp(FN fn)
 {
   PetscFunctionBegin;

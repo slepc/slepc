@@ -260,6 +260,14 @@ static PetscErrorCode FNView_Invsqrt(FN fn,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   FNINVSQRT - FNINVSQRT = "invsqrt" - The inverse square root function $f(x)=x^{-\frac{1}{2}}$.
+
+   Level: beginner
+
+.seealso: [](sec:fn), `FN`, `FNType`, `FNSetType()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode FNCreate_Invsqrt(FN fn)
 {
   PetscFunctionBegin;

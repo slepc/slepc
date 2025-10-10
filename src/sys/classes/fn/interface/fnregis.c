@@ -19,13 +19,13 @@ SLEPC_EXTERN PetscErrorCode FNCreate_Sqrt(FN);
 SLEPC_EXTERN PetscErrorCode FNCreate_Invsqrt(FN);
 
 /*@C
-   FNRegisterAll - Registers all of the math functions in the FN package.
+   FNRegisterAll - Registers all of the math functions in the `FN` package.
 
    Not Collective
 
    Level: advanced
 
-.seealso: `FNRegister()`
+.seealso: [](sec:fn), `FNRegister()`
 @*/
 PetscErrorCode FNRegisterAll(void)
 {

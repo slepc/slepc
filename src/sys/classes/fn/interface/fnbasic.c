@@ -23,12 +23,12 @@ static PetscBool  FNPackageInitialized = PETSC_FALSE;
 const char *FNParallelTypes[] = {"REDUNDANT","SYNCHRONIZED","FNParallelType","FN_PARALLEL_",NULL};
 
 /*@C
-   FNFinalizePackage - This function destroys everything in the Slepc interface
-   to the FN package. It is called from SlepcFinalize().
+   FNFinalizePackage - This function destroys everything in the SLEPc interface
+   to the `FN` package. It is called from `SlepcFinalize()`.
 
    Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: [](sec:fn), `SlepcFinalize()`
 @*/
 PetscErrorCode FNFinalizePackage(void)
 {
@@ -40,13 +40,13 @@ PetscErrorCode FNFinalizePackage(void)
 }
 
 /*@C
-  FNInitializePackage - This function initializes everything in the FN package.
-  It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-  on the first call to FNCreate() when using static libraries.
+  FNInitializePackage - This function initializes everything in the `FN` package.
+  It is called from `PetscDLLibraryRegister()` when using dynamic libraries, and
+  on the first call to `FNCreate()` when using static libraries.
 
   Level: developer
 
-.seealso: `SlepcInitialize()`
+.seealso: [](sec:fn), `SlepcInitialize()`
 @*/
 PetscErrorCode FNInitializePackage(void)
 {
@@ -78,7 +78,7 @@ PetscErrorCode FNInitializePackage(void)
 }
 
 /*@
-   FNCreate - Creates an FN context.
+   FNCreate - Creates an `FN` context.
 
    Collective
 
@@ -86,11 +86,11 @@ PetscErrorCode FNInitializePackage(void)
 .  comm - MPI communicator
 
    Output Parameter:
-.  newfn - location to put the FN context
+.  newfn - location to put the `FN` context
 
    Level: beginner
 
-.seealso: `FNDestroy()`, `FN`
+.seealso: [](sec:fn), `FNDestroy()`, `FN`
 @*/
 PetscErrorCode FNCreate(MPI_Comm comm,FN *newfn)
 {
@@ -115,13 +115,13 @@ PetscErrorCode FNCreate(MPI_Comm comm,FN *newfn)
 
 /*@
    FNSetOptionsPrefix - Sets the prefix used for searching for all
-   FN options in the database.
+   `FN` options in the database.
 
    Logically Collective
 
    Input Parameters:
 +  fn - the math function context
--  prefix - the prefix string to prepend to all FN option requests
+-  prefix - the prefix string to prepend to all `FN` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -130,7 +130,7 @@ PetscErrorCode FNCreate(MPI_Comm comm,FN *newfn)
 
    Level: advanced
 
-.seealso: `FNAppendOptionsPrefix()`
+.seealso: [](sec:fn), `FNAppendOptionsPrefix()`
 @*/
 PetscErrorCode FNSetOptionsPrefix(FN fn,const char *prefix)
 {
@@ -142,13 +142,13 @@ PetscErrorCode FNSetOptionsPrefix(FN fn,const char *prefix)
 
 /*@
    FNAppendOptionsPrefix - Appends to the prefix used for searching for all
-   FN options in the database.
+   `FN` options in the database.
 
    Logically Collective
 
    Input Parameters:
 +  fn - the math function context
--  prefix - the prefix string to prepend to all FN option requests
+-  prefix - the prefix string to prepend to all `FN` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -156,7 +156,7 @@ PetscErrorCode FNSetOptionsPrefix(FN fn,const char *prefix)
 
    Level: advanced
 
-.seealso: `FNSetOptionsPrefix()`
+.seealso: [](sec:fn), `FNSetOptionsPrefix()`
 @*/
 PetscErrorCode FNAppendOptionsPrefix(FN fn,const char *prefix)
 {
@@ -180,7 +180,7 @@ PetscErrorCode FNAppendOptionsPrefix(FN fn,const char *prefix)
 
    Level: advanced
 
-.seealso: `FNSetOptionsPrefix()`, `FNAppendOptionsPrefix()`
+.seealso: [](sec:fn), `FNSetOptionsPrefix()`, `FNAppendOptionsPrefix()`
 @*/
 PetscErrorCode FNGetOptionsPrefix(FN fn,const char *prefix[])
 {
@@ -192,7 +192,7 @@ PetscErrorCode FNGetOptionsPrefix(FN fn,const char *prefix[])
 }
 
 /*@
-   FNSetType - Selects the type for the FN object.
+   FNSetType - Selects the type for the `FN` object.
 
    Logically Collective
 
@@ -200,13 +200,13 @@ PetscErrorCode FNGetOptionsPrefix(FN fn,const char *prefix[])
 +  fn   - the math function context
 -  type - a known type
 
-   Notes:
-   The default is FNRATIONAL, which includes polynomials as a particular
-   case as well as simple functions such as f(x)=x and f(x)=constant.
+   Note:
+   The default is `FNRATIONAL`, which includes polynomials as a particular
+   case as well as simple functions such as $f(x)=x$ and $f(x)=constant$.
 
    Level: intermediate
 
-.seealso: `FNGetType()`
+.seealso: [](sec:fn), `FNGetType()`
 @*/
 PetscErrorCode FNSetType(FN fn,FNType type)
 {
@@ -232,7 +232,7 @@ PetscErrorCode FNSetType(FN fn,FNType type)
 }
 
 /*@
-   FNGetType - Gets the FN type name (as a string) from the FN context.
+   FNGetType - Gets the `FN` type name (as a string) from the `FN` context.
 
    Not Collective
 
@@ -244,7 +244,7 @@ PetscErrorCode FNSetType(FN fn,FNType type)
 
    Level: intermediate
 
-.seealso: `FNSetType()`
+.seealso: [](sec:fn), `FNSetType()`
 @*/
 PetscErrorCode FNGetType(FN fn,FNType *type)
 {
@@ -266,10 +266,10 @@ PetscErrorCode FNGetType(FN fn,FNType *type)
 -  beta  - outer scaling (result)
 
    Notes:
-   Given a function f(x) specified by the FN type, the scaling parameters can
-   be used to realize the function beta*f(alpha*x). So when these values are given,
-   the procedure for function evaluation will first multiply the argument by alpha,
-   then evaluate the function itself, and finally scale the result by beta.
+   Given a function $f(x)$ specified by the `FN` type, the scaling parameters can
+   be used to realize the function $\beta f(\alpha x)$. So when these values are given,
+   the procedure for function evaluation will first multiply the argument by $\alpha$,
+   then evaluate the function itself, and finally scale the result by $\beta$.
    Likewise, these values are also considered when evaluating the derivative.
 
    If you want to provide only one of the two scaling factors, set the other
@@ -277,7 +277,7 @@ PetscErrorCode FNGetType(FN fn,FNType *type)
 
    Level: intermediate
 
-.seealso: `FNGetScale()`, `FNEvaluateFunction()`
+.seealso: [](sec:fn), `FNGetScale()`, `FNEvaluateFunction()`
 @*/
 PetscErrorCode FNSetScale(FN fn,PetscScalar alpha,PetscScalar beta)
 {
@@ -305,7 +305,7 @@ PetscErrorCode FNSetScale(FN fn,PetscScalar alpha,PetscScalar beta)
 
    Level: intermediate
 
-.seealso: `FNSetScale()`
+.seealso: [](sec:fn), `FNSetScale()`
 @*/
 PetscErrorCode FNGetScale(FN fn,PetscScalar *alpha,PetscScalar *beta)
 {
@@ -329,16 +329,16 @@ PetscErrorCode FNGetScale(FN fn,PetscScalar *alpha,PetscScalar *beta)
 .  -fn_method <meth> - Sets the method
 
    Notes:
-   In some FN types there are more than one algorithms available for computing
+   In some `FN` types there are more than one algorithm available for computing
    matrix functions. In that case, this function allows choosing the wanted method.
 
-   If meth is currently set to 0 (the default) and the input argument A of
-   FNEvaluateFunctionMat() is a symmetric/Hermitian matrix, then the computation
-   is done via the eigendecomposition of A, rather than with the general algorithm.
+   If `meth` is currently set to 0 (the default) and the input argument `A` of
+   `FNEvaluateFunctionMat()` is a symmetric/Hermitian matrix, then the computation
+   is done via the eigendecomposition of `A`, rather than with the general algorithm.
 
    Level: intermediate
 
-.seealso: `FNGetMethod()`, `FNEvaluateFunctionMat()`
+.seealso: [](sec:fn), `FNGetMethod()`, `FNEvaluateFunctionMat()`
 @*/
 PetscErrorCode FNSetMethod(FN fn,PetscInt meth)
 {
@@ -352,7 +352,7 @@ PetscErrorCode FNSetMethod(FN fn,PetscInt meth)
 }
 
 /*@
-   FNGetMethod - Gets the method currently used in the FN.
+   FNGetMethod - Gets the method currently used in the `FN`.
 
    Not Collective
 
@@ -364,7 +364,7 @@ PetscErrorCode FNSetMethod(FN fn,PetscInt meth)
 
    Level: intermediate
 
-.seealso: `FNSetMethod()`
+.seealso: [](sec:fn), `FNSetMethod()`
 @*/
 PetscErrorCode FNGetMethod(FN fn,PetscInt *meth)
 {
@@ -385,25 +385,25 @@ PetscErrorCode FNGetMethod(FN fn,PetscInt *meth)
 -  pmode - the parallel mode
 
    Options Database Key:
-.  -fn_parallel <mode> - Sets the parallel mode, either 'redundant' or 'synchronized'
+.  -fn_parallel <mode> - Sets the parallel mode, either `redundant` or `synchronized`
 
    Notes:
    This is relevant only when the function is evaluated on a matrix, with
-   either FNEvaluateFunctionMat() or FNEvaluateFunctionMatVec().
+   either `FNEvaluateFunctionMat()` or `FNEvaluateFunctionMatVec()`.
 
-   In the 'redundant' parallel mode, all processes will make the computation
+   In the `redundant` parallel mode, all processes will make the computation
    redundantly, starting from the same data, and producing the same result.
    This result may be slightly different in the different processes if using a
    multithreaded BLAS library, which may cause issues in ill-conditioned problems.
 
-   In the 'synchronized' parallel mode, only the first MPI process performs the
+   In the `synchronized` parallel mode, only the first MPI process performs the
    computation and then the computed matrix is broadcast to the other
    processes in the communicator. This communication is done automatically at
-   the end of FNEvaluateFunctionMat() or FNEvaluateFunctionMatVec().
+   the end of `FNEvaluateFunctionMat()` or `FNEvaluateFunctionMatVec()`.
 
    Level: advanced
 
-.seealso: `FNEvaluateFunctionMat()` or `FNEvaluateFunctionMatVec()`, `FNGetParallel()`
+.seealso: [](sec:fn), `FNEvaluateFunctionMat()` or `FNEvaluateFunctionMatVec()`, `FNGetParallel()`
 @*/
 PetscErrorCode FNSetParallel(FN fn,FNParallelType pmode)
 {
@@ -427,7 +427,7 @@ PetscErrorCode FNSetParallel(FN fn,FNParallelType pmode)
 
    Level: advanced
 
-.seealso: `FNSetParallel()`
+.seealso: [](sec:fn), `FNSetParallel()`
 @*/
 PetscErrorCode FNGetParallel(FN fn,FNParallelType *pmode)
 {
@@ -439,7 +439,7 @@ PetscErrorCode FNGetParallel(FN fn,FNParallelType *pmode)
 }
 
 /*@
-   FNEvaluateFunction - Computes the value of the function f(x) for a given x.
+   FNEvaluateFunction - Computes the value of the function $f(x)$ for a given $x$.
 
    Not Collective
 
@@ -448,15 +448,15 @@ PetscErrorCode FNGetParallel(FN fn,FNParallelType *pmode)
 -  x  - the value where the function must be evaluated
 
    Output Parameter:
-.  y  - the result of f(x)
+.  y  - the result of $f(x)$
 
    Note:
    Scaling factors are taken into account, so the actual function evaluation
-   will return beta*f(alpha*x).
+   will return $\beta f(\alpha x)$.
 
    Level: intermediate
 
-.seealso: `FNEvaluateDerivative()`, `FNEvaluateFunctionMat()`, `FNSetScale()`
+.seealso: [](sec:fn), `FNEvaluateDerivative()`, `FNEvaluateFunctionMat()`, `FNSetScale()`
 @*/
 PetscErrorCode FNEvaluateFunction(FN fn,PetscScalar x,PetscScalar *y)
 {
@@ -475,7 +475,7 @@ PetscErrorCode FNEvaluateFunction(FN fn,PetscScalar x,PetscScalar *y)
 }
 
 /*@
-   FNEvaluateDerivative - Computes the value of the derivative f'(x) for a given x.
+   FNEvaluateDerivative - Computes the value of the derivative $f'(x)$ for a given $x$.
 
    Not Collective
 
@@ -484,15 +484,15 @@ PetscErrorCode FNEvaluateFunction(FN fn,PetscScalar x,PetscScalar *y)
 -  x  - the value where the derivative must be evaluated
 
    Output Parameter:
-.  y  - the result of f'(x)
+.  y  - the result of $f'(x)$
 
    Note:
    Scaling factors are taken into account, so the actual derivative evaluation will
-   return alpha*beta*f'(alpha*x).
+   return $\alpha\beta f'(\alpha x)$.
 
    Level: intermediate
 
-.seealso: `FNEvaluateFunction()`
+.seealso: [](sec:fn), `FNEvaluateFunction()`, `FNSetScale()`
 @*/
 PetscErrorCode FNEvaluateDerivative(FN fn,PetscScalar x,PetscScalar *y)
 {
@@ -649,8 +649,8 @@ PetscErrorCode FNEvaluateFunctionMat_Private(FN fn,Mat A,Mat B,PetscBool sync)
 }
 
 /*@
-   FNEvaluateFunctionMat - Computes the value of the function f(A) for a given
-   matrix A, where the result is also a matrix.
+   FNEvaluateFunctionMat - Computes the value of the function $f(A)$ for a given
+   matrix $A$, where the result is also a matrix.
 
    Logically Collective
 
@@ -659,25 +659,25 @@ PetscErrorCode FNEvaluateFunctionMat_Private(FN fn,Mat A,Mat B,PetscBool sync)
 -  A  - matrix on which the function must be evaluated
 
    Output Parameter:
-.  B  - (optional) matrix resulting from evaluating f(A)
+.  B  - (optional) matrix resulting from evaluating $f(A)$
 
    Notes:
-   Matrix A must be a square sequential dense Mat, with all entries equal on
+   Matrix `A` must be a square sequential dense `Mat`, with all entries equal on
    all processes (otherwise each process will compute different results).
-   If matrix B is provided, it must also be a square sequential dense Mat, and
-   both matrices must have the same dimensions. If B is NULL (or B=A) then the
-   function will perform an in-place computation, overwriting A with f(A).
+   If matrix `B` is provided, it must also be a square sequential dense `Mat`, and
+   both matrices must have the same dimensions. If `B` is `NULL` (or `B`=`A`) then
+   the function will perform an in-place computation, overwriting `A` with $f(A)$.
 
-   If A is known to be real symmetric or complex Hermitian then it is
-   recommended to set the appropriate flag with MatSetOption(), because
+   If `A` is known to be real symmetric or complex Hermitian then it is
+   recommended to set the appropriate flag with `MatSetOption()`, because
    symmetry can sometimes be exploited by the algorithm.
 
    Scaling factors are taken into account, so the actual function evaluation
-   will return beta*f(alpha*A).
+   will return $\beta f(\alpha A)$.
 
    Level: advanced
 
-.seealso: `FNEvaluateFunction()`, `FNEvaluateFunctionMatVec()`, `FNSetMethod()`
+.seealso: [](sec:fn), `FNEvaluateFunction()`, `FNEvaluateFunctionMatVec()`, `FNSetMethod()`
 @*/
 PetscErrorCode FNEvaluateFunctionMat(FN fn,Mat A,Mat B)
 {
@@ -801,8 +801,8 @@ PetscErrorCode FNEvaluateFunctionMatVec_Private(FN fn,Mat A,Vec v,PetscBool sync
 }
 
 /*@
-   FNEvaluateFunctionMatVec - Computes the first column of the matrix f(A)
-   for a given matrix A.
+   FNEvaluateFunctionMatVec - Computes the first column of the matrix $f(A)$
+   for a given matrix $A$.
 
    Logically Collective
 
@@ -811,15 +811,15 @@ PetscErrorCode FNEvaluateFunctionMatVec_Private(FN fn,Mat A,Vec v,PetscBool sync
 -  A  - matrix on which the function must be evaluated
 
    Output Parameter:
-.  v  - vector to hold the first column of f(A)
+.  v  - vector to hold the first column of $f(A)$
 
    Notes:
-   This operation is similar to FNEvaluateFunctionMat() but returns only
-   the first column of f(A), hence saving computations in most cases.
+   This operation is similar to `FNEvaluateFunctionMat()` but returns only
+   the first column of $f(A)$, hence saving computations in most cases.
 
    Level: advanced
 
-.seealso: `FNEvaluateFunction()`, `FNEvaluateFunctionMat()`, `FNSetMethod()`
+.seealso: [](sec:fn), `FNEvaluateFunction()`, `FNEvaluateFunctionMat()`, `FNSetMethod()`
 @*/
 PetscErrorCode FNEvaluateFunctionMatVec(FN fn,Mat A,Vec v)
 {
@@ -847,19 +847,19 @@ PetscErrorCode FNEvaluateFunctionMatVec(FN fn,Mat A,Vec v)
 }
 
 /*@
-   FNSetFromOptions - Sets FN options from the options database.
+   FNSetFromOptions - Sets `FN` options from the options database.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  fn - the math function context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 
-.seealso: `FNSetOptionsPrefix()`
+.seealso: [](sec:fn), `FNSetOptionsPrefix()`
 @*/
 PetscErrorCode FNSetFromOptions(FN fn)
 {
@@ -898,7 +898,7 @@ PetscErrorCode FNSetFromOptions(FN fn)
 }
 
 /*@
-   FNView - Prints the FN data structure.
+   FNView - Prints the `FN` data structure.
 
    Collective
 
@@ -908,18 +908,20 @@ PetscErrorCode FNSetFromOptions(FN fn)
 
    Note:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
+
+   Use `FNViewFromOptions()` to allow the user to select many different `PetscViewerType`
+   and formats from the options database.
 
    Level: beginner
 
-.seealso: `FNCreate()`
+.seealso: [](sec:fn), `FNCreate()`, `FNViewFromOptions()`
 @*/
 PetscErrorCode FNView(FN fn,PetscViewer viewer)
 {
@@ -944,18 +946,18 @@ PetscErrorCode FNView(FN fn,PetscViewer viewer)
 }
 
 /*@
-   FNViewFromOptions - View from options
+   FNViewFromOptions - View (print) an `FN` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  fn   - the math function context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: `FNView()`, `FNCreate()`
+.seealso: [](sec:fn), `FNView()`, `FNCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode FNViewFromOptions(FN fn,PetscObject obj,const char name[])
 {
@@ -976,15 +978,15 @@ PetscErrorCode FNViewFromOptions(FN fn,PetscObject obj,const char name[])
 -  comm - MPI communicator
 
    Output Parameter:
-.  newfn - location to put the new FN context
+.  newfn - location to put the new `FN` context
 
    Note:
    In order to use the same MPI communicator as in the original object,
-   use PetscObjectComm((PetscObject)fn).
+   use `PetscObjectComm`((`PetscObject`)`fn`).
 
    Level: developer
 
-.seealso: `FNCreate()`
+.seealso: [](sec:fn), `FNCreate()`
 @*/
 PetscErrorCode FNDuplicate(FN fn,MPI_Comm comm,FN *newfn)
 {
@@ -1011,7 +1013,7 @@ PetscErrorCode FNDuplicate(FN fn,MPI_Comm comm,FN *newfn)
 }
 
 /*@
-   FNDestroy - Destroys FN context that was created with FNCreate().
+   FNDestroy - Destroys an `FN` context that was created with `FNCreate()`.
 
    Collective
 
@@ -1020,7 +1022,7 @@ PetscErrorCode FNDuplicate(FN fn,MPI_Comm comm,FN *newfn)
 
    Level: beginner
 
-.seealso: `FNCreate()`
+.seealso: [](sec:fn), `FNCreate()`
 @*/
 PetscErrorCode FNDestroy(FN *fn)
 {
@@ -1037,20 +1039,20 @@ PetscErrorCode FNDestroy(FN *fn)
 }
 
 /*@C
-   FNRegister - Adds a mathematical function to the FN package.
+   FNRegister - Adds a mathematical function to the `FN` package.
 
    Not Collective
 
    Input Parameters:
-+  name - name of a new user-defined FN
--  function - routine to create context
++  name - name of a new user-defined `FN`
+-  function - routine to create the context
 
    Notes:
-   FNRegister() may be called multiple times to add several user-defined functions.
+   `FNRegister()` may be called multiple times to add several user-defined functions.
 
    Level: advanced
 
-.seealso: `FNRegisterAll()`
+.seealso: [](sec:fn), `FNRegisterAll()`
 @*/
 PetscErrorCode FNRegister(const char *name,PetscErrorCode (*function)(FN))
 {
