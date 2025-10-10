@@ -17,11 +17,11 @@
 
    Input Parameters:
 +  xr - the real part of the vector (overwritten on output)
-.  xi - the imaginary part of the vector (not referenced if iscomplex is false)
+.  xi - the imaginary part of the vector (not referenced if `iscomplex` is false)
 -  iscomplex - a flag indicating if the vector is complex
 
    Output Parameter:
-.  norm - the vector norm before normalization (can be set to NULL)
+.  norm - the vector norm before normalization (can be set to `NULL`)
 
    Level: developer
 
@@ -121,18 +121,18 @@ static PetscErrorCode VecCheckOrthogonality_Private(Vec V[],PetscInt nv,Vec W[],
 .  lev - level of orthogonality (optional)
 
    Notes:
-   This function computes W'*V and prints the result. It is intended to check
-   the level of bi-orthogonality of the vectors in the two sets. If W is equal
-   to NULL then V is used, thus checking the orthogonality of the V vectors.
+   This function computes $W^*V$ and prints the result. It is intended to check
+   the level of bi-orthogonality of the vectors in the two sets. If $W$ is equal
+   to `NULL` then $V$ is used, thus checking the orthogonality of the $V$ vectors.
 
-   If matrix B is provided then the check uses the B-inner product, W'*B*V,
-   where B is assumed to be Hermitian.
+   If matrix `B` is provided then the check uses the $B$-inner product, $W^*BV$,
+   where $B$ is assumed to be Hermitian.
 
-   If V, W represent eigenvectors computed by SLEPc, this function will not work
+   If `V`, `W` represent eigenvectors computed by SLEPc, this function will not work
    correctly if one of the eigenvalues is complex when running with real scalars.
 
-   If lev is not NULL, it will contain the maximum entry of matrix
-   W'*V - I (in absolute value) omitting the diagonal. Otherwise, the matrix W'*V
+   If `lev` is not `NULL`, it will contain the maximum entry of matrix
+   $W^*V - I$ (in absolute value) omitting the diagonal. Otherwise, the matrix $W^*V$
    is printed.
 
    Level: developer
@@ -174,8 +174,8 @@ PetscErrorCode VecCheckOrthogonality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Mat
 .  lev - level of orthogonality (optional)
 
    Notes:
-   This function is equivalent to VecCheckOrthonormality(), but in addition it checks
-   that the diagonal of W'*V (or W'*B*V) is equal to all ones.
+   This function is equivalent to `VecCheckOrthonormality()`, but in addition it checks
+   that the diagonal of $W^*V$ (or $W^*BV$) is equal to all ones.
 
    Level: developer
 
@@ -211,8 +211,8 @@ PetscErrorCode VecCheckOrthonormality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Ma
 .  newv - location to put new vector
 
    Note:
-   This is similar to VecDuplicate(), but the new vector does not have an internal
-   array, so the intended usage is with VecPlaceArray().
+   This is similar to `VecDuplicate()`, but the new vector does not have an internal
+   array, so the intended usage is with `VecPlaceArray()`.
 
    Level: developer
 
@@ -261,13 +261,13 @@ PetscErrorCode VecDuplicateEmpty(Vec v,Vec *newv)
 
    Input Parameters:
 +  v    - the vector to be filled with random values
-.  rctx - the random number context (can be NULL)
-.  w1   - first work vector (can be NULL)
--  w2   - second work vector (can be NULL)
+.  rctx - the random number context (can be `NULL`)
+.  w1   - first work vector (can be `NULL`)
+-  w2   - second work vector (can be `NULL`)
 
    Notes:
-   Fills the two work vectors with uniformly distributed random values (VecSetRandom)
-   and then applies the Box-Muller transform to get normally distributed values on v.
+   Fills the two work vectors with uniformly distributed random values (`VecSetRandom()`)
+   and then applies the Box-Muller transform to get normally distributed values on `v`.
 
    Level: developer
 

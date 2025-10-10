@@ -12,19 +12,19 @@
 
 /*@C
    SlepcInitializeFortran - Routine that should be called from C after
-   the call to SlepcInitialize() if one is using a C main program
+   the call to `SlepcInitialize()` if one is using a C main program
    that calls Fortran routines that in turn call SLEPc routines.
 
-   Collective on PETSC_COMM_WORLD
+   Collective on `PETSC_COMM_WORLD`
 
-   Level: beginner
+   Level: advanced
 
-   Notes:
-   SlepcInitializeFortran() initializes some of the default SLEPc variables
+   Note:
+   `SlepcInitializeFortran()` initializes some of the default SLEPc variables
    for use in Fortran if a user's main program is written in C.
-   SlepcInitializeFortran() is NOT needed if a user's main
+   `SlepcInitializeFortran()` is NOT needed if a user's main
    program is written in Fortran; in this case, just calling
-   SlepcInitialize() in the main (Fortran) program is sufficient.
+   `SlepcInitialize()` in the main (Fortran) program is sufficient.
 
 .seealso: `SlepcInitialize()`
 @*/

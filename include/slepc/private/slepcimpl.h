@@ -36,7 +36,7 @@ SLEPC_INTERN PetscBool SlepcBeganPetsc;
 .   h - the newly created object
 
     Note:
-    This is equivalent to PetscHeaderCreate but makes sure that SlepcInitialize
+    This is equivalent to `PetscHeaderCreate()` but makes sure that `SlepcInitialize()`
     has been called.
 
     Level: developer
