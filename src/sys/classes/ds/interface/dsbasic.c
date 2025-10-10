@@ -195,19 +195,15 @@ PetscErrorCode DSAppendOptionsPrefix(DS ds,const char *prefix)
 
 /*@
    DSGetOptionsPrefix - Gets the prefix used for searching for all
-   DS options in the database.
+   `DS` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 

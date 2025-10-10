@@ -1566,19 +1566,15 @@ PetscErrorCode EPSAppendOptionsPrefix(EPS eps,const char *prefix)
 
 /*@
    EPSGetOptionsPrefix - Gets the prefix used for searching for all
-   EPS options in the database.
+   `EPS` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  eps - the eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 

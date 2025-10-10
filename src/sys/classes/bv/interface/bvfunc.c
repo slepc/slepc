@@ -494,19 +494,15 @@ PetscErrorCode BVAppendOptionsPrefix(BV bv,const char *prefix)
 
 /*@
    BVGetOptionsPrefix - Gets the prefix used for searching for all
-   BV options in the database.
+   `BV` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - the basis vectors context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used, is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 

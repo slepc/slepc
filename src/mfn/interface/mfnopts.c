@@ -391,19 +391,15 @@ PetscErrorCode MFNAppendOptionsPrefix(MFN mfn,const char *prefix)
 
 /*@
    MFNGetOptionsPrefix - Gets the prefix used for searching for all
-   MFN options in the database.
+   `MFN` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  mfn - the matrix function context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 

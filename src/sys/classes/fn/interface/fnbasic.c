@@ -168,19 +168,15 @@ PetscErrorCode FNAppendOptionsPrefix(FN fn,const char *prefix)
 
 /*@
    FNGetOptionsPrefix - Gets the prefix used for searching for all
-   FN options in the database.
+   `FN` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  fn - the math function context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 

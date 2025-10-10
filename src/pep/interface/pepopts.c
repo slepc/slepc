@@ -1348,19 +1348,15 @@ PetscErrorCode PEPAppendOptionsPrefix(PEP pep,const char *prefix)
 
 /*@
    PEPGetOptionsPrefix - Gets the prefix used for searching for all
-   PEP options in the database.
+   `PEP` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  pep - the polynomial eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 
