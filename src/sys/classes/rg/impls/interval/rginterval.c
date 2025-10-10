@@ -53,19 +53,19 @@ static PetscErrorCode RGIntervalSetEndpoints_Interval(RG rg,PetscReal a,PetscRea
 -  d - top endpoint of the interval in the imaginary axis
 
    Options Database Keys:
-.  -rg_interval_endpoints - the four endpoints
+.  -rg_interval_endpoints - comma-separated list of values (two or four)
 
    Note:
-   The region is defined as [a,b]x[c,d]. Particular cases are an interval on
-   the real axis (c=d=0), similar for the imaginary axis (a=b=0), the whole
-   complex plane (a=-inf,b=inf,c=-inf,d=inf), and so on.
+   The region is defined as $[a,b]\times[c,d]$. Particular cases are an interval on
+   the real axis ($c=d=0$), similarly for the imaginary axis ($a=b=0$), the whole
+   complex plane ($a=-\infty,b=\infty,c=-\infty,d=\infty$), and so on.
 
    When PETSc is built with real scalars, the region must be symmetric with
    respect to the real axis.
 
    Level: advanced
 
-.seealso: `RGIntervalGetEndpoints()`
+.seealso: [](sec:rg), `RGINTERVAL`, `RGIntervalGetEndpoints()`
 @*/
 PetscErrorCode RGIntervalSetEndpoints(RG rg,PetscReal a,PetscReal b,PetscReal c,PetscReal d)
 {
@@ -107,7 +107,7 @@ static PetscErrorCode RGIntervalGetEndpoints_Interval(RG rg,PetscReal *a,PetscRe
 
    Level: advanced
 
-.seealso: `RGIntervalSetEndpoints()`
+.seealso: [](sec:rg), `RGIntervalSetEndpoints()`
 @*/
 PetscErrorCode RGIntervalGetEndpoints(RG rg,PetscReal *a,PetscReal *b,PetscReal *c,PetscReal *d)
 {
@@ -343,6 +343,21 @@ static PetscErrorCode RGDestroy_Interval(RG rg)
   PetscCall(PetscObjectComposeFunction((PetscObject)rg,"RGIntervalGetEndpoints_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
+
+/*MC
+   RGINTERVAL - RGINTERVAL = "interval" - A region consisting of a (generalized)
+   interval, defined as $[a,b]\times[c,d]$, where the four parameters can be set with
+   `RGIntervalSetEndpoints()`.
+
+   Note:
+   The following figure shows an example of an interval region.
+
+   ![Interval region](../../_static/images/manual/svg/fig-rg-interval.svg)
+
+   Level: beginner
+
+.seealso: [](sec:rg), `RG`, `RGType`, `RGSetType()`, `RGIntervalSetEndpoints()`
+M*/
 
 SLEPC_EXTERN PetscErrorCode RGCreate_Interval(RG rg)
 {

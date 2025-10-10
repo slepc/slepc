@@ -59,17 +59,17 @@ static PetscErrorCode RGEllipseSetParameters_Ellipse(RG rg,PetscScalar center,Pe
 
    Notes:
    In the case of complex scalars, a complex center can be provided in the
-   command line with [+/-][realnumber][+/-]realnumberi with no spaces, e.g.
-   -rg_ellipse_center 1.0+2.0i
+   command line with `[+/-][realnumber][+/-]realnumberi` with no spaces, e.g.,
+   `-rg_ellipse_center 1.0+2.0i`.
 
    When PETSc is built with real scalars, the center is restricted to a real value.
 
-   For radius and vscale, you can use PETSC_CURRENT to keep the current value, and
-   PETSC_DETERMINE to set them to a default of 1.
+   For `radius` and `vscale`, you can use `PETSC_CURRENT` to keep the current value, and
+   `PETSC_DETERMINE` to set them to a default of 1.
 
    Level: advanced
 
-.seealso: `RGEllipseGetParameters()`
+.seealso: [](sec:rg), `RGELLIPSE`, `RGEllipseGetParameters()`
 @*/
 PetscErrorCode RGEllipseSetParameters(RG rg,PetscScalar center,PetscReal radius,PetscReal vscale)
 {
@@ -108,7 +108,7 @@ static PetscErrorCode RGEllipseGetParameters_Ellipse(RG rg,PetscScalar *center,P
 
    Level: advanced
 
-.seealso: `RGEllipseSetParameters()`
+.seealso: [](sec:rg), `RGEllipseSetParameters()`
 @*/
 PetscErrorCode RGEllipseGetParameters(RG rg,PetscScalar *center,PetscReal *radius,PetscReal *vscale)
 {
@@ -279,6 +279,21 @@ static PetscErrorCode RGDestroy_Ellipse(RG rg)
   PetscCall(PetscObjectComposeFunction((PetscObject)rg,"RGEllipseGetParameters_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
+
+/*MC
+   RGELLIPSE - RGELLIPSE = "ellipse" - A region consisting of an ellipse defined by
+   its center, radius and vertical scale (1 by default), specified with
+   `RGEllipseSetParameters()`.
+
+   Note:
+   The following figure shows an example of an elliptic region.
+
+   ![Elliptic region](../../_static/images/manual/svg/fig-rg-ellipse.svg)
+
+   Level: beginner
+
+.seealso: [](sec:rg), `RG`, `RGType`, `RGSetType()`, `RGEllipseSetParameters()`
+M*/
 
 SLEPC_EXTERN PetscErrorCode RGCreate_Ellipse(RG rg)
 {
