@@ -1,9 +1,9 @@
 # Singular Value Decomposition Solvers - SVD
 
-The Singular Value Decomposition Solver (SVD) is very similar to the EPS object, but intended for the computation of the partial SVD of a rectangular matrix. With this type of object, the user can specify an SVD problem and solve it with any of the different solvers encapsulated by the package. Some of these solvers are actually implemented through calls to EPS eigensolvers.
+The Singular Value Decomposition Solver (SVD) is very similar to the EPS object, but intended for the computation of the partial SVD of a rectangular matrix. With this type of object, the user can specify an SVD problem and solve it with any of the different solvers encapsulated by the package. Some of these solvers are actually implemented through calls to `EPS` eigensolvers.
 
-The user interface is very similar to that of EPS, both for the options database (e.g., -svd_nsv 4 -svd_type lanczos), and for the programmatic interface (e.g., SVDSetDimensions() / SVDSetType()).
+The user interface is very similar to that of `EPS`, both for the options database (e.g., `-svd_nsv 4 -svd_type trlanczos`), and for the programmatic interface (e.g., `SVDSetDimensions()` or `SVDSetType()`).
 
-Users guide section: [](ch:svd).
+Related Users Manual part: [](ch:svd).
 
 <a href="PETSC_DOC_OUT_ROOT_PLACEHOLDER/src/svd/tutorials/index.html">Examples</a><br>

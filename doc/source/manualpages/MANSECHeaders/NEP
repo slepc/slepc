@@ -2,8 +2,8 @@
 
 The Nonlinear Eigenvalue Problem (NEP) solver is the object provided by SLEPc for specifying an eigenvalue problem that is nonlinear with respect to the eigenvalue (not the eigenvector). This is intended for general nonlinear problems (rather than polynomial eigenproblems) described as {math}`T(\lambda) x=0`
 
-As in the other solver objects, users can set various options at runtime via the options database (e.g., -nep_nev 4 -nep_type narnoldi). Options can also be set directly in application codes by calling the corresponding routines (e.g., NEPSetDimensions() / NEPSetType()).
+As in the other solver objects, users can set various options at runtime via the options database (e.g., `-nep_nev 4 -nep_type narnoldi`). Options can also be set directly in application codes by calling the corresponding routines (e.g., `NEPSetDimensions()` or `NEPSetType()`).
 
-Users guide section: [](ch:nep).
+Related Users Manual part: [](ch:nep).
 
 <a href="PETSC_DOC_OUT_ROOT_PLACEHOLDER/src/nep/tutorials/index.html">Examples</a><br>

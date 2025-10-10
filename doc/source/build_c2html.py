@@ -55,7 +55,7 @@ def main(slepc_dir,srcdir,loc,c2html,mapnames):
               mansec = re.sub('MANSEC[ ]*=[ ]*','',mansecl[0]).strip('\n').strip()
               with open(os.path.join('doc','source','manualpages','MANSECHeaders',mansec)) as fd:
                 for line in fd:
-                  if (line.find('Users guide section:') > -1 or
+                  if (line.find('Related Users Manual part:') > -1 or
                       line.find('>Examples</a>') > -1):
                     continue
                   fdw.write(to_html5_demo(line))
