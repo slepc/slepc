@@ -68,6 +68,7 @@ website: latexpdf
 	python3 -m pip install -r requirements.txt && \
 	${RM} -rf ${BUILDDIR}/html && \
 	$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) && \
+	cp $(BUILDDIR)/latex/slepc-manual.pdf $(BUILDDIR)/html/documentation/manual/ && \
 	deactivate
 
 .PHONY: logo_upv
@@ -111,7 +112,6 @@ latexpdf: webstatic logo_upv
 	if [ ! -d $(SOURCEDIR)/_static/manual ]; then \
 		mkdir $(SOURCEDIR)/_static/manual ;\
 	fi && \
-	cp $(BUILDDIR)/latex/slepc-manual.pdf $(SOURCEDIR)/_static/manual/ && \
 	deactivate \
 
 # Catch-all target: route all unknown targets to Sphinx using the new
