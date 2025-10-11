@@ -23,18 +23,123 @@
 !     Module contains data needed by shell ST
 !
 #include <slepc/finclude/slepceps.h>
-      module mymoduleex10f
+   module ex10fmodule
       use slepceps
       implicit none
 
       KSP myksp
-      end module
+
+   contains
+! -------------------------------------------------------------------
+!
+!   STApply_User - This routine demonstrates the use of a user-provided spectral
+!   transformation. The transformation implemented in this code is just OP=A^-1.
+!
+!   Input Parameters:
+!   st - spectral transformation context
+!   x - input vector
+!
+!   Output Parameter:
+!   y - output vector
+!
+      subroutine STApply_User(st,x,y,ierr)
+      use slepceps
+      implicit none
+
+      ST             st
+      Vec            x,y
+      PetscErrorCode ierr
+
+      call KSPSolve(myksp,x,y,ierr);CHKERRQ(ierr)
+      end subroutine
+
+! -------------------------------------------------------------------
+!
+!   STApplyTranspose_User - This is not required unless using a two-sided eigensolver
+!
+!   Input Parameters:
+!   st - spectral transformation context
+!   x - input vector
+!
+!   Output Parameter:
+!   y - output vector
+!
+      subroutine STApplyTranspose_User(st,x,y,ierr)
+      use slepceps
+      implicit none
+
+      ST             st
+      Vec            x,y
+      PetscErrorCode ierr
+
+      call KSPSolveTranspose(myksp,x,y,ierr);CHKERRQ(ierr)
+      end subroutine
+
+#if defined(PETSC_USE_COMPLEX)
+! -------------------------------------------------------------------
+!
+!   STApplyHermitianTranspose_User - This is not required unless using a two-sided eigensolver
+!   in complex scalars
+!
+!   Input Parameters:
+!   st - spectral transformation context
+!   x - input vector
+!
+!   Output Parameter:
+!   y - output vector
+!
+      subroutine STApplyHermitianTranspose_User(st,x,y,ierr)
+      use slepceps
+      implicit none
+
+      ST             st
+      Vec            x,y,w
+      PetscErrorCode ierr
+
+      call VecDuplicate(x,w,ierr);CHKERRQ(ierr)
+      call VecCopy(x,w,ierr);CHKERRQ(ierr)
+      call VecConjugate(w,ierr);CHKERRQ(ierr)
+      call KSPSolveTranspose(myksp,w,y,ierr);CHKERRQ(ierr)
+      call VecConjugate(y,ierr);CHKERRQ(ierr)
+      call VecDestroy(w,ierr);CHKERRQ(ierr)
+      end subroutine
+#endif
+
+! -------------------------------------------------------------------
+!
+!   STBackTransform_User - This routine demonstrates the use of a user-provided spectral
+!   transformation
+!
+!   Input Parameters:
+!   st - spectral transformation context
+!   n  - number of eigenvalues to transform
+!
+!   Output Parameters:
+!   eigr - real part of eigenvalues
+!   eigi - imaginary part of eigenvalues
+!
+      subroutine STBackTransform_User(st,n,eigr,eigi,ierr)
+      use slepceps
+      implicit none
+
+      ST             st
+      PetscInt       n, j
+      PetscScalar    eigr(*), eigi(*)
+      PetscErrorCode ierr
+
+      do j=1,n
+        eigr(j) = 1.0 / eigr(j)
+      end do
+      ierr = 0
+      end subroutine
+
+   end module ex10fmodule
 
 ! ----------------------------------------------------------------------
 
-      program ex10f
+   program ex10f
       use slepceps
-      use mymoduleex10f
+      use ex10fmodule
       implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -55,9 +160,6 @@
       PetscBool      flg, isShell, terse
       PetscMPIInt    rank
       PetscErrorCode ierr
-
-!     Note: Any user-defined Fortran routines MUST be declared as external.
-      external STApply_User, STApplyTranspose_User, STApplyHermitianTranspose_User, STBackTransform_User
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
@@ -206,118 +308,7 @@
       call EPSDestroy(eps,ierr);CHKERRA(ierr)
       call MatDestroy(A,ierr);CHKERRA(ierr)
       call SlepcFinalize(ierr)
-      end program ex10f
-
-! -------------------------------------------------------------------
-!
-!   STApply_User - This routine demonstrates the use of a user-provided spectral
-!   transformation. The transformation implemented in this code is just OP=A^-1.
-!
-!   Input Parameters:
-!   st - spectral transformation context
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
-      subroutine STApply_User(st,x,y,ierr)
-      use slepceps
-      use mymoduleex10f
-      implicit none
-
-      ST             st
-      Vec            x,y
-      PetscErrorCode ierr
-
-      call KSPSolve(myksp,x,y,ierr);CHKERRQ(ierr)
-
-      end
-
-! -------------------------------------------------------------------
-!
-!   STApplyTranspose_User - This is not required unless using a two-sided eigensolver
-!
-!   Input Parameters:
-!   st - spectral transformation context
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
-      subroutine STApplyTranspose_User(st,x,y,ierr)
-      use slepceps
-      use mymoduleex10f
-      implicit none
-
-      ST             st
-      Vec            x,y
-      PetscErrorCode ierr
-
-      call KSPSolveTranspose(myksp,x,y,ierr);CHKERRQ(ierr)
-
-      end
-
-#if defined(PETSC_USE_COMPLEX)
-! -------------------------------------------------------------------
-!
-!   STApplyHermitianTranspose_User - This is not required unless using a two-sided eigensolver
-!   in complex scalars
-!
-!   Input Parameters:
-!   st - spectral transformation context
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
-      subroutine STApplyHermitianTranspose_User(st,x,y,ierr)
-      use slepceps
-      use mymoduleex10f
-      implicit none
-
-      ST             st
-      Vec            x,y,w
-      PetscErrorCode ierr
-
-      call VecDuplicate(x,w,ierr);CHKERRQ(ierr)
-      call VecCopy(x,w,ierr);CHKERRQ(ierr)
-      call VecConjugate(w,ierr);CHKERRQ(ierr)
-      call KSPSolveTranspose(myksp,w,y,ierr);CHKERRQ(ierr)
-      call VecConjugate(y,ierr);CHKERRQ(ierr)
-      call VecDestroy(w,ierr);CHKERRQ(ierr)
-
-      end
-#endif
-
-! -------------------------------------------------------------------
-!
-!   STBackTransform_User - This routine demonstrates the use of a user-provided spectral
-!   transformation
-!
-!   Input Parameters:
-!   st - spectral transformation context
-!   n  - number of eigenvalues to transform
-!
-!   Output Parameters:
-!   eigr - real part of eigenvalues
-!   eigi - imaginary part of eigenvalues
-!
-      subroutine STBackTransform_User(st,n,eigr,eigi,ierr)
-      use slepceps
-      use mymoduleex10f
-      implicit none
-
-      ST             st
-      PetscInt       n, j
-      PetscScalar    eigr(*), eigi(*)
-      PetscErrorCode ierr
-
-      do j=1,n
-        eigr(j) = 1.0 / eigr(j)
-      end do
-      ierr = 0
-
-      end
+   end program ex10f
 
 !/*TEST
 !

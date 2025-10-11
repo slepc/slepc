@@ -64,11 +64,151 @@
 
    end module shell_ctx_interfaces
 
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+!    Module used to implement the shell matrix operations
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   module ex54fmodule
+      use slepcnep
+      implicit none
+
+   contains
+! --------------------------------------------------------------
+!
+!  MyNEPFunction - Computes Function matrix  T(lambda)
+!
+      subroutine MyNEPFunction(nep,lambda,T,P,ctx,ierr)
+        use slepcnep
+        use shell_ctx_interfaces
+        implicit none
+
+        NEP                   :: nep
+        PetscScalar           :: lambda
+        Mat                   :: T,P
+        PetscInt              :: ctx
+        PetscErrorCode        :: ierr
+        type(MatCtx), pointer :: ctxT
+
+        PetscCall(MatShellGetContext(T,ctxT,ierr))
+        ctxT%lambda = lambda
+      end subroutine MyNEPFunction
+
+! --------------------------------------------------------------
+!
+!  MyNEPJacobian - Computes Jacobian matrix  T'(lambda)
+!
+      subroutine MyNEPJacobian(nep,lambda,T,ctx,ierr)
+        use slepcnep
+        use shell_ctx_interfaces
+        implicit none
+
+        NEP                   :: nep
+        PetscScalar           :: lambda
+        Mat                   :: T
+        PetscInt              :: ctx
+        PetscErrorCode        :: ierr
+        type(MatCtx), pointer :: ctxT
+
+        PetscCall(MatShellGetContext(T,ctxT,ierr))
+        ctxT%lambda = lambda
+      end subroutine MyNEPJacobian
+
+! --------------------------------------------------------------
+!
+!  MatMult_A - Shell matrix operation, multiples y=A*x
+!  Here A=(D-lambda*I) where D is a diagonal matrix
+!
+      subroutine MatMult_A(A,x,y,ierr)
+        use shell_ctx_interfaces
+        implicit none
+
+        Mat                   :: A
+        Vec                   :: x,y
+        PetscErrorCode        :: ierr
+        PetscInt              :: i,istart,iend
+        PetscScalar           :: val
+        type(MatCtx), pointer :: ctxA
+!
+        PetscCall(VecGetOwnershipRange(x,istart,iend,ierr))
+        do i=istart,iend-1
+           val = i+1
+           val = 1.0/val
+           PetscCall(VecSetValue(y,i,val,INSERT_VALUES,ierr))
+        end do
+        PetscCall(VecAssemblyBegin(y,ierr))
+        PetscCall(VecAssemblyEnd(y,ierr))
+        PetscCall(VecPointwiseMult(y,y,x,ierr))
+        PetscCall(MatShellGetContext(A,ctxA,ierr))
+        PetscCall(VecAXPY(y,-ctxA%lambda,x,ierr))
+      end subroutine MatMult_A
+
+! --------------------------------------------------------------
+!
+!  MatDuplicate_A - Shell matrix operation, duplicates A
+!
+      subroutine MatDuplicate_A(A,opt,M,ierr)
+        use shell_ctx_interfaces
+        implicit none
+
+        Mat                   :: A,M
+        MatDuplicateOption    :: opt
+        PetscErrorCode        :: ierr
+        PetscInt              :: ml,nl
+        type(MatCtx), pointer :: ctxM,ctxA
+
+        PetscCall(MatGetLocalSize(A,ml,nl,ierr))
+        PetscCall(MatShellGetContext(A,ctxA,ierr))
+        allocate(ctxM)
+        ctxM%lambda = ctxA%lambda
+        PetscCall(MatCreateShell(PETSC_COMM_WORLD,ml,nl,PETSC_DETERMINE,PETSC_DETERMINE,ctxM,M,ierr))
+        PetscCall(MatShellSetOperation(M,MATOP_MULT,MatMult_A,ierr))
+        PetscCall(MatShellSetOperation(M,MATOP_DESTROY,MatDestroy_A,ierr))
+      end subroutine MatDuplicate_A
+
+! --------------------------------------------------------------
+!
+!  MatDestroy_A - Shell matrix operation, destroys A
+!
+      subroutine MatDestroy_A(A,ierr)
+        use shell_ctx_interfaces
+        implicit none
+
+        Mat                   :: A
+        PetscErrorCode        :: ierr
+        type(MatCtx), pointer :: ctxA
+
+        PetscCall(MatShellGetContext(A,ctxA,ierr))
+        deallocate(ctxA)
+      end subroutine MatDestroy_A
+
+! --------------------------------------------------------------
+!
+!  MatMult_B - Shell matrix operation, multiples y=B*x
+!  Here B=-I
+!
+      subroutine MatMult_B(B,x,y,ierr)
+        use petscmat
+        implicit none
+
+        Mat            :: B
+        Vec            :: x
+        Vec            :: y
+        PetscErrorCode :: ierr
+        PetscScalar    :: mone
+
+        PetscCall(VecCopy(x,y,ierr))
+        mone = -1.0
+        PetscCall(VecScale(y,mone,ierr))
+      end subroutine MatMult_B
+
+   end module ex54fmodule
+
 !=================================================================================================
 
    program ex54f
       use slepcnep
       use shell_ctx_interfaces
+      use ex54fmodule
       implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -83,8 +223,6 @@
       PetscBool      :: flg,terse
       PetscMPIInt    :: rank
       type(MatCtx)   :: ctxA,ctxB
-
-      external MyNEPFunction,MyNEPJacobian,MatMult_A,MatDuplicate_A,MatMult_B
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
@@ -150,142 +288,6 @@
       PetscCallA(SlepcFinalize(ierr))
 
    end program ex54f
-
-! --------------------------------------------------------------
-!
-!  MyNEPFunction - Computes Function matrix  T(lambda)
-!
-   subroutine MyNEPFunction(nep,lambda,T,P,ctx,ierr)
-      use slepcnep
-      use shell_ctx_interfaces
-      implicit none
-
-      NEP                   :: nep
-      PetscScalar           :: lambda
-      Mat                   :: T,P
-      PetscInt              :: ctx
-      PetscErrorCode        :: ierr
-      type(MatCtx), pointer :: ctxT
-
-      PetscCall(MatShellGetContext(T,ctxT,ierr))
-      ctxT%lambda = lambda
-
-   end subroutine MyNEPFunction
-
-! --------------------------------------------------------------
-!
-!  MyNEPJacobian - Computes Jacobian matrix  T'(lambda)
-!
-   subroutine MyNEPJacobian(nep,lambda,T,ctx,ierr)
-      use slepcnep
-      use shell_ctx_interfaces
-      implicit none
-
-      NEP                   :: nep
-      PetscScalar           :: lambda
-      Mat                   :: T
-      PetscInt              :: ctx
-      PetscErrorCode        :: ierr
-      type(MatCtx), pointer :: ctxT
-
-      PetscCall(MatShellGetContext(T,ctxT,ierr))
-      ctxT%lambda = lambda
-
-   end subroutine MyNEPJacobian
-
-! --------------------------------------------------------------
-!
-!  MatMult_A - Shell matrix operation, multiples y=A*x
-!  Here A=(D-lambda*I) where D is a diagonal matrix
-!
-   subroutine MatMult_A(A,x,y,ierr)
-      use shell_ctx_interfaces
-      implicit none
-
-      Mat                   :: A
-      Vec                   :: x,y
-      PetscErrorCode        :: ierr
-      PetscInt              :: i,istart,iend
-      PetscScalar           :: val
-      type(MatCtx), pointer :: ctxA
-!
-      PetscCall(VecGetOwnershipRange(x,istart,iend,ierr))
-      do i=istart,iend-1
-         val = i+1
-         val = 1.0/val
-         PetscCall(VecSetValue(y,i,val,INSERT_VALUES,ierr))
-      end do
-      PetscCall(VecAssemblyBegin(y,ierr))
-      PetscCall(VecAssemblyEnd(y,ierr))
-      PetscCall(VecPointwiseMult(y,y,x,ierr))
-      PetscCall(MatShellGetContext(A,ctxA,ierr))
-      PetscCall(VecAXPY(y,-ctxA%lambda,x,ierr))
-
-   end subroutine MatMult_A
-
-! --------------------------------------------------------------
-!
-!  MatDuplicate_A - Shell matrix operation, duplicates A
-!
-   subroutine MatDuplicate_A(A,opt,M,ierr)
-      use shell_ctx_interfaces
-      implicit none
-
-      Mat                   :: A,M
-      MatDuplicateOption    :: opt
-      PetscErrorCode        :: ierr
-      PetscInt              :: ml,nl
-      type(MatCtx), pointer :: ctxM,ctxA
-
-      external MatMult_A,MatDestroy_A
-
-      PetscCall(MatGetLocalSize(A,ml,nl,ierr))
-      PetscCall(MatShellGetContext(A,ctxA,ierr))
-      allocate(ctxM)
-      ctxM%lambda = ctxA%lambda
-      PetscCall(MatCreateShell(PETSC_COMM_WORLD,ml,nl,PETSC_DETERMINE,PETSC_DETERMINE,ctxM,M,ierr))
-      PetscCall(MatShellSetOperation(M,MATOP_MULT,MatMult_A,ierr))
-      PetscCall(MatShellSetOperation(M,MATOP_DESTROY,MatDestroy_A,ierr))
-
-   end subroutine MatDuplicate_A
-
-! --------------------------------------------------------------
-!
-!  MatDestroy_A - Shell matrix operation, destroys A
-!
-   subroutine MatDestroy_A(A,ierr)
-      use shell_ctx_interfaces
-      implicit none
-
-      Mat                   :: A
-      PetscErrorCode        :: ierr
-      type(MatCtx), pointer :: ctxA
-
-      PetscCall(MatShellGetContext(A,ctxA,ierr))
-      deallocate(ctxA)
-
-   end subroutine MatDestroy_A
-
-! --------------------------------------------------------------
-!
-!  MatMult_B - Shell matrix operation, multiples y=B*x
-!  Here B=-I
-!
-   subroutine MatMult_B(B,x,y,ierr)
-      use petscmat
-      implicit none
-
-      Mat            :: B
-      Vec            :: x
-      Vec            :: y
-      PetscErrorCode :: ierr
-      PetscScalar    :: mone
-
-      PetscCall(VecCopy(x,y,ierr))
-      mone = -1.0
-      PetscCall(VecScale(y,mone,ierr))
-
-   end subroutine MatMult_B
 
 !/*TEST
 !

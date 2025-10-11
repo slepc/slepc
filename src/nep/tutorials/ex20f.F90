@@ -24,18 +24,139 @@
 
 #include <slepc/finclude/slepcnep.h>
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     User-defined application context
+!     User-defined module with application context and callback functions
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      module UserModule
+   module ex20fmodule
       use slepcnep
       type User
         PetscScalar kappa
         PetscReal   h
       end type User
-      end module UserModule
 
-      program ex20f
-      use UserModule
+   contains
+! ---------------  Evaluate Function matrix  T(lambda)  ----------------
+
+      subroutine FormFunction(nep,lambda,fun,B,ctx,ierr)
+      implicit none
+      NEP            nep
+      PetscScalar    lambda, A(3), c, d
+      Mat            fun,B
+      type(User)     ctx
+      PetscReal      h
+      PetscInt       i, n, j(3), Istart, Iend, one, two, three
+      PetscErrorCode ierr
+
+!     ** Compute Function entries and insert into matrix
+      PetscCall(MatGetSize(fun,n,PETSC_NULL_INTEGER,ierr))
+      PetscCall(MatGetOwnershipRange(fun,Istart,Iend,ierr))
+      h = ctx%h
+      c = ctx%kappa/(lambda-ctx%kappa)
+      d = n
+      one = 1
+      two = 2
+      three = 3
+
+!     ** Boundary points
+      if (Istart==0) then
+        i = 0
+        j(1) = 0
+        j(2) = 1
+        A(1) = 2.0*(d-lambda*h/3.0)
+        A(2) = -d-lambda*h/6.0
+        PetscCall(MatSetValues(fun,one,[i],two,j,A,INSERT_VALUES,ierr))
+        Istart = Istart + 1
+      end if
+
+      if (Iend==n) then
+        i = n-1
+        j(1) = n-2
+        j(2) = n-1
+        A(1) = -d-lambda*h/6.0
+        A(2) = d-lambda*h/3.0+lambda*c
+        PetscCall(MatSetValues(fun,one,[i],two,j,A,INSERT_VALUES,ierr))
+        Iend = Iend - 1
+      end if
+
+!     ** Interior grid points
+      do i=Istart,Iend-1
+        j(1) = i-1
+        j(2) = i
+        j(3) = i+1
+        A(1) = -d-lambda*h/6.0
+        A(2) = 2.0*(d-lambda*h/3.0)
+        A(3) = -d-lambda*h/6.0
+        PetscCall(MatSetValues(fun,one,[i],three,j,A,INSERT_VALUES,ierr))
+      end do
+
+!     ** Assemble matrix
+      PetscCall(MatAssemblyBegin(fun,MAT_FINAL_ASSEMBLY,ierr))
+      PetscCall(MatAssemblyEnd(fun,MAT_FINAL_ASSEMBLY,ierr))
+
+      end subroutine
+
+! ---------------  Evaluate Jacobian matrix  T'(lambda)  ---------------
+
+      subroutine FormJacobian(nep,lambda,jac,ctx,ierr)
+      implicit none
+      NEP            nep
+      PetscScalar    lambda, A(3), c
+      Mat            jac
+      type(User)     ctx
+      PetscReal      h
+      PetscInt       i, n, j(3), Istart, Iend, one, two, three
+      PetscErrorCode ierr
+
+!     ** Compute Jacobian entries and insert into matrix
+      PetscCall(MatGetSize(jac,n,PETSC_NULL_INTEGER,ierr))
+      PetscCall(MatGetOwnershipRange(jac,Istart,Iend,ierr))
+      h = ctx%h
+      c = ctx%kappa/(lambda-ctx%kappa)
+      one = 1
+      two = 2
+      three = 3
+
+!     ** Boundary points
+      if (Istart==0) then
+        i = 0
+        j(1) = 0
+        j(2) = 1
+        A(1) = -2.0*h/3.0
+        A(2) = -h/6.0
+        PetscCall(MatSetValues(jac,one,[i],two,j,A,INSERT_VALUES,ierr))
+        Istart = Istart + 1
+      end if
+
+      if (Iend==n) then
+        i = n-1
+        j(1) = n-2
+        j(2) = n-1
+        A(1) = -h/6.0
+        A(2) = -h/3.0-c*c
+        PetscCall(MatSetValues(jac,one,[i],two,j,A,INSERT_VALUES,ierr))
+        Iend = Iend - 1
+      end if
+
+!     ** Interior grid points
+      do i=Istart,Iend-1
+        j(1) = i-1
+        j(2) = i
+        j(3) = i+1
+        A(1) = -h/6.0
+        A(2) = -2.0*h/3.0
+        A(3) = -h/6.0
+        PetscCall(MatSetValues(jac,one,[i],three,j,A,INSERT_VALUES,ierr))
+      end do
+
+!     ** Assemble matrix
+      PetscCall(MatAssemblyBegin(jac,MAT_FINAL_ASSEMBLY,ierr))
+      PetscCall(MatAssemblyEnd(jac,MAT_FINAL_ASSEMBLY,ierr))
+
+      end subroutine
+
+   end module ex20fmodule
+
+   program ex20f
+      use ex20fmodule
       implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -61,9 +182,6 @@
       PetscMPIInt    rank
       PetscBool      flg
       PetscErrorCode ierr
-!  Note: Any user-defined Fortran routines (such as FormJacobian)
-!  MUST be declared as external.
-      external       FormFunction, FormJacobian
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
@@ -188,128 +306,7 @@
       PetscCallA(MatDestroy(J,ierr))
       PetscCallA(VecDestroy(x,ierr))
       PetscCallA(SlepcFinalize(ierr))
-      end program ex20f
-
-! ---------------  Evaluate Function matrix  T(lambda)  ----------------
-
-      subroutine FormFunction(nep,lambda,fun,B,ctx,ierr)
-      use UserModule
-      implicit none
-      NEP            nep
-      PetscScalar    lambda, A(3), c, d
-      Mat            fun,B
-      type(User)     ctx
-      PetscReal      h
-      PetscInt       i, n, j(3), Istart, Iend, one, two, three
-      PetscErrorCode ierr
-
-!     ** Compute Function entries and insert into matrix
-      PetscCall(MatGetSize(fun,n,PETSC_NULL_INTEGER,ierr))
-      PetscCall(MatGetOwnershipRange(fun,Istart,Iend,ierr))
-      h = ctx%h
-      c = ctx%kappa/(lambda-ctx%kappa)
-      d = n
-      one = 1
-      two = 2
-      three = 3
-
-!     ** Boundary points
-      if (Istart==0) then
-        i = 0
-        j(1) = 0
-        j(2) = 1
-        A(1) = 2.0*(d-lambda*h/3.0)
-        A(2) = -d-lambda*h/6.0
-        PetscCall(MatSetValues(fun,one,[i],two,j,A,INSERT_VALUES,ierr))
-        Istart = Istart + 1
-      end if
-
-      if (Iend==n) then
-        i = n-1
-        j(1) = n-2
-        j(2) = n-1
-        A(1) = -d-lambda*h/6.0
-        A(2) = d-lambda*h/3.0+lambda*c
-        PetscCall(MatSetValues(fun,one,[i],two,j,A,INSERT_VALUES,ierr))
-        Iend = Iend - 1
-      end if
-
-!     ** Interior grid points
-      do i=Istart,Iend-1
-        j(1) = i-1
-        j(2) = i
-        j(3) = i+1
-        A(1) = -d-lambda*h/6.0
-        A(2) = 2.0*(d-lambda*h/3.0)
-        A(3) = -d-lambda*h/6.0
-        PetscCall(MatSetValues(fun,one,[i],three,j,A,INSERT_VALUES,ierr))
-      end do
-
-!     ** Assemble matrix
-      PetscCall(MatAssemblyBegin(fun,MAT_FINAL_ASSEMBLY,ierr))
-      PetscCall(MatAssemblyEnd(fun,MAT_FINAL_ASSEMBLY,ierr))
-
-      end
-
-! ---------------  Evaluate Jacobian matrix  T'(lambda)  ---------------
-
-      subroutine FormJacobian(nep,lambda,jac,ctx,ierr)
-      use UserModule
-      implicit none
-      NEP            nep
-      PetscScalar    lambda, A(3), c
-      Mat            jac
-      type(User)     ctx
-      PetscReal      h
-      PetscInt       i, n, j(3), Istart, Iend, one, two, three
-      PetscErrorCode ierr
-
-!     ** Compute Jacobian entries and insert into matrix
-      PetscCall(MatGetSize(jac,n,PETSC_NULL_INTEGER,ierr))
-      PetscCall(MatGetOwnershipRange(jac,Istart,Iend,ierr))
-      h = ctx%h
-      c = ctx%kappa/(lambda-ctx%kappa)
-      one = 1
-      two = 2
-      three = 3
-
-!     ** Boundary points
-      if (Istart==0) then
-        i = 0
-        j(1) = 0
-        j(2) = 1
-        A(1) = -2.0*h/3.0
-        A(2) = -h/6.0
-        PetscCall(MatSetValues(jac,one,[i],two,j,A,INSERT_VALUES,ierr))
-        Istart = Istart + 1
-      end if
-
-      if (Iend==n) then
-        i = n-1
-        j(1) = n-2
-        j(2) = n-1
-        A(1) = -h/6.0
-        A(2) = -h/3.0-c*c
-        PetscCall(MatSetValues(jac,one,[i],two,j,A,INSERT_VALUES,ierr))
-        Iend = Iend - 1
-      end if
-
-!     ** Interior grid points
-      do i=Istart,Iend-1
-        j(1) = i-1
-        j(2) = i
-        j(3) = i+1
-        A(1) = -h/6.0
-        A(2) = -2.0*h/3.0
-        A(3) = -h/6.0
-        PetscCall(MatSetValues(jac,one,[i],three,j,A,INSERT_VALUES,ierr))
-      end do
-
-!     ** Assemble matrix
-      PetscCall(MatAssemblyBegin(jac,MAT_FINAL_ASSEMBLY,ierr))
-      PetscCall(MatAssemblyEnd(jac,MAT_FINAL_ASSEMBLY,ierr))
-
-      end
+   end program ex20f
 
 !/*TEST
 !

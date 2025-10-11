@@ -22,8 +22,141 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcnep.h>
+
+module ex27fmodule
+  use slepcnep
+  implicit none
+
+contains
+! --------------------------------------------------------------
+!
+!   FormFunction - Computes Function matrix  T(lambda)
+!
+   subroutine FormFunction(nep,lambda,fun,B,ctx,ierr)
+     use slepcnep
+     implicit none
+
+     NEP            :: nep
+     PetscScalar    :: lambda,val(0:2),t
+     Mat            :: fun,B
+     PetscInt       :: ctx,i,n,col(0:2),Istart,Iend,Istart0,Iend0,one,two,three
+     PetscErrorCode :: ierr
+     PetscBool      :: FirstBlock=PETSC_FALSE, LastBlock=PETSC_FALSE
+
+     one   = 1
+     two   = 2
+     three = 3
+
+     ! ** Compute Function entries and insert into matrix
+     t = sqrt(lambda)
+     PetscCall(MatGetSize(fun,n,PETSC_NULL_INTEGER,ierr))
+     PetscCall(MatGetOwnershipRange(fun,Istart,Iend,ierr))
+     if (Istart==0) FirstBlock=PETSC_TRUE
+     if (Iend==n) LastBlock=PETSC_TRUE
+     val(0)=1.0
+     val(1)=t-2.0
+     val(2)=1.0
+
+     Istart0 = Istart
+     if (FirstBlock) Istart0 = Istart+1
+     Iend0 = Iend
+     if (LastBlock) Iend0 = Iend-1
+
+     do i=Istart0,Iend0-1
+        col(0) = i-1
+        col(1) = i
+        col(2) = i+1
+        PetscCall(MatSetValues(fun,one,[i],three,col,val,INSERT_VALUES,ierr))
+     end do
+
+     if (LastBlock) then
+        i = n-1
+        col(0) = n-2
+        col(1) = n-1
+        val(0) = 1.0
+        val(1) = t-2.0
+        PetscCall(MatSetValues(fun,one,[i],two,col,val,INSERT_VALUES,ierr))
+     end if
+
+     if (FirstBlock) then
+        i = 0
+        col(0) = 0
+        col(1) = 1
+        val(0) = t-2.0
+        val(1) = 1.0
+        PetscCall(MatSetValues(fun,one,[i],two,col,val,INSERT_VALUES,ierr))
+     end if
+
+     ! ** Assemble matrix
+     PetscCall(MatAssemblyBegin(B,MAT_FINAL_ASSEMBLY,ierr))
+     PetscCall(MatAssemblyEnd(B,MAT_FINAL_ASSEMBLY,ierr))
+     PetscCall(MatAssemblyBegin(fun,MAT_FINAL_ASSEMBLY,ierr))
+     PetscCall(MatAssemblyEnd(fun,MAT_FINAL_ASSEMBLY,ierr))
+
+   end subroutine FormFunction
+
+! --------------------------------------------------------------
+!
+!   FormJacobian - Computes Jacobian matrix  T'(lambda)
+!
+   subroutine FormJacobian(nep,lambda,jac,ctx,ierr)
+     USE slepcnep
+     implicit none
+
+     NEP            :: nep
+     PetscScalar    :: lambda,t
+     Mat            :: jac
+     PetscInt       :: ctx
+     PetscErrorCode :: ierr
+     Vec            :: d
+
+     PetscCall(MatCreateVecs(jac,d,PETSC_NULL_VEC,ierr))
+     t = 0.5/sqrt(lambda)
+     PetscCall(VecSet(d,t,ierr))
+     PetscCall(MatDiagonalSet(jac,d,INSERT_VALUES,ierr))
+     PetscCall(VecDestroy(d,ierr))
+
+   end subroutine FormJacobian
+
+! --------------------------------------------------------------
+!
+!  ComputeSingularities - This is a user-defined routine to compute maxnp
+!  points (at most) in the complex plane where the function T(.) is not analytic.
+!
+!  In this case, we discretize the singularity region (-inf,0)~(-1e+6,-1e-5)
+!
+!  Input Parameters:
+!    nep   - nonlinear eigensolver context
+!    maxnp - on input number of requested points in the discretization (can be set)
+!    xi    - computed values of the discretization
+!    dummy - optional user-defined monitor context (unused here)
+!
+   subroutine ComputeSingularities(nep,maxnp,xi,dummy,ierr)
+     use slepcnep
+     implicit none
+
+     NEP            :: nep
+     PetscInt       :: maxnp, dummy
+     PetscScalar    :: xi(0:maxnp-1)
+     PetscErrorCode :: ierr
+     PetscReal      :: h
+     PetscInt       :: i
+
+     h = 11.0/real(maxnp-1)
+     xi(0) = -1e-5
+     xi(maxnp-1) = -1e+6
+     do i=1,maxnp-2
+        xi(i) = -10**(-5+h*i)
+     end do
+     ierr = 0
+
+   end subroutine ComputeSingularities
+
+  end module ex27fmodule
+
   program ex27f
   use slepcnep
+  use ex27fmodule
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -41,10 +174,6 @@
   FN                 :: fn(2)
   PetscScalar        :: coeffs,sigma,done
   character(len=128) :: string
-
-  ! NOTE: Any user-defined Fortran routines (such as ComputeSingularities)
-  !       MUST be declared as external.
-  external ComputeSingularities, FormFunction, FormJacobian
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
@@ -179,130 +308,6 @@
   PetscCallA(SlepcFinalize(ierr))
 
 end program ex27f
-
-! --------------------------------------------------------------
-!
-!   FormFunction - Computes Function matrix  T(lambda)
-!
-subroutine FormFunction(nep,lambda,fun,B,ctx,ierr)
-  use slepcnep
-  implicit none
-
-  NEP            :: nep
-  PetscScalar    :: lambda,val(0:2),t
-  Mat            :: fun,B
-  PetscInt       :: ctx,i,n,col(0:2),Istart,Iend,Istart0,Iend0,one,two,three
-  PetscErrorCode :: ierr
-  PetscBool      :: FirstBlock=PETSC_FALSE, LastBlock=PETSC_FALSE
-
-  one   = 1
-  two   = 2
-  three = 3
-
-  ! ** Compute Function entries and insert into matrix
-  t = sqrt(lambda)
-  PetscCall(MatGetSize(fun,n,PETSC_NULL_INTEGER,ierr))
-  PetscCall(MatGetOwnershipRange(fun,Istart,Iend,ierr))
-  if (Istart.eq.0) FirstBlock=PETSC_TRUE
-  if (Iend.eq.n) LastBlock=PETSC_TRUE
-  val(0)=1.0
-  val(1)=t-2.0
-  val(2)=1.0
-
-  Istart0 = Istart
-  if (FirstBlock) Istart0 = Istart+1
-  Iend0 = Iend
-  if (LastBlock) Iend0 = Iend-1
-
-  do i=Istart0,Iend0-1
-     col(0) = i-1
-     col(1) = i
-     col(2) = i+1
-     PetscCall(MatSetValues(fun,one,[i],three,col,val,INSERT_VALUES,ierr))
-  end do
-
-  if (LastBlock) then
-     i = n-1
-     col(0) = n-2
-     col(1) = n-1
-     val(0) = 1.0
-     val(1) = t-2.0
-     PetscCall(MatSetValues(fun,one,[i],two,col,val,INSERT_VALUES,ierr))
-  end if
-
-  if (FirstBlock) then
-     i = 0
-     col(0) = 0
-     col(1) = 1
-     val(0) = t-2.0
-     val(1) = 1.0
-     PetscCall(MatSetValues(fun,one,[i],two,col,val,INSERT_VALUES,ierr))
-  end if
-
-  ! ** Assemble matrix
-  PetscCall(MatAssemblyBegin(B,MAT_FINAL_ASSEMBLY,ierr))
-  PetscCall(MatAssemblyEnd(B,MAT_FINAL_ASSEMBLY,ierr))
-  PetscCall(MatAssemblyBegin(fun,MAT_FINAL_ASSEMBLY,ierr))
-  PetscCall(MatAssemblyEnd(fun,MAT_FINAL_ASSEMBLY,ierr))
-
-end subroutine FormFunction
-
-! --------------------------------------------------------------
-!
-!   FormJacobian - Computes Jacobian matrix  T'(lambda)
-!
-subroutine FormJacobian(nep,lambda,jac,ctx,ierr)
-  USE slepcnep
-  implicit none
-
-  NEP            :: nep
-  PetscScalar    :: lambda,t
-  Mat            :: jac
-  PetscInt       :: ctx
-  PetscErrorCode :: ierr
-  Vec            :: d
-
-  PetscCall(MatCreateVecs(jac,d,PETSC_NULL_VEC,ierr))
-  t = 0.5/sqrt(lambda)
-  PetscCall(VecSet(d,t,ierr))
-  PetscCall(MatDiagonalSet(jac,d,INSERT_VALUES,ierr))
-  PetscCall(VecDestroy(d,ierr))
-
-end subroutine FormJacobian
-
-! --------------------------------------------------------------
-!
-!  ComputeSingularities - This is a user-defined routine to compute maxnp
-!  points (at most) in the complex plane where the function T(.) is not analytic.
-!
-!  In this case, we discretize the singularity region (-inf,0)~(-1e+6,-1e-5)
-!
-!  Input Parameters:
-!    nep   - nonlinear eigensolver context
-!    maxnp - on input number of requested points in the discretization (can be set)
-!    xi    - computed values of the discretization
-!    dummy - optional user-defined monitor context (unused here)
-!
-subroutine ComputeSingularities(nep,maxnp,xi,dummy,ierr)
-  use slepcnep
-  implicit none
-
-  NEP            :: nep
-  PetscInt       :: maxnp, dummy
-  PetscScalar    :: xi(0:maxnp-1)
-  PetscErrorCode :: ierr
-  PetscReal      :: h
-  PetscInt       :: i
-
-  h = 11.0/real(maxnp-1)
-  xi(0) = -1e-5
-  xi(maxnp-1) = -1e+6
-  do i=1,maxnp-2
-     xi(i) = -10**(-5+h*i)
-  end do
-  ierr = 0
-
-end subroutine ComputeSingularities
 
 !/*TEST
 !

@@ -18,8 +18,52 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepceps.h>
-      program test15f
+
+   module test15fmodule
       use slepceps
+      implicit none
+
+   contains
+! --------------------------------------------------------------
+!
+!  MyEPSMonitor - This is a user-defined routine for monitoring
+!  the EPS iterative solvers.
+!
+!  Input Parameters:
+!    eps   - eigensolver context
+!    its   - iteration number
+!    nconv - number of converged eigenpairs
+!    eigr  - real part of the eigenvalues
+!    eigi  - imaginary part of the eigenvalues
+!    errest- relative error estimates for each eigenpair
+!    nest  - number of error estimates
+!    dummy - optional user-defined monitor context (unused here)
+!
+      subroutine MyEPSMonitor(eps,its,nconv,eigr,eigi,errest,nest,dummy,ierr)
+      use slepceps
+      implicit none
+
+      EPS            eps
+      PetscErrorCode ierr
+      PetscInt       its,nconv,nest,dummy
+      PetscScalar    eigr(*),eigi(*)
+      PetscReal      re,errest(*)
+      PetscMPIInt    rank
+
+      PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
+      if (its>0 .and. rank==0) then
+        re = PetscRealPart(eigr(nconv+1))
+        write(6,140) its,nconv,re,errest(nconv+1)
+      end if
+ 140  format(i3,' EPS nconv=',i2,' first unconverged value (error) ',f7.4,' (',g10.3,')')
+      ierr = 0
+      end subroutine
+
+   end module test15fmodule
+
+   program test15f
+      use slepceps
+      use test15fmodule
       implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -41,11 +85,6 @@
       PetscErrorCode ierr
       PetscBool      flg
       PetscScalar    value(3)
-
-!  Note: Any user-defined Fortran routines (such as MyEPSMonitor)
-!  MUST be declared as external.
-
-      external MyEPSMonitor
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
@@ -151,43 +190,7 @@
       PetscCallA(MatDestroy(A,ierr))
 
       PetscCallA(SlepcFinalize(ierr))
-      end program test15f
-
-! --------------------------------------------------------------
-!
-!  MyEPSMonitor - This is a user-defined routine for monitoring
-!  the EPS iterative solvers.
-!
-!  Input Parameters:
-!    eps   - eigensolver context
-!    its   - iteration number
-!    nconv - number of converged eigenpairs
-!    eigr  - real part of the eigenvalues
-!    eigi  - imaginary part of the eigenvalues
-!    errest- relative error estimates for each eigenpair
-!    nest  - number of error estimates
-!    dummy - optional user-defined monitor context (unused here)
-!
-      subroutine MyEPSMonitor(eps,its,nconv,eigr,eigi,errest,nest,dummy,ierr)
-      use slepceps
-      implicit none
-
-      EPS            eps
-      PetscErrorCode ierr
-      PetscInt       its,nconv,nest,dummy
-      PetscScalar    eigr(*),eigi(*)
-      PetscReal      re,errest(*)
-      PetscMPIInt    rank
-
-      PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
-      if (its>0 .and. rank==0) then
-        re = PetscRealPart(eigr(nconv+1))
-        write(6,140) its,nconv,re,errest(nconv+1)
-      end if
-
- 140  format(i3,' EPS nconv=',i2,' first unconverged value (error) ',f7.4,' (',g10.3,')')
-      ierr = 0
-      end
+   end program test15f
 
 !/*TEST
 !

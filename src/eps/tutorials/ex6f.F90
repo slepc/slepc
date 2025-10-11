@@ -19,8 +19,170 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepceps.h>
-      program ex6f
+
+   module ex6fmodule
       use slepceps
+      implicit none
+
+   contains
+! -------------------------------------------------------------------
+!   The actual routine for the matrix-vector product
+!   See https://math.nist.gov/MatrixMarket/data/NEP/mvmisg/mvmisg.html
+!
+!   Computes Y(:,1:M) = op(A)*X(:,1:M)
+!   where op(A) is A or A' and A is the Ising matrix.
+!
+!   trans   (input) integer
+!           If trans = 0, compute y(:,1:M) = A*x(:,1:M)
+!           If trans = 1, compute y(:,1:M) = A'*x(:,1:M)
+!
+!   n       (input) integer
+!           The order of the matrix, it has to be an even number.
+!
+!   m       (input) integeR
+!           The number of columns of x to multiply.
+!
+!   x       (input) double precision array, dimension (ldx, m)
+!           x contains the matrix (vectors) x.
+!
+!   ldx     (input) integer
+!           The leading dimension of array x, ldx >= max(1, n)
+!
+!   y       (output) double precision array, dimension (ldx, m)
+!           contains the product of the matrix op(A) with x.
+!
+!   ldy     (input) integer
+!           The leading dimension of array y, ldy >= max(1, n)
+!
+      subroutine mvmisg(trans, n, m, x, ldx, y, ldy)
+      use petscsys
+      implicit none
+
+      PetscInt    ldy, ldx, m, n, trans
+      PetscScalar y(ldy,*), x(ldx,*)
+      PetscInt    i, k
+      PetscReal   alpha, beta, cosa, cosb, sina, sinb
+      PetscScalar temp, temp1
+      intrinsic   cos, sin
+
+      alpha = PETSC_PI/4
+      beta  = PETSC_PI/4
+      cosa  = cos(alpha)
+      sina  = sin(alpha)
+      cosb  = cos(beta)
+      sinb  = sin(beta)
+
+      if (trans==0) then
+
+!       Compute y(:,1:m) = A*x(:,1:m)
+
+        do k=1,m
+          y(1,k) = cosb*x(1,k) - sinb*x(n,k)
+          do i=2,n-1,2
+            y(i,k)   =  cosb*x(i,k) + sinb*x(i+1,k)
+            y(i+1,k) = -sinb*x(i,k) + cosb*x(i+1,k)
+          end do
+          y(n,k) = sinb*x(1,k) + cosb*x(n,k)
+          do i=1,n,2
+            temp     =  cosa*y(i,k) + sina*y(i+1,k)
+            y(i+1,k) = -sina*y(i,k) + cosa*y(i+1,k)
+            y(i,k)   = temp
+          end do
+        end do
+
+      else if (trans==1) then
+
+!       Compute y(:1:m) = A'*x(:,1:m)
+
+        do k=1,m
+          do i=1,n,2
+            y(i,k)   = cosa*x(i,k) - sina*x(i+1,k)
+            y(i+1,k) = sina*x(i,k) + cosa*x(i+1,k)
+          end do
+          temp = cosb*y(1,k) + sinb*y(n,k)
+          do i=2,n-1,2
+            temp1    = cosb*y(i,k) - sinb*y(i+1,k)
+            y(i+1,k) = sinb*y(i,k) + cosb*y(i+1,k)
+            y(i,k)   = temp1
+          end do
+          y(n,k) = -sinb*y(1,k) + cosb*y(n,k)
+          y(1,k) = temp
+        end do
+
+      end if
+      end subroutine
+
+! -------------------------------------------------------------------
+!
+!   MatMult_Ising - user provided matrix-vector multiply
+!
+!   Input Parameters:
+!   A - matrix
+!   x - input vector
+!
+!   Output Parameter:
+!   y - output vector
+!
+      subroutine MatMult_Ising(A,x,y,ierr)
+      use petscmat
+      implicit none
+
+      Mat            A
+      Vec            x,y
+      PetscInt       trans,one,N
+      PetscScalar, pointer :: xx(:),yy(:)
+      PetscErrorCode ierr
+
+      PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
+      PetscCall(VecGetArrayRead(x,xx,ierr))
+      PetscCall(VecGetArray(y,yy,ierr))
+
+      trans = 0
+      one = 1
+      call mvmisg(trans,N,one,xx,N,yy,N)
+
+      PetscCall(VecRestoreArrayRead(x,xx,ierr))
+      PetscCall(VecRestoreArray(y,yy,ierr))
+      end subroutine
+
+! -------------------------------------------------------------------
+!
+!   MatMultTranspose_Ising - user provided transpose matrix-vector multiply
+!
+!   Input Parameters:
+!   A - matrix
+!   x - input vector
+!
+!   Output Parameter:
+!   y - output vector
+!
+      subroutine MatMultTranspose_Ising(A,x,y,ierr)
+      use petscmat
+      implicit none
+
+      Mat            A
+      Vec            x,y
+      PetscInt       trans,one,N
+      PetscScalar, pointer :: xx(:),yy(:)
+      PetscErrorCode ierr
+
+      PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
+      PetscCall(VecGetArrayRead(x,xx,ierr))
+      PetscCall(VecGetArray(y,yy,ierr))
+
+      trans = 1
+      one = 1
+      call mvmisg(trans,N,one,xx,N,yy,N)
+
+      PetscCall(VecRestoreArrayRead(x,xx,ierr))
+      PetscCall(VecRestoreArray(y,yy,ierr))
+      end subroutine
+
+   end module ex6fmodule
+
+   program ex6f
+      use slepceps
+      use ex6fmodule
       implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -40,10 +202,6 @@
       PetscMPIInt    sz, rank
       PetscErrorCode ierr
       PetscBool      flg, terse
-
-!     This is the routine to use for matrix-free approach
-!
-      external MatMult_Ising, MatMultTranspose_Ising
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
@@ -128,199 +286,7 @@
       PetscCallA(EPSDestroy(eps,ierr))
       PetscCallA(MatDestroy(A,ierr))
       PetscCallA(SlepcFinalize(ierr))
-      end program ex6f
-
-! -------------------------------------------------------------------
-!
-!   MatMult_Ising - user provided matrix-vector multiply
-!
-!   Input Parameters:
-!   A - matrix
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
-      subroutine MatMult_Ising(A,x,y,ierr)
-      use petscmat
-      implicit none
-
-      Mat            A
-      Vec            x,y
-      PetscInt       trans,one,N
-      PetscScalar, pointer :: xx(:),yy(:)
-      PetscErrorCode ierr
-
-!     The actual routine for the matrix-vector product
-      external mvmisg
-
-      PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
-      PetscCall(VecGetArrayRead(x,xx,ierr))
-      PetscCall(VecGetArray(y,yy,ierr))
-
-      trans = 0
-      one = 1
-      call mvmisg(trans,N,one,xx,N,yy,N)
-
-      PetscCall(VecRestoreArrayRead(x,xx,ierr))
-      PetscCall(VecRestoreArray(y,yy,ierr))
-
-      end
-
-! -------------------------------------------------------------------
-!
-!   MatMultTranspose_Ising - user provided transpose matrix-vector multiply
-!
-!   Input Parameters:
-!   A - matrix
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
-      subroutine MatMultTranspose_Ising(A,x,y,ierr)
-      use petscmat
-      implicit none
-
-      Mat            A
-      Vec            x,y
-      PetscInt       trans,one,N
-      PetscScalar, pointer :: xx(:),yy(:)
-      PetscErrorCode ierr
-
-!     The actual routine for the transpose matrix-vector product
-      external mvmisg
-
-      PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
-      PetscCall(VecGetArrayRead(x,xx,ierr))
-      PetscCall(VecGetArray(y,yy,ierr))
-
-      trans = 1
-      one = 1
-      call mvmisg(trans,N,one,xx,N,yy,N)
-
-      PetscCall(VecRestoreArrayRead(x,xx,ierr))
-      PetscCall(VecRestoreArray(y,yy,ierr))
-
-      end
-
-! -------------------------------------------------------------------
-!     The actual routine for the matrix-vector product
-!     See https://math.nist.gov/MatrixMarket/data/NEP/mvmisg/mvmisg.html
-
-      SUBROUTINE MVMISG(TRANS, N, M, X, LDX, Y, LDY)
-      use petscsys
-!     ..
-!     .. Scalar Arguments ..
-      PetscInt     LDY, LDX, M, N, TRANS
-!     ..
-!     .. Array Arguments ..
-      PetscScalar  Y(LDY, *), X(LDX, *)
-!     ..
-!
-!  Purpose
-!  =======
-!
-!  Compute
-!
-!               Y(:,1:M) = op(A)*X(:,1:M)
-!
-!  where op(A) is A or A' (the transpose of A). The A is the Ising
-!  matrix.
-!
-!  Arguments
-!  =========
-!
-!  TRANS   (input) INTEGER
-!          If TRANS = 0, compute Y(:,1:M) = A*X(:,1:M)
-!          If TRANS = 1, compute Y(:,1:M) = A'*X(:,1:M)
-!
-!  N       (input) INTEGER
-!          The order of the matrix A. N has to be an even number.
-!
-!  M       (input) INTEGER
-!          The number of columns of X to multiply.
-!
-!  X       (input) DOUBLE PRECISION array, dimension (LDX, M)
-!          X contains the matrix (vectors) X.
-!
-!  LDX     (input) INTEGER
-!          The leading dimension of array X, LDX >= max(1, N)
-!
-!  Y       (output) DOUBLE PRECISION array, dimension (LDX, M)
-!          contains the product of the matrix op(A) with X.
-!
-!  LDY     (input) INTEGER
-!          The leading dimension of array Y, LDY >= max(1, N)
-!
-!  ===================================================================
-!
-!
-
-!     .. Local Variables ..
-      PetscInt    I, K
-      PetscReal   ALPHA, BETA
-      PetscReal   COSA, COSB, SINA, SINB
-      PetscScalar TEMP, TEMP1
-!
-!     .. Intrinsic functions ..
-      INTRINSIC   COS, SIN
-!
-      ALPHA = PETSC_PI/4
-      BETA = PETSC_PI/4
-      COSA = COS(ALPHA)
-      SINA = SIN(ALPHA)
-      COSB = COS(BETA)
-      SINB = SIN(BETA)
-!
-      IF (TRANS.EQ.0) THEN
-!
-!     Compute Y(:,1:M) = A*X(:,1:M)
-
-         DO 30 K = 1, M
-!
-            Y(1, K) = COSB*X(1, K) - SINB*X(N, K)
-            DO 10 I = 2, N-1, 2
-               Y(I, K)   =  COSB*X(I, K) + SINB*X(I+1, K)
-               Y(I+1, K) = -SINB*X(I, K) + COSB*X(I+1, K)
-   10       CONTINUE
-            Y(N, K) = SINB*X(1, K) + COSB*X(N, K)
-!
-            DO 20 I = 1, N, 2
-               TEMP      =  COSA*Y(I, K) + SINA*Y(I+1, K)
-               Y(I+1, K) = -SINA*Y(I, K) + COSA*Y(I+1, K)
-               Y(I, K)   = TEMP
-   20       CONTINUE
-!
-   30    CONTINUE
-!
-      ELSE IF (TRANS.EQ.1) THEN
-!
-!        Compute Y(:1:M) = A'*X(:,1:M)
-!
-         DO 60 K = 1, M
-!
-            DO 40 I = 1, N, 2
-               Y(I, K)   =  COSA*X(I, K) - SINA*X(I+1, K)
-               Y(I+1, K) =  SINA*X(I, K) + COSA*X(I+1, K)
-   40       CONTINUE
-            TEMP  = COSB*Y(1,K) + SINB*Y(N,K)
-            DO 50 I = 2, N-1, 2
-               TEMP1     =  COSB*Y(I, K) - SINB*Y(I+1, K)
-               Y(I+1, K) =  SINB*Y(I, K) + COSB*Y(I+1, K)
-               Y(I, K)   =  TEMP1
-   50       CONTINUE
-            Y(N, K) = -SINB*Y(1, K) + COSB*Y(N, K)
-            Y(1, K) = TEMP
-!
-   60    CONTINUE
-!
-      END IF
-!
-      RETURN
-!
-!     END OF MVMISG
-      END
+   end program ex6f
 
 !/*TEST
 !
