@@ -45,7 +45,7 @@
 
       if (rank .eq. 0) then
         write(*,100) n
-      endif
+      end if
  100  format (/'Matrix square root, n =',I3,' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -83,15 +83,15 @@
           write(*,110) 'f', PetscRealPart(x), re
         else
           write(*,120) 'f', PetscRealPart(x), re, im
-        endif
+        end if
         re = PetscRealPart(yp)
         im = PetscImaginaryPart(yp)
         if (abs(im).lt.1.d-10) then
           write(*,110) 'f''', PetscRealPart(x), re
         else
           write(*,120) 'f''', PetscRealPart(x), re, im
-        endif
-      endif
+        end if
+      end if
  110  format (A2,'(',F4.1,') = ',F8.5)
  120  format (A2,'(',F4.1,') = ',F8.5,SP,F8.5,'i')
 
@@ -107,20 +107,20 @@
         PetscCallA(FNEvaluateFunctionMat(fn,S,PETSC_NULL_MAT,ierr))
       else
         PetscCallA(FNEvaluateFunctionMat(fn,A,S,ierr))
-      endif
+      end if
       if (verbose) then
         if (rank .eq. 0) write (*,*) 'Matrix A - - - - - - - -'
         PetscCallA(MatView(A,PETSC_NULL_VIEWER,ierr))
         if (rank .eq. 0) write (*,*) 'Computed sqrtm(A) - - - - - - - -'
         PetscCallA(MatView(S,PETSC_NULL_VIEWER,ierr))
-      endif
+      end if
 
 !     *** check error ||S*S-A||_F
       PetscCallA(MatMatMult(S,S,MAT_INITIAL_MATRIX,PETSC_DEFAULT_REAL,R,ierr))
       if (eta .ne. 1.0) then
         alpha = 1.0/(eta*eta)
         PetscCallA(MatScale(R,alpha,ierr))
-      endif
+      end if
       alpha = -tau
       PetscCallA(MatAXPY(R,alpha,A,SAME_NONZERO_PATTERN,ierr))
       PetscCallA(MatNorm(R,NORM_FROBENIUS,nrm,ierr))
@@ -128,7 +128,7 @@
         write (*,*) '||S*S-A||_F < 100*eps'
       else
         write (*,130) nrm
-      endif
+      end if
  130  format ('||S*S-A||_F = ',F8.5)
 
 !     *** Clean up

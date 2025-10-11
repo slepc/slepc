@@ -58,7 +58,7 @@
 
       if (rank .eq. 0) then
         write(*,100) n
-      endif
+      end if
  100  format (/'1-D Laplacian Eigenproblem, n =',I3,' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -81,7 +81,7 @@
         value(2) = -1.0
         PetscCallA(MatSetValues(A,i1,[i],i2,col,value,INSERT_VALUES,ierr))
         Istart = Istart+1
-      endif
+      end if
       if (Iend .eq. n) then
         i = n-1
         col(1) = n-2
@@ -90,7 +90,7 @@
         value(2) =  2.0
         PetscCallA(MatSetValues(A,i1,[i],i2,col,value,INSERT_VALUES,ierr))
         Iend = Iend-1
-      endif
+      end if
       value(1) = -1.0
       value(2) =  2.0
       value(3) = -1.0
@@ -99,7 +99,7 @@
         col(2) = i
         col(3) = i+1
         PetscCallA(MatSetValues(A,i1,[i],i3,col,value,INSERT_VALUES,ierr))
-      enddo
+      end do
 
       PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
       PetscCallA(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr))
@@ -119,7 +119,7 @@
       PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-my_eps_monitor',flg,ierr))
       if (flg) then
         PetscCallA(EPSMonitorSet(eps,MyEPSMonitor,0,PETSC_NULL_FUNCTION,ierr))
-      endif
+      end if
 
 !     ** Set solver parameters at runtime
       PetscCallA(EPSSetFromOptions(eps,ierr))
@@ -134,12 +134,12 @@
       PetscCallA(EPSGetType(eps,tname,ierr))
       if (rank .eq. 0) then
         write(*,120) tname
-      endif
+      end if
  120  format (' Solution method: ',A)
       PetscCallA(EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
       if (rank .eq. 0) then
         write(*,130) nev
-      endif
+      end if
  130  format (' Number of requested eigenvalues:',I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -184,7 +184,7 @@
       if (its .gt. 0 .and. rank .eq. 0) then
         re = PetscRealPart(eigr(nconv+1))
         write(6,140) its,nconv,re,errest(nconv+1)
-      endif
+      end if
 
  140  format(i3,' EPS nconv=',i2,' first unconverged value (error) ',f7.4,' (',g10.3,')')
       ierr = 0

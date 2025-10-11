@@ -51,7 +51,7 @@
       n = 20
       if (rank .eq. 0) then
         write(*,100) n
-      endif
+      end if
  100  format (/'Diagonal Nonlinear Eigenproblem, n =',I3,' (Fortran)')
 
 !     Matrices
@@ -62,7 +62,7 @@
       do i=Istart,Iend-1
         val = i+1
         PetscCallA(MatSetValue(A(1),i,i,val,INSERT_VALUES,ierr))
-      enddo
+      end do
       PetscCallA(MatAssemblyBegin(A(1),MAT_FINAL_ASSEMBLY,ierr))
       PetscCallA(MatAssemblyEnd(A(1),MAT_FINAL_ASSEMBLY,ierr))
 
@@ -73,7 +73,7 @@
       do i=Istart,Iend-1
         val = 1
         PetscCallA(MatSetValue(A(2),i,i,val,INSERT_VALUES,ierr))
-      enddo
+      end do
       PetscCallA(MatAssemblyBegin(A(2),MAT_FINAL_ASSEMBLY,ierr))
       PetscCallA(MatAssemblyEnd(A(2),MAT_FINAL_ASSEMBLY,ierr))
 
@@ -84,7 +84,7 @@
       do i=Istart,Iend-1
         val = real(n)/real(i+1)
         PetscCallA(MatSetValue(A(3),i,i,val,INSERT_VALUES,ierr))
-      enddo
+      end do
       PetscCallA(MatAssemblyBegin(A(3),MAT_FINAL_ASSEMBLY,ierr))
       PetscCallA(MatAssemblyEnd(A(3),MAT_FINAL_ASSEMBLY,ierr))
 
@@ -116,7 +116,7 @@
       PetscCallA(NEPGetSplitOperatorInfo(nep,nterm,mstr,ierr))
       if (rank .eq. 0) then
         write(*,110) nterm
-      endif
+      end if
  110  format (' Nonlinear function with ',I2,' terms')
       i = 0
       PetscCallA(NEPGetSplitOperatorTerm(nep,i,B,g,ierr))
@@ -127,19 +127,19 @@
       PetscCallA(NEPGetType(nep,tname,ierr))
       if (rank .eq. 0) then
         write(*,120) tname
-      endif
+      end if
  120  format (' Type set to ',A)
 
       PetscCallA(NEPGetProblemType(nep,ptype,ierr))
       if (rank .eq. 0) then
         write(*,130) ptype
-      endif
+      end if
  130  format (' Problem type before changing = ',I2)
       PetscCallA(NEPSetProblemType(nep,NEP_RATIONAL,ierr))
       PetscCallA(NEPGetProblemType(nep,ptype,ierr))
       if (rank .eq. 0) then
         write(*,140) ptype
-      endif
+      end if
  140  format (' ... changed to ',I2)
 
       np = 1
@@ -151,7 +151,7 @@
       PetscCallA(NEPGetRefine(nep,refine,np,tol,its,rscheme,ierr))
       if (rank .eq. 0) then
         write(*,190) refine,tol,its,rscheme
-      endif
+      end if
  190  format (' Refinement: ',I2,', tol=',F12.9,', its=',I2,', scheme=',I2)
 
       tget = 1.1
@@ -161,7 +161,7 @@
       PetscCallA(NEPGetWhichEigenpairs(nep,which,ierr))
       if (rank .eq. 0) then
         write(*,200) which,PetscRealPart(tget)
-      endif
+      end if
  200  format (' Which = ',I2,', target = ',F4.1)
 
       nev = 1
@@ -170,7 +170,7 @@
       PetscCallA(NEPGetDimensions(nep,nev,ncv,mpd,ierr))
       if (rank .eq. 0) then
         write(*,210) nev,ncv,mpd
-      endif
+      end if
  210  format (' Dimensions: nev=',I2,', ncv=',I2,', mpd=',I2)
 
       tol = 1.0e-6
@@ -179,7 +179,7 @@
       PetscCallA(NEPGetTolerances(nep,tol,its,ierr))
       if (rank .eq. 0) then
         write(*,220) tol,its
-      endif
+      end if
  220  format (' Tolerance =',F9.6,', max_its =',I4)
 
       PetscCallA(NEPSetConvergenceTest(nep,NEP_CONV_ABS,ierr))
@@ -188,7 +188,7 @@
       PetscCallA(NEPGetStoppingTest(nep,stp,ierr))
       if (rank .eq. 0) then
         write(*,230) conv,stp
-      endif
+      end if
  230  format (' Convergence test =',I2,', stopping test =',I2)
 
       PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_DEFAULT,vf,ierr))
@@ -208,7 +208,7 @@
       PetscCallA(NEPGetConvergedReason(nep,reason,ierr))
       if (rank .eq. 0) then
         write(*,240) reason
-      endif
+      end if
  240  format (' Finished - converged reason =',I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

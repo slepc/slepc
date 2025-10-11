@@ -36,7 +36,7 @@
           else
              call SlepcInitializeF(filename,help,ierr)
              CHKERRQ(ierr)
-          endif
+          end if
         end subroutine SlepcInitializeWithHelp
 
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
@@ -52,7 +52,7 @@
           else
              call SlepcInitializeF(filename,PETSC_NULL_CHARACTER,ierr)
              CHKERRQ(ierr)
-          endif
+          end if
         end subroutine SlepcInitializeNoHelp
 
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)

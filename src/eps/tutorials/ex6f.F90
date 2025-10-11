@@ -55,14 +55,14 @@
 #endif
       PetscCallMPIA(MPI_Comm_size(PETSC_COMM_WORLD,sz,ierr))
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
-      if (sz .ne. 1) then; SETERRA(PETSC_COMM_SELF,PETSC_ERR_WRONG_MPI_SIZE,'This is a uniprocessor example only!'); endif
+      PetscCheckA(sz==1,PETSC_COMM_SELF,PETSC_ERR_WRONG_MPI_SIZE,'This is a uniprocessor example only!')
       m = 30
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-m',m,flg,ierr))
       N = 2*m
 
       if (rank .eq. 0) then
         write(*,'(/A,I6,A/)') 'Ising Model Eigenproblem, m=',m,', (N=2*m)'
-      endif
+      end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Register the matrix-vector subroutine for the operator that defines
@@ -95,21 +95,21 @@
       PetscCallA(EPSGetIterationNumber(eps,its,ierr))
       if (rank .eq. 0) then
         write(*,'(A,I4)') ' Number of iterations of the method: ',its
-      endif
+      end if
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(EPSGetType(eps,tname,ierr))
       if (rank .eq. 0) then
         write(*,'(A,A)') ' Solution method: ', tname
-      endif
+      end if
       PetscCallA(EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
       if (rank .eq. 0) then
         write(*,'(A,I2)') ' Number of requested eigenvalues:',nev
-      endif
+      end if
       PetscCallA(EPSGetTolerances(eps,tol,maxit,ierr))
       if (rank .eq. 0) then
         write(*,'(A,1PE11.4,A,I6)') ' Stopping condition: tol=',tol,', maxit=', maxit
-      endif
+      end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Display solution and clean up
@@ -124,7 +124,7 @@
         PetscCallA(EPSConvergedReasonView(eps,PETSC_VIEWER_STDOUT_WORLD,ierr))
         PetscCallA(EPSErrorView(eps,EPS_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD,ierr))
         PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr))
-      endif
+      end if
       PetscCallA(EPSDestroy(eps,ierr))
       PetscCallA(MatDestroy(A,ierr))
       PetscCallA(SlepcFinalize(ierr))

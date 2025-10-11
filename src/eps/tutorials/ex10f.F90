@@ -71,14 +71,14 @@
       if (ierr .ne. 0) then
         print*,'SlepcInitialize failed'
         stop
-      endif
+      end if
       call MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr);CHKERRMPIA(ierr)
       n = 30
       call PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr);CHKERRA(ierr)
 
       if (rank .eq. 0) then
         write(*,'(/A,I6/)') '1-D Laplacian Eigenproblem (shell-enabled), n=',n
-      endif
+      end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Compute the operator matrix that defines the eigensystem, Ax=kx
@@ -97,7 +97,7 @@
         val(2) = -1.0
         call MatSetValues(A,one,row,two,col,val,INSERT_VALUES,ierr);CHKERRA(ierr)
         Istart = Istart+1
-      endif
+      end if
       if (Iend .eq. n) then
         row(1) = n-1
         col(1) = n-2
@@ -106,7 +106,7 @@
         val(2) =  2.0
         call MatSetValues(A,one,row,two,col,val,INSERT_VALUES,ierr);CHKERRA(ierr)
         Iend = Iend-1
-      endif
+      end if
       val(1) = -1.0
       val(2) =  2.0
       val(3) = -1.0
@@ -116,7 +116,7 @@
         col(2) = i
         col(3) = i+1
         call MatSetValues(A,one,row,three,col,val,INSERT_VALUES,ierr);CHKERRA(ierr)
-      enddo
+      end do
 
       call MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr);CHKERRA(ierr)
       call MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr);CHKERRA(ierr)
@@ -169,7 +169,7 @@
 !       ** (Optional) Do any setup required for the new transformation
         call KSPSetOperators(myksp,A,A,ierr);CHKERRA(ierr)
         call KSPSetFromOptions(myksp,ierr);CHKERRA(ierr)
-      endif
+      end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Solve the eigensystem
@@ -181,11 +181,11 @@
       call EPSGetType(eps,tname,ierr);CHKERRA(ierr)
       if (rank .eq. 0) then
         write(*,'(A,A,/)') ' Solution method: ', tname
-      endif
+      end if
       call EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr);CHKERRA(ierr)
       if (rank .eq. 0) then
         write(*,'(A,I2)') ' Number of requested eigenvalues:',nev
-      endif
+      end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Display solution and clean up
@@ -200,10 +200,10 @@
         call EPSConvergedReasonView(eps,PETSC_VIEWER_STDOUT_WORLD,ierr);CHKERRA(ierr)
         call EPSErrorView(eps,EPS_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD,ierr);CHKERRA(ierr)
         call PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr);CHKERRA(ierr)
-      endif
+      end if
       if (isShell) then
         call KSPDestroy(myksp,ierr);CHKERRA(ierr)
-      endif
+      end if
       call EPSDestroy(eps,ierr);CHKERRA(ierr)
       call MatDestroy(A,ierr);CHKERRA(ierr)
       call SlepcFinalize(ierr)
@@ -319,7 +319,7 @@
 
       do j=1,n
         eigr(j) = 1.0 / eigr(j)
-      enddo
+      end do
       ierr = 0
 
       end

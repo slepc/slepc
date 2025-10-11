@@ -67,19 +67,19 @@
           write(*,110) re, im, 'inside'
         else
           write(*,110) re, im, 'outside'
-        endif
-      endif
+        end if
+      end if
  110  format ('Point (',F4.1,',',F4.1,') is ',A7,' the region')
 
       PetscCallA(RGComputeBoundingBox(rg,a,b,c,d,ierr))
       if (rank .eq. 0) then
         write(*,115) a, b, c, d
-      endif
+      end if
  115  format ('Bounding box: [',F4.1,',',F4.1,']x[',F4.1,',',F4.1,']')
 
       if (rank .eq. 0) then
         write (*,*) 'Contour points:'
-      endif
+      end if
       n = 10
       PetscCallA(RGComputeContour(rg,n,cr,ci,ierr))
       do i=1,n
@@ -92,8 +92,8 @@
 #endif
         if (rank .eq. 0) then
           write(*,120) re, im
-        endif
-      enddo
+        end if
+      end do
  120  format ('(',F7.4,',',F7.4,')')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -123,8 +123,8 @@
           write(*,110) re, im, 'inside'
         else
           write(*,110) re, im, 'outside'
-        endif
-      endif
+        end if
+      end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Polygon
@@ -174,8 +174,8 @@
           write(*,110) re, im, 'inside'
         else
           write(*,110) re, im, 'outside'
-        endif
-      endif
+        end if
+      end if
 
 !     *** Clean up
       PetscCallA(RGDestroy(rg,ierr))

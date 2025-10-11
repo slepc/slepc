@@ -54,7 +54,7 @@
 
       if (rank .eq. 0) then
         write(*,100) n, mu
-      endif
+      end if
  100  format (/'Lauchli SVD, n =',I3,', mu=',E12.4,' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -76,7 +76,7 @@
           alpha = mu
           PetscCallA(MatSetValue(A,i,i-1,alpha,INSERT_VALUES,ierr))
         end if
-      enddo
+      end do
 
       PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
       PetscCallA(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr))
@@ -106,24 +106,24 @@
       PetscCallA(SVDGetIterationNumber(svd,its,ierr))
       if (rank .eq. 0) then
         write(*,110) its
-      endif
+      end if
  110  format (/' Number of iterations of the method:',I4)
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(SVDGetType(svd,tname,ierr))
       if (rank .eq. 0) then
         write(*,120) tname
-      endif
+      end if
  120  format (' Solution method: ',A)
       PetscCallA(SVDGetDimensions(svd,nsv,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
       if (rank .eq. 0) then
         write(*,130) nsv
-      endif
+      end if
  130  format (' Number of requested singular values:',I2)
       PetscCallA(SVDGetTolerances(svd,tol,maxit,ierr))
       if (rank .eq. 0) then
         write(*,140) tol, maxit
-      endif
+      end if
  140  format (' Stopping condition: tol=',1P,E11.4,', maxit=',I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -134,7 +134,7 @@
       PetscCallA(SVDGetConverged(svd,nconv,ierr))
       if (rank .eq. 0) then
         write(*,150) nconv
-      endif
+      end if
  150  format (' Number of converged approximate singular triplets:',I2/)
 
 !     ** Display singular values and relative errors
@@ -142,7 +142,7 @@
         if (rank .eq. 0) then
           write(*,*) '       sigma          relative error'
           write(*,*) ' ----------------- ------------------'
-        endif
+        end if
         do i=0,nconv-1
 !         ** Get i-th singular value
           PetscCallA(SVDGetSingularTriplet(svd,i,sigma,PETSC_NULL_VEC,PETSC_NULL_VEC,ierr))
@@ -151,14 +151,14 @@
           PetscCallA(SVDComputeError(svd,i,SVD_ERROR_RELATIVE,error,ierr))
           if (rank .eq. 0) then
             write(*,160) sigma, error
-          endif
+          end if
  160      format (1P,'   ',E12.4,'       ',E12.4)
 
-        enddo
+        end do
         if (rank .eq. 0) then
           write(*,*)
-        endif
-      endif
+        end if
+      end if
 
 !     ** Free work space
       PetscCallA(SVDDestroy(svd,ierr))

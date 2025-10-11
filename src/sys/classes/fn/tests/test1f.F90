@@ -142,15 +142,15 @@
           write(*,110) 'f', PetscRealPart(x), re
         else
           write(*,120) 'f', PetscRealPart(x), re, im
-        endif
+        end if
         re = PetscRealPart(yp)
         im = PetscImaginaryPart(yp)
         if (abs(im).lt.1.d-10) then
           write(*,110) 'f''', PetscRealPart(x), re
         else
           write(*,120) 'f''', PetscRealPart(x), re, im
-        endif
-      endif
+        end if
+      end if
  110  format (A2,'(',F4.1,') = ',F10.5)
  120  format (A2,'(',F4.1,') = ',F10.5,SP,F9.5,'i')
 

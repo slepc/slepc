@@ -53,15 +53,15 @@
       if (ierr .ne. 0) then
         print*,'SlepcInitialize failed'
         stop
-      endif
+      end if
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-k',k,flg,ierr))
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-l',l,flg,ierr))
-      if (k .gt. KMAX) then; SETERRA(PETSC_COMM_SELF,1,'Program currently limited to k=35'); endif
+      PetscCheckA(k<=KMAX,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,'Program currently limited to k=35')
       if (rank .eq. 0) then
         write(*,110) k,n
-      endif
+      end if
  110  format (/'Test BV with',I3,' columns of length',I3,' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -153,12 +153,12 @@
       PetscCallA(BVNormColumn(X,izero,NORM_2,nrm,ierr))
       if (rank .eq. 0) then
         write(*,120) nrm
-      endif
+      end if
  120  format ('2-Norm of X[0] = ',f8.4)
       PetscCallA(BVNorm(X,NORM_FROBENIUS,nrm,ierr))
       if (rank .eq. 0) then
         write(*,130) nrm
-      endif
+      end if
  130  format ('Frobenius Norm of X = ',f8.4)
 
 !     *** Clean up

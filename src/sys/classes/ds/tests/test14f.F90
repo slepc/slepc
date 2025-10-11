@@ -48,15 +48,15 @@
       if (ierr .ne. 0) then
         print*,'SlepcInitialize failed'
         stop
-      endif
+      end if
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       n = 10
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
-      if (n .gt. 100) then; SETERRA(PETSC_COMM_SELF,1,'Program currently limited to n=100'); endif
+      PetscCheckA(n<=100,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,'Program currently limited to n=100')
 
       if (rank .eq. 0) then
         write(*,110) n
-      endif
+      end if
  110  format (/'Solve a Dense System of type NHEP, n =',I3,' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -102,9 +102,9 @@
             write(*,120) re
           else
             write(*,130) re, im
-          endif
+          end if
         end do
-      endif
+      end if
  120  format ('  ',F8.5)
  130  format ('  ',F8.5,SP,F8.5,'i')
 

@@ -95,7 +95,7 @@
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       if (rank .eq. 0) then
          write(*,'(/A,I4)') 'Nonlinear eigenproblem with shell matrices, n =',n
-      endif
+      end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Create matrix-free operators for A and B corresponding to T and T'
@@ -131,7 +131,7 @@
       PetscCallA(NEPGetConverged(nep,nconv,ierr))
       if (rank .eq. 0) then
          write(*,'(A,I2/)') ' Number of converged approximate eigenpairs:',nconv
-      endif
+      end if
 !
 !     ** show detailed info unless -terse option is given by user
       PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-terse',terse,ierr))
@@ -142,7 +142,7 @@
          PetscCallA(NEPConvergedReasonView(nep,PETSC_VIEWER_STDOUT_WORLD,ierr))
          PetscCallA(NEPErrorView(nep,NEP_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD,ierr))
          PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr))
-      endif
+      end if
 
       PetscCallA(NEPDestroy(nep,ierr))
       PetscCallA(MatDestroy(A,ierr))

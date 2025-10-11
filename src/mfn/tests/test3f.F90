@@ -51,7 +51,7 @@
 
       if (rank .eq. 0) then
         write(*,100) n
-      endif
+      end if
  100  format (/'nSquare root of Laplacian, n=',I3,' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -85,7 +85,7 @@
         end if
         val = 4.0
         PetscCallA(MatSetValue(A,II,II,val,INSERT_VALUES,ierr))
-      enddo
+      end do
 
       PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
       PetscCallA(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr))
@@ -123,17 +123,17 @@
       PetscCallA(MFNGetTolerances(mfn,tol,maxit,ierr))
       if (rank .eq. 0) then
         write(*,110) tol,maxit
-      endif
+      end if
  110  format (/' Tolerance: ',F7.4,', maxit: ',I4)
       PetscCallA(MFNGetDimensions(mfn,ncv,ierr))
       if (rank .eq. 0) then
         write(*,120) ncv
-      endif
+      end if
  120  format (' Subspace dimension: ',I3)
       PetscCallA(MFNGetErrorIfNotConverged(mfn,flg,ierr))
       if (rank .eq. 0 .and. flg) then
         write(*,*) 'Erroring out if convergence fails'
-      endif
+      end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Call the solver
@@ -143,18 +143,18 @@
       PetscCallA(MFNGetConvergedReason(mfn,reason,ierr))
       if (rank .eq. 0) then
         write(*,130) reason
-      endif
+      end if
  130  format (' Converged reason:',I2)
       PetscCallA(MFNGetIterationNumber(mfn,its,ierr))
 !     if (rank .eq. 0) then
 !       write(*,140) its
-!     endif
+!     end if
 !140  format (' Number of iterations of the method:',I4)
 
       PetscCallA(VecNorm(y,NORM_2,norm,ierr))
       if (rank .eq. 0) then
         write(*,150) norm
-      endif
+      end if
  150  format (' sqrt(A)*v has norm ',F7.4)
 
       PetscCallA(MFNDestroy(mfn,ierr))

@@ -53,14 +53,14 @@
       if (ierr .ne. 0) then
         print*,'SlepcInitialize failed'
         stop
-      endif
+      end if
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       n = 30
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
 
       if (rank .eq. 0) then
         write(*,100) n
-      endif
+      end if
  100  format (/'1-D Laplacian Eigenproblem, n =',I4,' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -80,7 +80,7 @@
         val(2) = -1.0
         PetscCallA(MatSetValues(A,one,row,two,col,val,INSERT_VALUES,ierr))
         Istart = Istart+1
-      endif
+      end if
       if (Iend .eq. n) then
         row(1) = n-1
         col(1) = n-2
@@ -89,7 +89,7 @@
         val(2) =  2.0
         PetscCallA(MatSetValues(A,one,row,two,col,val,INSERT_VALUES,ierr))
         Iend = Iend-1
-      endif
+      end if
       val(1) = -1.0
       val(2) =  2.0
       val(3) = -1.0
@@ -99,7 +99,7 @@
         col(2) = i
         col(3) = i+1
         PetscCallA(MatSetValues(A,one,row,three,col,val,INSERT_VALUES,ierr))
-      enddo
+      end do
 
       PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
       PetscCallA(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr))
@@ -128,12 +128,12 @@
       PetscCallA(EPSGetType(eps,tname,ierr))
       if (rank .eq. 0) then
         write(*,120) tname
-      endif
+      end if
  120  format (' Solution method: ',A)
       PetscCallA(EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
       if (rank .eq. 0) then
         write(*,130) nev
-      endif
+      end if
  130  format (' Number of requested eigenvalues:',I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -149,7 +149,7 @@
         PetscCallA(EPSConvergedReasonView(eps,PETSC_VIEWER_STDOUT_WORLD,ierr))
         PetscCallA(EPSErrorView(eps,EPS_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD,ierr))
         PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr))
-      endif
+      end if
       PetscCallA(EPSDestroy(eps,ierr))
       PetscCallA(MatDestroy(A,ierr))
 

@@ -52,11 +52,11 @@
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-m',ny,flg,ierr))
       if (.not. flg) then
         ny = nx
-      endif
+      end if
       N = nx*ny
       if (rank .eq. 0) then
         write(*,100) N, nx, ny
-      endif
+      end if
  100  format (/'Quadratic Eigenproblem, N=',I6,' (',I4,'x',I4,' grid)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -75,16 +75,16 @@
         j = II-i*nx
         if (i .gt. 0) then
           PetscCallA(MatSetValue(K,II,II-nx,mone,INSERT_VALUES,ierr))
-        endif
+        end if
         if (i .lt. ny-1) then
           PetscCallA(MatSetValue(K,II,II+nx,mone,INSERT_VALUES,ierr))
-        endif
+        end if
         if (j .gt. 0) then
           PetscCallA(MatSetValue(K,II,II-1,mone,INSERT_VALUES,ierr))
-        endif
+        end if
         if (j .lt. nx-1) then
           PetscCallA(MatSetValue(K,II,II+1,mone,INSERT_VALUES,ierr))
-        endif
+        end if
         PetscCallA(MatSetValue(K,II,II,four,INSERT_VALUES,ierr))
       end do
       PetscCallA(MatAssemblyBegin(K,MAT_FINAL_ASSEMBLY,ierr))
@@ -101,10 +101,10 @@
         j = II-i*nx
         if (j .gt. 0) then
           PetscCallA(MatSetValue(C,II,II-1,mone,INSERT_VALUES,ierr))
-        endif
+        end if
         if (j .lt. nx-1) then
           PetscCallA(MatSetValue(C,II,II+1,mone,INSERT_VALUES,ierr))
-        endif
+        end if
         PetscCallA(MatSetValue(C,II,II,two,INSERT_VALUES,ierr))
       end do
       PetscCallA(MatAssemblyBegin(C,MAT_FINAL_ASSEMBLY,ierr))
@@ -150,12 +150,12 @@
       PetscCallA(PEPGetType(pep,tname,ierr))
       if (rank .eq. 0) then
         write(*,120) tname
-      endif
+      end if
  120  format (' Solution method: ',A)
       PetscCallA(PEPGetDimensions(pep,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
       if (rank .eq. 0) then
         write(*,130) nev
-      endif
+      end if
  130  format (' Number of requested eigenvalues:',I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -171,7 +171,7 @@
         PetscCallA(PEPConvergedReasonView(pep,PETSC_VIEWER_STDOUT_WORLD,ierr))
         PetscCallA(PEPErrorView(pep,PEP_ERROR_BACKWARD,PETSC_VIEWER_STDOUT_WORLD,ierr))
         PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr))
-      endif
+      end if
       PetscCallA(PEPDestroy(pep,ierr))
       PetscCallA(MatDestroy(K,ierr))
       PetscCallA(MatDestroy(C,ierr))

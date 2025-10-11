@@ -57,7 +57,7 @@
       N = m*(m+1)/2
       if (rank .eq. 0) then
         write(*,100) N, m
-      endif
+      end if
  100  format (/'Markov y=exp(t*A)*e_1, N=',I6,' (m=',I4,')')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -146,24 +146,24 @@
 
       PetscCallA(MFNSolve(mfn,v,y,ierr))
       PetscCallA(MFNGetConvergedReason(mfn,reason,ierr))
-      if (reason%v.lt.0) then; SETERRA(PETSC_COMM_WORLD,1,'Solver did not converge'); endif
+      PetscCheckA(reason%v>=0,PETSC_COMM_WORLD,PETSC_ERR_NOT_CONVERGED,'Solver did not converge')
       PetscCallA(VecNorm(y,NORM_2,norm,ierr))
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(MFNGetIterationNumber(mfn,its,ierr))
       if (rank .eq. 0) then
         write(*,120) its
-      endif
+      end if
  120  format (' Number of iterations of the method: ',I4)
       PetscCallA(MFNGetDimensions(mfn,ncv,ierr))
       if (rank .eq. 0) then
         write(*,130) ncv
-      endif
+      end if
  130  format (' Subspace dimension:',I4)
       PetscCallA(MFNGetTolerances(mfn,tol,maxit,ierr))
       if (rank .eq. 0) then
         write(*,140) tol,maxit
-      endif
+      end if
  140  format (' Stopping condition: tol=',f10.7,' maxit=',I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -172,7 +172,7 @@
 
       if (rank .eq. 0) then
         write(*,150) PetscRealPart(t),norm
-      endif
+      end if
  150  format (' Computed vector at time t=',f4.1,' has norm ',f8.5)
 
       PetscCallA(MFNDestroy(mfn,ierr))

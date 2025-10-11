@@ -76,7 +76,7 @@
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
       if (rank .eq. 0) then
         write(*,'(/A,I4)') 'Nonlinear Eigenproblem, n =',n
-      endif
+      end if
 
       ctx%h = 1.0/real(n)
       ctx%kappa = 1.0
@@ -138,21 +138,21 @@
       PetscCallA(NEPGetIterationNumber(nep,its,ierr))
       if (rank .eq. 0) then
         write(*,'(A,I3)') ' Number of NEP iterations =',its
-      endif
+      end if
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(NEPGetType(nep,tname,ierr))
       if (rank .eq. 0) then
         write(*,'(A,A10)') ' Solution method: ',tname
-      endif
+      end if
       PetscCallA(NEPGetDimensions(nep,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
       if (rank .eq. 0) then
         write(*,'(A,I4)') ' Number of requested eigenvalues:',nev
-      endif
+      end if
       PetscCallA(NEPGetTolerances(nep,tol,maxit,ierr))
       if (rank .eq. 0) then
         write(*,'(A,F12.9,A,I5)') ' Stopping condition: tol=',tol,', maxit=',maxit
-      endif
+      end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Display solution and clean up
@@ -161,14 +161,14 @@
       PetscCallA(NEPGetConverged(nep,nconv,ierr))
       if (rank .eq. 0) then
         write(*,'(A,I2/)') ' Number of converged approximate eigenpairs:',nconv
-      endif
+      end if
 
 !     ** Display eigenvalues and relative errors
       if (nconv .gt. 0) then
         if (rank .eq. 0) then
           write(*,*) '        k              ||T(k)x||'
           write(*,*) '----------------- ------------------'
-        endif
+        end if
         do i=0,nconv-1
 !         ** Get converged eigenpairs: (in this example they are always real)
           PetscCallA(NEPGetEigenpair(nep,i,lambda,PETSC_NULL_SCALAR,x,PETSC_NULL_VEC,ierr))
@@ -177,12 +177,12 @@
           PetscCallA(NEPComputeError(nep,i,NEP_ERROR_RELATIVE,norm,ierr))
           if (rank .eq. 0) then
             write(*,'(1P,E15.4,E18.4)') PetscRealPart(lambda), norm
-          endif
-        enddo
+          end if
+        end do
         if (rank .eq. 0) then
           write(*,*)
-        endif
-      endif
+        end if
+      end if
 
       PetscCallA(NEPDestroy(nep,ierr))
       PetscCallA(MatDestroy(F,ierr))
@@ -223,7 +223,7 @@
         A(2) = -d-lambda*h/6.0
         PetscCall(MatSetValues(fun,one,[i],two,j,A,INSERT_VALUES,ierr))
         Istart = Istart + 1
-      endif
+      end if
 
       if (Iend .eq. n) then
         i = n-1
@@ -233,7 +233,7 @@
         A(2) = d-lambda*h/3.0+lambda*c
         PetscCall(MatSetValues(fun,one,[i],two,j,A,INSERT_VALUES,ierr))
         Iend = Iend - 1
-      endif
+      end if
 
 !     ** Interior grid points
       do i=Istart,Iend-1
@@ -244,7 +244,7 @@
         A(2) = 2.0*(d-lambda*h/3.0)
         A(3) = -d-lambda*h/6.0
         PetscCall(MatSetValues(fun,one,[i],three,j,A,INSERT_VALUES,ierr))
-      enddo
+      end do
 
 !     ** Assemble matrix
       PetscCall(MatAssemblyBegin(fun,MAT_FINAL_ASSEMBLY,ierr))
@@ -283,7 +283,7 @@
         A(2) = -h/6.0
         PetscCall(MatSetValues(jac,one,[i],two,j,A,INSERT_VALUES,ierr))
         Istart = Istart + 1
-      endif
+      end if
 
       if (Iend .eq. n) then
         i = n-1
@@ -293,7 +293,7 @@
         A(2) = -h/3.0-c*c
         PetscCall(MatSetValues(jac,one,[i],two,j,A,INSERT_VALUES,ierr))
         Iend = Iend - 1
-      endif
+      end if
 
 !     ** Interior grid points
       do i=Istart,Iend-1
@@ -304,7 +304,7 @@
         A(2) = -2.0*h/3.0
         A(3) = -h/6.0
         PetscCall(MatSetValues(jac,one,[i],three,j,A,INSERT_VALUES,ierr))
-      enddo
+      end do
 
 !     ** Assemble matrix
       PetscCall(MatAssemblyBegin(jac,MAT_FINAL_ASSEMBLY,ierr))

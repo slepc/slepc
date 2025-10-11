@@ -54,7 +54,7 @@
 
       if (rank .eq. 0) then
         write(*,100) n
-      endif
+      end if
  100  format (/'1-D Laplacian Eigenproblem, n =',I3,' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -78,7 +78,7 @@
         value(2) = -1.0
         PetscCallA(MatSetValues(A,i1,[i],i2,col,value,INSERT_VALUES,ierr))
         Istart = Istart+1
-      endif
+      end if
       if (Iend .eq. n) then
         i = n-1
         col(1) = n-2
@@ -87,7 +87,7 @@
         value(2) =  2.0
         PetscCallA(MatSetValues(A,i1,[i],i2,col,value,INSERT_VALUES,ierr))
         Iend = Iend-1
-      endif
+      end if
       value(1) = -1.0
       value(2) =  2.0
       value(3) = -1.0
@@ -96,7 +96,7 @@
         col(2) = i
         col(3) = i+1
         PetscCallA(MatSetValues(A,i1,[i],i3,col,value,INSERT_VALUES,ierr))
-      enddo
+      end do
 
       PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
       PetscCallA(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr))
@@ -105,7 +105,7 @@
       one = 1.0
       if (Istart .eq. 0) then
         PetscCallA(VecSetValue(v(1),i0,one,INSERT_VALUES,ierr))
-      endif
+      end if
       PetscCallA(VecAssemblyBegin(v(1),ierr))
       PetscCallA(VecAssemblyEnd(v(1),ierr))
 
@@ -137,12 +137,12 @@
       PetscCallA(EPSGetType(eps,tname,ierr))
       if (rank .eq. 0) then
         write(*,120) tname
-      endif
+      end if
  120  format (' Solution method: ',A)
       PetscCallA(EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
       if (rank .eq. 0) then
         write(*,130) nev
-      endif
+      end if
  130  format (' Number of requested eigenvalues:',I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

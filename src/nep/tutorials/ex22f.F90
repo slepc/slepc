@@ -69,7 +69,7 @@
       PetscCallA(PetscOptionsGetReal(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-tau',tau,flg,ierr))
       if (rank .eq. 0) then
         write(*,100) n, tau
-      endif
+      end if
  100  format (/'Delay Eigenproblem, n =',I4,', tau =',F6.3)
 
       one = 1.0
@@ -94,10 +94,10 @@
       do i=Istart,Iend-1
         if (i .gt. 0) then
           PetscCallA(MatSetValue(A,i,i-1,coeffs(1),INSERT_VALUES,ierr))
-        endif
+        end if
         if (i .lt. n-1) then
           PetscCallA(MatSetValue(A,i,i+1,coeffs(1),INSERT_VALUES,ierr))
-        endif
+        end if
         PetscCallA(MatSetValue(A,i,i,coeffs(2),INSERT_VALUES,ierr))
       end do
       PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
@@ -183,12 +183,12 @@
       PetscCallA(NEPGetType(nep,tname,ierr))
       if (rank .eq. 0) then
         write(*,120) tname
-      endif
+      end if
  120  format (' Solution method: ',A)
       PetscCallA(NEPGetDimensions(nep,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
       if (rank .eq. 0) then
         write(*,130) nev
-      endif
+      end if
  130  format (' Number of requested eigenvalues:',I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -204,7 +204,7 @@
         PetscCallA(NEPConvergedReasonView(nep,PETSC_VIEWER_STDOUT_WORLD,ierr))
         PetscCallA(NEPErrorView(nep,NEP_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD,ierr))
         PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr))
-      endif
+      end if
       PetscCallA(NEPDestroy(nep,ierr))
       PetscCallA(MatDestroy(Id,ierr))
       PetscCallA(MatDestroy(A,ierr))

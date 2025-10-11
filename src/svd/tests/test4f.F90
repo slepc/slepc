@@ -62,7 +62,7 @@
 
       if (rank .eq. 0) then
         write(*,100) m, n
-      endif
+      end if
  100  format (/'Bidiagonal matrix, m =',I3,', n=',I3,' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -85,7 +85,7 @@
         if (i .lt. n-1) then
           PetscCallA(MatSetValue(A,i,col(2),val(2),INSERT_VALUES,ierr))
         end if
-      enddo
+      end do
 
       PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
       PetscCallA(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr))
@@ -107,30 +107,30 @@
       PetscCallA(SVDGetProblemType(svd,ptype,ierr))
       if (rank .eq. 0) then
         write(*,105) ptype
-      endif
+      end if
  105  format (/' Problem type = ',I2)
       PetscCallA(SVDIsGeneralized(svd,flg,ierr))
       if (flg .and. rank .eq. 0) then
         write(*,*) 'generalized'
-      endif
+      end if
       PetscCallA(SVDGetImplicitTranspose(svd,tmode,ierr))
       if (rank .eq. 0) then
         if (tmode) then
           write(*,110) 'implicit'
         else
           write(*,110) 'explicit'
-        endif
-      endif
+        end if
+      end if
  110  format (' Transpose mode is',A9)
       PetscCallA(SVDGetConvergenceTest(svd,conv,ierr))
       if (rank .eq. 0) then
         write(*,120) conv
-      endif
+      end if
  120  format (' Convergence test is',I2)
       PetscCallA(SVDGetStoppingTest(svd,stp,ierr))
       if (rank .eq. 0) then
         write(*,130) stp
-      endif
+      end if
  130  format (' Stopping test is',I2)
       PetscCallA(SVDGetWhichSingularTriplets(svd,which,ierr))
       if (rank .eq. 0) then
@@ -138,8 +138,8 @@
           write(*,140) 'largest'
         else
           write(*,140) 'smallest'
-        endif
-      endif
+        end if
+      end if
  140  format (' Which =',A9)
 
       PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_DEFAULT,vf,ierr))
@@ -154,12 +154,12 @@
       PetscCallA(SVDGetConvergedReason(svd,reason,ierr))
       if (rank .eq. 0) then
         write(*,150) reason
-      endif
+      end if
  150  format (' Converged reason:',I2)
       PetscCallA(SVDGetIterationNumber(svd,its,ierr))
 !     if (rank .eq. 0) then
 !       write(*,160) its
-!     endif
+!     end if
 !160  format (' Number of iterations of the method:',I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
