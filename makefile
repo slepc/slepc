@@ -115,7 +115,7 @@ reconfigure: allclean
 
 # ******** Rules for make check ************************************************************************
 
-RUN_TEST = ${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR}
+RUN_TEST = ${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} DIFF=${PETSC_DIR}/lib/petsc/bin/petscdiff
 
 .PHONY: check
 check: check_body ${SLEPC_POST_CHECKS}
