@@ -394,6 +394,16 @@ static PetscErrorCode BVDestroy_Svec(BV bv)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   BVSVEC - BVSVEC = "svec" - A basis vectors object represented by a single
+   `Vec` object. The local array of the `Vec` stores the local part of the
+   basis vectors column-wise.
+
+   Level: beginner
+
+.seealso: [](sec:bv), `BV`, `BVType`, `BVSetType()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode BVCreate_Svec(BV bv)
 {
   BV_SVEC           *ctx;

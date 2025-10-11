@@ -25,8 +25,8 @@ const char *BVMatMultTypes[] = {"VECS","MAT","MAT_SAVE","BVMatMultType","BV_MATM
 const char *BVSVDMethods[] = {"REFINE","QR","QR_CAA","BVSVDMethod","BV_SVD_METHOD_",NULL};
 
 /*@C
-   BVFinalizePackage - This function destroys everything in the Slepc interface
-   to the BV package. It is called from SlepcFinalize().
+   BVFinalizePackage - This function destroys everything in the SLEPc interface
+   to the `BV` package. It is called from `SlepcFinalize()`.
 
    Level: developer
 
@@ -44,9 +44,9 @@ PetscErrorCode BVFinalizePackage(void)
 }
 
 /*@C
-   BVInitializePackage - This function initializes everything in the BV package.
-   It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-   on the first call to BVCreate() when using static libraries.
+   BVInitializePackage - This function initializes everything in the `BV` package.
+   It is called from `PetscDLLibraryRegister()` when using dynamic libraries, and
+   on the first call to `BVCreate()` when using static libraries.
 
    Level: developer
 
@@ -102,7 +102,7 @@ PetscErrorCode BVInitializePackage(void)
 }
 
 /*@
-   BVDestroy - Destroys BV context that was created with BVCreate().
+   BVDestroy - Destroys a `BV` context that was created with `BVCreate()`.
 
    Collective
 
@@ -111,7 +111,7 @@ PetscErrorCode BVInitializePackage(void)
 
    Level: beginner
 
-.seealso: `BVCreate()`
+.seealso: [](sec:bv), `BVCreate()`
 @*/
 PetscErrorCode BVDestroy(BV *bv)
 {
@@ -151,9 +151,13 @@ PetscErrorCode BVDestroy(BV *bv)
    Output Parameter:
 .  newbv - location to put the basis vectors context
 
+   Note:
+   A basis vectors object of type `BVTENSOR` should be created using
+   the helper function `BVCreateTensor()` instead of this one.
+
    Level: beginner
 
-.seealso: `BVSetUp()`, `BVDestroy()`, `BV`
+.seealso: [](sec:bv), `BV`, `BVDuplicate()`, `BVDestroy()`, `BVCreateTensor()` , `BVCreateFromMat()`
 @*/
 PetscErrorCode BVCreate(MPI_Comm comm,BV *newbv)
 {
@@ -224,7 +228,7 @@ PetscErrorCode BVCreate(MPI_Comm comm,BV *newbv)
 }
 
 /*@
-   BVCreateFromMat - Creates a basis vectors object from a dense Mat object.
+   BVCreateFromMat - Creates a basis vectors object from a dense `Mat` object.
 
    Collective
 
@@ -235,14 +239,14 @@ PetscErrorCode BVCreate(MPI_Comm comm,BV *newbv)
 .  bv - the new basis vectors context
 
    Notes:
-   The matrix values are copied to the BV data storage, memory is not shared.
+   The matrix values are copied to the `BV` data storage, memory is not shared.
 
-   The communicator of the BV object will be the same as A, and so will be
+   The communicator of the `BV` object will be the same as `A`, and so will be
    the dimensions.
 
    Level: intermediate
 
-.seealso: `BVCreate()`, `BVDestroy()`, `BVCreateMat()`
+.seealso: [](sec:bv), `BVCreate()`, `BVDestroy()`, `BVCreateMat()`
 @*/
 PetscErrorCode BVCreateFromMat(Mat A,BV *bv)
 {
@@ -271,12 +275,12 @@ PetscErrorCode BVCreateFromMat(Mat A,BV *bv)
 
    Input Parameters:
 +  V - basis vectors
-.  j - the column of V to be overwritten
+.  j - the column of `V` to be overwritten
 -  w - the vector to be copied
 
    Level: intermediate
 
-.seealso: `BVInsertVecs()`
+.seealso: [](sec:bv), `BVInsertVecs()`
 @*/
 PetscErrorCode BVInsertVec(BV V,PetscInt j,Vec w)
 {
@@ -310,8 +314,8 @@ PetscErrorCode BVInsertVec(BV V,PetscInt j,Vec w)
 
    Input Parameters:
 +  V - basis vectors
-.  s - first column of V to be overwritten
-.  W - set of vectors to be copied
+.  s - first column of `V` to be overwritten
+.  W - array of vectors to be copied
 -  orth - flag indicating if the vectors must be orthogonalized
 
    Input/Output Parameter:
@@ -319,14 +323,14 @@ PetscErrorCode BVInsertVec(BV V,PetscInt j,Vec w)
        vectors
 
    Notes:
-   Copies the contents of vectors W to V(:,s:s+n). If the orthogonalization
+   Copies the contents of vectors `W` to `V(:,s:s+n)`. If the orthogonalization
    flag is set, then the vectors are copied one by one and then orthogonalized
    against the previous ones. If any of them is linearly dependent then it
-   is discarded and the value of m is decreased.
+   is discarded and the value of `m` is decreased.
 
    Level: intermediate
 
-.seealso: `BVInsertVec()`, `BVOrthogonalizeColumn()`
+.seealso: [](sec:bv), `BVInsertVec()`, `BVOrthogonalizeColumn()`
 @*/
 PetscErrorCode BVInsertVecs(BV V,PetscInt s,PetscInt *m,Vec *W,PetscBool orth)
 {
@@ -390,23 +394,23 @@ PetscErrorCode BVInsertVecs(BV V,PetscInt s,PetscInt *m,Vec *W,PetscBool orth)
    The constraints are relevant only during orthogonalization. Constraint
    vectors span a subspace that is deflated in every orthogonalization
    operation, so they are intended for removing those directions from the
-   orthogonal basis computed in regular BV columns.
+   orthogonal basis computed in regular `BV` columns.
 
-   Constraints are not stored in regular BV columns, but in a special part of
-   the storage. They can be accessed with negative indices in BVGetColumn().
+   Constraints are not stored in regular `BV` columns, but in a special part of
+   the storage. They can be accessed with negative indices in `BVGetColumn()`.
 
    This operation is DESTRUCTIVE, meaning that all data contained in the
-   columns of V is lost. This is typically invoked just after creating the BV.
+   columns of `V` is lost. This is typically invoked just after creating the `BV`.
    Once a set of constraints has been set, it is not allowed to call this
    function again.
 
    The vectors are copied one by one and then orthogonalized against the
    previous ones. If any of them is linearly dependent then it is discarded
-   and the value of nc is decreased. The behaviour is similar to BVInsertVecs().
+   and the value of `nc` is decreased. The behaviour is similar to `BVInsertVecs()`.
 
    Level: advanced
 
-.seealso: `BVInsertVecs()`, `BVOrthogonalizeColumn()`, `BVGetColumn()`, `BVGetNumConstraints()`
+.seealso: [](sec:bv), `BVInsertVecs()`, `BVOrthogonalizeColumn()`, `BVGetColumn()`, `BVGetNumConstraints()`
 @*/
 PetscErrorCode BVInsertConstraints(BV V,PetscInt *nc,Vec *C)
 {
@@ -440,13 +444,13 @@ PetscErrorCode BVInsertConstraints(BV V,PetscInt *nc,Vec *C)
 
 /*@
    BVSetOptionsPrefix - Sets the prefix used for searching for all
-   BV options in the database.
+   `BV` options in the database.
 
    Logically Collective
 
    Input Parameters:
 +  bv     - the basis vectors context
--  prefix - the prefix string to prepend to all BV option requests
+-  prefix - the prefix string to prepend to all `BV` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -455,7 +459,7 @@ PetscErrorCode BVInsertConstraints(BV V,PetscInt *nc,Vec *C)
 
    Level: advanced
 
-.seealso: `BVAppendOptionsPrefix()`, `BVGetOptionsPrefix()`
+.seealso: [](sec:bv), `BVAppendOptionsPrefix()`, `BVGetOptionsPrefix()`
 @*/
 PetscErrorCode BVSetOptionsPrefix(BV bv,const char *prefix)
 {
@@ -467,22 +471,22 @@ PetscErrorCode BVSetOptionsPrefix(BV bv,const char *prefix)
 
 /*@
    BVAppendOptionsPrefix - Appends to the prefix used for searching for all
-   BV options in the database.
+   `BV` options in the database.
 
    Logically Collective
 
    Input Parameters:
 +  bv     - the basis vectors context
--  prefix - the prefix string to prepend to all BV option requests
+-  prefix - the prefix string to prepend to all `BV` option requests
 
-   Notes:
+   Note:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
    The first character of all runtime options is AUTOMATICALLY the
    hyphen.
 
    Level: advanced
 
-.seealso: `BVSetOptionsPrefix()`, `BVGetOptionsPrefix()`
+.seealso: [](sec:bv), `BVSetOptionsPrefix()`, `BVGetOptionsPrefix()`
 @*/
 PetscErrorCode BVAppendOptionsPrefix(BV bv,const char *prefix)
 {
@@ -502,11 +506,11 @@ PetscErrorCode BVAppendOptionsPrefix(BV bv,const char *prefix)
 .  bv - the basis vectors context
 
    Output Parameter:
-.  prefix - pointer to the prefix string used, is returned
+.  prefix - pointer to the prefix string used is returned
 
    Level: advanced
 
-.seealso: `BVSetOptionsPrefix()`, `BVAppendOptionsPrefix()`
+.seealso: [](sec:bv), `BVSetOptionsPrefix()`, `BVAppendOptionsPrefix()`
 @*/
 PetscErrorCode BVGetOptionsPrefix(BV bv,const char *prefix[])
 {
@@ -518,28 +522,30 @@ PetscErrorCode BVGetOptionsPrefix(BV bv,const char *prefix[])
 }
 
 /*@
-   BVView - Prints the BV data structure.
+   BVView - Prints the `BV` data structure.
 
    Collective
 
    Input Parameters:
-+  bv     - the BV context
++  bv     - the basis vectors context
 -  viewer - optional visualization context
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization contexts with
-   PetscViewerASCIIOpen() (output to a specified file).
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
+
+   Use `BVViewFromOptions()` to allow the user to select many different `PetscViewerType`
+   and formats from the options database.
 
    Level: beginner
 
-.seealso: `BVCreate()`
+.seealso: [](sec:bv), `BVCreate()`
 @*/
 PetscErrorCode BVView(BV bv,PetscViewer viewer)
 {
@@ -601,18 +607,18 @@ PetscErrorCode BVView(BV bv,PetscViewer viewer)
 }
 
 /*@
-   BVViewFromOptions - View from options
+   BVViewFromOptions - View (print) a `BV` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  bv   - the basis vectors context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: `BVView()`, `BVCreate()`
+.seealso: [](sec:bv), `BVView()`, `BVCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode BVViewFromOptions(BV bv,PetscObject obj,const char name[])
 {
@@ -623,21 +629,21 @@ PetscErrorCode BVViewFromOptions(BV bv,PetscObject obj,const char name[])
 }
 
 /*@C
-   BVRegister - Adds a new storage format to the BV package.
+   BVRegister - Adds a new storage format to the `BV` package.
 
    Not Collective
 
    Input Parameters:
-+  name     - name of a new user-defined BV
++  name     - name of a new user-defined `BV`
 -  function - routine to create context
 
    Notes:
-   BVRegister() may be called multiple times to add several user-defined
+   `BVRegister()` may be called multiple times to add several user-defined
    basis vectors.
 
    Level: advanced
 
-.seealso: `BVRegisterAll()`
+.seealso: [](sec:bv), `BVRegisterAll()`
 @*/
 PetscErrorCode BVRegister(const char *name,PetscErrorCode (*function)(BV))
 {

@@ -17,28 +17,28 @@
 #define p_id(i) (i*subcomm->n + subcomm->color)
 
 /*@
-   BVScatter - Scatters the columns of a BV to another BV created in a
+   BVScatter - Scatters the columns of a `BV` to another `BV` created in a
    subcommunicator.
 
    Collective
 
    Input Parameters:
 +  Vin  - input basis vectors (defined on the whole communicator)
-.  scat - VecScatter object that contains the info for the communication
+.  scat - `VecScatter` object that contains the info for the communication
 -  xdup - an auxiliary vector
 
    Output Parameter:
 .  Vout - output basis vectors (defined on the subcommunicator)
 
    Notes:
-   Currently implemented as a loop for each the active column, where each
-   column is scattered independently. The vector xdup is defined on the
-   contiguous parent communicator and have enough space to store one
+   Currently implemented as a loop for each active column, where each
+   column is scattered independently. The vector `xdup` is defined on the
+   contiguous parent communicator and should have enough space to store one
    duplicate of the original vector per each subcommunicator.
 
    Level: developer
 
-.seealso: `BVGetColumn()`
+.seealso: [](sec:bv), `BVGetColumn()`
 @*/
 PetscErrorCode BVScatter(BV Vin,BV Vout,VecScatter scat,Vec xdup)
 {
@@ -80,7 +80,7 @@ PetscErrorCode BVScatter(BV Vin,BV Vout,VecScatter scat,Vec xdup)
 .  L_max   - maximum block size
 .  w       - quadrature weights
 .  zn      - normalized quadrature points
-.  scat    - (optional) VecScatter object to communicate between subcommunicators
+.  scat    - (optional) `VecScatter` object to communicate between subcommunicators
 .  subcomm - subcommunicator layout
 .  npoints - number of points to process by the subcommunicator
 -  useconj - whether conjugate points can be used or not
@@ -89,21 +89,21 @@ PetscErrorCode BVScatter(BV Vin,BV Vout,VecScatter scat,Vec xdup)
 .  S       - output basis vectors
 
    Notes:
-   This is a generalization of BVMult(). The resulting matrix S consists of M
-   panels of L columns, and the following formula is computed for each panel
-   S_k = sum_j w_j*zn_j^k*Y_j, where Y_j is the j-th panel of Y containing
-   the result of solving T(z_j)^{-1}*X for each integration point j. L_max is
-   the width of the panels in Y.
+   This is a generalization of `BVMult()`. The resulting matrix `S` consists of `M`
+   panels of `L` columns, and the following formula is computed for each panel
+   $S_k = \sum_j w_j\zeta_j^kY_j$, where $Y_j$ is the $j$-th panel of $Y$ containing
+   the result of solving $T(z_j)^{-1}X$ for each integration point $j$. `L_max` is
+   the width of the panels in $Y$.
 
-   When using subcommunicators, Y is stored in the subcommunicators for a subset
-   of integration points. In that case, the computation is done in the subcomm
-   and then scattered to the whole communicator in S using the VecScatter scat.
-   The value npoints is the number of points to be processed in this subcomm
-   and the flag useconj indicates whether symmetric points can be reused.
+   When using subcommunicators, `Y` is stored in the subcommunicators for a subset
+   of integration points. In that case, the computation is done in the `subcomm`
+   and then scattered to the whole communicator in `S` using the `VecScatter` `scat`.
+   The value `npoints` is the number of points to be processed in this `subcomm`
+   and the flag `useconj` indicates whether symmetric points can be reused.
 
    Level: developer
 
-.seealso: `BVMult()`, `BVScatter()`, `BVDotQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
+.seealso: [](sec:bv), `BVMult()`, `BVScatter()`, `BVDotQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
 @*/
 PetscErrorCode BVSumQuadrature(BV S,BV Y,PetscInt M,PetscInt L,PetscInt L_max,PetscScalar *w,PetscScalar *zn,VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
 {
@@ -168,21 +168,21 @@ PetscErrorCode BVSumQuadrature(BV S,BV Y,PetscInt M,PetscInt L,PetscInt L_max,Pe
 .  Mu      - computed result
 
    Notes:
-   This is a generalization of BVDot(). The resulting matrix Mu consists of M
-   blocks of size LxL (placed horizontally), each of them computed as
-   Mu_k = sum_j w_j*zn_j^k*V'*Y_j, where Y_j is the j-th panel of Y containing
-   the result of solving T(z_j)^{-1}*X for each integration point j. L_max is
-   the width of the panels in Y.
+   This is a generalization of `BVDot()`. The resulting matrix `Mu` consists of `M`
+   blocks of size `L*L` (placed horizontally), each of them computed as
+   $Mu_k = \sum_j w_j\zeta_j^k V^*Y_j$, where $Y_j$ is the $j$-th panel of $Y$ containing
+   the result of solving $T(z_j)^{-1}X$ for each integration point $j$. `L_max` is
+   the width of the panels in $Y$.
 
-   When using subcommunicators, Y is stored in the subcommunicators for a subset
-   of integration points. In that case, the computation is done in the subcomm
+   When using subcommunicators, $Y$ is stored in the subcommunicators for a subset
+   of integration points. In that case, the computation is done in the `subcomm`
    and then the final result is combined via reduction.
-   The value npoints is the number of points to be processed in this subcomm
-   and the flag useconj indicates whether symmetric points can be reused.
+   The value `npoints` is the number of points to be processed in this `subcomm`
+   and the flag `useconj` indicates whether symmetric points can be reused.
 
    Level: developer
 
-.seealso: `BVDot()`, `BVScatter()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
+.seealso: [](sec:bv), `BVDot()`, `BVScatter()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
 @*/
 PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar *Mu,PetscInt M,PetscInt L,PetscInt L_max,PetscScalar *w,PetscScalar *zn,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
 {
@@ -249,7 +249,7 @@ PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar *Mu,PetscInt M,PetscInt L,P
 .  L       - block size
 .  L_max   - maximum block size
 .  w       - quadrature weights
-.  scat    - (optional) VecScatter object to communicate between subcommunicators
+.  scat    - (optional) `VecScatter` object to communicate between subcommunicators
 .  subcomm - subcommunicator layout
 .  npoints - number of points to process by the subcommunicator
 -  useconj - whether conjugate points can be used or not
@@ -259,18 +259,18 @@ PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar *Mu,PetscInt M,PetscInt L,P
 
    Notes:
    This function returns an estimation of the number of eigenvalues in the
-   region, computed as trace(V'*S_0), where S_0 is the first panel of S
-   computed by BVSumQuadrature().
+   region, computed as $\operatorname{tr}(V^*S_0)$, where $S_0$ is the first panel of $S$
+   computed by `BVSumQuadrature()`.
 
-   When using subcommunicators, Y is stored in the subcommunicators for a subset
-   of integration points. In that case, the computation is done in the subcomm
-   and then scattered to the whole communicator in S using the VecScatter scat.
-   The value npoints is the number of points to be processed in this subcomm
-   and the flag useconj indicates whether symmetric points can be reused.
+   When using subcommunicators, `Y` is stored in the subcommunicators for a subset
+   of integration points. In that case, the computation is done in the `subcomm`
+   and then scattered to the whole communicator in `V` using the `VecScatter` `scat`.
+   The value `npoints` is the number of points to be processed in this `subcomm`
+   and the flag `useconj` indicates whether symmetric points can be reused.
 
    Level: developer
 
-.seealso: `BVScatter()`, `BVDotQuadrature()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
+.seealso: [](sec:bv), `BVScatter()`, `BVDotQuadrature()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
 @*/
 PetscErrorCode BVTraceQuadrature(BV Y,BV V,PetscInt L,PetscInt L_max,PetscScalar *w,VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj,PetscReal *est_eig)
 {
@@ -504,7 +504,7 @@ static PetscErrorCode BVSVDAndRank_QR_CAA(BV S,PetscInt M,PetscInt L,PetscReal d
    Collective
 
    Input Parameters:
-+  S     - the basis vectors
++  S     - the basis vectors object
 .  m     - the moment degree
 .  l     - the block size
 .  delta - the tolerance used to determine the rank
@@ -513,28 +513,28 @@ static PetscErrorCode BVSVDAndRank_QR_CAA(BV S,PetscInt M,PetscInt L,PetscReal d
    Output Parameters:
 +  A     - workspace, on output contains relevant values in the CAA method
 .  sigma - computed singular values
--  rank  - estimated rank (optional)
+-  rank  - estimated rank (optional, pass `NULL` if not needed)
 
    Notes:
-   This function computes [U,Sigma,V] = svd(S) and replaces S with U.
-   The current implementation computes this via S'*S, and it may include
+   This function computes the SVD $S=U\Sigma V^*$ and replaces $S$ with $U$.
+   The current implementation computes this via $S^*S$, and it may include
    some kind of iterative refinement to improve accuracy in some cases.
 
-   The parameters m and l refer to the moment and block size of contour
-   integral methods. All columns up to m*l are modified, and the active
-   columns are set to 0..m*l.
+   The parameters `m` and `l` refer to the moment and block size of contour
+   integral methods. All columns up to `m*l` are modified, and the active
+   columns are set to `0..m*l`.
 
-   The method is one of BV_SVD_METHOD_REFINE, BV_SVD_METHOD_QR, BV_SVD_METHOD_QR_CAA.
+   See `BVSVDMethod` for available methods.
 
-   The A workspace should be m*l*m*l in size.
+   The `A` workspace should be `m*l*m*l` in size.
 
    Once the decomposition is computed, the numerical rank is estimated
    by counting the number of singular values that are larger than the
-   tolerance delta, relative to the first singular value.
+   tolerance `delta`, relative to the first singular value.
 
    Level: developer
 
-.seealso: `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSVDAndRank(BV S,PetscInt m,PetscInt l,PetscReal delta,BVSVDMethod meth,PetscScalar *A,PetscReal *sigma,PetscInt *rank)
 {
@@ -566,22 +566,22 @@ PetscErrorCode BVSVDAndRank(BV S,PetscInt m,PetscInt l,PetscReal delta,BVSVDMeth
 }
 
 /*@
-   BVCISSResizeBases - Resize the bases involved in CISS solvers when the L grows.
+   BVCISSResizeBases - Resize the bases involved in CISS solvers when the $L$ parameter grows.
 
    Logically Collective
 
    Input Parameters:
-+  S      - basis of L*M columns
-.  V      - basis of L columns (may be associated to subcommunicators)
-.  Y      - basis of npoints*L columns
-.  Lold   - old value of L
-.  Lnew   - new value of L
-.  M      - the moment size
++  S       - basis of $L\cdot M$ columns
+.  V       - basis of $L$ columns (may be associated to subcommunicators)
+.  Y       - basis of `npoints`$\cdot L$ columns
+.  Lold    - old value of $L$
+.  Lnew    - new value of $L$
+.  M       - the moment size
 -  npoints - number of integration points
 
    Level: developer
 
-.seealso: `BVResize()`
+.seealso: [](sec:bv), `BVResize()`
 @*/
 PetscErrorCode BVCISSResizeBases(BV S,BV V,BV Y,PetscInt Lold,PetscInt Lnew,PetscInt M,PetscInt npoints)
 {
