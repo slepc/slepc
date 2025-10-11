@@ -495,7 +495,7 @@ The following is a Fortran example. It is the Fortran equivalent of the program 
 ```{literalinclude} /../../src/eps/tutorials/ex1f.F90
 :name: ex1f.F90
 :language: fortran
-:start-at: program main
+:start-at: '#include <slepc/finclude/slepceps.h>'
 :end-before: '!/*TEST'
 ```
 

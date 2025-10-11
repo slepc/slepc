@@ -16,8 +16,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepcds.h>
+      program main
       use slepcds
       implicit none
 

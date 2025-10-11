@@ -32,8 +32,8 @@
 !           (-lambda*I + A + exp(-tau*lambda)*B)*u = 0
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepcnep.h>
+      program main
       use slepcnep
       implicit none
 

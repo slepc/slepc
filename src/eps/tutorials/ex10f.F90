@@ -22,8 +22,8 @@
 !
 !     Module contains data needed by shell ST
 !
-      module mymoduleex10f
 #include <slepc/finclude/slepceps.h>
+      module mymoduleex10f
       use slepceps
       implicit none
 
@@ -33,7 +33,6 @@
 ! ----------------------------------------------------------------------
 
       program main
-#include <slepc/finclude/slepceps.h>
       use slepceps
       use mymoduleex10f
       implicit none
@@ -222,7 +221,6 @@
 !   y - output vector
 !
       subroutine STApply_User(st,x,y,ierr)
-#include <slepc/finclude/slepceps.h>
       use slepceps
       use mymoduleex10f
       implicit none
@@ -247,7 +245,6 @@
 !   y - output vector
 !
       subroutine STApplyTranspose_User(st,x,y,ierr)
-#include <slepc/finclude/slepceps.h>
       use slepceps
       use mymoduleex10f
       implicit none
@@ -274,7 +271,6 @@
 !   y - output vector
 !
       subroutine STApplyHermitianTranspose_User(st,x,y,ierr)
-#include <slepc/finclude/slepceps.h>
       use slepceps
       use mymoduleex10f
       implicit none
@@ -307,7 +303,6 @@
 !   eigi - imaginary part of eigenvalues
 !
       subroutine STBackTransform_User(st,n,eigr,eigi,ierr)
-#include <slepc/finclude/slepceps.h>
       use slepceps
       use mymoduleex10f
       implicit none

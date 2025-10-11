@@ -15,12 +15,13 @@
 !  The command line options are:
 !    -n <n>, where <n> = matrix dimension
 
+#include <slepc/finclude/slepcnep.h>
+
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !    Modules needed to pass and get the context to/from the Mat
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
    module shell_ctx
-#include <petsc/finclude/petscmat.h>
       use petscmat
       implicit none
       type :: MatCtx
@@ -66,7 +67,6 @@
 !=================================================================================================
 
    program main
-#include <slepc/finclude/slepcnep.h>
       use slepcnep
       use shell_ctx_interfaces
       implicit none

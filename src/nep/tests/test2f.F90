@@ -11,8 +11,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepcnep.h>
+      program main
       use slepcnep
       implicit none
 

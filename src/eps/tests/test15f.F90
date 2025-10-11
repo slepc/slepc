@@ -17,8 +17,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepceps.h>
+      program main
       use slepceps
       implicit none
 
@@ -169,7 +169,6 @@
 !    dummy - optional user-defined monitor context (unused here)
 !
       subroutine MyEPSMonitor(eps,its,nconv,eigr,eigi,errest,nest,dummy,ierr)
-#include <slepc/finclude/slepceps.h>
       use slepceps
       implicit none
 

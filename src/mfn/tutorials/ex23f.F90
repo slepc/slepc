@@ -18,8 +18,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepcmfn.h>
+      program main
       use slepcmfn
       implicit none
 

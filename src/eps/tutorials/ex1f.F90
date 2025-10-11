@@ -18,8 +18,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepceps.h>
+      program main
       use slepceps
       implicit none
 

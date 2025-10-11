@@ -13,8 +13,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepcbv.h>
+      program main
       use slepcbv
       implicit none
 

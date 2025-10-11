@@ -17,8 +17,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepcsvd.h>
+      program main
       use slepcsvd
       implicit none
 

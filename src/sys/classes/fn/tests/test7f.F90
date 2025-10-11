@@ -13,8 +13,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepcfn.h>
+      program main
       use slepcfn
       implicit none
 

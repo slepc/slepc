@@ -18,8 +18,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepceps.h>
+      program main
       use slepceps
       implicit none
 
@@ -142,7 +142,6 @@
 !   y - output vector
 !
       subroutine MatMult_Ising(A,x,y,ierr)
-#include <petsc/finclude/petscmat.h>
       use petscmat
       implicit none
 
@@ -180,7 +179,6 @@
 !   y - output vector
 !
       subroutine MatMultTranspose_Ising(A,x,y,ierr)
-#include <petsc/finclude/petscmat.h>
       use petscmat
       implicit none
 
@@ -211,7 +209,6 @@
 !     See https://math.nist.gov/MatrixMarket/data/NEP/mvmisg/mvmisg.html
 
       SUBROUTINE MVMISG(TRANS, N, M, X, LDX, Y, LDY)
-#include <petsc/finclude/petscsys.h>
       use petscsys
 !     ..
 !     .. Scalar Arguments ..

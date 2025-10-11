@@ -13,8 +13,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepcrg.h>
+      program main
       use slepcrg
       implicit none
 

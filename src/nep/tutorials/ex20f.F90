@@ -22,11 +22,11 @@
 ! ----------------------------------------------------------------------
 !
 
+#include <slepc/finclude/slepcnep.h>
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     User-defined application context
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       module UserModule
-#include <slepc/finclude/slepcnep.h>
       use slepcnep
       type User
         PetscScalar kappa
@@ -35,7 +35,6 @@
       end module UserModule
 
       program main
-#include <slepc/finclude/slepcnep.h>
       use UserModule
       implicit none
 

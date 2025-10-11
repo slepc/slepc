@@ -21,9 +21,9 @@
 !      and with the interpolation interval [.01,16]
 ! ----------------------------------------------------------------------
 !
-PROGRAM main
 #include <slepc/finclude/slepcnep.h>
-  USE slepcnep
+  program main
+  use slepcnep
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -40,7 +40,7 @@ PROGRAM main
   RG                 :: rg
   FN                 :: fn(2)
   PetscScalar        :: coeffs,sigma,done
-  CHARACTER(LEN=128) :: string
+  character(len=128) :: string
 
   ! NOTE: Any user-defined Fortran routines (such as ComputeSingularities)
   !       MUST be declared as external.
@@ -178,14 +178,13 @@ PROGRAM main
   PetscCallA(NEPDestroy(nep,ierr))
   PetscCallA(SlepcFinalize(ierr))
 
-END PROGRAM main
+end program main
 
 ! --------------------------------------------------------------
 !
 !   FormFunction - Computes Function matrix  T(lambda)
 !
-SUBROUTINE FormFunction(nep,lambda,fun,B,ctx,ierr)
-#include <slepc/finclude/slepcnep.h>
+subroutine FormFunction(nep,lambda,fun,B,ctx,ierr)
   use slepcnep
   implicit none
 
@@ -246,14 +245,13 @@ SUBROUTINE FormFunction(nep,lambda,fun,B,ctx,ierr)
   PetscCall(MatAssemblyBegin(fun,MAT_FINAL_ASSEMBLY,ierr))
   PetscCall(MatAssemblyEnd(fun,MAT_FINAL_ASSEMBLY,ierr))
 
-END SUBROUTINE FormFunction
+end subroutine FormFunction
 
 ! --------------------------------------------------------------
 !
 !   FormJacobian - Computes Jacobian matrix  T'(lambda)
 !
-SUBROUTINE FormJacobian(nep,lambda,jac,ctx,ierr)
-#include <slepc/finclude/slepcnep.h>
+subroutine FormJacobian(nep,lambda,jac,ctx,ierr)
   USE slepcnep
   implicit none
 
@@ -270,7 +268,7 @@ SUBROUTINE FormJacobian(nep,lambda,jac,ctx,ierr)
   PetscCall(MatDiagonalSet(jac,d,INSERT_VALUES,ierr))
   PetscCall(VecDestroy(d,ierr))
 
-END SUBROUTINE FormJacobian
+end subroutine FormJacobian
 
 ! --------------------------------------------------------------
 !
@@ -285,8 +283,7 @@ END SUBROUTINE FormJacobian
 !    xi    - computed values of the discretization
 !    dummy - optional user-defined monitor context (unused here)
 !
-SUBROUTINE ComputeSingularities(nep,maxnp,xi,dummy,ierr)
-#include <slepc/finclude/slepcnep.h>
+subroutine ComputeSingularities(nep,maxnp,xi,dummy,ierr)
   use slepcnep
   implicit none
 
@@ -305,7 +302,7 @@ SUBROUTINE ComputeSingularities(nep,maxnp,xi,dummy,ierr)
   end do
   ierr = 0
 
-END SUBROUTINE ComputeSingularities
+end subroutine ComputeSingularities
 
 !/*TEST
 !

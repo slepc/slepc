@@ -13,8 +13,8 @@
 !
 ! ----------------------------------------------------------------------
 !
-      program main
 #include <slepc/finclude/slepcfn.h>
+      program main
       use slepcfn
       implicit none
 
@@ -126,7 +126,6 @@
 ! -----------------------------------------------------------------
 
       subroutine PrintInfo(x,y,yp)
-#include <slepc/finclude/slepcfn.h>
       use slepcfn
       implicit none
       PetscScalar    x,y,yp
