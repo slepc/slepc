@@ -14,7 +14,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcbv.h>
-      program main
+      program test1f
       use slepcbv
       implicit none
 
@@ -168,7 +168,7 @@
       PetscCallA(MatDestroy(Q,ierr))
       PetscCallA(MatDestroy(M,ierr))
       PetscCallA(SlepcFinalize(ierr))
-      end
+      end program test1f
 
 !/*TEST
 !

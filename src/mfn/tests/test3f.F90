@@ -17,7 +17,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcmfn.h>
-      program main
+      program test3f
       use slepcmfn
       implicit none
 
@@ -163,7 +163,7 @@
       PetscCallA(VecDestroy(y,ierr))
 
       PetscCallA(SlepcFinalize(ierr))
-      end
+      end program test3f
 
 !/*TEST
 !

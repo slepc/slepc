@@ -34,7 +34,7 @@
       end type User
       end module UserModule
 
-      program main
+      program ex20f
       use UserModule
       implicit none
 
@@ -188,7 +188,7 @@
       PetscCallA(MatDestroy(J,ierr))
       PetscCallA(VecDestroy(x,ierr))
       PetscCallA(SlepcFinalize(ierr))
-      end
+      end program ex20f
 
 ! ---------------  Evaluate Function matrix  T(lambda)  ----------------
 

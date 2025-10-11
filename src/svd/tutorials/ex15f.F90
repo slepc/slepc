@@ -18,7 +18,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcsvd.h>
-      program main
+      program ex15f
       use slepcsvd
       implicit none
 
@@ -165,7 +165,7 @@
       PetscCallA(MatDestroy(A,ierr))
 
       PetscCallA(SlepcFinalize(ierr))
-      end
+      end program ex15f
 
 !/*TEST
 !

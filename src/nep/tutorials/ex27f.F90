@@ -22,7 +22,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcnep.h>
-  program main
+  program ex27f
   use slepcnep
   implicit none
 
@@ -178,7 +178,7 @@
   PetscCallA(NEPDestroy(nep,ierr))
   PetscCallA(SlepcFinalize(ierr))
 
-end program main
+end program ex27f
 
 ! --------------------------------------------------------------
 !

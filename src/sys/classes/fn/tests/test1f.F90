@@ -14,7 +14,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcfn.h>
-      program main
+      program test1f
       use slepcfn
       implicit none
 
@@ -121,7 +121,7 @@
 !     *** Clean up
       PetscCallA(FNDestroy(fn,ierr))
       PetscCallA(SlepcFinalize(ierr))
-      end
+      end program test1f
 
 ! -----------------------------------------------------------------
 

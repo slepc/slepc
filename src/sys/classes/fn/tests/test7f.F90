@@ -14,7 +14,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcfn.h>
-      program main
+      program test7f
       use slepcfn
       implicit none
 
@@ -158,7 +158,7 @@
 
       end
 
-      end program main
+      end program test7f
 
 !/*TEST
 !

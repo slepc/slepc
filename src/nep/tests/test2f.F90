@@ -12,7 +12,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcnep.h>
-      program main
+      program test2f
       use slepcnep
       implicit none
 
@@ -224,7 +224,7 @@
       PetscCallA(FNDestroy(f(3),ierr))
 
       PetscCallA(SlepcFinalize(ierr))
-      end
+      end program test2f
 
 !/*TEST
 !

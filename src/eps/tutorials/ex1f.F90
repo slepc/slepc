@@ -19,7 +19,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepceps.h>
-      program main
+      program ex1f
       use slepceps
       implicit none
 
@@ -154,7 +154,7 @@
       PetscCallA(MatDestroy(A,ierr))
 
       PetscCallA(SlepcFinalize(ierr))
-      end
+      end program ex1f
 
 !/*TEST
 !

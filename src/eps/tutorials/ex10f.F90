@@ -32,7 +32,7 @@
 
 ! ----------------------------------------------------------------------
 
-      program main
+      program ex10f
       use slepceps
       use mymoduleex10f
       implicit none
@@ -206,7 +206,7 @@
       call EPSDestroy(eps,ierr);CHKERRA(ierr)
       call MatDestroy(A,ierr);CHKERRA(ierr)
       call SlepcFinalize(ierr)
-      end
+      end program ex10f
 
 ! -------------------------------------------------------------------
 !

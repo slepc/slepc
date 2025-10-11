@@ -17,7 +17,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcds.h>
-      program main
+      program test14f
       use slepcds
       implicit none
 
@@ -131,7 +131,7 @@
 
       end
 
-      end program main
+      end program test14f
 
 !/*TEST
 !

@@ -66,7 +66,7 @@
 
 !=================================================================================================
 
-   program main
+   program ex54f
       use slepcnep
       use shell_ctx_interfaces
       implicit none
@@ -149,7 +149,7 @@
       PetscCallA(MatDestroy(B,ierr))
       PetscCallA(SlepcFinalize(ierr))
 
-   end program main
+   end program ex54f
 
 ! --------------------------------------------------------------
 !

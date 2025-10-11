@@ -14,7 +14,7 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcrg.h>
-      program main
+      program test1f
       use slepcrg
       implicit none
 
@@ -180,7 +180,7 @@
 !     *** Clean up
       PetscCallA(RGDestroy(rg,ierr))
       PetscCallA(SlepcFinalize(ierr))
-      end
+      end program test1f
 
 !/*TEST
 !
