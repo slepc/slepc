@@ -174,7 +174,7 @@ static PetscErrorCode EPSArnoldiSetDelayed_Arnoldi(EPS eps,PetscBool delayed)
 
    Level: advanced
 
-.seealso: EPSArnoldiGetDelayed()
+.seealso: `EPSArnoldiGetDelayed()`
 @*/
 PetscErrorCode EPSArnoldiSetDelayed(EPS eps,PetscBool delayed)
 {
@@ -208,7 +208,7 @@ static PetscErrorCode EPSArnoldiGetDelayed_Arnoldi(EPS eps,PetscBool *delayed)
 
    Level: advanced
 
-.seealso: EPSArnoldiSetDelayed()
+.seealso: `EPSArnoldiSetDelayed()`
 @*/
 PetscErrorCode EPSArnoldiGetDelayed(EPS eps,PetscBool *delayed)
 {

@@ -43,7 +43,7 @@ PetscBool         SVDMonitorRegisterAllCalled = PETSC_FALSE;
 
    Level: beginner
 
-.seealso: SVDSetUp(), SVDSolve(), SVDDestroy(), SVD
+.seealso: `SVDSetUp()`, `SVDSolve()`, `SVDDestroy()`, `SVD`
 @*/
 PetscErrorCode SVDCreate(MPI_Comm comm,SVD *outsvd)
 {
@@ -129,7 +129,7 @@ PetscErrorCode SVDCreate(MPI_Comm comm,SVD *outsvd)
 
    Level: advanced
 
-.seealso: SVDDestroy()
+.seealso: `SVDDestroy()`
 @*/
 PetscErrorCode SVDReset(SVD svd)
 {
@@ -165,7 +165,7 @@ PetscErrorCode SVDReset(SVD svd)
 
    Level: beginner
 
-.seealso: SVDCreate(), SVDSetUp(), SVDSolve()
+.seealso: `SVDCreate()`, `SVDSetUp()`, `SVDSolve()`
 @*/
 PetscErrorCode SVDDestroy(SVD *svd)
 {
@@ -216,7 +216,7 @@ PetscErrorCode SVDDestroy(SVD *svd)
 
    Level: intermediate
 
-.seealso: SVDType
+.seealso: `SVDType`
 @*/
 PetscErrorCode SVDSetType(SVD svd,SVDType type)
 {
@@ -255,7 +255,7 @@ PetscErrorCode SVDSetType(SVD svd,SVDType type)
 
    Level: intermediate
 
-.seealso: SVDSetType()
+.seealso: `SVDSetType()`
 @*/
 PetscErrorCode SVDGetType(SVD svd,SVDType *type)
 {
@@ -290,7 +290,7 @@ $     -svd_type my_solver
 
    Level: advanced
 
-.seealso: SVDRegisterAll()
+.seealso: `SVDRegisterAll()`
 @*/
 PetscErrorCode SVDRegister(const char *name,PetscErrorCode (*function)(SVD))
 {
@@ -332,7 +332,7 @@ $      -svd_monitor_my_monitor
 
    Level: advanced
 
-.seealso: SVDMonitorSet(), SVDMonitorRegisterAll()
+.seealso: `SVDMonitorSet()`, `SVDMonitorRegisterAll()`
 @*/
 PetscErrorCode SVDMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,SVDMonitorRegisterFn *monitor,SVDMonitorRegisterCreateFn *create,SVDMonitorRegisterDestroyFn *destroy)
 {
@@ -363,7 +363,7 @@ PetscErrorCode SVDMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 
    Level: advanced
 
-.seealso: SVDGetBV()
+.seealso: `SVDGetBV()`
 @*/
 PetscErrorCode SVDSetBV(SVD svd,BV V,BV U)
 {
@@ -401,7 +401,7 @@ PetscErrorCode SVDSetBV(SVD svd,BV V,BV U)
 
    Level: advanced
 
-.seealso: SVDSetBV()
+.seealso: `SVDSetBV()`
 @*/
 PetscErrorCode SVDGetBV(SVD svd,BV *V,BV *U)
 {
@@ -441,7 +441,7 @@ PetscErrorCode SVDGetBV(SVD svd,BV *V,BV *U)
 
    Level: advanced
 
-.seealso: SVDGetDS()
+.seealso: `SVDGetDS()`
 @*/
 PetscErrorCode SVDSetDS(SVD svd,DS ds)
 {
@@ -469,7 +469,7 @@ PetscErrorCode SVDSetDS(SVD svd,DS ds)
 
    Level: advanced
 
-.seealso: SVDSetDS()
+.seealso: `SVDSetDS()`
 @*/
 PetscErrorCode SVDGetDS(SVD svd,DS *ds)
 {

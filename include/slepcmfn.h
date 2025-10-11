@@ -26,7 +26,7 @@ SLEPC_EXTERN PetscErrorCode MFNFinalizePackage(void);
 
     Level: beginner
 
-.seealso:  MFNCreate()
+.seealso:  `MFNCreate()`
 S*/
 typedef struct _p_MFN* MFN;
 
@@ -35,7 +35,7 @@ typedef struct _p_MFN* MFN;
 
     Level: beginner
 
-.seealso: MFNSetType(), MFN
+.seealso: `MFNSetType()`, `MFN`
 J*/
 typedef const char *MFNType;
 #define MFNKRYLOV   "krylov"
@@ -86,7 +86,7 @@ SLEPC_EXTERN PetscErrorCode MFNGetErrorIfNotConverged(MFN,PetscBool*);
 
   Level: beginner
 
-.seealso: MFNMonitorSet()
+.seealso: `MFNMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorFn(MFN mfn,PetscInt its,PetscReal errest,void *ctx);
 
@@ -104,7 +104,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorFn(MFN mfn,PetscInt its,Pe
   Note:
   This is an MFNMonitorFn specialized for a context of PetscViewerAndFormat.
 
-.seealso: MFNMonitorSet(), MFNMonitorRegister(), MFNMonitorFn, MFNMonitorRegisterCreateFn, MFNMonitorRegisterDestroyFn
+.seealso: `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterCreateFn`, `MFNMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterFn(MFN mfn,PetscInt its,PetscReal errest,PetscViewerAndFormat *ctx);
 
@@ -119,7 +119,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterFn(MFN mfn,PetscIn
 
   Level: beginner
 
-.seealso: MFNMonitorRegisterFn, MFNMonitorSet(), MFNMonitorRegister(), MFNMonitorFn, MFNMonitorRegisterDestroyFn
+.seealso: `MFNMonitorRegisterFn`, `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
@@ -131,7 +131,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterCreateFn(PetscView
 
   Level: beginner
 
-.seealso: MFNMonitorRegisterFn, MFNMonitorSet(), MFNMonitorRegister(), MFNMonitorFn, MFNMonitorRegisterCreateFn
+.seealso: `MFNMonitorRegisterFn`, `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterCreateFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
@@ -155,7 +155,7 @@ SLEPC_EXTERN PetscErrorCode MFNGetOptionsPrefix(MFN,const char*[]);
 
     Level: intermediate
 
-.seealso: MFNSolve(), MFNGetConvergedReason(), MFNSetTolerances()
+.seealso: `MFNSolve()`, `MFNGetConvergedReason()`, `MFNSetTolerances()`
 E*/
 typedef enum {/* converged */
               MFN_CONVERGED_TOL                =  1,

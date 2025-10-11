@@ -20,3 +20,4 @@ graft   docs/usrman
 graft   docs/apiref
 graft   docs/source
 prune   docs/source/_build
+exclude docs/source/*.inv

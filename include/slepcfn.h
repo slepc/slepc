@@ -27,7 +27,7 @@ SLEPC_EXTERN PetscErrorCode FNFinalizePackage(void);
 
    Level: beginner
 
-.seealso: FNCreate()
+.seealso: `FNCreate()`
 S*/
 typedef struct _p_FN* FN;
 
@@ -36,7 +36,7 @@ typedef struct _p_FN* FN;
 
    Level: beginner
 
-.seealso: FNSetType(), FN
+.seealso: `FNSetType()`, `FN`
 J*/
 typedef const char *FNType;
 #define FNCOMBINE  "combine"
@@ -55,7 +55,7 @@ SLEPC_EXTERN PetscClassId FN_CLASSID;
 
     Level: advanced
 
-.seealso: FNCombineSetChildren()
+.seealso: `FNCombineSetChildren()`
 E*/
 typedef enum { FN_COMBINE_ADD,
                FN_COMBINE_MULTIPLY,
@@ -67,7 +67,7 @@ typedef enum { FN_COMBINE_ADD,
 
     Level: advanced
 
-.seealso: FNSetParallel()
+.seealso: `FNSetParallel()`
 E*/
 typedef enum { FN_PARALLEL_REDUNDANT,
                FN_PARALLEL_SYNCHRONIZED } FNParallelType;

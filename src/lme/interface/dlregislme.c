@@ -22,7 +22,7 @@ const char *const*LMEConvergedReasons = LMEConvergedReasons_Shifted + 2;
 
   Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode LMEFinalizePackage(void)
 {
@@ -44,7 +44,7 @@ PetscErrorCode LMEFinalizePackage(void)
 
   Level: developer
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode LMEInitializePackage(void)
 {

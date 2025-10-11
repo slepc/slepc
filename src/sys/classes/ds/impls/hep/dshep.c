@@ -867,7 +867,7 @@ static PetscErrorCode DSReallocate_HEP(DS ds,PetscInt ld)
 .  2 - Divide and Conquer (_stedc)
 -  3 - Block Divide and Conquer (real scalars only)
 
-.seealso: DSCreate(), DSSetType(), DSType
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_HEP(DS ds)
 {

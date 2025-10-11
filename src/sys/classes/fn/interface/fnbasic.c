@@ -28,7 +28,7 @@ const char *FNParallelTypes[] = {"REDUNDANT","SYNCHRONIZED","FNParallelType","FN
 
    Level: developer
 
-.seealso: SlepcFinalize()
+.seealso: `SlepcFinalize()`
 @*/
 PetscErrorCode FNFinalizePackage(void)
 {
@@ -46,7 +46,7 @@ PetscErrorCode FNFinalizePackage(void)
 
   Level: developer
 
-.seealso: SlepcInitialize()
+.seealso: `SlepcInitialize()`
 @*/
 PetscErrorCode FNInitializePackage(void)
 {
@@ -90,7 +90,7 @@ PetscErrorCode FNInitializePackage(void)
 
    Level: beginner
 
-.seealso: FNDestroy(), FN
+.seealso: `FNDestroy()`, `FN`
 @*/
 PetscErrorCode FNCreate(MPI_Comm comm,FN *newfn)
 {
@@ -130,7 +130,7 @@ PetscErrorCode FNCreate(MPI_Comm comm,FN *newfn)
 
    Level: advanced
 
-.seealso: FNAppendOptionsPrefix()
+.seealso: `FNAppendOptionsPrefix()`
 @*/
 PetscErrorCode FNSetOptionsPrefix(FN fn,const char *prefix)
 {
@@ -156,7 +156,7 @@ PetscErrorCode FNSetOptionsPrefix(FN fn,const char *prefix)
 
    Level: advanced
 
-.seealso: FNSetOptionsPrefix()
+.seealso: `FNSetOptionsPrefix()`
 @*/
 PetscErrorCode FNAppendOptionsPrefix(FN fn,const char *prefix)
 {
@@ -184,7 +184,7 @@ PetscErrorCode FNAppendOptionsPrefix(FN fn,const char *prefix)
 
    Level: advanced
 
-.seealso: FNSetOptionsPrefix(), FNAppendOptionsPrefix()
+.seealso: `FNSetOptionsPrefix()`, `FNAppendOptionsPrefix()`
 @*/
 PetscErrorCode FNGetOptionsPrefix(FN fn,const char *prefix[])
 {
@@ -210,7 +210,7 @@ PetscErrorCode FNGetOptionsPrefix(FN fn,const char *prefix[])
 
    Level: intermediate
 
-.seealso: FNGetType()
+.seealso: `FNGetType()`
 @*/
 PetscErrorCode FNSetType(FN fn,FNType type)
 {
@@ -248,7 +248,7 @@ PetscErrorCode FNSetType(FN fn,FNType type)
 
    Level: intermediate
 
-.seealso: FNSetType()
+.seealso: `FNSetType()`
 @*/
 PetscErrorCode FNGetType(FN fn,FNType *type)
 {
@@ -281,7 +281,7 @@ PetscErrorCode FNGetType(FN fn,FNType *type)
 
    Level: intermediate
 
-.seealso: FNGetScale(), FNEvaluateFunction()
+.seealso: `FNGetScale()`, `FNEvaluateFunction()`
 @*/
 PetscErrorCode FNSetScale(FN fn,PetscScalar alpha,PetscScalar beta)
 {
@@ -309,7 +309,7 @@ PetscErrorCode FNSetScale(FN fn,PetscScalar alpha,PetscScalar beta)
 
    Level: intermediate
 
-.seealso: FNSetScale()
+.seealso: `FNSetScale()`
 @*/
 PetscErrorCode FNGetScale(FN fn,PetscScalar *alpha,PetscScalar *beta)
 {
@@ -342,7 +342,7 @@ PetscErrorCode FNGetScale(FN fn,PetscScalar *alpha,PetscScalar *beta)
 
    Level: intermediate
 
-.seealso: FNGetMethod(), FNEvaluateFunctionMat()
+.seealso: `FNGetMethod()`, `FNEvaluateFunctionMat()`
 @*/
 PetscErrorCode FNSetMethod(FN fn,PetscInt meth)
 {
@@ -368,7 +368,7 @@ PetscErrorCode FNSetMethod(FN fn,PetscInt meth)
 
    Level: intermediate
 
-.seealso: FNSetMethod()
+.seealso: `FNSetMethod()`
 @*/
 PetscErrorCode FNGetMethod(FN fn,PetscInt *meth)
 {
@@ -407,7 +407,7 @@ PetscErrorCode FNGetMethod(FN fn,PetscInt *meth)
 
    Level: advanced
 
-.seealso: FNEvaluateFunctionMat() or FNEvaluateFunctionMatVec(), FNGetParallel()
+.seealso: `FNEvaluateFunctionMat()` or `FNEvaluateFunctionMatVec()`, `FNGetParallel()`
 @*/
 PetscErrorCode FNSetParallel(FN fn,FNParallelType pmode)
 {
@@ -431,7 +431,7 @@ PetscErrorCode FNSetParallel(FN fn,FNParallelType pmode)
 
    Level: advanced
 
-.seealso: FNSetParallel()
+.seealso: `FNSetParallel()`
 @*/
 PetscErrorCode FNGetParallel(FN fn,FNParallelType *pmode)
 {
@@ -460,7 +460,7 @@ PetscErrorCode FNGetParallel(FN fn,FNParallelType *pmode)
 
    Level: intermediate
 
-.seealso: FNEvaluateDerivative(), FNEvaluateFunctionMat(), FNSetScale()
+.seealso: `FNEvaluateDerivative()`, `FNEvaluateFunctionMat()`, `FNSetScale()`
 @*/
 PetscErrorCode FNEvaluateFunction(FN fn,PetscScalar x,PetscScalar *y)
 {
@@ -496,7 +496,7 @@ PetscErrorCode FNEvaluateFunction(FN fn,PetscScalar x,PetscScalar *y)
 
    Level: intermediate
 
-.seealso: FNEvaluateFunction()
+.seealso: `FNEvaluateFunction()`
 @*/
 PetscErrorCode FNEvaluateDerivative(FN fn,PetscScalar x,PetscScalar *y)
 {
@@ -681,7 +681,7 @@ PetscErrorCode FNEvaluateFunctionMat_Private(FN fn,Mat A,Mat B,PetscBool sync)
 
    Level: advanced
 
-.seealso: FNEvaluateFunction(), FNEvaluateFunctionMatVec(), FNSetMethod()
+.seealso: `FNEvaluateFunction()`, `FNEvaluateFunctionMatVec()`, `FNSetMethod()`
 @*/
 PetscErrorCode FNEvaluateFunctionMat(FN fn,Mat A,Mat B)
 {
@@ -823,7 +823,7 @@ PetscErrorCode FNEvaluateFunctionMatVec_Private(FN fn,Mat A,Vec v,PetscBool sync
 
    Level: advanced
 
-.seealso: FNEvaluateFunction(), FNEvaluateFunctionMat(), FNSetMethod()
+.seealso: `FNEvaluateFunction()`, `FNEvaluateFunctionMat()`, `FNSetMethod()`
 @*/
 PetscErrorCode FNEvaluateFunctionMatVec(FN fn,Mat A,Vec v)
 {
@@ -863,7 +863,7 @@ PetscErrorCode FNEvaluateFunctionMatVec(FN fn,Mat A,Vec v)
 
    Level: beginner
 
-.seealso: FNSetOptionsPrefix()
+.seealso: `FNSetOptionsPrefix()`
 @*/
 PetscErrorCode FNSetFromOptions(FN fn)
 {
@@ -923,7 +923,7 @@ PetscErrorCode FNSetFromOptions(FN fn)
 
    Level: beginner
 
-.seealso: FNCreate()
+.seealso: `FNCreate()`
 @*/
 PetscErrorCode FNView(FN fn,PetscViewer viewer)
 {
@@ -959,7 +959,7 @@ PetscErrorCode FNView(FN fn,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: FNView(), FNCreate()
+.seealso: `FNView()`, `FNCreate()`
 @*/
 PetscErrorCode FNViewFromOptions(FN fn,PetscObject obj,const char name[])
 {
@@ -988,7 +988,7 @@ PetscErrorCode FNViewFromOptions(FN fn,PetscObject obj,const char name[])
 
    Level: developer
 
-.seealso: FNCreate()
+.seealso: `FNCreate()`
 @*/
 PetscErrorCode FNDuplicate(FN fn,MPI_Comm comm,FN *newfn)
 {
@@ -1024,7 +1024,7 @@ PetscErrorCode FNDuplicate(FN fn,MPI_Comm comm,FN *newfn)
 
    Level: beginner
 
-.seealso: FNCreate()
+.seealso: `FNCreate()`
 @*/
 PetscErrorCode FNDestroy(FN *fn)
 {
@@ -1054,7 +1054,7 @@ PetscErrorCode FNDestroy(FN *fn)
 
    Level: advanced
 
-.seealso: FNRegisterAll()
+.seealso: `FNRegisterAll()`
 @*/
 PetscErrorCode FNRegister(const char *name,PetscErrorCode (*function)(FN))
 {

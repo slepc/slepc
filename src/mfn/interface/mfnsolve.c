@@ -75,8 +75,8 @@ static PetscErrorCode MFNSolve_Private(MFN mfn,Vec b,Vec x)
 
    Level: beginner
 
-.seealso: MFNCreate(), MFNSetUp(), MFNDestroy(), MFNSetTolerances(),
-          MFNSetOperator(), MFNSetFN()
+.seealso: `MFNCreate()`, `MFNSetUp()`, `MFNDestroy()`, `MFNSetTolerances()`,
+          `MFNSetOperator()`, `MFNSetFN()`
 @*/
 PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
 {
@@ -110,7 +110,7 @@ PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
 
    Level: beginner
 
-.seealso: MFNSolve()
+.seealso: `MFNSolve()`
 @*/
 PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
 {
@@ -148,7 +148,7 @@ PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
 
    Level: intermediate
 
-.seealso: MFNGetConvergedReason(), MFNSetTolerances()
+.seealso: `MFNGetConvergedReason()`, `MFNSetTolerances()`
 @*/
 PetscErrorCode MFNGetIterationNumber(MFN mfn,PetscInt *its)
 {
@@ -189,7 +189,7 @@ PetscErrorCode MFNGetIterationNumber(MFN mfn,PetscInt *its)
 
    Level: intermediate
 
-.seealso: MFNSetTolerances(), MFNSolve(), MFNConvergedReason, MFNSetErrorIfNotConverged()
+.seealso: `MFNSetTolerances()`, `MFNSolve()`, `MFNConvergedReason`, `MFNSetErrorIfNotConverged()`
 @*/
 PetscErrorCode MFNGetConvergedReason(MFN mfn,MFNConvergedReason *reason)
 {

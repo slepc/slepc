@@ -382,7 +382,7 @@ static PetscErrorCode SVDPRIMMESetBlockSize_PRIMME(SVD svd,PetscInt bs)
 
    Level: advanced
 
-.seealso: SVDPRIMMEGetBlockSize()
+.seealso: `SVDPRIMMEGetBlockSize()`
 @*/
 PetscErrorCode SVDPRIMMESetBlockSize(SVD svd,PetscInt bs)
 {
@@ -415,7 +415,7 @@ static PetscErrorCode SVDPRIMMEGetBlockSize_PRIMME(SVD svd,PetscInt *bs)
 
    Level: advanced
 
-.seealso: SVDPRIMMESetBlockSize()
+.seealso: `SVDPRIMMESetBlockSize()`
 @*/
 PetscErrorCode SVDPRIMMEGetBlockSize(SVD svd,PetscInt *bs)
 {
@@ -452,7 +452,7 @@ static PetscErrorCode SVDPRIMMESetMethod_PRIMME(SVD svd,SVDPRIMMEMethod method)
 
    Level: advanced
 
-.seealso: SVDPRIMMEGetMethod(), SVDPRIMMEMethod
+.seealso: `SVDPRIMMEGetMethod()`, `SVDPRIMMEMethod`
 @*/
 PetscErrorCode SVDPRIMMESetMethod(SVD svd,SVDPRIMMEMethod method)
 {
@@ -485,7 +485,7 @@ static PetscErrorCode SVDPRIMMEGetMethod_PRIMME(SVD svd,SVDPRIMMEMethod *method)
 
    Level: advanced
 
-.seealso: SVDPRIMMESetMethod(), SVDPRIMMEMethod
+.seealso: `SVDPRIMMESetMethod()`, `SVDPRIMMEMethod`
 @*/
 PetscErrorCode SVDPRIMMEGetMethod(SVD svd,SVDPRIMMEMethod *method)
 {

@@ -44,7 +44,7 @@
 
    Level: intermediate
 
-.seealso: BVMultVec(), BVMultColumn(), BVMultInPlace(), BVSetActiveColumns()
+.seealso: `BVMultVec()`, `BVMultColumn()`, `BVMultInPlace()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVMult(BV Y,PetscScalar alpha,PetscScalar beta,BV X,Mat Q)
 {
@@ -105,7 +105,7 @@ PetscErrorCode BVMult(BV Y,PetscScalar alpha,PetscScalar beta,BV X,Mat Q)
 
    Level: intermediate
 
-.seealso: BVMult(), BVMultColumn(), BVMultInPlace(), BVSetActiveColumns()
+.seealso: `BVMult()`, `BVMultColumn()`, `BVMultInPlace()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVMultVec(BV X,PetscScalar alpha,PetscScalar beta,Vec y,PetscScalar q[])
 {
@@ -160,7 +160,7 @@ PetscErrorCode BVMultVec(BV X,PetscScalar alpha,PetscScalar beta,Vec y,PetscScal
 
    Level: advanced
 
-.seealso: BVMult(), BVMultVec(), BVMultInPlace(), BVSetActiveColumns()
+.seealso: `BVMult()`, `BVMultVec()`, `BVMultInPlace()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVMultColumn(BV X,PetscScalar alpha,PetscScalar beta,PetscInt j,PetscScalar *q)
 {
@@ -215,7 +215,7 @@ PetscErrorCode BVMultColumn(BV X,PetscScalar alpha,PetscScalar beta,PetscInt j,P
 
    Level: intermediate
 
-.seealso: BVMult(), BVMultVec(), BVMultInPlaceHermitianTranspose(), BVSetActiveColumns()
+.seealso: `BVMult()`, `BVMultVec()`, `BVMultInPlaceHermitianTranspose()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVMultInPlace(BV V,Mat Q,PetscInt s,PetscInt e)
 {
@@ -263,7 +263,7 @@ PetscErrorCode BVMultInPlace(BV V,Mat Q,PetscInt s,PetscInt e)
 
    Level: intermediate
 
-.seealso: BVMultInPlace()
+.seealso: `BVMultInPlace()`
 @*/
 PetscErrorCode BVMultInPlaceHermitianTranspose(BV V,Mat Q,PetscInt s,PetscInt e)
 {
@@ -306,7 +306,7 @@ PetscErrorCode BVMultInPlaceHermitianTranspose(BV V,Mat Q,PetscInt s,PetscInt e)
 
    Level: intermediate
 
-.seealso: BVScaleColumn(), BVSetActiveColumns()
+.seealso: `BVScaleColumn()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVScale(BV bv,PetscScalar alpha)
 {
@@ -336,7 +336,7 @@ PetscErrorCode BVScale(BV bv,PetscScalar alpha)
 
    Level: intermediate
 
-.seealso: BVScale(), BVSetActiveColumns()
+.seealso: `BVScale()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVScaleColumn(BV bv,PetscInt j,PetscScalar alpha)
 {
@@ -447,7 +447,7 @@ static inline PetscErrorCode BVSetRandomSignColumn_Private(BV bv,PetscInt k)
 
    Level: advanced
 
-.seealso: BVSetRandomContext(), BVSetRandomColumn(), BVSetRandomNormal(), BVSetRandomSign(), BVSetRandomCond(), BVSetActiveColumns()
+.seealso: `BVSetRandomContext()`, `BVSetRandomColumn()`, `BVSetRandomNormal()`, `BVSetRandomSign()`, `BVSetRandomCond()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandom(BV bv)
 {
@@ -477,7 +477,7 @@ PetscErrorCode BVSetRandom(BV bv)
 
    Level: advanced
 
-.seealso: BVSetRandomContext(), BVSetRandom(), BVSetRandomNormal(), BVSetRandomCond()
+.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomNormal()`, `BVSetRandomCond()`
 @*/
 PetscErrorCode BVSetRandomColumn(BV bv,PetscInt j)
 {
@@ -518,7 +518,7 @@ PetscErrorCode BVSetRandomColumn(BV bv,PetscInt j)
 
    Level: advanced
 
-.seealso: BVSetRandomContext(), BVSetRandom(), BVSetRandomColumn(), BVSetRandomCond(), BVSetActiveColumns()
+.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetRandomCond()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandomNormal(BV bv)
 {
@@ -568,7 +568,7 @@ PetscErrorCode BVSetRandomNormal(BV bv)
 
    Level: advanced
 
-.seealso: BVSetRandomContext(), BVSetRandom(), BVSetRandomColumn(), BVSetActiveColumns()
+.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandomSign(BV bv)
 {
@@ -605,7 +605,7 @@ PetscErrorCode BVSetRandomSign(BV bv)
 
    Level: advanced
 
-.seealso: BVSetRandomContext(), BVSetRandom(), BVSetRandomColumn(), BVSetRandomNormal(), BVSetActiveColumns()
+.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetRandomNormal()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandomCond(BV bv,PetscReal condn)
 {
@@ -687,7 +687,7 @@ PetscErrorCode BVSetRandomCond(BV bv,PetscReal condn)
 
    Level: beginner
 
-.seealso: BVCopy(), BVSetActiveColumns(), BVMatMultColumn(), BVMatMultTranspose(), BVMatMultHermitianTranspose(), BVSetMatMultMethod()
+.seealso: `BVCopy()`, `BVSetActiveColumns()`, `BVMatMultColumn()`, `BVMatMultTranspose()`, `BVMatMultHermitianTranspose()`, `BVSetMatMultMethod()`
 @*/
 PetscErrorCode BVMatMult(BV V,Mat A,BV Y)
 {
@@ -745,7 +745,7 @@ PetscErrorCode BVMatMult(BV V,Mat A,BV Y)
 
    Level: beginner
 
-.seealso: BVMatMult(), BVMatMultHermitianTranspose()
+.seealso: `BVMatMult()`, `BVMatMultHermitianTranspose()`
 @*/
 PetscErrorCode BVMatMultTranspose(BV V,Mat A,BV Y)
 {
@@ -802,7 +802,7 @@ PetscErrorCode BVMatMultTranspose(BV V,Mat A,BV Y)
 
    Level: beginner
 
-.seealso: BVMatMult(), BVMatMultTranspose()
+.seealso: `BVMatMult()`, `BVMatMultTranspose()`
 @*/
 PetscErrorCode BVMatMultHermitianTranspose(BV V,Mat A,BV Y)
 {
@@ -857,7 +857,7 @@ PetscErrorCode BVMatMultHermitianTranspose(BV V,Mat A,BV Y)
 
    Level: beginner
 
-.seealso: BVMatMult(), BVMatMultTransposeColumn(), BVMatMultHermitianTransposeColumn()
+.seealso: `BVMatMult()`, `BVMatMultTransposeColumn()`, `BVMatMultHermitianTransposeColumn()`
 @*/
 PetscErrorCode BVMatMultColumn(BV V,Mat A,PetscInt j)
 {
@@ -897,7 +897,7 @@ PetscErrorCode BVMatMultColumn(BV V,Mat A,PetscInt j)
 
    Level: beginner
 
-.seealso: BVMatMult(), BVMatMultColumn(), BVMatMultHermitianTransposeColumn()
+.seealso: `BVMatMult()`, `BVMatMultColumn()`, `BVMatMultHermitianTransposeColumn()`
 @*/
 PetscErrorCode BVMatMultTransposeColumn(BV V,Mat A,PetscInt j)
 {
@@ -937,7 +937,7 @@ PetscErrorCode BVMatMultTransposeColumn(BV V,Mat A,PetscInt j)
 
    Level: beginner
 
-.seealso: BVMatMult(), BVMatMultColumn(), BVMatMultTransposeColumn()
+.seealso: `BVMatMult()`, `BVMatMultColumn()`, `BVMatMultTransposeColumn()`
 @*/
 PetscErrorCode BVMatMultHermitianTransposeColumn(BV V,Mat A,PetscInt j)
 {

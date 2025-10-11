@@ -83,7 +83,7 @@ PetscErrorCode SVDConvergedMaxIt(SVD svd,PetscReal sigma,PetscReal res,PetscReal
 
    Level: advanced
 
-.seealso: SVDSetStoppingTest(), SVDStoppingThreshold(), SVDConvergedReason, SVDGetConvergedReason()
+.seealso: `SVDSetStoppingTest()`, `SVDStoppingThreshold()`, `SVDConvergedReason`, `SVDGetConvergedReason()`
 @*/
 PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx)
 {
@@ -135,7 +135,7 @@ PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nc
 
    Level: advanced
 
-.seealso: SVDSetStoppingTest(), SVDStoppingBasic(), SVDSetThreshold(), SVDSetDimensions(), SVDConvergedReason, SVDGetConvergedReason()
+.seealso: `SVDSetStoppingTest()`, `SVDStoppingBasic()`, `SVDSetThreshold()`, `SVDSetDimensions()`, `SVDConvergedReason`, `SVDGetConvergedReason()`
 @*/
 PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx)
 {
@@ -184,7 +184,7 @@ PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscIn
 
    Level: developer
 
-.seealso: SVDSetUp()
+.seealso: `SVDSetUp()`
 @*/
 PetscErrorCode SVDSetWorkVecs(SVD svd,PetscInt nleft,PetscInt nright)
 {

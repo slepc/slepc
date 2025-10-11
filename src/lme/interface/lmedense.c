@@ -314,7 +314,7 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
 
    Level: developer
 
-.seealso: LMEDenseLyapunov(), LMESolve()
+.seealso: `LMEDenseLyapunov()`, `LMESolve()`
 @*/
 PetscErrorCode LMEDenseHessLyapunovChol(LME lme,PetscInt m,PetscScalar *H,PetscInt ldh,PetscInt k,PetscScalar *B,PetscInt ldb,PetscScalar *U,PetscInt ldu,PetscReal *res)
 {
@@ -482,7 +482,7 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
 
    Level: developer
 
-.seealso: LMEDenseHessLyapunovChol(), LMESolve()
+.seealso: `LMEDenseHessLyapunovChol()`, `LMESolve()`
 @*/
 PetscErrorCode LMEDenseLyapunov(LME lme,PetscInt m,PetscScalar *A,PetscInt lda,PetscScalar *B,PetscInt ldb,PetscScalar *X,PetscInt ldx)
 {

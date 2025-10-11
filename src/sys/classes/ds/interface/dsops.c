@@ -27,7 +27,7 @@
 
    Level: advanced
 
-.seealso: DSAllocate(), DSSetDimensions()
+.seealso: `DSAllocate()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSGetLeadingDimension(DS ds,PetscInt *ld)
 {
@@ -58,7 +58,7 @@ PetscErrorCode DSGetLeadingDimension(DS ds,PetscInt *ld)
 
    Level: advanced
 
-.seealso: DSGetState()
+.seealso: `DSGetState()`
 @*/
 PetscErrorCode DSSetState(DS ds,DSStateType state)
 {
@@ -92,7 +92,7 @@ PetscErrorCode DSSetState(DS ds,DSStateType state)
 
    Level: advanced
 
-.seealso: DSSetState()
+.seealso: `DSSetState()`
 @*/
 PetscErrorCode DSGetState(DS ds,DSStateType *state)
 {
@@ -125,7 +125,7 @@ PetscErrorCode DSGetState(DS ds,DSStateType *state)
 
    Level: intermediate
 
-.seealso: DSGetDimensions(), DSAllocate(), DSSVDSetDimensions()
+.seealso: `DSGetDimensions()`, `DSAllocate()`, `DSSVDSetDimensions()`
 @*/
 PetscErrorCode DSSetDimensions(DS ds,PetscInt n,PetscInt l,PetscInt k)
 {
@@ -187,7 +187,7 @@ PetscErrorCode DSSetDimensions(DS ds,PetscInt n,PetscInt l,PetscInt k)
 
    Level: intermediate
 
-.seealso: DSSetDimensions(), DSTruncate(), DSSVDGetDimensions()
+.seealso: `DSSetDimensions()`, `DSTruncate()`, `DSSVDGetDimensions()`
 @*/
 PetscErrorCode DSGetDimensions(DS ds,PetscInt *n,PetscInt *l,PetscInt *k,PetscInt *t)
 {
@@ -227,7 +227,7 @@ PetscErrorCode DSGetDimensions(DS ds,PetscInt *n,PetscInt *l,PetscInt *k,PetscIn
 
    Level: advanced
 
-.seealso: DSSetDimensions(), DSSetExtraRow(), DSStateType
+.seealso: `DSSetDimensions()`, `DSSetExtraRow()`, `DSStateType`
 @*/
 PetscErrorCode DSTruncate(DS ds,PetscInt n,PetscBool trim)
 {
@@ -271,7 +271,7 @@ PetscErrorCode DSTruncate(DS ds,PetscInt n,PetscBool trim)
 
    Level: developer
 
-.seealso: DSSetDimensions(), DSGetMat()
+.seealso: `DSSetDimensions()`, `DSGetMat()`
 @*/
 PetscErrorCode DSMatGetSize(DS ds,DSMatType t,PetscInt *m,PetscInt *n)
 {
@@ -312,7 +312,7 @@ PetscErrorCode DSMatGetSize(DS ds,DSMatType t,PetscInt *m,PetscInt *n)
 
    Level: developer
 
-.seealso: DSGetMat()
+.seealso: `DSGetMat()`
 @*/
 PetscErrorCode DSMatIsHermitian(DS ds,DSMatType t,PetscBool *flg)
 {
@@ -368,7 +368,7 @@ PetscErrorCode DSGetTruncateSize_Default(DS ds,PetscInt l,PetscInt n,PetscInt *k
 
    Level: advanced
 
-.seealso: DSTruncate(), DSSetDimensions()
+.seealso: `DSTruncate()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSGetTruncateSize(DS ds,PetscInt l,PetscInt n,PetscInt *k)
 {
@@ -412,7 +412,7 @@ PetscErrorCode DSGetTruncateSize(DS ds,PetscInt l,PetscInt n,PetscInt *k)
 
    Level: advanced
 
-.seealso: DSRestoreMat(), DSSetDimensions(), DSGetArray(), DSGetArrayReal(), DSTruncate()
+.seealso: `DSRestoreMat()`, `DSSetDimensions()`, `DSGetArray()`, `DSGetArrayReal()`, `DSTruncate()`
 @*/
 PetscErrorCode DSGetMat(DS ds,DSMatType m,Mat *A)
 {
@@ -451,7 +451,7 @@ PetscErrorCode DSGetMat(DS ds,DSMatType m,Mat *A)
 
    Level: advanced
 
-.seealso: DSGetMat(), DSRestoreArray(), DSRestoreArrayReal()
+.seealso: `DSGetMat()`, `DSRestoreArray()`, `DSRestoreArrayReal()`
 @*/
 PetscErrorCode DSRestoreMat(DS ds,DSMatType m,Mat *A)
 {
@@ -489,7 +489,7 @@ PetscErrorCode DSRestoreMat(DS ds,DSMatType m,Mat *A)
 
    Level: advanced
 
-.seealso: DSRestoreMatAndColumn(), DSGetMat()
+.seealso: `DSRestoreMatAndColumn()`, `DSGetMat()`
 @*/
 PetscErrorCode DSGetMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *v)
 {
@@ -537,7 +537,7 @@ PetscErrorCode DSGetMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *v)
 
    Level: advanced
 
-.seealso: DSGetMatAndColumn(), DSRestoreMat()
+.seealso: `DSGetMatAndColumn()`, `DSRestoreMat()`
 @*/
 PetscErrorCode DSRestoreMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *v)
 {
@@ -586,7 +586,7 @@ PetscErrorCode DSRestoreMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *
 
    Level: advanced
 
-.seealso: DSRestoreArray(), DSGetArrayReal()
+.seealso: `DSRestoreArray()`, `DSGetArrayReal()`
 @*/
 PetscErrorCode DSGetArray(DS ds,DSMatType m,PetscScalar *a[])
 {
@@ -611,7 +611,7 @@ PetscErrorCode DSGetArray(DS ds,DSMatType m,PetscScalar *a[])
 
    Level: advanced
 
-.seealso: DSGetArray(), DSGetArrayReal()
+.seealso: `DSGetArray()`, `DSGetArrayReal()`
 @*/
 PetscErrorCode DSRestoreArray(DS ds,DSMatType m,PetscScalar *a[])
 {
@@ -645,7 +645,7 @@ PetscErrorCode DSRestoreArray(DS ds,DSMatType m,PetscScalar *a[])
 
    Level: advanced
 
-.seealso: DSRestoreArrayReal(), DSGetArray()
+.seealso: `DSRestoreArrayReal()`, `DSGetArray()`
 @*/
 PetscErrorCode DSGetArrayReal(DS ds,DSMatType m,PetscReal *a[])
 {
@@ -679,7 +679,7 @@ PetscErrorCode DSGetArrayReal(DS ds,DSMatType m,PetscReal *a[])
 
    Level: advanced
 
-.seealso: DSGetArrayReal(), DSGetArray()
+.seealso: `DSGetArrayReal()`, `DSGetArray()`
 @*/
 PetscErrorCode DSRestoreArrayReal(DS ds,DSMatType m,PetscReal *a[])
 {
@@ -718,7 +718,7 @@ PetscErrorCode DSRestoreArrayReal(DS ds,DSMatType m,PetscReal *a[])
 
    Level: intermediate
 
-.seealso: DSSort(), DSStateType
+.seealso: `DSSort()`, `DSStateType`
 @*/
 PetscErrorCode DSSolve(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
@@ -772,7 +772,7 @@ PetscErrorCode DSSolve(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 
    Level: intermediate
 
-.seealso: DSSolve(), DSSetSlepcSC(), DSSortWithPermutation()
+.seealso: `DSSolve()`, `DSSetSlepcSC()`, `DSSortWithPermutation()`
 @*/
 PetscErrorCode DSSort(DS ds,PetscScalar eigr[],PetscScalar eigi[],PetscScalar rr[],PetscScalar ri[],PetscInt *k)
 {
@@ -820,7 +820,7 @@ PetscErrorCode DSSort(DS ds,PetscScalar eigr[],PetscScalar eigi[],PetscScalar rr
 
    Level: advanced
 
-.seealso: DSSolve(), DSSort()
+.seealso: `DSSolve()`, `DSSort()`
 @*/
 PetscErrorCode DSSortWithPermutation(DS ds,PetscInt perm[],PetscScalar eigr[],PetscScalar eigi[])
 {
@@ -870,7 +870,7 @@ PetscErrorCode DSSortWithPermutation(DS ds,PetscInt perm[],PetscScalar eigr[],Pe
 
    Level: developer
 
-.seealso: DSSetParallel(), DSSolve(), DSSort()
+.seealso: `DSSetParallel()`, `DSSolve()`, `DSSort()`
 @*/
 PetscErrorCode DSSynchronize(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
@@ -926,7 +926,7 @@ PetscErrorCode DSSynchronize(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 
    Level: intermediate
 
-.seealso: DSSolve()
+.seealso: `DSSolve()`
 @*/
 PetscErrorCode DSVectors(DS ds,DSMatType mat,PetscInt *j,PetscReal *rnorm)
 {
@@ -959,7 +959,7 @@ PetscErrorCode DSVectors(DS ds,DSMatType mat,PetscInt *j,PetscReal *rnorm)
 
    Level: advanced
 
-.seealso: DSSolve(), DSSetExtraRow()
+.seealso: `DSSolve()`, `DSSetExtraRow()`
 @*/
 PetscErrorCode DSUpdateExtraRow(DS ds)
 {
@@ -997,7 +997,7 @@ PetscErrorCode DSUpdateExtraRow(DS ds)
 
    Level: advanced
 
-.seealso: DSSolve(), DSSetExtraRow()
+.seealso: `DSSolve()`, `DSSetExtraRow()`
 @*/
 PetscErrorCode DSCond(DS ds,PetscReal *cond)
 {
@@ -1045,7 +1045,7 @@ PetscErrorCode DSCond(DS ds,PetscReal *cond)
 
    Level: developer
 
-.seealso: DSTranslateRKS()
+.seealso: `DSTranslateRKS()`
 @*/
 PetscErrorCode DSTranslateHarmonic(DS ds,PetscScalar tau,PetscReal beta,PetscBool recover,PetscScalar *g,PetscReal *gamma)
 {
@@ -1089,7 +1089,7 @@ PetscErrorCode DSTranslateHarmonic(DS ds,PetscScalar tau,PetscReal beta,PetscBoo
 
    Level: developer
 
-.seealso: DSTranslateHarmonic()
+.seealso: `DSTranslateHarmonic()`
 @*/
 PetscErrorCode DSTranslateRKS(DS ds,PetscScalar alpha)
 {

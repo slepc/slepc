@@ -25,7 +25,7 @@
 
    Level: developer
 
-.seealso: BVNormalize()
+.seealso: `BVNormalize()`
 @*/
 PetscErrorCode VecNormalizeComplex(Vec xr,Vec xi,PetscBool iscomplex,PetscReal *norm)
 {
@@ -137,7 +137,7 @@ static PetscErrorCode VecCheckOrthogonality_Private(Vec V[],PetscInt nv,Vec W[],
 
    Level: developer
 
-.seealso: VecCheckOrthonormality()
+.seealso: `VecCheckOrthonormality()`
 @*/
 PetscErrorCode VecCheckOrthogonality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Mat B,PetscViewer viewer,PetscReal *lev)
 {
@@ -179,7 +179,7 @@ PetscErrorCode VecCheckOrthogonality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Mat
 
    Level: developer
 
-.seealso: VecCheckOrthogonality()
+.seealso: `VecCheckOrthogonality()`
 @*/
 PetscErrorCode VecCheckOrthonormality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Mat B,PetscViewer viewer,PetscReal *lev)
 {
@@ -216,7 +216,7 @@ PetscErrorCode VecCheckOrthonormality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Ma
 
    Level: developer
 
-.seealso: MatCreateVecsEmpty()
+.seealso: `MatCreateVecsEmpty()`
 @*/
 PetscErrorCode VecDuplicateEmpty(Vec v,Vec *newv)
 {
@@ -271,7 +271,7 @@ PetscErrorCode VecDuplicateEmpty(Vec v,Vec *newv)
 
    Level: developer
 
-.seealso: VecSetRandom()
+.seealso: `VecSetRandom()`
 @*/
 PetscErrorCode VecSetRandomNormal(Vec v,PetscRandom rctx,Vec w1,Vec w2)
 {

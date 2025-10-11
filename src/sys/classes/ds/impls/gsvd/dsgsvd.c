@@ -700,7 +700,7 @@ static PetscErrorCode DSGSVDSetDimensions_GSVD(DS ds,PetscInt m,PetscInt p)
 
    Level: intermediate
 
-.seealso: DSGSVDGetDimensions(), DSSetDimensions()
+.seealso: `DSGSVDGetDimensions()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSGSVDSetDimensions(DS ds,PetscInt m,PetscInt p)
 {
@@ -736,7 +736,7 @@ static PetscErrorCode DSGSVDGetDimensions_GSVD(DS ds,PetscInt *m,PetscInt *p)
 
    Level: intermediate
 
-.seealso: DSGSVDSetDimensions()
+.seealso: `DSGSVDSetDimensions()`
 @*/
 PetscErrorCode DSGSVDGetDimensions(DS ds,PetscInt *m,PetscInt *p)
 {
@@ -822,7 +822,7 @@ static PetscErrorCode DSReallocate_GSVD(DS ds,PetscInt ld)
    Implemented methods:
 .  0 - Lapack (_ggsvd3 if available, or _ggsvd)
 
-.seealso: DSCreate(), DSSetType(), DSType, DSGSVDSetDimensions()
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`, `DSGSVDSetDimensions()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_GSVD(DS ds)
 {

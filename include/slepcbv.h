@@ -26,7 +26,7 @@ SLEPC_EXTERN PetscErrorCode BVFinalizePackage(void);
 
     Level: beginner
 
-.seealso:  BVCreate()
+.seealso:  `BVCreate()`
 S*/
 typedef struct _p_BV* BV;
 
@@ -36,7 +36,7 @@ typedef struct _p_BV* BV;
 
     Level: beginner
 
-.seealso: BVSetType(), BV
+.seealso: `BVSetType()`, `BV`
 J*/
 typedef const char *BVType;
 #define BVMAT        "mat"
@@ -54,7 +54,7 @@ SLEPC_EXTERN PetscClassId BV_CLASSID;
 
     Level: advanced
 
-.seealso: BVSetOrthogonalization(), BVGetOrthogonalization(), BVOrthogonalizeColumn(), BVOrthogRefineType
+.seealso: `BVSetOrthogonalization()`, `BVGetOrthogonalization()`, `BVOrthogonalizeColumn()`, `BVOrthogRefineType`
 E*/
 typedef enum { BV_ORTHOG_CGS,
                BV_ORTHOG_MGS } BVOrthogType;
@@ -66,7 +66,7 @@ SLEPC_EXTERN const char *BVOrthogTypes[];
 
     Level: advanced
 
-.seealso: BVSetOrthogonalization(), BVGetOrthogonalization(), BVOrthogonalizeColumn()
+.seealso: `BVSetOrthogonalization()`, `BVGetOrthogonalization()`, `BVOrthogonalizeColumn()`
 E*/
 typedef enum { BV_ORTHOG_REFINE_IFNEEDED,
                BV_ORTHOG_REFINE_NEVER,
@@ -79,7 +79,7 @@ SLEPC_EXTERN const char *BVOrthogRefineTypes[];
 
     Level: advanced
 
-.seealso: BVSetOrthogonalization(), BVGetOrthogonalization(), BVOrthogonalize()
+.seealso: `BVSetOrthogonalization()`, `BVGetOrthogonalization()`, `BVOrthogonalize()`
 E*/
 typedef enum { BV_ORTHOG_BLOCK_GS,
                BV_ORTHOG_BLOCK_CHOL,
@@ -101,7 +101,7 @@ SLEPC_EXTERN const char *BVOrthogBlockTypes[];
 
    Level: advanced
 
-.seealso: BVSetMatMultMethod(), BVMatMult()
+.seealso: `BVSetMatMultMethod()`, `BVMatMult()`
 E*/
 typedef enum { BV_MATMULT_VECS,
                BV_MATMULT_MAT,
@@ -234,7 +234,7 @@ SLEPC_EXTERN PetscErrorCode BVTraceQuadrature(BV,BV,PetscInt,PetscInt,PetscScala
 
    Level: developer
 
-.seealso: BVSVDAndRank()
+.seealso: `BVSVDAndRank()`
 E*/
 typedef enum { BV_SVD_METHOD_REFINE,
                BV_SVD_METHOD_QR,

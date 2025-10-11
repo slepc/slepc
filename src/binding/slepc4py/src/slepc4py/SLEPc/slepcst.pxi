@@ -40,6 +40,9 @@ cdef extern from * nogil:
     PetscErrorCode STGetMatStructure(SlepcST,PetscMatStructure*)
     PetscErrorCode STSetPreconditionerMat(SlepcST,PetscMat)
     PetscErrorCode STGetPreconditionerMat(SlepcST,PetscMat*)
+    PetscErrorCode STSetSplitPreconditioner(SlepcST,PetscInt,PetscMat*,PetscMatStructure)
+    PetscErrorCode STGetSplitPreconditionerTerm(SlepcST,PetscInt,PetscMat*)
+    PetscErrorCode STGetSplitPreconditionerInfo(SlepcST,PetscInt*,PetscMatStructure*)
 
     PetscErrorCode STSetTransform(SlepcST,PetscBool)
     PetscErrorCode STGetTransform(SlepcST,PetscBool*)

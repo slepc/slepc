@@ -38,6 +38,7 @@ OMAKE_SELF_PRINTDIR = $(OMAKE_PRINTDIR) -f makefile
 
 # ******** Rules for make all **************************************************************************
 
+.PHONY: all
 all:
 	+@${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} chk_slepcdir | tee ${PETSC_ARCH}/lib/slepc/conf/make.log
 	@ln -sf ${PETSC_ARCH}/lib/slepc/conf/make.log make.log
@@ -68,6 +69,7 @@ all:
 	@echo "Finishing make run at `date +'%a, %d %b %Y %H:%M:%S %z'`" >> ${PETSC_ARCH}/lib/slepc/conf/make.log
 	@if [ "`cat ${PETSC_ARCH}/lib/slepc/conf/error.log 2> /dev/null`" != "0" ]; then exit 1; fi
 
+.PHONY: all-local
 all-local: info slepc_libs ${SLEPC_POST_BUILDS}
 
 ${SLEPC_DIR}/${PETSC_ARCH}/lib/slepc/conf/files:
@@ -84,6 +86,7 @@ slepc_libs: ${SLEPC_DIR}/${PETSC_ARCH}/lib/slepc/conf/files ${SLEPC_DIR}/${PETSC
         cmd="${OMAKE_PRINTDIR} -f gmakefile $${make_j} $${make_l} ${MAKE_PAR_OUT_FLG} V=${V} slepc_libs"; \
         cd ${SLEPC_DIR} && echo $${cmd} && exec $${cmd}
 
+.PHONY: chk_slepcdir
 chk_slepcdir:
 	@mypwd=`pwd`; cd ${SLEPC_DIR} 2>&1 > /dev/null; true_SLEPC_DIR=`pwd`; cd $${mypwd} 2>&1 >/dev/null; \
         newpwd=`echo $${mypwd} | sed "s+$${true_SLEPC_DIR}+DUMMY+g"`;\
@@ -95,15 +98,18 @@ chk_slepcdir:
           printf "******************************************************"${PETSC_TEXT_NORMAL}"\n" ; \
         fi
 
+.PHONY: fortranbindings
 fortranbindings: deletefortranbindings
 	@${PYTHON} config/utils/generatefortranbindings.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch=${PETSC_ARCH}
 
+.PHONY: deletefortranbindings
 deletefortranbindings:
 	-@find src -type d -name ftn-auto* | xargs rm -rf
 	-@if [ -n "${PETSC_ARCH}" ] && [ -d ${PETSC_ARCH} ] && [ -d ${PETSC_ARCH}/src ]; then \
           find ${PETSC_ARCH}/src -type d -name ftn-auto* | xargs rm -rf ;\
         fi
 
+.PHONY: reconfigure
 reconfigure: allclean
 	@unset MAKEFLAGS && ${PYTHON} ${PETSC_ARCH}/lib/slepc/conf/reconfigure-${PETSC_ARCH}.py
 
@@ -111,10 +117,13 @@ reconfigure: allclean
 
 RUN_TEST = ${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR}
 
+.PHONY: check
 check: check_body ${SLEPC_POST_CHECKS}
 
+.PHONY: check_install
 check_install: check
 
+.PHONY: check_body
 check_body:
 	-@echo "Running SLEPc check examples to verify correct installation"
 	-@echo "Using SLEPC_DIR=${SLEPC_DIR}, PETSC_DIR=${PETSC_DIR}, and PETSC_ARCH=${PETSC_ARCH}"
@@ -133,6 +142,7 @@ check_body:
           ${RM} -f check_error; \
         fi
 
+.PHONY: check_build
 check_build:
 	+@cd src/eps/tests >/dev/null; ${RUN_TEST} clean-legacy
 	+@cd src/eps/tests >/dev/null; ${RUN_TEST} testtest10
@@ -154,21 +164,25 @@ check_build:
 
 # ******** Rules for make install **********************************************************************
 
+.PHONY: install
 install:
 	@${PYTHON} ./config/install.py ${SLEPC_DIR} ${PETSC_DIR} ${SLEPC_INSTALLDIR} -destDir=${DESTDIR} ${PETSC_ARCH} ${AR_LIB_SUFFIX} ${RANLIB}
 	+${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} SLEPC_INSTALL=$@ install-builtafterslepc
 
 # A smaller install with fewer extras
+.PHONY: install-lib
 install-lib:
 	@${PYTHON} ./config/install.py ${SLEPC_DIR} ${PETSC_DIR} ${SLEPC_INSTALLDIR} -destDir=${DESTDIR} -no-examples ${PETSC_ARCH} ${AR_LIB_SUFFIX} ${RANLIB}
 	+${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} SLEPC_INSTALL=$@ install-builtafterslepc
 
+.PHONY: install-builtafterslepc
 install-builtafterslepc:
 	@if [ "${SLEPC_POST_INSTALLS}" != "" ]; then ${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} SLEPC_INSTALL=${PETSC_INSTALL} ${SLEPC_POST_INSTALLS}; fi
 	@echo "*** Install of SLEPc (and any other packages) complete ***"
 
 # ******** Rules for running the full test suite *******************************************************
 
+.PHONY: chk_in_slepcdir
 chk_in_slepcdir:
 	@if [ ! -f include/slepcversion.h ]; then \
           printf ${PETSC_TEXT_HILIGHT}"*********************** ERROR **********************************************\n" ; \
@@ -179,6 +193,7 @@ TESTMODE = testexamples
 ALLTESTS_CHECK_FAILURES = no
 ALLTESTS_MAKEFILE = ${SLEPC_DIR}/gmakefile.test
 VALGRIND=0
+.PHONY: alltests
 alltests: chk_in_slepcdir ${SLEPC_DIR}/${PETSC_ARCH}/tests/testfiles
 	-@${RM} -rf ${PETSC_ARCH}/lib/slepc/conf/alltests.log alltests.log
 	+@if [ -f ${SLEPC_DIR}/share/slepc/examples/gmakefile.test ] ; then \
@@ -194,25 +209,32 @@ alltests: chk_in_slepcdir ${SLEPC_DIR}/${PETSC_ARCH}/tests/testfiles
             cat $${ALLTESTSLOG} | grep -E '(^not ok|not remade because of errors|^# No tests run)' | wc -l | grep '^[ ]*0$$' > /dev/null; \
           fi;
 
+.PHONY: allgtests-tap
 allgtests-tap: allgtest-tap
 	+@${OMAKE} -f ${ALLTESTS_MAKEFILE} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} check-test-errors
 
+.PHONY: allgtest-tap
 allgtest-tap: ${SLEPC_DIR}/${PETSC_ARCH}/tests/testfiles
 	+@MAKEFLAGS="-j$(MAKE_TEST_NP) -l$(MAKE_LOAD) $(MAKEFLAGS)" ${OMAKE} ${MAKE_SHUFFLE_FLG} -f ${ALLTESTS_MAKEFILE} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} test OUTPUT=1
 
+.PHONY: allgtest
 allgtest: ${SLEPC_DIR}/${PETSC_ARCH}/tests/testfiles
 	+@MAKEFLAGS="-j$(MAKE_TEST_NP) -l$(MAKE_LOAD) $(MAKEFLAGS)" ${OMAKE} -k -f ${ALLTESTS_MAKEFILE} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} test V=0 2>&1 | grep -E -v '^(ok [^#]*(# SKIP|# TODO|$$)|[A-Za-z][A-Za-z0-9_]*\.(c|F|cxx|F90).$$)'
 
+.PHONY: test
 test:
 	+${OMAKE} -f ${ALLTESTS_MAKEFILE} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} test
+.PHONY: cleantest
 cleantest:
 	+${OMAKE} -f ${ALLTESTS_MAKEFILE} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} SLEPC_DIR=${SLEPC_DIR} cleantest
 
 # ******** Rules for cleaning **************************************************************************
 
+.PHONY: deletelibs
 deletelibs:
 	-${RM} -r ${SLEPC_LIB_DIR}/libslepc*.*
 
+.PHONY: deleteshared
 deleteshared:
 	@for LIBNAME in ${SHLIBS}; \
         do \
@@ -228,28 +250,36 @@ deleteshared:
           ${RM} ${SLEPC_INSTALLDIR}/lib/so_locations; \
         fi
 
+.PHONY: deletemods
 deletemods:
 	-${RM} -f ${SLEPC_DIR}/${PETSC_ARCH}/include/slepc*.mod
 
+.PHONY: allclean
 allclean:
 	-@${OMAKE} -f gmakefile clean
 
+.PHONY: clean
 clean:: allclean
 
 #********* Rules for printing library properties useful for building applications **********************
 
+.PHONY: getversion_slepc
 getversion_slepc:
 	-@${SLEPC_DIR}/lib/slepc/bin/slepcversion
 
+.PHONY: getlinklibs_slepc
 getlinklibs_slepc:
 	-@${OMAKE} -f gmakefile gmakegetlinklibs_slepc
 
+.PHONY: getincludedirs_slepc
 getincludedirs_slepc:
 	-@${OMAKE} -f gmakefile gmakegetincludedirs_slepc
 
+.PHONY: info
 info:
 	+@${OMAKE} -f gmakefile gmakeinfo
 
+.PHONY: check_usermakefile
 check_usermakefile:
 	-@echo "Testing compile with user makefile"
 	-@echo "Using SLEPC_DIR=${SLEPC_DIR}, PETSC_DIR=${PETSC_DIR}, and PETSC_ARCH=${PETSC_ARCH}"
@@ -268,20 +298,24 @@ check_usermakefile:
 
 # ******** Rules for generating tag files **************************************************************
 
+.PHONY: alletags
 alletags:
 	-@${PYTHON} lib/slepc/bin/maint/generateetags.py
 	-@find config -type f -name "*.py" |grep -v SCCS | xargs etags -o TAGS_PYTHON
 
 # ******** Rules for building documentation ************************************************************
 
+.PHONY: alldoc
 alldoc: alldoc_html
 
+.PHONY: chk_c2html
 chk_c2html:
 	@if [ ${C2HTML}foo = foo ] ; then \
           printf ${PETSC_TEXT_HILIGHT}"*********************** ERROR ************************\n" ; \
           echo "Require c2html for html docs. Please reconfigure PETSc with --download-c2html=1"; \
           printf "******************************************************"${PETSC_TEXT_NORMAL}"\n" ;false; fi
 
+.PHONY: chk_doctext
 chk_doctext:
 	@if [ ${DOCTEXT}foo = foo ] ; then \
           printf ${PETSC_TEXT_HILIGHT}"*********************** ERROR ************************\n" ; \
@@ -289,24 +323,29 @@ chk_doctext:
           printf "******************************************************"${PETSC_TEXT_NORMAL}"\n" ;false; fi
 
 # Build just PDF manual + prerequisites
+.PHONY: alldoc_pdf
 alldoc_pdf:
-	-${OMAKE_SELF} -C doc latexpdf PETSC_DIR=${PETSC_DIR}
+	${OMAKE_SELF} -C doc latexpdf PETSC_DIR=${PETSC_DIR}
 
 # Builds .html versions of the source
+.PHONY: alldoc_html
 alldoc_html: chk_c2html chk_doctext
-	-${OMAKE_SELF} -C doc website PETSC_DIR=${PETSC_DIR}
+	${OMAKE_SELF} -C doc website PETSC_DIR=${PETSC_DIR}
 
 # Deletes documentation
+.PHONY: alldocclean
 alldocclean:
 	-@${OMAKE_SELF} -C doc clean PETSC_DIR=${PETSC_DIR}
 
 # ******** Rules for checking coding standards *********************************************************
 
 # Run fortitude Fortran linter
+.PHONY: fortitude
 fortitude:
 	-@fortitude check --line-length 1000 --ignore C003,C121,S241 --verbose --fix --preview
 
 # Compare ABI/API of two versions of PETSc library with the old one defined by PETSC_{DIR,ARCH}_ABI_OLD
+.PHONY: abitest
 abitest:
 	@if [ "x${SLEPC_DIR_ABI_OLD}" = "x" ] || [ "x${PETSC_ARCH_ABI_OLD}" = "x" ] || [ "x${PETSC_DIR_ABI_OLD}" = "x" ]; \
          then printf "You must set environment variables SLEPC_DIR_ABI_OLD, PETSC_ARCH_ABI_OLD, and PETSC_DIR_ABI_OLD to run abitest\n"; \
@@ -324,6 +363,4 @@ abitest:
 	-@echo "         Branch             = "`git rev-parse --abbrev-ref HEAD`
 	-@echo "========================================================================================="
 	-@$(PYTHON) ${SLEPC_DIR}/lib/slepc/bin/maint/abicheck.py -old_dir ${SLEPC_DIR_ABI_OLD} -old_arch ${PETSC_ARCH_ABI_OLD} -old_petsc_dir ${PETSC_DIR_ABI_OLD} -new_dir ${SLEPC_DIR} -new_arch ${PETSC_ARCH} -new_petsc_dir ${PETSC_DIR} -report_format html
-
-.PHONY: info all deletelibs allclean alletags alldoc alldocclean install
 

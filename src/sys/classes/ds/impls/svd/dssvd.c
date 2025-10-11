@@ -663,7 +663,7 @@ static PetscErrorCode DSSVDSetDimensions_SVD(DS ds,PetscInt m)
 
    Level: intermediate
 
-.seealso: DSSVDGetDimensions(), DSSetDimensions()
+.seealso: `DSSVDGetDimensions()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSSVDSetDimensions(DS ds,PetscInt m)
 {
@@ -696,7 +696,7 @@ static PetscErrorCode DSSVDGetDimensions_SVD(DS ds,PetscInt *m)
 
    Level: intermediate
 
-.seealso: DSSVDSetDimensions()
+.seealso: `DSSVDSetDimensions()`
 @*/
 PetscErrorCode DSSVDGetDimensions(DS ds,PetscInt *m)
 {
@@ -775,7 +775,7 @@ static PetscErrorCode DSReallocate_SVD(DS ds,PetscInt ld)
 +  0 - Implicit zero-shift QR for bidiagonals (_bdsqr)
 -  1 - Divide and Conquer (_bdsdc or _gesdd)
 
-.seealso: DSCreate(), DSSetType(), DSType, DSSVDSetDimensions()
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`, `DSSVDSetDimensions()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_SVD(DS ds)
 {

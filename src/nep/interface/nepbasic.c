@@ -40,7 +40,7 @@ PetscBool         NEPMonitorRegisterAllCalled = PETSC_FALSE;
 
    Level: beginner
 
-.seealso: NEPSetUp(), NEPSolve(), NEPDestroy(), NEP
+.seealso: `NEPSetUp()`, `NEPSolve()`, `NEPDestroy()`, `NEP`
 @*/
 PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
 {
@@ -148,7 +148,7 @@ PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
 
    Level: intermediate
 
-.seealso: NEPType
+.seealso: `NEPType`
 @*/
 PetscErrorCode NEPSetType(NEP nep,NEPType type)
 {
@@ -187,7 +187,7 @@ PetscErrorCode NEPSetType(NEP nep,NEPType type)
 
    Level: intermediate
 
-.seealso: NEPSetType()
+.seealso: `NEPSetType()`
 @*/
 PetscErrorCode NEPGetType(NEP nep,NEPType *type)
 {
@@ -222,7 +222,7 @@ $     -nep_type my_solver
 
    Level: advanced
 
-.seealso: NEPRegisterAll()
+.seealso: `NEPRegisterAll()`
 @*/
 PetscErrorCode NEPRegister(const char *name,PetscErrorCode (*function)(NEP))
 {
@@ -264,7 +264,7 @@ $      -nep_monitor_my_monitor
 
    Level: advanced
 
-.seealso: NEPMonitorSet(), NEPMonitorRegisterAll()
+.seealso: `NEPMonitorSet()`, `NEPMonitorRegisterAll()`
 @*/
 PetscErrorCode NEPMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,NEPMonitorRegisterFn *monitor,NEPMonitorRegisterCreateFn *create,NEPMonitorRegisterDestroyFn *destroy)
 {
@@ -312,7 +312,7 @@ PetscErrorCode NEPReset_Problem(NEP nep)
 
    Level: advanced
 
-.seealso: NEPDestroy()
+.seealso: `NEPDestroy()`
 @*/
 PetscErrorCode NEPReset(NEP nep)
 {
@@ -341,7 +341,7 @@ PetscErrorCode NEPReset(NEP nep)
 
    Level: beginner
 
-.seealso: NEPCreate(), NEPSetUp(), NEPSolve()
+.seealso: `NEPCreate()`, `NEPSetUp()`, `NEPSolve()`
 @*/
 PetscErrorCode NEPDestroy(NEP *nep)
 {
@@ -381,7 +381,7 @@ PetscErrorCode NEPDestroy(NEP *nep)
 
    Level: advanced
 
-.seealso: NEPGetBV()
+.seealso: `NEPGetBV()`
 @*/
 PetscErrorCode NEPSetBV(NEP nep,BV bv)
 {
@@ -409,7 +409,7 @@ PetscErrorCode NEPSetBV(NEP nep,BV bv)
 
    Level: advanced
 
-.seealso: NEPSetBV()
+.seealso: `NEPSetBV()`
 @*/
 PetscErrorCode NEPGetBV(NEP nep,BV *bv)
 {
@@ -440,7 +440,7 @@ PetscErrorCode NEPGetBV(NEP nep,BV *bv)
 
    Level: advanced
 
-.seealso: NEPGetRG()
+.seealso: `NEPGetRG()`
 @*/
 PetscErrorCode NEPSetRG(NEP nep,RG rg)
 {
@@ -470,7 +470,7 @@ PetscErrorCode NEPSetRG(NEP nep,RG rg)
 
    Level: advanced
 
-.seealso: NEPSetRG()
+.seealso: `NEPSetRG()`
 @*/
 PetscErrorCode NEPGetRG(NEP nep,RG *rg)
 {
@@ -501,7 +501,7 @@ PetscErrorCode NEPGetRG(NEP nep,RG *rg)
 
    Level: advanced
 
-.seealso: NEPGetDS()
+.seealso: `NEPGetDS()`
 @*/
 PetscErrorCode NEPSetDS(NEP nep,DS ds)
 {
@@ -529,7 +529,7 @@ PetscErrorCode NEPSetDS(NEP nep,DS ds)
 
    Level: advanced
 
-.seealso: NEPSetDS()
+.seealso: `NEPSetDS()`
 @*/
 PetscErrorCode NEPGetDS(NEP nep,DS *ds)
 {
@@ -559,7 +559,7 @@ PetscErrorCode NEPGetDS(NEP nep,DS *ds)
 
    Level: advanced
 
-.seealso: NEPSetRefine()
+.seealso: `NEPSetRefine()`
 @*/
 PetscErrorCode NEPRefineGetKSP(NEP nep,KSP *ksp)
 {
@@ -609,7 +609,7 @@ PetscErrorCode NEPRefineGetKSP(NEP nep,KSP *ksp)
 
    Level: intermediate
 
-.seealso: NEPGetTarget(), NEPSetWhichEigenpairs()
+.seealso: `NEPGetTarget()`, `NEPSetWhichEigenpairs()`
 @*/
 PetscErrorCode NEPSetTarget(NEP nep,PetscScalar target)
 {
@@ -636,7 +636,7 @@ PetscErrorCode NEPSetTarget(NEP nep,PetscScalar target)
 
    Level: intermediate
 
-.seealso: NEPSetTarget()
+.seealso: `NEPSetTarget()`
 @*/
 PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
 {
@@ -665,7 +665,7 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
 
    Level: beginner
 
-.seealso: NEPGetFunction(), NEPSetJacobian()
+.seealso: `NEPGetFunction()`, `NEPSetJacobian()`
 @*/
 PetscErrorCode NEPSetFunction(NEP nep,Mat A,Mat B,NEPFunctionFn *fun,void *ctx)
 {
@@ -713,7 +713,7 @@ PetscErrorCode NEPSetFunction(NEP nep,Mat A,Mat B,NEPFunctionFn *fun,void *ctx)
 
    Level: advanced
 
-.seealso: NEPSetFunction()
+.seealso: `NEPSetFunction()`
 @*/
 PetscErrorCode NEPGetFunction(NEP nep,Mat *A,Mat *B,NEPFunctionFn **fun,void **ctx)
 {
@@ -744,7 +744,7 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *A,Mat *B,NEPFunctionFn **fun,void **c
 
    Level: beginner
 
-.seealso: NEPSetFunction(), NEPGetJacobian()
+.seealso: `NEPSetFunction()`, `NEPGetJacobian()`
 @*/
 PetscErrorCode NEPSetJacobian(NEP nep,Mat A,NEPJacobianFn *jac,void *ctx)
 {
@@ -784,7 +784,7 @@ PetscErrorCode NEPSetJacobian(NEP nep,Mat A,NEPJacobianFn *jac,void *ctx)
 
    Level: advanced
 
-.seealso: NEPSetJacobian()
+.seealso: `NEPSetJacobian()`
 @*/
 PetscErrorCode NEPGetJacobian(NEP nep,Mat *A,NEPJacobianFn **jac,void **ctx)
 {
@@ -828,7 +828,7 @@ PetscErrorCode NEPGetJacobian(NEP nep,Mat *A,NEPJacobianFn **jac,void **ctx)
 
    Level: beginner
 
-.seealso: NEPGetSplitOperatorTerm(), NEPGetSplitOperatorInfo(), NEPSetSplitPreconditioner()
+.seealso: `NEPGetSplitOperatorTerm()`, `NEPGetSplitOperatorInfo()`, `NEPSetSplitPreconditioner()`
 @*/
 PetscErrorCode NEPSetSplitOperator(NEP nep,PetscInt nt,Mat A[],FN f[],MatStructure str)
 {
@@ -890,7 +890,7 @@ PetscErrorCode NEPSetSplitOperator(NEP nep,PetscInt nt,Mat A[],FN f[],MatStructu
 
    Level: intermediate
 
-.seealso: NEPSetSplitOperator(), NEPGetSplitOperatorInfo()
+.seealso: `NEPSetSplitOperator()`, `NEPGetSplitOperatorInfo()`
 @*/
 PetscErrorCode NEPGetSplitOperatorTerm(NEP nep,PetscInt k,Mat *A,FN *f)
 {
@@ -919,7 +919,7 @@ PetscErrorCode NEPGetSplitOperatorTerm(NEP nep,PetscInt k,Mat *A,FN *f)
 
    Level: intermediate
 
-.seealso: NEPSetSplitOperator(), NEPGetSplitOperatorTerm()
+.seealso: `NEPSetSplitOperator()`, `NEPGetSplitOperatorTerm()`
 @*/
 PetscErrorCode NEPGetSplitOperatorInfo(NEP nep,PetscInt *n,MatStructure *str)
 {
@@ -963,7 +963,7 @@ PetscErrorCode NEPGetSplitOperatorInfo(NEP nep,PetscInt *n,MatStructure *str)
 
    Level: advanced
 
-.seealso: NEPGetSplitPreconditionerTerm(), NEPGetSplitPreconditionerInfo(), NEPSetSplitOperator()
+.seealso: `NEPGetSplitPreconditionerTerm()`, `NEPGetSplitPreconditionerInfo()`, `NEPSetSplitOperator()`
 @*/
 PetscErrorCode NEPSetSplitPreconditioner(NEP nep,PetscInt ntp,Mat P[],MatStructure strp)
 {
@@ -1019,7 +1019,7 @@ PetscErrorCode NEPSetSplitPreconditioner(NEP nep,PetscInt ntp,Mat P[],MatStructu
 
    Level: advanced
 
-.seealso: NEPSetSplitPreconditioner(), NEPGetSplitPreconditionerInfo()
+.seealso: `NEPSetSplitPreconditioner()`, `NEPGetSplitPreconditionerInfo()`
 @*/
 PetscErrorCode NEPGetSplitPreconditionerTerm(NEP nep,PetscInt k,Mat *P)
 {
@@ -1049,7 +1049,7 @@ PetscErrorCode NEPGetSplitPreconditionerTerm(NEP nep,PetscInt k,Mat *P)
 
    Level: advanced
 
-.seealso: NEPSetSplitPreconditioner(), NEPGetSplitPreconditionerTerm()
+.seealso: `NEPSetSplitPreconditioner()`, `NEPGetSplitPreconditionerTerm()`
 @*/
 PetscErrorCode NEPGetSplitPreconditionerInfo(NEP nep,PetscInt *n,MatStructure *strp)
 {

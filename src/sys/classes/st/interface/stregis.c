@@ -24,7 +24,7 @@ SLEPC_EXTERN PetscErrorCode STCreate_Filter(ST);
 
    Level: advanced
 
-.seealso: STRegister()
+.seealso: `STRegister()`
 @*/
 PetscErrorCode STRegisterAll(void)
 {

@@ -32,7 +32,7 @@
 
   Level: advanced
 
-.seealso: EPSSetEigenvalueComparison()
+.seealso: `EPSSetEigenvalueComparison()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SlepcEigenvalueComparisonFn(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res,void *ctx);
 
@@ -51,7 +51,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SlepcEigenvalueComparisonFn(PetscSca
 
   Level: advanced
 
-.seealso: EPSSetArbitrarySelection()
+.seealso: `EPSSetArbitrarySelection()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SlepcArbitrarySelectionFn(PetscScalar er,PetscScalar ei,Vec xr,Vec xi,PetscScalar *rr,PetscScalar *ri,void *ctx);
 
@@ -85,7 +85,7 @@ $  comparison(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscI
 
    Level: developer
 
-.seealso: SlepcSCCompare()
+.seealso: `SlepcSCCompare()`
 S*/
 struct _n_SlepcSC {
   /* map values before sorting, typically a call to STBackTransform (mapctx=ST) */

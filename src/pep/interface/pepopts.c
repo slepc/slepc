@@ -30,7 +30,7 @@
 
    Level: developer
 
-.seealso: PEPMonitorSet(), PEPSetTrackAll()
+.seealso: `PEPMonitorSet()`, `PEPSetTrackAll()`
 @*/
 PetscErrorCode PEPMonitorSetFromOptions(PEP pep,const char opt[],const char name[],void *ctx,PetscBool trackall)
 {
@@ -79,7 +79,7 @@ PetscErrorCode PEPMonitorSetFromOptions(PEP pep,const char opt[],const char name
 
    Level: beginner
 
-.seealso: PEPSetOptionsPrefix()
+.seealso: `PEPSetOptionsPrefix()`
 @*/
 PetscErrorCode PEPSetFromOptions(PEP pep)
 {
@@ -255,7 +255,7 @@ PetscErrorCode PEPSetFromOptions(PEP pep)
 
    Level: intermediate
 
-.seealso: PEPSetTolerances()
+.seealso: `PEPSetTolerances()`
 @*/
 PetscErrorCode PEPGetTolerances(PEP pep,PetscReal *tol,PetscInt *maxits)
 {
@@ -289,7 +289,7 @@ PetscErrorCode PEPGetTolerances(PEP pep,PetscReal *tol,PetscInt *maxits)
 
    Level: intermediate
 
-.seealso: PEPGetTolerances()
+.seealso: `PEPGetTolerances()`
 @*/
 PetscErrorCode PEPSetTolerances(PEP pep,PetscReal tol,PetscInt maxits)
 {
@@ -335,7 +335,7 @@ PetscErrorCode PEPSetTolerances(PEP pep,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: PEPSetDimensions()
+.seealso: `PEPSetDimensions()`
 @*/
 PetscErrorCode PEPGetDimensions(PEP pep,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -383,7 +383,7 @@ PetscErrorCode PEPGetDimensions(PEP pep,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 
    Level: intermediate
 
-.seealso: PEPGetDimensions(), PEPSetInterval(), PEPSTOARSetDimensions()
+.seealso: `PEPGetDimensions()`, `PEPSetInterval()`, `PEPSTOARSetDimensions()`
 @*/
 PetscErrorCode PEPSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -467,8 +467,8 @@ PetscErrorCode PEPSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 
    Level: intermediate
 
-.seealso: PEPGetWhichEigenpairs(), PEPSetTarget(), PEPSetInterval(),
-          PEPSetDimensions(), PEPSetEigenvalueComparison(), PEPWhich
+.seealso: `PEPGetWhichEigenpairs()`, `PEPSetTarget()`, `PEPSetInterval()`,
+          `PEPSetDimensions()`, `PEPSetEigenvalueComparison()`, `PEPWhich`
 @*/
 PetscErrorCode PEPSetWhichEigenpairs(PEP pep,PEPWhich which)
 {
@@ -521,7 +521,7 @@ PetscErrorCode PEPSetWhichEigenpairs(PEP pep,PEPWhich which)
 
     Level: intermediate
 
-.seealso: PEPSetWhichEigenpairs(), PEPWhich
+.seealso: `PEPSetWhichEigenpairs()`, `PEPWhich`
 @*/
 PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
 {
@@ -551,7 +551,7 @@ PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
 
    Level: advanced
 
-.seealso: PEPSetWhichEigenpairs(), PEPWhich
+.seealso: `PEPSetWhichEigenpairs()`, `PEPWhich`
 @*/
 PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *comp,void *ctx)
 {
@@ -593,7 +593,7 @@ PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *c
 
    Level: intermediate
 
-.seealso: PEPSetOperators(), PEPSetType(), PEPGetProblemType(), PEPProblemType
+.seealso: `PEPSetOperators()`, `PEPSetType()`, `PEPGetProblemType()`, `PEPProblemType`
 @*/
 PetscErrorCode PEPSetProblemType(PEP pep,PEPProblemType type)
 {
@@ -621,7 +621,7 @@ PetscErrorCode PEPSetProblemType(PEP pep,PEPProblemType type)
 
    Level: intermediate
 
-.seealso: PEPSetProblemType(), PEPProblemType
+.seealso: `PEPSetProblemType()`, `PEPProblemType`
 @*/
 PetscErrorCode PEPGetProblemType(PEP pep,PEPProblemType *type)
 {
@@ -654,7 +654,7 @@ PetscErrorCode PEPGetProblemType(PEP pep,PEPProblemType *type)
 
    Level: intermediate
 
-.seealso: PEPSetOperators(), PEPGetBasis(), PEPBasis
+.seealso: `PEPSetOperators()`, `PEPGetBasis()`, `PEPBasis`
 @*/
 PetscErrorCode PEPSetBasis(PEP pep,PEPBasis basis)
 {
@@ -678,7 +678,7 @@ PetscErrorCode PEPSetBasis(PEP pep,PEPBasis basis)
 
    Level: intermediate
 
-.seealso: PEPSetBasis(), PEPBasis
+.seealso: `PEPSetBasis()`, `PEPBasis`
 @*/
 PetscErrorCode PEPGetBasis(PEP pep,PEPBasis *basis)
 {
@@ -709,7 +709,7 @@ PetscErrorCode PEPGetBasis(PEP pep,PEPBasis *basis)
 
    Level: developer
 
-.seealso: PEPGetTrackAll()
+.seealso: `PEPGetTrackAll()`
 @*/
 PetscErrorCode PEPSetTrackAll(PEP pep,PetscBool trackall)
 {
@@ -734,7 +734,7 @@ PetscErrorCode PEPSetTrackAll(PEP pep,PetscBool trackall)
 
    Level: developer
 
-.seealso: PEPSetTrackAll()
+.seealso: `PEPSetTrackAll()`
 @*/
 PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
 {
@@ -763,7 +763,7 @@ PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
 
    Level: advanced
 
-.seealso: PEPSetConvergenceTest(), PEPSetTolerances()
+.seealso: `PEPSetConvergenceTest()`, `PEPSetTolerances()`
 @*/
 PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -808,7 +808,7 @@ PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,
 
    Level: intermediate
 
-.seealso: PEPGetConvergenceTest(), PEPSetConvergenceTestFunction(), PEPSetStoppingTest(), PEPConv
+.seealso: `PEPGetConvergenceTest()`, `PEPSetConvergenceTestFunction()`, `PEPSetStoppingTest()`, `PEPConv`
 @*/
 PetscErrorCode PEPSetConvergenceTest(PEP pep,PEPConv conv)
 {
@@ -844,7 +844,7 @@ PetscErrorCode PEPSetConvergenceTest(PEP pep,PEPConv conv)
 
    Level: intermediate
 
-.seealso: PEPSetConvergenceTest(), PEPConv
+.seealso: `PEPSetConvergenceTest()`, `PEPConv`
 @*/
 PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
 {
@@ -875,7 +875,7 @@ PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
 
    Level: advanced
 
-.seealso: PEPSetStoppingTest(), PEPStoppingBasic()
+.seealso: `PEPSetStoppingTest()`, `PEPStoppingBasic()`
 @*/
 PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -914,7 +914,7 @@ PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void *
 
    Level: advanced
 
-.seealso: PEPGetStoppingTest(), PEPSetStoppingTestFunction(), PEPSetConvergenceTest(), PEPStop
+.seealso: `PEPGetStoppingTest()`, `PEPSetStoppingTestFunction()`, `PEPSetConvergenceTest()`, `PEPStop`
 @*/
 PetscErrorCode PEPSetStoppingTest(PEP pep,PEPStop stop)
 {
@@ -948,7 +948,7 @@ PetscErrorCode PEPSetStoppingTest(PEP pep,PEPStop stop)
 
    Level: advanced
 
-.seealso: PEPSetStoppingTest(), PEPStop
+.seealso: `PEPSetStoppingTest()`, `PEPStop`
 @*/
 PetscErrorCode PEPGetStoppingTest(PEP pep,PEPStop *stop)
 {
@@ -1002,7 +1002,7 @@ PetscErrorCode PEPGetStoppingTest(PEP pep,PEPStop *stop)
 
    Level: intermediate
 
-.seealso: PEPGetScale()
+.seealso: `PEPGetScale()`
 @*/
 PetscErrorCode PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,PetscInt its,PetscReal lambda)
 {
@@ -1078,7 +1078,7 @@ PetscErrorCode PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,
    If Dl or Dr were not set by the user, then the ones computed internally are
    returned (or a null pointer if called before PEPSetUp).
 
-.seealso: PEPSetScale(), PEPSetUp()
+.seealso: `PEPSetScale()`, `PEPSetUp()`
 @*/
 PetscErrorCode PEPGetScale(PEP pep,PEPScale *scale,PetscReal *alpha,Vec *Dl,Vec *Dr,PetscInt *its,PetscReal *lambda)
 {
@@ -1107,7 +1107,7 @@ PetscErrorCode PEPGetScale(PEP pep,PEPScale *scale,PetscReal *alpha,Vec *Dl,Vec 
 
    Level: intermediate
 
-.seealso: PEPGetExtract()
+.seealso: `PEPGetExtract()`
 @*/
 PetscErrorCode PEPSetExtract(PEP pep,PEPExtract extract)
 {
@@ -1131,7 +1131,7 @@ PetscErrorCode PEPSetExtract(PEP pep,PEPExtract extract)
 
    Level: intermediate
 
-.seealso: PEPSetExtract(), PEPExtract
+.seealso: `PEPSetExtract()`, `PEPExtract`
 @*/
 PetscErrorCode PEPGetExtract(PEP pep,PEPExtract *extract)
 {
@@ -1191,7 +1191,7 @@ PetscErrorCode PEPGetExtract(PEP pep,PEPExtract *extract)
 
    Level: intermediate
 
-.seealso: PEPGetRefine()
+.seealso: `PEPGetRefine()`
 @*/
 PetscErrorCode PEPSetRefine(PEP pep,PEPRefine refine,PetscInt npart,PetscReal tol,PetscInt its,PEPRefineScheme scheme)
 {
@@ -1256,7 +1256,7 @@ PetscErrorCode PEPSetRefine(PEP pep,PEPRefine refine,PetscInt npart,PetscReal to
    Note:
    The user can specify NULL for any parameter that is not needed.
 
-.seealso: PEPSetRefine()
+.seealso: `PEPSetRefine()`
 @*/
 PetscErrorCode PEPGetRefine(PEP pep,PEPRefine *refine,PetscInt *npart,PetscReal *tol,PetscInt *its,PEPRefineScheme *scheme)
 {
@@ -1294,7 +1294,7 @@ PetscErrorCode PEPGetRefine(PEP pep,PEPRefine *refine,PetscInt *npart,PetscReal 
 
    Level: advanced
 
-.seealso: PEPAppendOptionsPrefix(), PEPGetOptionsPrefix()
+.seealso: `PEPAppendOptionsPrefix()`, `PEPGetOptionsPrefix()`
 @*/
 PetscErrorCode PEPSetOptionsPrefix(PEP pep,const char *prefix)
 {
@@ -1328,7 +1328,7 @@ PetscErrorCode PEPSetOptionsPrefix(PEP pep,const char *prefix)
 
    Level: advanced
 
-.seealso: PEPSetOptionsPrefix(), PEPGetOptionsPrefix()
+.seealso: `PEPSetOptionsPrefix()`, `PEPGetOptionsPrefix()`
 @*/
 PetscErrorCode PEPAppendOptionsPrefix(PEP pep,const char *prefix)
 {
@@ -1364,7 +1364,7 @@ PetscErrorCode PEPAppendOptionsPrefix(PEP pep,const char *prefix)
 
    Level: advanced
 
-.seealso: PEPSetOptionsPrefix(), PEPAppendOptionsPrefix()
+.seealso: `PEPSetOptionsPrefix()`, `PEPAppendOptionsPrefix()`
 @*/
 PetscErrorCode PEPGetOptionsPrefix(PEP pep,const char *prefix[])
 {

@@ -105,7 +105,7 @@ static PetscErrorCode RGPolygonSetVertices_Polygon(RG rg,PetscInt n,PetscScalar 
 
    Level: advanced
 
-.seealso: RGPolygonGetVertices()
+.seealso: `RGPolygonGetVertices()`
 @*/
 PetscErrorCode RGPolygonSetVertices(RG rg,PetscInt n,PetscScalar vr[],PetscScalar vi[])
 {
@@ -166,7 +166,7 @@ static PetscErrorCode RGPolygonGetVertices_Polygon(RG rg,PetscInt *n,PetscScalar
 
    Level: advanced
 
-.seealso: RGPolygonSetVertices()
+.seealso: `RGPolygonSetVertices()`
 @*/
 PetscErrorCode RGPolygonGetVertices(RG rg,PetscInt *n,PetscScalar *vr[],PetscScalar *vi[]) PeNS
 {

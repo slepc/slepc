@@ -262,7 +262,7 @@ static PetscErrorCode NEPRIISetMaximumIterations_RII(NEP nep,PetscInt its)
 
    Level: advanced
 
-.seealso: NEPRIIGetMaximumIterations()
+.seealso: `NEPRIIGetMaximumIterations()`
 @*/
 PetscErrorCode NEPRIISetMaximumIterations(NEP nep,PetscInt its)
 {
@@ -295,7 +295,7 @@ static PetscErrorCode NEPRIIGetMaximumIterations_RII(NEP nep,PetscInt *its)
 
    Level: advanced
 
-.seealso: NEPRIISetMaximumIterations()
+.seealso: `NEPRIISetMaximumIterations()`
 @*/
 PetscErrorCode NEPRIIGetMaximumIterations(NEP nep,PetscInt *its)
 {
@@ -337,7 +337,7 @@ static PetscErrorCode NEPRIISetLagPreconditioner_RII(NEP nep,PetscInt lag)
 
    Level: intermediate
 
-.seealso: NEPRIIGetLagPreconditioner()
+.seealso: `NEPRIIGetLagPreconditioner()`
 @*/
 PetscErrorCode NEPRIISetLagPreconditioner(NEP nep,PetscInt lag)
 {
@@ -370,7 +370,7 @@ static PetscErrorCode NEPRIIGetLagPreconditioner_RII(NEP nep,PetscInt *lag)
 
    Level: intermediate
 
-.seealso: NEPRIISetLagPreconditioner()
+.seealso: `NEPRIISetLagPreconditioner()`
 @*/
 PetscErrorCode NEPRIIGetLagPreconditioner(NEP nep,PetscInt *lag)
 {
@@ -411,7 +411,7 @@ static PetscErrorCode NEPRIISetConstCorrectionTol_RII(NEP nep,PetscBool cct)
 
    Level: intermediate
 
-.seealso: NEPRIIGetConstCorrectionTol()
+.seealso: `NEPRIIGetConstCorrectionTol()`
 @*/
 PetscErrorCode NEPRIISetConstCorrectionTol(NEP nep,PetscBool cct)
 {
@@ -444,7 +444,7 @@ static PetscErrorCode NEPRIIGetConstCorrectionTol_RII(NEP nep,PetscBool *cct)
 
    Level: intermediate
 
-.seealso: NEPRIISetConstCorrectionTol()
+.seealso: `NEPRIISetConstCorrectionTol()`
 @*/
 PetscErrorCode NEPRIIGetConstCorrectionTol(NEP nep,PetscBool *cct)
 {
@@ -485,7 +485,7 @@ static PetscErrorCode NEPRIISetHermitian_RII(NEP nep,PetscBool herm)
 
    Level: intermediate
 
-.seealso: NEPRIIGetHermitian()
+.seealso: `NEPRIIGetHermitian()`
 @*/
 PetscErrorCode NEPRIISetHermitian(NEP nep,PetscBool herm)
 {
@@ -519,7 +519,7 @@ static PetscErrorCode NEPRIIGetHermitian_RII(NEP nep,PetscBool *herm)
 
    Level: intermediate
 
-.seealso: NEPRIISetHermitian()
+.seealso: `NEPRIISetHermitian()`
 @*/
 PetscErrorCode NEPRIIGetHermitian(NEP nep,PetscBool *herm)
 {
@@ -562,7 +562,7 @@ static PetscErrorCode NEPRIISetDeflationThreshold_RII(NEP nep,PetscReal deftol)
 
    Level: advanced
 
-.seealso: NEPRIIGetDeflationThreshold()
+.seealso: `NEPRIIGetDeflationThreshold()`
 @*/
 PetscErrorCode NEPRIISetDeflationThreshold(NEP nep,PetscReal deftol)
 {
@@ -595,7 +595,7 @@ static PetscErrorCode NEPRIIGetDeflationThreshold_RII(NEP nep,PetscReal *deftol)
 
    Level: advanced
 
-.seealso: NEPRIISetDeflationThreshold()
+.seealso: `NEPRIISetDeflationThreshold()`
 @*/
 PetscErrorCode NEPRIIGetDeflationThreshold(NEP nep,PetscReal *deftol)
 {
@@ -630,7 +630,7 @@ static PetscErrorCode NEPRIISetKSP_RII(NEP nep,KSP ksp)
 
    Level: advanced
 
-.seealso: NEPRIIGetKSP()
+.seealso: `NEPRIIGetKSP()`
 @*/
 PetscErrorCode NEPRIISetKSP(NEP nep,KSP ksp)
 {
@@ -674,7 +674,7 @@ static PetscErrorCode NEPRIIGetKSP_RII(NEP nep,KSP *ksp)
 
    Level: advanced
 
-.seealso: NEPRIISetKSP()
+.seealso: `NEPRIISetKSP()`
 @*/
 PetscErrorCode NEPRIIGetKSP(NEP nep,KSP *ksp)
 {

@@ -27,7 +27,7 @@
 
    Level: developer
 
-.seealso: SlepcVecPoolGetVecs(), SlepcVecPoolDestroy()
+.seealso: `SlepcVecPoolGetVecs()`, `SlepcVecPoolDestroy()`
 */
 PetscErrorCode SlepcVecPoolCreate(Vec v,PetscInt init_size,VecPool *p)
 {
@@ -56,7 +56,7 @@ PetscErrorCode SlepcVecPoolCreate(Vec v,PetscInt init_size,VecPool *p)
 
    Level: developer
 
-.seealso: SlepcVecPoolGetVecs(), SlepcVecPoolCreate()
+.seealso: `SlepcVecPoolGetVecs()`, `SlepcVecPoolCreate()`
 */
 PetscErrorCode SlepcVecPoolDestroy(VecPool *p)
 {
@@ -89,7 +89,7 @@ PetscErrorCode SlepcVecPoolDestroy(VecPool *p)
 
    Level: developer
 
-.seealso: SlepcVecPoolRestoreVecs()
+.seealso: `SlepcVecPoolRestoreVecs()`
 */
 PetscErrorCode SlepcVecPoolGetVecs(VecPool p,PetscInt n,Vec **vecs)
 {
@@ -128,7 +128,7 @@ PetscErrorCode SlepcVecPoolGetVecs(VecPool p,PetscInt n,Vec **vecs)
 
    Level: developer
 
-.seealso: SlepcVecPoolGetVecs()
+.seealso: `SlepcVecPoolGetVecs()`
 */
 PetscErrorCode SlepcVecPoolRestoreVecs(VecPool p,PetscInt n,Vec **vecs)
 {

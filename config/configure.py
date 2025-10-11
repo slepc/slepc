@@ -118,19 +118,20 @@ if not showhelp:
 else:
   packagesinpetsc = ''
 
-# Create directories for configuration files
-archdir, archdirexisted = slepc.CreateDirTest(slepc.dir,petsc.archname)
-libdir  = slepc.CreateDir(archdir,'lib')
-confdir = slepc.CreateDirTwo(libdir,'slepc','conf')
+if not showhelp:
+  # Create directories for configuration files
+  archdir, archdirexisted = slepc.CreateDirTest(slepc.dir,petsc.archname)
+  libdir  = slepc.CreateDir(archdir,'lib')
+  confdir = slepc.CreateDirTwo(libdir,'slepc','conf')
 
-# Open log file
-log.Open(slepc.dir,confdir,'configure.log')
-log.write('='*80)
-log.write('Starting Configure Run at '+time.ctime(time.time()))
-log.write('Configure Options: '+' '.join(sys.argv[1:]))
-log.write('Working directory: '+os.getcwd())
-log.write('Python version:\n'+sys.version)
-log.write('make: '+petsc.make)
+  # Open log file
+  log.Open(slepc.dir,confdir,'configure.log')
+  log.write('='*80)
+  log.write('Starting Configure Run at '+time.ctime(time.time()))
+  log.write('Configure Options: '+' '.join(sys.argv[1:]))
+  log.write('Working directory: '+os.getcwd())
+  log.write('Python version:\n'+sys.version)
+  log.write('make: '+petsc.make)
 
 # Load classes for packages and process their command-line options
 import arpack, blopex, chase, elemental, elpa, evsl, feast, hpddm, ksvd, polar, primme, scalapack, slepc4py, slicot, lapack

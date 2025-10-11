@@ -3,11 +3,11 @@
 
 SLEPc, the *Scalable Library for Eigenvalue Problem Computations*, is a software library for the solution of large sparse eigenvalue problems on parallel computers.
 
-Together with linear systems of equations, eigenvalue problems are a very important class of linear algebra problems. The need for the numerical solution of these problems arises in many situations in science and engineering, in problems associated with stability and vibration analysis in practical applications. These are usually formulated as large sparse eigenproblems.
+Together with systems of linear equations, eigenvalue problems are a very important class of linear algebra problems. The need for the numerical solution of these problems arises in many situations in science and engineering, in problems associated with stability and vibration analysis in practical applications. These are usually formulated as large sparse eigenproblems.
 
-Computing eigenvalues is essentially more difficult than solving linear systems of equations. This has resulted in a very active research activity in the area of computational methods for eigenvalue problems in the last years, with many remarkable achievements. However, these state-of-the-art methods and algorithms are not easily transferred to the scientific community, and, apart from a few exceptions, most user still rely on simpler, well-established techniques.
+Computing eigenvalues is essentially more difficult than solving systems of linear equations. This has resulted in a very active research activity in the area of computational methods for eigenvalue problems in the last years, with many remarkable achievements. However, these state-of-the-art methods and algorithms are not easily transferred to the scientific community, and, apart from a few exceptions, most user still rely on simpler, well-established techniques.
 
-The reasons for this situation are diverse. First, new methods are increasingly complex and difficult to implement and therefore robust implementations must be provided by computational specialists, for example as software libraries. The development of such libraries requires to invest a lot of effort but sometimes they do not reach normal users due to a lack of awareness.
+The reasons for this situation are diverse. First, new methods are increasingly complex and difficult to implement and therefore robust implementations must be provided by computational specialists, for example as software libraries. The development of such libraries requires investing a lot of effort but sometimes they do not reach normal users due to a lack of awareness.
 
 In the case of eigenproblems, using libraries is not straightforward. It is usually recommended that the user understands how the underlying algorithm works and typically the problem is successfully solved only after several cycles of testing and parameter tuning. Methods are often specific for a certain class of eigenproblems and this leads to an explosion of available algorithms from which the user has to choose. Not all these algorithms are available in the form of software libraries, even less frequently with parallel capabilities.
 
@@ -17,7 +17,7 @@ The first implementations of algorithms for sparse matrices required a prescribe
 
 A better solution for the matrix representation problem is the well-known reverse communication interface, a technique that allows the development of iterative methods disregarding the implementation details of various operations. Whenever the iterative method subroutine needs the results of one of the operations, it returns control to the user's subroutine that called it. The user's subroutine then invokes the module that performs the operation. The iterative method subroutine is invoked again with the results of the operation.
 
-Several libraries with any of the interface schemes mentioned above are publicly available. For a survey of such software see the SLEPc Technical Report {cite:t}`str-6`, "A Survey of Software for Sparse Eigenvalue Problems", and references therein. Some of the most recent libraries are even prepared for parallel execution (some of them can be used from within SLEPc, see section [](#sec:wrap)). However, they still lack some flexibility or require too much programming effort from the user, especially in the case that the eigensolution requires to employ advanced techniques such as spectral transformations or preconditioning.
+Several libraries with any of the interface schemes mentioned above are publicly available. For a survey of such software see the SLEPc Technical Report {cite:p}`Her09` and references therein. Some of the most recent libraries are even prepared for parallel execution (some of them can be used from within SLEPc, see section [](#sec:wrap)). However, they still lack some flexibility or require too much programming effort from the user, especially in the case that the eigensolution requires to employ advanced techniques such as spectral transformations or preconditioning.
 
 A further obstacle appears when these libraries have to be used in the context of large software projects carried out by inter-disciplinary teams. In this scenery, libraries must be able to interoperate with already existing software and with other libraries. In order to cope with the complexity associated with such projects, libraries must be designed carefully in order to overcome hurdles such as different storage formats or programming languages. In the case of parallel software, care must be taken also to achieve portability to a wide range of platforms with good performance and still retain flexibility and usability.
 
@@ -25,19 +25,20 @@ A further obstacle appears when these libraries have to be used in the context o
 
 The SLEPc library is an attempt to provide a solution to the situation described in the previous paragraphs. It is intended to be a general library for the solution of eigenvalue problems that arise in different contexts, covering standard and generalized problems, both Hermitian and non-Hermitian, with either real or complex arithmetic. Issues such as usability, portability, efficiency and interoperability are addressed, and special emphasis is put on flexibility, providing data-structure neutral implementations and multitude of run-time options. SLEPc offers a growing number of eigensolvers as well as interfaces to integrate well-established eigenvalue packages such as ARPACK. In addition to the linear eigenvalue problem, SLEPc also includes other solver classes for nonlinear eigenproblems, SVD and the computation of the action of a matrix function.
 
-SLEPc is based on PETSc, the Portable, Extensible Toolkit for Scientific Computation {cite:p}`Balay:PUM`, and, therefore, a large percentage of the software complexity is avoided since many PETSc developments are leveraged, including matrix storage formats and linear solvers, to name a few. SLEPc focuses on high level features for eigenproblems, structured around a few object classes as described below.
+SLEPc is based on PETSc, the Portable, Extensible Toolkit for Scientific Computation {cite:p}`BalPU`, and, therefore, a large percentage of the software complexity is avoided since many PETSc developments are leveraged, including matrix storage formats and linear solvers, to name a few. SLEPc focuses on high level features for eigenproblems, structured around a few object classes as described below.
 
-PETSc uses modern programming paradigms to ease the development of large-scale scientific application codes in Fortran, C, and C++ and provides a powerful set of tools for the numerical solution of partial differential equations and related problems on high-performance computers. Its approach is to encapsulate mathematical algorithms using object-oriented programming techniques, which allow to manage the complexity of efficient numerical message-passing codes. All the PETSc software is free and used around the world in a variety of application areas.
+PETSc uses modern programming paradigms to ease the development of large-scale scientific application codes in Fortran, C/C++, and Python, and provides a powerful set of tools for the numerical solution of partial differential equations and related problems on high-performance computers. Its approach is to encapsulate mathematical algorithms using object-oriented programming techniques, which allow to manage the complexity of efficient numerical message-passing codes. All the PETSc software is free and used around the world in a variety of application areas.
 
-The design philosophy is not to try to completely conceal parallelism from the application programmer. Rather, the user initiates a combination of sequential and parallel phases of computations, but the library handles the detailed message passing required during the coordination of computations. Some of the design principles are described in {cite:p}`Balay:1997:EMP`.
+The design philosophy is not to try to completely conceal parallelism from the application programmer. Rather, the user initiates a combination of sequential and parallel phases of computations, but the library handles the detailed message passing required during the coordination of computations. Some of the design principles are described in {cite:p}`Bal97`.
 
 PETSc is built around a variety of data structures and algorithmic objects. The application programmer works directly with these objects rather than concentrating on the underlying data structures. Each component manipulates a particular family of objects (for instance, vectors) and the operations one would like to perform on the objects. The three basic abstract data objects are index sets, vectors and matrices. Built on top of this foundation are various classes of solver objects, which encapsulate virtually all information regarding the solution procedure for a particular class of problems, including the local state and various options such as convergence tolerances, etc.
 
-SLEPc can be considered an extension of PETSc providing all the functionality necessary for the solution of eigenvalue problems. Figure [](#fig:slepc) shows a diagram of all the different objects included in PETSc (on the left) and those added by SLEPc (on the right). PETSc is a prerequisite for SLEPc and users should be familiar with basic concepts such as vectors and matrices in order to use SLEPc. Therefore, together with this manual we recommend to use the PETSc Users Manual {cite:p}`Balay:PUM`.
+SLEPc can be considered an extension of PETSc providing all the functionality necessary for the solution of eigenvalue problems. Figure [](#fig:slepc) shows a diagram of all the different objects included in PETSc (on the left) and those added by SLEPc (on the right). PETSc is a prerequisite for SLEPc and users should be familiar with basic concepts such as vectors and matrices in order to use SLEPc. Therefore, together with this manual we recommend to use the PETSc Users Manual {cite:p}`BalPU`.
 
 ```{figure} ../../_static/images/manual/svg/fig-slepc.svg
 :alt: Numerical components of PETSc and SLEPc
 :name: fig:slepc
+:width: 120%
 
 Numerical components of PETSc and SLEPc
 ```
@@ -116,6 +117,8 @@ Several options are available in SLEPc's configuration script. To see all availa
 In SLEPc, configure options have the following purposes:
 
 -   Specify a directory for prefix-based installation, as explained in section [](#sec:prefix-inst).
+
+-   Enable compilation of Python bindings (slepc4py).
 
 -   Enable external eigensolver packages. For example, to use ARPACK, specify the following options (with the appropriate paths):
 
@@ -215,7 +218,7 @@ export SLEPC_DIR=/software/slepc-{{env.config.release}}
 
 can be placed in the user's `.bashrc` file. The `SLEPC_DIR` directory can be either a standard installation SLEPc directory, or a prefix-based installation directory, see section [](#sec:prefix-inst). In addition, the user must set the environment variables required by PETSc, that is, `PETSC_DIR`, to indicate the full path of the PETSc directory, and `PETSC_ARCH` to specify a particular architecture and set of options. Note that `PETSC_ARCH` should not be set in the case of prefix-based installations.
 
-All PETSc programs use the MPI (Message Passing Interface) standard for message-passing communication {cite:p}`MPI-Forum:1994:MMI`. Thus, to execute SLEPc programs, users must know the procedure for launching MPI jobs on their selected computer system(s). Usually, the `mpiexec` command can be used to initiate a program as in the following example that uses eight processes:
+All PETSc programs use the MPI (Message Passing Interface) standard for message-passing communication {cite:p}`MPI94`. Thus, to execute SLEPc programs, users must know the procedure for launching MPI jobs on their selected computer system(s). Usually, the `mpiexec` command can be used to initiate a program as in the following example that uses eight processes:
 
 ```{code} console
 $ mpiexec -n 8 slepc_program [command-line options]
@@ -230,7 +233,7 @@ All PETSc-compliant programs support the use of the `-h` or `-help` option as we
 Most SLEPc programs begin with a call to `SlepcInitialize`
 
 ```{code} c
-SlepcInitialize(int *argc,char ***argv,char *file,char *help);
+SlepcInitialize(int *argc,char ***args,const char file[],const char help[]);
 ```
 
 which initializes SLEPc, PETSc and MPI. This subroutine is very similar to {external:doc}`PetscInitialize`, and the arguments have the same meaning. In fact, internally `SlepcInitialize` calls {external:doc}`PetscInitialize`.
@@ -259,28 +262,23 @@ Section [](#sec:fortran) provides a summary of the differences between using SLE
 
 A simple example is listed next that solves an eigenvalue problem associated with the one-dimensional Laplacian operator discretized with finite differences. This example can be found in `${SLEPC_DIR}/src/eps/tutorials/ex1.c`. Following the code we highlight a few of the most important parts of this example.
 
-```{include} ex1.c
+```{literalinclude} /../../src/eps/tutorials/ex1.c
 :name: ex1.c
-:code: c
+:language: c
+:start-after: */
 ```
 
-#### Include Files.
-
-The C/C++ include files for SLEPc should be used via statements such as
+**Include Files**. The C/C++ include files for SLEPc should be used via statements such as
 
 ```{code} c
 #include <slepceps.h>
 ```
 
-where `slepceps.h` is the include file for the `EPS` component. Each SLEPc program must specify an include file that corresponds to the highest level SLEPc objects needed within the program; all of the required lower level include files are automatically included within the higher level files. For example, `slepceps.h` includes `slepcst.h` (spectral transformations), and `slepcsys.h` (base SLEPc file). Some PETSc header files are included as well, such as `PETScksp.h`. The SLEPc include files are located in the directory `${SLEPC_DIR}/include`.
+where `slepceps.h` is the include file for the `EPS` component. Each SLEPc program must specify an include file that corresponds to the highest level SLEPc objects needed within the program; all of the required lower level include files are automatically included within the higher level files. For example, `slepceps.h` includes `slepcst.h` (spectral transformations), and `slepcsys.h` (base SLEPc file). Some PETSc header files are included as well, such as `petscksp.h`. The SLEPc include files are located in the directory `${SLEPC_DIR}/include`.
 
-#### The Options Database.
+**The Options Database**. All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the call {external:doc}`PetscOptionsGetInt``(NULL,NULL,"-n",&n,NULL)` checks whether the user has provided a command line option to set the value of `n`, the problem dimension. If so, the variable `n` is set accordingly; otherwise, `n` remains unchanged.
 
-All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the call {external:doc}`PetscOptionsGetInt``(NULL,NULL,"-n",&n,NULL)` checks whether the user has provided a command line option to set the value of `n`, the problem dimension. If so, the variable `n` is set accordingly; otherwise, `n` remains unchanged.
-
-#### Vectors and Matrices.
-
-Usage of matrices and vectors in SLEPc is exactly the same as in PETSc. The user can create a new parallel or sequential matrix, `A`, which has `M` global rows and `N` global columns, with
+**Vectors and Matrices**. Usage of matrices and vectors in SLEPc is exactly the same as in PETSc. The user can create a new parallel or sequential matrix, `A`, which has `M` global rows and `N` global columns, with
 
 ```{code} c
 MatCreate(MPI_Comm comm,Mat *A);
@@ -290,9 +288,7 @@ MatSetFromOptions(Mat A);
 
 where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with {external:doc}`MatSetValues` and then assembles it.
 
-#### Eigensolvers.
-
-Usage of eigensolvers is very similar to other kinds of solvers provided by PETSc. After creating the matrix (or matrices) that define the problem, $Ax = kx$ (or $Ax=kBx$), the user can then use `EPS` to solve the system with the following sequence of commands: `EPSCreate` `EPSSetOperators` `EPSSetProblemType` `EPSSetFromOptions` `EPSSolve` `EPSDestroy` `EPSGetConverged` `EPSGetEigenpair`
+**Eigensolvers**. Usage of eigensolvers is very similar to other kinds of solvers provided by PETSc. After creating the matrix (or matrices) that define the problem, $Ax = kx$ (or $Ax=kBx$), the user can then use `EPS` to solve the system with the following sequence of commands:
 
 ```{code} c
 EPSCreate(MPI_Comm comm,EPS *eps);
@@ -307,13 +303,9 @@ EPSDestroy(EPS *eps);
 
 The user first creates the `EPS` context and sets the operators associated with the eigensystem as well as the problem type. The user then sets various options for customized solution, solves the problem, retrieves the solution, and finally destroys the `EPS` context. Chapter [](#ch:eps) describes in detail the `EPS` package, including the options database that enables the user to customize the solution process at runtime by selecting the solution algorithm and also specifying the convergence tolerance, the number of eigenvalues, the dimension of the subspace, etc.
 
-#### Spectral Transformation.
+**Spectral Transformation**. In the example program shown above there is no explicit reference to spectral transformations. However, an `ST` object is handled internally so that the user is able to request different transformations such as shift-and-invert. Chapter [](#ch:st) describes the `ST` package in detail.
 
-In the example program shown above there is no explicit reference to spectral transformations. However, an `ST` object is handled internally so that the user is able to request different transformations such as shift-and-invert. Chapter [](#ch:st) describes the `ST` package in detail.
-
-#### Error Checking.
-
-All SLEPc routines return an integer indicating whether an error has occurred during the call. The error code is set to be nonzero if an error has been detected; otherwise, it is zero. The PETSc macro {external:doc}`PetscCall``(...)` checks the return value and calls the PETSc error handler upon error detection. {external:doc}`PetscCall``(...)` should be used in all subroutine calls to enable a complete error traceback. See the PETSc documentation for full details.
+**Error Checking**. All SLEPc routines return an integer indicating whether an error has occurred during the call. The error code is set to be nonzero if an error has been detected; otherwise, it is zero. The PETSc macro {external:doc}`PetscCall``(...)` checks the return value and calls the PETSc error handler upon error detection. {external:doc}`PetscCall``(...)` should be used in all subroutine calls to enable a complete error traceback. See the PETSc documentation for full details.
 
 ### Writing Application Codes with SLEPc
 
@@ -321,7 +313,7 @@ Several example programs demonstrate the software usage and can serve as templat
 
 To write a new application program using SLEPc, we suggest the following procedure:
 
-1.  Install and test SLEPc according to the instructions given in the documentation.
+1.  Install and test SLEPc according to the instructions given in [](#sec:inst).
 
 2.  Copy the SLEPc example that corresponds to the class of problem of interest (e.g., singular value decomposition).
 
@@ -344,9 +336,7 @@ ex1f: ex1f.o
         -${FLINKER} -o ex1f ex1f.o ${SLEPC_EPS_LIB}
         ${RM} ex1f.o
 ```
-
-```{rubric} Footnotes
-```
+Replace `EPS` in `${SLEPC_EPS_LIB}` with the highest level module you are using in your program.
 
 ```{eval-rst}
 .. bibliography::

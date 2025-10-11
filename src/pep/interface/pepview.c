@@ -40,7 +40,7 @@
 
    Level: beginner
 
-.seealso: STView()
+.seealso: `STView()`
 @*/
 PetscErrorCode PEPView(PEP pep,PetscViewer viewer)
 {
@@ -199,7 +199,7 @@ PetscErrorCode PEPView(PEP pep,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: PEPView(), PEPCreate()
+.seealso: `PEPView()`, `PEPCreate()`
 @*/
 PetscErrorCode PEPViewFromOptions(PEP pep,PetscObject obj,const char name[])
 {
@@ -229,7 +229,7 @@ PetscErrorCode PEPViewFromOptions(PEP pep,PetscObject obj,const char name[])
 
    Level: intermediate
 
-.seealso: PEPSetConvergenceTest(), PEPSetTolerances(), PEPGetIterationNumber(), PEPConvergedReasonViewFromOptions()
+.seealso: `PEPSetConvergenceTest()`, `PEPSetTolerances()`, `PEPGetIterationNumber()`, `PEPConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode PEPConvergedReasonView(PEP pep,PetscViewer viewer)
 {
@@ -260,7 +260,7 @@ PetscErrorCode PEPConvergedReasonView(PEP pep,PetscViewer viewer)
 
    Level: developer
 
-.seealso: PEPConvergedReasonView()
+.seealso: `PEPConvergedReasonView()`
 @*/
 PetscErrorCode PEPConvergedReasonViewFromOptions(PEP pep)
 {
@@ -398,7 +398,7 @@ static PetscErrorCode PEPErrorView_MATLAB(PEP pep,PEPErrorType etype,PetscViewer
 
    Level: intermediate
 
-.seealso: PEPSolve(), PEPValuesView(), PEPVectorsView()
+.seealso: `PEPSolve()`, `PEPValuesView()`, `PEPVectorsView()`
 @*/
 PetscErrorCode PEPErrorView(PEP pep,PEPErrorType etype,PetscViewer viewer)
 {
@@ -443,7 +443,7 @@ PetscErrorCode PEPErrorView(PEP pep,PEPErrorType etype,PetscViewer viewer)
 
    Level: developer
 
-.seealso: PEPErrorView()
+.seealso: `PEPErrorView()`
 @*/
 PetscErrorCode PEPErrorViewFromOptions(PEP pep)
 {
@@ -634,7 +634,7 @@ static PetscErrorCode PEPValuesView_MATLAB(PEP pep,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: PEPSolve(), PEPVectorsView(), PEPErrorView()
+.seealso: `PEPSolve()`, `PEPVectorsView()`, `PEPErrorView()`
 @*/
 PetscErrorCode PEPValuesView(PEP pep,PetscViewer viewer)
 {
@@ -690,7 +690,7 @@ PetscErrorCode PEPValuesView(PEP pep,PetscViewer viewer)
 
    Level: developer
 
-.seealso: PEPValuesView()
+.seealso: `PEPValuesView()`
 @*/
 PetscErrorCode PEPValuesViewFromOptions(PEP pep)
 {
@@ -732,7 +732,7 @@ PetscErrorCode PEPValuesViewFromOptions(PEP pep)
 
    Level: intermediate
 
-.seealso: PEPSolve(), PEPValuesView(), PEPErrorView()
+.seealso: `PEPSolve()`, `PEPValuesView()`, `PEPErrorView()`
 @*/
 PetscErrorCode PEPVectorsView(PEP pep,PetscViewer viewer)
 {
@@ -775,7 +775,7 @@ PetscErrorCode PEPVectorsView(PEP pep,PetscViewer viewer)
 
    Level: developer
 
-.seealso: PEPVectorsView()
+.seealso: `PEPVectorsView()`
 @*/
 PetscErrorCode PEPVectorsViewFromOptions(PEP pep)
 {

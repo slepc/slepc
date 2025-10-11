@@ -308,7 +308,7 @@ SLEPC_EXTERN PetscErrorCode VecCreate_Comp(Vec V)
 
    Level: developer
 
-.seealso: VecCreateCompWithVecs(), VecCompSetSubVecs()
+.seealso: `VecCreateCompWithVecs()`, `VecCompSetSubVecs()`
 @*/
 PetscErrorCode VecCreateComp(MPI_Comm comm,PetscInt Nx[],PetscInt n,VecType t,Vec Vparent,Vec *V)
 {
@@ -343,7 +343,7 @@ PetscErrorCode VecCreateComp(MPI_Comm comm,PetscInt Nx[],PetscInt n,VecType t,Ve
 
    Level: developer
 
-.seealso: VecCreateComp()
+.seealso: `VecCreateComp()`
 @*/
 PetscErrorCode VecCreateCompWithVecs(Vec x[],PetscInt n,Vec Vparent,Vec *V)
 {
@@ -402,7 +402,7 @@ static PetscErrorCode VecCompGetSubVecs_Comp(Vec win,PetscInt *n,const Vec **x)
 
    Level: developer
 
-.seealso: VecCreateComp()
+.seealso: `VecCreateComp()`
 @*/
 PetscErrorCode VecCompGetSubVecs(Vec win,PetscInt *n,const Vec **x)
 {
@@ -463,7 +463,7 @@ static PetscErrorCode VecCompSetSubVecs_Comp(Vec win,PetscInt n,Vec *x)
 
    Level: developer
 
-.seealso: VecCreateComp(), VecCompGetSubVecs()
+.seealso: `VecCreateComp()`, `VecCompGetSubVecs()`
 @*/
 PetscErrorCode VecCompSetSubVecs(Vec win,PetscInt n,Vec x[])
 {

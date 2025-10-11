@@ -455,7 +455,7 @@ static PetscErrorCode DSMatGetSize_NHEPTS(DS ds,DSMatType t,PetscInt *rows,Petsc
    Implemented methods:
 .  0 - Implicit QR (_hseqr)
 
-.seealso: DSCreate(), DSSetType(), DSType
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_NHEPTS(DS ds)
 {

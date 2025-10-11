@@ -141,6 +141,7 @@ pybtex.plugin.register_plugin('pybtex.style.formatting', 'slepcstyle', SLEPcStyl
 #bibtex_default_style = 'unsrtalpha' # alpha, plain, unsrt, unsrtalpha, and custom
 bibtex_default_style = 'slepcstyle'
 bibtex_reference_style = 'author_year' # label, author_year, super
+bibtex_bibliography_header = ".. rubric:: References"
 
 # prevents incorrect WARNING: duplicate citation for key "xxxx" warnings
 suppress_warnings = ['bibtex.duplicate_citation']
@@ -229,7 +230,7 @@ html_theme_options = {
                 },
             {
                 "name": "Feed",
-                "url": "_static/rss/slepc-news.xml",
+                "url": "https://slepc.upv.es/release/_static/rss/slepc-news.xml",
                 "icon": "fa-solid fa-square-rss",
                 "type": "fontawesome",
                 }
@@ -262,7 +263,7 @@ html_sidebars = {
         }
 
 # -- Options for LaTeX output --------------------------------------------------
-latex_engine = 'xelatex'
+latex_engine = 'pdflatex'
 
 # How to arrange the documents into LaTeX files, building only the manual.
 latex_documents = [
@@ -277,7 +278,7 @@ latex_additional_files = [
 ]
 
 latex_show_pagerefs = True
-latex_show_urls = 'footnote'
+#latex_show_urls = 'footnote'
 
 latex_elements = {
         'papersize' : 'a4paper',
@@ -288,15 +289,67 @@ latex_elements = {
                         + 'TableRowColorEven={white},'
                         + 'VerbatimColor={white},'
                         + 'noteBgColor={white},',
-        'maketitle': r'\newcommand{\slepcversion}{%s}' % version
-                     + r'\newcommand{\releasedate}{%s}' % release_date
-                     + r'\makeatletter\@ifundefined{bibfont}{\newcommand{\bibfont}{\small}}{\renewcommand{\bibfont}{\small}}\makeatother'
-r'''
-\input{frontpage.tex.txt}
+        'fvset': r'\fvset{fontsize=\footnotesize}',
+        'maketitle': r'''
+\begin{titlepage}
+\begin{center}
+   \vspace*{15mm}
+   \framebox[14cm][l]{
+   \includegraphics[height=1.4cm]{logo-upv}
+   \hfill
+   \parbox[b]{7cm}{\begin{flushright}\vspace*{-7mm}\normalsize\sl\sffamily
+   Departament de\\[-0.8mm] Sistemes Inform\`atics\\[-0.8mm]
+   i Computaci\'o\\[0.8mm]
+   \vspace{-0.0mm}\end{flushright}}\;\;
+   \raisebox{3mm}{\includegraphics[height=0.8cm]{logo-dsic-black}}
+   }
+   \\[2cm]
+   \normalsize Technical Report DSIC-II/24/02
+   \\[2cm]
+   \vspace*{6mm}
+   {\Large\bf\sffamily
+   SLEPc Users Manual\\[2mm]}
+   {\large\bf\sffamily
+   Scalable Library for Eigenvalue Problem Computations}\\[2mm]
+   \vspace*{12mm}
+   \textbf{\texttt{\url{https://slepc.upv.es}}}
+   \\[20mm]
+   \begin{large}
+   Jose E. Roman\\
+   Carmen Campos\\
+   Lisandro Dalcin\\
+   Eloy Romero\\
+   Andr\'es Tom\'as
+   \\[12mm]
+   To be used with SLEPc ''' + version +r'\\[3mm]'+release_date+r'''
+   \end{large}
+\end{center}
+\end{titlepage}
 ''',
         'tableofcontents' : r'',
         'printindex': r'''
         \printindex
+        ''',
+        'preamble': r'''
+\titleformat{\chapter}[display]
+  {\bfseries\Large}
+  {\filleft\setlength{\fboxsep}{2mm}\fbox{\large\sc\chaptertitlename}\hspace*{-0.5mm}\setlength{\fboxsep}{4mm}\setlength{\fboxrule}{.5mm}\fbox{\Huge\bfseries\thechapter}}
+  {4ex}
+  {\huge\bf\sffamily\filright}
+  [\hfill\rule{10cm}{1pt}]
+\hypersetup{
+  colorlinks,
+  linkcolor=purple,
+  citecolor=violet,
+  filecolor=blue,
+  urlcolor=magenta,
+  bookmarksnumbered,
+  pdfstartview=FitH,
+  pdftitle={SLEPc Users Manual},
+  pdfauthor={J. E. Roman, C. Campos, L. Dalcin, E. Romero, A. Tomas},
+  pdfsubject={SLEPc: Scalable Library for Eigenvalue Problem Computations},
+  pdfkeywords={SLEPc, PETSc, eigenvalue problems}
+}
         ''',
 }
 

@@ -212,7 +212,7 @@ static PetscErrorCode DSHermitian_GHEP(DS ds,DSMatType m,PetscBool *flg)
    Implemented methods:
 .  0 - Divide and Conquer (_sygvd)
 
-.seealso: DSCreate(), DSSetType(), DSType
+.seealso: `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_GHEP(DS ds)
 {

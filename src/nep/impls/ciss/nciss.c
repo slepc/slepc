@@ -588,7 +588,7 @@ static PetscErrorCode NEPCISSSetSizes_CISS(NEP nep,PetscInt ip,PetscInt bs,Petsc
 
    Level: advanced
 
-.seealso: NEPCISSGetSizes()
+.seealso: `NEPCISSGetSizes()`
 @*/
 PetscErrorCode NEPCISSSetSizes(NEP nep,PetscInt ip,PetscInt bs,PetscInt ms,PetscInt npart,PetscInt bsmax,PetscBool realmats)
 {
@@ -636,7 +636,7 @@ static PetscErrorCode NEPCISSGetSizes_CISS(NEP nep,PetscInt *ip,PetscInt *bs,Pet
 
    Level: advanced
 
-.seealso: NEPCISSSetSizes()
+.seealso: `NEPCISSSetSizes()`
 @*/
 PetscErrorCode NEPCISSGetSizes(NEP nep,PetscInt *ip,PetscInt *bs,PetscInt *ms,PetscInt *npart,PetscInt *bsmax,PetscBool *realmats)
 {
@@ -687,7 +687,7 @@ static PetscErrorCode NEPCISSSetThreshold_CISS(NEP nep,PetscReal delta,PetscReal
 
    Level: advanced
 
-.seealso: NEPCISSGetThreshold()
+.seealso: `NEPCISSGetThreshold()`
 @*/
 PetscErrorCode NEPCISSSetThreshold(NEP nep,PetscReal delta,PetscReal spur)
 {
@@ -724,7 +724,7 @@ static PetscErrorCode NEPCISSGetThreshold_CISS(NEP nep,PetscReal *delta,PetscRea
 
    Level: advanced
 
-.seealso: NEPCISSSetThreshold()
+.seealso: `NEPCISSSetThreshold()`
 @*/
 PetscErrorCode NEPCISSGetThreshold(NEP nep,PetscReal *delta,PetscReal *spur)
 {
@@ -775,7 +775,7 @@ static PetscErrorCode NEPCISSSetRefinement_CISS(NEP nep,PetscInt inner,PetscInt 
 
    Level: advanced
 
-.seealso: NEPCISSGetRefinement()
+.seealso: `NEPCISSGetRefinement()`
 @*/
 PetscErrorCode NEPCISSSetRefinement(NEP nep,PetscInt inner,PetscInt blsize)
 {
@@ -812,7 +812,7 @@ static PetscErrorCode NEPCISSGetRefinement_CISS(NEP nep,PetscInt *inner,PetscInt
 
    Level: advanced
 
-.seealso: NEPCISSSetRefinement()
+.seealso: `NEPCISSSetRefinement()`
 @*/
 PetscErrorCode NEPCISSGetRefinement(NEP nep, PetscInt *inner, PetscInt *blsize)
 {
@@ -855,7 +855,7 @@ static PetscErrorCode NEPCISSSetExtraction_CISS(NEP nep,NEPCISSExtraction extrac
 
    Level: advanced
 
-.seealso: NEPCISSGetExtraction(), NEPCISSExtraction
+.seealso: `NEPCISSGetExtraction()`, `NEPCISSExtraction`
 @*/
 PetscErrorCode NEPCISSSetExtraction(NEP nep,NEPCISSExtraction extraction)
 {
@@ -888,7 +888,7 @@ static PetscErrorCode NEPCISSGetExtraction_CISS(NEP nep,NEPCISSExtraction *extra
 
    Level: advanced
 
-.seealso: NEPCISSSetExtraction() NEPCISSExtraction
+.seealso: `NEPCISSSetExtraction()`, `NEPCISSExtraction`
 @*/
 PetscErrorCode NEPCISSGetExtraction(NEP nep,NEPCISSExtraction *extraction)
 {
@@ -959,7 +959,7 @@ static PetscErrorCode NEPCISSGetKSPs_CISS(NEP nep,PetscInt *nsolve,KSP **ksp)
 
    Level: advanced
 
-.seealso: NEPCISSSetSizes()
+.seealso: `NEPCISSSetSizes()`
 @*/
 PetscErrorCode NEPCISSGetKSPs(NEP nep,PetscInt *nsolve,KSP **ksp)
 {

@@ -202,7 +202,7 @@ static PetscErrorCode MatCreateTile_MPI(PetscScalar a,Mat A,PetscScalar b,Mat B,
 
    Level: developer
 
-.seealso: MatCreateNest()
+.seealso: `MatCreateNest()`
 @*/
 PetscErrorCode MatCreateTile(PetscScalar a,Mat A,PetscScalar b,Mat B,PetscScalar c,Mat C,PetscScalar d,Mat D,Mat *G)
 {
@@ -293,7 +293,7 @@ PetscErrorCode MatCreateTile(PetscScalar a,Mat A,PetscScalar b,Mat B,PetscScalar
 
    Level: developer
 
-.seealso: VecDuplicateEmpty()
+.seealso: `VecDuplicateEmpty()`
 @*/
 PetscErrorCode MatCreateVecsEmpty(Mat mat,Vec *right,Vec *left)
 {
@@ -386,7 +386,7 @@ PetscErrorCode MatCreateVecsEmpty(Mat mat,Vec *right,Vec *left)
 
    Level: developer
 
-.seealso: VecSetRandomNormal()
+.seealso: `VecSetRandomNormal()`
 @*/
 PetscErrorCode MatNormEstimate(Mat A,Vec vrn,Vec w,PetscReal *nrm)
 {
