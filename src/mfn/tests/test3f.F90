@@ -49,7 +49,7 @@
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
       Nt = n*n
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) n
       end if
  100  format (/'nSquare root of Laplacian, n=',I3,' (Fortran)')
@@ -67,19 +67,19 @@
         i = II/n
         j = II-i*n
         val = -1.0
-        if (i .gt. 0) then
+        if (i>0) then
           col = II-n
           PetscCallA(MatSetValue(A,II,col,val,INSERT_VALUES,ierr))
         end if
-        if (i .lt. n-1) then
+        if (i<n-1) then
           col = II+n
           PetscCallA(MatSetValue(A,II,col,val,INSERT_VALUES,ierr))
         end if
-        if (j .gt. 0) then
+        if (j>0) then
           col = II-1
           PetscCallA(MatSetValue(A,II,col,val,INSERT_VALUES,ierr))
         end if
-        if (j .lt. n-1) then
+        if (j<n-1) then
           col = II+1
           PetscCallA(MatSetValue(A,II,col,val,INSERT_VALUES,ierr))
         end if
@@ -121,17 +121,17 @@
 
 !     ** query properties and print them
       PetscCallA(MFNGetTolerances(mfn,tol,maxit,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,110) tol,maxit
       end if
  110  format (/' Tolerance: ',F7.4,', maxit: ',I4)
       PetscCallA(MFNGetDimensions(mfn,ncv,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) ncv
       end if
  120  format (' Subspace dimension: ',I3)
       PetscCallA(MFNGetErrorIfNotConverged(mfn,flg,ierr))
-      if (rank .eq. 0 .and. flg) then
+      if (rank==0 .and. flg) then
         write(*,*) 'Erroring out if convergence fails'
       end if
 
@@ -141,18 +141,18 @@
 
       PetscCallA(MFNSolve(mfn,v,y,ierr))
       PetscCallA(MFNGetConvergedReason(mfn,reason,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) reason
       end if
  130  format (' Converged reason:',I2)
       PetscCallA(MFNGetIterationNumber(mfn,its,ierr))
-!     if (rank .eq. 0) then
+!     if (rank==0) then
 !       write(*,140) its
 !     end if
 !140  format (' Number of iterations of the method:',I4)
 
       PetscCallA(VecNorm(y,NORM_2,norm,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,150) norm
       end if
  150  format (' sqrt(A)*v has norm ',F7.4)

@@ -68,7 +68,7 @@
       two = 2
       three = 3
       call SlepcInitialize(PETSC_NULL_CHARACTER,ierr)
-      if (ierr .ne. 0) then
+      if (ierr/=0) then
         print*,'SlepcInitialize failed'
         stop
       end if
@@ -76,7 +76,7 @@
       n = 30
       call PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr);CHKERRA(ierr)
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(/A,I6/)') '1-D Laplacian Eigenproblem (shell-enabled), n=',n
       end if
 
@@ -89,7 +89,7 @@
       call MatSetFromOptions(A,ierr);CHKERRA(ierr)
 
       call MatGetOwnershipRange(A,Istart,Iend,ierr);CHKERRA(ierr)
-      if (Istart .eq. 0) then
+      if (Istart==0) then
         row(1) = 0
         col(1) = 0
         col(2) = 1
@@ -98,7 +98,7 @@
         call MatSetValues(A,one,row,two,col,val,INSERT_VALUES,ierr);CHKERRA(ierr)
         Istart = Istart+1
       end if
-      if (Iend .eq. n) then
+      if (Iend==n) then
         row(1) = n-1
         col(1) = n-2
         col(2) = n-1
@@ -179,11 +179,11 @@
 
 !     ** Optional: Get some information from the solver and display it
       call EPSGetType(eps,tname,ierr);CHKERRA(ierr)
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,A,/)') ' Solution method: ', tname
       end if
       call EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr);CHKERRA(ierr)
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,I2)') ' Number of requested eigenvalues:',nev
       end if
 

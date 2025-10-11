@@ -60,7 +60,7 @@
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-m',m,flg,ierr))
       N = 2*m
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(/A,I6,A/)') 'Ising Model Eigenproblem, m=',m,', (N=2*m)'
       end if
 
@@ -93,21 +93,21 @@
 
       PetscCallA(EPSSolve(eps,ierr))
       PetscCallA(EPSGetIterationNumber(eps,its,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,I4)') ' Number of iterations of the method: ',its
       end if
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(EPSGetType(eps,tname,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,A)') ' Solution method: ', tname
       end if
       PetscCallA(EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,I2)') ' Number of requested eigenvalues:',nev
       end if
       PetscCallA(EPSGetTolerances(eps,tol,maxit,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,1PE11.4,A,I6)') ' Stopping condition: tol=',tol,', maxit=', maxit
       end if
 

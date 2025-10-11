@@ -50,7 +50,7 @@
       two = 2
       three = 3
       PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,"ex1f test"//c_new_line,ierr))
-      if (ierr .ne. 0) then
+      if (ierr/=0) then
         print*,'SlepcInitialize failed'
         stop
       end if
@@ -58,7 +58,7 @@
       n = 30
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) n
       end if
  100  format (/'1-D Laplacian Eigenproblem, n =',I4,' (Fortran)')
@@ -72,7 +72,7 @@
       PetscCallA(MatSetFromOptions(A,ierr))
 
       PetscCallA(MatGetOwnershipRange(A,Istart,Iend,ierr))
-      if (Istart .eq. 0) then
+      if (Istart==0) then
         row(1) = 0
         col(1) = 0
         col(2) = 1
@@ -81,7 +81,7 @@
         PetscCallA(MatSetValues(A,one,row,two,col,val,INSERT_VALUES,ierr))
         Istart = Istart+1
       end if
-      if (Iend .eq. n) then
+      if (Iend==n) then
         row(1) = n-1
         col(1) = n-2
         col(2) = n-1
@@ -126,12 +126,12 @@
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(EPSGetType(eps,tname,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) tname
       end if
  120  format (' Solution method: ',A)
       PetscCallA(EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) nev
       end if
  130  format (' Number of requested eigenvalues:',I4)

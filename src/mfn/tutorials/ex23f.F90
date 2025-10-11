@@ -55,7 +55,7 @@
       t = 2.0
       PetscCallA(PetscOptionsGetScalar(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-t',t,flg,ierr))
       N = m*(m+1)/2
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) N, m
       end if
  100  format (/'Markov y=exp(t*A)*e_1, N=',I6,' (m=',I4,')')
@@ -75,18 +75,18 @@
         do j=1,jmax
           ix = ix + 1
           ii = ix - 1
-          if (ix-1.ge.Istart .and. ix.le.Iend) then
-            if (j.ne.jmax) then
+          if (ix-1>=Istart .and. ix<=Iend) then
+            if (j/=jmax) then
               pd = cst*(i+j-1)
               !** north
-              if (i.eq.1) then
+              if (i==1) then
                 z = 2.0*pd
               else
                 z = pd
               end if
               PetscCallA(MatSetValue(A,ii,ix,z,INSERT_VALUES,ierr))
               !** east
-              if (j.eq.1) then
+              if (j==1) then
                 z = 2.0*pd
               else
                 z = pd
@@ -98,12 +98,12 @@
             !** south
             pu = 0.5 - cst*(i+j-3)
             z = pu
-            if (j.gt.1) then
+            if (j>1) then
               jj = ix-2
               PetscCallA(MatSetValue(A,ii,jj,z,INSERT_VALUES,ierr))
             end if
             !** west
-            if (i.gt.1) then
+            if (i>1) then
               jj = ix-jmax-2
               PetscCallA(MatSetValue(A,ii,jj,z,INSERT_VALUES,ierr))
             end if
@@ -151,17 +151,17 @@
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(MFNGetIterationNumber(mfn,its,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) its
       end if
  120  format (' Number of iterations of the method: ',I4)
       PetscCallA(MFNGetDimensions(mfn,ncv,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) ncv
       end if
  130  format (' Subspace dimension:',I4)
       PetscCallA(MFNGetTolerances(mfn,tol,maxit,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,140) tol,maxit
       end if
  140  format (' Stopping condition: tol=',f10.7,' maxit=',I4)
@@ -170,7 +170,7 @@
 !     Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,150) PetscRealPart(t),norm
       end if
  150  format (' Computed vector at time t=',f4.1,' has norm ',f8.5)

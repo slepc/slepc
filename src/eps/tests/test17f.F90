@@ -46,7 +46,7 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
       PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,ierr))
-      if (ierr .ne. 0) then
+      if (ierr/=0) then
         print*,'SlepcInitialize failed'
         stop
       end if
@@ -55,7 +55,7 @@
       n = 35
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
       m = n*n
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) n
       end if
  100  format (/'Spectrum-slicing test, n =',I3,' (Fortran)'/)
@@ -94,7 +94,7 @@
         value = 2.0
         PetscCallA(MatSetValue(B,row,col,value,INSERT_VALUES,ierr))
       end do
-      if (Istart .eq. 0) then
+      if (Istart==0) then
         row = 0
         col = 0
         value = 6.0
@@ -146,32 +146,32 @@
 !     Test interface functions of Krylov-Schur solver
 
       PetscCallA(EPSKrylovSchurGetRestart(eps,keep,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,110) keep
       end if
  110  format (' Restart parameter before changing = ',f7.4)
       keep = 0.4
       PetscCallA(EPSKrylovSchurSetRestart(eps,keep,ierr))
       PetscCallA(EPSKrylovSchurGetRestart(eps,keep,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) keep
       end if
  120  format (' ... changed to ',f7.4)
 
       PetscCallA(EPSKrylovSchurGetLocking(eps,lock,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) lock
       end if
  130  format (' Locking flag before changing = ',L4)
       PetscCallA(EPSKrylovSchurSetLocking(eps,PETSC_FALSE,ierr))
       PetscCallA(EPSKrylovSchurGetLocking(eps,lock,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,140) lock
       end if
  140  format (' ... changed to ',L4)
 
       PetscCallA(EPSKrylovSchurGetDimensions(eps,nev,ncv,mpd,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,150) nev,ncv,mpd
       end if
  150  format (' Sub-solve dimensions before changing: nev=',I2,', ncv=',I2,', mpd=',I2)
@@ -180,14 +180,14 @@
       mpd = 60
       PetscCallA(EPSKrylovSchurSetDimensions(eps,nev,ncv,mpd,ierr))
       PetscCallA(EPSKrylovSchurGetDimensions(eps,nev,ncv,mpd,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,160) nev,ncv,mpd
       end if
  160  format (' ... changed to: nev=',I2,', ncv=',I2,', mpd=',I2)
 
       if (nprc>0) then
         PetscCallA(EPSKrylovSchurGetPartitions(eps,npart,ierr))
-        if (rank .eq. 0) then
+        if (rank==0) then
           write(*,170) npart
         end if
  170    format (' Using ',I2,' partitions')
@@ -199,7 +199,7 @@
         end do
         PetscCallA(EPSKrylovSchurSetSubintervals(eps,subint,ierr))
         PetscCallA(EPSKrylovSchurGetSubintervals(eps,subint,ierr))
-        if (rank .eq. 0) then
+        if (rank==0) then
           write(*,*) 'Using sub-interval separations ='
           do i=2,npart
             write(*,180) subint(i)
@@ -218,7 +218,7 @@
       PetscCallA(EPSKrylovSchurGetInertias(eps,k,PETSC_NULL_REAL_ARRAY,PETSC_NULL_INTEGER_ARRAY,ierr))
       PetscCheckA(k<=MAXSHI,PETSC_COMM_SELF,PETSC_ERR_ARG_OUTOFRANGE,'Too many shifts')
       PetscCallA(EPSKrylovSchurGetInertias(eps,k,shifts,inertias,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,*) 'Inertias after EPSSetUp:'
         do i=1,k
           write(*,185) shifts(i),inertias(i)
@@ -229,14 +229,14 @@
       PetscCallA(EPSSolve(eps,ierr))
       PetscCallA(EPSGetDimensions(eps,nev,ncv,mpd,ierr))
       PetscCallA(EPSGetInterval(eps,int0,int1,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,190) nev,int0,int1
       end if
  190  format (' Found ',I2,' eigenvalues in interval [',f7.4,',',f7.4,']')
 
       if (nprc>0) then
         PetscCallA(EPSKrylovSchurGetSubcommInfo(eps,k,nval,v,ierr))
-        if (rank .eq. 0) then
+        if (rank==0) then
           write(*,200) rank,k,nval
           do i=0,nval-1
             PetscCallA(EPSKrylovSchurGetSubcommPairs(eps,i,eval,v,ierr))
@@ -250,7 +250,7 @@
         PetscCallA(EPSKrylovSchurGetSubcommMats(eps,As,Bs,ierr))
         PetscCallA(MatGetLocalSize(A,nloc,PETSC_NULL_INTEGER,ierr))
         PetscCallA(MatGetLocalSize(As,nlocs,mlocs,ierr))
-        if (rank .eq. 0) then
+        if (rank==0) then
           write(*,220) rank,nloc,nlocs
         end if
  220    format (' Process ',I2,' owns ',I5,', rows of the global',' matrices, and ',I5,' rows in the subcommunicator')

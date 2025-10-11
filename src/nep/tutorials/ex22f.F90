@@ -67,7 +67,7 @@
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
       tau = 0.001
       PetscCallA(PetscOptionsGetReal(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-tau',tau,flg,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) n, tau
       end if
  100  format (/'Delay Eigenproblem, n =',I4,', tau =',F6.3)
@@ -92,10 +92,10 @@
       coeffs(1) = 1.0/(h*h)
       coeffs(2) = -2.0/(h*h)+aa
       do i=Istart,Iend-1
-        if (i .gt. 0) then
+        if (i>0) then
           PetscCallA(MatSetValue(A,i,i-1,coeffs(1),INSERT_VALUES,ierr))
         end if
-        if (i .lt. n-1) then
+        if (i<n-1) then
           PetscCallA(MatSetValue(A,i,i+1,coeffs(1),INSERT_VALUES,ierr))
         end if
         PetscCallA(MatSetValue(A,i,i,coeffs(2),INSERT_VALUES,ierr))
@@ -181,12 +181,12 @@
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(NEPGetType(nep,tname,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) tname
       end if
  120  format (' Solution method: ',A)
       PetscCallA(NEPGetDimensions(nep,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) nev
       end if
  130  format (' Number of requested eigenvalues:',I4)

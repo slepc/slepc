@@ -62,7 +62,7 @@
       ai = im
 #endif
       PetscCallA(RGCheckInside(rg,one,ar,ai,inside,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         if (inside >= 0) then
           write(*,110) re, im, 'inside'
         else
@@ -72,12 +72,12 @@
  110  format ('Point (',F4.1,',',F4.1,') is ',A7,' the region')
 
       PetscCallA(RGComputeBoundingBox(rg,a,b,c,d,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,115) a, b, c, d
       end if
  115  format ('Bounding box: [',F4.1,',',F4.1,']x[',F4.1,',',F4.1,']')
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write (*,*) 'Contour points:'
       end if
       n = 10
@@ -90,7 +90,7 @@
         re = cr(i)
         im = ci(i)
 #endif
-        if (rank .eq. 0) then
+        if (rank==0) then
           write(*,120) re, im
         end if
       end do
@@ -118,7 +118,7 @@
       ai = im
 #endif
       PetscCallA(RGCheckInside(rg,one,ar,ai,inside,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         if (inside >= 0) then
           write(*,110) re, im, 'inside'
         else
@@ -169,7 +169,7 @@
       ai = im
 #endif
       PetscCallA(RGCheckInside(rg,one,ar,ai,inside,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         if (inside >= 0) then
           write(*,110) re, im, 'inside'
         else

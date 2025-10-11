@@ -30,7 +30,7 @@
           character(len=*),intent(in):: help
           PetscErrorCode             :: ierr
 
-          if (filename .ne. PETSC_NULL_CHARACTER) then
+          if (filename/=PETSC_NULL_CHARACTER) then
              call SlepcInitializeF(trim(filename),help,ierr)
              CHKERRQ(ierr)
           else
@@ -46,7 +46,7 @@
           character(len=*),intent(in):: filename
           PetscErrorCode             :: ierr
 
-          if (filename .ne. PETSC_NULL_CHARACTER) then
+          if (filename/=PETSC_NULL_CHARACTER) then
              call SlepcInitializeF(trim(filename),PETSC_NULL_CHARACTER,ierr)
              CHKERRQ(ierr)
           else

@@ -60,7 +60,7 @@
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
       if (.not. flg) n = m+2
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) m, n
       end if
  100  format (/'Bidiagonal matrix, m =',I3,', n=',I3,' (Fortran)')
@@ -79,10 +79,10 @@
       do i=Istart,Iend-1
         col(1) = i
         col(2) = i+1
-        if (i .le. n-1) then
+        if (i<n) then
           PetscCallA(MatSetValue(A,i,col(1),val(1),INSERT_VALUES,ierr))
         end if
-        if (i .lt. n-1) then
+        if (i<n-1) then
           PetscCallA(MatSetValue(A,i,col(2),val(2),INSERT_VALUES,ierr))
         end if
       end do
@@ -105,16 +105,16 @@
 
 !     ** query properties and print them
       PetscCallA(SVDGetProblemType(svd,ptype,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,105) ptype
       end if
  105  format (/' Problem type = ',I2)
       PetscCallA(SVDIsGeneralized(svd,flg,ierr))
-      if (flg .and. rank .eq. 0) then
+      if (flg .and. rank==0) then
         write(*,*) 'generalized'
       end if
       PetscCallA(SVDGetImplicitTranspose(svd,tmode,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         if (tmode) then
           write(*,110) 'implicit'
         else
@@ -123,18 +123,18 @@
       end if
  110  format (' Transpose mode is',A9)
       PetscCallA(SVDGetConvergenceTest(svd,conv,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) conv
       end if
  120  format (' Convergence test is',I2)
       PetscCallA(SVDGetStoppingTest(svd,stp,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) stp
       end if
  130  format (' Stopping test is',I2)
       PetscCallA(SVDGetWhichSingularTriplets(svd,which,ierr))
-      if (rank .eq. 0) then
-        if (which .eq. SVD_LARGEST) then
+      if (rank==0) then
+        if (which==SVD_LARGEST) then
           write(*,140) 'largest'
         else
           write(*,140) 'smallest'
@@ -152,12 +152,12 @@
       PetscCallA(SVDSetFromOptions(svd,ierr))
       PetscCallA(SVDSolve(svd,ierr))
       PetscCallA(SVDGetConvergedReason(svd,reason,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,150) reason
       end if
  150  format (' Converged reason:',I2)
       PetscCallA(SVDGetIterationNumber(svd,its,ierr))
-!     if (rank .eq. 0) then
+!     if (rank==0) then
 !       write(*,160) its
 !     end if
 !160  format (' Number of iterations of the method:',I4)

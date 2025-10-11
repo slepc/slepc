@@ -52,7 +52,7 @@
       n = 30
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) n
       end if
  100  format (/'1-D Laplacian Eigenproblem, n =',I3,' (Fortran)')
@@ -70,7 +70,7 @@
       i2 = 2
       i3 = 3
       PetscCallA(MatGetOwnershipRange(A,Istart,Iend,ierr))
-      if (Istart .eq. 0) then
+      if (Istart==0) then
         i = 0
         col(1) = 0
         col(2) = 1
@@ -79,7 +79,7 @@
         PetscCallA(MatSetValues(A,i1,[i],i2,col,value,INSERT_VALUES,ierr))
         Istart = Istart+1
       end if
-      if (Iend .eq. n) then
+      if (Iend==n) then
         i = n-1
         col(1) = n-2
         col(2) = n-1
@@ -103,7 +103,7 @@
 
       PetscCallA(MatCreateVecs(A,v(1),PETSC_NULL_VEC,ierr))
       one = 1.0
-      if (Istart .eq. 0) then
+      if (Istart==0) then
         PetscCallA(VecSetValue(v(1),i0,one,INSERT_VALUES,ierr))
       end if
       PetscCallA(VecAssemblyBegin(v(1),ierr))
@@ -135,12 +135,12 @@
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(EPSGetType(eps,tname,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) tname
       end if
  120  format (' Solution method: ',A)
       PetscCallA(EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) nev
       end if
  130  format (' Number of requested eigenvalues:',I2)

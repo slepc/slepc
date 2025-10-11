@@ -45,7 +45,7 @@
 
       zero = 0
       PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,ierr))
-      if (ierr .ne. 0) then
+      if (ierr/=0) then
         print*,'SlepcInitialize failed'
         stop
       end if
@@ -54,7 +54,7 @@
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
       PetscCheckA(n<=100,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,'Program currently limited to n=100')
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,110) n
       end if
  110  format (/'Solve a Dense System of type NHEP, n =',I3,' (Fortran)')
@@ -88,7 +88,7 @@
       PetscCallA(DSSolve(ds,wr,wi,ierr))
 !     PetscCallA(DSSort(ds,wr,wi,PETSC_NULL_SCALAR,PETSC_NULL_SCALAR,PETSC_NULL_INTEGER,ierr))
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,*) 'Computed eigenvalues ='
         do i=1,n
 #if defined(PETSC_USE_COMPLEX)
@@ -98,7 +98,7 @@
           re = wr(i)
           im = wi(i)
 #endif
-          if (abs(im).lt.1.d-10) then
+          if (abs(im)<1.d-10) then
             write(*,120) re
           else
             write(*,130) re, im

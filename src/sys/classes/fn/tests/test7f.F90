@@ -43,7 +43,7 @@
       PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-verbose',verbose,ierr))
       PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-inplace',inplace,ierr))
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) n
       end if
  100  format (/'Matrix square root, n =',I3,' (Fortran)')
@@ -76,17 +76,17 @@
       PetscCallA(FNEvaluateFunction(fn,x,y,ierr))
       PetscCallA(FNEvaluateDerivative(fn,x,yp,ierr))
 
-      if (rank .eq. 0) then
+      if (rank==0) then
         re = PetscRealPart(y)
         im = PetscImaginaryPart(y)
-        if (abs(im).lt.1.d-10) then
+        if (abs(im)<1.d-10) then
           write(*,110) 'f', PetscRealPart(x), re
         else
           write(*,120) 'f', PetscRealPart(x), re, im
         end if
         re = PetscRealPart(yp)
         im = PetscImaginaryPart(yp)
-        if (abs(im).lt.1.d-10) then
+        if (abs(im)<1.d-10) then
           write(*,110) 'f''', PetscRealPart(x), re
         else
           write(*,120) 'f''', PetscRealPart(x), re, im
@@ -109,15 +109,15 @@
         PetscCallA(FNEvaluateFunctionMat(fn,A,S,ierr))
       end if
       if (verbose) then
-        if (rank .eq. 0) write (*,*) 'Matrix A - - - - - - - -'
+        if (rank==0) write (*,*) 'Matrix A - - - - - - - -'
         PetscCallA(MatView(A,PETSC_NULL_VIEWER,ierr))
-        if (rank .eq. 0) write (*,*) 'Computed sqrtm(A) - - - - - - - -'
+        if (rank==0) write (*,*) 'Computed sqrtm(A) - - - - - - - -'
         PetscCallA(MatView(S,PETSC_NULL_VIEWER,ierr))
       end if
 
 !     *** check error ||S*S-A||_F
       PetscCallA(MatMatMult(S,S,MAT_INITIAL_MATRIX,PETSC_DEFAULT_REAL,R,ierr))
-      if (eta .ne. 1.0) then
+      if (eta/=1.0) then
         alpha = 1.0/(eta*eta)
         PetscCallA(MatScale(R,alpha,ierr))
       end if

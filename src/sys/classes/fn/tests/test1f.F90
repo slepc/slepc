@@ -94,11 +94,11 @@
       call PrintInfo(x,y,yp)
 
       PetscCallA(FNRationalGetNumerator(fn,n,pp,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) 'Numerator',(PetscRealPart(pp(i)),i=1,n)
       end if
       PetscCallA(FNRationalGetDenominator(fn,n,qq,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) 'Denominator',(PetscRealPart(qq(i)),i=1,n)
       end if
  100  format (A15,10F6.1)
@@ -135,17 +135,17 @@
       PetscErrorCode ierr
 
       PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         re = PetscRealPart(y)
         im = PetscImaginaryPart(y)
-        if (abs(im).lt.1.d-10) then
+        if (abs(im)<1.d-10) then
           write(*,110) 'f', PetscRealPart(x), re
         else
           write(*,120) 'f', PetscRealPart(x), re, im
         end if
         re = PetscRealPart(yp)
         im = PetscImaginaryPart(yp)
-        if (abs(im).lt.1.d-10) then
+        if (abs(im)<1.d-10) then
           write(*,110) 'f''', PetscRealPart(x), re
         else
           write(*,120) 'f''', PetscRealPart(x), re, im

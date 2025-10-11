@@ -74,7 +74,7 @@
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       n = 128
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(/A,I4)') 'Nonlinear Eigenproblem, n =',n
       end if
 
@@ -136,21 +136,21 @@
 !     ** Call the solver
       PetscCallA(NEPSolve(nep,ierr))
       PetscCallA(NEPGetIterationNumber(nep,its,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,I3)') ' Number of NEP iterations =',its
       end if
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(NEPGetType(nep,tname,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,A10)') ' Solution method: ',tname
       end if
       PetscCallA(NEPGetDimensions(nep,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,I4)') ' Number of requested eigenvalues:',nev
       end if
       PetscCallA(NEPGetTolerances(nep,tol,maxit,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,F12.9,A,I5)') ' Stopping condition: tol=',tol,', maxit=',maxit
       end if
 
@@ -159,13 +159,13 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
       PetscCallA(NEPGetConverged(nep,nconv,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,'(A,I2/)') ' Number of converged approximate eigenpairs:',nconv
       end if
 
 !     ** Display eigenvalues and relative errors
-      if (nconv .gt. 0) then
-        if (rank .eq. 0) then
+      if (nconv>0) then
+        if (rank==0) then
           write(*,*) '        k              ||T(k)x||'
           write(*,*) '----------------- ------------------'
         end if
@@ -175,11 +175,11 @@
 
 !         ** Compute residual norm and error
           PetscCallA(NEPComputeError(nep,i,NEP_ERROR_RELATIVE,norm,ierr))
-          if (rank .eq. 0) then
+          if (rank==0) then
             write(*,'(1P,E15.4,E18.4)') PetscRealPart(lambda), norm
           end if
         end do
-        if (rank .eq. 0) then
+        if (rank==0) then
           write(*,*)
         end if
       end if
@@ -215,7 +215,7 @@
       three = 3
 
 !     ** Boundary points
-      if (Istart .eq. 0) then
+      if (Istart==0) then
         i = 0
         j(1) = 0
         j(2) = 1
@@ -225,7 +225,7 @@
         Istart = Istart + 1
       end if
 
-      if (Iend .eq. n) then
+      if (Iend==n) then
         i = n-1
         j(1) = n-2
         j(2) = n-1
@@ -275,7 +275,7 @@
       three = 3
 
 !     ** Boundary points
-      if (Istart .eq. 0) then
+      if (Istart==0) then
         i = 0
         j(1) = 0
         j(2) = 1
@@ -285,7 +285,7 @@
         Istart = Istart + 1
       end if
 
-      if (Iend .eq. n) then
+      if (Iend==n) then
         i = n-1
         j(1) = n-2
         j(2) = n-1

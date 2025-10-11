@@ -50,7 +50,7 @@
       PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,ierr))
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       n = 20
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) n
       end if
  100  format (/'Diagonal Quadratic Eigenproblem, n =',I3,' (Fortran)')
@@ -96,7 +96,7 @@
       nmat = 3
       PetscCallA(PEPSetOperators(pep,nmat,A,ierr))
       PetscCallA(PEPGetNumMatrices(pep,nmat,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,110) nmat-1
       end if
  110  format (' Polynomial of degree ',I2)
@@ -106,31 +106,31 @@
 
       PetscCallA(PEPSetType(pep,PEPTOAR,ierr))
       PetscCallA(PEPGetType(pep,tname,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) tname
       end if
  120  format (' Type set to ',A)
 
       PetscCallA(PEPGetProblemType(pep,ptype,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) ptype
       end if
  130  format (' Problem type before changing = ',I2)
       PetscCallA(PEPSetProblemType(pep,PEP_HERMITIAN,ierr))
       PetscCallA(PEPGetProblemType(pep,ptype,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,140) ptype
       end if
  140  format (' ... changed to ',I2)
 
       PetscCallA(PEPGetExtract(pep,extr,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,150) extr
       end if
  150  format (' Extraction before changing = ',I2)
       PetscCallA(PEPSetExtract(pep,PEP_EXTRACT_STRUCTURED,ierr))
       PetscCallA(PEPGetExtract(pep,extr,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,160) extr
       end if
  160  format (' ... changed to ',I2)
@@ -141,7 +141,7 @@
       scal = PEP_SCALE_SCALAR
       PetscCallA(PEPSetScale(pep,scal,alpha,PETSC_NULL_VEC,PETSC_NULL_VEC,its,lambda,ierr))
       PetscCallA(PEPGetScale(pep,scal,alpha,PETSC_NULL_VEC,PETSC_NULL_VEC,its,lambda,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,170) scal,alpha,its
       end if
  170  format (' Scaling: ',I2,', alpha=',F7.4,', its=',I2)
@@ -149,7 +149,7 @@
       basis = PEP_BASIS_CHEBYSHEV1
       PetscCallA(PEPSetBasis(pep,basis,ierr))
       PetscCallA(PEPGetBasis(pep,basis,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,180) basis
       end if
  180  format (' Polynomial basis: ',I2)
@@ -161,7 +161,7 @@
       rscheme = PEP_REFINE_SCHEME_SCHUR
       PetscCallA(PEPSetRefine(pep,refine,np,tol,its,rscheme,ierr))
       PetscCallA(PEPGetRefine(pep,refine,np,tol,its,rscheme,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,190) refine,tol,its,rscheme
       end if
  190  format (' Refinement: ',I2,', tol=',F7.4,', its=',I2,', schem=',I2)
@@ -171,7 +171,7 @@
       PetscCallA(PEPGetTarget(pep,tget,ierr))
       PetscCallA(PEPSetWhichEigenpairs(pep,PEP_TARGET_MAGNITUDE,ierr))
       PetscCallA(PEPGetWhichEigenpairs(pep,which,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,200) which,PetscRealPart(tget)
       end if
  200  format (' Which = ',I2,', target = ',F4.1)
@@ -179,7 +179,7 @@
       nev = 4
       PetscCallA(PEPSetDimensions(pep,nev,PETSC_DETERMINE_INTEGER,PETSC_DETERMINE_INTEGER,ierr))
       PetscCallA(PEPGetDimensions(pep,nev,ncv,mpd,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,210) nev,ncv,mpd
       end if
  210  format (' Dimensions: nev=',I2,', ncv=',I2,', mpd=',I2)
@@ -188,7 +188,7 @@
       its = 200
       PetscCallA(PEPSetTolerances(pep,tol,its,ierr))
       PetscCallA(PEPGetTolerances(pep,tol,its,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,220) tol,its
       end if
  220  format (' Tolerance =',F8.5,', max_its =',I4)
@@ -197,7 +197,7 @@
       PetscCallA(PEPGetConvergenceTest(pep,conv,ierr))
       PetscCallA(PEPSetStoppingTest(pep,PEP_STOP_BASIC,ierr))
       PetscCallA(PEPGetStoppingTest(pep,stp,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,230) conv,stp
       end if
  230  format (' Convergence test =',I2,', stopping test =',I2)
@@ -220,7 +220,7 @@
       PetscCallA(PEPSetFromOptions(pep,ierr))
       PetscCallA(PEPSolve(pep,ierr))
       PetscCallA(PEPGetConvergedReason(pep,reason,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,240) reason
       end if
  240  format (' Finished - converged reason =',I2)

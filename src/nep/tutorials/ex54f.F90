@@ -93,7 +93,7 @@
       PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,ierr))
       PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
          write(*,'(/A,I4)') 'Nonlinear eigenproblem with shell matrices, n =',n
       end if
 
@@ -129,7 +129,7 @@
       PetscCallA(NEPSolve(nep, ierr))
 
       PetscCallA(NEPGetConverged(nep,nconv,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
          write(*,'(A,I2/)') ' Number of converged approximate eigenpairs:',nconv
       end if
 !

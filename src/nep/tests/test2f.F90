@@ -49,7 +49,7 @@
       PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,ierr))
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       n = 20
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) n
       end if
  100  format (/'Diagonal Nonlinear Eigenproblem, n =',I3,' (Fortran)')
@@ -114,7 +114,7 @@
       mstr = SAME_NONZERO_PATTERN
       PetscCallA(NEPSetSplitOperator(nep,nterm,A,f,mstr,ierr))
       PetscCallA(NEPGetSplitOperatorInfo(nep,nterm,mstr,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,110) nterm
       end if
  110  format (' Nonlinear function with ',I2,' terms')
@@ -125,19 +125,19 @@
 
       PetscCallA(NEPSetType(nep,NEPRII,ierr))
       PetscCallA(NEPGetType(nep,tname,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) tname
       end if
  120  format (' Type set to ',A)
 
       PetscCallA(NEPGetProblemType(nep,ptype,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) ptype
       end if
  130  format (' Problem type before changing = ',I2)
       PetscCallA(NEPSetProblemType(nep,NEP_RATIONAL,ierr))
       PetscCallA(NEPGetProblemType(nep,ptype,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,140) ptype
       end if
  140  format (' ... changed to ',I2)
@@ -149,7 +149,7 @@
       rscheme = NEP_REFINE_SCHEME_EXPLICIT
       PetscCallA(NEPSetRefine(nep,refine,np,tol,its,rscheme,ierr))
       PetscCallA(NEPGetRefine(nep,refine,np,tol,its,rscheme,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,190) refine,tol,its,rscheme
       end if
  190  format (' Refinement: ',I2,', tol=',F12.9,', its=',I2,', scheme=',I2)
@@ -159,7 +159,7 @@
       PetscCallA(NEPGetTarget(nep,tget,ierr))
       PetscCallA(NEPSetWhichEigenpairs(nep,NEP_TARGET_MAGNITUDE,ierr))
       PetscCallA(NEPGetWhichEigenpairs(nep,which,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,200) which,PetscRealPart(tget)
       end if
  200  format (' Which = ',I2,', target = ',F4.1)
@@ -168,7 +168,7 @@
       ncv = 12
       PetscCallA(NEPSetDimensions(nep,nev,ncv,PETSC_DETERMINE_INTEGER,ierr))
       PetscCallA(NEPGetDimensions(nep,nev,ncv,mpd,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,210) nev,ncv,mpd
       end if
  210  format (' Dimensions: nev=',I2,', ncv=',I2,', mpd=',I2)
@@ -177,7 +177,7 @@
       its = 200
       PetscCallA(NEPSetTolerances(nep,tol,its,ierr))
       PetscCallA(NEPGetTolerances(nep,tol,its,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,220) tol,its
       end if
  220  format (' Tolerance =',F9.6,', max_its =',I4)
@@ -186,7 +186,7 @@
       PetscCallA(NEPGetConvergenceTest(nep,conv,ierr))
       PetscCallA(NEPSetStoppingTest(nep,NEP_STOP_BASIC,ierr))
       PetscCallA(NEPGetStoppingTest(nep,stp,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,230) conv,stp
       end if
  230  format (' Convergence test =',I2,', stopping test =',I2)
@@ -206,7 +206,7 @@
 
       PetscCallA(NEPSolve(nep,ierr))
       PetscCallA(NEPGetConvergedReason(nep,reason,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,240) reason
       end if
  240  format (' Finished - converged reason =',I2)

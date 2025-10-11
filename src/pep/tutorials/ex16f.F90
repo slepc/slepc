@@ -54,7 +54,7 @@
         ny = nx
       end if
       N = nx*ny
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) N, nx, ny
       end if
  100  format (/'Quadratic Eigenproblem, N=',I6,' (',I4,'x',I4,' grid)')
@@ -73,16 +73,16 @@
       do II=Istart,Iend-1
         i = II/nx
         j = II-i*nx
-        if (i .gt. 0) then
+        if (i>0) then
           PetscCallA(MatSetValue(K,II,II-nx,mone,INSERT_VALUES,ierr))
         end if
-        if (i .lt. ny-1) then
+        if (i<ny-1) then
           PetscCallA(MatSetValue(K,II,II+nx,mone,INSERT_VALUES,ierr))
         end if
-        if (j .gt. 0) then
+        if (j>0) then
           PetscCallA(MatSetValue(K,II,II-1,mone,INSERT_VALUES,ierr))
         end if
-        if (j .lt. nx-1) then
+        if (j<nx-1) then
           PetscCallA(MatSetValue(K,II,II+1,mone,INSERT_VALUES,ierr))
         end if
         PetscCallA(MatSetValue(K,II,II,four,INSERT_VALUES,ierr))
@@ -99,10 +99,10 @@
       do II=Istart,Iend-1
         i = II/nx
         j = II-i*nx
-        if (j .gt. 0) then
+        if (j>0) then
           PetscCallA(MatSetValue(C,II,II-1,mone,INSERT_VALUES,ierr))
         end if
-        if (j .lt. nx-1) then
+        if (j<nx-1) then
           PetscCallA(MatSetValue(C,II,II+1,mone,INSERT_VALUES,ierr))
         end if
         PetscCallA(MatSetValue(C,II,II,two,INSERT_VALUES,ierr))
@@ -148,12 +148,12 @@
 
 !     ** Optional: Get some information from the solver and display it
       PetscCallA(PEPGetType(pep,tname,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) tname
       end if
  120  format (' Solution method: ',A)
       PetscCallA(PEPGetDimensions(pep,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) nev
       end if
  130  format (' Number of requested eigenvalues:',I4)

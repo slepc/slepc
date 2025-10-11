@@ -48,7 +48,7 @@
       PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,ierr))
       PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       n = 20
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,100) n
       end if
  100  format (/'Diagonal Eigenproblem, n =',I3,' (Fortran)')
@@ -75,43 +75,43 @@
 
       PetscCallA(EPSSetType(eps,EPSKRYLOVSCHUR,ierr))
       PetscCallA(EPSGetType(eps,tname,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,110) tname
       end if
  110  format (' Type set to ',A)
 
       PetscCallA(EPSGetProblemType(eps,ptype,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,120) ptype
       end if
  120  format (' Problem type before changing = ',I2)
       PetscCallA(EPSSetProblemType(eps,EPS_HEP,ierr))
       PetscCallA(EPSGetProblemType(eps,ptype,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,130) ptype
       end if
  130  format (' ... changed to ',I2)
       PetscCallA(EPSIsGeneralized(eps,flg,ierr))
-      if (flg .and. rank .eq. 0) then
+      if (flg .and. rank==0) then
         write(*,*) 'generalized'
       end if
       PetscCallA(EPSIsHermitian(eps,flg,ierr))
-      if (flg .and. rank .eq. 0) then
+      if (flg .and. rank==0) then
         write(*,*) 'hermitian'
       end if
       PetscCallA(EPSIsPositive(eps,flg,ierr))
-      if (flg .and. rank .eq. 0) then
+      if (flg .and. rank==0) then
         write(*,*) 'positive'
       end if
 
       PetscCallA(EPSGetExtraction(eps,extr,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,140) extr
       end if
  140  format (' Extraction before changing = ',I2)
       PetscCallA(EPSSetExtraction(eps,EPS_HARMONIC,ierr))
       PetscCallA(EPSGetExtraction(eps,extr,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,150) extr
       end if
  150  format (' ... changed to ',I2)
@@ -121,7 +121,7 @@
       bal = EPS_BALANCE_ONESIDE
       PetscCallA(EPSSetBalance(eps,bal,its,cut,ierr))
       PetscCallA(EPSGetBalance(eps,bal,its,cut,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,160) bal,its,cut
       end if
  160  format (' Balance: ',I2,', its=',I2,', cutoff=',F9.6)
@@ -131,7 +131,7 @@
       PetscCallA(EPSGetTarget(eps,tget,ierr))
       PetscCallA(EPSSetWhichEigenpairs(eps,EPS_TARGET_MAGNITUDE,ierr))
       PetscCallA(EPSGetWhichEigenpairs(eps,which,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,170) which,PetscRealPart(tget)
       end if
  170  format (' Which = ',I2,', target = ',F4.1)
@@ -139,7 +139,7 @@
       nev = 4
       PetscCallA(EPSSetDimensions(eps,nev,PETSC_DETERMINE_INTEGER,PETSC_DETERMINE_INTEGER,ierr))
       PetscCallA(EPSGetDimensions(eps,nev,ncv,mpd,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,180) nev,ncv,mpd
       end if
  180  format (' Dimensions: nev=',I2,', ncv=',I2,', mpd=',I2)
@@ -148,7 +148,7 @@
       its = 200
       PetscCallA(EPSSetTolerances(eps,tol,its,ierr))
       PetscCallA(EPSGetTolerances(eps,tol,its,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,190) tol,its
       end if
  190  format (' Tolerance =',F8.5,', max_its =',I4)
@@ -157,7 +157,7 @@
       PetscCallA(EPSGetConvergenceTest(eps,conv,ierr))
       PetscCallA(EPSSetStoppingTest(eps,EPS_STOP_BASIC,ierr))
       PetscCallA(EPSGetStoppingTest(eps,stp,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,200) conv,stp
       end if
  200  format (' Convergence test =',I2,', stopping test =',I2)
@@ -181,7 +181,7 @@
       PetscCallA(EPSSolve(eps,ierr))
       PetscCallA(EPSGetConvergedReason(eps,reason,ierr))
       PetscCallA(EPSGetIterationNumber(eps,its,ierr))
-      if (rank .eq. 0) then
+      if (rank==0) then
         write(*,210) reason,its
       end if
  210  format (' Finished - converged reason =',I2,', its=',I4)

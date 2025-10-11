@@ -98,11 +98,11 @@ PROGRAM main
      PetscCallA(MatGetOwnershipRange(A(1),Istart,Iend,ierr))
      coeffs = -2.0
      do i=Istart,Iend-1
-        if (i.gt.0) then
+        if (i>0) then
            col = i-1
            PetscCallA(MatSetValue(A(1),i,col,done,INSERT_VALUES,ierr))
         end if
-        if (i.lt.n-1) then
+        if (i<n-1) then
            col = i+1
            PetscCallA(MatSetValue(A(1),i,col,done,INSERT_VALUES,ierr))
         end if
