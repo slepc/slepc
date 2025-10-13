@@ -68,10 +68,17 @@ pause-for-approval:
       - $CI_MERGE_REQUEST_EVENT_TYPE == "detached"
   script:
     - echo "pause-for-approval has no script to run"
+    - if [ ! -z "${CI_PETSC_BRANCH}" ]; then echo "PETSC_BRANCH="${CI_PETSC_BRANCH};fi
+    - echo "PETSC_BRANCH=${CI_PETSC_BRANCH}" > uservars.env
+    - cat uservars.env
+  artifacts:
+    reports:
+      dotenv: uservars.env
   variables:
     GIT_STRATEGY: none
   when: manual
   allow_failure: false
+
 
 #
 #  This provides the basic order of operations and options template for cloud based stage 1 tests.
@@ -81,6 +88,8 @@ pause-for-approval:
 .stage-1:
   extends: .test
   stage: stage-1
+  dependencies:
+    - pause-for-approval
   before_script:
     - date
     - hostname
@@ -101,7 +110,7 @@ pause-for-approval:
     - git clean ${GIT_CLEAN_FLAGS}
     - git fetch
     - |
-      if [ -z ${PETSC_BRANCH+x} ]; then
+      if [ -z ${PETSC_BRANCH} ]; then
         if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
           then git checkout origin/release;
           else git checkout origin/main;
@@ -247,7 +256,7 @@ gnu-lint:
         sleep 10
       done
     - |
-      if [ -z ${PETSC_BRANCH+x} ]; then
+      if [ -z ${PETSC_BRANCH} ]; then
         if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
           then git checkout origin/release;
           else git checkout origin/main;
@@ -319,6 +328,8 @@ gnu-lint:
 .stage-2:
   extends: .stage-23
   stage: stage-2
+  dependencies:
+    - pause-for-approval
   only:
     variables:
       - $STAGE != "1"
@@ -328,6 +339,8 @@ gnu-lint:
 .stage-3:
   extends: .stage-23
   stage: stage-3
+  dependencies:
+    - pause-for-approval
   only:
     variables:
       - $STAGE != "1"
@@ -342,6 +355,8 @@ gnu-lint:
 .stage-4:
   extends: .test
   stage: stage-4
+  dependencies:
+    - pause-for-approval
   only:
     variables:
       - $STAGE != "1"
@@ -542,7 +557,7 @@ pip-install:
       cd petsc
       git clean ${GIT_CLEAN_FLAGS}
       git fetch
-      if [ -z ${PETSC_BRANCH+x} ]; then
+      if [ -z ${PETSC_BRANCH} ]; then
         if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $slepc/include/slepcversion.h) == 1 ]; then
           git checkout origin/release
         else
@@ -605,7 +620,7 @@ destdir-install:
     - git clean ${GIT_CLEAN_FLAGS}
     - git fetch
     - |
-      if [ -z ${PETSC_BRANCH+x} ]; then
+      if [ -z ${PETSC_BRANCH} ]; then
         if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
           then git checkout origin/release;
           else git checkout origin/main;
@@ -1133,7 +1148,7 @@ docs-review:
     - git clean ${GIT_CLEAN_FLAGS}
     - git fetch
     - |
-      if [ -z ${PETSC_BRANCH+x} ]; then
+      if [ -z ${PETSC_BRANCH} ]; then
         if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
           then git checkout origin/release;
           else git checkout origin/main;
