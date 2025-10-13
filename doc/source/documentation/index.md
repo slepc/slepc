@@ -5,7 +5,7 @@ A good starting point for learning SLEPc is to read the Users Manual and then fo
 ## SLEPc Users Manual
 
 - An online version of the [](manual/index) is available.
-- See also the <a href="manual/slepc-manual.pdf">PDF version</a>
+- See also the <a class="reference download internal" href="manual/slepc-manual.pdf"><span class="xref download myst">PDF version</span></a>.
 
 ## Manual Pages
 
