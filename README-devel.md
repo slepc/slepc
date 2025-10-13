@@ -17,7 +17,8 @@ Continuous integration
 
 - The SLEPc project uses its own gitlab-runners.
 - Pipelines are generated automatically when pushing to a merge request, as in PETSc. In that case, a merge against the target branch is done (merged results pipeline).
-- It is also possible to manually run a 'detached' pipeline (without merge) with the `New pipeline` button in the `Pipelines` item under the `Build` menu. In this case, it is possible to select a PETSc branch by using `PETSC_BRANCH` as the variable key and the branch name as the variable value. This option is not available in the case of a fork.
+- An alternative is to manually run a 'detached' pipeline (without merge) with the `New pipeline` button in the `Pipelines` item under the `Build` menu.
+- It is possible to select a PETSc branch to be used in the pipeline, by using `CI_PETSC_BRANCH` as the variable key and the branch name as the variable value. In the case of a manual pipeline, this is done in the `New pipeline` screen. In the case of automatic pipelines, one has to enter the `pause-for-approval` job before pushing the play button, and insert the variable there.
 - The test harness is run with `DIFF_NUMBERS` enabled by default, as opposed to PETSc. When adding a new test, all the output must match, including floating point numbers. Use filters to remove potentially problematic values such as small residual norms.
 - Using filters in tests is preferred to adding `alt` output files.
 
