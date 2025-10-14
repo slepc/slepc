@@ -4,6 +4,7 @@ from typing import Any, Dict
 import re
 import os
 import types
+import posixpath
 
 from docutils import nodes
 from docutils.nodes import Element, Text
@@ -11,6 +12,8 @@ from docutils.nodes import Element, Text
 from sphinx import version_info as sphinx_version_info
 from sphinx.writers.html5 import HTML5Translator
 from sphinx.application import Sphinx
+
+from sphinx.util.inventory import InventoryFile
 
 if not hasattr(re,'Pattern'): re.Pattern = re._pattern_type
 
@@ -80,6 +83,7 @@ class PETScHTMLTranslatorMixin:
 
     def __init__(self, *args: Any) -> None:
         self._manpage_map = None
+        self._inventory = None
         self._word_pattern = re.compile(r'\w+')
         super().__init__(*args)
 
@@ -96,14 +100,34 @@ class PETScHTMLTranslatorMixin:
             self._manpage_map = dict_complete_links(manpage_map_raw, manpage_prefix)
         return self._manpage_map
 
+    def _get_inventory(self) -> Dict[str,str]:
+        inventory_prefix = 'https://petsc.org/release/'
+        if not self._inventory:
+            inventory_raw = {}
+            inventory_filename = os.path.join('source','petsc_objects.inv')
+            with open(inventory_filename, 'rb') as f:
+                try:
+                    inventory = InventoryFile.load(f, inventory_prefix, posixpath.join)
+                except ValueError as exc:
+                    raise ValueError('unknown or unsupported inventory version: %r' % exc) from exc
+                stddoc = inventory['std:doc']
+                for k, v in stddoc.items():
+                    value = stddoc[k]
+                    path = value[2]
+                    inventory_raw[k] = path
+            self._inventory = dict_complete_links(inventory_raw, inventory_prefix)
+        return self._inventory
 
     def _add_manpage_links(self, string: str) -> str:
         """ Add plain HTML link tags to a string """
         manpage_map = self._get_manpage_map()
+        inventory = self._get_inventory()
         def replace(matchobj):
             word = matchobj.group(0)
             if word in manpage_map:
                 return manpage_map[word]
+            elif word in inventory:
+                return inventory[word]
             return word
 
         return self._word_pattern.sub(replace, string)
