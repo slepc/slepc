@@ -897,9 +897,11 @@ and then, after calling `EPSGetEigenvector` on a standard vector `x`, extract th
     VecRestoreSubVector(x,is[1],&x2);
 ```
 
-```{eval-rst}
-.. bibliography::
-   :filter: docname in docnames
+```{only} html
+<p class="rubric">References</p>
+```
+```{bibliography}
+:filter: docname in docnames
 ```
 
 ```{rubric} Footnotes

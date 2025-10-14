@@ -587,9 +587,11 @@ As in the case of eigensolvers, the user can choose different convergence tests,
 
 There is support for different kinds of viewers for the solution, as in the case of eigensolvers. One can for instance use `-svd_view_values`, `-svd_view_vectors`, `-svd_error_relative`, or `-svd_converged_reason`. See the description in section [](#sec:epsviewers).
 
-```{eval-rst}
-.. bibliography::
-   :filter: docname in docnames
+```{only} html
+<p class="rubric">References</p>
+```
+```{bibliography}
+:filter: docname in docnames
 ```
 
 ```{rubric} Footnotes
