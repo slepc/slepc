@@ -71,6 +71,15 @@ website: latexpdf
 	cp $(BUILDDIR)/latex/slepc-manual.pdf $(BUILDDIR)/html/documentation/manual/ && \
 	deactivate
 
+.PHONY: html_only
+html_only:
+	@python3 -m venv .venv-sphinx && \
+	. .venv-sphinx/bin/activate && \
+	python3 -m pip install -r requirements.txt && \
+	${RM} -rf ${BUILDDIR}/html && \
+	$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) && \
+	deactivate
+
 .PHONY: logo_upv
 logo_upv:
 	@echo "Preparing UPV images";
