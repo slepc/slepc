@@ -112,7 +112,9 @@ In the $f(A)v$ problem, there is no clear definition of residual, as opposed to 
 
 After the solver has finished, the number of performed (outer) iterations can be obtained with `MFNGetIterationNumber`. There are also monitors that display the error estimate, which can be activated with command-line keys `-mfn_monitor`, or `-mfn_monitor draw::draw_lg`. See section [](#sec:monitor) for additional details.
 
-```{eval-rst}
-.. bibliography::
-   :filter: docname in docnames
+```{only} html
+<p class="rubric">References</p>
+```
+```{bibliography}
+:filter: docname in docnames
 ```
