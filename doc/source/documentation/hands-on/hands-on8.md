@@ -89,7 +89,7 @@ ST Object: 1 MPI processes
     maximum iterations=10000, initial guess is zero
     tolerances:  relative=1e-08, absolute=1e-50, divergence=10000.
     left preconditioning
-    using NONE norm type for convergence test
+    not checking for convergence
   PC Object: (st_) 1 MPI processes
     type: lu
       out-of-place factorization

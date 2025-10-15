@@ -44,7 +44,7 @@ ST Object: 1 MPI process
     type: preonly
     maximum iterations=10000, initial guess is zero
     left preconditioning
-    using NONE norm type for convergence test
+    not checking for convergence
   PC Object: (st_) 1 MPI process
     type: lu
       out-of-place factorization

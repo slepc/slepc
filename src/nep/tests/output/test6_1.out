@@ -22,7 +22,7 @@ NEP Object: (check_myprefix_) 1 MPI process
           type: preonly
           maximum iterations=10000, initial guess is zero
           left preconditioning
-          using NONE norm type for convergence test
+          not checking for convergence
         PC Object: (sub_) 1 MPI process
           type: ilu
             out-of-place factorization
