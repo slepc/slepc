@@ -158,9 +158,6 @@
 
 !/*TEST
 !
-!   build:
-!      requires: defined(PETSC_USING_F2003) defined(PETSC_USING_F90FREEFORM)
-!
 !   test:
 !      args: -eps_nev 4 -terse
 !      filter: sed -e "s/3.83791/3.83792/"
