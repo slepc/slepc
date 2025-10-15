@@ -8,7 +8,7 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
       interface NEPNLEIGSGetRKShifts
-        subroutine NEPNLEIGSGetRKShifts(a,b,c,z)
+        subroutine NEPNLEIGSGetRKShifts(a, b, c, z)
           use, intrinsic :: ISO_C_BINDING
           import tNEP
           NEP a
@@ -22,7 +22,7 @@
 #endif
 
       interface NEPSetFunction
-        subroutine NEPSetFunction(a,b,c,d,e,z)
+        subroutine NEPSetFunction(a, b, c, d, e, z)
           use, intrinsic :: ISO_C_BINDING
           import tNEP, tMat
           NEP a
@@ -32,13 +32,13 @@
           type(*) e
           PetscErrorCode z
         end subroutine
-      end Interface NEPSetFunction
+      end interface NEPSetFunction
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPSetFunction
 #endif
 
       interface NEPSetJacobian
-        subroutine NEPSetJacobian(a,b,c,d,z)
+        subroutine NEPSetJacobian(a, b, c, d, z)
           use, intrinsic :: ISO_C_BINDING
           import tNEP, tMat
           NEP a
@@ -47,13 +47,13 @@
           type(*) d
           PetscErrorCode z
         end subroutine
-      end Interface NEPSetJacobian
+      end interface NEPSetJacobian
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPSetJacobian
 #endif
 
       interface NEPNLEIGSSetSingularitiesFunction
-        subroutine NEPNLEIGSSetSingularitiesFunction(a,b,c,z)
+        subroutine NEPNLEIGSSetSingularitiesFunction(a, b, c, z)
           use, intrinsic :: ISO_C_BINDING
           import tNEP
           NEP a
@@ -61,13 +61,13 @@
           type(*) c
           PetscErrorCode z
         end subroutine
-      end Interface NEPNLEIGSSetSingularitiesFunction
+      end interface NEPNLEIGSSetSingularitiesFunction
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPNLEIGSSetSingularitiesFunction
 #endif
 
       interface NEPMonitorSet
-        subroutine NEPMonitorSet(a,b,c,d,z)
+        subroutine NEPMonitorSet(a, b, c, d, z)
           use, intrinsic :: ISO_C_BINDING
           import tNEP
           NEP a
@@ -76,7 +76,7 @@
           external d
           PetscErrorCode z
         end subroutine
-      end Interface NEPMonitorSet
+      end interface NEPMonitorSet
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPMonitorSet
 #endif

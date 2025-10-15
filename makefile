@@ -344,6 +344,11 @@ alldocclean:
 
 # ******** Rules for checking coding standards *********************************************************
 
+# Run fprettify for formatting Fortran source
+.PHONY: fprettify
+fprettify:
+	@git ls-files "*.[hF]90" | xargs fprettify --indent 2 --line-length 1000 --whitespace 2 --whitespace-type F --case 1 0 1 0 --enable-replacements --c-relations
+
 # Run fortitude Fortran linter
 .PHONY: fortitude
 fortitude:

@@ -20,11 +20,11 @@
 !
 #include <slepc/finclude/slepceps.h>
 
-   module ex6fmodule
-      use slepceps
-      implicit none
+module ex6fmodule
+  use slepceps
+  implicit none
 
-   contains
+contains
 ! -------------------------------------------------------------------
 !   The actual routine for the matrix-vector product
 !   See https://math.nist.gov/MatrixMarket/data/NEP/mvmisg/mvmisg.html
@@ -54,62 +54,62 @@
 !   ldy     (input) integer
 !           The leading dimension of array y, ldy >= max(1, n)
 !
-      subroutine mvmisg(trans, n, m, x, ldx, y, ldy)
-      use petscsys
-      implicit none
+  subroutine mvmisg(trans, n, m, x, ldx, y, ldy)
+    use petscsys
+    implicit none
 
-      PetscInt    :: ldy, ldx, m, n, trans
-      PetscScalar :: y(ldy,*), x(ldx,*)
-      PetscInt    :: i, k
-      PetscReal   :: alpha, beta, cosa, cosb, sina, sinb
-      PetscScalar :: temp, temp1
+    PetscInt    :: ldy, ldx, m, n, trans
+    PetscScalar :: y(ldy, *), x(ldx, *)
+    PetscInt    :: i, k
+    PetscReal   :: alpha, beta, cosa, cosb, sina, sinb
+    PetscScalar :: temp, temp1
 
-      alpha = PETSC_PI/4
-      beta  = PETSC_PI/4
-      cosa  = cos(alpha)
-      sina  = sin(alpha)
-      cosb  = cos(beta)
-      sinb  = sin(beta)
+    alpha = PETSC_PI/4
+    beta = PETSC_PI/4
+    cosa = cos(alpha)
+    sina = sin(alpha)
+    cosb = cos(beta)
+    sinb = sin(beta)
 
-      if (trans==0) then
+    if (trans == 0) then
 
 !       Compute y(:,1:m) = A*x(:,1:m)
 
-        do k=1,m
-          y(1,k) = cosb*x(1,k) - sinb*x(n,k)
-          do i=2,n-1,2
-            y(i,k)   =  cosb*x(i,k) + sinb*x(i+1,k)
-            y(i+1,k) = -sinb*x(i,k) + cosb*x(i+1,k)
-          end do
-          y(n,k) = sinb*x(1,k) + cosb*x(n,k)
-          do i=1,n,2
-            temp     =  cosa*y(i,k) + sina*y(i+1,k)
-            y(i+1,k) = -sina*y(i,k) + cosa*y(i+1,k)
-            y(i,k)   = temp
-          end do
+      do k = 1, m
+        y(1, k) = cosb*x(1, k) - sinb*x(n, k)
+        do i = 2, n - 1, 2
+          y(i, k) = cosb*x(i, k) + sinb*x(i + 1, k)
+          y(i + 1, k) = -sinb*x(i, k) + cosb*x(i + 1, k)
         end do
+        y(n, k) = sinb*x(1, k) + cosb*x(n, k)
+        do i = 1, n, 2
+          temp = cosa*y(i, k) + sina*y(i + 1, k)
+          y(i + 1, k) = -sina*y(i, k) + cosa*y(i + 1, k)
+          y(i, k) = temp
+        end do
+      end do
 
-      else if (trans==1) then
+    else if (trans == 1) then
 
 !       Compute y(:1:m) = A'*x(:,1:m)
 
-        do k=1,m
-          do i=1,n,2
-            y(i,k)   = cosa*x(i,k) - sina*x(i+1,k)
-            y(i+1,k) = sina*x(i,k) + cosa*x(i+1,k)
-          end do
-          temp = cosb*y(1,k) + sinb*y(n,k)
-          do i=2,n-1,2
-            temp1    = cosb*y(i,k) - sinb*y(i+1,k)
-            y(i+1,k) = sinb*y(i,k) + cosb*y(i+1,k)
-            y(i,k)   = temp1
-          end do
-          y(n,k) = -sinb*y(1,k) + cosb*y(n,k)
-          y(1,k) = temp
+      do k = 1, m
+        do i = 1, n, 2
+          y(i, k) = cosa*x(i, k) - sina*x(i + 1, k)
+          y(i + 1, k) = sina*x(i, k) + cosa*x(i + 1, k)
         end do
+        temp = cosb*y(1, k) + sinb*y(n, k)
+        do i = 2, n - 1, 2
+          temp1 = cosb*y(i, k) - sinb*y(i + 1, k)
+          y(i + 1, k) = sinb*y(i, k) + cosb*y(i + 1, k)
+          y(i, k) = temp1
+        end do
+        y(n, k) = -sinb*y(1, k) + cosb*y(n, k)
+        y(1, k) = temp
+      end do
 
-      end if
-      end subroutine
+    end if
+  end subroutine
 
 ! -------------------------------------------------------------------
 !
@@ -122,27 +122,27 @@
 !   Output Parameter:
 !   y - output vector
 !
-      subroutine MatMult_Ising(A,x,y,ierr)
-      use petscmat
-      implicit none
+  subroutine MatMult_Ising(A, x, y, ierr)
+    use petscmat
+    implicit none
 
-      Mat                  :: A
-      Vec                  :: x,y
-      PetscInt             :: trans,one,N
-      PetscScalar, pointer :: xx(:),yy(:)
-      PetscErrorCode       :: ierr
+    Mat                  :: A
+    Vec                  :: x, y
+    PetscInt             :: trans, one, N
+    PetscScalar, pointer :: xx(:), yy(:)
+    PetscErrorCode       :: ierr
 
-      PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
-      PetscCall(VecGetArrayRead(x,xx,ierr))
-      PetscCall(VecGetArray(y,yy,ierr))
+    PetscCall(MatGetSize(A, N, PETSC_NULL_INTEGER, ierr))
+    PetscCall(VecGetArrayRead(x, xx, ierr))
+    PetscCall(VecGetArray(y, yy, ierr))
 
-      trans = 0
-      one = 1
-      call mvmisg(trans,N,one,xx,N,yy,N)
+    trans = 0
+    one = 1
+    call mvmisg(trans, N, one, xx, N, yy, N)
 
-      PetscCall(VecRestoreArrayRead(x,xx,ierr))
-      PetscCall(VecRestoreArray(y,yy,ierr))
-      end subroutine
+    PetscCall(VecRestoreArrayRead(x, xx, ierr))
+    PetscCall(VecRestoreArray(y, yy, ierr))
+  end subroutine
 
 ! -------------------------------------------------------------------
 !
@@ -155,34 +155,34 @@
 !   Output Parameter:
 !   y - output vector
 !
-      subroutine MatMultTranspose_Ising(A,x,y,ierr)
-      use petscmat
-      implicit none
+  subroutine MatMultTranspose_Ising(A, x, y, ierr)
+    use petscmat
+    implicit none
 
-      Mat                  :: A
-      Vec                  :: x,y
-      PetscInt             :: trans,one,N
-      PetscScalar, pointer :: xx(:),yy(:)
-      PetscErrorCode       :: ierr
+    Mat                  :: A
+    Vec                  :: x, y
+    PetscInt             :: trans, one, N
+    PetscScalar, pointer :: xx(:), yy(:)
+    PetscErrorCode       :: ierr
 
-      PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
-      PetscCall(VecGetArrayRead(x,xx,ierr))
-      PetscCall(VecGetArray(y,yy,ierr))
+    PetscCall(MatGetSize(A, N, PETSC_NULL_INTEGER, ierr))
+    PetscCall(VecGetArrayRead(x, xx, ierr))
+    PetscCall(VecGetArray(y, yy, ierr))
 
-      trans = 1
-      one = 1
-      call mvmisg(trans,N,one,xx,N,yy,N)
+    trans = 1
+    one = 1
+    call mvmisg(trans, N, one, xx, N, yy, N)
 
-      PetscCall(VecRestoreArrayRead(x,xx,ierr))
-      PetscCall(VecRestoreArray(y,yy,ierr))
-      end subroutine
+    PetscCall(VecRestoreArrayRead(x, xx, ierr))
+    PetscCall(VecRestoreArray(y, yy, ierr))
+  end subroutine
 
-   end module ex6fmodule
+end module ex6fmodule
 
-   program ex6f
-      use slepceps
-      use ex6fmodule
-      implicit none
+program ex6f
+  use slepceps
+  use ex6fmodule
+  implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Declarations
@@ -192,100 +192,100 @@
 !     A     operator matrix
 !     eps   eigenproblem solver context
 
-      Mat            :: A
-      EPS            :: eps
-      EPSType        :: tname
-      PetscReal      :: tol
-      PetscInt       :: N, m
-      PetscInt       :: nev, maxit, its
-      PetscMPIInt    :: sz, rank
-      PetscErrorCode :: ierr
-      PetscBool      :: flg, terse
+  Mat            :: A
+  EPS            :: eps
+  EPSType        :: tname
+  PetscReal      :: tol
+  PetscInt       :: N, m
+  PetscInt       :: nev, maxit, its
+  PetscMPIInt    :: sz, rank
+  PetscErrorCode :: ierr
+  PetscBool      :: flg, terse
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,ierr))
+  PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
 #if defined(PETSC_USE_COMPLEX)
-      SETERRA(PETSC_COMM_SELF,PETSC_ERR_SUP,'This example requires real numbers')
+  SETERRA(PETSC_COMM_SELF, PETSC_ERR_SUP, 'This example requires real numbers')
 #endif
-      PetscCallMPIA(MPI_Comm_size(PETSC_COMM_WORLD,sz,ierr))
-      PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
-      PetscCheckA(sz==1,PETSC_COMM_SELF,PETSC_ERR_WRONG_MPI_SIZE,'This is a uniprocessor example only!')
-      m = 30
-      PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-m',m,flg,ierr))
-      N = 2*m
+  PetscCallMPIA(MPI_Comm_size(PETSC_COMM_WORLD, sz, ierr))
+  PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
+  PetscCheckA(sz == 1, PETSC_COMM_SELF, PETSC_ERR_WRONG_MPI_SIZE, 'This is a uniprocessor example only!')
+  m = 30
+  PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-m', m, flg, ierr))
+  N = 2*m
 
-      if (rank==0) then
-        write(*,'(/A,I6,A/)') 'Ising Model Eigenproblem, m=',m,', (N=2*m)'
-      end if
+  if (rank == 0) then
+    write (*, '(/A,I6,A/)') 'Ising Model Eigenproblem, m=', m, ', (N=2*m)'
+  end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Register the matrix-vector subroutine for the operator that defines
 !     the eigensystem, Ax=kx
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(MatCreateShell(PETSC_COMM_WORLD,N,N,N,N,PETSC_NULL_INTEGER,A,ierr))
-      PetscCallA(MatShellSetOperation(A,MATOP_MULT,MatMult_Ising,ierr))
-      PetscCallA(MatShellSetOperation(A,MATOP_MULT_TRANSPOSE,MatMultTranspose_Ising,ierr))
+  PetscCallA(MatCreateShell(PETSC_COMM_WORLD, N, N, N, N, PETSC_NULL_INTEGER, A, ierr))
+  PetscCallA(MatShellSetOperation(A, MATOP_MULT, MatMult_Ising, ierr))
+  PetscCallA(MatShellSetOperation(A, MATOP_MULT_TRANSPOSE, MatMultTranspose_Ising, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Create the eigensolver and display info
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 !     ** Create eigensolver context
-      PetscCallA(EPSCreate(PETSC_COMM_WORLD,eps,ierr))
+  PetscCallA(EPSCreate(PETSC_COMM_WORLD, eps, ierr))
 
 !     ** Set operators. In this case, it is a standard eigenvalue problem
-      PetscCallA(EPSSetOperators(eps,A,PETSC_NULL_MAT,ierr))
-      PetscCallA(EPSSetProblemType(eps,EPS_NHEP,ierr))
+  PetscCallA(EPSSetOperators(eps, A, PETSC_NULL_MAT, ierr))
+  PetscCallA(EPSSetProblemType(eps, EPS_NHEP, ierr))
 
 !     ** Set solver parameters at runtime
-      PetscCallA(EPSSetFromOptions(eps,ierr))
+  PetscCallA(EPSSetFromOptions(eps, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Solve the eigensystem
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(EPSSolve(eps,ierr))
-      PetscCallA(EPSGetIterationNumber(eps,its,ierr))
-      if (rank==0) then
-        write(*,'(A,I4)') ' Number of iterations of the method: ',its
-      end if
+  PetscCallA(EPSSolve(eps, ierr))
+  PetscCallA(EPSGetIterationNumber(eps, its, ierr))
+  if (rank == 0) then
+    write (*, '(A,I4)') ' Number of iterations of the method: ', its
+  end if
 
 !     ** Optional: Get some information from the solver and display it
-      PetscCallA(EPSGetType(eps,tname,ierr))
-      if (rank==0) then
-        write(*,'(A,A)') ' Solution method: ', tname
-      end if
-      PetscCallA(EPSGetDimensions(eps,nev,PETSC_NULL_INTEGER,PETSC_NULL_INTEGER,ierr))
-      if (rank==0) then
-        write(*,'(A,I2)') ' Number of requested eigenvalues:',nev
-      end if
-      PetscCallA(EPSGetTolerances(eps,tol,maxit,ierr))
-      if (rank==0) then
-        write(*,'(A,1PE11.4,A,I6)') ' Stopping condition: tol=',tol,', maxit=', maxit
-      end if
+  PetscCallA(EPSGetType(eps, tname, ierr))
+  if (rank == 0) then
+    write (*, '(A,A)') ' Solution method: ', tname
+  end if
+  PetscCallA(EPSGetDimensions(eps, nev, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr))
+  if (rank == 0) then
+    write (*, '(A,I2)') ' Number of requested eigenvalues:', nev
+  end if
+  PetscCallA(EPSGetTolerances(eps, tol, maxit, ierr))
+  if (rank == 0) then
+    write (*, '(A,1PE11.4,A,I6)') ' Stopping condition: tol=', tol, ', maxit=', maxit
+  end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 !     ** show detailed info unless -terse option is given by user
-      PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-terse',terse,ierr))
-      if (terse) then
-        PetscCallA(EPSErrorView(eps,EPS_ERROR_RELATIVE,PETSC_NULL_VIEWER,ierr))
-      else
-        PetscCallA(PetscViewerPushFormat(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_ASCII_INFO_DETAIL,ierr))
-        PetscCallA(EPSConvergedReasonView(eps,PETSC_VIEWER_STDOUT_WORLD,ierr))
-        PetscCallA(EPSErrorView(eps,EPS_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD,ierr))
-        PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr))
-      end if
-      PetscCallA(EPSDestroy(eps,ierr))
-      PetscCallA(MatDestroy(A,ierr))
-      PetscCallA(SlepcFinalize(ierr))
-   end program ex6f
+  PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-terse', terse, ierr))
+  if (terse) then
+    PetscCallA(EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))
+  else
+    PetscCallA(PetscViewerPushFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_INFO_DETAIL, ierr))
+    PetscCallA(EPSConvergedReasonView(eps, PETSC_VIEWER_STDOUT_WORLD, ierr))
+    PetscCallA(EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_VIEWER_STDOUT_WORLD, ierr))
+    PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD, ierr))
+  end if
+  PetscCallA(EPSDestroy(eps, ierr))
+  PetscCallA(MatDestroy(A, ierr))
+  PetscCallA(SlepcFinalize(ierr))
+end program ex6f
 
 !/*TEST
 !

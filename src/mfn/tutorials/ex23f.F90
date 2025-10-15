@@ -19,9 +19,9 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcmfn.h>
-      program ex23f
-      use slepcmfn
-      implicit none
+program ex23f
+  use slepcmfn
+  implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Declarations
@@ -31,156 +31,156 @@
 !     A      problem matrix
 !     mfn    matrix function solver context
 
-      Mat                :: A
-      MFN                :: mfn
-      FN                 :: f
-      PetscReal          :: tol, norm, cst, pd, pu
-      PetscScalar        :: t, z
-      Vec                :: v, y
-      PetscInt           :: N, m, ncv, maxit, its, ii, jj
-      PetscInt           :: i, j, jmax, ix, Istart, Iend
-      PetscMPIInt        :: rank
-      PetscErrorCode     :: ierr
-      PetscBool          :: flg
-      MFNConvergedReason :: reason
+  Mat                :: A
+  MFN                :: mfn
+  FN                 :: f
+  PetscReal          :: tol, norm, cst, pd, pu
+  PetscScalar        :: t, z
+  Vec                :: v, y
+  PetscInt           :: N, m, ncv, maxit, its, ii, jj
+  PetscInt           :: i, j, jmax, ix, Istart, Iend
+  PetscMPIInt        :: rank
+  PetscErrorCode     :: ierr
+  PetscBool          :: flg
+  MFNConvergedReason :: reason
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,ierr))
-      PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
-      m = 15
-      PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-m',m,flg,ierr))
-      t = 2.0
-      PetscCallA(PetscOptionsGetScalar(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-t',t,flg,ierr))
-      N = m*(m+1)/2
-      if (rank==0) then
-        write(*,100) N, m
-      end if
- 100  format (/'Markov y=exp(t*A)*e_1, N=',I6,' (m=',I4,')')
+  PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
+  PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
+  m = 15
+  PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-m', m, flg, ierr))
+  t = 2.0
+  PetscCallA(PetscOptionsGetScalar(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-t', t, flg, ierr))
+  N = m*(m + 1)/2
+  if (rank == 0) then
+    write (*, 100) N, m
+  end if
+100 format(/'Markov y=exp(t*A)*e_1, N=', I6, ' (m=', I4, ')')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Compute the transition probability matrix, A
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(MatCreate(PETSC_COMM_WORLD,A,ierr))
-      PetscCallA(MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,N,N,ierr))
-      PetscCallA(MatSetFromOptions(A,ierr))
-      PetscCallA(MatGetOwnershipRange(A,Istart,Iend,ierr))
-      ix = 0
-      cst = 0.5/real(m-1)
-      do i=1,m
-        jmax = m-i+1
-        do j=1,jmax
-          ix = ix + 1
-          ii = ix - 1
-          if (ix-1>=Istart .and. ix<=Iend) then
-            if (j/=jmax) then
-              pd = cst*(i+j-1)
-              !** north
-              if (i==1) then
-                z = 2.0*pd
-              else
-                z = pd
-              end if
-              PetscCallA(MatSetValue(A,ii,ix,z,INSERT_VALUES,ierr))
-              !** east
-              if (j==1) then
-                z = 2.0*pd
-              else
-                z = pd
-              end if
-              jj = ix+jmax-1
-              PetscCallA(MatSetValue(A,ii,jj,z,INSERT_VALUES,ierr))
-            end if
-
-            !** south
-            pu = 0.5 - cst*(i+j-3)
-            z = pu
-            if (j>1) then
-              jj = ix-2
-              PetscCallA(MatSetValue(A,ii,jj,z,INSERT_VALUES,ierr))
-            end if
-            !** west
-            if (i>1) then
-              jj = ix-jmax-2
-              PetscCallA(MatSetValue(A,ii,jj,z,INSERT_VALUES,ierr))
-            end if
+  PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
+  PetscCallA(MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, N, N, ierr))
+  PetscCallA(MatSetFromOptions(A, ierr))
+  PetscCallA(MatGetOwnershipRange(A, Istart, Iend, ierr))
+  ix = 0
+  cst = 0.5/real(m - 1)
+  do i = 1, m
+    jmax = m - i + 1
+    do j = 1, jmax
+      ix = ix + 1
+      ii = ix - 1
+      if (ix - 1 >= Istart .and. ix <= Iend) then
+        if (j /= jmax) then
+          pd = cst*(i + j - 1)
+          !** north
+          if (i == 1) then
+            z = 2.0*pd
+          else
+            z = pd
           end if
-        end do
-      end do
-      PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
-      PetscCallA(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr))
+          PetscCallA(MatSetValue(A, ii, ix, z, INSERT_VALUES, ierr))
+          !** east
+          if (j == 1) then
+            z = 2.0*pd
+          else
+            z = pd
+          end if
+          jj = ix + jmax - 1
+          PetscCallA(MatSetValue(A, ii, jj, z, INSERT_VALUES, ierr))
+        end if
+
+        !** south
+        pu = 0.5 - cst*(i + j - 3)
+        z = pu
+        if (j > 1) then
+          jj = ix - 2
+          PetscCallA(MatSetValue(A, ii, jj, z, INSERT_VALUES, ierr))
+        end if
+        !** west
+        if (i > 1) then
+          jj = ix - jmax - 2
+          PetscCallA(MatSetValue(A, ii, jj, z, INSERT_VALUES, ierr))
+        end if
+      end if
+    end do
+  end do
+  PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))
+  PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
 
 !     ** Set v = e_1
-      PetscCallA(MatCreateVecs(A,y,v,ierr))
-      ii = 0
-      z = 1.0
-      PetscCallA(VecSetValue(v,ii,z,INSERT_VALUES,ierr))
-      PetscCallA(VecAssemblyBegin(v,ierr))
-      PetscCallA(VecAssemblyEnd(v,ierr))
+  PetscCallA(MatCreateVecs(A, y, v, ierr))
+  ii = 0
+  z = 1.0
+  PetscCallA(VecSetValue(v, ii, z, INSERT_VALUES, ierr))
+  PetscCallA(VecAssemblyBegin(v, ierr))
+  PetscCallA(VecAssemblyEnd(v, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Create the solver and set various options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 !     ** Create matrix function solver context
-      PetscCallA(MFNCreate(PETSC_COMM_WORLD,mfn,ierr))
+  PetscCallA(MFNCreate(PETSC_COMM_WORLD, mfn, ierr))
 
 !     ** Set operator matrix, the function to compute, and other options
-      PetscCallA(MFNSetOperator(mfn,A,ierr))
-      PetscCallA(MFNGetFN(mfn,f,ierr))
-      PetscCallA(FNSetType(f,FNEXP,ierr))
-      z = 1.0
-      PetscCallA(FNSetScale(f,t,z,ierr))
-      tol = 0.0000001
-      PetscCallA(MFNSetTolerances(mfn,tol,PETSC_CURRENT_INTEGER,ierr))
+  PetscCallA(MFNSetOperator(mfn, A, ierr))
+  PetscCallA(MFNGetFN(mfn, f, ierr))
+  PetscCallA(FNSetType(f, FNEXP, ierr))
+  z = 1.0
+  PetscCallA(FNSetScale(f, t, z, ierr))
+  tol = 0.0000001
+  PetscCallA(MFNSetTolerances(mfn, tol, PETSC_CURRENT_INTEGER, ierr))
 
 !     ** Set solver parameters at runtime
-      PetscCallA(MFNSetFromOptions(mfn,ierr))
+  PetscCallA(MFNSetFromOptions(mfn, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Solve the problem, y=exp(t*A)*v
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(MFNSolve(mfn,v,y,ierr))
-      PetscCallA(MFNGetConvergedReason(mfn,reason,ierr))
-      PetscCheckA(reason%v>=0,PETSC_COMM_WORLD,PETSC_ERR_NOT_CONVERGED,'Solver did not converge')
-      PetscCallA(VecNorm(y,NORM_2,norm,ierr))
+  PetscCallA(MFNSolve(mfn, v, y, ierr))
+  PetscCallA(MFNGetConvergedReason(mfn, reason, ierr))
+  PetscCheckA(reason%v >= 0, PETSC_COMM_WORLD, PETSC_ERR_NOT_CONVERGED, 'Solver did not converge')
+  PetscCallA(VecNorm(y, NORM_2, norm, ierr))
 
 !     ** Optional: Get some information from the solver and display it
-      PetscCallA(MFNGetIterationNumber(mfn,its,ierr))
-      if (rank==0) then
-        write(*,120) its
-      end if
- 120  format (' Number of iterations of the method: ',I4)
-      PetscCallA(MFNGetDimensions(mfn,ncv,ierr))
-      if (rank==0) then
-        write(*,130) ncv
-      end if
- 130  format (' Subspace dimension:',I4)
-      PetscCallA(MFNGetTolerances(mfn,tol,maxit,ierr))
-      if (rank==0) then
-        write(*,140) tol,maxit
-      end if
- 140  format (' Stopping condition: tol=',f10.7,' maxit=',I4)
+  PetscCallA(MFNGetIterationNumber(mfn, its, ierr))
+  if (rank == 0) then
+    write (*, 120) its
+  end if
+120 format(' Number of iterations of the method: ', I4)
+  PetscCallA(MFNGetDimensions(mfn, ncv, ierr))
+  if (rank == 0) then
+    write (*, 130) ncv
+  end if
+130 format(' Subspace dimension:', I4)
+  PetscCallA(MFNGetTolerances(mfn, tol, maxit, ierr))
+  if (rank == 0) then
+    write (*, 140) tol, maxit
+  end if
+140 format(' Stopping condition: tol=', f10.7, ' maxit=', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      if (rank==0) then
-        write(*,150) PetscRealPart(t),norm
-      end if
- 150  format (' Computed vector at time t=',f4.1,' has norm ',f8.5)
+  if (rank == 0) then
+    write (*, 150) PetscRealPart(t), norm
+  end if
+150 format(' Computed vector at time t=', f4.1, ' has norm ', f8.5)
 
-      PetscCallA(MFNDestroy(mfn,ierr))
-      PetscCallA(MatDestroy(A,ierr))
-      PetscCallA(VecDestroy(v,ierr))
-      PetscCallA(VecDestroy(y,ierr))
-      PetscCallA(SlepcFinalize(ierr))
-      end program ex23f
+  PetscCallA(MFNDestroy(mfn, ierr))
+  PetscCallA(MatDestroy(A, ierr))
+  PetscCallA(VecDestroy(v, ierr))
+  PetscCallA(VecDestroy(y, ierr))
+  PetscCallA(SlepcFinalize(ierr))
+end program ex23f
 
 !/*TEST
 !

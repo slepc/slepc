@@ -17,153 +17,153 @@
 ! ----------------------------------------------------------------------
 !
 #include <slepc/finclude/slepcmfn.h>
-      program test3f
-      use slepcmfn
-      implicit none
+program test3f
+  use slepcmfn
+  implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-      Mat                :: A, B
-      MFN                :: mfn
-      FN                 :: f
-      MFNConvergedReason :: reason
-      Vec                :: v, y
-      PetscInt           :: Nt, n, i, j, II
-      PetscInt           :: Istart, maxit, ncv
-      PetscInt           :: col, its, Iend
-      PetscScalar        :: val
-      PetscReal          :: tol, norm
-      PetscMPIInt        :: rank
-      PetscErrorCode     :: ierr
-      PetscBool          :: flg
+  Mat                :: A, B
+  MFN                :: mfn
+  FN                 :: f
+  MFNConvergedReason :: reason
+  Vec                :: v, y
+  PetscInt           :: Nt, n, i, j, II
+  PetscInt           :: Istart, maxit, ncv
+  PetscInt           :: col, its, Iend
+  PetscScalar        :: val
+  PetscReal          :: tol, norm
+  PetscMPIInt        :: rank
+  PetscErrorCode     :: ierr
+  PetscBool          :: flg
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER,ierr))
-      PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
-      n = 4
-      PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,'-n',n,flg,ierr))
-      Nt = n*n
+  PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
+  PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
+  n = 4
+  PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))
+  Nt = n*n
 
-      if (rank==0) then
-        write(*,100) n
-      end if
- 100  format (/'nSquare root of Laplacian, n=',I3,' (Fortran)')
+  if (rank == 0) then
+    write (*, 100) n
+  end if
+100 format(/'nSquare root of Laplacian, n=', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Compute the discrete 2-D Laplacian
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(MatCreate(PETSC_COMM_WORLD,A,ierr))
-      PetscCallA(MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,Nt,Nt,ierr))
-      PetscCallA(MatSetFromOptions(A,ierr))
+  PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
+  PetscCallA(MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, Nt, Nt, ierr))
+  PetscCallA(MatSetFromOptions(A, ierr))
 
-      PetscCallA(MatGetOwnershipRange(A,Istart,Iend,ierr))
-      do II=Istart,Iend-1
-        i = II/n
-        j = II-i*n
-        val = -1.0
-        if (i>0) then
-          col = II-n
-          PetscCallA(MatSetValue(A,II,col,val,INSERT_VALUES,ierr))
-        end if
-        if (i<n-1) then
-          col = II+n
-          PetscCallA(MatSetValue(A,II,col,val,INSERT_VALUES,ierr))
-        end if
-        if (j>0) then
-          col = II-1
-          PetscCallA(MatSetValue(A,II,col,val,INSERT_VALUES,ierr))
-        end if
-        if (j<n-1) then
-          col = II+1
-          PetscCallA(MatSetValue(A,II,col,val,INSERT_VALUES,ierr))
-        end if
-        val = 4.0
-        PetscCallA(MatSetValue(A,II,II,val,INSERT_VALUES,ierr))
-      end do
+  PetscCallA(MatGetOwnershipRange(A, Istart, Iend, ierr))
+  do II = Istart, Iend - 1
+    i = II/n
+    j = II - i*n
+    val = -1.0
+    if (i > 0) then
+      col = II - n
+      PetscCallA(MatSetValue(A, II, col, val, INSERT_VALUES, ierr))
+    end if
+    if (i < n - 1) then
+      col = II + n
+      PetscCallA(MatSetValue(A, II, col, val, INSERT_VALUES, ierr))
+    end if
+    if (j > 0) then
+      col = II - 1
+      PetscCallA(MatSetValue(A, II, col, val, INSERT_VALUES, ierr))
+    end if
+    if (j < n - 1) then
+      col = II + 1
+      PetscCallA(MatSetValue(A, II, col, val, INSERT_VALUES, ierr))
+    end if
+    val = 4.0
+    PetscCallA(MatSetValue(A, II, II, val, INSERT_VALUES, ierr))
+  end do
 
-      PetscCallA(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY,ierr))
-      PetscCallA(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY,ierr))
+  PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))
+  PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
 
-      PetscCallA(MatCreateVecs(A,PETSC_NULL_VEC,v,ierr))
-      i = 0
-      val = 1.0
-      PetscCallA(VecSetValue(v,i,val,INSERT_VALUES,ierr))
-      PetscCallA(VecAssemblyBegin(v,ierr))
-      PetscCallA(VecAssemblyEnd(v,ierr))
-      PetscCallA(VecDuplicate(v,y,ierr))
+  PetscCallA(MatCreateVecs(A, PETSC_NULL_VEC, v, ierr))
+  i = 0
+  val = 1.0
+  PetscCallA(VecSetValue(v, i, val, INSERT_VALUES, ierr))
+  PetscCallA(VecAssemblyBegin(v, ierr))
+  PetscCallA(VecAssemblyEnd(v, ierr))
+  PetscCallA(VecDuplicate(v, y, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Compute singular values
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(MFNCreate(PETSC_COMM_WORLD,mfn,ierr))
-      PetscCallA(MFNSetOperator(mfn,A,ierr))
-      PetscCallA(MFNGetFN(mfn,f,ierr))
-      PetscCallA(FNSetType(f,FNSQRT,ierr))
+  PetscCallA(MFNCreate(PETSC_COMM_WORLD, mfn, ierr))
+  PetscCallA(MFNSetOperator(mfn, A, ierr))
+  PetscCallA(MFNGetFN(mfn, f, ierr))
+  PetscCallA(FNSetType(f, FNSQRT, ierr))
 
 !     ** test some interface functions
-      PetscCallA(MFNGetOperator(mfn,B,ierr))
-      PetscCallA(MatView(B,PETSC_VIEWER_STDOUT_WORLD,ierr))
-      PetscCallA(MFNSetOptionsPrefix(mfn,'myprefix_',ierr))
-      tol = 1e-4
-      maxit = 500
-      PetscCallA(MFNSetTolerances(mfn,tol,maxit,ierr))
-      ncv = 6
-      PetscCallA(MFNSetDimensions(mfn,ncv,ierr))
-      PetscCallA(MFNSetErrorIfNotConverged(mfn,PETSC_TRUE,ierr))
-      PetscCallA(MFNSetFromOptions(mfn,ierr))
+  PetscCallA(MFNGetOperator(mfn, B, ierr))
+  PetscCallA(MatView(B, PETSC_VIEWER_STDOUT_WORLD, ierr))
+  PetscCallA(MFNSetOptionsPrefix(mfn, 'myprefix_', ierr))
+  tol = 1e-4
+  maxit = 500
+  PetscCallA(MFNSetTolerances(mfn, tol, maxit, ierr))
+  ncv = 6
+  PetscCallA(MFNSetDimensions(mfn, ncv, ierr))
+  PetscCallA(MFNSetErrorIfNotConverged(mfn, PETSC_TRUE, ierr))
+  PetscCallA(MFNSetFromOptions(mfn, ierr))
 
 !     ** query properties and print them
-      PetscCallA(MFNGetTolerances(mfn,tol,maxit,ierr))
-      if (rank==0) then
-        write(*,110) tol,maxit
-      end if
- 110  format (/' Tolerance: ',F7.4,', maxit: ',I4)
-      PetscCallA(MFNGetDimensions(mfn,ncv,ierr))
-      if (rank==0) then
-        write(*,120) ncv
-      end if
- 120  format (' Subspace dimension: ',I3)
-      PetscCallA(MFNGetErrorIfNotConverged(mfn,flg,ierr))
-      if (rank==0 .and. flg) then
-        write(*,*) 'Erroring out if convergence fails'
-      end if
+  PetscCallA(MFNGetTolerances(mfn, tol, maxit, ierr))
+  if (rank == 0) then
+    write (*, 110) tol, maxit
+  end if
+110 format(/' Tolerance: ', F7.4, ', maxit: ', I4)
+  PetscCallA(MFNGetDimensions(mfn, ncv, ierr))
+  if (rank == 0) then
+    write (*, 120) ncv
+  end if
+120 format(' Subspace dimension: ', I3)
+  PetscCallA(MFNGetErrorIfNotConverged(mfn, flg, ierr))
+  if (rank == 0 .and. flg) then
+    write (*, *) 'Erroring out if convergence fails'
+  end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Call the solver
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      PetscCallA(MFNSolve(mfn,v,y,ierr))
-      PetscCallA(MFNGetConvergedReason(mfn,reason,ierr))
-      if (rank==0) then
-        write(*,130) reason
-      end if
- 130  format (' Converged reason:',I2)
-      PetscCallA(MFNGetIterationNumber(mfn,its,ierr))
+  PetscCallA(MFNSolve(mfn, v, y, ierr))
+  PetscCallA(MFNGetConvergedReason(mfn, reason, ierr))
+  if (rank == 0) then
+    write (*, 130) reason
+  end if
+130 format(' Converged reason:', I2)
+  PetscCallA(MFNGetIterationNumber(mfn, its, ierr))
 !     if (rank==0) then
 !       write(*,140) its
 !     end if
 !140  format (' Number of iterations of the method:',I4)
 
-      PetscCallA(VecNorm(y,NORM_2,norm,ierr))
-      if (rank==0) then
-        write(*,150) norm
-      end if
- 150  format (' sqrt(A)*v has norm ',F7.4)
+  PetscCallA(VecNorm(y, NORM_2, norm, ierr))
+  if (rank == 0) then
+    write (*, 150) norm
+  end if
+150 format(' sqrt(A)*v has norm ', F7.4)
 
-      PetscCallA(MFNDestroy(mfn,ierr))
-      PetscCallA(MatDestroy(A,ierr))
-      PetscCallA(VecDestroy(v,ierr))
-      PetscCallA(VecDestroy(y,ierr))
+  PetscCallA(MFNDestroy(mfn, ierr))
+  PetscCallA(MatDestroy(A, ierr))
+  PetscCallA(VecDestroy(v, ierr))
+  PetscCallA(VecDestroy(y, ierr))
 
-      PetscCallA(SlepcFinalize(ierr))
-      end program test3f
+  PetscCallA(SlepcFinalize(ierr))
+end program test3f
 
 !/*TEST
 !

@@ -8,7 +8,7 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
       interface SVDMonitorSet
-        subroutine SVDMonitorSet(a,b,c,d,z)
+        subroutine SVDMonitorSet(a, b, c, d, z)
           use, intrinsic :: ISO_C_BINDING
           import tSVD
           SVD a
@@ -17,7 +17,7 @@
           external d
           PetscErrorCode z
         end subroutine
-      end Interface SVDMonitorSet
+      end interface SVDMonitorSet
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::SVDMonitorSet
 #endif
