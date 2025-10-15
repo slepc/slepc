@@ -72,7 +72,7 @@ website: latexpdf
 	deactivate
 
 .PHONY: html_only
-html_only:
+html_only: webstatic
 	@python3 -m venv .venv-sphinx && \
 	. .venv-sphinx/bin/activate && \
 	python3 -m pip install -r requirements.txt && \
