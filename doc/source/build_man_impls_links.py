@@ -11,9 +11,8 @@ def processfile(slepc_dir,srcdir,dir,file,implsClassAll,subimplsClassAll,implsFu
   isclass = False
   with open(os.path.join(dir,file),'r') as f:
     text = f.read()
-    bibneeded = text.find('{cite}') > -1
     isclass = text.find('typedef struct') > -1
-  if bibneeded:
+  if text.find('{cite}') > -1 or text.find('{cite:p}') > -1 or text.find('{cite:t}') > -1:
     with open(os.path.join(dir,file),'w') as f:
       f.write(text[0:text.find('## See Also')])
       f.write('\n## References\n```{bibliography}\n:filter: docname in docnames\n```\n\n')
