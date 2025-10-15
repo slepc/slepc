@@ -50,10 +50,6 @@ program test1f
   izero = 0
   ione = 1
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
-  if (ierr /= 0) then
-    print *, 'SlepcInitialize failed'
-    stop
-  end if
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-k', k, flg, ierr))

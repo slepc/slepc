@@ -46,10 +46,6 @@ program ex1f
   two = 2
   three = 3
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, "ex1f test"//c_new_line, ierr))
-  if (ierr /= 0) then
-    print *, 'SlepcInitialize failed'
-    stop
-  end if
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 30
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))

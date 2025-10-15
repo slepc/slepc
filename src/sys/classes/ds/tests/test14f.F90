@@ -41,10 +41,6 @@ program test14f
 
   zero = 0
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
-  if (ierr /= 0) then
-    print *, 'SlepcInitialize failed'
-    stop
-  end if
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 10
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))

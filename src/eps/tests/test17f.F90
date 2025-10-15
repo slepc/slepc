@@ -46,10 +46,6 @@ program test17f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
-  if (ierr /= 0) then
-    print *, 'SlepcInitialize failed'
-    stop
-  end if
   PetscCallMPIA(MPI_Comm_size(PETSC_COMM_WORLD, nprc, ierr))
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 35

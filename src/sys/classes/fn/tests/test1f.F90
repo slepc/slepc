@@ -131,7 +131,7 @@ contains
     PetscReal      :: re, im
     PetscMPIInt    :: rank
     PetscErrorCode :: ierr
-  
+
     PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
     if (rank == 0) then
       re = PetscRealPart(y)

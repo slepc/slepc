@@ -15,9 +15,6 @@
 !
 !  The command line options are:
 !    nm <n>, where <n> is the number of grid subdivisions = matrix dimension
-!
-!  Note: this example illustrates old error checking with CHKERRA instead
-!  of PetscCallA()
 ! ----------------------------------------------------------------------
 
 ! Module contains data needed by shell ST
@@ -49,7 +46,7 @@ contains
     Vec            :: x, y
     PetscErrorCode :: ierr
 
-    call KSPSolve(myksp, x, y, ierr); CHKERRQ(ierr)
+    PetscCall(KSPSolve(myksp, x, y, ierr))
   end subroutine
 
   ! -------------------------------------------------------------------
@@ -70,7 +67,7 @@ contains
     Vec            :: x, y
     PetscErrorCode :: ierr
 
-    call KSPSolveTranspose(myksp, x, y, ierr); CHKERRQ(ierr)
+    PetscCall(KSPSolveTranspose(myksp, x, y, ierr))
   end subroutine
 
 #if defined(PETSC_USE_COMPLEX)
@@ -93,12 +90,12 @@ contains
     Vec            :: x, y, w
     PetscErrorCode :: ierr
 
-    call VecDuplicate(x, w, ierr); CHKERRQ(ierr)
-    call VecCopy(x, w, ierr); CHKERRQ(ierr)
-    call VecConjugate(w, ierr); CHKERRQ(ierr)
-    call KSPSolveTranspose(myksp, w, y, ierr); CHKERRQ(ierr)
-    call VecConjugate(y, ierr); CHKERRQ(ierr)
-    call VecDestroy(w, ierr); CHKERRQ(ierr)
+    PetscCall(VecDuplicate(x, w, ierr))
+    PetscCall(VecCopy(x, w, ierr))
+    PetscCall(VecConjugate(w, ierr))
+    PetscCall(KSPSolveTranspose(myksp, w, y, ierr))
+    PetscCall(VecConjugate(y, ierr))
+    PetscCall(VecDestroy(w, ierr))
   end subroutine
 #endif
 
@@ -160,14 +157,10 @@ program ex10f
   one = 1
   two = 2
   three = 3
-  call SlepcInitialize(PETSC_NULL_CHARACTER, ierr)
-  if (ierr /= 0) then
-    print *, 'SlepcInitialize failed'
-    stop
-  end if
-  call MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr); CHKERRMPIA(ierr)
+  PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
+  PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 30
-  call PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr); CHKERRA(ierr)
+  PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))
 
   if (rank == 0) then
     write (*, '(/A,I6/)') '1-D Laplacian Eigenproblem (shell-enabled), n=', n
@@ -177,18 +170,18 @@ program ex10f
 ! Compute the operator matrix that defines the eigensystem, Ax=kx
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  call MatCreate(PETSC_COMM_WORLD, A, ierr); CHKERRA(ierr)
-  call MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, n, n, ierr); CHKERRA(ierr)
-  call MatSetFromOptions(A, ierr); CHKERRA(ierr)
+  PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
+  PetscCallA(MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
+  PetscCallA(MatSetFromOptions(A, ierr))
 
-  call MatGetOwnershipRange(A, Istart, Iend, ierr); CHKERRA(ierr)
+  PetscCallA(MatGetOwnershipRange(A, Istart, Iend, ierr))
   if (Istart == 0) then
     row(1) = 0
     col(1) = 0
     col(2) = 1
     val(1) = 2.0
     val(2) = -1.0
-    call MatSetValues(A, one, row, two, col, val, INSERT_VALUES, ierr); CHKERRA(ierr)
+    PetscCallA(MatSetValues(A, one, row, two, col, val, INSERT_VALUES, ierr))
     Istart = Istart + 1
   end if
   if (Iend == n) then
@@ -197,7 +190,7 @@ program ex10f
     col(2) = n - 1
     val(1) = -1.0
     val(2) = 2.0
-    call MatSetValues(A, one, row, two, col, val, INSERT_VALUES, ierr); CHKERRA(ierr)
+    PetscCallA(MatSetValues(A, one, row, two, col, val, INSERT_VALUES, ierr))
     Iend = Iend - 1
   end if
   val(1) = -1.0
@@ -208,74 +201,74 @@ program ex10f
     col(1) = i - 1
     col(2) = i
     col(3) = i + 1
-    call MatSetValues(A, one, row, three, col, val, INSERT_VALUES, ierr); CHKERRA(ierr)
+    PetscCallA(MatSetValues(A, one, row, three, col, val, INSERT_VALUES, ierr))
   end do
 
-  call MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr); CHKERRA(ierr)
-  call MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr); CHKERRA(ierr)
+  PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))
+  PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Create the eigensolver and set various options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ! ** Create eigensolver context
-  call EPSCreate(PETSC_COMM_WORLD, eps, ierr); CHKERRA(ierr)
+  PetscCallA(EPSCreate(PETSC_COMM_WORLD, eps, ierr))
 
 ! ** Set operators. In this case, it is a standard eigenvalue problem
-  call EPSSetOperators(eps, A, PETSC_NULL_MAT, ierr); CHKERRA(ierr)
-  call EPSSetProblemType(eps, EPS_NHEP, ierr); CHKERRA(ierr)
+  PetscCallA(EPSSetOperators(eps, A, PETSC_NULL_MAT, ierr))
+  PetscCallA(EPSSetProblemType(eps, EPS_NHEP, ierr))
 
 ! ** Set solver parameters at runtime
-  call EPSSetFromOptions(eps, ierr); CHKERRA(ierr)
+  PetscCallA(EPSSetFromOptions(eps, ierr))
 
 ! ** Initialize shell spectral transformation if selected by user
-  call EPSGetST(eps, st, ierr); CHKERRA(ierr)
-  call PetscObjectTypeCompare(st, STSHELL, isShell, ierr); CHKERRA(ierr)
+  PetscCallA(EPSGetST(eps, st, ierr))
+  PetscCallA(PetscObjectTypeCompare(st, STSHELL, isShell, ierr))
 
   if (isShell) then
 !   ** Change sorting criterion since this ST example computes values
 !   ** closest to 0
-    call EPSSetWhichEigenpairs(eps, EPS_SMALLEST_REAL, ierr); CHKERRA(ierr)
+    PetscCallA(EPSSetWhichEigenpairs(eps, EPS_SMALLEST_REAL, ierr))
 
 !   ** In Fortran, instead of a context for the user-defined spectral transform
 !   ** we use a module containing any application-specific data, initialized here
-    call KSPCreate(PETSC_COMM_WORLD, myksp, ierr); CHKERRA(ierr)
-    call KSPAppendOptionsPrefix(myksp, "st_", ierr); CHKERRA(ierr)
+    PetscCallA(KSPCreate(PETSC_COMM_WORLD, myksp, ierr))
+    PetscCallA(KSPAppendOptionsPrefix(myksp, "st_", ierr))
 
 !   ** (Required) Set the user-defined routine for applying the operator
-    call STShellSetApply(st, STApply_User, ierr); CHKERRA(ierr)
+    PetscCallA(STShellSetApply(st, STApply_User, ierr))
 
 !   ** (Optional) Set the user-defined routine for applying the transposed operator
-    call STShellSetApplyTranspose(st, STApplyTranspose_User, ierr); CHKERRA(ierr)
+    PetscCallA(STShellSetApplyTranspose(st, STApplyTranspose_User, ierr))
 
 #if defined(PETSC_USE_COMPLEX)
 !   ** (Optional) Set the user-defined routine for applying the conjugate-transposed operator
-    call STShellSetApplyHermitianTranspose(st, STApplyHermitianTranspose_User, ierr); CHKERRA(ierr)
+    PetscCallA(STShellSetApplyHermitianTranspose(st, STApplyHermitianTranspose_User, ierr))
 #endif
 
 !   ** (Optional) Set the user-defined routine for back-transformation
-    call STShellSetBackTransform(st, STBackTransform_User, ierr); CHKERRA(ierr)
+    PetscCallA(STShellSetBackTransform(st, STBackTransform_User, ierr))
 
 !   ** (Optional) Set a name for the transformation, used for STView()
-    call PetscObjectSetName(st, 'MyTransformation', ierr); CHKERRA(ierr)
+    PetscCallA(PetscObjectSetName(st, 'MyTransformation', ierr))
 
 !   ** (Optional) Do any setup required for the new transformation
-    call KSPSetOperators(myksp, A, A, ierr); CHKERRA(ierr)
-    call KSPSetFromOptions(myksp, ierr); CHKERRA(ierr)
+    PetscCallA(KSPSetOperators(myksp, A, A, ierr))
+    PetscCallA(KSPSetFromOptions(myksp, ierr))
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Solve the eigensystem
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  call EPSSolve(eps, ierr); CHKERRA(ierr)
+  PetscCallA(EPSSolve(eps, ierr))
 
 ! ** Optional: Get some information from the solver and display it
-  call EPSGetType(eps, tname, ierr); CHKERRA(ierr)
+  PetscCallA(EPSGetType(eps, tname, ierr))
   if (rank == 0) then
     write (*, '(A,A,/)') ' Solution method: ', tname
   end if
-  call EPSGetDimensions(eps, nev, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr); CHKERRA(ierr)
+  PetscCallA(EPSGetDimensions(eps, nev, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr))
   if (rank == 0) then
     write (*, '(A,I2)') ' Number of requested eigenvalues:', nev
   end if
@@ -285,21 +278,21 @@ program ex10f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ! ** show detailed info unless -terse option is given by user
-  call PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-terse', terse, ierr); CHKERRA(ierr)
+  PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-terse', terse, ierr))
   if (terse) then
-    call EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr); CHKERRA(ierr)
+    PetscCallA(EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))
   else
-    call PetscViewerPushFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_INFO_DETAIL, ierr); CHKERRA(ierr)
-    call EPSConvergedReasonView(eps, PETSC_VIEWER_STDOUT_WORLD, ierr); CHKERRA(ierr)
-    call EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_VIEWER_STDOUT_WORLD, ierr); CHKERRA(ierr)
-    call PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD, ierr); CHKERRA(ierr)
+    PetscCallA(PetscViewerPushFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_INFO_DETAIL, ierr))
+    PetscCallA(EPSConvergedReasonView(eps, PETSC_VIEWER_STDOUT_WORLD, ierr))
+    PetscCallA(EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_VIEWER_STDOUT_WORLD, ierr))
+    PetscCallA(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD, ierr))
   end if
   if (isShell) then
-    call KSPDestroy(myksp, ierr); CHKERRA(ierr)
+    PetscCallA(KSPDestroy(myksp, ierr))
   end if
-  call EPSDestroy(eps, ierr); CHKERRA(ierr)
-  call MatDestroy(A, ierr); CHKERRA(ierr)
-  call SlepcFinalize(ierr)
+  PetscCallA(EPSDestroy(eps, ierr))
+  PetscCallA(MatDestroy(A, ierr))
+  PetscCallA(SlepcFinalize(ierr))
 end program ex10f
 
 !/*TEST
