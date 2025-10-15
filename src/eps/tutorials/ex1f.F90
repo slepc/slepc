@@ -31,16 +31,16 @@
 !     A      operator matrix
 !     eps    eigenproblem solver context
 
-      Mat            A
-      EPS            eps
-      EPSType        tname
-      PetscInt       n, i, Istart, Iend, one, two, three
-      PetscInt       nev
-      PetscInt       row(1), col(3)
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscBool      flg, terse
-      PetscScalar    val(3)
+      Mat            :: A
+      EPS            :: eps
+      EPSType        :: tname
+      PetscInt       :: n, i, Istart, Iend, one, two, three
+      PetscInt       :: nev
+      PetscInt       :: row(1), col(3)
+      PetscMPIInt    :: rank
+      PetscErrorCode :: ierr
+      PetscBool      :: flg, terse
+      PetscScalar    :: val(3)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

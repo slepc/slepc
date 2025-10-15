@@ -34,20 +34,20 @@
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-      Mat                A, B
-      SVD                svd
-      SVDConv            conv
-      SVDStop            stp
-      SVDWhich           which
-      SVDConvergedReason reason
-      PetscInt           m, n, i, Istart
-      PetscInt           col(2), its, Iend
-      PetscScalar        val(2)
-      SVDProblemType     ptype
-      PetscMPIInt        rank
-      PetscErrorCode     ierr
-      PetscBool          flg, tmode
-      PetscViewerAndFormat vf
+      Mat                  :: A, B
+      SVD                  :: svd
+      SVDConv              :: conv
+      SVDStop              :: stp
+      SVDWhich             :: which
+      SVDConvergedReason   :: reason
+      PetscInt             :: m, n, i, Istart
+      PetscInt             :: col(2), its, Iend
+      PetscScalar          :: val(2)
+      SVDProblemType       :: ptype
+      PetscMPIInt          :: rank
+      PetscErrorCode       :: ierr
+      PetscBool            :: flg, tmode
+      PetscViewerAndFormat :: vf
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

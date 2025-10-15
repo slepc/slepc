@@ -19,28 +19,27 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      Mat                A(3),B
-      PEP                pep
-      ST                 st
-      KSP                ksp
-      DS                 ds
-      PetscReal          tol,tolabs,alpha,lambda
-      PetscScalar        tget,val
-      PetscInt           n,i,its,Istart,Iend
-      PetscInt           nev,ncv,mpd,nmat,np
-      PEPWhich           which
-      PEPConvergedReason reason
-      PEPType            tname
-      PEPExtract         extr
-      PEPBasis           basis
-      PEPScale           scal
-      PEPRefine          refine
-      PEPRefineScheme    rscheme
-      PEPConv            conv
-      PEPStop            stp
-      PEPProblemType     ptype
-      PetscMPIInt        rank
-      PetscErrorCode     ierr
+      Mat                  :: A(3),B
+      PEP                  :: pep
+      ST                   :: st
+      KSP                  :: ksp
+      DS                   :: ds
+      PetscReal            :: tol,tolabs,alpha,lambda
+      PetscScalar          :: tget,val
+      PetscInt             :: n,i,its,Istart,Iend,nev,ncv,mpd,nmat,np
+      PEPWhich             :: which
+      PEPConvergedReason   :: reason
+      PEPType              :: tname
+      PEPExtract           :: extr
+      PEPBasis             :: basis
+      PEPScale             :: scal
+      PEPRefine            :: refine
+      PEPRefineScheme      :: rscheme
+      PEPConv              :: conv
+      PEPStop              :: stp
+      PEPProblemType       :: ptype
+      PetscMPIInt          :: rank
+      PetscErrorCode       :: ierr
       PetscViewerAndFormat vf
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

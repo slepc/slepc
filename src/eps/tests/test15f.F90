@@ -43,12 +43,12 @@
       use slepceps
       implicit none
 
-      EPS            eps
-      PetscErrorCode ierr
-      PetscInt       its,nconv,nest,dummy
-      PetscScalar    eigr(*),eigi(*)
-      PetscReal      re,errest(*)
-      PetscMPIInt    rank
+      EPS            :: eps
+      PetscErrorCode :: ierr
+      PetscInt       :: its,nconv,nest,dummy
+      PetscScalar    :: eigr(*),eigi(*)
+      PetscReal      :: re,errest(*)
+      PetscMPIInt    :: rank
 
       PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       if (its>0 .and. rank==0) then

@@ -19,27 +19,27 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      Mat                A,B
-      EPS                eps
-      ST                 st
-      KSP                ksp
-      DS                 ds
-      PetscReal          cut,tol,tolabs
-      PetscScalar        tget,value
-      PetscInt           n,i,its,Istart,Iend
-      PetscInt           nev,ncv,mpd
-      PetscBool          flg
-      EPSConvergedReason reason
-      EPSType            tname
-      EPSExtraction      extr
-      EPSBalance         bal
-      EPSWhich           which
-      EPSConv            conv
-      EPSStop            stp
-      EPSProblemType     ptype
-      PetscMPIInt        rank
-      PetscErrorCode     ierr
-      PetscViewerAndFormat vf
+      Mat                  :: A,B
+      EPS                  :: eps
+      ST                   :: st
+      KSP                  :: ksp
+      DS                   :: ds
+      PetscReal            :: cut,tol,tolabs
+      PetscScalar          :: tget,value
+      PetscInt             :: n,i,its,Istart,Iend
+      PetscInt             :: nev,ncv,mpd
+      PetscBool            :: flg
+      EPSConvergedReason   :: reason
+      EPSType              :: tname
+      EPSExtraction        :: extr
+      EPSBalance           :: bal
+      EPSWhich             :: which
+      EPSConv              :: conv
+      EPSStop              :: stp
+      EPSProblemType       :: ptype
+      PetscMPIInt          :: rank
+      PetscErrorCode       :: ierr
+      PetscViewerAndFormat :: vf
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

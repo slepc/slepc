@@ -31,15 +31,15 @@
 !     M,C,K  problem matrices
 !     pep    polynomial eigenproblem solver context
 
-      Mat            M, C, K, A(3)
-      PEP            pep
-      PEPType        tname
-      PetscInt       N, nx, ny, i, j, Istart, Iend, II
-      PetscInt       nev, ithree
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscBool      flg, terse
-      PetscScalar    mone, two, four, val
+      Mat            :: M, C, K, A(3)
+      PEP            :: pep
+      PEPType        :: tname
+      PetscInt       :: N, nx, ny, i, j, Istart, Iend, II
+      PetscInt       :: nev, ithree
+      PetscMPIInt    :: rank
+      PetscErrorCode :: ierr
+      PetscBool      :: flg, terse
+      PetscScalar    :: mone, two, four, val
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

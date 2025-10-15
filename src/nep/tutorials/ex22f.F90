@@ -46,16 +46,16 @@
 !     Id,A,B    problem matrices
 !     f1,f2,f3  functions to define the nonlinear operator
 
-      Mat            Id, A, B, mats(3)
-      FN             f1, f2, f3, funs(3)
-      NEP            nep
-      NEPType        tname
-      PetscScalar    one, bb, coeffs(2), scal
-      PetscReal      tau, h, aa, xi, tol
-      PetscInt       n, i, k, nev, Istart, Iend
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscBool      flg, terse
+      Mat            :: Id, A, B, mats(3)
+      FN             :: f1, f2, f3, funs(3)
+      NEP            :: nep
+      NEPType        :: tname
+      PetscScalar    :: one, bb, coeffs(2), scal
+      PetscReal      :: tau, h, aa, xi, tol
+      PetscInt       :: n, i, k, nev, Istart, Iend
+      PetscMPIInt    :: rank
+      PetscErrorCode :: ierr
+      PetscBool      :: flg, terse
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

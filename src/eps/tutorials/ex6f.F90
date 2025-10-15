@@ -58,12 +58,11 @@
       use petscsys
       implicit none
 
-      PetscInt    ldy, ldx, m, n, trans
-      PetscScalar y(ldy,*), x(ldx,*)
-      PetscInt    i, k
-      PetscReal   alpha, beta, cosa, cosb, sina, sinb
-      PetscScalar temp, temp1
-      intrinsic   cos, sin
+      PetscInt    :: ldy, ldx, m, n, trans
+      PetscScalar :: y(ldy,*), x(ldx,*)
+      PetscInt    :: i, k
+      PetscReal   :: alpha, beta, cosa, cosb, sina, sinb
+      PetscScalar :: temp, temp1
 
       alpha = PETSC_PI/4
       beta  = PETSC_PI/4
@@ -127,11 +126,11 @@
       use petscmat
       implicit none
 
-      Mat            A
-      Vec            x,y
-      PetscInt       trans,one,N
+      Mat                  :: A
+      Vec                  :: x,y
+      PetscInt             :: trans,one,N
       PetscScalar, pointer :: xx(:),yy(:)
-      PetscErrorCode ierr
+      PetscErrorCode       :: ierr
 
       PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
       PetscCall(VecGetArrayRead(x,xx,ierr))
@@ -160,11 +159,11 @@
       use petscmat
       implicit none
 
-      Mat            A
-      Vec            x,y
-      PetscInt       trans,one,N
+      Mat                  :: A
+      Vec                  :: x,y
+      PetscInt             :: trans,one,N
       PetscScalar, pointer :: xx(:),yy(:)
-      PetscErrorCode ierr
+      PetscErrorCode       :: ierr
 
       PetscCall(MatGetSize(A,N,PETSC_NULL_INTEGER,ierr))
       PetscCall(VecGetArrayRead(x,xx,ierr))
@@ -193,15 +192,15 @@
 !     A     operator matrix
 !     eps   eigenproblem solver context
 
-      Mat            A
-      EPS            eps
-      EPSType        tname
-      PetscReal      tol
-      PetscInt       N, m
-      PetscInt       nev, maxit, its
-      PetscMPIInt    sz, rank
-      PetscErrorCode ierr
-      PetscBool      flg, terse
+      Mat            :: A
+      EPS            :: eps
+      EPSType        :: tname
+      PetscReal      :: tol
+      PetscInt       :: N, m
+      PetscInt       :: nev, maxit, its
+      PetscMPIInt    :: sz, rank
+      PetscErrorCode :: ierr
+      PetscBool      :: flg, terse
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

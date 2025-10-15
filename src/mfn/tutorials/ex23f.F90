@@ -31,18 +31,18 @@
 !     A      problem matrix
 !     mfn    matrix function solver context
 
-      Mat            A
-      MFN            mfn
-      FN             f
-      PetscReal      tol, norm, cst, pd, pu
-      PetscScalar    t, z
-      Vec            v, y
-      PetscInt       N, m, ncv, maxit, its, ii, jj
-      PetscInt       i, j, jmax, ix, Istart, Iend
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscBool      flg
-      MFNConvergedReason reason
+      Mat                :: A
+      MFN                :: mfn
+      FN                 :: f
+      PetscReal          :: tol, norm, cst, pd, pu
+      PetscScalar        :: t, z
+      Vec                :: v, y
+      PetscInt           :: N, m, ncv, maxit, its, ii, jj
+      PetscInt           :: i, j, jmax, ix, Istart, Iend
+      PetscMPIInt        :: rank
+      PetscErrorCode     :: ierr
+      PetscBool          :: flg
+      MFNConvergedReason :: reason
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

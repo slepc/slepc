@@ -22,12 +22,12 @@
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      FN             fn
-      PetscInt       i,n,na,nb
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscScalar    x,y,yp,p(10),q(10),five
-      PetscScalar    pp(10),qq(10),tau,eta
+      FN             :: fn
+      PetscInt       :: i,n,na,nb
+      PetscMPIInt    :: rank
+      PetscErrorCode :: ierr
+      PetscScalar    :: x,y,yp,p(10),q(10),five
+      PetscScalar    :: pp(10),qq(10),tau,eta
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
@@ -128,10 +128,10 @@
       subroutine PrintInfo(x,y,yp)
       use slepcfn
       implicit none
-      PetscScalar    x,y,yp
-      PetscReal      re,im
-      PetscMPIInt    rank
-      PetscErrorCode ierr
+      PetscScalar    :: x,y,yp
+      PetscReal      :: re,im
+      PetscMPIInt    :: rank
+      PetscErrorCode :: ierr
 
       PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr))
       if (rank==0) then

@@ -22,14 +22,14 @@
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      Mat            A,S,R
-      FN             fn
-      PetscInt       n
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscBool      flg,verbose,inplace
-      PetscReal      re,im,nrm
-      PetscScalar    tau,eta,alpha,x,y,yp
+      Mat                  :: A,S,R
+      FN                   :: fn
+      PetscInt             :: n
+      PetscMPIInt          :: rank
+      PetscErrorCode       :: ierr
+      PetscBool            :: flg,verbose,inplace
+      PetscReal            :: re,im,nrm
+      PetscScalar          :: tau,eta,alpha,x,y,yp
       PetscScalar, pointer :: aa(:,:)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -143,8 +143,8 @@
 ! -----------------------------------------------------------------
 
       subroutine FillUpMatrix(n,X)
-      PetscInt    n,i,j
-      PetscScalar X(n,n)
+      PetscInt    :: n,i,j
+      PetscScalar :: X(n,n)
 
       do i=1,n
         X(i,i) = 2.5

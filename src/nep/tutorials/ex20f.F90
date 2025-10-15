@@ -29,8 +29,8 @@
    module ex20fmodule
       use slepcnep
       type User
-        PetscScalar kappa
-        PetscReal   h
+        PetscScalar :: kappa
+        PetscReal   :: h
       end type User
 
    contains
@@ -38,13 +38,13 @@
 
       subroutine FormFunction(nep,lambda,fun,B,ctx,ierr)
       implicit none
-      NEP            nep
-      PetscScalar    lambda, A(3), c, d
-      Mat            fun,B
-      type(User)     ctx
-      PetscReal      h
-      PetscInt       i, n, j(3), Istart, Iend, one, two, three
-      PetscErrorCode ierr
+      NEP            :: nep
+      PetscScalar    :: lambda, A(3), c, d
+      Mat            :: fun,B
+      type(User)     :: ctx
+      PetscReal      :: h
+      PetscInt       :: i, n, j(3), Istart, Iend, one, two, three
+      PetscErrorCode :: ierr
 
 !     ** Compute Function entries and insert into matrix
       PetscCall(MatGetSize(fun,n,PETSC_NULL_INTEGER,ierr))
@@ -98,13 +98,13 @@
 
       subroutine FormJacobian(nep,lambda,jac,ctx,ierr)
       implicit none
-      NEP            nep
-      PetscScalar    lambda, A(3), c
-      Mat            jac
-      type(User)     ctx
-      PetscReal      h
-      PetscInt       i, n, j(3), Istart, Iend, one, two, three
-      PetscErrorCode ierr
+      NEP            :: nep
+      PetscScalar    :: lambda, A(3), c
+      Mat            :: jac
+      type(User)     :: ctx
+      PetscReal      :: h
+      PetscInt       :: i, n, j(3), Istart, Iend, one, two, three
+      PetscErrorCode :: ierr
 
 !     ** Compute Jacobian entries and insert into matrix
       PetscCall(MatGetSize(jac,n,PETSC_NULL_INTEGER,ierr))
@@ -170,18 +170,18 @@
 !     F,J       Function and Jacobian matrices
 !     ctx       user-defined context
 
-      NEP            nep
-      Vec            x, v(1)
-      PetscScalar    lambda
-      Mat            F, J
-      type(User)     ctx
-      NEPType        tname
-      PetscInt       n, i, k, nev, its, maxit, nconv, three, one
-      PetscReal      tol, norm
-      PetscScalar    alpha
-      PetscMPIInt    rank
-      PetscBool      flg
-      PetscErrorCode ierr
+      NEP            :: nep
+      Vec            :: x, v(1)
+      PetscScalar    :: lambda
+      Mat            :: F, J
+      type(User)     :: ctx
+      NEPType        :: tname
+      PetscInt       :: n, i, k, nev, its, maxit, nconv, three, one
+      PetscReal      :: tol, norm
+      PetscScalar    :: alpha
+      PetscMPIInt    :: rank
+      PetscBool      :: flg
+      PetscErrorCode :: ierr
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

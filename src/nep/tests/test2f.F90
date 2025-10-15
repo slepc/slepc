@@ -19,28 +19,28 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      Mat                A(3),B
-      FN                 f(3),g
-      NEP                nep
-      DS                 ds
-      RG                 rg
-      PetscReal          tol
-      PetscScalar        coeffs(2),tget,val
-      PetscInt           n,i,its,Istart,Iend
-      PetscInt           nev,ncv,mpd,nterm
-      PetscInt           nc,np
-      NEPWhich           which
-      NEPConvergedReason reason
-      NEPType            tname
-      NEPRefine          refine
-      NEPRefineScheme    rscheme
-      NEPConv            conv
-      NEPStop            stp
-      NEPProblemType     ptype
-      MatStructure       mstr
-      PetscMPIInt        rank
-      PetscErrorCode     ierr
-      PetscViewerAndFormat vf
+      Mat                  :: A(3),B
+      FN                   :: f(3),g
+      NEP                  :: nep
+      DS                   :: ds
+      RG                   :: rg
+      PetscReal            :: tol
+      PetscScalar          :: coeffs(2),tget,val
+      PetscInt             :: n,i,its,Istart,Iend
+      PetscInt             :: nev,ncv,mpd,nterm
+      PetscInt             :: nc,np
+      NEPWhich             :: which
+      NEPConvergedReason   :: reason
+      NEPType              :: tname
+      NEPRefine            :: refine
+      NEPRefineScheme      :: rscheme
+      NEPConv              :: conv
+      NEPStop              :: stp
+      NEPProblemType       :: ptype
+      MatStructure         :: mstr
+      PetscMPIInt          :: rank
+      PetscErrorCode       :: ierr
+      PetscViewerAndFormat :: vf
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

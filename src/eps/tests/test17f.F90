@@ -22,24 +22,24 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      Mat            A,B,As,Bs,Au
-      EPS            eps
-      ST             st
-      KSP            ksp
-      PC             pc
-      Vec            v
-      PetscScalar    value
-      PetscInt       n,m,i,j,k,Istart,Iend
-      PetscInt       nev,ncv,mpd,nval
-      PetscInt       row,col,nloc,nlocs,mlocs
-      PetscInt       II,npart,inertias(MAXSHI)
-      PetscBool      flg,lock
-      PetscMPIInt    nprc,rank
-      PetscReal      int0,int1,keep,subint(MAXSUB)
-      PetscReal      shifts(MAXSHI)
-      PetscScalar    eval,one,mone,zero
-      PetscErrorCode ierr
-      MPI_Comm       comm
+      Mat            :: A,B,As,Bs,Au
+      EPS            :: eps
+      ST             :: st
+      KSP            :: ksp
+      PC             :: pc
+      Vec            :: v
+      PetscScalar    :: value
+      PetscInt       :: n,m,i,j,k,Istart,Iend
+      PetscInt       :: nev,ncv,mpd,nval
+      PetscInt       :: row,col,nloc,nlocs,mlocs
+      PetscInt       :: II,npart,inertias(MAXSHI)
+      PetscBool      :: flg,lock
+      PetscMPIInt    :: nprc,rank
+      PetscReal      :: int0,int1,keep,subint(MAXSUB)
+      PetscReal      :: shifts(MAXSHI)
+      PetscScalar    :: eval,one,mone,zero
+      PetscErrorCode :: ierr
+      MPI_Comm       :: comm
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

@@ -26,9 +26,9 @@
 !DEC$ ATTRIBUTES DLLEXPORT::SlepcInitializeWithHelp
 #endif
       subroutine SlepcInitializeWithHelp(filename,help,ierr)
-          character(len=*),intent(in):: filename
-          character(len=*),intent(in):: help
-          PetscErrorCode             :: ierr
+          character(len=*),intent(in) :: filename
+          character(len=*),intent(in) :: help
+          PetscErrorCode              :: ierr
 
           if (filename/=PETSC_NULL_CHARACTER) then
              call SlepcInitializeF(trim(filename),help,ierr)
@@ -43,8 +43,8 @@
 !DEC$ ATTRIBUTES DLLEXPORT::SlepcInitializeNoHelp
 #endif
         subroutine SlepcInitializeNoHelp(filename,ierr)
-          character(len=*),intent(in):: filename
-          PetscErrorCode             :: ierr
+          character(len=*),intent(in) :: filename
+          PetscErrorCode              :: ierr
 
           if (filename/=PETSC_NULL_CHARACTER) then
              call SlepcInitializeF(trim(filename),PETSC_NULL_CHARACTER,ierr)

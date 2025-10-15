@@ -46,9 +46,9 @@
       use slepceps
       implicit none
 
-      ST             st
-      Vec            x,y
-      PetscErrorCode ierr
+      ST             :: st
+      Vec            :: x,y
+      PetscErrorCode :: ierr
 
       call KSPSolve(myksp,x,y,ierr);CHKERRQ(ierr)
       end subroutine
@@ -68,9 +68,9 @@
       use slepceps
       implicit none
 
-      ST             st
-      Vec            x,y
-      PetscErrorCode ierr
+      ST             :: st
+      Vec            :: x,y
+      PetscErrorCode :: ierr
 
       call KSPSolveTranspose(myksp,x,y,ierr);CHKERRQ(ierr)
       end subroutine
@@ -92,9 +92,9 @@
       use slepceps
       implicit none
 
-      ST             st
-      Vec            x,y,w
-      PetscErrorCode ierr
+      ST             :: st
+      Vec            :: x,y,w
+      PetscErrorCode :: ierr
 
       call VecDuplicate(x,w,ierr);CHKERRQ(ierr)
       call VecCopy(x,w,ierr);CHKERRQ(ierr)
@@ -122,10 +122,10 @@
       use slepceps
       implicit none
 
-      ST             st
-      PetscInt       n, j
-      PetscScalar    eigr(*), eigi(*)
-      PetscErrorCode ierr
+      ST             :: st
+      PetscInt       :: n, j
+      PetscScalar    :: eigr(*), eigi(*)
+      PetscErrorCode :: ierr
 
       do j=1,n
         eigr(j) = 1.0 / eigr(j)
@@ -150,16 +150,16 @@
 !     A     operator matrix
 !     eps   eigenproblem solver context
 
-      Mat            A
-      EPS            eps
-      ST             st
-      EPSType        tname
-      PetscInt       n, i, Istart, Iend, one, two, three
-      PetscInt       nev, row(1), col(3)
-      PetscScalar    val(3)
-      PetscBool      flg, isShell, terse
-      PetscMPIInt    rank
-      PetscErrorCode ierr
+      Mat            :: A
+      EPS            :: eps
+      ST             :: st
+      EPSType        :: tname
+      PetscInt       :: n, i, Istart, Iend, one, two, three
+      PetscInt       :: nev, row(1), col(3)
+      PetscScalar    :: val(3)
+      PetscBool      :: flg, isShell, terse
+      PetscMPIInt    :: rank
+      PetscErrorCode :: ierr
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

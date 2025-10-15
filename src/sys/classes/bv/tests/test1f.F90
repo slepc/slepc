@@ -24,17 +24,17 @@
 
 #define KMAX 35
 
-      Vec            t,v
-      Mat            Q,M
-      BV             X,Y
-      PetscMPIInt    rank
-      PetscInt       i,j,n,k,l,izero,ione
-      PetscScalar    z(KMAX),val
+      Vec                  :: t,v
+      Mat                  :: Q,M
+      BV                   :: X,Y
+      PetscMPIInt          :: rank
+      PetscInt             :: i,j,n,k,l,izero,ione
+      PetscScalar          :: z(KMAX),val
       PetscScalar, pointer :: qq(:,:)
-      PetscScalar    one,mone,two,zero
-      PetscReal      nrm
-      PetscBool      flg
-      PetscErrorCode ierr
+      PetscScalar          :: one,mone,two,zero
+      PetscReal            :: nrm
+      PetscBool            :: flg
+      PetscErrorCode       :: ierr
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

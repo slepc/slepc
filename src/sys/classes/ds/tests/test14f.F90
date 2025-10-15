@@ -29,14 +29,14 @@
 !     A     problem matrix
 !     ds    dense solver context
 
-      Mat            A
-      DS             ds
-      PetscInt       n, i, ld, zero
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscBool      flg
-      PetscScalar    wr(100), wi(100)
-      PetscReal      re, im
+      Mat                  :: A
+      DS                   :: ds
+      PetscInt             :: n, i, ld, zero
+      PetscMPIInt          :: rank
+      PetscErrorCode       :: ierr
+      PetscBool            :: flg
+      PetscScalar          :: wr(100), wi(100)
+      PetscReal            :: re, im
       PetscScalar, pointer :: aa(:,:)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -117,8 +117,8 @@
 ! -----------------------------------------------------------------
 
       subroutine FillUpMatrix(n,X)
-      PetscInt    n,i,j
-      PetscScalar X(n,n)
+      PetscInt    :: n,i,j
+      PetscScalar :: X(n,n)
 
       do i=2,n
         X(i,i-1) = -1.d0

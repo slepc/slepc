@@ -22,15 +22,15 @@
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      RG             rg
-      PetscInt       i,n,inside,one
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscReal      re,im
-      PetscScalar    ar,ai,cr(10),ci(10)
-      PetscScalar    vr(7),vi(7)
-      PetscScalar    center
-      PetscReal      radius,vscale,a,b,c,d
+      RG             :: rg
+      PetscInt       :: i,n,inside,one
+      PetscMPIInt    :: rank
+      PetscErrorCode :: ierr
+      PetscReal      :: re,im
+      PetscScalar    :: ar,ai,cr(10),ci(10)
+      PetscScalar    :: vr(7),vi(7)
+      PetscScalar    :: center
+      PetscReal      :: radius,vscale,a,b,c,d
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

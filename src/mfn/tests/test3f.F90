@@ -25,19 +25,19 @@
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-      Mat                A, B
-      MFN                mfn
-      FN                 f
-      MFNConvergedReason reason
-      Vec                v, y
-      PetscInt           Nt, n, i, j, II
-      PetscInt           Istart, maxit, ncv
-      PetscInt           col, its, Iend
-      PetscScalar        val
-      PetscReal          tol, norm
-      PetscMPIInt        rank
-      PetscErrorCode     ierr
-      PetscBool          flg
+      Mat                :: A, B
+      MFN                :: mfn
+      FN                 :: f
+      MFNConvergedReason :: reason
+      Vec                :: v, y
+      PetscInt           :: Nt, n, i, j, II
+      PetscInt           :: Istart, maxit, ncv
+      PetscInt           :: col, its, Iend
+      PetscScalar        :: val
+      PetscReal          :: tol, norm
+      PetscMPIInt        :: rank
+      PetscErrorCode     :: ierr
+      PetscBool          :: flg
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program

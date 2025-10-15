@@ -30,16 +30,16 @@
 !     A     operator matrix
 !     svd   singular value solver context
 
-      Mat            A
-      SVD            svd
-      SVDType        tname
-      PetscReal      tol, error, sigma, mu
-      PetscInt       n, i, j, Istart, Iend
-      PetscInt       nsv, maxit, its, nconv
-      PetscMPIInt    rank
-      PetscErrorCode ierr
-      PetscBool      flg
-      PetscScalar    one, alpha
+      Mat            :: A
+      SVD            :: svd
+      SVDType        :: tname
+      PetscReal      :: tol, error, sigma, mu
+      PetscInt       :: n, i, j, Istart, Iend
+      PetscInt       :: nsv, maxit, its, nconv
+      PetscMPIInt    :: rank
+      PetscErrorCode :: ierr
+      PetscBool      :: flg
+      PetscScalar    :: one, alpha
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
