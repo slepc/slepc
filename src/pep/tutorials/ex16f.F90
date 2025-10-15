@@ -24,15 +24,11 @@ program ex16f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
-!  Variables:
-!     M,C,K  problem matrices
-!     pep    polynomial eigenproblem solver context
 
-  Mat            :: M, C, K, A(3)
-  PEP            :: pep
+  Mat            :: M, C, K, A(3)   ! problem matrices
+  PEP            :: pep             ! polynomial eigenproblem solver context
   PEPType        :: tname
   PetscInt       :: N, nx, ny, i, j, Istart, Iend, II
   PetscInt       :: nev, ithree
@@ -42,7 +38,7 @@ program ex16f
   PetscScalar    :: mone, two, four, val
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -60,10 +56,10 @@ program ex16f
 100 format(/'Quadratic Eigenproblem, N=', I6, ' (', I4, 'x', I4, ' grid)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute the matrices that define the eigensystem, (k^2*M+k*C+K)x=0
+! Compute the matrices that define the eigensystem, (k^2*M+k*C+K)x=0
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** K is the 2-D Laplacian
+! ** K is the 2-D Laplacian
   PetscCallA(MatCreate(PETSC_COMM_WORLD, K, ierr))
   PetscCallA(MatSetSizes(K, PETSC_DECIDE, PETSC_DECIDE, N, N, ierr))
   PetscCallA(MatSetFromOptions(K, ierr))
@@ -90,7 +86,7 @@ program ex16f
   PetscCallA(MatAssemblyBegin(K, MAT_FINAL_ASSEMBLY, ierr))
   PetscCallA(MatAssemblyEnd(K, MAT_FINAL_ASSEMBLY, ierr))
 
-!     ** C is the 1-D Laplacian on horizontal lines
+! ** C is the 1-D Laplacian on horizontal lines
   PetscCallA(MatCreate(PETSC_COMM_WORLD, C, ierr))
   PetscCallA(MatSetSizes(C, PETSC_DECIDE, PETSC_DECIDE, N, N, ierr))
   PetscCallA(MatSetFromOptions(C, ierr))
@@ -110,7 +106,7 @@ program ex16f
   PetscCallA(MatAssemblyBegin(C, MAT_FINAL_ASSEMBLY, ierr))
   PetscCallA(MatAssemblyEnd(C, MAT_FINAL_ASSEMBLY, ierr))
 
-!     ** M is a diagonal matrix
+! ** M is a diagonal matrix
   PetscCallA(MatCreate(PETSC_COMM_WORLD, M, ierr))
   PetscCallA(MatSetSizes(M, PETSC_DECIDE, PETSC_DECIDE, N, N, ierr))
   PetscCallA(MatSetFromOptions(M, ierr))
@@ -123,13 +119,13 @@ program ex16f
   PetscCallA(MatAssemblyEnd(M, MAT_FINAL_ASSEMBLY, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the eigensolver and set various options
+! Create the eigensolver and set various options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Create eigensolver context
+! ** Create eigensolver context
   PetscCallA(PEPCreate(PETSC_COMM_WORLD, pep, ierr))
 
-!     ** Set matrices and problem type
+! ** Set matrices and problem type
   A(1) = K
   A(2) = C
   A(3) = M
@@ -137,16 +133,16 @@ program ex16f
   PetscCallA(PEPSetOperators(pep, ithree, A, ierr))
   PetscCallA(PEPSetProblemType(pep, PEP_GENERAL, ierr))
 
-!     ** Set solver parameters at runtime
+! ** Set solver parameters at runtime
   PetscCallA(PEPSetFromOptions(pep, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the eigensystem
+! Solve the eigensystem
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(PEPSolve(pep, ierr))
 
-!     ** Optional: Get some information from the solver and display it
+! ** Optional: Get some information from the solver and display it
   PetscCallA(PEPGetType(pep, tname, ierr))
   if (rank == 0) then
     write (*, 120) tname
@@ -159,10 +155,10 @@ program ex16f
 130 format(' Number of requested eigenvalues:', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** show detailed info unless -terse option is given by user
+! ** show detailed info unless -terse option is given by user
   PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-terse', terse, ierr))
   if (terse) then
     PetscCallA(PEPErrorView(pep, PEP_ERROR_BACKWARD, PETSC_NULL_VIEWER, ierr))

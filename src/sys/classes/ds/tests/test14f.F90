@@ -22,15 +22,11 @@ program test14f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
-!  Variables:
-!     A     problem matrix
-!     ds    dense solver context
 
-  Mat                  :: A
-  DS                   :: ds
+  Mat                  :: A   ! problem matrix
+  DS                   :: ds  ! dense solver context
   PetscInt             :: n, i, ld, zero
   PetscMPIInt          :: rank
   PetscErrorCode       :: ierr
@@ -40,7 +36,7 @@ program test14f
   PetscScalar, pointer :: aa(:, :)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   zero = 0
@@ -60,7 +56,7 @@ program test14f
 110 format(/'Solve a Dense System of type NHEP, n =', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create DS object
+! Create DS object
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(DSCreate(PETSC_COMM_WORLD, ds, ierr))
@@ -71,7 +67,7 @@ program test14f
   PetscCallA(DSSetDimensions(ds, n, zero, zero, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Fill with Grcar matrix
+! Fill with Grcar matrix
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(DSGetMat(ds, DS_MAT_A, A, ierr))
@@ -82,11 +78,11 @@ program test14f
   PetscCallA(DSSetState(ds, DS_STATE_INTERMEDIATE, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the problem and show eigenvalues
+! Solve the problem and show eigenvalues
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(DSSolve(ds, wr, wi, ierr))
-!     PetscCallA(DSSort(ds,wr,wi,PETSC_NULL_SCALAR,PETSC_NULL_SCALAR,PETSC_NULL_INTEGER,ierr))
+! PetscCallA(DSSort(ds,wr,wi,PETSC_NULL_SCALAR,PETSC_NULL_SCALAR,PETSC_NULL_INTEGER,ierr))
 
   if (rank == 0) then
     write (*, *) 'Computed eigenvalues ='
@@ -108,13 +104,11 @@ program test14f
 120 format('  ', F8.5)
 130 format('  ', F8.5, SP, F8.5, 'i')
 
-!     *** Clean up
+! *** Clean up
   PetscCallA(DSDestroy(ds, ierr))
   PetscCallA(SlepcFinalize(ierr))
 
 contains
-
-! -----------------------------------------------------------------
 
   subroutine FillUpMatrix(n, X)
     PetscInt    :: n, i, j

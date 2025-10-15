@@ -24,15 +24,11 @@ program ex23f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
-!  Variables:
-!     A      problem matrix
-!     mfn    matrix function solver context
 
-  Mat                :: A
-  MFN                :: mfn
+  Mat                :: A      ! problem matrix
+  MFN                :: mfn    ! matrix function solver context
   FN                 :: f
   PetscReal          :: tol, norm, cst, pd, pu
   PetscScalar        :: t, z
@@ -45,7 +41,7 @@ program ex23f
   MFNConvergedReason :: reason
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -61,7 +57,7 @@ program ex23f
 100 format(/'Markov y=exp(t*A)*e_1, N=', I6, ' (m=', I4, ')')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute the transition probability matrix, A
+! Compute the transition probability matrix, A
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
@@ -113,7 +109,7 @@ program ex23f
   PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))
   PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
 
-!     ** Set v = e_1
+! ** Set v = e_1
   PetscCallA(MatCreateVecs(A, y, v, ierr))
   ii = 0
   z = 1.0
@@ -122,13 +118,13 @@ program ex23f
   PetscCallA(VecAssemblyEnd(v, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the solver and set various options
+! Create the solver and set various options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Create matrix function solver context
+! ** Create matrix function solver context
   PetscCallA(MFNCreate(PETSC_COMM_WORLD, mfn, ierr))
 
-!     ** Set operator matrix, the function to compute, and other options
+! ** Set operator matrix, the function to compute, and other options
   PetscCallA(MFNSetOperator(mfn, A, ierr))
   PetscCallA(MFNGetFN(mfn, f, ierr))
   PetscCallA(FNSetType(f, FNEXP, ierr))
@@ -137,11 +133,11 @@ program ex23f
   tol = 0.0000001
   PetscCallA(MFNSetTolerances(mfn, tol, PETSC_CURRENT_INTEGER, ierr))
 
-!     ** Set solver parameters at runtime
+! ** Set solver parameters at runtime
   PetscCallA(MFNSetFromOptions(mfn, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the problem, y=exp(t*A)*v
+! Solve the problem, y=exp(t*A)*v
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MFNSolve(mfn, v, y, ierr))
@@ -149,7 +145,7 @@ program ex23f
   PetscCheckA(reason%v >= 0, PETSC_COMM_WORLD, PETSC_ERR_NOT_CONVERGED, 'Solver did not converge')
   PetscCallA(VecNorm(y, NORM_2, norm, ierr))
 
-!     ** Optional: Get some information from the solver and display it
+! ** Optional: Get some information from the solver and display it
   PetscCallA(MFNGetIterationNumber(mfn, its, ierr))
   if (rank == 0) then
     write (*, 120) its
@@ -167,7 +163,7 @@ program ex23f
 140 format(' Stopping condition: tol=', f10.7, ' maxit=', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if (rank == 0) then

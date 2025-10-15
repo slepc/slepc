@@ -38,17 +38,12 @@ program ex22f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
-!  Variables:
-!     nep       nonlinear eigensolver context
-!     Id,A,B    problem matrices
-!     f1,f2,f3  functions to define the nonlinear operator
 
-  Mat            :: Id, A, B, mats(3)
-  FN             :: f1, f2, f3, funs(3)
-  NEP            :: nep
+  Mat            :: Id, A, B, mats(3)     ! problem matrices
+  FN             :: f1, f2, f3, funs(3)   ! functions to define the nonlinear operator
+  NEP            :: nep                   ! nonlinear eigensolver context
   NEPType        :: tname
   PetscScalar    :: one, bb, coeffs(2), scal
   PetscReal      :: tau, h, aa, xi, tol
@@ -58,7 +53,7 @@ program ex22f
   PetscBool      :: flg, terse
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -77,14 +72,14 @@ program ex22f
   h = PETSC_PI/real(n + 1)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create problem matrices
+! Create problem matrices
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Id is the identity matrix
+! ** Id is the identity matrix
   PetscCallA(MatCreateConstantDiagonal(PETSC_COMM_WORLD, PETSC_DECIDE, PETSC_DECIDE, n, n, one, Id, ierr))
   PetscCallA(MatSetOption(Id, MAT_HERMITIAN, PETSC_TRUE, ierr))
 
-!     ** A = 1/h^2*tridiag(1,-2,1) + aa*I
+! ** A = 1/h^2*tridiag(1,-2,1) + aa*I
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
   PetscCallA(MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
   PetscCallA(MatSetFromOptions(A, ierr))
@@ -104,7 +99,7 @@ program ex22f
   PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
   PetscCallA(MatSetOption(A, MAT_HERMITIAN, PETSC_TRUE, ierr))
 
-!     ** B = diag(bb(xi))
+! ** B = diag(bb(xi))
   PetscCallA(MatCreate(PETSC_COMM_WORLD, B, ierr))
   PetscCallA(MatSetSizes(B, PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
   PetscCallA(MatSetFromOptions(B, ierr))
@@ -119,7 +114,7 @@ program ex22f
   PetscCallA(MatSetOption(B, MAT_HERMITIAN, PETSC_TRUE, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create problem functions, f1=-lambda, f2=1.0, f3=exp(-tau*lambda)
+! Create problem functions, f1=-lambda, f2=1.0, f3=exp(-tau*lambda)
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(FNCreate(PETSC_COMM_WORLD, f1, ierr))
@@ -141,14 +136,14 @@ program ex22f
   PetscCallA(FNSetScale(f3, scal, one, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the eigensolver and set various options
+! Create the eigensolver and set various options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Create eigensolver context
+! ** Create eigensolver context
   PetscCallA(NEPCreate(PETSC_COMM_WORLD, nep, ierr))
 
-!     ** Set the split operator. Note that A is passed first so that
-!     ** SUBSET_NONZERO_PATTERN can be used
+! ** Set the split operator. Note that A is passed first so that
+! ** SUBSET_NONZERO_PATTERN can be used
   k = 3
   mats(1) = A
   mats(2) = Id
@@ -160,7 +155,7 @@ program ex22f
   PetscCallA(NEPSetProblemType(nep, NEP_GENERAL, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Customize nonlinear solver; set runtime options
+! Customize nonlinear solver; set runtime options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   tol = 1e-9
@@ -170,16 +165,16 @@ program ex22f
   k = 0
   PetscCallA(NEPRIISetLagPreconditioner(nep, k, ierr))
 
-!     ** Set solver parameters at runtime
+! ** Set solver parameters at runtime
   PetscCallA(NEPSetFromOptions(nep, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the eigensystem
+! Solve the eigensystem
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(NEPSolve(nep, ierr))
 
-!     ** Optional: Get some information from the solver and display it
+! ** Optional: Get some information from the solver and display it
   PetscCallA(NEPGetType(nep, tname, ierr))
   if (rank == 0) then
     write (*, 120) tname
@@ -192,10 +187,10 @@ program ex22f
 130 format(' Number of requested eigenvalues:', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** show detailed info unless -terse option is given by user
+! ** show detailed info unless -terse option is given by user
   PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-terse', terse, ierr))
   if (terse) then
     PetscCallA(NEPErrorView(nep, NEP_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))

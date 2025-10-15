@@ -18,7 +18,7 @@
 #include <slepc/finclude/slepcnep.h>
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!    Modules needed to pass and get the context to/from the Mat
+! Modules needed to pass and get the context to/from the Mat
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module shell_ctx
@@ -65,7 +65,7 @@ module shell_ctx_interfaces
 end module shell_ctx_interfaces
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!    Module used to implement the shell matrix operations
+! Module used to implement the shell matrix operations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module ex54fmodule
@@ -73,10 +73,9 @@ module ex54fmodule
   implicit none
 
 contains
-! --------------------------------------------------------------
-!
-!  MyNEPFunction - Computes Function matrix  T(lambda)
-!
+  ! --------------------------------------------------------------
+  ! MyNEPFunction - Computes Function matrix  T(lambda)
+  !
   subroutine MyNEPFunction(nep, lambda, T, P, ctx, ierr)
     use slepcnep
     use shell_ctx_interfaces
@@ -93,10 +92,9 @@ contains
     ctxT%lambda = lambda
   end subroutine MyNEPFunction
 
-! --------------------------------------------------------------
-!
-!  MyNEPJacobian - Computes Jacobian matrix  T'(lambda)
-!
+  ! --------------------------------------------------------------
+  ! MyNEPJacobian - Computes Jacobian matrix  T'(lambda)
+  !
   subroutine MyNEPJacobian(nep, lambda, T, ctx, ierr)
     use slepcnep
     use shell_ctx_interfaces
@@ -113,11 +111,10 @@ contains
     ctxT%lambda = lambda
   end subroutine MyNEPJacobian
 
-! --------------------------------------------------------------
-!
-!  MatMult_A - Shell matrix operation, multiples y=A*x
-!  Here A=(D-lambda*I) where D is a diagonal matrix
-!
+  ! --------------------------------------------------------------
+  ! MatMult_A - Shell matrix operation, multiples y=A*x
+  ! Here A=(D-lambda*I) where D is a diagonal matrix
+  !
   subroutine MatMult_A(A, x, y, ierr)
     use shell_ctx_interfaces
     implicit none
@@ -142,10 +139,9 @@ contains
     PetscCall(VecAXPY(y, -ctxA%lambda, x, ierr))
   end subroutine MatMult_A
 
-! --------------------------------------------------------------
-!
-!  MatDuplicate_A - Shell matrix operation, duplicates A
-!
+  ! --------------------------------------------------------------
+  ! MatDuplicate_A - Shell matrix operation, duplicates A
+  !
   subroutine MatDuplicate_A(A, opt, M, ierr)
     use shell_ctx_interfaces
     implicit none
@@ -165,10 +161,9 @@ contains
     PetscCall(MatShellSetOperation(M, MATOP_DESTROY, MatDestroy_A, ierr))
   end subroutine MatDuplicate_A
 
-! --------------------------------------------------------------
-!
-!  MatDestroy_A - Shell matrix operation, destroys A
-!
+  ! --------------------------------------------------------------
+  ! MatDestroy_A - Shell matrix operation, destroys A
+  !
   subroutine MatDestroy_A(A, ierr)
     use shell_ctx_interfaces
     implicit none
@@ -181,11 +176,10 @@ contains
     deallocate (ctxA)
   end subroutine MatDestroy_A
 
-! --------------------------------------------------------------
-!
-!  MatMult_B - Shell matrix operation, multiples y=B*x
-!  Here B=-I
-!
+  ! --------------------------------------------------------------
+  ! MatMult_B - Shell matrix operation, multiples y=B*x
+  ! Here B=-I
+  !
   subroutine MatMult_B(B, x, y, ierr)
     use petscmat
     implicit none
@@ -212,7 +206,7 @@ program ex54f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   NEP            :: nep
@@ -225,7 +219,7 @@ program ex54f
   type(MatCtx)   :: ctxA, ctxB
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -236,7 +230,7 @@ program ex54f
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create matrix-free operators for A and B corresponding to T and T'
+! Create matrix-free operators for A and B corresponding to T and T'
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   ctxA%lambda = 0.0
@@ -249,7 +243,7 @@ program ex54f
   PetscCallA(MatShellSetOperation(B, MATOP_MULT, MatMult_B, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the eigensolver and set various options
+! Create the eigensolver and set various options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(NEPCreate(PETSC_COMM_WORLD, nep, ierr))
@@ -261,7 +255,7 @@ program ex54f
   PetscCallA(NEPSetFromOptions(nep, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the eigensystem, display solution and clean up
+! Solve the eigensystem, display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(NEPSolve(nep, ierr))
@@ -271,7 +265,7 @@ program ex54f
     write (*, '(A,I2/)') ' Number of converged approximate eigenpairs:', nconv
   end if
 !
-!     ** show detailed info unless -terse option is given by user
+! ** show detailed info unless -terse option is given by user
   PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-terse', terse, ierr))
   if (terse) then
     PetscCallA(NEPErrorView(nep, NEP_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))

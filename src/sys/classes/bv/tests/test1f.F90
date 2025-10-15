@@ -19,7 +19,7 @@ program test1f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #define KMAX 35
@@ -37,7 +37,7 @@ program test1f
   PetscErrorCode       :: ierr
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   n = 10
@@ -65,20 +65,20 @@ program test1f
 110 format(/'Test BV with', I3, ' columns of length', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Initialize data
+! Initialize data
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Create template vector
+! ** Create template vector
   PetscCallA(VecCreate(PETSC_COMM_WORLD, t, ierr))
   PetscCallA(VecSetSizes(t, PETSC_DECIDE, n, ierr))
   PetscCallA(VecSetFromOptions(t, ierr))
 
-!     ** Create BV object X
+! ** Create BV object X
   PetscCallA(BVCreate(PETSC_COMM_WORLD, X, ierr))
   PetscCallA(BVSetSizesFromVec(X, t, k, ierr))
   PetscCallA(BVSetFromOptions(X, ierr))
 
-!     ** Fill X entries
+! ** Fill X entries
   do j = 0, k - 1
     PetscCallA(BVGetColumn(X, j, v, ierr))
     PetscCallA(VecSet(v, zero, ierr))
@@ -93,12 +93,12 @@ program test1f
     PetscCallA(BVRestoreColumn(X, j, v, ierr))
   end do
 
-!     ** Create BV object Y
+! ** Create BV object Y
   PetscCallA(BVCreate(PETSC_COMM_WORLD, Y, ierr))
   PetscCallA(BVSetSizesFromVec(Y, t, l, ierr))
   PetscCallA(BVSetFromOptions(Y, ierr))
 
-!     ** Fill Y entries
+! ** Fill Y entries
   do j = 0, l - 1
     PetscCallA(BVGetColumn(Y, j, v, ierr))
     val = real(j + 1)/4.0
@@ -106,7 +106,7 @@ program test1f
     PetscCallA(BVRestoreColumn(Y, j, v, ierr))
   end do
 
-!     ** Create Mat
+! ** Create Mat
   PetscCallA(MatCreateSeqDense(PETSC_COMM_SELF, k, l, PETSC_NULL_SCALAR_ARRAY, Q, ierr))
   PetscCallA(MatDenseGetArray(Q, qq, ierr))
   do i = 1, k
@@ -121,13 +121,13 @@ program test1f
   PetscCallA(MatDenseRestoreArray(Q, qq, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Test several operations
+! Test several operations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Test BVMult
+! ** Test BVMult
   PetscCallA(BVMult(Y, two, one, X, Q, ierr))
 
-!     ** Test BVMultVec
+! ** Test BVMultVec
   PetscCallA(BVGetColumn(Y, izero, v, ierr))
   z(1) = 2.0
   do i = 2, k
@@ -136,20 +136,20 @@ program test1f
   PetscCallA(BVMultVec(X, mone, one, v, z, ierr))
   PetscCallA(BVRestoreColumn(Y, izero, v, ierr))
 
-!     ** Test BVDot
+! ** Test BVDot
   PetscCallA(MatCreateSeqDense(PETSC_COMM_SELF, l, k, PETSC_NULL_SCALAR_ARRAY, M, ierr))
   PetscCallA(BVDot(X, Y, M, ierr))
 
-!     ** Test BVDotVec
+! ** Test BVDotVec
   PetscCallA(BVGetColumn(Y, izero, v, ierr))
   PetscCallA(BVDotVec(X, v, z, ierr))
   PetscCallA(BVRestoreColumn(Y, izero, v, ierr))
 
-!     ** Test BVMultInPlace and BVScale
+! ** Test BVMultInPlace and BVScale
   PetscCallA(BVMultInPlace(X, Q, ione, l, ierr))
   PetscCallA(BVScale(X, two, ierr))
 
-!     ** Test BVNorm
+! ** Test BVNorm
   PetscCallA(BVNormColumn(X, izero, NORM_2, nrm, ierr))
   if (rank == 0) then
     write (*, 120) nrm
@@ -161,7 +161,7 @@ program test1f
   end if
 130 format('Frobenius Norm of X = ', f8.4)
 
-!     *** Clean up
+! *** Clean up
   PetscCallA(BVDestroy(X, ierr))
   PetscCallA(BVDestroy(Y, ierr))
   PetscCallA(VecDestroy(t, ierr))

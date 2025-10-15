@@ -25,35 +25,35 @@ module ex6fmodule
   implicit none
 
 contains
-! -------------------------------------------------------------------
-!   The actual routine for the matrix-vector product
-!   See https://math.nist.gov/MatrixMarket/data/NEP/mvmisg/mvmisg.html
-!
-!   Computes Y(:,1:M) = op(A)*X(:,1:M)
-!   where op(A) is A or A' and A is the Ising matrix.
-!
-!   trans   (input) integer
-!           If trans = 0, compute y(:,1:M) = A*x(:,1:M)
-!           If trans = 1, compute y(:,1:M) = A'*x(:,1:M)
-!
-!   n       (input) integer
-!           The order of the matrix, it has to be an even number.
-!
-!   m       (input) integeR
-!           The number of columns of x to multiply.
-!
-!   x       (input) double precision array, dimension (ldx, m)
-!           x contains the matrix (vectors) x.
-!
-!   ldx     (input) integer
-!           The leading dimension of array x, ldx >= max(1, n)
-!
-!   y       (output) double precision array, dimension (ldx, m)
-!           contains the product of the matrix op(A) with x.
-!
-!   ldy     (input) integer
-!           The leading dimension of array y, ldy >= max(1, n)
-!
+  ! -------------------------------------------------------------------
+  ! The actual routine for the matrix-vector product
+  ! See https://math.nist.gov/MatrixMarket/data/NEP/mvmisg/mvmisg.html
+  !
+  ! Computes Y(:,1:M) = op(A)*X(:,1:M)
+  ! where op(A) is A or A' and A is the Ising matrix.
+  !
+  !   trans   (input) integer
+  !           If trans = 0, compute y(:,1:M) = A*x(:,1:M)
+  !           If trans = 1, compute y(:,1:M) = A'*x(:,1:M)
+  !
+  !   n       (input) integer
+  !           The order of the matrix, it has to be an even number.
+  !
+  !   m       (input) integeR
+  !           The number of columns of x to multiply.
+  !
+  !   x       (input) double precision array, dimension (ldx, m)
+  !           x contains the matrix (vectors) x.
+  !
+  !   ldx     (input) integer
+  !           The leading dimension of array x, ldx >= max(1, n)
+  !
+  !   y       (output) double precision array, dimension (ldx, m)
+  !           contains the product of the matrix op(A) with x.
+  !
+  !   ldy     (input) integer
+  !           The leading dimension of array y, ldy >= max(1, n)
+  !
   subroutine mvmisg(trans, n, m, x, ldx, y, ldy)
     use petscsys
     implicit none
@@ -73,7 +73,7 @@ contains
 
     if (trans == 0) then
 
-!       Compute y(:,1:m) = A*x(:,1:m)
+!     ** Compute y(:,1:m) = A*x(:,1:m)
 
       do k = 1, m
         y(1, k) = cosb*x(1, k) - sinb*x(n, k)
@@ -91,7 +91,7 @@ contains
 
     else if (trans == 1) then
 
-!       Compute y(:1:m) = A'*x(:,1:m)
+!     ** Compute y(:1:m) = A'*x(:,1:m)
 
       do k = 1, m
         do i = 1, n, 2
@@ -111,17 +111,16 @@ contains
     end if
   end subroutine
 
-! -------------------------------------------------------------------
-!
-!   MatMult_Ising - user provided matrix-vector multiply
-!
-!   Input Parameters:
-!   A - matrix
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
+  ! -------------------------------------------------------------------
+  ! MatMult_Ising - user provided matrix-vector multiply
+  !
+  ! Input Parameters:
+  !   A - matrix
+  !   x - input vector
+  !
+  ! Output Parameter:
+  !   y - output vector
+  !
   subroutine MatMult_Ising(A, x, y, ierr)
     use petscmat
     implicit none
@@ -144,17 +143,16 @@ contains
     PetscCall(VecRestoreArray(y, yy, ierr))
   end subroutine
 
-! -------------------------------------------------------------------
-!
-!   MatMultTranspose_Ising - user provided transpose matrix-vector multiply
-!
-!   Input Parameters:
-!   A - matrix
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
+  ! -------------------------------------------------------------------
+  ! MatMultTranspose_Ising - user provided transpose matrix-vector multiply
+  !
+  ! Input Parameters:
+  !   A - matrix
+  !   x - input vector
+  !
+  ! Output Parameter:
+  !   y - output vector
+  !
   subroutine MatMultTranspose_Ising(A, x, y, ierr)
     use petscmat
     implicit none
@@ -185,15 +183,11 @@ program ex6f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
-!  Variables:
-!     A     operator matrix
-!     eps   eigenproblem solver context
 
-  Mat            :: A
-  EPS            :: eps
+  Mat            :: A    ! operator matrix
+  EPS            :: eps  ! aeigenproblem solver context
   EPSType        :: tname
   PetscReal      :: tol
   PetscInt       :: N, m
@@ -203,7 +197,7 @@ program ex6f
   PetscBool      :: flg, terse
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -222,8 +216,8 @@ program ex6f
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Register the matrix-vector subroutine for the operator that defines
-!     the eigensystem, Ax=kx
+!  Register the matrix-vector subroutine for the operator that defines
+!  the eigensystem, Ax=kx
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MatCreateShell(PETSC_COMM_WORLD, N, N, N, N, PETSC_NULL_INTEGER, A, ierr))
@@ -231,21 +225,21 @@ program ex6f
   PetscCallA(MatShellSetOperation(A, MATOP_MULT_TRANSPOSE, MatMultTranspose_Ising, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the eigensolver and display info
+! Create the eigensolver and display info
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Create eigensolver context
+! ** Create eigensolver context
   PetscCallA(EPSCreate(PETSC_COMM_WORLD, eps, ierr))
 
-!     ** Set operators. In this case, it is a standard eigenvalue problem
+! ** Set operators. In this case, it is a standard eigenvalue problem
   PetscCallA(EPSSetOperators(eps, A, PETSC_NULL_MAT, ierr))
   PetscCallA(EPSSetProblemType(eps, EPS_NHEP, ierr))
 
-!     ** Set solver parameters at runtime
+! ** Set solver parameters at runtime
   PetscCallA(EPSSetFromOptions(eps, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the eigensystem
+! Solve the eigensystem
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(EPSSolve(eps, ierr))
@@ -254,7 +248,7 @@ program ex6f
     write (*, '(A,I4)') ' Number of iterations of the method: ', its
   end if
 
-!     ** Optional: Get some information from the solver and display it
+! ** Optional: Get some information from the solver and display it
   PetscCallA(EPSGetType(eps, tname, ierr))
   if (rank == 0) then
     write (*, '(A,A)') ' Solution method: ', tname
@@ -269,10 +263,10 @@ program ex6f
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** show detailed info unless -terse option is given by user
+! ** show detailed info unless -terse option is given by user
   PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-terse', terse, ierr))
   if (terse) then
     PetscCallA(EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))

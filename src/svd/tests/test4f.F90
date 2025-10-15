@@ -31,7 +31,7 @@ program test4f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
   Mat                  :: A, B
@@ -50,7 +50,7 @@ program test4f
   PetscViewerAndFormat :: vf
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -66,7 +66,7 @@ program test4f
 100 format(/'Bidiagonal matrix, m =', I3, ', n=', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Build the Lauchli matrix
+! Build the Lauchli matrix
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
@@ -91,19 +91,19 @@ program test4f
   PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute singular values
+! Compute singular values
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SVDCreate(PETSC_COMM_WORLD, svd, ierr))
   PetscCallA(SVDSetOperators(svd, A, PETSC_NULL_MAT, ierr))
 
-!     ** test some interface functions
+! ** test some interface functions
   PetscCallA(SVDGetOperators(svd, B, PETSC_NULL_MAT, ierr))
   PetscCallA(MatView(B, PETSC_VIEWER_STDOUT_WORLD, ierr))
   PetscCallA(SVDSetConvergenceTest(svd, SVD_CONV_ABS, ierr))
   PetscCallA(SVDSetStoppingTest(svd, SVD_STOP_BASIC, ierr))
 
-!     ** query properties and print them
+! ** query properties and print them
   PetscCallA(SVDGetProblemType(svd, ptype, ierr))
   if (rank == 0) then
     write (*, 105) ptype
@@ -148,7 +148,7 @@ program test4f
   PetscCallA(SVDMonitorSet(svd, SVDMONITORCONVERGED, vf, SVDMonitorConvergedDestroy, ierr))
   PetscCallA(SVDMonitorCancel(svd, ierr))
 
-!     ** call the solver
+! ** call the solver
   PetscCallA(SVDSetFromOptions(svd, ierr))
   PetscCallA(SVDSolve(svd, ierr))
   PetscCallA(SVDGetConvergedReason(svd, reason, ierr))
@@ -157,13 +157,13 @@ program test4f
   end if
 150 format(' Converged reason:', I2)
   PetscCallA(SVDGetIterationNumber(svd, its, ierr))
-!     if (rank==0) then
-!       write(*,160) its
-!     end if
+! if (rank==0) then
+!   write(*,160) its
+! end if
 !160  format (' Number of iterations of the method:',I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SVDErrorView(svd, SVD_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))

@@ -23,15 +23,11 @@ program test7f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
-!  Variables:
-!     A     operator matrix
-!     eps   eigenproblem solver context
 
-  Mat            :: A
-  EPS            :: eps
+  Mat            :: A     ! operator matrix
+  EPS            :: eps   ! eigenproblem solver context
   EPSType        :: tname
   PetscInt       :: n, i, Istart, Iend
   PetscInt       :: nev, nini
@@ -44,7 +40,7 @@ program test7f
   Vec            :: v(1)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -58,7 +54,7 @@ program test7f
 100 format(/'1-D Laplacian Eigenproblem, n =', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute the operator matrix that defines the eigensystem, Ax=kx
+! Compute the operator matrix that defines the eigensystem, Ax=kx
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
@@ -110,20 +106,20 @@ program test7f
   PetscCallA(VecAssemblyEnd(v(1), ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the eigensolver and display info
+! Create the eigensolver and display info
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Create eigensolver context
+! ** Create eigensolver context
   PetscCallA(EPSCreate(PETSC_COMM_WORLD, eps, ierr))
 
-!     ** Set operators. In this case, it is a standard eigenvalue problem
+! ** Set operators. In this case, it is a standard eigenvalue problem
   PetscCallA(EPSSetOperators(eps, A, PETSC_NULL_MAT, ierr))
   PetscCallA(EPSSetProblemType(eps, EPS_HEP, ierr))
 
-!     ** Set solver parameters at runtime
+! ** Set solver parameters at runtime
   PetscCallA(EPSSetFromOptions(eps, ierr))
 
-!     ** Set initial vectors
+! ** Set initial vectors
   nini = 1
   PetscCallA(EPSSetInitialSpace(eps, nini, v, ierr))
 
@@ -133,7 +129,7 @@ program test7f
 
   PetscCallA(EPSSolve(eps, ierr))
 
-!     ** Optional: Get some information from the solver and display it
+! ** Optional: Get some information from the solver and display it
   PetscCallA(EPSGetType(eps, tname, ierr))
   if (rank == 0) then
     write (*, 120) tname
@@ -146,7 +142,7 @@ program test7f
 130 format(' Number of requested eigenvalues:', I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))

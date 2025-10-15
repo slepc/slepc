@@ -28,10 +28,9 @@ module ex27fmodule
   implicit none
 
 contains
-! --------------------------------------------------------------
-!
-!   FormFunction - Computes Function matrix  T(lambda)
-!
+  ! --------------------------------------------------------------
+  ! FormFunction - Computes Function matrix  T(lambda)
+  !
   subroutine FormFunction(nep, lambda, fun, B, ctx, ierr)
     use slepcnep
     implicit none
@@ -95,10 +94,9 @@ contains
 
   end subroutine FormFunction
 
-! --------------------------------------------------------------
-!
-!   FormJacobian - Computes Jacobian matrix  T'(lambda)
-!
+  ! --------------------------------------------------------------
+  ! FormJacobian - Computes Jacobian matrix  T'(lambda)
+  !
   subroutine FormJacobian(nep, lambda, jac, ctx, ierr)
     use slepcnep
     implicit none
@@ -118,19 +116,18 @@ contains
 
   end subroutine FormJacobian
 
-! --------------------------------------------------------------
-!
-!  ComputeSingularities - This is a user-defined routine to compute maxnp
-!  points (at most) in the complex plane where the function T(.) is not analytic.
-!
-!  In this case, we discretize the singularity region (-inf,0)~(-1e+6,-1e-5)
-!
-!  Input Parameters:
-!    nep   - nonlinear eigensolver context
-!    maxnp - on input number of requested points in the discretization (can be set)
-!    xi    - computed values of the discretization
-!    dummy - optional user-defined monitor context (unused here)
-!
+  ! --------------------------------------------------------------
+  !  ComputeSingularities - This is a user-defined routine to compute maxnp
+  !  points (at most) in the complex plane where the function T(.) is not analytic.
+  !
+  !  In this case, we discretize the singularity region (-inf,0)~(-1e+6,-1e-5)
+  !
+  !  Input Parameters:
+  !    nep   - nonlinear eigensolver context
+  !    maxnp - on input number of requested points in the discretization (can be set)
+  !    xi    - computed values of the discretization
+  !    dummy - optional user-defined monitor context (unused here)
+  !
   subroutine ComputeSingularities(nep, maxnp, xi, dummy, ierr)
     use slepcnep
     implicit none
@@ -160,7 +157,7 @@ program ex27f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   NEP                :: nep
@@ -176,7 +173,7 @@ program ex27f
   character(len=128) :: string
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -194,7 +191,7 @@ program ex27f
   three = 3
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create nonlinear eigensolver context and set options
+! Create nonlinear eigensolver context and set options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(NEPCreate(PETSC_COMM_WORLD, nep, ierr))
@@ -216,7 +213,7 @@ program ex27f
   PetscCallA(NEPSetTarget(nep, sigma, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Define the nonlinear problem
+! Define the nonlinear problem
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if (split) then
@@ -269,7 +266,7 @@ program ex27f
   PetscCallA(NEPSetFromOptions(nep, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the eigensystem
+! Solve the eigensystem
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(NEPSolve(nep, ierr))
@@ -281,7 +278,7 @@ program ex27f
   PetscCallA(PetscPrintf(PETSC_COMM_WORLD, trim(string), ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   ! ** show detailed info unless -terse option is given by user

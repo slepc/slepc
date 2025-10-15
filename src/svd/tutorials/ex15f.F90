@@ -23,15 +23,11 @@ program ex15f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
-!  Variables:
-!     A     operator matrix
-!     svd   singular value solver context
 
-  Mat            :: A
-  SVD            :: svd
+  Mat            :: A    ! operator matrix
+  SVD            :: svd  ! singular value solver context
   SVDType        :: tname
   PetscReal      :: tol, error, sigma, mu
   PetscInt       :: n, i, j, Istart, Iend
@@ -42,7 +38,7 @@ program ex15f
   PetscScalar    :: one, alpha
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -58,7 +54,7 @@ program ex15f
 100 format(/'Lauchli SVD, n =', I3, ', mu=', E12.4, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Build the Lauchli matrix
+! Build the Lauchli matrix
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
@@ -82,24 +78,24 @@ program ex15f
   PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the singular value solver and display info
+! Create the singular value solver and display info
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Create singular value solver context
+! ** Create singular value solver context
   PetscCallA(SVDCreate(PETSC_COMM_WORLD, svd, ierr))
 
-!     ** Set operators and problem type
+! ** Set operators and problem type
   PetscCallA(SVDSetOperators(svd, A, PETSC_NULL_MAT, ierr))
   PetscCallA(SVDSetProblemType(svd, SVD_STANDARD, ierr))
 
-!     ** Use thick-restart Lanczos as default solver
+! ** Use thick-restart Lanczos as default solver
   PetscCallA(SVDSetType(svd, SVDTRLANCZOS, ierr))
 
-!     ** Set solver parameters at runtime
+! ** Set solver parameters at runtime
   PetscCallA(SVDSetFromOptions(svd, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the singular value system
+! Solve the singular value system
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SVDSolve(svd, ierr))
@@ -109,7 +105,7 @@ program ex15f
   end if
 110 format(/' Number of iterations of the method:', I4)
 
-!     ** Optional: Get some information from the solver and display it
+! ** Optional: Get some information from the solver and display it
   PetscCallA(SVDGetType(svd, tname, ierr))
   if (rank == 0) then
     write (*, 120) tname
@@ -127,27 +123,27 @@ program ex15f
 140 format(' Stopping condition: tol=', 1P, E11.4, ', maxit=', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Get number of converged singular triplets
+! ** Get number of converged singular triplets
   PetscCallA(SVDGetConverged(svd, nconv, ierr))
   if (rank == 0) then
     write (*, 150) nconv
   end if
 150 format(' Number of converged approximate singular triplets:', I2/)
 
-!     ** Display singular values and relative errors
+! ** Display singular values and relative errors
   if (nconv > 0) then
     if (rank == 0) then
       write (*, *) '       sigma          relative error'
       write (*, *) ' ----------------- ------------------'
     end if
     do i = 0, nconv - 1
-!         ** Get i-th singular value
+!     ** Get i-th singular value
       PetscCallA(SVDGetSingularTriplet(svd, i, sigma, PETSC_NULL_VEC, PETSC_NULL_VEC, ierr))
 
-!         ** Compute the relative error for each singular triplet
+!     ** Compute the relative error for each singular triplet
       PetscCallA(SVDComputeError(svd, i, SVD_ERROR_RELATIVE, error, ierr))
       if (rank == 0) then
         write (*, 160) sigma, error
@@ -160,7 +156,7 @@ program ex15f
     end if
   end if
 
-!     ** Free work space
+! ** Free work space
   PetscCallA(SVDDestroy(svd, ierr))
   PetscCallA(MatDestroy(A, ierr))
 

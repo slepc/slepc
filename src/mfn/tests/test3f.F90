@@ -24,7 +24,7 @@ program test3f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!
+
   Mat                :: A, B
   MFN                :: mfn
   FN                 :: f
@@ -40,7 +40,7 @@ program test3f
   PetscBool          :: flg
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -55,7 +55,7 @@ program test3f
 100 format(/'nSquare root of Laplacian, n=', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute the discrete 2-D Laplacian
+! Compute the discrete 2-D Laplacian
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
@@ -99,7 +99,7 @@ program test3f
   PetscCallA(VecDuplicate(v, y, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute singular values
+! Compute singular values
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MFNCreate(PETSC_COMM_WORLD, mfn, ierr))
@@ -107,7 +107,7 @@ program test3f
   PetscCallA(MFNGetFN(mfn, f, ierr))
   PetscCallA(FNSetType(f, FNSQRT, ierr))
 
-!     ** test some interface functions
+! ** test some interface functions
   PetscCallA(MFNGetOperator(mfn, B, ierr))
   PetscCallA(MatView(B, PETSC_VIEWER_STDOUT_WORLD, ierr))
   PetscCallA(MFNSetOptionsPrefix(mfn, 'myprefix_', ierr))
@@ -119,7 +119,7 @@ program test3f
   PetscCallA(MFNSetErrorIfNotConverged(mfn, PETSC_TRUE, ierr))
   PetscCallA(MFNSetFromOptions(mfn, ierr))
 
-!     ** query properties and print them
+! ** query properties and print them
   PetscCallA(MFNGetTolerances(mfn, tol, maxit, ierr))
   if (rank == 0) then
     write (*, 110) tol, maxit
@@ -136,7 +136,7 @@ program test3f
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Call the solver
+! Call the solver
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MFNSolve(mfn, v, y, ierr))
@@ -146,9 +146,9 @@ program test3f
   end if
 130 format(' Converged reason:', I2)
   PetscCallA(MFNGetIterationNumber(mfn, its, ierr))
-!     if (rank==0) then
-!       write(*,140) its
-!     end if
+! if (rank==0) then
+!   write(*,140) its
+! end if
 !140  format (' Number of iterations of the method:',I4)
 
   PetscCallA(VecNorm(y, NORM_2, norm, ierr))

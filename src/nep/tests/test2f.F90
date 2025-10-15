@@ -17,8 +17,9 @@ program test2f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   Mat                  :: A(3), B
   FN                   :: f(3), g
   NEP                  :: nep
@@ -43,7 +44,7 @@ program test2f
   PetscViewerAndFormat :: vf
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -54,7 +55,7 @@ program test2f
   end if
 100 format(/'Diagonal Nonlinear Eigenproblem, n =', I3, ' (Fortran)')
 
-!     Matrices
+! Matrices
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A(1), ierr))
   PetscCallA(MatSetSizes(A(1), PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
   PetscCallA(MatSetFromOptions(A(1), ierr))
@@ -88,7 +89,7 @@ program test2f
   PetscCallA(MatAssemblyBegin(A(3), MAT_FINAL_ASSEMBLY, ierr))
   PetscCallA(MatAssemblyEnd(A(3), MAT_FINAL_ASSEMBLY, ierr))
 
-!     Functions: f0=-lambda, f1=1.0, f2=sqrt(lambda)
+! Functions: f0=-lambda, f1=1.0, f2=sqrt(lambda)
   PetscCallA(FNCreate(PETSC_COMM_WORLD, f(1), ierr))
   PetscCallA(FNSetType(f(1), FNRATIONAL, ierr))
   nc = 2
@@ -106,7 +107,7 @@ program test2f
   PetscCallA(FNSetType(f(3), FNSQRT, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create eigensolver and test interface functions
+! Create eigensolver and test interface functions
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(NEPCreate(PETSC_COMM_WORLD, nep, ierr))
@@ -212,7 +213,7 @@ program test2f
 240 format(' Finished - converged reason =', I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   PetscCallA(NEPErrorView(nep, NEP_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))
   PetscCallA(NEPDestroy(nep, ierr))

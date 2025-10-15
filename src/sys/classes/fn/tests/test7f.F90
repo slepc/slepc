@@ -19,7 +19,7 @@ program test7f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   Mat                  :: A, S, R
@@ -33,7 +33,7 @@ program test7f
   PetscScalar, pointer :: aa(:, :)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -49,7 +49,7 @@ program test7f
 100 format(/'Matrix square root, n =', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create FN object and matrix
+! Create FN object and matrix
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(FNCreate(PETSC_COMM_WORLD, fn, ierr))
@@ -69,7 +69,7 @@ program test7f
   PetscCallA(MatSetOption(A, MAT_HERMITIAN, PETSC_TRUE, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Scalar evaluation
+! Scalar evaluation
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   x = 2.2
@@ -96,7 +96,7 @@ program test7f
 120 format(A2, '(', F4.1, ') = ', F8.5, SP, F8.5, 'i')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute matrix square root
+! Compute matrix square root
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MatCreateSeqDense(PETSC_COMM_SELF, n, n, PETSC_NULL_SCALAR_ARRAY, S, ierr))
@@ -115,7 +115,7 @@ program test7f
     PetscCallA(MatView(S, PETSC_NULL_VIEWER, ierr))
   end if
 
-!     *** check error ||S*S-A||_F
+! *** check error ||S*S-A||_F
   PetscCallA(MatMatMult(S, S, MAT_INITIAL_MATRIX, PETSC_DEFAULT_REAL, R, ierr))
   if (eta /= 1.0) then
     alpha = 1.0/(eta*eta)
@@ -131,7 +131,7 @@ program test7f
   end if
 130 format('||S*S-A||_F = ', F8.5)
 
-!     *** Clean up
+! *** Clean up
   PetscCallA(MatDestroy(S, ierr))
   PetscCallA(MatDestroy(R, ierr))
   PetscCallA(MatDestroy(A, ierr))
@@ -139,8 +139,6 @@ program test7f
   PetscCallA(SlepcFinalize(ierr))
 
 contains
-
-! -----------------------------------------------------------------
 
   subroutine FillUpMatrix(n, X)
     PetscInt    :: n, i, j

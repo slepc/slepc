@@ -20,7 +20,7 @@ program test17f
 #define MAXSHI 16
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   Mat            :: A, B, As, Bs, Au
   EPS            :: eps
@@ -42,7 +42,7 @@ program test17f
   MPI_Comm       :: comm
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -118,7 +118,7 @@ program test17f
   PetscCallA(MatAssemblyEnd(B, MAT_FINAL_ASSEMBLY, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create eigensolver and set various options
+! Create eigensolver and set various options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(EPSCreate(PETSC_COMM_WORLD, eps, ierr))
@@ -126,7 +126,7 @@ program test17f
   PetscCallA(EPSSetProblemType(eps, EPS_GHEP, ierr))
   PetscCallA(EPSSetType(eps, EPSKRYLOVSCHUR, ierr))
 
-!     Set interval and other settings for spectrum slicing
+! ** Set interval and other settings for spectrum slicing
 
   PetscCallA(EPSSetWhichEigenpairs(eps, EPS_ALL, ierr))
   int0 = 1.1
@@ -143,7 +143,7 @@ program test17f
   PetscCallA(KSPSetType(ksp, KSPPREONLY, ierr))
   PetscCallA(PCSetType(pc, PCCHOLESKY, ierr))
 
-!     Test interface functions of Krylov-Schur solver
+! ** Test interface functions of Krylov-Schur solver
 
   PetscCallA(EPSKrylovSchurGetRestart(eps, keep, ierr))
   if (rank == 0) then
@@ -211,7 +211,7 @@ program test17f
   PetscCallA(EPSSetFromOptions(eps, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute all eigenvalues in interval and display info
+! Compute all eigenvalues in interval and display info
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(EPSSetUp(eps, ierr))
@@ -255,7 +255,7 @@ program test17f
     end if
 220 format(' Process ', I2, ' owns ', I5, ', rows of the global', ' matrices, and ', I5, ' rows in the subcommunicator')
 
-!       modify A on subcommunicators
+!   ** Modify A on subcommunicators
     PetscCallA(PetscObjectGetComm(As, comm, ierr))
     PetscCallA(MatCreate(comm, Au, ierr))
     PetscCallA(MatSetSizes(Au, nlocs, mlocs, m, m, ierr))

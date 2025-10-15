@@ -24,21 +24,20 @@ module test15fmodule
   implicit none
 
 contains
-! --------------------------------------------------------------
-!
-!  MyEPSMonitor - This is a user-defined routine for monitoring
-!  the EPS iterative solvers.
-!
-!  Input Parameters:
-!    eps   - eigensolver context
-!    its   - iteration number
-!    nconv - number of converged eigenpairs
-!    eigr  - real part of the eigenvalues
-!    eigi  - imaginary part of the eigenvalues
-!    errest- relative error estimates for each eigenpair
-!    nest  - number of error estimates
-!    dummy - optional user-defined monitor context (unused here)
-!
+  ! --------------------------------------------------------------
+  ! MyEPSMonitor - This is a user-defined routine for monitoring
+  ! the EPS iterative solvers.
+  !
+  ! Input Parameters:
+  !   eps   - eigensolver context
+  !   its   - iteration number
+  !   nconv - number of converged eigenpairs
+  !   eigr  - real part of the eigenvalues
+  !   eigi  - imaginary part of the eigenvalues
+  !   errest- relative error estimates for each eigenpair
+  !   nest  - number of error estimates
+  !   dummy - optional user-defined monitor context (unused here)
+  !
   subroutine MyEPSMonitor(eps, its, nconv, eigr, eigi, errest, nest, dummy, ierr)
     use slepceps
     implicit none
@@ -67,15 +66,11 @@ program test15f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-!  Variables:
-!     A     operator matrix
-!     eps   eigenproblem solver context
-
-  Mat A
-  EPS eps
+  Mat A     ! operator matrix
+  EPS eps   ! eigenproblem solver context
   EPSType tname
   PetscInt n, i, Istart, Iend
   PetscInt nev
@@ -87,7 +82,7 @@ program test15f
   PetscScalar value(3)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -101,7 +96,7 @@ program test15f
 100 format(/'1-D Laplacian Eigenproblem, n =', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute the operator matrix that defines the eigensystem, Ax=kx
+! Compute the operator matrix that defines the eigensystem, Ax=kx
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
@@ -144,32 +139,32 @@ program test15f
   PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the eigensolver and display info
+! Create the eigensolver and display info
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Create eigensolver context
+! ** Create eigensolver context
   PetscCallA(EPSCreate(PETSC_COMM_WORLD, eps, ierr))
 
-!     ** Set operators. In this case, it is a standard eigenvalue problem
+! ** Set operators. In this case, it is a standard eigenvalue problem
   PetscCallA(EPSSetOperators(eps, A, PETSC_NULL_MAT, ierr))
   PetscCallA(EPSSetProblemType(eps, EPS_HEP, ierr))
 
-!     ** Set user-defined monitor
+! ** Set user-defined monitor
   PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-my_eps_monitor', flg, ierr))
   if (flg) then
     PetscCallA(EPSMonitorSet(eps, MyEPSMonitor, 0, PETSC_NULL_FUNCTION, ierr))
   end if
 
-!     ** Set solver parameters at runtime
+! ** Set solver parameters at runtime
   PetscCallA(EPSSetFromOptions(eps, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the eigensystem
+! Solve the eigensystem
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(EPSSolve(eps, ierr))
 
-!     ** Optional: Get some information from the solver and display it
+! ** Optional: Get some information from the solver and display it
   PetscCallA(EPSGetType(eps, tname, ierr))
   if (rank == 0) then
     write (*, 120) tname
@@ -182,7 +177,7 @@ program test15f
 130 format(' Number of requested eigenvalues:', I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))

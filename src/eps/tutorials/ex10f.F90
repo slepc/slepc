@@ -19,8 +19,8 @@
 !  Note: this example illustrates old error checking with CHKERRA instead
 !  of PetscCallA()
 ! ----------------------------------------------------------------------
-!
-!     Module contains data needed by shell ST
+
+! Module contains data needed by shell ST
 !
 #include <slepc/finclude/slepceps.h>
 module ex10fmodule
@@ -30,18 +30,17 @@ module ex10fmodule
   KSP myksp
 
 contains
-! -------------------------------------------------------------------
-!
-!   STApply_User - This routine demonstrates the use of a user-provided spectral
-!   transformation. The transformation implemented in this code is just OP=A^-1.
-!
-!   Input Parameters:
-!   st - spectral transformation context
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
+  ! -------------------------------------------------------------------
+  ! STApply_User - This routine demonstrates the use of a user-provided spectral
+  ! transformation. The transformation implemented in this code is just OP=A^-1.
+  !
+  ! Input Parameters:
+  !   st - spectral transformation context
+  !   x - input vector
+  !
+  ! Output Parameter:
+  !   y - output vector
+  !
   subroutine STApply_User(st, x, y, ierr)
     use slepceps
     implicit none
@@ -53,17 +52,16 @@ contains
     call KSPSolve(myksp, x, y, ierr); CHKERRQ(ierr)
   end subroutine
 
-! -------------------------------------------------------------------
-!
-!   STApplyTranspose_User - This is not required unless using a two-sided eigensolver
-!
-!   Input Parameters:
-!   st - spectral transformation context
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
+  ! -------------------------------------------------------------------
+  ! STApplyTranspose_User - This is not required unless using a two-sided eigensolver
+  !
+  ! Input Parameters:
+  !   st - spectral transformation context
+  !   x - input vector
+  !
+  ! Output Parameter:
+  !   y - output vector
+  !
   subroutine STApplyTranspose_User(st, x, y, ierr)
     use slepceps
     implicit none
@@ -76,18 +74,17 @@ contains
   end subroutine
 
 #if defined(PETSC_USE_COMPLEX)
-! -------------------------------------------------------------------
-!
-!   STApplyHermitianTranspose_User - This is not required unless using a two-sided eigensolver
-!   in complex scalars
-!
-!   Input Parameters:
-!   st - spectral transformation context
-!   x - input vector
-!
-!   Output Parameter:
-!   y - output vector
-!
+  ! -------------------------------------------------------------------
+  ! STApplyHermitianTranspose_User - This is not required unless using a two-sided eigensolver
+  ! in complex scalars
+  !
+  ! Input Parameters:
+  !   st - spectral transformation context
+  !   x - input vector
+  !
+  ! Output Parameter:
+  !   y - output vector
+  !
   subroutine STApplyHermitianTranspose_User(st, x, y, ierr)
     use slepceps
     implicit none
@@ -105,19 +102,18 @@ contains
   end subroutine
 #endif
 
-! -------------------------------------------------------------------
-!
-!   STBackTransform_User - This routine demonstrates the use of a user-provided spectral
-!   transformation
-!
-!   Input Parameters:
-!   st - spectral transformation context
-!   n  - number of eigenvalues to transform
-!
-!   Output Parameters:
-!   eigr - real part of eigenvalues
-!   eigi - imaginary part of eigenvalues
-!
+  ! -------------------------------------------------------------------
+  ! STBackTransform_User - This routine demonstrates the use of a user-provided spectral
+  ! transformation
+  !
+  ! Input Parameters:
+  !   st - spectral transformation context
+  !   n  - number of eigenvalues to transform
+  !
+  ! Output Parameters:
+  !   eigr - real part of eigenvalues
+  !   eigi - imaginary part of eigenvalues
+  !
   subroutine STBackTransform_User(st, n, eigr, eigi, ierr)
     use slepceps
     implicit none
@@ -143,15 +139,11 @@ program ex10f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-!  Variables:
-!     A     operator matrix
-!     eps   eigenproblem solver context
-
-  Mat            :: A
-  EPS            :: eps
+  Mat            :: A    ! operator matrix
+  EPS            :: eps  ! eigenproblem solver context
   ST             :: st
   EPSType        :: tname
   PetscInt       :: n, i, Istart, Iend, one, two, three
@@ -162,7 +154,7 @@ program ex10f
   PetscErrorCode :: ierr
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   one = 1
@@ -182,7 +174,7 @@ program ex10f
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Compute the operator matrix that defines the eigensystem, Ax=kx
+! Compute the operator matrix that defines the eigensystem, Ax=kx
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   call MatCreate(PETSC_COMM_WORLD, A, ierr); CHKERRA(ierr)
@@ -223,62 +215,62 @@ program ex10f
   call MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr); CHKERRA(ierr)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create the eigensolver and set various options
+! Create the eigensolver and set various options
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** Create eigensolver context
+! ** Create eigensolver context
   call EPSCreate(PETSC_COMM_WORLD, eps, ierr); CHKERRA(ierr)
 
-!     ** Set operators. In this case, it is a standard eigenvalue problem
+! ** Set operators. In this case, it is a standard eigenvalue problem
   call EPSSetOperators(eps, A, PETSC_NULL_MAT, ierr); CHKERRA(ierr)
   call EPSSetProblemType(eps, EPS_NHEP, ierr); CHKERRA(ierr)
 
-!     ** Set solver parameters at runtime
+! ** Set solver parameters at runtime
   call EPSSetFromOptions(eps, ierr); CHKERRA(ierr)
 
-!     ** Initialize shell spectral transformation if selected by user
+! ** Initialize shell spectral transformation if selected by user
   call EPSGetST(eps, st, ierr); CHKERRA(ierr)
   call PetscObjectTypeCompare(st, STSHELL, isShell, ierr); CHKERRA(ierr)
 
   if (isShell) then
-!       ** Change sorting criterion since this ST example computes values
-!       ** closest to 0
+!   ** Change sorting criterion since this ST example computes values
+!   ** closest to 0
     call EPSSetWhichEigenpairs(eps, EPS_SMALLEST_REAL, ierr); CHKERRA(ierr)
 
-!       ** In Fortran, instead of a context for the user-defined spectral transform
-!       ** we use a module containing any application-specific data, initialized here
+!   ** In Fortran, instead of a context for the user-defined spectral transform
+!   ** we use a module containing any application-specific data, initialized here
     call KSPCreate(PETSC_COMM_WORLD, myksp, ierr); CHKERRA(ierr)
     call KSPAppendOptionsPrefix(myksp, "st_", ierr); CHKERRA(ierr)
 
-!       ** (Required) Set the user-defined routine for applying the operator
+!   ** (Required) Set the user-defined routine for applying the operator
     call STShellSetApply(st, STApply_User, ierr); CHKERRA(ierr)
 
-!       ** (Optional) Set the user-defined routine for applying the transposed operator
+!   ** (Optional) Set the user-defined routine for applying the transposed operator
     call STShellSetApplyTranspose(st, STApplyTranspose_User, ierr); CHKERRA(ierr)
 
 #if defined(PETSC_USE_COMPLEX)
-!       ** (Optional) Set the user-defined routine for applying the conjugate-transposed operator
+!   ** (Optional) Set the user-defined routine for applying the conjugate-transposed operator
     call STShellSetApplyHermitianTranspose(st, STApplyHermitianTranspose_User, ierr); CHKERRA(ierr)
 #endif
 
-!       ** (Optional) Set the user-defined routine for back-transformation
+!   ** (Optional) Set the user-defined routine for back-transformation
     call STShellSetBackTransform(st, STBackTransform_User, ierr); CHKERRA(ierr)
 
-!       ** (Optional) Set a name for the transformation, used for STView()
+!   ** (Optional) Set a name for the transformation, used for STView()
     call PetscObjectSetName(st, 'MyTransformation', ierr); CHKERRA(ierr)
 
-!       ** (Optional) Do any setup required for the new transformation
+!   ** (Optional) Do any setup required for the new transformation
     call KSPSetOperators(myksp, A, A, ierr); CHKERRA(ierr)
     call KSPSetFromOptions(myksp, ierr); CHKERRA(ierr)
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Solve the eigensystem
+! Solve the eigensystem
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   call EPSSolve(eps, ierr); CHKERRA(ierr)
 
-!     ** Optional: Get some information from the solver and display it
+! ** Optional: Get some information from the solver and display it
   call EPSGetType(eps, tname, ierr); CHKERRA(ierr)
   if (rank == 0) then
     write (*, '(A,A,/)') ' Solution method: ', tname
@@ -289,10 +281,10 @@ program ex10f
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-!     ** show detailed info unless -terse option is given by user
+! ** show detailed info unless -terse option is given by user
   call PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-terse', terse, ierr); CHKERRA(ierr)
   if (terse) then
     call EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr); CHKERRA(ierr)

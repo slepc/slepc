@@ -17,8 +17,9 @@ program test3f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   Mat                  :: A(3), B
   PEP                  :: pep
   ST                   :: st
@@ -40,10 +41,10 @@ program test3f
   PEPProblemType       :: ptype
   PetscMPIInt          :: rank
   PetscErrorCode       :: ierr
-  PetscViewerAndFormat vf
+  PetscViewerAndFormat :: vf
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
@@ -88,7 +89,7 @@ program test3f
   PetscCallA(MatAssemblyEnd(A(3), MAT_FINAL_ASSEMBLY, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Create eigensolver and test interface functions
+! Create eigensolver and test interface functions
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(PEPCreate(PETSC_COMM_WORLD, pep, ierr))
@@ -225,7 +226,7 @@ program test3f
 240 format(' Finished - converged reason =', I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Display solution and clean up
+! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   PetscCallA(PEPErrorView(pep, PEP_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))
   PetscCallA(PEPDestroy(pep, ierr))

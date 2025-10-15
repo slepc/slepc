@@ -19,7 +19,7 @@ program test1f
   implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Declarations
+! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   RG             :: rg
@@ -33,7 +33,7 @@ program test1f
   PetscReal      :: radius, vscale, a, b, c, d
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Beginning of program
+! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   one = 1
@@ -42,7 +42,7 @@ program test1f
   PetscCallA(RGCreate(PETSC_COMM_WORLD, rg, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Ellipse
+! Ellipse
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(RGSetType(rg, RGELLIPSE, ierr))
@@ -97,7 +97,7 @@ program test1f
 120 format('(', F7.4, ',', F7.4, ')')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Interval
+! Interval
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   PetscCallA(RGSetType(rg, RGINTERVAL, ierr))
@@ -127,7 +127,7 @@ program test1f
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!     Polygon
+! Polygon
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #if defined(PETSC_USE_COMPLEX)
@@ -177,7 +177,7 @@ program test1f
     end if
   end if
 
-!     *** Clean up
+! *** Clean up
   PetscCallA(RGDestroy(rg, ierr))
   PetscCallA(SlepcFinalize(ierr))
 end program test1f
