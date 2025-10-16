@@ -29,8 +29,8 @@ bop
 eop
 
 s_arg_list         %n%n
-s_arg_inlist       - ***
-e_arg_inlist       -***
+s_arg_inlist       - ***`
+e_arg_inlist       `-***
 s_defn_inlist      \ 
 e_defn_inlist      %n
 e_arg_list         %n%n
