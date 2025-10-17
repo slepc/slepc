@@ -52,9 +52,8 @@ program ex23f
   PetscCallA(PetscOptionsGetScalar(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-t', t, flg, ierr))
   N = m*(m + 1)/2
   if (rank == 0) then
-    write (*, 100) N, m
+    write (*, '(/a,i6,a,i4,a)') 'Markov y=exp(t*A)*e_1, N=', N, ' (m=', m, ')'
   end if
-100 format(/'Markov y=exp(t*A)*e_1, N=', I6, ' (m=', I4, ')')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Compute the transition probability matrix, A
@@ -148,28 +147,24 @@ program ex23f
 ! ** Optional: Get some information from the solver and display it
   PetscCallA(MFNGetIterationNumber(mfn, its, ierr))
   if (rank == 0) then
-    write (*, 120) its
+    write (*, '(a,i4)') ' Number of iterations of the method: ', its
   end if
-120 format(' Number of iterations of the method: ', I4)
   PetscCallA(MFNGetDimensions(mfn, ncv, ierr))
   if (rank == 0) then
-    write (*, 130) ncv
+    write (*, '(a,i4)') ' Subspace dimension:', ncv
   end if
-130 format(' Subspace dimension:', I4)
   PetscCallA(MFNGetTolerances(mfn, tol, maxit, ierr))
   if (rank == 0) then
-    write (*, 140) tol, maxit
+    write (*, '(a,f10.7,a,i4)') ' Stopping condition: tol=', tol, ' maxit=', maxit
   end if
-140 format(' Stopping condition: tol=', f10.7, ' maxit=', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if (rank == 0) then
-    write (*, 150) PetscRealPart(t), norm
+    write (*, '(a,f4.1,a,f8.5)') ' Computed vector at time t=', PetscRealPart(t), ' has norm ', norm
   end if
-150 format(' Computed vector at time t=', f4.1, ' has norm ', f8.5)
 
   PetscCallA(MFNDestroy(mfn, ierr))
   PetscCallA(MatDestroy(A, ierr))

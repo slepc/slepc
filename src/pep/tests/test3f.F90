@@ -51,9 +51,8 @@ program test3f
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 20
   if (rank == 0) then
-    write (*, 100) n
+    write (*, '(/a,i3,a)') 'Diagonal Quadratic Eigenproblem, n =', n, ' (Fortran)'
   end if
-100 format(/'Diagonal Quadratic Eigenproblem, n =', I3, ' (Fortran)')
 
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A(1), ierr))
   PetscCallA(MatSetSizes(A(1), PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
@@ -97,9 +96,8 @@ program test3f
   PetscCallA(PEPSetOperators(pep, nmat, A, ierr))
   PetscCallA(PEPGetNumMatrices(pep, nmat, ierr))
   if (rank == 0) then
-    write (*, 110) nmat - 1
+    write (*, '(a,i2)') ' Polynomial of degree ', nmat - 1
   end if
-110 format(' Polynomial of degree ', I2)
   i = 0
   PetscCallA(PEPGetOperators(pep, i, B, ierr))
   PetscCallA(MatView(B, PETSC_NULL_VIEWER, ierr))
@@ -107,33 +105,28 @@ program test3f
   PetscCallA(PEPSetType(pep, PEPTOAR, ierr))
   PetscCallA(PEPGetType(pep, tname, ierr))
   if (rank == 0) then
-    write (*, 120) tname
+    write (*, '(a,a)') ' Type set to ', tname
   end if
-120 format(' Type set to ', A)
 
   PetscCallA(PEPGetProblemType(pep, ptype, ierr))
   if (rank == 0) then
-    write (*, 130) ptype
+    write (*, '(a,i2)') ' Problem type before changing = ', ptype
   end if
-130 format(' Problem type before changing = ', I2)
   PetscCallA(PEPSetProblemType(pep, PEP_HERMITIAN, ierr))
   PetscCallA(PEPGetProblemType(pep, ptype, ierr))
   if (rank == 0) then
-    write (*, 140) ptype
+    write (*, '(a,i2)') ' ... changed to ', ptype
   end if
-140 format(' ... changed to ', I2)
 
   PetscCallA(PEPGetExtract(pep, extr, ierr))
   if (rank == 0) then
-    write (*, 150) extr
+    write (*, '(a,i2)') ' Extraction before changing = ', extr
   end if
-150 format(' Extraction before changing = ', I2)
   PetscCallA(PEPSetExtract(pep, PEP_EXTRACT_STRUCTURED, ierr))
   PetscCallA(PEPGetExtract(pep, extr, ierr))
   if (rank == 0) then
-    write (*, 160) extr
+    write (*, '(a,i2)') ' ... changed to ', extr
   end if
-160 format(' ... changed to ', I2)
 
   alpha = .1
   its = 5
@@ -142,17 +135,15 @@ program test3f
   PetscCallA(PEPSetScale(pep, scal, alpha, PETSC_NULL_VEC, PETSC_NULL_VEC, its, lambda, ierr))
   PetscCallA(PEPGetScale(pep, scal, alpha, PETSC_NULL_VEC, PETSC_NULL_VEC, its, lambda, ierr))
   if (rank == 0) then
-    write (*, 170) scal, alpha, its
+    write (*, '(a,i2,a,f7.4,a,i2)') ' Scaling: ', scal, ', alpha=', alpha, ', its=', its
   end if
-170 format(' Scaling: ', I2, ', alpha=', F7.4, ', its=', I2)
 
   basis = PEP_BASIS_CHEBYSHEV1
   PetscCallA(PEPSetBasis(pep, basis, ierr))
   PetscCallA(PEPGetBasis(pep, basis, ierr))
   if (rank == 0) then
-    write (*, 180) basis
+    write (*, '(a,i2)') ' Polynomial basis: ', basis
   end if
-180 format(' Polynomial basis: ', I2)
 
   np = 1
   tol = 1e-9
@@ -162,9 +153,8 @@ program test3f
   PetscCallA(PEPSetRefine(pep, refine, np, tol, its, rscheme, ierr))
   PetscCallA(PEPGetRefine(pep, refine, np, tol, its, rscheme, ierr))
   if (rank == 0) then
-    write (*, 190) refine, tol, its, rscheme
+    write (*, '(a,i2,a,f7.4,a,i2,a,i2)') ' Refinement: ', refine, ', tol=', tol, ', its=', its, ', schem=', rscheme
   end if
-190 format(' Refinement: ', I2, ', tol=', F7.4, ', its=', I2, ', schem=', I2)
 
   tget = 4.8
   PetscCallA(PEPSetTarget(pep, tget, ierr))
@@ -172,35 +162,31 @@ program test3f
   PetscCallA(PEPSetWhichEigenpairs(pep, PEP_TARGET_MAGNITUDE, ierr))
   PetscCallA(PEPGetWhichEigenpairs(pep, which, ierr))
   if (rank == 0) then
-    write (*, 200) which, PetscRealPart(tget)
+    write (*, '(a,i2,a,f4.1)') ' Which = ', which, ', target = ', PetscRealPart(tget)
   end if
-200 format(' Which = ', I2, ', target = ', F4.1)
 
   nev = 4
   PetscCallA(PEPSetDimensions(pep, nev, PETSC_DETERMINE_INTEGER, PETSC_DETERMINE_INTEGER, ierr))
   PetscCallA(PEPGetDimensions(pep, nev, ncv, mpd, ierr))
   if (rank == 0) then
-    write (*, 210) nev, ncv, mpd
+    write (*, '(a,i2,a,i2,a,i2)') ' Dimensions: nev=', nev, ', ncv=', ncv, ', mpd=', mpd
   end if
-210 format(' Dimensions: nev=', I2, ', ncv=', I2, ', mpd=', I2)
 
   tol = 2.2e-4
   its = 200
   PetscCallA(PEPSetTolerances(pep, tol, its, ierr))
   PetscCallA(PEPGetTolerances(pep, tol, its, ierr))
   if (rank == 0) then
-    write (*, 220) tol, its
+    write (*, '(a,f8.5,a,i4)') ' Tolerance =', tol, ', max_its =', its
   end if
-220 format(' Tolerance =', F8.5, ', max_its =', I4)
 
   PetscCallA(PEPSetConvergenceTest(pep, PEP_CONV_ABS, ierr))
   PetscCallA(PEPGetConvergenceTest(pep, conv, ierr))
   PetscCallA(PEPSetStoppingTest(pep, PEP_STOP_BASIC, ierr))
   PetscCallA(PEPGetStoppingTest(pep, stp, ierr))
   if (rank == 0) then
-    write (*, 230) conv, stp
+    write (*, '(a,i2,a,i2)') ' Convergence test =', conv, ', stopping test =', stp
   end if
-230 format(' Convergence test =', I2, ', stopping test =', I2)
 
   PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, vf, ierr))
   PetscCallA(PEPMonitorSet(pep, PEPMONITORFIRST, vf, PetscViewerAndFormatDestroy, ierr))
@@ -221,9 +207,8 @@ program test3f
   PetscCallA(PEPSolve(pep, ierr))
   PetscCallA(PEPGetConvergedReason(pep, reason, ierr))
   if (rank == 0) then
-    write (*, 240) reason
+    write (*, '(a,i2)') ' Finished - converged reason =', reason
   end if
-240 format(' Finished - converged reason =', I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up

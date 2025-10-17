@@ -49,9 +49,8 @@ program test7f
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))
 
   if (rank == 0) then
-    write (*, 100) n
+    write (*, '(/a,i3,a)') '1-D Laplacian Eigenproblem, n =', n, ' (Fortran)'
   end if
-100 format(/'1-D Laplacian Eigenproblem, n =', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Compute the operator matrix that defines the eigensystem, Ax=kx
@@ -132,14 +131,12 @@ program test7f
 ! ** Optional: Get some information from the solver and display it
   PetscCallA(EPSGetType(eps, tname, ierr))
   if (rank == 0) then
-    write (*, 120) tname
+    write (*, '(a,a)') ' Solution method: ', tname
   end if
-120 format(' Solution method: ', A)
   PetscCallA(EPSGetDimensions(eps, nev, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr))
   if (rank == 0) then
-    write (*, 130) nev
+    write (*, '(a,i2)') ' Number of requested eigenvalues:', nev
   end if
-130 format(' Number of requested eigenvalues:', I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up

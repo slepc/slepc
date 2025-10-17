@@ -61,9 +61,8 @@ program test4f
   if (.not. flg) n = m + 2
 
   if (rank == 0) then
-    write (*, 100) m, n
+    write (*, '(/a,i3,a,i3,a)') 'Bidiagonal matrix, m =', m, ', n=', n, ' (Fortran)'
   end if
-100 format(/'Bidiagonal matrix, m =', I3, ', n=', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Build the Lauchli matrix
@@ -106,9 +105,8 @@ program test4f
 ! ** query properties and print them
   PetscCallA(SVDGetProblemType(svd, ptype, ierr))
   if (rank == 0) then
-    write (*, 105) ptype
+    write (*, '(/a,i2)') ' Problem type = ', ptype
   end if
-105 format(/' Problem type = ', I2)
   PetscCallA(SVDIsGeneralized(svd, flg, ierr))
   if (flg .and. rank == 0) then
     write (*, *) 'generalized'
@@ -116,31 +114,27 @@ program test4f
   PetscCallA(SVDGetImplicitTranspose(svd, tmode, ierr))
   if (rank == 0) then
     if (tmode) then
-      write (*, 110) 'implicit'
+      write (*, *) ' Transpose mode is implicit'
     else
-      write (*, 110) 'explicit'
+      write (*, *) ' Transpose mode is explicit'
     end if
   end if
-110 format(' Transpose mode is', A9)
   PetscCallA(SVDGetConvergenceTest(svd, conv, ierr))
   if (rank == 0) then
-    write (*, 120) conv
+    write (*, '(a,i2)') ' Convergence test is', conv
   end if
-120 format(' Convergence test is', I2)
   PetscCallA(SVDGetStoppingTest(svd, stp, ierr))
   if (rank == 0) then
-    write (*, 130) stp
+    write (*, '(a,i2)') ' Stopping test is', stp
   end if
-130 format(' Stopping test is', I2)
   PetscCallA(SVDGetWhichSingularTriplets(svd, which, ierr))
   if (rank == 0) then
     if (which == SVD_LARGEST) then
-      write (*, 140) 'largest'
+      write (*, *) ' Which = largest'
     else
-      write (*, 140) 'smallest'
+      write (*, *) ' Which = smallest'
     end if
   end if
-140 format(' Which =', A9)
 
   PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, vf, ierr))
   PetscCallA(SVDMonitorSet(svd, SVDMONITORFIRST, vf, PetscViewerAndFormatDestroy, ierr))
@@ -153,14 +147,12 @@ program test4f
   PetscCallA(SVDSolve(svd, ierr))
   PetscCallA(SVDGetConvergedReason(svd, reason, ierr))
   if (rank == 0) then
-    write (*, 150) reason
+    write (*, '(a,i2)') ' Converged reason:', reason
   end if
-150 format(' Converged reason:', I2)
   PetscCallA(SVDGetIterationNumber(svd, its, ierr))
 ! if (rank==0) then
-!   write(*,160) its
+!   write(*,'(a,i4)') ' Number of iterations of the method:', its
 ! end if
-!160  format (' Number of iterations of the method:',I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up

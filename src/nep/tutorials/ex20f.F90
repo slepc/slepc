@@ -185,7 +185,7 @@ program ex20f
   n = 128
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))
   if (rank == 0) then
-    write (*, '(/A,I4)') 'Nonlinear Eigenproblem, n =', n
+    write (*, '(/a,i4)') 'Nonlinear Eigenproblem, n =', n
   end if
 
   ctx%h = 1.0/real(n)
@@ -247,21 +247,21 @@ program ex20f
   PetscCallA(NEPSolve(nep, ierr))
   PetscCallA(NEPGetIterationNumber(nep, its, ierr))
   if (rank == 0) then
-    write (*, '(A,I3)') ' Number of NEP iterations =', its
+    write (*, '(a,i3)') ' Number of NEP iterations =', its
   end if
 
 ! ** Optional: Get some information from the solver and display it
   PetscCallA(NEPGetType(nep, tname, ierr))
   if (rank == 0) then
-    write (*, '(A,A10)') ' Solution method: ', tname
+    write (*, '(a,a10)') ' Solution method: ', tname
   end if
   PetscCallA(NEPGetDimensions(nep, nev, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr))
   if (rank == 0) then
-    write (*, '(A,I4)') ' Number of requested eigenvalues:', nev
+    write (*, '(a,i4)') ' Number of requested eigenvalues:', nev
   end if
   PetscCallA(NEPGetTolerances(nep, tol, maxit, ierr))
   if (rank == 0) then
-    write (*, '(A,F12.9,A,I5)') ' Stopping condition: tol=', tol, ', maxit=', maxit
+    write (*, '(a,f12.9,a,i5)') ' Stopping condition: tol=', tol, ', maxit=', maxit
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -270,7 +270,7 @@ program ex20f
 
   PetscCallA(NEPGetConverged(nep, nconv, ierr))
   if (rank == 0) then
-    write (*, '(A,I2/)') ' Number of converged approximate eigenpairs:', nconv
+    write (*, '(a,i2/)') ' Number of converged approximate eigenpairs:', nconv
   end if
 
 ! ** Display eigenvalues and relative errors
@@ -286,7 +286,7 @@ program ex20f
 !     ** Compute residual norm and error
       PetscCallA(NEPComputeError(nep, i, NEP_ERROR_RELATIVE, norm, ierr))
       if (rank == 0) then
-        write (*, '(1P,E15.4,E18.4)') PetscRealPart(lambda), norm
+        write (*, '(1p,e15.4,e18.4)') PetscRealPart(lambda), norm
       end if
     end do
     if (rank == 0) then

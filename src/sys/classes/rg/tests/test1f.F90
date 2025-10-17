@@ -64,18 +64,16 @@ program test1f
   PetscCallA(RGCheckInside(rg, one, ar, ai, inside, ierr))
   if (rank == 0) then
     if (inside >= 0) then
-      write (*, 110) re, im, 'inside'
+      write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is inside the region'
     else
-      write (*, 110) re, im, 'outside'
+      write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is outside the region'
     end if
   end if
-110 format('Point (', F4.1, ',', F4.1, ') is ', A7, ' the region')
 
   PetscCallA(RGComputeBoundingBox(rg, a, b, c, d, ierr))
   if (rank == 0) then
-    write (*, 115) a, b, c, d
+    write (*, '(a,f4.1,a,f4.1,a,f4.1,a,f4.1,a)') 'Bounding box: [', a, ',', b, ']x[', c, ',', d, ']'
   end if
-115 format('Bounding box: [', F4.1, ',', F4.1, ']x[', F4.1, ',', F4.1, ']')
 
   if (rank == 0) then
     write (*, *) 'Contour points:'
@@ -91,10 +89,9 @@ program test1f
     im = ci(i)
 #endif
     if (rank == 0) then
-      write (*, 120) re, im
+      write (*, '(a,f7.4,a,f7.4,a)') '(', re, ',', im, ')'
     end if
   end do
-120 format('(', F7.4, ',', F7.4, ')')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Interval
@@ -120,9 +117,9 @@ program test1f
   PetscCallA(RGCheckInside(rg, one, ar, ai, inside, ierr))
   if (rank == 0) then
     if (inside >= 0) then
-      write (*, 110) re, im, 'inside'
+      write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is inside the region'
     else
-      write (*, 110) re, im, 'outside'
+      write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is outside the region'
     end if
   end if
 
@@ -171,9 +168,9 @@ program test1f
   PetscCallA(RGCheckInside(rg, one, ar, ai, inside, ierr))
   if (rank == 0) then
     if (inside >= 0) then
-      write (*, 110) re, im, 'inside'
+      write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is inside the region'
     else
-      write (*, 110) re, im, 'outside'
+      write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is outside the region'
     end if
   end if
 

@@ -52,9 +52,8 @@ contains
     PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
     if (its > 0 .and. rank == 0) then
       re = PetscRealPart(eigr(nconv + 1))
-      write (6, 140) its, nconv, re, errest(nconv + 1)
+      write (6, '(i3,a,i2,a,f7.4,a,g10.3,a)') its, ' EPS nconv=', nconv, ' first unconverged value (error) ', re, ' (', errest(nconv + 1), ')'
     end if
-140 format(i3, ' EPS nconv=', i2, ' first unconverged value (error) ', f7.4, ' (', g10.3, ')')
     ierr = 0
   end subroutine
 
@@ -91,9 +90,8 @@ program test15f
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))
 
   if (rank == 0) then
-    write (*, 100) n
+    write (*, '(/a,i3,a)') '1-D Laplacian Eigenproblem, n =', n, ' (Fortran)'
   end if
-100 format(/'1-D Laplacian Eigenproblem, n =', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Compute the operator matrix that defines the eigensystem, Ax=kx
@@ -167,14 +165,12 @@ program test15f
 ! ** Optional: Get some information from the solver and display it
   PetscCallA(EPSGetType(eps, tname, ierr))
   if (rank == 0) then
-    write (*, 120) tname
+    write (*, '(a,a)') ' Solution method: ', tname
   end if
-120 format(' Solution method: ', A)
   PetscCallA(EPSGetDimensions(eps, nev, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr))
   if (rank == 0) then
-    write (*, 130) nev
+    write (*, '(a,i2)') ' Number of requested eigenvalues:', nev
   end if
-130 format(' Number of requested eigenvalues:', I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up

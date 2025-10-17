@@ -44,9 +44,8 @@ program test7f
   PetscCallA(PetscOptionsHasName(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-inplace', inplace, ierr))
 
   if (rank == 0) then
-    write (*, 100) n
+    write (*, '(/a,i3,a)') 'Matrix square root, n =', n, ' (Fortran)'
   end if
-100 format(/'Matrix square root, n =', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Create FN object and matrix
@@ -80,20 +79,18 @@ program test7f
     re = PetscRealPart(y)
     im = PetscImaginaryPart(y)
     if (abs(im) < 1.d-10) then
-      write (*, 110) 'f', PetscRealPart(x), re
+      write (*, '(a3,f3.1,a,f8.5)') 'f(', PetscRealPart(x), ') = ', re
     else
-      write (*, 120) 'f', PetscRealPart(x), re, im
+      write (*, '(a3,f3.1,a,f10.5,sp,f9.5,a)') 'f(', PetscRealPart(x), ') = ', re, im, 'i'
     end if
     re = PetscRealPart(yp)
     im = PetscImaginaryPart(yp)
     if (abs(im) < 1.d-10) then
-      write (*, 110) 'f''', PetscRealPart(x), re
+      write (*, '(a3,f3.1,a,f8.5)') 'f''(', PetscRealPart(x), ') = ', re
     else
-      write (*, 120) 'f''', PetscRealPart(x), re, im
+      write (*, '(a3,f3.1,a,f8.5,sp,f8.5,a)') 'f''(', PetscRealPart(x), ') = ', re, im, 'i'
     end if
   end if
-110 format(A2, '(', F4.1, ') = ', F8.5)
-120 format(A2, '(', F4.1, ') = ', F8.5, SP, F8.5, 'i')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Compute matrix square root
@@ -127,9 +124,8 @@ program test7f
   if (nrm < 100*PETSC_MACHINE_EPSILON) then
     write (*, *) '||S*S-A||_F < 100*eps'
   else
-    write (*, 130) nrm
+    write (*, '(a,f8.5)') '||S*S-A||_F = ', nrm
   end if
-130 format('||S*S-A||_F = ', F8.5)
 
 ! *** Clean up
   PetscCallA(MatDestroy(S, ierr))

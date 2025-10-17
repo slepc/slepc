@@ -95,13 +95,12 @@ program test1f
 
   PetscCallA(FNRationalGetNumerator(fn, n, pp, ierr))
   if (rank == 0) then
-    write (*, 100) 'Numerator', (PetscRealPart(pp(i)), i=1, n)
+    write (*, '(a15,10f6.1)') 'Numerator', (PetscRealPart(pp(i)), i=1, n)
   end if
   PetscCallA(FNRationalGetDenominator(fn, n, qq, ierr))
   if (rank == 0) then
-    write (*, 100) 'Denominator', (PetscRealPart(qq(i)), i=1, n)
+    write (*, '(a15,10f6.1)') 'Denominator', (PetscRealPart(qq(i)), i=1, n)
   end if
-100 format(A15, 10F6.1)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Constant
@@ -137,20 +136,18 @@ contains
       re = PetscRealPart(y)
       im = PetscImaginaryPart(y)
       if (abs(im) < 1.d-10) then
-        write (*, 110) 'f', PetscRealPart(x), re
+        write (*, '(a3,f3.1,a,f10.5)') 'f(', PetscRealPart(x), ') = ', re
       else
-        write (*, 120) 'f', PetscRealPart(x), re, im
+        write (*, '(a3,f3.1,a,f10.5,sp,f9.5,a)') 'f(', PetscRealPart(x), ') = ', re, im, 'i'
       end if
       re = PetscRealPart(yp)
       im = PetscImaginaryPart(yp)
       if (abs(im) < 1.d-10) then
-        write (*, 110) 'f''', PetscRealPart(x), re
+        write (*, '(a3,f3.1,a,f10.5)') 'f''(', PetscRealPart(x), ') = ', re
       else
-        write (*, 120) 'f''', PetscRealPart(x), re, im
+        write (*, '(a3,f3.1,a,f10.5,sp,f9.5,a)') 'f''(', PetscRealPart(x), ') = ', re, im, 'i'
       end if
     end if
-110 format(A2, '(', F4.1, ') = ', F10.5)
-120 format(A2, '(', F4.1, ') = ', F10.5, SP, F9.5, 'i')
 
   end subroutine
 

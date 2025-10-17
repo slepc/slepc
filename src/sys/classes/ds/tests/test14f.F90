@@ -47,9 +47,8 @@ program test14f
   PetscCheckA(n <= 100, PETSC_COMM_SELF, PETSC_ERR_ARG_WRONG, 'Program currently limited to n=100')
 
   if (rank == 0) then
-    write (*, 110) n
+    write (*, '(/a,i3,a)') 'Solve a Dense System of type NHEP, n =', n, ' (Fortran)'
   end if
-110 format(/'Solve a Dense System of type NHEP, n =', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Create DS object
@@ -91,14 +90,12 @@ program test14f
       im = wi(i)
 #endif
       if (abs(im) < 1.d-10) then
-        write (*, 120) re
+        write (*, '(a,f8.5)') '  ', re
       else
-        write (*, 130) re, im
+        write (*, '(a,f8.5,sp,f8.5,a)') '  ', re, im, 'i'
       end if
     end do
   end if
-120 format('  ', F8.5)
-130 format('  ', F8.5, SP, F8.5, 'i')
 
 ! *** Clean up
   PetscCallA(DSDestroy(ds, ierr))

@@ -56,9 +56,8 @@ program test1f
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-l', l, flg, ierr))
   PetscCheckA(k <= KMAX, PETSC_COMM_SELF, PETSC_ERR_ARG_WRONG, 'Program currently limited to k=35')
   if (rank == 0) then
-    write (*, 110) k, n
+    write (*, '(/a,i3,a,i3,a)') 'Test BV with', k, ' columns of length', n, ' (Fortran)'
   end if
-110 format(/'Test BV with', I3, ' columns of length', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Initialize data
@@ -148,14 +147,12 @@ program test1f
 ! ** Test BVNorm
   PetscCallA(BVNormColumn(X, izero, NORM_2, nrm, ierr))
   if (rank == 0) then
-    write (*, 120) nrm
+    write (*, '(a,f8.4)') '2-Norm of X[0] = ', nrm
   end if
-120 format('2-Norm of X[0] = ', f8.4)
   PetscCallA(BVNorm(X, NORM_FROBENIUS, nrm, ierr))
   if (rank == 0) then
-    write (*, 130) nrm
+    write (*, '(a,f8.4)') 'Frobenius Norm of X = ', nrm
   end if
-130 format('Frobenius Norm of X = ', f8.4)
 
 ! *** Clean up
   PetscCallA(BVDestroy(X, ierr))

@@ -25,7 +25,7 @@ program test14f
   KSP                  :: ksp
   DS                   :: ds
   PetscReal            :: cut, tol, tolabs
-  PetscScalar          :: tget, value
+  PetscScalar          :: tget, val
   PetscInt             :: n, i, its, Istart, Iend
   PetscInt             :: nev, ncv, mpd
   PetscBool            :: flg
@@ -49,17 +49,16 @@ program test14f
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 20
   if (rank == 0) then
-    write (*, 100) n
+    write (*, '(/a,i3,a)') 'Diagonal Eigenproblem, n =', n, ' (Fortran)'
   end if
-100 format(/'Diagonal Eigenproblem, n =', I3, ' (Fortran)')
 
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A, ierr))
   PetscCallA(MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
   PetscCallA(MatSetFromOptions(A, ierr))
   PetscCallA(MatGetOwnershipRange(A, Istart, Iend, ierr))
   do i = Istart, Iend - 1
-    value = i + 1
-    PetscCallA(MatSetValue(A, i, i, value, INSERT_VALUES, ierr))
+    val = i + 1
+    PetscCallA(MatSetValue(A, i, i, val, INSERT_VALUES, ierr))
   end do
   PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))
   PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
@@ -76,21 +75,18 @@ program test14f
   PetscCallA(EPSSetType(eps, EPSKRYLOVSCHUR, ierr))
   PetscCallA(EPSGetType(eps, tname, ierr))
   if (rank == 0) then
-    write (*, 110) tname
+    write (*, '(a,a)') ' Type set to ', tname
   end if
-110 format(' Type set to ', A)
 
   PetscCallA(EPSGetProblemType(eps, ptype, ierr))
   if (rank == 0) then
-    write (*, 120) ptype
+    write (*, '(a,i2)') ' Problem type before changing = ', ptype
   end if
-120 format(' Problem type before changing = ', I2)
   PetscCallA(EPSSetProblemType(eps, EPS_HEP, ierr))
   PetscCallA(EPSGetProblemType(eps, ptype, ierr))
   if (rank == 0) then
-    write (*, 130) ptype
+    write (*, '(a,i2)') ' ... changed to ', ptype
   end if
-130 format(' ... changed to ', I2)
   PetscCallA(EPSIsGeneralized(eps, flg, ierr))
   if (flg .and. rank == 0) then
     write (*, *) 'generalized'
@@ -106,15 +102,13 @@ program test14f
 
   PetscCallA(EPSGetExtraction(eps, extr, ierr))
   if (rank == 0) then
-    write (*, 140) extr
+    write (*, '(a,i2)') ' Extraction before changing = ', extr
   end if
-140 format(' Extraction before changing = ', I2)
   PetscCallA(EPSSetExtraction(eps, EPS_HARMONIC, ierr))
   PetscCallA(EPSGetExtraction(eps, extr, ierr))
   if (rank == 0) then
-    write (*, 150) extr
+    write (*, '(a,i2)') ' ... changed to ', extr
   end if
-150 format(' ... changed to ', I2)
 
   its = 8
   cut = 2.0e-6
@@ -122,9 +116,8 @@ program test14f
   PetscCallA(EPSSetBalance(eps, bal, its, cut, ierr))
   PetscCallA(EPSGetBalance(eps, bal, its, cut, ierr))
   if (rank == 0) then
-    write (*, 160) bal, its, cut
+    write (*, '(a,i2,a,i2,a,f9.6)') ' Balance: ', bal, ', its=', its, ', cutoff=', cut
   end if
-160 format(' Balance: ', I2, ', its=', I2, ', cutoff=', F9.6)
 
   tget = 4.8
   PetscCallA(EPSSetTarget(eps, tget, ierr))
@@ -132,35 +125,31 @@ program test14f
   PetscCallA(EPSSetWhichEigenpairs(eps, EPS_TARGET_MAGNITUDE, ierr))
   PetscCallA(EPSGetWhichEigenpairs(eps, which, ierr))
   if (rank == 0) then
-    write (*, 170) which, PetscRealPart(tget)
+    write (*, '(a,i2,a,f4.1)') ' Which = ', which, ', target = ', PetscRealPart(tget)
   end if
-170 format(' Which = ', I2, ', target = ', F4.1)
 
   nev = 4
   PetscCallA(EPSSetDimensions(eps, nev, PETSC_DETERMINE_INTEGER, PETSC_DETERMINE_INTEGER, ierr))
   PetscCallA(EPSGetDimensions(eps, nev, ncv, mpd, ierr))
   if (rank == 0) then
-    write (*, 180) nev, ncv, mpd
+    write (*, '(a,i2,a,i2,a,i2)') ' Dimensions: nev=', nev, ', ncv=', ncv, ', mpd=', mpd
   end if
-180 format(' Dimensions: nev=', I2, ', ncv=', I2, ', mpd=', I2)
 
   tol = 2.2e-4
   its = 200
   PetscCallA(EPSSetTolerances(eps, tol, its, ierr))
   PetscCallA(EPSGetTolerances(eps, tol, its, ierr))
   if (rank == 0) then
-    write (*, 190) tol, its
+    write (*, '(a,f8.5,a,i4)') ' Tolerance =', tol, ', max_its =', its
   end if
-190 format(' Tolerance =', F8.5, ', max_its =', I4)
 
   PetscCallA(EPSSetConvergenceTest(eps, EPS_CONV_ABS, ierr))
   PetscCallA(EPSGetConvergenceTest(eps, conv, ierr))
   PetscCallA(EPSSetStoppingTest(eps, EPS_STOP_BASIC, ierr))
   PetscCallA(EPSGetStoppingTest(eps, stp, ierr))
   if (rank == 0) then
-    write (*, 200) conv, stp
+    write (*, '(a,i2,a,i2)') ' Convergence test =', conv, ', stopping test =', stp
   end if
-200 format(' Convergence test =', I2, ', stopping test =', I2)
 
   PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, vf, ierr))
   PetscCallA(EPSMonitorSet(eps, EPSMONITORFIRST, vf, PetscViewerAndFormatDestroy, ierr))
@@ -182,9 +171,8 @@ program test14f
   PetscCallA(EPSGetConvergedReason(eps, reason, ierr))
   PetscCallA(EPSGetIterationNumber(eps, its, ierr))
   if (rank == 0) then
-    write (*, 210) reason, its
+    write (*, '(a,i2,a,i4)') ' Finished - converged reason =', reason, ', its = ', its
   end if
-210 format(' Finished - converged reason =', I2, ', its=', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up

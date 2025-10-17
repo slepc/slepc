@@ -50,9 +50,8 @@ program test3f
   Nt = n*n
 
   if (rank == 0) then
-    write (*, 100) n
+    write (*, '(/a,i3,a)') 'Square root of Laplacian, n=', n, ' (Fortran)'
   end if
-100 format(/'nSquare root of Laplacian, n=', I3, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Compute the discrete 2-D Laplacian
@@ -122,14 +121,12 @@ program test3f
 ! ** query properties and print them
   PetscCallA(MFNGetTolerances(mfn, tol, maxit, ierr))
   if (rank == 0) then
-    write (*, 110) tol, maxit
+    write (*, '(/a,f7.4,a,i4)') ' Tolerance: ', tol, ', maxit: ', maxit
   end if
-110 format(/' Tolerance: ', F7.4, ', maxit: ', I4)
   PetscCallA(MFNGetDimensions(mfn, ncv, ierr))
   if (rank == 0) then
-    write (*, 120) ncv
+    write (*, '(a,i3)') ' Subspace dimension: ', ncv
   end if
-120 format(' Subspace dimension: ', I3)
   PetscCallA(MFNGetErrorIfNotConverged(mfn, flg, ierr))
   if (rank == 0 .and. flg) then
     write (*, *) 'Erroring out if convergence fails'
@@ -142,20 +139,17 @@ program test3f
   PetscCallA(MFNSolve(mfn, v, y, ierr))
   PetscCallA(MFNGetConvergedReason(mfn, reason, ierr))
   if (rank == 0) then
-    write (*, 130) reason
+    write (*, '(a,i2)') ' Converged reason:', reason
   end if
-130 format(' Converged reason:', I2)
   PetscCallA(MFNGetIterationNumber(mfn, its, ierr))
 ! if (rank==0) then
-!   write(*,140) its
+!   write(*, '(a,i4)') ' Number of iterations of the method:', its
 ! end if
-!140  format (' Number of iterations of the method:',I4)
 
   PetscCallA(VecNorm(y, NORM_2, norm, ierr))
   if (rank == 0) then
-    write (*, 150) norm
+    write (*, '(a,f7.4)') ' sqrt(A)*v has norm ', norm
   end if
-150 format(' sqrt(A)*v has norm ', F7.4)
 
   PetscCallA(MFNDestroy(mfn, ierr))
   PetscCallA(MatDestroy(A, ierr))

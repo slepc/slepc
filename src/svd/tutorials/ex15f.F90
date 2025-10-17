@@ -49,9 +49,8 @@ program ex15f
   PetscCallA(PetscOptionsGetReal(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-mu', mu, flg, ierr))
 
   if (rank == 0) then
-    write (*, 100) n, mu
+    write (*, '(/a,i3,a,e12.4,a)') 'Lauchli SVD, n =', n, ', mu=', mu, ' (Fortran)'
   end if
-100 format(/'Lauchli SVD, n =', I3, ', mu=', E12.4, ' (Fortran)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Build the Lauchli matrix
@@ -101,26 +100,22 @@ program ex15f
   PetscCallA(SVDSolve(svd, ierr))
   PetscCallA(SVDGetIterationNumber(svd, its, ierr))
   if (rank == 0) then
-    write (*, 110) its
+    write (*, '(/a,i4)') ' Number of iterations of the method:', its
   end if
-110 format(/' Number of iterations of the method:', I4)
 
 ! ** Optional: Get some information from the solver and display it
   PetscCallA(SVDGetType(svd, tname, ierr))
   if (rank == 0) then
-    write (*, 120) tname
+    write (*, '(a,a)') ' Solution method: ', tname
   end if
-120 format(' Solution method: ', A)
   PetscCallA(SVDGetDimensions(svd, nsv, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr))
   if (rank == 0) then
-    write (*, 130) nsv
+    write (*, '(a,i2)') ' Number of requested singular values:', nsv
   end if
-130 format(' Number of requested singular values:', I2)
   PetscCallA(SVDGetTolerances(svd, tol, maxit, ierr))
   if (rank == 0) then
-    write (*, 140) tol, maxit
+    write (*, '(a,1pe11.4,a,i4)') ' Stopping condition: tol=', tol, ', maxit=', maxit
   end if
-140 format(' Stopping condition: tol=', 1P, E11.4, ', maxit=', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up
@@ -129,9 +124,8 @@ program ex15f
 ! ** Get number of converged singular triplets
   PetscCallA(SVDGetConverged(svd, nconv, ierr))
   if (rank == 0) then
-    write (*, 150) nconv
+    write (*, '(a,i2/)') ' Number of converged approximate singular triplets:', nconv
   end if
-150 format(' Number of converged approximate singular triplets:', I2/)
 
 ! ** Display singular values and relative errors
   if (nconv > 0) then
@@ -146,9 +140,8 @@ program ex15f
 !     ** Compute the relative error for each singular triplet
       PetscCallA(SVDComputeError(svd, i, SVD_ERROR_RELATIVE, error, ierr))
       if (rank == 0) then
-        write (*, 160) sigma, error
+        write (*, '(1p,a,e12.4,a,e12.4)') '   ', sigma, '       ', error
       end if
-160   format(1P, '   ', E12.4, '       ', E12.4)
 
     end do
     if (rank == 0) then

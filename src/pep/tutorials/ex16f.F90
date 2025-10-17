@@ -51,9 +51,8 @@ program ex16f
   end if
   N = nx*ny
   if (rank == 0) then
-    write (*, 100) N, nx, ny
+    write (*, '(/a,i6,a,i4,a,i4,a)') 'Quadratic Eigenproblem, N=', N, ' (', nx, 'x', ny, ' grid)'
   end if
-100 format(/'Quadratic Eigenproblem, N=', I6, ' (', I4, 'x', I4, ' grid)')
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Compute the matrices that define the eigensystem, (k^2*M+k*C+K)x=0
@@ -145,14 +144,12 @@ program ex16f
 ! ** Optional: Get some information from the solver and display it
   PetscCallA(PEPGetType(pep, tname, ierr))
   if (rank == 0) then
-    write (*, 120) tname
+    write (*, '(a,a)') ' Solution method: ', tname
   end if
-120 format(' Solution method: ', A)
   PetscCallA(PEPGetDimensions(pep, nev, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr))
   if (rank == 0) then
-    write (*, 130) nev
+    write (*, '(a,i4)') ' Number of requested eigenvalues:', nev
   end if
-130 format(' Number of requested eigenvalues:', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up

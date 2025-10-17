@@ -51,9 +51,8 @@ program test2f
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 20
   if (rank == 0) then
-    write (*, 100) n
+    write (*, '(/a,i3,a)') 'Diagonal Nonlinear Eigenproblem, n =', n, ' (Fortran)'
   end if
-100 format(/'Diagonal Nonlinear Eigenproblem, n =', I3, ' (Fortran)')
 
 ! Matrices
   PetscCallA(MatCreate(PETSC_COMM_WORLD, A(1), ierr))
@@ -116,9 +115,8 @@ program test2f
   PetscCallA(NEPSetSplitOperator(nep, nterm, A, f, mstr, ierr))
   PetscCallA(NEPGetSplitOperatorInfo(nep, nterm, mstr, ierr))
   if (rank == 0) then
-    write (*, 110) nterm
+    write (*, '(a,i2,a)') ' Nonlinear function with ', nterm, ' terms'
   end if
-110 format(' Nonlinear function with ', I2, ' terms')
   i = 0
   PetscCallA(NEPGetSplitOperatorTerm(nep, i, B, g, ierr))
   PetscCallA(MatView(B, PETSC_NULL_VIEWER, ierr))
@@ -127,21 +125,18 @@ program test2f
   PetscCallA(NEPSetType(nep, NEPRII, ierr))
   PetscCallA(NEPGetType(nep, tname, ierr))
   if (rank == 0) then
-    write (*, 120) tname
+    write (*, '(a,a)') ' Type set to ', tname
   end if
-120 format(' Type set to ', A)
 
   PetscCallA(NEPGetProblemType(nep, ptype, ierr))
   if (rank == 0) then
-    write (*, 130) ptype
+    write (*, '(a,i2)') ' Problem type before changing = ', ptype
   end if
-130 format(' Problem type before changing = ', I2)
   PetscCallA(NEPSetProblemType(nep, NEP_RATIONAL, ierr))
   PetscCallA(NEPGetProblemType(nep, ptype, ierr))
   if (rank == 0) then
-    write (*, 140) ptype
+    write (*, '(a,i2)') ' ... changed to ', ptype
   end if
-140 format(' ... changed to ', I2)
 
   np = 1
   tol = 1e-9
@@ -151,9 +146,8 @@ program test2f
   PetscCallA(NEPSetRefine(nep, refine, np, tol, its, rscheme, ierr))
   PetscCallA(NEPGetRefine(nep, refine, np, tol, its, rscheme, ierr))
   if (rank == 0) then
-    write (*, 190) refine, tol, its, rscheme
+    write (*, '(a,i2,a,f12.9,a,i2,a,i2)') ' Refinement: ', refine, ', tol=', tol, ', its=', its, ', scheme=', rscheme
   end if
-190 format(' Refinement: ', I2, ', tol=', F12.9, ', its=', I2, ', scheme=', I2)
 
   tget = 1.1
   PetscCallA(NEPSetTarget(nep, tget, ierr))
@@ -161,36 +155,32 @@ program test2f
   PetscCallA(NEPSetWhichEigenpairs(nep, NEP_TARGET_MAGNITUDE, ierr))
   PetscCallA(NEPGetWhichEigenpairs(nep, which, ierr))
   if (rank == 0) then
-    write (*, 200) which, PetscRealPart(tget)
+    write (*, '(a,i2,a,f4.1)') ' Which = ', which, ', target = ', PetscRealPart(tget)
   end if
-200 format(' Which = ', I2, ', target = ', F4.1)
 
   nev = 1
   ncv = 12
   PetscCallA(NEPSetDimensions(nep, nev, ncv, PETSC_DETERMINE_INTEGER, ierr))
   PetscCallA(NEPGetDimensions(nep, nev, ncv, mpd, ierr))
   if (rank == 0) then
-    write (*, 210) nev, ncv, mpd
+    write (*, '(a,i2,a,i2,a,i2)') ' Dimensions: nev=', nev, ', ncv=', ncv, ', mpd=', mpd
   end if
-210 format(' Dimensions: nev=', I2, ', ncv=', I2, ', mpd=', I2)
 
   tol = 1.0e-6
   its = 200
   PetscCallA(NEPSetTolerances(nep, tol, its, ierr))
   PetscCallA(NEPGetTolerances(nep, tol, its, ierr))
   if (rank == 0) then
-    write (*, 220) tol, its
+    write (*, '(a,f9.6,a,i4)') ' Tolerance =', tol, ', max_its =', its
   end if
-220 format(' Tolerance =', F9.6, ', max_its =', I4)
 
   PetscCallA(NEPSetConvergenceTest(nep, NEP_CONV_ABS, ierr))
   PetscCallA(NEPGetConvergenceTest(nep, conv, ierr))
   PetscCallA(NEPSetStoppingTest(nep, NEP_STOP_BASIC, ierr))
   PetscCallA(NEPGetStoppingTest(nep, stp, ierr))
   if (rank == 0) then
-    write (*, 230) conv, stp
+    write (*, '(a,i2,a,i2)') ' Convergence test =', conv, ', stopping test =', stp
   end if
-230 format(' Convergence test =', I2, ', stopping test =', I2)
 
   PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, vf, ierr))
   PetscCallA(NEPMonitorSet(nep, NEPMONITORFIRST, vf, PetscViewerAndFormatDestroy, ierr))
@@ -208,9 +198,8 @@ program test2f
   PetscCallA(NEPSolve(nep, ierr))
   PetscCallA(NEPGetConvergedReason(nep, reason, ierr))
   if (rank == 0) then
-    write (*, 240) reason
+    write (*, '(a,i2)') ' Finished - converged reason =', reason
   end if
-240 format(' Finished - converged reason =', I2)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up

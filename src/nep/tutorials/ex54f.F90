@@ -226,7 +226,7 @@ program ex54f
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   if (rank == 0) then
-    write (*, '(/A,I4)') 'Nonlinear eigenproblem with shell matrices, n =', n
+    write (*, '(/a,i4)') 'Nonlinear eigenproblem with shell matrices, n =', n
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -262,7 +262,7 @@ program ex54f
 
   PetscCallA(NEPGetConverged(nep, nconv, ierr))
   if (rank == 0) then
-    write (*, '(A,I2/)') ' Number of converged approximate eigenpairs:', nconv
+    write (*, '(a,i2/)') ' Number of converged approximate eigenpairs:', nconv
   end if
 !
 ! ** show detailed info unless -terse option is given by user

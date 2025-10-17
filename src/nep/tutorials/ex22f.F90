@@ -63,9 +63,8 @@ program ex22f
   tau = 0.001
   PetscCallA(PetscOptionsGetReal(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-tau', tau, flg, ierr))
   if (rank == 0) then
-    write (*, 100) n, tau
+    write (*, '(/a,i4,a,f6.3)') 'Delay Eigenproblem, n =', n, ', tau =', tau
   end if
-100 format(/'Delay Eigenproblem, n =', I4, ', tau =', F6.3)
 
   one = 1.0
   aa = 20.0
@@ -177,14 +176,12 @@ program ex22f
 ! ** Optional: Get some information from the solver and display it
   PetscCallA(NEPGetType(nep, tname, ierr))
   if (rank == 0) then
-    write (*, 120) tname
+    write (*, '(a,a)') ' Solution method: ', tname
   end if
-120 format(' Solution method: ', A)
   PetscCallA(NEPGetDimensions(nep, nev, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr))
   if (rank == 0) then
-    write (*, 130) nev
+    write (*, '(a,i4)') ' Number of requested eigenvalues:', nev
   end if
-130 format(' Number of requested eigenvalues:', I4)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Display solution and clean up

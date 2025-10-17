@@ -163,7 +163,7 @@ program ex10f
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))
 
   if (rank == 0) then
-    write (*, '(/A,I6/)') '1-D Laplacian Eigenproblem (shell-enabled), n=', n
+    write (*, '(/a,i6/)') '1-D Laplacian Eigenproblem (shell-enabled), n=', n
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -266,11 +266,11 @@ program ex10f
 ! ** Optional: Get some information from the solver and display it
   PetscCallA(EPSGetType(eps, tname, ierr))
   if (rank == 0) then
-    write (*, '(A,A,/)') ' Solution method: ', tname
+    write (*, '(a,a/)') ' Solution method: ', tname
   end if
   PetscCallA(EPSGetDimensions(eps, nev, PETSC_NULL_INTEGER, PETSC_NULL_INTEGER, ierr))
   if (rank == 0) then
-    write (*, '(A,I2)') ' Number of requested eigenvalues:', nev
+    write (*, '(a,i2)') ' Number of requested eigenvalues:', nev
   end if
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
