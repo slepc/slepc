@@ -1245,7 +1245,7 @@ docs-deploy:
     # build docs release
     - echo -e "section_start:`date +%s`:build_slepc_docs\r\e[0KSLEPc docs"
     - cd doc
-    - mkdir ../public || true
+    - if [ ! -d ../public ]; then mkdir ../public ; fi || true
     - (make website BUILDDIR="../build/release" && mv ../build/release/html ../public/release) || (printf "Sphinx documentation build failed (warnings count as errors)\n" && false)
     - echo -e "section_end:`date +%s`:build_slepc_docs\r\e[0K"
     # clean and pack
