@@ -338,7 +338,9 @@ ex1f: ex1f.o
 ```
 Replace `EPS` in `${SLEPC_EPS_LIB}` with the highest level module you are using in your program.
 
-```{eval-rst}
-.. bibliography::
-   :filter: docname in docnames
+```{only} html
+<p class="rubric">References</p>
+```
+```{bibliography}
+:filter: docname in docnames
 ```

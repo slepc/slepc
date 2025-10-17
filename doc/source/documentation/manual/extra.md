@@ -499,9 +499,11 @@ The following is a Fortran example. It is the Fortran equivalent of the program 
 :end-before: '!/*TEST'
 ```
 
-```{eval-rst}
-.. bibliography::
-   :filter: docname in docnames
+```{only} html
+<p class="rubric">References</p>
+```
+```{bibliography}
+:filter: docname in docnames
 ```
 
 ```{rubric} Footnotes

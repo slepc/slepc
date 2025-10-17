@@ -306,7 +306,7 @@ alletags:
 # ******** Rules for building documentation ************************************************************
 
 .PHONY: alldoc
-alldoc: alldoc_html
+alldoc: doc_html
 
 .PHONY: chk_c2html
 chk_c2html:
@@ -323,14 +323,19 @@ chk_doctext:
           printf "******************************************************"${PETSC_TEXT_NORMAL}"\n" ;false; fi
 
 # Build just PDF manual + prerequisites
-.PHONY: alldoc_pdf
-alldoc_pdf:
+.PHONY: doc_pdf
+doc_pdf:
 	${OMAKE_SELF} -C doc latexpdf PETSC_DIR=${PETSC_DIR}
 
 # Builds .html versions of the source
-.PHONY: alldoc_html
-alldoc_html: chk_c2html chk_doctext
+.PHONY: doc_html
+doc_html: chk_c2html chk_doctext
 	${OMAKE_SELF} -C doc website PETSC_DIR=${PETSC_DIR}
+
+# Builds only .html version of the source
+.PHONY: doc_html_only
+doc_html_only: chk_c2html chk_doctext
+	${OMAKE_SELF} -C doc html_only PETSC_DIR=${PETSC_DIR}
 
 # Deletes documentation
 .PHONY: alldocclean

@@ -592,9 +592,11 @@ In `PEPSetRefine`, the argument `npart` indicates the number of partitions in wh
 
 Additional details can be found in {cite:p}`Cam16b`.
 
-```{eval-rst}
-.. bibliography::
-   :filter: docname in docnames
+```{only} html
+<p class="rubric">References</p>
+```
+```{bibliography}
+:filter: docname in docnames
 ```
 
 ```{rubric} Footnotes

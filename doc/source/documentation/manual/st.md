@@ -581,9 +581,11 @@ Illustration of the effect of spectrum folding
 
 The effect is that the spectrum is folded around the value of $\sigma$. Thus, eigenvalues that are closest to the shift become the smallest eigenvalues in the folded spectrum, see figure [](#fig:fold). For this reason, spectrum folding is commonly used in combination with eigensolvers that compute the smallest eigenvalues, for instance in the context of electronic structure calculations {cite:p}`Can00`. This transformation can be an effective, low-cost alternative to shift-and-invert.
 
-```{eval-rst}
-.. bibliography::
-   :filter: docname in docnames
+```{only} html
+<p class="rubric">References</p>
+```
+```{bibliography}
+:filter: docname in docnames
 ```
 
 ```{rubric} Footnotes
