@@ -354,6 +354,32 @@ fprettify:
 fortitude:
 	-@fortitude check --line-length 1000 --ignore C003,C121,S241 --verbose --fix --preview
 
+.PHONY: checkgitclean
+checkgitclean:
+	@if ! git diff --quiet; then \
+           echo "The repository has uncommitted files, cannot run fprettify"; \
+           git status -s --untracked-files=no ;\
+           false;\
+        fi
+
+.PHONY: checkfprettifyformat
+# Check that all the Fortran source code in the repository satisfies the fprettify format
+checkfprettifyformat: checkgitclean fprettify
+	@if ! git diff --quiet; then \
+          printf "The current commit has Fortran source code formatting problems\n" ;\
+          if [ -z "${CI_PIPELINE_ID}" ]; then \
+            printf "Please run 'git diff' to check\n"; \
+            git diff --stat; \
+          else \
+            git diff --patch-with-stat >  ${PETSC_ARCH}/lib/slepc/conf/checkfprettifyformat.patch; \
+            git diff --patch-with-stat --color=always | head -1000; \
+            if [ `wc -l < ${PETSC_ARCH}/lib/slepc/conf/checkfprettifyformat.patch` -gt 1000 ]; then \
+              printf "The diff has been trimmed, check ${PETSC_ARCH}/lib/slepc/conf/checkfprettifyformat.patch (in CI artifacts) for all changes\n"; \
+            fi;\
+          fi;\
+          false;\
+        fi;
+
 # Compare ABI/API of two versions of PETSc library with the old one defined by PETSC_{DIR,ARCH}_ABI_OLD
 .PHONY: abitest
 abitest:

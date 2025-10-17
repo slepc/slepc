@@ -131,10 +131,17 @@ pause-for-approval:
     - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}" check
     - |
       if [ ! -z ${CHECKSOURCE+x} ]; then
-        make checkbadSource SHELL=bash;
+        rm -rf ${PWD}/.venv-prettify
+        python3 -m venv ${PWD}/.venv-prettify
+        source ${PWD}/.venv-prettify/bin/activate
+        python3 -m pip install --upgrade pip==25.2
+        python3 -m pip install --upgrade fprettify==0.3.7
+        python3 -m pip install --upgrade vermin==1.7.0
+        make checkbadSource checkfprettifyformat SHELL=bash;
         make -f gmakefile check_output SHELL=bash;
         vermin --version
         make vermin_slepc
+        deactivate
       fi
     - if [ ! -z ${RUN_LINT+x} ]; then make lint_slepc LINTER_OPTIONS="--clang_lib=`llvm-config --libdir`/libclang.so --verbose --werror -fdoc-indentation 0 -fdoc-param-list-alignment 0 -fdoc-inline-list-seealso-backticks 0"; fi
     - echo -e "section_end:`date +%s`:build_slepc\r\e[0K"
@@ -289,7 +296,7 @@ gnu-lint:
         rm -rf ${PWD}/.venv-gcovr
         python3 -m venv ${PWD}/.venv-gcovr
         source ${PWD}/.venv-gcovr/bin/activate
-        python3 -m pip install --upgrade pip==25.0.1
+        python3 -m pip install --upgrade pip==25.2
         python3 -m pip install --upgrade gcovr==8.3
         for note_file in $(find $PETSC_ARCH -name '*\.gcno')
         do
@@ -1083,7 +1090,7 @@ total-coverage:
     - rm -rf ${PWD}/.venv-gcovr
     - python3 -m venv ${PWD}/.venv-gcovr
     - source ${PWD}/.venv-gcovr/bin/activate
-    - python3 -m pip install --upgrade pip==25.0.1
+    - python3 -m pip install --upgrade pip==25.2
     - python3 -m pip install --upgrade gcovr==8.3
     - gcovr --version
     - 'gcovr -a "coverage-*.json" -j 4 --xml coverage.xml --xml-pretty --html-details coverage/index.html --print-summary'
