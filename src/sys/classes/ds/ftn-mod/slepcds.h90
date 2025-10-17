@@ -8,7 +8,7 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
       interface DSPEPGetCoefficients
-        subroutine DSPEPGetCoefficients(a,b,z)
+        subroutine DSPEPGetCoefficients(a, b, z)
           use, intrinsic :: ISO_C_BINDING
           import tDS
           DS a

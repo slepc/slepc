@@ -8,7 +8,7 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
       interface FNRationalGetNumerator
-        subroutine FNRationalGetNumerator(a,b,c,z)
+        subroutine FNRationalGetNumerator(a, b, c, z)
           use, intrinsic :: ISO_C_BINDING
           import tFN
           FN a
@@ -22,7 +22,7 @@
 #endif
 
       interface FNRationalGetDenominator
-        subroutine FNRationalGetDenominator(a,b,c,z)
+        subroutine FNRationalGetDenominator(a, b, c, z)
           use, intrinsic :: ISO_C_BINDING
           import tFN
           FN a

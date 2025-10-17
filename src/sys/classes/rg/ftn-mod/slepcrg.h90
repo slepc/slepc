@@ -8,7 +8,7 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
       interface RGPolygonGetVertices
-        subroutine RGPolygonGetVertices(a,b,c,d,z)
+        subroutine RGPolygonGetVertices(a, b, c, d, z)
           use, intrinsic :: ISO_C_BINDING
           import tRG
           RG a

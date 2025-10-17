@@ -7,22 +7,22 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-        module slepcepsdef
-        use slepcsysdef
+module slepcepsdef
+  use slepcsysdef
 #include <../ftn/eps/slepcall.h>
-        end module slepcepsdef
+end module slepcepsdef
 
-        module slepceps
-        use petscsnes
-        use slepcepsdef
-        use slepcst
-        use slepcds
-        use slepclme
+module slepceps
+  use petscsnes
+  use slepcepsdef
+  use slepcst
+  use slepcds
+  use slepclme
 #include <../ftn/eps/slepcall.h90>
 #include <../src/eps/ftn-mod/slepceps.h90>
 
-        contains
+contains
 
 #include <../ftn/eps/slepcall.hf90>
 
-        end module slepceps
+end module slepceps

@@ -8,7 +8,7 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
       interface EPSKrylovSchurGetSubintervals
-        subroutine EPSKrylovSchurGetSubintervals(a,b,z)
+        subroutine EPSKrylovSchurGetSubintervals(a, b, z)
           use, intrinsic :: ISO_C_BINDING
           import tEPS
           EPS a
@@ -21,7 +21,7 @@
 #endif
 
       interface EPSKrylovSchurGetInertias
-        subroutine EPSKrylovSchurGetInertias(a,b,c,d,z)
+        subroutine EPSKrylovSchurGetInertias(a, b, c, d, z)
           use, intrinsic :: ISO_C_BINDING
           import tEPS
           EPS a
@@ -36,7 +36,7 @@
 #endif
 
       interface EPSMonitorSet
-        subroutine EPSMonitorSet(a,b,c,d,z)
+        subroutine EPSMonitorSet(a, b, c, d, z)
           use, intrinsic :: ISO_C_BINDING
           import tEPS
           EPS a
@@ -45,7 +45,7 @@
           external d
           PetscErrorCode z
         end subroutine
-      end Interface EPSMonitorSet
+      end interface EPSMonitorSet
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::EPSMonitorSet
 #endif
