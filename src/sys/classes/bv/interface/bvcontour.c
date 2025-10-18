@@ -398,9 +398,9 @@ static PetscErrorCode BVSVDAndRank_Refine(BV S,PetscReal delta,PetscScalar *pA,P
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode BVSVDAndRank_QR(BV S,PetscReal delta,PetscScalar *pA,PetscReal *sigma,PetscInt *rank)
+static PetscErrorCode BVSVDAndRank_QR(BV S,PetscReal delta,PetscScalar *pA,PetscReal *sigma,PetscInt *rankout)
 {
-  PetscInt       i,n,ml=S->k;
+  PetscInt       i,n,ml=S->k,rank;
   PetscBLASInt   m,lda,lwork,info;
   PetscScalar    *work;
   PetscReal      *rwork;
@@ -435,20 +435,21 @@ static PetscErrorCode BVSVDAndRank_QR(BV S,PetscReal delta,PetscScalar *pA,Petsc
 #endif
   SlepcCheckLapackInfo("gesvd",info);
   PetscCall(PetscFPTrapPop());
-  *rank = 0;
+  rank = 0;
   for (i=0;i<n;i++) {
-    if (sigma[i]/PetscMax(sigma[0],1)>delta) (*rank)++;
+    if (sigma[i]/PetscMax(sigma[0],1)>delta) rank++;
   }
+  if (rankout) *rankout = rank;
   /* n first columns of A have the left singular vectors */
-  PetscCall(BVMultInPlace(S,A,0,*rank));
+  PetscCall(BVMultInPlace(S,A,0,rank));
   PetscCall(PetscFree2(work,rwork));
   PetscCall(MatDestroy(&A));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode BVSVDAndRank_QR_CAA(BV S,PetscInt M,PetscInt L,PetscReal delta,PetscScalar *pA,PetscReal *sigma,PetscInt *rank)
+static PetscErrorCode BVSVDAndRank_QR_CAA(BV S,PetscInt M,PetscInt L,PetscReal delta,PetscScalar *pA,PetscReal *sigma,PetscInt *rankout)
 {
-  PetscInt       i,j,n,ml=S->k;
+  PetscInt       i,j,n,ml=S->k,rank;
   PetscBLASInt   m,k_,lda,lwork,info;
   PetscScalar    *work,*T,*U,*R,sone=1.0,zero=0.0;
   PetscReal      *rwork;
@@ -477,17 +478,18 @@ static PetscErrorCode BVSVDAndRank_QR_CAA(BV S,PetscInt M,PetscInt L,PetscReal d
 #endif
   SlepcCheckLapackInfo("gesvd",info);
   PetscCall(PetscFPTrapPop());
-  *rank = 0;
+  rank = 0;
   for (i=0;i<m;i++) {
-    if (sigma[i]/PetscMax(sigma[0],1)>delta) (*rank)++;
+    if (sigma[i]/PetscMax(sigma[0],1)>delta) rank++;
   }
+  if (rankout) *rankout = rank;
   PetscCall(MatCreateDense(PETSC_COMM_SELF,m,m,PETSC_DECIDE,PETSC_DECIDE,U,&A));
   PetscCall(BVSetActiveColumns(S,0,m));
-  PetscCall(BVMultInPlace(S,A,0,*rank));
+  PetscCall(BVMultInPlace(S,A,0,rank));
   PetscCall(MatDestroy(&A));
   /* Projected linear system */
   /* m first columns of A have the right singular vectors */
-  PetscCall(PetscBLASIntCast(*rank,&k_));
+  PetscCall(PetscBLASIntCast(rank,&k_));
   PetscCall(PetscBLASIntCast(ml,&lda));
   PetscCallBLAS("BLASgemm",BLASgemm_("N","C",&m,&k_,&m,&sone,pA+L*lda,&lda,R,&m,&zero,T,&m));
   PetscCall(PetscArrayzero(pA,ml*ml));
@@ -546,7 +548,6 @@ PetscErrorCode BVSVDAndRank(BV S,PetscInt m,PetscInt l,PetscReal delta,BVSVDMeth
   PetscValidLogicalCollectiveEnum(S,meth,5);
   PetscAssertPointer(A,6);
   PetscAssertPointer(sigma,7);
-  PetscAssertPointer(rank,8);
 
   PetscCall(PetscLogEventBegin(BV_SVDAndRank,S,0,0,0));
   PetscCall(BVSetActiveColumns(S,0,m*l));
