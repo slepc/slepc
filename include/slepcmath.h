@@ -35,8 +35,8 @@ static inline PetscReal SlepcDefaultTol(PetscReal tol)
 }
 
 /*@C
-   SlepcAbs - Returns sqrt(x**2+y**2), taking care not to cause unnecessary
-   overflow. It is based on LAPACK's DLAPY2.
+   SlepcAbs - Returns $\sqrt{x^2+y^2}$, taking care not to cause unnecessary
+   overflow. It is based on LAPACK's `DLAPY2`.
 
    Not Collective
 
@@ -46,7 +46,7 @@ static inline PetscReal SlepcDefaultTol(PetscReal tol)
    Output parameter:
 .  return - the result
 
-   Note:
+   Fortran Note:
    This function is not available from Fortran.
 
    Level: developer
@@ -76,11 +76,12 @@ static inline PetscReal SlepcAbs(PetscReal x,PetscReal y)
 -  y  - the imaginary part of the complex number
 
    Notes:
-   This function computes sqrt(x**2+y**2), taking care not to cause unnecessary
-   overflow. It is based on LAPACK's DLAPY2.
+   This function computes $\sqrt{x^2+y^2}$, taking care not to cause unnecessary
+   overflow. It is based on LAPACK's `DLAPY2`.
 
-   In complex scalars, only the first argument is used.
+   In complex scalars, only the first argument is used, i.e., the result is $|x|$.
 
+   Fortran Note:
    This function is not available from Fortran.
 
    Level: developer

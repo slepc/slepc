@@ -112,7 +112,7 @@ static PetscErrorCode SlepcSortEigenvalues_Private(SlepcSC sc,PetscInt n,PetscSc
 }
 /*@
    SlepcSortEigenvalues - Sorts a list of eigenvalues according to the
-   sorting criterion specified in a SlepcSC context.
+   sorting criterion specified in a `SlepcSC` context.
 
    Not Collective
 
@@ -120,14 +120,14 @@ static PetscErrorCode SlepcSortEigenvalues_Private(SlepcSC sc,PetscInt n,PetscSc
 +  sc   - the sorting criterion context
 .  n    - number of eigenvalues in the list
 .  eigr - pointer to the array containing the eigenvalues
--  eigi - imaginary part of the eigenvalues (only when using real numbers)
+-  eigi - imaginary part of the eigenvalues (only when using real scalars)
 
    Output Parameter:
-.  perm - permutation array. Must be initialized to 0:n-1 on input.
+.  perm - permutation array, must be initialized to `0:n-1` on input
 
    Notes:
    The result is a list of indices in the original eigenvalue array
-   corresponding to the first n eigenvalues sorted in the specified
+   corresponding to the first `n` eigenvalues sorted in the specified
    criterion.
 
    In real scalars, this functions assumes that complex values come in
@@ -150,7 +150,7 @@ PetscErrorCode SlepcSortEigenvalues(SlepcSC sc,PetscInt n,PetscScalar *eigr,Pets
 
 /*@
    SlepcSortEigenvaluesSpecial - Sorts a list of eigenvalues according to the
-   sorting criterion specified in a SlepcSC context, with a special assumption
+   sorting criterion specified in a `SlepcSC` context, with a special assumption
    on the input values.
 
    Not Collective
@@ -159,14 +159,14 @@ PetscErrorCode SlepcSortEigenvalues(SlepcSC sc,PetscInt n,PetscScalar *eigr,Pets
 +  sc   - the sorting criterion context
 .  n    - number of eigenvalues in the list
 .  eigr - pointer to the array containing the eigenvalues
--  eigi - imaginary part of the eigenvalues (only when using real numbers)
+-  eigi - imaginary part of the eigenvalues (only when using real scalars)
 
    Output Parameter:
-.  perm - permutation array. Must be initialized to 0:n-1 on input.
+.  perm - permutation array, must be initialized to `0:n-1` on input
 
    Notes:
    The result is a list of indices in the original eigenvalue array
-   corresponding to the first n eigenvalues sorted in the specified
+   corresponding to the first `n` eigenvalues sorted in the specified
    criterion.
 
    In real scalars, this functions assumes that complex values come in

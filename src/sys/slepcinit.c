@@ -54,13 +54,13 @@ PetscErrorCode SlepcGetVersion(char version[],size_t len)
 -   release  - indicates the library is from a release
 
     Notes:
-    Pass NULL in any argument that is not requested.
+    Pass `NULL` in any argument that is not requested.
 
-    The C macros SLEPC_VERSION_MAJOR, SLEPC_VERSION_MINOR, SLEPC_VERSION_SUBMINOR,
-    SLEPC_VERSION_RELEASE provide the information at compile time. This can be used to confirm
+    The C macros `SLEPC_VERSION_MAJOR`, `SLEPC_VERSION_MINOR`, `SLEPC_VERSION_SUBMINOR`,
+    `SLEPC_VERSION_RELEASE` provide the information at compile time. This can be used to confirm
     that the shared library being loaded at runtime has the appropriate version updates.
 
-    This function can be called before SlepcInitialize().
+    This function can be called before `SlepcInitialize()`.
 
     Level: intermediate
 
@@ -235,21 +235,38 @@ PetscErrorCode SlepcCitationsInitialize(void)
 }
 
 /*@C
-   SlepcInitialize - Initializes the SLEPc library. SlepcInitialize() calls
-   PetscInitialize() if that has not been called yet, so this routine should
+   SlepcInitialize - Initializes the SLEPc library. `SlepcInitialize()` calls
+   `PetscInitialize()` if it has not been called yet, so this function should
    always be called near the beginning of your program.
 
-   Collective on MPI_COMM_WORLD or PETSC_COMM_WORLD if it has been set
+   Collective on `MPI_COMM_WORLD` or `PETSC_COMM_WORLD` if it has been set
 
    Input Parameters:
 +  argc - count of number of command line arguments
 .  args - the command line arguments
-.  file - [optional] PETSc database file, defaults to ~username/.petscrc
-          (use NULL for default)
--  help - [optional] Help message to print, use NULL for no message
+.  file - [optional] PETSc database file
+-  help - [optional] Help message to print, use `NULL` for no message
+
+   Note:
+   Works in the same way as `PetscInitialize()`, but in addition initializes SLEPc.
+   The same considerations apply with respect to command line options and
+   environment variables.
 
    Fortran Notes:
-   Fortran syntax is very similar to that of PetscInitialize()
+   In Fortran this routine can be called with
+.vb
+       call SlepcInitialize(ierr)
+.ve
+.vb
+       call SlepcInitialize(file,ierr)
+.ve
+   or
+.vb
+       call SlepcInitialize(file,help,ierr)
+.ve
+
+   If your main program is C but you call Fortran code that also uses SLEPc you need
+   to call `SlepcInitializeFortran()` soon after calling `SlepcInitialize()`.
 
    Level: beginner
 
@@ -281,9 +298,9 @@ PetscErrorCode SlepcInitialize(int *argc,char ***args,const char file[],const ch
 
 /*@C
    SlepcFinalize - Checks for options to be called at the conclusion
-   of the SLEPc program and calls PetscFinalize().
+   of the SLEPc program and calls `PetscFinalize()`.
 
-   Collective on PETSC_COMM_WORLD
+   Collective on `PETSC_COMM_WORLD`
 
    Level: beginner
 
@@ -309,7 +326,7 @@ PetscErrorCode SlepcFinalize(void)
 }
 
 /*@C
-   SlepcInitializeNoArguments - Calls SlepcInitialize() from C/C++ without
+   SlepcInitializeNoArguments - Calls `SlepcInitialize()` from C/C++ without
    the command line arguments.
 
    Collective
@@ -346,12 +363,12 @@ PetscErrorCode SlepcInitialized(PetscBool *isInitialized)
 }
 
 /*@
-   SlepcFinalized - Determine whether SlepcFinalize() has been called.
+   SlepcFinalized - Determine whether `SlepcFinalize()` has been called.
 
    Output Parameter:
 .  isFinalized - the result
 
-   Level: developer
+   Level: beginner
 
 .seealso: `SlepcFinalize()`
 @*/
@@ -365,17 +382,19 @@ PetscErrorCode SlepcFinalized(PetscBool *isFinalized)
 PETSC_EXTERN PetscBool PetscBeganMPI;
 
 /*@C
-   SlepcInitializeNoPointers - Calls SlepcInitialize() from C/C++ without the pointers
-   to argc and args (analogue to PetscInitializeNoPointers).
+   SlepcInitializeNoPointers - Calls `SlepcInitialize()` from C/C++ without the pointers
+   to `argc` and `args`.
 
    Collective
 
    Input Parameters:
 +  argc - count of number of command line arguments
 .  args - the command line arguments
-.  file - [optional] PETSc database file, defaults to ~username/.petscrc
-          (use NULL for default)
--  help - [optional] Help message to print, use NULL for no message
+.  file - [optional] PETSc database file
+-  help - [optional] Help message to print, use `NULL` for no message
+
+   Note:
+   Check the manual page of `PetscInitializeNoPointers()` for an explanation.
 
    Level: advanced
 

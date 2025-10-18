@@ -19,7 +19,7 @@
 /* SUBMANSEC = Sys */
 
 /*S
-  SlepcEigenvalueComparisonFn - A prototype of an eigenvalue comparison function that would be passed to EPSSetEigenvalueComparison() and analogue functions in other solver types
+  SlepcEigenvalueComparisonFn - A prototype of an eigenvalue comparison function that would be passed to `EPSSetEigenvalueComparison()` and analogue functions in other solver types
 
   Calling Sequence:
 +   ar     - real part of the 1st eigenvalue
@@ -28,7 +28,12 @@
 .   bi     - imaginary part of the 2nd eigenvalue
 .   res    - [output] result of comparison
 -   ctx    - [optional] user-defined context for private data for the
-             eigenvalue comparison routine (may be NULL)
+             eigenvalue comparison routine (may be `NULL`)
+
+   The return value `res` can be
++  negative - if the 1st value is preferred to the 2st one
+.  zero     - if both values are equally preferred
+-  positive - if the 2st value is preferred to the 1st one
 
   Level: advanced
 
@@ -37,7 +42,7 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SlepcEigenvalueComparisonFn(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res,void *ctx);
 
 /*S
-  SlepcArbitrarySelectionFn - A prototype of an arbitrary selection function that would be passed to EPSSetArbitrarySelection() and analogue functions in other solver types
+  SlepcArbitrarySelectionFn - A prototype of an arbitrary selection function that would be passed to `EPSSetArbitrarySelection()` and analogue functions in other solver types
 
   Calling Sequence:
 +   er     - real part of the current eigenvalue approximation
@@ -47,7 +52,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SlepcEigenvalueComparisonFn(PetscSca
 .   rr     - result of evaluation (real part)
 .   ri     - result of evaluation (imaginary part)
 -   ctx    - [optional] user-defined context for private data for the
-             arbitrary selection routine (may be NULL)
+             arbitrary selection routine (may be `NULL`)
 
   Level: advanced
 
@@ -62,25 +67,10 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SlepcArbitrarySelectionFn(PetscScala
    Notes:
    The SlepcSC structure contains a mapping function and a comparison
    function (with associated contexts).
-   The mapping function usually calls ST's backtransform.
+   The mapping function usually calls the backtransform operation of an `ST` object.
    An optional region can also be used to give higher priority to values inside it.
 
-   The comparison function must have the following calling sequence
-
-$  comparison(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *res,void *ctx)
-
-+  ar  - real part of the 1st eigenvalue
-.  ai  - imaginary part of the 1st eigenvalue
-.  br  - real part of the 2nd eigenvalue
-.  bi  - imaginary part of the 2nd eigenvalue
-.  res - result of comparison
--  ctx - optional context, stored in comparisonctx
-
-   The returning parameter 'res' can be
-+  negative - if the 1st value is preferred to the 2st one
-.  zero     - if both values are equally preferred
--  positive - if the 2st value is preferred to the 1st one
-
+   Fortran Note:
    Fortran usage is not supported.
 
    Level: developer

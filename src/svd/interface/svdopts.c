@@ -1064,19 +1064,15 @@ PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char *prefix)
 
 /*@
    SVDGetOptionsPrefix - Gets the prefix used for searching for all
-   SVD options in the database.
+   `SVD` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  svd - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 

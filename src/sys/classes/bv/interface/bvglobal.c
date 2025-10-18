@@ -64,24 +64,24 @@ static inline PetscErrorCode BVDot_Private(BV X,BV Y,Mat M)
 .  M - the resulting matrix
 
    Notes:
-   This is the generalization of VecDot() for a collection of vectors, M = Y^H*X.
-   The result is a matrix M whose entry m_ij is equal to y_i^H x_j (where y_i^H
-   denotes the conjugate transpose of y_i).
+   This is the generalization of `VecDot()` for a collection of vectors, $M = Y^*X$.
+   The result is a matrix $M$ whose entry $m_{ij}$ is equal to $y_i^* x_j$ (where $y_i^*$
+   denotes the conjugate transpose of $y_i$).
 
-   If a non-standard inner product has been specified with BVSetMatrix(),
-   then the result is M = Y^H*B*X. In this case, both X and Y must have
+   If a non-standard inner product has been specified with `BVSetMatrix()`,
+   then the result is $M = Y^*BX$. In this case, both `X` and `Y` must have
    the same associated matrix.
 
-   On entry, M must be a sequential dense Mat with dimensions m,n at least, where
-   m is the number of active columns of Y and n is the number of active columns of X.
-   Only rows (resp. columns) of M starting from ly (resp. lx) are computed,
-   where ly (resp. lx) is the number of leading columns of Y (resp. X).
+   On entry, `M` must be a sequential dense `Mat` with dimensions `m,n` at least, where
+   `m` is the number of active columns of `Y` and `n` is the number of active columns of `X`.
+   Only rows (resp. columns) of `M` starting from `ly` (resp. `lx`) are computed,
+   where `ly` (resp. `lx`) is the number of leading columns of `Y` (resp. `X`).
 
-   X and Y need not be different objects.
+   `X` and `Y` need not be different objects.
 
    Level: intermediate
 
-.seealso: `BVDotVec()`, `BVDotColumn()`, `BVSetActiveColumns()`, `BVSetMatrix()`
+.seealso: [](sec:bv), `BVDotVec()`, `BVDotColumn()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVDot(BV X,BV Y,Mat M)
 {
@@ -121,7 +121,7 @@ PetscErrorCode BVDot(BV X,BV Y,Mat M)
 
 /*@
    BVDotVec - Computes multiple dot products of a vector against all the
-   column vectors of a BV.
+   column vectors of a `BV`.
 
    Collective
 
@@ -133,20 +133,20 @@ PetscErrorCode BVDot(BV X,BV Y,Mat M)
 .  m - an array where the result must be placed
 
    Notes:
-   This is analogue to VecMDot(), but using BV to represent a collection
-   of vectors. The result is m = X^H*y, so m_i is equal to x_i^H y. Note
-   that here X is transposed as opposed to BVDot().
+   This is analogue to `VecMDot()`, but using `BV` to represent a collection
+   of vectors. The result is $m = X^*y$, so $m_i$ is equal to $x_i^* y$. Note
+   that here `X` is transposed as opposed to `BVDot()`.
 
-   If a non-standard inner product has been specified with BVSetMatrix(),
-   then the result is m = X^H*B*y.
+   If a non-standard inner product has been specified with `BVSetMatrix()`,
+   then the result is $m = X^*By$.
 
-   The length of array m must be equal to the number of active columns of X
-   minus the number of leading columns, i.e. the first entry of m is the
-   product of the first non-leading column with y.
+   The length of array `m` must be equal to the number of active columns of `X`
+   minus the number of leading columns, i.e., the first entry of `m` is the
+   product of the first non-leading column with `y`.
 
    Level: intermediate
 
-.seealso: `BVDot()`, `BVDotColumn()`, `BVSetActiveColumns()`, `BVSetMatrix()`
+.seealso: [](sec:bv), `BVDot()`, `BVDotColumn()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVDotVec(BV X,Vec y,PetscScalar m[])
 {
@@ -176,14 +176,14 @@ PetscErrorCode BVDotVec(BV X,Vec y,PetscScalar m[])
    Input Parameters:
 +  X - basis vectors
 .  y - a vector
--  m - an array where the result will go (can be NULL)
+-  m - an array where the result will go (can be `NULL`)
 
    Note:
-   Each call to BVDotVecBegin() should be paired with a call to BVDotVecEnd().
+   Each call to `BVDotVecBegin()` should be paired with a call to `BVDotVecEnd()`.
 
    Level: advanced
 
-.seealso: `BVDotVecEnd()`, `BVDotVec()`
+.seealso: [](sec:bv), `BVDotVecEnd()`, `BVDotVec()`
 @*/
 PetscErrorCode BVDotVecBegin(BV X,Vec y,PetscScalar *m)
 {
@@ -231,11 +231,11 @@ PetscErrorCode BVDotVecBegin(BV X,Vec y,PetscScalar *m)
 -  m - an array where the result will go
 
    Note:
-   Each call to BVDotVecBegin() should be paired with a call to BVDotVecEnd().
+   Each call to `BVDotVecBegin()` should be paired with a call to `BVDotVecEnd()`.
 
    Level: advanced
 
-.seealso: `BVDotVecBegin()`, `BVDotVec()`
+.seealso: [](sec:bv), `BVDotVecBegin()`, `BVDotVec()`
 @*/
 PetscErrorCode BVDotVecEnd(BV X,Vec y,PetscScalar *m)
 {
@@ -272,7 +272,7 @@ PetscErrorCode BVDotVecEnd(BV X,Vec y,PetscScalar *m)
 
 /*@
    BVDotColumn - Computes multiple dot products of a column against all the
-   previous columns of a BV.
+   previous columns of a `BV`.
 
    Collective
 
@@ -284,20 +284,20 @@ PetscErrorCode BVDotVecEnd(BV X,Vec y,PetscScalar *m)
 .  q - an array where the result must be placed
 
    Notes:
-   This operation is equivalent to BVDotVec() but it uses column j of X
-   rather than taking a Vec as an argument. The number of active columns of
-   X is set to j before the computation, and restored afterwards.
-   If X has leading columns specified, then these columns do not participate
-   in the computation. Therefore, the length of array q must be equal to j
+   This operation is equivalent to `BVDotVec()` but it uses column `j` of `X`
+   rather than taking a `Vec` as an argument. The number of active columns of
+   `X` is set to `j` before the computation, and restored afterwards.
+   If `X` has leading columns specified, then these columns do not participate
+   in the computation. Therefore, the length of array `q` must be at least `j`
    minus the number of leading columns.
 
    Developer Notes:
-   If q is NULL, then the result is written in position nc+l of the internal
-   buffer vector, see BVGetBufferVec().
+   If `q` is `NULL`, then the result is written in position `nc+l` of the internal
+   buffer vector, see `BVGetBufferVec()`.
 
-   Level: advanced
+   Level: intermediate
 
-.seealso: `BVDot()`, `BVDotVec()`, `BVSetActiveColumns()`, `BVSetMatrix()`
+.seealso: [](sec:bv), `BVDot()`, `BVDotVec()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVDotColumn(BV X,PetscInt j,PetscScalar *q)
 {
@@ -332,14 +332,14 @@ PetscErrorCode BVDotColumn(BV X,PetscInt j,PetscScalar *q)
    Input Parameters:
 +  X - basis vectors
 .  j - the column index
--  m - an array where the result will go (can be NULL)
+-  m - an array where the result will go (can be `NULL`)
 
    Note:
-   Each call to BVDotColumnBegin() should be paired with a call to BVDotColumnEnd().
+   Each call to `BVDotColumnBegin()` should be paired with a call to `BVDotColumnEnd()`.
 
    Level: advanced
 
-.seealso: `BVDotColumnEnd()`, `BVDotColumn()`
+.seealso: [](sec:bv), `BVDotColumnEnd()`, `BVDotColumn()`
 @*/
 PetscErrorCode BVDotColumnBegin(BV X,PetscInt j,PetscScalar *m)
 {
@@ -391,11 +391,11 @@ PetscErrorCode BVDotColumnBegin(BV X,PetscInt j,PetscScalar *m)
 -  m - an array where the result will go
 
    Notes:
-   Each call to BVDotColumnBegin() should be paired with a call to BVDotColumnEnd().
+   Each call to `BVDotColumnBegin()` should be paired with a call to `BVDotColumnEnd()`.
 
    Level: advanced
 
-.seealso: `BVDotColumnBegin()`, `BVDotColumn()`
+.seealso: [](sec:bv), `BVDotColumnBegin()`, `BVDotColumn()`
 @*/
 PetscErrorCode BVDotColumnEnd(BV X,PetscInt j,PetscScalar *m)
 {
@@ -473,7 +473,7 @@ static inline PetscErrorCode BVNorm_End_Private(BV bv,Vec z,NormType type,PetscR
 }
 
 /*@
-   BVNorm - Computes the matrix norm of the BV.
+   BVNorm - Computes the matrix norm of the `BV`.
 
    Collective
 
@@ -486,14 +486,14 @@ static inline PetscErrorCode BVNorm_End_Private(BV bv,Vec z,NormType type,PetscR
 
    Notes:
    All active columns (except the leading ones) are considered as a matrix.
-   The allowed norms are NORM_1, NORM_FROBENIUS, and NORM_INFINITY.
+   The allowed norms are `NORM_1`, `NORM_FROBENIUS`, and `NORM_INFINITY`.
 
    This operation fails if a non-standard inner product has been
-   specified with BVSetMatrix().
+   specified with `BVSetMatrix()`.
 
    Level: intermediate
 
-.seealso: `BVNormVec()`, `BVNormColumn()`, `BVNormalize()`, `BVSetActiveColumns()`, `BVSetMatrix()`
+.seealso: [](sec:bv), `BVNormVec()`, `BVNormColumn()`, `BVNormalize()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVNorm(BV bv,NormType type,PetscReal *val)
 {
@@ -527,14 +527,14 @@ PetscErrorCode BVNorm(BV bv,NormType type,PetscReal *val)
 .  val  - the norm
 
    Notes:
-   This is the analogue of BVNormColumn() but for a vector that is not in the BV.
-   If a non-standard inner product has been specified with BVSetMatrix(),
-   then the returned value is sqrt(v'*B*v), where B is the inner product
-   matrix (argument 'type' is ignored). Otherwise, VecNorm() is called.
+   This is the analogue of `BVNormColumn()` but for a vector that is not in the `BV`.
+   If a non-standard inner product has been specified with `BVSetMatrix()`,
+   then the returned value is $\sqrt{v^*Bv}$, where $B$ is the inner product
+   matrix (argument `type` is ignored). Otherwise, `VecNorm()` is called.
 
    Level: developer
 
-.seealso: `BVNorm()`, `BVNormColumn()`, `BVSetMatrix()`
+.seealso: [](sec:bv), `BVNorm()`, `BVNormColumn()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVNormVec(BV bv,Vec v,NormType type,PetscReal *val)
 {
@@ -572,11 +572,11 @@ PetscErrorCode BVNormVec(BV bv,Vec v,NormType type,PetscReal *val)
 -  val  - the norm
 
    Note:
-   Each call to BVNormVecBegin() should be paired with a call to BVNormVecEnd().
+   Each call to `BVNormVecBegin()` should be paired with a call to `BVNormVecEnd()`.
 
    Level: advanced
 
-.seealso: `BVNormVecEnd()`, `BVNormVec()`
+.seealso: [](sec:bv), `BVNormVecEnd()`, `BVNormVec()`
 @*/
 PetscErrorCode BVNormVecBegin(BV bv,Vec v,NormType type,PetscReal *val)
 {
@@ -614,11 +614,11 @@ PetscErrorCode BVNormVecBegin(BV bv,Vec v,NormType type,PetscReal *val)
 -  val  - the norm
 
    Note:
-   Each call to BVNormVecBegin() should be paired with a call to BVNormVecEnd().
+   Each call to `BVNormVecBegin()` should be paired with a call to `BVNormVecEnd()`.
 
    Level: advanced
 
-.seealso: `BVNormVecBegin()`, `BVNormVec()`
+.seealso: [](sec:bv), `BVNormVecBegin()`, `BVNormVec()`
 @*/
 PetscErrorCode BVNormVecEnd(BV bv,Vec v,NormType type,PetscReal *val)
 {
@@ -643,21 +643,21 @@ PetscErrorCode BVNormVecEnd(BV bv,Vec v,NormType type,PetscReal *val)
 
    Input Parameters:
 +  bv   - basis vectors
-.  j    - column number to be used
+.  j    - index of column to be used
 -  type - the norm type
 
    Output Parameter:
 .  val  - the norm
 
    Notes:
-   The norm of V[j] is computed (NORM_1, NORM_2, or NORM_INFINITY).
-   If a non-standard inner product has been specified with BVSetMatrix(),
-   then the returned value is sqrt(V[j]'*B*V[j]),
-   where B is the inner product matrix (argument 'type' is ignored).
+   The norm of $v_j$ is computed (`NORM_1`, `NORM_2`, or `NORM_INFINITY`).
+   If a non-standard inner product has been specified with `BVSetMatrix()`,
+   then the returned value is $\sqrt{v_j^*B v_j}$,
+   where $B$ is the inner product matrix (argument `type` is ignored).
 
    Level: intermediate
 
-.seealso: `BVNorm()`, `BVNormVec()`, `BVNormalize()`, `BVSetActiveColumns()`, `BVSetMatrix()`
+.seealso: [](sec:bv), `BVNorm()`, `BVNormVec()`, `BVNormalize()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVNormColumn(BV bv,PetscInt j,NormType type,PetscReal *val)
 {
@@ -689,16 +689,16 @@ PetscErrorCode BVNormColumn(BV bv,PetscInt j,NormType type,PetscReal *val)
 
    Input Parameters:
 +  bv   - basis vectors
-.  j    - column number to be used
+.  j    - index of column to be used
 .  type - the norm type
 -  val  - the norm
 
    Note:
-   Each call to BVNormColumnBegin() should be paired with a call to BVNormColumnEnd().
+   Each call to `BVNormColumnBegin()` should be paired with a call to `BVNormColumnEnd()`.
 
    Level: advanced
 
-.seealso: `BVNormColumnEnd()`, `BVNormColumn()`
+.seealso: [](sec:bv), `BVNormColumnEnd()`, `BVNormColumn()`
 @*/
 PetscErrorCode BVNormColumnBegin(BV bv,PetscInt j,NormType type,PetscReal *val)
 {
@@ -745,16 +745,16 @@ PetscErrorCode BVNormColumnBegin(BV bv,PetscInt j,NormType type,PetscReal *val)
 
    Input Parameters:
 +  bv   - basis vectors
-.  j    - column number to be used
+.  j    - index of column to be used
 .  type - the norm type
 -  val  - the norm
 
    Note:
-   Each call to BVNormColumnBegin() should be paired with a call to BVNormColumnEnd().
+   Each call to `BVNormColumnBegin()` should be paired with a call to `BVNormColumnEnd()`.
 
    Level: advanced
 
-.seealso: `BVNormColumnBegin()`, `BVNormColumn()`
+.seealso: [](sec:bv), `BVNormColumnBegin()`, `BVNormColumn()`
 @*/
 PetscErrorCode BVNormColumnEnd(BV bv,PetscInt j,NormType type,PetscReal *val)
 {
@@ -806,25 +806,25 @@ PetscErrorCode BVNormColumnEnd(BV bv,PetscInt j,NormType type,PetscReal *val)
 
    Notes:
    On output, all columns will have unit norm. The normalization is done with
-   respect to the 2-norm, or to the B-norm if a non-standard inner product has
-   been specified with BVSetMatrix(), see BVNormColumn().
+   respect to the 2-norm, or to the $B$-norm if a non-standard inner product has
+   been specified with `BVSetMatrix()`, see `BVNormColumn()`.
 
-   If the optional argument eigi is passed (taken into account only in real
+   If the optional argument `eigi` is passed (taken into account only in real
    scalars) it is interpreted as the imaginary parts of the eigenvalues and
-   the BV is supposed to contain the corresponding eigenvectors. Suppose the
-   first three values are eigi = { 0, alpha, -alpha }, then the first column
+   the `BV` is supposed to contain the corresponding eigenvectors. Suppose the
+   first three values are `eigi` = $\{ 0, \alpha, -\alpha \}$, then the first column
    is normalized as usual, but the second and third ones are normalized assuming
    that they contain the real and imaginary parts of a complex conjugate pair of
    eigenvectors.
 
-   If eigi is passed, the inner-product matrix is ignored.
+   If `eigi` is passed, the inner-product matrix is ignored.
 
    If there are leading columns, they are not modified (are assumed to be already
    normalized).
 
    Level: intermediate
 
-.seealso: `BVNormColumn()`
+.seealso: [](sec:bv), `BVNormColumn()`, `BVSetMatrix()`
 @*/
 PetscErrorCode BVNormalize(BV bv,PetscScalar *eigi)
 {
@@ -1056,39 +1056,39 @@ static inline PetscErrorCode BVMatProject_Dot(BV X,BV Y,PetscScalar *marray,Pets
    Input Parameters:
 +  X - basis vectors
 .  A - (optional) matrix to be projected
--  Y - left basis vectors, can be equal to X
+-  Y - left basis vectors, can be equal to `X`
 
    Output Parameter:
 .  M - the resulting matrix
 
    Notes:
-   If A=NULL, then it is assumed that X already contains A*X.
+   If `A=NULL`, then it is assumed that `X` already contains $AX$.
 
-   This operation is similar to BVDot(), with important differences.
+   This operation is similar to `BVDot()`, with important differences.
    The goal is to compute the matrix resulting from the orthogonal projection
-   of A onto the subspace spanned by the columns of X, M = X^H*A*X, or the
-   oblique projection onto X along Y, M = Y^H*A*X.
+   of `A` onto the subspace spanned by the columns of `X`, $M = X^*AX$, or the
+   oblique projection onto `X` along `Y`, $M = Y^*AX$.
 
-   A difference with respect to BVDot() is that the standard inner product
+   A difference with respect to `BVDot()` is that the standard inner product
    is always used, regardless of a non-standard inner product being specified
-   with BVSetMatrix().
+   with `BVSetMatrix()`.
 
-   On entry, M must be a sequential dense Mat with dimensions ky,kx at least,
-   where ky (resp. kx) is the number of active columns of Y (resp. X).
-   Another difference with respect to BVDot() is that all entries of M are
-   computed except the leading ly,lx part, where ly (resp. lx) is the
-   number of leading columns of Y (resp. X). Hence, the leading columns of
-   X and Y participate in the computation, as opposed to BVDot().
-   The leading part of M is assumed to be already available from previous
+   On entry, `M` must be a sequential dense `Mat` with dimensions `ky,kx` at least,
+   where `ky` (resp. `kx`) is the number of active columns of `Y` (resp. `X`).
+   Another difference with respect to `BVDot()` is that all entries of `M` are
+   computed except the leading `ly,lx` part, where `ly` (resp. `lx`) is the
+   number of leading columns of `Y` (resp. `X`). Hence, the leading columns of
+   `X` and `Y` participate in the computation, as opposed to `BVDot()`.
+   The leading part of `M` is assumed to be already available from previous
    computations.
 
-   In the orthogonal projection case, Y=X, some computation can be saved if
-   A is real symmetric (or complex Hermitian). In order to exploit this
-   property, the symmetry flag of A must be set with MatSetOption().
+   In the orthogonal projection case, `Y=X`, some computation can be saved if
+   `A` is real symmetric (or complex Hermitian). In order to exploit this
+   property, the symmetry flag of `A` must be set with `MatSetOption()`.
 
    Level: intermediate
 
-.seealso: `BVDot()`, `BVSetActiveColumns()`, `BVSetMatrix()`
+.seealso: [](sec:bv), `BVDot()`, `BVSetActiveColumns()`, `BVSetMatrix()`, `MatSetOption()`
 @*/
 PetscErrorCode BVMatProject(BV X,Mat A,BV Y,Mat M)
 {

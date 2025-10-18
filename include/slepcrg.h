@@ -22,11 +22,11 @@ SLEPC_EXTERN PetscErrorCode RGInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode RGFinalizePackage(void);
 
 /*J
-   RGType - String with the name of the region.
+   RGType - String with the name of the region type.
 
    Level: beginner
 
-.seealso: `RGSetType()`, `RG`
+.seealso: [](sec:rg), `RG`, `RGSetType()`
 J*/
 typedef const char *RGType;
 #define RGINTERVAL  "interval"
@@ -49,14 +49,34 @@ SLEPC_EXTERN PetscErrorCode RGViewFromOptions(RG,PetscObject,const char[]);
 SLEPC_EXTERN PetscErrorCode RGDestroy(RG*);
 
 /*E
-    RGQuadRule - determines how to compute the quadrature parameters
+   RGQuadRule - Determines how to compute the quadrature parameters.
 
-    Level: advanced
+   Values:
++  `RG_QUADRULE_TRAPEZOIDAL` - use the trapezoidal rule
+-  `RG_QUADRULE_CHEBYSHEV`   - use Chebyshev nodes and weights
+
+   Level: advanced
 
 .seealso: `RGComputeQuadrature()`
 E*/
 typedef enum { RG_QUADRULE_TRAPEZOIDAL = 1,
                RG_QUADRULE_CHEBYSHEV   = 2 } RGQuadRule;
+
+/*MC
+   RG_QUADRULE_TRAPEZOIDAL - In contour integral methods, use the trapezoidal rule.
+
+   Level: advanced
+
+.seealso: [](sec:rg), `RGQuadRule`, `RGComputeQuadrature()`, `RG_QUADRULE_CHEBYSHEV`
+M*/
+
+/*MC
+   RG_QUADRULE_CHEBYSHEV - In contour integral methods, use Chebyshev nodes and weights.
+
+   Level: advanced
+
+.seealso: [](sec:rg), `RGQuadRule`, `RGComputeQuadrature()`, `RG_QUADRULE_TRAPEZOIDAL`
+M*/
 
 SLEPC_EXTERN PetscErrorCode RGIsTrivial(RG,PetscBool*);
 SLEPC_EXTERN PetscErrorCode RGSetComplement(RG,PetscBool);

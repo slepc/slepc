@@ -26,17 +26,17 @@ SLEPC_EXTERN PetscErrorCode BVFinalizePackage(void);
 
     Level: beginner
 
-.seealso:  `BVCreate()`
+.seealso: [](sec:bv), `BVCreate()`
 S*/
 typedef struct _p_BV* BV;
 
 /*J
-    BVType - String with the name of the type of BV. Each type differs in
+    BVType - String with the name of the type of `BV`. Each type differs in
     the way data is stored internally.
 
     Level: beginner
 
-.seealso: `BVSetType()`, `BV`
+.seealso: [](sec:bv), `BVSetType()`, `BV`
 J*/
 typedef const char *BVType;
 #define BVMAT        "mat"
@@ -49,37 +49,134 @@ typedef const char *BVType;
 SLEPC_EXTERN PetscClassId BV_CLASSID;
 
 /*E
-    BVOrthogType - Determines the method used in the orthogonalization
-    of vectors
+   BVOrthogType - Determines the method used in the orthogonalization of vectors.
 
-    Level: advanced
+   Values:
++  `BV_ORTHOG_CGS` - Classical Gram-Schmidt
+-  `BV_ORTHOG_MGS` - Modified Gram-Schmidt
 
-.seealso: `BVSetOrthogonalization()`, `BVGetOrthogonalization()`, `BVOrthogonalizeColumn()`, `BVOrthogRefineType`
+   Note:
+   The default is to use CGS. Both CGS and MGS provide similar numerical accuracy when
+   combined with iterative refinement (the default). MGS results in poorer performance,
+   both sequential and in parallel, so it is not recommended unless iterative
+   refinement is disabled.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVSetOrthogonalization()`, `BVGetOrthogonalization()`, `BVOrthogonalizeColumn()`, `BVOrthogRefineType`
 E*/
 typedef enum { BV_ORTHOG_CGS,
                BV_ORTHOG_MGS } BVOrthogType;
 SLEPC_EXTERN const char *BVOrthogTypes[];
 
+/*MC
+   BV_ORTHOG_CGS - Use Classical Gram-Schmidt for orthogonalization of vectors.
+
+   Level: advanced
+
+   Note:
+   Although CGS is not numerically stable, when combined with iterative refinement
+   it yields a sufficiently accurate result.
+
+.seealso: [](sec:bv), `BVOrthogType`, `BVSetOrthogonalization()`, `BV_ORTHOG_MGS`
+M*/
+
+/*MC
+   BV_ORTHOG_MGS - Use Modified Gram-Schmidt for orthogonalization of vectors.
+
+   Level: advanced
+
+   Note:
+   MGS results in poorer performance, both sequential and in parallel, so it is
+   not recommended unless iterative refinement is disabled.
+
+.seealso: [](sec:bv), `BVOrthogType`, `BVSetOrthogonalization()`, `BV_ORTHOG_CGS`
+M*/
+
 /*E
-    BVOrthogRefineType - Determines what type of refinement to use
-    during orthogonalization of vectors
+   BVOrthogRefineType - Determines what type of iterative refinement to use
+   during orthogonalization of vectors.
 
-    Level: advanced
+   Values:
++  `BV_ORTHOG_REFINE_IFNEEDED` - Refine only if a certain criterion is satisfied
+.  `BV_ORTHOG_REFINE_NEVER`    - Never refine, do plain CGS or MGS
+-  `BV_ORTHOG_REFINE_ALWAYS`   - Always refine, i.e., run CGS2 or MGS2
 
-.seealso: `BVSetOrthogonalization()`, `BVGetOrthogonalization()`, `BVOrthogonalizeColumn()`
+   Notes:
+   The default is to perform one step of iterative refinement if a certain
+   numerical criterion holds. In ill-conditioned cases, a third orthogonalization
+   can also be done.
+
+   Never refining is not recommended because it will generally make the eigensolver
+   numerically unstable.
+
+   Always refining is numerically stable, but it often performs unnecessary
+   computation.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVSetOrthogonalization()`, `BVGetOrthogonalization()`, `BVOrthogonalizeColumn()`
 E*/
 typedef enum { BV_ORTHOG_REFINE_IFNEEDED,
                BV_ORTHOG_REFINE_NEVER,
                BV_ORTHOG_REFINE_ALWAYS } BVOrthogRefineType;
 SLEPC_EXTERN const char *BVOrthogRefineTypes[];
 
+/*MC
+   BV_ORTHOG_REFINE_IFNEEDED - In the orthogonalization of vectors, do iterative
+   refinement only if a certain criterion is satisfied.
+
+   Note:
+   This is the default. One step of iterative refinement will be done if a certain
+   numerical criterion holds. In ill-conditioned cases, a third orthogonalization
+   can also be done. The criterion is similar to the one proposed in {cite:p}`Dan76`.
+   The parameter $\eta$ for the criterion can be set in `BVSetOrthogonalization()`.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVOrthogRefineType`, `BVSetOrthogonalization()`, `BV_ORTHOG_REFINE_NEVER`, `BV_ORTHOG_REFINE_ALWAYS`
+M*/
+
+/*MC
+   BV_ORTHOG_REFINE_NEVER - In the orthogonalization of vectors, never do an iterative
+   refinement step, i.e., do plain CGS or MGS.
+
+   Note:
+   Never refining is not recommended because it will generally make the eigensolver
+   numerically unstable.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVOrthogRefineType`, `BVSetOrthogonalization()`, `BV_ORTHOG_REFINE_IFNEEDED`, `BV_ORTHOG_REFINE_ALWAYS`
+M*/
+
+/*MC
+   BV_ORTHOG_REFINE_ALWAYS - In the orthogonalization of vectors, always do an iterative
+   refinement step, i.e., run CGS2 or MGS2.
+
+   Note:
+   Always refining is numerically stable, but it often performs unnecessary
+   computation.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVOrthogRefineType`, `BVSetOrthogonalization()`, `BV_ORTHOG_REFINE_IFNEEDED`, `BV_ORTHOG_REFINE_NEVER`
+M*/
+
 /*E
-    BVOrthogBlockType - Determines the method used in block
-    orthogonalization (simultaneous orthogonalization of a set of vectors)
+   BVOrthogBlockType - Determines the method used in block
+   orthogonalization (simultaneous orthogonalization of a set of vectors).
 
-    Level: advanced
+   Values:
++  `BV_ORTHOG_BLOCK_GS`       - Gram-Schmidt, column by column
+.  `BV_ORTHOG_BLOCK_CHOL`     - Cholesky QR method
+.  `BV_ORTHOG_BLOCK_TSQR`     - Tall-Skinny QR method
+.  `BV_ORTHOG_BLOCK_TSQRCHOL` - TSQR, but computing the triangular factor only
+-  `BV_ORTHOG_BLOCK_SVQB`     - SVQB method
 
-.seealso: `BVSetOrthogonalization()`, `BVGetOrthogonalization()`, `BVOrthogonalize()`
+   Level: advanced
+
+.seealso: [](sec:bv), `BVSetOrthogonalization()`, `BVGetOrthogonalization()`, `BVOrthogonalize()`
 E*/
 typedef enum { BV_ORTHOG_BLOCK_GS,
                BV_ORTHOG_BLOCK_CHOL,
@@ -89,24 +186,49 @@ typedef enum { BV_ORTHOG_BLOCK_GS,
 SLEPC_EXTERN const char *BVOrthogBlockTypes[];
 
 /*E
-   BVMatMultType - Different ways of performing the BVMatMult() operation
+   BVMatMultType - Different ways of performing the `BVMatMult()` operation.
 
-   Notes:
+   Values:
    Allowed values are
-+  BV_MATMULT_VECS - perform a matrix-vector multiply per each column
-.  BV_MATMULT_MAT - carry out a Mat-Mat product with a dense matrix
--  BV_MATMULT_MAT_SAVE - this case is deprecated
++  `BV_MATMULT_VECS` - perform a matrix-vector multiply per each column
+.  `BV_MATMULT_MAT` - carry out a Mat-Mat product with a dense matrix
+-  `BV_MATMULT_MAT_SAVE` - this case is deprecated
 
-   The default is BV_MATMULT_MAT except in the case of BVVECS.
+   Note:
+   The default is `BV_MATMULT_MAT` except in the case of `BVVECS`.
 
    Level: advanced
 
-.seealso: `BVSetMatMultMethod()`, `BVMatMult()`
+.seealso: [](sec:bv), `BVSetMatMultMethod()`, `BVMatMult()`
 E*/
 typedef enum { BV_MATMULT_VECS,
                BV_MATMULT_MAT,
                BV_MATMULT_MAT_SAVE } BVMatMultType;
 SLEPC_EXTERN const char *BVMatMultTypes[];
+
+/*MC
+   BV_MATMULT_VECS - Perform a matrix-vector multiply per each column.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVMatMultType`, `BVSetMatMultMethod()`, `BVMatMult()`, `BV_MATMULT_MAT`, `BV_MATMULT_MAT_SAVE`
+M*/
+
+/*MC
+   BV_MATMULT_MAT - Perform a `Mat`-`Mat` product with a dense matrix.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVMatMultType`, `BVSetMatMultMethod()`, `BVMatMult()`, `BV_MATMULT_VECS`, `BV_MATMULT_MAT_SAVE`
+M*/
+
+/*MC
+   BV_MATMULT_MAT_SAVE - This case is deprecated, do not use.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVMatMultType`, `BVSetMatMultMethod()`, `BVMatMult()`, `BV_MATMULT_VECS`, `BV_MATMULT_MAT`
+M*/
 
 SLEPC_EXTERN PetscErrorCode BVCreate(MPI_Comm,BV*);
 SLEPC_EXTERN PetscErrorCode BVDestroy(BV*);
@@ -224,22 +346,48 @@ SLEPC_EXTERN PetscErrorCode BVDotQuadrature(BV,BV,PetscScalar*,PetscInt,PetscInt
 SLEPC_EXTERN PetscErrorCode BVTraceQuadrature(BV,BV,PetscInt,PetscInt,PetscScalar*,VecScatter,PetscSubcomm,PetscInt,PetscBool,PetscReal*);
 
 /*E
-   BVSVDMethod - Different methods for computing the SVD of a BV
+   BVSVDMethod - Different methods for computing the SVD of a `BV`.
 
-   Notes:
-   Allowed values are
-+  BV_SVD_METHOD_REFINE - based on the SVD of the cross product matrix S'*S, with refinement
-.  BV_SVD_METHOD_QR     - based on the SVD of the triangular factor of qr(S)
--  BV_SVD_METHOD_QR_CAA - variant of QR intended for use in cammunication-avoiding Arnoldi
+   Values:
++  `BV_SVD_METHOD_REFINE` - based on the SVD of the cross product matrix $S^*S$, with refinement
+.  `BV_SVD_METHOD_QR`     - based on the SVD of the triangular factor of qr(S)
+-  `BV_SVD_METHOD_QR_CAA` - variant of QR intended for use in communication-avoiding Arnoldi
 
    Level: developer
 
-.seealso: `BVSVDAndRank()`
+.seealso: [](sec:bv), `BVSVDAndRank()`
 E*/
 typedef enum { BV_SVD_METHOD_REFINE,
                BV_SVD_METHOD_QR,
                BV_SVD_METHOD_QR_CAA } BVSVDMethod;
 SLEPC_EXTERN const char *BVSVDMethods[];
+
+/*MC
+   BV_SVD_METHOD_REFINE - Compute the SVD of the `BV` via the cross product matrix $S^*S$,
+   with iterative refinement.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVSVDMethod`, `BVSVDAndRank()`, `BV_SVD_METHOD_QR`, `BV_SVD_METHOD_QR_CAA`
+M*/
+
+/*MC
+   BV_SVD_METHOD_QR - Compute the SVD of the `BV` via the SVD of the triangular factor of
+   the QR factorization of $S$.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVSVDMethod`, `BVSVDAndRank()`, `BV_SVD_METHOD_REFINE`, `BV_SVD_METHOD_QR_CAA`
+M*/
+
+/*MC
+   BV_SVD_METHOD_QR_CAA - Compute the SVD of the `BV` employing a variant of
+   `BV_SVD_METHOD_QR` intended for use in communication-avoiding Arnoldi.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVSVDMethod`, `BVSVDAndRank()`, `BV_SVD_METHOD_REFINE`, `BV_SVD_METHOD_QR`
+M*/
 
 SLEPC_EXTERN PetscErrorCode BVSVDAndRank(BV,PetscInt,PetscInt,PetscReal,BVSVDMethod,PetscScalar*,PetscReal*,PetscInt*);
 SLEPC_EXTERN PetscErrorCode BVCISSResizeBases(BV,BV,BV,PetscInt,PetscInt,PetscInt,PetscInt);

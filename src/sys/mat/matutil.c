@@ -171,7 +171,7 @@ static PetscErrorCode MatCreateTile_MPI(PetscScalar a,Mat A,PetscScalar b,Mat B,
 }
 
 /*@
-   MatCreateTile - Explicitly build a matrix from four blocks, G = [ a*A b*B; c*C d*D ].
+   MatCreateTile - Explicitly build a matrix from four blocks.
 
    Collective
 
@@ -189,16 +189,19 @@ static PetscErrorCode MatCreateTile_MPI(PetscScalar a,Mat A,PetscScalar b,Mat B,
 .  G  - the resulting matrix
 
    Notes:
-   In the case of a parallel matrix, a permuted version of G is returned. The permutation
-   is a perfect shuffle such that the local parts of A, B, C, D remain in the local part of
-   G for the same process.
+   The resulting matrix is built as
+   $$G = \begin{bmatrix} aA & bB\\ cC & dD \end{bmatrix}.$$
 
-   Matrix G must be destroyed by the user.
+   In the case of a parallel matrix, a permuted version of `G` is returned. The permutation
+   is a perfect shuffle such that the local parts of `A`, `B`, `C`, `D` remain in the local part of
+   `G` for the same process.
 
-   The blocks can be of different type. They can be either ConstantDiagonal, or a standard
-   type such as AIJ, or any other type provided that it supports the MatGetRow operation.
+   Matrix `G` must be destroyed by the user.
+
+   The blocks can be of different type. They can be either `MATCONSTANTDIAGONAL`, or a standard
+   type such as `MATAIJ`, or any other type provided that it supports the `MatGetRow()` operation.
    The type of the output matrix will be the same as the first block that is not
-   ConstantDiagonal (checked in the A,B,C,D order).
+   `MATCONSTANTDIAGONAL` (checked in the `A`,`B`,`C`,`D` order).
 
    Level: developer
 
@@ -275,7 +278,7 @@ PetscErrorCode MatCreateTile(PetscScalar a,Mat A,PetscScalar b,Mat B,PetscScalar
 }
 
 /*@
-   MatCreateVecsEmpty - Get vector(s) compatible with the matrix, i.e. with the same
+   MatCreateVecsEmpty - Get vector(s) compatible with the matrix, i.e., with the same
    parallel layout, but without internal array.
 
    Collective
@@ -288,8 +291,8 @@ PetscErrorCode MatCreateTile(PetscScalar a,Mat A,PetscScalar b,Mat B,PetscScalar
 -  left - (optional) vector that the matrix vector product can be stored in
 
    Note:
-   This is similar to MatCreateVecs(), but the new vectors do not have an internal
-   array, so the intended usage is with VecPlaceArray().
+   This is similar to `MatCreateVecs()`, but the new vectors do not have an internal
+   array, so the intended usage is with `VecPlaceArray()`.
 
    Level: developer
 
@@ -371,18 +374,18 @@ PetscErrorCode MatCreateVecsEmpty(Mat mat,Vec *right,Vec *left)
 
    Input Parameters:
 +  A   - the matrix
-.  vrn - random vector with normally distributed entries (can be NULL)
--  w   - workspace vector (can be NULL)
+.  vrn - random vector with normally distributed entries (can be `NULL`)
+-  w   - workspace vector (can be `NULL`)
 
    Output Parameter:
 .  nrm - the norm estimate
 
    Notes:
    Does not need access to the matrix entries, just performs a matrix-vector product.
-   Based on work by I. Ipsen and coworkers https://ipsen.math.ncsu.edu/ps/slides_ima.pdf
+   Based on work by I. Ipsen and coworkers <https://ipsen.math.ncsu.edu/ps/slides_ima.pdf>.
 
-   The input vector vrn must have unit 2-norm.
-   If vrn is NULL, then it is created internally and filled with VecSetRandomNormal().
+   The input vector `vrn` must have unit 2-norm.
+   If `vrn` is `NULL`, then it is created internally and filled with `VecSetRandomNormal()`.
 
    Level: developer
 

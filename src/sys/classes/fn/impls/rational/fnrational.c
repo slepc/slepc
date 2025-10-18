@@ -255,17 +255,17 @@ static PetscErrorCode FNRationalSetNumerator_Rational(FN fn,PetscInt np,PetscSca
 -  pcoeff - coefficients (array of scalar values)
 
    Notes:
-   Let the rational function r(x) = p(x)/q(x), where p(x) and q(x) are polynomials.
-   This function provides the coefficients of the numerator p(x).
-   Hence, p(x) is of degree np-1.
-   If np is zero, then the numerator is assumed to be p(x)=1.
+   Let the rational function be $f(x) = p(x)/q(x)$, where $p(x)$ and $q(x)$ are
+   polynomials. This function provides the coefficients of the numerator $p(x)$.
+   Hence, $p(x)$ is of degree `np-1`. If `np` is zero, or this function is not
+   called, then the numerator is assumed to be $p(x)=1$.
 
    In polynomials, high order coefficients are stored in the first positions
-   of the array, e.g. to represent x^2-3 use {1,0,-3}.
+   of the array, e.g., to represent $x^2-3$ use `{1,0,-3}`.
 
    Level: intermediate
 
-.seealso: `FNRationalSetDenominator()`, `FNRationalGetNumerator()`
+.seealso: [](sec:fn), `FNRationalSetDenominator()`, `FNRationalGetNumerator()`
 @*/
 PetscErrorCode FNRationalSetNumerator(FN fn,PetscInt np,PetscScalar pcoeff[])
 {
@@ -305,16 +305,16 @@ static PetscErrorCode FNRationalGetNumerator_Rational(FN fn,PetscInt *np,PetscSc
 
    Output Parameters:
 +  np     - number of coefficients
--  pcoeff - coefficients (array of scalar values, length nq)
+-  pcoeff - coefficients (array of scalar values, length `np`)
 
    Notes:
-   The values passed by user with FNRationalSetNumerator() are returned (or null
-   pointers otherwise).
-   The pcoeff array should be freed by the user when no longer needed.
+   The values passed by user with `FNRationalSetNumerator()` are returned (or
+   `NULL` pointers otherwise).
+   The `pcoeff` array should be freed by the user when no longer needed.
 
    Level: intermediate
 
-.seealso: `FNRationalSetNumerator()`
+.seealso: [](sec:fn), `FNRationalSetNumerator()`
 @*/
 PetscErrorCode FNRationalGetNumerator(FN fn,PetscInt *np,PetscScalar *pcoeff[]) PeNS
 {
@@ -352,17 +352,17 @@ static PetscErrorCode FNRationalSetDenominator_Rational(FN fn,PetscInt nq,PetscS
 -  qcoeff - coefficients (array of scalar values)
 
    Notes:
-   Let the rational function r(x) = p(x)/q(x), where p(x) and q(x) are polynomials.
-   This function provides the coefficients of the denominator q(x).
-   Hence, q(x) is of degree nq-1.
-   If nq is zero, then the function is assumed to be polynomial, r(x) = p(x).
+   Let the rational function be $f(x) = p(x)/q(x)$, where $p(x)$ and $q(x)$ are
+   polynomials. This function provides the coefficients of the denominator $q(x)$.
+   Hence, $q(x)$ is of degree `nq-1`. If `nq` is zero, or this function is not
+   called, then the function is assumed to be polynomial, $f(x) = p(x)$.
 
    In polynomials, high order coefficients are stored in the first positions
-   of the array, e.g. to represent x^2-3 use {1,0,-3}.
+   of the array, e.g., to represent $x^2-3$ use `{1,0,-3}`.
 
    Level: intermediate
 
-.seealso: `FNRationalSetNumerator()`, `FNRationalGetDenominator()`
+.seealso: [](sec:fn), `FNRationalSetNumerator()`, `FNRationalGetDenominator()`
 @*/
 PetscErrorCode FNRationalSetDenominator(FN fn,PetscInt nq,PetscScalar qcoeff[])
 {
@@ -402,16 +402,16 @@ static PetscErrorCode FNRationalGetDenominator_Rational(FN fn,PetscInt *nq,Petsc
 
    Output Parameters:
 +  nq     - number of coefficients
--  qcoeff - coefficients (array of scalar values, length nq)
+-  qcoeff - coefficients (array of scalar values, length `nq`)
 
    Notes:
-   The values passed by user with FNRationalSetDenominator() are returned (or a null
-   pointer otherwise).
-   The qcoeff array should be freed by the user when no longer needed.
+   The values passed by user with `FNRationalSetDenominator()` are returned (or a
+   `NULL` pointer otherwise).
+   The `qcoeff` array should be freed by the user when no longer needed.
 
    Level: intermediate
 
-.seealso: `FNRationalSetDenominator()`
+.seealso: [](sec:fn), `FNRationalSetDenominator()`
 @*/
 PetscErrorCode FNRationalGetDenominator(FN fn,PetscInt *nq,PetscScalar *qcoeff[]) PeNS
 {
@@ -478,6 +478,22 @@ static PetscErrorCode FNDestroy_Rational(FN fn)
   PetscCall(PetscObjectComposeFunction((PetscObject)fn,"FNRationalGetDenominator_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
+
+/*MC
+   FNRATIONAL - FNRATIONAL = "rational" - A rational function $f(x)=p(x)/q(x)$,
+   where the coefficients of the $p(x)$ and $q(x)$ polynomials are specified with
+   `FNRationalSetNumerator()` and `FNRationalSetDenominator()`, respectively.
+
+   Level: beginner
+
+   Notes:
+   The function will behave as a polynomial if only the numerator is given.
+
+   When working with matrix functions, the rational function should rather be
+   interpreted as $f(x)=q(x)^{-1}p(x)$.
+
+.seealso: [](sec:fn), `FN`, `FNType`, `FNSetType()`, `FNRationalSetNumerator()`, `FNRationalSetDenominator()`,
+M*/
 
 SLEPC_EXTERN PetscErrorCode FNCreate_Rational(FN fn)
 {

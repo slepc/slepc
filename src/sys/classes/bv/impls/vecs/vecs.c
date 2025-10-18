@@ -499,6 +499,15 @@ static PetscErrorCode BVDuplicate_Vecs(BV V,BV W)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   BVVECS - BVVECS = "vecs" - A basis vectors object represented by an array of
+   independent `Vec`s.
+
+   Level: beginner
+
+.seealso: [](sec:bv), `BV`, `BVType`, `BVSetType()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode BVCreate_Vecs(BV bv)
 {
   BV_VECS        *ctx;

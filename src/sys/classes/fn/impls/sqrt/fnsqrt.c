@@ -399,6 +399,14 @@ static PetscErrorCode FNView_Sqrt(FN fn,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   FNSQRT - FNSQRT = "sqrt" - The square root function $f(x)=\sqrt{x}$.
+
+   Level: beginner
+
+.seealso: [](sec:fn), `FN`, `FNType`, `FNSetType()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode FNCreate_Sqrt(FN fn)
 {
   PetscFunctionBegin;

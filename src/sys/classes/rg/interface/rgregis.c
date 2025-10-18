@@ -16,13 +16,13 @@ SLEPC_EXTERN PetscErrorCode RGCreate_Ring(RG);
 SLEPC_EXTERN PetscErrorCode RGCreate_Polygon(RG);
 
 /*@C
-   RGRegisterAll - Registers all of the regions in the RG package.
+   RGRegisterAll - Registers all of the regions in the `RG` package.
 
    Not Collective
 
    Level: advanced
 
-.seealso: `RGRegister()`
+.seealso: [](sec:rg), `RGRegister()`
 @*/
 PetscErrorCode RGRegisterAll(void)
 {

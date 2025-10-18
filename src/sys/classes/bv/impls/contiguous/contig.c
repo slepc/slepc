@@ -328,6 +328,16 @@ static PetscErrorCode BVView_Contiguous(BV bv,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   BVCONTIGUOUS - BVCONTIGUOUS = "contiguous" - A basis vectors object represented
+   by an array of `Vec`s sharing a contiguous array of `PetscScalar` storing the
+   elements column-wise.
+
+   Level: beginner
+
+.seealso: [](sec:bv), `BV`, `BVType`, `BVSetType()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode BVCreate_Contiguous(BV bv)
 {
   BV_CONTIGUOUS  *ctx;

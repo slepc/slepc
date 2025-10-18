@@ -382,6 +382,14 @@ static PetscErrorCode BVDestroy_Mat(BV bv)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   BVMAT - BVMAT = "mat" - A basis vectors object represented by a dense `Mat`.
+
+   Level: beginner
+
+.seealso: [](sec:bv), `BV`, `BVType`, `BVSetType()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode BVCreate_Mat(BV bv)
 {
   BV_MAT         *ctx;
