@@ -9,7 +9,7 @@ Apart from the main solver classes listed in table [](#tab:modules), SLEPc conta
 
 -   `RG`: Region, a way to define a region of the complex plane.
 
--   `DS`: Direct Solver (or Dense System), can be seen as a wrapper to LAPACK functions used within SLEPc. It is mostly an internal object that need not be called by end users.
+-   `DS`: Direct Solver (or Dense System), can be seen as a wrapper to LAPACK functions used within SLEPc.
 
 -   `BV`: Basis Vectors, provides the concept of a block of vectors that represent the basis of a subspace.
 
@@ -174,6 +174,27 @@ RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,PetscInt *inside)
 ```
 
 Note that the point is represented as two {external:doc}`PetscScalar`'s, similarly to eigenvalues in SLEPc.
+
+{#sec:ds}
+## DS: Direct Solver (or Dense System)
+
+The `DS` class can be seen as a wrapper to LAPACK functions {cite:p}`And99` used within SLEPc. It is mostly an internal object that need not be called by end users.
+
+Many of the iterative eigensolvers implemented in SLEPc, such as Krylov-Schur or LOBPCG, perform a projection onto a low-dimensional subspace, e.g., $M=V^*AV$, where $M$ is a dense matrix of small dimension (compared to the size of the original problem) and may or may not have a special structure such as Hessenberg or tridiagonal. Computing the full solution of an eigenproblem associated with matrix $M$ is necessary to continue the outer iterative eigensolver, and this is typically done by calling a LAPACK function.
+
+In case of parallel runs with several MPI processes, the result of the projection, $M$, is available in all processes and all of them solve the dense eigenproblem redundantly. Although this behavior can be changed slightly (see `DSSetParallel()`), the computation done in `DS` should be considered a sequential step of the overall algorithm, because we assume the size of $M$ is small. That is why it is relevant for parallel efficiency to keep the size of $M$ bounded, see discussion in [](#sec:large-nev).
+
+Due to the wide range of eigenproblems covered by SLEPc, the projected eigenproblem also has many variants, represented by the `DSType`.
+
+:::{note}
+The projected problem associated with `MFN` solvers is a matrix function calculation, which is implemented in `FN` and not `DS`.
+:::
+
+Not all `DS` types are covered by LAPACK subroutines, particularly `DSGHIEP`, `DSHSVD`, `DSPEP`, and `DSNEP`. Hence `DS` provides implementations for solving those problems. In many cases, several methods are available, and this includes the case where LAPACK provides several subroutines for the same problem. The user can select a solution method with an integer set via `DSSetMethod()`.
+
+The user interface is organized in a way that accommodates to the needs of iterative eigensolvers. The computation is split in three stages, `DSSolve()`, `DSSort()` and `DSVectors()`, which are typically called at different times. There are also convenience functions for truncating a previously computed solution, `DSTruncate()`, or to process the additional row present in $M$ in case of Krylov methods, see `DSUpdateExtraRow()`, which results in the typical arrowhead form when restarting Lanczos, for instance.
+
+To manipulate matrix $M$ and other matrices associated with the projected problem, the `DS` interface provides a list of dense matrices, see `DSMatType`, and operations to work with them, such as `DSGetMat()` or `DSGetArray()`.
 
 {#sec:bv}
 ## BV: Basis Vectors
