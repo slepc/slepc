@@ -191,7 +191,7 @@ int main(int argc,char **argv)
          nsize: 4
          args: -mat_type scalapack
          suffix: 1_sinvert_scalapack
-         requires: complex scalapack
+         requires: complex scalapack !__float128
          output_file: output/ex55_1_sinvert.out
       test:
          suffix: 1_real_sinvert
@@ -200,7 +200,7 @@ int main(int argc,char **argv)
          nsize: 4
          args: -mat_type scalapack
          suffix: 1_real_sinvert_scalapack
-         requires: !complex scalapack
+         requires: !complex scalapack !__float128
          output_file: output/ex55_1_real_sinvert.out
 
    testset:

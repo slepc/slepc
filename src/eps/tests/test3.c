@@ -132,7 +132,7 @@ int main(int argc,char **argv)
          requires: primme
       test:
          suffix: 1_scalapack
-         args: -eps_type scalapack
+         args: -eps_type scalapack !__float128
          requires: scalapack
       test:
          suffix: 1_elpa

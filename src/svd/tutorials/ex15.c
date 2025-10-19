@@ -149,6 +149,6 @@ int main(int argc,char **argv)
          suffix: 1_scalapack
          nsize: {{1 2}}
          args: -svd_type scalapack
-         requires: scalapack
+         requires: scalapack !__float128
 
 TEST*/

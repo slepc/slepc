@@ -21,9 +21,9 @@ class Primme(package.Package):
     self.version        = '3.2.3'
     self.url            = 'https://github.com/primme/primme/archive/v'+self.version+'.tar.gz'
     self.archive        = 'primme-'+self.version+'.tar.gz'
-    self.supportssingle = True
     self.supports64bint = True
     self.hasheaders     = True
+    self.supportsprecis.append('single')
     self.ProcessArgs(argdb)
 
   def SampleCode(self,petsc):

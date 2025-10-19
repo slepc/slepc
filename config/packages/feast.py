@@ -17,8 +17,8 @@ class Feast(package.Package):
     self.packagename    = 'feast'
     self.installable    = True
     self.petscdepend    = 'mkl'
-    self.supportssingle = True
     self.supports64bint = True
+    self.supportsprecis.append('single')
     self.ProcessArgs(argdb,petscpackages)
 
   def SampleCode(self,petsc):

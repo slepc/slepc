@@ -17,8 +17,8 @@ class Elemental(package.Package):
     self.packagename    = 'elemental'
     self.installable    = True
     self.petscdepend    = 'elemental'
-    self.supportssingle = True
     self.supports64bint = True
+    self.supportsprecis.append('single')
     self.ProcessArgs(argdb,petscpackages)
 
   def Check(self,slepcconf,slepcvars,petsc,archdir):

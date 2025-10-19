@@ -15,7 +15,7 @@ class Log:
 
   def __init__(self):
     self.fd = None
-    self.lastfailed = False
+    self.laststatus = 'done'
 
   def Open(self,slepcdir,confdir,fname):
     filename = os.path.join(confdir,fname)
@@ -37,16 +37,16 @@ class Log:
       self.fd.write(string+' ')
 
   def NewSection(self,string):
-    if self.lastfailed:
+    if not self.laststatus == 'done':
       colorfail = '\033[91m'
       colornorm = '\033[0m'
-      print(colorfail+'failed'+colornorm+'\n'+string, end=' ')
+      print(colorfail+self.laststatus+colornorm+'\n'+string, end=' ')
     else:
-      print('done\n'+string, end=' ')
+      print(self.laststatus+'\n'+string, end=' ')
     sys.stdout.flush()
     if self.fd:
       self.fd.write('='*80+'\n'+string+'\n')
-    self.lastfailed = False
+    self.laststatus = 'done'
 
   def write(self,string):
     if self.fd:
@@ -69,8 +69,10 @@ class Log:
       msg = 'ERROR during configure (log file not open yet)'
     sys.exit(msg)
 
-  def setLastFailed(self):
-    self.lastfailed = True
+  def setLastStatus(self, stat):
+    if stat not in ['done', 'failed', 'skipped']:
+      self.Exit('Unknown value of argument stat='+stat)
+    self.laststatus = stat
 
   def Close(self):
     if self.fd:

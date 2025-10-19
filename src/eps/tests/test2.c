@@ -119,7 +119,7 @@ int main(int argc,char **argv)
          args: -eps_type krylovschur -eps_krylovschur_locking {{0 1}}
       test:
          suffix: 1_scalapack
-         requires: scalapack
+         requires: scalapack !__float128
          args: -eps_type scalapack
       test:
          suffix: 1_elpa
