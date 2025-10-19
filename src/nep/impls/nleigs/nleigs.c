@@ -1465,7 +1465,7 @@ static PetscErrorCode NEPNLEIGSSetLocking_NLEIGS(NEP nep,PetscBool lock)
 
    Notes:
    The default is to lock converged eigenpairs when the method restarts.
-   This behaviour can be changed so that all directions are kept in the
+   This behavior can be changed so that all directions are kept in the
    working subspace even if already converged to working accuracy (the
    non-locking variant).
 
@@ -1804,7 +1804,7 @@ static PetscErrorCode NEPNLEIGSSetFullBasis_NLEIGS(NEP nep,PetscBool fullbasis)
 
    Notes:
    The default is to use a compact representation of the Krylov basis, that is,
-   V = (I otimes U) S, with a tensor BV. This behaviour can be changed so that
+   V = (I otimes U) S, with a tensor BV. This behavior can be changed so that
    the full basis V is explicitly stored and operated with. This variant is more
    expensive in terms of memory and computation, but is necessary in some cases,
    particularly for two-sided computations, see NEPSetTwoSided().

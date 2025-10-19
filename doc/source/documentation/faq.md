@@ -53,7 +53,7 @@ Possibly, the best way of learning to use SLEPc is to follow these steps:
 
 We also provide several [](#video-tutorials).
 
-## 8.  From 3.0.0 to 3.1 the behaviour of shift-and-invert has changed
+## 8.  From 3.0.0 to 3.1 the behavior of shift-and-invert has changed
 
 The shift-and-invert spectral transformation (and Cayley as well) is intended for computing the eigenvalues closest to a given value {math}`\sigma` (the shift). Those eigenvalues closest to the shift become dominant in the transformed spectrum, so in SLEPc 3.0.0 one had to use `EPS_LARGEST_MAGNITUDE` (the default) for this situation. For example (the last option can be omitted because it is the default):
 

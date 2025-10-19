@@ -402,7 +402,7 @@ The polynomial eigenvalue problem of equation {math:numref}`eq:sinvquad` corresp
 T_k=\sum_{j=0}^{d-k}\binom{j+k}{k}\sigma^{j}A_{j+k},\qquad k=0,\ldots,d.
 ```
 
- The way this is implemented in SLEPc is that the `ST` object is in charge of computing the $T_k$ matrices, so that the `PEP` solver operates with these matrices as it would with the original $A_i$ matrices, without changing its behaviour. We say that `ST` performs the transformation.
+ The way this is implemented in SLEPc is that the `ST` object is in charge of computing the $T_k$ matrices, so that the `PEP` solver operates with these matrices as it would with the original $A_i$ matrices, without changing its behavior. We say that `ST` performs the transformation.
 
 An alternative would be to apply the shift-and-invert spectral transformation to the linearization {math:numref}`eq:firstcomp` in a smart way, making the polynomial eigensolver aware of this fact so that it can exploit the block structure of the linearization. Let $S_\sigma:=(L_0-\sigma L_1)^{-1}L_1$, then when the solver needs to extend the Arnoldi basis with an operation such as $z=S_\sigma w$, a linear solve is required with the form
 

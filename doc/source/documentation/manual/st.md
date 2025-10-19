@@ -242,7 +242,7 @@ Similarly, in the JD eigensolver the expansion of the subspace is carried out by
 
 It should be clear from the previous discussion, that `STPRECOND` does not work in the same way as the rest of spectral transformations. In particular, it does not rely on `STBackTransform`. It is rather a convenient mechanism for handling the preconditioner and linear solver (see examples in section [](#sec:lin)). The expressions shown in tables [](#tab:transforms) and [](#tab:op) are just a reference to indicate from which matrix the preconditioner is built by default.
 
-There is the possibility that the user overrides the default behaviour, that is, to explicitly supply a matrix from which the preconditioner is to be built, with:
+There is the possibility that the user overrides the default behavior, that is, to explicitly supply a matrix from which the preconditioner is to be built, with:
 
 ```{code} c
 STSetPreconditionerMat(ST st,Mat mat);
@@ -296,7 +296,7 @@ The following command-line is equivalent to the previous one:
 $ ./program -st_ksp_type preonly -st_pc_type lu
 ```
 
-The two options specify the type of the linear solver and preconditioner to be used. The `-st_` prefix indicates that the option corresponds to the linear solver within `ST`. The combination `preonly`$+$`lu` instructs to use a direct solver (LU factorization, see {{'[PETSc documentation](https://petsc.org/{}/manual/ksp/)'.format(branch)}} for details), so this is the same as the default. Adding a new option changes the default behaviour, for instance
+The two options specify the type of the linear solver and preconditioner to be used. The `-st_` prefix indicates that the option corresponds to the linear solver within `ST`. The combination `preonly`$+$`lu` instructs to use a direct solver (LU factorization, see {{'[PETSc documentation](https://petsc.org/{}/manual/ksp/)'.format(branch)}} for details), so this is the same as the default. Adding a new option changes the default behavior, for instance
 
 ```{code} console
 $ ./program -st_ksp_type preonly -st_pc_type lu -st_pc_factor_mat_solver_type mumps

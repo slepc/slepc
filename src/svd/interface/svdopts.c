@@ -34,7 +34,7 @@
    If this flag is set to true, the solver does not build the transpose, but
    handles it implicitly via MatMultTranspose() (or MatMultHermitianTranspose()
    in the complex case) operations. This is likely to be more inefficient
-   than the default behaviour, both in sequential and in parallel, but
+   than the default behavior, both in sequential and in parallel, but
    requires less storage.
 
    Level: advanced

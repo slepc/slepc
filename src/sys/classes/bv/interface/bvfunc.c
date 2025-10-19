@@ -406,7 +406,7 @@ PetscErrorCode BVInsertVecs(BV V,PetscInt s,PetscInt *m,Vec *W,PetscBool orth)
 
    The vectors are copied one by one and then orthogonalized against the
    previous ones. If any of them is linearly dependent then it is discarded
-   and the value of `nc` is decreased. The behaviour is similar to `BVInsertVecs()`.
+   and the value of `nc` is decreased. The behavior is similar to `BVInsertVecs()`.
 
    Level: advanced
 

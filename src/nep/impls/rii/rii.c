@@ -407,7 +407,7 @@ static PetscErrorCode NEPRIISetConstCorrectionTol_RII(NEP nep,PetscBool cct)
    By default, an exponentially decreasing tolerance is set in the KSP used
    within the nonlinear iteration, so that each Newton iteration requests
    better accuracy than the previous one. The constant correction tolerance
-   flag stops this behaviour.
+   flag stops this behavior.
 
    Level: intermediate
 

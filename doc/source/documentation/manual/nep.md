@@ -293,13 +293,13 @@ Some solvers such as `NEPRII` and `NEPNARNOLDI` need a {external:doc}`KSP` objec
 NEPRIIGetKSP(NEP nep,KSP *ksp);
 ```
 
-This {external:doc}`KSP` object is typically used to compute the action of $T(\sigma)^{-1}$ on a given vector. In principle, $\sigma$ is an approximation of an eigenvalue, but it is usually more efficient to keep this value constant, otherwise the factorization or preconditioner must be recomputed every time since eigensolvers update eigenvalue approximations in each iteration. This behaviour can be changed with:
+This {external:doc}`KSP` object is typically used to compute the action of $T(\sigma)^{-1}$ on a given vector. In principle, $\sigma$ is an approximation of an eigenvalue, but it is usually more efficient to keep this value constant, otherwise the factorization or preconditioner must be recomputed every time since eigensolvers update eigenvalue approximations in each iteration. This behavior can be changed with:
 
 ```{code} c
 NEPRIISetLagPreconditioner(NEP nep,PetscInt lag);
 ```
 
-Recomputing the preconditioner every 2 iterations, say, will introduce a considerable overhead, but may reduce the number of iterations significantly. Another related comment is that, when using an iterative linear solver, the requested accuracy is adapted as the outer iteration progresses, being the tolerance larger in the first solves. Again, the user can modify this behaviour with `NEPRIISetConstCorrectionTol`. Both options can also be changed at run time. As an example, consider the following command line:
+Recomputing the preconditioner every 2 iterations, say, will introduce a considerable overhead, but may reduce the number of iterations significantly. Another related comment is that, when using an iterative linear solver, the requested accuracy is adapted as the outer iteration progresses, being the tolerance larger in the first solves. Again, the user can modify this behavior with `NEPRIISetConstCorrectionTol`. Both options can also be changed at run time. As an example, consider the following command line:
 
 ```{code} console
 $ ./ex22 -nep_type rii -nep_rii_lag_preconditioner 2 -nep_rii_ksp_type bcgs -nep_rii_pc_type ilu -nep_rii_const_correction_tol 1 -nep_rii_ksp_rtol 1e-3
