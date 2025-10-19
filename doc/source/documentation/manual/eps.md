@@ -745,7 +745,7 @@ If one wants to use the region to specify where eigenvalues should *not* be comp
 $ ./ex1 -eps_smallest_magnitude -rg_type ellipse -rg_ellipse_center 0 -rg_ellipse_radius 0.5 -rg_ellipse_vscale 0.1 -rg_complement
 ```
 
-Additional details of the `RG` class can be found in section [](#sec:sys).
+Additional details of the `RG` class can be found in section [](#sec:rg).
 
 {#sec:large-nev}
 ### Computing a Large Portion of the Spectrum

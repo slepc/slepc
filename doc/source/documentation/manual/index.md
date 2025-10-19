@@ -52,7 +52,7 @@ This manual provides a general description of SLEPc. In addition, manual pages f
 {#how-to-read-this-manual .unnumbered}
 **How to Read this Manual**
 
-Users that are already familiar with PETSc can read chapter [](#ch:int) very fast. Section [](#sec:eig) provides a brief overview of eigenproblems and the general concepts used by eigensolvers, so it can be skipped by experienced users. Chapters [](#ch:eps) to [](#ch:mfn) describe the main SLEPc functionality. Some of them include an advanced usage section that can be skipped at a first reading. Finally, chapter [](#ch:add) contains less important, additional information.
+Users that are already familiar with PETSc can read chapter [](#ch:int) very fast. Section [](#sec:eig) provides a brief overview of eigenproblems and the general concepts used by eigensolvers, so it can be skipped by experienced users. Chapters [](#ch:eps) to [](#ch:aux) describe the main SLEPc functionality. Some of them include an advanced usage section that can be skipped at a first reading. Finally, chapter [](#ch:add) contains less important, additional information.
 
 {#slepc-technical-reports .unnumbered}
 **SLEPc Technical Reports**
@@ -133,5 +133,6 @@ svd
 pep
 nep
 mfn
+aux
 extra
 ```

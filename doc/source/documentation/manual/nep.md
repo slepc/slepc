@@ -203,7 +203,7 @@ NEPSetSplitOperator(NEP nep,PetscInt l,Mat A[],FN f[],MatStructure str);
 
 Here, the {external:doc}`MatStructure` flag is used to indicate whether all matrices have the same (or subset) nonzero pattern with respect to the first one. Listing [](#fig:ex-split) illustrates this usage with the problem of equation {math:numref}`eq:delay`, where $\ell=3$ and the matrices are $I$, $A$ and $B$ (note that in the code we have changed the order for efficiency reasons, since the nonzero pattern of $I$ and $B$ is a subset of $A$'s in this case). Two of the associated functions are polynomials ($-\lambda$ and $1$) and the other one is the exponential $e^{-\tau\lambda}$.
 
-Details of how to define the $f_i$ functions by using the `FN` class are provided in section [](#sec:sys).
+Details of how to define the $f_i$ functions by using the `FN` class are provided in section [](#sec:fn).
 
 :::{note}
 Using the split form is required in order to be able to use some eigensolvers, in particular, those that project the nonlinear eigenproblem onto a low dimensional subspace and then use a dense nonlinear solver for the projected problem.
@@ -285,7 +285,7 @@ The polynomial interpolation solver currently uses Chebyshev polynomials of the 
 $ ./ex22 -nep_type interpol -rg_interval_endpoints 0.1,14.0,-0.1,0.1 -nep_nev 2 -nep_interpol_interpolation_degree 15 -nep_target 1.0
 ```
 
-Note that the target $\tau$ must lie inside the region. For details about specifying a region, see section [](#sec:sys).
+Note that the target $\tau$ must lie inside the region. For details about specifying a region, see section [](#sec:rg).
 
 Some solvers such as `NEPRII` and `NEPNARNOLDI` need a {external:doc}`KSP` object to handle the solution of linear systems of equations. This {external:doc}`KSP` and can be retrieved, e.g., with:
 

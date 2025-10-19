@@ -4,4 +4,4 @@ The DS package provides auxiliary routines that are internally used by the diffe
 
 These routines are usually not needed by application programmers.
 
-Related Users Manual part: [](sec:sys).
+Related Users Manual part: [](ch:aux).
