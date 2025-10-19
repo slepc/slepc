@@ -1082,27 +1082,26 @@ static PetscErrorCode DSHermitian_GHIEP(DS ds,DSMatType m,PetscBool *flg)
 /*MC
    DSGHIEP - Dense Generalized Hermitian Indefinite Eigenvalue Problem.
 
-   Level: beginner
-
    Notes:
-   The problem is expressed as A*X = B*X*Lambda, where both A and B are
-   real symmetric (or complex Hermitian) and possibly indefinite. Lambda
-   is a diagonal matrix whose diagonal elements are the arguments of DSSolve().
-   After solve, A is overwritten with Lambda. Note that in the case of real
-   scalars, A is overwritten with a real representation of Lambda, i.e.,
+   The problem is expressed as $AX = BX\Lambda$, where both $A$ and $B$ are
+   real symmetric (or complex Hermitian) and possibly indefinite. $\Lambda$
+   is a diagonal matrix whose diagonal elements are the arguments of `DSSolve()`.
+   After solve, $A$ is overwritten with $\Lambda$. Note that in the case of real
+   scalars, $A$ is overwritten with a real representation of $\Lambda$, i.e.,
    complex conjugate eigenvalue pairs are stored as a 2x2 block in the
    quasi-diagonal matrix.
 
-   In the intermediate state A is reduced to tridiagonal form and B is
+   In the intermediate state $A$ is reduced to tridiagonal form and $B$ is
    transformed into a signature matrix. In compact storage format, these
-   matrices are stored in T and D, respectively.
+   matrices are stored in $T$ and $D$, respectively. Details of the implemented
+   methods are presented in {cite:p}`Cam16c`.
 
    Used DS matrices:
-+  DS_MAT_A - first problem matrix
-.  DS_MAT_B - second problem matrix
-.  DS_MAT_T - symmetric tridiagonal matrix of the reduced pencil
-.  DS_MAT_D - diagonal matrix (signature) of the reduced pencil
--  DS_MAT_Q - pseudo-orthogonal transformation that reduces (A,B) to
++  `DS_MAT_A` - first problem matrix
+.  `DS_MAT_B` - second problem matrix
+.  `DS_MAT_T` - symmetric tridiagonal matrix of the reduced pencil
+.  `DS_MAT_D` - diagonal matrix (signature) of the reduced pencil
+-  `DS_MAT_Q` - pseudo-orthogonal transformation that reduces $(A,B)$ to
    tridiagonal-diagonal form (intermediate step) or a real basis of eigenvectors
 
    Implemented methods:
@@ -1110,11 +1109,9 @@ static PetscErrorCode DSHermitian_GHIEP(DS ds,DSMatType m,PetscBool *flg)
 .  1 - HZ iteration
 -  2 - QR iteration plus pseudo-orthogonalization for the eigenvectors
 
-   References:
-.  1. - C. Campos and J. E. Roman, "Restarted Q-Arnoldi-type methods exploiting
-   symmetry in quadratic eigenvalue problems", BIT Numer. Math. 56(4):1213-1236, 2016.
+   Level: beginner
 
-.seealso: `DSCreate()`, `DSSetType()`, `DSType`
+.seealso: [](sec:ds), `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_GHIEP(DS ds)
 {

@@ -652,28 +652,28 @@ static PetscErrorCode DSTruncate_GNHEP(DS ds,PetscInt n,PetscBool trim)
 /*MC
    DSGNHEP - Dense Generalized Non-Hermitian Eigenvalue Problem.
 
-   Level: beginner
-
    Notes:
-   The problem is expressed as A*X = B*X*Lambda, where (A,B) is the input
-   matrix pencil. Lambda is a diagonal matrix whose diagonal elements are the
-   arguments of DSSolve(). After solve, (A,B) is overwritten with the
-   generalized (real) Schur form (S,T) = (Z'*A*Q,Z'*B*Q), with the first
+   The problem is expressed as $AX = BX\Lambda$, where $(A,B)$ is the input
+   matrix pencil. $\Lambda$ is a diagonal matrix whose diagonal elements are the
+   arguments of `DSSolve()`. After solve, $(A,B)$ is overwritten with the
+   generalized (real) Schur form $(S,T) = (Z^*AQ,Z^*BQ)$, with the first
    matrix being upper quasi-triangular and the second one triangular.
 
    Used DS matrices:
-+  DS_MAT_A - first problem matrix
-.  DS_MAT_B - second problem matrix
-.  DS_MAT_Q - first orthogonal/unitary transformation that reduces to
++  `DS_MAT_A` - first problem matrix
+.  `DS_MAT_B` - second problem matrix
+.  `DS_MAT_Q` - first orthogonal/unitary transformation that reduces to
    generalized (real) Schur form
--  DS_MAT_Z - second orthogonal/unitary transformation that reduces to
+-  `DS_MAT_Z` - second orthogonal/unitary transformation that reduces to
    generalized (real) Schur form
 
    Implemented methods:
-+  0 - QZ iteration (_gges)
--  1 - blocked QZ iteration (_gges3, if available)
++  0 - QZ iteration (`_gges`)
+-  1 - blocked QZ iteration (`_gges3`, if available)
 
-.seealso: `DSCreate()`, `DSSetType()`, `DSType`
+   Level: beginner
+
+.seealso: [](sec:ds), `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_GNHEP(DS ds)
 {

@@ -115,7 +115,7 @@ PetscErrorCode DSAllocateWork_Private(DS ds,PetscInt s,PetscInt r,PetscInt i)
 }
 
 /*@
-   DSViewMat - Prints one of the internal DS matrices.
+   DSViewMat - Prints one of the internal `DS` matrices.
 
    Collective
 
@@ -125,12 +125,12 @@ PetscErrorCode DSAllocateWork_Private(DS ds,PetscInt s,PetscInt r,PetscInt i)
 -  m      - matrix to display
 
    Note:
-   Works only for ascii viewers. Set the viewer in Matlab format if
-   want to paste into Matlab.
+   Works only for `ascii` viewers. Set the viewer to Matlab format if
+   you want to paste the output into Matlab.
 
    Level: developer
 
-.seealso: `DSView()`
+.seealso: [](sec:ds), `DSView()`
 @*/
 PetscErrorCode DSViewMat(DS ds,PetscViewer viewer,DSMatType m)
 {
@@ -391,8 +391,8 @@ PetscErrorCode DSPermuteBoth_Private(DS ds,PetscInt istart,PetscInt iend,PetscIn
 }
 
 /*@
-   DSSetIdentity - Copy the identity (a diagonal matrix with ones) on the
-   active part of a matrix.
+   DSSetIdentity - Copy the identity (a diagonal matrix with ones on the
+   diagonal) on the active part of a matrix.
 
    Logically Collective
 
@@ -402,7 +402,7 @@ PetscErrorCode DSPermuteBoth_Private(DS ds,PetscInt istart,PetscInt iend,PetscIn
 
    Level: intermediate
 
-.seealso: `DSGetMat()`
+.seealso: [](sec:ds), `DSGetMat()`
 @*/
 PetscErrorCode DSSetIdentity(DS ds,DSMatType mat)
 {
@@ -440,7 +440,7 @@ PetscErrorCode DSSetIdentity(DS ds,DSMatType mat)
 
    Level: developer
 
-.seealso: `DSPseudoOrthogonalize()`
+.seealso: [](sec:ds), `DSPseudoOrthogonalize()`
 @*/
 PetscErrorCode DSOrthogonalize(DS ds,DSMatType mat,PetscInt cols,PetscInt *lindcols)
 {
@@ -554,11 +554,13 @@ static PetscErrorCode SlepcMatDenseMult(PetscScalar *C,PetscInt _ldC,PetscScalar
 -  ns   - (optional) the new signature of the vectors
 
    Note:
-   After the call the matrix satisfies A'*s*A = ns.
+   After the call the matrix satisfies $A^*\Omega A = \tilde\Omega$, where
+   $\Omega$ is the input signature, represented as a list of $\pm 1$ values
+   in `s`, and the new signature $\tilde\Omega$ is stored similarly in `ns`.
 
    Level: developer
 
-.seealso: `DSOrthogonalize()`
+.seealso: [](sec:ds), `DSOrthogonalize()`
 @*/
 PetscErrorCode DSPseudoOrthogonalize(DS ds,DSMatType mat,PetscInt cols,PetscReal s[],PetscInt *lindcols,PetscReal ns[])
 {

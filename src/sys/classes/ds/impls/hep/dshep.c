@@ -844,30 +844,30 @@ static PetscErrorCode DSReallocate_HEP(DS ds,PetscInt ld)
 /*MC
    DSHEP - Dense Hermitian Eigenvalue Problem.
 
-   Level: beginner
-
    Notes:
-   The problem is expressed as A*X = X*Lambda, where A is real symmetric
-   (or complex Hermitian). Lambda is a diagonal matrix whose diagonal
-   elements are the arguments of DSSolve(). After solve, A is overwritten
-   with Lambda.
+   The problem is expressed as $AX = X\Lambda$, where $A$ is real symmetric
+   (or complex Hermitian). $\Lambda$ is a diagonal matrix whose diagonal
+   elements are the arguments of `DSSolve()`. After solve, $A$ is overwritten
+   with $\Lambda$.
 
-   In the intermediate state A is reduced to tridiagonal form. In compact
-   storage format, the symmetric tridiagonal matrix is stored in T.
+   In the intermediate state $A$ is reduced to tridiagonal form. In compact
+   storage format, the symmetric tridiagonal matrix is stored in $T$.
 
    Used DS matrices:
-+  DS_MAT_A - problem matrix (used only if compact=false)
-.  DS_MAT_T - symmetric tridiagonal matrix
--  DS_MAT_Q - orthogonal/unitary transformation that reduces to tridiagonal form
-   (intermediate step) or matrix of orthogonal eigenvectors, which is equal to X
++  `DS_MAT_A` - problem matrix (used only if `compact=PETSC_FALSE`)
+.  `DS_MAT_T` - symmetric tridiagonal matrix
+-  `DS_MAT_Q` - orthogonal/unitary transformation that reduces to tridiagonal form
+   (intermediate step) or matrix of orthogonal eigenvectors, which is equal to $X$
 
    Implemented methods:
-+  0 - Implicit QR (_steqr)
-.  1 - Multiple Relatively Robust Representations (_stevr)
-.  2 - Divide and Conquer (_stedc)
++  0 - Implicit QR (`_steqr`)
+.  1 - Multiple Relatively Robust Representations (`_stevr`)
+.  2 - Divide and Conquer (`_stedc`)
 -  3 - Block Divide and Conquer (real scalars only)
 
-.seealso: `DSCreate()`, `DSSetType()`, `DSType`
+   Level: beginner
+
+.seealso: [](sec:ds), `DSCreate()`, `DSSetType()`, `DSType`, `DSSetCompact()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_HEP(DS ds)
 {

@@ -26,7 +26,7 @@ DSMatType  DSMatExtra[DS_NUM_EXTRA] = {DS_MAT_E0,DS_MAT_E1,DS_MAT_E2,DS_MAT_E3,D
 
 /*@C
    DSFinalizePackage - This function destroys everything in the SLEPc interface
-   to the DS package. It is called from SlepcFinalize().
+   to the `DS` package. It is called from `SlepcFinalize()`.
 
    Level: developer
 
@@ -42,9 +42,9 @@ PetscErrorCode DSFinalizePackage(void)
 }
 
 /*@C
-  DSInitializePackage - This function initializes everything in the DS package.
-  It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-  on the first call to DSCreate() when using static libraries.
+  DSInitializePackage - This function initializes everything in the `DS` package.
+  It is called from `PetscDLLibraryRegister()` when using dynamic libraries, and
+  on the first call to `DSCreate()` when using static libraries.
 
   Level: developer
 
@@ -83,7 +83,7 @@ PetscErrorCode DSInitializePackage(void)
 }
 
 /*@
-   DSCreate - Creates a DS context.
+   DSCreate - Creates a `DS` context.
 
    Collective
 
@@ -91,15 +91,15 @@ PetscErrorCode DSInitializePackage(void)
 .  comm - MPI communicator
 
    Output Parameter:
-.  newds - location to put the DS context
+.  newds - location to put the `DS` context
 
    Level: beginner
 
    Note:
-   DS objects are not intended for normal users but only for
+   `DS` objects are not intended for normal users but only for
    advanced user that for instance implement their own solvers.
 
-.seealso: `DSDestroy()`, `DS`
+.seealso: [](sec:ds), `DSDestroy()`, `DS`
 @*/
 PetscErrorCode DSCreate(MPI_Comm comm,DS *newds)
 {
@@ -142,13 +142,13 @@ PetscErrorCode DSCreate(MPI_Comm comm,DS *newds)
 
 /*@
    DSSetOptionsPrefix - Sets the prefix used for searching for all
-   DS options in the database.
+   `DS` options in the database.
 
    Logically Collective
 
    Input Parameters:
 +  ds - the direct solver context
--  prefix - the prefix string to prepend to all DS option requests
+-  prefix - the prefix string to prepend to all `DS` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -157,7 +157,7 @@ PetscErrorCode DSCreate(MPI_Comm comm,DS *newds)
 
    Level: advanced
 
-.seealso: `DSAppendOptionsPrefix()`
+.seealso: [](sec:ds), `DSAppendOptionsPrefix()`
 @*/
 PetscErrorCode DSSetOptionsPrefix(DS ds,const char *prefix)
 {
@@ -169,7 +169,7 @@ PetscErrorCode DSSetOptionsPrefix(DS ds,const char *prefix)
 
 /*@
    DSAppendOptionsPrefix - Appends to the prefix used for searching for all
-   DS options in the database.
+   `DS` options in the database.
 
    Logically Collective
 
@@ -183,7 +183,7 @@ PetscErrorCode DSSetOptionsPrefix(DS ds,const char *prefix)
 
    Level: advanced
 
-.seealso: `DSSetOptionsPrefix()`
+.seealso: [](sec:ds), `DSSetOptionsPrefix()`
 @*/
 PetscErrorCode DSAppendOptionsPrefix(DS ds,const char *prefix)
 {
@@ -207,7 +207,7 @@ PetscErrorCode DSAppendOptionsPrefix(DS ds,const char *prefix)
 
    Level: advanced
 
-.seealso: `DSSetOptionsPrefix()`, `DSAppendOptionsPrefix()`
+.seealso: [](sec:ds), `DSSetOptionsPrefix()`, `DSAppendOptionsPrefix()`
 @*/
 PetscErrorCode DSGetOptionsPrefix(DS ds,const char *prefix[])
 {
@@ -229,7 +229,7 @@ PetscErrorCode DSGetOptionsPrefix(DS ds,const char *prefix[])
 
    Level: intermediate
 
-.seealso: `DSGetType()`
+.seealso: [](sec:ds), `DSGetType()`
 @*/
 PetscErrorCode DSSetType(DS ds,DSType type)
 {
@@ -256,7 +256,7 @@ PetscErrorCode DSSetType(DS ds,DSType type)
 }
 
 /*@
-   DSGetType - Gets the DS type name (as a string) from the DS context.
+   DSGetType - Gets the `DS` type name (as a string) from the `DS` context.
 
    Not Collective
 
@@ -268,7 +268,7 @@ PetscErrorCode DSSetType(DS ds,DSType type)
 
    Level: intermediate
 
-.seealso: `DSSetType()`
+.seealso: [](sec:ds), `DSSetType()`
 @*/
 PetscErrorCode DSGetType(DS ds,DSType *type)
 {
@@ -289,17 +289,17 @@ PetscErrorCode DSGetType(DS ds,DSType *type)
 .  ds - direct solver context
 
    Output Parameter:
-.  dsnew - location to put the new DS
+.  dsnew - location to put the new `DS`
 
    Notes:
-   DSDuplicate() DOES NOT COPY the matrices, and the new DS does not even have
-   internal arrays allocated. Use DSAllocate() to use the new DS.
+   `DSDuplicate()` DOES NOT COPY the matrices, and the new `DS` does not even have
+   internal arrays allocated. Use `DSAllocate()` to use the new `DS`.
 
-   The sorting criterion options are not copied, see DSSetSlepcSC().
+   The sorting criterion options are not copied, see `DSSetSlepcSC()`.
 
    Level: intermediate
 
-.seealso: `DSCreate()`, `DSAllocate()`, `DSSetSlepcSC()`
+.seealso: [](sec:ds), `DSCreate()`, `DSAllocate()`, `DSSetSlepcSC()`
 @*/
 PetscErrorCode DSDuplicate(DS ds,DS *dsnew)
 {
@@ -331,7 +331,7 @@ PetscErrorCode DSDuplicate(DS ds,DS *dsnew)
 
    Level: intermediate
 
-.seealso: `DSGetMethod()`
+.seealso: [](sec:ds), `DSGetMethod()`
 @*/
 PetscErrorCode DSSetMethod(DS ds,PetscInt meth)
 {
@@ -345,7 +345,7 @@ PetscErrorCode DSSetMethod(DS ds,PetscInt meth)
 }
 
 /*@
-   DSGetMethod - Gets the method currently used in the DS.
+   DSGetMethod - Gets the method currently used in the `DS`.
 
    Not Collective
 
@@ -357,7 +357,7 @@ PetscErrorCode DSSetMethod(DS ds,PetscInt meth)
 
    Level: intermediate
 
-.seealso: `DSSetMethod()`
+.seealso: [](sec:ds), `DSSetMethod()`
 @*/
 PetscErrorCode DSGetMethod(DS ds,PetscInt *meth)
 {
@@ -378,27 +378,27 @@ PetscErrorCode DSGetMethod(DS ds,PetscInt *meth)
 -  pmode - the parallel mode
 
    Options Database Key:
-.  -ds_parallel <mode> - Sets the parallel mode, 'redundant', 'synchronized'
-   or 'distributed'
+.  -ds_parallel <mode> - Sets the parallel mode, `redundant`, `synchronized`
+   or `distributed`
 
    Notes:
-   In the 'redundant' parallel mode, all processes will make the computation
+   In the `redundant` parallel mode, all processes will make the computation
    redundantly, starting from the same data, and producing the same result.
    This result may be slightly different in the different processes if using a
    multithreaded BLAS library, which may cause issues in ill-conditioned problems.
 
-   In the 'synchronized' parallel mode, only the first MPI process performs the
+   In the `synchronized` parallel mode, only the first MPI process performs the
    computation and then the computed quantities are broadcast to the other
    processes in the communicator. This communication is not done automatically,
-   an explicit call to DSSynchronize() is required.
+   an explicit call to `DSSynchronize()` is required.
 
-   The 'distributed' parallel mode can be used in some DS types only, such
-   as the contour integral method of DSNEP. In this case, every MPI process
+   The `distributed` parallel mode can be used in some `DS` types only, such
+   as the contour integral method of `DSNEP`. In this case, every MPI process
    will be in charge of part of the computation.
 
    Level: advanced
 
-.seealso: `DSSynchronize()`, `DSGetParallel()`
+.seealso: [](sec:ds), `DSSynchronize()`, `DSGetParallel()`
 @*/
 PetscErrorCode DSSetParallel(DS ds,DSParallelType pmode)
 {
@@ -422,7 +422,7 @@ PetscErrorCode DSSetParallel(DS ds,DSParallelType pmode)
 
    Level: advanced
 
-.seealso: `DSSetParallel()`
+.seealso: [](sec:ds), `DSSetParallel()`
 @*/
 PetscErrorCode DSGetParallel(DS ds,DSParallelType *pmode)
 {
@@ -443,16 +443,16 @@ PetscErrorCode DSGetParallel(DS ds,DSParallelType *pmode)
 -  comp - a boolean flag
 
    Notes:
-   Compact storage is used in some DS types such as DSHEP when the matrix
+   Compact storage is used in some `DS` types such as `DSHEP` when the matrix
    is tridiagonal. This flag can be used to indicate whether the user
-   provides the matrix entries via the compact form (the tridiagonal DS_MAT_T)
-   or the non-compact one (DS_MAT_A).
+   provides the matrix entries via the compact form (the tridiagonal `DS_MAT_T`)
+   or the non-compact one (`DS_MAT_A`).
 
-   The default is PETSC_FALSE.
+   The default is `PETSC_FALSE`.
 
    Level: advanced
 
-.seealso: `DSGetCompact()`
+.seealso: [](sec:ds), `DSGetCompact()`
 @*/
 PetscErrorCode DSSetCompact(DS ds,PetscBool comp)
 {
@@ -477,7 +477,7 @@ PetscErrorCode DSSetCompact(DS ds,PetscBool comp)
 
    Level: advanced
 
-.seealso: `DSSetCompact()`
+.seealso: [](sec:ds), `DSSetCompact()`
 @*/
 PetscErrorCode DSGetCompact(DS ds,PetscBool *comp)
 {
@@ -500,15 +500,15 @@ PetscErrorCode DSGetCompact(DS ds,PetscBool *comp)
 
    Notes:
    In Krylov methods it is useful that the matrix representing the direct solver
-   has one extra row, i.e., has dimension (n+1) x n. If this flag is activated, all
+   has one extra row, i.e., has dimension $(n+1) \times n$. If this flag is activated, all
    transformations applied to the right of the matrix also affect this additional
-   row. In that case, (n+1) must be less or equal than the leading dimension.
+   row. In that case, $(n+1)$ must be less or equal than the leading dimension.
 
-   The default is PETSC_FALSE.
+   The default is `PETSC_FALSE`.
 
    Level: advanced
 
-.seealso: `DSSolve()`, `DSAllocate()`, `DSGetExtraRow()`
+.seealso: [](sec:ds), `DSSolve()`, `DSAllocate()`, `DSGetExtraRow()`
 @*/
 PetscErrorCode DSSetExtraRow(DS ds,PetscBool ext)
 {
@@ -533,7 +533,7 @@ PetscErrorCode DSSetExtraRow(DS ds,PetscBool ext)
 
    Level: advanced
 
-.seealso: `DSSetExtraRow()`
+.seealso: [](sec:ds), `DSSetExtraRow()`
 @*/
 PetscErrorCode DSGetExtraRow(DS ds,PetscBool *ext)
 {
@@ -555,18 +555,18 @@ PetscErrorCode DSGetExtraRow(DS ds,PetscBool *ext)
 -  ref - a boolean flag
 
    Notes:
-   Normally the vectors returned in DS_MAT_X are eigenvectors of the
-   projected matrix. With this flag activated, DSVectors() will return
+   Normally the vectors returned in `DS_MAT_X` are eigenvectors of the
+   projected matrix. With this flag activated, `DSVectors()` will return
    the right singular vector of the smallest singular value of matrix
-   \tilde{A}-theta*I, where \tilde{A} is the extended (n+1)xn matrix
-   and theta is the Ritz value. This is used in the refined Ritz
-   approximation.
+   $\tilde{A}-\theta I$, where $\tilde{A}$ is the extended $(n+1)\times n$
+   matrix and $\theta$ is the Ritz value. This is used in the refined Ritz
+   approximation {cite:p}`Jia97`.
 
-   The default is PETSC_FALSE.
+   The default is `PETSC_FALSE`.
 
    Level: advanced
 
-.seealso: `DSVectors()`, `DSGetRefined()`
+.seealso: [](sec:ds), `DSVectors()`, `DSGetRefined()`
 @*/
 PetscErrorCode DSSetRefined(DS ds,PetscBool ref)
 {
@@ -590,7 +590,7 @@ PetscErrorCode DSSetRefined(DS ds,PetscBool ref)
 
    Level: advanced
 
-.seealso: `DSSetRefined()`
+.seealso: [](sec:ds), `DSSetRefined()`
 @*/
 PetscErrorCode DSGetRefined(DS ds,PetscBool *ref)
 {
@@ -615,7 +615,7 @@ PetscErrorCode DSGetRefined(DS ds,PetscBool *ref)
 
    Level: intermediate
 
-.seealso: `DSGetBlockSize()`
+.seealso: [](sec:ds), `DSGetBlockSize()`
 @*/
 PetscErrorCode DSSetBlockSize(DS ds,PetscInt bs)
 {
@@ -640,7 +640,7 @@ PetscErrorCode DSSetBlockSize(DS ds,PetscInt bs)
 
    Level: intermediate
 
-.seealso: `DSSetBlockSize()`
+.seealso: [](sec:ds), `DSSetBlockSize()`
 @*/
 PetscErrorCode DSGetBlockSize(DS ds,PetscInt *bs)
 {
@@ -665,7 +665,7 @@ PetscErrorCode DSGetBlockSize(DS ds,PetscInt *bs)
 
    Level: developer
 
-.seealso: `DSGetSlepcSC()`, `DSSort()`
+.seealso: [](sec:ds), `DSGetSlepcSC()`, `DSSort()`
 @*/
 PetscErrorCode DSSetSlepcSC(DS ds,SlepcSC sc)
 {
@@ -694,7 +694,7 @@ PetscErrorCode DSSetSlepcSC(DS ds,SlepcSC sc)
 
    Level: developer
 
-.seealso: `DSSetSlepcSC()`, `DSSort()`
+.seealso: [](sec:ds), `DSSetSlepcSC()`, `DSSort()`
 @*/
 PetscErrorCode DSGetSlepcSC(DS ds,SlepcSC *sc)
 {
@@ -707,19 +707,19 @@ PetscErrorCode DSGetSlepcSC(DS ds,SlepcSC *sc)
 }
 
 /*@
-   DSSetFromOptions - Sets DS options from the options database.
+   DSSetFromOptions - Sets `DS` options from the options database.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  ds - the direct solver context
 
    Notes:
-   To see all options, run your program with the -help option.
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 
-.seealso: `DSSetOptionsPrefix()`
+.seealso: [](sec:ds), `DSSetOptionsPrefix()`
 @*/
 PetscErrorCode DSSetFromOptions(DS ds)
 {
@@ -750,7 +750,7 @@ PetscErrorCode DSSetFromOptions(DS ds)
 }
 
 /*@
-   DSView - Prints the DS data structure.
+   DSView - Prints the `DS` data structure.
 
    Collective
 
@@ -758,20 +758,22 @@ PetscErrorCode DSSetFromOptions(DS ds)
 +  ds - the direct solver context
 -  viewer - optional visualization context
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
+
+   Use `DSViewFromOptions()` to allow the user to select many different `PetscViewerType`
+   and formats from the options database.
 
    Level: beginner
 
-.seealso: `DSViewMat()`
+.seealso: [](sec:ds), `DSCreate()`, `DSViewFromOptions()`, `DSViewMat()`
 @*/
 PetscErrorCode DSView(DS ds,PetscViewer viewer)
 {
@@ -805,18 +807,18 @@ PetscErrorCode DSView(DS ds,PetscViewer viewer)
 }
 
 /*@
-   DSViewFromOptions - View from options
+   DSViewFromOptions - View (print) a `DS` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  ds   - the direct solver context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: `DSView()`, `DSCreate()`
+.seealso: [](sec:ds), `DSView()`, `DSCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode DSViewFromOptions(DS ds,PetscObject obj,const char name[])
 {
@@ -827,7 +829,7 @@ PetscErrorCode DSViewFromOptions(DS ds,PetscObject obj,const char name[])
 }
 
 /*@
-   DSAllocate - Allocates memory for internal storage or matrices in DS.
+   DSAllocate - Allocates memory for internal storage or matrices in `DS`.
 
    Logically Collective
 
@@ -838,11 +840,11 @@ PetscErrorCode DSViewFromOptions(DS ds,PetscObject obj,const char name[])
 
    Note:
    If the leading dimension is different from a previously set value, then
-   all matrices are destroyed with DSReset().
+   all matrices are destroyed with `DSReset()`.
 
    Level: intermediate
 
-.seealso: `DSGetLeadingDimension()`, `DSSetDimensions()`, `DSSetExtraRow()`, `DSReset()`, `DSReallocate()`
+.seealso: [](sec:ds), `DSGetLeadingDimension()`, `DSSetDimensions()`, `DSSetExtraRow()`, `DSReset()`, `DSReallocate()`
 @*/
 PetscErrorCode DSAllocate(DS ds,PetscInt ld)
 {
@@ -861,7 +863,7 @@ PetscErrorCode DSAllocate(DS ds,PetscInt ld)
 }
 
 /*@
-   DSReallocate - Reallocates memory for internal storage or matrices in DS,
+   DSReallocate - Reallocates memory for internal storage or matrices in `DS`,
    keeping the previously set data.
 
    Logically Collective
@@ -874,11 +876,11 @@ PetscErrorCode DSAllocate(DS ds,PetscInt ld)
    The new leading dimension must be larger than the previous one. The relevant
    data previously set is copied over to the new data structures.
 
-   This operation is not available in all DS types.
+   This operation is not available in all `DS` types.
 
    Level: developer
 
-.seealso: `DSAllocate()`
+.seealso: [](sec:ds), `DSAllocate()`
 @*/
 PetscErrorCode DSReallocate(DS ds,PetscInt ld)
 {
@@ -895,7 +897,7 @@ PetscErrorCode DSReallocate(DS ds,PetscInt ld)
 }
 
 /*@
-   DSReset - Resets the DS context to the initial state.
+   DSReset - Resets the `DS` context to the initial state.
 
    Collective
 
@@ -904,11 +906,11 @@ PetscErrorCode DSReallocate(DS ds,PetscInt ld)
 
    Note:
    All data structures with size depending on the leading dimension
-   of DSAllocate() are released.
+   of `DSAllocate()` are released.
 
    Level: advanced
 
-.seealso: `DSDestroy()`, `DSAllocate()`
+.seealso: [](sec:ds), `DSDestroy()`, `DSAllocate()`
 @*/
 PetscErrorCode DSReset(DS ds)
 {
@@ -928,7 +930,7 @@ PetscErrorCode DSReset(DS ds)
 }
 
 /*@
-   DSDestroy - Destroys DS context that was created with DSCreate().
+   DSDestroy - Destroys `DS` context that was created with `DSCreate()`.
 
    Collective
 
@@ -937,7 +939,7 @@ PetscErrorCode DSReset(DS ds)
 
    Level: beginner
 
-.seealso: `DSCreate()`
+.seealso: [](sec:ds), `DSCreate()`
 @*/
 PetscErrorCode DSDestroy(DS *ds)
 {
@@ -956,21 +958,21 @@ PetscErrorCode DSDestroy(DS *ds)
 }
 
 /*@C
-   DSRegister - Adds a direct solver to the DS package.
+   DSRegister - Adds a direct solver to the `DS` package.
 
    Not Collective
 
    Input Parameters:
-+  name - name of a new user-defined DS
++  name - name of a new user-defined `DS`
 -  function - routine to create context
 
    Note:
-   DSRegister() may be called multiple times to add several user-defined
+   `DSRegister()` may be called multiple times to add several user-defined
    direct solvers.
 
    Level: advanced
 
-.seealso: `DSRegisterAll()`
+.seealso: [](sec:ds), `DSRegisterAll()`
 @*/
 PetscErrorCode DSRegister(const char *name,PetscErrorCode (*function)(DS))
 {
@@ -993,13 +995,13 @@ SLEPC_EXTERN PetscErrorCode DSCreate_PEP(DS);
 SLEPC_EXTERN PetscErrorCode DSCreate_NEP(DS);
 
 /*@C
-   DSRegisterAll - Registers all of the direct solvers in the DS package.
+   DSRegisterAll - Registers all of the direct solvers in the `DS` package.
 
    Not Collective
 
    Level: advanced
 
-.seealso: `DSRegister()`
+.seealso: [](sec:ds), `DSRegister()`
 @*/
 PetscErrorCode DSRegisterAll(void)
 {
