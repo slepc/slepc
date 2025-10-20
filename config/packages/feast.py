@@ -18,7 +18,7 @@ class Feast(package.Package):
     self.installable    = True
     self.petscdepend    = 'mkl'
     self.supports64bint = True
-    self.supportsprecis.append('single')
+    self.supportsprecis.extend(['single','__float128'])
     self.ProcessArgs(argdb,petscpackages)
 
   def SampleCode(self,petsc):
@@ -57,14 +57,18 @@ class Feast(package.Package):
   def Check(self,slepcconf,slepcvars,petsc,archdir):
     if not 'mkl' in petsc.packages:
       self.log.Exit('The FEAST interface requires that PETSc has been built with Intel MKL (libraries and includes)')
-    code = self.SampleCode(petsc)
-
-    (result,output) = self.Link([],[],'',code)
-    if not result:
-      self.log.write('WARNING: Unable to link with FEAST, maybe your MKL version does not contain it')
-      self.log.write('If you do not want to check for FEAST, rerun configure adding --with-feast=0')
-      self.havepackage = False
+    if petsc.precision == '__float128':
+      self.skippackage = True
+      self.log.write('Disabling FEAST interface due to precision = __float128')
     else:
-      slepcconf.write('#define SLEPC_HAVE_FEAST 1\n')
-      self.havepackage = True
+      code = self.SampleCode(petsc)
+
+      (result,output) = self.Link([],[],'',code)
+      if not result:
+        self.log.write('WARNING: Unable to link with FEAST, maybe your MKL version does not contain it')
+        self.log.write('If you do not want to check for FEAST, rerun configure adding --with-feast=0')
+        self.havepackage = False
+      else:
+        slepcconf.write('#define SLEPC_HAVE_FEAST 1\n')
+        self.havepackage = True
 
