@@ -128,13 +128,13 @@ Try to change some of the values, for instance:
 $ ./ex14 -file $SLEPC_DIR/share/slepc/datafiles/matrices/rdb200.petsc -svd_nsv 10 -svd_ncv 40 -svd_smallest
 ```
 
-The "transpose mode" refers to whether the transpose of matrix A is being built explicitly or not (see `SVDSetImplicitTranspose` for an explanation).
+The "transpose mode" refers to whether the transpose of matrix A is being built explicitly or not (see `SVDSetImplicitTranspose()` for an explanation).
 
 Note that in the sample output above, the `SVD` object contains an `EPS` object. This only happens in some `SVD` solver types, as detailed below.
 
 ## Changing the Singular Value Solver
 
-SLEPc provides several solvers for computing the SVD, which can be selected in the source code with the function `SVDSetType`, or at run time:
+SLEPc provides several solvers for computing the SVD, which can be selected in the source code with the function `SVDSetType()`, or at run time:
 
 ```{code} console
 $ ./ex14 -file $SLEPC_DIR/share/slepc/datafiles/matrices/rdb200.petsc -svd_type trlanczos

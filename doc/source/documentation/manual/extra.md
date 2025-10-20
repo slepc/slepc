@@ -17,7 +17,7 @@ SLEPc mainly contains high level objects, as depicted in figure [](#fig:slepc). 
 
     -   Event logging, including user-defined events.
 
-    -   Direct wall-clock timing with {external:doc}`PetscTime`.
+    -   Direct wall-clock timing with {external:doc}`PetscTime`().
 
     -   Display detailed profile information and trace of events.
 
@@ -63,11 +63,11 @@ In some cases, these problems can be solved by reformulating them as a reduced-o
 
 All these cases can be easily handled in SLEPc by means of shell matrices. These are matrices that do not require explicit storage of the matrix entries. Instead, the user must provide subroutines for all the necessary matrix operations, typically only the application of the linear operator to a vector.
 
-Shell matrices, also called matrix-free matrices, are created in PETSc with the function {external:doc}`MatCreateShell`. Then, the function {external:doc}`MatShellSetOperation` is used to provide any user-defined shell matrix operations (see the {{'[PETSc Users Guide](https://petsc.org/{}/manual/mat/#application-specific-custom-matrices)'.format(branch)}} for additional details). Several examples are available in SLEPc that illustrate how to solve a matrix-free eigenvalue problem.
+Shell matrices, also called matrix-free matrices, are created in PETSc with the function {external:doc}`MatCreateShell`(). Then, the function {external:doc}`MatShellSetOperation`() is used to provide any user-defined shell matrix operations (see the {{'[PETSc Users Guide](https://petsc.org/{}/manual/mat/#application-specific-custom-matrices)'.format(branch)}} for additional details). Several examples are available in SLEPc that illustrate how to solve a matrix-free eigenvalue problem.
 
 In the simplest case, defining matrix-vector product operations (`MATOP_MULT`) is enough for using `EPS` with shell matrices. However, in the case of generalized problems, if matrix $B$ is also a shell matrix then it may be necessary to define other operations in order to be able to solve the linear system successfully, for example `MATOP_GET_DIAGONAL` to use an iterative linear solver with Jacobi preconditioning. On the other hand, if the shift-and-invert `ST` is to be used, then in addition it may also be necessary to define `MATOP_SHIFT` or `MATOP_AXPY` (see section [](#sec:explicit) for discussion).
 
-In the case of `SVD`, both $A$ and $A^*$ are required to solve the problem. So when computing the SVD, the shell matrix needs to have the `MATOP_MULT_TRANSPOSE` operation (or `MATOP_MULT_HERMITIAN_TRANSPOSE` in the case of complex scalars) in addition to `MATOP_MULT`. Alternatively, if $A^*$ is to be built explicitly, `MATOP_TRANSPOSE` is then the required operation. For details, see the manual page for `SVDSetImplicitTranspose`.
+In the case of `SVD`, both $A$ and $A^*$ are required to solve the problem. So when computing the SVD, the shell matrix needs to have the `MATOP_MULT_TRANSPOSE` operation (or `MATOP_MULT_HERMITIAN_TRANSPOSE` in the case of complex scalars) in addition to `MATOP_MULT`. Alternatively, if $A^*$ is to be built explicitly, `MATOP_TRANSPOSE` is then the required operation. For details, see the manual page for `SVDSetImplicitTranspose()`.
 
 {#sec:gpu}
 ## GPU Computing
@@ -82,13 +82,13 @@ CUDA provides a C/C++ compiler with CUDA extensions as well as the cuBLAS and cu
 $ ./configure --with-precision=single --with-cuda
 ```
 
-{external:doc}`VECCUDA` and {external:doc}`MATAIJCUSPARSE` are currently the mechanism in PETSc to run a computation on the GPU. {external:doc}`VECCUDA` is a special type of {external:doc}`Vec` whose array is mirrored in the GPU (and similarly for {external:doc}`MATAIJCUSPARSE`). PETSc takes care of keeping memory coherence between the two copies of the array, and performs the computation on the GPU when possible, trying to avoid unnecessary copies between the host and the device. For maximum efficiency, the user has to make sure that all vectors and matrices are of these types. If they are created in the standard way ({external:doc}`VecCreate` plus {external:doc}`VecSetFromOptions`) then it is sufficient to run the SLEPc program with
+{external:doc}`VECCUDA` and {external:doc}`MATAIJCUSPARSE` are currently the mechanism in PETSc to run a computation on the GPU. {external:doc}`VECCUDA` is a special type of {external:doc}`Vec` whose array is mirrored in the GPU (and similarly for {external:doc}`MATAIJCUSPARSE`). PETSc takes care of keeping memory coherence between the two copies of the array, and performs the computation on the GPU when possible, trying to avoid unnecessary copies between the host and the device. For maximum efficiency, the user has to make sure that all vectors and matrices are of these types. If they are created in the standard way ({external:doc}`VecCreate`() plus {external:doc}`VecSetFromOptions`()) then it is sufficient to run the SLEPc program with
 
 ```{code} console
 $ ./program -vec_type cuda -mat_type aijcusparse
 ```
 
-Note that the first option is unnecessary if no {external:doc}`Vec` is created in the main program, or if all vectors are created via {external:doc}`MatCreateVecs` from a {external:doc}`MATAIJCUSPARSE`.
+Note that the first option is unnecessary if no {external:doc}`Vec` is created in the main program, or if all vectors are created via {external:doc}`MatCreateVecs`() from a {external:doc}`MATAIJCUSPARSE`.
 
 For AMD GPUs the procedure is very similar, with HIP providing the compiler and ROCm providing the analogue libraries hipBLAS and hipSPARSE. To configure PETSc with HIP do:
 
@@ -121,7 +121,7 @@ has to be invoked after the creation of the `ST` object in order to provide a ro
 STShellSetBackTransform(ST,PetscErrorCode(*)(ST,PetscInt,PetscScalar*,PetscScalar*));
 ```
 
-can be used optionally to specify the routine for the back-transformation of eigenvalues. The two functions provided by the user can make use of any required user-defined information via a context that can be retrieved with `STShellGetContext`. The example program {{'[ex10.c](https://slepc.upv.es/{}/src/eps/tutorials/ex10.c.html)'.format(branch)}} illustrates the use of shell transformations.
+can be used optionally to specify the routine for the back-transformation of eigenvalues. The two functions provided by the user can make use of any required user-defined information via a context that can be retrieved with `STShellGetContext()`. The example program {{'[ex10.c](https://slepc.upv.es/{}/src/eps/tutorials/ex10.c.html)'.format(branch)}} illustrates the use of shell transformations.
 
 SLEPc further supports extensibility by allowing application programmers to code their own subroutines for unimplemented features such as new eigensolvers or new spectral transformations. It is possible to register these new methods to the system and use them as the rest of standard subroutines. For example, to implement a variant of the Subspace Iteration method, one could copy the SLEPc code associated with the `subspace` solver, modify it and register a new `EPS` type with the following line of code:
 
@@ -213,7 +213,7 @@ PRIMME {cite:p}`Sta10` is a C library for finding a number of eigenvalues and th
 
 **Installation**: Type `make lib` after customizing the file `Make_flags` appropriately. Alternatively, the `--download-primme` option is also available in SLEPc's `configure`.
 
-**Specific options**: Since PRIMME contains preconditioned solvers, the SLEPc interface uses `STPRECOND`, as described in section [](#sec:precond). The SLEPc interface to this package allows the user to specify the maximum allowed block size with the function `EPSPRIMMESetBlockSize` or at run time with the option `-eps_primme_blocksize <size>`. For changing the particular algorithm within PRIMME, use the function `EPSPRIMMESetMethod`. PRIMME also provides a solver for the singular value decomposition that is interfaced in SLEPc's `SVD`, see `SVDPRIMMESetMethod`.
+**Specific options**: Since PRIMME contains preconditioned solvers, the SLEPc interface uses `STPRECOND`, as described in section [](#sec:precond). The SLEPc interface to this package allows the user to specify the maximum allowed block size with the function `EPSPRIMMESetBlockSize()` or at run time with the option `-eps_primme_blocksize <size>`. For changing the particular algorithm within PRIMME, use the function `EPSPRIMMESetMethod()`. PRIMME also provides a solver for the singular value decomposition that is interfaced in SLEPc's `SVD`, see `SVDPRIMMESetMethod()`.
 
 #### EVSL
 
@@ -273,7 +273,7 @@ FEAST {cite:p}`Pol09` is a numerical library for solving the standard or general
 
 **Installation**: We only support the FEAST implementation included in Intel MKL. For using it from SLEPc it is necessary to configure PETSc with MKL by adding the corresponding option, e.g., `--with-blas-lapack-dir=$MKLROOT`.
 
-**Specific options**: The SLEPc interface to FEAST allows the user to specify the number of contour integration points with the function `EPSFEASTSetNumPoints` or at run time with the option `-eps_feast_num_points <n>`.
+**Specific options**: The SLEPc interface to FEAST allows the user to specify the number of contour integration points with the function `EPSFEASTSetNumPoints()` or at run time with the option `-eps_feast_num_points <n>`.
 
 #### CHASE
 

@@ -57,7 +57,7 @@ The user interface of the `NEP` package is quite similar to `EPS` and `PEP`. As 
 {#sec:nepjac label="sec:nepjac"}
 ### Using Callback Functions
 
-A sample code for solving a nonlinear eigenproblem with `NEP` is shown in listing [](#fig:ex-nep). The usual steps are performed, starting with the creation of the solver context with `NEPCreate`. Then the problem matrices are defined, see discussion below. The call to `NEPSetFromOptions` captures relevant options specified in the command line. The actual solver is invoked with `NEPSolve`. Then, the solution is retrieved with `NEPGetConverged` and `NEPGetEigenpair`. Finally, `NEPDestroy` destroys the object.
+A sample code for solving a nonlinear eigenproblem with `NEP` is shown in listing [](#fig:ex-nep). The usual steps are performed, starting with the creation of the solver context with `NEPCreate()`. Then the problem matrices are defined, see discussion below. The call to `NEPSetFromOptions()` captures relevant options specified in the command line. The actual solver is invoked with `NEPSolve()`. Then, the solution is retrieved with `NEPGetConverged()` and `NEPGetEigenpair()`. Finally, `NEPDestroy()` destroys the object.
 
 ```{code-block} c
 :name: fig:ex-nep
@@ -106,7 +106,7 @@ NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,void *ctx);
 NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,void *ctx)
 ```
 
-The argument `ctx` is an optional user-defined context intended to contain application-specific parameters required to build $T(\lambda)$ or $T'(\lambda)$, and it is received as the last argument in the callback functions. The callback routines also get an argument containing the value of $\lambda$ at which $T$ or $T'$ must be evaluated. Note that the `NEPSetFunction` callback takes two {external:doc}`Mat` arguments instead of one. The rationale for this is that some `NEP` solvers require to perform linear solves with $T(\lambda)$ within the iteration (in {external:doc}`SNES` this is done with the Jacobian), so $T(\lambda)$ will be passed as the coefficient matrix to a {external:doc}`KSP` object. The second {external:doc}`Mat` argument `P` is the matrix from which the preconditioner is constructed (which is usually the same as `F`).
+The argument `ctx` is an optional user-defined context intended to contain application-specific parameters required to build $T(\lambda)$ or $T'(\lambda)$, and it is received as the last argument in the callback functions. The callback routines also get an argument containing the value of $\lambda$ at which $T$ or $T'$ must be evaluated. Note that the `NEPSetFunction()` callback takes two {external:doc}`Mat` arguments instead of one. The rationale for this is that some `NEP` solvers require to perform linear solves with $T(\lambda)$ within the iteration (in {external:doc}`SNES` this is done with the Jacobian), so $T(\lambda)$ will be passed as the coefficient matrix to a {external:doc}`KSP` object. The second {external:doc}`Mat` argument `P` is the matrix from which the preconditioner is constructed (which is usually the same as `F`).
 
 There is the possibility of solving the problem in a matrix-free fashion, that is, just implementing subroutines that compute the action of $T(\lambda)$ or $T'(\lambda)$ on a vector, instead of having to explicitly compute all nonzero entries of these two matrices. The example program {{'[ex21.c](https://slepc.upv.es/{}/src/nep/tutorials/ex21.c.html)'.format(branch)}} illustrates this, using the concept of *shell* matrices (see section [](#sec:supported) for details).
 
@@ -146,7 +146,7 @@ For the selection of the portion of the spectrum of interest, there are several 
 NEPSetWhichEigenpairs(NEP nep,NEPWhich which);
 ```
 
-The default is to compute the largest magnitude eigenvalues. For the sorting criteria relative to a target value, $\tau$ must be specified with `NEPSetTarget` or in the command-line with `-nep_target`.
+The default is to compute the largest magnitude eigenvalues. For the sorting criteria relative to a target value, $\tau$ must be specified with `NEPSetTarget()` or in the command-line with `-nep_target`.
 
 `NEP` solvers can also work with a region of the complex plane (`RG`), as discussed in section [](#sec:region) for linear problems. Some eigensolvers (NLEIGS) use the definition of the region to compute `nev` eigenvalues in its interior. If *all* eigenvalues inside the region are required, then a contour-integral method is required, see discussion in {cite:p}`Mae16`.
 
@@ -273,7 +273,7 @@ NEPSLPGetEPS(NEP nep,EPS *eps);
 
 This allows the application programmer to set any of the `EPS` options directly within the code. These options can also be set through the command-line, simply by prefixing the `EPS` options with `-nep_slp_`.
 
-Similarly, `NEPINTERPOL` works with a `PEP` object internally, that can be retrieved by `NEPInterpolGetPEP`. Another relevant option of this solver is the degree of the interpolation polynomial, that can be set with:
+Similarly, `NEPINTERPOL` works with a `PEP` object internally, that can be retrieved by `NEPInterpolGetPEP()`. Another relevant option of this solver is the degree of the interpolation polynomial, that can be set with:
 
 ```{code} c
 NEPInterpolSetInterpolation(NEP nep,PetscReal tol,PetscInt deg);
@@ -299,7 +299,7 @@ This {external:doc}`KSP` object is typically used to compute the action of $T(\s
 NEPRIISetLagPreconditioner(NEP nep,PetscInt lag);
 ```
 
-Recomputing the preconditioner every 2 iterations, say, will introduce a considerable overhead, but may reduce the number of iterations significantly. Another related comment is that, when using an iterative linear solver, the requested accuracy is adapted as the outer iteration progresses, being the tolerance larger in the first solves. Again, the user can modify this behavior with `NEPRIISetConstCorrectionTol`. Both options can also be changed at run time. As an example, consider the following command line:
+Recomputing the preconditioner every 2 iterations, say, will introduce a considerable overhead, but may reduce the number of iterations significantly. Another related comment is that, when using an iterative linear solver, the requested accuracy is adapted as the outer iteration progresses, being the tolerance larger in the first solves. Again, the user can modify this behavior with `NEPRIISetConstCorrectionTol()`. Both options can also be changed at run time. As an example, consider the following command line:
 
 ```{code} console
 $ ./ex22 -nep_type rii -nep_rii_lag_preconditioner 2 -nep_rii_ksp_type bcgs -nep_rii_pc_type ilu -nep_rii_const_correction_tol 1 -nep_rii_ksp_rtol 1e-3
@@ -313,11 +313,11 @@ The NLEIGS solver is most appropriate for problems where $T(\cdot)$ is singular 
 NEPNLEIGSSetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesFn *fun,void *ctx);
 ```
 
-Alternatively, if the problem is known to be a rational eigenvalue problem, the user can avoid the computation of singularities by just specifying the problem type with `NEPSetProblemType`, as explained at the end of the previous section. If none of the above functions is invoked by the user, then the NLEIGS solver attempts to determine the singularities automatically.
+Alternatively, if the problem is known to be a rational eigenvalue problem, the user can avoid the computation of singularities by just specifying the problem type with `NEPSetProblemType()`, as explained at the end of the previous section. If none of the above functions is invoked by the user, then the NLEIGS solver attempts to determine the singularities automatically.
 
 ## Retrieving the Solution
 
-The procedure for obtaining the computed eigenpairs is similar to previously discussed eigensolvers. After the call to `NEPSolve`, the computed results are stored internally and a call to `NEPGetConverged` must be issued to obtain the number of converged solutions. Then calling `NEPGetEigenpair` repeatedly will retrieve each eigenvalue-eigenvector pair.
+The procedure for obtaining the computed eigenpairs is similar to previously discussed eigensolvers. After the call to `NEPSolve()`, the computed results are stored internally and a call to `NEPGetConverged()` must be issued to obtain the number of converged solutions. Then calling `NEPGetEigenpair()` repeatedly will retrieve each eigenvalue-eigenvector pair.
 
 ```{code} c
 NEPGetEigenpair(NEP nep,PetscInt j,PetscScalar *kr,PetscScalar *ki,Vec xr,Vec xi);
@@ -341,7 +341,7 @@ NEPComputeError(NEP nep,PetscInt j,NEPErrorType type,PetscReal *error);
 
 can be used to assess the accuracy of the computed solutions. The error is based on the 2-norm of the residual vector $r$ defined in equation {math:numref}`eq:nlres`.
 
-As in the case of `EPS`, in `NEP` the number of iterations carried out by the solver can be determined with `NEPGetIterationNumber`, and the tolerance and maximum number of iterations can be set with `NEPSetTolerances`. Also, convergence can be monitored with either textual monitors `-nep_monitor`, `-nep_monitor_all`, `-nep_monitor_conv`, or graphical monitors `-nep_monitor draw::draw_lg`, `-nep_monitor_all draw::draw_lg`. See section [](#sec:monitor) for additional details. Similarly, there is support for viewing the computed solution as explained in section [](#sec:epsviewers).
+As in the case of `EPS`, in `NEP` the number of iterations carried out by the solver can be determined with `NEPGetIterationNumber()`, and the tolerance and maximum number of iterations can be set with `NEPSetTolerances()`. Also, convergence can be monitored with either textual monitors `-nep_monitor`, `-nep_monitor_all`, `-nep_monitor_conv`, or graphical monitors `-nep_monitor draw::draw_lg`, `-nep_monitor_all draw::draw_lg`. See section [](#sec:monitor) for additional details. Similarly, there is support for viewing the computed solution as explained in section [](#sec:epsviewers).
 
 The `NEP` class also provides some kind of iterative refinement, similar to the one available in `PEP`, see section [](#sec:refine). The parameters can be set with:
 

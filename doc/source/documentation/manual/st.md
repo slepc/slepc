@@ -26,7 +26,7 @@ As explained in the previous chapter, `EPS` contains preconditioned eigensolvers
 
 ## Basic Usage
 
-The `ST` module is the analog of some PETSc modules such as {external:doc}`PC`. The user does not usually need to create a stand-alone `ST` object explicitly. Instead, every `EPS` object internally sets up an associated `ST`. Therefore, the usual object management methods such as `STCreate`, `STDestroy`, `STView`, `STSetFromOptions`, are not usually called by the user.
+The `ST` module is the analog of some PETSc modules such as {external:doc}`PC`. The user does not usually need to create a stand-alone `ST` object explicitly. Instead, every `EPS` object internally sets up an associated `ST`. Therefore, the usual object management methods such as `STCreate()`, `STDestroy()`, `STView()`, `STSetFromOptions()`, are not usually called by the user.
 
 Although the `ST` context is hidden inside the `EPS` object, the user still has control over all the options, by means of the command line, or also inside the program. To allow application programmers to set any of the spectral transformation options directly within the code, the following function is provided to extract the `ST` context from the `EPS` object:
 
@@ -43,10 +43,10 @@ STSetShift(ST st,PetscScalar shift);
 This can also be done with the command line option `-st_shift <shift>`. Note that the argument `shift` is defined as a {external:doc}`PetscScalar`, and this means that complex shifts are not allowed unless the complex version of SLEPc is used.
 
 :::{warning}
-Usually, `STSetShift` is never called from application code, as the value of the shift is taken from the target. In all transformations except `STSHIFT`, there is a direct connection between the target $\tau$ (described in section [](#sec:which)) and the shift $\sigma$, as will be discussed below. The normal usage is that the user sets the target and then $\sigma$ is set to $\tau$ automatically (though it is still possible for the user to set a different value of the shift).
+Usually, `STSetShift()` is never called from application code, as the value of the shift is taken from the target. In all transformations except `STSHIFT`, there is a direct connection between the target $\tau$ (described in section [](#sec:which)) and the shift $\sigma$, as will be discussed below. The normal usage is that the user sets the target and then $\sigma$ is set to $\tau$ automatically (though it is still possible for the user to set a different value of the shift).
 :::
 
-Other object operations are available, which are not usually called by the user. The most important ones are `STApply`, that applies the operator to a vector, and `STSetUp`, that prepares all the necessary data structures before the solution process starts. The term "operator" refers to one of $A$, $B^{-1}\!A$, $A-\sigma I$, \... depending on which kind of spectral transformation is being used.
+Other object operations are available, which are not usually called by the user. The most important ones are `STApply()`, that applies the operator to a vector, and `STSetUp()`, that prepares all the necessary data structures before the solution process starts. The term "operator" refers to one of $A$, $B^{-1}\!A$, $A-\sigma I$, \... depending on which kind of spectral transformation is being used.
 
 ## Available Transformations
 
@@ -137,7 +137,7 @@ When the shift, $\sigma$, is given a value different from the default, 0, the ef
 \theta=\lambda-\sigma.
 ```
 
-This means that after the solution process, the value $\sigma$ has to be added[^slepc-v3.5] to the computed eigenvalues, $\theta$, in order to retrieve the solution of the original problem, $\lambda$. This is done by means of the function `STBackTransform`, which does not need to be called directly by the user.
+This means that after the solution process, the value $\sigma$ has to be added[^slepc-v3.5] to the computed eigenvalues, $\theta$, in order to retrieve the solution of the original problem, $\lambda$. This is done by means of the function `STBackTransform()`, which does not need to be called directly by the user.
 
 ### Shift-and-invert
 
@@ -170,7 +170,7 @@ The shift-and-invert spectral transformation (`STSINVERT`) is used to enhance co
 \theta=1/(\lambda-\sigma).
 ```
 
-Therefore, after the solution process, the operation to be performed in function `STBackTransform` is $\lambda=\sigma+1/\theta$ for each of the computed eigenvalues.
+Therefore, after the solution process, the operation to be performed in function `STBackTransform()` is $\lambda=\sigma+1/\theta$ for each of the computed eigenvalues.
 
 This spectral transformation is used in the spectrum slicing technique, see section [](#sec:slice).
 
@@ -209,7 +209,7 @@ In this case, the relation between the eigenvalues of both problems is
 \theta=(\lambda+\nu)/(\lambda-\sigma).
 ```
 
- Therefore, after the solution process, the operation to be performed in function `STBackTransform` is $\lambda=(\theta\sigma+\nu)/(\theta-1)$ for each of the computed eigenvalues.
+ Therefore, after the solution process, the operation to be performed in function `STBackTransform()` is $\lambda=(\theta\sigma+\nu)/(\theta-1)$ for each of the computed eigenvalues.
 
 {#sec:precond}
 ### Preconditioner
@@ -240,7 +240,7 @@ Similarly, in the JD eigensolver the expansion of the subspace is carried out by
 
  where the system is solved approximately with a preconditioned iterative linear solver. For building the preconditioner of this linear system, the projectors $I-x_ix_i^*$ are ignored, and again it is not recomputed in each iteration. Therefore, the preconditioner is built as in equation {math:numref}`eq:precon` as well.
 
-It should be clear from the previous discussion, that `STPRECOND` does not work in the same way as the rest of spectral transformations. In particular, it does not rely on `STBackTransform`. It is rather a convenient mechanism for handling the preconditioner and linear solver (see examples in section [](#sec:lin)). The expressions shown in tables [](#tab:transforms) and [](#tab:op) are just a reference to indicate from which matrix the preconditioner is built by default.
+It should be clear from the previous discussion, that `STPRECOND` does not work in the same way as the rest of spectral transformations. In particular, it does not rely on `STBackTransform()`. It is rather a convenient mechanism for handling the preconditioner and linear solver (see examples in section [](#sec:lin)). The expressions shown in tables [](#tab:transforms) and [](#tab:op) are just a reference to indicate from which matrix the preconditioner is built by default.
 
 There is the possibility that the user overrides the default behavior, that is, to explicitly supply a matrix from which the preconditioner is to be built, with:
 
@@ -269,9 +269,9 @@ The polynomial filtering methods address the eigenvalue problem
 p(A)x=\theta x,
 ```
 
- where $p(\cdot)$ is a suitable high-degree polynomial. Once the polynomial is built, the eigensolver relies on `STApply` to compute approximations of the eigenvalues $\theta$ of the transformed problem. These approximations must be processed in some way in order to recover the $\lambda$ eigenvalues. Note that in this case there is no `STBackTransform` operation. Details of the method can be found in {cite:p}`Fan12`.
+ where $p(\cdot)$ is a suitable high-degree polynomial. Once the polynomial is built, the eigensolver relies on `STApply()` to compute approximations of the eigenvalues $\theta$ of the transformed problem. These approximations must be processed in some way in order to recover the $\lambda$ eigenvalues. Note that in this case there is no `STBackTransform()` operation. Details of the method can be found in {cite:p}`Fan12`.
 
-Currently, SLEPc provides several types of polynomial filtering techniques, which can be selected via `STFilterSetType`. Note that the external package EVSL also implements polynomial filters to compute all eigenvalues in an interval.
+Currently, SLEPc provides several types of polynomial filtering techniques, which can be selected via `STFilterSetType()`. Note that the external package EVSL also implements polynomial filters to compute all eigenvalues in an interval.
 
 ## Advanced Usage
 
@@ -332,7 +332,7 @@ In shift-and-invert and Cayley, unless $\sigma=0$, the coefficient matrix is not
 By default the preconditioner is built from the matrix $A-\sigma I$ (or $A-\sigma B$ in generalized problems). In some special situations, the user may want to build the preconditioner from a different matrix, e.g., stemming from simplified versions of $A$ and $B$. To do this, one should use the functions mentioned in section [](#sec:precond).
 :::
 
-In many cases, especially if a shift-and-invert or Cayley transformation is being used, iterative methods may not be well suited for solving linear systems (because of the properties of the coefficient matrix that can be indefinite and ill-conditioned). When using an iterative linear solver, it may be helpful to run with the option `-st_ksp_converged_reason`, which will display the number of iterations required in each operator application. In extreme cases, the iterative solver fails, so `EPSSolve` aborts with an error
+In many cases, especially if a shift-and-invert or Cayley transformation is being used, iterative methods may not be well suited for solving linear systems (because of the properties of the coefficient matrix that can be indefinite and ill-conditioned). When using an iterative linear solver, it may be helpful to run with the option `-st_ksp_converged_reason`, which will display the number of iterations required in each operator application. In extreme cases, the iterative solver fails, so `EPSSolve()` aborts with an error
 
 ```{code} c
 [0]PETSC ERROR: KSP did not converge (reason=DIVERGED_ITS)!
@@ -373,11 +373,11 @@ The first case has already been described and presents no difficulty. In the oth
 
 "`shell`"
 
-:   To work with the corresponding expression without forming the matrix explicitly. This is achieved by internally setting a matrix-free matrix with {external:doc}`MatCreateShell`.
+:   To work with the corresponding expression without forming the matrix explicitly. This is achieved by internally setting a matrix-free matrix with {external:doc}`MatCreateShell`().
 
 "`inplace`"
 
-:   To build the coefficient matrix explicitly. This is done by means of a {external:doc}`MatShift` or a {external:doc}`MatAXPY` operation, which overwrites matrix $A$ with the corresponding expression. This alteration of matrix $A$ is reversed after the eigensolution process has finished.
+:   To build the coefficient matrix explicitly. This is done by means of a {external:doc}`MatShift`() or a {external:doc}`MatAXPY`() operation, which overwrites matrix $A$ with the corresponding expression. This alteration of matrix $A$ is reversed after the eigensolution process has finished.
 
 "`copy`"
 
@@ -397,7 +397,7 @@ STSetMatMode(ST st,STMatMode mode);
 
 The user must consider which approach is the most appropriate for the particular application. The different options have advantages and drawbacks. The "`shell`" approach is the simplest one but severely restricts the number of possibilities available for solving the system, in particular most of the PETSc preconditioners would not be available, including direct methods. The only preconditioners that can be used in this case are Jacobi (only if matrices $A$ and $B$ have the operation `MATOP_GET_DIAGONAL`) or a user-defined one.
 
-The second approach ("`inplace`") can be much faster, specially in the generalized case. A more important advantage of this approach is that, in this case, the linear system solver can be combined with any of the preconditioners available in PETSc, including those which need to access internal matrix data-structures such as ILU. The main drawback is that, in the generalized problem, this approach probably makes sense only in the case that $A$ and $B$ have the same sparse pattern, because otherwise the function {external:doc}`MatAXPY` might be inefficient. If the user knows that the pattern is the same (or a subset), then this can be specified with the function:
+The second approach ("`inplace`") can be much faster, specially in the generalized case. A more important advantage of this approach is that, in this case, the linear system solver can be combined with any of the preconditioners available in PETSc, including those which need to access internal matrix data-structures such as ILU. The main drawback is that, in the generalized problem, this approach probably makes sense only in the case that $A$ and $B$ have the same sparse pattern, because otherwise the function {external:doc}`MatAXPY`() might be inefficient. If the user knows that the pattern is the same (or a subset), then this can be specified with the function:
 
 ```{code} c
 STSetMatStructure(ST st,MatStructure str);
@@ -429,7 +429,7 @@ It can be shown that $\mathbb{R}^n$ with the $\langle x,y\rangle_B$ inner produc
 Abstraction used by SLEPc solvers
 ```
 
-Internally, SLEPc operates with the scheme illustrated in figure [](#fig:abstr). The operations indicated by dashed arrows are implemented as virtual functions. From the user point of view, all the above explanation is transparent. The only thing he/she has to care about is to set the problem type appropriately with `EPSSetProblemType` (see section [](#sec:defprob)). In the case of the Cayley transform, SLEPc is using $\langle x,y\rangle_{A+\nu B}$ as the inner product for preserving symmetry.
+Internally, SLEPc operates with the scheme illustrated in figure [](#fig:abstr). The operations indicated by dashed arrows are implemented as virtual functions. From the user point of view, all the above explanation is transparent. The only thing he/she has to care about is to set the problem type appropriately with `EPSSetProblemType()` (see section [](#sec:defprob)). In the case of the Cayley transform, SLEPc is using $\langle x,y\rangle_{A+\nu B}$ as the inner product for preserving symmetry.
 
 Using the $B$-inner product may be attractive also in the non-symmetric case ($A$ non-symmetric) as described in the next subsection.
 
@@ -487,7 +487,7 @@ A-\sigma B=LDL^T,
 
 -   The method is based on shift-and-invert, so `STSINVERT` must be used. Furthermore, direct linear solvers are required.
 
--   The direct linear solver must provide the matrix inertia (see PETSc's {external:doc}`MatGetInertia`).
+-   The direct linear solver must provide the matrix inertia (see PETSc's {external:doc}`MatGetInertia`()).
 
 An example command-line that sets up all the required options is:
 
@@ -507,11 +507,11 @@ The last option is required by MUMPS to compute the inertia. An alternative is t
 $ ./ex2 -n 50 -eps_interval 0.4,0.8 -st_type sinvert -st_ksp_type preonly -st_pc_type cholesky -st_pc_factor_mat_solver_type superlu_dist -st_mat_superlu_dist_rowperm NOROWPERM
 ```
 
-In the latter example, {external:doc}`MatSetOption` must be used in both matrices to explicitly state that they are symmetric (or Hermitian in the complex case).
+In the latter example, {external:doc}`MatSetOption`() must be used in both matrices to explicitly state that they are symmetric (or Hermitian in the complex case).
 
 Apart from the above recommendations, the following must be taken into account:
 
--   The parameters `nev` and `ncv` from `EPSSetDimensions` are determined internally (user-provided values are ignored, and set to the number of eigenvalues in the interval). It is possible for the user to specify the "local" `nev` and `ncv` parameters that will be used when computing eigenvalues around each shift, with `EPSKrylovSchurSetDimensions`.
+-   The parameters `nev` and `ncv` from `EPSSetDimensions()` are determined internally (user-provided values are ignored, and set to the number of eigenvalues in the interval). It is possible for the user to specify the "local" `nev` and `ncv` parameters that will be used when computing eigenvalues around each shift, with `EPSKrylovSchurSetDimensions()`.
 
 -   The user can also tune the computation by setting the value of `max_it`.
 

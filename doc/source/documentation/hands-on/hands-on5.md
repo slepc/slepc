@@ -21,8 +21,8 @@ $ make ex3
 ## Source Code Details
 
 PETSc provides support for matrix-free problems via the _shell_ matrix type.
-This kind of matrices is created with a call to {external:doc}`MatCreateShell`, and their operations are specified with {external:doc}`MatShellSetOperation`.
-For basic use of these matrices with `EPS` solvers only the matrix-vector product operation is required. In the example, this operation is performed by a separate function `MatMult_Laplacian2D`.
+This kind of matrices is created with a call to {external:doc}`MatCreateShell`(), and their operations are specified with {external:doc}`MatShellSetOperation`().
+For basic use of these matrices with `EPS` solvers only the matrix-vector product operation is required. In the example, this operation is performed by a separate function `MatMult_Laplacian2D`().
 
 ## Running the Program
 
