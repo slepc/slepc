@@ -30,7 +30,7 @@ DSMatType  DSMatExtra[DS_NUM_EXTRA] = {DS_MAT_E0,DS_MAT_E1,DS_MAT_E2,DS_MAT_E3,D
 
    Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: `SlepcFinalize()`, `DSInitializePackage()`
 @*/
 PetscErrorCode DSFinalizePackage(void)
 {
@@ -42,13 +42,16 @@ PetscErrorCode DSFinalizePackage(void)
 }
 
 /*@C
-  DSInitializePackage - This function initializes everything in the `DS` package.
-  It is called from `PetscDLLibraryRegister()` when using dynamic libraries, and
-  on the first call to `DSCreate()` when using static libraries.
+   DSInitializePackage - This function initializes everything in the `DS` package.
+   It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
+   on the first call to `DSCreate()` when using shared or static libraries.
 
-  Level: developer
+   Note:
+   This function never needs to be called by SLEPc users.
 
-.seealso: `SlepcInitialize()`
+   Level: developer
+
+.seealso: [](sec:ds), `DS`, `SlepcInitialize()`, `DSFinalizePackage()`
 @*/
 PetscErrorCode DSInitializePackage(void)
 {

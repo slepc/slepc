@@ -20,12 +20,12 @@ static PetscBool STPackageInitialized = PETSC_FALSE;
 const char *STMatModes[] = {"COPY","INPLACE","SHELL","STMatMode","ST_MATMODE_",NULL};
 
 /*@C
-   STFinalizePackage - This function destroys everything in the Slepc interface
-   to the ST package. It is called from SlepcFinalize().
+   STFinalizePackage - This function destroys everything in the SLEPc interface
+   to the `ST` package. It is called from `SlepcFinalize()`.
 
    Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: `SlepcFinalize()`, `STInitializePackage()`
 @*/
 PetscErrorCode STFinalizePackage(void)
 {
@@ -37,13 +37,16 @@ PetscErrorCode STFinalizePackage(void)
 }
 
 /*@C
-   STInitializePackage - This function initializes everything in the ST package.
-   It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-   on the first call to STCreate() when using static libraries.
+   STInitializePackage - This function initializes everything in the `ST` package.
+   It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
+   on the first call to `STCreate()` when using shared or static libraries.
+
+   Note:
+   This function never needs to be called by SLEPc users.
 
    Level: developer
 
-.seealso: `SlepcInitialize()`
+.seealso: [](ch:st), `ST`, `SlepcInitialize()`, `STFinalizePackage()`
 @*/
 PetscErrorCode STInitializePackage(void)
 {

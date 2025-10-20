@@ -21,12 +21,12 @@ const char *const SVDConvergedReasons_Shifted[] = {"","DIVERGED_SYMMETRY_LOST","
 const char *const*SVDConvergedReasons = SVDConvergedReasons_Shifted + 4;
 
 /*@C
-   SVDFinalizePackage - This function destroys everything in the Slepc interface
-   to the SVD package. It is called from SlepcFinalize().
+  SVDFinalizePackage - This function destroys everything in the SLEPc interface
+  to the `SVD` package. It is called from `SlepcFinalize()`.
 
-   Level: developer
+  Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: `SlepcFinalize()`, `SVDInitializePackage()`
 @*/
 PetscErrorCode SVDFinalizePackage(void)
 {
@@ -42,13 +42,16 @@ PetscErrorCode SVDFinalizePackage(void)
 }
 
 /*@C
-   SVDInitializePackage - This function initializes everything in the SVD package.
-   It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-   on the first call to SVDCreate() when using static libraries.
+   SVDInitializePackage - This function initializes everything in the `SVD` package.
+   It is called from `PetscDLLibraryRegister_slepcsvd()` when using dynamic libraries, and
+   on the first call to `SVDCreate()` when using shared or static libraries.
+
+   Note:
+   This function never needs to be called by SLEPc users.
 
    Level: developer
 
-.seealso: `SlepcInitialize()`
+.seealso: [](ch:svd), `SVD`, `SlepcInitialize()`, `SVDFinalizePackage()`
 @*/
 PetscErrorCode SVDInitializePackage(void)
 {

@@ -24,7 +24,7 @@ static PetscBool  RGPackageInitialized = PETSC_FALSE;
 
    Level: developer
 
-.seealso: SlepcFinalize()`
+.seealso: SlepcFinalize()`, `BVInitializePackage()`
 @*/
 PetscErrorCode RGFinalizePackage(void)
 {
@@ -36,13 +36,16 @@ PetscErrorCode RGFinalizePackage(void)
 }
 
 /*@C
-  RGInitializePackage - This function initializes everything in the `RG` package.
-  It is called from `PetscDLLibraryRegister()` when using dynamic libraries, and
-  on the first call to `RGCreate()` when using static libraries.
+   RGInitializePackage - This function initializes everything in the `RG` package.
+   It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
+   on the first call to `RGCreate()` when using shared or static libraries.
 
-  Level: developer
+   Note:
+   This function never needs to be called by SLEPc users.
 
-.seealso: `SlepcInitialize()`
+   Level: developer
+
+.seealso: [](sec:rg), `RG`, `SlepcInitialize()`, `RGFinalizePackage()`
 @*/
 PetscErrorCode RGInitializePackage(void)
 {

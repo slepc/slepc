@@ -28,7 +28,7 @@ const char *FNParallelTypes[] = {"REDUNDANT","SYNCHRONIZED","FNParallelType","FN
 
    Level: developer
 
-.seealso: [](sec:fn), `SlepcFinalize()`
+.seealso: `SlepcFinalize()`, `FNInitializePackage()`
 @*/
 PetscErrorCode FNFinalizePackage(void)
 {
@@ -40,13 +40,16 @@ PetscErrorCode FNFinalizePackage(void)
 }
 
 /*@C
-  FNInitializePackage - This function initializes everything in the `FN` package.
-  It is called from `PetscDLLibraryRegister()` when using dynamic libraries, and
-  on the first call to `FNCreate()` when using static libraries.
+   FNInitializePackage - This function initializes everything in the `FN` package.
+   It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
+   on the first call to `FNCreate()` when using shared or static libraries.
 
-  Level: developer
+   Note:
+   This function never needs to be called by SLEPc users.
 
-.seealso: [](sec:fn), `SlepcInitialize()`
+   Level: developer
+
+.seealso: [](sec:fn), `FN`, `SlepcInitialize()`, `FNFinalizePackage()`
 @*/
 PetscErrorCode FNInitializePackage(void)
 {

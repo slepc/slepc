@@ -30,7 +30,7 @@ const char *BVSVDMethods[] = {"REFINE","QR","QR_CAA","BVSVDMethod","BV_SVD_METHO
 
    Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: `SlepcFinalize()`, `BVInitializePackage()`
 @*/
 PetscErrorCode BVFinalizePackage(void)
 {
@@ -45,12 +45,15 @@ PetscErrorCode BVFinalizePackage(void)
 
 /*@C
    BVInitializePackage - This function initializes everything in the `BV` package.
-   It is called from `PetscDLLibraryRegister()` when using dynamic libraries, and
-   on the first call to `BVCreate()` when using static libraries.
+   It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
+   on the first call to `BVCreate()` when using shared or static libraries.
+
+   Note:
+   This function never needs to be called by SLEPc users.
 
    Level: developer
 
-.seealso: `SlepcInitialize()`
+.seealso: [](sec:bv), `BV`, `SlepcInitialize()`, `BVFinalizePackage()`
 @*/
 PetscErrorCode BVInitializePackage(void)
 {
