@@ -23,7 +23,7 @@ typedef struct {
 } ST_SHELL;
 
 /*@C
-   STShellGetContext - Returns the user-provided context associated with a shell ST
+   STShellGetContext - Returns the user-provided context associated with an `STSHELL`.
 
    Not Collective
 
@@ -35,10 +35,7 @@ typedef struct {
 
    Level: advanced
 
-   Notes:
-   This routine is intended for use within various shell routines
-
-.seealso: `STShellSetContext()`
+.seealso: [](ch:st), `STShellSetContext()`
 @*/
 PetscErrorCode STShellGetContext(ST st,void *ctx)
 {
@@ -54,7 +51,7 @@ PetscErrorCode STShellGetContext(ST st,void *ctx)
 }
 
 /*@
-   STShellSetContext - Sets the context for a shell ST
+   STShellSetContext - Sets the user-defined context for an `STSHELL`.
 
    Logically Collective
 
@@ -67,9 +64,9 @@ PetscErrorCode STShellGetContext(ST st,void *ctx)
    Fortran Notes:
    To use this from Fortran you must write a Fortran interface definition
    for this function that tells Fortran the Fortran derived data type that
-   you are passing in as the ctx argument.
+   you are passing in as the `ctx` argument.
 
-.seealso: `STShellGetContext()`
+.seealso: [](ch:st), `STShellGetContext()`
 @*/
 PetscErrorCode STShellSetContext(ST st,void *ctx)
 {
@@ -198,7 +195,7 @@ static PetscErrorCode STShellSetApply_Shell(ST st,STShellApplyFn *apply)
 
    Level: advanced
 
-.seealso: `STShellSetBackTransform()`, `STShellSetApplyTranspose()`, `STShellSetApplyHermitianTranspose()`
+.seealso: [](ch:st), `STShellSetBackTransform()`, `STShellSetApplyTranspose()`, `STShellSetApplyHermitianTranspose()`
 @*/
 PetscErrorCode STShellSetApply(ST st,STShellApplyFn *apply)
 {
@@ -229,7 +226,7 @@ static PetscErrorCode STShellSetApplyTranspose_Shell(ST st,STShellApplyTranspose
 
    Level: advanced
 
-.seealso: `STShellSetApply()`, `STShellSetBackTransform()`
+.seealso: [](ch:st), `STShellSetApply()`, `STShellSetBackTransform()`
 @*/
 PetscErrorCode STShellSetApplyTranspose(ST st,STShellApplyTransposeFn *applytrans)
 {
@@ -261,12 +258,12 @@ static PetscErrorCode STShellSetApplyHermitianTranspose_Shell(ST st,STShellApply
 -  applyhermtrans - the application-provided transformation routine
 
    Note:
-   If configured with real scalars, this function has the same effect as STShellSetApplyTranspose(),
+   If configured with real scalars, this function has the same effect as `STShellSetApplyTranspose()`,
    so no need to call both.
 
    Level: advanced
 
-.seealso: `STShellSetApply()`, `STShellSetApplyTranspose()`, `STShellSetBackTransform()`
+.seealso: [](ch:st), `STShellSetApply()`, `STShellSetApplyTranspose()`, `STShellSetBackTransform()`
 @*/
 PetscErrorCode STShellSetApplyHermitianTranspose(ST st,STShellApplyHermitianTransposeFn *applyhermtrans)
 {
@@ -298,7 +295,7 @@ static PetscErrorCode STShellSetBackTransform_Shell(ST st,STShellBackTransformFn
 
    Level: advanced
 
-.seealso: `STShellSetApply()`, `STShellSetApplyTranspose()`
+.seealso: [](ch:st), `STShellSetApply()`, `STShellSetApplyTranspose()`
 @*/
 PetscErrorCode STShellSetBackTransform(ST st,STShellBackTransformFn *backtr)
 {
@@ -309,26 +306,20 @@ PetscErrorCode STShellSetBackTransform(ST st,STShellBackTransformFn *backtr)
 }
 
 /*MC
-   STSHELL - User-defined spectral transformation via callback functions
-   for the application of the operator to a vector and (optionally) the
+   STSHELL - STSHELL = "shell" - User-defined spectral transformation via callback
+   functions for the application of the operator to a vector and (optionally) the
    backtransform operation.
 
-   Level: advanced
+   Level: beginner
 
-   Usage:
-$             extern PetscErrorCode (*apply)(void*,Vec,Vec);
-$             extern PetscErrorCode (*applytrans)(void*,Vec,Vec);
-$             extern PetscErrorCode (*applyht)(void*,Vec,Vec);
-$             extern PetscErrorCode (*backtr)(void*,PetscScalar*,PetscScalar*);
-$
-$             STCreate(comm,&st);
-$             STSetType(st,STSHELL);
-$             STShellSetContext(st,ctx);
-$             STShellSetApply(st,apply);
-$             STShellSetApplyTranspose(st,applytrans);        (optional)
-$             STShellSetApplyHermitianTranspose(st,applyht);  (optional, only in complex scalars)
-$             STShellSetBackTransform(st,backtr);             (optional)
+   Note:
+   In order to define a `shell` spectral transformation, the user has to provide
+   the `apply` operation via `STShellSetApply()` and related functions, and
+   optionally a `backtransform` operation via `STShellSetBackTransform()`, and
+   in some cases a user-defined context containing relevant data via
+   `STShellSetContext()`.
 
+.seealso: [](ch:st), `ST`, `STType`, `STSetType()`, `STShellSetApply()`, `STShellSetBackTransform()`, `STShellSetContext()`
 M*/
 
 SLEPC_EXTERN PetscErrorCode STCreate_Shell(ST st)

@@ -203,6 +203,9 @@ PetscErrorCode FNGetOptionsPrefix(FN fn,const char *prefix[])
 +  fn   - the math function context
 -  type - a known type
 
+   Options Database Key:
+.  -fn_type <type> - Sets `FN` type
+
    Note:
    The default is `FNRATIONAL`, which includes polynomials as a particular
    case as well as simple functions such as $f(x)=x$ and $f(x)=constant$.

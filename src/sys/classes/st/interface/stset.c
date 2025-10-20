@@ -17,7 +17,7 @@ PetscBool         STRegisterAllCalled = PETSC_FALSE;
 PetscFunctionList STList = NULL;
 
 /*@
-   STSetType - Builds ST for a particular spectral transformation.
+   STSetType - Selects the type of spectral transformation.
 
    Logically Collective
 
@@ -26,21 +26,17 @@ PetscFunctionList STList = NULL;
 -  type - a known type
 
    Options Database Key:
-.  -st_type <type> - Sets ST type
-
-   Use -help for a list of available transformations
+.  -st_type <type> - Sets `ST` type
 
    Notes:
-   See "slepc/include/slepcst.h" for available transformations
-
-   Normally, it is best to use the EPSSetFromOptions() command and
-   then set the ST type from the options database rather than by using
+   Normally, it is best to call the `EPSSetFromOptions()` function and
+   then set the `ST` type from the options database rather than by using
    this routine.  Using the options database provides the user with
-   maximum flexibility in evaluating the many different transformations.
+   maximum flexibility in evaluating the different transformations.
 
    Level: beginner
 
-.seealso: `EPSSetType()`
+.seealso: [](ch:st), `STGetType()`, `EPSSetType()`, `EPSSetFromOptions()`
 
 @*/
 PetscErrorCode STSetType(ST st,STType type)
@@ -70,7 +66,7 @@ PetscErrorCode STSetType(ST st,STType type)
 }
 
 /*@
-   STGetType - Gets the ST type name (as a string) from the ST context.
+   STGetType - Gets the `ST` type name (as a string) from the `ST` context.
 
    Not Collective
 
@@ -82,7 +78,7 @@ PetscErrorCode STSetType(ST st,STType type)
 
    Level: intermediate
 
-.seealso: `STSetType()`
+.seealso: [](ch:st), `STSetType()`
 
 @*/
 PetscErrorCode STGetType(ST st,STType *type)
@@ -95,18 +91,19 @@ PetscErrorCode STGetType(ST st,STType *type)
 }
 
 /*@
-   STSetFromOptions - Sets ST options from the options database.
-   This routine must be called before STSetUp() if the user is to be
-   allowed to set the type of transformation.
+   STSetFromOptions - Sets `ST` options from the options database.
 
    Collective
 
    Input Parameter:
 .  st - the spectral transformation context
 
+   Note:
+   To see all options, run your program with the `-help` option.
+
    Level: beginner
 
-.seealso: `STSetOptionsPrefix()`
+.seealso: [](ch:st), `STSetOptionsPrefix()`
 @*/
 PetscErrorCode STSetFromOptions(ST st)
 {
@@ -148,27 +145,24 @@ PetscErrorCode STSetFromOptions(ST st)
 }
 
 /*@
-   STSetMatStructure - Sets an internal MatStructure attribute to
-   indicate which is the relation of the sparsity pattern of all ST matrices.
+   STSetMatStructure - Sets an internal `MatStructure` attribute to
+   indicate which is the relation of the sparsity pattern of all `ST` matrices.
 
    Logically Collective
 
    Input Parameters:
 +  st  - the spectral transformation context
--  str - either SAME_NONZERO_PATTERN, DIFFERENT_NONZERO_PATTERN,
-         SUBSET_NONZERO_PATTERN, or UNKNOWN_NONZERO_PATTERN
+-  str - either `SAME_NONZERO_PATTERN`, `DIFFERENT_NONZERO_PATTERN`,
+         `SUBSET_NONZERO_PATTERN`, or `UNKNOWN_NONZERO_PATTERN`
 
    Options Database Key:
-.  -st_matstructure <str> - Indicates the structure flag, where <str> is one
-         of 'same' (matrices have the same nonzero pattern), 'different'
-         (different nonzero pattern), 'subset' (pattern is a subset of the
-         first one), or 'unknown'.
+.  -st_matstructure <str> - the structure flag, one of `same`, `different`, `subset`, `unknown`.
 
    Notes:
    If the sparsity pattern of the second matrix is equal or a subset of the
    pattern of the first matrix then it is recommended to set this attribute
-   for efficiency reasons (in particular, for internal MatAXPY() operations).
-   If not set, the default is UNKNOWN_NONZERO_PATTERN, in which case the patterns
+   for efficiency reasons (in particular, for internal `MatAXPY()` operations).
+   If not set, the default is `UNKNOWN_NONZERO_PATTERN`, in which case the patterns
    will be compared to determine if they are equal.
 
    This function has no effect in the case of standard eigenproblems.
@@ -178,7 +172,7 @@ PetscErrorCode STSetFromOptions(ST st)
 
    Level: advanced
 
-.seealso: `STSetMatrices()`, `MatAXPY()`
+.seealso: [](ch:st), `STSetMatrices()`, `MatAXPY()`
 @*/
 PetscErrorCode STSetMatStructure(ST st,MatStructure str)
 {
@@ -199,21 +193,21 @@ PetscErrorCode STSetMatStructure(ST st,MatStructure str)
 }
 
 /*@
-   STGetMatStructure - Gets the internal MatStructure attribute to
+   STGetMatStructure - Gets the internal `MatStructure` attribute to
    indicate which is the relation of the sparsity pattern of the matrices.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  st  - the spectral transformation context
 
-   Output Parameters:
-.  str - either SAME_NONZERO_PATTERN, DIFFERENT_NONZERO_PATTERN,
-         SUBSET_NONZERO_PATTERN, or UNKNOWN_NONZERO_PATTERN
+   Output Parameter:
+.  str - either `SAME_NONZERO_PATTERN`, `DIFFERENT_NONZERO_PATTERN`,
+         `SUBSET_NONZERO_PATTERN`, or `UNKNOWN_NONZERO_PATTERN`
 
    Level: advanced
 
-.seealso: `STSetMatStructure()`, `STSetMatrices()`, `MatAXPY()`
+.seealso: [](ch:st), `STSetMatStructure()`, `STSetMatrices()`, `MatAXPY()`
 @*/
 PetscErrorCode STGetMatStructure(ST st,MatStructure *str)
 {
@@ -232,35 +226,33 @@ PetscErrorCode STGetMatStructure(ST st,MatStructure *str)
 
    Input Parameters:
 +  st - the spectral transformation context
--  mode - the mode flag, one of ST_MATMODE_COPY,
-          ST_MATMODE_INPLACE, or ST_MATMODE_SHELL
+-  mode - the mode
 
    Options Database Key:
-.  -st_matmode <mode> - Indicates the mode flag, where <mode> is one of
-          'copy', 'inplace', 'shell' (see explanation below).
+.  -st_matmode <mode> - Indicates the mode, one of `copy`, `inplace`, `shell`
 
    Notes:
-   By default (ST_MATMODE_COPY), a copy of matrix A is made and then
-   this copy is modified explicitly, e.g. A <- (A - s B).
+   By default (`ST_MATMODE_COPY`), a copy of matrix $A$ is made and then
+   this copy is modified explicitly, e.g., $A \leftarrow A - \sigma B$.
 
-   With ST_MATMODE_INPLACE, the original matrix A is modified at STSetUp()
+   With `ST_MATMODE_INPLACE`, the original matrix $A$ is modified at `STSetUp()`
    and changes are reverted at the end of the computations. With respect to
-   the previous one, this mode avoids a copy of matrix A. However, a
+   the previous one, this mode avoids a copy of matrix $A$. However, a
    drawback is that the recovered matrix might be slightly different
    from the original one (due to roundoff).
 
-   With ST_MATMODE_SHELL, the solver works with an implicit shell
+   With `ST_MATMODE_SHELL`, the solver works with an implicit shell
    matrix that represents the shifted matrix. This mode is the most efficient
    in creating the shifted matrix but it places serious limitations to the
    linear solves performed in each iteration of the eigensolver (typically,
    only iterative solvers with Jacobi preconditioning can be used).
 
-   In the two first modes the efficiency of the computation
-   can be controlled with STSetMatStructure().
+   In the two first modes the efficiency of the computation can be controlled
+   with `STSetMatStructure()`.
 
    Level: intermediate
 
-.seealso: `STSetMatrices()`, `STSetMatStructure()`, `STGetMatMode()`, `STMatMode`
+.seealso: [](ch:st), `STSetMatrices()`, `STSetMatStructure()`, `STGetMatMode()`, `STMatMode`
 @*/
 PetscErrorCode STSetMatMode(ST st,STMatMode mode)
 {
@@ -290,7 +282,7 @@ PetscErrorCode STSetMatMode(ST st,STMatMode mode)
 
    Level: intermediate
 
-.seealso: `STSetMatMode()`, `STMatMode`
+.seealso: [](ch:st), `STSetMatMode()`, `STMatMode`
 @*/
 PetscErrorCode STGetMatMode(ST st,STMatMode *mode)
 {
@@ -322,7 +314,7 @@ PetscErrorCode STGetMatMode(ST st,STMatMode *mode)
 
    Level: developer
 
-.seealso: `STMatSolve()`, `STMatMult()`, `STSetMatStructure()`, `STGetTransform()`
+.seealso: [](ch:st), `STMatSolve()`, `STMatMult()`, `STSetMatStructure()`, `STGetTransform()`
 @*/
 PetscErrorCode STSetTransform(ST st,PetscBool flg)
 {
@@ -351,7 +343,7 @@ PetscErrorCode STSetTransform(ST st,PetscBool flg)
 
    Level: developer
 
-.seealso: `STSetTransform()`
+.seealso: [](ch:st), `STSetTransform()`
 @*/
 PetscErrorCode STGetTransform(ST st,PetscBool *flg)
 {
@@ -378,7 +370,7 @@ PetscErrorCode STGetTransform(ST st,PetscBool *flg)
 
    Level: developer
 
-.seealso: `STApply()`, `STGetStructured()`
+.seealso: [](ch:st), `STApply()`, `STGetStructured()`
 @*/
 PetscErrorCode STSetStructured(ST st,PetscBool flg)
 {
@@ -407,7 +399,7 @@ PetscErrorCode STSetStructured(ST st,PetscBool flg)
 
    Level: developer
 
-.seealso: `STSetStructured()`
+.seealso: [](ch:st), `STSetStructured()`
 @*/
 PetscErrorCode STGetStructured(ST st,PetscBool *flg)
 {

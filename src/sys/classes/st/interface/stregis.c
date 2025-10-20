@@ -18,13 +18,13 @@ SLEPC_EXTERN PetscErrorCode STCreate_Precond(ST);
 SLEPC_EXTERN PetscErrorCode STCreate_Filter(ST);
 
 /*@C
-   STRegisterAll - Registers all of the spectral transformations in the ST package.
+   STRegisterAll - Registers all of the spectral transformations in the `ST` package.
 
    Not Collective
 
    Level: advanced
 
-.seealso: `STRegister()`
+.seealso: [](ch:st), `STRegister()`
 @*/
 PetscErrorCode STRegisterAll(void)
 {

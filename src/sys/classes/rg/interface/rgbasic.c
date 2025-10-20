@@ -193,6 +193,9 @@ PetscErrorCode RGGetOptionsPrefix(RG rg,const char *prefix[])
 +  rg   - the region context
 -  type - a known type
 
+   Options Database Key:
+.  -rg_type <type> - Sets `RG` type
+
    Level: beginner
 
 .seealso: [](sec:rg), `RGGetType()`

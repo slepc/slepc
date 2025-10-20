@@ -26,7 +26,7 @@ PetscErrorCode STApply_Generic(ST st,Vec x,Vec y)
 
 /*@
    STApply - Applies the spectral transformation operator to a vector, for
-   instance (A - sB)^-1 B in the case of the shift-and-invert transformation
+   instance $y=(A - \sigma B)^{-1} Bx$ in the case of the shift-and-invert transformation
    and generalized eigenproblem.
 
    Collective
@@ -40,7 +40,7 @@ PetscErrorCode STApply_Generic(ST st,Vec x,Vec y)
 
    Level: developer
 
-.seealso: `STApplyTranspose()`, `STApplyHermitianTranspose()`
+.seealso: [](ch:st), `STApplyTranspose()`, `STApplyHermitianTranspose()`
 @*/
 PetscErrorCode STApply(ST st,Vec x,Vec y)
 {
@@ -75,8 +75,8 @@ PetscErrorCode STApplyMat_Generic(ST st,Mat B,Mat C)
 
 /*@
    STApplyMat - Applies the spectral transformation operator to a matrix, for
-   instance (A - sB)^-1 B in the case of the shift-and-invert transformation
-   and generalized eigenproblem.
+   instance $Y = (A - \sigma B)^{-1} B X$ in the case of the shift-and-invert
+   transformation and generalized eigenproblem.
 
    Collective
 
@@ -89,7 +89,7 @@ PetscErrorCode STApplyMat_Generic(ST st,Mat B,Mat C)
 
    Level: developer
 
-.seealso: `STApply()`
+.seealso: [](ch:st), `STApply()`
 @*/
 PetscErrorCode STApplyMat(ST st,Mat X,Mat Y)
 {
@@ -117,8 +117,8 @@ PetscErrorCode STApplyTranspose_Generic(ST st,Vec x,Vec y)
 
 /*@
    STApplyTranspose - Applies the transpose of the operator to a vector, for
-   instance B^T(A - sB)^-T in the case of the shift-and-invert transformation
-   and generalized eigenproblem.
+   instance $y = B^T(A - \sigma B)^{-T} x$ in the case of the shift-and-invert
+   transformation and generalized eigenproblem.
 
    Collective
 
@@ -131,7 +131,7 @@ PetscErrorCode STApplyTranspose_Generic(ST st,Vec x,Vec y)
 
    Level: developer
 
-.seealso: `STApply()`, `STApplyHermitianTranspose()`
+.seealso: [](ch:st), `STApply()`, `STApplyHermitianTranspose()`
 @*/
 PetscErrorCode STApplyTranspose(ST st,Vec x,Vec y)
 {
@@ -162,8 +162,8 @@ PetscErrorCode STApplyHermitianTranspose_Generic(ST st,Vec x,Vec y)
 }
 
 /*@
-   STApplyHermitianTranspose - Applies the hermitian-transpose of the operator
-   to a vector, for instance B^H(A - sB)^-H in the case of the shift-and-invert
+   STApplyHermitianTranspose - Applies the Hermitian-transpose of the operator
+   to a vector, for instance $y=B^*(A - \sigma B)^{-*}x$ in the case of the shift-and-invert
    transformation and generalized eigenproblem.
 
    Collective
@@ -176,11 +176,11 @@ PetscErrorCode STApplyHermitianTranspose_Generic(ST st,Vec x,Vec y)
 .  y - output vector
 
    Note:
-   Currently implemented via STApplyTranspose() with appropriate conjugation.
+   Currently implemented via `STApplyTranspose()` with appropriate conjugation.
 
    Level: developer
 
-.seealso: `STApply()`, `STApplyTranspose()`
+.seealso: [](ch:st), `STApply()`, `STApplyTranspose()`
 @*/
 PetscErrorCode STApplyHermitianTranspose(ST st,Vec x,Vec y)
 {
@@ -201,7 +201,7 @@ PetscErrorCode STApplyHermitianTranspose(ST st,Vec x,Vec y)
 
 /*@
    STGetBilinearForm - Returns the matrix used in the bilinear form with a
-   generalized problem with semi-definite B.
+   generalized eigenproblem with semi-definite $B$.
 
    Logically Collective
 
@@ -212,12 +212,12 @@ PetscErrorCode STApplyHermitianTranspose(ST st,Vec x,Vec y)
 .  B - output matrix
 
    Notes:
-   The output matrix B must be destroyed after use. It will be NULL in
+   The output matrix `B` must be destroyed after use. It will be `NULL` in
    case of standard eigenproblems.
 
    Level: developer
 
-.seealso: `BVSetMatrix()`
+.seealso: [](ch:st), `BVSetMatrix()`
 @*/
 PetscErrorCode STGetBilinearForm(ST st,Mat *B)
 {
@@ -372,36 +372,35 @@ PetscErrorCode STGetOperator_Private(ST st,Mat *Op)
 
    Notes:
    The operator is defined in linear eigenproblems only, not in polynomial ones,
-   so the call will fail if more than 2 matrices were passed in STSetMatrices().
+   so the call will fail if more than 2 matrices were passed in `STSetMatrices()`.
 
-   The returned shell matrix is essentially a wrapper to the STApply() and
-   STApplyTranspose() operations. The operator can often be expressed as
+   The returned shell matrix is essentially a wrapper to the `STApply()` and
+   `STApplyTranspose()` operations. The operator can often be expressed as
 
-$     Op = D*inv(K)*M*inv(D)
+      $$Op = D K^{-1} M D^{-1}$$
 
-   where D is the balancing matrix, and M and K are two matrices corresponding
+   where $D$ is the balancing matrix, and $M$ and $K$ are two matrices corresponding
    to the numerator and denominator for spectral transformations that represent
-   a rational matrix function. In the case of STSHELL, the inner part inv(K)*M
-   is replaced by the user-provided operation from STShellSetApply().
+   a rational matrix function. In the case of `STSHELL`, the inner part $K^{-1}M$
+   is replaced by the user-provided operation from `STShellSetApply()`.
 
-   The preconditioner matrix K typically depends on the value of the shift, and
-   its inverse is handled via an internal KSP object. Normal usage does not
-   require explicitly calling STGetOperator(), but it can be used to force the
-   creation of K and M, and then K is passed to the KSP. This is useful for
-   setting options associated with the PCFactor (to set MUMPS options, for instance).
+   The preconditioner matrix $K$ typically depends on the value of the shift, and
+   its inverse is handled via an internal `KSP` object. Normal usage does not
+   require explicitly calling `STGetOperator()`, but it can be used to force the
+   creation of $K$ and $M$, and then $K$ is passed to the `KSP`. This is useful for
+   setting options associated with the `PCFactor` (to set MUMPS options, for instance).
 
    The returned matrix must NOT be destroyed by the user. Instead, when no
-   longer needed it must be returned with STRestoreOperator(). In particular,
-   this is required before modifying the ST matrices or the shift.
+   longer needed it must be returned with `STRestoreOperator()`. In particular,
+   this is required before modifying the `ST` matrices or the shift.
 
-   A NULL pointer can be passed in Op in case the matrix is not required but we
-   want to force its creation. In this case, STRestoreOperator() should not be
+   A `NULL` pointer can be passed in `Op` in case the matrix is not required but we
+   want to force its creation. In this case, `STRestoreOperator()` should not be
    called.
 
    Level: advanced
 
-.seealso: `STApply()`, `STApplyTranspose()`, `STSetBalanceMatrix()`, `STShellSetApply()`,
-          `STGetKSP()`, `STSetShift()`, `STRestoreOperator()`, `STSetMatrices()`
+.seealso: [](ch:st), `STApply()`, `STApplyTranspose()`, `STSetBalanceMatrix()`, `STShellSetApply()`, `STGetKSP()`, `STSetShift()`, `STRestoreOperator()`, `STSetMatrices()`
 @*/
 PetscErrorCode STGetOperator(ST st,Mat *Op)
 {
@@ -426,11 +425,11 @@ PetscErrorCode STGetOperator(ST st,Mat *Op)
 -  Op - operator matrix
 
    Notes:
-   The arguments must match the corresponding call to STGetOperator().
+   The arguments must match the corresponding call to `STGetOperator()`.
 
    Level: advanced
 
-.seealso: `STGetOperator()`
+.seealso: [](ch:st), `STGetOperator()`
 @*/
 PetscErrorCode STRestoreOperator(ST st,Mat *Op)
 {
@@ -503,7 +502,7 @@ PetscErrorCode STComputeOperator(ST st)
 
    Level: advanced
 
-.seealso: `STCreate()`, `STApply()`, `STDestroy()`
+.seealso: [](ch:st), `STCreate()`, `STApply()`, `STDestroy()`
 @*/
 PetscErrorCode STSetUp(ST st)
 {
@@ -657,7 +656,7 @@ PetscErrorCode STCoeffs_Monomial(ST st, PetscScalar *coeffs)
 
 /*@
    STPostSolve - Optional post-solve phase, intended for any actions that must
-   be performed on the ST object after the eigensolver has finished.
+   be performed on the `ST` object after the eigensolver has finished.
 
    Collective
 
@@ -666,7 +665,7 @@ PetscErrorCode STCoeffs_Monomial(ST st, PetscScalar *coeffs)
 
    Level: developer
 
-.seealso: `EPSSolve()`
+.seealso: [](ch:st), `EPSSolve()`
 @*/
 PetscErrorCode STPostSolve(ST st)
 {
@@ -692,7 +691,7 @@ PetscErrorCode STPostSolve(ST st)
 
    Level: developer
 
-.seealso: `STIsInjective()`
+.seealso: [](ch:st), `STIsInjective()`
 @*/
 PetscErrorCode STBackTransform(ST st,PetscInt n,PetscScalar* eigr,PetscScalar* eigi)
 {
@@ -704,9 +703,9 @@ PetscErrorCode STBackTransform(ST st,PetscInt n,PetscScalar* eigr,PetscScalar* e
 }
 
 /*@
-   STIsInjective - Ask if this spectral transformation is injective or not
+   STIsInjective - Returns whether this spectral transformation is injective or not
    (that is, if it corresponds to a one-to-one mapping). If not, then it
-   does not make sense to call STBackTransform().
+   does not make sense to call `STBackTransform()`.
 
    Not Collective
 
@@ -716,9 +715,14 @@ PetscErrorCode STBackTransform(ST st,PetscInt n,PetscScalar* eigr,PetscScalar* e
    Output Parameter:
 .  is - the answer
 
+   Note:
+   In case of non-injective transformations such as `STFILTER`, the eigenvalues
+   of the original eigenproblem are computed via the Rayleigh quotient
+   $\rho(A,x) = \frac{x^*Ax}{x^*x}$ for each computed eigenvector $x$.
+
    Level: developer
 
-.seealso: `STBackTransform()`
+.seealso: [](ch:st), `STBackTransform()`
 @*/
 PetscErrorCode STIsInjective(ST st,PetscBool* is)
 {
@@ -736,26 +740,29 @@ PetscErrorCode STIsInjective(ST st,PetscBool* is)
 }
 
 /*@
-   STMatSetUp - Build the preconditioner matrix used in STMatSolve().
+   STMatSetUp - Build the preconditioner matrix used in `STMatSolve()`.
 
    Collective
 
    Input Parameters:
 +  st     - the spectral transformation context
 .  sigma  - the shift
--  coeffs - the coefficients (may be NULL)
+-  coeffs - the coefficients (may be `NULL`)
 
    Note:
    This function is not intended to be called by end users, but by SLEPc
-   solvers that use ST. It builds matrix st->P as follows, then calls KSPSetUp().
-.vb
-    If (coeffs)  st->P = Sum_{i=0..nmat-1} coeffs[i]*sigma^i*A_i
-    else         st->P = Sum_{i=0..nmat-1} sigma^i*A_i
-.ve
+   solvers that use `ST`. It builds the internal matrix for the preconditioner as
+   $$
+   P=\begin{cases}
+     \sum_{i=0}^{\mathtt{nmat}-1}\mathtt{coeffs[i]}\,\sigma^i A_i, & \text{if coefficients given}\\
+     \sum_{i=0}^{\mathtt{nmat}-1}\sigma^i A_i, & \text{otherwise}
+     \end{cases}
+   $$
+   then calls `KSPSetUp()`.
 
    Level: developer
 
-.seealso: `STMatSolve()`
+.seealso: [](ch:st), `STMatSolve()`
 @*/
 PetscErrorCode STMatSetUp(ST st,PetscScalar sigma,PetscScalar *coeffs)
 {
@@ -774,7 +781,7 @@ PetscErrorCode STMatSetUp(ST st,PetscScalar sigma,PetscScalar *coeffs)
 }
 
 /*@
-   STSetWorkVecs - Sets a number of work vectors into the ST object.
+   STSetWorkVecs - Sets a number of work vectors into the `ST` object.
 
    Collective
 
@@ -783,11 +790,11 @@ PetscErrorCode STMatSetUp(ST st,PetscScalar sigma,PetscScalar *coeffs)
 -  nw - number of work vectors to allocate
 
    Developer Notes:
-   This is SLEPC_EXTERN because it may be required by shell STs.
+   This is `SLEPC_EXTERN` because it may be required by shell `ST`s.
 
    Level: developer
 
-.seealso: `STMatCreateVecs()`
+.seealso: [](ch:st), `STMatCreateVecs()`
 @*/
 PetscErrorCode STSetWorkVecs(ST st,PetscInt nw)
 {

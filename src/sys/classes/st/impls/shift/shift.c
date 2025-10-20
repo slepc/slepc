@@ -219,6 +219,23 @@ static PetscErrorCode STSetShift_Shift(ST st,PetscScalar newshift)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   STSHIFT - STSHIFT = "shift" - A shift of origin, where the spectrum is
+   shifted by a constant amount.
+
+   Level: beginner
+
+   Notes:
+   The operator in this `ST` is $B^{-1}A-\sigma I$, where $A$ and $B$ are the
+   matrices set with `STSetMatrices()` and the shift $\sigma$ is given in
+   `STSetShift()`.
+
+   This is the default `ST`. If no shift is given, the default is $\sigma=0$,
+   i.e., no transformation.
+
+.seealso: [](ch:st), `ST`, `STType`, `STSetType()`, `STSetMatrices()`, `STSetShift()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode STCreate_Shift(ST st)
 {
   PetscFunctionBegin;
