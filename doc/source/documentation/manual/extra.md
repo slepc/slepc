@@ -193,7 +193,7 @@ This list might be incomplete. Check the output of `./configure --help` for othe
 
 LAPACK {cite:p}`And99` is a software package for the solution of many different dense linear algebra problems, including various types of eigenvalue problems and singular value decompositions. SLEPc explicitly creates the operator matrix in dense form and then the appropriate LAPACK driver routine is invoked. Therefore, this interface should be used only for testing and validation purposes and not in a production code. The operator matrix is created by applying the operator to the columns of the identity matrix.
 
-**Installation**: PETSc already depends on LAPACK. The SLEPc interface to LAPACK can be used directly. If SLEPc's configure script complains about missing LAPACK functions, then reconfigure PETSc with option `--download-f2cblaslapack`.
+**Installation**: PETSc already depends on LAPACK. The SLEPc interface to LAPACK can be used directly. If SLEPc's `configure` script complains about missing LAPACK functions, then reconfigure PETSc with option `--download-f2cblaslapack`.
 
 #### ARPACK
 
@@ -221,7 +221,7 @@ PRIMME {cite:p}`Sta10` is a C library for finding a number of eigenvalues and th
 
 EVSL {cite:p}`Li19` is a sequential library that implements methods for computing all eigenvalues located in a given interval for real symmetric (standard or generalized) eigenvalue problems. Currently SLEPc only supports standard problems.
 
-**Installation**: The option `--download-evsl` is available in SLEPc's configure for easy installation. Alternatively, one can use an already installed version.
+**Installation**: The option `--download-evsl` is available in SLEPc's `configure` for easy installation. Alternatively, one can use an already installed version.
 
 #### BLOPEX
 
@@ -255,7 +255,7 @@ ELPA {cite:p}`Auc11` is a high-performance library for the parallel solution of 
 
 KSVD {cite:p}`Suk19` is a high performance software framework for computing a dense SVD on distributed-memory manycore systems. The KSVD solver relies on the polar decomposition (PD) based on the QR Dynamically-Weighted Halley (QDWH) and ZOLO-PD algorithms.
 
-**Installation**: The option `--download-ksvd` is available in SLEPc's configure for easy installation, which in turn requires adding `--download-polar` and `--download-elpa`.
+**Installation**: The option `--download-ksvd` is available in SLEPc's `configure` for easy installation, which in turn requires adding `--download-polar` and `--download-elpa`.
 
 #### ELEMENTAL
 
@@ -282,6 +282,14 @@ FEAST {cite:p}`Pol09` is a numerical library for solving the standard or general
 CHASE {cite:p}`Win19` is a modern and scalable library based on subspace iteration with polynomial acceleration to solve dense Hermitian (symmetric) algebraic eigenvalue problems, especially solving dense Hermitian eigenproblems arranged in a sequence. Novel to ChASE is the computation of the spectral estimates that enter in the filter and an optimization of the polynomial degree that further reduces the necessary floating-point operations.
 
 **Installation**: Currently, the CHASE interface in SLEPc is based on the MPI version with block-cyclic distribution, i.e., ScaLAPACK matrix storage, so it is necessary to enable ScaLAPACK during configuration of PETSc.
+
+#### SLICOT
+
+<https://www.slicot.org>
+
+SLICOT provides Fortran 77 implementations of numerical algorithms for computations in systems and control theory. In SLEPc, they are used in the `LME` module only, for solving Lyapunov equations of small size.
+
+**Installation**: The option `--download-slicot` is available in SLEPc's `configure` for easy installation.
 
 {#sec:fortran}
 ## Fortran Interface
