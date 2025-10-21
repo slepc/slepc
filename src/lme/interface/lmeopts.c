@@ -168,7 +168,7 @@ PetscErrorCode LMESetFromOptions(LME lme)
        LME_GEN_LYAPUNOV    A*X*D'+D*X*A'=-C      yes (A-t) yes (D-t)
        LME_GEN_SYLVESTER   A*X*E+D*X*B=C         yes  yes  yes  yes
        LME_DT_LYAPUNOV     A*X*A'-X=-C           yes   -    -  (A-t)
-       LME_STEIN           A*X*E+X=C             yes   -    -   yes
+       LME_STEIN           A*X*E-X=-C            yes   -    -   yes
 .ve
 
    In the above table, the notation (A-t) means that this matrix need

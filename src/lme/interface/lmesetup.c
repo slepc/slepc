@@ -89,7 +89,7 @@ PetscErrorCode LMESetUp(LME lme)
     case LME_DT_LYAPUNOV:
       break;
     case LME_STEIN:
-      LMECheckCoeff(lme,lme->D,"D","Stein");
+      LMECheckCoeff(lme,lme->E,"E","Stein");
       break;
   }
   PetscCheck(lme->problem_type==LME_LYAPUNOV,PetscObjectComm((PetscObject)lme),PETSC_ERR_SUP,"There is no solver yet for this matrix equation type");
