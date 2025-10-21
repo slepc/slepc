@@ -22,8 +22,8 @@ class Chase(package.Package):
     obj = self.version if hasattr(self,'version') else self.gitcommit
     self.url            = 'https://github.com/ChASE-library/ChASE/archive/'+('v'+obj if hasattr(self,'version') else obj)+'.tar.gz'
     self.archive        = 'ChASE-'+obj+'.tar.gz'
-    self.supportssingle = True
     self.hasheaders     = True
+    self.supportsprecis.append('single')
     self.ProcessArgs(argdb)
 
   def Precondition(self,slepc,petsc):

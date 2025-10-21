@@ -22,8 +22,8 @@ class HPDDM(package.Package):
     obj = self.version if hasattr(self,'version') else self.gitcommit
     self.url            = 'https://github.com/hpddm/hpddm/archive/'+('v'+obj if hasattr(self,'version') else obj)+'.tar.gz'
     self.archive        = 'hpddm-'+obj+'.tar.gz'
-    self.supportssingle = True
     self.supports64bint = True
+    self.supportsprecis.extend(['single','__float128'])
     self.ProcessArgs(argdb)
 
   def Precondition(self,slepc,petsc):

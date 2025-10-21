@@ -36,12 +36,13 @@ class Package:
     self.buildflags      = ''
     self.log             = log
     self.supportsscalar  = ['real', 'complex']
-    self.supportssingle  = False
+    self.supportsprecis  = ['double']
     self.supports64bint  = False
     self.fortran         = False
     self.hasheaders      = False
     self.requested       = False
     self.havepackage     = False
+    self.skippackage     = False
 
   def RunCommand(self,instr):
     try:
@@ -127,7 +128,8 @@ class Package:
         if petsc.buildsharedlib:
           self.packagelibs = self.DistilLibList(self.packagelibs,petsc)
         self.Check(slepcconf,slepcvars,petsc,archdir)
-        if not self.havepackage: self.log.setLastFailed()
+        if self.skippackage: self.log.setLastStatus('skipped')
+        elif not self.havepackage: self.log.setLastStatus('failed')
       try:
         self.LoadVersion(slepcconf)
         self.log.write('Version number for '+name+' is '+self.iversion)
@@ -146,11 +148,8 @@ class Package:
     elif petsc.scalar == 'real':
       if 'real' not in self.supportsscalar:
         self.log.Exit(package+' is supported only with complex scalars')
-    if petsc.precision == 'single':
-      if not self.supportssingle:
-        self.log.Exit(package+' is supported only in double precision')
-    elif petsc.precision != 'double':
-      self.log.Exit('Precision '+petsc.precision+' is not supported for external packages')
+    if not petsc.precision in self.supportsprecis:
+      self.log.Exit(package+' does not support '+petsc.precision+' precision')
     if petsc.ind64 and not self.supports64bint:
       self.log.Exit(package+' cannot be used with 64-bit integers')
     if self.downloadpackage and self.fortran and not hasattr(petsc,'fc'):

@@ -162,7 +162,7 @@ int main(int argc,char **argv)
       test:
          suffix: 1_scalapack
          nsize: {{1 2 3}}
-         requires: scalapack
+         requires: scalapack !__float128
          args: -eps_type scalapack
       test:
          suffix: 1_elpa

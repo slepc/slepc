@@ -17,8 +17,8 @@ class Scalapack(package.Package):
     self.packagename    = 'scalapack'
     self.installable    = True
     self.petscdepend    = 'scalapack'
-    self.supportssingle = True
     self.supports64bint = True
+    self.supportsprecis.extend(['single','__float128'])
     self.ProcessArgs(argdb,petscpackages)
 
   def Functions(self,petsc):
@@ -38,6 +38,10 @@ class Scalapack(package.Package):
     if not 'scalapack' in petsc.packages:
       self.log.Exit('The ScaLAPACK interface requires that PETSc has been built with ScaLAPACK')
 
-    functions = self.Functions(petsc)
-    self.FortranLib(slepcconf,slepcvars,[''],'',functions)
+    if petsc.precision == '__float128':
+      self.skippackage = True
+      self.log.write('Disabling ScaLAPACK interface due to precision = __float128')
+    else:
+      functions = self.Functions(petsc)
+      self.FortranLib(slepcconf,slepcvars,[''],'',functions)
 

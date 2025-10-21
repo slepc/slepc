@@ -21,8 +21,8 @@ class Elpa(package.Package):
     self.version        = '2025.06.001'
     self.archive        = 'elpa-'+self.version+'.tar.gz'
     self.url            = 'https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/'+self.version+'/'+self.archive
-    self.supportssingle = True
     self.fortran        = True
+    self.supportsprecis.append('single')
     self.ProcessArgs(argdb)
 
 

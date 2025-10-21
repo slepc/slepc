@@ -23,10 +23,10 @@ class Arpack(package.Package):
     obj = self.version if hasattr(self,'version') else self.gitcommit
     self.url            = 'https://github.com/opencollab/arpack-ng/archive/'+obj+'.tar.gz'
     self.archive        = 'arpack-ng-'+obj+'.tar.gz'
-    self.supportssingle = True
     self.supports64bint = True
     self.fortran        = True
     self.hasheaders     = True   # the option --with-arpack-include=... is simply ignored
+    self.supportsprecis.append('single')
     self.ProcessArgs(argdb)
 
   def Functions(self,petsc):
