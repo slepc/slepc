@@ -65,4 +65,3 @@ SHLIBS = libslepcsys${LIB_NAME_SUFFIX} libslepcmfn${LIB_NAME_SUFFIX} libslepclme
 
 # Include definitions customized by configuration
 include ${SLEPC_DIR}/${PETSC_ARCH}/lib/slepc/conf/slepcvariables
-

@@ -265,7 +265,6 @@ print:
 	$(info $($(VAR)))
 	@true
 
-
 allobj.d := $(srcs.o:%.o=%.d)
 # Tell make that allobj.d are all up to date.  Without this, the include
 # below has quadratic complexity, taking more than one second for a

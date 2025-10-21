@@ -406,8 +406,6 @@ print-test:
 show-fail:
 	-@$(PYTHON) $(PETSCCONFIGDIR)/report_tests.py -d $(TESTDIR)/counts -f
 
-
-
 # Don't start running tests until starttime has completed
 $(alltesttargets:%=$(TESTDIR)/counts/%.counts) : starttime
 
