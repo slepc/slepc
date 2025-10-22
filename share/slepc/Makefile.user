@@ -52,4 +52,3 @@ print:
 	$(COMPILE.cc) $(OUTPUT_OPTION) $<
 %.o : %.cu
 	$(CUDAC) -c $(CPPFLAGS) $(CUDAC_FLAGS) $(CUDA_INCLUDE) -o $@ $<
-

@@ -25,4 +25,3 @@ help-lint_slepc:
 	-@echo "Options:"
 	-@echo "  LINTER_OPTIONS=\"--linter_options ...\"  See above for available options"
 	-@echo
-
