@@ -63,7 +63,10 @@ PetscErrorCode LMESolve(LME lme)
   /* various viewers */
   PetscCall(LMEViewFromOptions(lme,NULL,"-lme_view"));
   PetscCall(LMEConvergedReasonViewFromOptions(lme));
-  PetscCall(MatViewFromOptions(lme->A,(PetscObject)lme,"-lme_view_mat"));
+  PetscCall(MatViewFromOptions(lme->A,(PetscObject)lme,"-lme_view_mat_a"));
+  if (lme->B) PetscCall(MatViewFromOptions(lme->B,(PetscObject)lme,"-lme_view_mat_b"));
+  if (lme->D) PetscCall(MatViewFromOptions(lme->D,(PetscObject)lme,"-lme_view_mat_d"));
+  if (lme->E) PetscCall(MatViewFromOptions(lme->E,(PetscObject)lme,"-lme_view_mat_e"));
   PetscCall(MatViewFromOptions(lme->C,(PetscObject)lme,"-lme_view_rhs"));
   PetscCall(MatViewFromOptions(lme->X,(PetscObject)lme,"-lme_view_solution"));
   PetscFunctionReturn(PETSC_SUCCESS);
