@@ -13,13 +13,13 @@
 SLEPC_EXTERN PetscErrorCode LMECreate_Krylov(LME);
 
 /*@C
-  LMERegisterAll - Registers all the matrix functions in the LME package.
+  LMERegisterAll - Registers all the matrix functions in the `LME` package.
 
   Not Collective
 
   Level: advanced
 
-.seealso: `LMERegister()`
+.seealso: [](ch:lme), `LMERegister()`
 @*/
 PetscErrorCode LMERegisterAll(void)
 {
@@ -31,13 +31,13 @@ PetscErrorCode LMERegisterAll(void)
 }
 
 /*@C
-  LMEMonitorRegisterAll - Registers all the monitors in the LME package.
+  LMEMonitorRegisterAll - Registers all the monitors in the `LME `package.
 
   Not Collective
 
   Level: advanced
 
-.seealso: `LMEMonitorRegister()`
+.seealso: [](ch:lme), `LMEMonitorRegister()`
 @*/
 PetscErrorCode LMEMonitorRegisterAll(void)
 {

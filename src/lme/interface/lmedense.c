@@ -292,29 +292,29 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
 
    Input Parameters:
 +  lme - linear matrix equation solver context
-.  m   - number of rows and columns of H
+.  m   - number of rows and columns of `H`
 .  H   - coefficient matrix
-.  ldh - leading dimension of H
-.  k   - number of columns of B
+.  ldh - leading dimension of `H`
+.  k   - number of columns of `B`
 .  B   - right-hand side matrix
-.  ldb - leading dimension of B
--  ldu - leading dimension of U
+.  ldb - leading dimension of `B`
+-  ldu - leading dimension of `U`
 
    Output Parameters:
 +  U   - Cholesky factor of the solution
--  res - (optional) residual norm, on input it should contain H(m+1,m)
+-  res - (optional) residual norm, on input it should contain $h_{m+1,m}$
 
    Note:
-   The Lyapunov equation has the form H*X + X*H' = -B*B', where H is an mxm
-   upper Hessenberg matrix, B is an mxk matrix and the solution is expressed
-   as X = U'*U, where U is upper triangular. H is supposed to be stable.
+   The Lyapunov equation has the form $HX + XH^* = -BB^*$, where $H$ is an $m\times m$
+   upper Hessenberg matrix, $B$ is an $m\times k$ matrix and the solution is expressed
+   as $X = U^*U$, where $U$ is upper triangular. $H$ is supposed to be stable.
 
-   When k=1 and the res argument is provided, the last row of X is used to
+   When `k=1` and the `res` argument is provided, the last row of `X` is used to
    compute the residual norm of a Lyapunov equation projected via Arnoldi.
 
    Level: developer
 
-.seealso: `LMEDenseLyapunov()`, `LMESolve()`
+.seealso: [](ch:lme), `LMEDenseLyapunov()`, `LMESolve()`
 @*/
 PetscErrorCode LMEDenseHessLyapunovChol(LME lme,PetscInt m,PetscScalar *H,PetscInt ldh,PetscInt k,PetscScalar *B,PetscInt ldb,PetscScalar *U,PetscInt ldu,PetscReal *res)
 {
@@ -466,23 +466,23 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
 
    Input Parameters:
 +  lme - linear matrix equation solver context
-.  m   - number of rows and columns of A
+.  m   - number of rows and columns of `A`
 .  A   - coefficient matrix
-.  lda - leading dimension of A
+.  lda - leading dimension of `A`
 .  B   - right-hand side matrix
-.  ldb - leading dimension of B
--  ldx - leading dimension of X
+.  ldb - leading dimension of `B`
+-  ldx - leading dimension of `X`
 
    Output Parameter:
 .  X   - the solution
 
    Note:
-   The Lyapunov equation has the form A*X + X*A' = -B, where all are mxm
-   matrices, and B is symmetric.
+   The Lyapunov equation has the form $AX + XA^* = -B$, where all are $m\times m$
+   matrices, and $B$ is symmetric.
 
    Level: developer
 
-.seealso: `LMEDenseHessLyapunovChol()`, `LMESolve()`
+.seealso: [](ch:lme), `LMEDenseHessLyapunovChol()`, `LMESolve()`
 @*/
 PetscErrorCode LMEDenseLyapunov(LME lme,PetscInt m,PetscScalar *A,PetscInt lda,PetscScalar *B,PetscInt ldb,PetscScalar *X,PetscInt ldx)
 {
