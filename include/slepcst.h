@@ -23,21 +23,22 @@ SLEPC_EXTERN PetscErrorCode STInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode STFinalizePackage(void);
 
 /*S
-    ST - Abstract SLEPc object that manages spectral transformations.
-    This object is accessed only in advanced applications.
+   ST - Spectral transformation, encapsulates the functionality required
+   for acceleration techniques based on the transformation of the spectrum,
+   e.g., shift-and-invert.
 
-    Level: beginner
+   Level: beginner
 
-.seealso:  `STCreate()`, `EPS`
+.seealso: [](ch:st), `STCreate()`
 S*/
 typedef struct _p_ST* ST;
 
 /*J
-    STType - String with the name of a SLEPc spectral transformation
+   STType - String with the name of the spectral transformation type.
 
-    Level: beginner
+   Level: beginner
 
-.seealso: `STSetType()`, `ST`
+.seealso: [](ch:st), `ST`, `STSetType()`
 J*/
 typedef const char *STType;
 #define STSHELL     "shell"
@@ -131,10 +132,15 @@ SLEPC_EXTERN PetscErrorCode STMatGetSize(ST,PetscInt*,PetscInt*);
 SLEPC_EXTERN PetscErrorCode STMatGetLocalSize(ST,PetscInt*,PetscInt*);
 
 /*E
-    STMatMode - Determines how to handle the coefficient matrix associated
-    to the spectral transformation
+   STMatMode - Determines how to handle the coefficient matrix of the linear
+   system associated with the spectral transformation.
 
-    Level: intermediate
+   Values:
++  `ST_MATMODE_COPY`    - the coefficient matrix is built explicitly on a copy of $A$
+.  `ST_MATMODE_INPLACE` - the coefficient matrix is built explicitly overwriting $A$
+-  `ST_MATMODE_SHELL`   - the coefficient matrix is handled implicitly
+
+   Level: intermediate
 
 .seealso: `STSetMatMode()`, `STGetMatMode()`
 E*/
@@ -142,6 +148,45 @@ typedef enum { ST_MATMODE_COPY,
                ST_MATMODE_INPLACE,
                ST_MATMODE_SHELL } STMatMode;
 SLEPC_EXTERN const char *STMatModes[];
+
+/*MC
+   ST_MATMODE_COPY - The coefficient matrix of the linear system, $A-\sigma B$, is
+   built explicitly on a copy of $A$.
+
+   Note:
+   If memory is an issue, one may prefer one of the other two modes.
+
+   Level: intermediate
+
+.seealso: [](ch:st), `STMatMode`, `STSetMatMode()`, `ST_MATMODE_INPLACE`, `ST_MATMODE_SHELL`
+M*/
+
+/*MC
+   ST_MATMODE_INPLACE - The coefficient matrix of the linear system, $A-\sigma B$, is
+   built explicitly overwritting $A$.
+
+   Note:
+   This mode uses less memory than `ST_MATMODE_COPY`, but it modifies $A$. This
+   alteration of $A$ is reversed after the eigensolution process has finished,
+   but due to roundoff, the result might not be exactly equal to the original $A$.
+
+   Level: intermediate
+
+.seealso: [](ch:st), `STMatMode`, `STSetMatMode()`, `ST_MATMODE_COPY`, `ST_MATMODE_SHELL`
+M*/
+
+/*MC
+   ST_MATMODE_SHELL - The coefficient matrix of the linear system, $A-\sigma B$, is
+   not built explicitly, and instead it is handled implicitly via a `MATSHELL`.
+
+   Note:
+   This mode severely restricts the number of possibilities available for solving
+   the linear system via `KSP`.
+
+   Level: intermediate
+
+.seealso: [](ch:st), `STMatMode`, `STSetMatMode()`, `ST_MATMODE_COPY`, `ST_MATMODE_INPLACE`
+M*/
 
 SLEPC_EXTERN PetscErrorCode STSetMatMode(ST,STMatMode);
 SLEPC_EXTERN PetscErrorCode STGetMatMode(ST,STMatMode*);
@@ -154,59 +199,63 @@ SLEPC_EXTERN PetscErrorCode STRegister(const char[],PetscErrorCode(*)(ST));
 /* --------- options specific to particular spectral transformations-------- */
 
 /*S
-  STShellApplyFn - A prototype of a function for the apply() operation in STSHELL
+   STShellApplyFn - A prototype of a function for the user-defined `STApply()`
+   operation in an `STSHELL`.
 
-  Calling Sequence:
-+   st   - the spectral transformation context
-.   xin  - input vector
--   xout - output vector
+   Calling Sequence:
++  st   - the spectral transformation context
+.  xin  - input vector
+-  xout - output vector
 
-  Level: advanced
+   Level: advanced
 
-.seealso: `STShellSetApply()`
+.seealso: [](ch:st), `STShellSetApply()`, `STApply()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyFn(ST st,Vec xin,Vec xout);
 
 /*S
-  STShellApplyTransposeFn - A prototype of a function for the applytrans() operation in STSHELL
+   STShellApplyTransposeFn - A prototype of a function for the user-defined `STApplyTranspose()`
+   operation in an `STSHELL`.
 
-  Calling Sequence:
-+   st   - the spectral transformation context
-.   xin  - input vector
--   xout - output vector
+   Calling Sequence:
++  st   - the spectral transformation context
+.  xin  - input vector
+-  xout - output vector
 
-  Level: advanced
+   Level: advanced
 
-.seealso: `STShellSetApplyTranspose()`
+.seealso: [](ch:st), `STShellSetApplyTranspose()`, `STApplyTranspose()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyTransposeFn(ST st,Vec xin,Vec xout);
 
 /*S
-  STShellApplyHermitianTransposeFn - A prototype of a function for the applyhermtrans() operation in STSHELL
+   STShellApplyHermitianTransposeFn - A prototype of a function for the user-defined
+   `STApplyHermitianTranspose()` operation in an `STSHELL`.
 
-  Calling Sequence:
-+   st   - the spectral transformation context
-.   xin  - input vector
--   xout - output vector
+   Calling Sequence:
++  st   - the spectral transformation context
+.  xin  - input vector
+-  xout - output vector
 
-  Level: advanced
+   Level: advanced
 
-.seealso: `STShellSetApplyHermitianTranspose()`
+.seealso: [](ch:st), `STShellSetApplyHermitianTranspose()`, `STApplyHermitianTranspose()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyHermitianTransposeFn(ST st,Vec xin,Vec xout);
 
 /*S
-  STShellBackTransformFn - A prototype of a function for the backtransform() operation in STSHELL
+   STShellBackTransformFn - A prototype of a function for the user-defined `STBackTransform()`
+   operation in an `STSHELL`.
 
-  Calling Sequence:
-+   st   - the spectral transformation context
-.   n    - number of eigenvalues to be backtransformed
-.   eigr - pointer to the real parts of the eigenvalues to transform back
--   eigi - pointer to the imaginary parts
+   Calling Sequence:
++  st   - the spectral transformation context
+.  n    - number of eigenvalues to be backtransformed
+.  eigr - pointer to the real parts of the eigenvalues to transform back
+-  eigi - pointer to the imaginary parts
 
-  Level: advanced
+   Level: advanced
 
-.seealso: `STShellSetBackTransform()`
+.seealso: [](ch:st), `STShellSetBackTransform()`, `STBackTransform()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellBackTransformFn(ST st,PetscInt n,PetscScalar *eigr,PetscScalar *eigi);
 
@@ -226,28 +275,80 @@ SLEPC_EXTERN PetscErrorCode STPrecondGetKSPHasMat(ST,PetscBool*);
 SLEPC_EXTERN PetscErrorCode STPrecondSetKSPHasMat(ST,PetscBool);
 
 /*E
-    STFilterType - Selects the method used to build the filter
+   STFilterType - Selects the method used to build the filter.
 
-    Level: intermediate
+   Values:
++  `ST_FILTER_FILTLAN`   - the filter is built with FILTLAN (Filtered Lanczos)
+-  `ST_FILTER_CHEBYSHEV` - the filter is built with a Chebyshev series
 
-.seealso: `STSetFilterType()`, `STGetFilterType()`
+   Level: intermediate
+
+.seealso: [](ch:st), `STFilterSetType()`, `STGetFilterType()`
 E*/
 typedef enum { ST_FILTER_FILTLAN   = 1,
                ST_FILTER_CHEBYSHEV = 2 } STFilterType;
 SLEPC_EXTERN const char *STFilterTypes[];
 
+/*MC
+   ST_FILTER_FILTLAN - The polynomial filter is built with FILTLAN (Filtered Lanczos).
+
+   Note:
+   This filter implements the Filtered Lanczos method {cite:p}`Fan12`. In fact,
+   the implementation adapts files from the FILTLAN package by the same authors,
+   which have been converted for a native integration in SLEPc.
+
+   Level: intermediate
+
+.seealso: [](ch:st), `STFilterType`, `STFilterSetType()`, `ST_FILTER_CHEBYSHEV`
+M*/
+
+/*MC
+   ST_FILTER_CHEBYSHEV - The filter is based on a truncated Chebyshev series.
+
+   Note:
+   The application of the filter is implemented by means of a Clenshaw
+   algorithm. This filter also supports using damping, see `STFilterSetDamping()`.
+
+   Level: intermediate
+
+.seealso: [](ch:st), `STFilterType`, `STSetFilterType()`, `STFilterSetDamping()`, `ST_FILTER_FILTLAN`
+M*/
+
 /*E
-    STFilterDamping - The damping type used to build the filter
+   STFilterDamping - The damping type used to build the filter.
 
-    Level: advanced
+   Values:
++  `ST_FILTER_DAMPING_NONE`    - no damping
+.  `ST_FILTER_DAMPING_JACKSON` - Jackson damping
+.  `ST_FILTER_DAMPING_LANCZOS` - Lanczos damping
+-  `ST_FILTER_DAMPING_FEJER`   - Fejer damping
 
-.seealso: `STSetFilterDamping()`, `STGetFilterDamping()`
+   Notes:
+   The default is no damping.
+
+   For the definition of the damping coefficients, see for instance {cite:p}`Pie16`
+
+   Level: advanced
+
+.seealso: [](ch:st), `STSetFilterDamping()`, `STGetFilterDamping()`
 E*/
 typedef enum { ST_FILTER_DAMPING_NONE,
                ST_FILTER_DAMPING_JACKSON,
                ST_FILTER_DAMPING_LANCZOS,
                ST_FILTER_DAMPING_FEJER } STFilterDamping;
 SLEPC_EXTERN const char *STFilterDampings[];
+
+/*MC
+   ST_MATMODE_COPY - The coefficient matrix of the linear system, $A-\sigma B$, is
+   built explicitly on a copy of $A$.
+
+   Note:
+   If memory is an issue, one may prefer one of the other two modes.
+
+   Level: intermediate
+
+.seealso: [](ch:st), `STMatMode`, `STSetMatMode()`, `ST_MATMODE_INPLACE`, `ST_MATMODE_SHELL`
+M*/
 
 SLEPC_EXTERN PetscErrorCode STFilterSetType(ST,STFilterType);
 SLEPC_EXTERN PetscErrorCode STFilterGetType(ST,STFilterType*);

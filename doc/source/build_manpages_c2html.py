@@ -20,7 +20,7 @@ def pre(doctext,slepc_dir,srcdir,outdir):
     print('============================================')
     print('Building all manual pages')
     build_man_pages.main(slepc_dir,srcdir,doctext)
-    print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+    print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
     print('============================================')
 
     import build_man_examples_links
@@ -28,7 +28,7 @@ def pre(doctext,slepc_dir,srcdir,outdir):
     print('============================================')
     print('Building manual page links to tutorials')
     build_man_examples_links.main(slepc_dir,srcdir)
-    print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+    print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
     print('============================================')
 
     import build_man_impls_links
@@ -36,7 +36,7 @@ def pre(doctext,slepc_dir,srcdir,outdir):
     print('============================================')
     print('Building manual page links to implementations')
     build_man_impls_links.main(slepc_dir,srcdir)
-    print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+    print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
     print('============================================')
 
     import build_man_index
@@ -44,7 +44,7 @@ def pre(doctext,slepc_dir,srcdir,outdir):
     print('============================================')
     print('Building manual page indices')
     build_man_index.main(slepc_dir,srcdir)
-    print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+    print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
     print('============================================')
 
 def post(c2html,mapnames,slepc_dir,srcdir,outdir):
@@ -69,5 +69,5 @@ def post(c2html,mapnames,slepc_dir,srcdir,outdir):
     print('============================================')
     print('Building c2html')
     build_c2html.main(slepc_dir,srcdir,outdir,c2html,mapnames)
-    print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+    print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
     print('============================================')

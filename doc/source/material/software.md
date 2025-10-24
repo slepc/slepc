@@ -62,3 +62,4 @@ The list below shows software packages that use SLEPc or expose part of its func
   10. [helmholtz-x](https://doi.org/10.17863/CAM.112694): a python library built upon DOLFINx to solve a non-homogeneous Helmholtz equation, specifically thermoacoustic Helmholtz.
   11. [RSVD-{math}`\Delta`t](https://github.com/AliFarghadan/RSVD-Delta-t/tree/Resolvent-analysis): Randomized Singular Value Decomposition with Time-stepping for large-scale resolvent analysis
   12. [OpenParEM](https://openparem.org): Open-source parallel electromagnetic simulators
+  13. [Resolvent4py](https://github.com/albertopadovan/resolvent4py): A parallel Python package for analysis, model reduction and control of large-scale linear systems

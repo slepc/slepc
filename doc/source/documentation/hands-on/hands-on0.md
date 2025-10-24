@@ -61,11 +61,11 @@ Examine the source code of the sample program. The following comments will help 
 SLEPc header files automatically include some PETSc header files.
 :::
 
-**Library Initialization**: All SLEPc programs must begin with a call to `SlepcInitialize`, which in turn initializes PETSc and MPI. Similarly, at the end of the program `SlepcFinalize` must be called for library cleanup.
+**Library Initialization**: All SLEPc programs must begin with a call to `SlepcInitialize()`, which in turn initializes PETSc and MPI. Similarly, at the end of the program `SlepcFinalize()` must be called for library cleanup.
 
-**Input/Output**: In this example, we do input/output via a call to a PETSc function, {external:doc}`PetscPrintf`. Remember that in parallel programs input/output cannot be done simply via C standard library functions. Note that in SLEPc programs we can freely use any PETSc function.
+**Input/Output**: In this example, we do input/output via a call to a PETSc function, {external:doc}`PetscPrintf`(). Remember that in parallel programs input/output cannot be done simply via C standard library functions. Note that in SLEPc programs we can freely use any PETSc function.
 
-**Error Checking**: All SLEPc routines return an integer indicating whether an error has occurred during the call. The PETSc macro {external:doc}`PetscCall` checks the return value and calls the PETSc error handler upon error detection. All function calls should be wrapped around {external:doc}`PetscCall` to enable a complete error traceback.
+**Error Checking**: All SLEPc routines return an integer indicating whether an error has occurred during the call. The PETSc macro {external:doc}`PetscCall`() checks the return value and calls the PETSc error handler upon error detection. All function calls should be wrapped around {external:doc}`PetscCall`() to enable a complete error traceback.
 
 ## Running the Program
 
@@ -112,6 +112,6 @@ When using the debug versions some options are available to support debugging.  
 $ ./hello -start_in_debugger
 ```
 
-opens the program in a debugger stopped at the `SlepcInitialize` function.
+opens the program in a debugger stopped at the `SlepcInitialize()` function.
 
 Other useful options are: `-info` to get informative messages about progress of the calculations, `-malloc_info` to print memory usage at end of run, `-log_trace [filename]` to get a full trace of the execution (in a file), `-malloc_dump` to list memory blocks not freed at the end of the program, and `-log_view` to get a summary including performance results.

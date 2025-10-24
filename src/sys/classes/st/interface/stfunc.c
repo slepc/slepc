@@ -20,12 +20,12 @@ static PetscBool STPackageInitialized = PETSC_FALSE;
 const char *STMatModes[] = {"COPY","INPLACE","SHELL","STMatMode","ST_MATMODE_",NULL};
 
 /*@C
-   STFinalizePackage - This function destroys everything in the Slepc interface
-   to the ST package. It is called from SlepcFinalize().
+   STFinalizePackage - This function destroys everything in the SLEPc interface
+   to the `ST` package. It is called from `SlepcFinalize()`.
 
    Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: `SlepcFinalize()`, `STInitializePackage()`
 @*/
 PetscErrorCode STFinalizePackage(void)
 {
@@ -37,13 +37,16 @@ PetscErrorCode STFinalizePackage(void)
 }
 
 /*@C
-   STInitializePackage - This function initializes everything in the ST package.
-   It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-   on the first call to STCreate() when using static libraries.
+   STInitializePackage - This function initializes everything in the `ST` package.
+   It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
+   on the first call to `STCreate()` when using shared or static libraries.
+
+   Note:
+   This function never needs to be called by SLEPc users.
 
    Level: developer
 
-.seealso: `SlepcInitialize()`
+.seealso: [](ch:st), `ST`, `SlepcInitialize()`, `STFinalizePackage()`
 @*/
 PetscErrorCode STInitializePackage(void)
 {
@@ -84,8 +87,8 @@ PetscErrorCode STInitializePackage(void)
 }
 
 /*@
-   STReset - Resets the ST context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   STReset - Resets the `ST` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 
@@ -94,7 +97,7 @@ PetscErrorCode STInitializePackage(void)
 
    Level: advanced
 
-.seealso: `STDestroy()`
+.seealso: [](ch:st), `STDestroy()`
 @*/
 PetscErrorCode STReset(ST st)
 {
@@ -124,7 +127,7 @@ PetscErrorCode STReset(ST st)
 }
 
 /*@
-   STDestroy - Destroys ST context that was created with STCreate().
+   STDestroy - Destroys ST context that was created with `STCreate()`.
 
    Collective
 
@@ -133,7 +136,7 @@ PetscErrorCode STReset(ST st)
 
    Level: beginner
 
-.seealso: `STCreate()`, `STSetUp()`
+.seealso: [](ch:st), `STCreate()`, `STSetUp()`
 @*/
 PetscErrorCode STDestroy(ST *st)
 {
@@ -161,7 +164,7 @@ PetscErrorCode STDestroy(ST *st)
 
    Level: beginner
 
-.seealso: `STSetUp()`, `STApply()`, `STDestroy()`, `ST`
+.seealso: [](ch:st), `STSetUp()`, `STApply()`, `STDestroy()`, `ST`
 @*/
 PetscErrorCode STCreate(MPI_Comm comm,ST *newst)
 {
@@ -251,16 +254,23 @@ static inline PetscErrorCode STMatIsSymmetricKnown(ST st,PetscBool *symm,PetscBo
 
    Input Parameters:
 +  st - the spectral transformation context
-.  n  - number of matrices in array A
+.  n  - number of matrices in array `A`
 -  A  - the array of matrices associated with the eigensystem
 
    Notes:
-   It must be called before STSetUp(). If it is called again after STSetUp() then
-   the ST object is reset.
+   It must be called before `STSetUp()`. If it is called again after `STSetUp()` then
+   the `ST` object is reset.
+
+   In standard eigenproblems only one matrix is passed, while in generalized
+   problems two matrices are provided. The number of matrices is larger in
+   polynomial eigenproblems.
+
+   In normal usage, matrices are provided via the corresponding `EPS` of `PEP`
+   interface function.
 
    Level: intermediate
 
-.seealso: `STGetMatrix()`, `STGetNumMatrices()`, `STSetUp()`, `STReset()`
+.seealso: [](ch:st), `STGetMatrix()`, `STGetNumMatrices()`, `STSetUp()`, `STReset()`
 @*/
 PetscErrorCode STSetMatrices(ST st,PetscInt n,Mat A[])
 {
@@ -323,7 +333,7 @@ PetscErrorCode STSetMatrices(ST st,PetscInt n,Mat A[])
 
    Level: intermediate
 
-.seealso: `STSetMatrices()`, `STGetNumMatrices()`
+.seealso: [](ch:st), `STSetMatrices()`, `STGetNumMatrices()`
 @*/
 PetscErrorCode STGetMatrix(ST st,PetscInt k,Mat *A)
 {
@@ -352,7 +362,7 @@ PetscErrorCode STGetMatrix(ST st,PetscInt k,Mat *A)
 
    Level: developer
 
-.seealso: `STGetMatrix()`, `STGetNumMatrices()`
+.seealso: [](ch:st), `STGetMatrix()`, `STGetNumMatrices()`
 @*/
 PetscErrorCode STGetMatrixTransformed(ST st,PetscInt k,Mat *T)
 {
@@ -368,7 +378,7 @@ PetscErrorCode STGetMatrixTransformed(ST st,PetscInt k,Mat *T)
 }
 
 /*@
-   STGetNumMatrices - Returns the number of matrices stored in the ST.
+   STGetNumMatrices - Returns the number of matrices stored in the `ST`.
 
    Not Collective
 
@@ -376,11 +386,11 @@ PetscErrorCode STGetMatrixTransformed(ST st,PetscInt k,Mat *T)
 .  st - the spectral transformation context
 
    Output Parameters:
-.  n - the number of matrices passed in STSetMatrices()
+.  n - the number of matrices passed in `STSetMatrices()`
 
    Level: intermediate
 
-.seealso: `STSetMatrices()`
+.seealso: [](ch:st), `STSetMatrices()`
 @*/
 PetscErrorCode STGetNumMatrices(ST st,PetscInt *n)
 {
@@ -392,7 +402,7 @@ PetscErrorCode STGetNumMatrices(ST st,PetscInt *n)
 }
 
 /*@
-   STResetMatrixState - Resets the stored state of the matrices in the ST.
+   STResetMatrixState - Resets the stored state of the matrices in the `ST`.
 
    Logically Collective
 
@@ -402,12 +412,12 @@ PetscErrorCode STGetNumMatrices(ST st,PetscInt *n)
    Note:
    This is useful in solvers where the user matrices are modified during
    the computation, as in nonlinear inverse iteration. The effect is that
-   STGetMatrix() will retrieve the modified matrices as if they were
+   `STGetMatrix()` will retrieve the modified matrices as if they were
    the matrices originally provided by the user.
 
    Level: developer
 
-.seealso: `STGetMatrix()`, `EPSPowerSetNonlinear()`
+.seealso: [](ch:st), `STGetMatrix()`, `EPSPowerSetNonlinear()`
 @*/
 PetscErrorCode STResetMatrixState(ST st)
 {
@@ -429,30 +439,30 @@ PetscErrorCode STResetMatrixState(ST st)
 -  mat - the matrix that will be used in constructing the preconditioner
 
    Notes:
-   This matrix will be passed to the internal KSP object (via the last argument
-   of KSPSetOperators()) as the matrix to be used when constructing the preconditioner.
-   If no matrix is set or mat is set to NULL, A-sigma*B will be used
-   to build the preconditioner, being sigma the value set by STSetShift().
+   This matrix will be passed to the internal `KSP` object (via the last argument
+   of `KSPSetOperators()`) as the matrix to be used when constructing the preconditioner.
+   If no matrix is set or `mat` is set to `NULL`, then $A-\sigma B$ will be used
+   to build the preconditioner, being $\sigma$ the value set by `STSetShift()`.
 
    More precisely, this is relevant for spectral transformations that represent
-   a rational matrix function, and use a KSP object for the denominator, called
-   K in the description of STGetOperator(). It includes also the STPRECOND case.
-   If the user has a good approximation to matrix K that can be used to build a
+   a rational matrix function, and use a `KSP` object for the denominator, called
+   $K$ in the description of `STGetOperator()`. It includes also the `STPRECOND` case.
+   If the user has a good approximation to matrix $K$ that can be used to build a
    cheap preconditioner, it can be passed with this function. Note that it affects
-   only the Pmat argument of KSPSetOperators(), not the Amat argument.
+   only the `Pmat` argument of `KSPSetOperators()`, not the `Amat` argument.
 
-   If a preconditioner matrix is set, the default is to use an iterative KSP
+   If a preconditioner matrix is set, the default is to use an iterative `KSP`
    rather than a direct method.
 
-   An alternative to pass an approximation of A-sigma*B with this function is
-   to provide approximations of A and B via STSetSplitPreconditioner(). The
-   difference is that when sigma changes the preconditioner is recomputed.
+   An alternative to pass an approximation of $A-\sigma B$ with this function is
+   to provide approximations of $A$ and $B$ via `STSetSplitPreconditioner()`. The
+   difference is that when $\sigma$ changes the preconditioner is recomputed.
 
-   Use NULL to remove a previously set matrix.
+   Use `NULL` to remove a previously set matrix.
 
    Level: advanced
 
-.seealso: `STGetPreconditionerMat()`, `STSetShift()`, `STGetOperator()`, `STSetSplitPreconditioner()`
+.seealso: [](ch:st), `STGetPreconditionerMat()`, `STSetShift()`, `STGetOperator()`, `STSetSplitPreconditioner()`
 @*/
 PetscErrorCode STSetPreconditionerMat(ST st,Mat mat)
 {
@@ -474,7 +484,7 @@ PetscErrorCode STSetPreconditionerMat(ST st,Mat mat)
 }
 
 /*@
-   STGetPreconditionerMat - Returns the matrix previously set by STSetPreconditionerMat().
+   STGetPreconditionerMat - Returns the matrix previously set by `STSetPreconditionerMat()`.
 
    Not Collective
 
@@ -483,11 +493,11 @@ PetscErrorCode STSetPreconditionerMat(ST st,Mat mat)
 
    Output Parameter:
 .  mat - the matrix that will be used in constructing the preconditioner or
-   NULL if no matrix was set by STSetPreconditionerMat().
+   `NULL` if no matrix was set by `STSetPreconditionerMat()`.
 
    Level: advanced
 
-.seealso: `STSetPreconditionerMat()`
+.seealso: [](ch:st), `STSetPreconditionerMat()`
 @*/
 PetscErrorCode STGetPreconditionerMat(ST st,Mat *mat)
 {
@@ -508,30 +518,30 @@ PetscErrorCode STGetPreconditionerMat(ST st,Mat *mat)
 +  st     - the spectral transformation context
 .  n      - number of matrices
 .  Psplit - array of matrices
--  strp   - structure flag for Psplit matrices
+-  strp   - structure flag for `Psplit` matrices
 
    Notes:
-   The number of matrices passed here must be the same as in STSetMatrices().
+   The number of matrices passed here must be the same as in `STSetMatrices()`.
 
    For linear eigenproblems, the preconditioner matrix is computed as
-   Pmat(sigma) = A0-sigma*B0, where A0 and B0 are approximations of A and B
-   (the eigenproblem matrices) provided via the Psplit array in this function.
-   Compared to STSetPreconditionerMat(), this function allows setting a preconditioner
-   in a way that is independent of the shift sigma. Whenever the value of sigma
+   $P(\sigma) = A_0-\sigma B_0$, where $A_0$ and $B_0$ are approximations of $A$ and $B$
+   (the eigenproblem matrices) provided via the `Psplit` array in this function.
+   Compared to `STSetPreconditionerMat()`, this function allows setting a preconditioner
+   in a way that is independent of the shift $\sigma$. Whenever the value of $\sigma$
    changes the preconditioner is recomputed.
 
    Similarly, for polynomial eigenproblems the matrix for the preconditioner
-   is expressed as Pmat(sigma) = sum_i Psplit_i*phi_i(sigma), for i=1,...,n, where
-   the phi_i's are the polynomial basis functions.
+   is expressed as $P(\sigma) = \sum_i P_i \phi_i(\sigma)$, for $i=1,\dots,n$, where
+   $P_i$ are given in `Psplit` and the $\phi_i$'s are the polynomial basis functions.
 
    The structure flag provides information about the relative nonzero pattern of the
-   Psplit_i matrices, in the same way as in STSetMatStructure().
+   `Psplit` matrices, in the same way as in `STSetMatStructure()`.
 
-   Use n=0 to reset a previously set split preconditioner.
+   Use `n=0` to reset a previously set split preconditioner.
 
    Level: advanced
 
-.seealso: `STGetSplitPreconditionerTerm()`, `STGetSplitPreconditionerInfo()`, `STSetPreconditionerMat()`, `STSetMatrices()`, `STSetMatStructure()`
+.seealso: [](ch:st), `STGetSplitPreconditionerTerm()`, `STGetSplitPreconditionerInfo()`, `STSetPreconditionerMat()`, `STSetMatrices()`, `STSetMatStructure()`
 @*/
 PetscErrorCode STSetSplitPreconditioner(ST st,PetscInt n,Mat Psplit[],MatStructure strp)
 {
@@ -588,7 +598,7 @@ PetscErrorCode STSetSplitPreconditioner(ST st,PetscInt n,Mat Psplit[],MatStructu
 
    Level: advanced
 
-.seealso: `STSetSplitPreconditioner()`, `STGetSplitPreconditionerInfo()`
+.seealso: [](ch:st), `STSetSplitPreconditioner()`, `STGetSplitPreconditionerInfo()`
 @*/
 PetscErrorCode STGetSplitPreconditionerTerm(ST st,PetscInt k,Mat *Psplit)
 {
@@ -612,12 +622,12 @@ PetscErrorCode STGetSplitPreconditionerTerm(ST st,PetscInt k,Mat *Psplit)
 .  st - the spectral transformation context
 
    Output Parameters:
-+  n    - the number of matrices passed in STSetSplitPreconditioner()
--  strp - the matrix structure flag passed in STSetSplitPreconditioner()
++  n    - the number of matrices passed in `STSetSplitPreconditioner()`
+-  strp - the matrix structure flag passed in `STSetSplitPreconditioner()`
 
    Level: advanced
 
-.seealso: `STSetSplitPreconditioner()`, `STGetSplitPreconditionerTerm()`
+.seealso: [](ch:st), `STSetSplitPreconditioner()`, `STGetSplitPreconditionerTerm()`
 @*/
 PetscErrorCode STGetSplitPreconditionerInfo(ST st,PetscInt *n,MatStructure *strp)
 {
@@ -642,11 +652,11 @@ PetscErrorCode STGetSplitPreconditionerInfo(ST st,PetscInt *n,MatStructure *strp
    a lot of work, for example recomputing a factorization.
 
    This function is normally not directly called by users, since the shift is
-   indirectly set by EPSSetTarget().
+   indirectly set by `EPSSetTarget()`.
 
    Level: intermediate
 
-.seealso: `EPSSetTarget()`, `STGetShift()`, `STSetDefaultShift()`
+.seealso: [](ch:st), `EPSSetTarget()`, `STGetShift()`, `STSetDefaultShift()`
 @*/
 PetscErrorCode STSetShift(ST st,PetscScalar shift)
 {
@@ -676,7 +686,7 @@ PetscErrorCode STSetShift(ST st,PetscScalar shift)
 
    Level: intermediate
 
-.seealso: `STSetShift()`
+.seealso: [](ch:st), `STSetShift()`
 @*/
 PetscErrorCode STGetShift(ST st,PetscScalar* shift)
 {
@@ -699,7 +709,7 @@ PetscErrorCode STGetShift(ST st,PetscScalar* shift)
 
    Level: developer
 
-.seealso: `STSetShift()`
+.seealso: [](ch:st), `STSetShift()`
 @*/
 PetscErrorCode STSetDefaultShift(ST st,PetscScalar defaultshift)
 {
@@ -715,7 +725,7 @@ PetscErrorCode STSetDefaultShift(ST st,PetscScalar defaultshift)
 }
 
 /*@
-   STScaleShift - Multiply the shift with a given factor.
+   STScaleShift - Multiply the shift by a given factor.
 
    Logically Collective
 
@@ -725,11 +735,11 @@ PetscErrorCode STSetDefaultShift(ST st,PetscScalar defaultshift)
 
    Note:
    This function does not update the transformation matrices, as opposed to
-   STSetShift().
+   `STSetShift()`.
 
    Level: developer
 
-.seealso: `STSetShift()`
+.seealso: [](ch:st), `STSetShift()`
 @*/
 PetscErrorCode STScaleShift(ST st,PetscScalar factor)
 {
@@ -750,15 +760,15 @@ PetscErrorCode STScaleShift(ST st,PetscScalar factor)
 -  D  - the diagonal matrix (represented as a vector)
 
    Notes:
-   If this matrix is set, STApply will effectively apply D*OP*D^{-1}. Use NULL
-   to reset a previously passed D.
+   If this matrix is set, `STApply()` will effectively apply $D K^{-1} M D^{-1}$,
+   see discussion at `STGetOperator()`. Use `NULL` to reset a previously passed `D`.
 
-   Balancing is usually set via EPSSetBalance, but the advanced user may use
+   Balancing is usually set via `EPSSetBalance()`, but the advanced user may use
    this function to bypass the usual balancing methods.
 
    Level: developer
 
-.seealso: `EPSSetBalance()`, `STApply()`, `STGetBalanceMatrix()`
+.seealso: [](ch:st), `EPSSetBalance()`, `STApply()`, `STGetBalanceMatrix()`, `STGetOperator()`
 @*/
 PetscErrorCode STSetBalanceMatrix(ST st,Vec D)
 {
@@ -790,11 +800,11 @@ PetscErrorCode STSetBalanceMatrix(ST st,Vec D)
 .  D  - the diagonal matrix (represented as a vector)
 
    Note:
-   If the matrix was not set, a null pointer will be returned.
+   If the matrix was not set, a `NULL` pointer will be returned.
 
    Level: developer
 
-.seealso: `STSetBalanceMatrix()`
+.seealso: [](ch:st), `STSetBalanceMatrix()`
 @*/
 PetscErrorCode STGetBalanceMatrix(ST st,Vec *D)
 {
@@ -806,7 +816,7 @@ PetscErrorCode STGetBalanceMatrix(ST st,Vec *D)
 }
 
 /*@
-   STMatCreateVecs - Get vector(s) compatible with the ST matrices.
+   STMatCreateVecs - Get vector(s) compatible with the `ST` matrices.
 
    Collective
 
@@ -819,7 +829,7 @@ PetscErrorCode STGetBalanceMatrix(ST st,Vec *D)
 
    Level: developer
 
-.seealso: `STMatCreateVecsEmpty()`
+.seealso: [](ch:st), `STMatCreateVecsEmpty()`
 @*/
 PetscErrorCode STMatCreateVecs(ST st,Vec *right,Vec *left)
 {
@@ -830,8 +840,8 @@ PetscErrorCode STMatCreateVecs(ST st,Vec *right,Vec *left)
 }
 
 /*@
-   STMatCreateVecsEmpty - Get vector(s) compatible with the ST matrices, i.e. with the same
-   parallel layout, but without internal array.
+   STMatCreateVecsEmpty - Get vector(s) compatible with the `ST` matrices, i.e.,
+   with the same parallel layout, but without internal array.
 
    Collective
 
@@ -844,7 +854,7 @@ PetscErrorCode STMatCreateVecs(ST st,Vec *right,Vec *left)
 
    Level: developer
 
-.seealso: `STMatCreateVecs()`, `MatCreateVecsEmpty()`
+.seealso: [](ch:st), `STMatCreateVecs()`, `MatCreateVecsEmpty()`
 @*/
 PetscErrorCode STMatCreateVecsEmpty(ST st,Vec *right,Vec *left)
 {
@@ -855,7 +865,7 @@ PetscErrorCode STMatCreateVecsEmpty(ST st,Vec *right,Vec *left)
 }
 
 /*@
-   STMatGetSize - Returns the number of rows and columns of the ST matrices.
+   STMatGetSize - Returns the number of rows and columns of the `ST` matrices.
 
    Not Collective
 
@@ -868,7 +878,7 @@ PetscErrorCode STMatCreateVecsEmpty(ST st,Vec *right,Vec *left)
 
    Level: developer
 
-.seealso: `STMatGetLocalSize()`
+.seealso: [](ch:st), `STMatGetLocalSize()`
 @*/
 PetscErrorCode STMatGetSize(ST st,PetscInt *m,PetscInt *n)
 {
@@ -879,7 +889,7 @@ PetscErrorCode STMatGetSize(ST st,PetscInt *m,PetscInt *n)
 }
 
 /*@
-   STMatGetLocalSize - Returns the number of local rows and columns of the ST matrices.
+   STMatGetLocalSize - Returns the number of local rows and columns of the `ST` matrices.
 
    Not Collective
 
@@ -892,7 +902,7 @@ PetscErrorCode STMatGetSize(ST st,PetscInt *m,PetscInt *n)
 
    Level: developer
 
-.seealso: `STMatGetSize()`
+.seealso: [](ch:st), `STMatGetSize()`
 @*/
 PetscErrorCode STMatGetLocalSize(ST st,PetscInt *m,PetscInt *n)
 {
@@ -904,13 +914,13 @@ PetscErrorCode STMatGetLocalSize(ST st,PetscInt *m,PetscInt *n)
 
 /*@
    STSetOptionsPrefix - Sets the prefix used for searching for all
-   ST options in the database.
+   `ST` options in the database.
 
    Logically Collective
 
    Input Parameters:
 +  st     - the spectral transformation context
--  prefix - the prefix string to prepend to all ST option requests
+-  prefix - the prefix string to prepend to all `ST` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -919,7 +929,7 @@ PetscErrorCode STMatGetLocalSize(ST st,PetscInt *m,PetscInt *n)
 
    Level: advanced
 
-.seealso: `STAppendOptionsPrefix()`, `STGetOptionsPrefix()`
+.seealso: [](ch:st), `STAppendOptionsPrefix()`, `STGetOptionsPrefix()`
 @*/
 PetscErrorCode STSetOptionsPrefix(ST st,const char *prefix)
 {
@@ -934,13 +944,13 @@ PetscErrorCode STSetOptionsPrefix(ST st,const char *prefix)
 
 /*@
    STAppendOptionsPrefix - Appends to the prefix used for searching for all
-   ST options in the database.
+   `ST` options in the database.
 
    Logically Collective
 
    Input Parameters:
 +  st     - the spectral transformation context
--  prefix - the prefix string to prepend to all ST option requests
+-  prefix - the prefix string to prepend to all `ST` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -949,7 +959,7 @@ PetscErrorCode STSetOptionsPrefix(ST st,const char *prefix)
 
    Level: advanced
 
-.seealso: `STSetOptionsPrefix()`, `STGetOptionsPrefix()`
+.seealso: [](ch:st), `STSetOptionsPrefix()`, `STGetOptionsPrefix()`
 @*/
 PetscErrorCode STAppendOptionsPrefix(ST st,const char *prefix)
 {
@@ -976,7 +986,7 @@ PetscErrorCode STAppendOptionsPrefix(ST st,const char *prefix)
 
    Level: advanced
 
-.seealso: `STSetOptionsPrefix()`, `STAppendOptionsPrefix()`
+.seealso: [](ch:st), `STSetOptionsPrefix()`, `STAppendOptionsPrefix()`
 @*/
 PetscErrorCode STGetOptionsPrefix(ST st,const char *prefix[])
 {
@@ -988,7 +998,7 @@ PetscErrorCode STGetOptionsPrefix(ST st,const char *prefix[])
 }
 
 /*@
-   STView - Prints the ST data structure.
+   STView - Prints the `ST` data structure.
 
    Collective
 
@@ -998,18 +1008,20 @@ PetscErrorCode STGetOptionsPrefix(ST st,const char *prefix[])
 
    Note:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization contexts with
-   PetscViewerASCIIOpen() (output to a specified file).
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
+
+   Use `STViewFromOptions()` to allow the user to select many different `PetscViewerType`
+   and formats from the options database.
 
    Level: beginner
 
-.seealso: `EPSView()`
+.seealso: [](ch:st), `STCreate()`, `STViewFromOptions()`
 @*/
 PetscErrorCode STView(ST st,PetscViewer viewer)
 {
@@ -1062,18 +1074,18 @@ PetscErrorCode STView(ST st,PetscViewer viewer)
 }
 
 /*@
-   STViewFromOptions - View from options
+   STViewFromOptions - View (print) an `ST` object based on values in the options database
 
    Collective
 
    Input Parameters:
 +  st   - the spectral transformation context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: `STView()`, `STCreate()`
+.seealso: [](ch:st), `STView()`, `STCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode STViewFromOptions(ST st,PetscObject obj,const char name[])
 {
@@ -1090,10 +1102,10 @@ PetscErrorCode STViewFromOptions(ST st,PetscObject obj,const char name[])
 
    Input Parameters:
 +  name - name of a new user-defined transformation
--  function - routine to create method context
+-  function - routine to create method
 
    Notes:
-   STRegister() may be called multiple times to add several user-defined
+   `STRegister()` may be called multiple times to add several user-defined
    spectral transformations.
 
    Example Usage:
@@ -1102,13 +1114,14 @@ PetscErrorCode STViewFromOptions(ST st,PetscObject obj,const char name[])
 .ve
 
    Then, your spectral transform can be chosen with the procedural interface via
-$     STSetType(st,"my_transform")
-   or at runtime via the option
-$     -st_type my_transform
+.vb
+    STSetType(st,"my_transform")
+.ve
+   or at runtime via the option `-st_type my_transform`
 
    Level: advanced
 
-.seealso: `STRegisterAll()`
+.seealso: [](ch:st), `STSetType()`, `STRegisterAll()`
 @*/
 PetscErrorCode STRegister(const char *name,PetscErrorCode (*function)(ST))
 {

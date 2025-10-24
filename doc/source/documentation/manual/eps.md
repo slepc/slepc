@@ -85,9 +85,9 @@ In many applications such as the analysis of damped vibrating systems the proble
 
 ## Basic Usage
 
-The `EPS` module in SLEPc is used in a similar way as PETSc modules such as {external:doc}`KSP`. All the information related to an eigenvalue problem is handled via a context variable. The usual object management functions are available (`EPSCreate`, `EPSDestroy`, `EPSView`, `EPSSetFromOptions`). In addition, the `EPS` object provides functions for setting several parameters such as the number of eigenvalues to compute, the dimension of the subspace, the portion of the spectrum of interest, the requested tolerance or the maximum number of iterations allowed.
+The `EPS` module in SLEPc is used in a similar way as PETSc modules such as {external:doc}`KSP`. All the information related to an eigenvalue problem is handled via a context variable. The usual object management functions are available (`EPSCreate()`, `EPSDestroy()`, `EPSView()`, `EPSSetFromOptions()`). In addition, the `EPS` object provides functions for setting several parameters such as the number of eigenvalues to compute, the dimension of the subspace, the portion of the spectrum of interest, the requested tolerance or the maximum number of iterations allowed.
 
-The solution of the problem is obtained in several steps. First of all, the matrices associated with the eigenproblem are specified via `EPSSetOperators` and `EPSSetProblemType` is used to specify the type of problem. Then, a call to `EPSSolve` is done that invokes the subroutine for the selected eigensolver. `EPSGetConverged` can be used afterwards to determine how many of the requested eigenpairs have converged to working accuracy. `EPSGetEigenpair` is finally used to retrieve the eigenvalues and eigenvectors.
+The solution of the problem is obtained in several steps. First of all, the matrices associated with the eigenproblem are specified via `EPSSetOperators()` and `EPSSetProblemType()` is used to specify the type of problem. Then, a call to `EPSSolve()` is done that invokes the subroutine for the selected eigensolver. `EPSGetConverged()` can be used afterwards to determine how many of the requested eigenpairs have converged to working accuracy. `EPSGetEigenpair()` is finally used to retrieve the eigenvalues and eigenvectors.
 
 As an illustration of basic usage, see listing [](#fig:ex-eps), that implements the solution of a simple standard eigenvalue problem. Code for setting up the matrix `A` is not shown and error-checking code is omitted.
 
@@ -130,9 +130,9 @@ Before actually solving an eigenvalue problem with `EPS`, the user must specify 
 EPSSetOperators(EPS eps,Mat A,Mat B);
 ```
 
-The example specifies a standard eigenproblem. In the case of a generalized problem, it would be necessary also to provide matrix $B$ as the third argument to the call. The matrices specified in this call can be in any PETSc format. In particular, `EPS` allows the user to solve matrix-free problems by specifying matrices created via {external:doc}`MatCreateShell`. A more detailed discussion of this issue is given in section [](#sec:supported).
+The example specifies a standard eigenproblem. In the case of a generalized problem, it would be necessary also to provide matrix $B$ as the third argument to the call. The matrices specified in this call can be in any PETSc format. In particular, `EPS` allows the user to solve matrix-free problems by specifying matrices created via {external:doc}`MatCreateShell`(). A more detailed discussion of this issue is given in section [](#sec:supported).
 
-After setting the problem matrices, the problem type is set with `EPSSetProblemType`. This is not strictly necessary since if this step is skipped then the problem type is assumed to be non-symmetric. More details are given in section [](#sec:defprob). At this point, the value of the different options could optionally be set by means of a function call such as `EPSSetTolerances` (explained later in this chapter). After this, a call to `EPSSetFromOptions` should be made as in line 11 of [](fig:ex-eps):
+After setting the problem matrices, the problem type is set with `EPSSetProblemType()`. This is not strictly necessary since if this step is skipped then the problem type is assumed to be non-symmetric. More details are given in section [](#sec:defprob). At this point, the value of the different options could optionally be set by means of a function call such as `EPSSetTolerances()` (explained later in this chapter). After this, a call to `EPSSetFromOptions()` should be made as in line 11 of [](fig:ex-eps):
 
 ```{code} c
 EPSSetFromOptions(EPS eps);
@@ -148,7 +148,7 @@ EPSSolve(EPS eps);
 
 The subroutine that is actually invoked depends on which solver has been selected by the user.
 
-After the call to `EPSSolve` has finished, all the data associated with the solution of the eigenproblem are kept internally. This information can be retrieved with different function calls, as in lines 13 to 17 of [](fig:ex-eps). This part is described in detail in section [](#sec:retrsol).
+After the call to `EPSSolve()` has finished, all the data associated with the solution of the eigenproblem are kept internally. This information can be retrieved with different function calls, as in lines 13 to 17 of [](fig:ex-eps). This part is described in detail in section [](#sec:retrsol).
 
 Once the `EPS` context is no longer needed, it should be destroyed with:
 
@@ -156,7 +156,7 @@ Once the `EPS` context is no longer needed, it should be destroyed with:
 EPSDestroy(EPS *eps);
 ```
 
-The above procedure is sufficient for general use of the `EPS` package. As in the case of the {external:doc}`KSP` solver, the user can optionally explicitly call `EPSSetUp` before calling `EPSSolve` to perform any setup required for the eigensolver.
+The above procedure is sufficient for general use of the `EPS` package. As in the case of the {external:doc}`KSP` solver, the user can optionally explicitly call `EPSSetUp()` before calling `EPSSolve()` to perform any setup required for the eigensolver.
 
 Internally, the `EPS` object works with an `ST` object (spectral transformation, described in chapter [](#ch:st)). To allow application programmers to set any of the spectral transformation options directly within the code, the following routine is provided to extract the `ST` context:
 
@@ -175,7 +175,7 @@ it is possible to examine the actual values of the different settings of the `EP
 {#sec:defprob}
 ## Defining the Problem
 
-SLEPc is able to cope with different kinds of problems. Currently supported problem types are listed in table [](#tab:ptype). An eigenproblem is generalized ($Ax=\lambda Bx$) if the user has specified two matrices (see `EPSSetOperators` discussed above), otherwise it is standard ($Ax=\lambda x$). A standard eigenproblem is Hermitian if matrix $A$ is Hermitian (i.e., $A=A^*$) or, equivalently in the case of real matrices, if matrix $A$ is symmetric (i.e., $A=A^T$). A generalized eigenproblem is Hermitian if matrix $A$ is Hermitian (symmetric) and $B$ is Hermitian (symmetric) and positive (semi-)definite. If $B$ is not positive (semi-)definite then the problem cannot be considered Hermitian but symmetry can still be exploited to some extent in some solvers (problem type `EPS_GHIEP`). A special case of generalized non-Hermitian problem is when $A$ is non-Hermitian but $B$ is Hermitian and positive (semi-)definite, see section [](#sec:symm) and [](#sec:purif) for discussion. The remaining entries in table [](#tab:ptype) correspond to structured eigenvalue problems, which are discussed in section [](#sec:structured).
+SLEPc is able to cope with different kinds of problems. Currently supported problem types are listed in table [](#tab:ptype). An eigenproblem is generalized ($Ax=\lambda Bx$) if the user has specified two matrices (see `EPSSetOperators()` discussed above), otherwise it is standard ($Ax=\lambda x$). A standard eigenproblem is Hermitian if matrix $A$ is Hermitian (i.e., $A=A^*$) or, equivalently in the case of real matrices, if matrix $A$ is symmetric (i.e., $A=A^T$). A generalized eigenproblem is Hermitian if matrix $A$ is Hermitian (symmetric) and $B$ is Hermitian (symmetric) and positive (semi-)definite. If $B$ is not positive (semi-)definite then the problem cannot be considered Hermitian but symmetry can still be exploited to some extent in some solvers (problem type `EPS_GHIEP`). A special case of generalized non-Hermitian problem is when $A$ is non-Hermitian but $B$ is Hermitian and positive (semi-)definite, see section [](#sec:symm) and [](#sec:purif) for discussion. The remaining entries in table [](#tab:ptype) correspond to structured eigenvalue problems, which are discussed in section [](#sec:structured).
 
 
 :::{table} Problem types considered in `EPS`
@@ -202,7 +202,7 @@ EPSSetProblemType(EPS eps,EPSProblemType type);
 
 By default, SLEPc assumes that the problem is non-Hermitian. Some eigensolvers are able to exploit symmetry, that is, they compute a solution for Hermitian problems with less storage and/or computational cost than other methods that ignore this property. Also, symmetric solvers may be more accurate. On the other hand, some eigensolvers in SLEPc only have a symmetric version and will abort if the problem is non-Hermitian. In the case of generalized eigenproblems some considerations apply regarding symmetry, especially in the case of singular $B$. This topic is covered in section [](#sec:symm) and [](#sec:purif). Similarly, if your eigenproblem has a particular algebraic structure listed in table [](#tab:ptype), solving it with a structured eigensolver as discussed in section [](#sec:structured) will result in more accuracy and better efficiency. For all these reasons, the user is strongly recommended to always specify the problem type in the source code.
 
-The characteristics of the problem can be determined with the functions `EPSIsGeneralized`, `EPSIsHermitian`, `EPSIsPositive`, and `EPSIsStructured`.
+The characteristics of the problem can be determined with the functions `EPSIsGeneralized()`, `EPSIsHermitian()`, `EPSIsPositive()`, and `EPSIsStructured()`.
 
 The user can specify how many eigenvalues (and eigenvectors) to compute. The default is to compute only one. The following function:
 
@@ -224,7 +224,7 @@ Instead of specifying the number of wanted eigenvalues `nev`, it is also possibl
 EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel);
 ```
 
-This usage is discussed for the case of `SVD` in section [](#sec:thres). For details about the differences in case of `EPS`, we refer to the manual page of `EPSSetThreshold`.
+This usage is discussed for the case of `SVD` in section [](#sec:thres). For details about the differences in case of `EPS`, we refer to the manual page of `EPSSetThreshold()`.
 
 {#sec:which}
 ### Eigenvalues of Interest
@@ -282,13 +282,13 @@ which is equivalent to `-eps_interval a,b`.
 
 There is also support for specifying a region of the complex plane so that the eigensolver finds eigenvalues within that region only. This possibility is described in section [](#sec:region). If *all* eigenvalues inside the region are required, then a contour-integral method must be used, as described in {cite:p}`Mae16`.
 
-Finally, we mention the possibility of defining an arbitrary sorting criterion by means of `EPS_WHICH_USER` in combination with `EPSSetEigenvalueComparison`.
+Finally, we mention the possibility of defining an arbitrary sorting criterion by means of `EPS_WHICH_USER` in combination with `EPSSetEigenvalueComparison()`.
 
-The selection criteria discussed above are based solely on the eigenvalue. In some special situations, it is necessary to establish a user-defined criterion that also makes use of the eigenvector when deciding which are the most wanted eigenpairs. For these cases, use `EPSSetArbitrarySelection`.
+The selection criteria discussed above are based solely on the eigenvalue. In some special situations, it is necessary to establish a user-defined criterion that also makes use of the eigenvector when deciding which are the most wanted eigenpairs. For these cases, use `EPSSetArbitrarySelection()`.
 
 ### Left Eigenvectors
 
-In addition to right eigenvectors, some solvers are able to compute also left eigenvectors, as defined in equation {math:numref}`eq:eigstdleft`. The algorithmic variants that compute both left and right eigenvectors are usually called *two-sided*. By default, SLEPc computes right eigenvectors only. To compute also left eigenvectors, the user should set a flag by calling the following function before `EPSSolve`:
+In addition to right eigenvectors, some solvers are able to compute also left eigenvectors, as defined in equation {math:numref}`eq:eigstdleft`. The algorithmic variants that compute both left and right eigenvectors are usually called *two-sided*. By default, SLEPc computes right eigenvectors only. To compute also left eigenvectors, the user should set a flag by calling the following function before `EPSSolve()`:
 
 ```{code} c
 EPSSetTwoSided(EPS eps,PetscBool twosided);
@@ -302,7 +302,7 @@ The available methods for solving the eigenvalue problems are the following:
 
 -   Basic methods (not recommended except for simple problems):
 
-    -   Power Iteration with deflation. When combined with shift-and-invert (see chapter [](#ch:st)), it is equivalent to the inverse iteration. Also, this solver embeds the Rayleigh Quotient iteration (RQI) by allowing variable shifts. Additionally, it provides the nonlinear inverse iteration method for the case that the problem matrix is a nonlinear operator (for this advanced usage, see `EPSPowerSetNonlinear`).
+    -   Power Iteration with deflation. When combined with shift-and-invert (see chapter [](#ch:st)), it is equivalent to the inverse iteration. Also, this solver embeds the Rayleigh Quotient iteration (RQI) by allowing variable shifts. Additionally, it provides the nonlinear inverse iteration method for the case that the problem matrix is a nonlinear operator (for this advanced usage, see `EPSPowerSetNonlinear()`).
 
     -   Subspace Iteration with Rayleigh-Ritz projection and locking.
 
@@ -398,7 +398,7 @@ Not all the methods can be used for all problem types. Table [](#tab:support) su
 {#sec:retrsol}
 ## Retrieving the Solution
 
-Once the call to `EPSSolve` is complete, all the data associated with the solution of the eigenproblem are kept internally in the `EPS` object. This information can be obtained by the calling program by means of a set of functions described in this section.
+Once the call to `EPSSolve()` is complete, all the data associated with the solution of the eigenproblem are kept internally in the `EPS` object. This information can be obtained by the calling program by means of a set of functions described in this section.
 
 As explained below, the number of computed solutions depends on the convergence and, therefore, it may be different from the number of solutions requested by the user. So the first task is to find out how many solutions are available, with:
 
@@ -406,7 +406,7 @@ As explained below, the number of computed solutions depends on the convergence 
 EPSGetConverged(EPS eps,PetscInt *nconv);
 ```
 
-Usually, the number of converged solutions, `nconv`, will be equal to `nev`, but in general it can be a number ranging from 0 to `ncv` (here, `nev` and `ncv` are the arguments of function `EPSSetDimensions`).
+Usually, the number of converged solutions, `nconv`, will be equal to `nev`, but in general it can be a number ranging from 0 to `ncv` (here, `nev` and `ncv` are the arguments of function `EPSSetDimensions()`).
 
 ### The Computed Solution
 
@@ -416,7 +416,7 @@ The user may be interested in the eigenvalues, or the eigenvectors, or both. The
 EPSGetEigenpair(EPS eps,PetscInt j,PetscScalar *kr,PetscScalar *ki, Vec xr,Vec xi);
 ```
 
-returns the $j$-th computed eigenvalue/eigenvector pair. Typically, this function is called inside a loop for each value of `j` from 0 to `nconv`--1. Note that eigenvalues are ordered according to the same criterion specified with function `EPSSetWhichEigenpairs` for selecting the portion of the spectrum of interest. The meaning of the last 4 arguments depends on whether SLEPc has been compiled for real or complex scalars, as detailed below. The eigenvectors are normalized so that they have a unit 2-norm, except for problem type `EPS_GHEP` in which case returned eigenvectors have a unit $B$-norm.
+returns the $j$-th computed eigenvalue/eigenvector pair. Typically, this function is called inside a loop for each value of `j` from 0 to `nconv`--1. Note that eigenvalues are ordered according to the same criterion specified with function `EPSSetWhichEigenpairs()` for selecting the portion of the spectrum of interest. The meaning of the last 4 arguments depends on whether SLEPc has been compiled for real or complex scalars, as detailed below. The eigenvectors are normalized so that they have a unit 2-norm, except for problem type `EPS_GHEP` in which case returned eigenvectors have a unit $B$-norm.
 
 In case they are available, the left eigenvectors can be extracted with:
 
@@ -432,7 +432,7 @@ In case of PETSc/SLEPc built with **real scalars**, all {external:doc}`Mat` and 
 
 -   If `ki` is different from zero, then the $j$-th eigenvalue is a complex number and, therefore, it is part of a complex conjugate pair. Thus, the $j$-th eigenvalue is `kr`$+\,i\cdot$`ki`. With respect to the eigenvector, `xr` stores the real part of the eigenvector and `xi` the imaginary part, that is, the $j$-th eigenvector is `xr`$+\,i\cdot$`xi`. The $(j+1)$-th eigenvalue (and eigenvector) will be the corresponding complex conjugate and will be returned when function `EPSGetEigenpair` is invoked with index `j`+1. Note that the sign of the imaginary part is returned correctly in all cases (users need not change signs).
 
-In case of PETSc/SLEPc built with **complex scalars**, all {external:doc}`Mat` and {external:doc}`Vec` objects are complex. The computed solution returned by function `EPSGetEigenpair` is the following: `kr` contains the (complex) eigenvalue and `xr` contains the corresponding (complex) eigenvector. In this case, `ki` and `xi` are not used (set to all zeros).
+In case of PETSc/SLEPc built with **complex scalars**, all {external:doc}`Mat` and {external:doc}`Vec` objects are complex. The computed solution returned by function `EPSGetEigenpair()` is the following: `kr` contains the (complex) eigenvalue and `xr` contains the corresponding (complex) eigenvector. In this case, `ki` and `xi` are not used (set to all zeros).
 
 {#sec:errbnd}
 ### Reliability of the Computed Solution
@@ -445,7 +445,7 @@ In this subsection, we discuss how a-posteriori error bounds can be obtained in 
 r=A\tilde{x}-\tilde{\lambda}\tilde{x},
 ```
 
-or $r=A\tilde{x}-\tilde{\lambda}B\tilde{x}$ in the case of a generalized problem, where $\tilde{\lambda}$ and $\tilde{x}$ represent any of the `nconv` computed eigenpairs delivered by `EPSGetEigenpair` (note that this function returns a normalized $\tilde{x}$).
+or $r=A\tilde{x}-\tilde{\lambda}B\tilde{x}$ in the case of a generalized problem, where $\tilde{\lambda}$ and $\tilde{x}$ represent any of the `nconv` computed eigenpairs delivered by `EPSGetEigenpair()` (note that this function returns a normalized $\tilde{x}$).
 
 In the case of Hermitian problems, it is possible to demonstrate the following property (see for example {cite:p}`Saa92{ch. 3}`):
 
@@ -519,7 +519,7 @@ The third parameter of this function allows the programmer to modify the maximum
 
 #### Convergence Check
 
-The error estimates used for the convergence test are based on the residual norm, as discussed in section [](#sec:errbnd). Most eigensolvers explicitly compute the residual of the relevant eigenpairs during the iteration, but Krylov solvers use a cheap formula instead, allowing to track many eigenpairs simultaneously. When using a spectral transformation, this formula may give too optimistic bounds (corresponding to the residual of the transformed problem, not the original problem). In such cases, the users can force the computation of the residual with `EPSSetTrueResidual`.
+The error estimates used for the convergence test are based on the residual norm, as discussed in section [](#sec:errbnd). Most eigensolvers explicitly compute the residual of the relevant eigenpairs during the iteration, but Krylov solvers use a cheap formula instead, allowing to track many eigenpairs simultaneously. When using a spectral transformation, this formula may give too optimistic bounds (corresponding to the residual of the transformed problem, not the original problem). In such cases, the users can force the computation of the residual with `EPSSetTrueResidual()`.
 
 :::{table} Available possibilities for the convergence criterion
 :name: tab:convergence
@@ -539,15 +539,15 @@ From the residual norm, the error bound can be computed in different ways, see t
 EPSSetConvergenceTest(EPS eps,EPSConv conv);
 ```
 
-The default is to use the criterion relative to the eigenvalue (note: for computing eigenvalues close to the origin this criterion will likely give very poor accuracy, so the user is advised to use `EPS_CONV_ABS` in that case). Finally, a custom convergence criterion may be established by specifying a user function (`EPSSetConvergenceTestFunction`).
+The default is to use the criterion relative to the eigenvalue (note: for computing eigenvalues close to the origin this criterion will likely give very poor accuracy, so the user is advised to use `EPS_CONV_ABS` in that case). Finally, a custom convergence criterion may be established by specifying a user function (`EPSSetConvergenceTestFunction()`).
 
-Error estimates used internally by eigensolvers for checking convergence may be different from the error bounds provided by `EPSComputeError`. At the end of the solution process, error estimates are available via `EPSGetErrorEstimate`.
+Error estimates used internally by eigensolvers for checking convergence may be different from the error bounds provided by `EPSComputeError()`. At the end of the solution process, error estimates are available via `EPSGetErrorEstimate()`.
 
-By default, the eigensolver will stop iterating when the current number of eigenpairs satisfying the convergence test is equal to (or greater than) the number of requested eigenpairs (or if the maximum number of iterations has been reached). However, it is also possible to provide a user-defined stopping test that may decide to quit earlier, see `EPSSetStoppingTest`.
+By default, the eigensolver will stop iterating when the current number of eigenpairs satisfying the convergence test is equal to (or greater than) the number of requested eigenpairs (or if the maximum number of iterations has been reached). However, it is also possible to provide a user-defined stopping test that may decide to quit earlier, see `EPSSetStoppingTest()`.
 
 #### Monitors
 
-Error estimates can be displayed during execution of the solution algorithm, as a way of monitoring convergence. There are several such monitors available. The user can activate them via the options database (see examples below), or within the code with `EPSMonitorSet`. By default, the solvers run silently without displaying information about the iteration. Also, application programmers can provide their own routines to perform the monitoring by using the function `EPSMonitorSet`.
+Error estimates can be displayed during execution of the solution algorithm, as a way of monitoring convergence. There are several such monitors available. The user can activate them via the options database (see examples below), or within the code with `EPSMonitorSet()`. By default, the solvers run silently without displaying information about the iteration. Also, application programmers can provide their own routines to perform the monitoring by using the function `EPSMonitorSet()`.
 
 The most basic monitor prints one approximate eigenvalue together with its associated error estimate in each iteration. The shown eigenvalue is the first unconverged one.
 
@@ -611,9 +611,9 @@ $ ./ex9 -n 200 -eps_nev 8 -eps_tol 1e-12 -eps_monitor_conv
 {#sec:epsviewers}
 ### Viewing the Solution
 
-The computed solution (eigenvalues and eigenvectors) can be viewed in different ways, exploiting the flexibility of {external:doc}`PetscViewer`s. The API functions for this are `EPSValuesView` and `EPSVectorsView`. We next illustrate their usage via the command line.
+The computed solution (eigenvalues and eigenvectors) can be viewed in different ways, exploiting the flexibility of {external:doc}`PetscViewer`s. The API functions for this are `EPSValuesView()` and `EPSVectorsView()`. We next illustrate their usage via the command line.
 
-The command-line option `-eps_view_values` shows the computed eigenvalues on the standard output at the end of `EPSSolve`. It admits an argument to specify {external:doc}`PetscViewer` options, for instance the following will create a Matlab command file `myeigenvalues.m` to load the eigenvalues in Matlab:
+The command-line option `-eps_view_values` shows the computed eigenvalues on the standard output at the end of `EPSSolve()`. It admits an argument to specify {external:doc}`PetscViewer` options, for instance the following will create a Matlab command file `myeigenvalues.m` to load the eigenvalues in Matlab:
 
 ```{code} console
 $ ./ex1 -n 120 -eps_nev 8 -eps_view_values :myeigenvalues.m:ascii_matlab
@@ -648,7 +648,7 @@ Similarly, eigenvectors may be viewed with `-eps_view_vectors`, either in text f
 $ ./ex1 -n 120 -eps_nev 8 -eps_view_vectors binary:evec.bin
 ```
 
-Two more related functions are available: `EPSErrorView` and `EPSConvergedReasonView`. These will show computed errors and the converged reason (plus number of iterations), respectively. Again, we illustrate its use via the command line. The option `-eps_error_relative` will show eigenvalues whose relative error are below the tolerance. The different types of errors have their corresponding options, see table [](#tab:errors). A more detailed output can be obtained as follows:
+Two more related functions are available: `EPSErrorView()` and `EPSConvergedReasonView()`. These will show computed errors and the converged reason (plus number of iterations), respectively. Again, we illustrate its use via the command line. The option `-eps_error_relative` will show eigenvalues whose relative error are below the tolerance. The different types of errors have their corresponding options, see table [](#tab:errors). A more detailed output can be obtained as follows:
 
 ```{code} console
 $ ./ex1 -n 120 -eps_nev 8 -eps_error_relative ::ascii_info_detail
@@ -693,7 +693,7 @@ Note that if the eigensolver supports only a single initial vector, but several 
 
 ### Dealing with Deflation Subspaces
 
-In some applications, when solving an eigenvalue problem the user wishes to use a priori knowledge about the solution. This is the case when an invariant subspace has already been computed (e.g., in a previous `EPSSolve` call) or when a basis of the null-space is known.
+In some applications, when solving an eigenvalue problem the user wishes to use a priori knowledge about the solution. This is the case when an invariant subspace has already been computed (e.g., in a previous `EPSSolve()` call) or when a basis of the null-space is known.
 
 Consider the following example. Given a graph $G$, with vertex set $V$ and edges $E$, the Laplacian matrix of $G$ is a sparse symmetric positive semidefinite matrix $L$ with elements
 
@@ -707,7 +707,7 @@ l_{ij}=\left\{\begin{array}{cl}
 \end{array}\right.
 ```
 
- where $d(v_i)$ is the degree of vertex $v_i$. This matrix is singular since all row sums are equal to zero. The constant vector is an eigenvector with zero eigenvalue, and if the graph is connected then all other eigenvalues are positive. The so-called Fiedler vector is the eigenvector associated with the smallest nonzero eigenvalue and can be used in heuristics for a number of graph manipulations such as partitioning. One possible way of computing this vector with SLEPc is to instruct the eigensolver to search for the smallest eigenvalue (with `EPSSetWhichEigenpairs` or by using a spectral transformation as described in next chapter) but preventing it from computing the already known eigenvalue. For this, the user must provide a basis for the invariant subspace (in this case just vector $[1,1,\ldots,1]^T$) so that the eigensolver can *deflate* this subspace. This process is very similar to what eigensolvers normally do with invariant subspaces associated with eigenvalues as they converge. In other words, when a deflation space has been specified, the eigensolver works with the restriction of the problem to the orthogonal complement of this subspace.
+ where $d(v_i)$ is the degree of vertex $v_i$. This matrix is singular since all row sums are equal to zero. The constant vector is an eigenvector with zero eigenvalue, and if the graph is connected then all other eigenvalues are positive. The so-called Fiedler vector is the eigenvector associated with the smallest nonzero eigenvalue and can be used in heuristics for a number of graph manipulations such as partitioning. One possible way of computing this vector with SLEPc is to instruct the eigensolver to search for the smallest eigenvalue (with `EPSSetWhichEigenpairs()` or by using a spectral transformation as described in next chapter) but preventing it from computing the already known eigenvalue. For this, the user must provide a basis for the invariant subspace (in this case just vector $[1,1,\ldots,1]^T$) so that the eigensolver can *deflate* this subspace. This process is very similar to what eigensolvers normally do with invariant subspaces associated with eigenvalues as they converge. In other words, when a deflation space has been specified, the eigensolver works with the restriction of the problem to the orthogonal complement of this subspace.
 
 The following function can be used to provide the `EPS` object with some basis vectors corresponding to a subspace that should be deflated during the solution process:
 
@@ -717,7 +717,7 @@ EPSSetDeflationSpace(EPS eps,PetscInt n,Vec defl[])
 
 The value `n` indicates how many vectors are passed in argument `defl`.
 
-The deflation space can be any subspace but typically it is most useful in the case of an invariant subspace or a null-space. In any case, SLEPc internally checks to see if all (or part of) the provided subspace is a null-space of the associated linear system (see section [](#sec:lin)). In this case, this null-space is attached to the coefficient matrix of the linear solver (see PETSc's function {external:doc}`MatSetNullSpace`) to enable the solution of singular systems. In practice, this allows the computation of eigenvalues of singular pencils (i.e., when $A$ and $B$ share a common null-space).
+The deflation space can be any subspace but typically it is most useful in the case of an invariant subspace or a null-space. In any case, SLEPc internally checks to see if all (or part of) the provided subspace is a null-space of the associated linear system (see section [](#sec:lin)). In this case, this null-space is attached to the coefficient matrix of the linear solver (see PETSc's function {external:doc}`MatSetNullSpace`()) to enable the solution of singular systems. In practice, this allows the computation of eigenvalues of singular pencils (i.e., when $A$ and $B$ share a common null-space).
 
 {#sec:orthog}
 ### Orthogonalization
@@ -733,7 +733,7 @@ Some solvers in `EPS` (and other solver classes as well) can take into considera
 
 -   To filter out eigenvalues outside the region. In this way, eigenvalues lying inside the region get higher priority during the iteration and are more likely to be returned as computed solutions.
 
-Regions are specified by means of an `RG` object. This object is handled internally in the `EPS` solver, as other auxiliary objects, and can be extracted with `EPSGetRG` to set the options that define the region. These options can also be set in the command line. The following example computes largest magnitude eigenvalues, but restricting to an ellipse of radius 0.5 centered at the origin (with vertical scale 0.1):
+Regions are specified by means of an `RG` object. This object is handled internally in the `EPS` solver, as other auxiliary objects, and can be extracted with `EPSGetRG()` to set the options that define the region. These options can also be set in the command line. The following example computes largest magnitude eigenvalues, but restricting to an ellipse of radius 0.5 centered at the origin (with vertical scale 0.1):
 
 ```{code} console
 $ ./ex1 -rg_type ellipse -rg_ellipse_center 0 -rg_ellipse_radius 0.5 -rg_ellipse_vscale 0.1
@@ -745,12 +745,12 @@ If one wants to use the region to specify where eigenvalues should *not* be comp
 $ ./ex1 -eps_smallest_magnitude -rg_type ellipse -rg_ellipse_center 0 -rg_ellipse_radius 0.5 -rg_ellipse_vscale 0.1 -rg_complement
 ```
 
-Additional details of the `RG` class can be found in section [](#sec:sys).
+Additional details of the `RG` class can be found in section [](#sec:rg).
 
 {#sec:large-nev}
 ### Computing a Large Portion of the Spectrum
 
-We now consider the case when the user requests a relatively large number of eigenpairs (the related case of computing all eigenvalues in a given interval is addressed in section [](#sec:slice)). To fix ideas, suppose that the problem size (the dimension of the matrix, denoted as `n`), is in the order of 100,000's, and the user wants `nev` to be approximately 5,000 (recall the notation of `EPSSetDimensions` in section [](#sec:defprob)).
+We now consider the case when the user requests a relatively large number of eigenpairs (the related case of computing all eigenvalues in a given interval is addressed in section [](#sec:slice)). To fix ideas, suppose that the problem size (the dimension of the matrix, denoted as `n`), is in the order of 100,000's, and the user wants `nev` to be approximately 5,000 (recall the notation of `EPSSetDimensions()` in section [](#sec:defprob)).
 
 The first comment is that for such large values of `nev`, the rule of thumb suggested in section [](#sec:defprob) for selecting the value of `ncv` ($\mathtt{ncv}\geq2\cdot\mathtt{nev}$) may be inappropriate. For small values of `nev`, this rule of thumb is intended to provide the solver with a sufficiently large subspace. But for large values of `nev`, it may be enough setting `ncv` to be slightly larger than `nev`.
 
@@ -779,7 +779,7 @@ $ ./program -eps_nev 5000 -eps_mpd 600
 
 The standard Rayleigh-Ritz projection procedure described in section [](#sec:eig) is most appropriate for approximating eigenvalues located at the periphery of the spectrum, especially those of largest magnitude. Most eigensolvers in SLEPc are restarted, meaning that the projection is carried out repeatedly with increasingly good subspaces. An effective restarting mechanism, such as that implemented in Krylov-Schur, improves the subspace by realizing a filtering effect that tries to eliminate components in the direction of unwanted eigenvectors. In that way, it is possible to compute eigenvalues located anywhere in the spectrum, even in its interior.
 
-Even though in theory eigensolvers could be able to approximate interior eigenvalues with a standard extraction technique, in practice convergence difficulties may arise that prevent success. The problem comes from the property that Ritz values (the approximate eigenvalues provided by the standard projection procedure) converge from the interior to the periphery of the spectrum. That is, the Ritz values that stabilize first are those in the periphery, so convergence of interior ones requires the previous convergence of all eigenvalues between them and the periphery. Furthermore, this convergence behaviour usually implies that restarting is carried out with bad approximations, so the restart is ineffective and global convergence is severely damaged.
+Even though in theory eigensolvers could be able to approximate interior eigenvalues with a standard extraction technique, in practice convergence difficulties may arise that prevent success. The problem comes from the property that Ritz values (the approximate eigenvalues provided by the standard projection procedure) converge from the interior to the periphery of the spectrum. That is, the Ritz values that stabilize first are those in the periphery, so convergence of interior ones requires the previous convergence of all eigenvalues between them and the periphery. Furthermore, this convergence behavior usually implies that restarting is carried out with bad approximations, so the restart is ineffective and global convergence is severely damaged.
 
 Harmonic projection is a variation that uses a target value, $\tau$, around which the user wants to compute eigenvalues (see, e.g., {cite:p}`Mor06`). The theory establishes that harmonic Ritz values converge in such a way that eigenvalues closest to the target stabilize first, and also that no unconverged value is ever close to the target, so restarting is safe in this case. As a conclusion, eigensolvers with harmonic extraction may be effective in computing interior eigenvalues. Whether it works or not in practical cases depends on the particular distribution of the spectrum.
 
@@ -821,7 +821,7 @@ Two variants are available, one-sided and two-sided, and there is also the possi
 
 Structured eigenvalue problems are those whose defining matrices are structured, i.e., their $n^2$ entries depend on less than $n^2$ parameters. Symmetry is the most obvious structure, and it is supported in SLEPc solvers via the `EPS_HEP` and `EPS_GHEP` problem types, see table [](#tab:ptype). The last entries listed in that table address other types of structured eigenproblems, which are discussed in this subsection. Preserving the algebraic structure can help preserve physically relevant symmetries in the eigenvalues of the matrix and may improve the accuracy and efficiency of the eigensolver. For example, in quadratic eigenvalue problems arising from gyroscopic systems (see section [](#sec:qep)), eigenvalues appear in quadruples $\{\lambda,-\lambda,\bar\lambda,-\bar\lambda\}$, i.e., the spectrum is symmetric with respect to both the real and imaginary axes. This problem can be linearized to a $2n\times 2n$ skew-Hamiltonian/Hamiltonian pencil with the same eigenvalues. A structure-preserving eigensolver will give a more accurate answer because it enforces the structure throughout the computation.
 
-Unless otherwise stated, the structured eigenproblems discussed below are only supported in the default `EPS` solver, Krylov-Schur. The idea is that the user creates the structured matrix with a helper function such as `MatCreateBSE` (see below), and then selects the appropriate problem type with `EPSSetProblemType`, in this case `EPS_BSE`. This will instruct the solver to exploit the problem structure. Alternatively, one can solve the problem as `EPS_NHEP`, in which case the solver will neglect the structure.
+Unless otherwise stated, the structured eigenproblems discussed below are only supported in the default `EPS` solver, Krylov-Schur. The idea is that the user creates the structured matrix with a helper function such as `MatCreateBSE()` (see below), and then selects the appropriate problem type with `EPSSetProblemType()`, in this case `EPS_BSE`. This will instruct the solver to exploit the problem structure. Alternatively, one can solve the problem as `EPS_NHEP`, in which case the solver will neglect the structure.
 
 :::{warning}
 Check below the section [](#sec:structured-vectors), since the trivial approach may give vectors with disordered entries.
@@ -842,7 +842,7 @@ H = \begin{bmatrix}
 
  where $R$ is Hermitian and $C$ is complex symmetric. For a good enough approximation of the optical absorption spectrum, it is sufficient to compute a few eigenvalues with a customized version of Krylov-Schur. In this problem, eigenvalues are real and come in pairs $\{\lambda,-\lambda\}$. The eigenvalues of interest are those with the smallest magnitude, which in this case lie in the middle of the spectrum. Usually, both right and left eigenvectors are required, but the left eigenvectors can be obtained inexpensively once the corresponding right ones are known.
 
-The helper function to generate the matrix $H$ of equation {math:numref}`eq:bse` from the blocks $R$ and $C$ is `MatCreateBSE`, and the associated problem type is `EPS_BSE` (or `-eps_bse` from the command line). It is possible to select a few variants of the solver with the function `EPSKrylovSchurSetBSEType`.
+The helper function to generate the matrix $H$ of equation {math:numref}`eq:bse` from the blocks $R$ and $C$ is `MatCreateBSE()`, and the associated problem type is `EPS_BSE` (or `-eps_bse` from the command line). It is possible to select a few variants of the solver with the function `EPSKrylovSchurSetBSEType()`.
 
 Further details about the implementation of the SLEPc solvers for the BSE can be found in {cite:p}`Alv25`.
 
@@ -859,7 +859,7 @@ H = \begin{bmatrix}
     \end{bmatrix},
 ```
 
-where $A$, $B$ and $C$ are either real with $B=B^T$, $C=C^T$, or complex with $B=B^*$, $C=C^*$. In the real case, eigenvalues appear in pairs $\{\lambda,-\lambda\}$ and for complex eigenvalues in quadruples $\{\lambda,-\lambda,\bar\lambda,-\bar\lambda\}$. For a complex Hamiltonian matrix, if $\lambda$ is an eigenvalue, then $-\bar\lambda$ is also an eigenvalue. A structure-preserving eigensolver has been implemented in `EPS` (in Krylov-Schur), which is activated by selecting the `EPS_HAMILT` problem type (or `-eps_hamiltonian` from the command line). Note that matrix $H$ {math:numref}`eq:hamilt` must be created with the helper function `MatCreateHamiltonian` in order to use this solver.
+where $A$, $B$ and $C$ are either real with $B=B^T$, $C=C^T$, or complex with $B=B^*$, $C=C^*$. In the real case, eigenvalues appear in pairs $\{\lambda,-\lambda\}$ and for complex eigenvalues in quadruples $\{\lambda,-\lambda,\bar\lambda,-\bar\lambda\}$. For a complex Hamiltonian matrix, if $\lambda$ is an eigenvalue, then $-\bar\lambda$ is also an eigenvalue. A structure-preserving eigensolver has been implemented in `EPS` (in Krylov-Schur), which is activated by selecting the `EPS_HAMILT` problem type (or `-eps_hamiltonian` from the command line). Note that matrix $H$ {math:numref}`eq:hamilt` must be created with the helper function `MatCreateHamiltonian()` in order to use this solver.
 
 :::{warning}
 The structure-preserving eigensolver for Hamiltonian eigenvalue problems should be considered experimental. Depending on the problem, it may become numerically unstable after some iterations, in which case the solver will abort, returning less eigenvalues than requested.
@@ -868,7 +868,7 @@ The structure-preserving eigensolver for Hamiltonian eigenvalue problems should 
 {#sec:structured-vectors}
 #### Extracting Eigenvectors of Structured Eigenproblems
 
-In the case of structured eigenproblems, one has to create the eigenvectors in a specific way, before passing them to functions such as `EPSGetEigenvector` or `EPSGetLeftEigenvector`. Otherwise, the obtained vector may have disordered entries when run with several processes, compared to sequential runs.
+In the case of structured eigenproblems, one has to create the eigenvectors in a specific way, before passing them to functions such as `EPSGetEigenvector()` or `EPSGetLeftEigenvector()`. Otherwise, the obtained vector may have disordered entries when run with several processes, compared to sequential runs.
 
 To understand the problem, it is important to note that the block matrices {math:numref}`eq:bse` or {math:numref}`eq:hamilt` are represented as PETSc matrices of type {external:doc}`MATNEST`, which implies that the individual blocks are stored independently (in parallel). The vectors associated with those matrices have the same distribution. For instance, if we are using two MPI processes, then process 0 will store the first half of the top part of the vector, and the first half of the bottom part, while process 1 will store the second half of both parts. Hence, the entries assigned to the different processes are not consecutive, but interleaved, so if we access that vector as a standard {external:doc}`Vec` the order of entries will be different when we change the number of processes.
 
@@ -882,13 +882,13 @@ The first solution is to create a vector of type {external:doc}`VECNEST` compati
     aux[1] = x2;
     VecCreateNest(PETSC_COMM_WORLD,2,NULL,aux,&x);
 ```
-We would pass `x` to `EPSGetEigenvector`, and then the individual blocks of the eigenvector can be easily extracted with {external:doc}`VecNestGetSubVec`.
+We would pass `x` to `EPSGetEigenvector()`, and then the individual blocks of the eigenvector can be easily extracted with {external:doc}`VecNestGetSubVec`().
 
 The second alternative is to retrieve the index sets {external:doc}`IS` that define the splitting
 ```{code} c
     MatNestGetISs(H,is,NULL);
 ```
-and then, after calling `EPSGetEigenvector` on a standard vector `x`, extract the subvectors using the index sets:
+and then, after calling `EPSGetEigenvector()` on a standard vector `x`, extract the subvectors using the index sets:
 ```{code} c
     VecGetSubVector(x,is[0],&x1);
     VecGetSubVector(x,is[1],&x2);

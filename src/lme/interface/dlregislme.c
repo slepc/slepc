@@ -18,11 +18,11 @@ const char *const*LMEConvergedReasons = LMEConvergedReasons_Shifted + 2;
 
 /*@C
   LMEFinalizePackage - This function destroys everything in the SLEPc interface
-  to the LME package. It is called from SlepcFinalize().
+  to the `LME` package. It is called from `SlepcFinalize()`.
 
   Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: [](ch:lme), `SlepcFinalize()`, `LMEInitializePackage()`
 @*/
 PetscErrorCode LMEFinalizePackage(void)
 {
@@ -38,13 +38,16 @@ PetscErrorCode LMEFinalizePackage(void)
 }
 
 /*@C
-  LMEInitializePackage - This function initializes everything in the LME package.
-  It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-  on the first call to LMECreate() when using static libraries.
+   LMEInitializePackage - This function initializes everything in the `LME` package.
+   It is called from `PetscDLLibraryRegister_slepclme()` when using dynamic libraries, and
+   on the first call to `LMECreate()` when using shared or static libraries.
 
-  Level: developer
+   Note:
+   This function never needs to be called by SLEPc users.
 
-.seealso: `SlepcInitialize()`
+   Level: developer
+
+.seealso: [](ch:lme), `LME`, `SlepcInitialize()`, `LMEFinalizePackage()`
 @*/
 PetscErrorCode LMEInitializePackage(void)
 {

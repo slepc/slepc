@@ -649,7 +649,7 @@ PetscErrorCode PEPGetProblemType(PEP pep,PEPProblemType *type)
    By default, the coefficient matrices passed via PEPSetOperators() are
    expressed in the monomial basis, i.e.
    P(lambda) = A_0 + lambda*A_1 + lambda^2*A_2 + ... + lambda^d*A_d.
-   Other polynomial bases may have better numerical behaviour, but the user
+   Other polynomial bases may have better numerical behavior, but the user
    must then pass the coefficient matrices accordingly.
 
    Level: intermediate

@@ -59,8 +59,8 @@ PetscErrorCode STSetDefaultKSP_Default(ST st)
 }
 
 /*@
-   STMatMult - Computes the matrix-vector product y = T[k] x, where T[k] is
-   the k-th matrix of the spectral transformation.
+   STMatMult - Computes the matrix-vector product $y = T_k x$, where $T_k$ is
+   the $k$-th (transformed) matrix of the spectral transformation.
 
    Neighbor-wise Collective
 
@@ -74,7 +74,7 @@ PetscErrorCode STSetDefaultKSP_Default(ST st)
 
    Level: developer
 
-.seealso: `STMatMultTranspose()`, `STMatMultHermitianTranspose()`
+.seealso: [](ch:st), `STMatMultTranspose()`, `STMatMultHermitianTranspose()`, `STGetMatrixTransformed()`
 @*/
 PetscErrorCode STMatMult(ST st,PetscInt k,Vec x,Vec y)
 {
@@ -99,8 +99,8 @@ PetscErrorCode STMatMult(ST st,PetscInt k,Vec x,Vec y)
 }
 
 /*@
-   STMatMultTranspose - Computes the matrix-vector product y = T[k]^T x, where T[k] is
-   the k-th matrix of the spectral transformation.
+   STMatMultTranspose - Computes the matrix-vector product $y = T_k^T x$, where $T_k$
+   is the $k$-th (transformed) matrix of the spectral transformation.
 
    Neighbor-wise Collective
 
@@ -114,7 +114,7 @@ PetscErrorCode STMatMult(ST st,PetscInt k,Vec x,Vec y)
 
    Level: developer
 
-.seealso: `STMatMult()`, `STMatMultHermitianTranspose()`
+.seealso: [](ch:st), `STMatMult()`, `STMatMultHermitianTranspose()`, `STGetMatrixTransformed()`
 @*/
 PetscErrorCode STMatMultTranspose(ST st,PetscInt k,Vec x,Vec y)
 {
@@ -139,8 +139,8 @@ PetscErrorCode STMatMultTranspose(ST st,PetscInt k,Vec x,Vec y)
 }
 
 /*@
-   STMatMultHermitianTranspose - Computes the matrix-vector product y = T[k]^H x, where T[k] is
-   the k-th matrix of the spectral transformation.
+   STMatMultHermitianTranspose - Computes the matrix-vector product $y = T_k^* x$,
+   where $T_k$ is the $k$-th (transformed) matrix of the spectral transformation.
 
    Neighbor-wise Collective
 
@@ -154,7 +154,7 @@ PetscErrorCode STMatMultTranspose(ST st,PetscInt k,Vec x,Vec y)
 
    Level: developer
 
-.seealso: `STMatMult()`, `STMatMultTranspose()`
+.seealso: [](ch:st), `STMatMult()`, `STMatMultTranspose()`, `STGetMatrixTransformed()`
 @*/
 PetscErrorCode STMatMultHermitianTranspose(ST st,PetscInt k,Vec x,Vec y)
 {
@@ -179,8 +179,8 @@ PetscErrorCode STMatMultHermitianTranspose(ST st,PetscInt k,Vec x,Vec y)
 }
 
 /*@
-   STMatSolve - Solves P x = b, where P is the preconditioner matrix of
-   the spectral transformation, using a KSP object stored internally.
+   STMatSolve - Solves $P x = b$, where $P$ is the preconditioner matrix of
+   the spectral transformation, using a `KSP` object stored internally.
 
    Collective
 
@@ -193,7 +193,7 @@ PetscErrorCode STMatMultHermitianTranspose(ST st,PetscInt k,Vec x,Vec y)
 
    Level: developer
 
-.seealso: `STMatSolveTranspose()`, `STMatSolveHermitianTranspose()`, `STMatMatSolve()`
+.seealso: [](ch:st), `STMatSolveTranspose()`, `STMatSolveHermitianTranspose()`, `STMatMatSolve()`
 @*/
 PetscErrorCode STMatSolve(ST st,Vec b,Vec x)
 {
@@ -216,8 +216,8 @@ PetscErrorCode STMatSolve(ST st,Vec b,Vec x)
 }
 
 /*@
-   STMatMatSolve - Solves P X = B, where P is the preconditioner matrix of
-   the spectral transformation, using a KSP object stored internally.
+   STMatMatSolve - Solves $P X = B$, where $P$ is the preconditioner matrix of
+   the spectral transformation, using a `KSP` object stored internally.
 
    Collective
 
@@ -230,7 +230,7 @@ PetscErrorCode STMatSolve(ST st,Vec b,Vec x)
 
    Level: developer
 
-.seealso: `STMatSolve()`
+.seealso: [](ch:st), `STMatSolve()`
 @*/
 PetscErrorCode STMatMatSolve(ST st,Mat B,Mat X)
 {
@@ -249,8 +249,8 @@ PetscErrorCode STMatMatSolve(ST st,Mat B,Mat X)
 }
 
 /*@
-   STMatSolveTranspose - Solves P^T x = b, where P is the preconditioner matrix of
-   the spectral transformation, using a KSP object stored internally.
+   STMatSolveTranspose - Solves $P^T x = b$, where $P$ is the preconditioner matrix of
+   the spectral transformation, using a `KSP` object stored internally.
 
    Collective
 
@@ -263,7 +263,7 @@ PetscErrorCode STMatMatSolve(ST st,Mat B,Mat X)
 
    Level: developer
 
-.seealso: `STMatSolve()`
+.seealso: [](ch:st), `STMatSolve()`
 @*/
 PetscErrorCode STMatSolveTranspose(ST st,Vec b,Vec x)
 {
@@ -286,8 +286,8 @@ PetscErrorCode STMatSolveTranspose(ST st,Vec b,Vec x)
 }
 
 /*@
-   STMatSolveHermitianTranspose - Solves P^H x = b, where P is the preconditioner matrix of
-   the spectral transformation, using a KSP object stored internally.
+   STMatSolveHermitianTranspose - Solves $P^* x = b$, where $P$ is the preconditioner matrix of
+   the spectral transformation, using a `KSP` object stored internally.
 
    Collective
 
@@ -300,7 +300,7 @@ PetscErrorCode STMatSolveTranspose(ST st,Vec b,Vec x)
 
    Level: developer
 
-.seealso: `STMatSolve()`
+.seealso: [](ch:st), `STMatSolve()`
 @*/
 PetscErrorCode STMatSolveHermitianTranspose(ST st,Vec b,Vec x)
 {
@@ -351,18 +351,18 @@ PetscErrorCode STCheckFactorPackage(ST st)
 }
 
 /*@
-   STSetKSP - Sets the KSP object associated with the spectral
+   STSetKSP - Sets the `KSP` object associated with the spectral
    transformation.
 
    Collective
 
    Input Parameters:
 +  st   - the spectral transformation context
--  ksp  - the linear system context
+-  ksp  - the linear solver context
 
    Level: advanced
 
-.seealso: `STGetKSP()`
+.seealso: [](ch:st), `STGetKSP()`
 @*/
 PetscErrorCode STSetKSP(ST st,KSP ksp)
 {
@@ -391,7 +391,7 @@ PetscErrorCode STSetKSP(ST st,KSP ksp)
 
    Level: intermediate
 
-.seealso: `STSetKSP()`
+.seealso: [](ch:st), `STSetKSP()`
 @*/
 PetscErrorCode STGetKSP(ST st,KSP* ksp)
 {
@@ -462,15 +462,15 @@ PetscErrorCode STCheckNullSpace_Default(ST st,BV V)
    Notes:
    Given a basis vectors object, this function tests each of its constraint
    vectors to be a nullspace vector of the coefficient matrix of the
-   associated KSP object. All these nullspace vectors are passed to the KSP
-   object.
+   associated `KSP` object. All these nullspace vectors are passed to the `KSP`
+   object with `MatSetNullSpace()`.
 
-   This function allows handling singular pencils and solving some problems
-   in which the nullspace is important (see the users guide for details).
+   This function allows handling singular pencils (i.e., when $A$ and $B$ share
+   a common nullspace), and solving some problems in which the nullspace is important.
 
    Level: developer
 
-.seealso: `EPSSetDeflationSpace()`
+.seealso: [](ch:st), `EPSSetDeflationSpace()`, `MatSetNullSpace()`
 @*/
 PetscErrorCode STCheckNullSpace(ST st,BV V)
 {

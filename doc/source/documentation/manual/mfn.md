@@ -24,7 +24,7 @@ so, in principle, the vector $y$ can be approximated by an element of the Krylov
 \tilde y=\beta V_m\exp(H_m)e_1,
 ```
 
- where $\beta=\|v\|_2$ and $e_1$ is the first coordinate vector. Hence, the problem of computing the exponential of a large matrix $A$ of order $n$ is reduced to computing the exponential of a small matrix $H_m$ of order $m$. For the latter task, we employ algorithms implemented in the `FN` auxiliary class, see section [](#sec:sys).
+ where $\beta=\|v\|_2$ and $e_1$ is the first coordinate vector. Hence, the problem of computing the exponential of a large matrix $A$ of order $n$ is reduced to computing the exponential of a small matrix $H_m$ of order $m$. For the latter task, we employ algorithms implemented in the `FN` auxiliary class, see section [](#sec:fn).
 
 ## Basic Usage
 
@@ -50,7 +50,7 @@ MFNSolve( mfn, v, y );
 MFNDestroy( &mfn );
 ```
 
-Listing [](#fig:ex-mfn) shows a simple example with the basic steps for computing $y=\exp(\alpha A)v$. After creating the solver context with `MFNCreate`, the problem matrix has to be passed with `MFNSetOperator` and the function to compute $f(\cdot)$ must be specified with the aid of the auxiliary class `FN`, see details in section [](#sec:sys). Then, a call to `MFNSolve` runs the solver on a given vector $v$, returning the computed result $y$. Finally, `MFNDestroy` is used to reclaim memory. We give a few more details below.
+Listing [](#fig:ex-mfn) shows a simple example with the basic steps for computing $y=\exp(\alpha A)v$. After creating the solver context with `MFNCreate()`, the problem matrix has to be passed with `MFNSetOperator()` and the function to compute $f(\cdot)$ must be specified with the aid of the auxiliary class `FN`, see details in section [](#sec:fn). Then, a call to `MFNSolve()` runs the solver on a given vector $v$, returning the computed result $y$. Finally, `MFNDestroy()` is used to reclaim memory. We give a few more details below.
 
 ### Defining the Problem
 
@@ -66,7 +66,7 @@ where `A` should be a square matrix, stored in any allowed PETSc format includin
 MFNGetFN(MFN mfn,FN *f);
 ```
 
-An alternative would be to create a standalone `FN` object and pass it with `MFNSetFN`. In any case, the function is defined via its type and the relevant parameters, see section [](#sec:sys) for details. The scaling parameters can be used for instance for the exponential when used in the context of ODE integration, $y=e^{tA}v$, where $t$ represents the elapsed time.
+An alternative would be to create a standalone `FN` object and pass it with `MFNSetFN()`. In any case, the function is defined via its type and the relevant parameters, see section [](#sec:fn) for details. The scaling parameters can be used for instance for the exponential when used in the context of ODE integration, $y=e^{tA}v$, where $t$ represents the elapsed time.
 
 :::{note}
 Some `MFN` solvers may be restricted to only some types of `FN` functions.
@@ -108,9 +108,9 @@ Currently implemented methods are:
 
 ### Accuracy and Monitors
 
-In the $f(A)v$ problem, there is no clear definition of residual, as opposed to the case of linear systems or eigenproblems. Still, the solvers have different ways of assessing the accuracy of the computed solution. The user can provide a tolerance and maximum number of iterations with `MFNSetTolerances`, but there is no guarantee that an analog of the residual is below the tolerance.
+In the $f(A)v$ problem, there is no clear definition of residual, as opposed to the case of linear systems or eigenproblems. Still, the solvers have different ways of assessing the accuracy of the computed solution. The user can provide a tolerance and maximum number of iterations with `MFNSetTolerances()`, but there is no guarantee that an analog of the residual is below the tolerance.
 
-After the solver has finished, the number of performed (outer) iterations can be obtained with `MFNGetIterationNumber`. There are also monitors that display the error estimate, which can be activated with command-line keys `-mfn_monitor`, or `-mfn_monitor draw::draw_lg`. See section [](#sec:monitor) for additional details.
+After the solver has finished, the number of performed (outer) iterations can be obtained with `MFNGetIterationNumber()`. There are also monitors that display the error estimate, which can be activated with command-line keys `-mfn_monitor`, or `-mfn_monitor draw::draw_lg`. See section [](#sec:monitor) for additional details.
 
 ```{only} html
 <p class="rubric">References</p>

@@ -681,26 +681,26 @@ static PetscErrorCode DSGSVDSetDimensions_GSVD(DS ds,PetscInt m,PetscInt p)
 }
 
 /*@
-   DSGSVDSetDimensions - Sets the number of columns and rows for a DSGSVD.
+   DSGSVDSetDimensions - Sets the number of columns and rows for a `DSGSVD`.
 
    Logically Collective
 
    Input Parameters:
 +  ds - the direct solver context
 .  m  - the number of columns
--  p  - the number of rows for the second matrix (B)
+-  p  - the number of rows for the second matrix (`DS_MAT_B`)
 
    Notes:
-   This call is complementary to DSSetDimensions(), to provide two dimensions
-   that are specific to this DS type. The number of rows for the first matrix (A)
-   is set by DSSetDimensions().
+   This call is complementary to `DSSetDimensions()`, to provide two dimensions
+   that are specific to this `DS` type. The number of rows for the first matrix
+   (`DS_MAT_A`) is set by `DSSetDimensions()`.
 
-   Use PETSC_CURRENT to leave any of the values unchanged. Use PETSC_DETERMINE
-   to set m to the leading dimension and p to the number of columns of B.
+   Use `PETSC_CURRENT` to leave any of the values unchanged. Use `PETSC_DETERMINE`
+   to set `m` to the leading dimension and `p` to the number of columns of $B$.
 
    Level: intermediate
 
-.seealso: `DSGSVDGetDimensions()`, `DSSetDimensions()`
+.seealso: [](sec:ds), `DSGSVDGetDimensions()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSGSVDSetDimensions(DS ds,PetscInt m,PetscInt p)
 {
@@ -723,7 +723,7 @@ static PetscErrorCode DSGSVDGetDimensions_GSVD(DS ds,PetscInt *m,PetscInt *p)
 }
 
 /*@
-   DSGSVDGetDimensions - Returns the number of columns and rows for a DSGSVD.
+   DSGSVDGetDimensions - Returns the number of columns and rows for a `DSGSVD`.
 
    Not Collective
 
@@ -732,11 +732,11 @@ static PetscErrorCode DSGSVDGetDimensions_GSVD(DS ds,PetscInt *m,PetscInt *p)
 
    Output Parameters:
 +  m - the number of columns
--  p - the number of rows for the second matrix (B)
+-  p - the number of rows for the second problem matrix (`DS_MAT_B`)
 
    Level: intermediate
 
-.seealso: `DSGSVDSetDimensions()`
+.seealso: [](sec:ds), `DSGSVDSetDimensions()`
 @*/
 PetscErrorCode DSGSVDGetDimensions(DS ds,PetscInt *m,PetscInt *p)
 {
@@ -781,48 +781,51 @@ static PetscErrorCode DSReallocate_GSVD(DS ds,PetscInt ld)
 /*MC
    DSGSVD - Dense Generalized Singular Value Decomposition.
 
-   Level: beginner
-
    Notes:
-   The problem is expressed as A*X = U*C, B*X = V*S, where A and B are
-   matrices with the same number of columns, m, U and V are orthogonal
-   (unitary), and X is an mxm invertible matrix. The DS object does not
-   expose matrices C and S, instead the singular values sigma, which are
-   the ratios c_i/s_i, are returned in the arguments of DSSolve().
-   Note that the number of columns of the returned X, U, V may be smaller
-   in the case that some c_i or s_i are zero.
+   The problem is expressed as $AX = UC$, $BX = VS$, where $A$ and $B$ are
+   matrices with the same number of columns, $m$, $U$ and $V$ are orthogonal
+   (unitary), and $X$ is an $m\times m$ invertible matrix. The `DS` object does not
+   expose matrices $C$ and $S$, instead the singular values $\sigma_i$, which are
+   the ratios $c_i/s_i$, are returned in the arguments of `DSSolve()`.
+   Note that the number of columns of the returned $X$, $U$, $V$ may be smaller
+   in the case that some $c_i$ or $s_i$ are zero.
 
-   The number of rows of A (and U) is the value n passed with DSSetDimensions().
-   The number of columns m and the number of rows of B (and V) must be
-   set via DSGSVDSetDimensions().
+   The number of rows of $A$ (and $U$) is the value $n$ passed with `DSSetDimensions()`.
+   The number of columns $m$ and the number of rows of $B$ (and $V$) must be
+   set via `DSGSVDSetDimensions()`.
 
-   Internally, LAPACK's representation is used, U'*A*Q = C*[0 R], V'*B*Q = S*[0 R],
-   where X = Q*inv(R) is computed at the end of DSSolve().
+   Internally, LAPACK's representation is used, $U^*AQ = C[0,R]$, $V^*BQ = S[0, R]$,
+   where $X = QR^{-1}$ is computed at the end of `DSSolve()`.
 
    If the compact storage format is selected, then a simplified problem is
-   solved, where A and B are bidiagonal (possibly with an arrow), and [A;B]
-   is assumed to have orthonormal columns. We consider two cases: (1) A and B
-   are square mxm upper bidiagonal, and (2) A is lower bidiagonal with m+1
-   rows and B is square upper bidiagonal. In these cases, R=I so it
-   corresponds to the CS decomposition. The first matrix is stored in two
-   diagonals of DS_MAT_T, while the second matrix is stored in DS_MAT_D
-   and the remaining diagonal of DS_MAT_T.
+   solved, where $A$ and $B$ are bidiagonal (possibly with an arrow), and the
+   stacked matrix $\begin{bmatrix}A^* &B^*\end{bmatrix}^*$
+   is assumed to have orthonormal columns. We consider two cases,
 
-   Allowed arguments of DSVectors() are DS_MAT_U, DS_MAT_V and DS_MAT_X.
+   1. $A$ and $B$ are square $m\times m$ upper bidiagonal, or
+   2. $A$ is lower bidiagonal with $m+1$ rows and $B$ is square upper bidiagonal.
+
+   In these cases, $R=I$ so it corresponds to the CS decomposition {cite:p}`Gol96`.
+   The first matrix is stored in two diagonals of `DS_MAT_T`, while the second matrix
+   is stored in `DS_MAT_D` and the remaining diagonal of `DS_MAT_T`.
+
+   Allowed arguments of `DSVectors()` are `DS_MAT_U`, `DS_MAT_V` and `DS_MAT_X`.
 
    Used DS matrices:
-+  DS_MAT_A - first problem matrix
-.  DS_MAT_B - second problem matrix
-.  DS_MAT_T - first upper bidiagonal matrix (if compact storage is selected)
-.  DS_MAT_D - second upper bidiagonal matrix (if compact storage is selected)
-.  DS_MAT_U - (upper) left generalized singular vectors
-.  DS_MAT_V - (lower) left generalized singular vectors
--  DS_MAT_X - right generalized singular vectors
++  `DS_MAT_A` - first problem matrix
+.  `DS_MAT_B` - second problem matrix
+.  `DS_MAT_T` - first upper bidiagonal matrix (if compact storage is selected)
+.  `DS_MAT_D` - second upper bidiagonal matrix (if compact storage is selected)
+.  `DS_MAT_U` - (upper) left generalized singular vectors
+.  `DS_MAT_V` - (lower) left generalized singular vectors
+-  `DS_MAT_X` - right generalized singular vectors
 
    Implemented methods:
-.  0 - Lapack (_ggsvd3 if available, or _ggsvd)
+.  0 - Lapack (`_ggsvd3` if available, or `_ggsvd`)
 
-.seealso: `DSCreate()`, `DSSetType()`, `DSType`, `DSGSVDSetDimensions()`
+   Level: beginner
+
+.seealso: [](sec:ds), `DSCreate()`, `DSSetType()`, `DSType`, `DSGSVDSetDimensions()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_GSVD(DS ds)
 {

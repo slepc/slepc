@@ -138,7 +138,7 @@ auxiliary object.
       of eigenvalues to compute, part of the spectrum of
       interest. Once the problem has been defined, a collection of
       solvers can be used to compute the required solutions.  The
-      behaviour of the solvers can be tuned by means of a few
+      behavior of the solvers can be tuned by means of a few
       parameters, such as the maximum dimension of the subspace to be
       used during the computation.
 

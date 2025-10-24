@@ -138,7 +138,7 @@ static PetscErrorCode STFilterSetType_Filter(ST st,STFilterType type)
 
    Level: intermediate
 
-.seealso: `STFilterGetType()`
+.seealso: [](ch:st), `STFILTER`, `STFilterGetType()`
 @*/
 PetscErrorCode STFilterSetType(ST st,STFilterType type)
 {
@@ -171,7 +171,7 @@ static PetscErrorCode STFilterGetType_Filter(ST st,STFilterType *type)
 
    Level: intermediate
 
-.seealso: `STFilterSetType()`
+.seealso: [](ch:st), `STFilterSetType()`
 @*/
 PetscErrorCode STFilterGetType(ST st,STFilterType *type)
 {
@@ -216,14 +216,14 @@ static PetscErrorCode STFilterSetInterval_Filter(ST st,PetscReal inta,PetscReal 
    interval, and damp out eigenvalues outside it. If the interval is open, then
    the filter is low- or high-pass, otherwise it is mid-pass.
 
-   Common usage is to set the interval in EPS with EPSSetInterval().
+   Common usage is to set the interval in `EPS` with `EPSSetInterval()`.
 
    The interval must be contained within the numerical range of the matrix, see
-   STFilterSetRange().
+   `STFilterSetRange()`.
 
    Level: intermediate
 
-.seealso: `STFilterGetInterval()`, `STFilterSetRange()`, `EPSSetInterval()`
+.seealso: [](ch:st), `STFILTER`, `STFilterGetInterval()`, `STFilterSetRange()`, `EPSSetInterval()`
 @*/
 PetscErrorCode STFilterSetInterval(ST st,PetscReal inta,PetscReal intb)
 {
@@ -259,7 +259,7 @@ static PetscErrorCode STFilterGetInterval_Filter(ST st,PetscReal *inta,PetscReal
 
    Level: intermediate
 
-.seealso: `STFilterSetInterval()`
+.seealso: [](ch:st), `STFilterSetInterval()`
 @*/
 PetscErrorCode STFilterGetInterval(ST st,PetscReal *inta,PetscReal *intb)
 {
@@ -293,19 +293,20 @@ static PetscErrorCode STFilterSetRange_Filter(ST st,PetscReal left,PetscReal rig
 
    Input Parameters:
 +  st    - the spectral transformation context
-.  left  - left end of the interval
--  right - right end of the interval
+.  left  - left end of the spectral range
+-  right - right end of the spectral range
 
    Options Database Key:
 .  -st_filter_range <a,b> - set [a,b] as the numerical range
 
    Notes:
-   The filter will be most effective if the numerical range is tight, that is, left and right
-   are good approximations to the leftmost and rightmost eigenvalues, respectively.
+   The filter will be most effective if the numerical range is tight, that is,
+   `left` and `right` are good approximations to the leftmost and rightmost
+   eigenvalues, respectively.
 
    Level: intermediate
 
-.seealso: `STFilterGetRange()`, `STFilterSetInterval()`
+.seealso: [](ch:st), `STFILTER`, `STFilterGetRange()`, `STFilterSetInterval()`
 @*/
 PetscErrorCode STFilterSetRange(ST st,PetscReal left,PetscReal right)
 {
@@ -336,12 +337,12 @@ static PetscErrorCode STFilterGetRange_Filter(ST st,PetscReal *left,PetscReal *r
 .  st  - the spectral transformation context
 
    Output Parameters:
-+  left  - left end of the interval
--  right - right end of the interval
++  left  - left end of the spectral range
+-  right - right end of the spectral range
 
    Level: intermediate
 
-.seealso: `STFilterSetRange()`
+.seealso: [](ch:st), `STFilterSetRange()`
 @*/
 PetscErrorCode STFilterGetRange(ST st,PetscReal *left,PetscReal *right)
 {
@@ -387,7 +388,7 @@ static PetscErrorCode STFilterSetDegree_Filter(ST st,PetscInt deg)
 
    Level: intermediate
 
-.seealso: `STFilterGetDegree()`
+.seealso: [](ch:st), `STFILTER`, `STFilterGetDegree()`
 @*/
 PetscErrorCode STFilterSetDegree(ST st,PetscInt deg)
 {
@@ -420,7 +421,7 @@ static PetscErrorCode STFilterGetDegree_Filter(ST st,PetscInt *deg)
 
    Level: intermediate
 
-.seealso: `STFilterSetDegree()`
+.seealso: [](ch:st), `STFilterSetDegree()`
 @*/
 PetscErrorCode STFilterGetDegree(ST st,PetscInt *deg)
 {
@@ -442,8 +443,8 @@ static PetscErrorCode STFilterGetThreshold_Filter(ST st,PetscReal *gamma)
 }
 
 /*@
-   STFilterGetThreshold - Gets the threshold value gamma such that rho(lambda)>=gamma for
-   eigenvalues lambda inside the wanted interval and rho(lambda)<gamma for those outside.
+   STFilterGetThreshold - Gets the threshold value $\gamma$ used to decide
+   whether eigenvalue approximations are inside or outside the wanted interval.
 
    Not Collective
 
@@ -453,9 +454,13 @@ static PetscErrorCode STFilterGetThreshold_Filter(ST st,PetscReal *gamma)
    Output Parameter:
 .  gamma - the threshold value
 
+   Note:
+   An eigenvalue $\lambda$ is considered to be inside the wanted interval
+   if $|p(\lambda)|\geq\gamma$, and outside otherwise.
+
    Level: developer
 
-.seealso: `STFilterGetRange()`
+.seealso: [](ch:st), `STFILTER`, `STFilterGetRange()`
 @*/
 PetscErrorCode STFilterGetThreshold(ST st,PetscReal *gamma)
 {
@@ -493,11 +498,11 @@ static PetscErrorCode STFilterSetDamping_Filter(ST st,STFilterDamping damping)
 .  -st_filter_damping <damping> - sets the type of damping
 
    Note:
-   Only used in Chebyshev filters.
+   Only used in `ST_FILTER_CHEBYSHEV` filters.
 
    Level: advanced
 
-.seealso: `STFilterGetDamping()`
+.seealso: [](ch:st), `STFILTER`, `STFilterGetDamping()`
 @*/
 PetscErrorCode STFilterSetDamping(ST st,STFilterDamping damping)
 {
@@ -530,7 +535,7 @@ static PetscErrorCode STFilterGetDamping_Filter(ST st,STFilterDamping *damping)
 
    Level: advanced
 
-.seealso: `STFilterSetDamping()`
+.seealso: [](ch:st), `STFilterSetDamping()`
 @*/
 PetscErrorCode STFilterGetDamping(ST st,STFilterDamping *damping)
 {
@@ -583,6 +588,26 @@ static PetscErrorCode STDestroy_Filter(ST st)
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STFilterGetDamping_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
+
+/*MC
+   STFILTER - STFILTER = "filter" - A special type of `ST` that represents
+   a polynomial filter.
+
+   Level: beginner
+
+   Notes:
+   In standard eigenvalue problems, when the eigenvalues of interest are interior
+   to the spectrum and we want to avoid the high cost associated with the matrix
+   factorization of the shift-and-invert spectral transformation, an alternative
+   is to build a high-order polynomial such that $p(A)$ enhances the wanted
+   eigenvalues and filters out the unwanted ones.
+
+   The definition of the filter is done with functions such as `STFilterSetDegree()`,
+   `STFilterSetInterval()` or `STFilterSetType()`.
+
+.seealso: [](ch:st), `ST`, `STType`, `STSetType()`, `STSetMatrices()`, `STFilterSetDegree()`,
+   `STFilterSetInterval()`, `STFilterSetType()`
+M*/
 
 SLEPC_EXTERN PetscErrorCode STCreate_Filter(ST st)
 {

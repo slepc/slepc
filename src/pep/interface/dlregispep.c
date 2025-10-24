@@ -24,12 +24,12 @@ const char *PEPJDProjectionTypes[] = {"HARMONIC","ORTHOGONAL","PEPJDProjection",
 const char *PEPCISSExtractions[] = {"RITZ","HANKEL","CAA","PEPCISSExtraction","PEP_CISS_EXTRACTION_",NULL};
 
 /*@C
-   PEPFinalizePackage - This function destroys everything in the Slepc interface
-   to the PEP package. It is called from SlepcFinalize().
+  PEPFinalizePackage - This function destroys everything in the SLEPc interface
+  to the `PEP` package. It is called from `SlepcFinalize()`.
 
-   Level: developer
+  Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: `SlepcFinalize()`, `PEPInitializePackage()`
 @*/
 PetscErrorCode PEPFinalizePackage(void)
 {
@@ -45,13 +45,16 @@ PetscErrorCode PEPFinalizePackage(void)
 }
 
 /*@C
-   PEPInitializePackage - This function initializes everything in the PEP package.
-   It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-   on the first call to PEPCreate() when using static libraries.
+   PEPInitializePackage - This function initializes everything in the `PEP` package.
+   It is called from `PetscDLLibraryRegister_slepcpep()` when using dynamic libraries, and
+   on the first call to `PEPCreate()` when using shared or static libraries.
+
+   Note:
+   This function never needs to be called by SLEPc users.
 
    Level: developer
 
-.seealso: `SlepcInitialize()`
+.seealso: [](ch:pep), `PEP`, `SlepcInitialize()`, `PEPFinalizePackage()`
 @*/
 PetscErrorCode PEPInitializePackage(void)
 {

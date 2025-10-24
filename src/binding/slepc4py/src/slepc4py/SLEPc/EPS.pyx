@@ -2020,7 +2020,7 @@ cdef class EPS(Object):
         Notes
         -----
         The default is to lock converged eigenpairs when the method restarts.
-        This behaviour can be changed so that all directions are kept in the
+        This behavior can be changed so that all directions are kept in the
         working subspace even if already converged to working accuracy (the
         non-locking variant).
         """

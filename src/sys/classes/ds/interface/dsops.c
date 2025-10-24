@@ -27,7 +27,7 @@
 
    Level: advanced
 
-.seealso: `DSAllocate()`, `DSSetDimensions()`
+.seealso: [](sec:ds), `DSAllocate()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSGetLeadingDimension(DS ds,PetscInt *ld)
 {
@@ -39,7 +39,7 @@ PetscErrorCode DSGetLeadingDimension(DS ds,PetscInt *ld)
 }
 
 /*@
-   DSSetState - Change the state of the DS object.
+   DSSetState - Change the state of the `DS` object.
 
    Logically Collective
 
@@ -53,12 +53,14 @@ PetscErrorCode DSGetLeadingDimension(DS ds,PetscInt *ld)
    Hessenberg-triangular), in a condensed state (such as diagonal, Schur or
    generalized Schur), or in a truncated state.
 
+   The state is automatically changed in functions such as `DSSolve()` or `DSTruncate()`.
    This function is normally used to return to the raw state when the
-   condensed structure is destroyed.
+   condensed structure is destroyed, or to indicate that `DSSolve()` must
+   start with a problem that already has an intermediate form.
 
    Level: advanced
 
-.seealso: `DSGetState()`
+.seealso: [](sec:ds), `DSGetState()`, `DSSolve()`, `DSTruncate()`
 @*/
 PetscErrorCode DSSetState(DS ds,DSStateType state)
 {
@@ -92,7 +94,7 @@ PetscErrorCode DSSetState(DS ds,DSStateType state)
 
    Level: advanced
 
-.seealso: `DSSetState()`
+.seealso: [](sec:ds), `DSSetState()`
 @*/
 PetscErrorCode DSGetState(DS ds,DSStateType *state)
 {
@@ -104,7 +106,7 @@ PetscErrorCode DSGetState(DS ds,DSStateType *state)
 }
 
 /*@
-   DSSetDimensions - Resize the matrices in the DS object.
+   DSSetDimensions - Resize the matrices in the `DS` object.
 
    Logically Collective
 
@@ -117,15 +119,15 @@ PetscErrorCode DSGetState(DS ds,DSStateType *state)
    Notes:
    The internal arrays are not reallocated.
 
-   Some DS types have additional dimensions, e.g. the number of columns
-   in DSSVD. For these, you should call a specific interface function.
+   Some `DS` types have additional dimensions, e.g., the number of columns
+   in `DSSVD`. For these, you should call a specific interface function.
 
-   Use PETSC_CURRENT to leave any of the values unchanged. Use PETSC_DETERMINE
-   to set n to the leading dimension, l to the minimum value (0), and k to n/2.
+   Use `PETSC_CURRENT` to leave any of the values unchanged. Use `PETSC_DETERMINE`
+   to set `n` to the leading dimension, `l` to the minimum value (0), and `k` to `n/2`.
 
    Level: intermediate
 
-.seealso: `DSGetDimensions()`, `DSAllocate()`, `DSSVDSetDimensions()`
+.seealso: [](sec:ds), `DSGetDimensions()`, `DSAllocate()`, `DSSVDSetDimensions()`
 @*/
 PetscErrorCode DSSetDimensions(DS ds,PetscInt n,PetscInt l,PetscInt k)
 {
@@ -179,15 +181,15 @@ PetscErrorCode DSSetDimensions(DS ds,PetscInt n,PetscInt l,PetscInt k)
 -  t  - truncated length
 
    Note:
-   The t parameter makes sense only if DSTruncate() has been called.
-   Otherwise its value equals n.
+   The `t` parameter makes sense only if `DSTruncate()` has been called.
+   Otherwise its value equals `n`.
 
-   Some DS types have additional dimensions, e.g. the number of columns
-   in DSSVD. For these, you should call a specific interface function.
+   Some `DS` types have additional dimensions, e.g., the number of columns
+   in `DSSVD`. For these, you should call a specific interface function.
 
    Level: intermediate
 
-.seealso: `DSSetDimensions()`, `DSTruncate()`, `DSSVDGetDimensions()`
+.seealso: [](sec:ds), `DSSetDimensions()`, `DSTruncate()`, `DSSVDGetDimensions()`
 @*/
 PetscErrorCode DSGetDimensions(DS ds,PetscInt *n,PetscInt *l,PetscInt *k,PetscInt *t)
 {
@@ -202,7 +204,7 @@ PetscErrorCode DSGetDimensions(DS ds,PetscInt *n,PetscInt *l,PetscInt *k,PetscIn
 }
 
 /*@
-   DSTruncate - Truncates the system represented in the DS object.
+   DSTruncate - Truncates the system represented in the `DS` object.
 
    Logically Collective
 
@@ -212,22 +214,22 @@ PetscErrorCode DSGetDimensions(DS ds,PetscInt *n,PetscInt *l,PetscInt *k,PetscIn
 -  trim - a flag to indicate if the factorization must be trimmed
 
    Note:
-   The new size is set to n. Note that in some cases the new size could
-   be n+1 or n-1 to avoid breaking a 2x2 diagonal block (e.g. in real
+   The new size is set to `n`. Note that in some cases the new size could
+   be `n+1` or `n-1` to avoid breaking a 2x2 diagonal block (e.g., in real
    Schur form). In cases where the extra row is meaningful, the first
-   n elements are kept as the extra row for the new system.
+   `n` elements are kept as the extra row for the new system.
 
-   If the flag trim is turned on, it resets the locked and intermediate
-   dimensions to zero, see DSSetDimensions(), and sets the state to RAW.
-   It also cleans the extra row if being used.
+   If the flag `trim` is turned on, it resets the locked and intermediate
+   dimensions to zero, see `DSSetDimensions()`, and sets the state to
+   `DS_STATE_RAW`. It also cleans the extra row if being used.
 
-   The typical usage of trim=true is to truncate the Schur decomposition
+   The typical usage of `trim=PETSC_TRUE` is to truncate the Schur decomposition
    at the end of a Krylov iteration. In this case, the state must be
-   changed to RAW so that DSVectors() computes eigenvectors from scratch.
+   changed to `DS_STATE_RAW` so that `DSVectors()` computes eigenvectors from scratch.
 
    Level: advanced
 
-.seealso: `DSSetDimensions()`, `DSSetExtraRow()`, `DSStateType`
+.seealso: [](sec:ds), `DSSetDimensions()`, `DSSetExtraRow()`, `DSStateType`
 @*/
 PetscErrorCode DSTruncate(DS ds,PetscInt n,PetscBool trim)
 {
@@ -254,7 +256,7 @@ PetscErrorCode DSTruncate(DS ds,PetscInt n,PetscBool trim)
 }
 
 /*@
-   DSMatGetSize - Returns the numbers of rows and columns of one of the DS matrices.
+   DSMatGetSize - Returns the numbers of rows and columns of one of the `DS` matrices.
 
    Not Collective
 
@@ -267,11 +269,11 @@ PetscErrorCode DSTruncate(DS ds,PetscInt n,PetscBool trim)
 -  m  - the number of columns
 
    Note:
-   This is equivalent to MatGetSize() on a matrix obtained with DSGetMat().
+   This is equivalent to `MatGetSize()` on a matrix obtained with `DSGetMat()`.
 
    Level: developer
 
-.seealso: `DSSetDimensions()`, `DSGetMat()`
+.seealso: [](sec:ds), `DSSetDimensions()`, `DSGetMat()`
 @*/
 PetscErrorCode DSMatGetSize(DS ds,DSMatType t,PetscInt *m,PetscInt *n)
 {
@@ -295,7 +297,7 @@ PetscErrorCode DSMatGetSize(DS ds,DSMatType t,PetscInt *m,PetscInt *n)
 }
 
 /*@
-   DSMatIsHermitian - Checks if one of the DS matrices is known to be Hermitian.
+   DSMatIsHermitian - Checks if one of the `DS` matrices is known to be Hermitian.
 
    Not Collective
 
@@ -308,11 +310,11 @@ PetscErrorCode DSMatGetSize(DS ds,DSMatType t,PetscInt *m,PetscInt *n)
 
    Note:
    Does not check the matrix values directly. The flag is set according to the
-   problem structure. For instance, in DSHEP matrix A is Hermitian.
+   problem structure. For instance, in `DSHEP` matrix `A` is Hermitian.
 
    Level: developer
 
-.seealso: `DSGetMat()`
+.seealso: [](sec:ds), `DSGetMat()`
 @*/
 PetscErrorCode DSMatIsHermitian(DS ds,DSMatType t,PetscBool *flg)
 {
@@ -344,31 +346,31 @@ PetscErrorCode DSGetTruncateSize_Default(DS ds,PetscInt l,PetscInt n,PetscInt *k
 }
 
 /*@
-   DSGetTruncateSize - Gets the correct size to be used in DSTruncate()
+   DSGetTruncateSize - Gets the correct size to be used in `DSTruncate()`
    to avoid breaking a 2x2 block.
 
    Not Collective
 
    Input Parameters:
 +  ds - the direct solver context
-.  l  - the size of the locked part (set to 0 to use ds->l)
--  n  - the total matrix size (set to 0 to use ds->n)
+.  l  - the size of the locked part (set to 0 to use `ds->l`)
+-  n  - the total matrix size (set to 0 to use `ds->n`)
 
    Output Parameter:
 .  k  - the wanted truncation size (possibly modified)
 
    Notes:
-   This should be called before DSTruncate() to make sure that the truncation
+   This should be called before `DSTruncate()` to make sure that the truncation
    does not break a 2x2 block corresponding to a complex conjugate eigenvalue.
 
-   The total size is n (either user-provided or ds->n if 0 is passed). The
-   size where the truncation is intended is equal to l+k (where l can be
-   equal to the locked size ds->l if set to 0). Then if there is a 2x2 block
-   at the l+k limit, the value of k is increased (or decreased) by 1.
+   The total size is `n` (either user-provided or `ds->n` if 0 is passed). The
+   size where the truncation is intended is equal to `l+k` (where `l` can be
+   equal to the locked size `ds->l` if set to 0). Then if there is a 2x2 block
+   at the `l+k` limit, the value of `k` is increased (or decreased) by 1.
 
    Level: advanced
 
-.seealso: `DSTruncate()`, `DSSetDimensions()`
+.seealso: [](sec:ds), `DSTruncate()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSGetTruncateSize(DS ds,PetscInt l,PetscInt n,PetscInt *k)
 {
@@ -383,7 +385,7 @@ PetscErrorCode DSGetTruncateSize(DS ds,PetscInt l,PetscInt n,PetscInt *k)
 }
 
 /*@
-   DSGetMat - Returns a sequential dense Mat object containing the requested
+   DSGetMat - Returns a sequential dense `Mat` object containing the requested
    matrix.
 
    Not Collective
@@ -396,23 +398,23 @@ PetscErrorCode DSGetTruncateSize(DS ds,PetscInt l,PetscInt n,PetscInt *k)
 .  A  - Mat object
 
    Notes:
-   The returned Mat has sizes equal to the current DS dimensions (nxm),
-   and contains the values that would be obtained with DSGetArray()
-   (not DSGetArrayReal()). If the DS was truncated, then the number of rows
-   is equal to the dimension prior to truncation, see DSTruncate().
-   The communicator is always PETSC_COMM_SELF.
+   The returned `Mat` has sizes equal to the current `DS` dimensions (see `DSSetDimensions()`),
+   and contains the values that would be obtained with `DSGetArray()`
+   (not `DSGetArrayReal()`). If the `DS` was truncated, then the number of rows
+   is equal to the dimension prior to truncation, see `DSTruncate()`.
+   The communicator is always `PETSC_COMM_SELF`.
 
-   It is implemented with MatDenseGetSubMatrix(), and when no longer needed
-   the user must call DSRestoreMat() which will invoke MatDenseRestoreSubMatrix().
+   It is implemented with `MatDenseGetSubMatrix()`, and when no longer needed
+   the user must call `DSRestoreMat()` which will invoke `MatDenseRestoreSubMatrix()`.
 
-   For matrices DS_MAT_T and DS_MAT_D, this function will return a Mat object
+   For matrices `DS_MAT_T` and `DS_MAT_D`, this function will return a `Mat` object
    that cannot be used directly for computations, since it uses compact storage
-   (three and one diagonals for T and D, respectively). In complex scalars, the
-   internal array stores real values, so it is sufficient with 2 columns for T.
+   (three and one diagonals for $T$ and $D$, respectively). In complex scalars, the
+   internal array stores real values, so it is sufficient with two columns for $T$.
 
    Level: advanced
 
-.seealso: `DSRestoreMat()`, `DSSetDimensions()`, `DSGetArray()`, `DSGetArrayReal()`, `DSTruncate()`
+.seealso: [](sec:ds), `DSRestoreMat()`, `DSSetDimensions()`, `DSGetArray()`, `DSGetArrayReal()`, `DSTruncate()`, `DSGetMatAndColumn()`
 @*/
 PetscErrorCode DSGetMat(DS ds,DSMatType m,Mat *A)
 {
@@ -437,21 +439,21 @@ PetscErrorCode DSGetMat(DS ds,DSMatType m,Mat *A)
 }
 
 /*@
-   DSRestoreMat - Restores the matrix after DSGetMat() was called.
+   DSRestoreMat - Restores the matrix after `DSGetMat()` was called.
 
    Not Collective
 
    Input Parameters:
 +  ds - the direct solver context
 .  m  - the requested matrix
--  A  - the fetched Mat object
+-  A  - the fetched `Mat` object
 
    Note:
-   A call to this function must match a previous call of DSGetMat().
+   A call to this function must match a previous call of `DSGetMat()`.
 
    Level: advanced
 
-.seealso: `DSGetMat()`, `DSRestoreArray()`, `DSRestoreArrayReal()`
+.seealso: [](sec:ds), `DSGetMat()`, `DSRestoreArray()`, `DSRestoreArrayReal()`
 @*/
 PetscErrorCode DSRestoreMat(DS ds,DSMatType m,Mat *A)
 {
@@ -467,29 +469,29 @@ PetscErrorCode DSRestoreMat(DS ds,DSMatType m,Mat *A)
 }
 
 /*@
-   DSGetMatAndColumn - Returns a sequential dense Mat object containing the requested
-   matrix and one of its columns as a Vec.
+   DSGetMatAndColumn - Returns a sequential dense `Mat` object containing the requested
+   matrix and one of its columns as a `Vec`.
 
    Not Collective
 
    Input Parameters:
 +  ds  - the direct solver context
 .  m   - the requested matrix
--  col - the requested column
+-  col - the index of the requested column
 
    Output Parameters:
-+  A   - Mat object
--  v   - Vec object (the column)
++  A   - `Mat` object
+-  v   - `Vec` object (the column)
 
    Notes:
-   This calls DSGetMat() and then it extracts the selected column.
-   The user must call DSRestoreMatAndColumn() to recover the original state.
-   For matrices DS_MAT_T and DS_MAT_D, in complex scalars this function implies
+   This calls `DSGetMat()` and then it extracts the selected column.
+   The user must call `DSRestoreMatAndColumn()` to recover the original state.
+   For matrices `DS_MAT_T` and `DS_MAT_D`, in complex scalars this function implies
    copying from real values stored internally to scalar values in the Vec.
 
    Level: advanced
 
-.seealso: `DSRestoreMatAndColumn()`, `DSGetMat()`
+.seealso: [](sec:ds), `DSRestoreMatAndColumn()`, `DSGetMat()`
 @*/
 PetscErrorCode DSGetMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *v)
 {
@@ -520,7 +522,7 @@ PetscErrorCode DSGetMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *v)
 }
 
 /*@
-   DSRestoreMatAndColumn - Restores the matrix and vector after DSGetMatAndColumn()
+   DSRestoreMatAndColumn - Restores the matrix and vector after `DSGetMatAndColumn()`
    was called.
 
    Not Collective
@@ -529,15 +531,15 @@ PetscErrorCode DSGetMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *v)
 +  ds  - the direct solver context
 .  m   - the requested matrix
 .  col - the requested column
-.  A   - the fetched Mat object
--  v   - the fetched Vec object
+.  A   - the fetched `Mat` object
+-  v   - the fetched `Vec` object
 
    Note:
-   A call to this function must match a previous call of DSGetMatAndColumn().
+   A call to this function must match a previous call of `DSGetMatAndColumn()`.
 
    Level: advanced
 
-.seealso: `DSGetMatAndColumn()`, `DSRestoreMat()`
+.seealso: [](sec:ds), `DSGetMatAndColumn()`, `DSRestoreMat()`
 @*/
 PetscErrorCode DSRestoreMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *v)
 {
@@ -569,7 +571,7 @@ PetscErrorCode DSRestoreMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *
 
 /*@C
    DSGetArray - Returns a pointer to the internal array of one of the
-   matrices. You MUST call DSRestoreArray() when you no longer
+   matrices. You MUST call `DSRestoreArray()` when you no longer
    need to access the array.
 
    Not Collective
@@ -582,11 +584,11 @@ PetscErrorCode DSRestoreMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *
 .  a  - pointer to the values
 
    Note:
-   To get read-only access, use DSGetMat() followed by MatDenseGetArrayRead().
+   To get read-only access, use `DSGetMat()` followed by `MatDenseGetArrayRead()`.
 
    Level: advanced
 
-.seealso: `DSRestoreArray()`, `DSGetArrayReal()`
+.seealso: [](sec:ds), `DSRestoreArray()`, `DSGetArrayReal()`
 @*/
 PetscErrorCode DSGetArray(DS ds,DSMatType m,PetscScalar *a[])
 {
@@ -600,7 +602,7 @@ PetscErrorCode DSGetArray(DS ds,DSMatType m,PetscScalar *a[])
 }
 
 /*@C
-   DSRestoreArray - Restores the matrix after DSGetArray() was called.
+   DSRestoreArray - Restores the matrix after `DSGetArray()` was called.
 
    Not Collective
 
@@ -611,7 +613,7 @@ PetscErrorCode DSGetArray(DS ds,DSMatType m,PetscScalar *a[])
 
    Level: advanced
 
-.seealso: `DSGetArray()`, `DSGetArrayReal()`
+.seealso: [](sec:ds), `DSGetArray()`, `DSGetArrayReal()`
 @*/
 PetscErrorCode DSRestoreArray(DS ds,DSMatType m,PetscScalar *a[])
 {
@@ -626,8 +628,8 @@ PetscErrorCode DSRestoreArray(DS ds,DSMatType m,PetscScalar *a[])
 }
 
 /*@C
-   DSGetArrayReal - Returns a real pointer to the internal array of T or D.
-   You MUST call DSRestoreArrayReal() when you no longer need to access the array.
+   DSGetArrayReal - Returns a real pointer to the internal array of $T$ or $D$.
+   You MUST call `DSRestoreArrayReal()` when you no longer need to access the array.
 
    Not Collective
 
@@ -639,13 +641,13 @@ PetscErrorCode DSRestoreArray(DS ds,DSMatType m,PetscScalar *a[])
 .  a  - pointer to the values
 
    Note:
-   This function can be used only for DS_MAT_T and DS_MAT_D. These matrices always
+   This function can be used only for `DS_MAT_T` and `DS_MAT_D`. These matrices always
    store real values, even in complex scalars, that is why the returned pointer is
-   PetscReal.
+   `PetscReal`.
 
    Level: advanced
 
-.seealso: `DSRestoreArrayReal()`, `DSGetArray()`
+.seealso: [](sec:ds), `DSRestoreArrayReal()`, `DSGetArray()`
 @*/
 PetscErrorCode DSGetArrayReal(DS ds,DSMatType m,PetscReal *a[])
 {
@@ -668,7 +670,7 @@ PetscErrorCode DSGetArrayReal(DS ds,DSMatType m,PetscReal *a[])
 }
 
 /*@C
-   DSRestoreArrayReal - Restores the matrix after DSGetArrayReal() was called.
+   DSRestoreArrayReal - Restores the matrix after `DSGetArrayReal()` was called.
 
    Not Collective
 
@@ -679,7 +681,7 @@ PetscErrorCode DSGetArrayReal(DS ds,DSMatType m,PetscReal *a[])
 
    Level: advanced
 
-.seealso: `DSGetArrayReal()`, `DSGetArray()`
+.seealso: [](sec:ds), `DSGetArrayReal()`, `DSGetArray()`
 @*/
 PetscErrorCode DSRestoreArrayReal(DS ds,DSMatType m,PetscReal *a[])
 {
@@ -703,7 +705,7 @@ PetscErrorCode DSRestoreArrayReal(DS ds,DSMatType m,PetscReal *a[])
 }
 
 /*@
-   DSSolve - Solves the problem.
+   DSSolve - Solve the problem.
 
    Logically Collective
 
@@ -712,13 +714,16 @@ PetscErrorCode DSRestoreArrayReal(DS ds,DSMatType m,PetscReal *a[])
 .  eigr - array to store the computed eigenvalues (real part)
 -  eigi - array to store the computed eigenvalues (imaginary part)
 
-   Note:
+   Notes:
    This call brings the dense system to condensed form. No ordering
-   of the eigenvalues is enforced (for this, call DSSort() afterwards).
+   of the eigenvalues is enforced (for this, call `DSSort()` afterwards).
+
+   In some `DS` types, the arguments will hold singular values,
+   instead of eigenvalues. Singular values are always real.
 
    Level: intermediate
 
-.seealso: `DSSort()`, `DSStateType`
+.seealso: [](sec:ds), `DSSort()`, `DSStateType`
 @*/
 PetscErrorCode DSSolve(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
@@ -742,7 +747,7 @@ PetscErrorCode DSSolve(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 }
 
 /*@
-   DSSort - Sorts the result of DSSolve() according to a given sorting
+   DSSort - Sort the result of `DSSolve()` according to a given sorting
    criterion.
 
    Logically Collective
@@ -758,21 +763,21 @@ PetscErrorCode DSSolve(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 -  k    - (optional) number of elements in the leading group
 
    Notes:
-   This routine sorts the arrays provided in eigr and eigi, and also
-   sorts the dense system stored inside ds (assumed to be in condensed form).
-   The sorting criterion is specified with DSSetSlepcSC().
+   This routine sorts the arrays provided in `eigr` and `eigi`, and also
+   sorts the dense system stored inside `ds` (assumed to be in condensed form).
+   The sorting criterion is specified with `DSSetSlepcSC()`.
 
-   If arrays rr and ri are provided, then a (partial) reordering based on these
+   If arrays `rr` and `ri` are provided, then a (partial) reordering based on these
    values rather than on the eigenvalues is performed. In symmetric problems
-   a total order is obtained (parameter k is ignored), but otherwise the result
+   a total order is obtained (parameter `k` is ignored), but otherwise the result
    is sorted only partially. In this latter case, it is only guaranteed that
-   all the first k elements satisfy the comparison with any of the last n-k
-   elements. The output value of parameter k is the final number of elements in
+   all the first `k` elements satisfy the comparison with any of the last `n-k`
+   elements. The output value of parameter `k` is the final number of elements in
    the first set.
 
    Level: intermediate
 
-.seealso: `DSSolve()`, `DSSetSlepcSC()`, `DSSortWithPermutation()`
+.seealso: [](sec:ds), `DSSolve()`, `DSSetSlepcSC()`, `DSSortWithPermutation()`
 @*/
 PetscErrorCode DSSort(DS ds,PetscScalar eigr[],PetscScalar eigi[],PetscScalar rr[],PetscScalar ri[],PetscInt *k)
 {
@@ -800,7 +805,7 @@ PetscErrorCode DSSort(DS ds,PetscScalar eigr[],PetscScalar eigi[],PetscScalar rr
 }
 
 /*@
-   DSSortWithPermutation - Reorders the result of DSSolve() according to a given
+   DSSortWithPermutation - Reorders the result of `DSSolve()` according to a given
    permutation.
 
    Logically Collective
@@ -814,13 +819,14 @@ PetscErrorCode DSSort(DS ds,PetscScalar eigr[],PetscScalar eigi[],PetscScalar rr
 -  eigi - array with the reordered eigenvalues (imaginary part)
 
    Notes:
-   This routine reorders the arrays provided in eigr and eigi, and also the dense
-   system stored inside ds (assumed to be in condensed form). There is no sorting
-   criterion, as opposed to DSSort(). Instead, the new ordering is given in argument perm.
+   This routine reorders the arrays provided in `eigr` and `eigi`, and also the dense
+   system stored inside `ds` (assumed to be in condensed form). There is no sorting
+   criterion, as opposed to `DSSort()`. Instead, the new ordering is given in argument
+   `perm`.
 
    Level: advanced
 
-.seealso: `DSSolve()`, `DSSort()`
+.seealso: [](sec:ds), `DSSolve()`, `DSSort()`
 @*/
 PetscErrorCode DSSortWithPermutation(DS ds,PetscInt perm[],PetscScalar eigr[],PetscScalar eigi[])
 {
@@ -856,21 +862,21 @@ PetscErrorCode DSSortWithPermutation(DS ds,PetscInt perm[],PetscScalar eigr[],Pe
 -  eigi - (optional) array with the computed eigenvalues (imaginary part)
 
    Notes:
-   When the DS has been created with a communicator with more than one process,
+   When the `DS` has been created with a communicator with more than one process,
    the internal data, especially the computed matrices, may diverge in the
    different processes. This happens when using multithreaded BLAS and may
    cause numerical issues in some ill-conditioned problems. This function
    performs the necessary communication among the processes so that the
    internal data is exactly equal in all of them.
 
-   Depending on the parallel mode as set with DSSetParallel(), this function
-   will either do nothing or synchronize the matrices computed by DSSolve()
-   and DSSort(). The arguments eigr and eigi are typically those used in the
-   calls to DSSolve() and DSSort().
+   Depending on the parallel mode as set with `DSSetParallel()`, this function
+   will either do nothing or synchronize the matrices computed by `DSSolve()`
+   and `DSSort()`. The arguments `eigr` and `eigi` are typically those used in the
+   calls to `DSSolve()` and `DSSort()`.
 
    Level: developer
 
-.seealso: `DSSetParallel()`, `DSSolve()`, `DSSort()`
+.seealso: [](sec:ds), `DSSetParallel()`, `DSSolve()`, `DSSort()`
 @*/
 PetscErrorCode DSSynchronize(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
@@ -908,25 +914,25 @@ PetscErrorCode DSSynchronize(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 .  rnorm - (optional) computed residual norm
 
    Notes:
-   Allowed values for mat are DS_MAT_X, DS_MAT_Y, DS_MAT_U and DS_MAT_V, to
+   Allowed values for mat are `DS_MAT_X`, `DS_MAT_Y`, `DS_MAT_U` and `DS_MAT_V`, to
    compute right or left eigenvectors, or left or right singular vectors,
    respectively.
 
-   If NULL is passed in argument j then all vectors are computed,
-   otherwise j indicates which vector must be computed. In real non-symmetric
-   problems, on exit the index j will be incremented when a complex conjugate
+   If `NULL` is passed in argument `j` then all vectors are computed,
+   otherwise `j` indicates which vector must be computed. In real non-symmetric
+   problems, on exit the index `j` will be incremented when a complex conjugate
    pair is found.
 
    This function can be invoked after the dense problem has been solved,
    to get the residual norm estimate of the associated Ritz pair. In that
-   case, the relevant information is returned in rnorm.
+   case, the relevant information is returned in `rnorm`.
 
-   For computing eigenvectors, LAPACK's _trevc is used so the matrix must
-   be in (quasi-)triangular form, or call DSSolve() first.
+   For computing eigenvectors, LAPACK's `_trevc` is used so the matrix must
+   be in (quasi-)triangular form, or call `DSSolve()` first.
 
    Level: intermediate
 
-.seealso: `DSSolve()`
+.seealso: [](sec:ds), `DSSolve()`
 @*/
 PetscErrorCode DSVectors(DS ds,DSMatType mat,PetscInt *j,PetscReal *rnorm)
 {
@@ -950,7 +956,7 @@ PetscErrorCode DSVectors(DS ds,DSMatType mat,PetscInt *j,PetscReal *rnorm)
 
 /*@
    DSUpdateExtraRow - Performs all necessary operations so that the extra
-   row gets up-to-date after a call to DSSolve().
+   row gets up-to-date after a call to `DSSolve()`.
 
    Logically Collective
 
@@ -959,7 +965,7 @@ PetscErrorCode DSVectors(DS ds,DSMatType mat,PetscInt *j,PetscReal *rnorm)
 
    Level: advanced
 
-.seealso: `DSSolve()`, `DSSetExtraRow()`
+.seealso: [](sec:ds), `DSSolve()`, `DSSetExtraRow()`
 @*/
 PetscErrorCode DSUpdateExtraRow(DS ds)
 {
@@ -987,17 +993,17 @@ PetscErrorCode DSUpdateExtraRow(DS ds)
 -  cond - the computed condition number
 
    Notes:
-   In standard eigenvalue problems, returns the inf-norm condition number of the first
-   matrix, computed as cond(A) = norm(A)*norm(inv(A)).
+   In standard eigenvalue problems, returns the $\infty$-norm condition number of the first
+   matrix, computed as $\kappa_\infty(A) = \|A\|_\infty\|A^{-1}\|_\infty$.
 
-   In GSVD problems, returns the maximum of cond(A) and cond(B), where cond(.) is
+   In GSVD problems, returns the maximum of $\kappa_2(A)$ and $\kappa_2(B)$, where $\kappa_2(\cdot)$ is
    computed as the ratio of the largest and smallest singular values.
 
    Does not take into account the extra row.
 
    Level: advanced
 
-.seealso: `DSSolve()`, `DSSetExtraRow()`
+.seealso: [](sec:ds), `DSSolve()`, `DSSetExtraRow()`
 @*/
 PetscErrorCode DSCond(DS ds,PetscReal *cond)
 {
@@ -1023,7 +1029,7 @@ PetscErrorCode DSCond(DS ds,PetscReal *cond)
    Input Parameters:
 +  ds      - the direct solver context
 .  tau     - the translation amount
-.  beta    - last component of vector b
+.  beta    - last component of vector $b$
 -  recover - boolean flag to indicate whether to recover or not
 
    Output Parameters:
@@ -1034,18 +1040,18 @@ PetscErrorCode DSCond(DS ds,PetscReal *cond)
    This function is intended for use in the context of Krylov methods only.
    It computes a translation of a Krylov decomposition in order to extract
    eigenpair approximations by harmonic Rayleigh-Ritz.
-   The matrix is updated as A + g*b' where g = (A-tau*eye(n))'\b and
-   vector b is assumed to be beta*e_n^T.
+   The matrix is updated as $A + gb^*$ where $g = (A-\tau I)^{-*}b$ and
+   vector $b$ is assumed to be $\beta e_n^*$.
 
-   The gamma factor is defined as sqrt(1+g'*g) and can be interpreted as
+   The $\gamma$ factor is defined as $\sqrt{1+g^*g}$ and can be interpreted as
    the factor by which the residual of the Krylov decomposition is scaled.
 
-   If the recover flag is activated, the computed translation undoes the
-   translation done previously. In that case, parameter tau is ignored.
+   If the `recover` flag is activated, the computed translation undoes the
+   translation done previously. In that case, parameter `tau` is ignored.
 
    Level: developer
 
-.seealso: `DSTranslateRKS()`
+.seealso: [](sec:ds), `DSTranslateRKS()`
 @*/
 PetscErrorCode DSTranslateHarmonic(DS ds,PetscScalar tau,PetscReal beta,PetscBool recover,PetscScalar *g,PetscReal *gamma)
 {
@@ -1077,19 +1083,19 @@ PetscErrorCode DSTranslateHarmonic(DS ds,PetscScalar tau,PetscReal beta,PetscBoo
 
    Notes:
    This function is intended for use in the context of Krylov methods only.
-   It takes the leading (k+1,k) submatrix of A, containing the truncated
+   It takes the leading $(k+1,k)$ submatrix of $A$, containing the truncated
    Rayleigh quotient of a Krylov-Schur relation computed from a shift
-   sigma1 and transforms it to obtain a Krylov relation as if computed
-   from a different shift sigma2. The new matrix is computed as
-   1.0/alpha*(eye(k)-Q*inv(R)), where [Q,R]=qr(eye(k)-alpha*A) and
-   alpha = sigma1-sigma2.
+   $\sigma_1$ and transforms it to obtain a Krylov relation as if computed
+   from a different shift $\sigma_2$. The new matrix is computed as
+   $\alpha^{-1}(I-QR^{-1})$, where $QR=I-\alpha A$ and
+   $\alpha = \sigma_1-\sigma_2$.
 
-   Matrix Q is placed in DS_MAT_Q so that it can be used to update the
+   Matrix $Q$ is placed in `DS_MAT_Q` so that it can be used to update the
    Krylov basis.
 
    Level: developer
 
-.seealso: `DSTranslateHarmonic()`
+.seealso: [](sec:ds), `DSTranslateHarmonic()`
 @*/
 PetscErrorCode DSTranslateRKS(DS ds,PetscScalar alpha)
 {

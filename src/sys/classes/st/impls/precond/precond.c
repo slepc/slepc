@@ -142,9 +142,9 @@ static PetscErrorCode STPrecondSetKSPHasMat_Precond(ST st,PetscBool ksphasmat)
 }
 
 /*@
-   STPrecondSetKSPHasMat - Sets a flag indicating that during STSetUp the coefficient
-   matrix of the KSP linear solver (A) must be set to be the same matrix as the
-   preconditioner (P).
+   STPrecondSetKSPHasMat - Sets a flag indicating that during `STSetUp` the coefficient
+   matrix of the `KSP` linear solver (`Amat`) must be set to be the same matrix as the
+   preconditioner (`Pmat`).
 
    Collective
 
@@ -153,13 +153,13 @@ static PetscErrorCode STPrecondSetKSPHasMat_Precond(ST st,PetscBool ksphasmat)
 -  ksphasmat - the flag
 
    Notes:
-   Often, the preconditioner matrix is used only in the PC object, but
-   in some solvers this matrix must be provided also as the A-matrix in
-   the KSP object.
+   Often, the preconditioner matrix is used only in the `PC` object, but
+   in some solvers this matrix must be provided also as the `Amat` matrix in
+   the `KSP` object.
 
    Level: developer
 
-.seealso: `STPrecondGetKSPHasMat()`, `STSetShift()`
+.seealso: [](ch:st), `STPrecondGetKSPHasMat()`, `STSetShift()`
 @*/
 PetscErrorCode STPrecondSetKSPHasMat(ST st,PetscBool ksphasmat)
 {
@@ -181,8 +181,8 @@ static PetscErrorCode STPrecondGetKSPHasMat_Precond(ST st,PetscBool *ksphasmat)
 
 /*@
    STPrecondGetKSPHasMat - Returns the flag indicating if the coefficient
-   matrix of the KSP linear system (A) is set to be the same matrix as the
-   preconditioner (P).
+   matrix of the `KSP` linear system (`Amat`) is set to be the same matrix as the
+   preconditioner (`Pmat`).
 
    Not Collective
 
@@ -194,7 +194,7 @@ static PetscErrorCode STPrecondGetKSPHasMat_Precond(ST st,PetscBool *ksphasmat)
 
    Level: developer
 
-.seealso: `STPrecondSetKSPHasMat()`, `STSetShift()`
+.seealso: [](ch:st), `STPrecondSetKSPHasMat()`, `STSetShift()`
 @*/
 PetscErrorCode STPrecondGetKSPHasMat(ST st,PetscBool *ksphasmat)
 {
@@ -213,6 +213,22 @@ static PetscErrorCode STDestroy_Precond(ST st)
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STPrecondSetKSPHasMat_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
+
+/*MC
+   STPRECOND - STPRECOND = "precond" - A special type of `ST` intended
+   for use with preconditioned eigensolvers.
+
+   Level: beginner
+
+   Note:
+   This is not a true spectral transformation. It behaves as an "inexact"
+   version of the `STSINVERT` operator, in the sense that the associated
+   `KSP` and `PC` objects can be used to implement a preconditioner
+   $K^{-1}\approx(A-\sigma B)^{-1}$ in the context of preconditioned
+   eigensolvers such as Jacobi-Davidson.
+
+.seealso: [](ch:st), `ST`, `STType`, `STSetType()`, `STSetMatrices()`, `STSetShift()`
+M*/
 
 SLEPC_EXTERN PetscErrorCode STCreate_Precond(ST st)
 {

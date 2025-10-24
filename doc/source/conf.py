@@ -440,7 +440,7 @@ def builder_init_handler(app):
 
 def build_finished_handler(app, exception):
     global xtime
-    print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - xtime))
+    print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - xtime))
     print("============================================")
     if app.builder.name.endswith('html'):
         build_manpages_c2html.post(app.c2html,app.mapnames,app.slepc_dir,app.srcdir,app.outdir)
@@ -466,7 +466,7 @@ def _add_man_page_redirects(app, exception):
         print("    Adding man pages redirects")
         x = time.clock_gettime(time.CLOCK_REALTIME)
         add_man_page_redirects.add_man_page_redirects(app.outdir)
-        print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+        print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
         print("============================================")
 
 def build_slepc4py_docs(app):
@@ -488,7 +488,7 @@ def build_slepc4py_docs(app):
     print(command)
     x = time.clock_gettime(time.CLOCK_REALTIME)
     subprocess.run(command, cwd=os.path.join(app.slepc_dir,'src','binding','slepc4py'), check=True)
-    print("End slepc4py docs Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+    print("End slepc4py docs Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
     print('============================================')
 
 def _fix_man_page_edit_links(app, exception):
@@ -498,7 +498,7 @@ def _fix_man_page_edit_links(app, exception):
         print("    Fixing manual page edit links")
         x = time.clock_gettime(time.CLOCK_REALTIME)
         fix_man_page_edit_links.fix_man_page_edit_links(app.outdir)
-        print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+        print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
         print("============================================")
 
 #   The following two scripts are needed because the Sphinx html and dirhtml builds save the output html
@@ -517,7 +517,7 @@ def _fix_links(app, exception):
         print("    Fixing relative links")
         x = time.clock_gettime(time.CLOCK_REALTIME)
         make_links_relative.make_links_relative(app.outdir)
-        print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+        print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
         print("============================================")
 
 def _update_htmlmap_links(app):
@@ -530,5 +530,5 @@ def _update_htmlmap_links(app):
     print("    Updating htmlmap")
     x = time.clock_gettime(time.CLOCK_REALTIME)
     update_htmlmap_links.update_htmlmap_links(app.builder,os.path.join('source','manualpages','htmlmap'))
-    print("Time: "+str(time.clock_gettime(time.CLOCK_REALTIME) - x))
+    print("Time: %.2f" % (time.clock_gettime(time.CLOCK_REALTIME) - x))
     print("============================================")

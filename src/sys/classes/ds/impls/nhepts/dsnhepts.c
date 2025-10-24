@@ -428,34 +428,34 @@ static PetscErrorCode DSMatGetSize_NHEPTS(DS ds,DSMatType t,PetscInt *rows,Petsc
    DSNHEPTS - Dense Non-Hermitian Eigenvalue Problem (special variant intended
    for two-sided Krylov solvers).
 
-   Level: beginner
-
    Notes:
-   Two related problems are solved, A*X = X*Lambda and B*Y = Y*Lambda', where A and
-   B are supposed to come from the Arnoldi factorizations of a certain matrix and its
-   (conjugate) transpose, respectively. Hence, in exact arithmetic the columns of Y
-   are equal to the left eigenvectors of A. Lambda is a diagonal matrix whose diagonal
-   elements are the arguments of DSSolve(). After solve, A is overwritten with the
-   upper quasi-triangular matrix T of the (real) Schur form, A*Q = Q*T, and similarly
-   another (real) Schur relation is computed, B*Z = Z*S, overwriting B.
+   Two related problems are solved, $AX = X\Lambda$ and $BY = Y\Lambda^*$, where $A$ and
+   $B$ are supposed to come from the Arnoldi factorizations of a certain matrix and its
+   (conjugate) transpose, respectively. Hence, in exact arithmetic the columns of $Y$
+   are equal to the left eigenvectors of $A$. $\Lambda$ is a diagonal matrix whose diagonal
+   elements are the arguments of `DSSolve()`. After solve, $A$ is overwritten with the
+   upper quasi-triangular matrix $T$ of the (real) Schur form, $AQ = QT$, and similarly
+   another (real) Schur relation is computed, $BZ = ZS$, overwriting $B$.
 
-   In the intermediate state A and B are reduced to upper Hessenberg form.
+   In the intermediate state $A$ and $B$ are reduced to upper Hessenberg form.
 
-   When left eigenvectors DS_MAT_Y are requested, right eigenvectors of B are returned,
-   while DS_MAT_X contains right eigenvectors of A.
+   When left eigenvectors `DS_MAT_Y` are requested, right eigenvectors of $B$ are returned,
+   while `DS_MAT_X` contains right eigenvectors of $A$.
 
    Used DS matrices:
-+  DS_MAT_A - first problem matrix obtained from Arnoldi
-.  DS_MAT_B - second problem matrix obtained from Arnoldi on the transpose
-.  DS_MAT_Q - orthogonal/unitary transformation that reduces A to Hessenberg form
-   (intermediate step) or matrix of orthogonal Schur vectors of A
--  DS_MAT_Z - orthogonal/unitary transformation that reduces B to Hessenberg form
-   (intermediate step) or matrix of orthogonal Schur vectors of B
++  `DS_MAT_A` - first problem matrix obtained from Arnoldi
+.  `DS_MAT_B` - second problem matrix obtained from Arnoldi on the transpose
+.  `DS_MAT_Q` - orthogonal/unitary transformation that reduces $A$ to Hessenberg form
+   (intermediate step) or matrix of orthogonal Schur vectors of $A$
+-  `DS_MAT_Z` - orthogonal/unitary transformation that reduces $B$ to Hessenberg form
+   (intermediate step) or matrix of orthogonal Schur vectors of $B$
 
    Implemented methods:
-.  0 - Implicit QR (_hseqr)
+.  0 - Implicit QR (`_hseqr`)
 
-.seealso: `DSCreate()`, `DSSetType()`, `DSType`
+   Level: beginner
+
+.seealso: [](sec:ds), `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_NHEPTS(DS ds)
 {

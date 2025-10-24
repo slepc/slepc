@@ -20,23 +20,31 @@
    Collective
 
    Input Parameter:
-.  lme - linear matrix equation solver context obtained from LMECreate()
+.  lme - linear matrix equation solver context obtained from `LMECreate()`
 
    Options Database Keys:
-+  -lme_view - print information about the solver used
-.  -lme_view_mat binary - save the matrix to the default binary viewer
-.  -lme_view_rhs binary - save right hand side to the default binary viewer
-.  -lme_view_solution binary - save computed solution to the default binary viewer
--  -lme_converged_reason - print reason for convergence, and number of iterations
++  -lme_view - print information about the solver once the solve is complete
+.  -lme_view_pre - print information about the solver before the solve starts
+.  -lme_view_mat_a - view the A matrix
+.  -lme_view_mat_b - view the B matrix
+.  -lme_view_mat_d - view the D matrix
+.  -lme_view_mat_e - view the E matrix
+.  -lme_view_rhs - view the right hand side of the equation
+.  -lme_view_solution - view the computed solution
+-  -lme_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:
-   The matrix coefficients are specified with LMESetCoefficients().
-   The right-hand side is specified with LMESetRHS().
-   The placeholder for the solution is specified with LMESetSolution().
+   The matrix coefficients are specified with `LMESetCoefficients()`. The right-hand
+   side is specified with `LMESetRHS()`. The placeholder for the solution is specified
+   with `LMESetSolution()`.
+
+   All the command-line options listed above admit an optional argument specifying
+   the viewer type and options. For instance, use `-lme_view_mat_a binary:amatrix.bin`
+   to save the $A$ matrix to a binary file.
 
    Level: beginner
 
-.seealso: `LMECreate()`, `LMESetUp()`, `LMEDestroy()`, `LMESetTolerances()`, `LMESetCoefficients()`, `LMESetRHS()`, `LMESetSolution()`
+.seealso: [](ch:lme), `LMECreate()`, `LMESetUp()`, `LMEDestroy()`, `LMESetTolerances()`, `LMESetCoefficients()`, `LMESetRHS()`, `LMESetSolution()`
 @*/
 PetscErrorCode LMESolve(LME lme)
 {
@@ -74,7 +82,7 @@ PetscErrorCode LMESolve(LME lme)
 
 /*@
    LMEGetIterationNumber - Gets the current iteration number. If the
-   call to LMESolve() is complete, then it returns the number of iterations
+   call to `LMESolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
@@ -86,15 +94,15 @@ PetscErrorCode LMESolve(LME lme)
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If LMESolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `LMESolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call LMEGetConvergedReason() to determine if the solver converged or
+   Call `LMEGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate
 
-.seealso: `LMEGetConvergedReason()`, `LMESetTolerances()`
+.seealso: [](ch:lme), `LMEGetConvergedReason()`, `LMESetTolerances()`
 @*/
 PetscErrorCode LMEGetIterationNumber(LME lme,PetscInt *its)
 {
@@ -106,7 +114,7 @@ PetscErrorCode LMEGetIterationNumber(LME lme,PetscInt *its)
 }
 
 /*@
-   LMEGetConvergedReason - Gets the reason why the LMESolve() iteration was
+   LMEGetConvergedReason - Gets the reason why the `LMESolve()` iteration was
    stopped.
 
    Not Collective
@@ -118,17 +126,12 @@ PetscErrorCode LMEGetIterationNumber(LME lme,PetscInt *its)
 .  reason - negative value indicates diverged, positive value converged
 
    Notes:
-
-   Possible values for reason are
-+  LME_CONVERGED_TOL - converged up to tolerance
-.  LME_DIVERGED_ITS - required more than max_it iterations to reach convergence
--  LME_DIVERGED_BREAKDOWN - generic breakdown in method
-
-   Can only be called after the call to LMESolve() is complete.
+   If this routine is called before or doing the `LMESolve()` the value of
+   `LME_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 
-.seealso: `LMESetTolerances()`, `LMESolve()`, `LMEConvergedReason`, `LMESetErrorIfNotConverged()`
+.seealso: [](ch:lme), `LMESetTolerances()`, `LMESolve()`, `LMEConvergedReason`, `LMESetErrorIfNotConverged()`
 @*/
 PetscErrorCode LMEGetConvergedReason(LME lme,LMEConvergedReason *reason)
 {
@@ -140,7 +143,7 @@ PetscErrorCode LMEGetConvergedReason(LME lme,LMEConvergedReason *reason)
 }
 
 /*@
-   LMEGetErrorEstimate - Returns the error estimate obtained during solve.
+   LMEGetErrorEstimate - Returns the error estimate obtained during the solve.
 
    Not Collective
 
@@ -150,14 +153,14 @@ PetscErrorCode LMEGetConvergedReason(LME lme,LMEConvergedReason *reason)
    Output Parameter:
 .  errest - the error estimate
 
-   Notes:
+   Note:
    This is the error estimated internally by the solver. The actual
-   error bound can be computed with LMEComputeError(). Note that some
+   error bound can be computed with `LMEComputeError()`. Note that some
    solvers may not be able to provide an error estimate.
 
    Level: advanced
 
-.seealso: `LMEComputeError()`
+.seealso: [](ch:lme), `LMEComputeError()`
 @*/
 PetscErrorCode LMEGetErrorEstimate(LME lme,PetscReal *errest)
 {
@@ -301,11 +304,11 @@ static PetscErrorCode LMEComputeResidualNorm_Lyapunov(LME lme,PetscReal *norm)
    Notes:
    This function is not scalable (in terms of memory or parallel communication),
    so it should not be called except in the case of small problem size. For
-   large equations, use LMEGetErrorEstimate().
+   large equations, use `LMEGetErrorEstimate()`.
 
    Level: advanced
 
-.seealso: `LMESolve()`, `LMEGetErrorEstimate()`
+.seealso: [](ch:lme), `LMESolve()`, `LMEGetErrorEstimate()`
 @*/
 PetscErrorCode LMEComputeError(LME lme,PetscReal *error)
 {

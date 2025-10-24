@@ -40,13 +40,13 @@ static inline PetscErrorCode LMESetUp_Lyapunov(LME lme)
 .  lme   - linear matrix equation solver context
 
    Notes:
-   This function need not be called explicitly in most cases, since LMESolve()
+   This function need not be called explicitly in most cases, since `LMESolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
    Level: developer
 
-.seealso: `LMECreate()`, `LMESolve()`, `LMEDestroy()`
+.seealso: [](ch:lme), `LMECreate()`, `LMESolve()`, `LMEDestroy()`
 @*/
 PetscErrorCode LMESetUp(LME lme)
 {
@@ -89,7 +89,7 @@ PetscErrorCode LMESetUp(LME lme)
     case LME_DT_LYAPUNOV:
       break;
     case LME_STEIN:
-      LMECheckCoeff(lme,lme->D,"D","Stein");
+      LMECheckCoeff(lme,lme->E,"E","Stein");
       break;
   }
   PetscCheck(lme->problem_type==LME_LYAPUNOV,PetscObjectComm((PetscObject)lme),PETSC_ERR_SUP,"There is no solver yet for this matrix equation type");
@@ -125,26 +125,26 @@ static inline PetscErrorCode LMESetCoefficients_Private(LME lme,Mat A,Mat *lmeA)
    Collective
 
    Input Parameters:
-+  lme - the matrix function context
++  lme - the linear matrix equation context
 .  A   - first coefficient matrix
 .  B   - second coefficient matrix
 .  D   - third coefficient matrix
 -  E   - fourth coefficient matrix
 
    Notes:
-   The matrix equation takes the general form A*X*E+D*X*B=C, where matrix C is not
-   provided here but with LMESetRHS(). Not all four matrices must be passed, some
-   can be NULL instead, see LMESetProblemType() for details.
+   The matrix equation takes the general form $AXE+DXB=C$, where matrix $C$ is not
+   provided here but with `LMESetRHS()`. Not all four matrices must be passed, some
+   can be `NULL` instead, see `LMESetProblemType()` for details.
 
-   It must be called before LMESetUp(). If it is called again after LMESetUp() then
-   the LME object is reset.
+   It must be called before `LMESetUp()`. If it is called again after `LMESetUp()` then
+   the `LME` object is reset.
 
-   In order to delete a previously set matrix, pass a NULL in the corresponding
+   In order to delete a previously set matrix, pass `NULL` in the corresponding
    argument.
 
    Level: beginner
 
-.seealso: `LMESolve()`, `LMESetUp()`, `LMESetRHS()`, `LMESetProblemType()`
+.seealso: [](ch:lme), `LMESolve()`, `LMESetUp()`, `LMESetRHS()`, `LMESetProblemType()`
 @*/
 PetscErrorCode LMESetCoefficients(LME lme,Mat A,Mat B,Mat D,Mat E)
 {
@@ -185,7 +185,7 @@ PetscErrorCode LMESetCoefficients(LME lme,Mat A,Mat B,Mat D,Mat E)
    Collective
 
    Input Parameter:
-.  lme - the LME context
+.  lme - the linear matrix equation context
 
    Output Parameters:
 +  A   - first coefficient matrix
@@ -195,7 +195,7 @@ PetscErrorCode LMESetCoefficients(LME lme,Mat A,Mat B,Mat D,Mat E)
 
    Level: intermediate
 
-.seealso: `LMESolve()`, `LMESetCoefficients()`
+.seealso: [](ch:lme), `LMESolve()`, `LMESetCoefficients()`
 @*/
 PetscErrorCode LMEGetCoefficients(LME lme,Mat *A,Mat *B,Mat *D,Mat *E)
 {
@@ -215,22 +215,22 @@ PetscErrorCode LMEGetCoefficients(LME lme,Mat *A,Mat *B,Mat *D,Mat *E)
    Collective
 
    Input Parameters:
-+  lme - the matrix function context
++  lme - the linear matrix equation context
 -  C   - the right-hand side matrix
 
    Notes:
-   The matrix equation takes the general form A*X*E+D*X*B=C, where matrix C is
-   given with this function. C must be a low-rank matrix of type MATLRC, that is,
-   C = U*D*V' where D is diagonal of order k, and U, V are dense tall-skinny
-   matrices with k columns. No sparse matrix must be provided when creating the
-   MATLRC matrix.
+   The matrix equation takes the general form $AXE+DXB=C$, where matrix $C$ is
+   given with this function. $C$ must be a low-rank matrix of type `MATLRC`, that is,
+   $C = UDV^*$ where $D$ is diagonal of order $k$, and $U$, $V$ are dense tall-skinny
+   matrices with $k$ columns. No sparse matrix must be provided when creating the
+   `MATLRC` matrix.
 
-   In equation types that require C to be symmetric, such as Lyapunov, C must be
-   created with V=U (or V=NULL).
+   In equation types that require $C$ to be symmetric, such as Lyapunov, `C` must be
+   created with $V=U$ (or `V=NULL`).
 
    Level: beginner
 
-.seealso: `LMESetSolution()`, `LMESetProblemType()`
+.seealso: [](ch:lme), `LMESetSolution()`, `LMESetProblemType()`
 @*/
 PetscErrorCode LMESetRHS(LME lme,Mat C)
 {
@@ -257,14 +257,14 @@ PetscErrorCode LMESetRHS(LME lme,Mat C)
    Collective
 
    Input Parameter:
-.  lme - the LME context
+.  lme - the linear matrix equation context
 
    Output Parameters:
-.  C   - the low-rank matrix
+.  C   - the right-hand side matrix
 
    Level: intermediate
 
-.seealso: `LMESolve()`, `LMESetRHS()`
+.seealso: [](ch:lme), `LMESolve()`, `LMESetRHS()`
 @*/
 PetscErrorCode LMEGetRHS(LME lme,Mat *C)
 {
@@ -282,26 +282,26 @@ PetscErrorCode LMEGetRHS(LME lme,Mat *C)
    Collective
 
    Input Parameters:
-+  lme - the matrix function context
++  lme - the linear matrix equation context
 -  X   - the solution matrix
 
    Notes:
-   The matrix equation takes the general form A*X*E+D*X*B=C, where the solution
-   matrix is of low rank and is written in factored form X = U*D*V'. This function
-   provides a Mat object of type MATLRC that stores U, V and (optionally) D.
-   These factors will be computed during LMESolve().
+   The matrix equation takes the general form $AXE+DXB=C$, where the solution
+   matrix is of low rank and is written in factored form $X = UDV^*$. This function
+   provides a `Mat` object of type `MATLRC` that stores $U$, $V$ and (optionally) $D$.
+   These factors will be computed during `LMESolve()`.
 
-   In equation types whose solution X is symmetric, such as Lyapunov, X must be
-   created with V=U (or V=NULL).
+   In equation types whose solution $X$ is symmetric, such as Lyapunov, $X$ must be
+   created with $V=U$ (or `V=NULL`).
 
-   If the user provides X with this function, then the solver will
-   return a solution with rank at most the number of columns of U. Alternatively,
+   If the user provides `X` with this function, then the solver will
+   return a solution with rank at most the number of columns of $U$. Alternatively,
    it is possible to let the solver choose the rank of the solution, by
-   setting X to NULL and then calling LMEGetSolution() after LMESolve().
+   setting `X` to `NULL` and then calling `LMEGetSolution()` after `LMESolve()`.
 
    Level: intermediate
 
-.seealso: `LMEGetSolution()`, `LMESetRHS()`, `LMESetProblemType()`, `LMESolve()`
+.seealso: [](ch:lme), `LMEGetSolution()`, `LMESetRHS()`, `LMESetProblemType()`, `LMESolve()`
 @*/
 PetscErrorCode LMESetSolution(LME lme,Mat X)
 {
@@ -328,14 +328,20 @@ PetscErrorCode LMESetSolution(LME lme,Mat X)
    Collective
 
    Input Parameter:
-.  lme - the LME context
+.  lme - the `LME` context
 
-   Output Parameters:
+   Output Parameter:
 .  X   - the low-rank matrix
 
-   Level: intermediate
+   Notes:
+   If called after `LMESolve()`, `X` will contain the solution of the equation.
 
-.seealso: `LMESolve()`, `LMESetSolution()`
+   The matrix `X` may have been passed by the user via `LMESetSolution()`,
+   although this is not required.
+
+   Level: beginner
+
+.seealso: [](ch:lme), `LMESolve()`, `LMESetSolution()`
 @*/
 PetscErrorCode LMEGetSolution(LME lme,Mat *X)
 {
@@ -355,15 +361,15 @@ PetscErrorCode LMEGetSolution(LME lme,Mat *X)
    Input Parameters:
 +  lme   - linear matrix equation solver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
    Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin LME
+   This is `SLEPC_EXTERN` because it may be required by user plugin `LME`
    implementations.
 
    Level: developer
 
-.seealso: `LMESetUp()`
+.seealso: [](ch:lme), `LMESetUp()`, `LMESetDimensions()`
 @*/
 PetscErrorCode LMEAllocateSolution(LME lme,PetscInt extra)
 {

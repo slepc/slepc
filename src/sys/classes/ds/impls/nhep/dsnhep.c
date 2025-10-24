@@ -557,28 +557,28 @@ static PetscErrorCode DSReallocate_NHEP(DS ds,PetscInt ld)
 /*MC
    DSNHEP - Dense Non-Hermitian Eigenvalue Problem.
 
-   Level: beginner
-
    Notes:
-   The problem is expressed as A*X = X*Lambda, where A is the input matrix.
-   Lambda is a diagonal matrix whose diagonal elements are the arguments of
-   DSSolve(). After solve, A is overwritten with the upper quasi-triangular
-   matrix T of the (real) Schur form, A*Q = Q*T.
+   The problem is expressed as $AX = X\Lambda$, where $A$ is the input matrix.
+   $\Lambda$ is a diagonal matrix whose diagonal elements are the arguments of
+   `DSSolve()`. After solve, $A$ is overwritten with the upper quasi-triangular
+   matrix $T$ of the (real) Schur form, $AQ = QT$.
 
-   In the intermediate state A is reduced to upper Hessenberg form.
+   In the intermediate state $A$ is reduced to upper Hessenberg form.
 
    Computation of left eigenvectors is supported, but two-sided Krylov solvers
-   usually rely on the related DSNHEPTS.
+   usually rely on the related `DSNHEPTS`.
 
    Used DS matrices:
-+  DS_MAT_A - problem matrix
--  DS_MAT_Q - orthogonal/unitary transformation that reduces to Hessenberg form
++  `DS_MAT_A` - problem matrix
+-  `DS_MAT_Q` - orthogonal/unitary transformation that reduces to Hessenberg form
    (intermediate step) or matrix of orthogonal Schur vectors
 
    Implemented methods:
-.  0 - Implicit QR (_hseqr)
+.  0 - Implicit QR (`_hseqr`)
 
-.seealso: `DSCreate()`, `DSSetType()`, `DSType`
+   Level: beginner
+
+.seealso: [](sec:ds), `DSCreate()`, `DSSetType()`, `DSType`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_NHEP(DS ds)
 {

@@ -20,12 +20,12 @@ const char *const NEPConvergedReasons_Shifted[] = {"DIVERGED_SUBSPACE_EXHAUSTED"
 const char *const*NEPConvergedReasons = NEPConvergedReasons_Shifted + 5;
 
 /*@C
-   NEPFinalizePackage - This function destroys everything in the Slepc interface
-   to the NEP package. It is called from SlepcFinalize().
+  NEPFinalizePackage - This function destroys everything in the SLEPc interface
+  to the `NEP` package. It is called from `SlepcFinalize()`.
 
-   Level: developer
+  Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: `SlepcFinalize()`, `NEPInitializePackage()`
 @*/
 PetscErrorCode NEPFinalizePackage(void)
 {
@@ -41,13 +41,16 @@ PetscErrorCode NEPFinalizePackage(void)
 }
 
 /*@C
-   NEPInitializePackage - This function initializes everything in the NEP package.
-   It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-   on the first call to NEPCreate() when using static libraries.
+   NEPInitializePackage - This function initializes everything in the `NEP` package.
+   It is called from `PetscDLLibraryRegister_slepcnep()` when using dynamic libraries, and
+   on the first call to `NEPCreate()` when using shared or static libraries.
+
+   Note:
+   This function never needs to be called by SLEPc users.
 
    Level: developer
 
-.seealso: `SlepcInitialize()`
+.seealso: [](ch:nep), `NEP`, `SlepcInitialize()`, `NEPFinalizePackage()`
 @*/
 PetscErrorCode NEPInitializePackage(void)
 {

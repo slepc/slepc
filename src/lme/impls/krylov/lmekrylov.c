@@ -196,6 +196,18 @@ static PetscErrorCode LMESolve_Krylov_Lyapunov(LME lme)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   LMEKRYLOV - LMEKRYLOV = "krylov" - A restarted Krylov method for the solution of
+   linear matrix equations.
+
+   Note:
+   A description of the method is provided in chapter [](ch:lme)
+   of the Users Manual.
+
+   Level: beginner
+
+.seealso: [](ch:lme), `LME`, `LMEType`, `LMESetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode LMECreate_Krylov(LME lme)
 {
   PetscFunctionBegin;
