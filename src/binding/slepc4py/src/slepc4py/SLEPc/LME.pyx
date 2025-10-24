@@ -299,7 +299,7 @@ cdef class LME(Object):
         CHKERR( LMEGetErrorEstimate(self.lme, &rval) )
         return toReal(rval)
 
-    def LMEComputeError(self) -> float:
+    def computeError(self) -> float:
         """
         Compute the error associated with the last equation solved.
 
