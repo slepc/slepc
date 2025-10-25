@@ -103,17 +103,17 @@ PetscScalar kr, ki;    /*  eigenvalue, k        */
 PetscInt    j, nconv;
 PetscReal   error;
 
-EPSCreate( PETSC_COMM_WORLD, &eps );
-EPSSetOperators( eps, A, NULL );
-EPSSetProblemType( eps, EPS_NHEP );
-EPSSetFromOptions( eps );
-EPSSolve( eps );
-EPSGetConverged( eps, &nconv );
-for (j=0; j<nconv; j++) {
-  EPSGetEigenpair( eps, j, &kr, &ki, xr, xi );
-  EPSComputeError( eps, j, EPS_ERROR_RELATIVE, &error );
+EPSCreate(PETSC_COMM_WORLD, &eps);
+EPSSetOperators(eps, A, NULL);
+EPSSetProblemType(eps, EPS_NHEP);
+EPSSetFromOptions(eps);
+EPSSolve(eps);
+EPSGetConverged(eps, &nconv);
+for (j=0;j<nconv;j++) {
+  EPSGetEigenpair(eps, j, &kr, &ki, xr, xi);
+  EPSComputeError(eps, j, EPS_ERROR_RELATIVE, &error);
 }
-EPSDestroy( &eps );
+EPSDestroy(&eps);
 ```
 
 All the operations of the program are done over a single `EPS` object. This solver context is created in line 8 with the function:

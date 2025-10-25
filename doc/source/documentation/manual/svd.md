@@ -281,17 +281,17 @@ PetscReal sigma;     /*  singular value      */
 PetscInt  j, nconv;
 PetscReal error;
 
-SVDCreate( PETSC_COMM_WORLD, &svd );
-SVDSetOperators( svd, A, NULL );
-SVDSetProblemType( svd, SVD_STANDARD );
-SVDSetFromOptions( svd );
-SVDSolve( svd );
-SVDGetConverged( svd, &nconv );
-for (j=0; j<nconv; j++) {
-  SVDGetSingularTriplet( svd, j, &sigma, u, v );
-  SVDComputeError( svd, j, SVD_ERROR_RELATIVE, &error );
+SVDCreate(PETSC_COMM_WORLD, &svd);
+SVDSetOperators(svd, A, NULL);
+SVDSetProblemType(svd, SVD_STANDARD);
+SVDSetFromOptions(svd);
+SVDSolve(svd);
+SVDGetConverged(svd, &nconv);
+for (j=0;j<nconv;j++) {
+  SVDGetSingularTriplet(svd, j, &sigma, u, v);
+  SVDComputeError(svd, j, SVD_ERROR_RELATIVE, &error);
 }
-SVDDestroy( &svd );
+SVDDestroy(&svd);
 ```
 
 The basic steps for computing a partial SVD with SLEPc are illustrated in listing [](#fig:ex-svd). The steps are more or less the same as those described in chapter [](#ch:eps) for the eigenvalue problem. First, the solver context is created with `SVDCreate()`. Then the problem matrices have to be specified with `SVDSetOperators()` and the type of problem can be selected via `SVDSetProblemType()`. Then, a call to `SVDSolve()` invokes the actual solver. After that, `SVDGetConverged()` is used to determine how many solutions have been computed, which are retrieved with `SVDGetSingularTriplet()`. Finally, `SVDDestroy()` gets rid of the object.

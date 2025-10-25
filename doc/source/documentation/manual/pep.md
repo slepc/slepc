@@ -198,17 +198,17 @@ PetscScalar kr, ki;    /*  eigenvalue, k        */
 PetscInt    j, nconv;
 PetscReal   error;
 
-PEPCreate( PETSC_COMM_WORLD, &pep );
-PEPSetOperators( pep, NMAT, A );
-PEPSetProblemType( pep, PEP_GENERAL );  /* optional */
-PEPSetFromOptions( pep );
-PEPSolve( pep );
-PEPGetConverged( pep, &nconv );
-for (j=0; j<nconv; j++) {
-  PEPGetEigenpair( pep, j, &kr, &ki, xr, xi );
-  PEPComputeError( pep, j, PEP_ERROR_BACKWARD, &error );
+PEPCreate(PETSC_COMM_WORLD, &pep);
+PEPSetOperators(pep, NMAT, A);
+PEPSetProblemType(pep, PEP_GENERAL);  /* optional */
+PEPSetFromOptions(pep);
+PEPSolve(pep);
+PEPGetConverged(pep, &nconv);
+for (j=0;j<nconv;j++) {
+  PEPGetEigenpair(pep, j, &kr, &ki, xr, xi);
+  PEPComputeError(pep, j, PEP_ERROR_BACKWARD, &error);
 }
-PEPDestroy( &pep );
+PEPDestroy(&pep);
 ```
 
 ## Defining the Problem

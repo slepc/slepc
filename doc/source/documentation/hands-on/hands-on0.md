@@ -35,7 +35,7 @@ static char help[] = "Simple Hello World example program in SLEPc\n";
 
 #include <slepcsys.h>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
   PetscFunctionBeginUser;
   PetscCall(SlepcInitialize(&argc,&argv,(char*)0,help));
