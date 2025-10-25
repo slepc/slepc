@@ -535,7 +535,7 @@ The interval $[a,b]$ is then divided in `npart` subintervals of equal size, and 
 The division of the interval in subintervals is done blindly, and this may result in load imbalance if some subintervals contain much more eigenvalues than others. This can be prevented by passing a list of subinterval boundaries, provided that the user has a priori information to roughly determine the eigenvalue distribution:
 
 ```{code} c
-EPSKrylovSchurSetSubintervals(EPS eps,PetscReal *subint);
+EPSKrylovSchurSetSubintervals(EPS eps,PetscReal subint[]);
 ```
 
 An additional benefit of multi-communicator support is that it enables parallel spectrum slicing runs without the need to install a parallel direct solver (MUMPS), by setting the number of partitions equal to the number of MPI processes. The following command-line example uses sequential linear solves in 4 partitions, one process each:

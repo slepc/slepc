@@ -275,7 +275,7 @@ The use of a target value makes sense especially when the eigenvalues of interes
 The special case of computing all eigenvalues in an interval is discussed in the next chapter (sections [](#sec:filter) and [](#sec:slice)), since it is related also to spectral transformations. In this case, instead of a target value the user has to specify the computational interval with:
 
 ```{code} c
-EPSSetInterval(EPS eps,PetscScalar a,PetscScalar b);
+EPSSetInterval(EPS eps,PetscReal a,PetscReal b);
 ```
 
 which is equivalent to `-eps_interval a,b`.

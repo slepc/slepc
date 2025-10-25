@@ -61,8 +61,8 @@ r(x)=\frac{p(x)}{q(x)}
 These parameters are specified with:
 
 ```{code} c
-FNRationalSetNumerator(FN fn,PetscInt np,PetscScalar *pcoeff);
-FNRationalSetDenominator(FN fn,PetscInt nq,PetscScalar *qcoeff);
+FNRationalSetNumerator(FN fn,PetscInt np,PetscScalar pcoeff[]);
+FNRationalSetDenominator(FN fn,PetscInt nq,PetscScalar qcoeff[]);
 ```
 
 Here, polynomials are passed as an array with high order coefficients appearing in low indices.
@@ -170,7 +170,7 @@ RGIsTrivial(RG rg,PetscBool *trivial)
 Another useful operation is to check whether a given point of the complex plane is inside the region or not:
 
 ```{code} c
-RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,PetscInt *inside)
+RGCheckInside(RG rg,PetscInt n,PetscScalar ar[],PetscScalar ai[],PetscInt *inside)
 ```
 
 Note that the point is represented as two {external:doc}`PetscScalar`'s, similarly to eigenvalues in SLEPc.
