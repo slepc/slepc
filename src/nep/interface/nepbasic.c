@@ -655,8 +655,8 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
 
    Input Parameters:
 +  nep - the NEP context
-.  A   - Function matrix
-.  B   - preconditioner matrix (usually same as A)
+.  F   - Function matrix
+.  P   - preconditioner matrix (usually same as F)
 .  fun - Function evaluation routine (if NULL then NEP retains any
          previously set value), see NEPFunctionFn for the calling sequence
 -  ctx - [optional] user-defined context for private data for the Function
@@ -667,29 +667,29 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
 
 .seealso: `NEPGetFunction()`, `NEPSetJacobian()`
 @*/
-PetscErrorCode NEPSetFunction(NEP nep,Mat A,Mat B,NEPFunctionFn *fun,void *ctx)
+PetscErrorCode NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
-  if (A) PetscValidHeaderSpecific(A,MAT_CLASSID,2);
-  if (B) PetscValidHeaderSpecific(B,MAT_CLASSID,3);
-  if (A) PetscCheckSameComm(nep,1,A,2);
-  if (B) PetscCheckSameComm(nep,1,B,3);
+  if (F) PetscValidHeaderSpecific(F,MAT_CLASSID,2);
+  if (P) PetscValidHeaderSpecific(P,MAT_CLASSID,3);
+  if (F) PetscCheckSameComm(nep,1,F,2);
+  if (P) PetscCheckSameComm(nep,1,P,3);
 
   if (nep->state) PetscCall(NEPReset(nep));
   else if (nep->fui && nep->fui!=NEP_USER_INTERFACE_CALLBACK) PetscCall(NEPReset_Problem(nep));
 
   if (fun) nep->computefunction = fun;
   if (ctx) nep->functionctx     = ctx;
-  if (A) {
-    PetscCall(PetscObjectReference((PetscObject)A));
+  if (F) {
+    PetscCall(PetscObjectReference((PetscObject)F));
     PetscCall(MatDestroy(&nep->function));
-    nep->function = A;
+    nep->function = F;
   }
-  if (B) {
-    PetscCall(PetscObjectReference((PetscObject)B));
+  if (P) {
+    PetscCall(PetscObjectReference((PetscObject)P));
     PetscCall(MatDestroy(&nep->function_pre));
-    nep->function_pre = B;
+    nep->function_pre = P;
   }
   nep->fui   = NEP_USER_INTERFACE_CALLBACK;
   nep->state = NEP_STATE_INITIAL;
@@ -706,8 +706,8 @@ PetscErrorCode NEPSetFunction(NEP nep,Mat A,Mat B,NEPFunctionFn *fun,void *ctx)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  A   - location to stash Function matrix (or NULL)
-.  B   - location to stash preconditioner matrix (or NULL)
++  F   - location to stash Function matrix (or NULL)
+.  P   - location to stash preconditioner matrix (or NULL)
 .  fun - location to put Function function (or NULL)
 -  ctx - location to stash Function context (or NULL)
 
@@ -715,13 +715,13 @@ PetscErrorCode NEPSetFunction(NEP nep,Mat A,Mat B,NEPFunctionFn *fun,void *ctx)
 
 .seealso: `NEPSetFunction()`
 @*/
-PetscErrorCode NEPGetFunction(NEP nep,Mat *A,Mat *B,NEPFunctionFn **fun,void **ctx)
+PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,void **ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
   NEPCheckCallback(nep,1);
-  if (A)   *A   = nep->function;
-  if (B)   *B   = nep->function_pre;
+  if (F)   *F   = nep->function;
+  if (P)   *P   = nep->function_pre;
   if (fun) *fun = nep->computefunction;
   if (ctx) *ctx = nep->functionctx;
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -735,7 +735,7 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *A,Mat *B,NEPFunctionFn **fun,void **c
 
    Input Parameters:
 +  nep - the NEP context
-.  A   - Jacobian matrix
+.  J   - Jacobian matrix
 .  jac - Jacobian evaluation routine (if NULL then NEP retains any
          previously set value), see NEPJacobianFn for the calling sequence
 -  ctx - [optional] user-defined context for private data for the Jacobian
@@ -746,22 +746,22 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *A,Mat *B,NEPFunctionFn **fun,void **c
 
 .seealso: `NEPSetFunction()`, `NEPGetJacobian()`
 @*/
-PetscErrorCode NEPSetJacobian(NEP nep,Mat A,NEPJacobianFn *jac,void *ctx)
+PetscErrorCode NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
-  if (A) PetscValidHeaderSpecific(A,MAT_CLASSID,2);
-  if (A) PetscCheckSameComm(nep,1,A,2);
+  if (J) PetscValidHeaderSpecific(J,MAT_CLASSID,2);
+  if (J) PetscCheckSameComm(nep,1,J,2);
 
   if (nep->state) PetscCall(NEPReset(nep));
   else if (nep->fui && nep->fui!=NEP_USER_INTERFACE_CALLBACK) PetscCall(NEPReset_Problem(nep));
 
   if (jac) nep->computejacobian = jac;
   if (ctx) nep->jacobianctx     = ctx;
-  if (A) {
-    PetscCall(PetscObjectReference((PetscObject)A));
+  if (J) {
+    PetscCall(PetscObjectReference((PetscObject)J));
     PetscCall(MatDestroy(&nep->jacobian));
-    nep->jacobian = A;
+    nep->jacobian = J;
   }
   nep->fui   = NEP_USER_INTERFACE_CALLBACK;
   nep->state = NEP_STATE_INITIAL;
@@ -778,7 +778,7 @@ PetscErrorCode NEPSetJacobian(NEP nep,Mat A,NEPJacobianFn *jac,void *ctx)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  A   - location to stash Jacobian matrix (or NULL)
++  J   - location to stash Jacobian matrix (or NULL)
 .  jac - location to put Jacobian function (or NULL)
 -  ctx - location to stash Jacobian context (or NULL)
 
@@ -786,12 +786,12 @@ PetscErrorCode NEPSetJacobian(NEP nep,Mat A,NEPJacobianFn *jac,void *ctx)
 
 .seealso: `NEPSetJacobian()`
 @*/
-PetscErrorCode NEPGetJacobian(NEP nep,Mat *A,NEPJacobianFn **jac,void **ctx)
+PetscErrorCode NEPGetJacobian(NEP nep,Mat *J,NEPJacobianFn **jac,void **ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
   NEPCheckCallback(nep,1);
-  if (A)   *A   = nep->jacobian;
+  if (J)   *J   = nep->jacobian;
   if (jac) *jac = nep->computejacobian;
   if (ctx) *ctx = nep->jacobianctx;
   PetscFunctionReturn(PETSC_SUCCESS);
