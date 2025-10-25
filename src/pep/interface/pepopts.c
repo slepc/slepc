@@ -65,17 +65,17 @@ PetscErrorCode PEPMonitorSetFromOptions(PEP pep,const char opt[],const char name
 }
 
 /*@
-   PEPSetFromOptions - Sets PEP options from the options database.
-   This routine must be called before PEPSetUp() if the user is to be
-   allowed to set the solver type.
+   PEPSetFromOptions - Sets `PEP` options from the options database.
+   This routine must be called before `PEPSetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  pep - the polynomial eigensolver context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 

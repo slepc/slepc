@@ -126,7 +126,7 @@ PetscErrorCode PEPCreate(MPI_Comm comm,PEP *outpep)
 }
 
 /*@
-   PEPSetType - Selects the particular solver to be used in the PEP object.
+   PEPSetType - Selects the particular solver to be used in the `PEP` object.
 
    Logically Collective
 
@@ -135,18 +135,17 @@ PetscErrorCode PEPCreate(MPI_Comm comm,PEP *outpep)
 -  type     - a known method
 
    Options Database Key:
-.  -pep_type <method> - Sets the method; use -help for a list
+.  -pep_type <method> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
-   See "slepc/include/slepcpep.h" for available methods. The default
-   is PEPTOAR.
+   See `PEPType` for available methods. The default is `PEPTOAR`.
 
-   Normally, it is best to use the PEPSetFromOptions() command and
-   then set the PEP type from the options database rather than by using
+   Normally, it is best to use the `PEPSetFromOptions()` command and
+   then set the `PEP` type from the options database rather than by using
    this routine.  Using the options database provides the user with
    maximum flexibility in evaluating the different available methods.
-   The PEPSetType() routine is provided for those situations where it
+   The `PEPSetType()` routine is provided for those situations where it
    is necessary to set the iterative solver independently of the command
    line or options database.
 
@@ -179,7 +178,7 @@ PetscErrorCode PEPSetType(PEP pep,PEPType type)
 }
 
 /*@
-   PEPGetType - Gets the PEP type as a string from the PEP object.
+   PEPGetType - Gets the `PEP` type as a string from the `PEP` object.
 
    Not Collective
 
@@ -187,7 +186,7 @@ PetscErrorCode PEPSetType(PEP pep,PEPType type)
 .  pep - the eigensolver context
 
    Output Parameter:
-.  type - name of PEP method
+.  type - name of `PEP` method
 
    Level: intermediate
 
@@ -237,24 +236,25 @@ PetscErrorCode PEPRegister(const char *name,PetscErrorCode (*function)(PEP))
 }
 
 /*@C
-   PEPMonitorRegister - Registers a PEP monitor routine that may be accessed with PEPMonitorSetFromOptions().
+   PEPMonitorRegister - Registers a `PEP` monitor routine that may be accessed with
+   `PEPMonitorSetFromOptions()`.
 
    Not Collective
 
    Input Parameters:
 +  name    - name of a new monitor routine
-.  vtype   - a PetscViewerType for the output
-.  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine, see PEPMonitorRegisterFn
-.  create  - creation routine, or NULL
--  destroy - destruction routine, or NULL
+.  vtype   - a `PetscViewerType` for the output
+.  format  - a `PetscViewerFormat` for the output
+.  monitor - monitor routine, see `PEPMonitorRegisterFn`
+.  create  - creation routine, or `NULL`
+-  destroy - destruction routine, or `NULL`
 
    Notes:
-   PEPMonitorRegister() may be called multiple times to add several user-defined monitors.
+   `PEPMonitorRegister()` may be called multiple times to add several user-defined monitors.
 
-   The calling sequence for the given function matches the calling sequence of PEPMonitorFn
-   functions passed to PEPMonitorSet() with the additional requirement that its final argument
-   be a PetscViewerAndFormat.
+   The calling sequence for the given function matches the calling sequence of `PEPMonitorFn`
+   functions passed to `PEPMonitorSet()` with the additional requirement that its final argument
+   be a `PetscViewerAndFormat`.
 
    Example Usage:
 .vb
@@ -262,13 +262,14 @@ PetscErrorCode PEPRegister(const char *name,PetscErrorCode (*function)(PEP))
 .ve
 
    Then, your monitor can be chosen with the procedural interface via
-$      PEPMonitorSetFromOptions(pep,"-pep_monitor_my_monitor","my_monitor",NULL)
-   or at runtime via the option
-$      -pep_monitor_my_monitor
+.vb
+   PEPMonitorSetFromOptions(pep,"-pep_monitor_my_monitor","my_monitor",NULL);
+.ve
+   or at runtime via the option `-pep_monitor_my_monitor`.
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorRegisterAll()`
+.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorRegisterAll()`, `PEPMonitorSetFromOptions()`
 @*/
 PetscErrorCode PEPMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,PEPMonitorRegisterFn *monitor,PEPMonitorRegisterCreateFn *create,PEPMonitorRegisterDestroyFn *destroy)
 {

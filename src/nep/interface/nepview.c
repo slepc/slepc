@@ -16,7 +16,7 @@
 #include <petscdraw.h>
 
 /*@
-   NEPView - Prints the NEP data structure.
+   NEPView - Prints the `NEP` data structure.
 
    Collective
 
@@ -25,22 +25,21 @@
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -nep_view -  Calls NEPView() at end of NEPSolve()
+.  -nep_view -  Calls `NEPView()` at end of `NEPSolve()`
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
 
    Level: beginner
 
-.seealso: [](ch:nep), `FNView()`
+.seealso: [](ch:nep), `NEPCreate()`, `NEPViewFromOptions()`, `FNView()`
 @*/
 PetscErrorCode NEPView(NEP nep,PetscViewer viewer)
 {
@@ -180,18 +179,18 @@ PetscErrorCode NEPView(NEP nep,PetscViewer viewer)
 }
 
 /*@
-   NEPViewFromOptions - View from options
+   NEPViewFromOptions - View (print) a `NEP` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  nep  - the nonlinear eigensolver context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPView()`, `NEPCreate()`
+.seealso: [](ch:nep), `NEPView()`, `NEPCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode NEPViewFromOptions(NEP nep,PetscObject obj,const char name[])
 {
@@ -202,7 +201,7 @@ PetscErrorCode NEPViewFromOptions(NEP nep,PetscObject obj,const char name[])
 }
 
 /*@
-   NEPConvergedReasonView - Displays the reason a NEP solve converged or diverged.
+   NEPConvergedReasonView - Displays the reason a `NEP` solve converged or diverged.
 
    Collective
 
@@ -210,14 +209,17 @@ PetscErrorCode NEPViewFromOptions(NEP nep,PetscObject obj,const char name[])
 +  nep - the nonlinear eigensolver context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
-.  -nep_converged_reason - print reason for convergence, and number of iterations
+   Options Database Key:
+.  -nep_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Note:
-   To change the format of the output call PetscViewerPushFormat(viewer,format) before
-   this call. Use PETSC_VIEWER_DEFAULT for the default, use PETSC_VIEWER_FAILED to only
+   Notes:
+   Use `NEPConvergedReasonViewFromOptions()` to display the reason based on values
+   in the options database.
+
+   To change the format of the output call `PetscViewerPushFormat()` before this
+   call. Use `PETSC_VIEWER_DEFAULT` for the default, or `PETSC_VIEWER_FAILED` to only
    display a reason if it fails. The latter can be set in the command line with
-   -nep_converged_reason ::failed
+   `-nep_converged_reason ::failed`.
 
    Level: intermediate
 
@@ -243,14 +245,14 @@ PetscErrorCode NEPConvergedReasonView(NEP nep,PetscViewer viewer)
 
 /*@
    NEPConvergedReasonViewFromOptions - Processes command line options to determine if/how
-   the NEP converged reason is to be viewed.
+   the `NEP` converged reason is to be viewed.
 
    Collective
 
    Input Parameter:
 .  nep - the nonlinear eigensolver context
 
-   Level: developer
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPConvergedReasonView()`
 @*/

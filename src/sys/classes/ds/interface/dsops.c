@@ -180,7 +180,7 @@ PetscErrorCode DSSetDimensions(DS ds,PetscInt n,PetscInt l,PetscInt k)
 .  k  - intermediate dimension (e.g., position of arrow)
 -  t  - truncated length
 
-   Note:
+   Notes:
    The `t` parameter makes sense only if `DSTruncate()` has been called.
    Otherwise its value equals `n`.
 

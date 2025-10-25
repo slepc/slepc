@@ -159,7 +159,7 @@ PetscErrorCode MFNGetIterationNumber(MFN mfn,PetscInt *its)
 }
 
 /*@
-   MFNGetConvergedReason - Gets the reason why the MFNSolve() iteration was
+   MFNGetConvergedReason - Gets the reason why the `MFNSolve()` iteration was
    stopped.
 
    Not Collective
@@ -168,22 +168,20 @@ PetscErrorCode MFNGetIterationNumber(MFN mfn,PetscInt *its)
 .  mfn - the matrix function context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `MFNConvergedReason` for the possible values
+
+   Options Database Key:
+.  -mfn_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:
+   If this routine is called before or doing the `MFNSolve()` the value of
+   `MFN_CONVERGED_ITERATING` is returned.
 
-   Possible values for reason are
-+  MFN_CONVERGED_TOL - converged up to tolerance
-.  MFN_CONVERGED_ITS - solver completed the requested number of steps
-.  MFN_DIVERGED_ITS - required more than max_it iterations to reach convergence
--  MFN_DIVERGED_BREAKDOWN - generic breakdown in method
-
-   Can only be called after the call to MFNSolve() is complete.
-
-   Basic solvers (e.g. unrestarted Krylov iterations) cannot determine if the
+   Basic solvers (e.g., unrestarted Krylov iterations) cannot determine if the
    computation is accurate up to the requested tolerance. In that case, the
-   converged reason is set to MFN_CONVERGED_ITS if the requested number of steps
-   (for instance, the ncv value in unrestarted Krylov methods) have been
+   converged reason is set to `MFN_CONVERGED_ITS` if the requested number of steps
+   (for instance, the `ncv` value in unrestarted Krylov methods) have been
    completed successfully.
 
    Level: intermediate

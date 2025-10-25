@@ -65,17 +65,17 @@ PetscErrorCode NEPMonitorSetFromOptions(NEP nep,const char opt[],const char name
 }
 
 /*@
-   NEPSetFromOptions - Sets NEP options from the options database.
-   This routine must be called before NEPSetUp() if the user is to be
-   allowed to set the solver type.
+   NEPSetFromOptions - Sets `NEP` options from the options database.
+   This routine must be called before `NEPSetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  nep - the nonlinear eigensolver context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 

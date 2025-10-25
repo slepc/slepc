@@ -21,8 +21,8 @@ SLEPC_EXTERN PetscErrorCode PEPInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode PEPFinalizePackage(void);
 
 /*S
-     PEP - Abstract SLEPc object that manages all the polynomial eigenvalue
-     problem solvers.
+   PEP - Abstract SLEPc object that manages all the polynomial eigenvalue
+   problem solvers.
 
    Level: beginner
 
@@ -31,7 +31,7 @@ S*/
 typedef struct _p_PEP* PEP;
 
 /*J
-    PEPType - String with the name of a polynomial eigensolver
+   PEPType - String with the name of a polynomial eigensolver
 
    Level: beginner
 
@@ -49,13 +49,13 @@ typedef const char *PEPType;
 SLEPC_EXTERN PetscClassId PEP_CLASSID;
 
 /*E
-    PEPProblemType - Determines the type of the polynomial eigenproblem
+   PEPProblemType - Determines the type of the polynomial eigenproblem
 
-    PEP_HERMITIAN is used when all A_i are Hermitian,
-    PEP_HYPERBOLIC is reserved for a QEP with Hermitian matrices, M>0, (x'Cx)^2 > 4(x'Mx)(x'Kx),
-    PEP_GYROSCOPIC is for aQEP with M, K  Hermitian, M>0, C skew-Hermitian.
+   PEP_HERMITIAN is used when all A_i are Hermitian,
+   PEP_HYPERBOLIC is reserved for a QEP with Hermitian matrices, M>0, (x'Cx)^2 > 4(x'Mx)(x'Kx),
+   PEP_GYROSCOPIC is for aQEP with M, K  Hermitian, M>0, C skew-Hermitian.
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetProblemType()`, `PEPGetProblemType()`
 E*/
@@ -66,9 +66,9 @@ typedef enum { PEP_GENERAL    = 1,
              } PEPProblemType;
 
 /*E
-    PEPWhich - Determines which part of the spectrum is requested
+   PEPWhich - Determines which part of the spectrum is requested
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetWhichEigenpairs()`, `PEPGetWhichEigenpairs()`
 E*/
@@ -85,10 +85,10 @@ typedef enum { PEP_LARGEST_MAGNITUDE  = 1,
                PEP_WHICH_USER         = 11 } PEPWhich;
 
 /*E
-    PEPBasis - The type of polynomial basis used to represent the polynomial
-    eigenproblem
+   PEPBasis - The type of polynomial basis used to represent the polynomial
+   eigenproblem
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetBasis()`
 E*/
@@ -101,9 +101,9 @@ typedef enum { PEP_BASIS_MONOMIAL,
 SLEPC_EXTERN const char *PEPBasisTypes[];
 
 /*E
-    PEPScale - The scaling strategy
+   PEPScale - The scaling strategy
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetScale()`
 E*/
@@ -114,9 +114,9 @@ typedef enum { PEP_SCALE_NONE,
 SLEPC_EXTERN const char *PEPScaleTypes[];
 
 /*E
-    PEPRefine - The refinement type
+   PEPRefine - The refinement type
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetRefine()`
 E*/
@@ -126,9 +126,9 @@ typedef enum { PEP_REFINE_NONE,
 SLEPC_EXTERN const char *PEPRefineTypes[];
 
 /*E
-    PEPRefineScheme - The scheme used for solving linear systems during iterative refinement
+   PEPRefineScheme - The scheme used for solving linear systems during iterative refinement
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetRefine()`
 E*/
@@ -138,9 +138,9 @@ typedef enum { PEP_REFINE_SCHEME_SCHUR    = 1,
 SLEPC_EXTERN const char *PEPRefineSchemes[];
 
 /*E
-    PEPExtract - The extraction type
+   PEPExtract - The extraction type
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetExtract()`
 E*/
@@ -151,9 +151,9 @@ typedef enum { PEP_EXTRACT_NONE       = 1,
 SLEPC_EXTERN const char *PEPExtractTypes[];
 
 /*E
-    PEPErrorType - The error type used to assess accuracy of computed solutions
+   PEPErrorType - The error type used to assess accuracy of computed solutions
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPComputeError()`
 E*/
@@ -163,9 +163,9 @@ typedef enum { PEP_ERROR_ABSOLUTE,
 SLEPC_EXTERN const char *PEPErrorTypes[];
 
 /*E
-    PEPConv - Determines the convergence test
+   PEPConv - Determines the convergence test
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetConvergenceTest()`, `PEPSetConvergenceTestFunction()`
 E*/
@@ -175,9 +175,9 @@ typedef enum { PEP_CONV_ABS,
                PEP_CONV_USER } PEPConv;
 
 /*E
-    PEPStop - Determines the stopping test
+   PEPStop - Determines the stopping test
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:pep), `PEPSetStoppingTest()`, `PEPSetStoppingTestFunction()`
 E*/
@@ -185,10 +185,17 @@ typedef enum { PEP_STOP_BASIC,
                PEP_STOP_USER } PEPStop;
 
 /*E
-    PEPConvergedReason - Reason an eigensolver was said to
-         have converged or diverged
+   PEPConvergedReason - Reason an eigensolver was determined to have converged
+   or diverged.
 
-    Level: intermediate
+   Values:
++  `PEP_CONVERGED_TOL`          - converged up to tolerance
+.  `PEP_CONVERGED_USER`         - converged due to a user-defined condition
+.  `PEP_DIVERGED_ITS`           - exceeded the maximum number of allowed iterations
+.  `PEP_DIVERGED_BREAKDOWN`     - generic breakdown in method
+-  `PEP_DIVERGED_SYMMETRY_LOST` - pseudo-Lanczos was not able to keep symmetry
+
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSolve()`, `PEPGetConvergedReason()`, `PEPSetTolerances()`
 E*/
@@ -274,68 +281,70 @@ SLEPC_EXTERN PetscErrorCode PEPSetTrackAll(PEP,PetscBool);
 SLEPC_EXTERN PetscErrorCode PEPGetTrackAll(PEP,PetscBool*);
 
 /*S
-  PEPMonitorFn - A function prototype for functions provided to PEPMonitorSet()
+   PEPMonitorFn - A function prototype for functions provided to `PEPMonitorSet()`.
 
-  Calling Sequence:
-+   pep    - eigensolver context obtained from PEPCreate()
-.   its    - iteration number
-.   nconv  - number of converged eigenpairs
-.   eigr   - real part of the eigenvalues
-.   eigi   - imaginary part of the eigenvalues
-.   errest - relative error estimates for each eigenpair
-.   nest   - number of error estimates
--   ctx    - optional monitoring context, as provided with PEPMonitorSet()
+   Calling Sequence:
++  pep    - polynomial eigensolver context
+.  its    - iteration number
+.  nconv  - number of converged eigenpairs
+.  eigr   - real part of the eigenvalues
+.  eigi   - imaginary part of the eigenvalues
+.  errest - relative error estimates for each eigenpair
+.  nest   - number of error estimates
+-  ctx    - optional monitoring context, as provided with `PEPMonitorSet()`
 
-  Level: beginner
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx);
 
 /*S
-  PEPMonitorRegisterFn - A function prototype for functions provided to PEPMonitorRegister()
+   PEPMonitorRegisterFn - A function prototype for functions provided to PEPMonitorRegister()
 
-  Calling Sequence:
-+   pep    - eigensolver context obtained from PEPCreate()
-.   its    - iteration number
-.   nconv  - number of converged eigenpairs
-.   eigr   - real part of the eigenvalues
-.   eigi   - imaginary part of the eigenvalues
-.   errest - relative error estimates for each eigenpair
-.   nest   - number of error estimates
--   ctx    - PetscViewerAndFormat object
+   Calling Sequence:
++  pep    - polynomial eigensolver context
+.  its    - iteration number
+.  nconv  - number of converged eigenpairs
+.  eigr   - real part of the eigenvalues
+.  eigi   - imaginary part of the eigenvalues
+.  errest - relative error estimates for each eigenpair
+.  nest   - number of error estimates
+-  ctx    - `PetscViewerAndFormat` object
 
-  Level: beginner
+   Level: advanced
 
-  Note:
-  This is an PEPMonitorFn specialized for a context of PetscViewerAndFormat.
+   Note:
+   This is a `PEPMonitorFn` specialized for a context of `PetscViewerAndFormat`.
 
 .seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterCreateFn`, `PEPMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
 
 /*S
-  PEPMonitorRegisterCreateFn - A function prototype for functions that do the creation when provided to PEPMonitorRegister()
+   PEPMonitorRegisterCreateFn - A function prototype for functions that do the
+   creation when provided to `PEPMonitorRegister()`.
 
-  Calling Sequence:
-+   viewer - the viewer to be used with the PEPMonitorRegisterFn
-.   format - the format of the viewer
-.   ctx    - a context for the monitor
--   result - a PetscViewerAndFormat object
+   Calling Sequence:
++  viewer - the viewer to be used with the `PEPMonitorRegisterFn`
+.  format - the format of the viewer
+.  ctx    - a context for the monitor
+-  result - a `PetscViewerAndFormat` object
 
-  Level: beginner
+   Level: advanced
 
 .seealso: [](ch:pep), `PEPMonitorRegisterFn`, `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
 /*S
-  PEPMonitorRegisterDestroyFn - A function prototype for functions that do the after use destruction when provided to PEPMonitorRegister()
+   PEPMonitorRegisterDestroyFn - A function prototype for functions that do the after
+   use destruction when provided to `PEPMonitorRegister()`.
 
-  Calling Sequence:
-.   vf - a PetscViewerAndFormat object to be destroyed, including any context
+   Calling Sequence:
+.  vf - a `PetscViewerAndFormat` object to be destroyed, including any context
 
-  Level: beginner
+   Level: advanced
 
 .seealso: [](ch:pep), `PEPMonitorRegisterFn`, `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterCreateFn`
 S*/
@@ -374,18 +383,19 @@ SLEPC_EXTERN PetscErrorCode PEPSetWorkVecs(PEP,PetscInt);
 SLEPC_EXTERN PetscErrorCode PEPAllocateSolution(PEP,PetscInt);
 
 /*S
-  PEPConvergenceTestFn - A prototype of a PEP convergence test function that would be passed to PEPSetConvergenceTestFunction()
+   PEPConvergenceTestFn - A prototype of a PEP convergence test function that
+   would be passed to PEPSetConvergenceTestFunction()
 
-  Calling Sequence:
-+   pep    - eigensolver context obtained from PEPCreate()
-.   eigr   - real part of the eigenvalue
-.   eigi   - imaginary part of the eigenvalue
-.   res    - residual norm associated to the eigenpair
-.   errest - [output] computed error estimate
--   ctx    - [optional] user-defined context for private data for the
-             convergence test routine (may be NULL)
+   Calling Sequence:
++  pep    - eigensolver context obtained from PEPCreate()
+.  eigr   - real part of the eigenvalue
+.  eigi   - imaginary part of the eigenvalue
+.  res    - residual norm associated to the eigenpair
+.  errest - [output] computed error estimate
+-  ctx    - [optional] user-defined context for private data for the
+            convergence test routine (may be NULL)
 
-  Level: advanced
+   Level: advanced
 
 .seealso: [](ch:pep), `PEPSetConvergenceTestFunction()`
 S*/
@@ -399,19 +409,20 @@ SLEPC_EXTERN PEPConvergenceTestFn PEPConvergedNorm;
 SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTestFunction(PEP,PEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
 
 /*S
-  PEPStoppingTestFn - A prototype of a PEP stopping test function that would be passed to PEPSetStoppingTestFunction()
+   PEPStoppingTestFn - A prototype of a PEP stopping test function that would be
+   passed to PEPSetStoppingTestFunction()
 
-  Calling Sequence:
-+   pep    - eigensolver context obtained from PEPCreate()
-.   its    - current number of iterations
-.   max_it - maximum number of iterations
-.   nconv  - number of currently converged eigenpairs
-.   nev    - number of requested eigenpairs
-.   reason - [output] result of the stopping test
--   ctx    - [optional] user-defined context for private data for the
-             stopping test routine (may be NULL)
+   Calling Sequence:
++  pep    - eigensolver context obtained from PEPCreate()
+.  its    - current number of iterations
+.  max_it - maximum number of iterations
+.  nconv  - number of currently converged eigenpairs
+.  nev    - number of requested eigenpairs
+.  reason - [output] result of the stopping test
+-  ctx    - [optional] user-defined context for private data for the
+            stopping test routine (may be NULL)
 
-  Level: advanced
+   Level: advanced
 
 .seealso: [](ch:pep), `PEPSetStoppingTestFunction()`
 S*/
@@ -459,9 +470,9 @@ SLEPC_EXTERN PetscErrorCode PEPSTOARGetCheckEigenvalueType(PEP,PetscBool*);
 SLEPC_EXTERN PetscErrorCode PEPCheckDefiniteQEP(PEP,PetscReal*,PetscReal*,PetscInt*,PetscInt*);
 
 /*E
-    PEPJDProjection - The type of projection to be used in the Jacobi-Davidson solver
+   PEPJDProjection - The type of projection to be used in the Jacobi-Davidson solver
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPJDSetProjection()`
 E*/
@@ -481,9 +492,9 @@ SLEPC_EXTERN PetscErrorCode PEPJDSetProjection(PEP,PEPJDProjection);
 SLEPC_EXTERN PetscErrorCode PEPJDGetProjection(PEP,PEPJDProjection*);
 
 /*E
-    PEPCISSExtraction - determines the extraction technique in the CISS solver
+   PEPCISSExtraction - determines the extraction technique in the CISS solver
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:pep), `PEPCISSSetExtraction()`, `PEPCISSGetExtraction()`
 E*/

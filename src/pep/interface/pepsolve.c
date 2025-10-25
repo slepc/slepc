@@ -226,7 +226,7 @@ PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 }
 
 /*@
-   PEPGetConvergedReason - Gets the reason why the PEPSolve() iteration was
+   PEPGetConvergedReason - Gets the reason why the `PEPSolve()` iteration was
    stopped.
 
    Not Collective
@@ -235,20 +235,15 @@ PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 .  pep - the polynomial eigensolver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `PEPConvergedReason` for the possible values
 
    Options Database Key:
-.  -pep_converged_reason - print the reason to a viewer
+.  -pep_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  PEP_CONVERGED_TOL - converged up to tolerance
-.  PEP_CONVERGED_USER - converged due to a user-defined condition
-.  PEP_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  PEP_DIVERGED_BREAKDOWN - generic breakdown in method
--  PEP_DIVERGED_SYMMETRY_LOST - pseudo-Lanczos was not able to keep symmetry
-
-   Can only be called after the call to PEPSolve() is complete.
+   Note:
+   If this routine is called before or doing the `PEPSolve()` the value of
+   `PEP_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 

@@ -190,7 +190,7 @@ PetscErrorCode SVDDestroy(SVD *svd)
 }
 
 /*@
-   SVDSetType - Selects the particular solver to be used in the SVD object.
+   SVDSetType - Selects the particular solver to be used in the `SVD` object.
 
    Logically Collective
 
@@ -199,18 +199,17 @@ PetscErrorCode SVDDestroy(SVD *svd)
 -  type     - a known method
 
    Options Database Key:
-.  -svd_type <method> - Sets the method; use -help for a list
+.  -svd_type <method> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
-   See "slepc/include/slepcsvd.h" for available methods. The default
-   is SVDCROSS.
+   See `SVDType` for available methods. The default is `SVDCROSS`.
 
-   Normally, it is best to use the SVDSetFromOptions() command and
-   then set the SVD type from the options database rather than by using
+   Normally, it is best to use the `SVDSetFromOptions()` command and
+   then set the `SVD` type from the options database rather than by using
    this routine.  Using the options database provides the user with
    maximum flexibility in evaluating the different available methods.
-   The SVDSetType() routine is provided for those situations where it
+   The `SVDSetType()` routine is provided for those situations where it
    is necessary to set the iterative solver independently of the command
    line or options database.
 
@@ -243,7 +242,7 @@ PetscErrorCode SVDSetType(SVD svd,SVDType type)
 }
 
 /*@
-   SVDGetType - Gets the SVD type as a string from the SVD object.
+   SVDGetType - Gets the `SVD` type as a string from the `SVD` object.
 
    Not Collective
 
@@ -251,7 +250,7 @@ PetscErrorCode SVDSetType(SVD svd,SVDType type)
 .  svd - the singular value solver context
 
    Output Parameter:
-.  type - name of SVD method
+.  type - name of `SVD` method
 
    Level: intermediate
 
@@ -301,24 +300,25 @@ PetscErrorCode SVDRegister(const char *name,PetscErrorCode (*function)(SVD))
 }
 
 /*@C
-   SVDMonitorRegister - Registers an SVD monitor routine that may be accessed with SVDMonitorSetFromOptions().
+   SVDMonitorRegister - Registers an `SVD` monitor routine that may be accessed with
+   `SVDMonitorSetFromOptions()`.
 
    Not Collective
 
    Input Parameters:
 +  name    - name of a new monitor routine
-.  vtype   - a PetscViewerType for the output
-.  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine, see SVDMonitorRegisterFn
-.  create  - creation routine, or NULL
--  destroy - destruction routine, or NULL
+.  vtype   - a `PetscViewerType` for the output
+.  format  - a `PetscViewerFormat` for the output
+.  monitor - monitor routine, see `SVDMonitorRegisterFn`
+.  create  - creation routine, or `NULL`
+-  destroy - destruction routine, or `NULL`
 
    Notes:
-   SVDMonitorRegister() may be called multiple times to add several user-defined monitors.
+   `SVDMonitorRegister()` may be called multiple times to add several user-defined monitors.
 
-   The calling sequence for the given function matches the calling sequence of SVDMonitorFn
-   functions passed to SVDMonitorSet() with the additional requirement that its final argument
-   be a PetscViewerAndFormat.
+   The calling sequence for the given function matches the calling sequence of `SVDMonitorFn`
+   functions passed to `SVDMonitorSet()` with the additional requirement that its final argument
+   be a `PetscViewerAndFormat`.
 
    Example Usage:
 .vb
@@ -326,13 +326,14 @@ PetscErrorCode SVDRegister(const char *name,PetscErrorCode (*function)(SVD))
 .ve
 
    Then, your monitor can be chosen with the procedural interface via
-$      SVDMonitorSetFromOptions(svd,"-svd_monitor_my_monitor","my_monitor",NULL)
-   or at runtime via the option
-$      -svd_monitor_my_monitor
+.vb
+   SVDMonitorSetFromOptions(svd,"-svd_monitor_my_monitor","my_monitor",NULL);
+.ve
+   or at runtime via the option `-svd_monitor_my_monitor`.
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorRegisterAll()`
+.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorRegisterAll()`, `SVDMonitorSetFromOptions()`
 @*/
 PetscErrorCode SVDMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,SVDMonitorRegisterFn *monitor,SVDMonitorRegisterCreateFn *create,SVDMonitorRegisterDestroyFn *destroy)
 {

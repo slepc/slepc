@@ -26,19 +26,19 @@ SLEPC_EXTERN PetscErrorCode EPSInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode EPSFinalizePackage(void);
 
 /*S
-    EPS - Abstract SLEPc object that manages all the eigenvalue
-    problem solvers.
+   EPS - Abstract SLEPc object that manages all the eigenvalue
+   problem solvers.
 
-    Level: beginner
+   Level: beginner
 
 .seealso: [](ch:eps), `EPSCreate()`, `ST`
 S*/
 typedef struct _p_EPS* EPS;
 
 /*J
-    EPSType - String with the name of a SLEPc eigensolver
+   EPSType - String with the name of a SLEPc eigensolver
 
-    Level: beginner
+   Level: beginner
 
 .seealso: [](ch:eps), `EPSSetType()`, `EPS`
 J*/
@@ -69,9 +69,9 @@ typedef const char *EPSType;
 SLEPC_EXTERN PetscClassId EPS_CLASSID;
 
 /*E
-    EPSProblemType - Determines the type of eigenvalue problem
+   EPSProblemType - Determines the type of eigenvalue problem
 
-    Level: beginner
+   Level: beginner
 
 .seealso: [](ch:eps), `EPSSetProblemType()`, `EPSGetProblemType()`
 E*/
@@ -85,10 +85,10 @@ typedef enum { EPS_HEP    = 1,
                EPS_HAMILT = 8 } EPSProblemType;
 
 /*E
-    EPSExtraction - Determines the type of extraction technique employed
-    by the eigensolver
+   EPSExtraction - Determines the type of extraction technique employed
+   by the eigensolver
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSSetExtraction()`, `EPSGetExtraction()`
 E*/
@@ -101,9 +101,9 @@ typedef enum { EPS_RITZ,
                EPS_REFINED_HARMONIC } EPSExtraction;
 
 /*E
-    EPSWhich - Determines which part of the spectrum is requested
+   EPSWhich - Determines which part of the spectrum is requested
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:eps), `EPSSetWhichEigenpairs()`, `EPSGetWhichEigenpairs()`
 E*/
@@ -120,9 +120,9 @@ typedef enum { EPS_LARGEST_MAGNITUDE  = 1,
                EPS_WHICH_USER         = 11 } EPSWhich;
 
 /*E
-    EPSBalance - The type of balancing used for non-Hermitian problems
+   EPSBalance - The type of balancing used for non-Hermitian problems
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:eps), `EPSSetBalance()`
 E*/
@@ -133,9 +133,9 @@ typedef enum { EPS_BALANCE_NONE,
 SLEPC_EXTERN const char *EPSBalanceTypes[];
 
 /*E
-    EPSErrorType - The error type used to assess accuracy of computed solutions
+   EPSErrorType - The error type used to assess accuracy of computed solutions
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:eps), `EPSComputeError()`
 E*/
@@ -145,9 +145,9 @@ typedef enum { EPS_ERROR_ABSOLUTE,
 SLEPC_EXTERN const char *EPSErrorTypes[];
 
 /*E
-    EPSConv - Determines the convergence test
+   EPSConv - Determines the convergence test
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:eps), `EPSSetConvergenceTest()`, `EPSSetConvergenceTestFunction()`
 E*/
@@ -157,9 +157,9 @@ typedef enum { EPS_CONV_ABS,
                EPS_CONV_USER } EPSConv;
 
 /*E
-    EPSStop - Determines the stopping test
+   EPSStop - Determines the stopping test
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSSetStoppingTestFunction()`
 E*/
@@ -168,10 +168,17 @@ typedef enum { EPS_STOP_BASIC,
                EPS_STOP_THRESHOLD } EPSStop;
 
 /*E
-    EPSConvergedReason - Reason an eigensolver was said to
-         have converged or diverged
+   EPSConvergedReason - Reason an eigensolver was determined to have converged
+   or diverged.
 
-    Level: intermediate
+   Values:
++  `EPS_CONVERGED_TOL`          - converged up to tolerance
+.  `EPS_CONVERGED_USER`         - converged due to a user-defined condition
+.  `EPS_DIVERGED_ITS`           - exceeded the maximum number of allowed iterations
+.  `EPS_DIVERGED_BREAKDOWN`     - generic breakdown in method
+-  `EPS_DIVERGED_SYMMETRY_LOST` - pseudo-Lanczos was not able to keep symmetry
+
+   Level: intermediate
 
 .seealso: [](ch:eps), `EPSSolve()`, `EPSGetConvergedReason()`, `EPSSetTolerances()`
 E*/
@@ -288,68 +295,70 @@ SLEPC_EXTERN PetscErrorCode EPSSetInitialSpace(EPS,PetscInt,Vec[]);
 SLEPC_EXTERN PetscErrorCode EPSSetLeftInitialSpace(EPS,PetscInt,Vec[]);
 
 /*S
-  EPSMonitorFn - A function prototype for functions provided to EPSMonitorSet()
+   EPSMonitorFn - A function prototype for functions provided to `EPSMonitorSet()`.
 
-  Calling Sequence:
-+   eps    - eigensolver context obtained from EPSCreate()
-.   its    - iteration number
-.   nconv  - number of converged eigenpairs
-.   eigr   - real part of the eigenvalues
-.   eigi   - imaginary part of the eigenvalues
-.   errest - relative error estimates for each eigenpair
-.   nest   - number of error estimates
--   ctx    - optional monitoring context, as provided with EPSMonitorSet()
+   Calling Sequence:
++  eps    - eigensolver context
+.  its    - iteration number
+.  nconv  - number of converged eigenpairs
+.  eigr   - real part of the eigenvalues
+.  eigi   - imaginary part of the eigenvalues
+.  errest - relative error estimates for each eigenpair
+.  nest   - number of error estimates
+-  ctx    - optional monitoring context, as provided with `EPSMonitorSet()`
 
-  Level: beginner
+   Level: intermediate
 
 .seealso: [](ch:eps), `EPSMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorFn(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx);
 
 /*S
-  EPSMonitorRegisterFn - A function prototype for functions provided to EPSMonitorRegister()
+   EPSMonitorRegisterFn - A function prototype for functions provided to `EPSMonitorRegister()`.
 
-  Calling Sequence:
-+   eps    - eigensolver context obtained from EPSCreate()
-.   its    - iteration number
-.   nconv  - number of converged eigenpairs
-.   eigr   - real part of the eigenvalues
-.   eigi   - imaginary part of the eigenvalues
-.   errest - relative error estimates for each eigenpair
-.   nest   - number of error estimates
--   ctx    - PetscViewerAndFormat object
+   Calling Sequence:
++  eps    - eigensolver context
+.  its    - iteration number
+.  nconv  - number of converged eigenpairs
+.  eigr   - real part of the eigenvalues
+.  eigi   - imaginary part of the eigenvalues
+.  errest - relative error estimates for each eigenpair
+.  nest   - number of error estimates
+-  ctx    - `PetscViewerAndFormat` object
 
-  Level: beginner
+   Level: advanced
 
-  Note:
-  This is an EPSMonitorFn specialized for a context of PetscViewerAndFormat.
+   Note:
+   This is an `EPSMonitorFn` specialized for a context of `PetscViewerAndFormat`.
 
 .seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterCreateFn`, `EPSMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterFn(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
 
 /*S
-  EPSMonitorRegisterCreateFn - A function prototype for functions that do the creation when provided to EPSMonitorRegister()
+   EPSMonitorRegisterCreateFn - A function prototype for functions that do the
+   creation when provided to `EPSMonitorRegister()`.
 
-  Calling Sequence:
-+   viewer - the viewer to be used with the EPSMonitorRegisterFn
-.   format - the format of the viewer
-.   ctx    - a context for the monitor
--   result - a PetscViewerAndFormat object
+   Calling Sequence:
++  viewer - the viewer to be used with the `EPSMonitorRegisterFn`
+.  format - the format of the viewer
+.  ctx    - a context for the monitor
+-  result - a `PetscViewerAndFormat` object
 
-  Level: beginner
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSMonitorRegisterFn`, `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
 /*S
-  EPSMonitorRegisterDestroyFn - A function prototype for functions that do the after use destruction when provided to EPSMonitorRegister()
+   EPSMonitorRegisterDestroyFn - A function prototype for functions that do the after
+   use destruction when provided to `EPSMonitorRegister()`
 
-  Calling Sequence:
-.   vf - a PetscViewerAndFormat object to be destroyed, including any context
+   Calling Sequence:
+.  vf - a `PetscViewerAndFormat` object to be destroyed, including any context
 
-  Level: beginner
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSMonitorRegisterFn`, `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterCreateFn`
 S*/
@@ -389,18 +398,19 @@ SLEPC_EXTERN PetscErrorCode EPSAllocateSolution(EPS,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSReallocateSolution(EPS,PetscInt);
 
 /*S
-  EPSConvergenceTestFn - A prototype of an EPS convergence test function that would be passed to EPSSetConvergenceTestFunction()
+   EPSConvergenceTestFn - A prototype of an EPS convergence test function that
+   would be passed to EPSSetConvergenceTestFunction()
 
-  Calling Sequence:
-+   eps    - eigensolver context obtained from EPSCreate()
-.   eigr   - real part of the eigenvalue
-.   eigi   - imaginary part of the eigenvalue
-.   res    - residual norm associated to the eigenpair
-.   errest - [output] computed error estimate
--   ctx    - [optional] user-defined context for private data for the
-             convergence test routine (may be NULL)
+   Calling Sequence:
++  eps    - eigensolver context obtained from EPSCreate()
+.  eigr   - real part of the eigenvalue
+.  eigi   - imaginary part of the eigenvalue
+.  res    - residual norm associated to the eigenpair
+.  errest - [output] computed error estimate
+-  ctx    - [optional] user-defined context for private data for the
+            convergence test routine (may be NULL)
 
-  Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSSetConvergenceTestFunction()`
 S*/
@@ -414,19 +424,20 @@ SLEPC_EXTERN EPSConvergenceTestFn EPSConvergedNorm;
 SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTestFn*,void*,PetscCtxDestroyFn*);
 
 /*S
-  EPSStoppingTestFn - A prototype of an EPS stopping test function that would be passed to EPSSetStoppingTestFunction()
+   EPSStoppingTestFn - A prototype of an EPS stopping test function that would
+   be passed to EPSSetStoppingTestFunction()
 
-  Calling Sequence:
-+   eps    - eigensolver context obtained from EPSCreate()
-.   its    - current number of iterations
-.   max_it - maximum number of iterations
-.   nconv  - number of currently converged eigenpairs
-.   nev    - number of requested eigenpairs
-.   reason - [output] result of the stopping test
--   ctx    - [optional] user-defined context for private data for the
-             stopping test routine (may be NULL)
+   Calling Sequence:
++  eps    - eigensolver context obtained from EPSCreate()
+.  its    - current number of iterations
+.  max_it - maximum number of iterations
+.  nconv  - number of currently converged eigenpairs
+.  nev    - number of requested eigenpairs
+.  reason - [output] result of the stopping test
+-  ctx    - [optional] user-defined context for private data for the
+            stopping test routine (may be NULL)
 
-  Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSSetStoppingTestFunction()`
 S*/
@@ -444,9 +455,9 @@ SLEPC_EXTERN PetscErrorCode EPSSetArbitrarySelection(EPS,SlepcArbitrarySelection
 /* --------- options specific to particular eigensolvers -------- */
 
 /*E
-    EPSPowerShiftType - determines the type of shift used in the Power iteration
+   EPSPowerShiftType - determines the type of shift used in the Power iteration
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSPowerSetShiftType()`, `EPSPowerGetShiftType()`
 E*/
@@ -470,10 +481,10 @@ SLEPC_EXTERN PetscErrorCode EPSArnoldiSetDelayed(EPS,PetscBool);
 SLEPC_EXTERN PetscErrorCode EPSArnoldiGetDelayed(EPS,PetscBool*);
 
 /*E
-    EPSKrylovSchurBSEType - the method to be used in the Krylov-Schur solver
-    for the case of BSE structured eigenproblems
+   EPSKrylovSchurBSEType - the method to be used in the Krylov-Schur solver
+   for the case of BSE structured eigenproblems
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSKrylovSchurSetBSEType()`, `EPSKrylovSchurGetBSEType()`
 E*/
@@ -504,10 +515,10 @@ SLEPC_EXTERN PetscErrorCode EPSKrylovSchurUpdateSubcommMats(EPS,PetscScalar,Pets
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetKSP(EPS,KSP*);
 
 /*E
-    EPSLanczosReorthogType - determines the type of reorthogonalization
-    used in the Lanczos method
+   EPSLanczosReorthogType - determines the type of reorthogonalization
+   used in the Lanczos method
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSLanczosSetReorthog()`, `EPSLanczosGetReorthog()`
 E*/
@@ -523,9 +534,9 @@ SLEPC_EXTERN PetscErrorCode EPSLanczosSetReorthog(EPS,EPSLanczosReorthogType);
 SLEPC_EXTERN PetscErrorCode EPSLanczosGetReorthog(EPS,EPSLanczosReorthogType*);
 
 /*E
-    EPSPRIMMEMethod - determines the method selected in the PRIMME library
+   EPSPRIMMEMethod - determines the method selected in the PRIMME library
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSPRIMMESetMethod()`, `EPSPRIMMEGetMethod()`
 E*/
@@ -590,9 +601,9 @@ SLEPC_EXTERN PetscErrorCode EPSLOBPCGSetLocking(EPS,PetscBool);
 SLEPC_EXTERN PetscErrorCode EPSLOBPCGGetLocking(EPS,PetscBool*);
 
 /*E
-    EPSCISSQuadRule - determines the quadrature rule in the CISS solver
+   EPSCISSQuadRule - determines the quadrature rule in the CISS solver
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSCISSSetQuadRule()`, `EPSCISSGetQuadRule()`
 E*/
@@ -601,9 +612,9 @@ typedef enum { EPS_CISS_QUADRULE_TRAPEZOIDAL = 1,
 SLEPC_EXTERN const char *EPSCISSQuadRules[];
 
 /*E
-    EPSCISSExtraction - determines the extraction technique in the CISS solver
+   EPSCISSExtraction - determines the extraction technique in the CISS solver
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSCISSSetExtraction()`, `EPSCISSGetExtraction()`
 E*/
@@ -634,9 +645,9 @@ SLEPC_EXTERN PetscErrorCode EPSBLOPEXSetBlockSize(EPS,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSBLOPEXGetBlockSize(EPS,PetscInt*);
 
 /*E
-    EPSEVSLDOSMethod - the method to approximate the density of states (DOS) in the EVSL solver
+   EPSEVSLDOSMethod - the method to approximate the density of states (DOS) in the EVSL solver
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSLSetDOSParameters()`, `EPSEVSLGetDOSParameters()`
 E*/
@@ -645,9 +656,9 @@ typedef enum { EPS_EVSL_DOS_KPM,
 SLEPC_EXTERN const char *EPSEVSLDOSMethods[];
 
 /*E
-    EPSEVSLDamping - the damping type used in the EVSL solver
+   EPSEVSLDamping - the damping type used in the EVSL solver
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSLSetDOSParameters()`, `EPSEVSLGetDOSParameters()`
 E*/

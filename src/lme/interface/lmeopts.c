@@ -64,13 +64,15 @@ PetscErrorCode LMEMonitorSetFromOptions(LME lme,const char opt[],const char name
 
 /*@
    LMESetFromOptions - Sets `LME` options from the options database.
+   This routine must be called before `LMESetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  lme - the linear matrix equation solver context
 
-   Notes:
+   Note:
    To see all options, run your program with the `-help` option.
 
    Level: beginner

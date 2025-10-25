@@ -23,8 +23,8 @@ SLEPC_EXTERN PetscErrorCode NEPInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode NEPFinalizePackage(void);
 
 /*S
-     NEP - Abstract SLEPc object that manages all solvers for
-     nonlinear eigenvalue problems.
+   NEP - Abstract SLEPc object that manages all solvers for
+   nonlinear eigenvalue problems.
 
    Level: beginner
 
@@ -33,7 +33,7 @@ S*/
 typedef struct _p_NEP* NEP;
 
 /*J
-    NEPType - String with the name of a nonlinear eigensolver
+   NEPType - String with the name of a nonlinear eigensolver
 
    Level: beginner
 
@@ -51,9 +51,9 @@ typedef const char *NEPType;
 SLEPC_EXTERN PetscClassId NEP_CLASSID;
 
 /*E
-    NEPProblemType - Determines the type of the nonlinear eigenproblem
+   NEPProblemType - Determines the type of the nonlinear eigenproblem
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPSetProblemType()`, `NEPGetProblemType()`
 E*/
@@ -62,9 +62,9 @@ typedef enum { NEP_GENERAL  = 1,
              } NEPProblemType;
 
 /*E
-    NEPWhich - Determines which part of the spectrum is requested
+   NEPWhich - Determines which part of the spectrum is requested
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPSetWhichEigenpairs()`, `NEPGetWhichEigenpairs()`
 E*/
@@ -81,9 +81,9 @@ typedef enum { NEP_LARGEST_MAGNITUDE  = 1,
                NEP_WHICH_USER         = 11 } NEPWhich;
 
 /*E
-    NEPErrorType - The error type used to assess accuracy of computed solutions
+   NEPErrorType - The error type used to assess accuracy of computed solutions
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPComputeError()`
 E*/
@@ -93,9 +93,9 @@ typedef enum { NEP_ERROR_ABSOLUTE,
 SLEPC_EXTERN const char *NEPErrorTypes[];
 
 /*E
-    NEPRefine - The refinement type
+   NEPRefine - The refinement type
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPSetRefine()`
 E*/
@@ -105,9 +105,9 @@ typedef enum { NEP_REFINE_NONE,
 SLEPC_EXTERN const char *NEPRefineTypes[];
 
 /*E
-    NEPRefineScheme - The scheme used for solving linear systems during iterative refinement
+   NEPRefineScheme - The scheme used for solving linear systems during iterative refinement
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPSetRefine()`
 E*/
@@ -117,9 +117,9 @@ typedef enum { NEP_REFINE_SCHEME_SCHUR    = 1,
 SLEPC_EXTERN const char *NEPRefineSchemes[];
 
 /*E
-    NEPConv - Determines the convergence test
+   NEPConv - Determines the convergence test
 
-    Level: intermediate
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPSetConvergenceTest()`, `NEPSetConvergenceTestFunction()`
 E*/
@@ -129,9 +129,9 @@ typedef enum { NEP_CONV_ABS,
                NEP_CONV_USER } NEPConv;
 
 /*E
-    NEPStop - Determines the stopping test
+   NEPStop - Determines the stopping test
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:nep), `NEPSetStoppingTest()`, `NEPSetStoppingTestFunction()`
 E*/
@@ -139,10 +139,18 @@ typedef enum { NEP_STOP_BASIC,
                NEP_STOP_USER } NEPStop;
 
 /*E
-    NEPConvergedReason - Reason a nonlinear eigensolver was said to
-         have converged or diverged
+   NEPConvergedReason - Reason a nonlinear eigensolver was determined to have converged
+   or diverged.
 
-    Level: intermediate
+   Values:
++  `NEP_CONVERGED_TOL`               - converged up to tolerance
+.  `NEP_CONVERGED_USER`              - converged due to a user-defined condition
+.  `NEP_DIVERGED_ITS`                - exceeded the maximum number of allowed iterations
+.  `NEP_DIVERGED_BREAKDOWN`          - generic breakdown in method
+.  `NEP_DIVERGED_LINEAR_SOLVE`       - inner linear solve failed
+-  `NEP_DIVERGED_SUBSPACE_EXHAUSTED` - run out of space for the basis in an unrestarted solver
+
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPSolve()`, `NEPGetConvergedReason()`, `NEPSetTolerances()`
 E*/
@@ -185,33 +193,34 @@ SLEPC_EXTERN PetscErrorCode NEPVectorsView(NEP,PetscViewer);
 SLEPC_EXTERN PetscErrorCode NEPVectorsViewFromOptions(NEP);
 
 /*S
-  NEPFunctionFn - A prototype of a NEP function evaluation function that would be passed to NEPSetFunction()
+   NEPFunctionFn - A prototype of a NEP function evaluation function that
+   would be passed to NEPSetFunction()
 
-  Calling Sequence:
-+   nep    - eigensolver context obtained from NEPCreate()
-.   lambda - the scalar argument where T(.) must be evaluated
-.   T      - matrix that will contain T(lambda)
-.   P      - [optional] different matrix to build the preconditioner
--   ctx    - [optional] user-defined context for private data for the
-             function evaluation routine (may be NULL)
+   Calling Sequence:
++  nep    - eigensolver context obtained from NEPCreate()
+.  lambda - the scalar argument where T(.) must be evaluated
+.  T      - matrix that will contain T(lambda)
+.  P      - [optional] different matrix to build the preconditioner
+-  ctx    - [optional] user-defined context for private data for the
+            function evaluation routine (may be NULL)
 
-  Level: beginner
+   Level: beginner
 
 .seealso: [](ch:nep), `NEPSetFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPFunctionFn(NEP nep,PetscScalar lambda,Mat T,Mat P,void *ctx);
 
 /*S
-  NEPJacobianFn - A prototype of a NEP Jacobian evaluation function that would be passed to NEPSetJacobian()
+   NEPJacobianFn - A prototype of a NEP Jacobian evaluation function that would be passed to NEPSetJacobian()
 
-  Calling Sequence:
-+   nep    - eigensolver context obtained from NEPCreate()
-.   lambda - the scalar argument where T'(.) must be evaluated
-.   J      - matrix that will contain T'(lambda)
--   ctx    - [optional] user-defined context for private data for the
-             Jacobian evaluation routine (may be NULL)
+   Calling Sequence:
++  nep    - eigensolver context obtained from NEPCreate()
+.  lambda - the scalar argument where T'(.) must be evaluated
+.  J      - matrix that will contain T'(lambda)
+-  ctx    - [optional] user-defined context for private data for the
+            Jacobian evaluation routine (may be NULL)
 
-  Level: beginner
+   Level: beginner
 
 .seealso: [](ch:nep), `NEPSetJacobian()`
 S*/
@@ -275,68 +284,70 @@ SLEPC_EXTERN PetscErrorCode NEPGetTrackAll(NEP,PetscBool*);
 SLEPC_EXTERN PetscErrorCode NEPGetConvergedReason(NEP,NEPConvergedReason*);
 
 /*S
-  NEPMonitorFn - A function prototype for functions provided to NEPMonitorSet()
+   NEPMonitorFn - A function prototype for functions provided to `NEPMonitorSet()`.
 
-  Calling Sequence:
-+   nep    - eigensolver context obtained from NEPCreate()
-.   its    - iteration number
-.   nconv  - number of converged eigenpairs
-.   eigr   - real part of the eigenvalues
-.   eigi   - imaginary part of the eigenvalues
-.   errest - relative error estimates for each eigenpair
-.   nest   - number of error estimates
--   ctx    - optional monitoring context, as provided with NEPMonitorSet()
+   Calling Sequence:
++  nep    - nonlinear eigensolver context
+.  its    - iteration number
+.  nconv  - number of converged eigenpairs
+.  eigr   - real part of the eigenvalues
+.  eigi   - imaginary part of the eigenvalues
+.  errest - relative error estimates for each eigenpair
+.  nest   - number of error estimates
+-  ctx    - optional monitoring context, as provided with `NEPMonitorSet()`
 
-  Level: beginner
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorFn(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx);
 
 /*S
-  NEPMonitorRegisterFn - A function prototype for functions provided to NEPMonitorRegister()
+   NEPMonitorRegisterFn - A function prototype for functions provided to `NEPMonitorRegister()`.
 
-  Calling Sequence:
-+   nep    - eigensolver context obtained from NEPCreate()
-.   its    - iteration number
-.   nconv  - number of converged eigenpairs
-.   eigr   - real part of the eigenvalues
-.   eigi   - imaginary part of the eigenvalues
-.   errest - relative error estimates for each eigenpair
-.   nest   - number of error estimates
--   ctx    - PetscViewerAndFormat object
+   Calling Sequence:
++  nep    - nonlinear eigensolver context
+.  its    - iteration number
+.  nconv  - number of converged eigenpairs
+.  eigr   - real part of the eigenvalues
+.  eigi   - imaginary part of the eigenvalues
+.  errest - relative error estimates for each eigenpair
+.  nest   - number of error estimates
+-  ctx    - `PetscViewerAndFormat` object
 
-  Level: beginner
+   Level: advanced
 
-  Note:
-  This is an NEPMonitorFn specialized for a context of PetscViewerAndFormat.
+   Note:
+   This is a `NEPMonitorFn` specialized for a context of `PetscViewerAndFormat`.
 
 .seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterCreateFn`, `NEPMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterFn(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
 
 /*S
-  NEPMonitorRegisterCreateFn - A function prototype for functions that do the creation when provided to NEPMonitorRegister()
+   NEPMonitorRegisterCreateFn - A function prototype for functions that do the
+   creation when provided to `NEPMonitorRegister()`.
 
-  Calling Sequence:
-+   viewer - the viewer to be used with the NEPMonitorRegisterFn
-.   format - the format of the viewer
-.   ctx    - a context for the monitor
--   result - a PetscViewerAndFormat object
+   Calling Sequence:
++  viewer - the viewer to be used with the `NEPMonitorRegisterFn`
+.  format - the format of the viewer
+.  ctx    - a context for the monitor
+-  result - a `PetscViewerAndFormat` object
 
-  Level: beginner
+   Level: advanced
 
 .seealso: [](ch:nep), `NEPMonitorRegisterFn`, `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
 /*S
-  NEPMonitorRegisterDestroyFn - A function prototype for functions that do the after use destruction when provided to NEPMonitorRegister()
+   NEPMonitorRegisterDestroyFn - A function prototype for functions that do the after
+   use destruction when provided to `NEPMonitorRegister()`.
 
-  Calling Sequence:
-.   vf - a PetscViewerAndFormat object to be destroyed, including any context
+   Calling Sequence:
+.  vf - a `PetscViewerAndFormat` object to be destroyed, including any context
 
-  Level: beginner
+   Level: advanced
 
 .seealso: [](ch:nep), `NEPMonitorRegisterFn`, `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterCreateFn`
 S*/
@@ -375,18 +386,19 @@ SLEPC_EXTERN PetscErrorCode NEPSetWorkVecs(NEP,PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPAllocateSolution(NEP,PetscInt);
 
 /*S
-  NEPConvergenceTestFn - A prototype of a NEP convergence test function that would be passed to NEPSetConvergenceTestFunction()
+   NEPConvergenceTestFn - A prototype of a NEP convergence test function that
+   would be passed to NEPSetConvergenceTestFunction()
 
-  Calling Sequence:
-+   nep    - eigensolver context obtained from NEPCreate()
-.   eigr   - real part of the eigenvalue
-.   eigi   - imaginary part of the eigenvalue
-.   res    - residual norm associated to the eigenpair
-.   errest - [output] computed error estimate
--   ctx    - [optional] user-defined context for private data for the
-             convergence test routine (may be NULL)
+   Calling Sequence:
++  nep    - eigensolver context obtained from NEPCreate()
+.  eigr   - real part of the eigenvalue
+.  eigi   - imaginary part of the eigenvalue
+.  res    - residual norm associated to the eigenpair
+.  errest - [output] computed error estimate
+-  ctx    - [optional] user-defined context for private data for the
+            convergence test routine (may be NULL)
 
-  Level: advanced
+   Level: advanced
 
 .seealso: [](ch:nep), `NEPSetConvergenceTestFunction()`
 S*/
@@ -400,19 +412,20 @@ SLEPC_EXTERN NEPConvergenceTestFn NEPConvergedNorm;
 SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
 
 /*S
-  NEPStoppingTestFn - A prototype of a NEP stopping test function that would be passed to NEPSetStoppingTestFunction()
+   NEPStoppingTestFn - A prototype of a NEP stopping test function that would
+   be passed to NEPSetStoppingTestFunction()
 
-  Calling Sequence:
-+   nep    - eigensolver context obtained from NEPCreate()
-.   its    - current number of iterations
-.   max_it - maximum number of iterations
-.   nconv  - number of currently converged eigenpairs
-.   nev    - number of requested eigenpairs
-.   reason - [output] result of the stopping test
--   ctx    - [optional] user-defined context for private data for the
-             stopping test routine (may be NULL)
+   Calling Sequence:
++  nep    - eigensolver context obtained from NEPCreate()
+.  its    - current number of iterations
+.  max_it - maximum number of iterations
+.  nconv  - number of currently converged eigenpairs
+.  nev    - number of requested eigenpairs
+.  reason - [output] result of the stopping test
+-  ctx    - [optional] user-defined context for private data for the
+            stopping test routine (may be NULL)
 
-  Level: advanced
+   Level: advanced
 
 .seealso: [](ch:nep), `NEPSetStoppingTestFunction()`
 S*/
@@ -455,9 +468,9 @@ SLEPC_EXTERN PetscErrorCode NEPNArnoldiSetLagPreconditioner(NEP,PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPNArnoldiGetLagPreconditioner(NEP,PetscInt*);
 
 /*E
-    NEPCISSExtraction - determines the extraction technique in the CISS solver
+   NEPCISSExtraction - determines the extraction technique in the CISS solver
 
-    Level: advanced
+   Level: advanced
 
 .seealso: [](ch:nep), `NEPCISSSetExtraction()`, `NEPCISSGetExtraction()`
 E*/
@@ -499,15 +512,16 @@ SLEPC_EXTERN PetscErrorCode NEPInterpolSetInterpolation(NEP,PetscReal,PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPInterpolGetInterpolation(NEP,PetscReal*,PetscInt*);
 
 /*S
-  NEPNLEIGSSingularitiesFn - A prototype of a function that would be passed to NEPNLEIGSSetSingularitiesFunction()
+   NEPNLEIGSSingularitiesFn - A prototype of a function that would be passed
+   to NEPNLEIGSSetSingularitiesFunction()
 
-  Calling Sequence:
-+   nep   - eigensolver context obtained from NEPCreate()
-.   maxnp - on input number of requested points in the discretization (can be set)
-.   xi    - computed values of the discretization
--   ctx   - optional context, as set by NEPNLEIGSSetSingularitiesFunction()
+   Calling Sequence:
++  nep   - eigensolver context obtained from NEPCreate()
+.  maxnp - on input number of requested points in the discretization (can be set)
+.  xi    - computed values of the discretization
+-  ctx   - optional context, as set by NEPNLEIGSSetSingularitiesFunction()
 
-  Level: advanced
+   Level: advanced
 
 .seealso: [](ch:nep), `NEPNLEIGSSetSingularitiesFunction()`
 S*/

@@ -217,7 +217,7 @@ PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 }
 
 /*@
-   SVDGetConvergedReason - Gets the reason why the SVDSolve() iteration was
+   SVDGetConvergedReason - Gets the reason why the `SVDSolve()` iteration was
    stopped.
 
    Not Collective
@@ -226,22 +226,15 @@ PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 .  svd - the singular value solver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
-   (see SVDConvergedReason)
+.  reason - negative value indicates diverged, positive value converged, see
+   `SVDConvergedReason` for the possible values
 
    Options Database Key:
-.  -svd_converged_reason - print the reason to a viewer
+.  -svd_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  SVD_CONVERGED_TOL - converged up to tolerance
-.  SVD_CONVERGED_USER - converged due to a user-defined condition
-.  SVD_CONVERGED_MAXIT - reached the maximum number of iterations with SVD_CONV_MAXIT criterion
-.  SVD_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  SVD_DIVERGED_BREAKDOWN - generic breakdown in method
--  SVD_DIVERGED_SYMMETRY_LOST - underlying indefinite eigensolver was not able to keep symmetry
-
-   Can only be called after the call to SVDSolve() is complete.
+   Note:
+   If this routine is called before or doing the `SVDSolve()` the value of
+   `SVD_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 

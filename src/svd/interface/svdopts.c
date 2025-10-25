@@ -694,17 +694,17 @@ PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name
 }
 
 /*@
-   SVDSetFromOptions - Sets SVD options from the options database.
-   This routine must be called before SVDSetUp() if the user is to be
-   allowed to set the solver type.
+   SVDSetFromOptions - Sets `SVD` options from the options database.
+   This routine must be called before `SVDSetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  svd - the singular value solver context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 

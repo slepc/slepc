@@ -281,7 +281,7 @@ PetscErrorCode EPSGetConverged(EPS eps,PetscInt *nconv)
 }
 
 /*@
-   EPSGetConvergedReason - Gets the reason why the EPSSolve() iteration was
+   EPSGetConvergedReason - Gets the reason why the `EPSSolve()` iteration was
    stopped.
 
    Not Collective
@@ -290,20 +290,15 @@ PetscErrorCode EPSGetConverged(EPS eps,PetscInt *nconv)
 .  eps - the eigensolver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `EPSConvergedReason` for the possible values
 
    Options Database Key:
-.  -eps_converged_reason - print the reason to a viewer
+.  -eps_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  EPS_CONVERGED_TOL - converged up to tolerance
-.  EPS_CONVERGED_USER - converged due to a user-defined condition
-.  EPS_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  EPS_DIVERGED_BREAKDOWN - generic breakdown in method
--  EPS_DIVERGED_SYMMETRY_LOST - pseudo-Lanczos was not able to keep symmetry
-
-   Can only be called after the call to EPSSolve() is complete.
+   Note:
+   If this routine is called before or doing the `EPSSolve()` the value of
+   `EPS_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 

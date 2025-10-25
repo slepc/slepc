@@ -123,9 +123,13 @@ PetscErrorCode LMEGetIterationNumber(LME lme,PetscInt *its)
 .  lme - the linear matrix equation solver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `LMEConvergedReason` for the possible values
 
-   Notes:
+   Options Database Key:
+.  -lme_converged_reason - print reason for convergence/divergence, and number of iterations
+
+   Note:
    If this routine is called before or doing the `LMESolve()` the value of
    `LME_CONVERGED_ITERATING` is returned.
 

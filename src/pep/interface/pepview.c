@@ -16,7 +16,7 @@
 #include <petscdraw.h>
 
 /*@
-   PEPView - Prints the PEP data structure.
+   PEPView - Prints the `PEP` data structure.
 
    Collective
 
@@ -25,22 +25,21 @@
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -pep_view -  Calls PEPView() at end of PEPSolve()
+.  -pep_view -  Calls `PEPView()` at end of `PEPSolve()`
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
 
    Level: beginner
 
-.seealso: [](ch:pep), `STView()`
+.seealso: [](ch:pep), `PEPCreate()`, `PEPViewFromOptions()`, `STView()`
 @*/
 PetscErrorCode PEPView(PEP pep,PetscViewer viewer)
 {
@@ -188,18 +187,18 @@ PetscErrorCode PEPView(PEP pep,PetscViewer viewer)
 }
 
 /*@
-   PEPViewFromOptions - View from options
+   PEPViewFromOptions - View (print) a `PEP` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  pep  - the eigensolver context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPView()`, `PEPCreate()`
+.seealso: [](ch:pep), `PEPView()`, `PEPCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode PEPViewFromOptions(PEP pep,PetscObject obj,const char name[])
 {
@@ -210,7 +209,7 @@ PetscErrorCode PEPViewFromOptions(PEP pep,PetscObject obj,const char name[])
 }
 
 /*@
-   PEPConvergedReasonView - Displays the reason a PEP solve converged or diverged.
+   PEPConvergedReasonView - Displays the reason a `PEP` solve converged or diverged.
 
    Collective
 
@@ -218,14 +217,17 @@ PetscErrorCode PEPViewFromOptions(PEP pep,PetscObject obj,const char name[])
 +  pep - the eigensolver context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
-.  -pep_converged_reason - print reason for convergence, and number of iterations
+   Options Database Key:
+.  -pep_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Note:
-   To change the format of the output call PetscViewerPushFormat(viewer,format) before
-   this call. Use PETSC_VIEWER_DEFAULT for the default, use PETSC_VIEWER_FAILED to only
+   Notes:
+   Use `PEPConvergedReasonViewFromOptions()` to display the reason based on values
+   in the options database.
+
+   To change the format of the output call `PetscViewerPushFormat()` before this
+   call. Use `PETSC_VIEWER_DEFAULT` for the default, or `PETSC_VIEWER_FAILED` to only
    display a reason if it fails. The latter can be set in the command line with
-   -pep_converged_reason ::failed
+   `-pep_converged_reason ::failed`.
 
    Level: intermediate
 
@@ -251,14 +253,14 @@ PetscErrorCode PEPConvergedReasonView(PEP pep,PetscViewer viewer)
 
 /*@
    PEPConvergedReasonViewFromOptions - Processes command line options to determine if/how
-   the PEP converged reason is to be viewed.
+   the `PEP` converged reason is to be viewed.
 
    Collective
 
    Input Parameter:
 .  pep - the eigensolver context
 
-   Level: developer
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPConvergedReasonView()`
 @*/

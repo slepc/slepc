@@ -33,41 +33,45 @@ PetscErrorCode SVDMonitor(SVD svd,PetscInt it,PetscInt nconv,PetscReal *sigma,Pe
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver context obtained from SVDCreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring), see SVDMonitorFn
-.  mctx    - [optional] context for private data for the
-             monitor routine (use NULL if no context is desired)
--  monitordestroy - [optional] routine that frees monitor context (may be NULL),
-             see PetscCtxDestroyFn for the calling sequence
++  svd            - singular value solver context
+.  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
+                    see `SVDMonitorFn`
+.  mctx           - [optional] context for private data for the monitor routine
+                    (use `NULL` if no context is desired)
+-  monitordestroy - [optional] routine that frees monitor context (may be `NULL`),
+                    see `PetscCtxDestroyFn` for the calling sequence
 
    Options Database Keys:
-+    -svd_monitor        - print only the first error estimate
-.    -svd_monitor_all    - print error estimates at each iteration
-.    -svd_monitor_conv   - print the singular value approximations only when
-      convergence has been reached
-.    -svd_monitor_conditioning - print the condition number when available
-.    -svd_monitor draw::draw_lg - sets line graph monitor for the first unconverged
-      approximate singular value
-.    -svd_monitor_all draw::draw_lg - sets line graph monitor for all unconverged
-      approximate singular values
-.    -svd_monitor_conv draw::draw_lg - sets line graph monitor for convergence history
--    -svd_monitor_cancel - cancels all monitors that have been hardwired into
-      a code by calls to SVDMonitorSet(), but does not cancel those set via
-      the options database.
++  -svd_monitor                    - print only the first error estimate
+.  -svd_monitor_all                - print error estimates at each iteration
+.  -svd_monitor_conv               - print the singular value approximations only when
+                                     convergence has been reached
+.  -svd_monitor_conditioning       - print the condition number when available
+.  -svd_monitor draw::draw_lg      - sets line graph monitor for the first unconverged
+                                     approximate singular value
+.  -svd_monitor_all draw::draw_lg  - sets line graph monitor for all unconverged
+                                     approximate singular values
+.  -svd_monitor_conv draw::draw_lg - sets line graph monitor for convergence history
+-  -svd_monitor_cancel             - cancels all monitors that have been hardwired into
+                                     a code by calls to `SVDMonitorSet()`, but does not cancel
+                                     those set via the options database.
 
    Notes:
-   The options database option -svd_monitor and related options are the easiest way
-   to turn on SVD iteration monitoring.
+   The options database option `-svd_monitor` and related options are the easiest way
+   to turn on `SVD` iteration monitoring.
 
-   SVDMonitorRegister() provides a way to associate an options database key with SVD
+   `SVDMonitorRegister()` provides a way to associate an options database key with `SVD`
    monitor function.
 
-   Several different monitoring routines may be set by calling SVDMonitorSet() multiple
+   Several different monitoring routines may be set by calling `SVDMonitorSet()` multiple
    times; all will be called in the order in which they were set.
+
+   Fortran Note:
+   Only a single monitor function can be set for each `SVD` object.
 
    Level: intermediate
 
-.seealso: [](ch:svd), `SVDMonitorFirst()`, `SVDMonitorAll()`, `SVDMonitorConditioning()`, `SVDMonitorCancel()`
+.seealso: [](ch:svd), `SVDMonitorFirst()`, `SVDMonitorAll()`, `SVDMonitorConverged()`, `SVDMonitorConditioning()`, `SVDMonitorFirstDrawLG()`, `SVDMonitorAllDrawLG()`, `SVDMonitorConvergedDrawLG()`, `SVDMonitorCancel()`
 @*/
 PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {

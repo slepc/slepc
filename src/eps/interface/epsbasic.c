@@ -130,7 +130,7 @@ PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
 }
 
 /*@
-   EPSSetType - Selects the particular solver to be used in the EPS object.
+   EPSSetType - Selects the particular solver to be used in the `EPS` object.
 
    Logically Collective
 
@@ -139,18 +139,17 @@ PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
 -  type - a known method
 
    Options Database Key:
-.  -eps_type <method> - Sets the method; use -help for a list
+.  -eps_type <method> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
-   See "slepc/include/slepceps.h" for available methods. The default
-   is EPSKRYLOVSCHUR.
+   See `EPSType` for available methods. The default is `EPSKRYLOVSCHUR`.
 
-   Normally, it is best to use the EPSSetFromOptions() command and
-   then set the EPS type from the options database rather than by using
+   Normally, it is best to use the `EPSSetFromOptions()` command and
+   then set the `EPS` type from the options database rather than by using
    this routine.  Using the options database provides the user with
    maximum flexibility in evaluating the different available methods.
-   The EPSSetType() routine is provided for those situations where it
+   The `EPSSetType()` routine is provided for those situations where it
    is necessary to set the iterative solver independently of the command
    line or options database.
 
@@ -183,7 +182,7 @@ PetscErrorCode EPSSetType(EPS eps,EPSType type)
 }
 
 /*@
-   EPSGetType - Gets the EPS type as a string from the EPS object.
+   EPSGetType - Gets the `EPS` type as a string from the `EPS` object.
 
    Not Collective
 
@@ -191,7 +190,7 @@ PetscErrorCode EPSSetType(EPS eps,EPSType type)
 .  eps - the eigensolver context
 
    Output Parameter:
-.  type - name of EPS method
+.  type - name of `EPS` method
 
    Level: intermediate
 
@@ -241,24 +240,25 @@ PetscErrorCode EPSRegister(const char *name,PetscErrorCode (*function)(EPS))
 }
 
 /*@C
-   EPSMonitorRegister - Registers an EPS monitor routine that may be accessed with EPSMonitorSetFromOptions().
+   EPSMonitorRegister - Registers an `EPS` monitor routine that may be accessed with
+   `EPSMonitorSetFromOptions()`.
 
    Not Collective
 
    Input Parameters:
 +  name    - name of a new monitor routine
-.  vtype   - a PetscViewerType for the output
-.  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine, see EPSMonitorRegisterFn
-.  create  - creation routine, or NULL
--  destroy - destruction routine, or NULL
+.  vtype   - a `PetscViewerType` for the output
+.  format  - a `PetscViewerFormat` for the output
+.  monitor - monitor routine, see `EPSMonitorRegisterFn`
+.  create  - creation routine, or `NULL`
+-  destroy - destruction routine, or `NULL`
 
    Notes:
-   EPSMonitorRegister() may be called multiple times to add several user-defined monitors.
+   `EPSMonitorRegister()` may be called multiple times to add several user-defined monitors.
 
-   The calling sequence for the given function matches the calling sequence of EPSMonitorFn
-   functions passed to EPSMonitorSet() with the additional requirement that its final argument
-   be a PetscViewerAndFormat.
+   The calling sequence for the given function matches the calling sequence of `EPSMonitorFn`
+   functions passed to `EPSMonitorSet()` with the additional requirement that its final argument
+   be a `PetscViewerAndFormat`.
 
    Example Usage:
 .vb
@@ -266,13 +266,14 @@ PetscErrorCode EPSRegister(const char *name,PetscErrorCode (*function)(EPS))
 .ve
 
    Then, your monitor can be chosen with the procedural interface via
-$      EPSMonitorSetFromOptions(eps,"-eps_monitor_my_monitor","my_monitor",NULL)
-   or at runtime via the option
-$      -eps_monitor_my_monitor
+.vb
+   EPSMonitorSetFromOptions(eps,"-eps_monitor_my_monitor","my_monitor",NULL)
+.ve
+   or at runtime via the option `-eps_monitor_my_monitor`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorRegisterAll()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorRegisterAll()`, `EPSMonitorSetFromOptions()`
 @*/
 PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,EPSMonitorRegisterFn *monitor,EPSMonitorRegisterCreateFn *create,EPSMonitorRegisterDestroyFn *destroy)
 {

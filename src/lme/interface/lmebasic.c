@@ -111,7 +111,7 @@ PetscErrorCode LMEViewFromOptions(LME lme,PetscObject obj,const char name[])
 +  lme - the linear matrix equation context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
+   Options Database Key:
 .  -lme_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:
@@ -373,7 +373,7 @@ PetscErrorCode LMERegister(const char *name,PetscErrorCode (*function)(LME))
 
    Then, your monitor can be chosen with the procedural interface via
 .vb
-   LMEMonitorSetFromOptions(lme,"-lme_monitor_my_monitor","my_monitor",NULL)
+   LMEMonitorSetFromOptions(lme,"-lme_monitor_my_monitor","my_monitor",NULL);
 .ve
    or at runtime via the option `-lme_monitor_my_monitor`.
 

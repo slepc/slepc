@@ -33,40 +33,44 @@ PetscErrorCode PEPMonitor(PEP pep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
    Logically Collective
 
    Input Parameters:
-+  pep     - eigensolver context obtained from PEPCreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring), see PEPMonitorFn
-.  mctx    - [optional] context for private data for the
-             monitor routine (use NULL if no context is desired)
--  monitordestroy - [optional] routine that frees monitor context (may be NULL),
-             see PetscCtxDestroyFn for the calling sequence
++  pep            - polynomial eigensolver context
+.  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
+                    see `PEPMonitorFn`
+.  mctx           - [optional] context for private data for the monitor routine
+                    (use `NULL` if no context is desired)
+-  monitordestroy - [optional] routine that frees monitor context (may be `NULL`),
+                    see `PetscCtxDestroyFn` for the calling sequence
 
    Options Database Keys:
-+    -pep_monitor        - print only the first error estimate
-.    -pep_monitor_all    - print error estimates at each iteration
-.    -pep_monitor_conv   - print the eigenvalue approximations only when
-      convergence has been reached
-.    -pep_monitor draw::draw_lg - sets line graph monitor for the first unconverged
-      approximate eigenvalue
-.    -pep_monitor_all draw::draw_lg - sets line graph monitor for all unconverged
-      approximate eigenvalues
-.    -pep_monitor_conv draw::draw_lg - sets line graph monitor for convergence history
--    -pep_monitor_cancel - cancels all monitors that have been hardwired into
-      a code by calls to PEPMonitorSet(), but does not cancel those set via
-      the options database.
++  -pep_monitor                    - print only the first error estimate
+.  -pep_monitor_all                - print error estimates at each iteration
+.  -pep_monitor_conv               - print the eigenvalue approximations only when
+                                     convergence has been reached
+.  -pep_monitor draw::draw_lg      - sets line graph monitor for the first unconverged
+                                     approximate eigenvalue
+.  -pep_monitor_all draw::draw_lg  - sets line graph monitor for all unconverged
+                                     approximate eigenvalues
+.  -pep_monitor_conv draw::draw_lg - sets line graph monitor for convergence history
+-  -pep_monitor_cancel             - cancels all monitors that have been hardwired into
+                                     a code by calls to `PEPMonitorSet()`, but does not cancel
+                                     those set via the options database.
 
    Notes:
-   The options database option -pep_monitor and related options are the easiest way
-   to turn on PEP iteration monitoring.
+   The options database option `-pep_monitor` and related options are the easiest way
+   to turn on `PEP` iteration monitoring.
 
-   PEPMonitorRegister() provides a way to associate an options database key with PEP
+   `PEPMonitorRegister()` provides a way to associate an options database key with `PEP`
    monitor function.
 
-   Several different monitoring routines may be set by calling PEPMonitorSet() multiple
+   Several different monitoring routines may be set by calling `PEPMonitorSet()` multiple
    times; all will be called in the order in which they were set.
+
+   Fortran Note:
+   Only a single monitor function can be set for each `PEP` object.
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPMonitorFirst()`, `PEPMonitorAll()`, `PEPMonitorCancel()`
+.seealso: [](ch:pep), `PEPMonitorFirst()`, `PEPMonitorAll()`, `PEPMonitorConverged()`, `PEPMonitorFirstDrawLG()`, `PEPMonitorAllDrawLG()`, `PEPMonitorConvergedDrawLG()`, `PEPMonitorCancel()`
 @*/
 PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {

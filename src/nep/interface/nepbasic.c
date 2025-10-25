@@ -123,7 +123,7 @@ PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
 }
 
 /*@
-   NEPSetType - Selects the particular solver to be used in the NEP object.
+   NEPSetType - Selects the particular solver to be used in the `NEP` object.
 
    Logically Collective
 
@@ -132,17 +132,17 @@ PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
 -  type     - a known method
 
    Options Database Key:
-.  -nep_type <method> - Sets the method; use -help for a list
+.  -nep_type <method> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
-   See "slepc/include/slepcnep.h" for available methods.
+   See `NEPType` for available methods. The default is `NEPRII`.
 
-   Normally, it is best to use the NEPSetFromOptions() command and
-   then set the NEP type from the options database rather than by using
+   Normally, it is best to use the `NEPSetFromOptions()` command and
+   then set the `NEP` type from the options database rather than by using
    this routine.  Using the options database provides the user with
    maximum flexibility in evaluating the different available methods.
-   The NEPSetType() routine is provided for those situations where it
+   The `NEPSetType()` routine is provided for those situations where it
    is necessary to set the iterative solver independently of the command
    line or options database.
 
@@ -175,7 +175,7 @@ PetscErrorCode NEPSetType(NEP nep,NEPType type)
 }
 
 /*@
-   NEPGetType - Gets the NEP type as a string from the NEP object.
+   NEPGetType - Gets the `NEP` type as a string from the `NEP` object.
 
    Not Collective
 
@@ -183,7 +183,7 @@ PetscErrorCode NEPSetType(NEP nep,NEPType type)
 .  nep - the eigensolver context
 
    Output Parameter:
-.  type - name of NEP method
+.  type - name of `NEP` method
 
    Level: intermediate
 
@@ -233,24 +233,25 @@ PetscErrorCode NEPRegister(const char *name,PetscErrorCode (*function)(NEP))
 }
 
 /*@C
-   NEPMonitorRegister - Registers a  NEP monitor routine that may be accessed with NEPMonitorSetFromOptions().
+   NEPMonitorRegister - Registers a `NEP` monitor routine that may be accessed with
+   `NEPMonitorSetFromOptions()`.
 
    Not Collective
 
    Input Parameters:
 +  name    - name of a new monitor routine
-.  vtype   - a PetscViewerType for the output
-.  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine, see NEPMonitorRegisterFn
-.  create  - creation routine, or NULL
--  destroy - destruction routine, or NULL
+.  vtype   - a `PetscViewerType` for the output
+.  format  - a `PetscViewerFormat` for the output
+.  monitor - monitor routine, see `NEPMonitorRegisterFn`
+.  create  - creation routine, or `NULL`
+-  destroy - destruction routine, or `NULL`
 
    Notes:
-   NEPMonitorRegister() may be called multiple times to add several user-defined monitors.
+   `NEPMonitorRegister()` may be called multiple times to add several user-defined monitors.
 
-   The calling sequence for the given function matches the calling sequence of NEPMonitorFn
-   functions passed to NEPMonitorSet() with the additional requirement that its final argument
-   be a PetscViewerAndFormat.
+   The calling sequence for the given function matches the calling sequence of `NEPMonitorFn`
+   functions passed to `NEPMonitorSet()` with the additional requirement that its final argument
+   be a `PetscViewerAndFormat`.
 
    Example Usage:
 .vb
@@ -258,13 +259,14 @@ PetscErrorCode NEPRegister(const char *name,PetscErrorCode (*function)(NEP))
 .ve
 
    Then, your monitor can be chosen with the procedural interface via
-$      NEPMonitorSetFromOptions(nep,"-nep_monitor_my_monitor","my_monitor",NULL)
-   or at runtime via the option
-$      -nep_monitor_my_monitor
+.vb
+   NEPMonitorSetFromOptions(nep,"-nep_monitor_my_monitor","my_monitor",NULL);
+.ve
+   or at runtime via the option `-nep_monitor_my_monitor`.
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorRegisterAll()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorRegisterAll()`, `NEPMonitorSetFromOptions()`
 @*/
 PetscErrorCode NEPMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,NEPMonitorRegisterFn *monitor,NEPMonitorRegisterCreateFn *create,NEPMonitorRegisterDestroyFn *destroy)
 {

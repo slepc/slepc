@@ -28,7 +28,7 @@ PetscFunctionList MFNMonitorDestroyList       = NULL;
 PetscBool         MFNMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   MFNView - Prints the MFN data structure.
+   MFNView - Prints the `MFN` data structure.
 
    Collective
 
@@ -37,22 +37,21 @@ PetscBool         MFNMonitorRegisterAllCalled = PETSC_FALSE;
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -mfn_view -  Calls MFNView() at end of MFNSolve()
+.  -mfn_view -  Calls `MFNView()` at end of `MFNSolve()`
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
 
    Level: beginner
 
-.seealso: [](ch:mfn), `MFNCreate()`
+.seealso: [](ch:mfn), `MFNCreate()`, `MFNViewFromOptions()`
 @*/
 PetscErrorCode MFNView(MFN mfn,PetscViewer viewer)
 {
@@ -84,18 +83,18 @@ PetscErrorCode MFNView(MFN mfn,PetscViewer viewer)
 }
 
 /*@
-   MFNViewFromOptions - View from options
+   MFNViewFromOptions - View (print) an `MFN` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  mfn  - the matrix function context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: [](ch:mfn), `MFNView()`, `MFNCreate()`
+.seealso: [](ch:mfn), `MFNView()`, `MFNCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode MFNViewFromOptions(MFN mfn,PetscObject obj,const char name[])
 {
@@ -105,7 +104,7 @@ PetscErrorCode MFNViewFromOptions(MFN mfn,PetscObject obj,const char name[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 /*@
-   MFNConvergedReasonView - Displays the reason an MFN solve converged or diverged.
+   MFNConvergedReasonView - Displays the reason an `MFN` solve converged or diverged.
 
    Collective
 
@@ -113,14 +112,17 @@ PetscErrorCode MFNViewFromOptions(MFN mfn,PetscObject obj,const char name[])
 +  mfn - the matrix function context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
-.  -mfn_converged_reason - print reason for convergence, and number of iterations
+   Options Database Key:
+.  -mfn_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Note:
-   To change the format of the output call PetscViewerPushFormat(viewer,format) before
-   this call. Use PETSC_VIEWER_DEFAULT for the default, use PETSC_VIEWER_FAILED to only
+   Notes:
+   Use `MFNConvergedReasonViewFromOptions()` to display the reason based on values
+   in the options database.
+
+   To change the format of the output call `PetscViewerPushFormat()` before this
+   call. Use `PETSC_VIEWER_DEFAULT` for the default, or `PETSC_VIEWER_FAILED` to only
    display a reason if it fails. The latter can be set in the command line with
-   -mfn_converged_reason ::failed
+   `-mfn_converged_reason ::failed`.
 
    Level: intermediate
 
@@ -146,14 +148,14 @@ PetscErrorCode MFNConvergedReasonView(MFN mfn,PetscViewer viewer)
 
 /*@
    MFNConvergedReasonViewFromOptions - Processes command line options to determine if/how
-   the MFN converged reason is to be viewed.
+   the `MFN` converged reason is to be viewed.
 
    Collective
 
    Input Parameter:
 .  mfn - the matrix function context
 
-   Level: developer
+   Level: intermediate
 
 .seealso: [](ch:mfn), `MFNConvergedReasonView()`
 @*/
@@ -230,7 +232,7 @@ PetscErrorCode MFNCreate(MPI_Comm comm,MFN *outmfn)
 }
 
 /*@
-   MFNSetType - Selects the particular solver to be used in the MFN object.
+   MFNSetType - Selects the particular solver to be used in the `MFN` object.
 
    Logically Collective
 
@@ -239,18 +241,17 @@ PetscErrorCode MFNCreate(MPI_Comm comm,MFN *outmfn)
 -  type - a known method
 
    Options Database Key:
-.  -mfn_type <method> - Sets the method; use -help for a list
+.  -mfn_type <method> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
-   See "slepc/include/slepcmfn.h" for available methods. The default
-   is MFNKRYLOV
+   See `MFNType` for available methods. The default is `MFNKRYLOV`.
 
-   Normally, it is best to use the MFNSetFromOptions() command and
-   then set the MFN type from the options database rather than by using
+   Normally, it is best to use the `MFNSetFromOptions()` command and
+   then set the `MFN` type from the options database rather than by using
    this routine.  Using the options database provides the user with
    maximum flexibility in evaluating the different available methods.
-   The MFNSetType() routine is provided for those situations where it
+   The `MFNSetType()` routine is provided for those situations where it
    is necessary to set the iterative solver independently of the command
    line or options database.
 
@@ -283,7 +284,7 @@ PetscErrorCode MFNSetType(MFN mfn,MFNType type)
 }
 
 /*@
-   MFNGetType - Gets the MFN type as a string from the MFN object.
+   MFNGetType - Gets the `MFN` type as a string from the `MFN` object.
 
    Not Collective
 
@@ -291,7 +292,7 @@ PetscErrorCode MFNSetType(MFN mfn,MFNType type)
 .  mfn - the matrix function context
 
    Output Parameter:
-.  type - name of MFN method
+.  type - name of `MFN` method
 
    Level: intermediate
 
@@ -341,24 +342,25 @@ PetscErrorCode MFNRegister(const char *name,PetscErrorCode (*function)(MFN))
 }
 
 /*@C
-   MFNMonitorRegister - Registers an MFN monitor routine that may be accessed with MFNMonitorSetFromOptions().
+   MFNMonitorRegister - Registers an `MFN` monitor routine that may be accessed with
+   `MFNMonitorSetFromOptions()`.
 
    Not Collective
 
    Input Parameters:
 +  name    - name of a new monitor routine
-.  vtype   - a PetscViewerType for the output
-.  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine, see MFNMonitorRegisterFn
-.  create  - creation routine, or NULL
--  destroy - destruction routine, or NULL
+.  vtype   - a `PetscViewerType` for the output
+.  format  - a `PetscViewerFormat` for the output
+.  monitor - monitor routine, see `MFNMonitorRegisterFn`
+.  create  - creation routine, or `NULL`
+-  destroy - destruction routine, or `NULL`
 
    Notes:
-   MFNMonitorRegister() may be called multiple times to add several user-defined monitors.
+   `MFNMonitorRegister()` may be called multiple times to add several user-defined monitors.
 
-   The calling sequence for the given function matches the calling sequence of MFNMonitorFn
-   functions passed to MFNMonitorSet() with the additional requirement that its final argument
-   be a PetscViewerAndFormat.
+   The calling sequence for the given function matches the calling sequence of `MFNMonitorFn`
+   functions passed to `MFNMonitorSet()` with the additional requirement that its final argument
+   be a `PetscViewerAndFormat`.
 
    Example Usage:
 .vb
@@ -366,13 +368,14 @@ PetscErrorCode MFNRegister(const char *name,PetscErrorCode (*function)(MFN))
 .ve
 
    Then, your monitor can be chosen with the procedural interface via
-$      MFNMonitorSetFromOptions(mfn,"-mfn_monitor_my_monitor","my_monitor",NULL)
-   or at runtime via the option
-$      -mfn_monitor_my_monitor
+.vb
+   MFNMonitorSetFromOptions(mfn,"-mfn_monitor_my_monitor","my_monitor",NULL);
+.ve
+   or at runtime via the option `-mfn_monitor_my_monitor`.
 
    Level: advanced
 
-.seealso: [](ch:mfn), `MFNMonitorSet()`, `MFNMonitorRegisterAll()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`, `MFNMonitorRegisterAll()`, `MFNMonitorSetFromOptions()`
 @*/
 PetscErrorCode MFNMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,MFNMonitorRegisterFn *monitor,MFNMonitorRegisterCreateFn *create,MFNMonitorRegisterDestroyFn *destroy)
 {

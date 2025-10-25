@@ -410,7 +410,7 @@ PetscErrorCode NEPGetConverged(NEP nep,PetscInt *nconv)
 }
 
 /*@
-   NEPGetConvergedReason - Gets the reason why the NEPSolve() iteration was
+   NEPGetConvergedReason - Gets the reason why the `NEPSolve()` iteration was
    stopped.
 
    Not Collective
@@ -419,22 +419,15 @@ PetscErrorCode NEPGetConverged(NEP nep,PetscInt *nconv)
 .  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `NEPConvergedReason` for the possible values
 
    Options Database Key:
-.  -nep_converged_reason - print the reason to a viewer
+.  -nep_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  NEP_CONVERGED_TOL - converged up to tolerance
-.  NEP_CONVERGED_USER - converged due to a user-defined condition
-.  NEP_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  NEP_DIVERGED_BREAKDOWN - generic breakdown in method
-.  NEP_DIVERGED_LINEAR_SOLVE - inner linear solve failed
--  NEP_DIVERGED_SUBSPACE_EXHAUSTED - run out of space for the basis in an
-   unrestarted solver
-
-   Can only be called after the call to NEPSolve() is complete.
+   Note:
+   If this routine is called before or doing the `NEPSolve()` the value of
+   `NEP_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 

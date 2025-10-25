@@ -16,7 +16,7 @@
 #include <petscdraw.h>
 
 /*@
-   EPSView - Prints the EPS data structure.
+   EPSView - Prints the `EPS` data structure.
 
    Collective
 
@@ -25,22 +25,21 @@
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -eps_view -  Calls EPSView() at end of EPSSolve()
+.  -eps_view -  Calls `EPSView()` at end of `EPSSolve()`
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
 
    Level: beginner
 
-.seealso: [](ch:eps), `STView()`
+.seealso: [](ch:eps), `EPSCreate()`, `EPSViewFromOptions()`, `STView()`
 @*/
 PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
 {
@@ -201,18 +200,18 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
 }
 
 /*@
-   EPSViewFromOptions - View from options
+   EPSViewFromOptions - View (print) an `EPS` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  eps  - the eigensolver context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSView()`, `EPSCreate()`
+.seealso: [](ch:eps), `EPSView()`, `EPSCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode EPSViewFromOptions(EPS eps,PetscObject obj,const char name[])
 {
@@ -223,7 +222,7 @@ PetscErrorCode EPSViewFromOptions(EPS eps,PetscObject obj,const char name[])
 }
 
 /*@
-   EPSConvergedReasonView - Displays the reason an EPS solve converged or diverged.
+   EPSConvergedReasonView - Displays the reason an `EPS` solve converged or diverged.
 
    Collective
 
@@ -231,14 +230,17 @@ PetscErrorCode EPSViewFromOptions(EPS eps,PetscObject obj,const char name[])
 +  eps - the eigensolver context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
-.  -eps_converged_reason - print reason for convergence, and number of iterations
+   Options Database Key:
+.  -eps_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Note:
-   To change the format of the output call PetscViewerPushFormat(viewer,format) before
-   this call. Use PETSC_VIEWER_DEFAULT for the default, use PETSC_VIEWER_FAILED to only
+   Notes:
+   Use `EPSConvergedReasonViewFromOptions()` to display the reason based on values
+   in the options database.
+
+   To change the format of the output call `PetscViewerPushFormat()` before this
+   call. Use `PETSC_VIEWER_DEFAULT` for the default, or `PETSC_VIEWER_FAILED` to only
    display a reason if it fails. The latter can be set in the command line with
-   -eps_converged_reason ::failed
+   `-eps_converged_reason ::failed`.
 
    Level: intermediate
 
@@ -266,14 +268,14 @@ PetscErrorCode EPSConvergedReasonView(EPS eps,PetscViewer viewer)
 
 /*@
    EPSConvergedReasonViewFromOptions - Processes command line options to determine if/how
-   the EPS converged reason is to be viewed.
+   the `EPS` converged reason is to be viewed.
 
    Collective
 
    Input Parameter:
 .  eps - the eigensolver context
 
-   Level: developer
+   Level: intermediate
 
 .seealso: [](ch:eps), `EPSConvergedReasonView()`
 @*/

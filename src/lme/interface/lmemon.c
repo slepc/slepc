@@ -33,19 +33,20 @@ PetscErrorCode LMEMonitor(LME lme,PetscInt it,PetscReal errest)
    Logically Collective
 
    Input Parameters:
-+  lme     - linear matrix equation solver context
-.  monitor - pointer to function (if this is `NULL`, it turns off monitoring), see `LMEMonitorFn`
-.  mctx    - [optional] context for private data for the
-             monitor routine (use `NULL` if no context is desired)
++  lme            - linear matrix equation solver context
+.  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
+                    see `LMEMonitorFn`
+.  mctx           - [optional] context for private data for the monitor routine
+                    (use `NULL` if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be `NULL`),
-             see `PetscCtxDestroyFn` for the calling sequence
+                    see `PetscCtxDestroyFn` for the calling sequence
 
    Options Database Keys:
-+    -lme_monitor - sets `LMEMonitorDefault()`
-.    -lme_monitor draw::draw_lg - sets `LMEMonitorDefaultDrawLG()` and plots residual
--    -lme_monitor_cancel - cancels all monitors that have been hardwired into
-      a code by calls to `LMEMonitorSet()`, but does not cancel those set via
-      the options database
++  -lme_monitor               - print the error estimate
+.  -lme_monitor draw::draw_lg - sets line graph monitor for the error estimate
+-  -lme_monitor_cancel        - cancels all monitors that have been hardwired into
+                                a code by calls to `LMEMonitorSet()`, but does not cancel
+                                those set via the options database
 
    Notes:
    The options database option `-lme_monitor` and related options are the easiest way
@@ -62,7 +63,7 @@ PetscErrorCode LMEMonitor(LME lme,PetscInt it,PetscReal errest)
 
    Level: intermediate
 
-.seealso: [](ch:lme), `LMEMonitorCancel()`
+.seealso: [](ch:lme), `LMEMonitorDefault()`, `LMEMonitorDefaultDrawLG()`, `LMEMonitorCancel()`
 @*/
 PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
