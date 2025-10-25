@@ -104,7 +104,7 @@ static PetscErrorCode MatDestroy_Resolvent(Mat M)
 
    Level: intermediate
 
-.seealso: `NEPGetLeftEigenvector()`, `NEPSolve()`
+.seealso: [](ch:nep), `NEPGetLeftEigenvector()`, `NEPSolve()`
 @*/
 PetscErrorCode NEPApplyResolvent(NEP nep,RG rg,PetscScalar omega,Vec v,Vec r)
 {

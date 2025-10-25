@@ -30,7 +30,7 @@ const char *BVSVDMethods[] = {"REFINE","QR","QR_CAA","BVSVDMethod","BV_SVD_METHO
 
    Level: developer
 
-.seealso: `SlepcFinalize()`, `BVInitializePackage()`
+.seealso: [](sec:bv), `SlepcFinalize()`, `BVInitializePackage()`
 @*/
 PetscErrorCode BVFinalizePackage(void)
 {

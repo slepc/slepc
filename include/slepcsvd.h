@@ -28,7 +28,7 @@ SLEPC_EXTERN PetscErrorCode SVDFinalizePackage(void);
 
    Level: beginner
 
-.seealso:  `SVDCreate()`
+.seealso: [](ch:svd), `SVDCreate()`
 S*/
 typedef struct _p_SVD* SVD;
 
@@ -37,7 +37,7 @@ typedef struct _p_SVD* SVD;
 
    Level: beginner
 
-.seealso: `SVDSetType()`, `SVD`
+.seealso: [](ch:svd), `SVDSetType()`, `SVD`
 J*/
 typedef const char *SVDType;
 #define SVDCROSS       "cross"
@@ -59,7 +59,7 @@ SLEPC_EXTERN PetscClassId SVD_CLASSID;
 
     Level: beginner
 
-.seealso: `SVDSetProblemType()`, `SVDGetProblemType()`
+.seealso: [](ch:svd), `SVDSetProblemType()`, `SVDGetProblemType()`
 E*/
 typedef enum { SVD_STANDARD    = 1,
                SVD_GENERALIZED = 2,  /* GSVD */
@@ -72,7 +72,7 @@ typedef enum { SVD_STANDARD    = 1,
 
     Level: intermediate
 
-.seealso: `SVDSetWhichSingularTriplets()`, `SVDGetWhichSingularTriplets()`
+.seealso: [](ch:svd), `SVDSetWhichSingularTriplets()`, `SVDGetWhichSingularTriplets()`
 E*/
 typedef enum { SVD_LARGEST,
                SVD_SMALLEST } SVDWhich;
@@ -82,7 +82,7 @@ typedef enum { SVD_LARGEST,
 
     Level: intermediate
 
-.seealso: `SVDComputeError()`
+.seealso: [](ch:svd), `SVDComputeError()`
 E*/
 typedef enum { SVD_ERROR_ABSOLUTE,
                SVD_ERROR_RELATIVE,
@@ -94,7 +94,7 @@ SLEPC_EXTERN const char *SVDErrorTypes[];
 
     Level: intermediate
 
-.seealso: `SVDSetConvergenceTest()`, `SVDSetConvergenceTestFunction()`
+.seealso: [](ch:svd), `SVDSetConvergenceTest()`, `SVDSetConvergenceTestFunction()`
 E*/
 typedef enum { SVD_CONV_ABS,
                SVD_CONV_REL,
@@ -107,7 +107,7 @@ typedef enum { SVD_CONV_ABS,
 
     Level: advanced
 
-.seealso: `SVDSetStoppingTest()`, `SVDSetStoppingTestFunction()`
+.seealso: [](ch:svd), `SVDSetStoppingTest()`, `SVDSetStoppingTestFunction()`
 E*/
 typedef enum { SVD_STOP_BASIC,
                SVD_STOP_USER,
@@ -119,7 +119,7 @@ typedef enum { SVD_STOP_BASIC,
 
    Level: intermediate
 
-.seealso: `SVDSolve()`, `SVDGetConvergedReason()`, `SVDSetTolerances()`
+.seealso: [](ch:svd), `SVDSolve()`, `SVDGetConvergedReason()`, `SVDSetTolerances()`
 E*/
 typedef enum {/* converged */
               SVD_CONVERGED_TOL                =  1,
@@ -138,7 +138,7 @@ SLEPC_EXTERN const char *const*SVDConvergedReasons;
 
    Level: advanced
 
-.seealso: `SVDSetStoppingTestFunction()`
+.seealso: [](ch:svd), `SVDSetStoppingTestFunction()`
 S*/
 struct _n_SVDStoppingCtx {
   PetscReal firstsv;    /* the value of the first converged singular value */
@@ -226,7 +226,7 @@ SLEPC_EXTERN PetscErrorCode SVDGetTrackAll(SVD,PetscBool*);
 
   Level: beginner
 
-.seealso: `SVDMonitorSet()`
+.seealso: [](ch:svd), `SVDMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,void *ctx);
 
@@ -247,7 +247,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorFn(SVD svd,PetscInt its,Pe
   Note:
   This is an SVDMonitorFn specialized for a context of PetscViewerAndFormat.
 
-.seealso: `SVDMonitorSet()`, `SVDMonitorRegister()`, `SVDMonitorFn`, `SVDMonitorRegisterCreateFn`, `SVDMonitorRegisterDestroyFn`
+.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorRegister()`, `SVDMonitorFn`, `SVDMonitorRegisterCreateFn`, `SVDMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
 
@@ -262,7 +262,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterFn(SVD svd,PetscIn
 
   Level: beginner
 
-.seealso: `SVDMonitorRegisterFn`, `SVDMonitorSet()`, `SVDMonitorRegister()`, `SVDMonitorFn`, `SVDMonitorRegisterDestroyFn`
+.seealso: [](ch:svd), `SVDMonitorRegisterFn`, `SVDMonitorSet()`, `SVDMonitorRegister()`, `SVDMonitorFn`, `SVDMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
@@ -274,7 +274,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterCreateFn(PetscView
 
   Level: beginner
 
-.seealso: `SVDMonitorRegisterFn`, `SVDMonitorSet()`, `SVDMonitorRegister()`, `SVDMonitorFn`, `SVDMonitorRegisterCreateFn`
+.seealso: [](ch:svd), `SVDMonitorRegisterFn`, `SVDMonitorSet()`, `SVDMonitorRegister()`, `SVDMonitorFn`, `SVDMonitorRegisterCreateFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
@@ -320,7 +320,7 @@ SLEPC_EXTERN PetscErrorCode SVDReallocateSolution(SVD,PetscInt);
 
   Level: advanced
 
-.seealso: `SVDSetConvergenceTestFunction()`
+.seealso: [](ch:svd), `SVDSetConvergenceTestFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDConvergenceTestFn(SVD svd,PetscReal sigma,PetscReal res,PetscReal *errest,void *ctx);
 
@@ -347,7 +347,7 @@ SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTestFunction(SVD,SVDConvergenceTest
 
   Level: advanced
 
-.seealso: `SVDSetStoppingTestFunction()`
+.seealso: [](ch:svd), `SVDSetStoppingTestFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDStoppingTestFn(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx);
 
@@ -378,7 +378,7 @@ SLEPC_EXTERN PetscErrorCode SVDLanczosGetOneSide(SVD,PetscBool*);
 
     Level: advanced
 
-.seealso: `SVDTRLanczosSetGBidiag()`, `SVDTRLanczosGetGBidiag()`
+.seealso: [](ch:svd), `SVDTRLanczosSetGBidiag()`, `SVDTRLanczosGetGBidiag()`
 E*/
 typedef enum {
   SVD_TRLANCZOS_GBIDIAG_SINGLE, /* single bidiagonalization (Qa) */
@@ -407,7 +407,7 @@ SLEPC_EXTERN PetscErrorCode SVDTRLanczosGetScale(SVD,PetscReal*);
 
     Level: advanced
 
-.seealso: `SVDPRIMMESetMethod()`, `SVDPRIMMEGetMethod()`
+.seealso: [](ch:svd), `SVDPRIMMESetMethod()`, `SVDPRIMMEGetMethod()`
 E*/
 typedef enum { SVD_PRIMME_HYBRID          = 1,
                SVD_PRIMME_NORMALEQUATIONS = 2,
@@ -424,7 +424,7 @@ SLEPC_EXTERN PetscErrorCode SVDPRIMMEGetMethod(SVD,SVDPRIMMEMethod*);
 
     Level: advanced
 
-.seealso: `SVDKSVDSetEigenMethod()`, `SVDKSVDGetEigenMethod()`
+.seealso: [](ch:svd), `SVDKSVDSetEigenMethod()`, `SVDKSVDGetEigenMethod()`
 E*/
 typedef enum { SVD_KSVD_EIGEN_MRRR = 1,
                SVD_KSVD_EIGEN_DC   = 2,
@@ -436,7 +436,7 @@ SLEPC_EXTERN const char *SVDKSVDEigenMethods[];
 
     Level: advanced
 
-.seealso: `SVDKSVDSetPolarMethod()`, `SVDKSVDGetPolarMethod()`
+.seealso: [](ch:svd), `SVDKSVDSetPolarMethod()`, `SVDKSVDGetPolarMethod()`
 E*/
 typedef enum { SVD_KSVD_POLAR_QDWH   = 1,
                SVD_KSVD_POLAR_ZOLOPD = 2 } SVDKSVDPolarMethod;

@@ -30,7 +30,7 @@ DSMatType  DSMatExtra[DS_NUM_EXTRA] = {DS_MAT_E0,DS_MAT_E1,DS_MAT_E2,DS_MAT_E3,D
 
    Level: developer
 
-.seealso: `SlepcFinalize()`, `DSInitializePackage()`
+.seealso: [](sec:ds), `SlepcFinalize()`, `DSInitializePackage()`
 @*/
 PetscErrorCode DSFinalizePackage(void)
 {

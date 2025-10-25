@@ -492,7 +492,7 @@ static PetscErrorCode FNDestroy_Rational(FN fn)
    When working with matrix functions, the rational function should rather be
    interpreted as $f(x)=q(x)^{-1}p(x)$.
 
-.seealso: [](sec:fn), `FN`, `FNType`, `FNSetType()`, `FNRationalSetNumerator()`, `FNRationalSetDenominator()`,
+.seealso: [](sec:fn), `FN`, `FNType`, `FNSetType()`, `FNRationalSetNumerator()`, `FNRationalSetDenominator()`
 M*/
 
 SLEPC_EXTERN PetscErrorCode FNCreate_Rational(FN fn)

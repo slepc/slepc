@@ -28,7 +28,7 @@
 
    Level: developer
 
-.seealso: `PEPSetUp()`
+.seealso: [](ch:pep), `PEPSetUp()`
 @*/
 PetscErrorCode PEPSetWorkVecs(PEP pep,PetscInt nw)
 {
@@ -142,7 +142,7 @@ PetscErrorCode PEPConvergedAbsolute(PEP pep,PetscScalar eigr,PetscScalar eigi,Pe
 
    Level: advanced
 
-.seealso: `PEPSetStoppingTest()`, `PEPConvergedReason`, `PEPGetConvergedReason()`
+.seealso: [](ch:pep), `PEPSetStoppingTest()`, `PEPConvergedReason`, `PEPGetConvergedReason()`
 @*/
 PetscErrorCode PEPStoppingBasic(PEP pep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,PEPConvergedReason *reason,void *ctx)
 {

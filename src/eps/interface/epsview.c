@@ -40,7 +40,7 @@
 
    Level: beginner
 
-.seealso: `STView()`
+.seealso: [](ch:eps), `STView()`
 @*/
 PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
 {
@@ -212,7 +212,7 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: `EPSView()`, `EPSCreate()`
+.seealso: [](ch:eps), `EPSView()`, `EPSCreate()`
 @*/
 PetscErrorCode EPSViewFromOptions(EPS eps,PetscObject obj,const char name[])
 {
@@ -242,7 +242,7 @@ PetscErrorCode EPSViewFromOptions(EPS eps,PetscObject obj,const char name[])
 
    Level: intermediate
 
-.seealso: `EPSSetConvergenceTest()`, `EPSSetTolerances()`, `EPSGetIterationNumber()`, `EPSConvergedReasonViewFromOptions()`
+.seealso: [](ch:eps), `EPSSetConvergenceTest()`, `EPSSetTolerances()`, `EPSGetIterationNumber()`, `EPSConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode EPSConvergedReasonView(EPS eps,PetscViewer viewer)
 {
@@ -275,7 +275,7 @@ PetscErrorCode EPSConvergedReasonView(EPS eps,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `EPSConvergedReasonView()`
+.seealso: [](ch:eps), `EPSConvergedReasonView()`
 @*/
 PetscErrorCode EPSConvergedReasonViewFromOptions(EPS eps)
 {
@@ -417,7 +417,7 @@ static PetscErrorCode EPSErrorView_MATLAB(EPS eps,EPSErrorType etype,PetscViewer
 
    Level: intermediate
 
-.seealso: `EPSSolve()`, `EPSValuesView()`, `EPSVectorsView()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSValuesView()`, `EPSVectorsView()`
 @*/
 PetscErrorCode EPSErrorView(EPS eps,EPSErrorType etype,PetscViewer viewer)
 {
@@ -462,7 +462,7 @@ PetscErrorCode EPSErrorView(EPS eps,EPSErrorType etype,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `EPSErrorView()`
+.seealso: [](ch:eps), `EPSErrorView()`
 @*/
 PetscErrorCode EPSErrorViewFromOptions(EPS eps)
 {
@@ -663,7 +663,7 @@ static PetscErrorCode EPSValuesView_MATLAB(EPS eps,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: `EPSSolve()`, `EPSVectorsView()`, `EPSErrorView()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSVectorsView()`, `EPSErrorView()`
 @*/
 PetscErrorCode EPSValuesView(EPS eps,PetscViewer viewer)
 {
@@ -719,7 +719,7 @@ PetscErrorCode EPSValuesView(EPS eps,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `EPSValuesView()`
+.seealso: [](ch:eps), `EPSValuesView()`
 @*/
 PetscErrorCode EPSValuesViewFromOptions(EPS eps)
 {
@@ -765,7 +765,7 @@ PetscErrorCode EPSValuesViewFromOptions(EPS eps)
 
    Level: intermediate
 
-.seealso: `EPSSolve()`, `EPSValuesView()`, `EPSErrorView()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSValuesView()`, `EPSErrorView()`
 @*/
 PetscErrorCode EPSVectorsView(EPS eps,PetscViewer viewer)
 {
@@ -811,7 +811,7 @@ PetscErrorCode EPSVectorsView(EPS eps,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `EPSVectorsView()`
+.seealso: [](ch:eps), `EPSVectorsView()`
 @*/
 PetscErrorCode EPSVectorsViewFromOptions(EPS eps)
 {

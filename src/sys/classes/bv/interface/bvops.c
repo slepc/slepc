@@ -568,7 +568,7 @@ PetscErrorCode BVSetRandomNormal(BV bv)
 
    Level: advanced
 
-.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandomSign(BV bv)
 {

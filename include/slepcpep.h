@@ -26,7 +26,7 @@ SLEPC_EXTERN PetscErrorCode PEPFinalizePackage(void);
 
    Level: beginner
 
-.seealso:  `PEPCreate()`
+.seealso: [](ch:pep), `PEPCreate()`
 S*/
 typedef struct _p_PEP* PEP;
 
@@ -35,7 +35,7 @@ typedef struct _p_PEP* PEP;
 
    Level: beginner
 
-.seealso: `PEPSetType()`, `PEP`
+.seealso: [](ch:pep), `PEPSetType()`, `PEP`
 J*/
 typedef const char *PEPType;
 #define PEPTOAR      "toar"
@@ -57,7 +57,7 @@ SLEPC_EXTERN PetscClassId PEP_CLASSID;
 
     Level: intermediate
 
-.seealso: `PEPSetProblemType()`, `PEPGetProblemType()`
+.seealso: [](ch:pep), `PEPSetProblemType()`, `PEPGetProblemType()`
 E*/
 typedef enum { PEP_GENERAL    = 1,
                PEP_HERMITIAN  = 2,
@@ -70,7 +70,7 @@ typedef enum { PEP_GENERAL    = 1,
 
     Level: intermediate
 
-.seealso: `PEPSetWhichEigenpairs()`, `PEPGetWhichEigenpairs()`
+.seealso: [](ch:pep), `PEPSetWhichEigenpairs()`, `PEPGetWhichEigenpairs()`
 E*/
 typedef enum { PEP_LARGEST_MAGNITUDE  = 1,
                PEP_SMALLEST_MAGNITUDE = 2,
@@ -90,7 +90,7 @@ typedef enum { PEP_LARGEST_MAGNITUDE  = 1,
 
     Level: intermediate
 
-.seealso: `PEPSetBasis()`
+.seealso: [](ch:pep), `PEPSetBasis()`
 E*/
 typedef enum { PEP_BASIS_MONOMIAL,
                PEP_BASIS_CHEBYSHEV1,
@@ -105,7 +105,7 @@ SLEPC_EXTERN const char *PEPBasisTypes[];
 
     Level: intermediate
 
-.seealso: `PEPSetScale()`
+.seealso: [](ch:pep), `PEPSetScale()`
 E*/
 typedef enum { PEP_SCALE_NONE,
                PEP_SCALE_SCALAR,
@@ -118,7 +118,7 @@ SLEPC_EXTERN const char *PEPScaleTypes[];
 
     Level: intermediate
 
-.seealso: `PEPSetRefine()`
+.seealso: [](ch:pep), `PEPSetRefine()`
 E*/
 typedef enum { PEP_REFINE_NONE,
                PEP_REFINE_SIMPLE,
@@ -130,7 +130,7 @@ SLEPC_EXTERN const char *PEPRefineTypes[];
 
     Level: intermediate
 
-.seealso: `PEPSetRefine()`
+.seealso: [](ch:pep), `PEPSetRefine()`
 E*/
 typedef enum { PEP_REFINE_SCHEME_SCHUR    = 1,
                PEP_REFINE_SCHEME_MBE      = 2,
@@ -142,7 +142,7 @@ SLEPC_EXTERN const char *PEPRefineSchemes[];
 
     Level: intermediate
 
-.seealso: `PEPSetExtract()`
+.seealso: [](ch:pep), `PEPSetExtract()`
 E*/
 typedef enum { PEP_EXTRACT_NONE       = 1,
                PEP_EXTRACT_NORM       = 2,
@@ -155,7 +155,7 @@ SLEPC_EXTERN const char *PEPExtractTypes[];
 
     Level: intermediate
 
-.seealso: `PEPComputeError()`
+.seealso: [](ch:pep), `PEPComputeError()`
 E*/
 typedef enum { PEP_ERROR_ABSOLUTE,
                PEP_ERROR_RELATIVE,
@@ -167,7 +167,7 @@ SLEPC_EXTERN const char *PEPErrorTypes[];
 
     Level: intermediate
 
-.seealso: `PEPSetConvergenceTest()`, `PEPSetConvergenceTestFunction()`
+.seealso: [](ch:pep), `PEPSetConvergenceTest()`, `PEPSetConvergenceTestFunction()`
 E*/
 typedef enum { PEP_CONV_ABS,
                PEP_CONV_REL,
@@ -179,7 +179,7 @@ typedef enum { PEP_CONV_ABS,
 
     Level: advanced
 
-.seealso: `PEPSetStoppingTest()`, `PEPSetStoppingTestFunction()`
+.seealso: [](ch:pep), `PEPSetStoppingTest()`, `PEPSetStoppingTestFunction()`
 E*/
 typedef enum { PEP_STOP_BASIC,
                PEP_STOP_USER } PEPStop;
@@ -190,7 +190,7 @@ typedef enum { PEP_STOP_BASIC,
 
     Level: intermediate
 
-.seealso: `PEPSolve()`, `PEPGetConvergedReason()`, `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPSolve()`, `PEPGetConvergedReason()`, `PEPSetTolerances()`
 E*/
 typedef enum {/* converged */
               PEP_CONVERGED_TOL                =  1,
@@ -288,7 +288,7 @@ SLEPC_EXTERN PetscErrorCode PEPGetTrackAll(PEP,PetscBool*);
 
   Level: beginner
 
-.seealso: `PEPMonitorSet()`
+.seealso: [](ch:pep), `PEPMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx);
 
@@ -310,7 +310,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,Pe
   Note:
   This is an PEPMonitorFn specialized for a context of PetscViewerAndFormat.
 
-.seealso: `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterCreateFn`, `PEPMonitorRegisterDestroyFn`
+.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterCreateFn`, `PEPMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
 
@@ -325,7 +325,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterFn(PEP pep,PetscIn
 
   Level: beginner
 
-.seealso: `PEPMonitorRegisterFn`, `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterDestroyFn`
+.seealso: [](ch:pep), `PEPMonitorRegisterFn`, `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
@@ -337,7 +337,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterCreateFn(PetscView
 
   Level: beginner
 
-.seealso: `PEPMonitorRegisterFn`, `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterCreateFn`
+.seealso: [](ch:pep), `PEPMonitorRegisterFn`, `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterCreateFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
@@ -387,7 +387,7 @@ SLEPC_EXTERN PetscErrorCode PEPAllocateSolution(PEP,PetscInt);
 
   Level: advanced
 
-.seealso: `PEPSetConvergenceTestFunction()`
+.seealso: [](ch:pep), `PEPSetConvergenceTestFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPConvergenceTestFn(PEP pep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
 
@@ -413,7 +413,7 @@ SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTestFunction(PEP,PEPConvergenceTest
 
   Level: advanced
 
-.seealso: `PEPSetStoppingTestFunction()`
+.seealso: [](ch:pep), `PEPSetStoppingTestFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPStoppingTestFn(PEP pep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,PEPConvergedReason *reason,void *ctx);
 
@@ -463,7 +463,7 @@ SLEPC_EXTERN PetscErrorCode PEPCheckDefiniteQEP(PEP,PetscReal*,PetscReal*,PetscI
 
     Level: intermediate
 
-.seealso: `PEPJDSetProjection()`
+.seealso: [](ch:pep), `PEPJDSetProjection()`
 E*/
 typedef enum { PEP_JD_PROJECTION_HARMONIC,
                PEP_JD_PROJECTION_ORTHOGONAL } PEPJDProjection;
@@ -485,7 +485,7 @@ SLEPC_EXTERN PetscErrorCode PEPJDGetProjection(PEP,PEPJDProjection*);
 
     Level: advanced
 
-.seealso: `PEPCISSSetExtraction()`, `PEPCISSGetExtraction()`
+.seealso: [](ch:pep), `PEPCISSSetExtraction()`, `PEPCISSGetExtraction()`
 E*/
 typedef enum { PEP_CISS_EXTRACTION_RITZ,
                PEP_CISS_EXTRACTION_HANKEL,

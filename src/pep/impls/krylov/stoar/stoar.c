@@ -537,7 +537,7 @@ static PetscErrorCode PEPSTOARSetLocking_STOAR(PEP pep,PetscBool lock)
 
    Level: advanced
 
-.seealso: `PEPSTOARGetLocking()`
+.seealso: [](ch:pep), `PEPSTOARGetLocking()`
 @*/
 PetscErrorCode PEPSTOARSetLocking(PEP pep,PetscBool lock)
 {
@@ -570,7 +570,7 @@ static PetscErrorCode PEPSTOARGetLocking_STOAR(PEP pep,PetscBool *lock)
 
    Level: advanced
 
-.seealso: `PEPSTOARSetLocking()`
+.seealso: [](ch:pep), `PEPSTOARSetLocking()`
 @*/
 PetscErrorCode PEPSTOARGetLocking(PEP pep,PetscBool *lock)
 {
@@ -665,7 +665,7 @@ static PetscErrorCode PEPSTOARGetInertias_STOAR(PEP pep,PetscInt *n,PetscReal *s
 
    Level: advanced
 
-.seealso: `PEPSetInterval()`
+.seealso: [](ch:pep), `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARGetInertias(PEP pep,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[]) PeNS
 {
@@ -709,7 +709,7 @@ static PetscErrorCode PEPSTOARSetDetectZeros_STOAR(PEP pep,PetscBool detect)
 
    Level: advanced
 
-.seealso: `PEPSetInterval()`
+.seealso: [](ch:pep), `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARSetDetectZeros(PEP pep,PetscBool detect)
 {
@@ -743,7 +743,7 @@ static PetscErrorCode PEPSTOARGetDetectZeros_STOAR(PEP pep,PetscBool *detect)
 
    Level: advanced
 
-.seealso: `PEPSTOARSetDetectZeros()`
+.seealso: [](ch:pep), `PEPSTOARSetDetectZeros()`
 @*/
 PetscErrorCode PEPSTOARGetDetectZeros(PEP pep,PetscBool *detect)
 {
@@ -785,7 +785,7 @@ static PetscErrorCode PEPSTOARSetLinearization_STOAR(PEP pep,PetscReal alpha,Pet
 
    Level: advanced
 
-.seealso: `PEPSTOARGetLinearization()`
+.seealso: [](ch:pep), `PEPSTOARGetLinearization()`
 @*/
 PetscErrorCode PEPSTOARSetLinearization(PEP pep,PetscReal alpha,PetscReal beta)
 {
@@ -822,7 +822,7 @@ static PetscErrorCode PEPSTOARGetLinearization_STOAR(PEP pep,PetscReal *alpha,Pe
 
    Level: advanced
 
-.seealso: `PEPSTOARSetLinearization()`
+.seealso: [](ch:pep), `PEPSTOARSetLinearization()`
 @*/
 PetscErrorCode PEPSTOARGetLinearization(PEP pep,PetscReal *alpha,PetscReal *beta)
 {
@@ -877,7 +877,7 @@ static PetscErrorCode PEPSTOARSetDimensions_STOAR(PEP pep,PetscInt nev,PetscInt 
 
    Level: advanced
 
-.seealso: `PEPSTOARGetDimensions()`, `PEPSetDimensions()`, `PEPSetInterval()`
+.seealso: [](ch:pep), `PEPSTOARGetDimensions()`, `PEPSetDimensions()`, `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -917,7 +917,7 @@ static PetscErrorCode PEPSTOARGetDimensions_STOAR(PEP pep,PetscInt *nev,PetscInt
 
    Level: advanced
 
-.seealso: `PEPSTOARSetDimensions()`
+.seealso: [](ch:pep), `PEPSTOARSetDimensions()`
 @*/
 PetscErrorCode PEPSTOARGetDimensions(PEP pep,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -963,7 +963,7 @@ static PetscErrorCode PEPSTOARSetCheckEigenvalueType_STOAR(PEP pep,PetscBool che
 
    Level: advanced
 
-.seealso: `PEPSetProblemType()`, `PEPSetInterval()`
+.seealso: [](ch:pep), `PEPSetProblemType()`, `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARSetCheckEigenvalueType(PEP pep,PetscBool checket)
 {
@@ -997,7 +997,7 @@ static PetscErrorCode PEPSTOARGetCheckEigenvalueType_STOAR(PEP pep,PetscBool *ch
 
    Level: advanced
 
-.seealso: `PEPSTOARSetCheckEigenvalueType()`
+.seealso: [](ch:pep), `PEPSTOARSetCheckEigenvalueType()`
 @*/
 PetscErrorCode PEPSTOARGetCheckEigenvalueType(PEP pep,PetscBool *checket)
 {

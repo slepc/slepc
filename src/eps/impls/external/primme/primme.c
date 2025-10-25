@@ -458,7 +458,7 @@ static PetscErrorCode EPSPRIMMESetBlockSize_PRIMME(EPS eps,PetscInt bs)
 
    Level: advanced
 
-.seealso: `EPSPRIMMEGetBlockSize()`
+.seealso: [](ch:eps), `EPSPRIMMEGetBlockSize()`
 @*/
 PetscErrorCode EPSPRIMMESetBlockSize(EPS eps,PetscInt bs)
 {
@@ -491,7 +491,7 @@ static PetscErrorCode EPSPRIMMEGetBlockSize_PRIMME(EPS eps,PetscInt *bs)
 
    Level: advanced
 
-.seealso: `EPSPRIMMESetBlockSize()`
+.seealso: [](ch:eps), `EPSPRIMMESetBlockSize()`
 @*/
 PetscErrorCode EPSPRIMMEGetBlockSize(EPS eps,PetscInt *bs)
 {
@@ -528,7 +528,7 @@ static PetscErrorCode EPSPRIMMESetMethod_PRIMME(EPS eps,EPSPRIMMEMethod method)
 
    Level: advanced
 
-.seealso: `EPSPRIMMEGetMethod()`, `EPSPRIMMEMethod`
+.seealso: [](ch:eps), `EPSPRIMMEGetMethod()`, `EPSPRIMMEMethod`
 @*/
 PetscErrorCode EPSPRIMMESetMethod(EPS eps,EPSPRIMMEMethod method)
 {
@@ -561,7 +561,7 @@ static PetscErrorCode EPSPRIMMEGetMethod_PRIMME(EPS eps,EPSPRIMMEMethod *method)
 
    Level: advanced
 
-.seealso: `EPSPRIMMESetMethod()`, `EPSPRIMMEMethod`
+.seealso: [](ch:eps), `EPSPRIMMESetMethod()`, `EPSPRIMMEMethod`
 @*/
 PetscErrorCode EPSPRIMMEGetMethod(EPS eps,EPSPRIMMEMethod *method)
 {

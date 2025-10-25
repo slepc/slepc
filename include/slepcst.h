@@ -142,7 +142,7 @@ SLEPC_EXTERN PetscErrorCode STMatGetLocalSize(ST,PetscInt*,PetscInt*);
 
    Level: intermediate
 
-.seealso: `STSetMatMode()`, `STGetMatMode()`
+.seealso: [](ch:st), `STSetMatMode()`, `STGetMatMode()`
 E*/
 typedef enum { ST_MATMODE_COPY,
                ST_MATMODE_INPLACE,

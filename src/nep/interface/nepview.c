@@ -40,7 +40,7 @@
 
    Level: beginner
 
-.seealso: `FNView()`
+.seealso: [](ch:nep), `FNView()`
 @*/
 PetscErrorCode NEPView(NEP nep,PetscViewer viewer)
 {
@@ -191,7 +191,7 @@ PetscErrorCode NEPView(NEP nep,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: `NEPView()`, `NEPCreate()`
+.seealso: [](ch:nep), `NEPView()`, `NEPCreate()`
 @*/
 PetscErrorCode NEPViewFromOptions(NEP nep,PetscObject obj,const char name[])
 {
@@ -221,7 +221,7 @@ PetscErrorCode NEPViewFromOptions(NEP nep,PetscObject obj,const char name[])
 
    Level: intermediate
 
-.seealso: `NEPSetConvergenceTest()`, `NEPSetTolerances()`, `NEPGetIterationNumber()`, `NEPConvergedReasonViewFromOptions()`
+.seealso: [](ch:nep), `NEPSetConvergenceTest()`, `NEPSetTolerances()`, `NEPGetIterationNumber()`, `NEPConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode NEPConvergedReasonView(NEP nep,PetscViewer viewer)
 {
@@ -252,7 +252,7 @@ PetscErrorCode NEPConvergedReasonView(NEP nep,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `NEPConvergedReasonView()`
+.seealso: [](ch:nep), `NEPConvergedReasonView()`
 @*/
 PetscErrorCode NEPConvergedReasonViewFromOptions(NEP nep)
 {
@@ -390,7 +390,7 @@ static PetscErrorCode NEPErrorView_MATLAB(NEP nep,NEPErrorType etype,PetscViewer
 
    Level: intermediate
 
-.seealso: `NEPSolve()`, `NEPValuesView()`, `NEPVectorsView()`
+.seealso: [](ch:nep), `NEPSolve()`, `NEPValuesView()`, `NEPVectorsView()`
 @*/
 PetscErrorCode NEPErrorView(NEP nep,NEPErrorType etype,PetscViewer viewer)
 {
@@ -435,7 +435,7 @@ PetscErrorCode NEPErrorView(NEP nep,NEPErrorType etype,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `NEPErrorView()`
+.seealso: [](ch:nep), `NEPErrorView()`
 @*/
 PetscErrorCode NEPErrorViewFromOptions(NEP nep)
 {
@@ -626,7 +626,7 @@ static PetscErrorCode NEPValuesView_MATLAB(NEP nep,PetscViewer viewer)
 
    Level: intermediate
 
-.seealso: `NEPSolve()`, `NEPVectorsView()`, `NEPErrorView()`
+.seealso: [](ch:nep), `NEPSolve()`, `NEPVectorsView()`, `NEPErrorView()`
 @*/
 PetscErrorCode NEPValuesView(NEP nep,PetscViewer viewer)
 {
@@ -682,7 +682,7 @@ PetscErrorCode NEPValuesView(NEP nep,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `NEPValuesView()`
+.seealso: [](ch:nep), `NEPValuesView()`
 @*/
 PetscErrorCode NEPValuesViewFromOptions(NEP nep)
 {
@@ -728,7 +728,7 @@ PetscErrorCode NEPValuesViewFromOptions(NEP nep)
 
    Level: intermediate
 
-.seealso: `NEPSolve()`, `NEPValuesView()`, `NEPErrorView()`
+.seealso: [](ch:nep), `NEPSolve()`, `NEPValuesView()`, `NEPErrorView()`
 @*/
 PetscErrorCode NEPVectorsView(NEP nep,PetscViewer viewer)
 {
@@ -775,7 +775,7 @@ PetscErrorCode NEPVectorsView(NEP nep,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `NEPVectorsView()`
+.seealso: [](ch:nep), `NEPVectorsView()`
 @*/
 PetscErrorCode NEPVectorsViewFromOptions(NEP nep)
 {

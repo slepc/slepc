@@ -111,7 +111,7 @@ PetscErrorCode SVDComputeVectors(SVD svd)
 
    Level: beginner
 
-.seealso: `SVDCreate()`, `SVDSetUp()`, `SVDDestroy()`
+.seealso: [](ch:svd), `SVDCreate()`, `SVDSetUp()`, `SVDDestroy()`
 @*/
 PetscErrorCode SVDSolve(SVD svd)
 {
@@ -205,7 +205,7 @@ PetscErrorCode SVDSolve(SVD svd)
 
    Level: intermediate
 
-.seealso: `SVDGetConvergedReason()`, `SVDSetTolerances()`
+.seealso: [](ch:svd), `SVDGetConvergedReason()`, `SVDSetTolerances()`
 @*/
 PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 {
@@ -245,7 +245,7 @@ PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 
    Level: intermediate
 
-.seealso: `SVDSetTolerances()`, `SVDSolve()`, `SVDConvergedReason`
+.seealso: [](ch:svd), `SVDSetTolerances()`, `SVDSolve()`, `SVDConvergedReason`
 @*/
 PetscErrorCode SVDGetConvergedReason(SVD svd,SVDConvergedReason *reason)
 {
@@ -273,7 +273,7 @@ PetscErrorCode SVDGetConvergedReason(SVD svd,SVDConvergedReason *reason)
 
    Level: beginner
 
-.seealso: `SVDSetDimensions()`, `SVDSolve()`, `SVDGetSingularTriplet()`
+.seealso: [](ch:svd), `SVDSetDimensions()`, `SVDSolve()`, `SVDGetSingularTriplet()`
 @*/
 PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
 {
@@ -319,7 +319,7 @@ PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
 
    Level: beginner
 
-.seealso: `SVDSolve()`, `SVDGetConverged()`, `SVDSetWhichSingularTriplets()`
+.seealso: [](ch:svd), `SVDSolve()`, `SVDGetConverged()`, `SVDSetWhichSingularTriplets()`
 @*/
 PetscErrorCode SVDGetSingularTriplet(SVD svd,PetscInt i,PetscReal *sigma,Vec u,Vec v)
 {
@@ -491,7 +491,7 @@ static PetscErrorCode SVDComputeResidualNorms_Hyperbolic(SVD svd,PetscReal sigma
 
    Level: beginner
 
-.seealso: `SVDErrorType`, `SVDSolve()`
+.seealso: [](ch:svd), `SVDErrorType`, `SVDSolve()`
 @*/
 PetscErrorCode SVDComputeError(SVD svd,PetscInt i,SVDErrorType type,PetscReal *error)
 {

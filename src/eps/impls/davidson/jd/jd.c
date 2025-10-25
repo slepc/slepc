@@ -173,7 +173,7 @@ static PetscErrorCode EPSDestroy_JD(EPS eps)
 
    Level: advanced
 
-.seealso: `EPSJDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDGetKrylovStart()`
 @*/
 PetscErrorCode EPSJDSetKrylovStart(EPS eps,PetscBool krylovstart)
 {
@@ -199,7 +199,7 @@ PetscErrorCode EPSJDSetKrylovStart(EPS eps,PetscBool krylovstart)
 
    Level: advanced
 
-.seealso: `EPSJDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDSetKrylovStart()`
 @*/
 PetscErrorCode EPSJDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 {
@@ -225,7 +225,7 @@ PetscErrorCode EPSJDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 
    Level: advanced
 
-.seealso: `EPSJDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDSetKrylovStart()`
 @*/
 PetscErrorCode EPSJDSetBlockSize(EPS eps,PetscInt blocksize)
 {
@@ -250,7 +250,7 @@ PetscErrorCode EPSJDSetBlockSize(EPS eps,PetscInt blocksize)
 
    Level: advanced
 
-.seealso: `EPSJDSetBlockSize()`
+.seealso: [](ch:eps), `EPSJDSetBlockSize()`
 @*/
 PetscErrorCode EPSJDGetBlockSize(EPS eps,PetscInt *blocksize)
 {
@@ -282,7 +282,7 @@ PetscErrorCode EPSJDGetBlockSize(EPS eps,PetscInt *blocksize)
 
    Level: advanced
 
-.seealso: `EPSJDGetRestart()`
+.seealso: [](ch:eps), `EPSJDGetRestart()`
 @*/
 PetscErrorCode EPSJDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 {
@@ -309,7 +309,7 @@ PetscErrorCode EPSJDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 
    Level: advanced
 
-.seealso: `EPSJDSetRestart()`
+.seealso: [](ch:eps), `EPSJDSetRestart()`
 @*/
 PetscErrorCode EPSJDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 {
@@ -341,7 +341,7 @@ PetscErrorCode EPSJDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 
    Level: advanced
 
-.seealso: `EPSJDGetInitialSize()`, `EPSJDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDGetInitialSize()`, `EPSJDGetKrylovStart()`
 @*/
 PetscErrorCode EPSJDSetInitialSize(EPS eps,PetscInt initialsize)
 {
@@ -373,7 +373,7 @@ PetscErrorCode EPSJDSetInitialSize(EPS eps,PetscInt initialsize)
 
    Level: advanced
 
-.seealso: `EPSJDSetInitialSize()`, `EPSJDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDSetInitialSize()`, `EPSJDGetKrylovStart()`
 @*/
 PetscErrorCode EPSJDGetInitialSize(EPS eps,PetscInt *initialsize)
 {
@@ -415,7 +415,7 @@ static PetscErrorCode EPSJDSetFix_JD(EPS eps,PetscReal fix)
 
    Level: advanced
 
-.seealso: `EPSJDGetFix()`
+.seealso: [](ch:eps), `EPSJDGetFix()`
 @*/
 PetscErrorCode EPSJDSetFix(EPS eps,PetscReal fix)
 {
@@ -454,7 +454,7 @@ PetscErrorCode EPSJDGetFix_JD(EPS eps,PetscReal *fix)
 
    Level: advanced
 
-.seealso: `EPSJDSetFix()`
+.seealso: [](ch:eps), `EPSJDSetFix()`
 @*/
 PetscErrorCode EPSJDGetFix(EPS eps,PetscReal *fix)
 {
@@ -490,7 +490,7 @@ static PetscErrorCode EPSJDSetConstCorrectionTol_JD(EPS eps,PetscBool constant)
 
    Level: advanced
 
-.seealso: `EPSJDGetConstCorrectionTol()`
+.seealso: [](ch:eps), `EPSJDGetConstCorrectionTol()`
 @*/
 PetscErrorCode EPSJDSetConstCorrectionTol(EPS eps,PetscBool constant)
 {
@@ -528,7 +528,7 @@ PetscErrorCode EPSJDGetConstCorrectionTol_JD(EPS eps,PetscBool *constant)
 
    Level: advanced
 
-.seealso: `EPSJDSetConstCorrectionTol()`
+.seealso: [](ch:eps), `EPSJDSetConstCorrectionTol()`
 @*/
 PetscErrorCode EPSJDGetConstCorrectionTol(EPS eps,PetscBool *constant)
 {
@@ -554,7 +554,7 @@ PetscErrorCode EPSJDGetConstCorrectionTol(EPS eps,PetscBool *constant)
 
    Level: advanced
 
-.seealso: `EPSJDGetBOrth()`
+.seealso: [](ch:eps), `EPSJDGetBOrth()`
 @*/
 PetscErrorCode EPSJDSetBOrth(EPS eps,PetscBool borth)
 {
@@ -579,7 +579,7 @@ PetscErrorCode EPSJDSetBOrth(EPS eps,PetscBool borth)
 
    Level: advanced
 
-.seealso: `EPSJDSetBOrth()`
+.seealso: [](ch:eps), `EPSJDSetBOrth()`
 @*/
 PetscErrorCode EPSJDGetBOrth(EPS eps,PetscBool *borth)
 {

@@ -25,7 +25,7 @@ const char *STMatModes[] = {"COPY","INPLACE","SHELL","STMatMode","ST_MATMODE_",N
 
    Level: developer
 
-.seealso: `SlepcFinalize()`, `STInitializePackage()`
+.seealso: [](ch:st), `SlepcFinalize()`, `STInitializePackage()`
 @*/
 PetscErrorCode STFinalizePackage(void)
 {

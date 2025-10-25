@@ -66,7 +66,7 @@ PetscErrorCode EPSMonitor(EPS eps,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 
    Level: intermediate
 
-.seealso: `EPSMonitorFirst()`, `EPSMonitorAll()`, `EPSMonitorCancel()`
+.seealso: [](ch:eps), `EPSMonitorFirst()`, `EPSMonitorAll()`, `EPSMonitorCancel()`
 @*/
 PetscErrorCode EPSMonitorSet(EPS eps,EPSMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
@@ -101,7 +101,7 @@ PetscErrorCode EPSMonitorSet(EPS eps,EPSMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`
 @*/
 PetscErrorCode EPSMonitorCancel(EPS eps)
 {
@@ -130,7 +130,7 @@ PetscErrorCode EPSMonitorCancel(EPS eps)
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`
 @*/
 PetscErrorCode EPSGetMonitorContext(EPS eps,void *ctx)
 {
@@ -176,7 +176,7 @@ static inline PetscErrorCode EPSMonitorPrintEval(EPS eps,PetscViewer viewer,Pets
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`, `EPSMonitorAll()`, `EPSMonitorConverged()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorAll()`, `EPSMonitorConverged()`
 @*/
 PetscErrorCode EPSMonitorFirst(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -224,7 +224,7 @@ PetscErrorCode EPSMonitorFirst(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`, `EPSMonitorFirst()`, `EPSMonitorConverged()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorFirst()`, `EPSMonitorConverged()`
 @*/
 PetscErrorCode EPSMonitorAll(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -274,7 +274,7 @@ PetscErrorCode EPSMonitorAll(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *ei
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`, `EPSMonitorFirst()`, `EPSMonitorAll()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorFirst()`, `EPSMonitorAll()`
 @*/
 PetscErrorCode EPSMonitorConverged(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -351,7 +351,7 @@ PetscErrorCode EPSMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`
 @*/
 PetscErrorCode EPSMonitorFirstDrawLG(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -398,7 +398,7 @@ PetscErrorCode EPSMonitorFirstDrawLG(EPS eps,PetscInt its,PetscInt nconv,PetscSc
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`
 @*/
 PetscErrorCode EPSMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -430,7 +430,7 @@ PetscErrorCode EPSMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`
 @*/
 PetscErrorCode EPSMonitorAllDrawLG(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -480,7 +480,7 @@ PetscErrorCode EPSMonitorAllDrawLG(EPS eps,PetscInt its,PetscInt nconv,PetscScal
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`
 @*/
 PetscErrorCode EPSMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -512,7 +512,7 @@ PetscErrorCode EPSMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`
 @*/
 PetscErrorCode EPSMonitorConvergedDrawLG(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -556,7 +556,7 @@ PetscErrorCode EPSMonitorConvergedDrawLG(EPS eps,PetscInt its,PetscInt nconv,Pet
 
    Level: intermediate
 
-.seealso: `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`
 @*/
 PetscErrorCode EPSMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {

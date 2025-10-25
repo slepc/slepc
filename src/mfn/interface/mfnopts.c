@@ -29,7 +29,7 @@
 
    Level: developer
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNMonitorSetFromOptions(MFN mfn,const char opt[],const char name[],void *ctx)
 {
@@ -77,7 +77,7 @@ PetscErrorCode MFNMonitorSetFromOptions(MFN mfn,const char opt[],const char name
 
    Level: beginner
 
-.seealso: `MFNSetOptionsPrefix()`
+.seealso: [](ch:mfn), `MFNSetOptionsPrefix()`
 @*/
 PetscErrorCode MFNSetFromOptions(MFN mfn)
 {
@@ -146,7 +146,7 @@ PetscErrorCode MFNSetFromOptions(MFN mfn)
 
    Level: intermediate
 
-.seealso: `MFNSetTolerances()`
+.seealso: [](ch:mfn), `MFNSetTolerances()`
 @*/
 PetscErrorCode MFNGetTolerances(MFN mfn,PetscReal *tol,PetscInt *maxits)
 {
@@ -180,7 +180,7 @@ PetscErrorCode MFNGetTolerances(MFN mfn,PetscReal *tol,PetscInt *maxits)
 
    Level: intermediate
 
-.seealso: `MFNGetTolerances()`
+.seealso: [](ch:mfn), `MFNGetTolerances()`
 @*/
 PetscErrorCode MFNSetTolerances(MFN mfn,PetscReal tol,PetscInt maxits)
 {
@@ -220,7 +220,7 @@ PetscErrorCode MFNSetTolerances(MFN mfn,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: `MFNSetDimensions()`
+.seealso: [](ch:mfn), `MFNSetDimensions()`
 @*/
 PetscErrorCode MFNGetDimensions(MFN mfn,PetscInt *ncv)
 {
@@ -249,7 +249,7 @@ PetscErrorCode MFNGetDimensions(MFN mfn,PetscInt *ncv)
 
    Level: intermediate
 
-.seealso: `MFNGetDimensions()`
+.seealso: [](ch:mfn), `MFNGetDimensions()`
 @*/
 PetscErrorCode MFNSetDimensions(MFN mfn,PetscInt ncv)
 {
@@ -285,7 +285,7 @@ PetscErrorCode MFNSetDimensions(MFN mfn,PetscInt ncv)
    Normally SLEPc continues if the solver fails to converge, you can call
    MFNGetConvergedReason() after a MFNSolve() to determine if it has converged.
 
-.seealso: `MFNGetErrorIfNotConverged()`
+.seealso: [](ch:mfn), `MFNGetErrorIfNotConverged()`
 @*/
 PetscErrorCode MFNSetErrorIfNotConverged(MFN mfn,PetscBool flg)
 {
@@ -310,7 +310,7 @@ PetscErrorCode MFNSetErrorIfNotConverged(MFN mfn,PetscBool flg)
 
    Level: intermediate
 
-.seealso: `MFNSetErrorIfNotConverged()`
+.seealso: [](ch:mfn), `MFNSetErrorIfNotConverged()`
 @*/
 PetscErrorCode MFNGetErrorIfNotConverged(MFN mfn,PetscBool *flag)
 {
@@ -345,7 +345,7 @@ PetscErrorCode MFNGetErrorIfNotConverged(MFN mfn,PetscBool *flag)
 
    Level: advanced
 
-.seealso: `MFNAppendOptionsPrefix()`, `MFNGetOptionsPrefix()`
+.seealso: [](ch:mfn), `MFNAppendOptionsPrefix()`, `MFNGetOptionsPrefix()`
 @*/
 PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char *prefix)
 {
@@ -375,7 +375,7 @@ PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char *prefix)
 
    Level: advanced
 
-.seealso: `MFNSetOptionsPrefix()`, `MFNGetOptionsPrefix()`
+.seealso: [](ch:mfn), `MFNSetOptionsPrefix()`, `MFNGetOptionsPrefix()`
 @*/
 PetscErrorCode MFNAppendOptionsPrefix(MFN mfn,const char *prefix)
 {
@@ -403,7 +403,7 @@ PetscErrorCode MFNAppendOptionsPrefix(MFN mfn,const char *prefix)
 
    Level: advanced
 
-.seealso: `MFNSetOptionsPrefix()`, `MFNAppendOptionsPrefix()`
+.seealso: [](ch:mfn), `MFNSetOptionsPrefix()`, `MFNAppendOptionsPrefix()`
 @*/
 PetscErrorCode MFNGetOptionsPrefix(MFN mfn,const char *prefix[])
 {

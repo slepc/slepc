@@ -78,7 +78,7 @@ PetscErrorCode PEPExtractVectors(PEP pep)
 
    Level: beginner
 
-.seealso: `PEPCreate()`, `PEPSetUp()`, `PEPDestroy()`, `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPCreate()`, `PEPSetUp()`, `PEPDestroy()`, `PEPSetTolerances()`
 @*/
 PetscErrorCode PEPSolve(PEP pep)
 {
@@ -186,7 +186,7 @@ PetscErrorCode PEPSolve(PEP pep)
 
    Level: intermediate
 
-.seealso: `PEPGetConvergedReason()`, `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPGetConvergedReason()`, `PEPSetTolerances()`
 @*/
 PetscErrorCode PEPGetIterationNumber(PEP pep,PetscInt *its)
 {
@@ -213,7 +213,7 @@ PetscErrorCode PEPGetIterationNumber(PEP pep,PetscInt *its)
 
    Level: beginner
 
-.seealso: `PEPSetDimensions()`, `PEPSolve()`, `PEPGetEigenpair()`
+.seealso: [](ch:pep), `PEPSetDimensions()`, `PEPSolve()`, `PEPGetEigenpair()`
 @*/
 PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 {
@@ -252,7 +252,7 @@ PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 
    Level: intermediate
 
-.seealso: `PEPSetTolerances()`, `PEPSolve()`, `PEPConvergedReason`
+.seealso: [](ch:pep), `PEPSetTolerances()`, `PEPSolve()`, `PEPConvergedReason`
 @*/
 PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
 {
@@ -297,7 +297,7 @@ PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
 
    Level: beginner
 
-.seealso: `PEPSolve()`, `PEPGetConverged()`, `PEPSetWhichEigenpairs()`
+.seealso: [](ch:pep), `PEPSolve()`, `PEPGetConverged()`, `PEPSetWhichEigenpairs()`
 @*/
 PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar *eigi,Vec Vr,Vec Vi)
 {
@@ -349,7 +349,7 @@ PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar 
 
    Level: advanced
 
-.seealso: `PEPComputeError()`
+.seealso: [](ch:pep), `PEPComputeError()`
 @*/
 PetscErrorCode PEPGetErrorEstimate(PEP pep,PetscInt i,PetscReal *errest)
 {
@@ -463,7 +463,7 @@ PetscErrorCode PEPComputeResidualNorm_Private(PEP pep,PetscScalar kr,PetscScalar
 
    Level: beginner
 
-.seealso: `PEPErrorType`, `PEPSolve()`, `PEPGetErrorEstimate()`
+.seealso: [](ch:pep), `PEPErrorType`, `PEPSolve()`, `PEPGetErrorEstimate()`
 @*/
 PetscErrorCode PEPComputeError(PEP pep,PetscInt i,PEPErrorType type,PetscReal *error)
 {

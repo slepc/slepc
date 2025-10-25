@@ -25,7 +25,7 @@ const char *const*NEPConvergedReasons = NEPConvergedReasons_Shifted + 5;
 
   Level: developer
 
-.seealso: `SlepcFinalize()`, `NEPInitializePackage()`
+.seealso: [](ch:nep), `SlepcFinalize()`, `NEPInitializePackage()`
 @*/
 PetscErrorCode NEPFinalizePackage(void)
 {

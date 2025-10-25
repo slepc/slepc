@@ -31,7 +31,7 @@ SLEPC_EXTERN PetscErrorCode EPSFinalizePackage(void);
 
     Level: beginner
 
-.seealso:  `EPSCreate()`, `ST`
+.seealso: [](ch:eps), `EPSCreate()`, `ST`
 S*/
 typedef struct _p_EPS* EPS;
 
@@ -40,7 +40,7 @@ typedef struct _p_EPS* EPS;
 
     Level: beginner
 
-.seealso: `EPSSetType()`, `EPS`
+.seealso: [](ch:eps), `EPSSetType()`, `EPS`
 J*/
 typedef const char *EPSType;
 #define EPSPOWER       "power"
@@ -73,7 +73,7 @@ SLEPC_EXTERN PetscClassId EPS_CLASSID;
 
     Level: beginner
 
-.seealso: `EPSSetProblemType()`, `EPSGetProblemType()`
+.seealso: [](ch:eps), `EPSSetProblemType()`, `EPSGetProblemType()`
 E*/
 typedef enum { EPS_HEP    = 1,
                EPS_GHEP   = 2,
@@ -90,7 +90,7 @@ typedef enum { EPS_HEP    = 1,
 
     Level: advanced
 
-.seealso: `EPSSetExtraction()`, `EPSGetExtraction()`
+.seealso: [](ch:eps), `EPSSetExtraction()`, `EPSGetExtraction()`
 E*/
 typedef enum { EPS_RITZ,
                EPS_HARMONIC,
@@ -105,7 +105,7 @@ typedef enum { EPS_RITZ,
 
     Level: intermediate
 
-.seealso: `EPSSetWhichEigenpairs()`, `EPSGetWhichEigenpairs()`
+.seealso: [](ch:eps), `EPSSetWhichEigenpairs()`, `EPSGetWhichEigenpairs()`
 E*/
 typedef enum { EPS_LARGEST_MAGNITUDE  = 1,
                EPS_SMALLEST_MAGNITUDE = 2,
@@ -124,7 +124,7 @@ typedef enum { EPS_LARGEST_MAGNITUDE  = 1,
 
     Level: intermediate
 
-.seealso: `EPSSetBalance()`
+.seealso: [](ch:eps), `EPSSetBalance()`
 E*/
 typedef enum { EPS_BALANCE_NONE,
                EPS_BALANCE_ONESIDE,
@@ -137,7 +137,7 @@ SLEPC_EXTERN const char *EPSBalanceTypes[];
 
     Level: intermediate
 
-.seealso: `EPSComputeError()`
+.seealso: [](ch:eps), `EPSComputeError()`
 E*/
 typedef enum { EPS_ERROR_ABSOLUTE,
                EPS_ERROR_RELATIVE,
@@ -149,7 +149,7 @@ SLEPC_EXTERN const char *EPSErrorTypes[];
 
     Level: intermediate
 
-.seealso: `EPSSetConvergenceTest()`, `EPSSetConvergenceTestFunction()`
+.seealso: [](ch:eps), `EPSSetConvergenceTest()`, `EPSSetConvergenceTestFunction()`
 E*/
 typedef enum { EPS_CONV_ABS,
                EPS_CONV_REL,
@@ -161,7 +161,7 @@ typedef enum { EPS_CONV_ABS,
 
     Level: advanced
 
-.seealso: `EPSSetStoppingTest()`, `EPSSetStoppingTestFunction()`
+.seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSSetStoppingTestFunction()`
 E*/
 typedef enum { EPS_STOP_BASIC,
                EPS_STOP_USER,
@@ -173,7 +173,7 @@ typedef enum { EPS_STOP_BASIC,
 
     Level: intermediate
 
-.seealso: `EPSSolve()`, `EPSGetConvergedReason()`, `EPSSetTolerances()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSGetConvergedReason()`, `EPSSetTolerances()`
 E*/
 typedef enum {/* converged */
               EPS_CONVERGED_TOL                =  1,
@@ -191,7 +191,7 @@ SLEPC_EXTERN const char *const*EPSConvergedReasons;
 
    Level: advanced
 
-.seealso: `EPSSetStoppingTestFunction()`
+.seealso: [](ch:eps), `EPSSetStoppingTestFunction()`
 S*/
 struct _n_EPSStoppingCtx {
   PetscReal firstev;    /* the (absolute) value of the first converged eigenvalue */
@@ -302,7 +302,7 @@ SLEPC_EXTERN PetscErrorCode EPSSetLeftInitialSpace(EPS,PetscInt,Vec[]);
 
   Level: beginner
 
-.seealso: `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorFn(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx);
 
@@ -324,7 +324,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorFn(EPS eps,PetscInt its,Pe
   Note:
   This is an EPSMonitorFn specialized for a context of PetscViewerAndFormat.
 
-.seealso: `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterCreateFn`, `EPSMonitorRegisterDestroyFn`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterCreateFn`, `EPSMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterFn(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
 
@@ -339,7 +339,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterFn(EPS eps,PetscIn
 
   Level: beginner
 
-.seealso: `EPSMonitorRegisterFn`, `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterDestroyFn`
+.seealso: [](ch:eps), `EPSMonitorRegisterFn`, `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
@@ -351,7 +351,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterCreateFn(PetscView
 
   Level: beginner
 
-.seealso: `EPSMonitorRegisterFn`, `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterCreateFn`
+.seealso: [](ch:eps), `EPSMonitorRegisterFn`, `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterCreateFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
@@ -402,7 +402,7 @@ SLEPC_EXTERN PetscErrorCode EPSReallocateSolution(EPS,PetscInt);
 
   Level: advanced
 
-.seealso: `EPSSetConvergenceTestFunction()`
+.seealso: [](ch:eps), `EPSSetConvergenceTestFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSConvergenceTestFn(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
 
@@ -428,7 +428,7 @@ SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTest
 
   Level: advanced
 
-.seealso: `EPSSetStoppingTestFunction()`
+.seealso: [](ch:eps), `EPSSetStoppingTestFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSStoppingTestFn(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx);
 
@@ -448,7 +448,7 @@ SLEPC_EXTERN PetscErrorCode EPSSetArbitrarySelection(EPS,SlepcArbitrarySelection
 
     Level: advanced
 
-.seealso: `EPSPowerSetShiftType()`, `EPSPowerGetShiftType()`
+.seealso: [](ch:eps), `EPSPowerSetShiftType()`, `EPSPowerGetShiftType()`
 E*/
 typedef enum { EPS_POWER_SHIFT_CONSTANT,
                EPS_POWER_SHIFT_RAYLEIGH,
@@ -475,7 +475,7 @@ SLEPC_EXTERN PetscErrorCode EPSArnoldiGetDelayed(EPS,PetscBool*);
 
     Level: advanced
 
-.seealso: `EPSKrylovSchurSetBSEType()`, `EPSKrylovSchurGetBSEType()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetBSEType()`, `EPSKrylovSchurGetBSEType()`
 E*/
 typedef enum { EPS_KRYLOVSCHUR_BSE_SHAO,
                EPS_KRYLOVSCHUR_BSE_GRUNING,
@@ -509,7 +509,7 @@ SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetKSP(EPS,KSP*);
 
     Level: advanced
 
-.seealso: `EPSLanczosSetReorthog()`, `EPSLanczosGetReorthog()`
+.seealso: [](ch:eps), `EPSLanczosSetReorthog()`, `EPSLanczosGetReorthog()`
 E*/
 typedef enum { EPS_LANCZOS_REORTHOG_LOCAL,
                EPS_LANCZOS_REORTHOG_FULL,
@@ -527,7 +527,7 @@ SLEPC_EXTERN PetscErrorCode EPSLanczosGetReorthog(EPS,EPSLanczosReorthogType*);
 
     Level: advanced
 
-.seealso: `EPSPRIMMESetMethod()`, `EPSPRIMMEGetMethod()`
+.seealso: [](ch:eps), `EPSPRIMMESetMethod()`, `EPSPRIMMEGetMethod()`
 E*/
 typedef enum { EPS_PRIMME_DYNAMIC             = 1,
                EPS_PRIMME_DEFAULT_MIN_TIME    = 2,
@@ -594,7 +594,7 @@ SLEPC_EXTERN PetscErrorCode EPSLOBPCGGetLocking(EPS,PetscBool*);
 
     Level: advanced
 
-.seealso: `EPSCISSSetQuadRule()`, `EPSCISSGetQuadRule()`
+.seealso: [](ch:eps), `EPSCISSSetQuadRule()`, `EPSCISSGetQuadRule()`
 E*/
 typedef enum { EPS_CISS_QUADRULE_TRAPEZOIDAL = 1,
                EPS_CISS_QUADRULE_CHEBYSHEV   = 2 } EPSCISSQuadRule;
@@ -605,7 +605,7 @@ SLEPC_EXTERN const char *EPSCISSQuadRules[];
 
     Level: advanced
 
-.seealso: `EPSCISSSetExtraction()`, `EPSCISSGetExtraction()`
+.seealso: [](ch:eps), `EPSCISSSetExtraction()`, `EPSCISSGetExtraction()`
 E*/
 typedef enum { EPS_CISS_EXTRACTION_RITZ,
                EPS_CISS_EXTRACTION_HANKEL } EPSCISSExtraction;
@@ -638,7 +638,7 @@ SLEPC_EXTERN PetscErrorCode EPSBLOPEXGetBlockSize(EPS,PetscInt*);
 
     Level: advanced
 
-.seealso: `EPSEVSLSetDOSParameters()`, `EPSEVSLGetDOSParameters()`
+.seealso: [](ch:eps), `EPSEVSLSetDOSParameters()`, `EPSEVSLGetDOSParameters()`
 E*/
 typedef enum { EPS_EVSL_DOS_KPM,
                EPS_EVSL_DOS_LANCZOS } EPSEVSLDOSMethod;
@@ -649,7 +649,7 @@ SLEPC_EXTERN const char *EPSEVSLDOSMethods[];
 
     Level: advanced
 
-.seealso: `EPSEVSLSetDOSParameters()`, `EPSEVSLGetDOSParameters()`
+.seealso: [](ch:eps), `EPSEVSLSetDOSParameters()`, `EPSEVSLGetDOSParameters()`
 E*/
 typedef enum { EPS_EVSL_DAMPING_NONE,
                EPS_EVSL_DAMPING_JACKSON,

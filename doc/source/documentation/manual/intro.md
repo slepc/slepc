@@ -228,6 +228,7 @@ Note that MPI may be deactivated during configuration of PETSc, if one wants to 
 
 All PETSc-compliant programs support the use of the `-h` or `-help` option as well as the `-v` or `-version` option. In the case of SLEPc programs, specific information for SLEPc is also displayed.
 
+{#sec:writing-prog}
 ## Writing SLEPc Programs
 
 Most SLEPc programs begin with a call to `SlepcInitialize()`

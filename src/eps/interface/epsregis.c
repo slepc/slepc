@@ -57,7 +57,7 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_ChASE(EPS);
 
   Level: advanced
 
-.seealso: `EPSRegister()`
+.seealso: [](ch:eps), `EPSRegister()`
 @*/
 PetscErrorCode EPSRegisterAll(void)
 {
@@ -113,7 +113,7 @@ PetscErrorCode EPSRegisterAll(void)
 
   Level: advanced
 
-.seealso: `EPSMonitorRegister()`
+.seealso: [](ch:eps), `EPSMonitorRegister()`
 @*/
 PetscErrorCode EPSMonitorRegisterAll(void)
 {

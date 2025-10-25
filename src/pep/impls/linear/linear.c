@@ -753,7 +753,7 @@ static PetscErrorCode PEPLinearSetLinearization_Linear(PEP pep,PetscReal alpha,P
 
    Level: advanced
 
-.seealso: `PEPLinearGetLinearization()`
+.seealso: [](ch:pep), `PEPLinearGetLinearization()`
 @*/
 PetscErrorCode PEPLinearSetLinearization(PEP pep,PetscReal alpha,PetscReal beta)
 {
@@ -790,7 +790,7 @@ static PetscErrorCode PEPLinearGetLinearization_Linear(PEP pep,PetscReal *alpha,
 
    Level: advanced
 
-.seealso: `PEPLinearSetLinearization()`
+.seealso: [](ch:pep), `PEPLinearSetLinearization()`
 @*/
 PetscErrorCode PEPLinearGetLinearization(PEP pep,PetscReal *alpha,PetscReal *beta)
 {
@@ -827,7 +827,7 @@ static PetscErrorCode PEPLinearSetExplicitMatrix_Linear(PEP pep,PetscBool explic
 
    Level: advanced
 
-.seealso: `PEPLinearGetExplicitMatrix()`
+.seealso: [](ch:pep), `PEPLinearGetExplicitMatrix()`
 @*/
 PetscErrorCode PEPLinearSetExplicitMatrix(PEP pep,PetscBool explicitmat)
 {
@@ -861,7 +861,7 @@ static PetscErrorCode PEPLinearGetExplicitMatrix_Linear(PEP pep,PetscBool *expli
 
    Level: advanced
 
-.seealso: `PEPLinearSetExplicitMatrix()`
+.seealso: [](ch:pep), `PEPLinearSetExplicitMatrix()`
 @*/
 PetscErrorCode PEPLinearGetExplicitMatrix(PEP pep,PetscBool *explicitmat)
 {
@@ -897,7 +897,7 @@ static PetscErrorCode PEPLinearSetEPS_Linear(PEP pep,EPS eps)
 
    Level: advanced
 
-.seealso: `PEPLinearGetEPS()`
+.seealso: [](ch:pep), `PEPLinearGetEPS()`
 @*/
 PetscErrorCode PEPLinearSetEPS(PEP pep,EPS eps)
 {
@@ -940,7 +940,7 @@ static PetscErrorCode PEPLinearGetEPS_Linear(PEP pep,EPS *eps)
 
    Level: advanced
 
-.seealso: `PEPLinearSetEPS()`
+.seealso: [](ch:pep), `PEPLinearSetEPS()`
 @*/
 PetscErrorCode PEPLinearGetEPS(PEP pep,EPS *eps)
 {

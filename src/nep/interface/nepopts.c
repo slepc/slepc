@@ -30,7 +30,7 @@
 
    Level: developer
 
-.seealso: `NEPMonitorSet()`, `NEPSetTrackAll()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPSetTrackAll()`
 @*/
 PetscErrorCode NEPMonitorSetFromOptions(NEP nep,const char opt[],const char name[],void *ctx,PetscBool trackall)
 {
@@ -79,7 +79,7 @@ PetscErrorCode NEPMonitorSetFromOptions(NEP nep,const char opt[],const char name
 
    Level: beginner
 
-.seealso: `NEPSetOptionsPrefix()`
+.seealso: [](ch:nep), `NEPSetOptionsPrefix()`
 @*/
 PetscErrorCode NEPSetFromOptions(NEP nep)
 {
@@ -229,7 +229,7 @@ PetscErrorCode NEPSetFromOptions(NEP nep)
 
    Level: intermediate
 
-.seealso: `NEPSetTolerances()`
+.seealso: [](ch:nep), `NEPSetTolerances()`
 @*/
 PetscErrorCode NEPGetTolerances(NEP nep,PetscReal *tol,PetscInt *maxits)
 {
@@ -263,7 +263,7 @@ PetscErrorCode NEPGetTolerances(NEP nep,PetscReal *tol,PetscInt *maxits)
 
    Level: intermediate
 
-.seealso: `NEPGetTolerances()`
+.seealso: [](ch:nep), `NEPGetTolerances()`
 @*/
 PetscErrorCode NEPSetTolerances(NEP nep,PetscReal tol,PetscInt maxits)
 {
@@ -309,7 +309,7 @@ PetscErrorCode NEPSetTolerances(NEP nep,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: `NEPSetDimensions()`
+.seealso: [](ch:nep), `NEPSetDimensions()`
 @*/
 PetscErrorCode NEPGetDimensions(NEP nep,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -354,7 +354,7 @@ PetscErrorCode NEPGetDimensions(NEP nep,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 
    Level: intermediate
 
-.seealso: `NEPGetDimensions()`
+.seealso: [](ch:nep), `NEPGetDimensions()`
 @*/
 PetscErrorCode NEPSetDimensions(NEP nep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -432,7 +432,7 @@ PetscErrorCode NEPSetDimensions(NEP nep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 
     Level: intermediate
 
-.seealso: `NEPGetWhichEigenpairs()`, `NEPSetTarget()`, `NEPSetEigenvalueComparison()`, `NEPWhich`
+.seealso: [](ch:nep), `NEPGetWhichEigenpairs()`, `NEPSetTarget()`, `NEPSetEigenvalueComparison()`, `NEPWhich`
 @*/
 PetscErrorCode NEPSetWhichEigenpairs(NEP nep,NEPWhich which)
 {
@@ -485,7 +485,7 @@ PetscErrorCode NEPSetWhichEigenpairs(NEP nep,NEPWhich which)
 
     Level: intermediate
 
-.seealso: `NEPSetWhichEigenpairs()`, `NEPWhich`
+.seealso: [](ch:nep), `NEPSetWhichEigenpairs()`, `NEPWhich`
 @*/
 PetscErrorCode NEPGetWhichEigenpairs(NEP nep,NEPWhich *which)
 {
@@ -515,7 +515,7 @@ PetscErrorCode NEPGetWhichEigenpairs(NEP nep,NEPWhich *which)
 
    Level: advanced
 
-.seealso: `NEPSetWhichEigenpairs()`, `NEPWhich`
+.seealso: [](ch:nep), `NEPSetWhichEigenpairs()`, `NEPWhich`
 @*/
 PetscErrorCode NEPSetEigenvalueComparison(NEP nep,SlepcEigenvalueComparisonFn *comp,void *ctx)
 {
@@ -550,7 +550,7 @@ PetscErrorCode NEPSetEigenvalueComparison(NEP nep,SlepcEigenvalueComparisonFn *c
 
    Level: intermediate
 
-.seealso: `NEPSetType()`, `NEPGetProblemType()`, `NEPProblemType`
+.seealso: [](ch:nep), `NEPSetType()`, `NEPGetProblemType()`, `NEPProblemType`
 @*/
 PetscErrorCode NEPSetProblemType(NEP nep,NEPProblemType type)
 {
@@ -578,7 +578,7 @@ PetscErrorCode NEPSetProblemType(NEP nep,NEPProblemType type)
 
    Level: intermediate
 
-.seealso: `NEPSetProblemType()`, `NEPProblemType`
+.seealso: [](ch:nep), `NEPSetProblemType()`, `NEPProblemType`
 @*/
 PetscErrorCode NEPGetProblemType(NEP nep,NEPProblemType *type)
 {
@@ -612,7 +612,7 @@ PetscErrorCode NEPGetProblemType(NEP nep,NEPProblemType *type)
 
    Level: advanced
 
-.seealso: `NEPGetTwoSided()`, `NEPGetLeftEigenvector()`
+.seealso: [](ch:nep), `NEPGetTwoSided()`, `NEPGetLeftEigenvector()`
 @*/
 PetscErrorCode NEPSetTwoSided(NEP nep,PetscBool twosided)
 {
@@ -640,7 +640,7 @@ PetscErrorCode NEPSetTwoSided(NEP nep,PetscBool twosided)
 
    Level: advanced
 
-.seealso: `NEPSetTwoSided()`
+.seealso: [](ch:nep), `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPGetTwoSided(NEP nep,PetscBool *twosided)
 {
@@ -669,7 +669,7 @@ PetscErrorCode NEPGetTwoSided(NEP nep,PetscBool *twosided)
 
    Level: advanced
 
-.seealso: `NEPSetConvergenceTest()`, `NEPSetTolerances()`
+.seealso: [](ch:nep), `NEPSetConvergenceTest()`, `NEPSetTolerances()`
 @*/
 PetscErrorCode NEPSetConvergenceTestFunction(NEP nep,NEPConvergenceTestFn *conv,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -713,7 +713,7 @@ PetscErrorCode NEPSetConvergenceTestFunction(NEP nep,NEPConvergenceTestFn *conv,
 
    Level: intermediate
 
-.seealso: `NEPGetConvergenceTest()`, `NEPSetConvergenceTestFunction()`, `NEPSetStoppingTest()`, `NEPConv`
+.seealso: [](ch:nep), `NEPGetConvergenceTest()`, `NEPSetConvergenceTestFunction()`, `NEPSetStoppingTest()`, `NEPConv`
 @*/
 PetscErrorCode NEPSetConvergenceTest(NEP nep,NEPConv conv)
 {
@@ -749,7 +749,7 @@ PetscErrorCode NEPSetConvergenceTest(NEP nep,NEPConv conv)
 
    Level: intermediate
 
-.seealso: `NEPSetConvergenceTest()`, `NEPConv`
+.seealso: [](ch:nep), `NEPSetConvergenceTest()`, `NEPConv`
 @*/
 PetscErrorCode NEPGetConvergenceTest(NEP nep,NEPConv *conv)
 {
@@ -780,7 +780,7 @@ PetscErrorCode NEPGetConvergenceTest(NEP nep,NEPConv *conv)
 
    Level: advanced
 
-.seealso: `NEPSetStoppingTest()`, `NEPStoppingBasic()`
+.seealso: [](ch:nep), `NEPSetStoppingTest()`, `NEPStoppingBasic()`
 @*/
 PetscErrorCode NEPSetStoppingTestFunction(NEP nep,NEPStoppingTestFn *stop,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -819,7 +819,7 @@ PetscErrorCode NEPSetStoppingTestFunction(NEP nep,NEPStoppingTestFn *stop,void *
 
    Level: advanced
 
-.seealso: `NEPGetStoppingTest()`, `NEPSetStoppingTestFunction()`, `NEPSetConvergenceTest()`, `NEPStop`
+.seealso: [](ch:nep), `NEPGetStoppingTest()`, `NEPSetStoppingTestFunction()`, `NEPSetConvergenceTest()`, `NEPStop`
 @*/
 PetscErrorCode NEPSetStoppingTest(NEP nep,NEPStop stop)
 {
@@ -853,7 +853,7 @@ PetscErrorCode NEPSetStoppingTest(NEP nep,NEPStop stop)
 
    Level: advanced
 
-.seealso: `NEPSetStoppingTest()`, `NEPStop`
+.seealso: [](ch:nep), `NEPSetStoppingTest()`, `NEPStop`
 @*/
 PetscErrorCode NEPGetStoppingTest(NEP nep,NEPStop *stop)
 {
@@ -884,7 +884,7 @@ PetscErrorCode NEPGetStoppingTest(NEP nep,NEPStop *stop)
 
    Level: developer
 
-.seealso: `NEPGetTrackAll()`
+.seealso: [](ch:nep), `NEPGetTrackAll()`
 @*/
 PetscErrorCode NEPSetTrackAll(NEP nep,PetscBool trackall)
 {
@@ -909,7 +909,7 @@ PetscErrorCode NEPSetTrackAll(NEP nep,PetscBool trackall)
 
    Level: developer
 
-.seealso: `NEPSetTrackAll()`
+.seealso: [](ch:nep), `NEPSetTrackAll()`
 @*/
 PetscErrorCode NEPGetTrackAll(NEP nep,PetscBool *trackall)
 {
@@ -969,7 +969,7 @@ PetscErrorCode NEPGetTrackAll(NEP nep,PetscBool *trackall)
 
    Level: intermediate
 
-.seealso: `NEPGetRefine()`
+.seealso: [](ch:nep), `NEPGetRefine()`
 @*/
 PetscErrorCode NEPSetRefine(NEP nep,NEPRefine refine,PetscInt npart,PetscReal tol,PetscInt its,NEPRefineScheme scheme)
 {
@@ -1034,7 +1034,7 @@ PetscErrorCode NEPSetRefine(NEP nep,NEPRefine refine,PetscInt npart,PetscReal to
    Note:
    The user can specify NULL for any parameter that is not needed.
 
-.seealso: `NEPSetRefine()`
+.seealso: [](ch:nep), `NEPSetRefine()`
 @*/
 PetscErrorCode NEPGetRefine(NEP nep,NEPRefine *refine,PetscInt *npart,PetscReal *tol,PetscInt *its,NEPRefineScheme *scheme)
 {
@@ -1072,7 +1072,7 @@ PetscErrorCode NEPGetRefine(NEP nep,NEPRefine *refine,PetscInt *npart,PetscReal 
 
    Level: advanced
 
-.seealso: `NEPAppendOptionsPrefix()`, `NEPGetOptionsPrefix()`
+.seealso: [](ch:nep), `NEPAppendOptionsPrefix()`, `NEPGetOptionsPrefix()`
 @*/
 PetscErrorCode NEPSetOptionsPrefix(NEP nep,const char *prefix)
 {
@@ -1104,7 +1104,7 @@ PetscErrorCode NEPSetOptionsPrefix(NEP nep,const char *prefix)
 
    Level: advanced
 
-.seealso: `NEPSetOptionsPrefix()`, `NEPGetOptionsPrefix()`
+.seealso: [](ch:nep), `NEPSetOptionsPrefix()`, `NEPGetOptionsPrefix()`
 @*/
 PetscErrorCode NEPAppendOptionsPrefix(NEP nep,const char *prefix)
 {
@@ -1134,7 +1134,7 @@ PetscErrorCode NEPAppendOptionsPrefix(NEP nep,const char *prefix)
 
    Level: advanced
 
-.seealso: `NEPSetOptionsPrefix()`, `NEPAppendOptionsPrefix()`
+.seealso: [](ch:nep), `NEPSetOptionsPrefix()`, `NEPAppendOptionsPrefix()`
 @*/
 PetscErrorCode NEPGetOptionsPrefix(NEP nep,const char *prefix[])
 {

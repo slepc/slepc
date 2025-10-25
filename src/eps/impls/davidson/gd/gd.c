@@ -143,7 +143,7 @@ static PetscErrorCode EPSDestroy_GD(EPS eps)
 
    Level: advanced
 
-.seealso: `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDGetKrylovStart()`
 @*/
 PetscErrorCode EPSGDSetKrylovStart(EPS eps,PetscBool krylovstart)
 {
@@ -169,7 +169,7 @@ PetscErrorCode EPSGDSetKrylovStart(EPS eps,PetscBool krylovstart)
 
    Level: advanced
 
-.seealso: `EPSGDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDSetKrylovStart()`
 @*/
 PetscErrorCode EPSGDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 {
@@ -195,7 +195,7 @@ PetscErrorCode EPSGDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 
    Level: advanced
 
-.seealso: `EPSGDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDSetKrylovStart()`
 @*/
 PetscErrorCode EPSGDSetBlockSize(EPS eps,PetscInt blocksize)
 {
@@ -220,7 +220,7 @@ PetscErrorCode EPSGDSetBlockSize(EPS eps,PetscInt blocksize)
 
    Level: advanced
 
-.seealso: `EPSGDSetBlockSize()`
+.seealso: [](ch:eps), `EPSGDSetBlockSize()`
 @*/
 PetscErrorCode EPSGDGetBlockSize(EPS eps,PetscInt *blocksize)
 {
@@ -252,7 +252,7 @@ PetscErrorCode EPSGDGetBlockSize(EPS eps,PetscInt *blocksize)
 
    Level: advanced
 
-.seealso: `EPSGDGetRestart()`
+.seealso: [](ch:eps), `EPSGDGetRestart()`
 @*/
 PetscErrorCode EPSGDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 {
@@ -279,7 +279,7 @@ PetscErrorCode EPSGDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 
    Level: advanced
 
-.seealso: `EPSGDSetRestart()`
+.seealso: [](ch:eps), `EPSGDSetRestart()`
 @*/
 PetscErrorCode EPSGDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 {
@@ -311,7 +311,7 @@ PetscErrorCode EPSGDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 
    Level: advanced
 
-.seealso: `EPSGDGetInitialSize()`, `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDGetInitialSize()`, `EPSGDGetKrylovStart()`
 @*/
 PetscErrorCode EPSGDSetInitialSize(EPS eps,PetscInt initialsize)
 {
@@ -343,7 +343,7 @@ PetscErrorCode EPSGDSetInitialSize(EPS eps,PetscInt initialsize)
 
    Level: advanced
 
-.seealso: `EPSGDSetInitialSize()`, `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDSetInitialSize()`, `EPSGDGetKrylovStart()`
 @*/
 PetscErrorCode EPSGDGetInitialSize(EPS eps,PetscInt *initialsize)
 {
@@ -369,7 +369,7 @@ PetscErrorCode EPSGDGetInitialSize(EPS eps,PetscInt *initialsize)
 
    Level: advanced
 
-.seealso: `EPSGDGetBOrth()`
+.seealso: [](ch:eps), `EPSGDGetBOrth()`
 @*/
 PetscErrorCode EPSGDSetBOrth(EPS eps,PetscBool borth)
 {
@@ -394,7 +394,7 @@ PetscErrorCode EPSGDSetBOrth(EPS eps,PetscBool borth)
 
    Level: advanced
 
-.seealso: `EPSGDSetBOrth()`
+.seealso: [](ch:eps), `EPSGDSetBOrth()`
 @*/
 PetscErrorCode EPSGDGetBOrth(EPS eps,PetscBool *borth)
 {
@@ -433,7 +433,7 @@ static PetscErrorCode EPSGDSetDoubleExpansion_GD(EPS eps,PetscBool doubleexp)
 
    Level: advanced
 
-.seealso: `EPSGDGetDoubleExpansion()`
+.seealso: [](ch:eps), `EPSGDGetDoubleExpansion()`
 @*/
 PetscErrorCode EPSGDSetDoubleExpansion(EPS eps,PetscBool doubleexp)
 {
@@ -467,7 +467,7 @@ static PetscErrorCode EPSGDGetDoubleExpansion_GD(EPS eps,PetscBool *doubleexp)
 
    Level: advanced
 
-.seealso: `EPSGDSetDoubleExpansion()`
+.seealso: [](ch:eps), `EPSGDSetDoubleExpansion()`
 @*/
 PetscErrorCode EPSGDGetDoubleExpansion(EPS eps,PetscBool *doubleexp)
 {

@@ -36,7 +36,7 @@ SLEPC_EXTERN PetscErrorCode SVDCreate_PRIMME(SVD);
 
    Level: advanced
 
-.seealso: `SVDRegister()`
+.seealso: [](ch:svd), `SVDRegister()`
 @*/
 PetscErrorCode SVDRegisterAll(void)
 {
@@ -71,7 +71,7 @@ PetscErrorCode SVDRegisterAll(void)
 
   Level: advanced
 
-.seealso: `SVDMonitorRegister()`
+.seealso: [](ch:svd), `SVDMonitorRegister()`
 @*/
 PetscErrorCode SVDMonitorRegisterAll(void)
 {

@@ -59,7 +59,7 @@ PetscErrorCode MFNMonitor(MFN mfn,PetscInt it,PetscReal errest)
 
    Level: intermediate
 
-.seealso: `MFNMonitorCancel()`
+.seealso: [](ch:mfn), `MFNMonitorCancel()`
 @*/
 PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
@@ -94,7 +94,7 @@ PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNMonitorCancel(MFN mfn)
 {
@@ -123,7 +123,7 @@ PetscErrorCode MFNMonitorCancel(MFN mfn)
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNGetMonitorContext(MFN mfn,void *ctx)
 {
@@ -150,7 +150,7 @@ PetscErrorCode MFNGetMonitorContext(MFN mfn,void *ctx)
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNMonitorDefault(MFN mfn,PetscInt its,PetscReal errest,PetscViewerAndFormat *vf)
 {
@@ -185,7 +185,7 @@ PetscErrorCode MFNMonitorDefault(MFN mfn,PetscInt its,PetscReal errest,PetscView
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNMonitorDefaultDrawLG(MFN mfn,PetscInt its,PetscReal errest,PetscViewerAndFormat *vf)
 {
@@ -230,7 +230,7 @@ PetscErrorCode MFNMonitorDefaultDrawLG(MFN mfn,PetscInt its,PetscReal errest,Pet
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNMonitorDefaultDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {

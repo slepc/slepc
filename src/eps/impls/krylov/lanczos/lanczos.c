@@ -752,7 +752,7 @@ static PetscErrorCode EPSLanczosSetReorthog_Lanczos(EPS eps,EPSLanczosReorthogTy
 
    Level: advanced
 
-.seealso: `EPSLanczosGetReorthog()`, `EPSLanczosReorthogType`
+.seealso: [](ch:eps), `EPSLanczosGetReorthog()`, `EPSLanczosReorthogType`
 @*/
 PetscErrorCode EPSLanczosSetReorthog(EPS eps,EPSLanczosReorthogType reorthog)
 {
@@ -786,7 +786,7 @@ static PetscErrorCode EPSLanczosGetReorthog_Lanczos(EPS eps,EPSLanczosReorthogTy
 
    Level: advanced
 
-.seealso: `EPSLanczosSetReorthog()`, `EPSLanczosReorthogType`
+.seealso: [](ch:eps), `EPSLanczosSetReorthog()`, `EPSLanczosReorthogType`
 @*/
 PetscErrorCode EPSLanczosGetReorthog(EPS eps,EPSLanczosReorthogType *reorthog)
 {

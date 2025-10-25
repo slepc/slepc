@@ -43,7 +43,7 @@ PetscBool         EPSMonitorRegisterAllCalled = PETSC_FALSE;
 
    Level: beginner
 
-.seealso: `EPSSetUp()`, `EPSSolve()`, `EPSDestroy()`, `EPS`
+.seealso: [](ch:eps), `EPSSetUp()`, `EPSSolve()`, `EPSDestroy()`, `EPS`
 @*/
 PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
 {
@@ -156,7 +156,7 @@ PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
 
    Level: intermediate
 
-.seealso: `STSetType()`, `EPSType`
+.seealso: [](ch:eps), `STSetType()`, `EPSType`
 @*/
 PetscErrorCode EPSSetType(EPS eps,EPSType type)
 {
@@ -195,7 +195,7 @@ PetscErrorCode EPSSetType(EPS eps,EPSType type)
 
    Level: intermediate
 
-.seealso: `EPSSetType()`
+.seealso: [](ch:eps), `EPSSetType()`
 @*/
 PetscErrorCode EPSGetType(EPS eps,EPSType *type)
 {
@@ -230,7 +230,7 @@ $     -eps_type my_solver
 
    Level: advanced
 
-.seealso: `EPSRegisterAll()`
+.seealso: [](ch:eps), `EPSRegisterAll()`
 @*/
 PetscErrorCode EPSRegister(const char *name,PetscErrorCode (*function)(EPS))
 {
@@ -272,7 +272,7 @@ $      -eps_monitor_my_monitor
 
    Level: advanced
 
-.seealso: `EPSMonitorSet()`, `EPSMonitorRegisterAll()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorRegisterAll()`
 @*/
 PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,EPSMonitorRegisterFn *monitor,EPSMonitorRegisterCreateFn *create,EPSMonitorRegisterDestroyFn *destroy)
 {
@@ -304,7 +304,7 @@ PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 
    Level: advanced
 
-.seealso: `EPSDestroy()`
+.seealso: [](ch:eps), `EPSDestroy()`
 @*/
 PetscErrorCode EPSReset(EPS eps)
 {
@@ -332,7 +332,7 @@ PetscErrorCode EPSReset(EPS eps)
 
    Level: beginner
 
-.seealso: `EPSCreate()`, `EPSSetUp()`, `EPSSolve()`
+.seealso: [](ch:eps), `EPSCreate()`, `EPSSetUp()`, `EPSSolve()`
 @*/
 PetscErrorCode EPSDestroy(EPS *eps)
 {
@@ -381,7 +381,7 @@ PetscErrorCode EPSDestroy(EPS *eps)
 
    Level: intermediate
 
-.seealso: `EPSGetTarget()`, `EPSSetWhichEigenpairs()`
+.seealso: [](ch:eps), `EPSGetTarget()`, `EPSSetWhichEigenpairs()`
 @*/
 PetscErrorCode EPSSetTarget(EPS eps,PetscScalar target)
 {
@@ -410,7 +410,7 @@ PetscErrorCode EPSSetTarget(EPS eps,PetscScalar target)
 
    Level: intermediate
 
-.seealso: `EPSSetTarget()`
+.seealso: [](ch:eps), `EPSSetTarget()`
 @*/
 PetscErrorCode EPSGetTarget(EPS eps,PetscScalar* target)
 {
@@ -447,7 +447,7 @@ PetscErrorCode EPSGetTarget(EPS eps,PetscScalar* target)
 
    Level: intermediate
 
-.seealso: `EPSGetInterval()`, `EPSSetWhichEigenpairs()`
+.seealso: [](ch:eps), `EPSGetInterval()`, `EPSSetWhichEigenpairs()`
 @*/
 PetscErrorCode EPSSetInterval(EPS eps,PetscReal inta,PetscReal intb)
 {
@@ -481,7 +481,7 @@ PetscErrorCode EPSSetInterval(EPS eps,PetscReal inta,PetscReal intb)
    Note:
    If the interval was not set by the user, then zeros are returned.
 
-.seealso: `EPSSetInterval()`
+.seealso: [](ch:eps), `EPSSetInterval()`
 @*/
 PetscErrorCode EPSGetInterval(EPS eps,PetscReal* inta,PetscReal* intb)
 {
@@ -507,7 +507,7 @@ PetscErrorCode EPSGetInterval(EPS eps,PetscReal* inta,PetscReal* intb)
 
    Level: advanced
 
-.seealso: `EPSGetST()`
+.seealso: [](ch:eps), `EPSGetST()`
 @*/
 PetscErrorCode EPSSetST(EPS eps,ST st)
 {
@@ -535,7 +535,7 @@ PetscErrorCode EPSSetST(EPS eps,ST st)
 
    Level: intermediate
 
-.seealso: `EPSSetST()`
+.seealso: [](ch:eps), `EPSSetST()`
 @*/
 PetscErrorCode EPSGetST(EPS eps,ST *st)
 {
@@ -562,7 +562,7 @@ PetscErrorCode EPSGetST(EPS eps,ST *st)
 
    Level: advanced
 
-.seealso: `EPSGetBV()`
+.seealso: [](ch:eps), `EPSGetBV()`
 @*/
 PetscErrorCode EPSSetBV(EPS eps,BV V)
 {
@@ -589,7 +589,7 @@ PetscErrorCode EPSSetBV(EPS eps,BV V)
 
    Level: advanced
 
-.seealso: `EPSSetBV()`
+.seealso: [](ch:eps), `EPSSetBV()`
 @*/
 PetscErrorCode EPSGetBV(EPS eps,BV *V)
 {
@@ -620,7 +620,7 @@ PetscErrorCode EPSGetBV(EPS eps,BV *V)
 
    Level: advanced
 
-.seealso: `EPSGetRG()`
+.seealso: [](ch:eps), `EPSGetRG()`
 @*/
 PetscErrorCode EPSSetRG(EPS eps,RG rg)
 {
@@ -649,7 +649,7 @@ PetscErrorCode EPSSetRG(EPS eps,RG rg)
 
    Level: advanced
 
-.seealso: `EPSSetRG()`
+.seealso: [](ch:eps), `EPSSetRG()`
 @*/
 PetscErrorCode EPSGetRG(EPS eps,RG *rg)
 {
@@ -680,7 +680,7 @@ PetscErrorCode EPSGetRG(EPS eps,RG *rg)
 
    Level: advanced
 
-.seealso: `EPSGetDS()`
+.seealso: [](ch:eps), `EPSGetDS()`
 @*/
 PetscErrorCode EPSSetDS(EPS eps,DS ds)
 {
@@ -707,7 +707,7 @@ PetscErrorCode EPSSetDS(EPS eps,DS ds)
 
    Level: advanced
 
-.seealso: `EPSSetDS()`
+.seealso: [](ch:eps), `EPSSetDS()`
 @*/
 PetscErrorCode EPSGetDS(EPS eps,DS *ds)
 {
@@ -737,7 +737,7 @@ PetscErrorCode EPSGetDS(EPS eps,DS *ds)
 
    Level: intermediate
 
-.seealso: `EPSIsHermitian()`, `EPSIsPositive()`, `EPSIsStructured()`
+.seealso: [](ch:eps), `EPSIsHermitian()`, `EPSIsPositive()`, `EPSIsStructured()`
 @*/
 PetscErrorCode EPSIsGeneralized(EPS eps,PetscBool* is)
 {
@@ -762,7 +762,7 @@ PetscErrorCode EPSIsGeneralized(EPS eps,PetscBool* is)
 
    Level: intermediate
 
-.seealso: `EPSIsGeneralized()`, `EPSIsPositive()`, `EPSIsStructured()`
+.seealso: [](ch:eps), `EPSIsGeneralized()`, `EPSIsPositive()`, `EPSIsStructured()`
 @*/
 PetscErrorCode EPSIsHermitian(EPS eps,PetscBool* is)
 {
@@ -787,7 +787,7 @@ PetscErrorCode EPSIsHermitian(EPS eps,PetscBool* is)
 
    Level: intermediate
 
-.seealso: `EPSIsGeneralized()`, `EPSIsHermitian()`, `EPSIsStructured()`
+.seealso: [](ch:eps), `EPSIsGeneralized()`, `EPSIsHermitian()`, `EPSIsStructured()`
 @*/
 PetscErrorCode EPSIsPositive(EPS eps,PetscBool* is)
 {
@@ -817,7 +817,7 @@ PetscErrorCode EPSIsPositive(EPS eps,PetscBool* is)
 
    Level: intermediate
 
-.seealso: `EPSIsGeneralized()`, `EPSIsHermitian()`, `EPSIsPositive()`, `EPSSetProblemType()`
+.seealso: [](ch:eps), `EPSIsGeneralized()`, `EPSIsHermitian()`, `EPSIsPositive()`, `EPSSetProblemType()`
 @*/
 PetscErrorCode EPSIsStructured(EPS eps,PetscBool* is)
 {

@@ -252,7 +252,7 @@ PetscErrorCode EPSSetUpSort_Default(EPS eps)
 
    Level: developer
 
-.seealso: `EPSSetFromOptions()`, `EPSSetUp()`
+.seealso: [](ch:eps), `EPSSetFromOptions()`, `EPSSetUp()`
 @*/
 PetscErrorCode EPSSetDSType(EPS eps)
 {
@@ -279,7 +279,7 @@ PetscErrorCode EPSSetDSType(EPS eps)
 
    Level: developer
 
-.seealso: `EPSCreate()`, `EPSSolve()`, `EPSDestroy()`, `STSetUp()`, `EPSSetInitialSpace()`
+.seealso: [](ch:eps), `EPSCreate()`, `EPSSolve()`, `EPSDestroy()`, `STSetUp()`, `EPSSetInitialSpace()`
 @*/
 PetscErrorCode EPSSetUp(EPS eps)
 {
@@ -459,7 +459,7 @@ PetscErrorCode EPSSetUp(EPS eps)
 
    Level: beginner
 
-.seealso: `EPSSolve()`, `EPSSetUp()`, `EPSReset()`, `EPSGetST()`, `STGetMatrix()`, `EPSSetProblemType()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSSetUp()`, `EPSReset()`, `EPSGetST()`, `STGetMatrix()`, `EPSSetProblemType()`
 @*/
 PetscErrorCode EPSSetOperators(EPS eps,Mat A,Mat B)
 {
@@ -517,7 +517,7 @@ PetscErrorCode EPSSetOperators(EPS eps,Mat A,Mat B)
 
    Level: intermediate
 
-.seealso: `EPSSolve()`, `EPSGetST()`, `STGetMatrix()`, `STSetMatrices()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSGetST()`, `STGetMatrix()`, `STSetMatrices()`
 @*/
 PetscErrorCode EPSGetOperators(EPS eps,Mat *A,Mat *B)
 {
@@ -564,7 +564,7 @@ PetscErrorCode EPSGetOperators(EPS eps,Mat *A,Mat *B)
 
    Level: intermediate
 
-.seealso: `EPSSetInitialSpace()`
+.seealso: [](ch:eps), `EPSSetInitialSpace()`
 @*/
 PetscErrorCode EPSSetDeflationSpace(EPS eps,PetscInt n,Vec v[])
 {
@@ -607,7 +607,7 @@ PetscErrorCode EPSSetDeflationSpace(EPS eps,PetscInt n,Vec v[])
 
    Level: intermediate
 
-.seealso: `EPSSetLeftInitialSpace()`, `EPSSetDeflationSpace()`
+.seealso: [](ch:eps), `EPSSetLeftInitialSpace()`, `EPSSetDeflationSpace()`
 @*/
 PetscErrorCode EPSSetInitialSpace(EPS eps,PetscInt n,Vec is[])
 {
@@ -644,7 +644,7 @@ PetscErrorCode EPSSetInitialSpace(EPS eps,PetscInt n,Vec is[])
 
    Level: intermediate
 
-.seealso: `EPSSetInitialSpace()`, `EPSSetTwoSided()`
+.seealso: [](ch:eps), `EPSSetInitialSpace()`, `EPSSetTwoSided()`
 @*/
 PetscErrorCode EPSSetLeftInitialSpace(EPS eps,PetscInt n,Vec isl[])
 {
@@ -710,7 +710,7 @@ PetscErrorCode EPSSetDimensions_Default(EPS eps,PetscInt *nev,PetscInt *ncv,Pets
 
    Level: developer
 
-.seealso: `EPSSetUp()`
+.seealso: [](ch:eps), `EPSSetUp()`
 @*/
 PetscErrorCode EPSAllocateSolution(EPS eps,PetscInt extra)
 {
@@ -773,7 +773,7 @@ PetscErrorCode EPSAllocateSolution(EPS eps,PetscInt extra)
 
    Level: developer
 
-.seealso: `EPSAllocateSolution()`, `EPSSetThreshold()`
+.seealso: [](ch:eps), `EPSAllocateSolution()`, `EPSSetThreshold()`
 @*/
 PetscErrorCode EPSReallocateSolution(EPS eps,PetscInt newsize)
 {

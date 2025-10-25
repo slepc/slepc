@@ -57,7 +57,7 @@ SLEPC_EXTERN PetscErrorCode RGDestroy(RG*);
 
    Level: advanced
 
-.seealso: `RGComputeQuadrature()`
+.seealso: [](sec:rg), `RGComputeQuadrature()`
 E*/
 typedef enum { RG_QUADRULE_TRAPEZOIDAL = 1,
                RG_QUADRULE_CHEBYSHEV   = 2 } RGQuadRule;

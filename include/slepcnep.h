@@ -28,7 +28,7 @@ SLEPC_EXTERN PetscErrorCode NEPFinalizePackage(void);
 
    Level: beginner
 
-.seealso:  `NEPCreate()`
+.seealso: [](ch:nep), `NEPCreate()`
 S*/
 typedef struct _p_NEP* NEP;
 
@@ -37,7 +37,7 @@ typedef struct _p_NEP* NEP;
 
    Level: beginner
 
-.seealso: `NEPSetType()`, `NEP`
+.seealso: [](ch:nep), `NEPSetType()`, `NEP`
 J*/
 typedef const char *NEPType;
 #define NEPRII       "rii"
@@ -55,7 +55,7 @@ SLEPC_EXTERN PetscClassId NEP_CLASSID;
 
     Level: intermediate
 
-.seealso: `NEPSetProblemType()`, `NEPGetProblemType()`
+.seealso: [](ch:nep), `NEPSetProblemType()`, `NEPGetProblemType()`
 E*/
 typedef enum { NEP_GENERAL  = 1,
                NEP_RATIONAL = 2     /* NEP defined in split form with all f_i rational */
@@ -66,7 +66,7 @@ typedef enum { NEP_GENERAL  = 1,
 
     Level: intermediate
 
-.seealso: `NEPSetWhichEigenpairs()`, `NEPGetWhichEigenpairs()`
+.seealso: [](ch:nep), `NEPSetWhichEigenpairs()`, `NEPGetWhichEigenpairs()`
 E*/
 typedef enum { NEP_LARGEST_MAGNITUDE  = 1,
                NEP_SMALLEST_MAGNITUDE = 2,
@@ -85,7 +85,7 @@ typedef enum { NEP_LARGEST_MAGNITUDE  = 1,
 
     Level: intermediate
 
-.seealso: `NEPComputeError()`
+.seealso: [](ch:nep), `NEPComputeError()`
 E*/
 typedef enum { NEP_ERROR_ABSOLUTE,
                NEP_ERROR_RELATIVE,
@@ -97,7 +97,7 @@ SLEPC_EXTERN const char *NEPErrorTypes[];
 
     Level: intermediate
 
-.seealso: `NEPSetRefine()`
+.seealso: [](ch:nep), `NEPSetRefine()`
 E*/
 typedef enum { NEP_REFINE_NONE,
                NEP_REFINE_SIMPLE,
@@ -109,7 +109,7 @@ SLEPC_EXTERN const char *NEPRefineTypes[];
 
     Level: intermediate
 
-.seealso: `NEPSetRefine()`
+.seealso: [](ch:nep), `NEPSetRefine()`
 E*/
 typedef enum { NEP_REFINE_SCHEME_SCHUR    = 1,
                NEP_REFINE_SCHEME_MBE      = 2,
@@ -121,7 +121,7 @@ SLEPC_EXTERN const char *NEPRefineSchemes[];
 
     Level: intermediate
 
-.seealso: `NEPSetConvergenceTest()`, `NEPSetConvergenceTestFunction()`
+.seealso: [](ch:nep), `NEPSetConvergenceTest()`, `NEPSetConvergenceTestFunction()`
 E*/
 typedef enum { NEP_CONV_ABS,
                NEP_CONV_REL,
@@ -133,7 +133,7 @@ typedef enum { NEP_CONV_ABS,
 
     Level: advanced
 
-.seealso: `NEPSetStoppingTest()`, `NEPSetStoppingTestFunction()`
+.seealso: [](ch:nep), `NEPSetStoppingTest()`, `NEPSetStoppingTestFunction()`
 E*/
 typedef enum { NEP_STOP_BASIC,
                NEP_STOP_USER } NEPStop;
@@ -144,7 +144,7 @@ typedef enum { NEP_STOP_BASIC,
 
     Level: intermediate
 
-.seealso: `NEPSolve()`, `NEPGetConvergedReason()`, `NEPSetTolerances()`
+.seealso: [](ch:nep), `NEPSolve()`, `NEPGetConvergedReason()`, `NEPSetTolerances()`
 E*/
 typedef enum {/* converged */
               NEP_CONVERGED_TOL                =  1,
@@ -197,7 +197,7 @@ SLEPC_EXTERN PetscErrorCode NEPVectorsViewFromOptions(NEP);
 
   Level: beginner
 
-.seealso: `NEPSetFunction()`
+.seealso: [](ch:nep), `NEPSetFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPFunctionFn(NEP nep,PetscScalar lambda,Mat T,Mat P,void *ctx);
 
@@ -213,7 +213,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPFunctionFn(NEP nep,PetscScalar la
 
   Level: beginner
 
-.seealso: `NEPSetJacobian()`
+.seealso: [](ch:nep), `NEPSetJacobian()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPJacobianFn(NEP nep,PetscScalar lambda,Mat J,void *ctx);
 
@@ -289,7 +289,7 @@ SLEPC_EXTERN PetscErrorCode NEPGetConvergedReason(NEP,NEPConvergedReason*);
 
   Level: beginner
 
-.seealso: `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorFn(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx);
 
@@ -311,7 +311,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorFn(NEP nep,PetscInt its,Pe
   Note:
   This is an NEPMonitorFn specialized for a context of PetscViewerAndFormat.
 
-.seealso: `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterCreateFn`, `NEPMonitorRegisterDestroyFn`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterCreateFn`, `NEPMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterFn(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
 
@@ -326,7 +326,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterFn(NEP nep,PetscIn
 
   Level: beginner
 
-.seealso: `NEPMonitorRegisterFn`, `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterDestroyFn`
+.seealso: [](ch:nep), `NEPMonitorRegisterFn`, `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
@@ -338,7 +338,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterCreateFn(PetscView
 
   Level: beginner
 
-.seealso: `NEPMonitorRegisterFn`, `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterCreateFn`
+.seealso: [](ch:nep), `NEPMonitorRegisterFn`, `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterCreateFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
@@ -388,7 +388,7 @@ SLEPC_EXTERN PetscErrorCode NEPAllocateSolution(NEP,PetscInt);
 
   Level: advanced
 
-.seealso: `NEPSetConvergenceTestFunction()`
+.seealso: [](ch:nep), `NEPSetConvergenceTestFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPConvergenceTestFn(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
 
@@ -414,7 +414,7 @@ SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTest
 
   Level: advanced
 
-.seealso: `NEPSetStoppingTestFunction()`
+.seealso: [](ch:nep), `NEPSetStoppingTestFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPStoppingTestFn(NEP nep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,NEPConvergedReason *reason,void *ctx);
 
@@ -459,7 +459,7 @@ SLEPC_EXTERN PetscErrorCode NEPNArnoldiGetLagPreconditioner(NEP,PetscInt*);
 
     Level: advanced
 
-.seealso: `NEPCISSSetExtraction()`, `NEPCISSGetExtraction()`
+.seealso: [](ch:nep), `NEPCISSSetExtraction()`, `NEPCISSGetExtraction()`
 E*/
 typedef enum { NEP_CISS_EXTRACTION_RITZ,
                NEP_CISS_EXTRACTION_HANKEL,
@@ -509,7 +509,7 @@ SLEPC_EXTERN PetscErrorCode NEPInterpolGetInterpolation(NEP,PetscReal*,PetscInt*
 
   Level: advanced
 
-.seealso: `NEPNLEIGSSetSingularitiesFunction()`
+.seealso: [](ch:nep), `NEPNLEIGSSetSingularitiesFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPNLEIGSSingularitiesFn(NEP nep,PetscInt *maxnp,PetscScalar *xi,void *ctx);
 

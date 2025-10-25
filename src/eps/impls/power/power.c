@@ -799,7 +799,7 @@ static PetscErrorCode EPSPowerSetShiftType_Power(EPS eps,EPSPowerShiftType shift
 
    Level: advanced
 
-.seealso: `EPSPowerGetShiftType()`, `STSetShift()`, `EPSPowerShiftType`
+.seealso: [](ch:eps), `EPSPowerGetShiftType()`, `STSetShift()`, `EPSPowerShiftType`
 @*/
 PetscErrorCode EPSPowerSetShiftType(EPS eps,EPSPowerShiftType shift)
 {
@@ -833,7 +833,7 @@ static PetscErrorCode EPSPowerGetShiftType_Power(EPS eps,EPSPowerShiftType *shif
 
    Level: advanced
 
-.seealso: `EPSPowerSetShiftType()`, `EPSPowerShiftType`
+.seealso: [](ch:eps), `EPSPowerSetShiftType()`, `EPSPowerShiftType`
 @*/
 PetscErrorCode EPSPowerGetShiftType(EPS eps,EPSPowerShiftType *shift)
 {
@@ -886,7 +886,7 @@ static PetscErrorCode EPSPowerSetNonlinear_Power(EPS eps,PetscBool nonlinear)
 
    Level: advanced
 
-.seealso: `EPSPowerGetNonlinear()`, `EPSSetOperators()`
+.seealso: [](ch:eps), `EPSPowerGetNonlinear()`, `EPSSetOperators()`
 @*/
 PetscErrorCode EPSPowerSetNonlinear(EPS eps,PetscBool nonlinear)
 {
@@ -919,7 +919,7 @@ static PetscErrorCode EPSPowerGetNonlinear_Power(EPS eps,PetscBool *nonlinear)
 
    Level: advanced
 
-.seealso: `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
+.seealso: [](ch:eps), `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
 @*/
 PetscErrorCode EPSPowerGetNonlinear(EPS eps,PetscBool *nonlinear)
 {
@@ -956,7 +956,7 @@ static PetscErrorCode EPSPowerSetUpdate_Power(EPS eps,PetscBool update)
 
    Level: advanced
 
-.seealso: `EPSPowerGetUpdate()`, `EPSPowerGetNonlinear()`, `EPSSetOperators()`
+.seealso: [](ch:eps), `EPSPowerGetUpdate()`, `EPSPowerGetNonlinear()`, `EPSSetOperators()`
 @*/
 PetscErrorCode EPSPowerSetUpdate(EPS eps,PetscBool update)
 {
@@ -990,7 +990,7 @@ static PetscErrorCode EPSPowerGetUpdate_Power(EPS eps,PetscBool *update)
 
    Level: advanced
 
-.seealso: `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
+.seealso: [](ch:eps), `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
 @*/
 PetscErrorCode EPSPowerGetUpdate(EPS eps,PetscBool *update)
 {
@@ -1028,7 +1028,7 @@ static PetscErrorCode EPSPowerSetSignNormalization_Power(EPS eps,PetscBool sign_
 
    Level: advanced
 
-.seealso: `EPSPowerGetSignNormalization()`
+.seealso: [](ch:eps), `EPSPowerGetSignNormalization()`
 @*/
 PetscErrorCode EPSPowerSetSignNormalization(EPS eps,PetscBool sign_normalization)
 {
@@ -1064,7 +1064,7 @@ static PetscErrorCode EPSPowerGetSignNormalization_Power(EPS eps,PetscBool *sign
 
    Level: advanced
 
-.seealso: `EPSPowerSetSignNormalization()`
+.seealso: [](ch:eps), `EPSPowerSetSignNormalization()`
 @*/
 PetscErrorCode EPSPowerGetSignNormalization(EPS eps,PetscBool *sign_normalization)
 {
@@ -1099,7 +1099,7 @@ static PetscErrorCode EPSPowerSetSNES_Power(EPS eps,SNES snes)
 
    Level: advanced
 
-.seealso: `EPSPowerGetSNES()`
+.seealso: [](ch:eps), `EPSPowerGetSNES()`
 @*/
 PetscErrorCode EPSPowerSetSNES(EPS eps,SNES snes)
 {
@@ -1141,7 +1141,7 @@ static PetscErrorCode EPSPowerGetSNES_Power(EPS eps,SNES *snes)
 
    Level: advanced
 
-.seealso: `EPSPowerSetSNES()`
+.seealso: [](ch:eps), `EPSPowerSetSNES()`
 @*/
 PetscErrorCode EPSPowerGetSNES(EPS eps,SNES *snes)
 {
