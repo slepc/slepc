@@ -131,16 +131,7 @@ Several polynomial eigensolvers are available, which can be selected in the sour
 $ ./ex16 -pep_type qarnoldi
 ```
 
-The following table shows the list of `PEP` solvers available in SLEPc.
-
-Solver                        |  Command-line Name  |  Parameter
----                           |---                  |---
-Linearization                 |  linear             |  PEPLINEAR
-Quadratic Arnoldi             |  qarnoldi           |  PEPQARNOLDI
-Two-level orthogonal Arnoldi  |  toar               |  PEPTOAR
-Symmetric TOAR                |  stoar              |  PEPSTOAR
-Jacobi-Davidson               |  jd                 |  PEPJD
-Contour integral              |  ciss               |  PEPCISS
+Check the table of [](tab:solversp).
 
 :::{note}
 The default solver is `toar`.
