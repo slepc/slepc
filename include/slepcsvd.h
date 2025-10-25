@@ -42,10 +42,10 @@ J*/
 typedef const char *SVDType;
 #define SVDCROSS       "cross"
 #define SVDCYCLIC      "cyclic"
-#define SVDLAPACK      "lapack"
 #define SVDLANCZOS     "lanczos"
 #define SVDTRLANCZOS   "trlanczos"
 #define SVDRANDOMIZED  "randomized"
+#define SVDLAPACK      "lapack"
 #define SVDSCALAPACK   "scalapack"
 #define SVDKSVD        "ksvd"
 #define SVDELEMENTAL   "elemental"

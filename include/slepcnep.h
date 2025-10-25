@@ -43,9 +43,9 @@ typedef const char *NEPType;
 #define NEPRII       "rii"
 #define NEPSLP       "slp"
 #define NEPNARNOLDI  "narnoldi"
+#define NEPNLEIGS    "nleigs"
 #define NEPCISS      "ciss"
 #define NEPINTERPOL  "interpol"
-#define NEPNLEIGS    "nleigs"
 
 /* Logging support */
 SLEPC_EXTERN PetscClassId NEP_CLASSID;

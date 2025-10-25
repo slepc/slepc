@@ -38,10 +38,10 @@ typedef struct _p_PEP* PEP;
 .seealso: `PEPSetType()`, `PEP`
 J*/
 typedef const char *PEPType;
-#define PEPLINEAR    "linear"
-#define PEPQARNOLDI  "qarnoldi"
 #define PEPTOAR      "toar"
 #define PEPSTOAR     "stoar"
+#define PEPQARNOLDI  "qarnoldi"
+#define PEPLINEAR    "linear"
 #define PEPJD        "jd"
 #define PEPCISS      "ciss"
 

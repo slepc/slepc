@@ -340,6 +340,7 @@ The default solver is `PEPTOAR`. The Two-level Orthogonal Arnoldi (TOAR) method 
  | Q-Arnoldi               | `PEPQARNOLDI` |`qarnoldi`        | Quadratic         | Monomial
  | Linearization via `EPS` | `PEPLINEAR`   |`linear`          | Arbitrary         | Any
  | Jacobi-Davidson         | `PEPJD`       |`jd`              | Arbitrary         | Monomial
+ | Contour integral SS     | `PEPCISS`     |`ciss`            | Arbitrary         | Monomial
 
 :::
 

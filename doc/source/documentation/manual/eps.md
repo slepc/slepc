@@ -184,11 +184,11 @@ SLEPc is able to cope with different kinds of problems. Currently supported prob
   Problem Type                             |`EPSProblemType`  |Command line key
   -----------------------------------------|------------------|------------------------------
   Hermitian                                |`EPS_HEP`         |`-eps_hermitian`
-  Non-Hermitian                            |`EPS_NHEP`        |`-eps_non_hermitian`
   Generalized Hermitian                    |`EPS_GHEP`        |`-eps_gen_hermitian`
-  Generalized Hermitian indefinite         |`EPS_GHIEP`       |`-eps_gen_indefinite`
+  Non-Hermitian                            |`EPS_NHEP`        |`-eps_non_hermitian`
   Generalized Non-Hermitian                |`EPS_GNHEP`       |`-eps_gen_non_hermitian`
   GNHEP with positive (semi-)definite $B$  |`EPS_PGNHEP`      |`-eps_pos_gen_non_hermitian`
+  Generalized Hermitian indefinite         |`EPS_GHIEP`       |`-eps_gen_indefinite`
   Bethe-Salpeter                           |`EPS_BSE`         |`-eps_bse`
   Hamiltonian                              |`EPS_HAMILT`      |`-eps_hamiltonian`
 
@@ -343,14 +343,14 @@ The available methods for solving the eigenvalue problems are the following:
   Lyapunov Inverse Iteration  |`EPSLYAPII`       |`lyapii`         | ` `
   Wrapper to LAPACK           |`EPSLAPACK`       |`lapack`         | ` `
   Wrapper to ARPACK           |`EPSARPACK`       |`arpack`         | ` `
-  Wrapper to PRIMME           |`EPSPRIMME`       |`primme`         | ` `
-  Wrapper to EVSL             |`EPSEVSL`         |`evsl`           | ` `
   Wrapper to BLOPEX           |`EPSBLOPEX`       |`blopex`         | ` `
+  Wrapper to PRIMME           |`EPSPRIMME`       |`primme`         | ` `
+  Wrapper to FEAST            |`EPSFEAST`        |`feast`          | ` `
   Wrapper to ScaLAPACK        |`EPSSCALAPACK`    |`scalapack`      | ` `
   Wrapper to ELPA             |`EPSELPA`         |`elpa`           | ` `
   Wrapper to ELEMENTAL        |`EPSELEMENTAL`    |`elemental`      | ` `
+  Wrapper to EVSL             |`EPSEVSL`         |`evsl`           | ` `
   Wrapper to CHASE            |`EPSCHASE`        |`chase`          | ` `
-  Wrapper to FEAST            |`EPSFEAST`        |`feast`          | ` `
 
 :::
 
@@ -384,14 +384,14 @@ Not all the methods can be used for all problem types. Table [](#tab:support) su
   `lyapii`      |       Largest $\mathrm{Re}(\lambda)$        |          any          |     both     |    ` `
   `lapack`      |                     any                     |          any          |     both     |    yes
   `arpack`      |                     any                     |          any          |     both     |    ` `
-  `primme`      | Largest and smallest $\mathrm{Re}(\lambda)$ | `EPS_HEP`, `EPS_GHEP` |     both     |    ` `
-  `evsl`        |          All $\lambda$ in interval          |       `EPS_HEP`       |     real     |    ` `
   `blopex`      |       Smallest $\mathrm{Re}(\lambda)$       | `EPS_HEP`, `EPS_GHEP` |     both     |    ` `
+  `primme`      | Largest and smallest $\mathrm{Re}(\lambda)$ | `EPS_HEP`, `EPS_GHEP` |     both     |    ` `
+  `feast`       |  All $\mathrm{Re}(\lambda)$ in an interval  |          any          |     both     |    ` `
   `scalapack`   |                All $\lambda$                | `EPS_HEP`, `EPS_GHEP` |     both     |    ` `
   `elpa`        |                All $\lambda$                | `EPS_HEP`, `EPS_GHEP` |     both     |    ` `
   `elemental`   |                All $\lambda$                | `EPS_HEP`, `EPS_GHEP` |     both     |    ` `
+  `evsl`        |          All $\lambda$ in interval          |       `EPS_HEP`       |     real     |    ` `
   `chase`       |       Smallest $\mathrm{Re}(\lambda)$       |       `EPS_HEP`       |     both     |    ` `
-  `feast`       |  All $\mathrm{Re}(\lambda)$ in an interval  |          any          |     both     |    ` `
 
 :::
 
