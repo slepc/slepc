@@ -91,7 +91,7 @@ PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDe
 }
 
 /*@
-   NEPMonitorCancel - Clears all monitors for a NEP object.
+   NEPMonitorCancel - Clears all monitors for a `NEP` object.
 
    Logically Collective
 
@@ -99,9 +99,8 @@ PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDe
 .  nep - the nonlinear eigensolver context
 
    Options Database Key:
-.    -nep_monitor_cancel - Cancels all monitors that have been hardwired
-      into a code by calls to NEPMonitorSet(),
-      but does not cancel those set via the options database.
+.  -nep_monitor_cancel - Cancels all monitors that have been hardwired into a code by calls to
+                         `NEPMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate
 
@@ -122,7 +121,7 @@ PetscErrorCode NEPMonitorCancel(NEP nep)
 
 /*@C
    NEPGetMonitorContext - Gets the monitor context, as set by
-   NEPMonitorSet() for the FIRST monitor only.
+   `NEPMonitorSet()` for the FIRST monitor only.
 
    Not Collective
 
@@ -161,7 +160,11 @@ PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor - activates NEPMonitorFirst()
+.  -nep_monitor - activates `NEPMonitorFirst()`
+
+   Note:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
 
    Level: intermediate
 
@@ -211,7 +214,11 @@ PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor_all - activates NEPMonitorAll()
+.  -nep_monitor_all - activates `NEPMonitorAll()`
+
+   Note:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
 
    Level: intermediate
 
@@ -263,7 +270,11 @@ PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *ei
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor_conv - activates NEPMonitorConverged()
+.  -nep_monitor_conv - activates `NEPMonitorConverged()`
+
+   Note:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
 
    Level: intermediate
 
@@ -342,11 +353,17 @@ PetscErrorCode NEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor draw::draw_lg - activates NEPMonitorFirstDrawLG()
+.  -nep_monitor draw::draw_lg - activates `NEPMonitorFirstDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
+
+   Call `NEPMonitorFirstDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorFirstDrawLGCreate()`
 @*/
 PetscErrorCode NEPMonitorFirstDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -421,11 +438,17 @@ PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor_all draw::draw_lg - activates NEPMonitorAllDrawLG()
+.  -nep_monitor_all draw::draw_lg - activates `NEPMonitorAllDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
+
+   Call `NEPMonitorAllDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorAllDrawLGCreate()`
 @*/
 PetscErrorCode NEPMonitorAllDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -503,11 +526,17 @@ PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor_conv draw::draw_lg - activates NEPMonitorConvergedDrawLG()
+.  -nep_monitor_conv draw::draw_lg - activates `NEPMonitorConvergedDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
+
+   Call `NEPMonitorConvergedDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorConvergedDrawLGCreate()`
 @*/
 PetscErrorCode NEPMonitorConvergedDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {

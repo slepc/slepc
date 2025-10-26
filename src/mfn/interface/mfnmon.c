@@ -92,9 +92,8 @@ PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,void *mctx,PetscCtxDe
 .  mfn - the matrix function solver context
 
    Options Database Key:
-.    -mfn_monitor_cancel - cancels all monitors that have been hardwired
-      into a code by calls to MFNMonitorSet(),
-      but does not cancel those set via the options database.
+.  -mfn_monitor_cancel - cancels all monitors that have been hardwired into a code by calls to
+                         `MFNMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate
 
@@ -115,7 +114,7 @@ PetscErrorCode MFNMonitorCancel(MFN mfn)
 
 /*@C
    MFNGetMonitorContext - Gets the monitor context, as set by
-   MFNMonitorSet() for the FIRST monitor only.
+   `MFNMonitorSet()` for the FIRST monitor only.
 
    Not Collective
 
@@ -150,7 +149,7 @@ PetscErrorCode MFNGetMonitorContext(MFN mfn,void *ctx)
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -mfn_monitor - activates MFNMonitorDefault()
+.  -mfn_monitor - activates `MFNMonitorDefault()`
 
    Level: intermediate
 
@@ -185,11 +184,17 @@ PetscErrorCode MFNMonitorDefault(MFN mfn,PetscInt its,PetscReal errest,PetscView
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -mfn_monitor draw::draw_lg - activates MFNMonitorDefaultDrawLG()
+.  -mfn_monitor draw::draw_lg - activates `MFNMonitorDefaultDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `MFNMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `MFN` solve.
+
+   Call `MFNMonitorDefaultDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:mfn), `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`, `MFNMonitorDefaultDrawLGCreate()`
 @*/
 PetscErrorCode MFNMonitorDefaultDrawLG(MFN mfn,PetscInt its,PetscReal errest,PetscViewerAndFormat *vf)
 {

@@ -91,7 +91,7 @@ PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDe
 }
 
 /*@
-   PEPMonitorCancel - Clears all monitors for a PEP object.
+   PEPMonitorCancel - Clears all monitors for a `PEP` object.
 
    Logically Collective
 
@@ -99,9 +99,8 @@ PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDe
 .  pep - the polynomial eigensolver context
 
    Options Database Key:
-.    -pep_monitor_cancel - Cancels all monitors that have been hardwired
-      into a code by calls to PEPMonitorSet(),
-      but does not cancel those set via the options database.
+.  -pep_monitor_cancel - Cancels all monitors that have been hardwired into a code by calls to
+                         `PEPMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate
 
@@ -122,7 +121,7 @@ PetscErrorCode PEPMonitorCancel(PEP pep)
 
 /*@C
    PEPGetMonitorContext - Gets the monitor context, as set by
-   PEPMonitorSet() for the FIRST monitor only.
+   `PEPMonitorSet()` for the FIRST monitor only.
 
    Not Collective
 
@@ -182,7 +181,11 @@ static PetscErrorCode PEPMonitorGetTrueEig(PEP pep,PetscScalar *er,PetscScalar *
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -pep_monitor - activates PEPMonitorFirst()
+.  -pep_monitor - activates `PEPMonitorFirst()`
+
+   Note:
+   This is not called directly by users, rather one calls `PEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `PEP` solve.
 
    Level: intermediate
 
@@ -235,7 +238,11 @@ PetscErrorCode PEPMonitorFirst(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -pep_monitor_all - activates PEPMonitorAll()
+.  -pep_monitor_all - activates `PEPMonitorAll()`
+
+   Note:
+   This is not called directly by users, rather one calls `PEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `PEP` solve.
 
    Level: intermediate
 
@@ -290,7 +297,11 @@ PetscErrorCode PEPMonitorAll(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *ei
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -pep_monitor_conv - activates PEPMonitorConverged()
+.  -pep_monitor_conv - activates `PEPMonitorConverged()`
+
+   Note:
+   This is not called directly by users, rather one calls `PEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `PEP` solve.
 
    Level: intermediate
 
@@ -372,11 +383,17 @@ PetscErrorCode PEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -pep_monitor draw::draw_lg - activates PEPMonitorFirstDrawLG()
+.  -pep_monitor draw::draw_lg - activates `PEPMonitorFirstDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `PEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `PEP` solve.
+
+   Call `PEPMonitorFirstDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPMonitorSet()`
+.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorFirstDrawLGCreate()`
 @*/
 PetscErrorCode PEPMonitorFirstDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -451,11 +468,17 @@ PetscErrorCode PEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -pep_monitor_all draw::draw_lg - activates PEPMonitorAllDrawLG()
+.  -pep_monitor_all draw::draw_lg - activates `PEPMonitorAllDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `PEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `PEP` solve.
+
+   Call `PEPMonitorAllDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPMonitorSet()`
+.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorAllDrawLGCreate()`
 @*/
 PetscErrorCode PEPMonitorAllDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -533,11 +556,17 @@ PetscErrorCode PEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -pep_monitor_conv draw::draw_lg - activates PEPMonitorConvergedDrawLG()
+.  -pep_monitor_conv draw::draw_lg - activates `PEPMonitorConvergedDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `PEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `PEP` solve.
+
+   Call `PEPMonitorConvergedDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPMonitorSet()`
+.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorConvergedDrawLGCreate()`
 @*/
 PetscErrorCode PEPMonitorConvergedDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {

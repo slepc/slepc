@@ -91,7 +91,7 @@ PetscErrorCode EPSMonitorSet(EPS eps,EPSMonitorFn *monitor,void *mctx,PetscCtxDe
 }
 
 /*@
-   EPSMonitorCancel - Clears all monitors for an EPS object.
+   EPSMonitorCancel - Clears all monitors for an `EPS` object.
 
    Logically Collective
 
@@ -99,9 +99,8 @@ PetscErrorCode EPSMonitorSet(EPS eps,EPSMonitorFn *monitor,void *mctx,PetscCtxDe
 .  eps - the linear eigensolver context
 
    Options Database Key:
-.    -eps_monitor_cancel - Cancels all monitors that have been hardwired
-      into a code by calls to EPSMonitorSet(),
-      but does not cancel those set via the options database.
+.  -eps_monitor_cancel - Cancels all monitors that have been hardwired into a code by calls to
+                         `EPSMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate
 
@@ -122,7 +121,7 @@ PetscErrorCode EPSMonitorCancel(EPS eps)
 
 /*@C
    EPSGetMonitorContext - Gets the monitor context, as set by
-   EPSMonitorSet() for the FIRST monitor only.
+   `EPSMonitorSet()` for the FIRST monitor only.
 
    Not Collective
 
@@ -176,7 +175,11 @@ static inline PetscErrorCode EPSMonitorPrintEval(EPS eps,PetscViewer viewer,Pets
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -eps_monitor - activates EPSMonitorFirst()
+.  -eps_monitor - activates `EPSMonitorFirst()`
+
+   Note:
+   This is not called directly by users, rather one calls `EPSMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `EPS` solve.
 
    Level: intermediate
 
@@ -224,7 +227,11 @@ PetscErrorCode EPSMonitorFirst(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -eps_monitor_all - activates EPSMonitorAll()
+.  -eps_monitor_all - activates `EPSMonitorAll()`
+
+   Note:
+   This is not called directly by users, rather one calls `EPSMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `EPS` solve.
 
    Level: intermediate
 
@@ -274,7 +281,11 @@ PetscErrorCode EPSMonitorAll(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *ei
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -eps_monitor_conv - activates EPSMonitorConverged()
+.  -eps_monitor_conv - activates `EPSMonitorConverged()`
+
+   Note:
+   This is not called directly by users, rather one calls `EPSMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `EPS` solve.
 
    Level: intermediate
 
@@ -351,11 +362,17 @@ PetscErrorCode EPSMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -eps_monitor draw::draw_lg - activates EPSMonitorFirstDrawLG()
+.  -eps_monitor draw::draw_lg - activates `EPSMonitorFirstDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `EPSMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `EPS` solve.
+
+   Call `EPSMonitorFirstDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorFirstDrawLGCreate()`
 @*/
 PetscErrorCode EPSMonitorFirstDrawLG(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -430,11 +447,17 @@ PetscErrorCode EPSMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -eps_monitor_all draw::draw_lg - activates EPSMonitorAllDrawLG()
+.  -eps_monitor_all draw::draw_lg - activates `EPSMonitorAllDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `EPSMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `EPS` solve.
+
+   Call `EPSMonitorAllDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorAllDrawLGCreate()`
 @*/
 PetscErrorCode EPSMonitorAllDrawLG(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -512,11 +535,17 @@ PetscErrorCode EPSMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -eps_monitor_conv draw::draw_lg - activates EPSMonitorConvergedDrawLG()
+.  -eps_monitor_conv draw::draw_lg - activates `EPSMonitorConvergedDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `EPSMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `EPS` solve.
+
+   Call `EPSMonitorConvergedDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSMonitorSet()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorConvergedDrawLGCreate()`
 @*/
 PetscErrorCode EPSMonitorConvergedDrawLG(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {

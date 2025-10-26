@@ -92,7 +92,7 @@ PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDe
 }
 
 /*@
-   SVDMonitorCancel - Clears all monitors for an SVD object.
+   SVDMonitorCancel - Clears all monitors for an `SVD` object.
 
    Logically Collective
 
@@ -100,9 +100,8 @@ PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDe
 .  svd - the singular value solver context
 
    Options Database Key:
-.    -svd_monitor_cancel - Cancels all monitors that have been hardwired
-      into a code by calls to SVDMonitorSet(),
-      but does not cancel those set via the options database.
+.  -svd_monitor_cancel - Cancels all monitors that have been hardwired into a code by calls to
+                         `SVDMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate
 
@@ -123,7 +122,7 @@ PetscErrorCode SVDMonitorCancel(SVD svd)
 
 /*@C
    SVDGetMonitorContext - Gets the monitor context, as set by
-   SVDMonitorSet() for the FIRST monitor only.
+   `SVDMonitorSet()` for the FIRST monitor only.
 
    Not Collective
 
@@ -161,7 +160,11 @@ PetscErrorCode SVDGetMonitorContext(SVD svd,void *ctx)
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -svd_monitor - activates SVDMonitorFirst()
+.  -svd_monitor - activates `SVDMonitorFirst()`
+
+   Note:
+   This is not called directly by users, rather one calls `SVDMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `SVD` solve.
 
    Level: intermediate
 
@@ -204,7 +207,11 @@ PetscErrorCode SVDMonitorFirst(SVD svd,PetscInt its,PetscInt nconv,PetscReal *si
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -svd_monitor_all - activates SVDMonitorAll()
+.  -svd_monitor_all - activates `SVDMonitorAll()`
+
+   Note:
+   This is not called directly by users, rather one calls `SVDMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `SVD` solve.
 
    Level: intermediate
 
@@ -247,7 +254,11 @@ PetscErrorCode SVDMonitorAll(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigm
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -svd_monitor_conv - activates SVDMonitorConverged()
+.  -svd_monitor_conv - activates `SVDMonitorConverged()`
+
+   Note:
+   This is not called directly by users, rather one calls `SVDMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `SVD` solve.
 
    Level: intermediate
 
@@ -319,11 +330,17 @@ PetscErrorCode SVDMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -svd_monitor draw::draw_lg - activates SVDMonitorFirstDrawLG()
+.  -svd_monitor draw::draw_lg - activates `SVDMonitorFirstDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `SVDMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `SVD` solve.
+
+   Call `SVDMonitorFirstDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:svd), `SVDMonitorSet()`
+.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorFirstDrawLGCreate()`
 @*/
 PetscErrorCode SVDMonitorFirstDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -397,11 +414,17 @@ PetscErrorCode SVDMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -svd_monitor_all draw::draw_lg - activates SVDMonitorAllDrawLG()
+.  -svd_monitor_all draw::draw_lg - activates `SVDMonitorAllDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `SVDMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `SVD` solve.
+
+   Call `SVDMonitorAllDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:svd), `SVDMonitorSet()`
+.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorAllDrawLGCreate()`
 @*/
 PetscErrorCode SVDMonitorAllDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -478,11 +501,17 @@ PetscErrorCode SVDMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -svd_monitor_conv draw::draw_lg - activates SVDMonitorConvergedDrawLG()
+.  -svd_monitor_conv draw::draw_lg - activates `SVDMonitorConvergedDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `SVDMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `SVD` solve.
+
+   Call `SVDMonitorConvergedDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: [](ch:svd), `SVDMonitorSet()`
+.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorConvergedDrawLGCreate()`
 @*/
 PetscErrorCode SVDMonitorConvergedDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -557,10 +586,13 @@ PetscErrorCode SVDMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFor
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -svd_monitor_conditioning - activates SVDMonitorConditioning()
+.  -svd_monitor_conditioning - activates `SVDMonitorConditioning()`
 
-   Note:
-   Works only for solvers that use a DS of type GSVD. The printed information corresponds
+   Notes:
+   This is not called directly by users, rather one calls `SVDMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `SVD` solve.
+
+   Works only for solvers that use a `DS` of type `DSGSVD`. The printed information corresponds
    to the maximum of the condition number of the two generated bidiagonal matrices.
 
    Level: intermediate

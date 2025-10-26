@@ -92,9 +92,8 @@ PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,void *mctx,PetscCtxDe
 .  lme - the linear matrix equation solver context
 
    Options Database Key:
-.    -lme_monitor_cancel - cancels all monitors that have been hardwired
-      into a code by calls to `LMEMonitorSet()`,
-      but does not cancel those set via the options database.
+.  -lme_monitor_cancel - cancels all monitors that have been hardwired into a code by calls to
+                         `LMEMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate
 
