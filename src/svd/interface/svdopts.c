@@ -1018,7 +1018,7 @@ PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
 
 .seealso: [](ch:svd), `SVDAppendOptionsPrefix()`, `SVDGetOptionsPrefix()`
 @*/
-PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char *prefix)
+PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -1049,7 +1049,7 @@ PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char *prefix)
 
 .seealso: [](ch:svd), `SVDSetOptionsPrefix()`, `SVDGetOptionsPrefix()`
 @*/
-PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char *prefix)
+PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);

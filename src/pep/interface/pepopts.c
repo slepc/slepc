@@ -1295,7 +1295,7 @@ PetscErrorCode PEPGetRefine(PEP pep,PEPRefine *refine,PetscInt *npart,PetscReal 
 
 .seealso: [](ch:pep), `PEPAppendOptionsPrefix()`, `PEPGetOptionsPrefix()`
 @*/
-PetscErrorCode PEPSetOptionsPrefix(PEP pep,const char *prefix)
+PetscErrorCode PEPSetOptionsPrefix(PEP pep,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
@@ -1329,7 +1329,7 @@ PetscErrorCode PEPSetOptionsPrefix(PEP pep,const char *prefix)
 
 .seealso: [](ch:pep), `PEPSetOptionsPrefix()`, `PEPGetOptionsPrefix()`
 @*/
-PetscErrorCode PEPAppendOptionsPrefix(PEP pep,const char *prefix)
+PetscErrorCode PEPAppendOptionsPrefix(PEP pep,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);

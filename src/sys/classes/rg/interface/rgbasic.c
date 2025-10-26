@@ -125,7 +125,7 @@ PetscErrorCode RGCreate(MPI_Comm comm,RG *newrg)
 
 .seealso: [](sec:rg), `RGAppendOptionsPrefix()`
 @*/
-PetscErrorCode RGSetOptionsPrefix(RG rg,const char *prefix)
+PetscErrorCode RGSetOptionsPrefix(RG rg,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(rg,RG_CLASSID,1);
@@ -151,7 +151,7 @@ PetscErrorCode RGSetOptionsPrefix(RG rg,const char *prefix)
 
 .seealso: [](sec:rg), `RGSetOptionsPrefix()`
 @*/
-PetscErrorCode RGAppendOptionsPrefix(RG rg,const char *prefix)
+PetscErrorCode RGAppendOptionsPrefix(RG rg,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(rg,RG_CLASSID,1);
@@ -410,7 +410,7 @@ PetscErrorCode RGIsTrivial(RG rg,PetscBool *trivial)
 
 .seealso: [](sec:rg), `RGSetScale()`, `RGSetComplement()`
 @*/
-PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,PetscInt *inside)
+PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar ar[],PetscScalar ai[],PetscInt inside[])
 {
   PetscReal      px,py;
   PetscInt       i;

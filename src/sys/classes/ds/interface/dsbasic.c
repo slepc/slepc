@@ -162,7 +162,7 @@ PetscErrorCode DSCreate(MPI_Comm comm,DS *newds)
 
 .seealso: [](sec:ds), `DSAppendOptionsPrefix()`
 @*/
-PetscErrorCode DSSetOptionsPrefix(DS ds,const char *prefix)
+PetscErrorCode DSSetOptionsPrefix(DS ds,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(ds,DS_CLASSID,1);
@@ -188,7 +188,7 @@ PetscErrorCode DSSetOptionsPrefix(DS ds,const char *prefix)
 
 .seealso: [](sec:ds), `DSSetOptionsPrefix()`
 @*/
-PetscErrorCode DSAppendOptionsPrefix(DS ds,const char *prefix)
+PetscErrorCode DSAppendOptionsPrefix(DS ds,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(ds,DS_CLASSID,1);

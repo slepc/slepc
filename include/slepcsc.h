@@ -116,8 +116,8 @@ struct _n_SlepcSC {
 typedef struct _n_SlepcSC* SlepcSC;
 
 SLEPC_EXTERN PetscErrorCode SlepcSCCompare(SlepcSC,PetscScalar,PetscScalar,PetscScalar,PetscScalar,PetscInt*);
-SLEPC_EXTERN PetscErrorCode SlepcSortEigenvalues(SlepcSC,PetscInt n,PetscScalar *eigr,PetscScalar *eigi,PetscInt *perm);
-SLEPC_EXTERN PetscErrorCode SlepcSortEigenvaluesSpecial(SlepcSC,PetscInt n,PetscScalar *eigr,PetscScalar *eigi,PetscInt *perm);
+SLEPC_EXTERN PetscErrorCode SlepcSortEigenvalues(SlepcSC,PetscInt,PetscScalar[],PetscScalar[],PetscInt[]);
+SLEPC_EXTERN PetscErrorCode SlepcSortEigenvaluesSpecial(SlepcSC,PetscInt,PetscScalar[],PetscScalar[],PetscInt[]);
 
 SLEPC_EXTERN PetscErrorCode SlepcMap_ST(PetscObject,PetscInt,PetscScalar*,PetscScalar*);
 

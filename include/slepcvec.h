@@ -20,10 +20,10 @@
 /* VecComp: Vec composed of several smaller Vecs */
 #define VECCOMP  "comp"
 
-SLEPC_EXTERN PetscErrorCode VecCreateComp(MPI_Comm,PetscInt*,PetscInt,VecType,Vec,Vec*);
-SLEPC_EXTERN PetscErrorCode VecCreateCompWithVecs(Vec*,PetscInt,Vec,Vec*);
+SLEPC_EXTERN PetscErrorCode VecCreateComp(MPI_Comm,PetscInt[],PetscInt,VecType,Vec,Vec*);
+SLEPC_EXTERN PetscErrorCode VecCreateCompWithVecs(Vec[],PetscInt,Vec,Vec*);
 SLEPC_EXTERN PetscErrorCode VecCompGetSubVecs(Vec,PetscInt*,const Vec*[]);
-SLEPC_EXTERN PetscErrorCode VecCompSetSubVecs(Vec,PetscInt,Vec*);
+SLEPC_EXTERN PetscErrorCode VecCompSetSubVecs(Vec,PetscInt,Vec[]);
 
 /* Some auxiliary functions */
 SLEPC_EXTERN PetscErrorCode VecNormalizeComplex(Vec,Vec,PetscBool,PetscReal*);

@@ -931,7 +931,7 @@ PetscErrorCode STMatGetLocalSize(ST st,PetscInt *m,PetscInt *n)
 
 .seealso: [](ch:st), `STAppendOptionsPrefix()`, `STGetOptionsPrefix()`
 @*/
-PetscErrorCode STSetOptionsPrefix(ST st,const char *prefix)
+PetscErrorCode STSetOptionsPrefix(ST st,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
@@ -961,7 +961,7 @@ PetscErrorCode STSetOptionsPrefix(ST st,const char *prefix)
 
 .seealso: [](ch:st), `STSetOptionsPrefix()`, `STGetOptionsPrefix()`
 @*/
-PetscErrorCode STAppendOptionsPrefix(ST st,const char *prefix)
+PetscErrorCode STAppendOptionsPrefix(ST st,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);

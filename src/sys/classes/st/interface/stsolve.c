@@ -693,7 +693,7 @@ PetscErrorCode STPostSolve(ST st)
 
 .seealso: [](ch:st), `STIsInjective()`
 @*/
-PetscErrorCode STBackTransform(ST st,PetscInt n,PetscScalar* eigr,PetscScalar* eigi)
+PetscErrorCode STBackTransform(ST st,PetscInt n,PetscScalar eigr[],PetscScalar eigi[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
@@ -764,7 +764,7 @@ PetscErrorCode STIsInjective(ST st,PetscBool* is)
 
 .seealso: [](ch:st), `STMatSolve()`
 @*/
-PetscErrorCode STMatSetUp(ST st,PetscScalar sigma,PetscScalar *coeffs)
+PetscErrorCode STMatSetUp(ST st,PetscScalar sigma,PetscScalar coeffs[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);

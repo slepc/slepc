@@ -1513,7 +1513,7 @@ PetscErrorCode EPSGetPurify(EPS eps,PetscBool *purify)
 
 .seealso: [](ch:eps), `EPSAppendOptionsPrefix()`, `EPSGetOptionsPrefix()`
 @*/
-PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char *prefix)
+PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -1547,7 +1547,7 @@ PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char *prefix)
 
 .seealso: [](ch:eps), `EPSSetOptionsPrefix()`, `EPSGetOptionsPrefix()`
 @*/
-PetscErrorCode EPSAppendOptionsPrefix(EPS eps,const char *prefix)
+PetscErrorCode EPSAppendOptionsPrefix(EPS eps,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);

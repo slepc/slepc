@@ -105,7 +105,7 @@ PetscErrorCode BVScatter(BV Vin,BV Vout,VecScatter scat,Vec xdup)
 
 .seealso: [](sec:bv), `BVMult()`, `BVScatter()`, `BVDotQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
 @*/
-PetscErrorCode BVSumQuadrature(BV S,BV Y,PetscInt M,PetscInt L,PetscInt L_max,PetscScalar *w,PetscScalar *zn,VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
+PetscErrorCode BVSumQuadrature(BV S,BV Y,PetscInt M,PetscInt L,PetscInt L_max,PetscScalar w[],PetscScalar zn[],VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
 {
   PetscInt       i,j,k,nloc;
   Vec            v,sj;
@@ -184,7 +184,7 @@ PetscErrorCode BVSumQuadrature(BV S,BV Y,PetscInt M,PetscInt L,PetscInt L_max,Pe
 
 .seealso: [](sec:bv), `BVDot()`, `BVScatter()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
 @*/
-PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar *Mu,PetscInt M,PetscInt L,PetscInt L_max,PetscScalar *w,PetscScalar *zn,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
+PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar Mu[],PetscInt M,PetscInt L,PetscInt L_max,PetscScalar w[],PetscScalar zn[],PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
 {
   PetscMPIInt       sub_size,count;
   PetscInt          i,j,k,s;
@@ -272,7 +272,7 @@ PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar *Mu,PetscInt M,PetscInt L,P
 
 .seealso: [](sec:bv), `BVScatter()`, `BVDotQuadrature()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
 @*/
-PetscErrorCode BVTraceQuadrature(BV Y,BV V,PetscInt L,PetscInt L_max,PetscScalar *w,VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj,PetscReal *est_eig)
+PetscErrorCode BVTraceQuadrature(BV Y,BV V,PetscInt L,PetscInt L_max,PetscScalar w[],VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj,PetscReal *est_eig)
 {
   PetscInt       i,j;
   Vec            y,yall,vj;
@@ -538,7 +538,7 @@ static PetscErrorCode BVSVDAndRank_QR_CAA(BV S,PetscInt M,PetscInt L,PetscReal d
 
 .seealso: [](sec:bv), `BVSetActiveColumns()`
 @*/
-PetscErrorCode BVSVDAndRank(BV S,PetscInt m,PetscInt l,PetscReal delta,BVSVDMethod meth,PetscScalar *A,PetscReal *sigma,PetscInt *rank)
+PetscErrorCode BVSVDAndRank(BV S,PetscInt m,PetscInt l,PetscReal delta,BVSVDMethod meth,PetscScalar A[],PetscReal sigma[],PetscInt *rank)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(S,BV_CLASSID,1);
