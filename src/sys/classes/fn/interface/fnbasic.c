@@ -135,7 +135,7 @@ PetscErrorCode FNCreate(MPI_Comm comm,FN *newfn)
 
 .seealso: [](sec:fn), `FNAppendOptionsPrefix()`
 @*/
-PetscErrorCode FNSetOptionsPrefix(FN fn,const char *prefix)
+PetscErrorCode FNSetOptionsPrefix(FN fn,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(fn,FN_CLASSID,1);
@@ -161,7 +161,7 @@ PetscErrorCode FNSetOptionsPrefix(FN fn,const char *prefix)
 
 .seealso: [](sec:fn), `FNSetOptionsPrefix()`
 @*/
-PetscErrorCode FNAppendOptionsPrefix(FN fn,const char *prefix)
+PetscErrorCode FNAppendOptionsPrefix(FN fn,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(fn,FN_CLASSID,1);

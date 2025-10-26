@@ -56,7 +56,7 @@ SLEPC_EXTERN PetscErrorCode STDestroy(ST*);
 SLEPC_EXTERN PetscErrorCode STReset(ST);
 SLEPC_EXTERN PetscErrorCode STSetType(ST,STType);
 SLEPC_EXTERN PetscErrorCode STGetType(ST,STType*);
-SLEPC_EXTERN PetscErrorCode STSetMatrices(ST,PetscInt,Mat*);
+SLEPC_EXTERN PetscErrorCode STSetMatrices(ST,PetscInt,Mat[]);
 SLEPC_EXTERN PetscErrorCode STGetMatrix(ST,PetscInt,Mat*);
 SLEPC_EXTERN PetscErrorCode STGetMatrixTransformed(ST,PetscInt,Mat*);
 SLEPC_EXTERN PetscErrorCode STGetNumMatrices(ST,PetscInt*);
@@ -93,7 +93,7 @@ SLEPC_EXTERN PetscErrorCode STMatSolveTranspose(ST,Vec,Vec);
 SLEPC_EXTERN PetscErrorCode STMatSolveHermitianTranspose(ST,Vec,Vec);
 SLEPC_EXTERN PetscErrorCode STMatMatSolve(ST,Mat,Mat);
 SLEPC_EXTERN PetscErrorCode STGetBilinearForm(ST,Mat*);
-SLEPC_EXTERN PetscErrorCode STMatSetUp(ST,PetscScalar,PetscScalar*);
+SLEPC_EXTERN PetscErrorCode STMatSetUp(ST,PetscScalar,PetscScalar[]);
 SLEPC_EXTERN PetscErrorCode STPostSolve(ST);
 SLEPC_EXTERN PetscErrorCode STResetMatrixState(ST);
 SLEPC_EXTERN PetscErrorCode STSetWorkVecs(ST,PetscInt);
@@ -111,11 +111,11 @@ SLEPC_EXTERN PetscErrorCode STGetTransform(ST,PetscBool*);
 SLEPC_EXTERN PetscErrorCode STSetStructured(ST,PetscBool);
 SLEPC_EXTERN PetscErrorCode STGetStructured(ST,PetscBool*);
 
-SLEPC_EXTERN PetscErrorCode STSetOptionsPrefix(ST,const char*);
-SLEPC_EXTERN PetscErrorCode STAppendOptionsPrefix(ST,const char*);
+SLEPC_EXTERN PetscErrorCode STSetOptionsPrefix(ST,const char[]);
+SLEPC_EXTERN PetscErrorCode STAppendOptionsPrefix(ST,const char[]);
 SLEPC_EXTERN PetscErrorCode STGetOptionsPrefix(ST,const char*[]);
 
-SLEPC_EXTERN PetscErrorCode STBackTransform(ST,PetscInt,PetscScalar*,PetscScalar*);
+SLEPC_EXTERN PetscErrorCode STBackTransform(ST,PetscInt,PetscScalar[],PetscScalar[]);
 SLEPC_EXTERN PetscErrorCode STIsInjective(ST,PetscBool*);
 
 SLEPC_EXTERN PetscErrorCode STCheckNullSpace(ST,BV);

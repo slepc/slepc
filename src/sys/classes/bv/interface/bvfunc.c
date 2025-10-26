@@ -335,7 +335,7 @@ PetscErrorCode BVInsertVec(BV V,PetscInt j,Vec w)
 
 .seealso: [](sec:bv), `BVInsertVec()`, `BVOrthogonalizeColumn()`
 @*/
-PetscErrorCode BVInsertVecs(BV V,PetscInt s,PetscInt *m,Vec *W,PetscBool orth)
+PetscErrorCode BVInsertVecs(BV V,PetscInt s,PetscInt *m,Vec W[],PetscBool orth)
 {
   PetscInt       n,N,i,ndep;
   PetscBool      lindep;
@@ -415,7 +415,7 @@ PetscErrorCode BVInsertVecs(BV V,PetscInt s,PetscInt *m,Vec *W,PetscBool orth)
 
 .seealso: [](sec:bv), `BVInsertVecs()`, `BVOrthogonalizeColumn()`, `BVGetColumn()`, `BVGetNumConstraints()`
 @*/
-PetscErrorCode BVInsertConstraints(BV V,PetscInt *nc,Vec *C)
+PetscErrorCode BVInsertConstraints(BV V,PetscInt *nc,Vec C[])
 {
   PetscInt       msave;
 
@@ -464,7 +464,7 @@ PetscErrorCode BVInsertConstraints(BV V,PetscInt *nc,Vec *C)
 
 .seealso: [](sec:bv), `BVAppendOptionsPrefix()`, `BVGetOptionsPrefix()`
 @*/
-PetscErrorCode BVSetOptionsPrefix(BV bv,const char *prefix)
+PetscErrorCode BVSetOptionsPrefix(BV bv,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(bv,BV_CLASSID,1);
@@ -491,7 +491,7 @@ PetscErrorCode BVSetOptionsPrefix(BV bv,const char *prefix)
 
 .seealso: [](sec:bv), `BVSetOptionsPrefix()`, `BVGetOptionsPrefix()`
 @*/
-PetscErrorCode BVAppendOptionsPrefix(BV bv,const char *prefix)
+PetscErrorCode BVAppendOptionsPrefix(BV bv,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(bv,BV_CLASSID,1);

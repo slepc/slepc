@@ -246,7 +246,7 @@ static PetscErrorCode BVOrthogonalizeGS(BV bv,PetscInt j,Vec v,PetscBool *which,
 
 .seealso: [](sec:bv), `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`, `BVSetActiveColumns()`, `BVGetNumConstraints()`
 @*/
-PetscErrorCode BVOrthogonalizeVec(BV bv,Vec v,PetscScalar *H,PetscReal *norm,PetscBool *lindep)
+PetscErrorCode BVOrthogonalizeVec(BV bv,Vec v,PetscScalar H[],PetscReal *norm,PetscBool *lindep)
 {
   PetscInt       ksave,lsave;
 
@@ -311,7 +311,7 @@ PetscErrorCode BVOrthogonalizeVec(BV bv,Vec v,PetscScalar *H,PetscReal *norm,Pet
 
 .seealso: [](sec:bv), `BVSetOrthogonalization()`, `BVSetMatrix()`, `BVSetActiveColumns()`, `BVOrthogonalize()`, `BVOrthogonalizeVec()`, `BVGetNumConstraints()`, `BVOrthonormalizeColumn()`
 @*/
-PetscErrorCode BVOrthogonalizeColumn(BV bv,PetscInt j,PetscScalar *H,PetscReal *norm,PetscBool *lindep)
+PetscErrorCode BVOrthogonalizeColumn(BV bv,PetscInt j,PetscScalar H[],PetscReal *norm,PetscBool *lindep)
 {
   PetscInt       ksave,lsave;
 
@@ -457,7 +457,7 @@ PetscErrorCode BVOrthonormalizeColumn(BV bv,PetscInt j,PetscBool replace,PetscRe
 
 .seealso: [](sec:bv), `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`
 @*/
-PetscErrorCode BVOrthogonalizeSomeColumn(BV bv,PetscInt j,PetscBool *which,PetscScalar *H,PetscReal *norm,PetscBool *lindep)
+PetscErrorCode BVOrthogonalizeSomeColumn(BV bv,PetscInt j,PetscBool *which,PetscScalar H[],PetscReal *norm,PetscBool *lindep)
 {
   PetscInt       ksave,lsave;
 

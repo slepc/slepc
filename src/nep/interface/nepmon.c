@@ -170,7 +170,7 @@ PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
 
 .seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorAll()`, `NEPMonitorConverged()`
 @*/
-PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
+PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
   PetscViewer    viewer = vf->viewer;
 
@@ -224,7 +224,7 @@ PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *
 
 .seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorFirst()`, `NEPMonitorConverged()`
 @*/
-PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
+PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
   PetscInt       i;
   PetscViewer    viewer = vf->viewer;
@@ -280,7 +280,7 @@ PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *ei
 
 .seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorFirst()`, `NEPMonitorAll()`
 @*/
-PetscErrorCode NEPMonitorConverged(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
+PetscErrorCode NEPMonitorConverged(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
   PetscInt       i;
   PetscViewer    viewer = vf->viewer;
@@ -365,7 +365,7 @@ PetscErrorCode NEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 
 .seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorFirstDrawLGCreate()`
 @*/
-PetscErrorCode NEPMonitorFirstDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
+PetscErrorCode NEPMonitorFirstDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
   PetscViewer    viewer = vf->viewer;
   PetscDrawLG    lg;
@@ -450,7 +450,7 @@ PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 
 .seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorAllDrawLGCreate()`
 @*/
-PetscErrorCode NEPMonitorAllDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
+PetscErrorCode NEPMonitorAllDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
   PetscViewer    viewer = vf->viewer;
   PetscDrawLG    lg;
@@ -538,7 +538,7 @@ PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 
 .seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorConvergedDrawLGCreate()`
 @*/
-PetscErrorCode NEPMonitorConvergedDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
+PetscErrorCode NEPMonitorConvergedDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
   PetscViewer      viewer = vf->viewer;
   PetscDrawLG      lg;

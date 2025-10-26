@@ -147,8 +147,8 @@ SLEPC_EXTERN MFNMonitorRegisterFn       MFNMonitorDefault;
 SLEPC_EXTERN MFNMonitorRegisterFn       MFNMonitorDefaultDrawLG;
 SLEPC_EXTERN MFNMonitorRegisterCreateFn MFNMonitorDefaultDrawLGCreate;
 
-SLEPC_EXTERN PetscErrorCode MFNSetOptionsPrefix(MFN,const char*);
-SLEPC_EXTERN PetscErrorCode MFNAppendOptionsPrefix(MFN,const char*);
+SLEPC_EXTERN PetscErrorCode MFNSetOptionsPrefix(MFN,const char[]);
+SLEPC_EXTERN PetscErrorCode MFNAppendOptionsPrefix(MFN,const char[]);
 SLEPC_EXTERN PetscErrorCode MFNGetOptionsPrefix(MFN,const char*[]);
 
 /*E
@@ -181,7 +181,7 @@ typedef enum {/* converged */
               MFN_CONVERGED_ITERATING          =  0} MFNConvergedReason;
 SLEPC_EXTERN const char *const*MFNConvergedReasons;
 
-SLEPC_EXTERN PetscErrorCode MFNGetConvergedReason(MFN,MFNConvergedReason *);
+SLEPC_EXTERN PetscErrorCode MFNGetConvergedReason(MFN,MFNConvergedReason*);
 
 SLEPC_EXTERN PetscFunctionList MFNList;
 SLEPC_EXTERN PetscFunctionList MFNMonitorList;

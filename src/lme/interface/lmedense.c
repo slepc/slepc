@@ -316,7 +316,7 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
 
 .seealso: [](ch:lme), `LMEDenseLyapunov()`, `LMESolve()`
 @*/
-PetscErrorCode LMEDenseHessLyapunovChol(LME lme,PetscInt m,PetscScalar *H,PetscInt ldh,PetscInt k,PetscScalar *B,PetscInt ldb,PetscScalar *U,PetscInt ldu,PetscReal *res)
+PetscErrorCode LMEDenseHessLyapunovChol(LME lme,PetscInt m,PetscScalar H[],PetscInt ldh,PetscInt k,PetscScalar B[],PetscInt ldb,PetscScalar U[],PetscInt ldu,PetscReal *res)
 {
 #if defined(PETSC_USE_INFO)
   PetscReal      error;
@@ -484,7 +484,7 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
 
 .seealso: [](ch:lme), `LMEDenseHessLyapunovChol()`, `LMESolve()`
 @*/
-PetscErrorCode LMEDenseLyapunov(LME lme,PetscInt m,PetscScalar *A,PetscInt lda,PetscScalar *B,PetscInt ldb,PetscScalar *X,PetscInt ldx)
+PetscErrorCode LMEDenseLyapunov(LME lme,PetscInt m,PetscScalar A[],PetscInt lda,PetscScalar B[],PetscInt ldb,PetscScalar X[],PetscInt ldx)
 {
 #if defined(PETSC_USE_INFO)
   PetscReal      error;

@@ -85,7 +85,7 @@ PetscErrorCode SlepcBasisDestroy_Private(PetscInt *m,Vec **W)
 
 .seealso: `PetscSNPrintf()`
 @*/
-PetscErrorCode SlepcSNPrintfScalar(char *str,size_t len,PetscScalar val,PetscBool exp)
+PetscErrorCode SlepcSNPrintfScalar(char str[],size_t len,PetscScalar val,PetscBool exp)
 {
 #if defined(PETSC_USE_COMPLEX)
   PetscReal      re,im;

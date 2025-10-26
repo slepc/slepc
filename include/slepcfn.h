@@ -153,9 +153,9 @@ M*/
 SLEPC_EXTERN PetscErrorCode FNCreate(MPI_Comm,FN*);
 SLEPC_EXTERN PetscErrorCode FNSetType(FN,FNType);
 SLEPC_EXTERN PetscErrorCode FNGetType(FN,FNType*);
-SLEPC_EXTERN PetscErrorCode FNSetOptionsPrefix(FN,const char *);
-SLEPC_EXTERN PetscErrorCode FNAppendOptionsPrefix(FN,const char *);
-SLEPC_EXTERN PetscErrorCode FNGetOptionsPrefix(FN,const char *[]);
+SLEPC_EXTERN PetscErrorCode FNSetOptionsPrefix(FN,const char[]);
+SLEPC_EXTERN PetscErrorCode FNAppendOptionsPrefix(FN,const char[]);
+SLEPC_EXTERN PetscErrorCode FNGetOptionsPrefix(FN,const char*[]);
 SLEPC_EXTERN PetscErrorCode FNSetFromOptions(FN);
 SLEPC_EXTERN PetscErrorCode FNView(FN,PetscViewer);
 SLEPC_EXTERN PetscErrorCode FNViewFromOptions(FN,PetscObject,const char[]);
@@ -179,9 +179,9 @@ SLEPC_EXTERN PetscErrorCode FNRegister(const char[],PetscErrorCode(*)(FN));
 
 /* --------- options specific to particular functions -------- */
 
-SLEPC_EXTERN PetscErrorCode FNRationalSetNumerator(FN,PetscInt,PetscScalar*);
+SLEPC_EXTERN PetscErrorCode FNRationalSetNumerator(FN,PetscInt,PetscScalar[]);
 SLEPC_EXTERN PetscErrorCode FNRationalGetNumerator(FN,PetscInt*,PetscScalar*[]);
-SLEPC_EXTERN PetscErrorCode FNRationalSetDenominator(FN,PetscInt,PetscScalar*);
+SLEPC_EXTERN PetscErrorCode FNRationalSetDenominator(FN,PetscInt,PetscScalar[]);
 SLEPC_EXTERN PetscErrorCode FNRationalGetDenominator(FN,PetscInt*,PetscScalar*[]);
 
 SLEPC_EXTERN PetscErrorCode FNCombineSetChildren(FN,FNCombineType,FN,FN);

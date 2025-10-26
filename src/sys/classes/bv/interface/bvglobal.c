@@ -299,7 +299,7 @@ PetscErrorCode BVDotVecEnd(BV X,Vec y,PetscScalar *m)
 
 .seealso: [](sec:bv), `BVDot()`, `BVDotVec()`, `BVSetActiveColumns()`, `BVSetMatrix()`
 @*/
-PetscErrorCode BVDotColumn(BV X,PetscInt j,PetscScalar *q)
+PetscErrorCode BVDotColumn(BV X,PetscInt j,PetscScalar q[])
 {
   PetscInt       ksave;
   Vec            y;
@@ -826,7 +826,7 @@ PetscErrorCode BVNormColumnEnd(BV bv,PetscInt j,NormType type,PetscReal *val)
 
 .seealso: [](sec:bv), `BVNormColumn()`, `BVSetMatrix()`
 @*/
-PetscErrorCode BVNormalize(BV bv,PetscScalar *eigi)
+PetscErrorCode BVNormalize(BV bv,PetscScalar eigi[])
 {
   PetscReal      norm;
   PetscInt       i;

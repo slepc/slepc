@@ -250,9 +250,9 @@ M*/
 SLEPC_EXTERN PetscErrorCode DSCreate(MPI_Comm,DS*);
 SLEPC_EXTERN PetscErrorCode DSSetType(DS,DSType);
 SLEPC_EXTERN PetscErrorCode DSGetType(DS,DSType*);
-SLEPC_EXTERN PetscErrorCode DSSetOptionsPrefix(DS,const char *);
-SLEPC_EXTERN PetscErrorCode DSAppendOptionsPrefix(DS,const char *);
-SLEPC_EXTERN PetscErrorCode DSGetOptionsPrefix(DS,const char *[]);
+SLEPC_EXTERN PetscErrorCode DSSetOptionsPrefix(DS,const char[]);
+SLEPC_EXTERN PetscErrorCode DSAppendOptionsPrefix(DS,const char[]);
+SLEPC_EXTERN PetscErrorCode DSGetOptionsPrefix(DS,const char*[]);
 SLEPC_EXTERN PetscErrorCode DSSetFromOptions(DS);
 SLEPC_EXTERN PetscErrorCode DSView(DS,PetscViewer);
 SLEPC_EXTERN PetscErrorCode DSViewFromOptions(DS,PetscObject,const char[]);
@@ -292,10 +292,10 @@ SLEPC_EXTERN PetscErrorCode DSRestoreArray(DS,DSMatType,PetscScalar*[]);
 SLEPC_EXTERN PetscErrorCode DSGetArrayReal(DS,DSMatType,PetscReal*[]);
 SLEPC_EXTERN PetscErrorCode DSRestoreArrayReal(DS,DSMatType,PetscReal*[]);
 SLEPC_EXTERN PetscErrorCode DSVectors(DS,DSMatType,PetscInt*,PetscReal*);
-SLEPC_EXTERN PetscErrorCode DSSolve(DS,PetscScalar*,PetscScalar*);
-SLEPC_EXTERN PetscErrorCode DSSort(DS,PetscScalar*,PetscScalar*,PetscScalar*,PetscScalar*,PetscInt*);
-SLEPC_EXTERN PetscErrorCode DSSortWithPermutation(DS,PetscInt*,PetscScalar*,PetscScalar*);
-SLEPC_EXTERN PetscErrorCode DSSynchronize(DS,PetscScalar*,PetscScalar*);
+SLEPC_EXTERN PetscErrorCode DSSolve(DS,PetscScalar[],PetscScalar[]);
+SLEPC_EXTERN PetscErrorCode DSSort(DS,PetscScalar[],PetscScalar[],PetscScalar[],PetscScalar[],PetscInt*);
+SLEPC_EXTERN PetscErrorCode DSSortWithPermutation(DS,PetscInt[],PetscScalar[],PetscScalar[]);
+SLEPC_EXTERN PetscErrorCode DSSynchronize(DS,PetscScalar[],PetscScalar[]);
 PETSC_DEPRECATED_FUNCTION(3, 18, 0, "DSGetMat()+MatDenseGetSubMatrix()+MatCopy()", ) static inline PetscErrorCode DSCopyMat(DS ds,DSMatType m,PetscInt mr,PetscInt mc,Mat A,PetscInt Ar,PetscInt Ac,PetscInt rows,PetscInt cols,PetscBool out)
 {
   Mat M,M0,A0;
@@ -317,10 +317,10 @@ SLEPC_EXTERN PetscErrorCode DSSetSlepcSC(DS,SlepcSC);
 SLEPC_EXTERN PetscErrorCode DSGetSlepcSC(DS,SlepcSC*);
 SLEPC_EXTERN PetscErrorCode DSUpdateExtraRow(DS);
 SLEPC_EXTERN PetscErrorCode DSCond(DS,PetscReal*);
-SLEPC_EXTERN PetscErrorCode DSTranslateHarmonic(DS,PetscScalar,PetscReal,PetscBool,PetscScalar*,PetscReal*);
+SLEPC_EXTERN PetscErrorCode DSTranslateHarmonic(DS,PetscScalar,PetscReal,PetscBool,PetscScalar[],PetscReal*);
 SLEPC_EXTERN PetscErrorCode DSTranslateRKS(DS,PetscScalar);
 SLEPC_EXTERN PetscErrorCode DSOrthogonalize(DS,DSMatType,PetscInt,PetscInt*);
-SLEPC_EXTERN PetscErrorCode DSPseudoOrthogonalize(DS,DSMatType,PetscInt,PetscReal*,PetscInt*,PetscReal*);
+SLEPC_EXTERN PetscErrorCode DSPseudoOrthogonalize(DS,DSMatType,PetscInt,PetscReal[],PetscInt*,PetscReal[]);
 
 /* --------- options specific to particular solvers -------- */
 
@@ -335,10 +335,10 @@ SLEPC_EXTERN PetscErrorCode DSHSVDGetReorthogonalize(DS,PetscBool*);
 
 SLEPC_EXTERN PetscErrorCode DSPEPSetDegree(DS,PetscInt);
 SLEPC_EXTERN PetscErrorCode DSPEPGetDegree(DS,PetscInt*);
-SLEPC_EXTERN PetscErrorCode DSPEPSetCoefficients(DS,PetscReal*);
+SLEPC_EXTERN PetscErrorCode DSPEPSetCoefficients(DS,PetscReal[]);
 SLEPC_EXTERN PetscErrorCode DSPEPGetCoefficients(DS,PetscReal*[]);
 
-SLEPC_EXTERN PetscErrorCode DSNEPSetFN(DS,PetscInt,FN*);
+SLEPC_EXTERN PetscErrorCode DSNEPSetFN(DS,PetscInt,FN[]);
 SLEPC_EXTERN PetscErrorCode DSNEPGetFN(DS,PetscInt,FN*);
 SLEPC_EXTERN PetscErrorCode DSNEPGetNumFN(DS,PetscInt*);
 SLEPC_EXTERN PetscErrorCode DSNEPSetMinimality(DS,PetscInt);

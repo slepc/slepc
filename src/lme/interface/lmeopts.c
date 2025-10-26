@@ -446,7 +446,7 @@ PetscErrorCode LMEGetErrorIfNotConverged(LME lme,PetscBool *flag)
 
 .seealso: [](ch:lme), `LMEAppendOptionsPrefix()`, `LMEGetOptionsPrefix()`
 @*/
-PetscErrorCode LMESetOptionsPrefix(LME lme,const char *prefix)
+PetscErrorCode LMESetOptionsPrefix(LME lme,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(lme,LME_CLASSID,1);
@@ -474,7 +474,7 @@ PetscErrorCode LMESetOptionsPrefix(LME lme,const char *prefix)
 
 .seealso: [](ch:lme), `LMESetOptionsPrefix()`, `LMEGetOptionsPrefix()`
 @*/
-PetscErrorCode LMEAppendOptionsPrefix(LME lme,const char *prefix)
+PetscErrorCode LMEAppendOptionsPrefix(LME lme,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(lme,LME_CLASSID,1);

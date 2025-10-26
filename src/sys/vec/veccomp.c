@@ -417,7 +417,7 @@ static PetscErrorCode VecCompGetSubVecs_Comp(Vec win,PetscInt *n,const Vec **x)
 
 .seealso: `VecCreateComp()`
 @*/
-PetscErrorCode VecCompGetSubVecs(Vec win,PetscInt *n,const Vec **x)
+PetscErrorCode VecCompGetSubVecs(Vec win,PetscInt *n,const Vec *x[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(win,VEC_CLASSID,1);

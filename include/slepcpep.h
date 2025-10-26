@@ -296,7 +296,7 @@ SLEPC_EXTERN PetscErrorCode PEPGetTrackAll(PEP,PetscBool*);
 
 .seealso: [](ch:pep), `PEPMonitorSet()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,void *ctx);
 
 /*S
    PEPMonitorRegisterFn - A function prototype for functions provided to PEPMonitorRegister()
@@ -318,7 +318,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,Pe
 
 .seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterCreateFn`, `PEPMonitorRegisterDestroyFn`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *ctx);
 
 /*S
    PEPMonitorRegisterCreateFn - A function prototype for functions that do the
@@ -349,7 +349,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterCreateFn(PetscView
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
-SLEPC_EXTERN PetscErrorCode PEPMonitor(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt);
+SLEPC_EXTERN PetscErrorCode PEPMonitor(PEP,PetscInt,PetscInt,PetscScalar[],PetscScalar[],PetscReal[],PetscInt);
 SLEPC_EXTERN PetscErrorCode PEPMonitorSet(PEP,PEPMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode PEPMonitorCancel(PEP);
 SLEPC_EXTERN PetscErrorCode PEPGetMonitorContext(PEP,void*);
@@ -367,8 +367,8 @@ SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorConvergedDrawLG;
 SLEPC_EXTERN PEPMonitorRegisterCreateFn  PEPMonitorConvergedDrawLGCreate;
 SLEPC_EXTERN PEPMonitorRegisterDestroyFn PEPMonitorConvergedDestroy;
 
-SLEPC_EXTERN PetscErrorCode PEPSetOptionsPrefix(PEP,const char*);
-SLEPC_EXTERN PetscErrorCode PEPAppendOptionsPrefix(PEP,const char*);
+SLEPC_EXTERN PetscErrorCode PEPSetOptionsPrefix(PEP,const char[]);
+SLEPC_EXTERN PetscErrorCode PEPAppendOptionsPrefix(PEP,const char[]);
 SLEPC_EXTERN PetscErrorCode PEPGetOptionsPrefix(PEP,const char*[]);
 
 SLEPC_EXTERN PetscFunctionList PEPList;

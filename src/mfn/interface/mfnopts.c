@@ -347,7 +347,7 @@ PetscErrorCode MFNGetErrorIfNotConverged(MFN mfn,PetscBool *flag)
 
 .seealso: [](ch:mfn), `MFNAppendOptionsPrefix()`, `MFNGetOptionsPrefix()`
 @*/
-PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char *prefix)
+PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(mfn,MFN_CLASSID,1);
@@ -377,7 +377,7 @@ PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char *prefix)
 
 .seealso: [](ch:mfn), `MFNSetOptionsPrefix()`, `MFNGetOptionsPrefix()`
 @*/
-PetscErrorCode MFNAppendOptionsPrefix(MFN mfn,const char *prefix)
+PetscErrorCode MFNAppendOptionsPrefix(MFN mfn,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(mfn,MFN_CLASSID,1);

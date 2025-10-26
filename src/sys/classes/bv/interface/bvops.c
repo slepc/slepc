@@ -162,7 +162,7 @@ PetscErrorCode BVMultVec(BV X,PetscScalar alpha,PetscScalar beta,Vec y,PetscScal
 
 .seealso: [](sec:bv), `BVMult()`, `BVMultVec()`, `BVMultInPlace()`, `BVSetActiveColumns()`
 @*/
-PetscErrorCode BVMultColumn(BV X,PetscScalar alpha,PetscScalar beta,PetscInt j,PetscScalar *q)
+PetscErrorCode BVMultColumn(BV X,PetscScalar alpha,PetscScalar beta,PetscInt j,PetscScalar q[])
 {
   PetscInt       ksave;
   Vec            y;

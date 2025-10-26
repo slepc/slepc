@@ -1053,7 +1053,7 @@ PetscErrorCode DSCond(DS ds,PetscReal *cond)
 
 .seealso: [](sec:ds), `DSTranslateRKS()`
 @*/
-PetscErrorCode DSTranslateHarmonic(DS ds,PetscScalar tau,PetscReal beta,PetscBool recover,PetscScalar *g,PetscReal *gamma)
+PetscErrorCode DSTranslateHarmonic(DS ds,PetscScalar tau,PetscReal beta,PetscBool recover,PetscScalar g[],PetscReal *gamma)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(ds,DS_CLASSID,1);

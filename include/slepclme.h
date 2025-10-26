@@ -113,7 +113,7 @@ M*/
 .seealso: [](ch:lme), `LMEProblemType`, `LMESetProblemType()`, `LME_LYAPUNOV`, `LME_SYLVESTER`, `LME_GEN_LYAPUNOV`, `LME_GEN_SYLVESTER`, `LME_DT_LYAPUNOV`
 M*/
 
-SLEPC_EXTERN PetscErrorCode LMECreate(MPI_Comm,LME *);
+SLEPC_EXTERN PetscErrorCode LMECreate(MPI_Comm,LME*);
 SLEPC_EXTERN PetscErrorCode LMEDestroy(LME*);
 SLEPC_EXTERN PetscErrorCode LMEReset(LME);
 SLEPC_EXTERN PetscErrorCode LMESetType(LME,LMEType);
@@ -149,8 +149,8 @@ SLEPC_EXTERN PetscErrorCode LMEComputeError(LME,PetscReal*);
 SLEPC_EXTERN PetscErrorCode LMESetErrorIfNotConverged(LME,PetscBool);
 SLEPC_EXTERN PetscErrorCode LMEGetErrorIfNotConverged(LME,PetscBool*);
 
-SLEPC_EXTERN PetscErrorCode LMEDenseLyapunov(LME,PetscInt,PetscScalar*,PetscInt,PetscScalar*,PetscInt,PetscScalar*,PetscInt);
-SLEPC_EXTERN PetscErrorCode LMEDenseHessLyapunovChol(LME,PetscInt,PetscScalar*,PetscInt,PetscInt,PetscScalar*,PetscInt,PetscScalar*,PetscInt,PetscReal*);
+SLEPC_EXTERN PetscErrorCode LMEDenseLyapunov(LME,PetscInt,PetscScalar[],PetscInt,PetscScalar[],PetscInt,PetscScalar[],PetscInt);
+SLEPC_EXTERN PetscErrorCode LMEDenseHessLyapunovChol(LME,PetscInt,PetscScalar[],PetscInt,PetscInt,PetscScalar[],PetscInt,PetscScalar[],PetscInt,PetscReal*);
 PETSC_DEPRECATED_FUNCTION(3, 8, 0, "LMEDenseHessLyapunovChol()", ) static inline PetscErrorCode LMEDenseLyapunovChol(LME lme,PetscScalar *H,PetscInt m,PetscInt ldh,PetscScalar *r,PetscScalar *L,PetscInt ldl,PetscReal *res) {return LMEDenseHessLyapunovChol(lme,m,H,ldh,1,r,m,L,ldl,res);}
 
 /*S
@@ -225,8 +225,8 @@ SLEPC_EXTERN LMEMonitorRegisterFn       LMEMonitorDefault;
 SLEPC_EXTERN LMEMonitorRegisterFn       LMEMonitorDefaultDrawLG;
 SLEPC_EXTERN LMEMonitorRegisterCreateFn LMEMonitorDefaultDrawLGCreate;
 
-SLEPC_EXTERN PetscErrorCode LMESetOptionsPrefix(LME,const char*);
-SLEPC_EXTERN PetscErrorCode LMEAppendOptionsPrefix(LME,const char*);
+SLEPC_EXTERN PetscErrorCode LMESetOptionsPrefix(LME,const char[]);
+SLEPC_EXTERN PetscErrorCode LMEAppendOptionsPrefix(LME,const char[]);
 SLEPC_EXTERN PetscErrorCode LMEGetOptionsPrefix(LME,const char*[]);
 
 /*E
@@ -287,7 +287,7 @@ M*/
 .seealso: [](ch:lme), `LMESolve()`, `LMEGetConvergedReason()`, `LMEConvergedReason`
 M*/
 
-SLEPC_EXTERN PetscErrorCode LMEGetConvergedReason(LME,LMEConvergedReason *);
+SLEPC_EXTERN PetscErrorCode LMEGetConvergedReason(LME,LMEConvergedReason*);
 
 SLEPC_EXTERN PetscFunctionList LMEList;
 SLEPC_EXTERN PetscFunctionList LMEMonitorList;

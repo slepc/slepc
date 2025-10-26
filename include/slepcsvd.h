@@ -187,8 +187,8 @@ SLEPC_EXTERN PetscErrorCode SVDGetWhichSingularTriplets(SVD,SVDWhich*);
 SLEPC_EXTERN PetscErrorCode SVDSetThreshold(SVD,PetscReal,PetscBool);
 SLEPC_EXTERN PetscErrorCode SVDGetThreshold(SVD,PetscReal*,PetscBool*);
 SLEPC_EXTERN PetscErrorCode SVDSetFromOptions(SVD);
-SLEPC_EXTERN PetscErrorCode SVDSetOptionsPrefix(SVD,const char*);
-SLEPC_EXTERN PetscErrorCode SVDAppendOptionsPrefix(SVD,const char*);
+SLEPC_EXTERN PetscErrorCode SVDSetOptionsPrefix(SVD,const char[]);
+SLEPC_EXTERN PetscErrorCode SVDAppendOptionsPrefix(SVD,const char[]);
 SLEPC_EXTERN PetscErrorCode SVDGetOptionsPrefix(SVD,const char*[]);
 SLEPC_EXTERN PetscErrorCode SVDSetDSType(SVD);
 SLEPC_EXTERN PetscErrorCode SVDSetUp(SVD);
@@ -235,7 +235,7 @@ SLEPC_EXTERN PetscErrorCode SVDGetTrackAll(SVD,PetscBool*);
 
 .seealso: [](ch:svd), `SVDMonitorSet()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal sigma[],PetscReal errest[],PetscInt nest,void *ctx);
 
 /*S
    SVDMonitorRegisterFn - A function prototype for functions provided to `SVDMonitorRegister()`.
@@ -256,7 +256,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorFn(SVD svd,PetscInt its,Pe
 
 .seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorRegister()`, `SVDMonitorFn`, `SVDMonitorRegisterCreateFn`, `SVDMonitorRegisterDestroyFn`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigma,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal sigma[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *ctx);
 
 /*S
    SVDMonitorRegisterCreateFn - A function prototype for functions that do
@@ -287,7 +287,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterCreateFn(PetscView
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
-SLEPC_EXTERN PetscErrorCode SVDMonitor(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt);
+SLEPC_EXTERN PetscErrorCode SVDMonitor(SVD,PetscInt,PetscInt,PetscReal[],PetscReal[],PetscInt);
 SLEPC_EXTERN PetscErrorCode SVDMonitorSet(SVD,SVDMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode SVDMonitorCancel(SVD);
 SLEPC_EXTERN PetscErrorCode SVDGetMonitorContext(SVD,void*);

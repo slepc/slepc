@@ -137,7 +137,7 @@ static PetscErrorCode SlepcSortEigenvalues_Private(SlepcSC sc,PetscInt n,PetscSc
 
 .seealso: `SlepcSCCompare()`, `SlepcSC`
 @*/
-PetscErrorCode SlepcSortEigenvalues(SlepcSC sc,PetscInt n,PetscScalar *eigr,PetscScalar *eigi,PetscInt *perm)
+PetscErrorCode SlepcSortEigenvalues(SlepcSC sc,PetscInt n,PetscScalar eigr[],PetscScalar eigi[],PetscInt perm[])
 {
   PetscFunctionBegin;
   PetscAssertPointer(sc,1);
@@ -177,7 +177,7 @@ PetscErrorCode SlepcSortEigenvalues(SlepcSC sc,PetscInt n,PetscScalar *eigr,Pets
 
 .seealso: `SlepcSCCompare()`, `SlepcSC`
 @*/
-PetscErrorCode SlepcSortEigenvaluesSpecial(SlepcSC sc,PetscInt n,PetscScalar *eigr,PetscScalar *eigi,PetscInt *perm)
+PetscErrorCode SlepcSortEigenvaluesSpecial(SlepcSC sc,PetscInt n,PetscScalar eigr[],PetscScalar eigi[],PetscInt perm[])
 {
   PetscFunctionBegin;
   PetscAssertPointer(sc,1);
@@ -191,7 +191,7 @@ PetscErrorCode SlepcSortEigenvaluesSpecial(SlepcSC sc,PetscInt n,PetscScalar *ei
 /*
    SlepcMap_ST - Gateway function to call STBackTransform from outside ST.
 */
-PetscErrorCode SlepcMap_ST(PetscObject obj,PetscInt n,PetscScalar* eigr,PetscScalar* eigi)
+PetscErrorCode SlepcMap_ST(PetscObject obj,PetscInt n,PetscScalar *eigr,PetscScalar *eigi)
 {
   PetscFunctionBegin;
   PetscCall(STBackTransform((ST)obj,n,eigr,eigi));
