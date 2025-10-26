@@ -24,7 +24,7 @@ static PetscBool  RGPackageInitialized = PETSC_FALSE;
 
    Level: developer
 
-.seealso: SlepcFinalize()`, `BVInitializePackage()`
+.seealso: [](sec:rg), `SlepcFinalize()`, `BVInitializePackage()`
 @*/
 PetscErrorCode RGFinalizePackage(void)
 {

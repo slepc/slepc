@@ -132,7 +132,7 @@ The "transpose mode" refers to whether the transpose of matrix A is being built 
 
 Note that in the sample output above, the `SVD` object contains an `EPS` object. This only happens in some `SVD` solver types, as detailed below.
 
-## Changing the Singular Value Solver
+## Choosing the Singular Value Solver
 
 SLEPc provides several solvers for computing the SVD, which can be selected in the source code with the function `SVDSetType()`, or at run time:
 
@@ -140,18 +140,10 @@ SLEPc provides several solvers for computing the SVD, which can be selected in t
 $ ./ex14 -file $SLEPC_DIR/share/slepc/datafiles/matrices/rdb200.petsc -svd_type trlanczos
 ```
 
-The following table shows the list of SVD solvers available in SLEPc.
-
-Solver                         |  Command-line Name  |  Parameter
----                            |  ---                |  ---
-Cross Product                  |  cross              |  SVDCROSS
-Cyclic Matrix                  |  cyclic             |  SVDCYCLIC
-Lanczos with Explicit Restart  |  lanczos            |  SVDLANCZOS
-Lanczos with Thick Restart     |  trlanczos          |  SVDTRLANCZOS
-LAPACK                         |  lapack             |  SVDLAPACK
+Check the table [List of solvers available in the SVD module](#tab:svdsolvers).
 
 :::{note}
-The LAPACK solver is not really a full-featured singular value solver but simply an interface to some LAPACK routines. These routines operate sequentially in dense mode and therefore are suitable only for small size problems. This solver should be used only for debugging purposes.
+The `lapack` solver is not really a full-featured singular value solver but simply an interface to some LAPACK routines. These routines operate sequentially in dense mode and therefore are suitable only for small size problems. That method should be used only for debugging purposes.
 :::
 
 :::{note}

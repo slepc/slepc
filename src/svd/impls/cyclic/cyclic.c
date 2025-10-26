@@ -897,7 +897,7 @@ static PetscErrorCode SVDCyclicSetExplicitMatrix_Cyclic(SVD svd,PetscBool explic
    Logically Collective
 
    Input Parameters:
-+  svd         - singular value solver
++  svd         - the singular value solver context
 -  explicitmat - boolean flag indicating if H(A) is built explicitly
 
    Options Database Key:
@@ -905,7 +905,7 @@ static PetscErrorCode SVDCyclicSetExplicitMatrix_Cyclic(SVD svd,PetscBool explic
 
    Level: advanced
 
-.seealso: `SVDCyclicGetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDCyclicGetExplicitMatrix()`
 @*/
 PetscErrorCode SVDCyclicSetExplicitMatrix(SVD svd,PetscBool explicitmat)
 {
@@ -931,14 +931,14 @@ static PetscErrorCode SVDCyclicGetExplicitMatrix_Cyclic(SVD svd,PetscBool *expli
    Not Collective
 
    Input Parameter:
-.  svd  - singular value solver
+.  svd  - the singular value solver context
 
    Output Parameter:
 .  explicitmat - the mode flag
 
    Level: advanced
 
-.seealso: `SVDCyclicSetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDCyclicSetExplicitMatrix()`
 @*/
 PetscErrorCode SVDCyclicGetExplicitMatrix(SVD svd,PetscBool *explicitmat)
 {
@@ -969,12 +969,12 @@ static PetscErrorCode SVDCyclicSetEPS_Cyclic(SVD svd,EPS eps)
    Collective
 
    Input Parameters:
-+  svd - singular value solver
--  eps - the eigensolver object
++  svd - the singular value solver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `SVDCyclicGetEPS()`
+.seealso: [](ch:svd), `SVDCyclicGetEPS()`
 @*/
 PetscErrorCode SVDCyclicSetEPS(SVD svd,EPS eps)
 {
@@ -1011,14 +1011,14 @@ static PetscErrorCode SVDCyclicGetEPS_Cyclic(SVD svd,EPS *eps)
    Collective
 
    Input Parameter:
-.  svd - singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `SVDCyclicSetEPS()`
+.seealso: [](ch:svd), `SVDCyclicSetEPS()`
 @*/
 PetscErrorCode SVDCyclicGetEPS(SVD svd,EPS *eps)
 {

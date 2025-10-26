@@ -204,7 +204,7 @@ PetscErrorCode VecCheckOrthonormality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Ma
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  v - a vector to mimic
 
    Output Parameter:
@@ -216,7 +216,7 @@ PetscErrorCode VecCheckOrthonormality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Ma
 
    Level: developer
 
-.seealso: `MatCreateVecsEmpty()`
+.seealso: `VecDuplicate()`, `MatCreateVecsEmpty()`
 @*/
 PetscErrorCode VecDuplicateEmpty(Vec v,Vec *newv)
 {

@@ -296,7 +296,7 @@ PetscErrorCode MatCreateTile(PetscScalar a,Mat A,PetscScalar b,Mat B,PetscScalar
 
    Level: developer
 
-.seealso: `VecDuplicateEmpty()`
+.seealso: `MatCreateVecs()`, `VecDuplicateEmpty()`
 @*/
 PetscErrorCode MatCreateVecsEmpty(Mat mat,Vec *right,Vec *left)
 {

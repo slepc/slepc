@@ -88,7 +88,7 @@ PetscErrorCode SVDComputeVectors(SVD svd)
    Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Options Database Keys:
 +  -svd_view - print information about the solver used
@@ -111,7 +111,7 @@ PetscErrorCode SVDComputeVectors(SVD svd)
 
    Level: beginner
 
-.seealso: `SVDCreate()`, `SVDSetUp()`, `SVDDestroy()`
+.seealso: [](ch:svd), `SVDCreate()`, `SVDSetUp()`, `SVDDestroy()`
 @*/
 PetscErrorCode SVDSolve(SVD svd)
 {
@@ -205,7 +205,7 @@ PetscErrorCode SVDSolve(SVD svd)
 
    Level: intermediate
 
-.seealso: `SVDGetConvergedReason()`, `SVDSetTolerances()`
+.seealso: [](ch:svd), `SVDGetConvergedReason()`, `SVDSetTolerances()`
 @*/
 PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 {
@@ -217,7 +217,7 @@ PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 }
 
 /*@
-   SVDGetConvergedReason - Gets the reason why the SVDSolve() iteration was
+   SVDGetConvergedReason - Gets the reason why the `SVDSolve()` iteration was
    stopped.
 
    Not Collective
@@ -226,26 +226,19 @@ PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 .  svd - the singular value solver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
-   (see SVDConvergedReason)
+.  reason - negative value indicates diverged, positive value converged, see
+   `SVDConvergedReason` for the possible values
 
    Options Database Key:
-.  -svd_converged_reason - print the reason to a viewer
+.  -svd_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  SVD_CONVERGED_TOL - converged up to tolerance
-.  SVD_CONVERGED_USER - converged due to a user-defined condition
-.  SVD_CONVERGED_MAXIT - reached the maximum number of iterations with SVD_CONV_MAXIT criterion
-.  SVD_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  SVD_DIVERGED_BREAKDOWN - generic breakdown in method
--  SVD_DIVERGED_SYMMETRY_LOST - underlying indefinite eigensolver was not able to keep symmetry
-
-   Can only be called after the call to SVDSolve() is complete.
+   Note:
+   If this routine is called before or doing the `SVDSolve()` the value of
+   `SVD_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 
-.seealso: `SVDSetTolerances()`, `SVDSolve()`, `SVDConvergedReason`
+.seealso: [](ch:svd), `SVDSetTolerances()`, `SVDSolve()`, `SVDConvergedReason`
 @*/
 PetscErrorCode SVDGetConvergedReason(SVD svd,SVDConvergedReason *reason)
 {
@@ -273,7 +266,7 @@ PetscErrorCode SVDGetConvergedReason(SVD svd,SVDConvergedReason *reason)
 
    Level: beginner
 
-.seealso: `SVDSetDimensions()`, `SVDSolve()`, `SVDGetSingularTriplet()`
+.seealso: [](ch:svd), `SVDSetDimensions()`, `SVDSolve()`, `SVDGetSingularTriplet()`
 @*/
 PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
 {
@@ -293,7 +286,7 @@ PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
    Collective
 
    Input Parameters:
-+  svd - singular value solver context
++  svd - the singular value solver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -319,7 +312,7 @@ PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
 
    Level: beginner
 
-.seealso: `SVDSolve()`, `SVDGetConverged()`, `SVDSetWhichSingularTriplets()`
+.seealso: [](ch:svd), `SVDSolve()`, `SVDGetConverged()`, `SVDSetWhichSingularTriplets()`
 @*/
 PetscErrorCode SVDGetSingularTriplet(SVD svd,PetscInt i,PetscReal *sigma,Vec u,Vec v)
 {
@@ -491,7 +484,7 @@ static PetscErrorCode SVDComputeResidualNorms_Hyperbolic(SVD svd,PetscReal sigma
 
    Level: beginner
 
-.seealso: `SVDErrorType`, `SVDSolve()`
+.seealso: [](ch:svd), `SVDErrorType`, `SVDSolve()`
 @*/
 PetscErrorCode SVDComputeError(SVD svd,PetscInt i,SVDErrorType type,PetscReal *error)
 {

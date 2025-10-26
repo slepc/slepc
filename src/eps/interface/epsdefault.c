@@ -174,7 +174,7 @@ PetscErrorCode EPSComputeVectors_Schur(EPS eps)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  nw  - number of work vectors to allocate
 
    Developer Notes:
@@ -183,7 +183,7 @@ PetscErrorCode EPSComputeVectors_Schur(EPS eps)
 
    Level: developer
 
-.seealso: `EPSSetUp()`
+.seealso: [](ch:eps), `EPSSetUp()`
 @*/
 PetscErrorCode EPSSetWorkVecs(EPS eps,PetscInt nw)
 {
@@ -262,7 +262,7 @@ PetscErrorCode EPSConvergedNorm(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscR
    Collective
 
    Input Parameters:
-+  eps    - eigensolver context obtained from EPSCreate()
++  eps    - the linear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs
@@ -285,7 +285,7 @@ PetscErrorCode EPSConvergedNorm(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscR
 
    Level: advanced
 
-.seealso: `EPSSetStoppingTest()`, `EPSStoppingThreshold()`, `EPSConvergedReason`, `EPSGetConvergedReason()`
+.seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSStoppingThreshold()`, `EPSConvergedReason`, `EPSGetConvergedReason()`
 @*/
 PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx)
 {
@@ -308,7 +308,7 @@ PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nc
    Collective
 
    Input Parameters:
-+  eps    - eigenvalue solver context obtained from EPSCreate()
++  eps    - the linear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs (ignored here)
@@ -334,7 +334,7 @@ PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nc
 
    Level: advanced
 
-.seealso: `EPSSetStoppingTest()`, `EPSStoppingBasic()`, `EPSSetThreshold()`, `EPSSetDimensions()`, `EPSConvergedReason`, `EPSGetConvergedReason()`
+.seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSStoppingBasic()`, `EPSSetThreshold()`, `EPSSetDimensions()`, `EPSConvergedReason`, `EPSGetConvergedReason()`
 @*/
 PetscErrorCode EPSStoppingThreshold(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx)
 {

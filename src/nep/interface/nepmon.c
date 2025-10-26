@@ -33,40 +33,44 @@ PetscErrorCode NEPMonitor(NEP nep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
    Logically Collective
 
    Input Parameters:
-+  nep     - eigensolver context obtained from NEPCreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring), see NEPMonitorFn
-.  mctx    - [optional] context for private data for the
-             monitor routine (use NULL if no context is desired)
--  monitordestroy - [optional] routine that frees monitor context (may be NULL),
-             see PetscCtxDestroyFn for the calling sequence
++  nep            - the nonlinear eigensolver context
+.  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
+                    see `NEPMonitorFn`
+.  mctx           - [optional] context for private data for the monitor routine
+                    (use `NULL` if no context is desired)
+-  monitordestroy - [optional] routine that frees monitor context (may be `NULL`),
+                    see `PetscCtxDestroyFn` for the calling sequence
 
    Options Database Keys:
-+    -nep_monitor        - print only the first error estimate
-.    -nep_monitor_all    - print error estimates at each iteration
-.    -nep_monitor_conv   - print the eigenvalue approximations only when
-      convergence has been reached
-.    -nep_monitor draw::draw_lg - sets line graph monitor for the first unconverged
-      approximate eigenvalue
-.    -nep_monitor_all draw::draw_lg - sets line graph monitor for all unconverged
-      approximate eigenvalues
-.    -nep_monitor_conv draw::draw_lg - sets line graph monitor for convergence history
--    -nep_monitor_cancel - cancels all monitors that have been hardwired into
-      a code by calls to NEPMonitorSet(), but does not cancel those set via
-      the options database.
++  -nep_monitor                    - print only the first error estimate
+.  -nep_monitor_all                - print error estimates at each iteration
+.  -nep_monitor_conv               - print the eigenvalue approximations only when
+                                     convergence has been reached
+.  -nep_monitor draw::draw_lg      - sets line graph monitor for the first unconverged
+                                     approximate eigenvalue
+.  -nep_monitor_all draw::draw_lg  - sets line graph monitor for all unconverged
+                                     approximate eigenvalues
+.  -nep_monitor_conv draw::draw_lg - sets line graph monitor for convergence history
+-  -nep_monitor_cancel             - cancels all monitors that have been hardwired into
+                                     a code by calls to `NEPMonitorSet()`, but does not cancel
+                                     those set via the options database.
 
    Notes:
-   The options database option -nep_monitor and related options are the easiest way
-   to turn on NEP iteration monitoring.
+   The options database option `-nep_monitor` and related options are the easiest way
+   to turn on `NEP` iteration monitoring.
 
-   NEPMonitorRegister() provides a way to associate an options database key with NEP
+   `NEPMonitorRegister()` provides a way to associate an options database key with `NEP`
    monitor function.
 
-   Several different monitoring routines may be set by calling NEPMonitorSet() multiple
+   Several different monitoring routines may be set by calling `NEPMonitorSet()` multiple
    times; all will be called in the order in which they were set.
+
+   Fortran Note:
+   Only a single monitor function can be set for each `NEP` object.
 
    Level: intermediate
 
-.seealso: `NEPMonitorFirst()`, `NEPMonitorAll()`, `NEPMonitorCancel()`
+.seealso: [](ch:nep), `NEPMonitorFirst()`, `NEPMonitorAll()`, `NEPMonitorConverged()`, `NEPMonitorFirstDrawLG()`, `NEPMonitorAllDrawLG()`, `NEPMonitorConvergedDrawLG()`, `NEPMonitorCancel()`
 @*/
 PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
@@ -87,21 +91,20 @@ PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDe
 }
 
 /*@
-   NEPMonitorCancel - Clears all monitors for a NEP object.
+   NEPMonitorCancel - Clears all monitors for a `NEP` object.
 
    Logically Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Options Database Key:
-.    -nep_monitor_cancel - Cancels all monitors that have been hardwired
-      into a code by calls to NEPMonitorSet(),
-      but does not cancel those set via the options database.
+.  -nep_monitor_cancel - Cancels all monitors that have been hardwired into a code by calls to
+                         `NEPMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorCancel(NEP nep)
 {
@@ -118,19 +121,19 @@ PetscErrorCode NEPMonitorCancel(NEP nep)
 
 /*@C
    NEPGetMonitorContext - Gets the monitor context, as set by
-   NEPMonitorSet() for the FIRST monitor only.
+   `NEPMonitorSet()` for the FIRST monitor only.
 
    Not Collective
 
    Input Parameter:
-.  nep - eigensolver context obtained from NEPCreate()
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ctx - monitor context
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`, `NEPDefaultMonitor()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPDefaultMonitor()`
 @*/
 PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
 {
@@ -147,7 +150,7 @@ PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -157,11 +160,15 @@ PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor - activates NEPMonitorFirst()
+.  -nep_monitor - activates `NEPMonitorFirst()`
+
+   Note:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`, `NEPMonitorAll()`, `NEPMonitorConverged()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorAll()`, `NEPMonitorConverged()`
 @*/
 PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -197,7 +204,7 @@ PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -207,11 +214,15 @@ PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor_all - activates NEPMonitorAll()
+.  -nep_monitor_all - activates `NEPMonitorAll()`
+
+   Note:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`, `NEPMonitorFirst()`, `NEPMonitorConverged()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorFirst()`, `NEPMonitorConverged()`
 @*/
 PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -249,7 +260,7 @@ PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *ei
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -259,11 +270,15 @@ PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *ei
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor_conv - activates NEPMonitorConverged()
+.  -nep_monitor_conv - activates `NEPMonitorConverged()`
+
+   Note:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`, `NEPMonitorFirst()`, `NEPMonitorAll()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorFirst()`, `NEPMonitorAll()`
 @*/
 PetscErrorCode NEPMonitorConverged(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -328,7 +343,7 @@ PetscErrorCode NEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -338,11 +353,17 @@ PetscErrorCode NEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor draw::draw_lg - activates NEPMonitorFirstDrawLG()
+.  -nep_monitor draw::draw_lg - activates `NEPMonitorFirstDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
+
+   Call `NEPMonitorFirstDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorFirstDrawLGCreate()`
 @*/
 PetscErrorCode NEPMonitorFirstDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -389,7 +410,7 @@ PetscErrorCode NEPMonitorFirstDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscSc
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -407,7 +428,7 @@ PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -417,11 +438,17 @@ PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor_all draw::draw_lg - activates NEPMonitorAllDrawLG()
+.  -nep_monitor_all draw::draw_lg - activates `NEPMonitorAllDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
+
+   Call `NEPMonitorAllDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorAllDrawLGCreate()`
 @*/
 PetscErrorCode NEPMonitorAllDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -471,7 +498,7 @@ PetscErrorCode NEPMonitorAllDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScal
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
@@ -489,7 +516,7 @@ PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -499,11 +526,17 @@ PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -nep_monitor_conv draw::draw_lg - activates NEPMonitorConvergedDrawLG()
+.  -nep_monitor_conv draw::draw_lg - activates `NEPMonitorConvergedDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `NEP` solve.
+
+   Call `NEPMonitorConvergedDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorConvergedDrawLGCreate()`
 @*/
 PetscErrorCode NEPMonitorConvergedDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *eigr,PetscScalar *eigi,PetscReal *errest,PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -547,7 +580,7 @@ PetscErrorCode NEPMonitorConvergedDrawLG(NEP nep,PetscInt its,PetscInt nconv,Pet
 
    Level: intermediate
 
-.seealso: `NEPMonitorSet()`
+.seealso: [](ch:nep), `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {

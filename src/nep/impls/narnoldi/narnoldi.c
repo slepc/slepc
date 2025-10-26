@@ -222,12 +222,12 @@ static PetscErrorCode NEPNArnoldiSetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
    Logically Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  lag - 0 indicates NEVER rebuild, 1 means rebuild every time the Jacobian is
           computed within the nonlinear iteration, 2 means every second time
           the Jacobian is built, etc.
 
-   Options Database Keys:
+   Options Database Key:
 .  -nep_narnoldi_lag_preconditioner <lag> - the lag value
 
    Notes:
@@ -236,7 +236,7 @@ static PetscErrorCode NEPNArnoldiSetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
 
    Level: intermediate
 
-.seealso: `NEPNArnoldiGetLagPreconditioner()`
+.seealso: [](ch:nep), `NEPNArnoldiGetLagPreconditioner()`
 @*/
 PetscErrorCode NEPNArnoldiSetLagPreconditioner(NEP nep,PetscInt lag)
 {
@@ -262,14 +262,14 @@ static PetscErrorCode NEPNArnoldiGetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  lag - the lag parameter
 
    Level: intermediate
 
-.seealso: `NEPNArnoldiSetLagPreconditioner()`
+.seealso: [](ch:nep), `NEPNArnoldiSetLagPreconditioner()`
 @*/
 PetscErrorCode NEPNArnoldiGetLagPreconditioner(NEP nep,PetscInt *lag)
 {
@@ -318,12 +318,12 @@ static PetscErrorCode NEPNArnoldiSetKSP_NArnoldi(NEP nep,KSP ksp)
    Collective
 
    Input Parameters:
-+  nep - eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `NEPNArnoldiGetKSP()`
+.seealso: [](ch:nep), `NEPNArnoldiGetKSP()`
 @*/
 PetscErrorCode NEPNArnoldiSetKSP(NEP nep,KSP ksp)
 {
@@ -360,14 +360,14 @@ static PetscErrorCode NEPNArnoldiGetKSP_NArnoldi(NEP nep,KSP *ksp)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `NEPNArnoldiSetKSP()`
+.seealso: [](ch:nep), `NEPNArnoldiSetKSP()`
 @*/
 PetscErrorCode NEPNArnoldiGetKSP(NEP nep,KSP *ksp)
 {

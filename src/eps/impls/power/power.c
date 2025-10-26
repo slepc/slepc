@@ -781,7 +781,7 @@ static PetscErrorCode EPSPowerSetShiftType_Power(EPS eps,EPSPowerShiftType shift
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  shift - the type of shift
 
    Options Database Key:
@@ -799,7 +799,7 @@ static PetscErrorCode EPSPowerSetShiftType_Power(EPS eps,EPSPowerShiftType shift
 
    Level: advanced
 
-.seealso: `EPSPowerGetShiftType()`, `STSetShift()`, `EPSPowerShiftType`
+.seealso: [](ch:eps), `EPSPowerGetShiftType()`, `STSetShift()`, `EPSPowerShiftType`
 @*/
 PetscErrorCode EPSPowerSetShiftType(EPS eps,EPSPowerShiftType shift)
 {
@@ -826,14 +826,14 @@ static PetscErrorCode EPSPowerGetShiftType_Power(EPS eps,EPSPowerShiftType *shif
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  shift - the type of shift
 
    Level: advanced
 
-.seealso: `EPSPowerSetShiftType()`, `EPSPowerShiftType`
+.seealso: [](ch:eps), `EPSPowerSetShiftType()`, `EPSPowerShiftType`
 @*/
 PetscErrorCode EPSPowerGetShiftType(EPS eps,EPSPowerShiftType *shift)
 {
@@ -864,7 +864,7 @@ static PetscErrorCode EPSPowerSetNonlinear_Power(EPS eps,PetscBool nonlinear)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  nonlinear - whether the problem is nonlinear or not
 
    Options Database Key:
@@ -886,7 +886,7 @@ static PetscErrorCode EPSPowerSetNonlinear_Power(EPS eps,PetscBool nonlinear)
 
    Level: advanced
 
-.seealso: `EPSPowerGetNonlinear()`, `EPSSetOperators()`
+.seealso: [](ch:eps), `EPSPowerGetNonlinear()`, `EPSSetOperators()`
 @*/
 PetscErrorCode EPSPowerSetNonlinear(EPS eps,PetscBool nonlinear)
 {
@@ -912,14 +912,14 @@ static PetscErrorCode EPSPowerGetNonlinear_Power(EPS eps,PetscBool *nonlinear)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  nonlinear - the nonlinear flag
 
    Level: advanced
 
-.seealso: `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
+.seealso: [](ch:eps), `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
 @*/
 PetscErrorCode EPSPowerGetNonlinear(EPS eps,PetscBool *nonlinear)
 {
@@ -948,7 +948,7 @@ static PetscErrorCode EPSPowerSetUpdate_Power(EPS eps,PetscBool update)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  update - whether the residual is updated monolithically or not
 
    Options Database Key:
@@ -956,7 +956,7 @@ static PetscErrorCode EPSPowerSetUpdate_Power(EPS eps,PetscBool update)
 
    Level: advanced
 
-.seealso: `EPSPowerGetUpdate()`, `EPSPowerGetNonlinear()`, `EPSSetOperators()`
+.seealso: [](ch:eps), `EPSPowerGetUpdate()`, `EPSPowerGetNonlinear()`, `EPSSetOperators()`
 @*/
 PetscErrorCode EPSPowerSetUpdate(EPS eps,PetscBool update)
 {
@@ -983,14 +983,14 @@ static PetscErrorCode EPSPowerGetUpdate_Power(EPS eps,PetscBool *update)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  update - the update flag
 
    Level: advanced
 
-.seealso: `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
+.seealso: [](ch:eps), `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
 @*/
 PetscErrorCode EPSPowerGetUpdate(EPS eps,PetscBool *update)
 {
@@ -1019,7 +1019,7 @@ static PetscErrorCode EPSPowerSetSignNormalization_Power(EPS eps,PetscBool sign_
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  sign_normalization - whether Bx should be multiplied by the sign of the first non-zero
                         element when performing normalization steps
 
@@ -1028,7 +1028,7 @@ static PetscErrorCode EPSPowerSetSignNormalization_Power(EPS eps,PetscBool sign_
 
    Level: advanced
 
-.seealso: `EPSPowerGetSignNormalization()`
+.seealso: [](ch:eps), `EPSPowerGetSignNormalization()`
 @*/
 PetscErrorCode EPSPowerSetSignNormalization(EPS eps,PetscBool sign_normalization)
 {
@@ -1057,14 +1057,14 @@ static PetscErrorCode EPSPowerGetSignNormalization_Power(EPS eps,PetscBool *sign
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  sign_normalization - the sign normalization flag
 
    Level: advanced
 
-.seealso: `EPSPowerSetSignNormalization()`
+.seealso: [](ch:eps), `EPSPowerSetSignNormalization()`
 @*/
 PetscErrorCode EPSPowerGetSignNormalization(EPS eps,PetscBool *sign_normalization)
 {
@@ -1094,12 +1094,12 @@ static PetscErrorCode EPSPowerSetSNES_Power(EPS eps,SNES snes)
    Collective
 
    Input Parameters:
-+  eps  - the eigenvalue solver
++  eps  - the linear eigensolver context
 -  snes - the nonlinear solver object
 
    Level: advanced
 
-.seealso: `EPSPowerGetSNES()`
+.seealso: [](ch:eps), `EPSPowerGetSNES()`
 @*/
 PetscErrorCode EPSPowerSetSNES(EPS eps,SNES snes)
 {
@@ -1134,14 +1134,14 @@ static PetscErrorCode EPSPowerGetSNES_Power(EPS eps,SNES *snes)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenvalue solver
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  snes - the nonlinear solver object
 
    Level: advanced
 
-.seealso: `EPSPowerSetSNES()`
+.seealso: [](ch:eps), `EPSPowerSetSNES()`
 @*/
 PetscErrorCode EPSPowerGetSNES(EPS eps,SNES *snes)
 {

@@ -22,7 +22,7 @@
    Collective
 
    Input Parameters:
-+  lme      - the linear matrix equation context
++  lme      - the linear matrix equation solver context
 .  opt  - the command line option for this monitor
 .  name - the monitor type one is seeking
 -  ctx  - an optional user context for the monitor, or `NULL`
@@ -64,13 +64,15 @@ PetscErrorCode LMEMonitorSetFromOptions(LME lme,const char opt[],const char name
 
 /*@
    LMESetFromOptions - Sets `LME` options from the options database.
+   This routine must be called before `LMESetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  lme - the linear matrix equation solver context
 
-   Notes:
+   Note:
    To see all options, run your program with the `-help` option.
 
    Level: beginner
@@ -337,7 +339,7 @@ PetscErrorCode LMEGetDimensions(LME lme,PetscInt *ncv)
 +  lme - the linear matrix equation solver context
 -  ncv - the maximum dimension of the subspace to be used by the solver
 
-   Options Database Keys:
+   Options Database Key:
 .  -lme_ncv <ncv> - sets the dimension of the subspace
 
    Notes:

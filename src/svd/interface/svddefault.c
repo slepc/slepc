@@ -60,7 +60,7 @@ PetscErrorCode SVDConvergedMaxIt(SVD svd,PetscReal sigma,PetscReal res,PetscReal
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context obtained from SVDCreate()
++  svd    - the singular value solver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged singular triplets
@@ -83,7 +83,7 @@ PetscErrorCode SVDConvergedMaxIt(SVD svd,PetscReal sigma,PetscReal res,PetscReal
 
    Level: advanced
 
-.seealso: `SVDSetStoppingTest()`, `SVDStoppingThreshold()`, `SVDConvergedReason`, `SVDGetConvergedReason()`
+.seealso: [](ch:svd), `SVDSetStoppingTest()`, `SVDStoppingThreshold()`, `SVDConvergedReason`, `SVDGetConvergedReason()`
 @*/
 PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx)
 {
@@ -109,7 +109,7 @@ PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nc
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context obtained from SVDCreate()
++  svd    - the singular value solver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged singular triplets (ignored here)
@@ -135,7 +135,7 @@ PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nc
 
    Level: advanced
 
-.seealso: `SVDSetStoppingTest()`, `SVDStoppingBasic()`, `SVDSetThreshold()`, `SVDSetDimensions()`, `SVDConvergedReason`, `SVDGetConvergedReason()`
+.seealso: [](ch:svd), `SVDSetStoppingTest()`, `SVDStoppingBasic()`, `SVDSetThreshold()`, `SVDSetDimensions()`, `SVDConvergedReason`, `SVDGetConvergedReason()`
 @*/
 PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx)
 {
@@ -174,7 +174,7 @@ PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscIn
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  nleft  - number of work vectors of dimension equal to left singular vector
 -  nright - number of work vectors of dimension equal to right singular vector
 
@@ -184,7 +184,7 @@ PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscIn
 
    Level: developer
 
-.seealso: `SVDSetUp()`
+.seealso: [](ch:svd), `SVDSetUp()`
 @*/
 PetscErrorCode SVDSetWorkVecs(SVD svd,PetscInt nleft,PetscInt nright)
 {

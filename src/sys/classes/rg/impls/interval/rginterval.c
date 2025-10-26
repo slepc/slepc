@@ -52,7 +52,7 @@ static PetscErrorCode RGIntervalSetEndpoints_Interval(RG rg,PetscReal a,PetscRea
 .  c - bottom endpoint of the interval in the imaginary axis
 -  d - top endpoint of the interval in the imaginary axis
 
-   Options Database Keys:
+   Options Database Key:
 .  -rg_interval_endpoints - comma-separated list of values (two or four)
 
    Note:

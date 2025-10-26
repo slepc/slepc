@@ -274,7 +274,7 @@ static PetscErrorCode EPSFEASTSetNumPoints_FEAST(EPS eps,PetscInt npoints)
    Logically Collective
 
    Input Parameters:
-+  eps     - the eigenproblem solver context
++  eps     - the linear eigensolver context
 -  npoints - number of contour integration points
 
    Options Database Key:
@@ -282,7 +282,7 @@ static PetscErrorCode EPSFEASTSetNumPoints_FEAST(EPS eps,PetscInt npoints)
 
    Level: advanced
 
-.seealso: `EPSFEASTGetNumPoints()`
+.seealso: [](ch:eps), `EPSFEASTGetNumPoints()`
 @*/
 PetscErrorCode EPSFEASTSetNumPoints(EPS eps,PetscInt npoints)
 {
@@ -309,14 +309,14 @@ static PetscErrorCode EPSFEASTGetNumPoints_FEAST(EPS eps,PetscInt *npoints)
    Not Collective
 
    Input Parameter:
-.  eps     - the eigenproblem solver context
+.  eps     - the linear eigensolver context
 
    Output Parameter:
 .  npoints - number of contour integration points
 
    Level: advanced
 
-.seealso: `EPSFEASTSetNumPoints()`
+.seealso: [](ch:eps), `EPSFEASTSetNumPoints()`
 @*/
 PetscErrorCode EPSFEASTGetNumPoints(EPS eps,PetscInt *npoints)
 {

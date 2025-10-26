@@ -20,13 +20,13 @@ SLEPC_EXTERN PetscErrorCode PEPCreate_CISS(PEP);
 #endif
 
 /*@C
-   PEPRegisterAll - Registers all the solvers in the PEP package.
+   PEPRegisterAll - Registers all the solvers in the `PEP` package.
 
    Not Collective
 
    Level: advanced
 
-.seealso: `PEPRegister()`
+.seealso: [](ch:pep), `PEPRegister()`
 @*/
 PetscErrorCode PEPRegisterAll(void)
 {
@@ -51,7 +51,7 @@ PetscErrorCode PEPRegisterAll(void)
 
   Level: advanced
 
-.seealso: `PEPMonitorRegister()`
+.seealso: [](ch:pep), `PEPMonitorRegister()`
 @*/
 PetscErrorCode PEPMonitorRegisterAll(void)
 {

@@ -427,7 +427,7 @@ static PetscErrorCode DSPEPGetCoefficients_PEP(DS ds,PetscReal *pbc[])
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  pbc - the polynomial basis coefficients
 
    Note:

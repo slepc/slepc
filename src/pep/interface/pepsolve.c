@@ -57,7 +57,7 @@ PetscErrorCode PEPExtractVectors(PEP pep)
    Collective
 
    Input Parameter:
-.  pep - eigensolver context obtained from PEPCreate()
+.  pep - the polynomial eigensolver context
 
    Options Database Keys:
 +  -pep_view - print information about the solver used
@@ -78,7 +78,7 @@ PetscErrorCode PEPExtractVectors(PEP pep)
 
    Level: beginner
 
-.seealso: `PEPCreate()`, `PEPSetUp()`, `PEPDestroy()`, `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPCreate()`, `PEPSetUp()`, `PEPDestroy()`, `PEPSetTolerances()`
 @*/
 PetscErrorCode PEPSolve(PEP pep)
 {
@@ -186,7 +186,7 @@ PetscErrorCode PEPSolve(PEP pep)
 
    Level: intermediate
 
-.seealso: `PEPGetConvergedReason()`, `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPGetConvergedReason()`, `PEPSetTolerances()`
 @*/
 PetscErrorCode PEPGetIterationNumber(PEP pep,PetscInt *its)
 {
@@ -213,7 +213,7 @@ PetscErrorCode PEPGetIterationNumber(PEP pep,PetscInt *its)
 
    Level: beginner
 
-.seealso: `PEPSetDimensions()`, `PEPSolve()`, `PEPGetEigenpair()`
+.seealso: [](ch:pep), `PEPSetDimensions()`, `PEPSolve()`, `PEPGetEigenpair()`
 @*/
 PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 {
@@ -226,7 +226,7 @@ PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 }
 
 /*@
-   PEPGetConvergedReason - Gets the reason why the PEPSolve() iteration was
+   PEPGetConvergedReason - Gets the reason why the `PEPSolve()` iteration was
    stopped.
 
    Not Collective
@@ -235,24 +235,19 @@ PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 .  pep - the polynomial eigensolver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `PEPConvergedReason` for the possible values
 
    Options Database Key:
-.  -pep_converged_reason - print the reason to a viewer
+.  -pep_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  PEP_CONVERGED_TOL - converged up to tolerance
-.  PEP_CONVERGED_USER - converged due to a user-defined condition
-.  PEP_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  PEP_DIVERGED_BREAKDOWN - generic breakdown in method
--  PEP_DIVERGED_SYMMETRY_LOST - pseudo-Lanczos was not able to keep symmetry
-
-   Can only be called after the call to PEPSolve() is complete.
+   Note:
+   If this routine is called before or doing the `PEPSolve()` the value of
+   `PEP_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 
-.seealso: `PEPSetTolerances()`, `PEPSolve()`, `PEPConvergedReason`
+.seealso: [](ch:pep), `PEPSetTolerances()`, `PEPSolve()`, `PEPConvergedReason`
 @*/
 PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
 {
@@ -271,7 +266,7 @@ PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
    Collective
 
    Input Parameters:
-+  pep - polynomial eigensolver context
++  pep - the polynomial eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -297,7 +292,7 @@ PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
 
    Level: beginner
 
-.seealso: `PEPSolve()`, `PEPGetConverged()`, `PEPSetWhichEigenpairs()`
+.seealso: [](ch:pep), `PEPSolve()`, `PEPGetConverged()`, `PEPSetWhichEigenpairs()`
 @*/
 PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar *eigi,Vec Vr,Vec Vi)
 {
@@ -336,7 +331,7 @@ PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar 
    Not Collective
 
    Input Parameters:
-+  pep - polynomial eigensolver context
++  pep - the polynomial eigensolver context
 -  i   - index of eigenpair
 
    Output Parameter:
@@ -349,7 +344,7 @@ PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar 
 
    Level: advanced
 
-.seealso: `PEPComputeError()`
+.seealso: [](ch:pep), `PEPComputeError()`
 @*/
 PetscErrorCode PEPGetErrorEstimate(PEP pep,PetscInt i,PetscReal *errest)
 {
@@ -463,7 +458,7 @@ PetscErrorCode PEPComputeResidualNorm_Private(PEP pep,PetscScalar kr,PetscScalar
 
    Level: beginner
 
-.seealso: `PEPErrorType`, `PEPSolve()`, `PEPGetErrorEstimate()`
+.seealso: [](ch:pep), `PEPErrorType`, `PEPSolve()`, `PEPGetErrorEstimate()`
 @*/
 PetscErrorCode PEPComputeError(PEP pep,PetscInt i,PEPErrorType type,PetscReal *error)
 {

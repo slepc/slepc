@@ -439,7 +439,7 @@ static inline PetscErrorCode BVSetRandomSignColumn_Private(BV bv,PetscInt k)
 
    Logically Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - basis vectors
 
    Note:
@@ -568,7 +568,7 @@ PetscErrorCode BVSetRandomNormal(BV bv)
 
    Level: advanced
 
-.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandomSign(BV bv)
 {

@@ -134,7 +134,7 @@ static PetscErrorCode EPSDestroy_GD(EPS eps)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  krylovstart - boolean flag
 
    Options Database Key:
@@ -143,7 +143,7 @@ static PetscErrorCode EPSDestroy_GD(EPS eps)
 
    Level: advanced
 
-.seealso: `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDGetKrylovStart()`
 @*/
 PetscErrorCode EPSGDSetKrylovStart(EPS eps,PetscBool krylovstart)
 {
@@ -161,15 +161,15 @@ PetscErrorCode EPSGDSetKrylovStart(EPS eps,PetscBool krylovstart)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  krylovstart - boolean flag indicating if the search subspace is started
    with a Krylov basis
 
    Level: advanced
 
-.seealso: `EPSGDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDSetKrylovStart()`
 @*/
 PetscErrorCode EPSGDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 {
@@ -187,7 +187,7 @@ PetscErrorCode EPSGDGetKrylovStart(EPS eps,PetscBool *krylovstart)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  blocksize - number of vectors added to the search space in every iteration
 
    Options Database Key:
@@ -195,7 +195,7 @@ PetscErrorCode EPSGDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 
    Level: advanced
 
-.seealso: `EPSGDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDSetKrylovStart()`
 @*/
 PetscErrorCode EPSGDSetBlockSize(EPS eps,PetscInt blocksize)
 {
@@ -213,14 +213,14 @@ PetscErrorCode EPSGDSetBlockSize(EPS eps,PetscInt blocksize)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  blocksize - number of vectors added to the search space in every iteration
 
    Level: advanced
 
-.seealso: `EPSGDSetBlockSize()`
+.seealso: [](ch:eps), `EPSGDSetBlockSize()`
 @*/
 PetscErrorCode EPSGDGetBlockSize(EPS eps,PetscInt *blocksize)
 {
@@ -238,7 +238,7 @@ PetscErrorCode EPSGDGetBlockSize(EPS eps,PetscInt *blocksize)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  minv - number of vectors of the searching subspace after restarting
 -  plusk - number of vectors saved from the previous iteration
 
@@ -252,7 +252,7 @@ PetscErrorCode EPSGDGetBlockSize(EPS eps,PetscInt *blocksize)
 
    Level: advanced
 
-.seealso: `EPSGDGetRestart()`
+.seealso: [](ch:eps), `EPSGDGetRestart()`
 @*/
 PetscErrorCode EPSGDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 {
@@ -271,7 +271,7 @@ PetscErrorCode EPSGDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  minv - number of vectors of the searching subspace after restarting
@@ -279,7 +279,7 @@ PetscErrorCode EPSGDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 
    Level: advanced
 
-.seealso: `EPSGDSetRestart()`
+.seealso: [](ch:eps), `EPSGDSetRestart()`
 @*/
 PetscErrorCode EPSGDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 {
@@ -295,7 +295,7 @@ PetscErrorCode EPSGDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  initialsize - number of vectors of the initial searching subspace
 
    Options Database Key:
@@ -311,7 +311,7 @@ PetscErrorCode EPSGDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 
    Level: advanced
 
-.seealso: `EPSGDGetInitialSize()`, `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDGetInitialSize()`, `EPSGDGetKrylovStart()`
 @*/
 PetscErrorCode EPSGDSetInitialSize(EPS eps,PetscInt initialsize)
 {
@@ -328,7 +328,7 @@ PetscErrorCode EPSGDSetInitialSize(EPS eps,PetscInt initialsize)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  initialsize - number of vectors of the initial searching subspace
@@ -343,7 +343,7 @@ PetscErrorCode EPSGDSetInitialSize(EPS eps,PetscInt initialsize)
 
    Level: advanced
 
-.seealso: `EPSGDSetInitialSize()`, `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGDSetInitialSize()`, `EPSGDGetKrylovStart()`
 @*/
 PetscErrorCode EPSGDGetInitialSize(EPS eps,PetscInt *initialsize)
 {
@@ -361,7 +361,7 @@ PetscErrorCode EPSGDGetInitialSize(EPS eps,PetscInt *initialsize)
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenproblem solver context
++  eps   - the linear eigensolver context
 -  borth - whether to B-orthogonalize the search subspace
 
    Options Database Key:
@@ -369,7 +369,7 @@ PetscErrorCode EPSGDGetInitialSize(EPS eps,PetscInt *initialsize)
 
    Level: advanced
 
-.seealso: `EPSGDGetBOrth()`
+.seealso: [](ch:eps), `EPSGDGetBOrth()`
 @*/
 PetscErrorCode EPSGDSetBOrth(EPS eps,PetscBool borth)
 {
@@ -387,14 +387,14 @@ PetscErrorCode EPSGDSetBOrth(EPS eps,PetscBool borth)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  borth - whether to B-orthogonalize the search subspace
 
    Level: advanced
 
-.seealso: `EPSGDSetBOrth()`
+.seealso: [](ch:eps), `EPSGDSetBOrth()`
 @*/
 PetscErrorCode EPSGDGetBOrth(EPS eps,PetscBool *borth)
 {
@@ -420,10 +420,10 @@ static PetscErrorCode EPSGDSetDoubleExpansion_GD(EPS eps,PetscBool doubleexp)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  doubleexp - the boolean flag
 
-   Options Database Keys:
+   Options Database Key:
 .  -eps_gd_double_expansion - activate the double-expansion variant of GD
 
    Notes:
@@ -433,7 +433,7 @@ static PetscErrorCode EPSGDSetDoubleExpansion_GD(EPS eps,PetscBool doubleexp)
 
    Level: advanced
 
-.seealso: `EPSGDGetDoubleExpansion()`
+.seealso: [](ch:eps), `EPSGDGetDoubleExpansion()`
 @*/
 PetscErrorCode EPSGDSetDoubleExpansion(EPS eps,PetscBool doubleexp)
 {
@@ -460,14 +460,14 @@ static PetscErrorCode EPSGDGetDoubleExpansion_GD(EPS eps,PetscBool *doubleexp)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  doubleexp - the flag
 
    Level: advanced
 
-.seealso: `EPSGDSetDoubleExpansion()`
+.seealso: [](ch:eps), `EPSGDSetDoubleExpansion()`
 @*/
 PetscErrorCode EPSGDGetDoubleExpansion(EPS eps,PetscBool *doubleexp)
 {

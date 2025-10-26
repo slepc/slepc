@@ -71,18 +71,18 @@ ApplCtx     ctx;       /*  user-defined context */
 PetscInt    j, nconv;
 PetscReal   error;
 
-NEPCreate( PETSC_COMM_WORLD, &nep );
+NEPCreate(PETSC_COMM_WORLD, &nep);
 /* create and preallocate F and J matrices */
-NEPSetFunction( nep, F, F, FormFunction, &ctx );
-NEPSetJacobian( nep, J, FormJacobian, &ctx );
-NEPSetFromOptions( nep );
-NEPSolve( nep );
-NEPGetConverged( nep, &nconv );
-for (j=0; j<nconv; j++) {
-  NEPGetEigenpair( nep, j, &kr, &ki, xr, xi );
-  NEPComputeError( nep, j, NEP_ERROR_RELATIVE, &error );
+NEPSetFunction(nep, F, F, FormFunction, &ctx);
+NEPSetJacobian(nep, J, FormJacobian, &ctx);
+NEPSetFromOptions(nep);
+NEPSolve(nep);
+NEPGetConverged(nep, &nconv);
+for (j=0;j<nconv;j++) {
+  NEPGetEigenpair(nep, j, &kr, &ki, xr, xi);
+  NEPComputeError(nep, j, NEP_ERROR_RELATIVE, &error);
 }
-NEPDestroy( &nep );
+NEPDestroy(&nep);
 ```
 
 In {external:doc}`SNES`, the usual way to define a set of nonlinear equations $F(x)=0$ is to provide two user-defined callback functions, one to compute the residual vector, $r=F(x)$ for a given $x$, and another one to evaluate the Jacobian matrix, $J(x)=F'(x)$. In the case of `NEP` there are some differences, since the function $T$ depends on the parameter $\lambda$ only. For a given value of $\lambda$ and its associated vector $x$, the residual vector is defined as
@@ -137,6 +137,7 @@ By default, `nev`=1. The other two arguments control the dimension of the subspa
  |`NEP_TARGET_REAL`         |`-nep_target_real`         |Smallest $\|\mathrm{Re}(\lambda-\tau)\|$
  |`NEP_TARGET_IMAGINARY`    |`-nep_target_imaginary`    |Smallest $\|\mathrm{Im}(\lambda-\tau)\|$
  |`NEP_ALL`                 |`-nep_all`                 |All $\lambda\in\Omega$
+ |`NEP_WHICH_USER`          |` `                        |*user-defined*
 
 :::
 

@@ -49,7 +49,7 @@ PetscErrorCode NEPComputeVectors(NEP nep)
    Collective
 
    Input Parameter:
-.  nep - eigensolver context obtained from NEPCreate()
+.  nep - the nonlinear eigensolver context
 
    Options Database Keys:
 +  -nep_view - print information about the solver used
@@ -71,7 +71,7 @@ PetscErrorCode NEPComputeVectors(NEP nep)
 
    Level: beginner
 
-.seealso: `NEPCreate()`, `NEPSetUp()`, `NEPDestroy()`, `NEPSetTolerances()`
+.seealso: [](ch:nep), `NEPCreate()`, `NEPSetUp()`, `NEPDestroy()`, `NEPSetTolerances()`
 @*/
 PetscErrorCode NEPSolve(NEP nep)
 {
@@ -161,7 +161,7 @@ PetscErrorCode NEPSolve(NEP nep)
 
    Level: developer
 
-.seealso: `NEPSetSplitOperator()`
+.seealso: [](ch:nep), `NEPSetSplitOperator()`
 @*/
 PetscErrorCode NEPProjectOperator(NEP nep,PetscInt j0,PetscInt j1)
 {
@@ -208,7 +208,7 @@ PetscErrorCode NEPProjectOperator(NEP nep,PetscInt j0,PetscInt j1)
 
    Level: developer
 
-.seealso: `NEPSetSplitOperator()`, `NEPComputeFunction()`, `NEPApplyAdjoint()`
+.seealso: [](ch:nep), `NEPSetSplitOperator()`, `NEPComputeFunction()`, `NEPApplyAdjoint()`
 @*/
 PetscErrorCode NEPApplyFunction(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat A,Mat B)
 {
@@ -257,7 +257,7 @@ PetscErrorCode NEPApplyFunction(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat
 
    Level: developer
 
-.seealso: `NEPSetSplitOperator()`, `NEPComputeFunction()`, `NEPApplyFunction()`
+.seealso: [](ch:nep), `NEPSetSplitOperator()`, `NEPComputeFunction()`, `NEPApplyFunction()`
 @*/
 PetscErrorCode NEPApplyAdjoint(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat A,Mat B)
 {
@@ -318,7 +318,7 @@ PetscErrorCode NEPApplyAdjoint(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat 
 
    Level: developer
 
-.seealso: `NEPSetSplitOperator()`, `NEPComputeJacobian()`
+.seealso: [](ch:nep), `NEPSetSplitOperator()`, `NEPComputeJacobian()`
 @*/
 PetscErrorCode NEPApplyJacobian(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat A)
 {
@@ -370,7 +370,7 @@ PetscErrorCode NEPApplyJacobian(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat
 
    Level: intermediate
 
-.seealso: `NEPGetConvergedReason()`, `NEPSetTolerances()`
+.seealso: [](ch:nep), `NEPGetConvergedReason()`, `NEPSetTolerances()`
 @*/
 PetscErrorCode NEPGetIterationNumber(NEP nep,PetscInt *its)
 {
@@ -397,7 +397,7 @@ PetscErrorCode NEPGetIterationNumber(NEP nep,PetscInt *its)
 
    Level: beginner
 
-.seealso: `NEPSetDimensions()`, `NEPSolve()`, `NEPGetEigenpair()`
+.seealso: [](ch:nep), `NEPSetDimensions()`, `NEPSolve()`, `NEPGetEigenpair()`
 @*/
 PetscErrorCode NEPGetConverged(NEP nep,PetscInt *nconv)
 {
@@ -410,7 +410,7 @@ PetscErrorCode NEPGetConverged(NEP nep,PetscInt *nconv)
 }
 
 /*@
-   NEPGetConvergedReason - Gets the reason why the NEPSolve() iteration was
+   NEPGetConvergedReason - Gets the reason why the `NEPSolve()` iteration was
    stopped.
 
    Not Collective
@@ -419,26 +419,19 @@ PetscErrorCode NEPGetConverged(NEP nep,PetscInt *nconv)
 .  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `NEPConvergedReason` for the possible values
 
    Options Database Key:
-.  -nep_converged_reason - print the reason to a viewer
+.  -nep_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  NEP_CONVERGED_TOL - converged up to tolerance
-.  NEP_CONVERGED_USER - converged due to a user-defined condition
-.  NEP_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  NEP_DIVERGED_BREAKDOWN - generic breakdown in method
-.  NEP_DIVERGED_LINEAR_SOLVE - inner linear solve failed
--  NEP_DIVERGED_SUBSPACE_EXHAUSTED - run out of space for the basis in an
-   unrestarted solver
-
-   Can only be called after the call to NEPSolve() is complete.
+   Note:
+   If this routine is called before or doing the `NEPSolve()` the value of
+   `NEP_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 
-.seealso: `NEPSetTolerances()`, `NEPSolve()`, `NEPConvergedReason`
+.seealso: [](ch:nep), `NEPSetTolerances()`, `NEPSolve()`, `NEPConvergedReason`
 @*/
 PetscErrorCode NEPGetConvergedReason(NEP nep,NEPConvergedReason *reason)
 {
@@ -457,7 +450,7 @@ PetscErrorCode NEPGetConvergedReason(NEP nep,NEPConvergedReason *reason)
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigensolver context
++  nep - the nonlinear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -483,7 +476,7 @@ PetscErrorCode NEPGetConvergedReason(NEP nep,NEPConvergedReason *reason)
 
    Level: beginner
 
-.seealso: `NEPSolve()`, `NEPGetConverged()`, `NEPSetWhichEigenpairs()`, `NEPGetLeftEigenvector()`
+.seealso: [](ch:nep), `NEPSolve()`, `NEPGetConverged()`, `NEPSetWhichEigenpairs()`, `NEPGetLeftEigenvector()`
 @*/
 PetscErrorCode NEPGetEigenpair(NEP nep,PetscInt i,PetscScalar *eigr,PetscScalar *eigi,Vec Vr,Vec Vi)
 {
@@ -521,7 +514,7 @@ PetscErrorCode NEPGetEigenpair(NEP nep,PetscInt i,PetscScalar *eigr,PetscScalar 
    Collective
 
    Input Parameters:
-+  nep - eigensolver context
++  nep - the nonlinear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -546,7 +539,7 @@ PetscErrorCode NEPGetEigenpair(NEP nep,PetscInt i,PetscScalar *eigr,PetscScalar 
 
    Level: intermediate
 
-.seealso: `NEPGetEigenpair()`, `NEPGetConverged()`, `NEPSetWhichEigenpairs()`, `NEPSetTwoSided()`
+.seealso: [](ch:nep), `NEPGetEigenpair()`, `NEPGetConverged()`, `NEPSetWhichEigenpairs()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPGetLeftEigenvector(NEP nep,PetscInt i,Vec Wr,Vec Wi)
 {
@@ -574,7 +567,7 @@ PetscErrorCode NEPGetLeftEigenvector(NEP nep,PetscInt i,Vec Wr,Vec Wi)
    Not Collective
 
    Input Parameters:
-+  nep - nonlinear eigensolver context
++  nep - the nonlinear eigensolver context
 -  i   - index of eigenpair
 
    Output Parameter:
@@ -586,7 +579,7 @@ PetscErrorCode NEPGetLeftEigenvector(NEP nep,PetscInt i,Vec Wr,Vec Wi)
 
    Level: advanced
 
-.seealso: `NEPComputeError()`
+.seealso: [](ch:nep), `NEPComputeError()`
 @*/
 PetscErrorCode NEPGetErrorEstimate(NEP nep,PetscInt i,PetscReal *errest)
 {
@@ -644,7 +637,7 @@ PetscErrorCode NEPComputeResidualNorm_Private(NEP nep,PetscBool adj,PetscScalar 
 
    Level: beginner
 
-.seealso: `NEPErrorType`, `NEPSolve()`, `NEPGetErrorEstimate()`
+.seealso: [](ch:nep), `NEPErrorType`, `NEPSolve()`, `NEPGetErrorEstimate()`
 @*/
 PetscErrorCode NEPComputeError(NEP nep,PetscInt i,NEPErrorType type,PetscReal *error)
 {
@@ -735,7 +728,7 @@ PetscErrorCode NEPComputeError(NEP nep,PetscInt i,NEPErrorType type,PetscReal *e
    Collective
 
    Input Parameters:
-+  nep    - the NEP context
++  nep    - the nonlinear eigensolver context
 -  lambda - the scalar argument
 
    Output Parameters:
@@ -749,7 +742,7 @@ PetscErrorCode NEPComputeError(NEP nep,PetscInt i,NEPErrorType type,PetscReal *e
 
    Level: developer
 
-.seealso: `NEPSetFunction()`, `NEPGetFunction()`
+.seealso: [](ch:nep), `NEPSetFunction()`, `NEPGetFunction()`
 @*/
 PetscErrorCode NEPComputeFunction(NEP nep,PetscScalar lambda,Mat A,Mat B)
 {
@@ -786,10 +779,10 @@ PetscErrorCode NEPComputeFunction(NEP nep,PetscScalar lambda,Mat A,Mat B)
    Collective
 
    Input Parameters:
-+  nep    - the NEP context
++  nep    - the nonlinear eigensolver context
 -  lambda - the scalar argument
 
-   Output Parameters:
+   Output Parameter:
 .  A   - Jacobian matrix
 
    Notes:
@@ -798,7 +791,7 @@ PetscErrorCode NEPComputeFunction(NEP nep,PetscScalar lambda,Mat A,Mat B)
 
    Level: developer
 
-.seealso: `NEPSetJacobian()`, `NEPGetJacobian()`
+.seealso: [](ch:nep), `NEPSetJacobian()`, `NEPGetJacobian()`
 @*/
 PetscErrorCode NEPComputeJacobian(NEP nep,PetscScalar lambda,Mat A)
 {

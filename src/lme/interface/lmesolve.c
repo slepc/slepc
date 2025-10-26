@@ -20,7 +20,7 @@
    Collective
 
    Input Parameter:
-.  lme - linear matrix equation solver context obtained from `LMECreate()`
+.  lme - the linear matrix equation solver context
 
    Options Database Keys:
 +  -lme_view - print information about the solver once the solve is complete
@@ -123,9 +123,13 @@ PetscErrorCode LMEGetIterationNumber(LME lme,PetscInt *its)
 .  lme - the linear matrix equation solver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `LMEConvergedReason` for the possible values
 
-   Notes:
+   Options Database Key:
+.  -lme_converged_reason - print reason for convergence/divergence, and number of iterations
+
+   Note:
    If this routine is called before or doing the `LMESolve()` the value of
    `LME_CONVERGED_ITERATING` is returned.
 
@@ -148,7 +152,7 @@ PetscErrorCode LMEGetConvergedReason(LME lme,LMEConvergedReason *reason)
    Not Collective
 
    Input Parameter:
-.  lme - linear matrix equation solver context
+.  lme - the linear matrix equation solver context
 
    Output Parameter:
 .  errest - the error estimate

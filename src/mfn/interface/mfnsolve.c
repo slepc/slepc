@@ -55,7 +55,7 @@ static PetscErrorCode MFNSolve_Private(MFN mfn,Vec b,Vec x)
    Collective
 
    Input Parameters:
-+  mfn - matrix function context obtained from MFNCreate()
++  mfn - the matrix function solver context
 -  b   - the right hand side vector
 
    Output Parameter:
@@ -75,8 +75,7 @@ static PetscErrorCode MFNSolve_Private(MFN mfn,Vec b,Vec x)
 
    Level: beginner
 
-.seealso: `MFNCreate()`, `MFNSetUp()`, `MFNDestroy()`, `MFNSetTolerances()`,
-          `MFNSetOperator()`, `MFNSetFN()`
+.seealso: [](ch:mfn), `MFNCreate()`, `MFNSetUp()`, `MFNDestroy()`, `MFNSetTolerances()`, `MFNSetOperator()`, `MFNSetFN()`
 @*/
 PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
 {
@@ -98,7 +97,7 @@ PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
    Collective
 
    Input Parameters:
-+  mfn - matrix function context obtained from MFNCreate()
++  mfn - the matrix function solver context
 -  b   - the right hand side vector
 
    Output Parameter:
@@ -110,7 +109,7 @@ PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
 
    Level: beginner
 
-.seealso: `MFNSolve()`
+.seealso: [](ch:mfn), `MFNSolve()`
 @*/
 PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
 {
@@ -134,7 +133,7 @@ PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  its - number of iterations
@@ -148,7 +147,7 @@ PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
 
    Level: intermediate
 
-.seealso: `MFNGetConvergedReason()`, `MFNSetTolerances()`
+.seealso: [](ch:mfn), `MFNGetConvergedReason()`, `MFNSetTolerances()`
 @*/
 PetscErrorCode MFNGetIterationNumber(MFN mfn,PetscInt *its)
 {
@@ -160,36 +159,34 @@ PetscErrorCode MFNGetIterationNumber(MFN mfn,PetscInt *its)
 }
 
 /*@
-   MFNGetConvergedReason - Gets the reason why the MFNSolve() iteration was
+   MFNGetConvergedReason - Gets the reason why the `MFNSolve()` iteration was
    stopped.
 
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `MFNConvergedReason` for the possible values
+
+   Options Database Key:
+.  -mfn_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:
+   If this routine is called before or doing the `MFNSolve()` the value of
+   `MFN_CONVERGED_ITERATING` is returned.
 
-   Possible values for reason are
-+  MFN_CONVERGED_TOL - converged up to tolerance
-.  MFN_CONVERGED_ITS - solver completed the requested number of steps
-.  MFN_DIVERGED_ITS - required more than max_it iterations to reach convergence
--  MFN_DIVERGED_BREAKDOWN - generic breakdown in method
-
-   Can only be called after the call to MFNSolve() is complete.
-
-   Basic solvers (e.g. unrestarted Krylov iterations) cannot determine if the
+   Basic solvers (e.g., unrestarted Krylov iterations) cannot determine if the
    computation is accurate up to the requested tolerance. In that case, the
-   converged reason is set to MFN_CONVERGED_ITS if the requested number of steps
-   (for instance, the ncv value in unrestarted Krylov methods) have been
+   converged reason is set to `MFN_CONVERGED_ITS` if the requested number of steps
+   (for instance, the `ncv` value in unrestarted Krylov methods) have been
    completed successfully.
 
    Level: intermediate
 
-.seealso: `MFNSetTolerances()`, `MFNSolve()`, `MFNConvergedReason`, `MFNSetErrorIfNotConverged()`
+.seealso: [](ch:mfn), `MFNSetTolerances()`, `MFNSolve()`, `MFNConvergedReason`, `MFNSetErrorIfNotConverged()`
 @*/
 PetscErrorCode MFNGetConvergedReason(MFN mfn,MFNConvergedReason *reason)
 {

@@ -743,7 +743,7 @@ static PetscErrorCode EPSLanczosSetReorthog_Lanczos(EPS eps,EPSLanczosReorthogTy
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  reorthog - the type of reorthogonalization
 
    Options Database Key:
@@ -752,7 +752,7 @@ static PetscErrorCode EPSLanczosSetReorthog_Lanczos(EPS eps,EPSLanczosReorthogTy
 
    Level: advanced
 
-.seealso: `EPSLanczosGetReorthog()`, `EPSLanczosReorthogType`
+.seealso: [](ch:eps), `EPSLanczosGetReorthog()`, `EPSLanczosReorthogType`
 @*/
 PetscErrorCode EPSLanczosSetReorthog(EPS eps,EPSLanczosReorthogType reorthog)
 {
@@ -779,14 +779,14 @@ static PetscErrorCode EPSLanczosGetReorthog_Lanczos(EPS eps,EPSLanczosReorthogTy
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  reorthog - the type of reorthogonalization
 
    Level: advanced
 
-.seealso: `EPSLanczosSetReorthog()`, `EPSLanczosReorthogType`
+.seealso: [](ch:eps), `EPSLanczosSetReorthog()`, `EPSLanczosReorthogType`
 @*/
 PetscErrorCode EPSLanczosGetReorthog(EPS eps,EPSLanczosReorthogType *reorthog)
 {

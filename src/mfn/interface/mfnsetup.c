@@ -20,7 +20,7 @@
    Collective
 
    Input Parameter:
-.  mfn   - matrix function context
+.  mfn   - the matrix function solver context
 
    Notes:
    This function need not be called explicitly in most cases, since MFNSolve()
@@ -29,7 +29,7 @@
 
    Level: developer
 
-.seealso: `MFNCreate()`, `MFNSolve()`, `MFNDestroy()`
+.seealso: [](ch:mfn), `MFNCreate()`, `MFNSolve()`, `MFNDestroy()`
 @*/
 PetscErrorCode MFNSetUp(MFN mfn)
 {
@@ -71,7 +71,7 @@ PetscErrorCode MFNSetUp(MFN mfn)
    Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  A   - the problem matrix
 
    Notes:
@@ -80,7 +80,7 @@ PetscErrorCode MFNSetUp(MFN mfn)
 
    Level: beginner
 
-.seealso: `MFNSolve()`, `MFNSetUp()`, `MFNReset()`
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNSetUp()`, `MFNReset()`
 @*/
 PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
 {
@@ -107,14 +107,14 @@ PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
    Collective
 
    Input Parameter:
-.  mfn - the MFN context
+.  mfn - the matrix function solver context
 
-   Output Parameters:
+   Output Parameter:
 .  A  - the matrix for which the matrix function is to be computed
 
    Level: intermediate
 
-.seealso: `MFNSolve()`, `MFNSetOperator()`
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNSetOperator()`
 @*/
 PetscErrorCode MFNGetOperator(MFN mfn,Mat *A)
 {
@@ -132,7 +132,7 @@ PetscErrorCode MFNGetOperator(MFN mfn,Mat *A)
    Collective
 
    Input Parameters:
-+  mfn   - matrix function context
++  mfn   - the matrix function solver context
 -  extra - number of additional positions, used for methods that require a
            working basis slightly larger than ncv
 
@@ -142,7 +142,7 @@ PetscErrorCode MFNGetOperator(MFN mfn,Mat *A)
 
    Level: developer
 
-.seealso: `MFNSetUp()`
+.seealso: [](ch:mfn), `MFNSetUp()`
 @*/
 PetscErrorCode MFNAllocateSolution(MFN mfn,PetscInt extra)
 {

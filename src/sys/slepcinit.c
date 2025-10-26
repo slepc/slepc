@@ -29,7 +29,7 @@ SLEPC_EXTERN PetscErrorCode PCCreate_HPDDM(PC);
 
     Level: intermediate
 
-.seealso: `SlepcGetVersionNumber()`
+.seealso: [](sec:writing-prog), `SlepcGetVersionNumber()`
 @*/
 PetscErrorCode SlepcGetVersion(char version[],size_t len)
 {
@@ -64,7 +64,7 @@ PetscErrorCode SlepcGetVersion(char version[],size_t len)
 
     Level: intermediate
 
-.seealso: `SlepcGetVersion()`, `SlepcInitialize()`
+.seealso: [](sec:writing-prog), `SlepcGetVersion()`, `SlepcInitialize()`
 @*/
 PetscErrorCode SlepcGetVersionNumber(PetscInt *major,PetscInt *minor,PetscInt *subminor,PetscInt *release)
 {
@@ -270,7 +270,7 @@ PetscErrorCode SlepcCitationsInitialize(void)
 
    Level: beginner
 
-.seealso: `SlepcFinalize()`, `PetscInitialize()`, `SlepcInitializeFortran()`
+.seealso: [](sec:writing-prog), `SlepcFinalize()`, `PetscInitialize()`, `SlepcInitializeFortran()`
 @*/
 PetscErrorCode SlepcInitialize(int *argc,char ***args,const char file[],const char help[])
 {
@@ -304,7 +304,7 @@ PetscErrorCode SlepcInitialize(int *argc,char ***args,const char file[],const ch
 
    Level: beginner
 
-.seealso: `SlepcInitialize()`, `PetscFinalize()`
+.seealso: [](sec:writing-prog), `SlepcInitialize()`, `PetscFinalize()`
 @*/
 PetscErrorCode SlepcFinalize(void)
 {
@@ -333,7 +333,7 @@ PetscErrorCode SlepcFinalize(void)
 
    Level: advanced
 
-.seealso: `SlepcInitialize()`, `SlepcInitializeFortran()`
+.seealso: [](sec:writing-prog), `SlepcInitialize()`, `SlepcInitializeFortran()`
 @*/
 PetscErrorCode SlepcInitializeNoArguments(void) PeNS
 {
@@ -353,7 +353,7 @@ PetscErrorCode SlepcInitializeNoArguments(void) PeNS
 
    Level: beginner
 
-.seealso: `SlepcInitialize()`, `SlepcInitializeFortran()`
+.seealso: [](sec:writing-prog), `SlepcInitialize()`, `SlepcInitializeFortran()`
 @*/
 PetscErrorCode SlepcInitialized(PetscBool *isInitialized)
 {
@@ -370,7 +370,7 @@ PetscErrorCode SlepcInitialized(PetscBool *isInitialized)
 
    Level: beginner
 
-.seealso: `SlepcFinalize()`
+.seealso: [](sec:writing-prog), `SlepcFinalize()`
 @*/
 PetscErrorCode SlepcFinalized(PetscBool *isFinalized)
 {
@@ -398,7 +398,7 @@ PETSC_EXTERN PetscBool PetscBeganMPI;
 
    Level: advanced
 
-.seealso: `SlepcInitialize()`
+.seealso: [](sec:writing-prog), `SlepcInitialize()`
 @*/
 PetscErrorCode SlepcInitializeNoPointers(int argc,char **args,const char *file,const char *help)
 {

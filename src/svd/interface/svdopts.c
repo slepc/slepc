@@ -39,7 +39,7 @@
 
    Level: advanced
 
-.seealso: `SVDGetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
+.seealso: [](ch:svd), `SVDGetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
 @*/
 PetscErrorCode SVDSetImplicitTranspose(SVD svd,PetscBool impl)
 {
@@ -67,7 +67,7 @@ PetscErrorCode SVDSetImplicitTranspose(SVD svd,PetscBool impl)
 
    Level: advanced
 
-.seealso: `SVDSetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
+.seealso: [](ch:svd), `SVDSetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
 @*/
 PetscErrorCode SVDGetImplicitTranspose(SVD svd,PetscBool *impl)
 {
@@ -101,7 +101,7 @@ PetscErrorCode SVDGetImplicitTranspose(SVD svd,PetscBool *impl)
 
    Level: intermediate
 
-.seealso: `SVDGetTolerances()`
+.seealso: [](ch:svd), `SVDGetTolerances()`
 @*/
 PetscErrorCode SVDSetTolerances(SVD svd,PetscReal tol,PetscInt maxits)
 {
@@ -146,7 +146,7 @@ PetscErrorCode SVDSetTolerances(SVD svd,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: `SVDSetTolerances()`
+.seealso: [](ch:svd), `SVDSetTolerances()`
 @*/
 PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
 {
@@ -211,7 +211,7 @@ PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
 
    Level: advanced
 
-.seealso: `SVDGetThreshold()`, `SVDSetStoppingTest()`, `SVDSetDimensions()`, `SVDSetWhichSingularTriplets()`
+.seealso: [](ch:svd), `SVDGetThreshold()`, `SVDSetStoppingTest()`, `SVDSetDimensions()`, `SVDSetWhichSingularTriplets()`
 @*/
 PetscErrorCode SVDSetThreshold(SVD svd,PetscReal thres,PetscBool rel)
 {
@@ -243,7 +243,7 @@ PetscErrorCode SVDSetThreshold(SVD svd,PetscReal thres,PetscBool rel)
 
    Level: advanced
 
-.seealso: `SVDSetThreshold()`
+.seealso: [](ch:svd), `SVDSetThreshold()`
 @*/
 PetscErrorCode SVDGetThreshold(SVD svd,PetscReal *thres,PetscBool *rel)
 {
@@ -287,7 +287,7 @@ PetscErrorCode SVDGetThreshold(SVD svd,PetscReal *thres,PetscBool *rel)
 
    Level: intermediate
 
-.seealso: `SVDGetDimensions()`
+.seealso: [](ch:svd), `SVDGetDimensions()`
 @*/
 PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
 {
@@ -323,7 +323,7 @@ PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value context
+.  svd - the singular value solver context
 
    Output Parameters:
 +  nsv - number of singular values to compute
@@ -335,7 +335,7 @@ PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
 
    Level: intermediate
 
-.seealso: `SVDSetDimensions()`
+.seealso: [](ch:svd), `SVDSetDimensions()`
 @*/
 PetscErrorCode SVDGetDimensions(SVD svd,PetscInt *nsv,PetscInt *ncv,PetscInt *mpd)
 {
@@ -354,7 +354,7 @@ PetscErrorCode SVDGetDimensions(SVD svd,PetscInt *nsv,PetscInt *ncv,PetscInt *mp
     Logically Collective
 
     Input Parameter:
-.   svd - singular value solver context obtained from SVDCreate()
+.   svd - the singular value solver context
 
     Output Parameter:
 .   which - which singular triplets are to be sought
@@ -371,7 +371,7 @@ PetscErrorCode SVDGetDimensions(SVD svd,PetscInt *nsv,PetscInt *ncv,PetscInt *mp
 
     Level: intermediate
 
-.seealso: `SVDGetWhichSingularTriplets()`, `SVDWhich`
+.seealso: [](ch:svd), `SVDGetWhichSingularTriplets()`, `SVDWhich`
 @*/
 PetscErrorCode SVDSetWhichSingularTriplets(SVD svd,SVDWhich which)
 {
@@ -399,7 +399,7 @@ PetscErrorCode SVDSetWhichSingularTriplets(SVD svd,SVDWhich which)
     Not Collective
 
     Input Parameter:
-.   svd - singular value solver context obtained from SVDCreate()
+.   svd - the singular value solver context
 
     Output Parameter:
 .   which - which singular triplets are to be sought
@@ -409,7 +409,7 @@ PetscErrorCode SVDSetWhichSingularTriplets(SVD svd,SVDWhich which)
 
     Level: intermediate
 
-.seealso: `SVDSetWhichSingularTriplets()`, `SVDWhich`
+.seealso: [](ch:svd), `SVDSetWhichSingularTriplets()`, `SVDWhich`
 @*/
 PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
 {
@@ -427,7 +427,7 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver context obtained from SVDCreate()
++  svd     - the singular value solver context
 .  conv    - the convergence test function, see SVDConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -438,7 +438,7 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
 
    Level: advanced
 
-.seealso: `SVDSetConvergenceTest()`, `SVDSetTolerances()`
+.seealso: [](ch:svd), `SVDSetConvergenceTest()`, `SVDSetTolerances()`
 @*/
 PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -466,7 +466,7 @@ PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,
    Logically Collective
 
    Input Parameters:
-+  svd  - singular value solver context obtained from SVDCreate()
++  svd  - the singular value solver context
 -  conv - the type of convergence test
 
    Options Database Keys:
@@ -488,7 +488,7 @@ PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,
 
    Level: intermediate
 
-.seealso: `SVDGetConvergenceTest()`, `SVDSetConvergenceTestFunction()`, `SVDSetStoppingTest()`, `SVDConv`
+.seealso: [](ch:svd), `SVDGetConvergenceTest()`, `SVDSetConvergenceTestFunction()`, `SVDSetStoppingTest()`, `SVDConv`
 @*/
 PetscErrorCode SVDSetConvergenceTest(SVD svd,SVDConv conv)
 {
@@ -517,15 +517,15 @@ PetscErrorCode SVDSetConvergenceTest(SVD svd,SVDConv conv)
 
    Not Collective
 
-   Input Parameters:
-.  svd   - singular value solver context obtained from SVDCreate()
+   Input Parameter:
+.  svd   - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  conv  - the type of convergence test
 
    Level: intermediate
 
-.seealso: `SVDSetConvergenceTest()`, `SVDConv`
+.seealso: [](ch:svd), `SVDSetConvergenceTest()`, `SVDConv`
 @*/
 PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
 {
@@ -543,7 +543,7 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver context obtained from SVDCreate()
++  svd     - the singular value solver context
 .  stop    - the stopping test function, see SVDStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -556,7 +556,7 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
 
    Level: advanced
 
-.seealso: `SVDSetStoppingTest()`, `SVDStoppingBasic()`
+.seealso: [](ch:svd), `SVDSetStoppingTest()`, `SVDStoppingBasic()`
 @*/
 PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -582,7 +582,7 @@ PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *
    Logically Collective
 
    Input Parameters:
-+  svd  - singular value solver context obtained from SVDCreate()
++  svd  - the singular value solver context
 -  stop - the type of stopping test
 
    Options Database Keys:
@@ -598,7 +598,7 @@ PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *
 
    Level: advanced
 
-.seealso: `SVDGetStoppingTest()`, `SVDSetStoppingTestFunction()`, `SVDSetConvergenceTest()`, `SVDStop`
+.seealso: [](ch:svd), `SVDGetStoppingTest()`, `SVDSetStoppingTestFunction()`, `SVDSetConvergenceTest()`, `SVDStop`
 @*/
 PetscErrorCode SVDSetStoppingTest(SVD svd,SVDStop stop)
 {
@@ -625,15 +625,15 @@ PetscErrorCode SVDSetStoppingTest(SVD svd,SVDStop stop)
 
    Not Collective
 
-   Input Parameters:
-.  svd   - singular value solver context obtained from SVDCreate()
+   Input Parameter:
+.  svd   - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  stop  - the type of stopping test
 
    Level: advanced
 
-.seealso: `SVDSetStoppingTest()`, `SVDStop`
+.seealso: [](ch:svd), `SVDSetStoppingTest()`, `SVDStop`
 @*/
 PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
 {
@@ -659,7 +659,7 @@ PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
 
    Level: developer
 
-.seealso: `SVDMonitorSet()`, `SVDSetTrackAll()`
+.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDSetTrackAll()`
 @*/
 PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name[],void *ctx,PetscBool trackall)
 {
@@ -694,21 +694,21 @@ PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name
 }
 
 /*@
-   SVDSetFromOptions - Sets SVD options from the options database.
-   This routine must be called before SVDSetUp() if the user is to be
-   allowed to set the solver type.
+   SVDSetFromOptions - Sets `SVD` options from the options database.
+   This routine must be called before `SVDSetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  svd - the singular value solver context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 
-.seealso: `SVDSetOptionsPrefix()`
+.seealso: [](ch:svd), `SVDSetOptionsPrefix()`
 @*/
 PetscErrorCode SVDSetFromOptions(SVD svd)
 {
@@ -833,7 +833,7 @@ PetscErrorCode SVDSetFromOptions(SVD svd)
 
    Level: intermediate
 
-.seealso: `SVDSetOperators()`, `SVDSetSignature()`, `SVDSetType()`, `SVDGetProblemType()`, `SVDProblemType`
+.seealso: [](ch:svd), `SVDSetOperators()`, `SVDSetSignature()`, `SVDSetType()`, `SVDGetProblemType()`, `SVDProblemType`
 @*/
 PetscErrorCode SVDSetProblemType(SVD svd,SVDProblemType type)
 {
@@ -875,7 +875,7 @@ PetscErrorCode SVDSetProblemType(SVD svd,SVDProblemType type)
 
    Level: intermediate
 
-.seealso: `SVDSetProblemType()`, `SVDProblemType`
+.seealso: [](ch:svd), `SVDSetProblemType()`, `SVDProblemType`
 @*/
 PetscErrorCode SVDGetProblemType(SVD svd,SVDProblemType *type)
 {
@@ -900,7 +900,7 @@ PetscErrorCode SVDGetProblemType(SVD svd,SVDProblemType *type)
 
    Level: intermediate
 
-.seealso: `SVDIsHyperbolic()`
+.seealso: [](ch:svd), `SVDIsHyperbolic()`
 @*/
 PetscErrorCode SVDIsGeneralized(SVD svd,PetscBool* is)
 {
@@ -925,7 +925,7 @@ PetscErrorCode SVDIsGeneralized(SVD svd,PetscBool* is)
 
    Level: intermediate
 
-.seealso: `SVDIsGeneralized()`
+.seealso: [](ch:svd), `SVDIsGeneralized()`
 @*/
 PetscErrorCode SVDIsHyperbolic(SVD svd,PetscBool* is)
 {
@@ -956,7 +956,7 @@ PetscErrorCode SVDIsHyperbolic(SVD svd,PetscBool* is)
 
    Level: developer
 
-.seealso: `SVDGetTrackAll()`
+.seealso: [](ch:svd), `SVDGetTrackAll()`
 @*/
 PetscErrorCode SVDSetTrackAll(SVD svd,PetscBool trackall)
 {
@@ -981,7 +981,7 @@ PetscErrorCode SVDSetTrackAll(SVD svd,PetscBool trackall)
 
    Level: developer
 
-.seealso: `SVDSetTrackAll()`
+.seealso: [](ch:svd), `SVDSetTrackAll()`
 @*/
 PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
 {
@@ -1016,7 +1016,7 @@ PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
 
    Level: advanced
 
-.seealso: `SVDAppendOptionsPrefix()`, `SVDGetOptionsPrefix()`
+.seealso: [](ch:svd), `SVDAppendOptionsPrefix()`, `SVDGetOptionsPrefix()`
 @*/
 PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char *prefix)
 {
@@ -1047,7 +1047,7 @@ PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char *prefix)
 
    Level: advanced
 
-.seealso: `SVDSetOptionsPrefix()`, `SVDGetOptionsPrefix()`
+.seealso: [](ch:svd), `SVDSetOptionsPrefix()`, `SVDGetOptionsPrefix()`
 @*/
 PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char *prefix)
 {
@@ -1076,7 +1076,7 @@ PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char *prefix)
 
    Level: advanced
 
-.seealso: `SVDSetOptionsPrefix()`, `SVDAppendOptionsPrefix()`
+.seealso: [](ch:svd), `SVDSetOptionsPrefix()`, `SVDAppendOptionsPrefix()`
 @*/
 PetscErrorCode SVDGetOptionsPrefix(SVD svd,const char *prefix[])
 {

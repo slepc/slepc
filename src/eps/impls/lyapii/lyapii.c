@@ -576,7 +576,7 @@ static PetscErrorCode EPSLyapIISetRanks_LyapII(EPS eps,PetscInt rkc,PetscInt rkl
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  rkc - the compressed rank
 -  rkl - the Lyapunov rank
 
@@ -595,7 +595,7 @@ static PetscErrorCode EPSLyapIISetRanks_LyapII(EPS eps,PetscInt rkc,PetscInt rkl
 
    Level: intermediate
 
-.seealso: `EPSLyapIIGetRanks()`
+.seealso: [](ch:eps), `EPSLyapIIGetRanks()`
 @*/
 PetscErrorCode EPSLyapIISetRanks(EPS eps,PetscInt rkc,PetscInt rkl)
 {
@@ -623,7 +623,7 @@ static PetscErrorCode EPSLyapIIGetRanks_LyapII(EPS eps,PetscInt *rkc,PetscInt *r
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  rkc - the compressed rank
@@ -631,7 +631,7 @@ static PetscErrorCode EPSLyapIIGetRanks_LyapII(EPS eps,PetscInt *rkc,PetscInt *r
 
    Level: intermediate
 
-.seealso: `EPSLyapIISetRanks()`
+.seealso: [](ch:eps), `EPSLyapIISetRanks()`
 @*/
 PetscErrorCode EPSLyapIIGetRanks(EPS eps,PetscInt *rkc,PetscInt *rkl)
 {
@@ -660,12 +660,12 @@ static PetscErrorCode EPSLyapIISetLME_LyapII(EPS eps,LME lme)
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
--  lme - the linear matrix equation solver object
++  eps - the linear eigensolver context
+-  lme - the linear matrix equation solver context
 
    Level: advanced
 
-.seealso: `EPSLyapIIGetLME()`
+.seealso: [](ch:eps), `EPSLyapIIGetLME()`
 @*/
 PetscErrorCode EPSLyapIISetLME(EPS eps,LME lme)
 {
@@ -699,14 +699,14 @@ static PetscErrorCode EPSLyapIIGetLME_LyapII(EPS eps,LME *lme)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  lme - the linear matrix equation solver object
+.  lme - the linear matrix equation solver context
 
    Level: advanced
 
-.seealso: `EPSLyapIISetLME()`
+.seealso: [](ch:eps), `EPSLyapIISetLME()`
 @*/
 PetscErrorCode EPSLyapIIGetLME(EPS eps,LME *lme)
 {

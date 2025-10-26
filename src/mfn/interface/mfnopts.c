@@ -22,14 +22,14 @@
    Collective
 
    Input Parameters:
-+  mfn  - the matrix function context
++  mfn  - the matrix function solver context
 .  opt  - the command line option for this monitor
 .  name - the monitor type one is seeking
 -  ctx  - an optional user context for the monitor, or NULL
 
    Level: developer
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNMonitorSetFromOptions(MFN mfn,const char opt[],const char name[],void *ctx)
 {
@@ -63,21 +63,21 @@ PetscErrorCode MFNMonitorSetFromOptions(MFN mfn,const char opt[],const char name
 }
 
 /*@
-   MFNSetFromOptions - Sets MFN options from the options database.
-   This routine must be called before MFNSetUp() if the user is to be
-   allowed to set the solver type.
+   MFNSetFromOptions - Sets `MFN` options from the options database.
+   This routine must be called before `MFNSetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
-.  mfn - the matrix function context
+   Input Parameter:
+.  mfn - the matrix function solver context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 
-.seealso: `MFNSetOptionsPrefix()`
+.seealso: [](ch:mfn), `MFNSetOptionsPrefix()`
 @*/
 PetscErrorCode MFNSetFromOptions(MFN mfn)
 {
@@ -135,7 +135,7 @@ PetscErrorCode MFNSetFromOptions(MFN mfn)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameters:
 +  tol - the convergence tolerance
@@ -146,7 +146,7 @@ PetscErrorCode MFNSetFromOptions(MFN mfn)
 
    Level: intermediate
 
-.seealso: `MFNSetTolerances()`
+.seealso: [](ch:mfn), `MFNSetTolerances()`
 @*/
 PetscErrorCode MFNGetTolerances(MFN mfn,PetscReal *tol,PetscInt *maxits)
 {
@@ -164,7 +164,7 @@ PetscErrorCode MFNGetTolerances(MFN mfn,PetscReal *tol,PetscInt *maxits)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 .  tol - the convergence tolerance
 -  maxits - maximum number of iterations to use
 
@@ -180,7 +180,7 @@ PetscErrorCode MFNGetTolerances(MFN mfn,PetscReal *tol,PetscInt *maxits)
 
    Level: intermediate
 
-.seealso: `MFNGetTolerances()`
+.seealso: [](ch:mfn), `MFNGetTolerances()`
 @*/
 PetscErrorCode MFNSetTolerances(MFN mfn,PetscReal tol,PetscInt maxits)
 {
@@ -213,14 +213,14 @@ PetscErrorCode MFNSetTolerances(MFN mfn,PetscReal tol,PetscInt maxits)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  ncv - the maximum dimension of the subspace to be used by the solver
 
    Level: intermediate
 
-.seealso: `MFNSetDimensions()`
+.seealso: [](ch:mfn), `MFNSetDimensions()`
 @*/
 PetscErrorCode MFNGetDimensions(MFN mfn,PetscInt *ncv)
 {
@@ -237,10 +237,10 @@ PetscErrorCode MFNGetDimensions(MFN mfn,PetscInt *ncv)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  ncv - the maximum dimension of the subspace to be used by the solver
 
-   Options Database Keys:
+   Options Database Key:
 .  -mfn_ncv <ncv> - Sets the dimension of the subspace
 
    Notes:
@@ -249,7 +249,7 @@ PetscErrorCode MFNGetDimensions(MFN mfn,PetscInt *ncv)
 
    Level: intermediate
 
-.seealso: `MFNGetDimensions()`
+.seealso: [](ch:mfn), `MFNGetDimensions()`
 @*/
 PetscErrorCode MFNSetDimensions(MFN mfn,PetscInt ncv)
 {
@@ -273,10 +273,10 @@ PetscErrorCode MFNSetDimensions(MFN mfn,PetscInt ncv)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  flg - PETSC_TRUE indicates you want the error generated
 
-   Options Database Keys:
+   Options Database Key:
 .  -mfn_error_if_not_converged - this takes an optional truth value (0/1/no/yes/true/false)
 
    Level: intermediate
@@ -285,7 +285,7 @@ PetscErrorCode MFNSetDimensions(MFN mfn,PetscInt ncv)
    Normally SLEPc continues if the solver fails to converge, you can call
    MFNGetConvergedReason() after a MFNSolve() to determine if it has converged.
 
-.seealso: `MFNGetErrorIfNotConverged()`
+.seealso: [](ch:mfn), `MFNGetErrorIfNotConverged()`
 @*/
 PetscErrorCode MFNSetErrorIfNotConverged(MFN mfn,PetscBool flg)
 {
@@ -303,14 +303,14 @@ PetscErrorCode MFNSetErrorIfNotConverged(MFN mfn,PetscBool flg)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  flag - PETSC_TRUE if it will generate an error, else PETSC_FALSE
 
    Level: intermediate
 
-.seealso: `MFNSetErrorIfNotConverged()`
+.seealso: [](ch:mfn), `MFNSetErrorIfNotConverged()`
 @*/
 PetscErrorCode MFNGetErrorIfNotConverged(MFN mfn,PetscBool *flag)
 {
@@ -328,7 +328,7 @@ PetscErrorCode MFNGetErrorIfNotConverged(MFN mfn,PetscBool *flag)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  prefix - the prefix string to prepend to all MFN option requests
 
    Notes:
@@ -345,7 +345,7 @@ PetscErrorCode MFNGetErrorIfNotConverged(MFN mfn,PetscBool *flag)
 
    Level: advanced
 
-.seealso: `MFNAppendOptionsPrefix()`, `MFNGetOptionsPrefix()`
+.seealso: [](ch:mfn), `MFNAppendOptionsPrefix()`, `MFNGetOptionsPrefix()`
 @*/
 PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char *prefix)
 {
@@ -366,7 +366,7 @@ PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char *prefix)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  prefix - the prefix string to prepend to all MFN option requests
 
    Notes:
@@ -375,7 +375,7 @@ PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char *prefix)
 
    Level: advanced
 
-.seealso: `MFNSetOptionsPrefix()`, `MFNGetOptionsPrefix()`
+.seealso: [](ch:mfn), `MFNSetOptionsPrefix()`, `MFNGetOptionsPrefix()`
 @*/
 PetscErrorCode MFNAppendOptionsPrefix(MFN mfn,const char *prefix)
 {
@@ -396,14 +396,14 @@ PetscErrorCode MFNAppendOptionsPrefix(MFN mfn,const char *prefix)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  prefix - pointer to the prefix string used is returned
 
    Level: advanced
 
-.seealso: `MFNSetOptionsPrefix()`, `MFNAppendOptionsPrefix()`
+.seealso: [](ch:mfn), `MFNSetOptionsPrefix()`, `MFNAppendOptionsPrefix()`
 @*/
 PetscErrorCode MFNGetOptionsPrefix(MFN mfn,const char *prefix[])
 {

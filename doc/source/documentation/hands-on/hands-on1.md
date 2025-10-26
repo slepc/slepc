@@ -182,7 +182,7 @@ $ ./ex1 -n 700 -eps_nev 5 -eps_ncv 35 -eps_monitor_all draw::draw_lg -draw_pause
 The plot is drawn in an X11 pop-up window, so this requires that the display is set up correctly.
 :::
 
-## Changing the Eigensolver
+## Choosing the Eigensolver
 
 The convergence behavior for a particular problem also depends on the properties of the eigensolver being used. SLEPc provides several eigensolvers that can be selected in the source code with the function `EPSSetType()`, or at run time:
 
@@ -190,27 +190,14 @@ The convergence behavior for a particular problem also depends on the properties
 $ ./ex1 -eps_nev 4 -eps_type lobpcg
 ```
 
-The following table shows some of the solvers available in SLEPc.
-
-Solver                                  |  Command-line Name  |  Parameter
----                                     |  ---                |  ---
-Krylov-Schur                            |  krylovschur        |  EPSKRYLOVSCHUR
-Generalized Davidson                    |  gd                 |  EPSGD
-Jacobi-Davidson                         |  jd                 |  EPSJD
-Rayleigh-quotient conjugate gradient    |  rqcg               |  EPSRQCG
-Locally optimal block preconditioned CG |  lobpcg             |  EPSLOBPCG
-Contour integral spectrum slice         |  ciss               |  EPSCISS
-Subspace Iteration                      |  subspace           |  EPSSUBSPACE
-Power / RQI                             |  power              |  EPSPOWER
-LAPACK                                  |  lapack             |  EPSLAPACK
-ARPACK                                  |  arpack             |  EPSARPACK
+Check the table of [](tab:solvers).
 
 :::{note}
-The LAPACK solver is not really a full-featured eigensolver but simply an interface to some LAPACK routines. These routines operate sequentially in dense mode and therefore are suitable only for small size problems. This solver should be used only for debugging purposes.
+The `lapack` solver is not really a full-featured eigensolver but simply an interface to some LAPACK routines. These routines operate sequentially in dense mode and therefore are suitable only for small size problems. This method should be used only for debugging purposes.
 :::
 
 :::{note}
-The last one (ARPACK) may or may not be available on your system, depending on whether it was enabled during installation of SLEPc. It consists in an interface to the external [ARPACK library](https://github.com/opencollab/arpack-ng). Interfaces to other external libraries may be available as well. These can be used as any other SLEPc native eigensolver.
+The last entries of the table (e.g., `arpack`) may or may not be available on your system, depending on whether they were enabled during installation of SLEPc. They are interfaces to external libraries that can be used as any other SLEPc native eigensolver, see the section [](sec:wrap).
 :::
 
 :::{note}

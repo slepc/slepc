@@ -263,7 +263,7 @@ static PetscErrorCode EPSRQCGSetReset_RQCG(EPS eps,PetscInt nrest)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  nrest - the number of iterations between resets
 
    Options Database Key:
@@ -271,7 +271,7 @@ static PetscErrorCode EPSRQCGSetReset_RQCG(EPS eps,PetscInt nrest)
 
    Level: advanced
 
-.seealso: `EPSRQCGGetReset()`
+.seealso: [](ch:eps), `EPSRQCGGetReset()`
 @*/
 PetscErrorCode EPSRQCGSetReset(EPS eps,PetscInt nrest)
 {
@@ -297,14 +297,14 @@ static PetscErrorCode EPSRQCGGetReset_RQCG(EPS eps,PetscInt *nrest)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  nrest - the reset parameter
 
    Level: advanced
 
-.seealso: `EPSRQCGSetReset()`
+.seealso: [](ch:eps), `EPSRQCGSetReset()`
 @*/
 PetscErrorCode EPSRQCGGetReset(EPS eps,PetscInt *nrest)
 {

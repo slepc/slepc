@@ -28,7 +28,7 @@ const char *FNParallelTypes[] = {"REDUNDANT","SYNCHRONIZED","FNParallelType","FN
 
    Level: developer
 
-.seealso: `SlepcFinalize()`, `FNInitializePackage()`
+.seealso: [](sec:fn), `SlepcFinalize()`, `FNInitializePackage()`
 @*/
 PetscErrorCode FNFinalizePackage(void)
 {

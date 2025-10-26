@@ -293,10 +293,10 @@ static PetscErrorCode NEPSLPSetDeflationThreshold_SLP(NEP nep,PetscReal deftol)
    Logically Collective
 
    Input Parameters:
-+  nep    - nonlinear eigenvalue solver
++  nep    - the nonlinear eigensolver context
 -  deftol - the threshold value
 
-   Options Database Keys:
+   Options Database Key:
 .  -nep_slp_deflation_threshold <deftol> - set the threshold
 
    Notes:
@@ -309,7 +309,7 @@ static PetscErrorCode NEPSLPSetDeflationThreshold_SLP(NEP nep,PetscReal deftol)
 
    Level: advanced
 
-.seealso: `NEPSLPGetDeflationThreshold()`
+.seealso: [](ch:nep), `NEPSLPGetDeflationThreshold()`
 @*/
 PetscErrorCode NEPSLPSetDeflationThreshold(NEP nep,PetscReal deftol)
 {
@@ -335,14 +335,14 @@ static PetscErrorCode NEPSLPGetDeflationThreshold_SLP(NEP nep,PetscReal *deftol)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  deftol - the threshold
 
    Level: advanced
 
-.seealso: `NEPSLPSetDeflationThreshold()`
+.seealso: [](ch:nep), `NEPSLPSetDeflationThreshold()`
 @*/
 PetscErrorCode NEPSLPGetDeflationThreshold(NEP nep,PetscReal *deftol)
 {
@@ -372,12 +372,12 @@ static PetscErrorCode NEPSLPSetEPS_SLP(NEP nep,EPS eps)
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  eps - the eigensolver object
++  nep - the nonlinear eigensolver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `NEPSLPGetEPS()`
+.seealso: [](ch:nep), `NEPSLPGetEPS()`
 @*/
 PetscErrorCode NEPSLPSetEPS(NEP nep,EPS eps)
 {
@@ -412,14 +412,14 @@ static PetscErrorCode NEPSLPGetEPS_SLP(NEP nep,EPS *eps)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `NEPSLPSetEPS()`
+.seealso: [](ch:nep), `NEPSLPSetEPS()`
 @*/
 PetscErrorCode NEPSLPGetEPS(NEP nep,EPS *eps)
 {
@@ -450,12 +450,12 @@ static PetscErrorCode NEPSLPSetEPSLeft_SLP(NEP nep,EPS eps)
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  eps - the eigensolver object
++  nep - the nonlinear eigensolver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `NEPSLPGetEPSLeft()`, `NEPSetTwoSided()`
+.seealso: [](ch:nep), `NEPSLPGetEPSLeft()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPSLPSetEPSLeft(NEP nep,EPS eps)
 {
@@ -491,14 +491,14 @@ static PetscErrorCode NEPSLPGetEPSLeft_SLP(NEP nep,EPS *eps)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `NEPSLPSetEPSLeft()`, `NEPSetTwoSided()`
+.seealso: [](ch:nep), `NEPSLPSetEPSLeft()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPSLPGetEPSLeft(NEP nep,EPS *eps)
 {
@@ -528,12 +528,12 @@ static PetscErrorCode NEPSLPSetKSP_SLP(NEP nep,KSP ksp)
    Collective
 
    Input Parameters:
-+  nep - eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `NEPSLPGetKSP()`
+.seealso: [](ch:nep), `NEPSLPGetKSP()`
 @*/
 PetscErrorCode NEPSLPSetKSP(NEP nep,KSP ksp)
 {
@@ -570,14 +570,14 @@ static PetscErrorCode NEPSLPGetKSP_SLP(NEP nep,KSP *ksp)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `NEPSLPSetKSP()`
+.seealso: [](ch:nep), `NEPSLPSetKSP()`
 @*/
 PetscErrorCode NEPSLPGetKSP(NEP nep,KSP *ksp)
 {

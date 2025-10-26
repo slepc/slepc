@@ -685,7 +685,7 @@ static PetscErrorCode DSNEPGetNumFN_NEP(DS ds,PetscInt *n)
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  n - the number of functions passed in `DSNEPSetFN()`
 
    Level: advanced
@@ -764,7 +764,7 @@ static PetscErrorCode DSNEPGetMinimality_NEP(DS ds,PetscInt *n)
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  n - the maximum minimality index passed in `DSNEPSetMinimality()`
 
    Level: advanced
@@ -811,7 +811,7 @@ static PetscErrorCode DSNEPSetRefine_NEP(DS ds,PetscReal tol,PetscInt its)
 .  tol - the tolerance
 -  its - the number of iterations
 
-   Options Database Key:
+   Options Database Keys:
 +  -ds_nep_refine_tol <tol> - sets the tolerance
 -  -ds_nep_refine_its <its> - sets the number of Newton iterations
 
@@ -933,7 +933,7 @@ static PetscErrorCode DSNEPGetIntegrationPoints_NEP(DS ds,PetscInt *ip)
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  ip - the number of integration points
 
    Level: advanced
@@ -1010,7 +1010,7 @@ static PetscErrorCode DSNEPGetSamplingSize_NEP(DS ds,PetscInt *p)
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  p -  the number of columns for the sampling matrix
 
    Level: advanced

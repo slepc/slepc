@@ -113,15 +113,7 @@ A better solution may be to use a spectral transformation, but with several cons
 
 The general idea of the spectral transformation is to substitute the original problem, {math}`Ax=\lambda x`, by another one, {math}`Tx= \theta x`, in which the eigenvalues are mapped to a different position but eigenvectors remain unchanged. With this strategy, one can move interior eigenvalues to the periphery.
 
-Each `EPS` object uses an `ST` object internally to manage the spectral transformation. The following table shows the available spectral transformations, which can be selected with the function `STSetType()` or at run time.
-
-Spectral Transformation  |  Operator                                   |  Command-line Name  |  Parameter
----                      |  ---                                        |  ---                |  ---
-Shift of origin          |  {math}`A - \sigma I`                       |  shift              |  STSHIFT
-Shift-and-invert         |  {math}`(A- \sigma I)^{-1}`                 |  sinvert            |  STSINVERT
-Cayley                   |  {math}`(A- \sigma I)^{-1} (A + \nu I)`     |  cayley             |  STCAYLEY
-Preconditioner           |  {math}`K^{-1} \approx (A- \sigma I)^{-1}`  |  precond            |  STPRECOND
-Polynomial filter        |  {math}`p(A)`                               |  filter             |  STFILTER
+Each `EPS` object uses an `ST` object internally to manage the spectral transformation. The table [](tab:transforms) shows the available spectral transformations, which can be selected with the function `STSetType()` or at run time. In this case, the expressions for the operator that appear in the table should be read considering $B=I$.
 
 :::{note}
 The default is to do shift of origin with a value {math}`\sigma=0`. This was reported by `-eps_view` in the previous example.

@@ -20,7 +20,7 @@
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Note:
    This function need not be called explicitly, since it will be called at
@@ -28,7 +28,7 @@
 
    Level: developer
 
-.seealso: `NEPSetFromOptions()`, `NEPSetUp()`
+.seealso: [](ch:nep), `NEPSetFromOptions()`, `NEPSetUp()`
 @*/
 PetscErrorCode NEPSetDSType(NEP nep)
 {
@@ -45,7 +45,7 @@ PetscErrorCode NEPSetDSType(NEP nep)
    Collective
 
    Input Parameter:
-.  nep   - solver context
+.  nep   - the nonlinear eigensolver context
 
    Notes:
    This function need not be called explicitly in most cases, since NEPSolve()
@@ -54,7 +54,7 @@ PetscErrorCode NEPSetDSType(NEP nep)
 
    Level: developer
 
-.seealso: `NEPCreate()`, `NEPSolve()`, `NEPDestroy()`
+.seealso: [](ch:nep), `NEPCreate()`, `NEPSolve()`, `NEPDestroy()`
 @*/
 PetscErrorCode NEPSetUp(NEP nep)
 {
@@ -240,7 +240,7 @@ PetscErrorCode NEPSetUp(NEP nep)
 
    Level: intermediate
 
-.seealso: `NEPSetUp()`
+.seealso: [](ch:nep), `NEPSetUp()`
 @*/
 PetscErrorCode NEPSetInitialSpace(NEP nep,PetscInt n,Vec is[])
 {
@@ -286,7 +286,7 @@ PetscErrorCode NEPSetDimensions_Default(NEP nep,PetscInt nev,PetscInt *ncv,Petsc
    Collective
 
    Input Parameters:
-+  nep   - eigensolver context
++  nep   - the nonlinear eigensolver context
 -  extra - number of additional positions, used for methods that require a
            working basis slightly larger than ncv
 
@@ -296,7 +296,7 @@ PetscErrorCode NEPSetDimensions_Default(NEP nep,PetscInt nev,PetscInt *ncv,Petsc
 
    Level: developer
 
-.seealso: `PEPSetUp()`
+.seealso: [](ch:nep), `PEPSetUp()`
 @*/
 PetscErrorCode NEPAllocateSolution(NEP nep,PetscInt extra)
 {

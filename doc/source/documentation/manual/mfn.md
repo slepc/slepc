@@ -40,14 +40,14 @@ FN          f;         /*  the function, exp() in this example */
 PetscScalar alpha;     /*  to compute exp(alpha*A)             */
 Vec         v, y;      /*  right vector and solution           */
 
-MFNCreate( PETSC_COMM_WORLD, &mfn );
-MFNSetOperator( mfn, A );
-MFNGetFN( mfn, &f );
-FNSetType( f, FNEXP );
-FNSetScale( f, alpha, 1.0 );
-MFNSetFromOptions( mfn );
-MFNSolve( mfn, v, y );
-MFNDestroy( &mfn );
+MFNCreate(PETSC_COMM_WORLD, &mfn);
+MFNSetOperator(mfn, A);
+MFNGetFN(mfn, &f);
+FNSetType(f, FNEXP);
+FNSetScale(f, alpha, 1.0);
+MFNSetFromOptions(mfn);
+MFNSolve(mfn, v, y);
+MFNDestroy(&mfn);
 ```
 
 Listing [](#fig:ex-mfn) shows a simple example with the basic steps for computing $y=\exp(\alpha A)v$. After creating the solver context with `MFNCreate()`, the problem matrix has to be passed with `MFNSetOperator()` and the function to compute $f(\cdot)$ must be specified with the aid of the auxiliary class `FN`, see details in section [](#sec:fn). Then, a call to `MFNSolve()` runs the solver on a given vector $v$, returning the computed result $y$. Finally, `MFNDestroy()` is used to reclaim memory. We give a few more details below.

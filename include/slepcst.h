@@ -41,12 +41,12 @@ typedef struct _p_ST* ST;
 .seealso: [](ch:st), `ST`, `STSetType()`
 J*/
 typedef const char *STType;
-#define STSHELL     "shell"
 #define STSHIFT     "shift"
 #define STSINVERT   "sinvert"
 #define STCAYLEY    "cayley"
 #define STPRECOND   "precond"
 #define STFILTER    "filter"
+#define STSHELL     "shell"
 
 /* Logging support */
 SLEPC_EXTERN PetscClassId ST_CLASSID;
@@ -142,7 +142,7 @@ SLEPC_EXTERN PetscErrorCode STMatGetLocalSize(ST,PetscInt*,PetscInt*);
 
    Level: intermediate
 
-.seealso: `STSetMatMode()`, `STGetMatMode()`
+.seealso: [](ch:st), `STSetMatMode()`, `STGetMatMode()`
 E*/
 typedef enum { ST_MATMODE_COPY,
                ST_MATMODE_INPLACE,

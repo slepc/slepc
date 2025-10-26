@@ -19,7 +19,7 @@
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigensolver context
++  nep - the nonlinear eigensolver context
 -  nw  - number of work vectors to allocate
 
    Developer Notes:
@@ -28,7 +28,7 @@
 
    Level: developer
 
-.seealso: `NEPSetUp()`
+.seealso: [](ch:nep), `NEPSetUp()`
 @*/
 PetscErrorCode NEPSetWorkVecs(NEP nep,PetscInt nw)
 {
@@ -145,7 +145,7 @@ PetscErrorCode NEPConvergedNorm(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscR
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context obtained from NEPCreate()
++  nep    - the nonlinear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs
@@ -168,7 +168,7 @@ PetscErrorCode NEPConvergedNorm(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscR
 
    Level: advanced
 
-.seealso: `NEPSetStoppingTest()`, `NEPConvergedReason`, `NEPGetConvergedReason()`
+.seealso: [](ch:nep), `NEPSetStoppingTest()`, `NEPConvergedReason`, `NEPGetConvergedReason()`
 @*/
 PetscErrorCode NEPStoppingBasic(NEP nep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,NEPConvergedReason *reason,void *ctx)
 {

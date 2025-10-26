@@ -39,13 +39,13 @@ typedef struct _p_FN* FN;
 .seealso: [](sec:fn), `FNSetType()`, `FN`
 J*/
 typedef const char *FNType;
-#define FNCOMBINE  "combine"
 #define FNRATIONAL "rational"
 #define FNEXP      "exp"
 #define FNLOG      "log"
 #define FNPHI      "phi"
 #define FNSQRT     "sqrt"
 #define FNINVSQRT  "invsqrt"
+#define FNCOMBINE  "combine"
 
 /* Logging support */
 SLEPC_EXTERN PetscClassId FN_CLASSID;

@@ -22,7 +22,7 @@
    Collective
 
    Input Parameters:
-+  eps      - the eigensolver context
++  eps      - the linear eigensolver context
 .  opt      - the command line option for this monitor
 .  name     - the monitor type one is seeking
 .  ctx      - an optional user context for the monitor, or NULL
@@ -30,7 +30,7 @@
 
    Level: developer
 
-.seealso: `EPSMonitorSet()`, `EPSSetTrackAll()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSSetTrackAll()`
 @*/
 PetscErrorCode EPSMonitorSetFromOptions(EPS eps,const char opt[],const char name[],void *ctx,PetscBool trackall)
 {
@@ -65,21 +65,21 @@ PetscErrorCode EPSMonitorSetFromOptions(EPS eps,const char opt[],const char name
 }
 
 /*@
-   EPSSetFromOptions - Sets EPS options from the options database.
-   This routine must be called before EPSSetUp() if the user is to be
-   allowed to set the solver type.
+   EPSSetFromOptions - Sets `EPS` options from the options database.
+   This routine must be called before `EPSSetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
-.  eps - the eigensolver context
+   Input Parameter:
+.  eps - the linear eigensolver context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 
-.seealso: `EPSSetOptionsPrefix()`
+.seealso: [](ch:eps), `EPSSetOptionsPrefix()`
 @*/
 PetscErrorCode EPSSetFromOptions(EPS eps)
 {
@@ -261,7 +261,7 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  tol - the convergence tolerance
@@ -272,7 +272,7 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
 
    Level: intermediate
 
-.seealso: `EPSSetTolerances()`
+.seealso: [](ch:eps), `EPSSetTolerances()`
 @*/
 PetscErrorCode EPSGetTolerances(EPS eps,PetscReal *tol,PetscInt *maxits)
 {
@@ -290,7 +290,7 @@ PetscErrorCode EPSGetTolerances(EPS eps,PetscReal *tol,PetscInt *maxits)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 .  tol - the convergence tolerance
 -  maxits - maximum number of iterations to use
 
@@ -306,7 +306,7 @@ PetscErrorCode EPSGetTolerances(EPS eps,PetscReal *tol,PetscInt *maxits)
 
    Level: intermediate
 
-.seealso: `EPSGetTolerances()`
+.seealso: [](ch:eps), `EPSGetTolerances()`
 @*/
 PetscErrorCode EPSSetTolerances(EPS eps,PetscReal tol,PetscInt maxits)
 {
@@ -340,7 +340,7 @@ PetscErrorCode EPSSetTolerances(EPS eps,PetscReal tol,PetscInt maxits)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  nev - number of eigenvalues to compute
@@ -349,7 +349,7 @@ PetscErrorCode EPSSetTolerances(EPS eps,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: `EPSSetDimensions()`
+.seealso: [](ch:eps), `EPSSetDimensions()`
 @*/
 PetscErrorCode EPSGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -368,7 +368,7 @@ PetscErrorCode EPSGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mp
    Logically Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 .  nev - number of eigenvalues to compute
 .  ncv - the maximum dimension of the subspace to be used by the solver
 -  mpd - the maximum dimension allowed for the projected problem
@@ -398,7 +398,7 @@ PetscErrorCode EPSGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 
    Level: intermediate
 
-.seealso: `EPSGetDimensions()`, `EPSSetInterval()`, `EPSKrylovSchurSetDimensions()`
+.seealso: [](ch:eps), `EPSGetDimensions()`, `EPSSetInterval()`, `EPSKrylovSchurSetDimensions()`
 @*/
 PetscErrorCode EPSSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -434,7 +434,7 @@ PetscErrorCode EPSSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
    Logically Collective
 
    Input Parameters:
-+  eps   - eigensolver context obtained from EPSCreate()
++  eps   - the linear eigensolver context
 -  which - the portion of the spectrum to be sought
 
    Options Database Keys:
@@ -483,8 +483,7 @@ PetscErrorCode EPSSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
 
    Level: intermediate
 
-.seealso: `EPSGetWhichEigenpairs()`, `EPSSetTarget()`, `EPSSetInterval()`,
-          `EPSSetDimensions()`, `EPSSetEigenvalueComparison()`, `EPSWhich`
+.seealso: [](ch:eps), `EPSGetWhichEigenpairs()`, `EPSSetTarget()`, `EPSSetInterval()`, `EPSSetDimensions()`, `EPSSetEigenvalueComparison()`, `EPSWhich`
 @*/
 PetscErrorCode EPSSetWhichEigenpairs(EPS eps,EPSWhich which)
 {
@@ -527,7 +526,7 @@ PetscErrorCode EPSSetWhichEigenpairs(EPS eps,EPSWhich which)
    Not Collective
 
    Input Parameter:
-.  eps - eigensolver context obtained from EPSCreate()
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  which - the portion of the spectrum to be sought
@@ -537,7 +536,7 @@ PetscErrorCode EPSSetWhichEigenpairs(EPS eps,EPSWhich which)
 
    Level: intermediate
 
-.seealso: `EPSSetWhichEigenpairs()`, `EPSWhich`
+.seealso: [](ch:eps), `EPSSetWhichEigenpairs()`, `EPSWhich`
 @*/
 PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
 {
@@ -554,7 +553,7 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenvalue solver context
++  eps   - the linear eigensolver context
 .  thres - the threshold value
 -  rel   - whether the threshold is relative or not
 
@@ -611,7 +610,7 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
 
    Level: advanced
 
-.seealso: `EPSGetThreshold()`, `EPSSetStoppingTest()`, `EPSSetDimensions()`, `EPSSetWhichEigenpairs()`, `EPSSetProblemType()`
+.seealso: [](ch:eps), `EPSGetThreshold()`, `EPSSetStoppingTest()`, `EPSSetDimensions()`, `EPSSetWhichEigenpairs()`, `EPSSetProblemType()`
 @*/
 PetscErrorCode EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel)
 {
@@ -634,7 +633,7 @@ PetscErrorCode EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenvalue solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  thres - the threshold
@@ -642,7 +641,7 @@ PetscErrorCode EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel)
 
    Level: advanced
 
-.seealso: `EPSSetThreshold()`
+.seealso: [](ch:eps), `EPSSetThreshold()`
 @*/
 PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
 {
@@ -660,7 +659,7 @@ PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context obtained from EPSCreate()
++  eps  - the linear eigensolver context
 .  func - the comparison function, see EPSEigenvalueComparisonFn for the calling sequence
 -  ctx  - a context pointer (the last parameter to the comparison function)
 
@@ -672,7 +671,7 @@ PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
 
    Level: advanced
 
-.seealso: `EPSSetWhichEigenpairs()`, `EPSWhich`
+.seealso: [](ch:eps), `EPSSetWhichEigenpairs()`, `EPSWhich`
 @*/
 PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *func,void *ctx)
 {
@@ -692,7 +691,7 @@ PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *f
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context obtained from EPSCreate()
++  eps  - the linear eigensolver context
 .  func - the arbitrary selection function, see SlepcArbitrarySelectionFn for a calling sequence
 -  ctx  - a context pointer (the last parameter to the arbitrary selection function)
 
@@ -718,7 +717,7 @@ PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *f
 
    Level: advanced
 
-.seealso: `EPSSetWhichEigenpairs()`
+.seealso: [](ch:eps), `EPSSetWhichEigenpairs()`
 @*/
 PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,void *ctx)
 {
@@ -737,7 +736,7 @@ PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,
    Logically Collective
 
    Input Parameters:
-+  eps     - eigensolver context obtained from EPSCreate()
++  eps     - the linear eigensolver context
 .  func    - convergence test function, see EPSConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -748,7 +747,7 @@ PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,
 
    Level: advanced
 
-.seealso: `EPSSetConvergenceTest()`, `EPSSetTolerances()`
+.seealso: [](ch:eps), `EPSSetConvergenceTest()`, `EPSSetTolerances()`
 @*/
 PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -775,7 +774,7 @@ PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context obtained from EPSCreate()
++  eps  - the linear eigensolver context
 -  conv - the type of convergence test
 
    Options Database Keys:
@@ -793,7 +792,7 @@ PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,
 
    Level: intermediate
 
-.seealso: `EPSGetConvergenceTest()`, `EPSSetConvergenceTestFunction()`, `EPSSetStoppingTest()`, `EPSConv`
+.seealso: [](ch:eps), `EPSGetConvergenceTest()`, `EPSSetConvergenceTestFunction()`, `EPSSetStoppingTest()`, `EPSConv`
 @*/
 PetscErrorCode EPSSetConvergenceTest(EPS eps,EPSConv conv)
 {
@@ -821,15 +820,15 @@ PetscErrorCode EPSSetConvergenceTest(EPS eps,EPSConv conv)
 
    Not Collective
 
-   Input Parameters:
-.  eps   - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps   - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  conv  - the type of convergence test
 
    Level: intermediate
 
-.seealso: `EPSSetConvergenceTest()`, `EPSConv`
+.seealso: [](ch:eps), `EPSSetConvergenceTest()`, `EPSConv`
 @*/
 PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
 {
@@ -847,7 +846,7 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
    Logically Collective
 
    Input Parameters:
-+  eps     - eigensolver context obtained from EPSCreate()
++  eps     - the linear eigensolver context
 .  func    - stopping test function, see EPSStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -860,7 +859,7 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
 
    Level: advanced
 
-.seealso: `EPSSetStoppingTest()`, `EPSStoppingBasic()`
+.seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSStoppingBasic()`
 @*/
 PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -886,7 +885,7 @@ PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context obtained from EPSCreate()
++  eps  - the linear eigensolver context
 -  stop - the type of stopping test
 
    Options Database Keys:
@@ -902,7 +901,7 @@ PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *
 
    Level: advanced
 
-.seealso: `EPSGetStoppingTest()`, `EPSSetStoppingTestFunction()`, `EPSSetConvergenceTest()`, `EPSStop`
+.seealso: [](ch:eps), `EPSGetStoppingTest()`, `EPSSetStoppingTestFunction()`, `EPSSetConvergenceTest()`, `EPSStop`
 @*/
 PetscErrorCode EPSSetStoppingTest(EPS eps,EPSStop stop)
 {
@@ -929,15 +928,15 @@ PetscErrorCode EPSSetStoppingTest(EPS eps,EPSStop stop)
 
    Not Collective
 
-   Input Parameters:
-.  eps   - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps   - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  stop  - the type of stopping test
 
    Level: advanced
 
-.seealso: `EPSSetStoppingTest()`, `EPSStop`
+.seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSStop`
 @*/
 PetscErrorCode EPSGetStoppingTest(EPS eps,EPSStop *stop)
 {
@@ -954,7 +953,7 @@ PetscErrorCode EPSGetStoppingTest(EPS eps,EPSStop *stop)
    Logically Collective
 
    Input Parameters:
-+  eps      - the eigensolver context
++  eps      - the linear eigensolver context
 -  type     - a known type of eigenvalue problem
 
    Options Database Keys:
@@ -986,7 +985,7 @@ PetscErrorCode EPSGetStoppingTest(EPS eps,EPSStop *stop)
 
    Level: intermediate
 
-.seealso: `EPSSetOperators()`, `EPSSetType()`, `EPSGetProblemType()`, `EPSProblemType`
+.seealso: [](ch:eps), `EPSSetOperators()`, `EPSSetType()`, `EPSGetProblemType()`, `EPSProblemType`
 @*/
 PetscErrorCode EPSSetProblemType(EPS eps,EPSProblemType type)
 {
@@ -1057,14 +1056,14 @@ PetscErrorCode EPSSetProblemType(EPS eps,EPSProblemType type)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  type - the problem type
 
    Level: intermediate
 
-.seealso: `EPSSetProblemType()`, `EPSProblemType`
+.seealso: [](ch:eps), `EPSSetProblemType()`, `EPSProblemType`
 @*/
 PetscErrorCode EPSGetProblemType(EPS eps,EPSProblemType *type)
 {
@@ -1082,7 +1081,7 @@ PetscErrorCode EPSGetProblemType(EPS eps,EPSProblemType *type)
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigensolver context
++  eps  - the linear eigensolver context
 -  extr - a known type of extraction
 
    Options Database Keys:
@@ -1106,7 +1105,7 @@ PetscErrorCode EPSGetProblemType(EPS eps,EPSProblemType *type)
 
    Level: advanced
 
-.seealso: `EPSSetTarget()`, `EPSGetExtraction()`, `EPSExtraction`
+.seealso: [](ch:eps), `EPSSetTarget()`, `EPSGetExtraction()`, `EPSExtraction`
 @*/
 PetscErrorCode EPSSetExtraction(EPS eps,EPSExtraction extr)
 {
@@ -1126,14 +1125,14 @@ PetscErrorCode EPSSetExtraction(EPS eps,EPSExtraction extr)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  extr - name of extraction type
 
    Level: advanced
 
-.seealso: `EPSSetExtraction()`, `EPSExtraction`
+.seealso: [](ch:eps), `EPSSetExtraction()`, `EPSExtraction`
 @*/
 PetscErrorCode EPSGetExtraction(EPS eps,EPSExtraction *extr)
 {
@@ -1151,7 +1150,7 @@ PetscErrorCode EPSGetExtraction(EPS eps,EPSExtraction *extr)
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 .  bal    - the balancing method, one of EPS_BALANCE_NONE, EPS_BALANCE_ONESIDE,
             EPS_BALANCE_TWOSIDE, or EPS_BALANCE_USER
 .  its    - number of iterations of the balancing algorithm
@@ -1184,7 +1183,7 @@ PetscErrorCode EPSGetExtraction(EPS eps,EPSExtraction *extr)
 
    Level: intermediate
 
-.seealso: `EPSGetBalance()`, `EPSBalance`, `STSetBalanceMatrix()`
+.seealso: [](ch:eps), `EPSGetBalance()`, `EPSBalance`, `STSetBalanceMatrix()`
 @*/
 PetscErrorCode EPSSetBalance(EPS eps,EPSBalance bal,PetscInt its,PetscReal cutoff)
 {
@@ -1226,7 +1225,7 @@ PetscErrorCode EPSSetBalance(EPS eps,EPSBalance bal,PetscInt its,PetscReal cutof
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  bal    - the balancing method
@@ -1238,7 +1237,7 @@ PetscErrorCode EPSSetBalance(EPS eps,EPSBalance bal,PetscInt its,PetscReal cutof
    Note:
    The user can specify NULL for any parameter that is not needed.
 
-.seealso: `EPSSetBalance()`, `EPSBalance`
+.seealso: [](ch:eps), `EPSSetBalance()`, `EPSBalance`
 @*/
 PetscErrorCode EPSGetBalance(EPS eps,EPSBalance *bal,PetscInt *its,PetscReal *cutoff)
 {
@@ -1257,10 +1256,10 @@ PetscErrorCode EPSGetBalance(EPS eps,EPSBalance *bal,PetscInt *its,PetscReal *cu
    Logically Collective
 
    Input Parameters:
-+  eps      - the eigensolver context
++  eps      - the linear eigensolver context
 -  twosided - whether the two-sided variant is to be used or not
 
-   Options Database Keys:
+   Options Database Key:
 .  -eps_two_sided <boolean> - Sets/resets the twosided flag
 
    Notes:
@@ -1273,7 +1272,7 @@ PetscErrorCode EPSGetBalance(EPS eps,EPSBalance *bal,PetscInt *its,PetscReal *cu
 
    Level: advanced
 
-.seealso: `EPSGetTwoSided()`, `EPSGetLeftEigenvector()`
+.seealso: [](ch:eps), `EPSGetTwoSided()`, `EPSGetLeftEigenvector()`
 @*/
 PetscErrorCode EPSSetTwoSided(EPS eps,PetscBool twosided)
 {
@@ -1294,14 +1293,14 @@ PetscErrorCode EPSSetTwoSided(EPS eps,PetscBool twosided)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  twosided - the returned flag
 
    Level: advanced
 
-.seealso: `EPSSetTwoSided()`
+.seealso: [](ch:eps), `EPSSetTwoSided()`
 @*/
 PetscErrorCode EPSGetTwoSided(EPS eps,PetscBool *twosided)
 {
@@ -1319,10 +1318,10 @@ PetscErrorCode EPSGetTwoSided(EPS eps,PetscBool *twosided)
    Logically Collective
 
    Input Parameters:
-+  eps     - the eigensolver context
++  eps     - the linear eigensolver context
 -  trueres - whether true residuals are required or not
 
-   Options Database Keys:
+   Options Database Key:
 .  -eps_true_residual <boolean> - Sets/resets the boolean flag 'trueres'
 
    Notes:
@@ -1337,7 +1336,7 @@ PetscErrorCode EPSGetTwoSided(EPS eps,PetscBool *twosided)
 
    Level: advanced
 
-.seealso: `EPSGetTrueResidual()`
+.seealso: [](ch:eps), `EPSGetTrueResidual()`
 @*/
 PetscErrorCode EPSSetTrueResidual(EPS eps,PetscBool trueres)
 {
@@ -1355,14 +1354,14 @@ PetscErrorCode EPSSetTrueResidual(EPS eps,PetscBool trueres)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  trueres - the returned flag
 
    Level: advanced
 
-.seealso: `EPSSetTrueResidual()`
+.seealso: [](ch:eps), `EPSSetTrueResidual()`
 @*/
 PetscErrorCode EPSGetTrueResidual(EPS eps,PetscBool *trueres)
 {
@@ -1380,7 +1379,7 @@ PetscErrorCode EPSGetTrueResidual(EPS eps,PetscBool *trueres)
    Logically Collective
 
    Input Parameters:
-+  eps      - the eigensolver context
++  eps      - the linear eigensolver context
 -  trackall - whether to compute all residuals or not
 
    Notes:
@@ -1393,7 +1392,7 @@ PetscErrorCode EPSGetTrueResidual(EPS eps,PetscBool *trueres)
 
    Level: developer
 
-.seealso: `EPSGetTrackAll()`
+.seealso: [](ch:eps), `EPSGetTrackAll()`
 @*/
 PetscErrorCode EPSSetTrackAll(EPS eps,PetscBool trackall)
 {
@@ -1411,14 +1410,14 @@ PetscErrorCode EPSSetTrackAll(EPS eps,PetscBool trackall)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  trackall - the returned flag
 
    Level: developer
 
-.seealso: `EPSSetTrackAll()`
+.seealso: [](ch:eps), `EPSSetTrackAll()`
 @*/
 PetscErrorCode EPSGetTrackAll(EPS eps,PetscBool *trackall)
 {
@@ -1435,10 +1434,10 @@ PetscErrorCode EPSGetTrackAll(EPS eps,PetscBool *trackall)
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 -  purify - whether purification is required or not
 
-   Options Database Keys:
+   Options Database Key:
 .  -eps_purify <boolean> - Sets/resets the boolean flag 'purify'
 
    Notes:
@@ -1449,7 +1448,7 @@ PetscErrorCode EPSGetTrackAll(EPS eps,PetscBool *trackall)
 
    Level: intermediate
 
-.seealso: `EPSGetPurify()`, `EPSSetInterval()`
+.seealso: [](ch:eps), `EPSGetPurify()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSSetPurify(EPS eps,PetscBool purify)
 {
@@ -1470,14 +1469,14 @@ PetscErrorCode EPSSetPurify(EPS eps,PetscBool purify)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  purify - the returned flag
 
    Level: intermediate
 
-.seealso: `EPSSetPurify()`
+.seealso: [](ch:eps), `EPSSetPurify()`
 @*/
 PetscErrorCode EPSGetPurify(EPS eps,PetscBool *purify)
 {
@@ -1495,7 +1494,7 @@ PetscErrorCode EPSGetPurify(EPS eps,PetscBool *purify)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 -  prefix - the prefix string to prepend to all EPS option requests
 
    Notes:
@@ -1512,7 +1511,7 @@ PetscErrorCode EPSGetPurify(EPS eps,PetscBool *purify)
 
    Level: advanced
 
-.seealso: `EPSAppendOptionsPrefix()`, `EPSGetOptionsPrefix()`
+.seealso: [](ch:eps), `EPSAppendOptionsPrefix()`, `EPSGetOptionsPrefix()`
 @*/
 PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char *prefix)
 {
@@ -1537,7 +1536,7 @@ PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char *prefix)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 -  prefix - the prefix string to prepend to all EPS option requests
 
    Notes:
@@ -1546,7 +1545,7 @@ PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char *prefix)
 
    Level: advanced
 
-.seealso: `EPSSetOptionsPrefix()`, `EPSGetOptionsPrefix()`
+.seealso: [](ch:eps), `EPSSetOptionsPrefix()`, `EPSGetOptionsPrefix()`
 @*/
 PetscErrorCode EPSAppendOptionsPrefix(EPS eps,const char *prefix)
 {
@@ -1571,14 +1570,14 @@ PetscErrorCode EPSAppendOptionsPrefix(EPS eps,const char *prefix)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  prefix - pointer to the prefix string used is returned
 
    Level: advanced
 
-.seealso: `EPSSetOptionsPrefix()`, `EPSAppendOptionsPrefix()`
+.seealso: [](ch:eps), `EPSSetOptionsPrefix()`, `EPSAppendOptionsPrefix()`
 @*/
 PetscErrorCode EPSGetOptionsPrefix(EPS eps,const char *prefix[])
 {

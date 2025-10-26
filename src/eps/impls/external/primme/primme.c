@@ -441,7 +441,7 @@ static PetscErrorCode EPSPRIMMESetBlockSize_PRIMME(EPS eps,PetscInt bs)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  bs - block size
 
    Options Database Key:
@@ -458,7 +458,7 @@ static PetscErrorCode EPSPRIMMESetBlockSize_PRIMME(EPS eps,PetscInt bs)
 
    Level: advanced
 
-.seealso: `EPSPRIMMEGetBlockSize()`
+.seealso: [](ch:eps), `EPSPRIMMEGetBlockSize()`
 @*/
 PetscErrorCode EPSPRIMMESetBlockSize(EPS eps,PetscInt bs)
 {
@@ -484,14 +484,14 @@ static PetscErrorCode EPSPRIMMEGetBlockSize_PRIMME(EPS eps,PetscInt *bs)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  bs - returned block size
 
    Level: advanced
 
-.seealso: `EPSPRIMMESetBlockSize()`
+.seealso: [](ch:eps), `EPSPRIMMESetBlockSize()`
 @*/
 PetscErrorCode EPSPRIMMEGetBlockSize(EPS eps,PetscInt *bs)
 {
@@ -517,7 +517,7 @@ static PetscErrorCode EPSPRIMMESetMethod_PRIMME(EPS eps,EPSPRIMMEMethod method)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  method - method that will be used by PRIMME
 
    Options Database Key:
@@ -528,7 +528,7 @@ static PetscErrorCode EPSPRIMMESetMethod_PRIMME(EPS eps,EPSPRIMMEMethod method)
 
    Level: advanced
 
-.seealso: `EPSPRIMMEGetMethod()`, `EPSPRIMMEMethod`
+.seealso: [](ch:eps), `EPSPRIMMEGetMethod()`, `EPSPRIMMEMethod`
 @*/
 PetscErrorCode EPSPRIMMESetMethod(EPS eps,EPSPRIMMEMethod method)
 {
@@ -554,14 +554,14 @@ static PetscErrorCode EPSPRIMMEGetMethod_PRIMME(EPS eps,EPSPRIMMEMethod *method)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  method - method that will be used by PRIMME
 
    Level: advanced
 
-.seealso: `EPSPRIMMESetMethod()`, `EPSPRIMMEMethod`
+.seealso: [](ch:eps), `EPSPRIMMESetMethod()`, `EPSPRIMMEMethod`
 @*/
 PetscErrorCode EPSPRIMMEGetMethod(EPS eps,EPSPRIMMEMethod *method)
 {

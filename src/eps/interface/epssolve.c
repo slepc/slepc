@@ -92,7 +92,7 @@ static PetscErrorCode EPSComputeValues(EPS eps)
    Collective
 
    Input Parameter:
-.  eps - eigensolver context obtained from EPSCreate()
+.  eps - the linear eigensolver context
 
    Options Database Keys:
 +  -eps_view - print information about the solver used
@@ -114,7 +114,7 @@ static PetscErrorCode EPSComputeValues(EPS eps)
 
    Level: beginner
 
-.seealso: `EPSCreate()`, `EPSSetUp()`, `EPSDestroy()`, `EPSSetTolerances()`
+.seealso: [](ch:eps), `EPSCreate()`, `EPSSetUp()`, `EPSDestroy()`, `EPSSetTolerances()`
 @*/
 PetscErrorCode EPSSolve(EPS eps)
 {
@@ -227,7 +227,7 @@ PetscErrorCode EPSSolve(EPS eps)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  its - number of iterations
@@ -241,7 +241,7 @@ PetscErrorCode EPSSolve(EPS eps)
 
    Level: intermediate
 
-.seealso: `EPSGetConvergedReason()`, `EPSSetTolerances()`
+.seealso: [](ch:eps), `EPSGetConvergedReason()`, `EPSSetTolerances()`
 @*/
 PetscErrorCode EPSGetIterationNumber(EPS eps,PetscInt *its)
 {
@@ -258,7 +258,7 @@ PetscErrorCode EPSGetIterationNumber(EPS eps,PetscInt *its)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  nconv - number of converged eigenpairs
@@ -268,7 +268,7 @@ PetscErrorCode EPSGetIterationNumber(EPS eps,PetscInt *its)
 
    Level: beginner
 
-.seealso: `EPSSetDimensions()`, `EPSSolve()`, `EPSGetEigenpair()`
+.seealso: [](ch:eps), `EPSSetDimensions()`, `EPSSolve()`, `EPSGetEigenpair()`
 @*/
 PetscErrorCode EPSGetConverged(EPS eps,PetscInt *nconv)
 {
@@ -281,33 +281,28 @@ PetscErrorCode EPSGetConverged(EPS eps,PetscInt *nconv)
 }
 
 /*@
-   EPSGetConvergedReason - Gets the reason why the EPSSolve() iteration was
+   EPSGetConvergedReason - Gets the reason why the `EPSSolve()` iteration was
    stopped.
 
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `EPSConvergedReason` for the possible values
 
    Options Database Key:
-.  -eps_converged_reason - print the reason to a viewer
+.  -eps_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  EPS_CONVERGED_TOL - converged up to tolerance
-.  EPS_CONVERGED_USER - converged due to a user-defined condition
-.  EPS_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  EPS_DIVERGED_BREAKDOWN - generic breakdown in method
--  EPS_DIVERGED_SYMMETRY_LOST - pseudo-Lanczos was not able to keep symmetry
-
-   Can only be called after the call to EPSSolve() is complete.
+   Note:
+   If this routine is called before or doing the `EPSSolve()` the value of
+   `EPS_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 
-.seealso: `EPSSetTolerances()`, `EPSSolve()`, `EPSConvergedReason`
+.seealso: [](ch:eps), `EPSSetTolerances()`, `EPSSolve()`, `EPSConvergedReason`
 @*/
 PetscErrorCode EPSGetConvergedReason(EPS eps,EPSConvergedReason *reason)
 {
@@ -326,7 +321,7 @@ PetscErrorCode EPSGetConvergedReason(EPS eps,EPSConvergedReason *reason)
    Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  v - an array of vectors
@@ -346,7 +341,7 @@ PetscErrorCode EPSGetConvergedReason(EPS eps,EPSConvergedReason *reason)
 
    Level: intermediate
 
-.seealso: `EPSGetEigenpair()`, `EPSGetConverged()`, `EPSSolve()`
+.seealso: [](ch:eps), `EPSGetEigenpair()`, `EPSGetConverged()`, `EPSSolve()`
 @*/
 PetscErrorCode EPSGetInvariantSubspace(EPS eps,Vec v[])
 {
@@ -383,7 +378,7 @@ PetscErrorCode EPSGetInvariantSubspace(EPS eps,Vec v[])
    Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -412,8 +407,7 @@ PetscErrorCode EPSGetInvariantSubspace(EPS eps,Vec v[])
 
    Level: beginner
 
-.seealso: `EPSGetEigenvalue()`, `EPSGetEigenvector()`, `EPSGetLeftEigenvector()`, `EPSSolve()`,
-          `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetInvariantSubspace()`
+.seealso: [](ch:eps), `EPSGetEigenvalue()`, `EPSGetEigenvector()`, `EPSGetLeftEigenvector()`, `EPSSolve()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetInvariantSubspace()`
 @*/
 PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar *eigi,Vec Vr,Vec Vi)
 {
@@ -437,7 +431,7 @@ PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar 
    Not Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -455,7 +449,7 @@ PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar 
 
    Level: beginner
 
-.seealso: `EPSSolve()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetEigenpair()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetEigenpair()`
 @*/
 PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar *eigi)
 {
@@ -525,7 +519,7 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
    Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -551,7 +545,7 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
 
    Level: beginner
 
-.seealso: `EPSSolve()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetEigenpair()`, `EPSGetLeftEigenvector()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetEigenpair()`, `EPSGetLeftEigenvector()`
 @*/
 PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
 {
@@ -577,7 +571,7 @@ PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -602,7 +596,7 @@ PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
 
    Level: intermediate
 
-.seealso: `EPSGetEigenvector()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSSetTwoSided()`
+.seealso: [](ch:eps), `EPSGetEigenvector()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSSetTwoSided()`
 @*/
 PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
 {
@@ -657,7 +651,7 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
    Not Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of eigenpair
 
    Output Parameter:
@@ -670,7 +664,7 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
 
    Level: advanced
 
-.seealso: `EPSComputeError()`
+.seealso: [](ch:eps), `EPSComputeError()`
 @*/
 PetscErrorCode EPSGetErrorEstimate(EPS eps,PetscInt i,PetscReal *errest)
 {
@@ -764,7 +758,7 @@ PetscErrorCode EPSComputeResidualNorm_Private(EPS eps,PetscBool trans,PetscScala
    Collective
 
    Input Parameters:
-+  eps  - the eigensolver context
++  eps  - the linear eigensolver context
 .  i    - the solution index
 -  type - the type of error to compute
 
@@ -777,7 +771,7 @@ PetscErrorCode EPSComputeResidualNorm_Private(EPS eps,PetscBool trans,PetscScala
 
    Level: beginner
 
-.seealso: `EPSErrorType`, `EPSSolve()`, `EPSGetErrorEstimate()`
+.seealso: [](ch:eps), `EPSErrorType`, `EPSSolve()`, `EPSGetErrorEstimate()`
 @*/
 PetscErrorCode EPSComputeError(EPS eps,PetscInt i,EPSErrorType type,PetscReal *error)
 {
@@ -861,10 +855,10 @@ PetscErrorCode EPSComputeError(EPS eps,PetscInt i,EPSErrorType type,PetscReal *e
    Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 -  i   - iteration number
 
-   Output Parameters:
+   Output Parameter:
 .  breakdown - flag indicating that a breakdown has occurred
 
    Notes:

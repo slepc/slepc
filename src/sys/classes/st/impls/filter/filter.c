@@ -605,8 +605,7 @@ static PetscErrorCode STDestroy_Filter(ST st)
    The definition of the filter is done with functions such as `STFilterSetDegree()`,
    `STFilterSetInterval()` or `STFilterSetType()`.
 
-.seealso: [](ch:st), `ST`, `STType`, `STSetType()`, `STSetMatrices()`, `STFilterSetDegree()`,
-   `STFilterSetInterval()`, `STFilterSetType()`
+.seealso: [](ch:st), `ST`, `STType`, `STSetType()`, `STSetMatrices()`, `STFilterSetDegree()`, `STFilterSetInterval()`, `STFilterSetType()`
 M*/
 
 SLEPC_EXTERN PetscErrorCode STCreate_Filter(ST st)

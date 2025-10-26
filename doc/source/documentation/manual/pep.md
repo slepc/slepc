@@ -198,17 +198,17 @@ PetscScalar kr, ki;    /*  eigenvalue, k        */
 PetscInt    j, nconv;
 PetscReal   error;
 
-PEPCreate( PETSC_COMM_WORLD, &pep );
-PEPSetOperators( pep, NMAT, A );
-PEPSetProblemType( pep, PEP_GENERAL );  /* optional */
-PEPSetFromOptions( pep );
-PEPSolve( pep );
-PEPGetConverged( pep, &nconv );
-for (j=0; j<nconv; j++) {
-  PEPGetEigenpair( pep, j, &kr, &ki, xr, xi );
-  PEPComputeError( pep, j, PEP_ERROR_BACKWARD, &error );
+PEPCreate(PETSC_COMM_WORLD, &pep);
+PEPSetOperators(pep, NMAT, A);
+PEPSetProblemType(pep, PEP_GENERAL);  /* optional */
+PEPSetFromOptions(pep);
+PEPSolve(pep);
+PEPGetConverged(pep, &nconv);
+for (j=0;j<nconv;j++) {
+  PEPGetEigenpair(pep, j, &kr, &ki, xr, xi);
+  PEPComputeError(pep, j, PEP_ERROR_BACKWARD, &error);
 }
-PEPDestroy( &pep );
+PEPDestroy(&pep);
 ```
 
 ## Defining the Problem
@@ -290,7 +290,7 @@ or in the command-line with `-pep_target`. As in `EPS`, complex values of $\tau$
 There is also support for spectrum slicing, that is, computing all eigenvalues in a given interval, see section [](#sec:qslice). For this, the user has to specify the computational interval with:
 
 ```{code} c
-PEPSetInterval(PEP pep,PetscScalar a,PetscScalar b);
+PEPSetInterval(PEP pep,PetscReal a,PetscReal b);
 ```
 
 or equivalently with `-pep_interval a,b`.
@@ -340,6 +340,7 @@ The default solver is `PEPTOAR`. The Two-level Orthogonal Arnoldi (TOAR) method 
  | Q-Arnoldi               | `PEPQARNOLDI` |`qarnoldi`        | Quadratic         | Monomial
  | Linearization via `EPS` | `PEPLINEAR`   |`linear`          | Arbitrary         | Any
  | Jacobi-Davidson         | `PEPJD`       |`jd`              | Arbitrary         | Monomial
+ | Contour integral SS     | `PEPCISS`     |`ciss`            | Arbitrary         | Monomial
 
 :::
 
@@ -362,7 +363,7 @@ For polynomial eigenproblems with degree $d>2$ the linearization is the one desc
 Another option of the `PEPLINEAR` solver is whether the matrices of the linearized problem are created explicitly or not. This is set with:
 
 ```{code} c
-PEPLinearSetExplicitMatrix(PEP pep,PetscBool exp);
+PEPLinearSetExplicitMatrix(PEP pep,PetscBool explicit);
 ```
 
 The explicit matrix option is available only for quadratic eigenproblems (higher degree polynomials are always handled implicitly). In the case of explicit creation, matrices $L_0$ and $L_1$ are created as true {external:doc}`Mat`'s, with explicit storage, whereas the implicit option works with *shell* {external:doc}`Mat`'s that operate only with the constituent blocks $M$, $C$ and $K$ (or $A_i$ in the general case). The explicit case requires more memory but gives more flexibility, e.g., for choosing a preconditioner. Some examples of usage via the command line are shown at the end of next section.
@@ -558,7 +559,7 @@ When the norm of $M$, $C$ and $K$ vary widely, {cite:t}`Tis00` recommends to sol
 In the general case of polynomials of arbitrary degree, a similar scheme is also possible, but it is not clear how to choose $\alpha$ to achieve the same goal. {cite:t}`Bet08` proposes such a scaling scheme as well as more general diagonal scalings $D_\ell P(\lambda)D_r$. In SLEPc, we provide these types of scalings, whose settings can be tuned with:
 
 ```{code} c
-PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,PetscInt its,PetscReal w);
+PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,PetscInt its,PetscReal lambda);
 ```
 
 See the manual page for details and the description in {cite:p}`Cam16a`.

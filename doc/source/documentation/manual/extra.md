@@ -112,13 +112,13 @@ A similar mechanism is available in SLEPc also for extending the system incorpor
 The following function:
 
 ```{code} c
-STShellSetApply(ST,PetscErrorCode(*)(ST,Vec,Vec));
+STShellSetApply(ST st,STShellApplyFn *apply)
 ```
 
 has to be invoked after the creation of the `ST` object in order to provide a routine that applies the operator to a vector. And this function:
 
 ```{code} c
-STShellSetBackTransform(ST,PetscErrorCode(*)(ST,PetscInt,PetscScalar*,PetscScalar*));
+STShellSetBackTransform(ST st,STShellBackTransformFn *backtr)
 ```
 
 can be used optionally to specify the routine for the back-transformation of eigenvalues. The two functions provided by the user can make use of any required user-defined information via a context that can be retrieved with `STShellGetContext()`. The example program {{'[ex10.c](https://slepc.upv.es/{}/src/eps/tutorials/ex10.c.html)'.format(branch)}} illustrates the use of shell transformations.

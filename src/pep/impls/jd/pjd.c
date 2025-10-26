@@ -1486,7 +1486,7 @@ static PetscErrorCode PEPJDSetRestart_JD(PEP pep,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
@@ -1497,7 +1497,7 @@ static PetscErrorCode PEPJDSetRestart_JD(PEP pep,PetscReal keep)
 
    Level: advanced
 
-.seealso: `PEPJDGetRestart()`
+.seealso: [](ch:pep), `PEPJDGetRestart()`
 @*/
 PetscErrorCode PEPJDSetRestart(PEP pep,PetscReal keep)
 {
@@ -1523,14 +1523,14 @@ static PetscErrorCode PEPJDGetRestart_JD(PEP pep,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
 
    Level: advanced
 
-.seealso: `PEPJDSetRestart()`
+.seealso: [](ch:pep), `PEPJDSetRestart()`
 @*/
 PetscErrorCode PEPJDGetRestart(PEP pep,PetscReal *keep)
 {
@@ -1561,7 +1561,7 @@ static PetscErrorCode PEPJDSetFix_JD(PEP pep,PetscReal fix)
    Logically Collective
 
    Input Parameters:
-+  pep - the eigenproblem solver context
++  pep - the polynomial eigensolver context
 -  fix - threshold for changing the target
 
    Options Database Key:
@@ -1574,7 +1574,7 @@ static PetscErrorCode PEPJDSetFix_JD(PEP pep,PetscReal fix)
 
    Level: advanced
 
-.seealso: `PEPJDGetFix()`
+.seealso: [](ch:pep), `PEPJDGetFix()`
 @*/
 PetscErrorCode PEPJDSetFix(PEP pep,PetscReal fix)
 {
@@ -1601,7 +1601,7 @@ static PetscErrorCode PEPJDGetFix_JD(PEP pep,PetscReal *fix)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  fix - threshold for changing the target
@@ -1613,7 +1613,7 @@ static PetscErrorCode PEPJDGetFix_JD(PEP pep,PetscReal *fix)
 
    Level: advanced
 
-.seealso: `PEPJDSetFix()`
+.seealso: [](ch:pep), `PEPJDSetFix()`
 @*/
 PetscErrorCode PEPJDGetFix(PEP pep,PetscReal *fix)
 {
@@ -1640,7 +1640,7 @@ static PetscErrorCode PEPJDSetReusePreconditioner_JD(PEP pep,PetscBool reusepc)
    Logically Collective
 
    Input Parameters:
-+  pep     - the eigenproblem solver context
++  pep     - the polynomial eigensolver context
 -  reusepc - the reuse flag
 
    Options Database Key:
@@ -1653,7 +1653,7 @@ static PetscErrorCode PEPJDSetReusePreconditioner_JD(PEP pep,PetscBool reusepc)
 
    Level: advanced
 
-.seealso: `PEPJDGetReusePreconditioner()`, `PEPJDSetFix()`
+.seealso: [](ch:pep), `PEPJDGetReusePreconditioner()`, `PEPJDSetFix()`
 @*/
 PetscErrorCode PEPJDSetReusePreconditioner(PEP pep,PetscBool reusepc)
 {
@@ -1679,14 +1679,14 @@ static PetscErrorCode PEPJDGetReusePreconditioner_JD(PEP pep,PetscBool *reusepc)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  reusepc - the reuse flag
 
    Level: advanced
 
-.seealso: `PEPJDSetReusePreconditioner()`
+.seealso: [](ch:pep), `PEPJDSetReusePreconditioner()`
 @*/
 PetscErrorCode PEPJDGetReusePreconditioner(PEP pep,PetscBool *reusepc)
 {
@@ -1719,7 +1719,7 @@ static PetscErrorCode PEPJDSetMinimalityIndex_JD(PEP pep,PetscInt mmidx)
    Logically Collective
 
    Input Parameters:
-+  pep   - the eigenproblem solver context
++  pep   - the polynomial eigensolver context
 -  mmidx - maximum minimality index
 
    Options Database Key:
@@ -1731,7 +1731,7 @@ static PetscErrorCode PEPJDSetMinimalityIndex_JD(PEP pep,PetscInt mmidx)
 
    Level: advanced
 
-.seealso: `PEPJDGetMinimalityIndex()`
+.seealso: [](ch:pep), `PEPJDGetMinimalityIndex()`
 @*/
 PetscErrorCode PEPJDSetMinimalityIndex(PEP pep,PetscInt mmidx)
 {
@@ -1758,14 +1758,14 @@ static PetscErrorCode PEPJDGetMinimalityIndex_JD(PEP pep,PetscInt *mmidx)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  mmidx - minimality index
 
    Level: advanced
 
-.seealso: `PEPJDSetMinimalityIndex()`
+.seealso: [](ch:pep), `PEPJDSetMinimalityIndex()`
 @*/
 PetscErrorCode PEPJDGetMinimalityIndex(PEP pep,PetscInt *mmidx)
 {
@@ -1801,7 +1801,7 @@ static PetscErrorCode PEPJDSetProjection_JD(PEP pep,PEPJDProjection proj)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  proj - the type of projection
 
    Options Database Key:
@@ -1809,7 +1809,7 @@ static PetscErrorCode PEPJDSetProjection_JD(PEP pep,PEPJDProjection proj)
 
    Level: advanced
 
-.seealso: `PEPJDGetProjection()`
+.seealso: [](ch:pep), `PEPJDGetProjection()`
 @*/
 PetscErrorCode PEPJDSetProjection(PEP pep,PEPJDProjection proj)
 {
@@ -1835,14 +1835,14 @@ static PetscErrorCode PEPJDGetProjection_JD(PEP pep,PEPJDProjection *proj)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  proj - the type of projection
 
    Level: advanced
 
-.seealso: `PEPJDSetProjection()`
+.seealso: [](ch:pep), `PEPJDSetProjection()`
 @*/
 PetscErrorCode PEPJDGetProjection(PEP pep,PEPJDProjection *proj)
 {

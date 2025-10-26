@@ -180,7 +180,7 @@ PetscErrorCode DSSetDimensions(DS ds,PetscInt n,PetscInt l,PetscInt k)
 .  k  - intermediate dimension (e.g., position of arrow)
 -  t  - truncated length
 
-   Note:
+   Notes:
    The `t` parameter makes sense only if `DSTruncate()` has been called.
    Otherwise its value equals `n`.
 
@@ -960,7 +960,7 @@ PetscErrorCode DSVectors(DS ds,DSMatType mat,PetscInt *j,PetscReal *rnorm)
 
    Logically Collective
 
-   Input Parameters:
+   Input Parameter:
 .  ds - the direct solver context
 
    Level: advanced

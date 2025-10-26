@@ -157,7 +157,7 @@ PETSC_DEPRECATED_FUNCTION(3, 8, 0, "LMEDenseHessLyapunovChol()", ) static inline
    LMEMonitorFn - A function prototype for functions provided to `LMEMonitorSet()`.
 
    Calling Sequence:
-+  lme    - linear matrix equation solver context
++  lme    - the linear matrix equation solver context
 .  its    - iteration number
 .  errest - error estimate
 -  ctx    - optional monitoring context, as provided with `LMEMonitorSet()`
@@ -172,7 +172,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorFn(LME lme,PetscInt its,Pe
    LMEMonitorRegisterFn - A function prototype for functions provided to `LMEMonitorRegister()`.
 
    Calling Sequence:
-+  lme    - linear matrix equation solver context
++  lme    - the linear matrix equation solver context
 .  its    - iteration number
 .  errest - error estimate
 -  ctx    - `PetscViewerAndFormat` object

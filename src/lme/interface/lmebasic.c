@@ -87,7 +87,7 @@ PetscErrorCode LMEView(LME lme,PetscViewer viewer)
    Collective
 
    Input Parameters:
-+  lme  - the linear matrix equation context
++  lme  - the linear matrix equation solver context
 .  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
@@ -108,10 +108,10 @@ PetscErrorCode LMEViewFromOptions(LME lme,PetscObject obj,const char name[])
    Collective
 
    Input Parameters:
-+  lme - the linear matrix equation context
++  lme - the linear matrix equation solver context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
+   Options Database Key:
 .  -lme_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:
@@ -152,7 +152,7 @@ PetscErrorCode LMEConvergedReasonView(LME lme,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  lme - the linear matrix equation context
+.  lme - the linear matrix equation solver context
 
    Level: intermediate
 
@@ -240,7 +240,7 @@ PetscErrorCode LMECreate(MPI_Comm comm,LME *outlme)
    Logically Collective
 
    Input Parameters:
-+  lme  - the linear matrix equation context
++  lme  - the linear matrix equation solver context
 -  type - a known method
 
    Options Database Key:
@@ -292,7 +292,7 @@ PetscErrorCode LMESetType(LME lme,LMEType type)
    Not Collective
 
    Input Parameter:
-.  lme - the linear matrix equation context
+.  lme - the linear matrix equation solver context
 
    Output Parameter:
 .  type - name of `LME` method
@@ -319,12 +319,12 @@ PetscErrorCode LMEGetType(LME lme,LMEType *type)
 +  name - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
+   Note:
    `LMERegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    LMERegister("my_solver",MySolverCreate);
+   LMERegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
@@ -373,7 +373,7 @@ PetscErrorCode LMERegister(const char *name,PetscErrorCode (*function)(LME))
 
    Then, your monitor can be chosen with the procedural interface via
 .vb
-   LMEMonitorSetFromOptions(lme,"-lme_monitor_my_monitor","my_monitor",NULL)
+   LMEMonitorSetFromOptions(lme,"-lme_monitor_my_monitor","my_monitor",NULL);
 .ve
    or at runtime via the option `-lme_monitor_my_monitor`.
 
@@ -401,7 +401,7 @@ PetscErrorCode LMEMonitorRegister(const char name[],PetscViewerType vtype,PetscV
    Collective
 
    Input Parameter:
-.  lme - linear matrix equation context
+.  lme - the linear matrix equation solver context
 
    Level: advanced
 
@@ -432,7 +432,7 @@ PetscErrorCode LMEReset(LME lme)
    Collective
 
    Input Parameter:
-.  lme - linear matrix equation context
+.  lme - the linear matrix equation solver context
 
    Level: beginner
 
@@ -457,7 +457,7 @@ PetscErrorCode LMEDestroy(LME *lme)
    Collective
 
    Input Parameters:
-+  lme - linear matrix equation context
++  lme - the linear matrix equation solver context
 -  bv  - the basis vectors object
 
    Note:
@@ -486,8 +486,8 @@ PetscErrorCode LMESetBV(LME lme,BV bv)
 
    Not Collective
 
-   Input Parameters:
-.  lme - linear matrix equation context
+   Input Parameter:
+.  lme - the linear matrix equation solver context
 
    Output Parameter:
 .  bv - basis vectors context

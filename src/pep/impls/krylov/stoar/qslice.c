@@ -317,7 +317,7 @@ static inline PetscErrorCode PEPQSliceEvaluateQEP(PEP pep,PetscScalar x,Mat M,Ma
    Collective
 
    Input Parameter:
-.  pep  - eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameters:
 +  xi - first computed parameter
@@ -342,7 +342,7 @@ static inline PetscErrorCode PEPQSliceEvaluateQEP(PEP pep,PetscScalar x,Mat M,Ma
 
    Level: advanced
 
-.seealso: `PEPSetProblemType()`
+.seealso: [](ch:pep), `PEPSetProblemType()`
 @*/
 PetscErrorCode PEPCheckDefiniteQEP(PEP pep,PetscReal *xi,PetscReal *mu,PetscInt *definite,PetscInt *hyperbolic)
 {

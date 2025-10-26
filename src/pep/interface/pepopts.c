@@ -30,7 +30,7 @@
 
    Level: developer
 
-.seealso: `PEPMonitorSet()`, `PEPSetTrackAll()`
+.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPSetTrackAll()`
 @*/
 PetscErrorCode PEPMonitorSetFromOptions(PEP pep,const char opt[],const char name[],void *ctx,PetscBool trackall)
 {
@@ -65,21 +65,21 @@ PetscErrorCode PEPMonitorSetFromOptions(PEP pep,const char opt[],const char name
 }
 
 /*@
-   PEPSetFromOptions - Sets PEP options from the options database.
-   This routine must be called before PEPSetUp() if the user is to be
-   allowed to set the solver type.
+   PEPSetFromOptions - Sets `PEP` options from the options database.
+   This routine must be called before `PEPSetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  pep - the polynomial eigensolver context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 
-.seealso: `PEPSetOptionsPrefix()`
+.seealso: [](ch:pep), `PEPSetOptionsPrefix()`
 @*/
 PetscErrorCode PEPSetFromOptions(PEP pep)
 {
@@ -255,7 +255,7 @@ PetscErrorCode PEPSetFromOptions(PEP pep)
 
    Level: intermediate
 
-.seealso: `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPSetTolerances()`
 @*/
 PetscErrorCode PEPGetTolerances(PEP pep,PetscReal *tol,PetscInt *maxits)
 {
@@ -289,7 +289,7 @@ PetscErrorCode PEPGetTolerances(PEP pep,PetscReal *tol,PetscInt *maxits)
 
    Level: intermediate
 
-.seealso: `PEPGetTolerances()`
+.seealso: [](ch:pep), `PEPGetTolerances()`
 @*/
 PetscErrorCode PEPSetTolerances(PEP pep,PetscReal tol,PetscInt maxits)
 {
@@ -335,7 +335,7 @@ PetscErrorCode PEPSetTolerances(PEP pep,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: `PEPSetDimensions()`
+.seealso: [](ch:pep), `PEPSetDimensions()`
 @*/
 PetscErrorCode PEPGetDimensions(PEP pep,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -383,7 +383,7 @@ PetscErrorCode PEPGetDimensions(PEP pep,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 
    Level: intermediate
 
-.seealso: `PEPGetDimensions()`, `PEPSetInterval()`, `PEPSTOARSetDimensions()`
+.seealso: [](ch:pep), `PEPGetDimensions()`, `PEPSetInterval()`, `PEPSTOARSetDimensions()`
 @*/
 PetscErrorCode PEPSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -419,7 +419,7 @@ PetscErrorCode PEPSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
    Logically Collective
 
    Input Parameters:
-+  pep   - eigensolver context obtained from PEPCreate()
++  pep   - the polynomial eigensolver context
 -  which - the portion of the spectrum to be sought
 
    Options Database Keys:
@@ -467,8 +467,7 @@ PetscErrorCode PEPSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 
    Level: intermediate
 
-.seealso: `PEPGetWhichEigenpairs()`, `PEPSetTarget()`, `PEPSetInterval()`,
-          `PEPSetDimensions()`, `PEPSetEigenvalueComparison()`, `PEPWhich`
+.seealso: [](ch:pep), `PEPGetWhichEigenpairs()`, `PEPSetTarget()`, `PEPSetInterval()`, `PEPSetDimensions()`, `PEPSetEigenvalueComparison()`, `PEPWhich`
 @*/
 PetscErrorCode PEPSetWhichEigenpairs(PEP pep,PEPWhich which)
 {
@@ -511,7 +510,7 @@ PetscErrorCode PEPSetWhichEigenpairs(PEP pep,PEPWhich which)
     Not Collective
 
     Input Parameter:
-.   pep - eigensolver context obtained from PEPCreate()
+.   pep - the polynomial eigensolver context
 
     Output Parameter:
 .   which - the portion of the spectrum to be sought
@@ -521,7 +520,7 @@ PetscErrorCode PEPSetWhichEigenpairs(PEP pep,PEPWhich which)
 
     Level: intermediate
 
-.seealso: `PEPSetWhichEigenpairs()`, `PEPWhich`
+.seealso: [](ch:pep), `PEPSetWhichEigenpairs()`, `PEPWhich`
 @*/
 PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
 {
@@ -539,7 +538,7 @@ PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
    Logically Collective
 
    Input Parameters:
-+  pep  - eigensolver context obtained from PEPCreate()
++  pep  - the polynomial eigensolver context
 .  comp - a pointer to the comparison function
 -  ctx  - a context pointer (the last parameter to the comparison function)
 
@@ -551,7 +550,7 @@ PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
 
    Level: advanced
 
-.seealso: `PEPSetWhichEigenpairs()`, `PEPWhich`
+.seealso: [](ch:pep), `PEPSetWhichEigenpairs()`, `PEPWhich`
 @*/
 PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *comp,void *ctx)
 {
@@ -593,7 +592,7 @@ PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *c
 
    Level: intermediate
 
-.seealso: `PEPSetOperators()`, `PEPSetType()`, `PEPGetProblemType()`, `PEPProblemType`
+.seealso: [](ch:pep), `PEPSetOperators()`, `PEPSetType()`, `PEPGetProblemType()`, `PEPProblemType`
 @*/
 PetscErrorCode PEPSetProblemType(PEP pep,PEPProblemType type)
 {
@@ -621,7 +620,7 @@ PetscErrorCode PEPSetProblemType(PEP pep,PEPProblemType type)
 
    Level: intermediate
 
-.seealso: `PEPSetProblemType()`, `PEPProblemType`
+.seealso: [](ch:pep), `PEPSetProblemType()`, `PEPProblemType`
 @*/
 PetscErrorCode PEPGetProblemType(PEP pep,PEPProblemType *type)
 {
@@ -654,7 +653,7 @@ PetscErrorCode PEPGetProblemType(PEP pep,PEPProblemType *type)
 
    Level: intermediate
 
-.seealso: `PEPSetOperators()`, `PEPGetBasis()`, `PEPBasis`
+.seealso: [](ch:pep), `PEPSetOperators()`, `PEPGetBasis()`, `PEPBasis`
 @*/
 PetscErrorCode PEPSetBasis(PEP pep,PEPBasis basis)
 {
@@ -678,7 +677,7 @@ PetscErrorCode PEPSetBasis(PEP pep,PEPBasis basis)
 
    Level: intermediate
 
-.seealso: `PEPSetBasis()`, `PEPBasis`
+.seealso: [](ch:pep), `PEPSetBasis()`, `PEPBasis`
 @*/
 PetscErrorCode PEPGetBasis(PEP pep,PEPBasis *basis)
 {
@@ -696,7 +695,7 @@ PetscErrorCode PEPGetBasis(PEP pep,PEPBasis *basis)
    Logically Collective
 
    Input Parameters:
-+  pep      - the eigensolver context
++  pep      - the polynomial eigensolver context
 -  trackall - whether compute all residuals or not
 
    Notes:
@@ -709,7 +708,7 @@ PetscErrorCode PEPGetBasis(PEP pep,PEPBasis *basis)
 
    Level: developer
 
-.seealso: `PEPGetTrackAll()`
+.seealso: [](ch:pep), `PEPGetTrackAll()`
 @*/
 PetscErrorCode PEPSetTrackAll(PEP pep,PetscBool trackall)
 {
@@ -727,14 +726,14 @@ PetscErrorCode PEPSetTrackAll(PEP pep,PetscBool trackall)
    Not Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  trackall - the returned flag
 
    Level: developer
 
-.seealso: `PEPSetTrackAll()`
+.seealso: [](ch:pep), `PEPSetTrackAll()`
 @*/
 PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
 {
@@ -752,7 +751,7 @@ PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
    Logically Collective
 
    Input Parameters:
-+  pep     - eigensolver context obtained from PEPCreate()
++  pep     - the polynomial eigensolver context
 .  conv    - convergence test function, see PEPConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -763,7 +762,7 @@ PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
 
    Level: advanced
 
-.seealso: `PEPSetConvergenceTest()`, `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPSetConvergenceTest()`, `PEPSetTolerances()`
 @*/
 PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -790,7 +789,7 @@ PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,
    Logically Collective
 
    Input Parameters:
-+  pep  - eigensolver context obtained from PEPCreate()
++  pep  - the polynomial eigensolver context
 -  conv - the type of convergence test
 
    Options Database Keys:
@@ -808,7 +807,7 @@ PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,
 
    Level: intermediate
 
-.seealso: `PEPGetConvergenceTest()`, `PEPSetConvergenceTestFunction()`, `PEPSetStoppingTest()`, `PEPConv`
+.seealso: [](ch:pep), `PEPGetConvergenceTest()`, `PEPSetConvergenceTestFunction()`, `PEPSetStoppingTest()`, `PEPConv`
 @*/
 PetscErrorCode PEPSetConvergenceTest(PEP pep,PEPConv conv)
 {
@@ -836,15 +835,15 @@ PetscErrorCode PEPSetConvergenceTest(PEP pep,PEPConv conv)
 
    Not Collective
 
-   Input Parameters:
-.  pep   - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep   - the polynomial eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  conv  - the type of convergence test
 
    Level: intermediate
 
-.seealso: `PEPSetConvergenceTest()`, `PEPConv`
+.seealso: [](ch:pep), `PEPSetConvergenceTest()`, `PEPConv`
 @*/
 PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
 {
@@ -862,7 +861,7 @@ PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
    Logically Collective
 
    Input Parameters:
-+  pep     - eigensolver context obtained from PEPCreate()
++  pep     - the polynomial eigensolver context
 .  stop    - stopping test function, see PEPStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -875,7 +874,7 @@ PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
 
    Level: advanced
 
-.seealso: `PEPSetStoppingTest()`, `PEPStoppingBasic()`
+.seealso: [](ch:pep), `PEPSetStoppingTest()`, `PEPStoppingBasic()`
 @*/
 PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -900,7 +899,7 @@ PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void *
    Logically Collective
 
    Input Parameters:
-+  pep  - eigensolver context obtained from PEPCreate()
++  pep  - the polynomial eigensolver context
 -  stop - the type of stopping test
 
    Options Database Keys:
@@ -914,7 +913,7 @@ PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void *
 
    Level: advanced
 
-.seealso: `PEPGetStoppingTest()`, `PEPSetStoppingTestFunction()`, `PEPSetConvergenceTest()`, `PEPStop`
+.seealso: [](ch:pep), `PEPGetStoppingTest()`, `PEPSetStoppingTestFunction()`, `PEPSetConvergenceTest()`, `PEPStop`
 @*/
 PetscErrorCode PEPSetStoppingTest(PEP pep,PEPStop stop)
 {
@@ -940,15 +939,15 @@ PetscErrorCode PEPSetStoppingTest(PEP pep,PEPStop stop)
 
    Not Collective
 
-   Input Parameters:
-.  pep   - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep   - the polynomial eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  stop  - the type of stopping test
 
    Level: advanced
 
-.seealso: `PEPSetStoppingTest()`, `PEPStop`
+.seealso: [](ch:pep), `PEPSetStoppingTest()`, `PEPStop`
 @*/
 PetscErrorCode PEPGetStoppingTest(PEP pep,PEPStop *stop)
 {
@@ -965,7 +964,7 @@ PetscErrorCode PEPGetStoppingTest(PEP pep,PEPStop *stop)
    Collective
 
    Input Parameters:
-+  pep    - the eigensolver context
++  pep    - the polynomial eigensolver context
 .  scale  - scaling strategy
 .  alpha  - the scaling factor used in the scalar strategy
 .  Dl     - the left diagonal matrix of the diagonal scaling algorithm
@@ -1002,7 +1001,7 @@ PetscErrorCode PEPGetStoppingTest(PEP pep,PEPStop *stop)
 
    Level: intermediate
 
-.seealso: `PEPGetScale()`
+.seealso: [](ch:pep), `PEPGetScale()`
 @*/
 PetscErrorCode PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,PetscInt its,PetscReal lambda)
 {
@@ -1060,7 +1059,7 @@ PetscErrorCode PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,
    Not Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameters:
 +  scale  - scaling strategy
@@ -1078,7 +1077,7 @@ PetscErrorCode PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,
    If Dl or Dr were not set by the user, then the ones computed internally are
    returned (or a null pointer if called before PEPSetUp).
 
-.seealso: `PEPSetScale()`, `PEPSetUp()`
+.seealso: [](ch:pep), `PEPSetScale()`, `PEPSetUp()`
 @*/
 PetscErrorCode PEPGetScale(PEP pep,PEPScale *scale,PetscReal *alpha,Vec *Dl,Vec *Dr,PetscInt *its,PetscReal *lambda)
 {
@@ -1099,15 +1098,15 @@ PetscErrorCode PEPGetScale(PEP pep,PEPScale *scale,PetscReal *alpha,Vec *Dl,Vec 
    Logically Collective
 
    Input Parameters:
-+  pep     - the eigensolver context
++  pep     - the polynomial eigensolver context
 -  extract - extraction strategy
 
-   Options Database Keys:
+   Options Database Key:
 .  -pep_extract <type> - extraction type, one of <none,norm,residual,structured>
 
    Level: intermediate
 
-.seealso: `PEPGetExtract()`
+.seealso: [](ch:pep), `PEPGetExtract()`
 @*/
 PetscErrorCode PEPSetExtract(PEP pep,PEPExtract extract)
 {
@@ -1124,14 +1123,14 @@ PetscErrorCode PEPSetExtract(PEP pep,PEPExtract extract)
    Not Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  extract - extraction strategy
 
    Level: intermediate
 
-.seealso: `PEPSetExtract()`, `PEPExtract`
+.seealso: [](ch:pep), `PEPSetExtract()`, `PEPExtract`
 @*/
 PetscErrorCode PEPGetExtract(PEP pep,PEPExtract *extract)
 {
@@ -1191,7 +1190,7 @@ PetscErrorCode PEPGetExtract(PEP pep,PEPExtract *extract)
 
    Level: intermediate
 
-.seealso: `PEPGetRefine()`
+.seealso: [](ch:pep), `PEPGetRefine()`
 @*/
 PetscErrorCode PEPSetRefine(PEP pep,PEPRefine refine,PetscInt npart,PetscReal tol,PetscInt its,PEPRefineScheme scheme)
 {
@@ -1256,7 +1255,7 @@ PetscErrorCode PEPSetRefine(PEP pep,PEPRefine refine,PetscInt npart,PetscReal to
    Note:
    The user can specify NULL for any parameter that is not needed.
 
-.seealso: `PEPSetRefine()`
+.seealso: [](ch:pep), `PEPSetRefine()`
 @*/
 PetscErrorCode PEPGetRefine(PEP pep,PEPRefine *refine,PetscInt *npart,PetscReal *tol,PetscInt *its,PEPRefineScheme *scheme)
 {
@@ -1294,7 +1293,7 @@ PetscErrorCode PEPGetRefine(PEP pep,PEPRefine *refine,PetscInt *npart,PetscReal 
 
    Level: advanced
 
-.seealso: `PEPAppendOptionsPrefix()`, `PEPGetOptionsPrefix()`
+.seealso: [](ch:pep), `PEPAppendOptionsPrefix()`, `PEPGetOptionsPrefix()`
 @*/
 PetscErrorCode PEPSetOptionsPrefix(PEP pep,const char *prefix)
 {
@@ -1328,7 +1327,7 @@ PetscErrorCode PEPSetOptionsPrefix(PEP pep,const char *prefix)
 
    Level: advanced
 
-.seealso: `PEPSetOptionsPrefix()`, `PEPGetOptionsPrefix()`
+.seealso: [](ch:pep), `PEPSetOptionsPrefix()`, `PEPGetOptionsPrefix()`
 @*/
 PetscErrorCode PEPAppendOptionsPrefix(PEP pep,const char *prefix)
 {
@@ -1360,7 +1359,7 @@ PetscErrorCode PEPAppendOptionsPrefix(PEP pep,const char *prefix)
 
    Level: advanced
 
-.seealso: `PEPSetOptionsPrefix()`, `PEPAppendOptionsPrefix()`
+.seealso: [](ch:pep), `PEPSetOptionsPrefix()`, `PEPAppendOptionsPrefix()`
 @*/
 PetscErrorCode PEPGetOptionsPrefix(PEP pep,const char *prefix[])
 {

@@ -317,7 +317,7 @@ static PetscErrorCode PEPQArnoldiSetRestart_QArnoldi(PEP pep,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
@@ -328,7 +328,7 @@ static PetscErrorCode PEPQArnoldiSetRestart_QArnoldi(PEP pep,PetscReal keep)
 
    Level: advanced
 
-.seealso: `PEPQArnoldiGetRestart()`
+.seealso: [](ch:pep), `PEPQArnoldiGetRestart()`
 @*/
 PetscErrorCode PEPQArnoldiSetRestart(PEP pep,PetscReal keep)
 {
@@ -354,14 +354,14 @@ static PetscErrorCode PEPQArnoldiGetRestart_QArnoldi(PEP pep,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
 
    Level: advanced
 
-.seealso: `PEPQArnoldiSetRestart()`
+.seealso: [](ch:pep), `PEPQArnoldiSetRestart()`
 @*/
 PetscErrorCode PEPQArnoldiGetRestart(PEP pep,PetscReal *keep)
 {
@@ -388,7 +388,7 @@ static PetscErrorCode PEPQArnoldiSetLocking_QArnoldi(PEP pep,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
@@ -402,7 +402,7 @@ static PetscErrorCode PEPQArnoldiSetLocking_QArnoldi(PEP pep,PetscBool lock)
 
    Level: advanced
 
-.seealso: `PEPQArnoldiGetLocking()`
+.seealso: [](ch:pep), `PEPQArnoldiGetLocking()`
 @*/
 PetscErrorCode PEPQArnoldiSetLocking(PEP pep,PetscBool lock)
 {
@@ -428,14 +428,14 @@ static PetscErrorCode PEPQArnoldiGetLocking_QArnoldi(PEP pep,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `PEPQArnoldiSetLocking()`
+.seealso: [](ch:pep), `PEPQArnoldiSetLocking()`
 @*/
 PetscErrorCode PEPQArnoldiGetLocking(PEP pep,PetscBool *lock)
 {

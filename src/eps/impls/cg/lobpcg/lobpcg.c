@@ -416,7 +416,7 @@ static PetscErrorCode EPSLOBPCGSetBlockSize_LOBPCG(EPS eps,PetscInt bs)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  bs  - the block size
 
    Options Database Key:
@@ -424,7 +424,7 @@ static PetscErrorCode EPSLOBPCGSetBlockSize_LOBPCG(EPS eps,PetscInt bs)
 
    Level: advanced
 
-.seealso: `EPSLOBPCGGetBlockSize()`
+.seealso: [](ch:eps), `EPSLOBPCGGetBlockSize()`
 @*/
 PetscErrorCode EPSLOBPCGSetBlockSize(EPS eps,PetscInt bs)
 {
@@ -450,14 +450,14 @@ static PetscErrorCode EPSLOBPCGGetBlockSize_LOBPCG(EPS eps,PetscInt *bs)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  bs - the block size
 
    Level: advanced
 
-.seealso: `EPSLOBPCGSetBlockSize()`
+.seealso: [](ch:eps), `EPSLOBPCGSetBlockSize()`
 @*/
 PetscErrorCode EPSLOBPCGGetBlockSize(EPS eps,PetscInt *bs)
 {
@@ -488,7 +488,7 @@ static PetscErrorCode EPSLOBPCGSetRestart_LOBPCG(EPS eps,PetscReal restart)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  restart - the percentage of the block of vectors to force a restart
 
    Options Database Key:
@@ -502,7 +502,7 @@ static PetscErrorCode EPSLOBPCGSetRestart_LOBPCG(EPS eps,PetscReal restart)
 
    Level: advanced
 
-.seealso: `EPSLOBPCGGetRestart()`
+.seealso: [](ch:eps), `EPSLOBPCGGetRestart()`
 @*/
 PetscErrorCode EPSLOBPCGSetRestart(EPS eps,PetscReal restart)
 {
@@ -528,14 +528,14 @@ static PetscErrorCode EPSLOBPCGGetRestart_LOBPCG(EPS eps,PetscReal *restart)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  restart - the restart parameter
 
    Level: advanced
 
-.seealso: `EPSLOBPCGSetRestart()`
+.seealso: [](ch:eps), `EPSLOBPCGSetRestart()`
 @*/
 PetscErrorCode EPSLOBPCGGetRestart(EPS eps,PetscReal *restart)
 {
@@ -562,7 +562,7 @@ static PetscErrorCode EPSLOBPCGSetLocking_LOBPCG(EPS eps,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigenproblem solver context
++  eps  - the linear eigensolver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
@@ -575,7 +575,7 @@ static PetscErrorCode EPSLOBPCGSetLocking_LOBPCG(EPS eps,PetscBool lock)
 
    Level: advanced
 
-.seealso: `EPSLOBPCGGetLocking()`
+.seealso: [](ch:eps), `EPSLOBPCGGetLocking()`
 @*/
 PetscErrorCode EPSLOBPCGSetLocking(EPS eps,PetscBool lock)
 {
@@ -601,14 +601,14 @@ static PetscErrorCode EPSLOBPCGGetLocking_LOBPCG(EPS eps,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `EPSLOBPCGSetLocking()`
+.seealso: [](ch:eps), `EPSLOBPCGSetLocking()`
 @*/
 PetscErrorCode EPSLOBPCGGetLocking(EPS eps,PetscBool *lock)
 {

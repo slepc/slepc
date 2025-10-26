@@ -523,7 +523,7 @@ static PetscErrorCode PEPSTOARSetLocking_STOAR(PEP pep,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
@@ -537,7 +537,7 @@ static PetscErrorCode PEPSTOARSetLocking_STOAR(PEP pep,PetscBool lock)
 
    Level: advanced
 
-.seealso: `PEPSTOARGetLocking()`
+.seealso: [](ch:pep), `PEPSTOARGetLocking()`
 @*/
 PetscErrorCode PEPSTOARSetLocking(PEP pep,PetscBool lock)
 {
@@ -563,14 +563,14 @@ static PetscErrorCode PEPSTOARGetLocking_STOAR(PEP pep,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `PEPSTOARSetLocking()`
+.seealso: [](ch:pep), `PEPSTOARSetLocking()`
 @*/
 PetscErrorCode PEPSTOARGetLocking(PEP pep,PetscBool *lock)
 {
@@ -631,7 +631,7 @@ static PetscErrorCode PEPSTOARGetInertias_STOAR(PEP pep,PetscInt *n,PetscReal *s
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameters:
 +  n        - number of shifts, including the endpoints of the interval
@@ -665,7 +665,7 @@ static PetscErrorCode PEPSTOARGetInertias_STOAR(PEP pep,PetscInt *n,PetscReal *s
 
    Level: advanced
 
-.seealso: `PEPSetInterval()`
+.seealso: [](ch:pep), `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARGetInertias(PEP pep,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[]) PeNS
 {
@@ -693,7 +693,7 @@ static PetscErrorCode PEPSTOARSetDetectZeros_STOAR(PEP pep,PetscBool detect)
    Logically Collective
 
    Input Parameters:
-+  pep    - the eigenproblem solver context
++  pep    - the polynomial eigensolver context
 -  detect - check for zeros
 
    Options Database Key:
@@ -709,7 +709,7 @@ static PetscErrorCode PEPSTOARSetDetectZeros_STOAR(PEP pep,PetscBool detect)
 
    Level: advanced
 
-.seealso: `PEPSetInterval()`
+.seealso: [](ch:pep), `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARSetDetectZeros(PEP pep,PetscBool detect)
 {
@@ -736,14 +736,14 @@ static PetscErrorCode PEPSTOARGetDetectZeros_STOAR(PEP pep,PetscBool *detect)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  detect - whether zeros detection is enforced during factorizations
 
    Level: advanced
 
-.seealso: `PEPSTOARSetDetectZeros()`
+.seealso: [](ch:pep), `PEPSTOARSetDetectZeros()`
 @*/
 PetscErrorCode PEPSTOARGetDetectZeros(PEP pep,PetscBool *detect)
 {
@@ -772,7 +772,7 @@ static PetscErrorCode PEPSTOARSetLinearization_STOAR(PEP pep,PetscReal alpha,Pet
    Logically Collective
 
    Input Parameters:
-+  pep   - polynomial eigenvalue solver
++  pep   - the polynomial eigensolver context
 .  alpha - first parameter of the linearization
 -  beta  - second parameter of the linearization
 
@@ -785,7 +785,7 @@ static PetscErrorCode PEPSTOARSetLinearization_STOAR(PEP pep,PetscReal alpha,Pet
 
    Level: advanced
 
-.seealso: `PEPSTOARGetLinearization()`
+.seealso: [](ch:pep), `PEPSTOARGetLinearization()`
 @*/
 PetscErrorCode PEPSTOARSetLinearization(PEP pep,PetscReal alpha,PetscReal beta)
 {
@@ -814,7 +814,7 @@ static PetscErrorCode PEPSTOARGetLinearization_STOAR(PEP pep,PetscReal *alpha,Pe
    Not Collective
 
    Input Parameter:
-.  pep  - polynomial eigenvalue solver
+.  pep  - the polynomial eigensolver context
 
    Output Parameters:
 +  alpha - the first parameter of the linearization
@@ -822,7 +822,7 @@ static PetscErrorCode PEPSTOARGetLinearization_STOAR(PEP pep,PetscReal *alpha,Pe
 
    Level: advanced
 
-.seealso: `PEPSTOARSetLinearization()`
+.seealso: [](ch:pep), `PEPSTOARSetLinearization()`
 @*/
 PetscErrorCode PEPSTOARGetLinearization(PEP pep,PetscReal *alpha,PetscReal *beta)
 {
@@ -865,19 +865,19 @@ static PetscErrorCode PEPSTOARSetDimensions_STOAR(PEP pep,PetscInt nev,PetscInt 
    Logically Collective
 
    Input Parameters:
-+  pep - the eigenproblem solver context
++  pep - the polynomial eigensolver context
 .  nev - number of eigenvalues to compute
 .  ncv - the maximum dimension of the subspace to be used by the subsolve
 -  mpd - the maximum dimension allowed for the projected problem
 
-   Options Database Key:
+   Options Database Keys:
 +  -pep_stoar_nev <nev> - Sets the number of eigenvalues
 .  -pep_stoar_ncv <ncv> - Sets the dimension of the subspace
 -  -pep_stoar_mpd <mpd> - Sets the maximum projected dimension
 
    Level: advanced
 
-.seealso: `PEPSTOARGetDimensions()`, `PEPSetDimensions()`, `PEPSetInterval()`
+.seealso: [](ch:pep), `PEPSTOARGetDimensions()`, `PEPSetDimensions()`, `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -908,7 +908,7 @@ static PetscErrorCode PEPSTOARGetDimensions_STOAR(PEP pep,PetscInt *nev,PetscInt
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameters:
 +  nev - number of eigenvalues to compute
@@ -917,7 +917,7 @@ static PetscErrorCode PEPSTOARGetDimensions_STOAR(PEP pep,PetscInt *nev,PetscInt
 
    Level: advanced
 
-.seealso: `PEPSTOARSetDimensions()`
+.seealso: [](ch:pep), `PEPSTOARSetDimensions()`
 @*/
 PetscErrorCode PEPSTOARGetDimensions(PEP pep,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -944,7 +944,7 @@ static PetscErrorCode PEPSTOARSetCheckEigenvalueType_STOAR(PEP pep,PetscBool che
    Logically Collective
 
    Input Parameters:
-+  pep     - the eigenproblem solver context
++  pep     - the polynomial eigensolver context
 -  checket - check eigenvalue type
 
    Options Database Key:
@@ -963,7 +963,7 @@ static PetscErrorCode PEPSTOARSetCheckEigenvalueType_STOAR(PEP pep,PetscBool che
 
    Level: advanced
 
-.seealso: `PEPSetProblemType()`, `PEPSetInterval()`
+.seealso: [](ch:pep), `PEPSetProblemType()`, `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARSetCheckEigenvalueType(PEP pep,PetscBool checket)
 {
@@ -990,14 +990,14 @@ static PetscErrorCode PEPSTOARGetCheckEigenvalueType_STOAR(PEP pep,PetscBool *ch
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  checket - whether eigenvalue type must be checked during spectrum slcing
 
    Level: advanced
 
-.seealso: `PEPSTOARSetCheckEigenvalueType()`
+.seealso: [](ch:pep), `PEPSTOARSetCheckEigenvalueType()`
 @*/
 PetscErrorCode PEPSTOARGetCheckEigenvalueType(PEP pep,PetscBool *checket)
 {

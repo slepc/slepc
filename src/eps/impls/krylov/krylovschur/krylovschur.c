@@ -372,7 +372,7 @@ static PetscErrorCode EPSKrylovSchurSetRestart_KrylovSchur(EPS eps,PetscReal kee
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
@@ -383,7 +383,7 @@ static PetscErrorCode EPSKrylovSchurSetRestart_KrylovSchur(EPS eps,PetscReal kee
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurGetRestart()`
+.seealso: [](ch:eps), `EPSKrylovSchurGetRestart()`
 @*/
 PetscErrorCode EPSKrylovSchurSetRestart(EPS eps,PetscReal keep)
 {
@@ -410,14 +410,14 @@ static PetscErrorCode EPSKrylovSchurGetRestart_KrylovSchur(EPS eps,PetscReal *ke
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetRestart()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetRestart()`
 @*/
 PetscErrorCode EPSKrylovSchurGetRestart(EPS eps,PetscReal *keep)
 {
@@ -444,7 +444,7 @@ static PetscErrorCode EPSKrylovSchurSetLocking_KrylovSchur(EPS eps,PetscBool loc
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigenproblem solver context
++  eps  - the linear eigensolver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
@@ -458,7 +458,7 @@ static PetscErrorCode EPSKrylovSchurSetLocking_KrylovSchur(EPS eps,PetscBool loc
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurGetLocking()`
+.seealso: [](ch:eps), `EPSKrylovSchurGetLocking()`
 @*/
 PetscErrorCode EPSKrylovSchurSetLocking(EPS eps,PetscBool lock)
 {
@@ -485,14 +485,14 @@ static PetscErrorCode EPSKrylovSchurGetLocking_KrylovSchur(EPS eps,PetscBool *lo
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetLocking()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetLocking()`
 @*/
 PetscErrorCode EPSKrylovSchurGetLocking(EPS eps,PetscBool *lock)
 {
@@ -540,7 +540,7 @@ static PetscErrorCode EPSKrylovSchurSetPartitions_KrylovSchur(EPS eps,PetscInt n
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenproblem solver context
++  eps   - the linear eigensolver context
 -  npart - number of partitions
 
    Options Database Key:
@@ -557,7 +557,7 @@ static PetscErrorCode EPSKrylovSchurSetPartitions_KrylovSchur(EPS eps,PetscInt n
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetSubintervals()`, `EPSSetInterval()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetSubintervals()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetPartitions(EPS eps,PetscInt npart)
 {
@@ -584,14 +584,14 @@ static PetscErrorCode EPSKrylovSchurGetPartitions_KrylovSchur(EPS eps,PetscInt *
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  npart - number of partitions
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetPartitions()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetPartitions()`
 @*/
 PetscErrorCode EPSKrylovSchurGetPartitions(EPS eps,PetscInt *npart)
 {
@@ -619,7 +619,7 @@ static PetscErrorCode EPSKrylovSchurSetDetectZeros_KrylovSchur(EPS eps,PetscBool
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigenproblem solver context
++  eps    - the linear eigensolver context
 -  detect - check for zeros
 
    Options Database Key:
@@ -636,7 +636,7 @@ static PetscErrorCode EPSKrylovSchurSetDetectZeros_KrylovSchur(EPS eps,PetscBool
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetPartitions()`, `EPSSetInterval()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetPartitions()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetDetectZeros(EPS eps,PetscBool detect)
 {
@@ -663,14 +663,14 @@ static PetscErrorCode EPSKrylovSchurGetDetectZeros_KrylovSchur(EPS eps,PetscBool
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  detect - whether zeros detection is enforced during factorizations
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetDetectZeros()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetDetectZeros()`
 @*/
 PetscErrorCode EPSKrylovSchurGetDetectZeros(EPS eps,PetscBool *detect)
 {
@@ -714,12 +714,12 @@ static PetscErrorCode EPSKrylovSchurSetDimensions_KrylovSchur(EPS eps,PetscInt n
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  nev - number of eigenvalues to compute
 .  ncv - the maximum dimension of the subspace to be used by the subsolve
 -  mpd - the maximum dimension allowed for the projected problem
 
-   Options Database Key:
+   Options Database Keys:
 +  -eps_krylovschur_nev <nev> - Sets the number of eigenvalues
 .  -eps_krylovschur_ncv <ncv> - Sets the dimension of the subspace
 -  -eps_krylovschur_mpd <mpd> - Sets the maximum projected dimension
@@ -730,7 +730,7 @@ static PetscErrorCode EPSKrylovSchurSetDimensions_KrylovSchur(EPS eps,PetscInt n
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurGetDimensions()`, `EPSSetDimensions()`, `EPSSetInterval()`
+.seealso: [](ch:eps), `EPSKrylovSchurGetDimensions()`, `EPSSetDimensions()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -761,7 +761,7 @@ static PetscErrorCode EPSKrylovSchurGetDimensions_KrylovSchur(EPS eps,PetscInt *
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  nev - number of eigenvalues to compute
@@ -770,7 +770,7 @@ static PetscErrorCode EPSKrylovSchurGetDimensions_KrylovSchur(EPS eps,PetscInt *
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetDimensions()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetDimensions()`
 @*/
 PetscErrorCode EPSKrylovSchurGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -803,7 +803,7 @@ static PetscErrorCode EPSKrylovSchurSetSubintervals_KrylovSchur(EPS eps,PetscRea
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigenproblem solver context
++  eps    - the linear eigensolver context
 -  subint - array of real values specifying subintervals
 
    Notes:
@@ -818,7 +818,7 @@ static PetscErrorCode EPSKrylovSchurSetSubintervals_KrylovSchur(EPS eps,PetscRea
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubintervals()`, `EPSSetInterval()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubintervals()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetSubintervals(EPS eps,PetscReal subint[])
 {
@@ -851,7 +851,7 @@ static PetscErrorCode EPSKrylovSchurGetSubintervals_KrylovSchur(EPS eps,PetscRea
    Not Collective
 
    Input Parameter:
-.  eps    - the eigenproblem solver context
+.  eps    - the linear eigensolver context
 
    Output Parameter:
 .  subint - array of real values specifying subintervals
@@ -875,7 +875,7 @@ static PetscErrorCode EPSKrylovSchurGetSubintervals_KrylovSchur(EPS eps,PetscRea
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetSubintervals()`, `EPSKrylovSchurGetPartitions()`, `EPSSetInterval()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetSubintervals()`, `EPSKrylovSchurGetPartitions()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubintervals(EPS eps,PetscReal *subint[]) PeNS
 {
@@ -939,7 +939,7 @@ static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  n        - number of shifts, including the endpoints of the interval
@@ -973,7 +973,7 @@ static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetSubintervals()`
+.seealso: [](ch:eps), `EPSSetInterval()`, `EPSKrylovSchurSetSubintervals()`
 @*/
 PetscErrorCode EPSKrylovSchurGetInertias(EPS eps,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[]) PeNS
 {
@@ -1006,7 +1006,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommInfo_KrylovSchur(EPS eps,PetscInt 
    Collective on the subcommunicator (if v is given)
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  k - index of the subinterval for the calling process
@@ -1021,7 +1021,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommInfo_KrylovSchur(EPS eps,PetscInt 
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommPairs()`
+.seealso: [](ch:eps), `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommPairs()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubcommInfo(EPS eps,PetscInt *k,PetscInt *n,Vec *v)
 {
@@ -1052,7 +1052,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommPairs_KrylovSchur(EPS eps,PetscInt
    Collective on the subcommunicator (if v is given)
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -1069,7 +1069,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommPairs_KrylovSchur(EPS eps,PetscInt
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`, `EPSKrylovSchurGetSubcommMats()`
+.seealso: [](ch:eps), `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`, `EPSKrylovSchurGetSubcommMats()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubcommPairs(EPS eps,PetscInt i,PetscScalar *eig,Vec v)
 {
@@ -1098,7 +1098,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommMats_KrylovSchur(EPS eps,Mat *A,Ma
    Collective on the subcommunicator
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  A  - the matrix associated with the eigensystem
@@ -1112,7 +1112,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommMats_KrylovSchur(EPS eps,Mat *A,Ma
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`
+.seealso: [](ch:eps), `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubcommMats(EPS eps,Mat *A,Mat *B)
 {
@@ -1176,7 +1176,7 @@ static PetscErrorCode EPSKrylovSchurUpdateSubcommMats_KrylovSchur(EPS eps,PetscS
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  s   - scalar that multiplies the existing A matrix
 .  a   - scalar used in the axpy operation on A
 .  Au  - matrix used in the axpy operation on A
@@ -1205,7 +1205,7 @@ static PetscErrorCode EPSKrylovSchurUpdateSubcommMats_KrylovSchur(EPS eps,PetscS
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommMats()`
+.seealso: [](ch:eps), `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommMats()`
 @*/
 PetscErrorCode EPSKrylovSchurUpdateSubcommMats(EPS eps,PetscScalar s,PetscScalar a,Mat Au,PetscScalar t,PetscScalar b,Mat Bu,MatStructure str,PetscBool globalup)
 {
@@ -1341,7 +1341,7 @@ static PetscErrorCode EPSKrylovSchurGetKSP_KrylovSchur(EPS eps,KSP *ksp)
    Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  ksp - the internal KSP object
@@ -1359,7 +1359,7 @@ static PetscErrorCode EPSKrylovSchurGetKSP_KrylovSchur(EPS eps,KSP *ksp)
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`
+.seealso: [](ch:eps), `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`
 @*/
 PetscErrorCode EPSKrylovSchurGetKSP(EPS eps,KSP *ksp)
 {
@@ -1396,7 +1396,7 @@ static PetscErrorCode EPSKrylovSchurSetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  bse - the BSE method
 
    Options Database Key:
@@ -1404,7 +1404,7 @@ static PetscErrorCode EPSKrylovSchurSetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurGetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
+.seealso: [](ch:eps), `EPSKrylovSchurGetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
 @*/
 PetscErrorCode EPSKrylovSchurSetBSEType(EPS eps,EPSKrylovSchurBSEType bse)
 {
@@ -1431,14 +1431,14 @@ static PetscErrorCode EPSKrylovSchurGetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  bse - the BSE method
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
+.seealso: [](ch:eps), `EPSKrylovSchurSetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
 @*/
 PetscErrorCode EPSKrylovSchurGetBSEType(EPS eps,EPSKrylovSchurBSEType *bse)
 {

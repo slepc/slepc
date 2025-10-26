@@ -25,7 +25,7 @@ const char *STMatModes[] = {"COPY","INPLACE","SHELL","STMatMode","ST_MATMODE_",N
 
    Level: developer
 
-.seealso: `SlepcFinalize()`, `STInitializePackage()`
+.seealso: [](ch:st), `SlepcFinalize()`, `STInitializePackage()`
 @*/
 PetscErrorCode STFinalizePackage(void)
 {
@@ -328,7 +328,7 @@ PetscErrorCode STSetMatrices(ST st,PetscInt n,Mat A[])
 +  st - the spectral transformation context
 -  k  - the index of the requested matrix (starting in 0)
 
-   Output Parameters:
+   Output Parameter:
 .  A - the requested matrix
 
    Level: intermediate
@@ -357,7 +357,7 @@ PetscErrorCode STGetMatrix(ST st,PetscInt k,Mat *A)
 +  st - the spectral transformation context
 -  k  - the index of the requested matrix (starting in 0)
 
-   Output Parameters:
+   Output Parameter:
 .  T - the requested matrix
 
    Level: developer
@@ -385,7 +385,7 @@ PetscErrorCode STGetMatrixTransformed(ST st,PetscInt k,Mat *T)
    Input Parameter:
 .  st - the spectral transformation context
 
-   Output Parameters:
+   Output Parameter:
 .  n - the number of matrices passed in `STSetMatrices()`
 
    Level: intermediate

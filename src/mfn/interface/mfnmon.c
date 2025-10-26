@@ -33,33 +33,37 @@ PetscErrorCode MFNMonitor(MFN mfn,PetscInt it,PetscReal errest)
    Logically Collective
 
    Input Parameters:
-+  mfn     - matrix function context obtained from MFNCreate()
-.  monitor - pointer to function (if this is NULL, it turns off monitoring), see MFNMonitorFn
-.  mctx    - [optional] context for private data for the
-             monitor routine (use NULL if no context is desired)
--  monitordestroy - [optional] routine that frees monitor context (may be NULL),
-             see PetscCtxDestroyFn for the calling sequence
++  mfn            - the matrix function solver context
+.  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
+                    see `MFNMonitorFn`
+.  mctx           - [optional] context for private data for the monitor routine
+                    (use `NULL` if no context is desired)
+-  monitordestroy - [optional] routine that frees monitor context (may be `NULL`),
+                    see `PetscCtxDestroyFn` for the calling sequence
 
    Options Database Keys:
-+    -mfn_monitor - print the error estimate
-.    -mfn_monitor draw::draw_lg - sets line graph monitor for the error estimate
--    -mfn_monitor_cancel - cancels all monitors that have been hardwired into
-      a code by calls to MFNMonitorSet(), but does not cancel those set via
-      the options database.
++  -mfn_monitor               - print the error estimate
+.  -mfn_monitor draw::draw_lg - sets line graph monitor for the error estimate
+-  -mfn_monitor_cancel        - cancels all monitors that have been hardwired into
+                                a code by calls to MFNMonitorSet(), but does not cancel
+                                those set via the options database.
 
    Notes:
-   The options database option -mfn_monitor and related options are the easiest way
-   to turn on MFN iteration monitoring.
+   The options database option `-mfn_monitor` and related options are the easiest way
+   to turn on `MFN` iteration monitoring.
 
-   MFNMonitorRegister() provides a way to associate an options database key with MFN
+   `MFNMonitorRegister()` provides a way to associate an options database key with `MFN`
    monitor function.
 
-   Several different monitoring routines may be set by calling MFNMonitorSet() multiple
+   Several different monitoring routines may be set by calling `MFNMonitorSet()` multiple
    times; all will be called in the order in which they were set.
+
+   Fortran Note:
+   Only a single monitor function can be set for each `LME` object.
 
    Level: intermediate
 
-.seealso: `MFNMonitorCancel()`
+.seealso: [](ch:mfn), `MFNMonitorDefault()`, `MFNMonitorDefaultDrawLG()`, `MFNMonitorCancel()`
 @*/
 PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
 {
@@ -80,21 +84,20 @@ PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,void *mctx,PetscCtxDe
 }
 
 /*@
-   MFNMonitorCancel - Clears all monitors for an MFN object.
+   MFNMonitorCancel - Clears all monitors for an `MFN` object.
 
    Logically Collective
 
-   Input Parameters:
-.  mfn - matrix function context obtained from MFNCreate()
+   Input Parameter:
+.  mfn - the matrix function solver context
 
    Options Database Key:
-.    -mfn_monitor_cancel - cancels all monitors that have been hardwired
-      into a code by calls to MFNMonitorSet(),
-      but does not cancel those set via the options database.
+.  -mfn_monitor_cancel - cancels all monitors that have been hardwired into a code by calls to
+                         `MFNMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNMonitorCancel(MFN mfn)
 {
@@ -111,19 +114,19 @@ PetscErrorCode MFNMonitorCancel(MFN mfn)
 
 /*@C
    MFNGetMonitorContext - Gets the monitor context, as set by
-   MFNMonitorSet() for the FIRST monitor only.
+   `MFNMonitorSet()` for the FIRST monitor only.
 
    Not Collective
 
    Input Parameter:
-.  mfn - matrix function context obtained from MFNCreate()
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  ctx - monitor context
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNGetMonitorContext(MFN mfn,void *ctx)
 {
@@ -140,17 +143,17 @@ PetscErrorCode MFNGetMonitorContext(MFN mfn,void *ctx)
    Collective
 
    Input Parameters:
-+  mfn    - matrix function context
++  mfn    - the matrix function solver context
 .  its    - iteration number
 .  errest - error estimate
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -mfn_monitor - activates MFNMonitorDefault()
+.  -mfn_monitor - activates `MFNMonitorDefault()`
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNMonitorDefault(MFN mfn,PetscInt its,PetscReal errest,PetscViewerAndFormat *vf)
 {
@@ -175,17 +178,23 @@ PetscErrorCode MFNMonitorDefault(MFN mfn,PetscInt its,PetscReal errest,PetscView
    Collective
 
    Input Parameters:
-+  mfn    - matrix function context
++  mfn    - the matrix function solver context
 .  its    - iteration number
 .  errest - error estimate
 -  vf     - viewer and format for monitoring
 
    Options Database Key:
-.  -mfn_monitor draw::draw_lg - activates MFNMonitorDefaultDrawLG()
+.  -mfn_monitor draw::draw_lg - activates `MFNMonitorDefaultDrawLG()`
+
+   Notes:
+   This is not called directly by users, rather one calls `MFNMonitorSet()`, with this
+   function as an argument, to cause the monitor to be used during the `MFN` solve.
+
+   Call `MFNMonitorDefaultDrawLGCreate()` to create the context used with this monitor.
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`, `MFNMonitorDefaultDrawLGCreate()`
 @*/
 PetscErrorCode MFNMonitorDefaultDrawLG(MFN mfn,PetscInt its,PetscReal errest,PetscViewerAndFormat *vf)
 {
@@ -230,7 +239,7 @@ PetscErrorCode MFNMonitorDefaultDrawLG(MFN mfn,PetscInt its,PetscReal errest,Pet
 
    Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
 PetscErrorCode MFNMonitorDefaultDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {

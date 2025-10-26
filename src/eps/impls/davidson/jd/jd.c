@@ -164,7 +164,7 @@ static PetscErrorCode EPSDestroy_JD(EPS eps)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  krylovstart - boolean flag
 
    Options Database Key:
@@ -173,7 +173,7 @@ static PetscErrorCode EPSDestroy_JD(EPS eps)
 
    Level: advanced
 
-.seealso: `EPSJDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDGetKrylovStart()`
 @*/
 PetscErrorCode EPSJDSetKrylovStart(EPS eps,PetscBool krylovstart)
 {
@@ -191,15 +191,15 @@ PetscErrorCode EPSJDSetKrylovStart(EPS eps,PetscBool krylovstart)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  krylovstart - boolean flag indicating if the searching subspace is started
    with a Krylov basis
 
    Level: advanced
 
-.seealso: `EPSJDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDSetKrylovStart()`
 @*/
 PetscErrorCode EPSJDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 {
@@ -217,7 +217,7 @@ PetscErrorCode EPSJDGetKrylovStart(EPS eps,PetscBool *krylovstart)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  blocksize - number of vectors added to the search space in every iteration
 
    Options Database Key:
@@ -225,7 +225,7 @@ PetscErrorCode EPSJDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 
    Level: advanced
 
-.seealso: `EPSJDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDSetKrylovStart()`
 @*/
 PetscErrorCode EPSJDSetBlockSize(EPS eps,PetscInt blocksize)
 {
@@ -243,14 +243,14 @@ PetscErrorCode EPSJDSetBlockSize(EPS eps,PetscInt blocksize)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  blocksize - number of vectors added to the search space in every iteration
 
    Level: advanced
 
-.seealso: `EPSJDSetBlockSize()`
+.seealso: [](ch:eps), `EPSJDSetBlockSize()`
 @*/
 PetscErrorCode EPSJDGetBlockSize(EPS eps,PetscInt *blocksize)
 {
@@ -268,7 +268,7 @@ PetscErrorCode EPSJDGetBlockSize(EPS eps,PetscInt *blocksize)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  minv - number of vectors of the searching subspace after restarting
 -  plusk - number of vectors saved from the previous iteration
 
@@ -282,7 +282,7 @@ PetscErrorCode EPSJDGetBlockSize(EPS eps,PetscInt *blocksize)
 
    Level: advanced
 
-.seealso: `EPSJDGetRestart()`
+.seealso: [](ch:eps), `EPSJDGetRestart()`
 @*/
 PetscErrorCode EPSJDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 {
@@ -301,7 +301,7 @@ PetscErrorCode EPSJDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  minv - number of vectors of the searching subspace after restarting
@@ -309,7 +309,7 @@ PetscErrorCode EPSJDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 
    Level: advanced
 
-.seealso: `EPSJDSetRestart()`
+.seealso: [](ch:eps), `EPSJDSetRestart()`
 @*/
 PetscErrorCode EPSJDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 {
@@ -325,7 +325,7 @@ PetscErrorCode EPSJDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  initialsize - number of vectors of the initial searching subspace
 
    Options Database Key:
@@ -341,7 +341,7 @@ PetscErrorCode EPSJDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 
    Level: advanced
 
-.seealso: `EPSJDGetInitialSize()`, `EPSJDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDGetInitialSize()`, `EPSJDGetKrylovStart()`
 @*/
 PetscErrorCode EPSJDSetInitialSize(EPS eps,PetscInt initialsize)
 {
@@ -358,7 +358,7 @@ PetscErrorCode EPSJDSetInitialSize(EPS eps,PetscInt initialsize)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  initialsize - number of vectors of the initial searching subspace
@@ -373,7 +373,7 @@ PetscErrorCode EPSJDSetInitialSize(EPS eps,PetscInt initialsize)
 
    Level: advanced
 
-.seealso: `EPSJDSetInitialSize()`, `EPSJDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSJDSetInitialSize()`, `EPSJDGetKrylovStart()`
 @*/
 PetscErrorCode EPSJDGetInitialSize(EPS eps,PetscInt *initialsize)
 {
@@ -402,7 +402,7 @@ static PetscErrorCode EPSJDSetFix_JD(EPS eps,PetscReal fix)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  fix - threshold for changing the target
 
    Options Database Key:
@@ -415,7 +415,7 @@ static PetscErrorCode EPSJDSetFix_JD(EPS eps,PetscReal fix)
 
    Level: advanced
 
-.seealso: `EPSJDGetFix()`
+.seealso: [](ch:eps), `EPSJDGetFix()`
 @*/
 PetscErrorCode EPSJDSetFix(EPS eps,PetscReal fix)
 {
@@ -442,7 +442,7 @@ PetscErrorCode EPSJDGetFix_JD(EPS eps,PetscReal *fix)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  fix - threshold for changing the target
@@ -454,7 +454,7 @@ PetscErrorCode EPSJDGetFix_JD(EPS eps,PetscReal *fix)
 
    Level: advanced
 
-.seealso: `EPSJDSetFix()`
+.seealso: [](ch:eps), `EPSJDSetFix()`
 @*/
 PetscErrorCode EPSJDGetFix(EPS eps,PetscReal *fix)
 {
@@ -482,7 +482,7 @@ static PetscErrorCode EPSJDSetConstCorrectionTol_JD(EPS eps,PetscBool constant)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  constant - if false, the KSP relative tolerance is set to 0.5**i.
 
    Options Database Key:
@@ -490,7 +490,7 @@ static PetscErrorCode EPSJDSetConstCorrectionTol_JD(EPS eps,PetscBool constant)
 
    Level: advanced
 
-.seealso: `EPSJDGetConstCorrectionTol()`
+.seealso: [](ch:eps), `EPSJDGetConstCorrectionTol()`
 @*/
 PetscErrorCode EPSJDSetConstCorrectionTol(EPS eps,PetscBool constant)
 {
@@ -517,7 +517,7 @@ PetscErrorCode EPSJDGetConstCorrectionTol_JD(EPS eps,PetscBool *constant)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  constant - boolean flag indicating if the dynamic stopping criterion is not being used.
@@ -528,7 +528,7 @@ PetscErrorCode EPSJDGetConstCorrectionTol_JD(EPS eps,PetscBool *constant)
 
    Level: advanced
 
-.seealso: `EPSJDSetConstCorrectionTol()`
+.seealso: [](ch:eps), `EPSJDSetConstCorrectionTol()`
 @*/
 PetscErrorCode EPSJDGetConstCorrectionTol(EPS eps,PetscBool *constant)
 {
@@ -546,7 +546,7 @@ PetscErrorCode EPSJDGetConstCorrectionTol(EPS eps,PetscBool *constant)
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenproblem solver context
++  eps   - the linear eigensolver context
 -  borth - whether to B-orthogonalize the search subspace
 
    Options Database Key:
@@ -554,7 +554,7 @@ PetscErrorCode EPSJDGetConstCorrectionTol(EPS eps,PetscBool *constant)
 
    Level: advanced
 
-.seealso: `EPSJDGetBOrth()`
+.seealso: [](ch:eps), `EPSJDGetBOrth()`
 @*/
 PetscErrorCode EPSJDSetBOrth(EPS eps,PetscBool borth)
 {
@@ -572,14 +572,14 @@ PetscErrorCode EPSJDSetBOrth(EPS eps,PetscBool borth)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  borth - whether to B-orthogonalize the search subspace
 
    Level: advanced
 
-.seealso: `EPSJDSetBOrth()`
+.seealso: [](ch:eps), `EPSJDSetBOrth()`
 @*/
 PetscErrorCode EPSJDGetBOrth(EPS eps,PetscBool *borth)
 {

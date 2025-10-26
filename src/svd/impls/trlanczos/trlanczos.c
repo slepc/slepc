@@ -1757,7 +1757,7 @@ static PetscErrorCode SVDTRLanczosSetOneSide_TRLanczos(SVD svd,PetscBool oneside
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver
++  svd     - the singular value solver context
 -  oneside - boolean flag indicating if the method is one-sided or not
 
    Options Database Key:
@@ -1773,7 +1773,7 @@ static PetscErrorCode SVDTRLanczosSetOneSide_TRLanczos(SVD svd,PetscBool oneside
 
    Level: advanced
 
-.seealso: `SVDLanczosSetOneSide()`
+.seealso: [](ch:svd), `SVDLanczosSetOneSide()`
 @*/
 PetscErrorCode SVDTRLanczosSetOneSide(SVD svd,PetscBool oneside)
 {
@@ -1799,15 +1799,15 @@ static PetscErrorCode SVDTRLanczosGetOneSide_TRLanczos(SVD svd,PetscBool *onesid
 
    Not Collective
 
-   Input Parameters:
-.  svd     - singular value solver
+   Input Parameter:
+.  svd - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  oneside - boolean flag indicating if the method is one-sided or not
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetOneSide()`
+.seealso: [](ch:svd), `SVDTRLanczosSetOneSide()`
 @*/
 PetscErrorCode SVDTRLanczosGetOneSide(SVD svd,PetscBool *oneside)
 {
@@ -1845,7 +1845,7 @@ static PetscErrorCode SVDTRLanczosSetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
    Logically Collective
 
    Input Parameters:
-+  svd - the singular value solver
++  svd - the singular value solver context
 -  bidiag - the bidiagonalization choice
 
    Options Database Key:
@@ -1854,7 +1854,7 @@ static PetscErrorCode SVDTRLanczosSetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetGBidiag()`, `SVDTRLanczosGBidiag`
+.seealso: [](ch:svd), `SVDTRLanczosGetGBidiag()`, `SVDTRLanczosGBidiag`
 @*/
 PetscErrorCode SVDTRLanczosSetGBidiag(SVD svd,SVDTRLanczosGBidiag bidiag)
 {
@@ -1881,14 +1881,14 @@ static PetscErrorCode SVDTRLanczosGetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  bidiag - the bidiagonalization choice
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetGBidiag()`, `SVDTRLanczosGBidiag`
+.seealso: [](ch:svd), `SVDTRLanczosSetGBidiag()`, `SVDTRLanczosGBidiag`
 @*/
 PetscErrorCode SVDTRLanczosGetGBidiag(SVD svd,SVDTRLanczosGBidiag *bidiag)
 {
@@ -1917,7 +1917,7 @@ static PetscErrorCode SVDTRLanczosSetKSP_TRLanczos(SVD svd,KSP ksp)
    Collective
 
    Input Parameters:
-+  svd - SVD solver
++  svd - the singular value solver context
 -  ksp - the linear solver object
 
    Note:
@@ -1925,7 +1925,7 @@ static PetscErrorCode SVDTRLanczosSetKSP_TRLanczos(SVD svd,KSP ksp)
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetKSP()`
+.seealso: [](ch:svd), `SVDTRLanczosGetKSP()`
 @*/
 PetscErrorCode SVDTRLanczosSetKSP(SVD svd,KSP ksp)
 {
@@ -1967,14 +1967,14 @@ static PetscErrorCode SVDTRLanczosGetKSP_TRLanczos(SVD svd,KSP *ksp)
    Collective
 
    Input Parameter:
-.  svd - SVD solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetKSP()`
+.seealso: [](ch:svd), `SVDTRLanczosSetKSP()`
 @*/
 PetscErrorCode SVDTRLanczosGetKSP(SVD svd,KSP *ksp)
 {
@@ -2006,7 +2006,7 @@ static PetscErrorCode SVDTRLanczosSetRestart_TRLanczos(SVD svd,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  svd  - the singular value solver
++  svd  - the singular value solver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
@@ -2017,7 +2017,7 @@ static PetscErrorCode SVDTRLanczosSetRestart_TRLanczos(SVD svd,PetscReal keep)
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetRestart()`
+.seealso: [](ch:svd), `SVDTRLanczosGetRestart()`
 @*/
 PetscErrorCode SVDTRLanczosSetRestart(SVD svd,PetscReal keep)
 {
@@ -2044,14 +2044,14 @@ static PetscErrorCode SVDTRLanczosGetRestart_TRLanczos(SVD svd,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  keep - the restart parameter
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetRestart()`
+.seealso: [](ch:svd), `SVDTRLanczosSetRestart()`
 @*/
 PetscErrorCode SVDTRLanczosGetRestart(SVD svd,PetscReal *keep)
 {
@@ -2078,7 +2078,7 @@ static PetscErrorCode SVDTRLanczosSetLocking_TRLanczos(SVD svd,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  svd  - the singular value solver
++  svd  - the singular value solver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
@@ -2092,7 +2092,7 @@ static PetscErrorCode SVDTRLanczosSetLocking_TRLanczos(SVD svd,PetscBool lock)
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetLocking()`
+.seealso: [](ch:svd), `SVDTRLanczosGetLocking()`
 @*/
 PetscErrorCode SVDTRLanczosSetLocking(SVD svd,PetscBool lock)
 {
@@ -2119,14 +2119,14 @@ static PetscErrorCode SVDTRLanczosGetLocking_TRLanczos(SVD svd,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetLocking()`
+.seealso: [](ch:svd), `SVDTRLanczosSetLocking()`
 @*/
 PetscErrorCode SVDTRLanczosGetLocking(SVD svd,PetscBool *lock)
 {
@@ -2156,7 +2156,7 @@ static PetscErrorCode SVDTRLanczosSetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
    Logically Collective
 
    Input Parameters:
-+  svd         - singular value solver
++  svd         - the singular value solver context
 -  explicitmat - Boolean flag indicating if Z=[A;B] is built explicitly
 
    Options Database Key:
@@ -2168,7 +2168,7 @@ static PetscErrorCode SVDTRLanczosSetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDTRLanczosGetExplicitMatrix()`
 @*/
 PetscErrorCode SVDTRLanczosSetExplicitMatrix(SVD svd,PetscBool explicitmat)
 {
@@ -2194,14 +2194,14 @@ static PetscErrorCode SVDTRLanczosGetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
    Not Collective
 
    Input Parameter:
-.  svd  - singular value solver
+.  svd  - the singular value solver context
 
    Output Parameter:
 .  explicitmat - the mode flag
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDTRLanczosSetExplicitMatrix()`
 @*/
 PetscErrorCode SVDTRLanczosGetExplicitMatrix(SVD svd,PetscBool *explicitmat)
 {
@@ -2233,7 +2233,7 @@ static PetscErrorCode SVDTRLanczosSetScale_TRLanczos(SVD svd,PetscReal scale)
    Logically Collective
 
    Input Parameters:
-+  svd   - singular value solver
++  svd   - the singular value solver context
 -  scale - scale parameter
 
    Options Database Key:
@@ -2250,7 +2250,7 @@ static PetscErrorCode SVDTRLanczosSetScale_TRLanczos(SVD svd,PetscReal scale)
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetScale()`
+.seealso: [](ch:svd), `SVDTRLanczosGetScale()`
 @*/
 PetscErrorCode SVDTRLanczosSetScale(SVD svd,PetscReal scale)
 {
@@ -2277,7 +2277,7 @@ static PetscErrorCode SVDTRLanczosGetScale_TRLanczos(SVD svd,PetscReal *scale)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  scale - the scale parameter
@@ -2289,7 +2289,7 @@ static PetscErrorCode SVDTRLanczosGetScale_TRLanczos(SVD svd,PetscReal *scale)
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetScale()`
+.seealso: [](ch:svd), `SVDTRLanczosSetScale()`
 @*/
 PetscErrorCode SVDTRLanczosGetScale(SVD svd,PetscReal *scale)
 {

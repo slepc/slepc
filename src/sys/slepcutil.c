@@ -132,7 +132,7 @@ PetscErrorCode SlepcSNPrintfScalar(char *str,size_t len,PetscScalar val,PetscBoo
 
    The lookup is case insensitive, i.e. looking for `ARPACK` or `arpack` is the same.
 
-.seealso: `EPSType`, `SVDType`
+.seealso: [](sec:writing-prog), `EPSType`, `SVDType`
 @*/
 PetscErrorCode SlepcHasExternalPackage(const char pkg[], PetscBool *has)
 {

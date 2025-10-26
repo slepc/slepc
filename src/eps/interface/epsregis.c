@@ -51,13 +51,13 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_ChASE(EPS);
 #endif
 
 /*@C
-  EPSRegisterAll - Registers all the eigenvalue solvers in the EPS package.
+  EPSRegisterAll - Registers all the eigenvalue solvers in the `EPS` package.
 
   Not Collective
 
   Level: advanced
 
-.seealso: `EPSRegister()`
+.seealso: [](ch:eps), `EPSRegister()`
 @*/
 PetscErrorCode EPSRegisterAll(void)
 {
@@ -113,7 +113,7 @@ PetscErrorCode EPSRegisterAll(void)
 
   Level: advanced
 
-.seealso: `EPSMonitorRegister()`
+.seealso: [](ch:eps), `EPSMonitorRegister()`
 @*/
 PetscErrorCode EPSMonitorRegisterAll(void)
 {

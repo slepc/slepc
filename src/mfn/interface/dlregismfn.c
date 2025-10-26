@@ -21,7 +21,7 @@ const char *const*MFNConvergedReasons = MFNConvergedReasons_Shifted + 2;
 
   Level: developer
 
-.seealso: `SlepcFinalize()`, `MFNInitializePackage()`
+.seealso: [](ch:mfn), `SlepcFinalize()`, `MFNInitializePackage()`
 @*/
 PetscErrorCode MFNFinalizePackage(void)
 {
