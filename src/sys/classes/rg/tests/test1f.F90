@@ -23,7 +23,8 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
       RG             rg
-      PetscInt       i,n,inside,one
+      PetscInt       i,n,one
+      PetscInt       inside(1)
       PetscMPIInt    rank
       PetscErrorCode ierr
       PetscReal      re,im
@@ -61,9 +62,9 @@
       ar = re
       ai = im
 #endif
-      PetscCallA(RGCheckInside(rg,one,ar,ai,inside,ierr))
+      PetscCallA(RGCheckInside(rg,one,[ar],[ai],inside,ierr))
       if (rank .eq. 0) then
-        if (inside >= 0) then
+        if (inside(1) >= 0) then
           write(*,110) re, im, 'inside'
         else
           write(*,110) re, im, 'outside'
@@ -117,9 +118,9 @@
       ar = re
       ai = im
 #endif
-      PetscCallA(RGCheckInside(rg,one,ar,ai,inside,ierr))
+      PetscCallA(RGCheckInside(rg,one,[ar],[ai],inside,ierr))
       if (rank .eq. 0) then
-        if (inside >= 0) then
+        if (inside(1) >= 0) then
           write(*,110) re, im, 'inside'
         else
           write(*,110) re, im, 'outside'
@@ -168,9 +169,9 @@
       ar = re
       ai = im
 #endif
-      PetscCallA(RGCheckInside(rg,one,ar,ai,inside,ierr))
+      PetscCallA(RGCheckInside(rg,one,[ar],[ai],inside,ierr))
       if (rank .eq. 0) then
-        if (inside >= 0) then
+        if (inside(1) >= 0) then
           write(*,110) re, im, 'inside'
         else
           write(*,110) re, im, 'outside'
