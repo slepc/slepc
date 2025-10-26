@@ -21,8 +21,7 @@ SLEPC_EXTERN PetscErrorCode PEPInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode PEPFinalizePackage(void);
 
 /*S
-   PEP - Abstract SLEPc object that manages all the polynomial eigenvalue
-   problem solvers.
+   PEP - SLEPc object that manages all the polynomial eigenvalue problem solvers.
 
    Level: beginner
 
@@ -31,7 +30,7 @@ S*/
 typedef struct _p_PEP* PEP;
 
 /*J
-   PEPType - String with the name of a polynomial eigensolver
+   PEPType - String with the name of a polynomial eigensolver.
 
    Level: beginner
 
@@ -284,7 +283,7 @@ SLEPC_EXTERN PetscErrorCode PEPGetTrackAll(PEP,PetscBool*);
    PEPMonitorFn - A function prototype for functions provided to `PEPMonitorSet()`.
 
    Calling Sequence:
-+  pep    - polynomial eigensolver context
++  pep    - the polynomial eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs
 .  eigr   - real part of the eigenvalues
@@ -303,7 +302,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,Pe
    PEPMonitorRegisterFn - A function prototype for functions provided to PEPMonitorRegister()
 
    Calling Sequence:
-+  pep    - polynomial eigensolver context
++  pep    - the polynomial eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs
 .  eigr   - real part of the eigenvalues
@@ -387,7 +386,7 @@ SLEPC_EXTERN PetscErrorCode PEPAllocateSolution(PEP,PetscInt);
    would be passed to PEPSetConvergenceTestFunction()
 
    Calling Sequence:
-+  pep    - eigensolver context obtained from PEPCreate()
++  pep    - the polynomial eigensolver context
 .  eigr   - real part of the eigenvalue
 .  eigi   - imaginary part of the eigenvalue
 .  res    - residual norm associated to the eigenpair
@@ -413,7 +412,7 @@ SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTestFunction(PEP,PEPConvergenceTest
    passed to PEPSetStoppingTestFunction()
 
    Calling Sequence:
-+  pep    - eigensolver context obtained from PEPCreate()
++  pep    - the polynomial eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs

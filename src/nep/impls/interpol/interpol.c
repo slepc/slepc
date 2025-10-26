@@ -283,11 +283,11 @@ static PetscErrorCode NEPInterpolSetInterpolation_Interpol(NEP nep,PetscReal tol
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
++  nep - the nonlinear eigensolver context
 .  tol - tolerance to stop computing polynomial coefficients
 -  deg - maximum degree of interpolation
 
-   Options Database Key:
+   Options Database Keys:
 +  -nep_interpol_interpolation_tol <tol> - Sets the tolerance to stop computing polynomial coefficients
 -  -nep_interpol_interpolation_degree <degree> - Sets the maximum degree of interpolation
 
@@ -326,7 +326,7 @@ static PetscErrorCode NEPInterpolGetInterpolation_Interpol(NEP nep,PetscReal *to
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameters:
 +  tol - tolerance to stop computing polynomial coefficients
@@ -363,8 +363,8 @@ static PetscErrorCode NEPInterpolSetPEP_Interpol(NEP nep,PEP pep)
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  pep - the polynomial eigensolver object
++  nep - the nonlinear eigensolver context
+-  pep - the polynomial eigensolver context
 
    Level: advanced
 
@@ -404,10 +404,10 @@ static PetscErrorCode NEPInterpolGetPEP_Interpol(NEP nep,PEP *pep)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  pep - the polynomial eigensolver object
+.  pep - the polynomial eigensolver context
 
    Level: advanced
 

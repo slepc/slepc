@@ -57,7 +57,7 @@ PetscErrorCode PEPExtractVectors(PEP pep)
    Collective
 
    Input Parameter:
-.  pep - eigensolver context obtained from PEPCreate()
+.  pep - the polynomial eigensolver context
 
    Options Database Keys:
 +  -pep_view - print information about the solver used
@@ -266,7 +266,7 @@ PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
    Collective
 
    Input Parameters:
-+  pep - polynomial eigensolver context
++  pep - the polynomial eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -331,7 +331,7 @@ PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar 
    Not Collective
 
    Input Parameters:
-+  pep - polynomial eigensolver context
++  pep - the polynomial eigensolver context
 -  i   - index of eigenpair
 
    Output Parameter:

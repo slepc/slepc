@@ -20,7 +20,7 @@
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Note:
    This function need not be called explicitly, since it will be called at
@@ -45,7 +45,7 @@ PetscErrorCode NEPSetDSType(NEP nep)
    Collective
 
    Input Parameter:
-.  nep   - solver context
+.  nep   - the nonlinear eigensolver context
 
    Notes:
    This function need not be called explicitly in most cases, since NEPSolve()
@@ -286,7 +286,7 @@ PetscErrorCode NEPSetDimensions_Default(NEP nep,PetscInt nev,PetscInt *ncv,Petsc
    Collective
 
    Input Parameters:
-+  nep   - eigensolver context
++  nep   - the nonlinear eigensolver context
 -  extra - number of additional positions, used for methods that require a
            working basis slightly larger than ncv
 

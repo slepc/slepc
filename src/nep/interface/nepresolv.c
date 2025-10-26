@@ -86,7 +86,7 @@ static PetscErrorCode MatDestroy_Resolvent(Mat M)
    Collective
 
    Input Parameters:
-+  nep   - eigensolver context obtained from NEPCreate()
++  nep   - the nonlinear eigensolver context
 .  rg    - optional region
 .  omega - value where the resolvent must be evaluated
 -  v     - input vector

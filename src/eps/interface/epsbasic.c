@@ -28,7 +28,7 @@ PetscFunctionList EPSMonitorDestroyList       = NULL;
 PetscBool         EPSMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   EPSCreate - Creates the default EPS context.
+   EPSCreate - Creates the `EPS` context.
 
    Collective
 
@@ -36,10 +36,10 @@ PetscBool         EPSMonitorRegisterAllCalled = PETSC_FALSE;
 .  comm - MPI communicator
 
    Output Parameter:
-.  outeps - location to put the EPS context
+.  outeps - location to put the `EPS` context
 
    Note:
-   The default EPS type is EPSKRYLOVSCHUR
+   The default `EPS` type is `EPSKRYLOVSCHUR`.
 
    Level: beginner
 
@@ -135,7 +135,7 @@ PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigensolver context
++  eps  - the linear eigensolver context
 -  type - a known method
 
    Options Database Key:
@@ -187,7 +187,7 @@ PetscErrorCode EPSSetType(EPS eps,EPSType type)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  type - name of `EPS` method
@@ -214,18 +214,19 @@ PetscErrorCode EPSGetType(EPS eps,EPSType *type)
 +  name - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
-   EPSRegister() may be called multiple times to add several user-defined solvers.
+   Note:
+   `EPSRegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    EPSRegister("my_solver",MySolverCreate);
+   EPSRegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
-$     EPSSetType(eps,"my_solver")
-   or at runtime via the option
-$     -eps_type my_solver
+.vb
+   EPSSetType(eps,"my_solver")
+.ve
+   or at runtime via the option `-eps_type my_solver`.
 
    Level: advanced
 
@@ -295,7 +296,7 @@ PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscV
    Collective
 
    Input Parameter:
-.  eps - eigensolver context obtained from EPSCreate()
+.  eps - the linear eigensolver context
 
    Note:
    This can be used when a problem of different matrix size wants to be solved.
@@ -324,12 +325,12 @@ PetscErrorCode EPSReset(EPS eps)
 }
 
 /*@
-   EPSDestroy - Destroys the EPS context.
+   EPSDestroy - Destroys the `EPS` context.
 
    Collective
 
    Input Parameter:
-.  eps - eigensolver context obtained from EPSCreate()
+.  eps - the linear eigensolver context
 
    Level: beginner
 
@@ -366,7 +367,7 @@ PetscErrorCode EPSDestroy(EPS *eps)
    Logically Collective
 
    Input Parameters:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 -  target - the value of the target
 
    Options Database Key:
@@ -401,7 +402,7 @@ PetscErrorCode EPSSetTarget(EPS eps,PetscScalar target)
    Not Collective
 
    Input Parameter:
-.  eps - eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  target - the value of the target
@@ -428,7 +429,7 @@ PetscErrorCode EPSGetTarget(EPS eps,PetscScalar* target)
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context
++  eps  - the linear eigensolver context
 .  inta - left end of the interval
 -  intb - right end of the interval
 
@@ -471,7 +472,7 @@ PetscErrorCode EPSSetInterval(EPS eps,PetscReal inta,PetscReal intb)
    Not Collective
 
    Input Parameter:
-.  eps - eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  inta - left end of the interval
@@ -499,7 +500,7 @@ PetscErrorCode EPSGetInterval(EPS eps,PetscReal* inta,PetscReal* intb)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context obtained from EPSCreate()
++  eps - the linear eigensolver context
 -  st   - the spectral transformation object
 
    Note:
@@ -528,8 +529,8 @@ PetscErrorCode EPSSetST(EPS eps,ST st)
 
    Not Collective
 
-   Input Parameters:
-.  eps - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  st - spectral transformation context
@@ -558,7 +559,7 @@ PetscErrorCode EPSGetST(EPS eps,ST *st)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context obtained from EPSCreate()
++  eps - the linear eigensolver context
 -  V   - the basis vectors object
 
    Level: advanced
@@ -582,8 +583,8 @@ PetscErrorCode EPSSetBV(EPS eps,BV V)
 
    Not Collective
 
-   Input Parameters:
-.  eps - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  V - basis vectors context
@@ -612,7 +613,7 @@ PetscErrorCode EPSGetBV(EPS eps,BV *V)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context obtained from EPSCreate()
++  eps - the linear eigensolver context
 -  rg  - the region object
 
    Note:
@@ -642,8 +643,8 @@ PetscErrorCode EPSSetRG(EPS eps,RG rg)
 
    Not Collective
 
-   Input Parameters:
-.  eps - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  rg - region context
@@ -672,7 +673,7 @@ PetscErrorCode EPSGetRG(EPS eps,RG *rg)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context obtained from EPSCreate()
++  eps - the linear eigensolver context
 -  ds  - the direct solver object
 
    Note:
@@ -700,8 +701,8 @@ PetscErrorCode EPSSetDS(EPS eps,DS ds)
 
    Not Collective
 
-   Input Parameters:
-.  eps - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  ds - direct solver context
@@ -731,7 +732,7 @@ PetscErrorCode EPSGetDS(EPS eps,DS *ds)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  is - the answer
@@ -756,7 +757,7 @@ PetscErrorCode EPSIsGeneralized(EPS eps,PetscBool* is)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  is - the answer
@@ -781,7 +782,7 @@ PetscErrorCode EPSIsHermitian(EPS eps,PetscBool* is)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  is - the answer
@@ -806,7 +807,7 @@ PetscErrorCode EPSIsPositive(EPS eps,PetscBool* is)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  is - the answer

@@ -88,7 +88,7 @@ PetscErrorCode MFNView(MFN mfn,PetscViewer viewer)
    Collective
 
    Input Parameters:
-+  mfn  - the matrix function context
++  mfn  - the matrix function solver context
 .  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
@@ -109,7 +109,7 @@ PetscErrorCode MFNViewFromOptions(MFN mfn,PetscObject obj,const char name[])
    Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  viewer - the viewer to display the reason
 
    Options Database Key:
@@ -153,7 +153,7 @@ PetscErrorCode MFNConvergedReasonView(MFN mfn,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Level: intermediate
 
@@ -181,7 +181,7 @@ PetscErrorCode MFNConvergedReasonViewFromOptions(MFN mfn)
 }
 
 /*@
-   MFNCreate - Creates the default MFN context.
+   MFNCreate - Creates the default `MFN` context.
 
    Collective
 
@@ -189,10 +189,10 @@ PetscErrorCode MFNConvergedReasonViewFromOptions(MFN mfn)
 .  comm - MPI communicator
 
    Output Parameter:
-.  outmfn - location to put the MFN context
+.  outmfn - location to put the `MFN` context
 
    Note:
-   The default MFN type is MFNKRYLOV
+   The default `MFN` type is `MFNKRYLOV`.
 
    Level: beginner
 
@@ -237,7 +237,7 @@ PetscErrorCode MFNCreate(MPI_Comm comm,MFN *outmfn)
    Logically Collective
 
    Input Parameters:
-+  mfn  - the matrix function context
++  mfn  - the matrix function solver context
 -  type - a known method
 
    Options Database Key:
@@ -289,7 +289,7 @@ PetscErrorCode MFNSetType(MFN mfn,MFNType type)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  type - name of `MFN` method
@@ -316,18 +316,19 @@ PetscErrorCode MFNGetType(MFN mfn,MFNType *type)
 +  name - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
-   MFNRegister() may be called multiple times to add several user-defined solvers.
+   Note:
+   `MFNRegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    MFNRegister("my_solver",MySolverCreate);
+   MFNRegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
-$     MFNSetType(mfn,"my_solver")
-   or at runtime via the option
-$     -mfn_type my_solver
+.vb
+   MFNSetType(mfn,"my_solver")
+.ve
+   or at runtime via the option `-mfn_type my_solver`.
 
    Level: advanced
 
@@ -397,7 +398,7 @@ PetscErrorCode MFNMonitorRegister(const char name[],PetscViewerType vtype,PetscV
    Collective
 
    Input Parameter:
-.  mfn - matrix function context obtained from MFNCreate()
+.  mfn - the matrix function solver context
 
    Level: advanced
 
@@ -423,7 +424,7 @@ PetscErrorCode MFNReset(MFN mfn)
    Collective
 
    Input Parameter:
-.  mfn - matrix function context obtained from MFNCreate()
+.  mfn - the matrix function solver context
 
    Level: beginner
 
@@ -450,7 +451,7 @@ PetscErrorCode MFNDestroy(MFN *mfn)
    Collective
 
    Input Parameters:
-+  mfn - matrix function context obtained from MFNCreate()
++  mfn - the matrix function solver context
 -  bv  - the basis vectors object
 
    Note:
@@ -479,8 +480,8 @@ PetscErrorCode MFNSetBV(MFN mfn,BV bv)
 
    Not Collective
 
-   Input Parameters:
-.  mfn - matrix function context obtained from MFNCreate()
+   Input Parameter:
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  bv - basis vectors context
@@ -509,7 +510,7 @@ PetscErrorCode MFNGetBV(MFN mfn,BV *bv)
    Collective
 
    Input Parameters:
-+  mfn - matrix function context obtained from MFNCreate()
++  mfn - the matrix function solver context
 -  fn  - the math function object
 
    Note:
@@ -537,8 +538,8 @@ PetscErrorCode MFNSetFN(MFN mfn,FN fn)
 
    Not Collective
 
-   Input Parameters:
-.  mfn - matrix function context obtained from MFNCreate()
+   Input Parameter:
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  fn - math function context

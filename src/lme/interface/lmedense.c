@@ -291,7 +291,7 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
    Logically Collective
 
    Input Parameters:
-+  lme - linear matrix equation solver context
++  lme - the linear matrix equation solver context
 .  m   - number of rows and columns of `H`
 .  H   - coefficient matrix
 .  ldh - leading dimension of `H`
@@ -465,7 +465,7 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
    Logically Collective
 
    Input Parameters:
-+  lme - linear matrix equation solver context
++  lme - the linear matrix equation solver context
 .  m   - number of rows and columns of `A`
 .  A   - coefficient matrix
 .  lda - leading dimension of `A`

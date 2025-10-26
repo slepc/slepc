@@ -51,7 +51,7 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_ChASE(EPS);
 #endif
 
 /*@C
-  EPSRegisterAll - Registers all the eigenvalue solvers in the EPS package.
+  EPSRegisterAll - Registers all the eigenvalue solvers in the `EPS` package.
 
   Not Collective
 

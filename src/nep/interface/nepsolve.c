@@ -49,7 +49,7 @@ PetscErrorCode NEPComputeVectors(NEP nep)
    Collective
 
    Input Parameter:
-.  nep - eigensolver context obtained from NEPCreate()
+.  nep - the nonlinear eigensolver context
 
    Options Database Keys:
 +  -nep_view - print information about the solver used
@@ -450,7 +450,7 @@ PetscErrorCode NEPGetConvergedReason(NEP nep,NEPConvergedReason *reason)
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigensolver context
++  nep - the nonlinear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -514,7 +514,7 @@ PetscErrorCode NEPGetEigenpair(NEP nep,PetscInt i,PetscScalar *eigr,PetscScalar 
    Collective
 
    Input Parameters:
-+  nep - eigensolver context
++  nep - the nonlinear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -567,7 +567,7 @@ PetscErrorCode NEPGetLeftEigenvector(NEP nep,PetscInt i,Vec Wr,Vec Wi)
    Not Collective
 
    Input Parameters:
-+  nep - nonlinear eigensolver context
++  nep - the nonlinear eigensolver context
 -  i   - index of eigenpair
 
    Output Parameter:
@@ -728,7 +728,7 @@ PetscErrorCode NEPComputeError(NEP nep,PetscInt i,NEPErrorType type,PetscReal *e
    Collective
 
    Input Parameters:
-+  nep    - the NEP context
++  nep    - the nonlinear eigensolver context
 -  lambda - the scalar argument
 
    Output Parameters:
@@ -779,10 +779,10 @@ PetscErrorCode NEPComputeFunction(NEP nep,PetscScalar lambda,Mat A,Mat B)
    Collective
 
    Input Parameters:
-+  nep    - the NEP context
++  nep    - the nonlinear eigensolver context
 -  lambda - the scalar argument
 
-   Output Parameters:
+   Output Parameter:
 .  A   - Jacobian matrix
 
    Notes:

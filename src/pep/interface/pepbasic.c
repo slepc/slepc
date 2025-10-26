@@ -28,7 +28,7 @@ PetscFunctionList PEPMonitorDestroyList       = NULL;
 PetscBool         PEPMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   PEPCreate - Creates the default PEP context.
+   PEPCreate - Creates the `PEP` context.
 
    Collective
 
@@ -36,10 +36,10 @@ PetscBool         PEPMonitorRegisterAllCalled = PETSC_FALSE;
 .  comm - MPI communicator
 
    Output Parameter:
-.  outpep - location to put the PEP context
+.  outpep - location to put the `PEP` context
 
    Note:
-   The default PEP type is PEPTOAR
+   The default `PEP` type is `PEPTOAR`.
 
    Level: beginner
 
@@ -131,8 +131,8 @@ PetscErrorCode PEPCreate(MPI_Comm comm,PEP *outpep)
    Logically Collective
 
    Input Parameters:
-+  pep      - the polynomial eigensolver context
--  type     - a known method
++  pep  - the polynomial eigensolver context
+-  type - a known method
 
    Options Database Key:
 .  -pep_type <method> - Sets the method; use `-help` for a list
@@ -183,7 +183,7 @@ PetscErrorCode PEPSetType(PEP pep,PEPType type)
    Not Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  type - name of `PEP` method
@@ -207,21 +207,22 @@ PetscErrorCode PEPGetType(PEP pep,PEPType *type)
    Not Collective
 
    Input Parameters:
-+  name - name of a new user-defined solver
++  name     - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
-   PEPRegister() may be called multiple times to add several user-defined solvers.
+   Note:
+   `PEPRegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    PEPRegister("my_solver",MySolverCreate);
+   PEPRegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
-$     PEPSetType(pep,"my_solver")
-   or at runtime via the option
-$     -pep_type my_solver
+.vb
+   PEPSetType(pep,"my_solver")
+.ve
+   or at runtime via the option `-pep_type my_solver`.
 
    Level: advanced
 
@@ -291,7 +292,7 @@ PetscErrorCode PEPMonitorRegister(const char name[],PetscViewerType vtype,PetscV
    Collective
 
    Input Parameter:
-.  pep - eigensolver context obtained from PEPCreate()
+.  pep - the polynomial eigensolver context
 
    Level: advanced
 
@@ -321,12 +322,12 @@ PetscErrorCode PEPReset(PEP pep)
 }
 
 /*@
-   PEPDestroy - Destroys the PEP context.
+   PEPDestroy - Destroys the `PEP` context.
 
    Collective
 
    Input Parameter:
-.  pep - eigensolver context obtained from PEPCreate()
+.  pep - the polynomial eigensolver context
 
    Level: beginner
 
@@ -362,7 +363,7 @@ PetscErrorCode PEPDestroy(PEP *pep)
    Collective
 
    Input Parameters:
-+  pep - eigensolver context obtained from PEPCreate()
++  pep - the polynomial eigensolver context
 -  bv  - the basis vectors object
 
    Note:
@@ -391,8 +392,8 @@ PetscErrorCode PEPSetBV(PEP pep,BV bv)
 
    Not Collective
 
-   Input Parameters:
-.  pep - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  bv - basis vectors context
@@ -421,7 +422,7 @@ PetscErrorCode PEPGetBV(PEP pep,BV *bv)
    Collective
 
    Input Parameters:
-+  pep - eigensolver context obtained from PEPCreate()
++  pep - the polynomial eigensolver context
 -  rg  - the region object
 
    Note:
@@ -452,8 +453,8 @@ PetscErrorCode PEPSetRG(PEP pep,RG rg)
 
    Not Collective
 
-   Input Parameters:
-.  pep - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  rg - region context
@@ -482,7 +483,7 @@ PetscErrorCode PEPGetRG(PEP pep,RG *rg)
    Collective
 
    Input Parameters:
-+  pep - eigensolver context obtained from PEPCreate()
++  pep - the polynomial eigensolver context
 -  ds  - the direct solver object
 
    Note:
@@ -511,8 +512,8 @@ PetscErrorCode PEPSetDS(PEP pep,DS ds)
 
    Not Collective
 
-   Input Parameters:
-.  pep - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  ds - direct solver context
@@ -541,8 +542,8 @@ PetscErrorCode PEPGetDS(PEP pep,DS *ds)
    Collective
 
    Input Parameters:
-+  pep - eigensolver context obtained from PEPCreate()
--  st   - the spectral transformation object
++  pep - the polynomial eigensolver context
+-  st  - the spectral transformation object
 
    Note:
    Use PEPGetST() to retrieve the spectral transformation context (for example,
@@ -570,8 +571,8 @@ PetscErrorCode PEPSetST(PEP pep,ST st)
 
    Not Collective
 
-   Input Parameters:
-.  pep - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  st - spectral transformation context
@@ -600,8 +601,8 @@ PetscErrorCode PEPGetST(PEP pep,ST *st)
 
    Collective
 
-   Input Parameters:
-.  pep - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  ksp - ksp context
@@ -642,7 +643,7 @@ PetscErrorCode PEPRefineGetKSP(PEP pep,KSP *ksp)
    Logically Collective
 
    Input Parameters:
-+  pep    - eigensolver context
++  pep    - the polynomial eigensolver context
 -  target - the value of the target
 
    Options Database Key:
@@ -677,7 +678,7 @@ PetscErrorCode PEPSetTarget(PEP pep,PetscScalar target)
    Not Collective
 
    Input Parameter:
-.  pep - eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  target - the value of the target
@@ -704,7 +705,7 @@ PetscErrorCode PEPGetTarget(PEP pep,PetscScalar* target)
    Logically Collective
 
    Input Parameters:
-+  pep  - eigensolver context
++  pep  - the polynomial eigensolver context
 .  inta - left end of the interval
 -  intb - right end of the interval
 
@@ -747,7 +748,7 @@ PetscErrorCode PEPSetInterval(PEP pep,PetscReal inta,PetscReal intb)
    Not Collective
 
    Input Parameter:
-.  pep - eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameters:
 +  inta - left end of the interval

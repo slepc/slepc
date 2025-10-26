@@ -19,7 +19,7 @@
    Collective
 
    Input Parameters:
-+  pep - polynomial eigensolver context
++  pep - the polynomial eigensolver context
 -  nw  - number of work vectors to allocate
 
    Developer Notes:
@@ -119,7 +119,7 @@ PetscErrorCode PEPConvergedAbsolute(PEP pep,PetscScalar eigr,PetscScalar eigi,Pe
    Collective
 
    Input Parameters:
-+  pep    - eigensolver context obtained from PEPCreate()
++  pep    - the polynomial eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs

@@ -33,7 +33,7 @@ PetscErrorCode MFNMonitor(MFN mfn,PetscInt it,PetscReal errest)
    Logically Collective
 
    Input Parameters:
-+  mfn            - matrix function context
++  mfn            - the matrix function solver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `MFNMonitorFn`
 .  mctx           - [optional] context for private data for the monitor routine
@@ -84,12 +84,12 @@ PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,void *mctx,PetscCtxDe
 }
 
 /*@
-   MFNMonitorCancel - Clears all monitors for an MFN object.
+   MFNMonitorCancel - Clears all monitors for an `MFN` object.
 
    Logically Collective
 
-   Input Parameters:
-.  mfn - matrix function context obtained from MFNCreate()
+   Input Parameter:
+.  mfn - the matrix function solver context
 
    Options Database Key:
 .    -mfn_monitor_cancel - cancels all monitors that have been hardwired
@@ -120,7 +120,7 @@ PetscErrorCode MFNMonitorCancel(MFN mfn)
    Not Collective
 
    Input Parameter:
-.  mfn - matrix function context obtained from MFNCreate()
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  ctx - monitor context
@@ -144,7 +144,7 @@ PetscErrorCode MFNGetMonitorContext(MFN mfn,void *ctx)
    Collective
 
    Input Parameters:
-+  mfn    - matrix function context
++  mfn    - the matrix function solver context
 .  its    - iteration number
 .  errest - error estimate
 -  vf     - viewer and format for monitoring
@@ -179,7 +179,7 @@ PetscErrorCode MFNMonitorDefault(MFN mfn,PetscInt its,PetscReal errest,PetscView
    Collective
 
    Input Parameters:
-+  mfn    - matrix function context
++  mfn    - the matrix function solver context
 .  its    - iteration number
 .  errest - error estimate
 -  vf     - viewer and format for monitoring

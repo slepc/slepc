@@ -28,7 +28,7 @@ PetscFunctionList SVDMonitorDestroyList       = NULL;
 PetscBool         SVDMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   SVDCreate - Creates the default SVD context.
+   SVDCreate - Creates the `SVD` context.
 
    Collective
 
@@ -36,10 +36,10 @@ PetscBool         SVDMonitorRegisterAllCalled = PETSC_FALSE;
 .  comm - MPI communicator
 
    Output Parameter:
-.  outsvd - location to put the SVD context
+.  outsvd - location to put the `SVD` context
 
    Note:
-   The default SVD type is SVDCROSS
+   The default `SVD` type is `SVDCROSS`.
 
    Level: beginner
 
@@ -125,7 +125,7 @@ PetscErrorCode SVDCreate(MPI_Comm comm,SVD *outsvd)
    Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Level: advanced
 
@@ -156,12 +156,12 @@ PetscErrorCode SVDReset(SVD svd)
 }
 
 /*@
-   SVDDestroy - Destroys the SVD context.
+   SVDDestroy - Destroys the `SVD` context.
 
    Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Level: beginner
 
@@ -274,18 +274,19 @@ PetscErrorCode SVDGetType(SVD svd,SVDType *type)
 +  name - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
-   SVDRegister() may be called multiple times to add several user-defined solvers.
+   Note:
+   `SVDRegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    SVDRegister("my_solver",MySolverCreate);
+   SVDRegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
-$     SVDSetType(svd,"my_solver")
-   or at runtime via the option
-$     -svd_type my_solver
+.vb
+   SVDSetType(svd,"my_solver")
+.ve
+   or at runtime via the option `-svd_type my_solver`.
 
    Level: advanced
 
@@ -354,7 +355,7 @@ PetscErrorCode SVDMonitorRegister(const char name[],PetscViewerType vtype,PetscV
    Collective
 
    Input Parameters:
-+  svd - singular value solver context obtained from SVDCreate()
++  svd - the singular value solver context
 .  V   - the basis vectors object for right singular vectors
 -  U   - the basis vectors object for left singular vectors
 
@@ -394,7 +395,7 @@ PetscErrorCode SVDSetBV(SVD svd,BV V,BV U)
    Not Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Output Parameters:
 +  V - basis vectors context for right singular vectors
@@ -433,7 +434,7 @@ PetscErrorCode SVDGetBV(SVD svd,BV *V,BV *U)
    Collective
 
    Input Parameters:
-+  svd - singular value solver context obtained from SVDCreate()
++  svd - the singular value solver context
 -  ds  - the direct solver object
 
    Note:
@@ -462,8 +463,8 @@ PetscErrorCode SVDSetDS(SVD svd,DS ds)
 
    Not Collective
 
-   Input Parameters:
-.  svd - singular value solver context obtained from SVDCreate()
+   Input Parameter:
+.  svd - the singular value solver context
 
    Output Parameter:
 .  ds - direct solver context

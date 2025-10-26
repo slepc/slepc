@@ -20,7 +20,7 @@
    Collective
 
    Input Parameter:
-.  mfn   - matrix function context
+.  mfn   - the matrix function solver context
 
    Notes:
    This function need not be called explicitly in most cases, since MFNSolve()
@@ -71,7 +71,7 @@ PetscErrorCode MFNSetUp(MFN mfn)
    Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  A   - the problem matrix
 
    Notes:
@@ -107,9 +107,9 @@ PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
    Collective
 
    Input Parameter:
-.  mfn - the MFN context
+.  mfn - the matrix function solver context
 
-   Output Parameters:
+   Output Parameter:
 .  A  - the matrix for which the matrix function is to be computed
 
    Level: intermediate
@@ -132,7 +132,7 @@ PetscErrorCode MFNGetOperator(MFN mfn,Mat *A)
    Collective
 
    Input Parameters:
-+  mfn   - matrix function context
++  mfn   - the matrix function solver context
 -  extra - number of additional positions, used for methods that require a
            working basis slightly larger than ncv
 

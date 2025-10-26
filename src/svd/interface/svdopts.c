@@ -323,7 +323,7 @@ PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value context
+.  svd - the singular value solver context
 
    Output Parameters:
 +  nsv - number of singular values to compute
@@ -354,7 +354,7 @@ PetscErrorCode SVDGetDimensions(SVD svd,PetscInt *nsv,PetscInt *ncv,PetscInt *mp
     Logically Collective
 
     Input Parameter:
-.   svd - singular value solver context obtained from SVDCreate()
+.   svd - the singular value solver context
 
     Output Parameter:
 .   which - which singular triplets are to be sought
@@ -399,7 +399,7 @@ PetscErrorCode SVDSetWhichSingularTriplets(SVD svd,SVDWhich which)
     Not Collective
 
     Input Parameter:
-.   svd - singular value solver context obtained from SVDCreate()
+.   svd - the singular value solver context
 
     Output Parameter:
 .   which - which singular triplets are to be sought
@@ -427,7 +427,7 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver context obtained from SVDCreate()
++  svd     - the singular value solver context
 .  conv    - the convergence test function, see SVDConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -466,7 +466,7 @@ PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,
    Logically Collective
 
    Input Parameters:
-+  svd  - singular value solver context obtained from SVDCreate()
++  svd  - the singular value solver context
 -  conv - the type of convergence test
 
    Options Database Keys:
@@ -517,10 +517,10 @@ PetscErrorCode SVDSetConvergenceTest(SVD svd,SVDConv conv)
 
    Not Collective
 
-   Input Parameters:
-.  svd   - singular value solver context obtained from SVDCreate()
+   Input Parameter:
+.  svd   - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  conv  - the type of convergence test
 
    Level: intermediate
@@ -543,7 +543,7 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver context obtained from SVDCreate()
++  svd     - the singular value solver context
 .  stop    - the stopping test function, see SVDStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -582,7 +582,7 @@ PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *
    Logically Collective
 
    Input Parameters:
-+  svd  - singular value solver context obtained from SVDCreate()
++  svd  - the singular value solver context
 -  stop - the type of stopping test
 
    Options Database Keys:
@@ -625,10 +625,10 @@ PetscErrorCode SVDSetStoppingTest(SVD svd,SVDStop stop)
 
    Not Collective
 
-   Input Parameters:
-.  svd   - singular value solver context obtained from SVDCreate()
+   Input Parameter:
+.  svd   - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  stop  - the type of stopping test
 
    Level: advanced

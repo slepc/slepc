@@ -33,7 +33,7 @@ PetscErrorCode LMEMonitor(LME lme,PetscInt it,PetscReal errest)
    Logically Collective
 
    Input Parameters:
-+  lme            - linear matrix equation solver context
++  lme            - the linear matrix equation solver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `LMEMonitorFn`
 .  mctx           - [optional] context for private data for the monitor routine
@@ -89,7 +89,7 @@ PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,void *mctx,PetscCtxDe
    Logically Collective
 
    Input Parameter:
-.  lme - linear matrix equation solver context
+.  lme - the linear matrix equation solver context
 
    Options Database Key:
 .    -lme_monitor_cancel - cancels all monitors that have been hardwired
@@ -120,7 +120,7 @@ PetscErrorCode LMEMonitorCancel(LME lme)
    Not Collective
 
    Input Parameter:
-.  lme - linear matrix equation solver context
+.  lme - the linear matrix equation solver context
 
    Output Parameter:
 .  ctx - monitor context
@@ -144,7 +144,7 @@ PetscErrorCode LMEGetMonitorContext(LME lme,void *ctx)
    Collective
 
    Input Parameters:
-+  lme    - linear matrix equation solver context
++  lme    - the linear matrix equation solver context
 .  its    - iteration number
 .  errest - error estimate
 -  vf     - viewer and format for monitoring
@@ -183,7 +183,7 @@ PetscErrorCode LMEMonitorDefault(LME lme,PetscInt its,PetscReal errest,PetscView
    Collective
 
    Input Parameters:
-+  lme    - linear matrix equation solver context
++  lme    - the linear matrix equation solver context
 .  its    - iteration number
 .  errest - error estimate
 -  vf     - viewer and format for monitoring

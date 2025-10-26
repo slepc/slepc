@@ -92,7 +92,7 @@ static PetscErrorCode EPSComputeValues(EPS eps)
    Collective
 
    Input Parameter:
-.  eps - eigensolver context obtained from EPSCreate()
+.  eps - the linear eigensolver context
 
    Options Database Keys:
 +  -eps_view - print information about the solver used
@@ -227,7 +227,7 @@ PetscErrorCode EPSSolve(EPS eps)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  its - number of iterations
@@ -258,7 +258,7 @@ PetscErrorCode EPSGetIterationNumber(EPS eps,PetscInt *its)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  nconv - number of converged eigenpairs
@@ -287,7 +287,7 @@ PetscErrorCode EPSGetConverged(EPS eps,PetscInt *nconv)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  reason - negative value indicates diverged, positive value converged, see
@@ -321,7 +321,7 @@ PetscErrorCode EPSGetConvergedReason(EPS eps,EPSConvergedReason *reason)
    Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  v - an array of vectors
@@ -378,7 +378,7 @@ PetscErrorCode EPSGetInvariantSubspace(EPS eps,Vec v[])
    Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -431,7 +431,7 @@ PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar 
    Not Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -519,7 +519,7 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
    Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -571,7 +571,7 @@ PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -651,7 +651,7 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
    Not Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  i   - index of eigenpair
 
    Output Parameter:
@@ -758,7 +758,7 @@ PetscErrorCode EPSComputeResidualNorm_Private(EPS eps,PetscBool trans,PetscScala
    Collective
 
    Input Parameters:
-+  eps  - the eigensolver context
++  eps  - the linear eigensolver context
 .  i    - the solution index
 -  type - the type of error to compute
 
@@ -855,10 +855,10 @@ PetscErrorCode EPSComputeError(EPS eps,PetscInt i,EPSErrorType type,PetscReal *e
    Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 -  i   - iteration number
 
-   Output Parameters:
+   Output Parameter:
 .  breakdown - flag indicating that a breakdown has occurred
 
    Notes:

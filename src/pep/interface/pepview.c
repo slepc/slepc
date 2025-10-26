@@ -21,7 +21,7 @@
    Collective
 
    Input Parameters:
-+  pep - the polynomial eigenproblem solver context
++  pep - the polynomial eigensolver context
 -  viewer - optional visualization context
 
    Options Database Key:
@@ -192,7 +192,7 @@ PetscErrorCode PEPView(PEP pep,PetscViewer viewer)
    Collective
 
    Input Parameters:
-+  pep  - the eigensolver context
++  pep  - the polynomial eigensolver context
 .  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
@@ -214,7 +214,7 @@ PetscErrorCode PEPViewFromOptions(PEP pep,PetscObject obj,const char name[])
    Collective
 
    Input Parameters:
-+  pep - the eigensolver context
++  pep - the polynomial eigensolver context
 -  viewer - the viewer to display the reason
 
    Options Database Key:
@@ -258,7 +258,7 @@ PetscErrorCode PEPConvergedReasonView(PEP pep,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Level: intermediate
 
@@ -383,7 +383,7 @@ static PetscErrorCode PEPErrorView_MATLAB(PEP pep,PEPErrorType etype,PetscViewer
    Collective
 
    Input Parameters:
-+  pep    - the eigensolver context
++  pep    - the polynomial eigensolver context
 .  etype  - error type
 -  viewer - optional visualization context
 
@@ -441,7 +441,7 @@ PetscErrorCode PEPErrorView(PEP pep,PEPErrorType etype,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Level: developer
 
@@ -628,7 +628,7 @@ static PetscErrorCode PEPValuesView_MATLAB(PEP pep,PetscViewer viewer)
    Collective
 
    Input Parameters:
-+  pep    - the eigensolver context
++  pep    - the polynomial eigensolver context
 -  viewer - the viewer
 
    Options Database Key:
@@ -688,7 +688,7 @@ PetscErrorCode PEPValuesView(PEP pep,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Level: developer
 
@@ -721,7 +721,7 @@ PetscErrorCode PEPValuesViewFromOptions(PEP pep)
    Collective
 
    Input Parameters:
-+  pep    - the eigensolver context
++  pep    - the polynomial eigensolver context
 -  viewer - the viewer
 
    Options Database Key:
@@ -773,7 +773,7 @@ PetscErrorCode PEPVectorsView(PEP pep,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Level: developer
 

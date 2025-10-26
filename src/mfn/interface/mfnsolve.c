@@ -55,7 +55,7 @@ static PetscErrorCode MFNSolve_Private(MFN mfn,Vec b,Vec x)
    Collective
 
    Input Parameters:
-+  mfn - matrix function context obtained from MFNCreate()
++  mfn - the matrix function solver context
 -  b   - the right hand side vector
 
    Output Parameter:
@@ -97,7 +97,7 @@ PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
    Collective
 
    Input Parameters:
-+  mfn - matrix function context obtained from MFNCreate()
++  mfn - the matrix function solver context
 -  b   - the right hand side vector
 
    Output Parameter:
@@ -133,7 +133,7 @@ PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  its - number of iterations
@@ -165,7 +165,7 @@ PetscErrorCode MFNGetIterationNumber(MFN mfn,PetscInt *its)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  reason - negative value indicates diverged, positive value converged, see

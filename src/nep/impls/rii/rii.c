@@ -257,7 +257,7 @@ static PetscErrorCode NEPRIISetMaximumIterations_RII(NEP nep,PetscInt its)
    Logically Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  its - maximum inner iterations
 
    Level: advanced
@@ -288,7 +288,7 @@ static PetscErrorCode NEPRIIGetMaximumIterations_RII(NEP nep,PetscInt *its)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  its - maximum inner iterations
@@ -323,12 +323,12 @@ static PetscErrorCode NEPRIISetLagPreconditioner_RII(NEP nep,PetscInt lag)
    Logically Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  lag - 0 indicates NEVER rebuild, 1 means rebuild every time the Jacobian is
           computed within the nonlinear iteration, 2 means every second time
           the Jacobian is built, etc.
 
-   Options Database Keys:
+   Options Database Key:
 .  -nep_rii_lag_preconditioner <lag> - the lag value
 
    Notes:
@@ -363,7 +363,7 @@ static PetscErrorCode NEPRIIGetLagPreconditioner_RII(NEP nep,PetscInt *lag)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  lag - the lag parameter
@@ -397,10 +397,10 @@ static PetscErrorCode NEPRIISetConstCorrectionTol_RII(NEP nep,PetscBool cct)
    Logically Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  cct - a boolean value
 
-   Options Database Keys:
+   Options Database Key:
 .  -nep_rii_const_correction_tol <bool> - set the boolean flag
 
    Notes:
@@ -437,7 +437,7 @@ static PetscErrorCode NEPRIIGetConstCorrectionTol_RII(NEP nep,PetscBool *cct)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  cct - the value of the constant tolerance flag
@@ -471,10 +471,10 @@ static PetscErrorCode NEPRIISetHermitian_RII(NEP nep,PetscBool herm)
    Logically Collective
 
    Input Parameters:
-+  nep  - nonlinear eigenvalue solver
++  nep  - the nonlinear eigensolver context
 -  herm - a boolean value
 
-   Options Database Keys:
+   Options Database Key:
 .  -nep_rii_hermitian <bool> - set the boolean flag
 
    Notes:
@@ -512,7 +512,7 @@ static PetscErrorCode NEPRIIGetHermitian_RII(NEP nep,PetscBool *herm)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  herm - the value of the hermitian flag
@@ -546,10 +546,10 @@ static PetscErrorCode NEPRIISetDeflationThreshold_RII(NEP nep,PetscReal deftol)
    Logically Collective
 
    Input Parameters:
-+  nep    - nonlinear eigenvalue solver
++  nep    - the nonlinear eigensolver context
 -  deftol - the threshold value
 
-   Options Database Keys:
+   Options Database Key:
 .  -nep_rii_deflation_threshold <deftol> - set the threshold
 
    Notes:
@@ -588,7 +588,7 @@ static PetscErrorCode NEPRIIGetDeflationThreshold_RII(NEP nep,PetscReal *deftol)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  deftol - the threshold
@@ -625,7 +625,7 @@ static PetscErrorCode NEPRIISetKSP_RII(NEP nep,KSP ksp)
    Collective
 
    Input Parameters:
-+  nep - eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  ksp - the linear solver object
 
    Level: advanced
@@ -667,7 +667,7 @@ static PetscErrorCode NEPRIIGetKSP_RII(NEP nep,KSP *ksp)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ksp - the linear solver object

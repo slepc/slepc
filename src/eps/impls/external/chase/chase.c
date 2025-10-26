@@ -152,7 +152,7 @@ static PetscErrorCode EPSCHASESetDegree_ChASE(EPS eps,PetscInt deg,PetscBool opt
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  deg - initial degree of Chebyshev polynomial filter
 -  opt - internal optimization of polynomial degree
 
@@ -190,7 +190,7 @@ static PetscErrorCode EPSCHASEGetDegree_ChASE(EPS eps,PetscInt *deg,PetscBool *o
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  deg - initial degree of Chebyshev polynomial filter

@@ -153,7 +153,7 @@ PetscErrorCode BVBiorthogonalizeColumn(BV V,BV W,PetscInt j)
 .  W - second basis vectors context
 -  j - index of column to be bi-orthonormalized
 
-   Output Parameters:
+   Output Parameter:
 .  delta - (optional) value used for normalization
 
    Notes:

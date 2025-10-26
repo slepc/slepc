@@ -1757,7 +1757,7 @@ static PetscErrorCode SVDTRLanczosSetOneSide_TRLanczos(SVD svd,PetscBool oneside
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver
++  svd     - the singular value solver context
 -  oneside - boolean flag indicating if the method is one-sided or not
 
    Options Database Key:
@@ -1799,10 +1799,10 @@ static PetscErrorCode SVDTRLanczosGetOneSide_TRLanczos(SVD svd,PetscBool *onesid
 
    Not Collective
 
-   Input Parameters:
-.  svd     - singular value solver
+   Input Parameter:
+.  svd - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  oneside - boolean flag indicating if the method is one-sided or not
 
    Level: advanced
@@ -1845,7 +1845,7 @@ static PetscErrorCode SVDTRLanczosSetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
    Logically Collective
 
    Input Parameters:
-+  svd - the singular value solver
++  svd - the singular value solver context
 -  bidiag - the bidiagonalization choice
 
    Options Database Key:
@@ -1881,7 +1881,7 @@ static PetscErrorCode SVDTRLanczosGetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  bidiag - the bidiagonalization choice
@@ -1917,7 +1917,7 @@ static PetscErrorCode SVDTRLanczosSetKSP_TRLanczos(SVD svd,KSP ksp)
    Collective
 
    Input Parameters:
-+  svd - SVD solver
++  svd - the singular value solver context
 -  ksp - the linear solver object
 
    Note:
@@ -1967,7 +1967,7 @@ static PetscErrorCode SVDTRLanczosGetKSP_TRLanczos(SVD svd,KSP *ksp)
    Collective
 
    Input Parameter:
-.  svd - SVD solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  ksp - the linear solver object
@@ -2006,7 +2006,7 @@ static PetscErrorCode SVDTRLanczosSetRestart_TRLanczos(SVD svd,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  svd  - the singular value solver
++  svd  - the singular value solver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
@@ -2044,7 +2044,7 @@ static PetscErrorCode SVDTRLanczosGetRestart_TRLanczos(SVD svd,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  keep - the restart parameter
@@ -2078,7 +2078,7 @@ static PetscErrorCode SVDTRLanczosSetLocking_TRLanczos(SVD svd,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  svd  - the singular value solver
++  svd  - the singular value solver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
@@ -2119,7 +2119,7 @@ static PetscErrorCode SVDTRLanczosGetLocking_TRLanczos(SVD svd,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  lock - the locking flag
@@ -2156,7 +2156,7 @@ static PetscErrorCode SVDTRLanczosSetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
    Logically Collective
 
    Input Parameters:
-+  svd         - singular value solver
++  svd         - the singular value solver context
 -  explicitmat - Boolean flag indicating if Z=[A;B] is built explicitly
 
    Options Database Key:
@@ -2194,7 +2194,7 @@ static PetscErrorCode SVDTRLanczosGetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
    Not Collective
 
    Input Parameter:
-.  svd  - singular value solver
+.  svd  - the singular value solver context
 
    Output Parameter:
 .  explicitmat - the mode flag
@@ -2233,7 +2233,7 @@ static PetscErrorCode SVDTRLanczosSetScale_TRLanczos(SVD svd,PetscReal scale)
    Logically Collective
 
    Input Parameters:
-+  svd   - singular value solver
++  svd   - the singular value solver context
 -  scale - scale parameter
 
    Options Database Key:
@@ -2277,7 +2277,7 @@ static PetscErrorCode SVDTRLanczosGetScale_TRLanczos(SVD svd,PetscReal *scale)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  scale - the scale parameter

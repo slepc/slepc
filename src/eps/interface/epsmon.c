@@ -33,7 +33,7 @@ PetscErrorCode EPSMonitor(EPS eps,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
    Logically Collective
 
    Input Parameters:
-+  eps            - eigensolver context
++  eps            - the linear eigensolver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `EPSMonitorFn`
 .  mctx           - [optional] context for private data for the monitor routine
@@ -95,8 +95,8 @@ PetscErrorCode EPSMonitorSet(EPS eps,EPSMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Logically Collective
 
-   Input Parameters:
-.  eps - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Options Database Key:
 .    -eps_monitor_cancel - Cancels all monitors that have been hardwired
@@ -127,7 +127,7 @@ PetscErrorCode EPSMonitorCancel(EPS eps)
    Not Collective
 
    Input Parameter:
-.  eps - eigensolver context obtained from EPSCreate()
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  ctx - monitor context
@@ -166,7 +166,7 @@ static inline PetscErrorCode EPSMonitorPrintEval(EPS eps,PetscViewer viewer,Pets
    Collective
 
    Input Parameters:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -214,7 +214,7 @@ PetscErrorCode EPSMonitorFirst(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *
    Collective
 
    Input Parameters:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -264,7 +264,7 @@ PetscErrorCode EPSMonitorAll(EPS eps,PetscInt its,PetscInt nconv,PetscScalar *ei
    Collective
 
    Input Parameters:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -341,7 +341,7 @@ PetscErrorCode EPSMonitorConvergedDestroy(PetscViewerAndFormat **vf)
    Collective
 
    Input Parameters:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -420,7 +420,7 @@ PetscErrorCode EPSMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
    Collective
 
    Input Parameters:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -502,7 +502,7 @@ PetscErrorCode EPSMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
    Collective
 
    Input Parameters:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues

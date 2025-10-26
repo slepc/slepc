@@ -33,7 +33,7 @@ PetscErrorCode PEPMonitor(PEP pep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
    Logically Collective
 
    Input Parameters:
-+  pep            - polynomial eigensolver context
++  pep            - the polynomial eigensolver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `PEPMonitorFn`
 .  mctx           - [optional] context for private data for the monitor routine
@@ -95,8 +95,8 @@ PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Logically Collective
 
-   Input Parameters:
-.  pep - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep - the polynomial eigensolver context
 
    Options Database Key:
 .    -pep_monitor_cancel - Cancels all monitors that have been hardwired
@@ -127,7 +127,7 @@ PetscErrorCode PEPMonitorCancel(PEP pep)
    Not Collective
 
    Input Parameter:
-.  pep - eigensolver context obtained from PEPCreate()
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  ctx - monitor context
@@ -172,7 +172,7 @@ static PetscErrorCode PEPMonitorGetTrueEig(PEP pep,PetscScalar *er,PetscScalar *
    Collective
 
    Input Parameters:
-+  pep    - polynomial eigensolver context
++  pep    - the polynomial eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -225,7 +225,7 @@ PetscErrorCode PEPMonitorFirst(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *
    Collective
 
    Input Parameters:
-+  pep    - polynomial eigensolver context
++  pep    - the polynomial eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -280,7 +280,7 @@ PetscErrorCode PEPMonitorAll(PEP pep,PetscInt its,PetscInt nconv,PetscScalar *ei
    Collective
 
    Input Parameters:
-+  pep    - polynomial eigensolver context
++  pep    - the polynomial eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -362,7 +362,7 @@ PetscErrorCode PEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
    Collective
 
    Input Parameters:
-+  pep    - polynomial eigensolver context
++  pep    - the polynomial eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -441,7 +441,7 @@ PetscErrorCode PEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
    Collective
 
    Input Parameters:
-+  pep    - polynomial eigensolver context
++  pep    - the polynomial eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -523,7 +523,7 @@ PetscErrorCode PEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
    Collective
 
    Input Parameters:
-+  pep    - polynomial eigensolver context
++  pep    - the polynomial eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues

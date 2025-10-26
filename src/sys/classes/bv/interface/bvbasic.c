@@ -301,7 +301,7 @@ PetscErrorCode BVSetNumConstraints(BV V,PetscInt nc)
    Input Parameter:
 .  bv - the basis vectors
 
-   Output Parameters:
+   Output Parameter:
 .  nc - the number of constraints
 
    Level: advanced
@@ -743,7 +743,7 @@ PetscErrorCode BVSetBufferVec(BV bv,Vec buffer)
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - the basis vectors context
 
    Output Parameter:
@@ -1027,7 +1027,7 @@ PetscErrorCode BVGetOrthogonalization(BV bv,BVOrthogType *type,BVOrthogRefineTyp
 +  bv     - the basis vectors context
 -  method - the method for the `BVMatMult()` operation
 
-   Options Database Keys:
+   Options Database Key:
 .  -bv_matmult <meth> - choose one of the methods: `vecs`, `mat`
 
    Note:
@@ -1185,7 +1185,7 @@ PetscErrorCode BVRestoreColumn(BV bv,PetscInt j,Vec *v)
 
    Logically Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - the basis vectors context
 
    Output Parameter:
@@ -1255,7 +1255,7 @@ PetscErrorCode BVRestoreArray(BV bv,PetscScalar **a)
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - the basis vectors context
 
    Output Parameter:

@@ -960,7 +960,7 @@ PetscErrorCode DSVectors(DS ds,DSMatType mat,PetscInt *j,PetscReal *rnorm)
 
    Logically Collective
 
-   Input Parameters:
+   Input Parameter:
 .  ds - the direct solver context
 
    Level: advanced

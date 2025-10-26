@@ -28,7 +28,7 @@ PetscFunctionList NEPMonitorDestroyList       = NULL;
 PetscBool         NEPMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   NEPCreate - Creates the default NEP context.
+   NEPCreate - Creates the default `NEP` context.
 
    Collective
 
@@ -36,7 +36,10 @@ PetscBool         NEPMonitorRegisterAllCalled = PETSC_FALSE;
 .  comm - MPI communicator
 
    Output Parameter:
-.  outnep - location to put the NEP context
+.  outnep - location to put the `NEP` context
+
+   Note:
+   The default `NEP` type is `NEPRII`.
 
    Level: beginner
 
@@ -180,7 +183,7 @@ PetscErrorCode NEPSetType(NEP nep,NEPType type)
    Not Collective
 
    Input Parameter:
-.  nep - the eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  type - name of `NEP` method
@@ -207,18 +210,19 @@ PetscErrorCode NEPGetType(NEP nep,NEPType *type)
 +  name - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
-   NEPRegister() may be called multiple times to add several user-defined solvers.
+   Note:
+   `NEPRegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    NEPRegister("my_solver",MySolverCreate);
+   NEPRegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
-$     NEPSetType(nep,"my_solver")
-   or at runtime via the option
-$     -nep_type my_solver
+.vb
+   NEPSetType(nep,"my_solver")
+.ve
+   or at runtime via the option `-nep_type my_solver`.
 
    Level: advanced
 
@@ -310,7 +314,7 @@ PetscErrorCode NEPReset_Problem(NEP nep)
    Collective
 
    Input Parameter:
-.  nep - eigensolver context obtained from NEPCreate()
+.  nep - the nonlinear eigensolver context
 
    Level: advanced
 
@@ -339,7 +343,7 @@ PetscErrorCode NEPReset(NEP nep)
    Collective
 
    Input Parameter:
-.  nep - eigensolver context obtained from NEPCreate()
+.  nep - the nonlinear eigensolver context
 
    Level: beginner
 
@@ -374,7 +378,7 @@ PetscErrorCode NEPDestroy(NEP *nep)
    Collective
 
    Input Parameters:
-+  nep - eigensolver context obtained from NEPCreate()
++  nep - the nonlinear eigensolver context
 -  bv  - the basis vectors object
 
    Note:
@@ -403,8 +407,8 @@ PetscErrorCode NEPSetBV(NEP nep,BV bv)
 
    Not Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  bv - basis vectors context
@@ -433,7 +437,7 @@ PetscErrorCode NEPGetBV(NEP nep,BV *bv)
    Collective
 
    Input Parameters:
-+  nep - eigensolver context obtained from NEPCreate()
++  nep - the nonlinear eigensolver context
 -  rg  - the region object
 
    Note:
@@ -464,8 +468,8 @@ PetscErrorCode NEPSetRG(NEP nep,RG rg)
 
    Not Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  rg - region context
@@ -494,7 +498,7 @@ PetscErrorCode NEPGetRG(NEP nep,RG *rg)
    Collective
 
    Input Parameters:
-+  nep - eigensolver context obtained from NEPCreate()
++  nep - the nonlinear eigensolver context
 -  ds  - the direct solver object
 
    Note:
@@ -523,8 +527,8 @@ PetscErrorCode NEPSetDS(NEP nep,DS ds)
 
    Not Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ds - direct solver context
@@ -553,8 +557,8 @@ PetscErrorCode NEPGetDS(NEP nep,DS *ds)
 
    Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ksp - ksp context
@@ -595,7 +599,7 @@ PetscErrorCode NEPRefineGetKSP(NEP nep,KSP *ksp)
    Logically Collective
 
    Input Parameters:
-+  nep    - eigensolver context
++  nep    - the nonlinear eigensolver context
 -  target - the value of the target
 
    Options Database Key:
@@ -628,7 +632,7 @@ PetscErrorCode NEPSetTarget(NEP nep,PetscScalar target)
    Not Collective
 
    Input Parameter:
-.  nep - eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  target - the value of the target
@@ -656,7 +660,7 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
    Collective
 
    Input Parameters:
-+  nep - the NEP context
++  nep - the nonlinear eigensolver context
 .  F   - Function matrix
 .  P   - preconditioner matrix (usually same as F)
 .  fun - Function evaluation routine (if NULL then NEP retains any
@@ -736,7 +740,7 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,void **c
    Collective
 
    Input Parameters:
-+  nep - the NEP context
++  nep - the nonlinear eigensolver context
 .  J   - Jacobian matrix
 .  jac - Jacobian evaluation routine (if NULL then NEP retains any
          previously set value), see NEPJacobianFn for the calling sequence

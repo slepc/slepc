@@ -19,7 +19,7 @@
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigensolver context
++  nep - the nonlinear eigensolver context
 -  nw  - number of work vectors to allocate
 
    Developer Notes:
@@ -145,7 +145,7 @@ PetscErrorCode NEPConvergedNorm(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscR
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context obtained from NEPCreate()
++  nep    - the nonlinear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs

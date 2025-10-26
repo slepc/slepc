@@ -1305,7 +1305,7 @@ static PetscErrorCode NEPNLEIGSSetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGS
    Logically Collective
 
    Input Parameters:
-+  nep - the NEP context
++  nep - the nonlinear eigensolver context
 .  fun - user function (if NULL then NEP retains any previously set value)
 -  ctx - [optional] user-defined context for private data for the function
          (may be NULL, in which case NEP retains any previously set value)
@@ -1553,7 +1553,7 @@ static PetscErrorCode NEPNLEIGSSetInterpolation_NLEIGS(NEP nep,PetscReal tol,Pet
 .  tol    - tolerance to stop computing divided differences
 -  degree - maximum degree of interpolation
 
-   Options Database Key:
+   Options Database Keys:
 +  -nep_nleigs_interpolation_tol <tol> - Sets the tolerance to stop computing divided differences
 -  -nep_nleigs_interpolation_degree <degree> - Sets the maximum degree of interpolation
 
@@ -1754,7 +1754,7 @@ static PetscErrorCode NEPNLEIGSGetKSPs_NLEIGS(NEP nep,PetscInt *nsolve,KSP **ksp
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameters:
 +  nsolve - number of returned KSP objects

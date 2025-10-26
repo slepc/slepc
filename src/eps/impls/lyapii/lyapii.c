@@ -576,7 +576,7 @@ static PetscErrorCode EPSLyapIISetRanks_LyapII(EPS eps,PetscInt rkc,PetscInt rkl
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  rkc - the compressed rank
 -  rkl - the Lyapunov rank
 
@@ -623,7 +623,7 @@ static PetscErrorCode EPSLyapIIGetRanks_LyapII(EPS eps,PetscInt *rkc,PetscInt *r
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  rkc - the compressed rank
@@ -660,8 +660,8 @@ static PetscErrorCode EPSLyapIISetLME_LyapII(EPS eps,LME lme)
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
--  lme - the linear matrix equation solver object
++  eps - the linear eigensolver context
+-  lme - the linear matrix equation solver context
 
    Level: advanced
 
@@ -699,10 +699,10 @@ static PetscErrorCode EPSLyapIIGetLME_LyapII(EPS eps,LME *lme)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  lme - the linear matrix equation solver object
+.  lme - the linear matrix equation solver context
 
    Level: advanced
 

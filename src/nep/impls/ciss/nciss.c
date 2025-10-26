@@ -883,7 +883,7 @@ static PetscErrorCode NEPCISSGetExtraction_CISS(NEP nep,NEPCISSExtraction *extra
    Input Parameter:
 .  nep - the nonlinear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  extraction - extraction technique
 
    Level: advanced
@@ -946,7 +946,7 @@ static PetscErrorCode NEPCISSGetKSPs_CISS(NEP nep,PetscInt *nsolve,KSP **ksp)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameters:
 +  nsolve - number of solver objects

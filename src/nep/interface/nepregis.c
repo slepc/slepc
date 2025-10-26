@@ -20,7 +20,7 @@ SLEPC_EXTERN PetscErrorCode NEPCreate_CISS(NEP);
 SLEPC_EXTERN PetscErrorCode NEPCreate_NLEIGS(NEP);
 
 /*@C
-   NEPRegisterAll - Registers all the solvers in the NEP package.
+   NEPRegisterAll - Registers all the solvers in the `NEP` package.
 
    Not Collective
 

@@ -23,8 +23,7 @@ SLEPC_EXTERN PetscErrorCode SVDInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode SVDFinalizePackage(void);
 
 /*S
-   SVD - Abstract SLEPc object that manages all the singular value
-   problem solvers.
+   SVD - SLEPc object that manages all the singular value problem solvers.
 
    Level: beginner
 
@@ -33,7 +32,7 @@ S*/
 typedef struct _p_SVD* SVD;
 
 /*J
-   SVDType - String with the name of a SLEPc singular value solver
+   SVDType - String with the name of a singular value solver.
 
    Level: beginner
 
@@ -224,7 +223,7 @@ SLEPC_EXTERN PetscErrorCode SVDGetTrackAll(SVD,PetscBool*);
    SVDMonitorFn - A function prototype for functions provided to `SVDMonitorSet()`.
 
    Calling Sequence:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  its    - iteration number
 .  nconv  - number of converged singular triplets
 .  sigma  - singular values
@@ -242,7 +241,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorFn(SVD svd,PetscInt its,Pe
    SVDMonitorRegisterFn - A function prototype for functions provided to `SVDMonitorRegister()`.
 
    Calling Sequence:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  its    - iteration number
 .  nconv  - number of converged singular triplets
 .  sigma  - singular values
@@ -321,7 +320,7 @@ SLEPC_EXTERN PetscErrorCode SVDReallocateSolution(SVD,PetscInt);
    SVDConvergenceTestFn - A prototype of an SVD convergence test function that would be passed to SVDSetConvergenceTestFunction()
 
    Calling Sequence:
-+  svd    - singular value solver context obtained from SVDCreate()
++  svd    - the singular value solver context
 .  sigma  - computed singular value
 .  res    - residual norm associated to the singular triplet
 .  errest - [output] computed error estimate
@@ -346,7 +345,7 @@ SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTestFunction(SVD,SVDConvergenceTest
    SVDStoppingTestFn - A prototype of an SVD stopping test function that would be passed to SVDSetStoppingTestFunction()
 
    Calling Sequence:
-+  svd    - singular value solver context obtained from SVDCreate()
++  svd    - the singular value solver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged singular triplets

@@ -293,10 +293,10 @@ static PetscErrorCode NEPSLPSetDeflationThreshold_SLP(NEP nep,PetscReal deftol)
    Logically Collective
 
    Input Parameters:
-+  nep    - nonlinear eigenvalue solver
++  nep    - the nonlinear eigensolver context
 -  deftol - the threshold value
 
-   Options Database Keys:
+   Options Database Key:
 .  -nep_slp_deflation_threshold <deftol> - set the threshold
 
    Notes:
@@ -335,7 +335,7 @@ static PetscErrorCode NEPSLPGetDeflationThreshold_SLP(NEP nep,PetscReal *deftol)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  deftol - the threshold
@@ -372,8 +372,8 @@ static PetscErrorCode NEPSLPSetEPS_SLP(NEP nep,EPS eps)
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  eps - the eigensolver object
++  nep - the nonlinear eigensolver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
@@ -412,10 +412,10 @@ static PetscErrorCode NEPSLPGetEPS_SLP(NEP nep,EPS *eps)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 
@@ -450,8 +450,8 @@ static PetscErrorCode NEPSLPSetEPSLeft_SLP(NEP nep,EPS eps)
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  eps - the eigensolver object
++  nep - the nonlinear eigensolver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
@@ -491,10 +491,10 @@ static PetscErrorCode NEPSLPGetEPSLeft_SLP(NEP nep,EPS *eps)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 
@@ -528,7 +528,7 @@ static PetscErrorCode NEPSLPSetKSP_SLP(NEP nep,KSP ksp)
    Collective
 
    Input Parameters:
-+  nep - eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  ksp - the linear solver object
 
    Level: advanced
@@ -570,7 +570,7 @@ static PetscErrorCode NEPSLPGetKSP_SLP(NEP nep,KSP *ksp)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ksp - the linear solver object

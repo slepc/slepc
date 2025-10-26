@@ -20,7 +20,7 @@ SLEPC_EXTERN PetscErrorCode PEPCreate_CISS(PEP);
 #endif
 
 /*@C
-   PEPRegisterAll - Registers all the solvers in the PEP package.
+   PEPRegisterAll - Registers all the solvers in the `PEP` package.
 
    Not Collective
 

@@ -174,7 +174,7 @@ PetscErrorCode EPSComputeVectors_Schur(EPS eps)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  nw  - number of work vectors to allocate
 
    Developer Notes:
@@ -262,7 +262,7 @@ PetscErrorCode EPSConvergedNorm(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscR
    Collective
 
    Input Parameters:
-+  eps    - eigensolver context obtained from EPSCreate()
++  eps    - the linear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs
@@ -308,7 +308,7 @@ PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nc
    Collective
 
    Input Parameters:
-+  eps    - eigenvalue solver context obtained from EPSCreate()
++  eps    - the linear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs (ignored here)

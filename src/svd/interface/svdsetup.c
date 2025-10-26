@@ -187,7 +187,7 @@ PetscErrorCode SVDGetSignature(SVD svd,Vec omega)
    Collective
 
    Input Parameter:
-.  svd - singular value solver context
+.  svd - the singular value solver context
 
    Note:
    This function need not be called explicitly, since it will be called at
@@ -212,7 +212,7 @@ PetscErrorCode SVDSetDSType(SVD svd)
    Collective
 
    Input Parameter:
-.  svd   - singular value solver context
+.  svd   - the singular value solver context
 
    Notes:
    This function need not be called explicitly in most cases, since SVDSolve()
@@ -498,7 +498,7 @@ PetscErrorCode SVDSetDimensions_Default(SVD svd)
    Collective
 
    Input Parameters:
-+  svd   - singular value solver context
++  svd   - the singular value solver context
 -  extra - number of additional positions, used for methods that require a
            working basis slightly larger than ncv
 
@@ -566,7 +566,7 @@ PetscErrorCode SVDAllocateSolution(SVD svd,PetscInt extra)
    Collective
 
    Input Parameters:
-+  svd     - singular value solver context
++  svd     - the singular value solver context
 -  newsize - new size
 
    Developer Notes:

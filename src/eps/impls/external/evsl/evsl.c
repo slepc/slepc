@@ -279,7 +279,7 @@ static PetscErrorCode EPSEVSLSetSlices_EVSL(EPS eps,PetscInt nslices)
    Logically Collective
 
    Input Parameters:
-+  eps     - the eigensolver context
++  eps     - the linear eigensolver context
 -  nslices - the number of slices
 
    Options Database Key:
@@ -319,7 +319,7 @@ static PetscErrorCode EPSEVSLGetSlices_EVSL(EPS eps,PetscInt *nslices)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  nslices - the number of slices
@@ -358,7 +358,7 @@ static PetscErrorCode EPSEVSLSetRange_EVSL(EPS eps,PetscReal lmin,PetscReal lmax
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigensolver context
++  eps  - the linear eigensolver context
 .  lmin - left end of the interval
 -  lmax - right end of the interval
 
@@ -403,7 +403,7 @@ static PetscErrorCode EPSEVSLGetRange_EVSL(EPS eps,PetscReal *lmin,PetscReal *lm
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  lmin - left end of the interval
@@ -464,7 +464,7 @@ static PetscErrorCode EPSEVSLSetDOSParameters_EVSL(EPS eps,EPSEVSLDOSMethod dos,
    Logically Collective
 
    Input Parameters:
-+  eps     - the eigensolver context
++  eps     - the linear eigensolver context
 .  dos     - DOS method, either KPM or Lanczos
 .  nvec    - number of sample vectors
 .  deg     - polynomial degree (KPM only)
@@ -524,7 +524,7 @@ static PetscErrorCode EPSEVSLGetDOSParameters_EVSL(EPS eps,EPSEVSLDOSMethod *dos
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  dos     - DOS method, either KPM or Lanczos
@@ -571,7 +571,7 @@ static PetscErrorCode EPSEVSLSetPolParameters_EVSL(EPS eps,PetscInt max_deg,Pets
    Logically Collective
 
    Input Parameters:
-+  eps     - the eigensolver context
++  eps     - the linear eigensolver context
 .  max_deg - maximum degree allowed for the polynomial
 -  thresh  - threshold for accepting polynomial
 
@@ -614,7 +614,7 @@ static PetscErrorCode EPSEVSLGetPolParameters_EVSL(EPS eps,PetscInt *max_deg,Pet
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  max_deg - the maximum degree of the polynomial
@@ -650,7 +650,7 @@ static PetscErrorCode EPSEVSLSetDamping_EVSL(EPS eps,EPSEVSLDamping damping)
    Logically Collective
 
    Input Parameters:
-+  eps     - the eigensolver context
++  eps     - the linear eigensolver context
 -  damping - the type of damping
 
    Options Database Key:
@@ -688,7 +688,7 @@ static PetscErrorCode EPSEVSLGetDamping_EVSL(EPS eps,EPSEVSLDamping *damping)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  damping - the type of damping

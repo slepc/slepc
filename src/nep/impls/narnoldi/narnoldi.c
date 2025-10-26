@@ -222,12 +222,12 @@ static PetscErrorCode NEPNArnoldiSetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
    Logically Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  lag - 0 indicates NEVER rebuild, 1 means rebuild every time the Jacobian is
           computed within the nonlinear iteration, 2 means every second time
           the Jacobian is built, etc.
 
-   Options Database Keys:
+   Options Database Key:
 .  -nep_narnoldi_lag_preconditioner <lag> - the lag value
 
    Notes:
@@ -262,7 +262,7 @@ static PetscErrorCode NEPNArnoldiGetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  lag - the lag parameter
@@ -318,7 +318,7 @@ static PetscErrorCode NEPNArnoldiSetKSP_NArnoldi(NEP nep,KSP ksp)
    Collective
 
    Input Parameters:
-+  nep - eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  ksp - the linear solver object
 
    Level: advanced
@@ -360,7 +360,7 @@ static PetscErrorCode NEPNArnoldiGetKSP_NArnoldi(NEP nep,KSP *ksp)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ksp - the linear solver object

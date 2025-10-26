@@ -21,7 +21,7 @@
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  viewer - optional visualization context
 
    Options Database Key:
@@ -205,7 +205,7 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
    Collective
 
    Input Parameters:
-+  eps  - the eigensolver context
++  eps  - the linear eigensolver context
 .  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
@@ -227,7 +227,7 @@ PetscErrorCode EPSViewFromOptions(EPS eps,PetscObject obj,const char name[])
    Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 -  viewer - the viewer to display the reason
 
    Options Database Key:
@@ -273,7 +273,7 @@ PetscErrorCode EPSConvergedReasonView(EPS eps,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Level: intermediate
 
@@ -402,7 +402,7 @@ static PetscErrorCode EPSErrorView_MATLAB(EPS eps,EPSErrorType etype,PetscViewer
    Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 .  etype  - error type
 -  viewer - optional visualization context
 
@@ -460,7 +460,7 @@ PetscErrorCode EPSErrorView(EPS eps,EPSErrorType etype,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Level: developer
 
@@ -657,7 +657,7 @@ static PetscErrorCode EPSValuesView_MATLAB(EPS eps,PetscViewer viewer)
    Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 -  viewer - the viewer
 
    Options Database Key:
@@ -716,8 +716,8 @@ PetscErrorCode EPSValuesView(EPS eps,PetscViewer viewer)
 
    Collective
 
-   Input Parameters:
-.  eps - the eigensolver context
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Level: developer
 
@@ -750,7 +750,7 @@ PetscErrorCode EPSValuesViewFromOptions(EPS eps)
    Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 -  viewer - the viewer
 
    Options Database Key:
@@ -809,7 +809,7 @@ PetscErrorCode EPSVectorsView(EPS eps,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Level: developer
 

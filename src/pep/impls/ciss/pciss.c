@@ -848,7 +848,7 @@ static PetscErrorCode PEPCISSGetExtraction_CISS(PEP pep,PEPCISSExtraction *extra
    Input Parameter:
 .  pep - the polynomial eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  extraction - extraction technique
 
    Level: advanced
@@ -913,7 +913,7 @@ static PetscErrorCode PEPCISSGetKSPs_CISS(PEP pep,PetscInt *nsolve,KSP **ksp)
    Collective
 
    Input Parameter:
-.  pep - polynomial eigenvalue solver
+.  pep - the polynomial eigensolver context
 
    Output Parameters:
 +  nsolve - number of solver objects

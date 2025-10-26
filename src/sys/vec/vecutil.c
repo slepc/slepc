@@ -204,7 +204,7 @@ PetscErrorCode VecCheckOrthonormality(Vec V[],PetscInt nv,Vec W[],PetscInt nw,Ma
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  v - a vector to mimic
 
    Output Parameter:

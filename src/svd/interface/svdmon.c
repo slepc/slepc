@@ -33,7 +33,7 @@ PetscErrorCode SVDMonitor(SVD svd,PetscInt it,PetscInt nconv,PetscReal *sigma,Pe
    Logically Collective
 
    Input Parameters:
-+  svd            - singular value solver context
++  svd            - the singular value solver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `SVDMonitorFn`
 .  mctx           - [optional] context for private data for the monitor routine
@@ -96,8 +96,8 @@ PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Logically Collective
 
-   Input Parameters:
-.  svd - singular value solver context obtained from SVDCreate()
+   Input Parameter:
+.  svd - the singular value solver context
 
    Options Database Key:
 .    -svd_monitor_cancel - Cancels all monitors that have been hardwired
@@ -128,7 +128,7 @@ PetscErrorCode SVDMonitorCancel(SVD svd)
    Not Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Output Parameter:
 .  ctx - monitor context
@@ -152,7 +152,7 @@ PetscErrorCode SVDGetMonitorContext(SVD svd,void *ctx)
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  its    - iteration number
 .  nconv  - number of converged singular triplets so far
 .  sigma  - singular values
@@ -195,7 +195,7 @@ PetscErrorCode SVDMonitorFirst(SVD svd,PetscInt its,PetscInt nconv,PetscReal *si
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  its    - iteration number
 .  nconv  - number of converged singular triplets so far
 .  sigma  - singular values
@@ -238,7 +238,7 @@ PetscErrorCode SVDMonitorAll(SVD svd,PetscInt its,PetscInt nconv,PetscReal *sigm
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  its    - iteration number
 .  nconv  - number of converged singular triplets so far
 .  sigma  - singular values
@@ -310,7 +310,7 @@ PetscErrorCode SVDMonitorConvergedDestroy(PetscViewerAndFormat **vf)
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  its    - iteration number
 .  nconv  - number of converged singular triplets so far
 .  sigma  - singular values
@@ -388,7 +388,7 @@ PetscErrorCode SVDMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  its    - iteration number
 .  nconv  - number of converged singular triplets so far
 .  sigma  - singular values
@@ -469,7 +469,7 @@ PetscErrorCode SVDMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  its    - iteration number
 .  nconv  - number of converged singular triplets so far
 .  sigma  - singular values
@@ -548,7 +548,7 @@ PetscErrorCode SVDMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFor
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  its    - iteration number
 .  nconv  - (unused) number of converged singular triplets so far
 .  sigma  - (unused) singular values

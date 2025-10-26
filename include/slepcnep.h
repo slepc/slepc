@@ -23,8 +23,7 @@ SLEPC_EXTERN PetscErrorCode NEPInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode NEPFinalizePackage(void);
 
 /*S
-   NEP - Abstract SLEPc object that manages all solvers for
-   nonlinear eigenvalue problems.
+   NEP - SLEPc object that manages all solvers for nonlinear eigenvalue problems.
 
    Level: beginner
 
@@ -33,7 +32,7 @@ S*/
 typedef struct _p_NEP* NEP;
 
 /*J
-   NEPType - String with the name of a nonlinear eigensolver
+   NEPType - String with the name of a nonlinear eigensolver.
 
    Level: beginner
 
@@ -197,7 +196,7 @@ SLEPC_EXTERN PetscErrorCode NEPVectorsViewFromOptions(NEP);
    would be passed to NEPSetFunction()
 
    Calling Sequence:
-+  nep    - eigensolver context obtained from NEPCreate()
++  nep    - the nonlinear eigensolver context
 .  lambda - the scalar argument where T(.) must be evaluated
 .  T      - matrix that will contain T(lambda)
 .  P      - [optional] different matrix to build the preconditioner
@@ -214,7 +213,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPFunctionFn(NEP nep,PetscScalar la
    NEPJacobianFn - A prototype of a NEP Jacobian evaluation function that would be passed to NEPSetJacobian()
 
    Calling Sequence:
-+  nep    - eigensolver context obtained from NEPCreate()
++  nep    - the nonlinear eigensolver context
 .  lambda - the scalar argument where T'(.) must be evaluated
 .  J      - matrix that will contain T'(lambda)
 -  ctx    - [optional] user-defined context for private data for the
@@ -287,7 +286,7 @@ SLEPC_EXTERN PetscErrorCode NEPGetConvergedReason(NEP,NEPConvergedReason*);
    NEPMonitorFn - A function prototype for functions provided to `NEPMonitorSet()`.
 
    Calling Sequence:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs
 .  eigr   - real part of the eigenvalues
@@ -306,7 +305,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorFn(NEP nep,PetscInt its,Pe
    NEPMonitorRegisterFn - A function prototype for functions provided to `NEPMonitorRegister()`.
 
    Calling Sequence:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs
 .  eigr   - real part of the eigenvalues
@@ -390,7 +389,7 @@ SLEPC_EXTERN PetscErrorCode NEPAllocateSolution(NEP,PetscInt);
    would be passed to NEPSetConvergenceTestFunction()
 
    Calling Sequence:
-+  nep    - eigensolver context obtained from NEPCreate()
++  nep    - the nonlinear eigensolver context
 .  eigr   - real part of the eigenvalue
 .  eigi   - imaginary part of the eigenvalue
 .  res    - residual norm associated to the eigenpair
@@ -416,7 +415,7 @@ SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTest
    be passed to NEPSetStoppingTestFunction()
 
    Calling Sequence:
-+  nep    - eigensolver context obtained from NEPCreate()
++  nep    - the nonlinear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs
@@ -516,7 +515,7 @@ SLEPC_EXTERN PetscErrorCode NEPInterpolGetInterpolation(NEP,PetscReal*,PetscInt*
    to NEPNLEIGSSetSingularitiesFunction()
 
    Calling Sequence:
-+  nep   - eigensolver context obtained from NEPCreate()
++  nep   - the nonlinear eigensolver context
 .  maxnp - on input number of requested points in the discretization (can be set)
 .  xi    - computed values of the discretization
 -  ctx   - optional context, as set by NEPNLEIGSSetSingularitiesFunction()

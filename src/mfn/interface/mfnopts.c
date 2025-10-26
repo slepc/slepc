@@ -22,7 +22,7 @@
    Collective
 
    Input Parameters:
-+  mfn  - the matrix function context
++  mfn  - the matrix function solver context
 .  opt  - the command line option for this monitor
 .  name - the monitor type one is seeking
 -  ctx  - an optional user context for the monitor, or NULL
@@ -70,7 +70,7 @@ PetscErrorCode MFNMonitorSetFromOptions(MFN mfn,const char opt[],const char name
    Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Note:
    To see all options, run your program with the `-help` option.
@@ -135,7 +135,7 @@ PetscErrorCode MFNSetFromOptions(MFN mfn)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameters:
 +  tol - the convergence tolerance
@@ -164,7 +164,7 @@ PetscErrorCode MFNGetTolerances(MFN mfn,PetscReal *tol,PetscInt *maxits)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 .  tol - the convergence tolerance
 -  maxits - maximum number of iterations to use
 
@@ -213,7 +213,7 @@ PetscErrorCode MFNSetTolerances(MFN mfn,PetscReal tol,PetscInt maxits)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  ncv - the maximum dimension of the subspace to be used by the solver
@@ -237,10 +237,10 @@ PetscErrorCode MFNGetDimensions(MFN mfn,PetscInt *ncv)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  ncv - the maximum dimension of the subspace to be used by the solver
 
-   Options Database Keys:
+   Options Database Key:
 .  -mfn_ncv <ncv> - Sets the dimension of the subspace
 
    Notes:
@@ -273,10 +273,10 @@ PetscErrorCode MFNSetDimensions(MFN mfn,PetscInt ncv)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  flg - PETSC_TRUE indicates you want the error generated
 
-   Options Database Keys:
+   Options Database Key:
 .  -mfn_error_if_not_converged - this takes an optional truth value (0/1/no/yes/true/false)
 
    Level: intermediate
@@ -303,7 +303,7 @@ PetscErrorCode MFNSetErrorIfNotConverged(MFN mfn,PetscBool flg)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  flag - PETSC_TRUE if it will generate an error, else PETSC_FALSE
@@ -328,7 +328,7 @@ PetscErrorCode MFNGetErrorIfNotConverged(MFN mfn,PetscBool *flag)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  prefix - the prefix string to prepend to all MFN option requests
 
    Notes:
@@ -366,7 +366,7 @@ PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char *prefix)
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  prefix - the prefix string to prepend to all MFN option requests
 
    Notes:
@@ -396,7 +396,7 @@ PetscErrorCode MFNAppendOptionsPrefix(MFN mfn,const char *prefix)
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  prefix - pointer to the prefix string used is returned

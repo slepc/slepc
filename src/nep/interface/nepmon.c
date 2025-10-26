@@ -33,7 +33,7 @@ PetscErrorCode NEPMonitor(NEP nep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
    Logically Collective
 
    Input Parameters:
-+  nep            - nonlinear eigensolver context
++  nep            - the nonlinear eigensolver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `NEPMonitorFn`
 .  mctx           - [optional] context for private data for the monitor routine
@@ -95,8 +95,8 @@ PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDe
 
    Logically Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Options Database Key:
 .    -nep_monitor_cancel - Cancels all monitors that have been hardwired
@@ -127,7 +127,7 @@ PetscErrorCode NEPMonitorCancel(NEP nep)
    Not Collective
 
    Input Parameter:
-.  nep - eigensolver context obtained from NEPCreate()
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ctx - monitor context
@@ -151,7 +151,7 @@ PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -201,7 +201,7 @@ PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -253,7 +253,7 @@ PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar *ei
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -332,7 +332,7 @@ PetscErrorCode NEPMonitorConvergedDestroy(PetscViewerAndFormat **vf)
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -411,7 +411,7 @@ PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues
@@ -493,7 +493,7 @@ PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context
++  nep    - the nonlinear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs so far
 .  eigr   - real part of the eigenvalues

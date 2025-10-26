@@ -390,7 +390,7 @@ PetscErrorCode NEPSetDimensions(NEP nep,PetscInt nev,PetscInt ncv,PetscInt mpd)
     Logically Collective
 
     Input Parameters:
-+   nep   - eigensolver context obtained from NEPCreate()
++   nep   - the nonlinear eigensolver context
 -   which - the portion of the spectrum to be sought
 
     Options Database Keys:
@@ -475,7 +475,7 @@ PetscErrorCode NEPSetWhichEigenpairs(NEP nep,NEPWhich which)
     Not Collective
 
     Input Parameter:
-.   nep - eigensolver context obtained from NEPCreate()
+.   nep - the nonlinear eigensolver context
 
     Output Parameter:
 .   which - the portion of the spectrum to be sought
@@ -503,7 +503,7 @@ PetscErrorCode NEPGetWhichEigenpairs(NEP nep,NEPWhich *which)
    Logically Collective
 
    Input Parameters:
-+  nep  - eigensolver context obtained from NEPCreate()
++  nep  - the nonlinear eigensolver context
 .  comp - a pointer to the comparison function
 -  ctx  - a context pointer (the last parameter to the comparison function)
 
@@ -596,10 +596,10 @@ PetscErrorCode NEPGetProblemType(NEP nep,NEPProblemType *type)
    Logically Collective
 
    Input Parameters:
-+  nep      - the eigensolver context
++  nep      - the nonlinear eigensolver context
 -  twosided - whether the two-sided variant is to be used or not
 
-   Options Database Keys:
+   Options Database Key:
 .  -nep_two_sided <boolean> - Sets/resets the twosided flag
 
    Notes:
@@ -633,7 +633,7 @@ PetscErrorCode NEPSetTwoSided(NEP nep,PetscBool twosided)
    Not Collective
 
    Input Parameter:
-.  nep - the eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  twosided - the returned flag
@@ -658,7 +658,7 @@ PetscErrorCode NEPGetTwoSided(NEP nep,PetscBool *twosided)
    Logically Collective
 
    Input Parameters:
-+  nep     - nonlinear eigensolver context obtained from NEPCreate()
++  nep     - the nonlinear eigensolver context
 .  conv    - convergence test function, see NEPConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -696,7 +696,7 @@ PetscErrorCode NEPSetConvergenceTestFunction(NEP nep,NEPConvergenceTestFn *conv,
    Logically Collective
 
    Input Parameters:
-+  nep  - nonlinear eigensolver context obtained from NEPCreate()
++  nep  - the nonlinear eigensolver context
 -  conv - the type of convergence test
 
    Options Database Keys:
@@ -741,10 +741,10 @@ PetscErrorCode NEPSetConvergenceTest(NEP nep,NEPConv conv)
 
    Not Collective
 
-   Input Parameters:
-.  nep   - nonlinear eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep   - the nonlinear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  conv  - the type of convergence test
 
    Level: intermediate
@@ -767,7 +767,7 @@ PetscErrorCode NEPGetConvergenceTest(NEP nep,NEPConv *conv)
    Logically Collective
 
    Input Parameters:
-+  nep     - nonlinear eigensolver context obtained from NEPCreate()
++  nep     - the nonlinear eigensolver context
 .  stop    - the stopping test function, see NEPStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -805,7 +805,7 @@ PetscErrorCode NEPSetStoppingTestFunction(NEP nep,NEPStoppingTestFn *stop,void *
    Logically Collective
 
    Input Parameters:
-+  nep  - nonlinear eigensolver context obtained from NEPCreate()
++  nep  - the nonlinear eigensolver context
 -  stop - the type of stopping test
 
    Options Database Keys:
@@ -845,10 +845,10 @@ PetscErrorCode NEPSetStoppingTest(NEP nep,NEPStop stop)
 
    Not Collective
 
-   Input Parameters:
-.  nep   - nonlinear eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep   - the nonlinear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  stop  - the type of stopping test
 
    Level: advanced
@@ -871,7 +871,7 @@ PetscErrorCode NEPGetStoppingTest(NEP nep,NEPStop *stop)
    Logically Collective
 
    Input Parameters:
-+  nep      - the eigensolver context
++  nep      - the nonlinear eigensolver context
 -  trackall - whether compute all residuals or not
 
    Notes:
@@ -902,7 +902,7 @@ PetscErrorCode NEPSetTrackAll(NEP nep,PetscBool trackall)
    Not Collective
 
    Input Parameter:
-.  nep - the eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  trackall - the returned flag

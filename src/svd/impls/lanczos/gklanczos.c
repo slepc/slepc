@@ -357,7 +357,7 @@ static PetscErrorCode SVDLanczosSetOneSide_Lanczos(SVD svd,PetscBool oneside)
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver
++  svd     - the singular value solver context
 -  oneside - boolean flag indicating if the method is one-sided or not
 
    Options Database Key:
@@ -397,10 +397,10 @@ static PetscErrorCode SVDLanczosGetOneSide_Lanczos(SVD svd,PetscBool *oneside)
 
    Not Collective
 
-   Input Parameters:
-.  svd     - singular value solver
+   Input Parameter:
+.  svd - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  oneside - boolean flag indicating if the method is one-sided or not
 
    Level: advanced

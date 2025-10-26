@@ -45,7 +45,7 @@ PetscErrorCode PEPSetDefaultST_Transform(PEP pep)
    Collective
 
    Input Parameter:
-.  pep - polynomial eigensolver context
+.  pep - the polynomial eigensolver context
 
    Note:
    This function need not be called explicitly, since it will be called at
@@ -70,7 +70,7 @@ PetscErrorCode PEPSetDSType(PEP pep)
    Collective
 
    Input Parameter:
-.  pep   - solver context
+.  pep   - the polynomial eigensolver context
 
    Notes:
    This function need not be called explicitly in most cases, since PEPSolve()
@@ -261,7 +261,7 @@ PetscErrorCode PEPSetUp(PEP pep)
    Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 .  nmat - number of matrices in array A
 -  A    - the array of matrices associated with the eigenproblem
 
@@ -323,7 +323,7 @@ PetscErrorCode PEPSetOperators(PEP pep,PetscInt nmat,Mat A[])
    Collective
 
    Input Parameters:
-+  pep - the PEP context
++  pep - the polynomial eigensolver context
 -  k   - the index of the requested matrix (starting in 0)
 
    Output Parameter:
@@ -349,9 +349,9 @@ PetscErrorCode PEPGetOperators(PEP pep,PetscInt k,Mat *A)
    Not Collective
 
    Input Parameter:
-.  pep - the PEP context
+.  pep - the polynomial eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  nmat - the number of matrices passed in PEPSetOperators()
 
    Level: intermediate
@@ -448,7 +448,7 @@ PetscErrorCode PEPSetDimensions_Default(PEP pep,PetscInt nev,PetscInt *ncv,Petsc
    Collective
 
    Input Parameters:
-+  pep   - eigensolver context
++  pep   - the polynomial eigensolver context
 -  extra - number of additional positions, used for methods that require a
            working basis slightly larger than ncv
 

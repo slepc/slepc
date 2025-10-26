@@ -26,8 +26,7 @@ SLEPC_EXTERN PetscErrorCode EPSInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode EPSFinalizePackage(void);
 
 /*S
-   EPS - Abstract SLEPc object that manages all the eigenvalue
-   problem solvers.
+   EPS - SLEPc object that manages all the eigenvalue problem solvers.
 
    Level: beginner
 
@@ -36,7 +35,7 @@ S*/
 typedef struct _p_EPS* EPS;
 
 /*J
-   EPSType - String with the name of a SLEPc eigensolver
+   EPSType - String with the name of a linear eigensolver.
 
    Level: beginner
 
@@ -298,7 +297,7 @@ SLEPC_EXTERN PetscErrorCode EPSSetLeftInitialSpace(EPS,PetscInt,Vec[]);
    EPSMonitorFn - A function prototype for functions provided to `EPSMonitorSet()`.
 
    Calling Sequence:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs
 .  eigr   - real part of the eigenvalues
@@ -317,7 +316,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorFn(EPS eps,PetscInt its,Pe
    EPSMonitorRegisterFn - A function prototype for functions provided to `EPSMonitorRegister()`.
 
    Calling Sequence:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 .  its    - iteration number
 .  nconv  - number of converged eigenpairs
 .  eigr   - real part of the eigenvalues
@@ -402,7 +401,7 @@ SLEPC_EXTERN PetscErrorCode EPSReallocateSolution(EPS,PetscInt);
    would be passed to EPSSetConvergenceTestFunction()
 
    Calling Sequence:
-+  eps    - eigensolver context obtained from EPSCreate()
++  eps    - the linear eigensolver context
 .  eigr   - real part of the eigenvalue
 .  eigi   - imaginary part of the eigenvalue
 .  res    - residual norm associated to the eigenpair
@@ -428,7 +427,7 @@ SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTest
    be passed to EPSSetStoppingTestFunction()
 
    Calling Sequence:
-+  eps    - eigensolver context obtained from EPSCreate()
++  eps    - the linear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs

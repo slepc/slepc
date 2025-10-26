@@ -426,7 +426,7 @@ static PetscErrorCode SVDCrossSetExplicitMatrix_Cross(SVD svd,PetscBool explicit
    Logically Collective
 
    Input Parameters:
-+  svd         - singular value solver
++  svd         - the singular value solver context
 -  explicitmat - boolean flag indicating if A^T*A is built explicitly
 
    Options Database Key:
@@ -460,7 +460,7 @@ static PetscErrorCode SVDCrossGetExplicitMatrix_Cross(SVD svd,PetscBool *explici
    Not Collective
 
    Input Parameter:
-.  svd  - singular value solver
+.  svd  - the singular value solver context
 
    Output Parameter:
 .  explicitmat - the mode flag
@@ -498,8 +498,8 @@ static PetscErrorCode SVDCrossSetEPS_Cross(SVD svd,EPS eps)
    Collective
 
    Input Parameters:
-+  svd - singular value solver
--  eps - the eigensolver object
++  svd - the singular value solver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
@@ -540,10 +540,10 @@ static PetscErrorCode SVDCrossGetEPS_Cross(SVD svd,EPS *eps)
    Collective
 
    Input Parameter:
-.  svd - singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 

@@ -419,7 +419,7 @@ PetscErrorCode PEPSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
    Logically Collective
 
    Input Parameters:
-+  pep   - eigensolver context obtained from PEPCreate()
++  pep   - the polynomial eigensolver context
 -  which - the portion of the spectrum to be sought
 
    Options Database Keys:
@@ -510,7 +510,7 @@ PetscErrorCode PEPSetWhichEigenpairs(PEP pep,PEPWhich which)
     Not Collective
 
     Input Parameter:
-.   pep - eigensolver context obtained from PEPCreate()
+.   pep - the polynomial eigensolver context
 
     Output Parameter:
 .   which - the portion of the spectrum to be sought
@@ -538,7 +538,7 @@ PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
    Logically Collective
 
    Input Parameters:
-+  pep  - eigensolver context obtained from PEPCreate()
++  pep  - the polynomial eigensolver context
 .  comp - a pointer to the comparison function
 -  ctx  - a context pointer (the last parameter to the comparison function)
 
@@ -695,7 +695,7 @@ PetscErrorCode PEPGetBasis(PEP pep,PEPBasis *basis)
    Logically Collective
 
    Input Parameters:
-+  pep      - the eigensolver context
++  pep      - the polynomial eigensolver context
 -  trackall - whether compute all residuals or not
 
    Notes:
@@ -726,7 +726,7 @@ PetscErrorCode PEPSetTrackAll(PEP pep,PetscBool trackall)
    Not Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  trackall - the returned flag
@@ -751,7 +751,7 @@ PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
    Logically Collective
 
    Input Parameters:
-+  pep     - eigensolver context obtained from PEPCreate()
++  pep     - the polynomial eigensolver context
 .  conv    - convergence test function, see PEPConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -789,7 +789,7 @@ PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,
    Logically Collective
 
    Input Parameters:
-+  pep  - eigensolver context obtained from PEPCreate()
++  pep  - the polynomial eigensolver context
 -  conv - the type of convergence test
 
    Options Database Keys:
@@ -835,10 +835,10 @@ PetscErrorCode PEPSetConvergenceTest(PEP pep,PEPConv conv)
 
    Not Collective
 
-   Input Parameters:
-.  pep   - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep   - the polynomial eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  conv  - the type of convergence test
 
    Level: intermediate
@@ -861,7 +861,7 @@ PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
    Logically Collective
 
    Input Parameters:
-+  pep     - eigensolver context obtained from PEPCreate()
++  pep     - the polynomial eigensolver context
 .  stop    - stopping test function, see PEPStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -899,7 +899,7 @@ PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void *
    Logically Collective
 
    Input Parameters:
-+  pep  - eigensolver context obtained from PEPCreate()
++  pep  - the polynomial eigensolver context
 -  stop - the type of stopping test
 
    Options Database Keys:
@@ -939,10 +939,10 @@ PetscErrorCode PEPSetStoppingTest(PEP pep,PEPStop stop)
 
    Not Collective
 
-   Input Parameters:
-.  pep   - eigensolver context obtained from PEPCreate()
+   Input Parameter:
+.  pep   - the polynomial eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  stop  - the type of stopping test
 
    Level: advanced
@@ -964,7 +964,7 @@ PetscErrorCode PEPGetStoppingTest(PEP pep,PEPStop *stop)
    Collective
 
    Input Parameters:
-+  pep    - the eigensolver context
++  pep    - the polynomial eigensolver context
 .  scale  - scaling strategy
 .  alpha  - the scaling factor used in the scalar strategy
 .  Dl     - the left diagonal matrix of the diagonal scaling algorithm
@@ -1059,7 +1059,7 @@ PetscErrorCode PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,
    Not Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameters:
 +  scale  - scaling strategy
@@ -1098,10 +1098,10 @@ PetscErrorCode PEPGetScale(PEP pep,PEPScale *scale,PetscReal *alpha,Vec *Dl,Vec 
    Logically Collective
 
    Input Parameters:
-+  pep     - the eigensolver context
++  pep     - the polynomial eigensolver context
 -  extract - extraction strategy
 
-   Options Database Keys:
+   Options Database Key:
 .  -pep_extract <type> - extraction type, one of <none,norm,residual,structured>
 
    Level: intermediate
@@ -1123,7 +1123,7 @@ PetscErrorCode PEPSetExtract(PEP pep,PEPExtract extract)
    Not Collective
 
    Input Parameter:
-.  pep - the eigensolver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  extract - extraction strategy

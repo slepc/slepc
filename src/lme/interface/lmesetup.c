@@ -37,7 +37,7 @@ static inline PetscErrorCode LMESetUp_Lyapunov(LME lme)
    Collective
 
    Input Parameter:
-.  lme   - linear matrix equation solver context
+.  lme   - the linear matrix equation solver context
 
    Notes:
    This function need not be called explicitly in most cases, since `LMESolve()`
@@ -125,7 +125,7 @@ static inline PetscErrorCode LMESetCoefficients_Private(LME lme,Mat A,Mat *lmeA)
    Collective
 
    Input Parameters:
-+  lme - the linear matrix equation context
++  lme - the linear matrix equation solver context
 .  A   - first coefficient matrix
 .  B   - second coefficient matrix
 .  D   - third coefficient matrix
@@ -185,7 +185,7 @@ PetscErrorCode LMESetCoefficients(LME lme,Mat A,Mat B,Mat D,Mat E)
    Collective
 
    Input Parameter:
-.  lme - the linear matrix equation context
+.  lme - the linear matrix equation solver context
 
    Output Parameters:
 +  A   - first coefficient matrix
@@ -215,7 +215,7 @@ PetscErrorCode LMEGetCoefficients(LME lme,Mat *A,Mat *B,Mat *D,Mat *E)
    Collective
 
    Input Parameters:
-+  lme - the linear matrix equation context
++  lme - the linear matrix equation solver context
 -  C   - the right-hand side matrix
 
    Notes:
@@ -257,9 +257,9 @@ PetscErrorCode LMESetRHS(LME lme,Mat C)
    Collective
 
    Input Parameter:
-.  lme - the linear matrix equation context
+.  lme - the linear matrix equation solver context
 
-   Output Parameters:
+   Output Parameter:
 .  C   - the right-hand side matrix
 
    Level: intermediate
@@ -282,7 +282,7 @@ PetscErrorCode LMEGetRHS(LME lme,Mat *C)
    Collective
 
    Input Parameters:
-+  lme - the linear matrix equation context
++  lme - the linear matrix equation solver context
 -  X   - the solution matrix
 
    Notes:
@@ -328,7 +328,7 @@ PetscErrorCode LMESetSolution(LME lme,Mat X)
    Collective
 
    Input Parameter:
-.  lme - the `LME` context
+.  lme - the linear matrix equation solver context
 
    Output Parameter:
 .  X   - the low-rank matrix
@@ -359,7 +359,7 @@ PetscErrorCode LMEGetSolution(LME lme,Mat *X)
    Collective
 
    Input Parameters:
-+  lme   - linear matrix equation solver context
++  lme   - the linear matrix equation solver context
 -  extra - number of additional positions, used for methods that require a
            working basis slightly larger than `ncv`
 

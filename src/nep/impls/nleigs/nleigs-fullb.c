@@ -422,8 +422,8 @@ PetscErrorCode NEPNLEIGSSetEPS_NLEIGS(NEP nep,EPS eps)
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  eps - the eigensolver object
++  nep - the nonlinear eigensolver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
@@ -479,10 +479,10 @@ PetscErrorCode NEPNLEIGSGetEPS_NLEIGS(NEP nep,EPS *eps)
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 

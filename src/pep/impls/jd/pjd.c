@@ -1486,7 +1486,7 @@ static PetscErrorCode PEPJDSetRestart_JD(PEP pep,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
@@ -1523,7 +1523,7 @@ static PetscErrorCode PEPJDGetRestart_JD(PEP pep,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
@@ -1561,7 +1561,7 @@ static PetscErrorCode PEPJDSetFix_JD(PEP pep,PetscReal fix)
    Logically Collective
 
    Input Parameters:
-+  pep - the eigenproblem solver context
++  pep - the polynomial eigensolver context
 -  fix - threshold for changing the target
 
    Options Database Key:
@@ -1601,7 +1601,7 @@ static PetscErrorCode PEPJDGetFix_JD(PEP pep,PetscReal *fix)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  fix - threshold for changing the target
@@ -1640,7 +1640,7 @@ static PetscErrorCode PEPJDSetReusePreconditioner_JD(PEP pep,PetscBool reusepc)
    Logically Collective
 
    Input Parameters:
-+  pep     - the eigenproblem solver context
++  pep     - the polynomial eigensolver context
 -  reusepc - the reuse flag
 
    Options Database Key:
@@ -1679,7 +1679,7 @@ static PetscErrorCode PEPJDGetReusePreconditioner_JD(PEP pep,PetscBool *reusepc)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  reusepc - the reuse flag
@@ -1719,7 +1719,7 @@ static PetscErrorCode PEPJDSetMinimalityIndex_JD(PEP pep,PetscInt mmidx)
    Logically Collective
 
    Input Parameters:
-+  pep   - the eigenproblem solver context
++  pep   - the polynomial eigensolver context
 -  mmidx - maximum minimality index
 
    Options Database Key:
@@ -1758,7 +1758,7 @@ static PetscErrorCode PEPJDGetMinimalityIndex_JD(PEP pep,PetscInt *mmidx)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  mmidx - minimality index
@@ -1801,7 +1801,7 @@ static PetscErrorCode PEPJDSetProjection_JD(PEP pep,PEPJDProjection proj)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  proj - the type of projection
 
    Options Database Key:
@@ -1835,7 +1835,7 @@ static PetscErrorCode PEPJDGetProjection_JD(PEP pep,PEPJDProjection *proj)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  proj - the type of projection

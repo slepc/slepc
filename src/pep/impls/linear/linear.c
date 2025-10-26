@@ -740,7 +740,7 @@ static PetscErrorCode PEPLinearSetLinearization_Linear(PEP pep,PetscReal alpha,P
    Logically Collective
 
    Input Parameters:
-+  pep   - polynomial eigenvalue solver
++  pep   - the polynomial eigensolver context
 .  alpha - first parameter of the linearization
 -  beta  - second parameter of the linearization
 
@@ -782,7 +782,7 @@ static PetscErrorCode PEPLinearGetLinearization_Linear(PEP pep,PetscReal *alpha,
    Not Collective
 
    Input Parameter:
-.  pep  - polynomial eigenvalue solver
+.  pep  - the polynomial eigensolver context
 
    Output Parameters:
 +  alpha - the first parameter of the linearization
@@ -819,7 +819,7 @@ static PetscErrorCode PEPLinearSetExplicitMatrix_Linear(PEP pep,PetscBool explic
    Logically Collective
 
    Input Parameters:
-+  pep         - polynomial eigenvalue solver
++  pep         - the polynomial eigensolver context
 -  explicitmat - boolean flag indicating if the matrices are built explicitly
 
    Options Database Key:
@@ -854,7 +854,7 @@ static PetscErrorCode PEPLinearGetExplicitMatrix_Linear(PEP pep,PetscBool *expli
    Not Collective
 
    Input Parameter:
-.  pep  - polynomial eigenvalue solver
+.  pep  - the polynomial eigensolver context
 
    Output Parameter:
 .  explicitmat - the mode flag
@@ -892,8 +892,8 @@ static PetscErrorCode PEPLinearSetEPS_Linear(PEP pep,EPS eps)
    Collective
 
    Input Parameters:
-+  pep - polynomial eigenvalue solver
--  eps - the eigensolver object
++  pep - the polynomial eigensolver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
@@ -933,10 +933,10 @@ static PetscErrorCode PEPLinearGetEPS_Linear(PEP pep,EPS *eps)
    Collective
 
    Input Parameter:
-.  pep - polynomial eigenvalue solver
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 

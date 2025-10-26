@@ -22,7 +22,7 @@
    Collective
 
    Input Parameters:
-+  eps      - the eigensolver context
++  eps      - the linear eigensolver context
 .  opt      - the command line option for this monitor
 .  name     - the monitor type one is seeking
 .  ctx      - an optional user context for the monitor, or NULL
@@ -72,7 +72,7 @@ PetscErrorCode EPSMonitorSetFromOptions(EPS eps,const char opt[],const char name
    Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Note:
    To see all options, run your program with the `-help` option.
@@ -261,7 +261,7 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  tol - the convergence tolerance
@@ -290,7 +290,7 @@ PetscErrorCode EPSGetTolerances(EPS eps,PetscReal *tol,PetscInt *maxits)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 .  tol - the convergence tolerance
 -  maxits - maximum number of iterations to use
 
@@ -340,7 +340,7 @@ PetscErrorCode EPSSetTolerances(EPS eps,PetscReal tol,PetscInt maxits)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  nev - number of eigenvalues to compute
@@ -368,7 +368,7 @@ PetscErrorCode EPSGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mp
    Logically Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 .  nev - number of eigenvalues to compute
 .  ncv - the maximum dimension of the subspace to be used by the solver
 -  mpd - the maximum dimension allowed for the projected problem
@@ -434,7 +434,7 @@ PetscErrorCode EPSSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
    Logically Collective
 
    Input Parameters:
-+  eps   - eigensolver context obtained from EPSCreate()
++  eps   - the linear eigensolver context
 -  which - the portion of the spectrum to be sought
 
    Options Database Keys:
@@ -526,7 +526,7 @@ PetscErrorCode EPSSetWhichEigenpairs(EPS eps,EPSWhich which)
    Not Collective
 
    Input Parameter:
-.  eps - eigensolver context obtained from EPSCreate()
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  which - the portion of the spectrum to be sought
@@ -553,7 +553,7 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenvalue solver context
++  eps   - the linear eigensolver context
 .  thres - the threshold value
 -  rel   - whether the threshold is relative or not
 
@@ -633,7 +633,7 @@ PetscErrorCode EPSSetThreshold(EPS eps,PetscReal thres,PetscBool rel)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenvalue solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  thres - the threshold
@@ -659,7 +659,7 @@ PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context obtained from EPSCreate()
++  eps  - the linear eigensolver context
 .  func - the comparison function, see EPSEigenvalueComparisonFn for the calling sequence
 -  ctx  - a context pointer (the last parameter to the comparison function)
 
@@ -691,7 +691,7 @@ PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *f
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context obtained from EPSCreate()
++  eps  - the linear eigensolver context
 .  func - the arbitrary selection function, see SlepcArbitrarySelectionFn for a calling sequence
 -  ctx  - a context pointer (the last parameter to the arbitrary selection function)
 
@@ -736,7 +736,7 @@ PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,
    Logically Collective
 
    Input Parameters:
-+  eps     - eigensolver context obtained from EPSCreate()
++  eps     - the linear eigensolver context
 .  func    - convergence test function, see EPSConvergenceTestFn for the calling sequence
 .  ctx     - context for private data for the convergence routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -774,7 +774,7 @@ PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context obtained from EPSCreate()
++  eps  - the linear eigensolver context
 -  conv - the type of convergence test
 
    Options Database Keys:
@@ -820,10 +820,10 @@ PetscErrorCode EPSSetConvergenceTest(EPS eps,EPSConv conv)
 
    Not Collective
 
-   Input Parameters:
-.  eps   - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps   - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  conv  - the type of convergence test
 
    Level: intermediate
@@ -846,7 +846,7 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
    Logically Collective
 
    Input Parameters:
-+  eps     - eigensolver context obtained from EPSCreate()
++  eps     - the linear eigensolver context
 .  func    - stopping test function, see EPSStoppingTestFn for the calling sequence
 .  ctx     - context for private data for the stopping routine (may be NULL)
 -  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
@@ -885,7 +885,7 @@ PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context obtained from EPSCreate()
++  eps  - the linear eigensolver context
 -  stop - the type of stopping test
 
    Options Database Keys:
@@ -928,10 +928,10 @@ PetscErrorCode EPSSetStoppingTest(EPS eps,EPSStop stop)
 
    Not Collective
 
-   Input Parameters:
-.  eps   - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps   - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  stop  - the type of stopping test
 
    Level: advanced
@@ -953,7 +953,7 @@ PetscErrorCode EPSGetStoppingTest(EPS eps,EPSStop *stop)
    Logically Collective
 
    Input Parameters:
-+  eps      - the eigensolver context
++  eps      - the linear eigensolver context
 -  type     - a known type of eigenvalue problem
 
    Options Database Keys:
@@ -1056,7 +1056,7 @@ PetscErrorCode EPSSetProblemType(EPS eps,EPSProblemType type)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  type - the problem type
@@ -1081,7 +1081,7 @@ PetscErrorCode EPSGetProblemType(EPS eps,EPSProblemType *type)
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigensolver context
++  eps  - the linear eigensolver context
 -  extr - a known type of extraction
 
    Options Database Keys:
@@ -1125,7 +1125,7 @@ PetscErrorCode EPSSetExtraction(EPS eps,EPSExtraction extr)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  extr - name of extraction type
@@ -1150,7 +1150,7 @@ PetscErrorCode EPSGetExtraction(EPS eps,EPSExtraction *extr)
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 .  bal    - the balancing method, one of EPS_BALANCE_NONE, EPS_BALANCE_ONESIDE,
             EPS_BALANCE_TWOSIDE, or EPS_BALANCE_USER
 .  its    - number of iterations of the balancing algorithm
@@ -1225,7 +1225,7 @@ PetscErrorCode EPSSetBalance(EPS eps,EPSBalance bal,PetscInt its,PetscReal cutof
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  bal    - the balancing method
@@ -1256,10 +1256,10 @@ PetscErrorCode EPSGetBalance(EPS eps,EPSBalance *bal,PetscInt *its,PetscReal *cu
    Logically Collective
 
    Input Parameters:
-+  eps      - the eigensolver context
++  eps      - the linear eigensolver context
 -  twosided - whether the two-sided variant is to be used or not
 
-   Options Database Keys:
+   Options Database Key:
 .  -eps_two_sided <boolean> - Sets/resets the twosided flag
 
    Notes:
@@ -1293,7 +1293,7 @@ PetscErrorCode EPSSetTwoSided(EPS eps,PetscBool twosided)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  twosided - the returned flag
@@ -1318,10 +1318,10 @@ PetscErrorCode EPSGetTwoSided(EPS eps,PetscBool *twosided)
    Logically Collective
 
    Input Parameters:
-+  eps     - the eigensolver context
++  eps     - the linear eigensolver context
 -  trueres - whether true residuals are required or not
 
-   Options Database Keys:
+   Options Database Key:
 .  -eps_true_residual <boolean> - Sets/resets the boolean flag 'trueres'
 
    Notes:
@@ -1354,7 +1354,7 @@ PetscErrorCode EPSSetTrueResidual(EPS eps,PetscBool trueres)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  trueres - the returned flag
@@ -1379,7 +1379,7 @@ PetscErrorCode EPSGetTrueResidual(EPS eps,PetscBool *trueres)
    Logically Collective
 
    Input Parameters:
-+  eps      - the eigensolver context
++  eps      - the linear eigensolver context
 -  trackall - whether to compute all residuals or not
 
    Notes:
@@ -1410,7 +1410,7 @@ PetscErrorCode EPSSetTrackAll(EPS eps,PetscBool trackall)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  trackall - the returned flag
@@ -1434,10 +1434,10 @@ PetscErrorCode EPSGetTrackAll(EPS eps,PetscBool *trackall)
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 -  purify - whether purification is required or not
 
-   Options Database Keys:
+   Options Database Key:
 .  -eps_purify <boolean> - Sets/resets the boolean flag 'purify'
 
    Notes:
@@ -1469,7 +1469,7 @@ PetscErrorCode EPSSetPurify(EPS eps,PetscBool purify)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  purify - the returned flag
@@ -1494,7 +1494,7 @@ PetscErrorCode EPSGetPurify(EPS eps,PetscBool *purify)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 -  prefix - the prefix string to prepend to all EPS option requests
 
    Notes:
@@ -1536,7 +1536,7 @@ PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char *prefix)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 -  prefix - the prefix string to prepend to all EPS option requests
 
    Notes:
@@ -1570,7 +1570,7 @@ PetscErrorCode EPSAppendOptionsPrefix(EPS eps,const char *prefix)
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  prefix - pointer to the prefix string used is returned

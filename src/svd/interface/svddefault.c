@@ -60,7 +60,7 @@ PetscErrorCode SVDConvergedMaxIt(SVD svd,PetscReal sigma,PetscReal res,PetscReal
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context obtained from SVDCreate()
++  svd    - the singular value solver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged singular triplets
@@ -109,7 +109,7 @@ PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nc
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context obtained from SVDCreate()
++  svd    - the singular value solver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged singular triplets (ignored here)
@@ -174,7 +174,7 @@ PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscIn
    Collective
 
    Input Parameters:
-+  svd    - singular value solver context
++  svd    - the singular value solver context
 .  nleft  - number of work vectors of dimension equal to left singular vector
 -  nright - number of work vectors of dimension equal to right singular vector
 

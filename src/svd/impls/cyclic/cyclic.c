@@ -897,7 +897,7 @@ static PetscErrorCode SVDCyclicSetExplicitMatrix_Cyclic(SVD svd,PetscBool explic
    Logically Collective
 
    Input Parameters:
-+  svd         - singular value solver
++  svd         - the singular value solver context
 -  explicitmat - boolean flag indicating if H(A) is built explicitly
 
    Options Database Key:
@@ -931,7 +931,7 @@ static PetscErrorCode SVDCyclicGetExplicitMatrix_Cyclic(SVD svd,PetscBool *expli
    Not Collective
 
    Input Parameter:
-.  svd  - singular value solver
+.  svd  - the singular value solver context
 
    Output Parameter:
 .  explicitmat - the mode flag
@@ -969,8 +969,8 @@ static PetscErrorCode SVDCyclicSetEPS_Cyclic(SVD svd,EPS eps)
    Collective
 
    Input Parameters:
-+  svd - singular value solver
--  eps - the eigensolver object
++  svd - the singular value solver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
@@ -1011,10 +1011,10 @@ static PetscErrorCode SVDCyclicGetEPS_Cyclic(SVD svd,EPS *eps)
    Collective
 
    Input Parameter:
-.  svd - singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 

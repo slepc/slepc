@@ -625,7 +625,7 @@ static PetscErrorCode PEPTOARSetRestart_TOAR(PEP pep,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
@@ -662,7 +662,7 @@ static PetscErrorCode PEPTOARGetRestart_TOAR(PEP pep,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
@@ -696,7 +696,7 @@ static PetscErrorCode PEPTOARSetLocking_TOAR(PEP pep,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
@@ -736,7 +736,7 @@ static PetscErrorCode PEPTOARGetLocking_TOAR(PEP pep,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  lock - the locking flag

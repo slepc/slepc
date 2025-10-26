@@ -205,7 +205,7 @@ PetscErrorCode STApplyHermitianTranspose(ST st,Vec x,Vec y)
 
    Logically Collective
 
-   Input Parameters:
+   Input Parameter:
 .  st - the spectral transformation context
 
    Output Parameter:
@@ -660,7 +660,7 @@ PetscErrorCode STCoeffs_Monomial(ST st, PetscScalar *coeffs)
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  st  - the spectral transformation context
 
    Level: developer

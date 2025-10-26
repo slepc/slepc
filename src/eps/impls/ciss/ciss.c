@@ -717,7 +717,7 @@ static PetscErrorCode EPSCISSSetSizes_CISS(EPS eps,PetscInt ip,PetscInt bs,Petsc
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenproblem solver context
++  eps   - the linear eigensolver context
 .  ip    - number of integration points
 .  bs    - block size
 .  ms    - moment size
@@ -779,7 +779,7 @@ static PetscErrorCode EPSCISSGetSizes_CISS(EPS eps,PetscInt *ip,PetscInt *bs,Pet
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  ip    - number of integration points
@@ -828,7 +828,7 @@ static PetscErrorCode EPSCISSSetThreshold_CISS(EPS eps,PetscReal delta,PetscReal
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenproblem solver context
++  eps   - the linear eigensolver context
 .  delta - threshold for numerical rank
 -  spur  - spurious threshold (to discard spurious eigenpairs)
 
@@ -871,7 +871,7 @@ static PetscErrorCode EPSCISSGetThreshold_CISS(EPS eps,PetscReal *delta,PetscRea
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  delta - threshold for numerical rank
@@ -916,7 +916,7 @@ static PetscErrorCode EPSCISSSetRefinement_CISS(EPS eps,PetscInt inner,PetscInt 
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigenproblem solver context
++  eps    - the linear eigensolver context
 .  inner  - number of iterative refinement iterations (inner loop)
 -  blsize - number of iterative refinement iterations (blocksize loop)
 
@@ -959,7 +959,7 @@ static PetscErrorCode EPSCISSGetRefinement_CISS(EPS eps,PetscInt *inner,PetscInt
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  inner  - number of iterative refinement iterations (inner loop)
@@ -995,10 +995,10 @@ static PetscErrorCode EPSCISSSetUseST_CISS(EPS eps,PetscBool usest)
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigenproblem solver context
++  eps    - the linear eigensolver context
 -  usest  - boolean flag to use the ST object or not
 
-   Options Database Keys:
+   Options Database Key:
 .  -eps_ciss_usest <bool> - whether the ST object will be used or not
 
    Level: advanced
@@ -1030,9 +1030,9 @@ static PetscErrorCode EPSCISSGetUseST_CISS(EPS eps,PetscBool *usest)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  usest - boolean flag indicating if the ST object is being used
 
    Level: advanced
@@ -1066,7 +1066,7 @@ static PetscErrorCode EPSCISSSetQuadRule_CISS(EPS eps,EPSCISSQuadRule quad)
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigenproblem solver context
++  eps  - the linear eigensolver context
 -  quad - the quadrature rule
 
    Options Database Key:
@@ -1107,9 +1107,9 @@ static PetscErrorCode EPSCISSGetQuadRule_CISS(EPS eps,EPSCISSQuadRule *quad)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  quad - quadrature rule
 
    Level: advanced
@@ -1143,7 +1143,7 @@ static PetscErrorCode EPSCISSSetExtraction_CISS(EPS eps,EPSCISSExtraction extrac
    Logically Collective
 
    Input Parameters:
-+  eps        - the eigenproblem solver context
++  eps        - the linear eigensolver context
 -  extraction - the extraction technique
 
    Options Database Key:
@@ -1184,9 +1184,9 @@ static PetscErrorCode EPSCISSGetExtraction_CISS(EPS eps,EPSCISSExtraction *extra
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  extraction - extraction technique
 
    Level: advanced
@@ -1251,7 +1251,7 @@ static PetscErrorCode EPSCISSGetKSPs_CISS(EPS eps,PetscInt *nsolve,KSP **ksp)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver solver
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  nsolve - number of solver objects

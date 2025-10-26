@@ -88,7 +88,7 @@ PetscErrorCode SVDComputeVectors(SVD svd)
    Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Options Database Keys:
 +  -svd_view - print information about the solver used
@@ -286,7 +286,7 @@ PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
    Collective
 
    Input Parameters:
-+  svd - singular value solver context
++  svd - the singular value solver context
 -  i   - index of the solution
 
    Output Parameters:

@@ -21,7 +21,7 @@
    Collective
 
    Input Parameters:
-+  nep - the nonlinear eigenproblem solver context
++  nep - the nonlinear eigensolver context
 -  viewer - optional visualization context
 
    Options Database Key:

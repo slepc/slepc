@@ -20,7 +20,7 @@
    Collective
 
    Input Parameter:
-.  lme - linear matrix equation solver context obtained from `LMECreate()`
+.  lme - the linear matrix equation solver context
 
    Options Database Keys:
 +  -lme_view - print information about the solver once the solve is complete
@@ -152,7 +152,7 @@ PetscErrorCode LMEGetConvergedReason(LME lme,LMEConvergedReason *reason)
    Not Collective
 
    Input Parameter:
-.  lme - linear matrix equation solver context
+.  lme - the linear matrix equation solver context
 
    Output Parameter:
 .  errest - the error estimate

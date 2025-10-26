@@ -30,7 +30,7 @@ SLEPC_EXTERN PetscErrorCode SVDCreate_PRIMME(SVD);
 #endif
 
 /*@C
-   SVDRegisterAll - Registers all the singular value solvers in the SVD package.
+   SVDRegisterAll - Registers all the singular value solvers in the `SVD` package.
 
    Not Collective
 

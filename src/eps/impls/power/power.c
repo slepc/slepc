@@ -781,7 +781,7 @@ static PetscErrorCode EPSPowerSetShiftType_Power(EPS eps,EPSPowerShiftType shift
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  shift - the type of shift
 
    Options Database Key:
@@ -826,7 +826,7 @@ static PetscErrorCode EPSPowerGetShiftType_Power(EPS eps,EPSPowerShiftType *shif
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  shift - the type of shift
@@ -864,7 +864,7 @@ static PetscErrorCode EPSPowerSetNonlinear_Power(EPS eps,PetscBool nonlinear)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  nonlinear - whether the problem is nonlinear or not
 
    Options Database Key:
@@ -912,7 +912,7 @@ static PetscErrorCode EPSPowerGetNonlinear_Power(EPS eps,PetscBool *nonlinear)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  nonlinear - the nonlinear flag
@@ -948,7 +948,7 @@ static PetscErrorCode EPSPowerSetUpdate_Power(EPS eps,PetscBool update)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  update - whether the residual is updated monolithically or not
 
    Options Database Key:
@@ -983,7 +983,7 @@ static PetscErrorCode EPSPowerGetUpdate_Power(EPS eps,PetscBool *update)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  update - the update flag
@@ -1019,7 +1019,7 @@ static PetscErrorCode EPSPowerSetSignNormalization_Power(EPS eps,PetscBool sign_
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  sign_normalization - whether Bx should be multiplied by the sign of the first non-zero
                         element when performing normalization steps
 
@@ -1057,7 +1057,7 @@ static PetscErrorCode EPSPowerGetSignNormalization_Power(EPS eps,PetscBool *sign
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  sign_normalization - the sign normalization flag
@@ -1094,7 +1094,7 @@ static PetscErrorCode EPSPowerSetSNES_Power(EPS eps,SNES snes)
    Collective
 
    Input Parameters:
-+  eps  - the eigenvalue solver
++  eps  - the linear eigensolver context
 -  snes - the nonlinear solver object
 
    Level: advanced
@@ -1134,7 +1134,7 @@ static PetscErrorCode EPSPowerGetSNES_Power(EPS eps,SNES *snes)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenvalue solver
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  snes - the nonlinear solver object

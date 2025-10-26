@@ -79,7 +79,7 @@ SLEPC_EXTERN PetscErrorCode MFNGetErrorIfNotConverged(MFN,PetscBool*);
    MFNMonitorFn - A function prototype for functions provided to `MFNMonitorSet()`.
 
    Calling Sequence:
-+  mfn    - matrix function context
++  mfn    - the matrix function solver context
 .  its    - iteration number
 .  errest - error estimate
 -  ctx    - optional monitoring context, as provided with `MFNMonitorSet()`
@@ -94,7 +94,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorFn(MFN mfn,PetscInt its,Pe
    MFNMonitorRegisterFn - A function prototype for functions provided to `MFNMonitorRegister()`.
 
    Calling Sequence:
-+  mfn    - matrix function context
++  mfn    - the matrix function solver context
 .  its    - iteration number
 .  errest - error estimate
 -  ctx    - `PetscViewerAndFormat` object

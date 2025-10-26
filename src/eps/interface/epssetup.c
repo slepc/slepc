@@ -244,7 +244,7 @@ PetscErrorCode EPSSetUpSort_Default(EPS eps)
    Collective
 
    Input Parameter:
-.  eps - eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Note:
    This function need not be called explicitly, since it will be called at
@@ -270,7 +270,7 @@ PetscErrorCode EPSSetDSType(EPS eps)
    Collective
 
    Input Parameter:
-.  eps   - eigenproblem solver context
+.  eps   - the linear eigensolver context
 
    Notes:
    This function need not be called explicitly in most cases, since EPSSolve()
@@ -443,7 +443,7 @@ PetscErrorCode EPSSetUp(EPS eps)
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  A  - the matrix associated with the eigensystem
 -  B  - the second matrix in the case of generalized eigenproblems
 
@@ -506,7 +506,7 @@ PetscErrorCode EPSSetOperators(EPS eps,Mat A,Mat B)
    Collective
 
    Input Parameter:
-.  eps - the EPS context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  A  - the matrix associated with the eigensystem
@@ -546,7 +546,7 @@ PetscErrorCode EPSGetOperators(EPS eps,Mat *A,Mat *B)
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  n   - number of vectors
 -  v   - set of basis vectors of the deflation space
 
@@ -588,7 +588,7 @@ PetscErrorCode EPSSetDeflationSpace(EPS eps,PetscInt n,Vec v[])
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  n   - number of vectors
 -  is  - set of basis vectors of the initial space
 
@@ -631,7 +631,7 @@ PetscErrorCode EPSSetInitialSpace(EPS eps,PetscInt n,Vec is[])
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  n   - number of vectors
 -  isl - set of basis vectors of the left initial space
 
@@ -700,7 +700,7 @@ PetscErrorCode EPSSetDimensions_Default(EPS eps,PetscInt *nev,PetscInt *ncv,Pets
    Collective
 
    Input Parameters:
-+  eps   - eigensolver context
++  eps   - the linear eigensolver context
 -  extra - number of additional positions, used for methods that require a
            working basis slightly larger than ncv
 
@@ -761,7 +761,7 @@ PetscErrorCode EPSAllocateSolution(EPS eps,PetscInt extra)
    Collective
 
    Input Parameters:
-+  eps     - eigensolver context
++  eps     - the linear eigensolver context
 -  newsize - new size
 
    Developer Notes:

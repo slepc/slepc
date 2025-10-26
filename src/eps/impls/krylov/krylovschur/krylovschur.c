@@ -372,7 +372,7 @@ static PetscErrorCode EPSKrylovSchurSetRestart_KrylovSchur(EPS eps,PetscReal kee
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
@@ -410,7 +410,7 @@ static PetscErrorCode EPSKrylovSchurGetRestart_KrylovSchur(EPS eps,PetscReal *ke
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
@@ -444,7 +444,7 @@ static PetscErrorCode EPSKrylovSchurSetLocking_KrylovSchur(EPS eps,PetscBool loc
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigenproblem solver context
++  eps  - the linear eigensolver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
@@ -485,7 +485,7 @@ static PetscErrorCode EPSKrylovSchurGetLocking_KrylovSchur(EPS eps,PetscBool *lo
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  lock - the locking flag
@@ -540,7 +540,7 @@ static PetscErrorCode EPSKrylovSchurSetPartitions_KrylovSchur(EPS eps,PetscInt n
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenproblem solver context
++  eps   - the linear eigensolver context
 -  npart - number of partitions
 
    Options Database Key:
@@ -584,7 +584,7 @@ static PetscErrorCode EPSKrylovSchurGetPartitions_KrylovSchur(EPS eps,PetscInt *
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  npart - number of partitions
@@ -619,7 +619,7 @@ static PetscErrorCode EPSKrylovSchurSetDetectZeros_KrylovSchur(EPS eps,PetscBool
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigenproblem solver context
++  eps    - the linear eigensolver context
 -  detect - check for zeros
 
    Options Database Key:
@@ -663,7 +663,7 @@ static PetscErrorCode EPSKrylovSchurGetDetectZeros_KrylovSchur(EPS eps,PetscBool
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  detect - whether zeros detection is enforced during factorizations
@@ -714,12 +714,12 @@ static PetscErrorCode EPSKrylovSchurSetDimensions_KrylovSchur(EPS eps,PetscInt n
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  nev - number of eigenvalues to compute
 .  ncv - the maximum dimension of the subspace to be used by the subsolve
 -  mpd - the maximum dimension allowed for the projected problem
 
-   Options Database Key:
+   Options Database Keys:
 +  -eps_krylovschur_nev <nev> - Sets the number of eigenvalues
 .  -eps_krylovschur_ncv <ncv> - Sets the dimension of the subspace
 -  -eps_krylovschur_mpd <mpd> - Sets the maximum projected dimension
@@ -761,7 +761,7 @@ static PetscErrorCode EPSKrylovSchurGetDimensions_KrylovSchur(EPS eps,PetscInt *
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  nev - number of eigenvalues to compute
@@ -803,7 +803,7 @@ static PetscErrorCode EPSKrylovSchurSetSubintervals_KrylovSchur(EPS eps,PetscRea
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigenproblem solver context
++  eps    - the linear eigensolver context
 -  subint - array of real values specifying subintervals
 
    Notes:
@@ -851,7 +851,7 @@ static PetscErrorCode EPSKrylovSchurGetSubintervals_KrylovSchur(EPS eps,PetscRea
    Not Collective
 
    Input Parameter:
-.  eps    - the eigenproblem solver context
+.  eps    - the linear eigensolver context
 
    Output Parameter:
 .  subint - array of real values specifying subintervals
@@ -939,7 +939,7 @@ static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  n        - number of shifts, including the endpoints of the interval
@@ -1006,7 +1006,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommInfo_KrylovSchur(EPS eps,PetscInt 
    Collective on the subcommunicator (if v is given)
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  k - index of the subinterval for the calling process
@@ -1052,7 +1052,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommPairs_KrylovSchur(EPS eps,PetscInt
    Collective on the subcommunicator (if v is given)
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -1098,7 +1098,7 @@ static PetscErrorCode EPSKrylovSchurGetSubcommMats_KrylovSchur(EPS eps,Mat *A,Ma
    Collective on the subcommunicator
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  A  - the matrix associated with the eigensystem
@@ -1176,7 +1176,7 @@ static PetscErrorCode EPSKrylovSchurUpdateSubcommMats_KrylovSchur(EPS eps,PetscS
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  s   - scalar that multiplies the existing A matrix
 .  a   - scalar used in the axpy operation on A
 .  Au  - matrix used in the axpy operation on A
@@ -1341,7 +1341,7 @@ static PetscErrorCode EPSKrylovSchurGetKSP_KrylovSchur(EPS eps,KSP *ksp)
    Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  ksp - the internal KSP object
@@ -1396,7 +1396,7 @@ static PetscErrorCode EPSKrylovSchurSetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  bse - the BSE method
 
    Options Database Key:
@@ -1431,7 +1431,7 @@ static PetscErrorCode EPSKrylovSchurGetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  bse - the BSE method

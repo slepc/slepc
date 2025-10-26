@@ -439,7 +439,7 @@ static inline PetscErrorCode BVSetRandomSignColumn_Private(BV bv,PetscInt k)
 
    Logically Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - basis vectors
 
    Note:
