@@ -211,7 +211,8 @@ gnu-c99-mlib-static:
   tags:
     - linux-ubuntu, name:pakhet
   variables:
-    PETSC_CONFIG_OPTS: COPTFLAGS="-O -std=c99" FPPFLAGS=-fno-underscoring --with-single-library=0 --with-shared-libraries=0
+    MAKE_TEST_CFLAGS: -Werror -Wdeclaration-after-statement
+    PETSC_CONFIG_OPTS: --with-single-library=0 --with-shared-libraries=0 CFLAGS+=-std=c99 FFLAGS+=-fno-underscoring
     TEST_SEARCH: eps_tests-test10_1
 
 gnu-lint:
@@ -497,6 +498,10 @@ clang-c:
   tags:
     - linux-ubuntu, compiler:clang, name:maat
   variables:
+    MAKE_CFLAGS: -Werror -Wmissing-field-initializers -Wundef -Wextra-semi-stmt
+    MAKE_CXXFLAGS: -Werror -Wzero-as-null-pointer-constant -Wundef -Wextra-semi-stmt -Wextra-semi
+    MAKE_TEST_CFLAGS: -Werror -Wmissing-field-initializers -Wundef -Wextra-semi-stmt
+    MAKE_TEST_CXXFLAGS: -Werror -Wzero-as-null-pointer-constant -Wundef -Wextra-semi-stmt -Wextra-semi
     PETSC_CONFIG_OPTS: --with-cc=/opt/mpich/clang/bin/mpicc --with-cxx=/opt/mpich/clang/bin/mpicxx --with-fc=0 --with-mpiexec=/opt/mpich/clang/bin/mpiexec
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --with-slicot
 
@@ -712,7 +717,9 @@ gnu-c-c99-nompi:
   tags:
     - name:jepri
   variables:
-    PETSC_CONFIG_OPTS: --CFLAGS='-std=c99 -pedantic -Wno-long-long -Wno-overlength-strings' --with-fortran-bindings=0 --with-mpi=0
+    MAKE_CFLAGS: -Werror -pedantic -Wno-long-long -Wno-overlength-strings
+    MAKE_TEST_CFLAGS: -Werror -pedantic -Wno-long-long -Wno-overlength-strings
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-mpi=0 CFLAGS+=-std=c99
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-lib='-L/usr/local/opt/arpack-ng-3.8.0/lib -Wl,-rpath,/usr/local/opt/arpack-ng-3.8.0/lib -lparpack -larpack' --with-blopex-dir=/usr/local/opt/blopex --with-packages-download-dir=/var/local/downloads --download-primme --download-primme-cflags=-std=c99
 
 clang-c-valgrind:
@@ -821,7 +828,7 @@ gnu-c-debug:
     - name:satet
   variables:
     LOAD_MODULES: mpich/4.3.0
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXOPTFLAGS='-O -g' --with-cxx-dialect=11
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-primme --download-blopex --download-hpddm --download-evsl
 
 gnu-c-complex-debug:
