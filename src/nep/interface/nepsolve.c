@@ -350,7 +350,7 @@ PetscErrorCode NEPApplyJacobian(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat
 
 /*@
    NEPGetIterationNumber - Gets the current iteration number. If the
-   call to NEPSolve() is complete, then it returns the number of iterations
+   call to `NEPSolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
@@ -362,10 +362,10 @@ PetscErrorCode NEPApplyJacobian(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If NEPSolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `NEPSolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call NEPGetConvergedReason() to determine if the solver converged or
+   Call `NEPGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate
@@ -393,7 +393,10 @@ PetscErrorCode NEPGetIterationNumber(NEP nep,PetscInt *its)
 .  nconv - number of converged eigenpairs
 
    Note:
-   This function should be called after NEPSolve() has finished.
+   This function should be called after `NEPSolve()` has finished.
+
+   The value `nconv` may be different from the number of requested solutions
+   `nev`, but not larger than `ncv`, see `NEPSetDimensions()`.
 
    Level: beginner
 
@@ -618,26 +621,30 @@ PetscErrorCode NEPComputeResidualNorm_Private(NEP nep,PetscBool adj,PetscScalar 
 
 /*@
    NEPComputeError - Computes the error (based on the residual norm) associated
-   with the i-th computed eigenpair.
+   with the `i`-th computed eigenpair.
 
    Collective
 
    Input Parameters:
 +  nep  - the nonlinear eigensolver context
 .  i    - the solution index
--  type - the type of error to compute
+-  type - the type of error to compute, see `NEPErrorType`
 
    Output Parameter:
 .  error - the error
 
    Notes:
    The error can be computed in various ways, all of them based on the residual
-   norm computed as ||T(lambda)x||_2 where lambda is the eigenvalue and x is the
+   norm computed as $\|T(\lambda)x\|_2$ where $(\lambda,x)$ is the approximate eigenpair.
+
+   If the computation of left eigenvectors was enabled with `NEPSetTwoSided()`,
+   then the error will be computed using the maximum of the value above and
+   the left residual norm $\|y^*T(\lambda)\|_2$, where $y$ is the approximate left
    eigenvector.
 
    Level: beginner
 
-.seealso: [](ch:nep), `NEPErrorType`, `NEPSolve()`, `NEPGetErrorEstimate()`
+.seealso: [](ch:nep), `NEPErrorType`, `NEPSolve()`, `NEPGetErrorEstimate()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPComputeError(NEP nep,PetscInt i,NEPErrorType type,PetscReal *error)
 {

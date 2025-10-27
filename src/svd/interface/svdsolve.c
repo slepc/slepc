@@ -185,7 +185,7 @@ PetscErrorCode SVDSolve(SVD svd)
 
 /*@
    SVDGetIterationNumber - Gets the current iteration number. If the
-   call to SVDSolve() is complete, then it returns the number of iterations
+   call to `SVDSolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
@@ -197,10 +197,10 @@ PetscErrorCode SVDSolve(SVD svd)
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If SVDSolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `SVDSolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call SVDGetConvergedReason() to determine if the solver converged or
+   Call `SVDGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate
@@ -261,8 +261,11 @@ PetscErrorCode SVDGetConvergedReason(SVD svd,SVDConvergedReason *reason)
    Output Parameter:
 .  nconv - number of converged singular values
 
-   Note:
-   This function should be called after SVDSolve() has finished.
+   Notes:
+   This function should be called after `SVDSolve()` has finished.
+
+   The value `nconv` may be different from the number of requested solutions
+   `nsv`, but not larger than `ncv`, see `SVDSetDimensions()`.
 
    Level: beginner
 
@@ -459,28 +462,28 @@ static PetscErrorCode SVDComputeResidualNorms_Hyperbolic(SVD svd,PetscReal sigma
 
 /*@
    SVDComputeError - Computes the error (based on the residual norm) associated
-   with the i-th singular triplet.
+   with the `i`-th singular triplet.
 
    Collective
 
    Input Parameters:
 +  svd  - the singular value solver context
 .  i    - the solution index
--  type - the type of error to compute
+-  type - the type of error to compute, see `SVDErrorType`
 
    Output Parameter:
 .  error - the error
 
    Notes:
    The error can be computed in various ways, all of them based on the residual
-   norm obtained as sqrt(n1^2+n2^2) with n1 = ||A*v-sigma*u||_2 and
-   n2 = ||A^T*u-sigma*v||_2, where sigma is the singular value, u is the left
-   singular vector and v is the right singular vector.
+   norm obtained as $\sqrt{\eta_1^2+\eta_2^2}$ with $\eta_1 = \|Av-\sigma u\|_2$ and
+   $\eta_2 = \|A^*u-\sigma v\|_2$, where $(\sigma,u,v)$ is the approximate singular
+   triplet.
 
    In the case of the GSVD, the two components of the residual norm are
-   n1 = ||s^2*A'*u-c*B'*B*x||_2 and n2 = ||c^2*B'*v-s*A'*A*x||_2, where [u;v]
-   are the left singular vectors and x is the right singular vector, with
-   sigma=c/s.
+   $\eta_1 = \|s^2 A^*u-cB^*Bx\|_2$ and $\eta_2 = ||c^2 B^*v-sA^*Ax||_2$, where
+   $(\sigma,u,v,x)$ is the approximate generalized singular quadruple, with
+   $\sigma=c/s$.
 
    Level: beginner
 

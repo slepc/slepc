@@ -221,7 +221,7 @@ PetscErrorCode EPSSolve(EPS eps)
 
 /*@
    EPSGetIterationNumber - Gets the current iteration number. If the
-   call to EPSSolve() is complete, then it returns the number of iterations
+   call to `EPSSolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
@@ -233,10 +233,10 @@ PetscErrorCode EPSSolve(EPS eps)
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If EPSSolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `EPSSolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call EPSGetConvergedReason() to determine if the solver converged or
+   Call `EPSGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate
@@ -263,8 +263,11 @@ PetscErrorCode EPSGetIterationNumber(EPS eps,PetscInt *its)
    Output Parameter:
 .  nconv - number of converged eigenpairs
 
-   Note:
-   This function should be called after EPSSolve() has finished.
+   Notes:
+   This function should be called after `EPSSolve()` has finished.
+
+   The value `nconv` may be different from the number of requested solutions
+   `nev`, but not larger than `ncv`, see `EPSSetDimensions()`.
 
    Level: beginner
 
@@ -753,25 +756,30 @@ PetscErrorCode EPSComputeResidualNorm_Private(EPS eps,PetscBool trans,PetscScala
 
 /*@
    EPSComputeError - Computes the error (based on the residual norm) associated
-   with the i-th computed eigenpair.
+   with the `i`-th computed eigenpair.
 
    Collective
 
    Input Parameters:
 +  eps  - the linear eigensolver context
 .  i    - the solution index
--  type - the type of error to compute
+-  type - the type of error to compute, see `EPSErrorType`
 
    Output Parameter:
 .  error - the error
 
    Notes:
    The error can be computed in various ways, all of them based on the residual
-   norm ||Ax-kBx||_2 where k is the eigenvalue and x is the eigenvector.
+   norm $\|Ax-\lambda Bx\|_2$ where $(\lambda,x)$ is the approximate eigenpair.
+
+   If the computation of left eigenvectors was enabled with `EPSSetTwoSided()`,
+   then the error will be computed using the maximum of the value above and
+   the left residual norm $\|y^*A-\lambda y^*B\|_2$, where $y$ is the approximate left
+   eigenvector.
 
    Level: beginner
 
-.seealso: [](ch:eps), `EPSErrorType`, `EPSSolve()`, `EPSGetErrorEstimate()`
+.seealso: [](ch:eps), `EPSErrorType`, `EPSSolve()`, `EPSGetErrorEstimate()`, `EPSSetTwoSided()`
 @*/
 PetscErrorCode EPSComputeError(EPS eps,PetscInt i,EPSErrorType type,PetscReal *error)
 {

@@ -414,8 +414,13 @@ static PetscErrorCode EPSErrorView_MATLAB(EPS eps,EPSErrorType etype,PetscViewer
    Notes:
    By default, this function checks the error of all eigenpairs and prints
    the eigenvalues if all of them are below the requested tolerance.
-   If the viewer has format=PETSC_VIEWER_ASCII_INFO_DETAIL then a table with
+   If the viewer has format `PETSC_VIEWER_ASCII_INFO_DETAIL` then a table with
    eigenvalues and corresponding errors is printed.
+
+   All the command-line options listed above admit an optional argument
+   specifying the viewer type and options. For instance, use
+   `-eps_error_relative :myerr.m:ascii_matlab` to save the errors in a file
+   that can be executed in Matlab.
 
    Level: intermediate
 

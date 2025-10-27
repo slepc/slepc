@@ -305,8 +305,13 @@ static PetscErrorCode SVDErrorView_MATLAB(SVD svd,SVDErrorType etype,PetscViewer
    Notes:
    By default, this function checks the error of all singular triplets and prints
    the singular values if all of them are below the requested tolerance.
-   If the viewer has format=PETSC_VIEWER_ASCII_INFO_DETAIL then a table with
+   If the viewer has format `PETSC_VIEWER_ASCII_INFO_DETAIL` then a table with
    singular values and corresponding errors is printed.
+
+   All the command-line options listed above admit an optional argument
+   specifying the viewer type and options. For instance, use
+   `-svd_error_relative :myerr.m:ascii_matlab` to save the errors in a file
+   that can be executed in Matlab.
 
    Level: intermediate
 
