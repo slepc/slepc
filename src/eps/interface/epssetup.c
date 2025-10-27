@@ -448,18 +448,18 @@ PetscErrorCode EPSSetUp(EPS eps)
 -  B  - the second matrix in the case of generalized eigenproblems
 
    Notes:
-   To specify a standard eigenproblem, use NULL for parameter B.
+   To specify a standard eigenproblem, use `NULL` for parameter `B`.
 
-   It must be called before EPSSetUp(). If it is called again after EPSSetUp() and
-   the matrix sizes have changed then the EPS object is reset.
+   It must be called before `EPSSetUp()`. If it is called again after `EPSSetUp()` and
+   the matrix sizes have changed then the `EPS` object is reset.
 
-   For structured eigenproblem types such as EPS_BSE (see EPSSetProblemType()), the
+   For structured eigenproblem types such as `EPS_BSE` (see `EPSSetProblemType()`), the
    provided matrices must have been created with the corresponding helper function,
-   i.e., MatCreateBSE().
+   i.e., `MatCreateBSE()`.
 
    Level: beginner
 
-.seealso: [](ch:eps), `EPSSolve()`, `EPSSetUp()`, `EPSReset()`, `EPSGetST()`, `STGetMatrix()`, `EPSSetProblemType()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSSetUp()`, `EPSReset()`, `EPSSetProblemType()`
 @*/
 PetscErrorCode EPSSetOperators(EPS eps,Mat A,Mat B)
 {

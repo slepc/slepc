@@ -478,6 +478,27 @@ PetscErrorCode EPSGDGetDoubleExpansion(EPS eps,PetscBool *doubleexp)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSGD - EPSGD = "gd" - The generalized Davidson method.
+
+   Notes:
+   This is a preconditioned eigensolver, that is, it may be competitive
+   when computing interior eigenvalues in case the shift-and-invert spectral
+   transformation is too costly and a good preconditioner is available.
+
+   The implemented method is Generalized Davidson, where any `PC`
+   preconditioner can be used, in contrast to the original Davidson method
+   that used a diagonal preconditioner.
+
+   The preconditioner is specified via the internal `ST` object and its
+   associated `KSP`.
+
+   Details of the implementation are described in {cite:p}`Rom14`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetST()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_GD(EPS eps)
 {
   EPS_DAVIDSON    *data;

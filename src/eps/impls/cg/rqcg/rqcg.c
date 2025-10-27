@@ -363,6 +363,22 @@ static PetscErrorCode EPSView_RQCG(EPS eps,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSRQCG - EPSRQCG = "rqcg" - The Rayleigh Quotient Conjugate Gradient method.
+
+   Notes:
+   This is a preconditioned eigensolver for computing leftmost
+   eigenvalues, similar to `EPSLOBPCG`, but usually less competitive.
+
+   The description of the method is in {cite:p}`Ber06`
+
+   The preconditioner is specified via the internal `ST` object and its
+   associated `KSP`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetST()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_RQCG(EPS eps)
 {
   EPS_RQCG       *rqcg;

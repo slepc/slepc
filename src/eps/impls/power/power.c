@@ -1236,6 +1236,33 @@ static PetscErrorCode EPSSetDefaultST_Power(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSPOWER - EPSPOWER = "power" - The simple power iteration and inverse
+   iteration.
+
+   Notes:
+   This solver is very basic and is not recommended in general, since it
+   will not be competitive with respect to other solvers.
+
+   The implemented method is the power iteration, or inverse iteration in
+   case the selected spectral transformation is `STSINVERT`. In this latter
+   case it is possible to use a dynamic shift, as in the RQI method, see
+   `EPSPowerSetShiftType()`.
+
+   The solver incorporates deflation so that several eigenpairs can be
+   computed. There is also a two-sided implementation that also computes
+   left eigenvectors.
+
+   This solver can also be used for nonlinear inverse iteration on the problem
+   $A(x)x=\lambda B(x)x$, where $A$ and $B$ are not constant matrices but
+   depend on the eigenvector $x$. This mode is enabled with `EPSPowerSetNonlinear()`.
+   Note that this is a nonlinear eigenvector problem, as opposed to problems
+   addressed in `NEP` that are nonlinear with respect to the eigenvalue.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSSetTwoSided()`, `EPSPowerSetShiftType()`, `EPSPowerSetNonlinear()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_Power(EPS eps)
 {
   EPS_POWER      *ctx;

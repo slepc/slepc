@@ -1591,6 +1591,35 @@ static PetscErrorCode EPSSetDefaultST_KrylovSchur(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSKRYLOVSCHUR - EPSKRYLOVSCHUR = "krylovschur" - The simple power iteration and inverse
+   iteration.
+
+   Notes:
+   This is the default solver, and is recommended in most situations.
+
+   The implemented algorithm is the single-vector Krylov-Schur method proposed
+   by {cite:t}`Ste01b` for non-Hermitian eigenproblems. When the problem is
+   Hermitian, the solver will behave as a thick-restart Lanczos method
+   {cite:p}`Wu00` with full reorthogonalization.
+
+   The solver includes support for many features\:
+   - Harmonic extraction, see `EPSSetExtraction()`.
+   - Inertia-based spectrum slicing to compute all eigenvalues in an interval,
+     see {cite:p}`Cam12`.
+   - Polynomial filter to compute eigenvalues in an interval via `STFILTER`.
+   - Indefinite Lanczos to solve `EPSGHIEP` problems.
+   - Structured variants for problem types such as `EPSBSE`.
+   - A two-sided variant that also computes left eigenvectors.
+   - Arbitrary selection of eigenvalues, see `EPSSetArbitrarySelection()`.
+
+   Developer Note:
+   In the future, we would like to have a block version of Krylov-Schur.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSSetProblemType()`, `EPSSetExtraction()`, `EPSSetArbitrarySelection()`, `EPSSetTwoSided()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_KrylovSchur(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx;

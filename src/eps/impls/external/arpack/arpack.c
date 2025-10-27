@@ -275,6 +275,17 @@ static PetscErrorCode EPSDestroy_ARPACK(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSARPACK - EPSARPACK = "arpack" - A wrapper to ARPACK {cite:p}`Leh98`.
+
+   Note:
+   We recommend using `EPSKRYLOVSCHUR` instead of this one, because both
+   methods are mathematically equivalent and Krylov-Schur may be more robust.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_ARPACK(EPS eps)
 {
   EPS_ARPACK     *ctx;

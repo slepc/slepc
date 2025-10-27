@@ -239,6 +239,21 @@ static PetscErrorCode EPSView_Arnoldi(EPS eps,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSARNOLDI - EPSARNOLDI = "arnoldi" - A basic Krylov method for non-Hermitian
+   problems, with explicit restart.
+
+   Notes:
+   This solver is very basic and is not recommended in general, since it
+   will not be competitive with respect to other solvers.
+
+   The implemented method is Arnoldi with explicit restart and deflation.
+   Generally, it is much better to use implicit restart as in `EPSKRYLOVSCHUR`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_Arnoldi(EPS eps)
 {
   EPS_ARNOLDI    *ctx;

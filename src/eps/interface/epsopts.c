@@ -256,7 +256,7 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
 
 /*@
    EPSGetTolerances - Gets the tolerance and maximum iteration count used
-   by the EPS convergence tests.
+   by the `EPS` convergence tests.
 
    Not Collective
 
@@ -268,7 +268,7 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
 -  maxits - maximum number of iterations
 
    Notes:
-   The user can specify NULL for any parameter that is not needed.
+   The user can specify `NULL` for any parameter that is not needed.
 
    Level: intermediate
 
@@ -529,10 +529,7 @@ PetscErrorCode EPSSetWhichEigenpairs(EPS eps,EPSWhich which)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  which - the portion of the spectrum to be sought
-
-   Notes:
-   See EPSSetWhichEigenpairs() for possible values of 'which'.
+.  which - the portion of the spectrum to be sought, see `EPSWhich` for possible values
 
    Level: intermediate
 
@@ -886,18 +883,12 @@ PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *
 
    Input Parameters:
 +  eps  - the linear eigensolver context
--  stop - the type of stopping test
+-  stop - the type of stopping test, see `EPSStop`
 
    Options Database Keys:
 +  -eps_stop_basic     - Sets the default stopping test
 .  -eps_stop_threshold - Sets the threshold stopping test
 -  -eps_stop_user      - Selects the user-defined stopping test
-
-   Note:
-   The parameter 'stop' can have one of these values
-+     EPS_STOP_BASIC     - default stopping test
-.     EPS_STOP_THRESHOLD - threshold stopping test)
--     EPS_STOP_USER      - function set by EPSSetStoppingTestFunction()
 
    Level: advanced
 
@@ -1051,7 +1042,7 @@ PetscErrorCode EPSSetProblemType(EPS eps,EPSProblemType type)
 }
 
 /*@
-   EPSGetProblemType - Gets the problem type from the EPS object.
+   EPSGetProblemType - Gets the problem type from the `EPS` object.
 
    Not Collective
 
@@ -1219,7 +1210,7 @@ PetscErrorCode EPSSetBalance(EPS eps,EPSBalance bal,PetscInt its,PetscReal cutof
 }
 
 /*@
-   EPSGetBalance - Gets the balancing type used by the EPS object, and the
+   EPSGetBalance - Gets the balancing type used by the `EPS` object, and the
    associated parameters.
 
    Not Collective
@@ -1235,7 +1226,7 @@ PetscErrorCode EPSSetBalance(EPS eps,EPSBalance bal,PetscInt its,PetscReal cutof
    Level: intermediate
 
    Note:
-   The user can specify NULL for any parameter that is not needed.
+   The user can specify `NULL` for any parameter that is not needed.
 
 .seealso: [](ch:eps), `EPSSetBalance()`, `EPSBalance`
 @*/

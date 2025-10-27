@@ -765,6 +765,26 @@ static PetscErrorCode EPSSetDefaultST_LyapII(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSLYAPII - EPSLYAPII = "lyapii" - The Lyapunov inverse iteration.
+
+   Notes:
+   This solver implements the method of Lyapunov inverse iteration
+   {cite:p}`Mee10,Elm13` to compute rightmost eigenvalues of
+   non-Hermitian matrices (or matrix pencils).
+
+   At each step of the eigensolver, a Lyapunov equation must be solved,
+   and this is done with an `LME` object, see `EPSLyapIIGetLME()`.
+
+   This solver may be useful for analyzing the stability of PDE's.
+   Note that the method requires the input matrix to be stable, so
+   it generally requires to shift the matrix before passing it in
+   `EPSSetOperators()`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSLyapIIGetLME()`, `EPSSetOperators()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_LyapII(EPS eps)
 {
   EPS_LYAPII     *ctx;

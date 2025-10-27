@@ -169,6 +169,24 @@ static PetscErrorCode EPSReset_ScaLAPACK(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSSCALAPACK - EPSSCALAPACK = "scalapack" - A wrapper to ScaLAPACK
+   eigensolvers {cite:p}`Bla97`.
+
+   Notes:
+   Only available for Hermitian problems, using subroutines `pdsyev` and
+   `pdsygvx` and the analogs for other precisions.
+
+   This is a direct eigensolver, that is, the full spectrum is computed.
+   The computation involves redistributing the matrices from PETSc storage
+   to ScaLAPACK distribution, and vice versa (this is done automatically
+   by SLEPc). Alternatively, the user may create the problem matrices
+   already with type `MATSCALAPACK`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_ScaLAPACK(EPS eps)
 {
   EPS_ScaLAPACK  *ctx;

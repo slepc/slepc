@@ -1421,6 +1421,28 @@ static PetscErrorCode EPSSetDefaultST_CISS(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSCISS - EPSCISS = "ciss" - A contour integral eigensolver based on the
+   Sakurai-Sugiura scheme.
+
+   Notes:
+   This solver is based on the numerical contour integration idea
+   proposed initially by {cite:t}`Sak03` and improved later by adding
+   a Rayleigh-Ritz projection step {cite:p}`Sak07`.
+
+   Contour integral methods are able to compute all eigenvalues
+   lying inside a region of the complex plane. Use `EPSGetRG()` to
+   specify the region. However, the computational cost is usually high
+   because multiple linear systems must be solved. For this, we can
+   use the `KSP` object inside `ST`, or several independent `KSP`s,
+   see `EPSCISSSetUseST()`.
+
+   Details of the implementation in SLEPc can be found in {cite:p}`Mae16`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetRG()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_CISS(EPS eps)
 {
   EPS_CISS       *ctx = (EPS_CISS*)eps->data;

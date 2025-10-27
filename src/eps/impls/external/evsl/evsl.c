@@ -283,7 +283,7 @@ static PetscErrorCode EPSEVSLSetSlices_EVSL(EPS eps,PetscInt nslices)
 -  nslices - the number of slices
 
    Options Database Key:
-.  -eps_evsl_slices <n> - set the number of slices to n
+.  -eps_evsl_slices <n> - set the number of slices
 
    Notes:
    By default, one slice per MPI process is used. Depending on the number of
@@ -527,7 +527,7 @@ static PetscErrorCode EPSEVSLGetDOSParameters_EVSL(EPS eps,EPSEVSLDOSMethod *dos
 .  eps - the linear eigensolver context
 
    Output Parameters:
-+  dos     - DOS method, either KPM or Lanczos
++  dos     - DOS method
 .  nvec    - number of sample vectors
 .  deg     - polynomial degree (KPM only)
 .  steps   - number of Lanczos steps (Lanczos only)
@@ -811,6 +811,19 @@ static PetscErrorCode EPSReset_EVSL(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSEVSL - EPSEVSL = "evsl" - A wrapper to EVSL {cite:p}`Li19`.
+
+   Note:
+   The Eigenvalues Slicing Library {EVSL} is intended for the case that
+   all eigenvalues inside a given interval are requested, for Hermitian
+   problems. It is based on polynomial filters, and has similarities with
+   the algorithms implemented in `STFILTER`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_EVSL(EPS eps)
 {
   EPS_EVSL       *ctx;

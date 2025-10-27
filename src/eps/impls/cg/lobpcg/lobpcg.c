@@ -669,6 +669,25 @@ static PetscErrorCode EPSDestroy_LOBPCG(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSLOBPCG - EPSLOBPCG = "lobpcg" - The Locally Optimal Block Preconditioned
+   Conjugate Gradient method.
+
+   Notes:
+   This is a preconditioned eigensolver, that is, a preconditioner can
+   be used to accelerate convergence, but as opposed to Davidson methods
+   it is intended for computing leftmost eigenvalues of Hermitian
+   problems, and not interior eigenvalues.
+
+   The implemented method is LOBPCG {cite:p}`Kny01`
+
+   The preconditioner is specified via the internal `ST` object and its
+   associated `KSP`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetST()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_LOBPCG(EPS eps)
 {
   EPS_LOBPCG     *lobpcg;

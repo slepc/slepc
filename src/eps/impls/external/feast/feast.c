@@ -327,6 +327,17 @@ PetscErrorCode EPSFEASTGetNumPoints(EPS eps,PetscInt *npoints)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSFEAST - EPSFEAST = "feast" - A wrapper to FEAST {cite:p}`Pol09`.
+
+   Note:
+   We currently support only the implementation of FEAST that is included
+   in the Intel MKL library.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_FEAST(EPS eps)
 {
   EPS_FEAST      *ctx;

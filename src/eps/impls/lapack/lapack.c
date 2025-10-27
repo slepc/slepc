@@ -159,6 +159,22 @@ static PetscErrorCode EPSSolve_LAPACK(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSLAPACK - EPSLAPACK = "lapack" - A wrapper to LAPACK eigensolvers.
+
+   Notes:
+   This is not really a full-featured eigensolver but simply an interface to
+   some LAPACK routines {cite:p}`And99`. These routines operate sequentially
+   in dense mode and therefore are suitable only for small size problems.
+   This solver should be used only for debugging purposes.
+
+   The LAPACK routine is not called directly, instead a `DS` object of
+   the appropriate type is set up.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `DS`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_LAPACK(EPS eps)
 {
   PetscFunctionBegin;

@@ -572,6 +572,18 @@ PetscErrorCode EPSPRIMMEGetMethod(EPS eps,EPSPRIMMEMethod *method)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSPRIMME - EPSPRIMME = "primme" - A wrapper to PRIMME {cite:p}`Sta10`.
+
+   Note:
+   The PRIMME library implements several closely related algorithms. The
+   default one is generally a good choice, but the user can select another
+   with `EPSPRIMMESetMethod()`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_PRIMME(EPS eps)
 {
   EPS_PRIMME     *primme;

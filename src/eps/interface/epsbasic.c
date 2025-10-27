@@ -524,7 +524,7 @@ PetscErrorCode EPSSetST(EPS eps,ST st)
 }
 
 /*@
-   EPSGetST - Obtain the spectral transformation (ST) object associated
+   EPSGetST - Obtain the spectral transformation (`ST`) object associated
    to the eigensolver object.
 
    Not Collective
@@ -726,7 +726,7 @@ PetscErrorCode EPSGetDS(EPS eps,DS *ds)
 }
 
 /*@
-   EPSIsGeneralized - Ask if the EPS object corresponds to a generalized
+   EPSIsGeneralized - Ask if the `EPS` object corresponds to a generalized
    eigenvalue problem.
 
    Not Collective
@@ -735,7 +735,7 @@ PetscErrorCode EPSGetDS(EPS eps,DS *ds)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is generalized
 
    Level: intermediate
 
@@ -751,7 +751,7 @@ PetscErrorCode EPSIsGeneralized(EPS eps,PetscBool* is)
 }
 
 /*@
-   EPSIsHermitian - Ask if the EPS object corresponds to a Hermitian
+   EPSIsHermitian - Ask if the `EPS` object corresponds to a Hermitian
    eigenvalue problem.
 
    Not Collective
@@ -760,7 +760,7 @@ PetscErrorCode EPSIsGeneralized(EPS eps,PetscBool* is)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is Hermitian
 
    Level: intermediate
 
@@ -776,8 +776,8 @@ PetscErrorCode EPSIsHermitian(EPS eps,PetscBool* is)
 }
 
 /*@
-   EPSIsPositive - Ask if the EPS object corresponds to an eigenvalue
-   problem type that requires a positive (semi-) definite matrix B.
+   EPSIsPositive - Ask if the `EPS` object corresponds to an eigenvalue
+   problem type that requires a positive (semi-) definite matrix $B$.
 
    Not Collective
 
@@ -785,7 +785,7 @@ PetscErrorCode EPSIsHermitian(EPS eps,PetscBool* is)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is positive (semi-) definite
 
    Level: intermediate
 
@@ -801,7 +801,7 @@ PetscErrorCode EPSIsPositive(EPS eps,PetscBool* is)
 }
 
 /*@
-   EPSIsStructured - Ask if the EPS object corresponds to a structured
+   EPSIsStructured - Ask if the `EPS` object corresponds to a structured
    eigenvalue problem.
 
    Not Collective
@@ -810,11 +810,11 @@ PetscErrorCode EPSIsPositive(EPS eps,PetscBool* is)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is structured
 
    Note:
    The result will be true if the problem type has been set to some
-   structured type such as EPS_BSE. This is independent of whether the
+   structured type such as `EPS_BSE`. This is independent of whether the
    input matrix has been built with a certain structure with a helper function.
 
    Level: intermediate
