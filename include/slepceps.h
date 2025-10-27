@@ -175,7 +175,8 @@ typedef enum { EPS_STOP_BASIC,
 .  `EPS_CONVERGED_USER`         - converged due to a user-defined condition
 .  `EPS_DIVERGED_ITS`           - exceeded the maximum number of allowed iterations
 .  `EPS_DIVERGED_BREAKDOWN`     - generic breakdown in method
--  `EPS_DIVERGED_SYMMETRY_LOST` - pseudo-Lanczos was not able to keep symmetry
+.  `EPS_DIVERGED_SYMMETRY_LOST` - pseudo-Lanczos was not able to keep symmetry
+-  `EPS_CONVERGED_ITERATING`    - the solver is still running
 
    Level: intermediate
 

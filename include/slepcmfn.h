@@ -156,10 +156,11 @@ SLEPC_EXTERN PetscErrorCode MFNGetOptionsPrefix(MFN,const char*[]);
    have converged or diverged.
 
    Values:
-+  `MFN_CONVERGED_TOL`      - converged up to tolerance
-.  `MFN_CONVERGED_ITS`      - solver completed the requested number of steps
-.  `MFN_DIVERGED_ITS`       - exceeded the maximum number of allowed iterations
--  `MFN_DIVERGED_BREAKDOWN` - generic breakdown in method
++  `MFN_CONVERGED_TOL`       - converged up to tolerance
+.  `MFN_CONVERGED_ITS`       - solver completed the requested number of steps
+.  `MFN_DIVERGED_ITS`        - exceeded the maximum number of allowed iterations
+.  `MFN_DIVERGED_BREAKDOWN`  - generic breakdown in method
+-  `MFN_CONVERGED_ITERATING` - the solver is still running
 
    Note:
    Basic solvers (e.g., unrestarted Krylov iterations) cannot determine if the

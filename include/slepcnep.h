@@ -147,7 +147,8 @@ typedef enum { NEP_STOP_BASIC,
 .  `NEP_DIVERGED_ITS`                - exceeded the maximum number of allowed iterations
 .  `NEP_DIVERGED_BREAKDOWN`          - generic breakdown in method
 .  `NEP_DIVERGED_LINEAR_SOLVE`       - inner linear solve failed
--  `NEP_DIVERGED_SUBSPACE_EXHAUSTED` - run out of space for the basis in an unrestarted solver
+.  `NEP_DIVERGED_SUBSPACE_EXHAUSTED` - run out of space for the basis in an unrestarted solver
+-  `NEP_CONVERGED_ITERATING`         - the solver is still running
 
    Level: intermediate
 

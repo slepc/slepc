@@ -122,7 +122,8 @@ typedef enum { SVD_STOP_BASIC,
 .  `SVD_CONVERGED_MAXIT`        - reached maximum number of iterations with `SVD_CONV_MAXIT` criterion
 .  `SVD_DIVERGED_ITS`           - exceeded the maximum number of allowed iterations
 .  `SVD_DIVERGED_BREAKDOWN`     - generic breakdown in method
--  `SVD_DIVERGED_SYMMETRY_LOST` - underlying indefinite eigensolver was not able to keep symmetry
+.  `SVD_DIVERGED_SYMMETRY_LOST` - underlying indefinite eigensolver was not able to keep symmetry
+-  `SVD_CONVERGED_ITERATING`    - the solver is still running
 
    Level: intermediate
 
