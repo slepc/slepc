@@ -148,4 +148,3 @@ class ArgDB:
   def ErrorIfNotEmpty(self):
     if self.argdb:
       sys.exit('ERROR: Invalid arguments '+' '.join(self.argdb)+'\nUse -h for help')
-

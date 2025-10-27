@@ -270,7 +270,6 @@ class Installer:
       raise shutil.Error(errors)
     return copies
 
-
   def fixConfFile(self, src):
     lines   = []
     oldFile = open(src, 'r')
@@ -534,7 +533,6 @@ for dir in dirs:
     self.copies.extend(self.copytree(self.archLibDir, self.destLibDir, copyFunc = self.copyLib, exclude = ['.DIR'],recurse = 0))
     self.copies.extend(self.copytree(os.path.join(self.archLibDir,'pkgconfig'), os.path.join(self.destLibDir,'pkgconfig'), copyFunc = self.copyLib, exclude = ['.DIR'],recurse = 0))
     return
-
 
   def outputInstallDone(self):
     arch=self.arch

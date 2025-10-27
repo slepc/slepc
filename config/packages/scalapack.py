@@ -44,4 +44,3 @@ class Scalapack(package.Package):
     else:
       functions = self.Functions(petsc)
       self.FortranLib(slepcconf,slepcvars,[''],'',functions)
-

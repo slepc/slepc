@@ -1096,7 +1096,7 @@ static PetscErrorCode NEPNLEIGSTOARrun(NEP nep,Mat MK,Mat MH,BV W,PetscInt k,Pet
   PetscCall(PetscMalloc4(ld,&x,lwa,&work,m+1,&tt,lds,&cont));
   PetscCall(BVSetActiveColumns(ctx->V,0,m));
   for (j=k;j<m;j++) {
-    sigma = ctx->shifts[(++(ctx->idxrk))%ctx->nshiftsw];
+    sigma = ctx->shifts[(++ctx->idxrk)%ctx->nshiftsw];
 
     /* Continuation vector */
     PetscCall(NEPNLEIGS_RKcontinuation(nep,0,j,K,H,ldh,sigma,S,lds,cont,tt,work));

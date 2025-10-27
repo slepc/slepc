@@ -89,7 +89,6 @@ class Chase(package.Package):
 
     self.log.Exit('Unable to link with ChASE library in directories'+' '.join(dirs)+' with libraries and link flags '+' '.join(libs))
 
-
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
     externdir = slepc.GetExternalPackagesDir(archdir)
     builddir  = self.Download(externdir,slepc.downloaddir)
@@ -133,4 +132,3 @@ class Chase(package.Package):
 
     self.havepackage = True
     self.packageflags = l+' '+f
-

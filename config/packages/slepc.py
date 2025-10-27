@@ -256,4 +256,3 @@ class SLEPc(package.Package):
       return ''
     hash += '\n'.join(sorted(chash.splitlines()))
     return hash
-

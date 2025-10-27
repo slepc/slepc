@@ -25,7 +25,6 @@ class Elpa(package.Package):
     self.supportsprecis.append('single')
     self.ProcessArgs(argdb)
 
-
   def Precondition(self,slepc,petsc):
     pkg = self.packagename.upper()
     if not 'scalapack' in petsc.packages:
@@ -33,7 +32,6 @@ class Elpa(package.Package):
     if petsc.language == 'c++':
       self.log.Exit('The ELPA interface currently does not support compilation with C++')
     package.Package.Precondition(self,slepc,petsc)
-
 
   def SampleCode(self,petsc):
     code = '#include <stdlib.h>\n'
@@ -48,7 +46,6 @@ class Elpa(package.Package):
     code += '  elpa_uninit(&error);\n'
     code += '  return 0;\n}\n'
     return code
-
 
   def Check(self,slepcconf,slepcvars,petsc,archdir):
     code = self.SampleCode(petsc)
@@ -88,7 +85,6 @@ class Elpa(package.Package):
           return
 
     self.log.Exit('Unable to link with ELPA library in directories'+' '.join(dirs)+' with libraries and link flags '+' '.join(libs))
-
 
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
     externdir = slepc.GetExternalPackagesDir(archdir)
@@ -138,4 +134,3 @@ class Elpa(package.Package):
 
     self.havepackage = True
     self.packageflags = l+' '+f
-

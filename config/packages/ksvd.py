@@ -24,14 +24,12 @@ class Ksvd(package.Package):
     self.supportsscalar = ['real']
     self.ProcessArgs(argdb)
 
-
   def Precondition(self,slepc,petsc):
     self.elpa  = self.Require('elpa')
     self.polar = self.Require('polar')
     if getattr(self,'download',False) and not hasattr(petsc,'cmake'):
       self.log.Exit('The KSVD interface requires CMake for building')
     package.Package.Precondition(self,slepc,petsc)
-
 
   def SampleCode(self,petsc):
     code =  '#include <stdlib.h>\n'
@@ -42,7 +40,6 @@ class Ksvd(package.Package):
     code += '  pdgeqsvd("V","V","r",n,n,A,i1,i1,descA,S,U,i1,i1,descU,VT,i1,i1,descVT,w1,lwork,w2,liwork,&info);\n'
     code += '  return 0;\n}\n'
     return code
-
 
   def Check(self,slepcconf,slepcvars,petsc,archdir):
     code = self.SampleCode(petsc)
@@ -83,7 +80,6 @@ class Ksvd(package.Package):
 
     self.log.Exit('Unable to link with KSVD library in directories'+' '.join(dirs)+' with libraries and link flags '+' '.join(libs))
 
-
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
     externdir = slepc.GetExternalPackagesDir(archdir)
     builddir  = self.Download(externdir,slepc.downloaddir)
@@ -106,9 +102,9 @@ class Ksvd(package.Package):
         int mpierr = elpa_get_communicators(MPI_Comm_c2f(MPI_COMM_WORLD), myrow, mycol, &mpi_comm_rows, &mpi_comm_cols);
         useQr = 0;
         THIS_REAL_ELPA_KERNEL_API = ELPA2_REAL_KERNEL_AVX_BLOCK6;
-        *info = elpa_solve_evp_real_2stage( n, n, U, mloc, 
-                                            S, VT, 
-                                            mloc, nb, nloc, 
+        *info = elpa_solve_evp_real_2stage( n, n, U, mloc, '''+r'''
+                                            S, VT, '''+r'''
+                                            mloc, nb, nloc, '''+r'''
                                             mpi_comm_rows, mpi_comm_cols, MPI_Comm_c2f(MPI_COMM_WORLD),
                                             THIS_REAL_ELPA_KERNEL_API, useQr);'''
     newcode1 = '''elpa_t handle;
@@ -192,4 +188,3 @@ int pdgezolopd(char *jobh,int m,int n,double *A,int iA,int jA,int *descA,double 
 
     self.havepackage = True
     self.packageflags = l+' '+f
-

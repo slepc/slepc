@@ -57,7 +57,6 @@ class Primme(package.Package):
     code += '  return 0;\n}\n'
     return code
 
-
   def Check(self,slepcconf,slepcvars,petsc,archdir):
     code = self.SampleCode(petsc)
     if self.packagedir:
@@ -99,7 +98,6 @@ class Primme(package.Package):
           return
 
     self.log.Exit('Unable to link with PRIMME library in directories'+' '.join(dirs)+' with libraries and link flags '+' '.join(libs)+' [NOTE: make sure PRIMME version is 2.0 at least]')
-
 
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
     externdir = slepc.GetExternalPackagesDir(archdir)
@@ -163,7 +161,6 @@ class Primme(package.Package):
     self.havepackage = True
     self.packageflags = l+' '+f
 
-
   def LoadVersion(self,slepcconf):
     try:
       with open(os.path.join(self.location,'primme.h')) as f:
@@ -179,4 +176,3 @@ class Primme(package.Package):
         slepcconf.write('#define SLEPC_HAVE_PRIMME3 1\n')
     except Exception as e:
       self.log.write('Error while determining version of PRIMME:\n'+str(e))
-

@@ -71,4 +71,3 @@ class Feast(package.Package):
       else:
         slepcconf.write('#define SLEPC_HAVE_FEAST 1\n')
         self.havepackage = True
-

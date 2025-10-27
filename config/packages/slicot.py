@@ -26,7 +26,6 @@ class Slicot(package.Package):
     self.fortran        = True
     self.ProcessArgs(argdb)
 
-
   def Check(self,slepcconf,slepcvars,petsc,archdir):
     functions = ['sb03od','sb03md']
     libs = self.packagelibs if self.packagelibs else [['-lslicot']]
@@ -40,7 +39,6 @@ class Slicot(package.Package):
       dirs = self.GenerateGuesses('slicot',archdir)
 
     self.FortranLib(slepcconf,slepcvars,dirs,libs,functions)
-
 
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
     externdir = slepc.GetExternalPackagesDir(archdir)
@@ -71,4 +69,3 @@ class Slicot(package.Package):
     libs = [['-lslicot']]
     dirs = [libdir]
     self.FortranLib(slepcconf,slepcvars,dirs,libs,functions)
-

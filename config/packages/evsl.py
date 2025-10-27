@@ -25,7 +25,6 @@ class Evsl(package.Package):
     self.hasheaders     = True
     self.ProcessArgs(argdb)
 
-
   def SampleCode(self,petsc):
     code =  '#include <evsl.h>\n'
     code += 'int main() {\n'
@@ -37,7 +36,6 @@ class Evsl(package.Package):
     code += '  EVSLFinish();\n'
     code += '  return ierr;\n}\n'
     return code
-
 
   def Check(self,slepcconf,slepcvars,petsc,archdir):
     code = self.SampleCode(petsc)
@@ -78,7 +76,6 @@ class Evsl(package.Package):
 
     self.log.Exit('Unable to link with EVSL library in directories'+' '.join(dirs)+' with libraries and link flags '+' '.join(libs)+' [NOTE: make sure EVSL version is 1.1.1 at least]')
 
-
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
     externdir = slepc.GetExternalPackagesDir(archdir)
     builddir  = os.path.join(self.Download(externdir,slepc.downloaddir),'EVSL_1.1.1')
@@ -117,4 +114,3 @@ class Evsl(package.Package):
 
     self.havepackage = True
     self.packageflags = l+' '+f
-

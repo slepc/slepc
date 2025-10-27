@@ -123,4 +123,3 @@ class Blopex(package.Package):
 
     self.havepackage = True
     self.packageflags = l+' '+f
-
