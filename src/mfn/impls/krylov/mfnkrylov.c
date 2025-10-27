@@ -126,6 +126,19 @@ static PetscErrorCode MFNSolve_Krylov(MFN mfn,Vec b,Vec x)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   MFNKRYLOV - MFNKRYLOV = "krylov" - A restarted Krylov method for the application
+   of a matrix function to a vector.
+
+   Note:
+   This solver builds Arnoldi approximations using $f(H)$ for the Hessenberg matrix
+   $H$, and restarts by discarding the Krylov basis but keeping $H$, as proposed by
+   {cite:t}`Eie06`.
+
+   Level: beginner
+
+.seealso: [](ch:mfn), `MFN`, `MFNType`, `MFNSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode MFNCreate_Krylov(MFN mfn)
 {
   PetscFunctionBegin;

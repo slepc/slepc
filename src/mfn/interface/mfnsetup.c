@@ -75,8 +75,8 @@ PetscErrorCode MFNSetUp(MFN mfn)
 -  A   - the problem matrix
 
    Notes:
-   It must be called before MFNSetUp(). If it is called again after MFNSetUp() then
-   the MFN object is reset.
+   It must be called before `MFNSetUp()`. If it is called again after `MFNSetUp()` then
+   the `MFN` object is reset.
 
    Level: beginner
 
@@ -102,7 +102,7 @@ PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
 }
 
 /*@
-   MFNGetOperator - Gets the matrix associated with the MFN object.
+   MFNGetOperator - Gets the matrix associated with the `MFN` object.
 
    Collective
 

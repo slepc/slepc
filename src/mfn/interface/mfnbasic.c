@@ -181,7 +181,7 @@ PetscErrorCode MFNConvergedReasonViewFromOptions(MFN mfn)
 }
 
 /*@
-   MFNCreate - Creates the default `MFN` context.
+   MFNCreate - Creates the `MFN` context.
 
    Collective
 
@@ -419,7 +419,7 @@ PetscErrorCode MFNReset(MFN mfn)
 }
 
 /*@
-   MFNDestroy - Destroys the MFN context.
+   MFNDestroy - Destroys the `MFN` context.
 
    Collective
 
@@ -513,9 +513,12 @@ PetscErrorCode MFNGetBV(MFN mfn,BV *bv)
 +  mfn - the matrix function solver context
 -  fn  - the math function object
 
-   Note:
-   Use MFNGetFN() to retrieve the math function context (for example,
-   to free it at the end of the computations).
+   Notes:
+   At a later time, use `MFNGetFN()` to retrieve the math function context
+   (for example, to free it at the end of the computations).
+
+   This function is not called in normal usage. Instead, it is easier to
+   extract the internal `FN` object with `MFNGetFN()` and modify it.
 
    Level: beginner
 
@@ -534,7 +537,7 @@ PetscErrorCode MFNSetFN(MFN mfn,FN fn)
 }
 
 /*@
-   MFNGetFN - Obtain the math function object associated to the MFN object.
+   MFNGetFN - Obtain the math function object associated to the `MFN` object.
 
    Not Collective
 
@@ -544,9 +547,13 @@ PetscErrorCode MFNSetFN(MFN mfn,FN fn)
    Output Parameter:
 .  fn - math function context
 
+   Note:
+   This is the usual way to specify the function that needs to be applied
+   to a given vector in `MFNSolve()`.
+
    Level: beginner
 
-.seealso: [](ch:mfn), `MFNSetFN()`
+.seealso: [](ch:mfn), `MFNSetFN()`. `MFNSolve()`
 @*/
 PetscErrorCode MFNGetFN(MFN mfn,FN *fn)
 {

@@ -130,7 +130,7 @@ PetscErrorCode MFNSetFromOptions(MFN mfn)
 
 /*@
    MFNGetTolerances - Gets the tolerance and maximum iteration count used
-   by the MFN convergence tests.
+   by the `MFN` convergence tests.
 
    Not Collective
 
@@ -142,7 +142,7 @@ PetscErrorCode MFNSetFromOptions(MFN mfn)
 -  maxits - maximum number of iterations
 
    Notes:
-   The user can specify NULL for any parameter that is not needed.
+   The user can specify `NULL` for any parameter that is not needed.
 
    Level: intermediate
 
@@ -159,7 +159,7 @@ PetscErrorCode MFNGetTolerances(MFN mfn,PetscReal *tol,PetscInt *maxits)
 
 /*@
    MFNSetTolerances - Sets the tolerance and maximum iteration count used
-   by the MFN convergence tests.
+   by the `MFN` convergence tests.
 
    Logically Collective
 
@@ -173,10 +173,10 @@ PetscErrorCode MFNGetTolerances(MFN mfn,PetscReal *tol,PetscInt *maxits)
 -  -mfn_max_it <maxits> - Sets the maximum number of iterations allowed
 
    Notes:
-   Use PETSC_CURRENT to retain the current value of any of the parameters.
-   Use PETSC_DETERMINE for either argument to assign a default value computed
+   Use `PETSC_CURRENT` to retain the current value of any of the parameters.
+   Use `PETSC_DETERMINE` for either argument to assign a default value computed
    internally (may be different in each solver).
-   For maxits use PETSC_UMLIMITED to indicate there is no upper bound on this value.
+   For `maxits` use `PETSC_UNLIMITED` to indicate there is no upper bound on this value.
 
    Level: intermediate
 
@@ -244,7 +244,7 @@ PetscErrorCode MFNGetDimensions(MFN mfn,PetscInt *ncv)
 .  -mfn_ncv <ncv> - Sets the dimension of the subspace
 
    Notes:
-   Use PETSC_DETERMINE for ncv to assign a reasonably good value, which is
+   Use `PETSC_DETERMINE` for `ncv` to assign a reasonably good value, which is
    dependent on the solution method.
 
    Level: intermediate
@@ -267,23 +267,23 @@ PetscErrorCode MFNSetDimensions(MFN mfn,PetscInt ncv)
 }
 
 /*@
-   MFNSetErrorIfNotConverged - Causes MFNSolve() to generate an error if the
+   MFNSetErrorIfNotConverged - Causes `MFNSolve()` to generate an error if the
    solver has not converged.
 
    Logically Collective
 
    Input Parameters:
 +  mfn - the matrix function solver context
--  flg - PETSC_TRUE indicates you want the error generated
+-  flg - `PETSC_TRUE` indicates you want the error generated
 
    Options Database Key:
-.  -mfn_error_if_not_converged - this takes an optional truth value (0/1/no/yes/true/false)
-
-   Level: intermediate
+.  -mfn_error_if_not_converged <true,false> - generate an error and stop the program
 
    Note:
    Normally SLEPc continues if the solver fails to converge, you can call
-   MFNGetConvergedReason() after a MFNSolve() to determine if it has converged.
+   `MFNGetConvergedReason()` after a `MFNSolve()` to determine if it has converged.
+
+   Level: intermediate
 
 .seealso: [](ch:mfn), `MFNGetErrorIfNotConverged()`
 @*/
@@ -297,7 +297,7 @@ PetscErrorCode MFNSetErrorIfNotConverged(MFN mfn,PetscBool flg)
 }
 
 /*@
-   MFNGetErrorIfNotConverged - Return a flag indicating whether MFNSolve() will
+   MFNGetErrorIfNotConverged - Return a flag indicating whether `MFNSolve()` will
    generate an error if the solver does not converge.
 
    Not Collective
@@ -306,7 +306,7 @@ PetscErrorCode MFNSetErrorIfNotConverged(MFN mfn,PetscBool flg)
 .  mfn - the matrix function solver context
 
    Output Parameter:
-.  flag - PETSC_TRUE if it will generate an error, else PETSC_FALSE
+.  flag - `PETSC_TRUE` if it will generate an error, else `PETSC_FALSE`
 
    Level: intermediate
 

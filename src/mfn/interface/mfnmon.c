@@ -45,7 +45,7 @@ PetscErrorCode MFNMonitor(MFN mfn,PetscInt it,PetscReal errest)
 +  -mfn_monitor               - print the error estimate
 .  -mfn_monitor draw::draw_lg - sets line graph monitor for the error estimate
 -  -mfn_monitor_cancel        - cancels all monitors that have been hardwired into
-                                a code by calls to MFNMonitorSet(), but does not cancel
+                                a code by calls to `MFNMonitorSet()`, but does not cancel
                                 those set via the options database.
 
    Notes:

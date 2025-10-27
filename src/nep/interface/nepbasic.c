@@ -28,7 +28,7 @@ PetscFunctionList NEPMonitorDestroyList       = NULL;
 PetscBool         NEPMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   NEPCreate - Creates the default `NEP` context.
+   NEPCreate - Creates the `NEP` context.
 
    Collective
 

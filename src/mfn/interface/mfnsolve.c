@@ -49,8 +49,8 @@ static PetscErrorCode MFNSolve_Private(MFN mfn,Vec b,Vec x)
 }
 
 /*@
-   MFNSolve - Solves the matrix function problem. Given a vector b, the
-   vector x = f(A)*b is returned.
+   MFNSolve - Solves the matrix function problem. Given a vector $b$, the
+   vector $x = f(A)b$ is returned.
 
    Collective
 
@@ -59,19 +59,25 @@ static PetscErrorCode MFNSolve_Private(MFN mfn,Vec b,Vec x)
 -  b   - the right hand side vector
 
    Output Parameter:
-.  x   - the solution (this may be the same vector as b, then b will be
+.  x   - the solution (this may be the same vector as `b`, then `b` will be
          overwritten with the answer)
 
    Options Database Keys:
 +  -mfn_view - print information about the solver used
-.  -mfn_view_mat binary - save the matrix to the default binary viewer
-.  -mfn_view_rhs binary - save right hand side vector to the default binary viewer
-.  -mfn_view_solution binary - save computed solution vector to the default binary viewer
--  -mfn_converged_reason - print reason for convergence, and number of iterations
+.  -mfn_view_pre - print information about the solver before the solve starts
+.  -mfn_view_mat - view the matrix
+.  -mfn_view_rhs - view right hand side vector
+.  -mfn_view_solution - view computed solution vector
+-  -mfn_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:
-   The matrix A is specified with MFNSetOperator().
-   The function f is specified with MFNSetFN().
+   The matrix $A$ is specified with `MFNSetOperator()`. The function $f$ is
+   specified via the `FN` object obtained with `MFNGetFN()` or set with `MFNSetFN()`.
+
+   All the command-line options listed above admit an optional argument specifying
+   the viewer type and options. For instance, use `-mfn_view_mat binary:amatrix.bin`
+   to save the matrix to a binary file, or `-mfn_view_solution :sol.m:ascii_matlab`
+   to save the solution in a file that can be executed in Matlab.
 
    Level: beginner
 
@@ -91,8 +97,8 @@ PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
 }
 
 /*@
-   MFNSolveTranspose - Solves the transpose matrix function problem. Given a vector b,
-   the vector x = f(A^T)*b is returned.
+   MFNSolveTranspose - Solves the transpose matrix function problem. Given a vector $b$,
+   the vector $x = f(A^T)b$ is returned.
 
    Collective
 
@@ -101,15 +107,24 @@ PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
 -  b   - the right hand side vector
 
    Output Parameter:
-.  x   - the solution (this may be the same vector as b, then b will be
+.  x   - the solution (this may be the same vector as `b`, then `b` will be
          overwritten with the answer)
 
-   Note:
-   See available options at MFNSolve().
+   Notes:
+   The matrix $A$ is specified with `MFNSetOperator()`. The function $f$ is
+   specified via the `FN` object obtained with `MFNGetFN()` or set with `MFNSetFN()`.
+
+   See available command-line options at `MFNSolve()`.
+
+   Developer Notes:
+   This is currently implemented with an explicit transpose matrix created
+   with `MatCreateTranspose()`.
+
+   Currently there is no conjugate-transpose version.
 
    Level: beginner
 
-.seealso: [](ch:mfn), `MFNSolve()`
+.seealso: [](ch:mfn), `MFNSolve()`, `MatCreateTranspose()`
 @*/
 PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
 {
@@ -127,7 +142,7 @@ PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
 
 /*@
    MFNGetIterationNumber - Gets the current iteration number. If the
-   call to MFNSolve() is complete, then it returns the number of iterations
+   call to `MFNSolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
@@ -139,10 +154,10 @@ PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If MFNSolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `MFNSolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call MFNGetConvergedReason() to determine if the solver converged or
+   Call `MFNGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate

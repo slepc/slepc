@@ -179,6 +179,21 @@ static PetscErrorCode MFNSolve_Expokit(MFN mfn,Vec b,Vec x)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   MFNEXPOKIT - MFNEXPOKIT = "expokit" - An Arnoldi method tailored for the
+   matrix exponential, as implemented in the Expokit package.
+
+   Notes:
+   This solver implements the method of Expokit natively in SLEPc, rather than
+   interfacing to the original Expokit software {cite:p}`Sid98`.
+
+   The method uses Arnoldi relations to compute $\exp(\alpha A)v_\mathrm{last}$
+   for several time steps, where $\alpha$ is the time step size.
+
+   Level: beginner
+
+.seealso: [](ch:mfn), `MFN`, `MFNType`, `MFNSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode MFNCreate_Expokit(MFN mfn)
 {
   PetscFunctionBegin;

@@ -22,7 +22,8 @@ SLEPC_EXTERN PetscErrorCode MFNInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode MFNFinalizePackage(void);
 
 /*S
-   MFN - SLEPc object that encapsulates functionality for matrix functions.
+   MFN - SLEPc object that encapsulates the functionality for matrix functions,
+   more precisely the action of a matrix function on a vector, $y=f(A)v$.
 
    Level: beginner
 
@@ -181,6 +182,56 @@ typedef enum {/* converged */
               MFN_DIVERGED_BREAKDOWN           = -2,
               MFN_CONVERGED_ITERATING          =  0} MFNConvergedReason;
 SLEPC_EXTERN const char *const*MFNConvergedReasons;
+
+/*MC
+   MFN_CONVERGED_TOL - The computed error estimate is below the tolerance.
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
+
+/*MC
+   MFN_CONVERGED_ITS - The solver completed the requested number of steps.
+
+   Note:
+   Basic solvers (e.g., unrestarted Krylov iterations) cannot determine if the
+   computation is accurate up to the requested tolerance. In that case, the
+   converged reason is set to `MFN_CONVERGED_ITS` if the requested number of steps
+   (for instance, the `ncv` value in unrestarted Krylov methods) have been
+   completed successfully.
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
+
+/*MC
+   MFN_DIVERGED_ITS - Ran out of iterations before the convergence criterion was
+   reached.
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
+
+/*MC
+   MFN_DIVERGED_BREAKDOWN - A breakdown in the solver was detected so the
+   method could not continue.
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
+
+/*MC
+   MFN_CONVERGED_ITERATING - This flag is returned if `MFNGetConvergedReason()` is called
+   while `MFNSolve()` is still running..
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
 
 SLEPC_EXTERN PetscErrorCode MFNGetConvergedReason(MFN,MFNConvergedReason*);
 
