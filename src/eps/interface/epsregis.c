@@ -107,7 +107,7 @@ PetscErrorCode EPSRegisterAll(void)
 }
 
 /*@C
-  EPSMonitorRegisterAll - Registers all the monitors in the EPS package.
+  EPSMonitorRegisterAll - Registers all the monitors in the `EPS` package.
 
   Not Collective
 

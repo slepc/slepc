@@ -323,13 +323,13 @@ PetscErrorCode MFNGetErrorIfNotConverged(MFN mfn,PetscBool *flag)
 
 /*@
    MFNSetOptionsPrefix - Sets the prefix used for searching for all
-   MFN options in the database.
+   `MFN` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function solver context
--  prefix - the prefix string to prepend to all MFN option requests
++  mfn    - the matrix function solver context
+-  prefix - the prefix string to prepend to all `MFN` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -337,10 +337,10 @@ PetscErrorCode MFNGetErrorIfNotConverged(MFN mfn,PetscBool *flag)
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different MFN contexts, one could call
+   different `MFN` contexts, one could call
 .vb
-      MFNSetOptionsPrefix(mfn1,"fun1_")
-      MFNSetOptionsPrefix(mfn2,"fun2_")
+   MFNSetOptionsPrefix(mfn1,"fun1_")
+   MFNSetOptionsPrefix(mfn2,"fun2_")
 .ve
 
    Level: advanced
@@ -361,13 +361,13 @@ PetscErrorCode MFNSetOptionsPrefix(MFN mfn,const char prefix[])
 
 /*@
    MFNAppendOptionsPrefix - Appends to the prefix used for searching for all
-   MFN options in the database.
+   `MFN` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  mfn - the matrix function solver context
--  prefix - the prefix string to prepend to all MFN option requests
++  mfn    - the matrix function solver context
+-  prefix - the prefix string to prepend to all `MFN` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.

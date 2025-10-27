@@ -40,15 +40,15 @@ PetscErrorCode NEPSetDSType(NEP nep)
 
 /*@
    NEPSetUp - Sets up all the internal data structures necessary for the
-   execution of the NEP solver.
+   execution of the nonlinear eigensolver.
 
    Collective
 
    Input Parameter:
-.  nep   - the nonlinear eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Notes:
-   This function need not be called explicitly in most cases, since NEPSolve()
+   This function need not be called explicitly in most cases, since `NEPSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
@@ -288,15 +288,15 @@ PetscErrorCode NEPSetDimensions_Default(NEP nep,PetscInt nev,PetscInt *ncv,Petsc
    Input Parameters:
 +  nep   - the nonlinear eigensolver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin NEP
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `NEP`
    implementations.
 
    Level: developer
 
-.seealso: [](ch:nep), `PEPSetUp()`
+.seealso: [](ch:nep), `PEPSetUp()`, `PEPSetDimensions()`
 @*/
 PetscErrorCode NEPAllocateSolution(NEP nep,PetscInt extra)
 {

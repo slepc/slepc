@@ -65,15 +65,15 @@ PetscErrorCode PEPSetDSType(PEP pep)
 
 /*@
    PEPSetUp - Sets up all the internal data structures necessary for the
-   execution of the PEP solver.
+   execution of the polynomial eigensolver.
 
    Collective
 
    Input Parameter:
-.  pep   - the polynomial eigensolver context
+.  pep - the polynomial eigensolver context
 
    Notes:
-   This function need not be called explicitly in most cases, since PEPSolve()
+   This function need not be called explicitly in most cases, since `PEPSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
@@ -450,15 +450,15 @@ PetscErrorCode PEPSetDimensions_Default(PEP pep,PetscInt nev,PetscInt *ncv,Petsc
    Input Parameters:
 +  pep   - the polynomial eigensolver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin PEP
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `PEP`
    implementations.
 
    Level: developer
 
-.seealso: [](ch:pep), `PEPSetUp()`
+.seealso: [](ch:pep), `PEPSetUp()`, `PEPSetDimensions()`
 @*/
 PetscErrorCode PEPAllocateSolution(PEP pep,PetscInt extra)
 {

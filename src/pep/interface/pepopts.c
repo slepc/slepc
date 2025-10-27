@@ -1271,13 +1271,13 @@ PetscErrorCode PEPGetRefine(PEP pep,PEPRefine *refine,PetscInt *npart,PetscReal 
 
 /*@
    PEPSetOptionsPrefix - Sets the prefix used for searching for all
-   PEP options in the database.
+   `PEP` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  pep - the polynomial eigensolver context
--  prefix - the prefix string to prepend to all PEP option requests
++  pep    - the polynomial eigensolver context
+-  prefix - the prefix string to prepend to all `PEP` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -1285,10 +1285,10 @@ PetscErrorCode PEPGetRefine(PEP pep,PEPRefine *refine,PetscInt *npart,PetscReal 
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different PEP contexts, one could call
+   different `PEP` contexts, one could call
 .vb
-      PEPSetOptionsPrefix(pep1,"qeig1_")
-      PEPSetOptionsPrefix(pep2,"qeig2_")
+   PEPSetOptionsPrefix(pep1,"qeig1_")
+   PEPSetOptionsPrefix(pep2,"qeig2_")
 .ve
 
    Level: advanced
@@ -1313,13 +1313,13 @@ PetscErrorCode PEPSetOptionsPrefix(PEP pep,const char prefix[])
 
 /*@
    PEPAppendOptionsPrefix - Appends to the prefix used for searching for all
-   PEP options in the database.
+   `PEP` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  pep - the polynomial eigensolver context
--  prefix - the prefix string to prepend to all PEP option requests
++  pep    - the polynomial eigensolver context
+-  prefix - the prefix string to prepend to all `PEP` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.

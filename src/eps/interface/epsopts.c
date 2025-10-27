@@ -1489,13 +1489,13 @@ PetscErrorCode EPSGetPurify(EPS eps,PetscBool *purify)
 
 /*@
    EPSSetOptionsPrefix - Sets the prefix used for searching for all
-   EPS options in the database.
+   `EPS` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context
--  prefix - the prefix string to prepend to all EPS option requests
++  eps    - the linear eigensolver context
+-  prefix - the prefix string to prepend to all `EPS` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -1503,10 +1503,10 @@ PetscErrorCode EPSGetPurify(EPS eps,PetscBool *purify)
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different EPS contexts, one could call
+   different `EPS` contexts, one could call
 .vb
-      EPSSetOptionsPrefix(eps1,"eig1_")
-      EPSSetOptionsPrefix(eps2,"eig2_")
+   EPSSetOptionsPrefix(eps1,"eig1_")
+   EPSSetOptionsPrefix(eps2,"eig2_")
 .ve
 
    Level: advanced
@@ -1531,13 +1531,13 @@ PetscErrorCode EPSSetOptionsPrefix(EPS eps,const char prefix[])
 
 /*@
    EPSAppendOptionsPrefix - Appends to the prefix used for searching for all
-   EPS options in the database.
+   `EPS` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context
--  prefix - the prefix string to prepend to all EPS option requests
++  eps    - the linear eigensolver context
+-  prefix - the prefix string to prepend to all `EPS` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.

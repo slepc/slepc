@@ -994,13 +994,13 @@ PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
 
 /*@
    SVDSetOptionsPrefix - Sets the prefix used for searching for all
-   SVD options in the database.
+   `SVD` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  svd - the singular value solver context
--  prefix - the prefix string to prepend to all SVD option requests
++  svd    - the singular value solver context
+-  prefix - the prefix string to prepend to all `SVD` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -1008,10 +1008,10 @@ PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different SVD contexts, one could call
+   different `SVD` contexts, one could call
 .vb
-      SVDSetOptionsPrefix(svd1,"svd1_")
-      SVDSetOptionsPrefix(svd2,"svd2_")
+   SVDSetOptionsPrefix(svd1,"svd1_")
+   SVDSetOptionsPrefix(svd2,"svd2_")
 .ve
 
    Level: advanced
@@ -1033,13 +1033,13 @@ PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char prefix[])
 
 /*@
    SVDAppendOptionsPrefix - Appends to the prefix used for searching for all
-   SVD options in the database.
+   `SVD` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  svd - the singular value solver context
--  prefix - the prefix string to prepend to all SVD option requests
++  svd    - the singular value solver context
+-  prefix - the prefix string to prepend to all `SVD` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.

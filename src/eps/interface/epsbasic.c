@@ -290,8 +290,8 @@ PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 }
 
 /*@
-   EPSReset - Resets the EPS context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   EPSReset - Resets the `EPS` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 

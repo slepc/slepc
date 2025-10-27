@@ -45,7 +45,7 @@ PetscErrorCode PEPRegisterAll(void)
 }
 
 /*@C
-  PEPMonitorRegisterAll - Registers all the monitors in the PEP package.
+  PEPMonitorRegisterAll - Registers all the monitors in the `PEP` package.
 
   Not Collective
 

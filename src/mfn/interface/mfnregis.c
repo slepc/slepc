@@ -33,7 +33,7 @@ PetscErrorCode MFNRegisterAll(void)
 }
 
 /*@C
-  MFNMonitorRegisterAll - Registers all the monitors in the MFN package.
+  MFNMonitorRegisterAll - Registers all the monitors in the `MFN` package.
 
   Not Collective
 

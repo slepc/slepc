@@ -1050,13 +1050,13 @@ PetscErrorCode NEPGetRefine(NEP nep,NEPRefine *refine,PetscInt *npart,PetscReal 
 
 /*@
    NEPSetOptionsPrefix - Sets the prefix used for searching for all
-   NEP options in the database.
+   `NEP` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  nep - the nonlinear eigensolver context
--  prefix - the prefix string to prepend to all NEP option requests
++  nep    - the nonlinear eigensolver context
+-  prefix - the prefix string to prepend to all `NEP` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -1064,10 +1064,10 @@ PetscErrorCode NEPGetRefine(NEP nep,NEPRefine *refine,PetscInt *npart,PetscReal 
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different NEP contexts, one could call
+   different `NEP` contexts, one could call
 .vb
-      NEPSetOptionsPrefix(nep1,"neig1_")
-      NEPSetOptionsPrefix(nep2,"neig2_")
+   NEPSetOptionsPrefix(nep1,"neig1_")
+   NEPSetOptionsPrefix(nep2,"neig2_")
 .ve
 
    Level: advanced
@@ -1090,13 +1090,13 @@ PetscErrorCode NEPSetOptionsPrefix(NEP nep,const char prefix[])
 
 /*@
    NEPAppendOptionsPrefix - Appends to the prefix used for searching for all
-   NEP options in the database.
+   `NEP` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  nep - the nonlinear eigensolver context
--  prefix - the prefix string to prepend to all NEP option requests
++  nep    - the nonlinear eigensolver context
+-  prefix - the prefix string to prepend to all `NEP` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.

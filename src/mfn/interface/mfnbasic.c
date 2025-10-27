@@ -392,8 +392,8 @@ PetscErrorCode MFNMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 }
 
 /*@
-   MFNReset - Resets the MFN context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   MFNReset - Resets the `MFN` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 
@@ -455,7 +455,7 @@ PetscErrorCode MFNDestroy(MFN *mfn)
 -  bv  - the basis vectors object
 
    Note:
-   Use MFNGetBV() to retrieve the basis vectors context (for example,
+   Use `MFNGetBV()` to retrieve the basis vectors context (for example,
    to free it at the end of the computations).
 
    Level: advanced

@@ -264,22 +264,22 @@ PetscErrorCode EPSSetDSType(EPS eps)
 
 /*@
    EPSSetUp - Sets up all the internal data structures necessary for the
-   execution of the eigensolver. Then calls STSetUp() for any set-up
-   operations associated to the ST object.
+   execution of the eigensolver. Then calls `STSetUp()` for any set-up
+   operations associated to the internal `ST` object.
 
    Collective
 
    Input Parameter:
-.  eps   - the linear eigensolver context
+.  eps - the linear eigensolver context
 
    Notes:
-   This function need not be called explicitly in most cases, since EPSSolve()
+   This function need not be called explicitly in most cases, since `EPSSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
    Level: developer
 
-.seealso: [](ch:eps), `EPSCreate()`, `EPSSolve()`, `EPSDestroy()`, `STSetUp()`, `EPSSetInitialSpace()`
+.seealso: [](ch:eps), `EPSCreate()`, `EPSSolve()`, `EPSDestroy()`, `STSetUp()`, `EPSSetInitialSpace()`, `EPSSetDeflationSpace()`
 @*/
 PetscErrorCode EPSSetUp(EPS eps)
 {
@@ -702,15 +702,15 @@ PetscErrorCode EPSSetDimensions_Default(EPS eps,PetscInt *nev,PetscInt *ncv,Pets
    Input Parameters:
 +  eps   - the linear eigensolver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin EPS
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `EPS`
    implementations.
 
    Level: developer
 
-.seealso: [](ch:eps), `EPSSetUp()`
+.seealso: [](ch:eps), `EPSSetUp()`, `EPSSetDimensions()`
 @*/
 PetscErrorCode EPSAllocateSolution(EPS eps,PetscInt extra)
 {

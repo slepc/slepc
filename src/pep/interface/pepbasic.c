@@ -286,8 +286,8 @@ PetscErrorCode PEPMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 }
 
 /*@
-   PEPReset - Resets the PEP context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   PEPReset - Resets the `PEP` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 
