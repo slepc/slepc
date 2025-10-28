@@ -166,7 +166,7 @@ static PetscErrorCode RGPolygonGetVertices_Polygon(RG rg,PetscInt *n,PetscScalar
 
    Level: advanced
 
-.seealso: [](sec:rg), `RGPolygonSetVertices()`
+.seealso: [](sec:rg), `RGPOLYGON`, `RGPolygonSetVertices()`
 @*/
 PetscErrorCode RGPolygonGetVertices(RG rg,PetscInt *n,PetscScalar *vr[],PetscScalar *vi[]) PeNS
 {

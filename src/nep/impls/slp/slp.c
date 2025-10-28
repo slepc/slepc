@@ -309,7 +309,7 @@ static PetscErrorCode NEPSLPSetDeflationThreshold_SLP(NEP nep,PetscReal deftol)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPSLPGetDeflationThreshold()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPGetDeflationThreshold()`
 @*/
 PetscErrorCode NEPSLPSetDeflationThreshold(NEP nep,PetscReal deftol)
 {
@@ -342,7 +342,7 @@ static PetscErrorCode NEPSLPGetDeflationThreshold_SLP(NEP nep,PetscReal *deftol)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPSLPSetDeflationThreshold()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPSetDeflationThreshold()`
 @*/
 PetscErrorCode NEPSLPGetDeflationThreshold(NEP nep,PetscReal *deftol)
 {
@@ -377,7 +377,7 @@ static PetscErrorCode NEPSLPSetEPS_SLP(NEP nep,EPS eps)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPSLPGetEPS()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPGetEPS()`
 @*/
 PetscErrorCode NEPSLPSetEPS(NEP nep,EPS eps)
 {
@@ -419,7 +419,7 @@ static PetscErrorCode NEPSLPGetEPS_SLP(NEP nep,EPS *eps)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPSLPSetEPS()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPSetEPS()`
 @*/
 PetscErrorCode NEPSLPGetEPS(NEP nep,EPS *eps)
 {
@@ -455,7 +455,7 @@ static PetscErrorCode NEPSLPSetEPSLeft_SLP(NEP nep,EPS eps)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPSLPGetEPSLeft()`, `NEPSetTwoSided()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPGetEPSLeft()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPSLPSetEPSLeft(NEP nep,EPS eps)
 {
@@ -498,7 +498,7 @@ static PetscErrorCode NEPSLPGetEPSLeft_SLP(NEP nep,EPS *eps)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPSLPSetEPSLeft()`, `NEPSetTwoSided()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPSetEPSLeft()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPSLPGetEPSLeft(NEP nep,EPS *eps)
 {
@@ -533,7 +533,7 @@ static PetscErrorCode NEPSLPSetKSP_SLP(NEP nep,KSP ksp)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPSLPGetKSP()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPGetKSP()`
 @*/
 PetscErrorCode NEPSLPSetKSP(NEP nep,KSP ksp)
 {
@@ -577,7 +577,7 @@ static PetscErrorCode NEPSLPGetKSP_SLP(NEP nep,KSP *ksp)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPSLPSetKSP()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPSetKSP()`
 @*/
 PetscErrorCode NEPSLPGetKSP(NEP nep,KSP *ksp)
 {

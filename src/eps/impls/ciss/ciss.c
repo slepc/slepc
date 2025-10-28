@@ -743,7 +743,7 @@ static PetscErrorCode EPSCISSSetSizes_CISS(EPS eps,PetscInt ip,PetscInt bs,Petsc
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSGetSizes()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetSizes()`
 @*/
 PetscErrorCode EPSCISSSetSizes(EPS eps,PetscInt ip,PetscInt bs,PetscInt ms,PetscInt npart,PetscInt bsmax,PetscBool realmats)
 {
@@ -791,7 +791,7 @@ static PetscErrorCode EPSCISSGetSizes_CISS(EPS eps,PetscInt *ip,PetscInt *bs,Pet
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSSetSizes()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetSizes()`
 @*/
 PetscErrorCode EPSCISSGetSizes(EPS eps,PetscInt *ip,PetscInt *bs,PetscInt *ms,PetscInt *npart,PetscInt *bsmax,PetscBool *realmats)
 {
@@ -842,7 +842,7 @@ static PetscErrorCode EPSCISSSetThreshold_CISS(EPS eps,PetscReal delta,PetscReal
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSGetThreshold()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetThreshold()`
 @*/
 PetscErrorCode EPSCISSSetThreshold(EPS eps,PetscReal delta,PetscReal spur)
 {
@@ -879,7 +879,7 @@ static PetscErrorCode EPSCISSGetThreshold_CISS(EPS eps,PetscReal *delta,PetscRea
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSSetThreshold()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetThreshold()`
 @*/
 PetscErrorCode EPSCISSGetThreshold(EPS eps,PetscReal *delta,PetscReal *spur)
 {
@@ -930,7 +930,7 @@ static PetscErrorCode EPSCISSSetRefinement_CISS(EPS eps,PetscInt inner,PetscInt 
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSGetRefinement()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetRefinement()`
 @*/
 PetscErrorCode EPSCISSSetRefinement(EPS eps,PetscInt inner,PetscInt blsize)
 {
@@ -967,7 +967,7 @@ static PetscErrorCode EPSCISSGetRefinement_CISS(EPS eps,PetscInt *inner,PetscInt
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSSetRefinement()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetRefinement()`
 @*/
 PetscErrorCode EPSCISSGetRefinement(EPS eps, PetscInt *inner, PetscInt *blsize)
 {
@@ -1003,7 +1003,7 @@ static PetscErrorCode EPSCISSSetUseST_CISS(EPS eps,PetscBool usest)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSGetUseST()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetUseST()`
 @*/
 PetscErrorCode EPSCISSSetUseST(EPS eps,PetscBool usest)
 {
@@ -1037,7 +1037,7 @@ static PetscErrorCode EPSCISSGetUseST_CISS(EPS eps,PetscBool *usest)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSSetUseST()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetUseST()`
 @*/
 PetscErrorCode EPSCISSGetUseST(EPS eps,PetscBool *usest)
 {
@@ -1081,7 +1081,7 @@ static PetscErrorCode EPSCISSSetQuadRule_CISS(EPS eps,EPSCISSQuadRule quad)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSGetQuadRule()`, `EPSCISSQuadRule`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetQuadRule()`, `EPSCISSQuadRule`
 @*/
 PetscErrorCode EPSCISSSetQuadRule(EPS eps,EPSCISSQuadRule quad)
 {
@@ -1114,7 +1114,7 @@ static PetscErrorCode EPSCISSGetQuadRule_CISS(EPS eps,EPSCISSQuadRule *quad)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSSetQuadRule()`, `EPSCISSQuadRule`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetQuadRule()`, `EPSCISSQuadRule`
 @*/
 PetscErrorCode EPSCISSGetQuadRule(EPS eps,EPSCISSQuadRule *quad)
 {
@@ -1158,7 +1158,7 @@ static PetscErrorCode EPSCISSSetExtraction_CISS(EPS eps,EPSCISSExtraction extrac
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSGetExtraction()`, `EPSCISSExtraction`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetExtraction()`, `EPSCISSExtraction`
 @*/
 PetscErrorCode EPSCISSSetExtraction(EPS eps,EPSCISSExtraction extraction)
 {
@@ -1191,7 +1191,7 @@ static PetscErrorCode EPSCISSGetExtraction_CISS(EPS eps,EPSCISSExtraction *extra
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSSetExtraction()`, `EPSCISSExtraction`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetExtraction()`, `EPSCISSExtraction`
 @*/
 PetscErrorCode EPSCISSGetExtraction(EPS eps,EPSCISSExtraction *extraction)
 {
@@ -1264,7 +1264,7 @@ static PetscErrorCode EPSCISSGetKSPs_CISS(EPS eps,PetscInt *nsolve,KSP **ksp)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSSetSizes()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetSizes()`
 @*/
 PetscErrorCode EPSCISSGetKSPs(EPS eps,PetscInt *nsolve,KSP **ksp)
 {

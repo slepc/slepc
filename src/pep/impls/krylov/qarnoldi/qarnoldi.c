@@ -328,7 +328,7 @@ static PetscErrorCode PEPQArnoldiSetRestart_QArnoldi(PEP pep,PetscReal keep)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPQArnoldiGetRestart()`
+.seealso: [](ch:pep), `PEPQARNOLDI`, `PEPQArnoldiGetRestart()`
 @*/
 PetscErrorCode PEPQArnoldiSetRestart(PEP pep,PetscReal keep)
 {
@@ -361,7 +361,7 @@ static PetscErrorCode PEPQArnoldiGetRestart_QArnoldi(PEP pep,PetscReal *keep)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPQArnoldiSetRestart()`
+.seealso: [](ch:pep), `PEPQARNOLDI`, `PEPQArnoldiSetRestart()`
 @*/
 PetscErrorCode PEPQArnoldiGetRestart(PEP pep,PetscReal *keep)
 {
@@ -402,7 +402,7 @@ static PetscErrorCode PEPQArnoldiSetLocking_QArnoldi(PEP pep,PetscBool lock)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPQArnoldiGetLocking()`
+.seealso: [](ch:pep), `PEPQARNOLDI`, `PEPQArnoldiGetLocking()`
 @*/
 PetscErrorCode PEPQArnoldiSetLocking(PEP pep,PetscBool lock)
 {
@@ -435,7 +435,7 @@ static PetscErrorCode PEPQArnoldiGetLocking_QArnoldi(PEP pep,PetscBool *lock)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPQArnoldiSetLocking()`
+.seealso: [](ch:pep), `PEPQARNOLDI`, `PEPQArnoldiSetLocking()`
 @*/
 PetscErrorCode PEPQArnoldiGetLocking(PEP pep,PetscBool *lock)
 {

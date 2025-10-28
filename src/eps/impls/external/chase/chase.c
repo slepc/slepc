@@ -162,7 +162,7 @@ static PetscErrorCode EPSCHASESetDegree_ChASE(EPS eps,PetscInt deg,PetscBool opt
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCHASEGetDegree()`
+.seealso: [](ch:eps), `EPSCHASE`, `EPSCHASEGetDegree()`
 @*/
 PetscErrorCode EPSCHASESetDegree(EPS eps,PetscInt deg,PetscBool opt)
 {
@@ -198,7 +198,7 @@ static PetscErrorCode EPSCHASEGetDegree_ChASE(EPS eps,PetscInt *deg,PetscBool *o
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCHASESetDegree()`
+.seealso: [](ch:eps), `EPSCHASE`, `EPSCHASESetDegree()`
 @*/
 PetscErrorCode EPSCHASEGetDegree(EPS eps,PetscInt *deg,PetscBool *opt)
 {

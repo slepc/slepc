@@ -282,7 +282,7 @@ static PetscErrorCode EPSFEASTSetNumPoints_FEAST(EPS eps,PetscInt npoints)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSFEASTGetNumPoints()`
+.seealso: [](ch:eps), `EPSFEAST`, `EPSFEASTGetNumPoints()`
 @*/
 PetscErrorCode EPSFEASTSetNumPoints(EPS eps,PetscInt npoints)
 {
@@ -316,7 +316,7 @@ static PetscErrorCode EPSFEASTGetNumPoints_FEAST(EPS eps,PetscInt *npoints)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSFEASTSetNumPoints()`
+.seealso: [](ch:eps), `EPSFEAST`, `EPSFEASTSetNumPoints()`
 @*/
 PetscErrorCode EPSFEASTGetNumPoints(EPS eps,PetscInt *npoints)
 {

@@ -292,7 +292,7 @@ static PetscErrorCode EPSEVSLSetSlices_EVSL(EPS eps,PetscInt nslices)
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLGetSlices()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetSlices()`
 @*/
 PetscErrorCode EPSEVSLSetSlices(EPS eps,PetscInt nslices)
 {
@@ -326,7 +326,7 @@ static PetscErrorCode EPSEVSLGetSlices_EVSL(EPS eps,PetscInt *nslices)
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLSetSlices()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetSlices()`
 @*/
 PetscErrorCode EPSEVSLGetSlices(EPS eps,PetscInt *nslices)
 {
@@ -375,7 +375,7 @@ static PetscErrorCode EPSEVSLSetRange_EVSL(EPS eps,PetscReal lmin,PetscReal lmax
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLGetRange()`, `EPSSetInterval()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetRange()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSEVSLSetRange(EPS eps,PetscReal lmin,PetscReal lmax)
 {
@@ -411,7 +411,7 @@ static PetscErrorCode EPSEVSLGetRange_EVSL(EPS eps,PetscReal *lmin,PetscReal *lm
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLSetRange()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetRange()`
 @*/
 PetscErrorCode EPSEVSLGetRange(EPS eps,PetscReal *lmin,PetscReal *lmax)
 {
@@ -489,7 +489,7 @@ static PetscErrorCode EPSEVSLSetDOSParameters_EVSL(EPS eps,EPSEVSLDOSMethod dos,
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLGetDOSParameters()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetDOSParameters()`
 @*/
 PetscErrorCode EPSEVSLSetDOSParameters(EPS eps,EPSEVSLDOSMethod dos,PetscInt nvec,PetscInt deg,PetscInt steps,PetscInt npoints)
 {
@@ -535,7 +535,7 @@ static PetscErrorCode EPSEVSLGetDOSParameters_EVSL(EPS eps,EPSEVSLDOSMethod *dos
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLSetDOSParameters()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetDOSParameters()`
 @*/
 PetscErrorCode EPSEVSLGetDOSParameters(EPS eps,EPSEVSLDOSMethod *dos,PetscInt *nvec,PetscInt *deg,PetscInt *steps,PetscInt *npoints)
 {
@@ -585,7 +585,7 @@ static PetscErrorCode EPSEVSLSetPolParameters_EVSL(EPS eps,PetscInt max_deg,Pets
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLGetPolParameters()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetPolParameters()`
 @*/
 PetscErrorCode EPSEVSLSetPolParameters(EPS eps,PetscInt max_deg,PetscReal thresh)
 {
@@ -622,7 +622,7 @@ static PetscErrorCode EPSEVSLGetPolParameters_EVSL(EPS eps,PetscInt *max_deg,Pet
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLSetPolParameters()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetPolParameters()`
 @*/
 PetscErrorCode EPSEVSLGetPolParameters(EPS eps,PetscInt *max_deg,PetscReal *thresh)
 {
@@ -662,7 +662,7 @@ static PetscErrorCode EPSEVSLSetDamping_EVSL(EPS eps,EPSEVSLDamping damping)
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLGetDamping()`, `EPSEVSLSetDOSParameters()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetDamping()`, `EPSEVSLSetDOSParameters()`
 @*/
 PetscErrorCode EPSEVSLSetDamping(EPS eps,EPSEVSLDamping damping)
 {
@@ -695,7 +695,7 @@ static PetscErrorCode EPSEVSLGetDamping_EVSL(EPS eps,EPSEVSLDamping *damping)
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSEVSLSetDamping()`
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetDamping()`
 @*/
 PetscErrorCode EPSEVSLGetDamping(EPS eps,EPSEVSLDamping *damping)
 {

@@ -371,7 +371,7 @@ static PetscErrorCode SVDLanczosSetOneSide_Lanczos(SVD svd,PetscBool oneside)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosSetOneSide()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosSetOneSide()`
 @*/
 PetscErrorCode SVDLanczosSetOneSide(SVD svd,PetscBool oneside)
 {
@@ -405,7 +405,7 @@ static PetscErrorCode SVDLanczosGetOneSide_Lanczos(SVD svd,PetscBool *oneside)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDLanczosSetOneSide()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDLanczosSetOneSide()`
 @*/
 PetscErrorCode SVDLanczosGetOneSide(SVD svd,PetscBool *oneside)
 {

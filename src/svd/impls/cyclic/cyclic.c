@@ -905,7 +905,7 @@ static PetscErrorCode SVDCyclicSetExplicitMatrix_Cyclic(SVD svd,PetscBool explic
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDCyclicGetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDCYCLIC`, `SVDCyclicGetExplicitMatrix()`
 @*/
 PetscErrorCode SVDCyclicSetExplicitMatrix(SVD svd,PetscBool explicitmat)
 {
@@ -938,7 +938,7 @@ static PetscErrorCode SVDCyclicGetExplicitMatrix_Cyclic(SVD svd,PetscBool *expli
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDCyclicSetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDCYCLIC`, `SVDCyclicSetExplicitMatrix()`
 @*/
 PetscErrorCode SVDCyclicGetExplicitMatrix(SVD svd,PetscBool *explicitmat)
 {
@@ -974,7 +974,7 @@ static PetscErrorCode SVDCyclicSetEPS_Cyclic(SVD svd,EPS eps)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDCyclicGetEPS()`
+.seealso: [](ch:svd), `SVDCYCLIC`, `SVDCyclicGetEPS()`
 @*/
 PetscErrorCode SVDCyclicSetEPS(SVD svd,EPS eps)
 {
@@ -1018,7 +1018,7 @@ static PetscErrorCode SVDCyclicGetEPS_Cyclic(SVD svd,EPS *eps)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDCyclicSetEPS()`
+.seealso: [](ch:svd), `SVDCYCLIC`, `SVDCyclicSetEPS()`
 @*/
 PetscErrorCode SVDCyclicGetEPS(SVD svd,EPS *eps)
 {

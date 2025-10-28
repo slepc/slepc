@@ -236,7 +236,7 @@ static PetscErrorCode NEPNArnoldiSetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPNArnoldiGetLagPreconditioner()`
+.seealso: [](ch:nep), `NEPARNOLDI`, `NEPNArnoldiGetLagPreconditioner()`
 @*/
 PetscErrorCode NEPNArnoldiSetLagPreconditioner(NEP nep,PetscInt lag)
 {
@@ -269,7 +269,7 @@ static PetscErrorCode NEPNArnoldiGetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPNArnoldiSetLagPreconditioner()`
+.seealso: [](ch:nep), `NEPARNOLDI`, `NEPNArnoldiSetLagPreconditioner()`
 @*/
 PetscErrorCode NEPNArnoldiGetLagPreconditioner(NEP nep,PetscInt *lag)
 {
@@ -323,7 +323,7 @@ static PetscErrorCode NEPNArnoldiSetKSP_NArnoldi(NEP nep,KSP ksp)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNArnoldiGetKSP()`
+.seealso: [](ch:nep), `NEPARNOLDI`, `NEPNArnoldiGetKSP()`
 @*/
 PetscErrorCode NEPNArnoldiSetKSP(NEP nep,KSP ksp)
 {
@@ -367,7 +367,7 @@ static PetscErrorCode NEPNArnoldiGetKSP_NArnoldi(NEP nep,KSP *ksp)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNArnoldiSetKSP()`
+.seealso: [](ch:nep), `NEPARNOLDI`, `NEPNArnoldiSetKSP()`
 @*/
 PetscErrorCode NEPNArnoldiGetKSP(NEP nep,KSP *ksp)
 {

@@ -553,7 +553,7 @@ static PetscErrorCode PEPCISSSetSizes_CISS(PEP pep,PetscInt ip,PetscInt bs,Petsc
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPCISSGetSizes()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSGetSizes()`
 @*/
 PetscErrorCode PEPCISSSetSizes(PEP pep,PetscInt ip,PetscInt bs,PetscInt ms,PetscInt npart,PetscInt bsmax,PetscBool realmats)
 {
@@ -601,7 +601,7 @@ static PetscErrorCode PEPCISSGetSizes_CISS(PEP pep,PetscInt *ip,PetscInt *bs,Pet
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPCISSSetSizes()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetSizes()`
 @*/
 PetscErrorCode PEPCISSGetSizes(PEP pep,PetscInt *ip,PetscInt *bs,PetscInt *ms,PetscInt *npart,PetscInt *bsmax,PetscBool *realmats)
 {
@@ -652,7 +652,7 @@ static PetscErrorCode PEPCISSSetThreshold_CISS(PEP pep,PetscReal delta,PetscReal
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPCISSGetThreshold()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSGetThreshold()`
 @*/
 PetscErrorCode PEPCISSSetThreshold(PEP pep,PetscReal delta,PetscReal spur)
 {
@@ -689,7 +689,7 @@ static PetscErrorCode PEPCISSGetThreshold_CISS(PEP pep,PetscReal *delta,PetscRea
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPCISSSetThreshold()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetThreshold()`
 @*/
 PetscErrorCode PEPCISSGetThreshold(PEP pep,PetscReal *delta,PetscReal *spur)
 {
@@ -740,7 +740,7 @@ static PetscErrorCode PEPCISSSetRefinement_CISS(PEP pep,PetscInt inner,PetscInt 
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPCISSGetRefinement()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSGetRefinement()`
 @*/
 PetscErrorCode PEPCISSSetRefinement(PEP pep,PetscInt inner,PetscInt blsize)
 {
@@ -777,7 +777,7 @@ static PetscErrorCode PEPCISSGetRefinement_CISS(PEP pep,PetscInt *inner,PetscInt
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPCISSSetRefinement()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetRefinement()`
 @*/
 PetscErrorCode PEPCISSGetRefinement(PEP pep, PetscInt *inner, PetscInt *blsize)
 {
@@ -820,7 +820,7 @@ static PetscErrorCode PEPCISSSetExtraction_CISS(PEP pep,PEPCISSExtraction extrac
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPCISSGetExtraction()`, `PEPCISSExtraction`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSGetExtraction()`, `PEPCISSExtraction`
 @*/
 PetscErrorCode PEPCISSSetExtraction(PEP pep,PEPCISSExtraction extraction)
 {
@@ -853,7 +853,7 @@ static PetscErrorCode PEPCISSGetExtraction_CISS(PEP pep,PEPCISSExtraction *extra
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPCISSSetExtraction()`, `PEPCISSExtraction`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetExtraction()`, `PEPCISSExtraction`
 @*/
 PetscErrorCode PEPCISSGetExtraction(PEP pep,PEPCISSExtraction *extraction)
 {
@@ -926,7 +926,7 @@ static PetscErrorCode PEPCISSGetKSPs_CISS(PEP pep,PetscInt *nsolve,KSP **ksp)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPCISSSetSizes()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetSizes()`
 @*/
 PetscErrorCode PEPCISSGetKSPs(PEP pep,PetscInt *nsolve,KSP **ksp)
 {

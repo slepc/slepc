@@ -313,7 +313,7 @@ static PetscErrorCode DSPEPSetDegree_PEP(DS ds,PetscInt d)
 
    Level: intermediate
 
-.seealso: [](sec:ds), `DSPEPGetDegree()`
+.seealso: [](sec:ds), `DSPEP`, `DSPEPGetDegree()`
 @*/
 PetscErrorCode DSPEPSetDegree(DS ds,PetscInt d)
 {
@@ -346,7 +346,7 @@ static PetscErrorCode DSPEPGetDegree_PEP(DS ds,PetscInt *d)
 
    Level: intermediate
 
-.seealso: [](sec:ds), `DSPEPSetDegree()`
+.seealso: [](sec:ds), `DSPEP`, `DSPEPSetDegree()`
 @*/
 PetscErrorCode DSPEPGetDegree(DS ds,PetscInt *d)
 {
@@ -395,7 +395,7 @@ static PetscErrorCode DSPEPSetCoefficients_PEP(DS ds,PetscReal *pbc)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSPEPGetCoefficients()`, `DSPEPSetDegree()`
+.seealso: [](sec:ds), `DSPEP`, `DSPEPGetCoefficients()`, `DSPEPSetDegree()`
 @*/
 PetscErrorCode DSPEPSetCoefficients(DS ds,PetscReal pbc[])
 {
@@ -439,7 +439,7 @@ static PetscErrorCode DSPEPGetCoefficients_PEP(DS ds,PetscReal *pbc[])
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSPEPSetCoefficients()`
+.seealso: [](sec:ds), `DSPEP`, `DSPEPSetCoefficients()`
 @*/
 PetscErrorCode DSPEPGetCoefficients(DS ds,PetscReal *pbc[]) PeNS
 {

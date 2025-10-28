@@ -107,7 +107,7 @@ static PetscErrorCode RGIntervalGetEndpoints_Interval(RG rg,PetscReal *a,PetscRe
 
    Level: advanced
 
-.seealso: [](sec:rg), `RGIntervalSetEndpoints()`
+.seealso: [](sec:rg), `RGINTERVAL`, `RGIntervalSetEndpoints()`
 @*/
 PetscErrorCode RGIntervalGetEndpoints(RG rg,PetscReal *a,PetscReal *b,PetscReal *c,PetscReal *d)
 {

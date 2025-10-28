@@ -424,7 +424,7 @@ static PetscErrorCode EPSLOBPCGSetBlockSize_LOBPCG(EPS eps,PetscInt bs)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGGetBlockSize()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGGetBlockSize()`
 @*/
 PetscErrorCode EPSLOBPCGSetBlockSize(EPS eps,PetscInt bs)
 {
@@ -457,7 +457,7 @@ static PetscErrorCode EPSLOBPCGGetBlockSize_LOBPCG(EPS eps,PetscInt *bs)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGSetBlockSize()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGSetBlockSize()`
 @*/
 PetscErrorCode EPSLOBPCGGetBlockSize(EPS eps,PetscInt *bs)
 {
@@ -502,7 +502,7 @@ static PetscErrorCode EPSLOBPCGSetRestart_LOBPCG(EPS eps,PetscReal restart)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGGetRestart()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGGetRestart()`
 @*/
 PetscErrorCode EPSLOBPCGSetRestart(EPS eps,PetscReal restart)
 {
@@ -535,7 +535,7 @@ static PetscErrorCode EPSLOBPCGGetRestart_LOBPCG(EPS eps,PetscReal *restart)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGSetRestart()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGSetRestart()`
 @*/
 PetscErrorCode EPSLOBPCGGetRestart(EPS eps,PetscReal *restart)
 {
@@ -575,7 +575,7 @@ static PetscErrorCode EPSLOBPCGSetLocking_LOBPCG(EPS eps,PetscBool lock)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGGetLocking()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGGetLocking()`
 @*/
 PetscErrorCode EPSLOBPCGSetLocking(EPS eps,PetscBool lock)
 {
@@ -608,7 +608,7 @@ static PetscErrorCode EPSLOBPCGGetLocking_LOBPCG(EPS eps,PetscBool *lock)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGSetLocking()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGSetLocking()`
 @*/
 PetscErrorCode EPSLOBPCGGetLocking(EPS eps,PetscBool *lock)
 {

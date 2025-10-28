@@ -171,7 +171,7 @@ static PetscErrorCode STFilterGetType_Filter(ST st,STFilterType *type)
 
    Level: intermediate
 
-.seealso: [](ch:st), `STFilterSetType()`
+.seealso: [](ch:st), `STFILTER`, `STFilterSetType()`
 @*/
 PetscErrorCode STFilterGetType(ST st,STFilterType *type)
 {
@@ -259,7 +259,7 @@ static PetscErrorCode STFilterGetInterval_Filter(ST st,PetscReal *inta,PetscReal
 
    Level: intermediate
 
-.seealso: [](ch:st), `STFilterSetInterval()`
+.seealso: [](ch:st), `STFILTER`, `STFilterSetInterval()`
 @*/
 PetscErrorCode STFilterGetInterval(ST st,PetscReal *inta,PetscReal *intb)
 {
@@ -342,7 +342,7 @@ static PetscErrorCode STFilterGetRange_Filter(ST st,PetscReal *left,PetscReal *r
 
    Level: intermediate
 
-.seealso: [](ch:st), `STFilterSetRange()`
+.seealso: [](ch:st), `STFILTER`, `STFilterSetRange()`
 @*/
 PetscErrorCode STFilterGetRange(ST st,PetscReal *left,PetscReal *right)
 {
@@ -421,7 +421,7 @@ static PetscErrorCode STFilterGetDegree_Filter(ST st,PetscInt *deg)
 
    Level: intermediate
 
-.seealso: [](ch:st), `STFilterSetDegree()`
+.seealso: [](ch:st), `STFILTER`, `STFilterSetDegree()`
 @*/
 PetscErrorCode STFilterGetDegree(ST st,PetscInt *deg)
 {
@@ -535,7 +535,7 @@ static PetscErrorCode STFilterGetDamping_Filter(ST st,STFilterDamping *damping)
 
    Level: advanced
 
-.seealso: [](ch:st), `STFilterSetDamping()`
+.seealso: [](ch:st), `STFILTER`, `STFilterSetDamping()`
 @*/
 PetscErrorCode STFilterGetDamping(ST st,STFilterDamping *damping)
 {

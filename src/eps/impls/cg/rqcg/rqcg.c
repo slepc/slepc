@@ -271,7 +271,7 @@ static PetscErrorCode EPSRQCGSetReset_RQCG(EPS eps,PetscInt nrest)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSRQCGGetReset()`
+.seealso: [](ch:eps), `EPSRQCG`, `EPSRQCGGetReset()`
 @*/
 PetscErrorCode EPSRQCGSetReset(EPS eps,PetscInt nrest)
 {
@@ -304,7 +304,7 @@ static PetscErrorCode EPSRQCGGetReset_RQCG(EPS eps,PetscInt *nrest)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSRQCGSetReset()`
+.seealso: [](ch:eps), `EPSRQCG`, `EPSRQCGSetReset()`
 @*/
 PetscErrorCode EPSRQCGGetReset(EPS eps,PetscInt *nrest)
 {

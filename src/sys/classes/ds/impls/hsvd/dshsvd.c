@@ -512,7 +512,7 @@ static PetscErrorCode DSHSVDSetDimensions_HSVD(DS ds,PetscInt m)
 
    Level: intermediate
 
-.seealso: [](sec:ds), `DSHSVDGetDimensions()`, `DSSetDimensions()`
+.seealso: [](sec:ds), `DSHSVD`, `DSHSVDGetDimensions()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSHSVDSetDimensions(DS ds,PetscInt m)
 {
@@ -545,7 +545,7 @@ static PetscErrorCode DSHSVDGetDimensions_HSVD(DS ds,PetscInt *m)
 
    Level: intermediate
 
-.seealso: [](sec:ds), `DSHSVDSetDimensions()`
+.seealso: [](sec:ds), `DSHSVD`, `DSHSVDSetDimensions()`
 @*/
 PetscErrorCode DSHSVDGetDimensions(DS ds,PetscInt *m)
 {
@@ -584,7 +584,7 @@ static PetscErrorCode DSHSVDSetReorthogonalize_HSVD(DS ds,PetscBool reorth)
 
    Level: intermediate
 
-.seealso: [](sec:ds), `DSHSVDGetReorthogonalize()`
+.seealso: [](sec:ds), `DSHSVD`, `DSHSVDGetReorthogonalize()`
 @*/
 PetscErrorCode DSHSVDSetReorthogonalize(DS ds,PetscBool reorth)
 {
@@ -617,7 +617,7 @@ static PetscErrorCode DSHSVDGetReorthogonalize_HSVD(DS ds,PetscBool *reorth)
 
    Level: intermediate
 
-.seealso: [](sec:ds), `DSHSVDSetReorthogonalize()`
+.seealso: [](sec:ds), `DSHSVD`, `DSHSVDSetReorthogonalize()`
 @*/
 PetscErrorCode DSHSVDGetReorthogonalize(DS ds,PetscBool *reorth)
 {

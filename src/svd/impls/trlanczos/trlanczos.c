@@ -1773,7 +1773,7 @@ static PetscErrorCode SVDTRLanczosSetOneSide_TRLanczos(SVD svd,PetscBool oneside
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDLanczosSetOneSide()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDLanczosSetOneSide()`
 @*/
 PetscErrorCode SVDTRLanczosSetOneSide(SVD svd,PetscBool oneside)
 {
@@ -1807,7 +1807,7 @@ static PetscErrorCode SVDTRLanczosGetOneSide_TRLanczos(SVD svd,PetscBool *onesid
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosSetOneSide()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosSetOneSide()`
 @*/
 PetscErrorCode SVDTRLanczosGetOneSide(SVD svd,PetscBool *oneside)
 {
@@ -1854,7 +1854,7 @@ static PetscErrorCode SVDTRLanczosSetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosGetGBidiag()`, `SVDTRLanczosGBidiag`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosGetGBidiag()`, `SVDTRLanczosGBidiag`
 @*/
 PetscErrorCode SVDTRLanczosSetGBidiag(SVD svd,SVDTRLanczosGBidiag bidiag)
 {
@@ -1888,7 +1888,7 @@ static PetscErrorCode SVDTRLanczosGetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosSetGBidiag()`, `SVDTRLanczosGBidiag`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosSetGBidiag()`, `SVDTRLanczosGBidiag`
 @*/
 PetscErrorCode SVDTRLanczosGetGBidiag(SVD svd,SVDTRLanczosGBidiag *bidiag)
 {
@@ -1925,7 +1925,7 @@ static PetscErrorCode SVDTRLanczosSetKSP_TRLanczos(SVD svd,KSP ksp)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosGetKSP()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosGetKSP()`
 @*/
 PetscErrorCode SVDTRLanczosSetKSP(SVD svd,KSP ksp)
 {
@@ -1974,7 +1974,7 @@ static PetscErrorCode SVDTRLanczosGetKSP_TRLanczos(SVD svd,KSP *ksp)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosSetKSP()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosSetKSP()`
 @*/
 PetscErrorCode SVDTRLanczosGetKSP(SVD svd,KSP *ksp)
 {
@@ -2017,7 +2017,7 @@ static PetscErrorCode SVDTRLanczosSetRestart_TRLanczos(SVD svd,PetscReal keep)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosGetRestart()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosGetRestart()`
 @*/
 PetscErrorCode SVDTRLanczosSetRestart(SVD svd,PetscReal keep)
 {
@@ -2051,7 +2051,7 @@ static PetscErrorCode SVDTRLanczosGetRestart_TRLanczos(SVD svd,PetscReal *keep)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosSetRestart()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosSetRestart()`
 @*/
 PetscErrorCode SVDTRLanczosGetRestart(SVD svd,PetscReal *keep)
 {
@@ -2092,7 +2092,7 @@ static PetscErrorCode SVDTRLanczosSetLocking_TRLanczos(SVD svd,PetscBool lock)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosGetLocking()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosGetLocking()`
 @*/
 PetscErrorCode SVDTRLanczosSetLocking(SVD svd,PetscBool lock)
 {
@@ -2126,7 +2126,7 @@ static PetscErrorCode SVDTRLanczosGetLocking_TRLanczos(SVD svd,PetscBool *lock)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosSetLocking()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosSetLocking()`
 @*/
 PetscErrorCode SVDTRLanczosGetLocking(SVD svd,PetscBool *lock)
 {
@@ -2168,7 +2168,7 @@ static PetscErrorCode SVDTRLanczosSetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosGetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosGetExplicitMatrix()`
 @*/
 PetscErrorCode SVDTRLanczosSetExplicitMatrix(SVD svd,PetscBool explicitmat)
 {
@@ -2201,7 +2201,7 @@ static PetscErrorCode SVDTRLanczosGetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosSetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosSetExplicitMatrix()`
 @*/
 PetscErrorCode SVDTRLanczosGetExplicitMatrix(SVD svd,PetscBool *explicitmat)
 {
@@ -2250,7 +2250,7 @@ static PetscErrorCode SVDTRLanczosSetScale_TRLanczos(SVD svd,PetscReal scale)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosGetScale()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosGetScale()`
 @*/
 PetscErrorCode SVDTRLanczosSetScale(SVD svd,PetscReal scale)
 {
@@ -2289,7 +2289,7 @@ static PetscErrorCode SVDTRLanczosGetScale_TRLanczos(SVD svd,PetscReal *scale)
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDTRLanczosSetScale()`
+.seealso: [](ch:svd), `SVDLANCZOS`, `SVDTRLanczosSetScale()`
 @*/
 PetscErrorCode SVDTRLanczosGetScale(SVD svd,PetscReal *scale)
 {

@@ -663,7 +663,7 @@ static PetscErrorCode DSSVDSetDimensions_SVD(DS ds,PetscInt m)
 
    Level: intermediate
 
-.seealso: [](sec:ds), `DSSVDGetDimensions()`, `DSSetDimensions()`
+.seealso: [](sec:ds), `DSSVD`, `DSSVDGetDimensions()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSSVDSetDimensions(DS ds,PetscInt m)
 {
@@ -696,7 +696,7 @@ static PetscErrorCode DSSVDGetDimensions_SVD(DS ds,PetscInt *m)
 
    Level: intermediate
 
-.seealso: [](sec:ds), `DSSVDSetDimensions()`
+.seealso: [](sec:ds), `DSSVD`, `DSSVDSetDimensions()`
 @*/
 PetscErrorCode DSSVDGetDimensions(DS ds,PetscInt *m)
 {

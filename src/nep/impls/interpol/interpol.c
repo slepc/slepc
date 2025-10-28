@@ -297,7 +297,7 @@ static PetscErrorCode NEPInterpolSetInterpolation_Interpol(NEP nep,PetscReal tol
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPInterpolGetInterpolation()`
+.seealso: [](ch:nep), `NEPINTERPOL`, `NEPInterpolGetInterpolation()`
 @*/
 PetscErrorCode NEPInterpolSetInterpolation(NEP nep,PetscReal tol,PetscInt deg)
 {
@@ -334,7 +334,7 @@ static PetscErrorCode NEPInterpolGetInterpolation_Interpol(NEP nep,PetscReal *to
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPInterpolSetInterpolation()`
+.seealso: [](ch:nep), `NEPINTERPOL`, `NEPInterpolSetInterpolation()`
 @*/
 PetscErrorCode NEPInterpolGetInterpolation(NEP nep,PetscReal *tol,PetscInt *deg)
 {
@@ -368,7 +368,7 @@ static PetscErrorCode NEPInterpolSetPEP_Interpol(NEP nep,PEP pep)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPInterpolGetPEP()`
+.seealso: [](ch:nep), `NEPINTERPOL`, `NEPInterpolGetPEP()`
 @*/
 PetscErrorCode NEPInterpolSetPEP(NEP nep,PEP pep)
 {
@@ -411,7 +411,7 @@ static PetscErrorCode NEPInterpolGetPEP_Interpol(NEP nep,PEP *pep)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPInterpolSetPEP()`
+.seealso: [](ch:nep), `NEPINTERPOL`, `NEPInterpolSetPEP()`
 @*/
 PetscErrorCode NEPInterpolGetPEP(NEP nep,PEP *pep)
 {

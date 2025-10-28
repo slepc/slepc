@@ -199,7 +199,7 @@ static PetscErrorCode SVDKSVDSetEigenMethod_KSVD(SVD svd,SVDKSVDEigenMethod eige
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDKSVDGetEigenMethod()`, `SVDKSVDEigenMethod`
+.seealso: [](ch:svd), `SVDKSVD`, `SVDKSVDGetEigenMethod()`, `SVDKSVDEigenMethod`
 @*/
 PetscErrorCode SVDKSVDSetEigenMethod(SVD svd,SVDKSVDEigenMethod eigen)
 {
@@ -232,7 +232,7 @@ static PetscErrorCode SVDKSVDGetEigenMethod_KSVD(SVD svd,SVDKSVDEigenMethod *eig
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDKSVDSetEigenMethod()`, `SVDKSVDEigenMethod`
+.seealso: [](ch:svd), `SVDKSVD`, `SVDKSVDSetEigenMethod()`, `SVDKSVDEigenMethod`
 @*/
 PetscErrorCode SVDKSVDGetEigenMethod(SVD svd,SVDKSVDEigenMethod *eigen)
 {
@@ -268,7 +268,7 @@ static PetscErrorCode SVDKSVDSetPolarMethod_KSVD(SVD svd,SVDKSVDPolarMethod pola
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDKSVDGetPolarMethod()`, `SVDKSVDPolarMethod`
+.seealso: [](ch:svd), `SVDKSVD`, `SVDKSVDGetPolarMethod()`, `SVDKSVDPolarMethod`
 @*/
 PetscErrorCode SVDKSVDSetPolarMethod(SVD svd,SVDKSVDPolarMethod polar)
 {
@@ -301,7 +301,7 @@ static PetscErrorCode SVDKSVDGetPolarMethod_KSVD(SVD svd,SVDKSVDPolarMethod *pol
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDKSVDSetPolarMethod()`, `SVDKSVDPolarMethod`
+.seealso: [](ch:svd), `SVDKSVD`, `SVDKSVDSetPolarMethod()`, `SVDKSVDPolarMethod`
 @*/
 PetscErrorCode SVDKSVDGetPolarMethod(SVD svd,SVDKSVDPolarMethod *polar)
 {
