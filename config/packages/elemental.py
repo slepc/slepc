@@ -42,4 +42,3 @@ class Elemental(package.Package):
     else:
       slepcconf.write('#define SLEPC_HAVE_ELEMENTAL 1\n')
       self.havepackage = True
-

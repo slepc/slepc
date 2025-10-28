@@ -14,7 +14,6 @@ import sys
   - make test search=X (or s=X)
   - make test query=X (or q=X) queryval=Y (or qv=Y)
 
-
   Which tests to query?  Two options:
       1. Query only the tests that are run for a given configuration.
       2. Query all of the test files in the source directory
@@ -432,7 +431,6 @@ def main():
              petsc_dir, petsc_arch, slepc_dir, field, labels, searchin)
 
     return
-
 
 if __name__ == "__main__":
         main()

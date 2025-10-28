@@ -512,4 +512,3 @@ Downloaded package %s from: %s is not a tarball.
           self.log.write('Found '+os.path.join(d,file))
           return d
     return '/usr/include'
-

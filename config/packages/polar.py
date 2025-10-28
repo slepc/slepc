@@ -24,7 +24,6 @@ class Polar(package.Package):
     self.supportsscalar = ['real']
     self.ProcessArgs(argdb)
 
-
   def Precondition(self,slepc,petsc):
     pkg = self.packagename.upper()
     if not 'mkl' in petsc.packages:
@@ -32,7 +31,6 @@ class Polar(package.Package):
     if getattr(self,'download',False) and not hasattr(petsc,'cmake'):
       self.log.Exit('The POLAR interface requires CMake for building')
     package.Package.Precondition(self,slepc,petsc)
-
 
   def SampleCode(self,petsc):
     code =  '#include <stdlib.h>\n'
@@ -43,7 +41,6 @@ class Polar(package.Package):
     code += '  pdgeqdwh("H",n,n,A,i1,i1,descA,H,i1,i1,descH,w1,lwork,w2,lwork,&info);\n'
     code += '  return 0;\n}\n'
     return code
-
 
   def Check(self,slepcconf,slepcvars,petsc,archdir):
     code = self.SampleCode(petsc)
@@ -84,7 +81,6 @@ class Polar(package.Package):
 
     self.log.Exit('Unable to link with POLAR library in directories'+' '.join(dirs)+' with libraries and link flags '+' '.join(libs))
 
-
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
     externdir = slepc.GetExternalPackagesDir(archdir)
     builddir  = self.Download(externdir,slepc.downloaddir)
@@ -111,9 +107,9 @@ class Polar(package.Package):
 
     # Patch pdgezolopd.c to avoid output even with verbose=false
     fname = os.path.join(builddir,'src','pdgezolopd.c')
-    oldcode1 = '''if ( myrank_mpi == 0 ){ 
+    oldcode1 = '''if ( myrank_mpi == 0 ){ '''+r'''
         fprintf(stderr, " The number of subproblems to be solved independently is %d'''
-    newcode1 = '''if (verbose && myrank_mpi == 0 ){ 
+    newcode1 = '''if (verbose && myrank_mpi == 0 ) {
         fprintf(stderr, " The number of subproblems to be solved independently is %d'''
     oldcode2 = r'''if ( myrank_mpi == 0 ) {
         fprintf(stderr, "#\n");'''
@@ -146,9 +142,9 @@ extern int Csys2blacs_handle(MPI_Comm SysCtxt);
       file.write(sourcecode)
 
     fname = os.path.join(builddir,'include','polar.h')
-    oldcode1 = r'''int mellipke( double alpha,  
+    oldcode1 = r'''int mellipke( double alpha,  '''+r'''
               double *k, double *e);'''
-    newcode1 = r'''int mellipke( double alpha,  
+    newcode1 = r'''int mellipke( double alpha,
               double *k, double *e);
 int choosem(double con, int *m);'''
     with open(fname,'r') as file:
@@ -200,4 +196,3 @@ int choosem(double con, int *m);'''
 
     self.havepackage = True
     self.packageflags = l+' '+f
-

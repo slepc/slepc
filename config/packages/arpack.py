@@ -54,7 +54,6 @@ class Arpack(package.Package):
           functions = ['pznaupd','pzneupd']
     return functions
 
-
   def Check(self,slepcconf,slepcvars,petsc,archdir):
     functions = self.Functions(petsc)
     if self.packagelibs:
@@ -73,7 +72,6 @@ class Arpack(package.Package):
     else:
       dirs = self.GenerateGuesses('Arpack',archdir) + self.GenerateGuesses('Arpack',archdir,'lib64')
     self.FortranLib(slepcconf,slepcvars,dirs,libs,functions)
-
 
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
     externdir = slepc.GetExternalPackagesDir(archdir)
@@ -128,4 +126,3 @@ class Arpack(package.Package):
       libs = [['-lparpack','-larpack']]
     dirs = [os.path.join(prefixdir,'lib'),os.path.join(prefixdir,'lib64')]
     self.FortranLib(slepcconf,slepcvars,dirs,libs,functions)
-

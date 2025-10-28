@@ -284,4 +284,3 @@ class PETSc(package.Package):
       return ' '.join(outflags)
     else:
       return ''
-
