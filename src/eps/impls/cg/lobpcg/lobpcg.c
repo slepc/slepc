@@ -420,7 +420,7 @@ static PetscErrorCode EPSLOBPCGSetBlockSize_LOBPCG(EPS eps,PetscInt bs)
 -  bs  - the block size
 
    Options Database Key:
-.  -eps_lobpcg_blocksize - Sets the block size
+.  -eps_lobpcg_blocksize - sets the block size
 
    Level: advanced
 
@@ -492,7 +492,7 @@ static PetscErrorCode EPSLOBPCGSetRestart_LOBPCG(EPS eps,PetscReal restart)
 -  restart - the percentage of the block of vectors to force a restart
 
    Options Database Key:
-.  -eps_lobpcg_restart - Sets the restart parameter
+.  -eps_lobpcg_restart - sets the restart parameter
 
    Notes:
    The meaning of this parameter is the proportion of vectors within the
@@ -566,11 +566,11 @@ static PetscErrorCode EPSLOBPCGSetLocking_LOBPCG(EPS eps,PetscBool lock)
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
-.  -eps_lobpcg_locking - Sets the locking flag
+.  -eps_lobpcg_locking - sets the locking flag
 
    Notes:
    This flag refers to soft locking (converged vectors within the current
-   block iterate), since hard locking is always used (when nev is larger
+   block iterate), since hard locking is always used (when `nev` is larger
    than the block size).
 
    Level: advanced

@@ -290,7 +290,9 @@ static PetscErrorCode EPSEVSLSetSlices_EVSL(EPS eps,PetscInt nslices)
    eigenvalues, using more slices may be beneficial, but very narrow subintervals
    imply higher polynomial degree.
 
-   Level: intermediate
+   See the documentation of EVSL {cite:p}`Li19` for details.
+
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetSlices()`
 @*/
@@ -324,7 +326,7 @@ static PetscErrorCode EPSEVSLGetSlices_EVSL(EPS eps,PetscInt *nslices)
    Output Parameter:
 .  nslices - the number of slices
 
-   Level: intermediate
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetSlices()`
 @*/
@@ -363,17 +365,19 @@ static PetscErrorCode EPSEVSLSetRange_EVSL(EPS eps,PetscReal lmin,PetscReal lmax
 -  lmax - right end of the interval
 
    Options Database Key:
-.  -eps_evsl_range <a,b> - set [a,b] as the numerical range
+.  -eps_evsl_range <a,b> - set $[a,b]$ as the numerical range
 
    Notes:
-   The filter will be most effective if the numerical range is tight, that is, lmin
-   and lmax are good approximations to the leftmost and rightmost eigenvalues,
+   The filter will be most effective if the numerical range is tight, that is, `lmin`
+   and `lmax` are good approximations to the leftmost and rightmost eigenvalues,
    respectively. If not set by the user, an approximation is computed internally.
 
-   The wanted computational interval specified via EPSSetInterval() must be
+   The wanted computational interval specified via `EPSSetInterval()` must be
    contained in the numerical range.
 
-   Level: intermediate
+   See the documentation of EVSL {cite:p}`Li19` for details.
+
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetRange()`, `EPSSetInterval()`
 @*/
@@ -409,7 +413,7 @@ static PetscErrorCode EPSEVSLGetRange_EVSL(EPS eps,PetscReal *lmin,PetscReal *lm
 +  lmin - left end of the interval
 -  lmax - right end of the interval
 
-   Level: intermediate
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetRange()`
 @*/
@@ -465,14 +469,14 @@ static PetscErrorCode EPSEVSLSetDOSParameters_EVSL(EPS eps,EPSEVSLDOSMethod dos,
 
    Input Parameters:
 +  eps     - the linear eigensolver context
-.  dos     - DOS method, either KPM or Lanczos
+.  dos     - DOS method, see `EPSEVSLDOSMethod` for possible values
 .  nvec    - number of sample vectors
 .  deg     - polynomial degree (KPM only)
 .  steps   - number of Lanczos steps (Lanczos only)
 -  npoints - number of sample points (Lanczos only)
 
    Options Database Keys:
-+  -eps_evsl_dos_method <dos> - set the DOS method, either kpm or lanczos
++  -eps_evsl_dos_method <dos> - set the DOS method, either `kpm` or `lanczos`
 .  -eps_evsl_dos_nvec <n> - set the number of sample vectors
 .  -eps_evsl_dos_degree <n> - set the polynomial degree
 .  -eps_evsl_dos_steps <n> - set the number of Lanczos steps
@@ -480,16 +484,18 @@ static PetscErrorCode EPSEVSLSetDOSParameters_EVSL(EPS eps,EPSEVSLDOSMethod dos,
 
    Notes:
    The density of states (or spectral density) can be approximated with two
-   methods, kernel polynomial method (KPM) or Lanczos. Some parameters for
+   methods, Kernel Polynomial Method (KPM) or Lanczos. Some parameters for
    these methods can be set by the user with this function, with some of
    them being relevant for one of the methods only.
 
-   For the integer argumens, you can use PETSC_CURRENT to keep the current
-   value, and PETSC_DETERMINE to set them to a reasonable default.
+   For the integer argumens, you can use `PETSC_CURRENT` to keep the current
+   value, and `PETSC_DETERMINE` to set them to a reasonable default.
 
-   Level: intermediate
+   See the documentation of EVSL {cite:p}`Li19` for details.
 
-.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetDOSParameters()`
+   Level: advanced
+
+.seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetDOSParameters()`, `EPSEVSLDOSMethod`
 @*/
 PetscErrorCode EPSEVSLSetDOSParameters(EPS eps,EPSEVSLDOSMethod dos,PetscInt nvec,PetscInt deg,PetscInt steps,PetscInt npoints)
 {
@@ -533,7 +539,7 @@ static PetscErrorCode EPSEVSLGetDOSParameters_EVSL(EPS eps,EPSEVSLDOSMethod *dos
 .  steps   - number of Lanczos steps (Lanczos only)
 -  npoints - number of sample points (Lanczos only)
 
-   Level: intermediate
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetDOSParameters()`
 @*/
@@ -573,17 +579,19 @@ static PetscErrorCode EPSEVSLSetPolParameters_EVSL(EPS eps,PetscInt max_deg,Pets
    Input Parameters:
 +  eps     - the linear eigensolver context
 .  max_deg - maximum degree allowed for the polynomial
--  thresh  - threshold for accepting polynomial
+-  thresh  - threshold for accepting a value
 
    Options Database Keys:
 +  -eps_evsl_pol_max_deg <d> - set maximum polynomial degree
 -  -eps_evsl_pol_thresh <t> - set the threshold
 
-   Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   Notes:
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
 
-   Level: intermediate
+   See the documentation of EVSL {cite:p}`Li19` for details.
+
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetPolParameters()`
 @*/
@@ -620,7 +628,7 @@ static PetscErrorCode EPSEVSLGetPolParameters_EVSL(EPS eps,PetscInt *max_deg,Pet
 +  max_deg - the maximum degree of the polynomial
 -  thresh  - the threshold
 
-   Level: intermediate
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetPolParameters()`
 @*/
@@ -651,16 +659,18 @@ static PetscErrorCode EPSEVSLSetDamping_EVSL(EPS eps,EPSEVSLDamping damping)
 
    Input Parameters:
 +  eps     - the linear eigensolver context
--  damping - the type of damping
+-  damping - the type of damping, see `EPSEVSLDamping` for possible values
 
    Options Database Key:
 .  -eps_evsl_damping <n> - set the type of damping
 
    Notes:
    Damping is applied when building the polynomial to be used when solving the
-   eigenproblem, and also during estimation of DOS with the KPM method.
+   eigenproblem, and also during estimation of the DOS with the KPM method.
 
-   Level: intermediate
+   See the documentation of EVSL {cite:p}`Li19` for details.
+
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLGetDamping()`, `EPSEVSLSetDOSParameters()`
 @*/
@@ -693,7 +703,7 @@ static PetscErrorCode EPSEVSLGetDamping_EVSL(EPS eps,EPSEVSLDamping *damping)
    Output Parameter:
 .  damping - the type of damping
 
-   Level: intermediate
+   Level: advanced
 
 .seealso: [](ch:eps), `EPSEVSL`, `EPSEVSLSetDamping()`
 @*/

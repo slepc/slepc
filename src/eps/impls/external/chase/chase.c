@@ -160,6 +160,9 @@ static PetscErrorCode EPSCHASESetDegree_ChASE(EPS eps,PetscInt deg,PetscBool opt
 +  -eps_chase_degree - Sets the initial degree
 -  -eps_chase_degree_opt - Enables/disables the optimization
 
+   Note:
+   See the documentation of ChASE {cite:p}`Win19` for details.
+
    Level: advanced
 
 .seealso: [](ch:eps), `EPSCHASE`, `EPSCHASEGetDegree()`

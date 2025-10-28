@@ -731,19 +731,21 @@ static PetscErrorCode EPSCISSSetSizes_CISS(EPS eps,PetscInt ip,PetscInt bs,Petsc
 .  -eps_ciss_moments - Sets the moment size
 .  -eps_ciss_partitions - Sets the number of partitions
 .  -eps_ciss_maxblocksize - Sets the maximum block size
--  -eps_ciss_realmats - A and B are real
+-  -eps_ciss_realmats - $A$ and $B$ are real
 
-   Note:
-   For all integer arguments, you can use PETSC_CURRENT to keep the current value, and
-   PETSC_DETERMINE to set them to a default value.
+   Notes:
+   For all integer arguments, you can use `PETSC_CURRENT` to keep the current value, and
+   `PETSC_DETERMINE` to set them to a default value.
 
-   The default number of partitions is 1. This means the internal KSP object is shared
-   among all processes of the EPS communicator. Otherwise, the communicator is split
-   into npart communicators, so that npart KSP solves proceed simultaneously.
+   The default number of partitions is 1. This means the internal `KSP` object is shared
+   among all processes of the `EPS` communicator. Otherwise, the communicator is split
+   into `npart` communicators, so that `npart` `KSP` solves proceed simultaneously.
+
+   For a detailed description of the parameters see {cite:p}`Mae16`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetSizes()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetSizes()`, `EPSCISSSetThreshold()`, `EPSCISSSetRefinement()`
 @*/
 PetscErrorCode EPSCISSSetSizes(EPS eps,PetscInt ip,PetscInt bs,PetscInt ms,PetscInt npart,PetscInt bsmax,PetscBool realmats)
 {
@@ -787,7 +789,7 @@ static PetscErrorCode EPSCISSGetSizes_CISS(EPS eps,PetscInt *ip,PetscInt *bs,Pet
 .  ms    - moment size
 .  npart - number of partitions when splitting the communicator
 .  bsmax - max block size
--  realmats - A and B are real
+-  realmats - $A$ and $B$ are real
 
    Level: advanced
 
@@ -836,13 +838,15 @@ static PetscErrorCode EPSCISSSetThreshold_CISS(EPS eps,PetscReal delta,PetscReal
 +  -eps_ciss_delta - Sets the delta
 -  -eps_ciss_spurious_threshold - Sets the spurious threshold
 
-   Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   Notes:
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
+
+   For a detailed description of the parameters see {cite:p}`Mae16`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetThreshold()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetThreshold()`, `EPSCISSSetSizes()`, `EPSCISSSetRefinement()`
 @*/
 PetscErrorCode EPSCISSSetThreshold(EPS eps,PetscReal delta,PetscReal spur)
 {
@@ -924,13 +928,15 @@ static PetscErrorCode EPSCISSSetRefinement_CISS(EPS eps,PetscInt inner,PetscInt 
 +  -eps_ciss_refine_inner - Sets number of inner iterations
 -  -eps_ciss_refine_blocksize - Sets number of blocksize iterations
 
-   Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default of 0.
+   Notes:
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default of 0 (no refinement).
+
+   For a detailed description of the parameters see {cite:p}`Mae16`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetRefinement()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetRefinement()`, `EPSCISSSetSizes()`, `EPSCISSSetThreshold()`
 @*/
 PetscErrorCode EPSCISSSetRefinement(EPS eps,PetscInt inner,PetscInt blsize)
 {
@@ -990,20 +996,29 @@ static PetscErrorCode EPSCISSSetUseST_CISS(EPS eps,PetscBool usest)
 
 /*@
    EPSCISSSetUseST - Sets a flag indicating that the CISS solver will
-   use the ST object for the linear solves.
+   use the `ST` object for the linear solves.
 
    Logically Collective
 
    Input Parameters:
 +  eps    - the linear eigensolver context
--  usest  - boolean flag to use the ST object or not
+-  usest  - boolean flag to use the `ST` object or not
 
    Options Database Key:
-.  -eps_ciss_usest <bool> - whether the ST object will be used or not
+.  -eps_ciss_usest <bool> - whether the `ST` object will be used or not
+
+   Note:
+   When this option is set, the linear solves can be configured by
+   setting options for the `KSP` object obtained with `STGetKSP()`.
+   Otherwise, several `KSP` objects are created, which can be accessed
+   with `EPSCISSGetKSPs()`.
+
+   The default is to use the `ST`, unless several partitions have been
+   specified, see `EPSCISSSetSizes()`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetUseST()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetUseST()`, `EPSCISSSetSizes()`, `EPSCISSGetKSPs()`, `STGetKSP()`
 @*/
 PetscErrorCode EPSCISSSetUseST(EPS eps,PetscBool usest)
 {
@@ -1024,7 +1039,7 @@ static PetscErrorCode EPSCISSGetUseST_CISS(EPS eps,PetscBool *usest)
 }
 
 /*@
-   EPSCISSGetUseST - Gets the flag for using the ST object
+   EPSCISSGetUseST - Gets the flag for using the `ST` object
    in the CISS solver.
 
    Not Collective
@@ -1033,7 +1048,7 @@ static PetscErrorCode EPSCISSGetUseST_CISS(EPS eps,PetscBool *usest)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  usest - boolean flag indicating if the ST object is being used
+.  usest - boolean flag indicating if the `ST` object is being used
 
    Level: advanced
 
@@ -1067,16 +1082,15 @@ static PetscErrorCode EPSCISSSetQuadRule_CISS(EPS eps,EPSCISSQuadRule quad)
 
    Input Parameters:
 +  eps  - the linear eigensolver context
--  quad - the quadrature rule
+-  quad - the quadrature rule, see `EPSCISSQuadRule` for possible values
 
    Options Database Key:
-.  -eps_ciss_quadrule - Sets the quadrature rule (either 'trapezoidal' or
-                           'chebyshev')
+.  -eps_ciss_quadrule - Sets the quadrature rule, either `trapezoidal` or `chebyshev`
 
    Notes:
-   By default, the trapezoidal rule is used (EPS_CISS_QUADRULE_TRAPEZOIDAL).
+   By default, the trapezoidal rule is used (`EPS_CISS_QUADRULE_TRAPEZOIDAL`).
 
-   If the 'chebyshev' option is specified (EPS_CISS_QUADRULE_CHEBYSHEV), then
+   If the `chebyshev` option is specified (`EPS_CISS_QUADRULE_CHEBYSHEV`), then
    Chebyshev points are used as quadrature points.
 
    Level: advanced
@@ -1144,17 +1158,17 @@ static PetscErrorCode EPSCISSSetExtraction_CISS(EPS eps,EPSCISSExtraction extrac
 
    Input Parameters:
 +  eps        - the linear eigensolver context
--  extraction - the extraction technique
+-  extraction - the extraction technique, see `EPSCISSExtraction` for possible values
 
    Options Database Key:
-.  -eps_ciss_extraction - Sets the extraction technique (either 'ritz' or
-                           'hankel')
+.  -eps_ciss_extraction - Sets the extraction technique, either `ritz` or `hankel`
 
    Notes:
-   By default, the Rayleigh-Ritz extraction is used (EPS_CISS_EXTRACTION_RITZ).
+   By default, the Rayleigh-Ritz extraction is used (`EPS_CISS_EXTRACTION_RITZ`),
+   see {cite:p}`Sak07`.
 
-   If the 'hankel' option is specified (EPS_CISS_EXTRACTION_HANKEL), then
-   the Block Hankel method is used for extracting eigenpairs.
+   If the `hankel` option is specified (`EPS_CISS_EXTRACTION_HANKEL`), then
+   the block Hankel method is used for extracting eigenpairs {cite:p}`Sak03`.
 
    Level: advanced
 
@@ -1257,10 +1271,10 @@ static PetscErrorCode EPSCISSGetKSPs_CISS(EPS eps,PetscInt *nsolve,KSP **ksp)
 +  nsolve - number of solver objects
 -  ksp - array of linear solver object
 
-   Notes:
-   The number of KSP solvers is equal to the number of integration points divided by
-   the number of partitions. This value is halved in the case of real matrices with
-   a region centered at the real axis.
+   Note:
+   The number of `KSP` solvers is equal to the number of integration points divided by
+   the number of partitions, see `EPSCISSSetSizes()`. This value is halved in the case
+   of real matrices with a region centered at the real axis.
 
    Level: advanced
 

@@ -180,7 +180,7 @@ M*/
 /*MC
    EPS_BSE - A structured Bethe-Salpeter eigenvalue problem.
 
-   Note:
+   Notes:
    The problem is formulated as $Hx=\lambda x$, where $H$ has a Bethe-Salpeter
    structure,
      $$H = \begin{bmatrix}
@@ -189,6 +189,9 @@ M*/
         \end{bmatrix},$$
    where $R$ is Hermitian and $C$ is complex symmetric. Can also be used in
    the case of real matrices.
+
+   A description of the properties of this problem can be found in {cite:p}`Alv25`
+   and references therein.
 
    Level: intermediate
 
@@ -804,6 +807,12 @@ SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTest
 .  nev    - number of requested eigenpairs
 .  reason - [output] result of the stopping test
 -  ctx    - optional stopping context, as set by `EPSSetStoppingTestFunction()`
+
+   Note:
+   A positive value of `reason` indicates that the iteration has finished successfully
+   (converged), and a negative value indicates an error condition (diverged). If
+   the iteration needs to be continued, `reason` must be set to `EPS_CONVERGED_ITERATING`
+   (zero).
 
    Level: advanced
 

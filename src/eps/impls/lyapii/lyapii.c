@@ -584,14 +584,14 @@ static PetscErrorCode EPSLyapIISetRanks_LyapII(EPS eps,PetscInt rkc,PetscInt rkl
 .  -eps_lyapii_ranks <rkc,rkl> - Sets the rank parameters
 
    Notes:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
 
    Lyapunov inverse iteration needs to solve a large-scale Lyapunov equation
-   at each iteration of the eigensolver. For this, an iterative solver (LME)
-   is used, which requires to prescribe the rank of the solution matrix X. This
-   is the meaning of parameter rkl. Later, this matrix is compressed into
-   another matrix of rank rkc. If not provided, rkl is a small multiple of rkc.
+   at each iteration of the eigensolver. For this, an iterative solver (`LME`)
+   is used, which requires to prescribe the rank of the solution matrix $X$. This
+   is the meaning of parameter `rkl`. Later, this matrix is compressed into
+   another matrix of rank `rkc`. If not provided, `rkl` is a small multiple of `rkc`.
 
    Level: intermediate
 
@@ -654,7 +654,7 @@ static PetscErrorCode EPSLyapIISetLME_LyapII(EPS eps,LME lme)
 }
 
 /*@
-   EPSLyapIISetLME - Associate a linear matrix equation solver object (LME) to the
+   EPSLyapIISetLME - Associate a linear matrix equation solver object (`LME`) to the
    eigenvalue solver.
 
    Collective
@@ -693,7 +693,7 @@ static PetscErrorCode EPSLyapIIGetLME_LyapII(EPS eps,LME *lme)
 }
 
 /*@
-   EPSLyapIIGetLME - Retrieve the linear matrix equation solver object (LME)
+   EPSLyapIIGetLME - Retrieve the linear matrix equation solver object (`LME`)
    associated with the eigenvalue solver.
 
    Not Collective

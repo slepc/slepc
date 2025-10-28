@@ -656,7 +656,7 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
 }
 
 /*@
-   EPSGetErrorEstimate - Returns the error estimate associated to the i-th
+   EPSGetErrorEstimate - Returns the error estimate associated to the `i`-th
    computed eigenpair.
 
    Not Collective
@@ -670,12 +670,12 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
 
    Notes:
    This is the error estimate used internally by the eigensolver. The actual
-   error bound can be computed with EPSComputeError(). See also the users
-   manual for details.
+   error bound can be computed with `EPSComputeError()`. See discussion at
+   section [](#sec:errbnd).
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSComputeError()`
+.seealso: [](ch:eps), [](#sec:errbnd), `EPSComputeError()`
 @*/
 PetscErrorCode EPSGetErrorEstimate(EPS eps,PetscInt i,PetscReal *errest)
 {

@@ -238,7 +238,7 @@ PetscErrorCode EPSSetUpSort_Default(EPS eps)
 }
 
 /*@
-   EPSSetDSType - Sets the type of the internal DS object based on the current
+   EPSSetDSType - Sets the type of the internal `DS` object based on the current
    settings of the eigenvalue solver.
 
    Collective
@@ -248,7 +248,7 @@ PetscErrorCode EPSSetUpSort_Default(EPS eps)
 
    Note:
    This function need not be called explicitly, since it will be called at
-   both EPSSetFromOptions() and EPSSetUp().
+   both `EPSSetFromOptions()` and `EPSSetUp()`.
 
    Level: developer
 
@@ -556,7 +556,7 @@ PetscErrorCode EPSGetOperators(EPS eps,Mat *A,Mat *B)
    space. This can be used for instance in the case that an invariant
    subspace is known beforehand (such as the nullspace of the matrix).
 
-   These vectors do not persist from one EPSSolve() call to the other, so the
+   These vectors do not persist from one `EPSSolve()` call to the other, so the
    deflation space should be set every time.
 
    The vectors do not need to be mutually orthonormal, since they are explicitly
@@ -593,10 +593,12 @@ PetscErrorCode EPSSetDeflationSpace(EPS eps,PetscInt n,Vec v[])
 -  is  - set of basis vectors of the initial space
 
    Notes:
-   Some solvers start to iterate on a single vector (initial vector). In that case,
-   the other vectors are ignored.
+   Some solvers such as `EPSKRYLOVSCHUR` start to iterate on a single vector
+   (initial vector). In that case, only `is[0] is taken into account and the
+   other vectors are ignored. But other solvers such as `EPSSUBSPACE` are
+   able to make use of the whole initial subspace as an initial guess.
 
-   These vectors do not persist from one EPSSolve() call to the other, so the
+   These vectors do not persist from one `EPSSolve()` call to the other, so the
    initial space should be set every time.
 
    The vectors do not need to be mutually orthonormal, since they are explicitly
@@ -640,7 +642,7 @@ PetscErrorCode EPSSetInitialSpace(EPS eps,PetscInt n,Vec is[])
    eigensolvers. Users should pass here an approximation of the left eigenspace,
    if available.
 
-   The same comments in EPSSetInitialSpace() are applicable here.
+   The same comments in `EPSSetInitialSpace()` are applicable here.
 
    Level: intermediate
 
@@ -765,7 +767,7 @@ PetscErrorCode EPSAllocateSolution(EPS eps,PetscInt extra)
 -  newsize - new size
 
    Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin EPS
+   This is `SLEPC_EXTERN` because it may be required by user plugin `EPS`
    implementations.
 
    This is called during the iteration in case the threshold stopping test has

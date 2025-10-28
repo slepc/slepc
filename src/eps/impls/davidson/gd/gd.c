@@ -134,16 +134,18 @@ static PetscErrorCode EPSDestroy_GD(EPS eps)
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context
++  eps         - the linear eigensolver context
 -  krylovstart - boolean flag
 
    Options Database Key:
-.  -eps_gd_krylov_start - Activates starting the searching subspace with a
-    Krylov basis
+.  -eps_gd_krylov_start - activate starting the searching subspace with a Krylov basis
+
+   Note:
+   See discussion at `EPSGDSetInitialSize()`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSGD`, `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDGetKrylovStart()`, `EPSGDSetInitialSize()`
 @*/
 PetscErrorCode EPSGDSetKrylovStart(EPS eps,PetscBool krylovstart)
 {
@@ -164,8 +166,7 @@ PetscErrorCode EPSGDSetKrylovStart(EPS eps,PetscBool krylovstart)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  krylovstart - boolean flag indicating if the search subspace is started
-   with a Krylov basis
+.  krylovstart - boolean flag indicating if the search subspace is started with a Krylov basis
 
    Level: advanced
 
@@ -187,11 +188,14 @@ PetscErrorCode EPSGDGetKrylovStart(EPS eps,PetscBool *krylovstart)
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context
++  eps       - the linear eigensolver context
 -  blocksize - number of vectors added to the search space in every iteration
 
    Options Database Key:
 .  -eps_gd_blocksize - number of vectors added to the search space in every iteration
+
+   Note:
+   Detailed information can be found at {cite:p}`Rom14`.
 
    Level: advanced
 
@@ -238,17 +242,19 @@ PetscErrorCode EPSGDGetBlockSize(EPS eps,PetscInt *blocksize)
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context
-.  minv - number of vectors of the searching subspace after restarting
++  eps   - the linear eigensolver context
+.  minv  - number of vectors of the searching subspace after restarting
 -  plusk - number of vectors saved from the previous iteration
 
    Options Database Keys:
-+  -eps_gd_minv - number of vectors of the searching subspace after restarting
++  -eps_gd_minv  - number of vectors of the searching subspace after restarting
 -  -eps_gd_plusk - number of vectors saved from the previous iteration
 
-   Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   Notes:
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
+
+   Detailed information can be found at {cite:p}`Rom14`.
 
    Level: advanced
 
@@ -274,7 +280,7 @@ PetscErrorCode EPSGDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 .  eps - the linear eigensolver context
 
    Output Parameters:
-+  minv - number of vectors of the searching subspace after restarting
++  minv  - number of vectors of the searching subspace after restarting
 -  plusk - number of vectors saved from the previous iteration
 
    Level: advanced
@@ -295,23 +301,25 @@ PetscErrorCode EPSGDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context
++  eps         - the linear eigensolver context
 -  initialsize - number of vectors of the initial searching subspace
 
    Options Database Key:
 .  -eps_gd_initial_size - number of vectors of the initial searching subspace
 
    Notes:
-   If EPSGDGetKrylovStart() is PETSC_FALSE and the user provides vectors with
-   EPSSetInitialSpace(), up to initialsize vectors will be used; and if the
-   provided vectors are not enough, the solver completes the subspace with
-   random vectors. In the case of EPSGDGetKrylovStart() being PETSC_TRUE, the solver
+   If the flag in `EPSGDSetKrylovStart()` is set to `PETSC_FALSE` and the user
+   provides vectors with `EPSSetInitialSpace()`, up to `initialsize` vectors will be used;
+   and if the provided vectors are not enough, the solver completes the subspace with
+   random vectors. In case the `EPSGDSetKrylovStart()` flag is `PETSC_TRUE`, the solver
    gets the first vector provided by the user or, if not available, a random vector,
-   and expands the Krylov basis up to initialsize vectors.
+   and expands the Krylov basis up to `initialsize` vectors.
+
+   Detailed information can be found at {cite:p}`Rom14`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSGD`, `EPSGDGetInitialSize()`, `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDGetInitialSize()`, `EPSGDSetKrylovStart()`
 @*/
 PetscErrorCode EPSGDSetInitialSize(EPS eps,PetscInt initialsize)
 {
@@ -332,14 +340,6 @@ PetscErrorCode EPSGDSetInitialSize(EPS eps,PetscInt initialsize)
 
    Output Parameter:
 .  initialsize - number of vectors of the initial searching subspace
-
-   Notes:
-   If EPSGDGetKrylovStart() is PETSC_FALSE and the user provides vectors with
-   EPSSetInitialSpace(), up to initialsize vectors will be used; and if the
-   provided vectors are not enough, the solver completes the subspace with
-   random vectors. In the case of EPSGDGetKrylovStart() being PETSC_TRUE, the solver
-   gets the first vector provided by the user or, if not available, a random vector,
-   and expands the Krylov basis up to initialsize vectors.
 
    Level: advanced
 
@@ -362,10 +362,13 @@ PetscErrorCode EPSGDGetInitialSize(EPS eps,PetscInt *initialsize)
 
    Input Parameters:
 +  eps   - the linear eigensolver context
--  borth - whether to B-orthogonalize the search subspace
+-  borth - whether to $B$-orthogonalize the search subspace
 
    Options Database Key:
-.  -eps_gd_borth - Set the orthogonalization used in the search subspace
+.  -eps_gd_borth - toggle the $B$-orthogonalization
+
+   Note:
+   Detailed information can be found at {cite:p}`Rom14`.
 
    Level: advanced
 
@@ -390,7 +393,7 @@ PetscErrorCode EPSGDSetBOrth(EPS eps,PetscBool borth)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  borth - whether to B-orthogonalize the search subspace
+.  borth - whether to $B$-orthogonalize the search subspace
 
    Level: advanced
 
@@ -426,10 +429,11 @@ static PetscErrorCode EPSGDSetDoubleExpansion_GD(EPS eps,PetscBool doubleexp)
    Options Database Key:
 .  -eps_gd_double_expansion - activate the double-expansion variant of GD
 
-   Notes:
-   In the double expansion variant the search subspace is expanded with K*[A*x B*x]
-   instead of the classic K*r, where K is the preconditioner, x the selected
-   approximate eigenvector and r its associated residual vector.
+   Note:
+   In the double expansion variant the search subspace is expanded with $K[Ax, Bx]$
+   instead of the classic $Kr$, where $K$ is the preconditioner, $x$ the selected
+   approximate eigenvector and $r$ its associated residual vector. More details
+   can be found in {cite:p}`Hoc12`.
 
    Level: advanced
 

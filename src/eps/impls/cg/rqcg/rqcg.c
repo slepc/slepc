@@ -257,8 +257,7 @@ static PetscErrorCode EPSRQCGSetReset_RQCG(EPS eps,PetscInt nrest)
 }
 
 /*@
-   EPSRQCGSetReset - Sets the reset parameter of the RQCG iteration. Every
-   nrest iterations, the solver performs a Rayleigh-Ritz projection step.
+   EPSRQCGSetReset - Sets the reset parameter of the RQCG iteration.
 
    Logically Collective
 
@@ -267,7 +266,11 @@ static PetscErrorCode EPSRQCGSetReset_RQCG(EPS eps,PetscInt nrest)
 -  nrest - the number of iterations between resets
 
    Options Database Key:
-.  -eps_rqcg_reset - Sets the reset parameter
+.  -eps_rqcg_reset - sets the reset parameter
+
+   Note:
+   The meaning of the reset parameter is that every `nrest` iterations the
+   solver performs a Rayleigh-Ritz projection step.
 
    Level: advanced
 

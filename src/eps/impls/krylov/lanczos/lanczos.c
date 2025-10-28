@@ -744,11 +744,16 @@ static PetscErrorCode EPSLanczosSetReorthog_Lanczos(EPS eps,EPSLanczosReorthogTy
 
    Input Parameters:
 +  eps - the linear eigensolver context
--  reorthog - the type of reorthogonalization
+-  reorthog - the type of reorthogonalization, see `EPSLanczosReorthogType` for possible values
 
    Options Database Key:
-.  -eps_lanczos_reorthog - Sets the reorthogonalization type (either 'local', 'selective',
-                         'periodic', 'partial', 'full' or 'delayed')
+.  -eps_lanczos_reorthog - sets the reorthogonalization type
+
+   Notes:
+   Details of the different reorthogonalization strategies can be found in
+   {cite:p}`Her06`.
+
+   This applies to `EPSLANCZOS`, not to `EPSKRYLOVSCHUR`.
 
    Level: advanced
 
