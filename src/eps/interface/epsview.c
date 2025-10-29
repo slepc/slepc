@@ -414,8 +414,13 @@ static PetscErrorCode EPSErrorView_MATLAB(EPS eps,EPSErrorType etype,PetscViewer
    Notes:
    By default, this function checks the error of all eigenpairs and prints
    the eigenvalues if all of them are below the requested tolerance.
-   If the viewer has format=PETSC_VIEWER_ASCII_INFO_DETAIL then a table with
+   If the viewer has format `PETSC_VIEWER_ASCII_INFO_DETAIL` then a table with
    eigenvalues and corresponding errors is printed.
+
+   All the command-line options listed above admit an optional argument
+   specifying the viewer type and options. For instance, use
+   `-eps_error_relative :myerr.m:ascii_matlab` to save the errors in a file
+   that can be executed in Matlab.
 
    Level: intermediate
 
@@ -663,6 +668,12 @@ static PetscErrorCode EPSValuesView_MATLAB(EPS eps,PetscViewer viewer)
    Options Database Key:
 .  -eps_view_values - print computed eigenvalues
 
+   Note:
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-eps_view_values :evals.m:ascii_matlab` to save the values in a file
+   that can be executed in Matlab.
+
    Level: intermediate
 
 .seealso: [](ch:eps), `EPSSolve()`, `EPSVectorsView()`, `EPSErrorView()`
@@ -763,7 +774,11 @@ PetscErrorCode EPSValuesViewFromOptions(EPS eps)
 
    If left eigenvectors were computed with a two-sided eigensolver, the right
    and left eigenvectors are interleaved, that is, the vectors are output in
-   the following order X0, Y0, X1, Y1, X2, Y2, ...
+   the following order\: `X0, Y0, X1, Y1, X2, Y2, ...`
+
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-eps_view_vectors binary:evecs.bin` to save the vectors in a binary file.
 
    Level: intermediate
 

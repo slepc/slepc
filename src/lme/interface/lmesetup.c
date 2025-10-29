@@ -37,7 +37,7 @@ static inline PetscErrorCode LMESetUp_Lyapunov(LME lme)
    Collective
 
    Input Parameter:
-.  lme   - the linear matrix equation solver context
+.  lme - the linear matrix equation solver context
 
    Notes:
    This function need not be called explicitly in most cases, since `LMESolve()`

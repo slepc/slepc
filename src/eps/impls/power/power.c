@@ -782,24 +782,25 @@ static PetscErrorCode EPSPowerSetShiftType_Power(EPS eps,EPSPowerShiftType shift
 
    Input Parameters:
 +  eps - the linear eigensolver context
--  shift - the type of shift
+-  shift - the type of shift, see `EPSPowerShiftType` for possible values
 
    Options Database Key:
-.  -eps_power_shift_type - Sets the shift type (either 'constant' or
-                           'rayleigh' or 'wilkinson')
+.  -eps_power_shift_type - sets the shift type, either `constant`, `rayleigh` or `wilkinson`
 
    Notes:
-   By default, shifts are constant (EPS_POWER_SHIFT_CONSTANT) and the iteration
+   By default, shifts are constant (`EPS_POWER_SHIFT_CONSTANT`) and the iteration
    is the simple power method (or inverse iteration if a shift-and-invert
    transformation is being used).
 
-   A variable shift can be specified (EPS_POWER_SHIFT_RAYLEIGH or
-   EPS_POWER_SHIFT_WILKINSON). In this case, the iteration behaves rather like
+   A variable shift can be specified (`EPS_POWER_SHIFT_RAYLEIGH` or
+   `EPS_POWER_SHIFT_WILKINSON`). In this case, the iteration behaves rather like
    a cubic converging method such as RQI.
+
+   Details of the three variants can be found in {cite:p}`Her05`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerGetShiftType()`, `STSetShift()`, `EPSPowerShiftType`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerGetShiftType()`, `STSetShift()`, `EPSPowerShiftType`
 @*/
 PetscErrorCode EPSPowerSetShiftType(EPS eps,EPSPowerShiftType shift)
 {
@@ -833,7 +834,7 @@ static PetscErrorCode EPSPowerGetShiftType_Power(EPS eps,EPSPowerShiftType *shif
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerSetShiftType()`, `EPSPowerShiftType`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerSetShiftType()`, `EPSPowerShiftType`
 @*/
 PetscErrorCode EPSPowerGetShiftType(EPS eps,EPSPowerShiftType *shift)
 {
@@ -868,25 +869,25 @@ static PetscErrorCode EPSPowerSetNonlinear_Power(EPS eps,PetscBool nonlinear)
 -  nonlinear - whether the problem is nonlinear or not
 
    Options Database Key:
-.  -eps_power_nonlinear - Sets the nonlinear flag
+.  -eps_power_nonlinear - sets the nonlinear flag
 
    Notes:
    If this flag is set, the solver assumes that the problem is nonlinear,
    that is, the operators that define the eigenproblem are not constant
-   matrices, but depend on the eigenvector, A(x)*x=lambda*B(x)*x. This is
+   matrices, but depend on the eigenvector, $A(x)x=\lambda B(x)x$. This is
    different from the case of nonlinearity with respect to the eigenvalue
-   (use the NEP solver class for this kind of problems).
+   (use the `NEP` solver class for this kind of problems).
 
    The way in which nonlinear operators are specified is very similar to
-   the case of PETSc's SNES solver. The difference is that the callback
-   functions are provided via composed functions "formFunction" and
-   "formJacobian" in each of the matrix objects passed as arguments of
-   EPSSetOperators(). The application context required for these functions
-   can be attached via a composed PetscContainer.
+   the case of PETSc's `SNES` solver. The difference is that the callback
+   functions are provided via composed functions `formFunction` and
+   `formJacobian` in each of the matrix objects passed as arguments of
+   `EPSSetOperators()`. The application context required for these functions
+   can be attached via a composed `PetscContainer`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerGetNonlinear()`, `EPSSetOperators()`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerGetNonlinear()`, `EPSSetOperators()`
 @*/
 PetscErrorCode EPSPowerSetNonlinear(EPS eps,PetscBool nonlinear)
 {
@@ -919,7 +920,7 @@ static PetscErrorCode EPSPowerGetNonlinear_Power(EPS eps,PetscBool *nonlinear)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
 @*/
 PetscErrorCode EPSPowerGetNonlinear(EPS eps,PetscBool *nonlinear)
 {
@@ -952,11 +953,14 @@ static PetscErrorCode EPSPowerSetUpdate_Power(EPS eps,PetscBool update)
 -  update - whether the residual is updated monolithically or not
 
    Options Database Key:
-.  -eps_power_update - Sets the update flag
+.  -eps_power_update - sets the update flag
+
+   Note:
+   This flag is relevant only in nonlinear problems, see `EPSPowerSetNonlinear()`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerGetUpdate()`, `EPSPowerGetNonlinear()`, `EPSSetOperators()`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerGetUpdate()`, `EPSPowerGetNonlinear()`, `EPSSetOperators()`
 @*/
 PetscErrorCode EPSPowerSetUpdate(EPS eps,PetscBool update)
 {
@@ -990,7 +994,7 @@ static PetscErrorCode EPSPowerGetUpdate_Power(EPS eps,PetscBool *update)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerSetUpdate()`, `EPSPowerSetNonlinear()`
 @*/
 PetscErrorCode EPSPowerGetUpdate(EPS eps,PetscBool *update)
 {
@@ -1011,7 +1015,7 @@ static PetscErrorCode EPSPowerSetSignNormalization_Power(EPS eps,PetscBool sign_
 }
 
 /*@
-   EPSPowerSetSignNormalization - Sets a flag to indicate whether the Bx vector
+   EPSPowerSetSignNormalization - Sets a flag to indicate whether the $Bx$ vector
    should be normalized by the sign of the first non-zero element in the vector.
    E.g., if this is true, the post-normalization value of the first non-zero element
    in the vector is guaranteed to be positive.
@@ -1019,16 +1023,19 @@ static PetscErrorCode EPSPowerSetSignNormalization_Power(EPS eps,PetscBool sign_
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context
--  sign_normalization - whether Bx should be multiplied by the sign of the first non-zero
++  eps                - the linear eigensolver context
+-  sign_normalization - whether $Bx$ should be multiplied by the sign of the first non-zero
                         element when performing normalization steps
 
    Options Database Key:
-.  -eps_power_sign_normalization - Sets the sign normalization flag
+.  -eps_power_sign_normalization - sets the sign normalization flag
+
+   Note:
+   This flag is relevant only in nonlinear problems, see `EPSPowerSetNonlinear()`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerGetSignNormalization()`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerSetNonlinear()`, `EPSPowerGetSignNormalization()`
 @*/
 PetscErrorCode EPSPowerSetSignNormalization(EPS eps,PetscBool sign_normalization)
 {
@@ -1049,7 +1056,7 @@ static PetscErrorCode EPSPowerGetSignNormalization_Power(EPS eps,PetscBool *sign
 }
 
 /*@
-   EPSPowerGetSignNormalization - Returns a flag indicating whether the Bx vector
+   EPSPowerGetSignNormalization - Returns a flag indicating whether the $Bx$ vector
    is normalized by the sign of the first non-zero element in the vector. E.g.,
    if this is true, the post-normalization value of the first non-zero element in
    the vector is guaranteed to be positive.
@@ -1064,7 +1071,7 @@ static PetscErrorCode EPSPowerGetSignNormalization_Power(EPS eps,PetscBool *sign
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerSetSignNormalization()`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerSetSignNormalization()`
 @*/
 PetscErrorCode EPSPowerGetSignNormalization(EPS eps,PetscBool *sign_normalization)
 {
@@ -1088,7 +1095,7 @@ static PetscErrorCode EPSPowerSetSNES_Power(EPS eps,SNES snes)
 }
 
 /*@
-   EPSPowerSetSNES - Associate a nonlinear solver object (SNES) to the
+   EPSPowerSetSNES - Associate a nonlinear solver object (`SNES`) to the
    eigenvalue solver (to be used in nonlinear inverse iteration).
 
    Collective
@@ -1097,9 +1104,12 @@ static PetscErrorCode EPSPowerSetSNES_Power(EPS eps,SNES snes)
 +  eps  - the linear eigensolver context
 -  snes - the nonlinear solver object
 
+   Note:
+   This flag is relevant only in nonlinear problems, see `EPSPowerSetNonlinear()`.
+
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerGetSNES()`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerSetNonlinear()`, `EPSPowerGetSNES()`
 @*/
 PetscErrorCode EPSPowerSetSNES(EPS eps,SNES snes)
 {
@@ -1128,7 +1138,7 @@ static PetscErrorCode EPSPowerGetSNES_Power(EPS eps,SNES *snes)
 }
 
 /*@
-   EPSPowerGetSNES - Retrieve the nonlinear solver object (SNES) associated
+   EPSPowerGetSNES - Retrieve the nonlinear solver object (`SNES`) associated
    with the eigenvalue solver.
 
    Not Collective
@@ -1141,7 +1151,7 @@ static PetscErrorCode EPSPowerGetSNES_Power(EPS eps,SNES *snes)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPowerSetSNES()`
+.seealso: [](ch:eps), `EPSPOWER`, `EPSPowerSetSNES()`
 @*/
 PetscErrorCode EPSPowerGetSNES(EPS eps,SNES *snes)
 {
@@ -1236,6 +1246,33 @@ static PetscErrorCode EPSSetDefaultST_Power(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSPOWER - EPSPOWER = "power" - The simple power iteration and inverse
+   iteration.
+
+   Notes:
+   This solver is very basic and is not recommended in general, since it
+   will not be competitive with respect to other solvers.
+
+   The implemented method is the power iteration, or inverse iteration in
+   case the selected spectral transformation is `STSINVERT`. In this latter
+   case it is possible to use a dynamic shift, as in the RQI method, see
+   `EPSPowerSetShiftType()`.
+
+   The solver incorporates deflation so that several eigenpairs can be
+   computed. There is also a two-sided implementation that also computes
+   left eigenvectors.
+
+   This solver can also be used for nonlinear inverse iteration on the problem
+   $A(x)x=\lambda B(x)x$, where $A$ and $B$ are not constant matrices but
+   depend on the eigenvector $x$. This mode is enabled with `EPSPowerSetNonlinear()`.
+   Note that this is a nonlinear eigenvector problem, as opposed to problems
+   addressed in `NEP` that are nonlinear with respect to the eigenvalue.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSSetTwoSided()`, `EPSPowerSetShiftType()`, `EPSPowerSetNonlinear()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_Power(EPS eps)
 {
   EPS_POWER      *ctx;

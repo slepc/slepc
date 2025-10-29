@@ -169,7 +169,7 @@ PetscErrorCode EPSComputeVectors_Schur(EPS eps)
 }
 
 /*@
-   EPSSetWorkVecs - Sets a number of work vectors into an EPS object.
+   EPSSetWorkVecs - Sets a number of work vectors into an `EPS` object.
 
    Collective
 
@@ -177,8 +177,8 @@ PetscErrorCode EPSComputeVectors_Schur(EPS eps)
 +  eps - the linear eigensolver context
 -  nw  - number of work vectors to allocate
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin EPS
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `EPS`
    implementations.
 
    Level: developer
@@ -273,15 +273,11 @@ PetscErrorCode EPSConvergedNorm(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscR
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to EPS_CONVERGED_ITERATING
-   (zero).
-
-   EPSStoppingBasic() will stop if all requested eigenvalues are converged, or if
+   `EPSStoppingBasic()` will stop if all requested eigenvalues are converged, or if
    the maximum number of iterations has been reached.
 
-   Use EPSSetStoppingTest() to provide your own test instead of using this one.
+   This is the default stopping test.
+   Use `EPSSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 
@@ -319,18 +315,13 @@ PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nc
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to EPS_CONVERGED_ITERATING
-   (zero).
-
-   EPSStoppingThreshold() will stop when one of the computed eigenvalues is not
-   above/below the threshold given at EPSSetThreshold(). If a number of wanted
-   eigenvalues has been specified via EPSSetDimensions() then it is also taken into
+   `EPSStoppingThreshold()` will stop when one of the computed eigenvalues is not
+   above/below the threshold given at `EPSSetThreshold()`. If a number of wanted
+   eigenvalues has been specified via `EPSSetDimensions()` then it is also taken into
    account, and the solver will stop when one of the two conditions (threshold or
    number of converged values) is met.
 
-   Use EPSSetStoppingTest() to provide your own test instead of using this one.
+   Use `EPSSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 

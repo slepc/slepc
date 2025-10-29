@@ -1497,7 +1497,7 @@ static PetscErrorCode PEPJDSetRestart_JD(PEP pep,PetscReal keep)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDGetRestart()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetRestart()`
 @*/
 PetscErrorCode PEPJDSetRestart(PEP pep,PetscReal keep)
 {
@@ -1530,7 +1530,7 @@ static PetscErrorCode PEPJDGetRestart_JD(PEP pep,PetscReal *keep)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDSetRestart()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetRestart()`
 @*/
 PetscErrorCode PEPJDGetRestart(PEP pep,PetscReal *keep)
 {
@@ -1574,7 +1574,7 @@ static PetscErrorCode PEPJDSetFix_JD(PEP pep,PetscReal fix)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDGetFix()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetFix()`
 @*/
 PetscErrorCode PEPJDSetFix(PEP pep,PetscReal fix)
 {
@@ -1613,7 +1613,7 @@ static PetscErrorCode PEPJDGetFix_JD(PEP pep,PetscReal *fix)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDSetFix()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetFix()`
 @*/
 PetscErrorCode PEPJDGetFix(PEP pep,PetscReal *fix)
 {
@@ -1653,7 +1653,7 @@ static PetscErrorCode PEPJDSetReusePreconditioner_JD(PEP pep,PetscBool reusepc)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDGetReusePreconditioner()`, `PEPJDSetFix()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetReusePreconditioner()`, `PEPJDSetFix()`
 @*/
 PetscErrorCode PEPJDSetReusePreconditioner(PEP pep,PetscBool reusepc)
 {
@@ -1686,7 +1686,7 @@ static PetscErrorCode PEPJDGetReusePreconditioner_JD(PEP pep,PetscBool *reusepc)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDSetReusePreconditioner()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetReusePreconditioner()`
 @*/
 PetscErrorCode PEPJDGetReusePreconditioner(PEP pep,PetscBool *reusepc)
 {
@@ -1731,7 +1731,7 @@ static PetscErrorCode PEPJDSetMinimalityIndex_JD(PEP pep,PetscInt mmidx)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDGetMinimalityIndex()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetMinimalityIndex()`
 @*/
 PetscErrorCode PEPJDSetMinimalityIndex(PEP pep,PetscInt mmidx)
 {
@@ -1765,7 +1765,7 @@ static PetscErrorCode PEPJDGetMinimalityIndex_JD(PEP pep,PetscInt *mmidx)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDSetMinimalityIndex()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetMinimalityIndex()`
 @*/
 PetscErrorCode PEPJDGetMinimalityIndex(PEP pep,PetscInt *mmidx)
 {
@@ -1809,7 +1809,7 @@ static PetscErrorCode PEPJDSetProjection_JD(PEP pep,PEPJDProjection proj)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDGetProjection()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetProjection()`
 @*/
 PetscErrorCode PEPJDSetProjection(PEP pep,PEPJDProjection proj)
 {
@@ -1842,7 +1842,7 @@ static PetscErrorCode PEPJDGetProjection_JD(PEP pep,PEPJDProjection *proj)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPJDSetProjection()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetProjection()`
 @*/
 PetscErrorCode PEPJDGetProjection(PEP pep,PEPJDProjection *proj)
 {

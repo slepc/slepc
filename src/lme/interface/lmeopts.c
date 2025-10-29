@@ -22,7 +22,7 @@
    Collective
 
    Input Parameters:
-+  lme      - the linear matrix equation solver context
++  lme  - the linear matrix equation solver context
 .  opt  - the command line option for this monitor
 .  name - the monitor type one is seeking
 -  ctx  - an optional user context for the monitor, or `NULL`
@@ -427,7 +427,7 @@ PetscErrorCode LMEGetErrorIfNotConverged(LME lme,PetscBool *flag)
    Logically Collective
 
    Input Parameters:
-+  lme - the linear matrix equation solver context
++  lme    - the linear matrix equation solver context
 -  prefix - the prefix string to prepend to all `LME` option requests
 
    Notes:
@@ -463,7 +463,7 @@ PetscErrorCode LMESetOptionsPrefix(LME lme,const char prefix[])
    Logically Collective
 
    Input Parameters:
-+  lme - the linear matrix equation solver context
++  lme    - the linear matrix equation solver context
 -  prefix - the prefix string to prepend to all `LME` option requests
 
    Notes:

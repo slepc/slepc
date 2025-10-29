@@ -282,7 +282,7 @@ static PetscErrorCode EPSFEASTSetNumPoints_FEAST(EPS eps,PetscInt npoints)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSFEASTGetNumPoints()`
+.seealso: [](ch:eps), `EPSFEAST`, `EPSFEASTGetNumPoints()`
 @*/
 PetscErrorCode EPSFEASTSetNumPoints(EPS eps,PetscInt npoints)
 {
@@ -316,7 +316,7 @@ static PetscErrorCode EPSFEASTGetNumPoints_FEAST(EPS eps,PetscInt *npoints)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSFEASTSetNumPoints()`
+.seealso: [](ch:eps), `EPSFEAST`, `EPSFEASTSetNumPoints()`
 @*/
 PetscErrorCode EPSFEASTGetNumPoints(EPS eps,PetscInt *npoints)
 {
@@ -327,6 +327,17 @@ PetscErrorCode EPSFEASTGetNumPoints(EPS eps,PetscInt *npoints)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSFEAST - EPSFEAST = "feast" - A wrapper to FEAST {cite:p}`Pol09`.
+
+   Note:
+   We currently support only the implementation of FEAST that is included
+   in the Intel MKL library.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_FEAST(EPS eps)
 {
   EPS_FEAST      *ctx;

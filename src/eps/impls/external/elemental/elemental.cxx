@@ -109,6 +109,22 @@ static PetscErrorCode EPSReset_Elemental(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSELEMENTAL - EPSELEMENTAL = "elemental" - A wrapper to Elemental
+   eigensolvers {cite:p}`Pou13`.
+
+   Notes:
+   Only available for Hermitian problems.
+
+   Elemental contains a direct eigensolver, that is, the full spectrum
+   is computed. Its storage format is similar to ScaLAPACK, but different,
+   and it may have better parallel performance in some cases. The
+   SLEPc solver is also in charge of the redistribution of matrices.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_Elemental(EPS eps)
 {
   EPS_Elemental  *ctx;

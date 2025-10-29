@@ -14,7 +14,7 @@
 #include <slepc/private/nepimpl.h>     /*I "slepcnep.h" I*/
 
 /*@
-   NEPSetWorkVecs - Sets a number of work vectors into a NEP object
+   NEPSetWorkVecs - Sets a number of work vectors into a `NEP` object
 
    Collective
 
@@ -22,8 +22,8 @@
 +  nep - the nonlinear eigensolver context
 -  nw  - number of work vectors to allocate
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin NEP
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `NEP`
    implementations.
 
    Level: developer

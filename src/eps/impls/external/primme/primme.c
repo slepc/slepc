@@ -445,20 +445,22 @@ static PetscErrorCode EPSPRIMMESetBlockSize_PRIMME(EPS eps,PetscInt bs)
 -  bs - block size
 
    Options Database Key:
-.  -eps_primme_blocksize - Sets the max allowed block size value
+.  -eps_primme_blocksize - sets the maximum allowed block size
 
    Notes:
-   If the block size is not set, the value established by primme_initialize
+   If the block size is not set, the value established by `primme_initialize`
    is used.
 
    The user should set the block size based on the architecture specifics
    of the target computer, as well as any a priori knowledge of multiplicities.
-   The code does NOT require bs > 1 to find multiple eigenvalues. For some
-   methods, keeping bs = 1 yields the best overall performance.
+   The code does NOT require `bs` > 1 to find multiple eigenvalues. For some
+   methods, keeping `bs` = 1 yields the best overall performance.
+
+   See the documentation of PRIMME {cite:p}`Sta10` for details.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPRIMMEGetBlockSize()`
+.seealso: [](ch:eps), `EPSPRIMME`, `EPSPRIMMEGetBlockSize()`
 @*/
 PetscErrorCode EPSPRIMMESetBlockSize(EPS eps,PetscInt bs)
 {
@@ -491,7 +493,7 @@ static PetscErrorCode EPSPRIMMEGetBlockSize_PRIMME(EPS eps,PetscInt *bs)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPRIMMESetBlockSize()`
+.seealso: [](ch:eps), `EPSPRIMME`, `EPSPRIMMESetBlockSize()`
 @*/
 PetscErrorCode EPSPRIMMEGetBlockSize(EPS eps,PetscInt *bs)
 {
@@ -521,14 +523,16 @@ static PetscErrorCode EPSPRIMMESetMethod_PRIMME(EPS eps,EPSPRIMMEMethod method)
 -  method - method that will be used by PRIMME
 
    Options Database Key:
-.  -eps_primme_method - Sets the method for the PRIMME library
+.  -eps_primme_method - sets the method for the PRIMME library
 
-   Note:
-   If not set, the method defaults to EPS_PRIMME_DEFAULT_MIN_TIME.
+   Notes:
+   If not set, the method defaults to `EPS_PRIMME_DEFAULT_MIN_TIME`.
+
+   See the documentation of PRIMME {cite:p}`Sta10` for a description of the methods.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPRIMMEGetMethod()`, `EPSPRIMMEMethod`
+.seealso: [](ch:eps), `EPSPRIMME`, `EPSPRIMMEGetMethod()`, `EPSPRIMMEMethod`
 @*/
 PetscErrorCode EPSPRIMMESetMethod(EPS eps,EPSPRIMMEMethod method)
 {
@@ -561,7 +565,7 @@ static PetscErrorCode EPSPRIMMEGetMethod_PRIMME(EPS eps,EPSPRIMMEMethod *method)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSPRIMMESetMethod()`, `EPSPRIMMEMethod`
+.seealso: [](ch:eps), `EPSPRIMME`, `EPSPRIMMESetMethod()`, `EPSPRIMMEMethod`
 @*/
 PetscErrorCode EPSPRIMMEGetMethod(EPS eps,EPSPRIMMEMethod *method)
 {
@@ -572,6 +576,18 @@ PetscErrorCode EPSPRIMMEGetMethod(EPS eps,EPSPRIMMEMethod *method)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSPRIMME - EPSPRIMME = "primme" - A wrapper to PRIMME {cite:p}`Sta10`.
+
+   Note:
+   The PRIMME library implements several closely related algorithms. The
+   default one is generally a good choice, but the user can select another
+   with `EPSPRIMMESetMethod()`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_PRIMME(EPS eps)
 {
   EPS_PRIMME     *primme;

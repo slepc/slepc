@@ -654,7 +654,7 @@ PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
 +  svd      - the singular value solver context
 .  opt      - the command line option for this monitor
 .  name     - the monitor type one is seeking
-.  ctx      - an optional user context for the monitor, or NULL
+.  ctx      - an optional user context for the monitor, or `NULL`
 -  trackall - whether this monitor tracks all singular values or not
 
    Level: developer
@@ -947,12 +947,12 @@ PetscErrorCode SVDIsHyperbolic(SVD svd,PetscBool* is)
 -  trackall - whether to compute all residuals or not
 
    Notes:
-   If the user sets trackall=PETSC_TRUE then the solver computes (or estimates)
+   If the user sets `trackall`=`PETSC_TRUE` then the solver computes (or estimates)
    the residual norm for each singular value approximation. Computing the residual is
    usually an expensive operation and solvers commonly compute only the residual
    associated to the first unconverged singular value.
 
-   The option '-svd_monitor_all' automatically activates this option.
+   The option `-svd_monitor_all` automatically activates this option.
 
    Level: developer
 
@@ -994,13 +994,13 @@ PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
 
 /*@
    SVDSetOptionsPrefix - Sets the prefix used for searching for all
-   SVD options in the database.
+   `SVD` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  svd - the singular value solver context
--  prefix - the prefix string to prepend to all SVD option requests
++  svd    - the singular value solver context
+-  prefix - the prefix string to prepend to all `SVD` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -1008,10 +1008,10 @@ PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different SVD contexts, one could call
+   different `SVD` contexts, one could call
 .vb
-      SVDSetOptionsPrefix(svd1,"svd1_")
-      SVDSetOptionsPrefix(svd2,"svd2_")
+   SVDSetOptionsPrefix(svd1,"svd1_")
+   SVDSetOptionsPrefix(svd2,"svd2_")
 .ve
 
    Level: advanced
@@ -1033,13 +1033,13 @@ PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char prefix[])
 
 /*@
    SVDAppendOptionsPrefix - Appends to the prefix used for searching for all
-   SVD options in the database.
+   `SVD` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  svd - the singular value solver context
--  prefix - the prefix string to prepend to all SVD option requests
++  svd    - the singular value solver context
+-  prefix - the prefix string to prepend to all `SVD` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.

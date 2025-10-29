@@ -281,7 +281,7 @@ static PetscErrorCode STCayleyGetAntishift_Cayley(ST st,PetscScalar *nu)
 
    Level: intermediate
 
-.seealso: [](ch:st), `STGetShift()`, `STCayleySetAntishift()`
+.seealso: [](ch:st), `STCAYLEY`, `STGetShift()`, `STCayleySetAntishift()`
 @*/
 PetscErrorCode STCayleyGetAntishift(ST st,PetscScalar *nu)
 {

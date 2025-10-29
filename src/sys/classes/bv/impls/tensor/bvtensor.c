@@ -351,7 +351,7 @@ static PetscErrorCode BVTensorBuildFirstColumn_Tensor(BV V,PetscInt k)
 
    Level: advanced
 
-.seealso: [](sec:bv), `BVCreateTensor()`, `BVTensorGetDegree()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVCreateTensor()`, `BVTensorGetDegree()`
 @*/
 PetscErrorCode BVTensorBuildFirstColumn(BV V,PetscInt k)
 {
@@ -559,7 +559,7 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
 
    Level: advanced
 
-.seealso: [](sec:bv), `BVCreateTensor()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVCreateTensor()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVTensorCompress(BV V,PetscInt newc)
 {
@@ -592,7 +592,7 @@ static PetscErrorCode BVTensorGetDegree_Tensor(BV bv,PetscInt *d)
 
    Level: advanced
 
-.seealso: [](sec:bv), `BVCreateTensor()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVCreateTensor()`
 @*/
 PetscErrorCode BVTensorGetDegree(BV bv,PetscInt *d)
 {
@@ -641,7 +641,7 @@ static PetscErrorCode BVTensorGetFactors_Tensor(BV V,BV *U,Mat *S)
 
    Level: advanced
 
-.seealso: [](sec:bv), `BVCreateTensor()`, `BVTensorRestoreFactors()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVCreateTensor()`, `BVTensorRestoreFactors()`
 @*/
 PetscErrorCode BVTensorGetFactors(BV V,BV *U,Mat *S)
 {
@@ -680,7 +680,7 @@ static PetscErrorCode BVTensorRestoreFactors_Tensor(BV V,BV *U,Mat *S)
 
    Level: advanced
 
-.seealso: [](sec:bv), `BVTensorGetFactors()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVTensorGetFactors()`
 @*/
 PetscErrorCode BVTensorRestoreFactors(BV V,BV *U,Mat *S)
 {

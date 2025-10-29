@@ -244,7 +244,7 @@ static PetscErrorCode FNCombineSetChildren_Combine(FN fn,FNCombineType comb,FN f
 
    Level: intermediate
 
-.seealso: [](sec:fn), `FNCombineGetChildren()`
+.seealso: [](sec:fn), `FNCOMBINE`, `FNCombineGetChildren()`
 @*/
 PetscErrorCode FNCombineSetChildren(FN fn,FNCombineType comb,FN f1,FN f2)
 {
@@ -290,7 +290,7 @@ static PetscErrorCode FNCombineGetChildren_Combine(FN fn,FNCombineType *comb,FN 
 
    Level: intermediate
 
-.seealso: [](sec:fn), `FNCombineSetChildren()`
+.seealso: [](sec:fn), `FNCOMBINE`, `FNCombineSetChildren()`
 @*/
 PetscErrorCode FNCombineGetChildren(FN fn,FNCombineType *comb,FN *f1,FN *f2)
 {

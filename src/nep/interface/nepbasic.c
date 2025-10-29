@@ -28,7 +28,7 @@ PetscFunctionList NEPMonitorDestroyList       = NULL;
 PetscBool         NEPMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   NEPCreate - Creates the default `NEP` context.
+   NEPCreate - Creates the `NEP` context.
 
    Collective
 
@@ -308,8 +308,8 @@ PetscErrorCode NEPReset_Problem(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 /*@
-   NEPReset - Resets the NEP context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   NEPReset - Resets the `NEP` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 

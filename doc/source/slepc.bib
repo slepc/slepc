@@ -1,5 +1,6 @@
 @STRING{acmmathsoft="{ACM} Trans. Math. Software" }
 @STRING{actanum	= "Acta Numerica" }
+@String{applmathcomp="Appl. Math. Comput." }
 @STRING{birkhauser="Birkha{\"u}ser" }
 @STRING{bit	= "{BIT}" }
 @String{compapplmath="J. Comput. Appl. Math." }
@@ -16,7 +17,7 @@
 @String{mathcomp="Math. Comp." }
 @String{numalg="Numer. Algorithms"}
 @String{numlinapp="Numer. Linear Algebra Appl." }
-@String{parcomputing="Parallel Computing" }
+@String{parcomputing="Parallel Comput." }
 @String{physrevb="Phys. Rev. B" }
 @STRING{prenticehall="Prentice-Hall" }
 @STRING{siam	= "Society for Industrial and Applied Mathematics" }
@@ -138,7 +139,7 @@
   address	= "New York"
 }
 
-@Book{		  Ste01,
+@Book{		  Ste01a,
   author	= "G. W. Stewart",
   title		= "Matrix Algorithms. {Volume II}: Eigensystems",
   publisher	= siam,
@@ -658,7 +659,7 @@
 }
 
 @TechReport{      Her07a,
-  author        = "V. Hernandez and J. E. Roman and A. Tomas and V. Vidal.",
+  author        = "V. Hernandez and J. E. Roman and A. Tomas and V. Vidal",
   title         = "Orthogonalization Routines in {SLEPc}",
   number        = "{STR-1}",
   institution   = "{Universitat Polit\`ecnica de Val\`encia}",
@@ -666,8 +667,26 @@
   year          = "2007"
 }
 
+@TechReport{      Her05,
+  author        = "V. Hernandez and J. E. Roman and A. Tomas and V. Vidal",
+  title         = "Single Vector Iteration Methods in {SLEPc}",
+  number        = "{STR-2}",
+  institution   = "{Universitat Polit\`ecnica de Val\`encia}",
+  url           = "https://slepc.upv.es/documentation",
+  year          = "2005"
+}
+
+@TechReport{      Her06,
+  author        = "V. Hernandez and J. E. Roman and A. Tomas and V. Vidal",
+  title         = "Lanczos Methods in {SLEPc}",
+  number        = "{STR-5}",
+  institution   = "{Universitat Polit\`ecnica de Val\`encia}",
+  url           = "https://slepc.upv.es/documentation",
+  year          = "2006"
+}
+
 @TechReport{      Her09,
-  author        = "V. Hernandez and J. E. Roman and A. Tomas and V. Vidal.",
+  author        = "V. Hernandez and J. E. Roman and A. Tomas and V. Vidal",
   title         = "A survey of software for sparse eigenvalue problems",
   number        = "{STR-6}",
   institution   = "{Universitat Polit\`ecnica de Val\`encia}",
@@ -676,12 +695,39 @@
 }
 
 @TechReport{      Her07b,
-  author        = "V. Hernandez and J. E. Roman and A. Tomas.",
+  author        = "V. Hernandez and J. E. Roman and A. Tomas and V. Vidal",
+  title         = "Krylov-Schur Methods in {SLEPc}",
+  number        = "{STR-7}",
+  institution   = "{Universitat Polit\`ecnica de Val\`encia}",
+  url           = "https://slepc.upv.es/documentation",
+  year          = "2007"
+}
+
+@TechReport{      Her07c,
+  author        = "V. Hernandez and J. E. Roman and A. Tomas",
   title         = "Restarted {Lanczos} Bidiagonalization for the {SVD} in {SLEPc}",
   number        = "{STR-8}",
   institution   = "{Universitat Polit\`ecnica de Val\`encia}",
   url           = "https://slepc.upv.es/documentation",
   year          = "2007"
+}
+
+@TechReport{      Rom09,
+  author        = "J. E. Roman",
+  title         = "Practical Implementation of Harmonic {Krylov-Schur}",
+  number        = "{STR-9}",
+  institution   = "{Universitat Polit\`ecnica de Val\`encia}",
+  url           = "https://slepc.upv.es/documentation",
+  year          = "2009"
+}
+
+@TechReport{      Hoc12,
+  author        = "M. Hochstenbach and E. Romero and J. E. Roman",
+  title         = "Davidson Type Subspace Expansions for the Linear Eigenvalue Problem",
+  number        = "{STR-10}",
+  institution   = "{Universitat Polit\`ecnica de Val\`encia}",
+  url           = "https://slepc.upv.es/documentation",
+  year          = "2012"
 }
 
 @TechReport{      Mae16,
@@ -805,4 +851,109 @@
   pages         = {613--618},
   year          = {2008},
   doi           = {10.1109/cacsd.2008.4627370}
+}
+
+@Article{         Bai97,
+  author        = {Z. Bai and G. W. Stewart},
+  title         = {Algorithm 776: {SRRIT}: a {Fortran} subroutine to calculate
+                  the dominant invariant subspace of a nonsymmetric matrix},
+  journal       = acmmathsoft,
+  volume        = {23},
+  number        = {4},
+  pages         = {494--513},
+  year          = {1997},
+  doi           = {10.1145/279232.279234}
+}
+
+@Article{         Ste01b,
+  author        = "G. W. Stewart",
+  title         = "A {Krylov--Schur} Algorithm for Large Eigenproblems",
+  journal       = siammatrix,
+  volume        = "23",
+  number        = "3",
+  pages         = "601--614",
+  year          = "2001",
+  doi           = "10.1137/S0895479800371529"
+}
+
+@Article{         Wu00,
+  author        = "K. Wu and H. Simon",
+  title         = "Thick-Restart {Lanczos} Method for Large Symmetric Eigenvalue Problems",
+  journal       = siammatrix,
+  volume        = "22",
+  number        = "2",
+  pages         = "602--616",
+  year          = "2000",
+  doi           = "10.1137/S0895479898334605"
+}
+
+@Article{         Sle00,
+  author        = "G. L. G. Sleijpen and H. A. van der Vorst",
+  title         = "A {Jacobi--Davidson} Iteration Method for Linear Eigenvalue Problems",
+  journal       = siamreview,
+  volume        = "42",
+  number        = "2",
+  pages         = "267--293",
+  year          = "2000",
+  doi           = "10.1137/S0036144599363084"
+}
+
+@Article{         Kny01,
+  author        = "A. V. Knyazev",
+  title         = "Toward the Optimal Preconditioned Eigensolver: {L}ocally
+                  {O}ptimal {B}lock {P}reconditioned {C}onjugate {G}radient Method",
+  journal       = siamsci,
+  volume        = "23",
+  number        = "2",
+  pages         = "517--541",
+  year          = "2001",
+  doi           = "10.1137/S1064827500366124"
+}
+
+@Article{         Ber06,
+  author        = {L. Bergamaschi and A. Martínez and G. Pini},
+  title         = {Parallel preconditioned conjugate gradient optimization of
+                  the {Rayleigh} quotient for the solution of sparse eigenproblems},
+  journal       = applmathcomp,
+  volume        = {175},
+  number        = {2},
+  pages         = {1694--1715},
+  year          = {2006},
+  doi           = {10.1016/j.amc.2005.09.015},
+}
+
+@Article{         Sak03,
+  author        = "T. Sakurai and H. Sugiura",
+  title         = "A projection method for generalized eigenvalue problems
+                  using numerical integration",
+  journal       = compapplmath,
+  number        = "1",
+  pages         = "119--128",
+  volume        = "159",
+  year          = "2003",
+  doi           = "10.1016/S0377-0427(03)00565-X"
+}
+
+@Article{         Sak07,
+  author        = "T. Sakurai and H. Tadano",
+  title         = "{CIRR}: a {Rayleigh-Ritz} type method with contour
+                  integral for generalized eigenvalue problems",
+  journal       = "Hokkaido Math. J.",
+  number        = "4",
+  pages         = "745--757",
+  volume        = "36",
+  year          = "2007",
+  doi           = "10.14492/hokmj/1272848031"
+}
+
+@Article{         Her07,
+  author        = "V. Hern{\'a}ndez and J. E. Rom{\'a}n and A. Tom{\'a}s",
+  title         = "Parallel {Arnoldi} eigensolvers with enhanced scalability
+                  via global communications rearrangement",
+  journal       = parcomputing,
+  volume        = "33",
+  number        = "7-8",
+  pages         = "521--540",
+  year          = "2007",
+  doi           = "10.1016/j.parco.2007.04.004"
 }

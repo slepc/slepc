@@ -20,10 +20,10 @@
    Collective
 
    Input Parameter:
-.  mfn   - the matrix function solver context
+.  mfn - the matrix function solver context
 
    Notes:
-   This function need not be called explicitly in most cases, since MFNSolve()
+   This function need not be called explicitly in most cases, since `MFNSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
@@ -75,8 +75,8 @@ PetscErrorCode MFNSetUp(MFN mfn)
 -  A   - the problem matrix
 
    Notes:
-   It must be called before MFNSetUp(). If it is called again after MFNSetUp() then
-   the MFN object is reset.
+   It must be called before `MFNSetUp()`. If it is called again after `MFNSetUp()` then
+   the `MFN` object is reset.
 
    Level: beginner
 
@@ -102,7 +102,7 @@ PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
 }
 
 /*@
-   MFNGetOperator - Gets the matrix associated with the MFN object.
+   MFNGetOperator - Gets the matrix associated with the `MFN` object.
 
    Collective
 
@@ -134,15 +134,15 @@ PetscErrorCode MFNGetOperator(MFN mfn,Mat *A)
    Input Parameters:
 +  mfn   - the matrix function solver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin MFN
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `MFN`
    implementations.
 
    Level: developer
 
-.seealso: [](ch:mfn), `MFNSetUp()`
+.seealso: [](ch:mfn), `MFNSetUp()`, `MFNSetDimensions()`
 @*/
 PetscErrorCode MFNAllocateSolution(MFN mfn,PetscInt extra)
 {

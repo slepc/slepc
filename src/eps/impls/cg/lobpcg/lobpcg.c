@@ -420,11 +420,11 @@ static PetscErrorCode EPSLOBPCGSetBlockSize_LOBPCG(EPS eps,PetscInt bs)
 -  bs  - the block size
 
    Options Database Key:
-.  -eps_lobpcg_blocksize - Sets the block size
+.  -eps_lobpcg_blocksize - sets the block size
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGGetBlockSize()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGGetBlockSize()`
 @*/
 PetscErrorCode EPSLOBPCGSetBlockSize(EPS eps,PetscInt bs)
 {
@@ -457,7 +457,7 @@ static PetscErrorCode EPSLOBPCGGetBlockSize_LOBPCG(EPS eps,PetscInt *bs)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGSetBlockSize()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGSetBlockSize()`
 @*/
 PetscErrorCode EPSLOBPCGGetBlockSize(EPS eps,PetscInt *bs)
 {
@@ -492,7 +492,7 @@ static PetscErrorCode EPSLOBPCGSetRestart_LOBPCG(EPS eps,PetscReal restart)
 -  restart - the percentage of the block of vectors to force a restart
 
    Options Database Key:
-.  -eps_lobpcg_restart - Sets the restart parameter
+.  -eps_lobpcg_restart - sets the restart parameter
 
    Notes:
    The meaning of this parameter is the proportion of vectors within the
@@ -502,7 +502,7 @@ static PetscErrorCode EPSLOBPCGSetRestart_LOBPCG(EPS eps,PetscReal restart)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGGetRestart()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGGetRestart()`
 @*/
 PetscErrorCode EPSLOBPCGSetRestart(EPS eps,PetscReal restart)
 {
@@ -535,7 +535,7 @@ static PetscErrorCode EPSLOBPCGGetRestart_LOBPCG(EPS eps,PetscReal *restart)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGSetRestart()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGSetRestart()`
 @*/
 PetscErrorCode EPSLOBPCGGetRestart(EPS eps,PetscReal *restart)
 {
@@ -566,16 +566,16 @@ static PetscErrorCode EPSLOBPCGSetLocking_LOBPCG(EPS eps,PetscBool lock)
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
-.  -eps_lobpcg_locking - Sets the locking flag
+.  -eps_lobpcg_locking - sets the locking flag
 
    Notes:
    This flag refers to soft locking (converged vectors within the current
-   block iterate), since hard locking is always used (when nev is larger
+   block iterate), since hard locking is always used (when `nev` is larger
    than the block size).
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGGetLocking()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGGetLocking()`
 @*/
 PetscErrorCode EPSLOBPCGSetLocking(EPS eps,PetscBool lock)
 {
@@ -608,7 +608,7 @@ static PetscErrorCode EPSLOBPCGGetLocking_LOBPCG(EPS eps,PetscBool *lock)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLOBPCGSetLocking()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGSetLocking()`
 @*/
 PetscErrorCode EPSLOBPCGGetLocking(EPS eps,PetscBool *lock)
 {
@@ -669,6 +669,25 @@ static PetscErrorCode EPSDestroy_LOBPCG(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSLOBPCG - EPSLOBPCG = "lobpcg" - The Locally Optimal Block Preconditioned
+   Conjugate Gradient method.
+
+   Notes:
+   This is a preconditioned eigensolver, that is, a preconditioner can
+   be used to accelerate convergence, but as opposed to Davidson methods
+   it is intended for computing leftmost eigenvalues of Hermitian
+   problems, and not interior eigenvalues.
+
+   The implemented method is LOBPCG {cite:p}`Kny01`
+
+   The preconditioner is specified via the internal `ST` object and its
+   associated `KSP`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetST()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_LOBPCG(EPS eps)
 {
   EPS_LOBPCG     *lobpcg;

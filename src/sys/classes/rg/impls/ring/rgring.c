@@ -164,7 +164,7 @@ static PetscErrorCode RGRingGetParameters_Ring(RG rg,PetscScalar *center,PetscRe
 
    Level: advanced
 
-.seealso: [](sec:rg), `RGRingSetParameters()`
+.seealso: [](sec:rg), `RGRING`, `RGRingSetParameters()`
 @*/
 PetscErrorCode RGRingGetParameters(RG rg,PetscScalar *center,PetscReal *radius,PetscReal *vscale,PetscReal *start_ang,PetscReal *end_ang,PetscReal *width)
 {

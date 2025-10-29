@@ -166,7 +166,7 @@ PetscErrorCode PEPSolve(PEP pep)
 
 /*@
    PEPGetIterationNumber - Gets the current iteration number. If the
-   call to PEPSolve() is complete, then it returns the number of iterations
+   call to `PEPSolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
@@ -178,10 +178,10 @@ PetscErrorCode PEPSolve(PEP pep)
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If PEPSolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `PEPSolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call PEPGetConvergedReason() to determine if the solver converged or
+   Call `PEPGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate
@@ -208,8 +208,11 @@ PetscErrorCode PEPGetIterationNumber(PEP pep,PetscInt *its)
    Output Parameter:
 .  nconv - number of converged eigenpairs
 
-   Note:
-   This function should be called after PEPSolve() has finished.
+   Notes:
+   This function should be called after `PEPSolve()` has finished.
+
+   The value `nconv` may be different from the number of requested solutions
+   `nev`, but not larger than `ncv`, see `PEPSetDimensions()`.
 
    Level: beginner
 
@@ -439,22 +442,21 @@ PetscErrorCode PEPComputeResidualNorm_Private(PEP pep,PetscScalar kr,PetscScalar
 
 /*@
    PEPComputeError - Computes the error (based on the residual norm) associated
-   with the i-th computed eigenpair.
+   with the `i`-th computed eigenpair.
 
    Collective
 
    Input Parameters:
 +  pep  - the polynomial eigensolver context
 .  i    - the solution index
--  type - the type of error to compute
+-  type - the type of error to compute, see `PEPErrorType`
 
    Output Parameter:
 .  error - the error
 
-   Notes:
+   Note:
    The error can be computed in various ways, all of them based on the residual
-   norm ||P(l)x||_2 where l is the eigenvalue and x is the eigenvector.
-   See the users guide for additional details.
+   norm $\|P(\lambda)x\|_2$ where $(\lambda,x)$ is the approximate eigenpair.
 
    Level: beginner
 

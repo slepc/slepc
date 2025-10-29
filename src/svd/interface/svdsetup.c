@@ -212,10 +212,10 @@ PetscErrorCode SVDSetDSType(SVD svd)
    Collective
 
    Input Parameter:
-.  svd   - the singular value solver context
+.  svd - the singular value solver context
 
    Notes:
-   This function need not be called explicitly in most cases, since SVDSolve()
+   This function need not be called explicitly in most cases, since `SVDSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
@@ -500,17 +500,17 @@ PetscErrorCode SVDSetDimensions_Default(SVD svd)
    Input Parameters:
 +  svd   - the singular value solver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
    Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin SVD
+   This is `SLEPC_EXTERN` because it may be required by user plugin `SVD`
    implementations.
 
-   This is called at setup after setting the value of ncv and the flag leftbasis.
+   This is called at setup after setting the value of `ncv` and the flag `leftbasis`.
 
    Level: developer
 
-.seealso: [](ch:svd), `SVDSetUp()`
+.seealso: [](ch:svd), `SVDSetUp()`, `SVDSetDimensions()`
 @*/
 PetscErrorCode SVDAllocateSolution(SVD svd,PetscInt extra)
 {

@@ -614,7 +614,7 @@ static PetscErrorCode DSNEPSetFN_NEP(DS ds,PetscInt n,FN fn[])
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPGetFN()`, `DSAllocate()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPGetFN()`, `DSAllocate()`
 @*/
 PetscErrorCode DSNEPSetFN(DS ds,PetscInt n,FN fn[])
 {
@@ -656,7 +656,7 @@ static PetscErrorCode DSNEPGetFN_NEP(DS ds,PetscInt k,FN *fn)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPSetFN()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPSetFN()`
 @*/
 PetscErrorCode DSNEPGetFN(DS ds,PetscInt k,FN *fn)
 {
@@ -690,7 +690,7 @@ static PetscErrorCode DSNEPGetNumFN_NEP(DS ds,PetscInt *n)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPSetFN()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPSetFN()`
 @*/
 PetscErrorCode DSNEPGetNumFN(DS ds,PetscInt *n)
 {
@@ -735,7 +735,7 @@ static PetscErrorCode DSNEPSetMinimality_NEP(DS ds,PetscInt n)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPGetMinimality()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPGetMinimality()`
 @*/
 PetscErrorCode DSNEPSetMinimality(DS ds,PetscInt n)
 {
@@ -769,7 +769,7 @@ static PetscErrorCode DSNEPGetMinimality_NEP(DS ds,PetscInt *n)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPSetMinimality()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPSetMinimality()`
 @*/
 PetscErrorCode DSNEPGetMinimality(DS ds,PetscInt *n)
 {
@@ -825,7 +825,7 @@ static PetscErrorCode DSNEPSetRefine_NEP(DS ds,PetscReal tol,PetscInt its)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPGetRefine()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPGetRefine()`
 @*/
 PetscErrorCode DSNEPSetRefine(DS ds,PetscReal tol,PetscInt its)
 {
@@ -862,7 +862,7 @@ static PetscErrorCode DSNEPGetRefine_NEP(DS ds,PetscReal *tol,PetscInt *its)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPSetRefine()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPSetRefine()`
 @*/
 PetscErrorCode DSNEPGetRefine(DS ds,PetscReal *tol,PetscInt *its)
 {
@@ -904,7 +904,7 @@ static PetscErrorCode DSNEPSetIntegrationPoints_NEP(DS ds,PetscInt ip)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPGetIntegrationPoints()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPGetIntegrationPoints()`
 @*/
 PetscErrorCode DSNEPSetIntegrationPoints(DS ds,PetscInt ip)
 {
@@ -938,7 +938,7 @@ static PetscErrorCode DSNEPGetIntegrationPoints_NEP(DS ds,PetscInt *ip)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPSetIntegrationPoints()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPSetIntegrationPoints()`
 @*/
 PetscErrorCode DSNEPGetIntegrationPoints(DS ds,PetscInt *ip)
 {
@@ -981,7 +981,7 @@ static PetscErrorCode DSNEPSetSamplingSize_NEP(DS ds,PetscInt p)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPGetSamplingSize()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPGetSamplingSize()`
 @*/
 PetscErrorCode DSNEPSetSamplingSize(DS ds,PetscInt p)
 {
@@ -1015,7 +1015,7 @@ static PetscErrorCode DSNEPGetSamplingSize_NEP(DS ds,PetscInt *p)
 
    Level: advanced
 
-.seealso: [](sec:ds), `DSNEPSetSamplingSize()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPSetSamplingSize()`
 @*/
 PetscErrorCode DSNEPGetSamplingSize(DS ds,PetscInt *p)
 {
@@ -1053,7 +1053,7 @@ static PetscErrorCode DSNEPSetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
 
    Level: developer
 
-.seealso: [](sec:ds), `DSNEPGetComputeMatrixFunction()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPGetComputeMatrixFunction()`
 @*/
 PetscErrorCode DSNEPSetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn *fun,void *ctx)
 {
@@ -1088,7 +1088,7 @@ static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
 
    Level: developer
 
-.seealso: [](sec:ds), `DSNEPSetComputeMatrixFunction()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPSetComputeMatrixFunction()`
 @*/
 PetscErrorCode DSNEPGetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn **fun,void *ctx)
 {
@@ -1124,7 +1124,7 @@ static PetscErrorCode DSNEPSetRG_NEP(DS ds,RG rg)
 
    Level: developer
 
-.seealso: [](sec:ds), `DSNEPGetRG()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPGetRG()`
 @*/
 PetscErrorCode DSNEPSetRG(DS ds,RG rg)
 {
@@ -1167,7 +1167,7 @@ static PetscErrorCode DSNEPGetRG_NEP(DS ds,RG *rg)
 
    Level: developer
 
-.seealso: [](sec:ds), `DSNEPSetRG()`
+.seealso: [](sec:ds), `DSNEP`, `DSNEPSetRG()`
 @*/
 PetscErrorCode DSNEPGetRG(DS ds,RG *rg)
 {

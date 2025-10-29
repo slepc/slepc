@@ -744,15 +744,20 @@ static PetscErrorCode EPSLanczosSetReorthog_Lanczos(EPS eps,EPSLanczosReorthogTy
 
    Input Parameters:
 +  eps - the linear eigensolver context
--  reorthog - the type of reorthogonalization
+-  reorthog - the type of reorthogonalization, see `EPSLanczosReorthogType` for possible values
 
    Options Database Key:
-.  -eps_lanczos_reorthog - Sets the reorthogonalization type (either 'local', 'selective',
-                         'periodic', 'partial', 'full' or 'delayed')
+.  -eps_lanczos_reorthog - sets the reorthogonalization type
+
+   Notes:
+   Details of the different reorthogonalization strategies can be found in
+   {cite:p}`Her06`.
+
+   This applies to `EPSLANCZOS`, not to `EPSKRYLOVSCHUR`.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLanczosGetReorthog()`, `EPSLanczosReorthogType`
+.seealso: [](ch:eps), `EPSLANCZOS`, `EPSLanczosGetReorthog()`, `EPSLanczosReorthogType`
 @*/
 PetscErrorCode EPSLanczosSetReorthog(EPS eps,EPSLanczosReorthogType reorthog)
 {
@@ -786,7 +791,7 @@ static PetscErrorCode EPSLanczosGetReorthog_Lanczos(EPS eps,EPSLanczosReorthogTy
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSLanczosSetReorthog()`, `EPSLanczosReorthogType`
+.seealso: [](ch:eps), `EPSLANCZOS`, `EPSLanczosSetReorthog()`, `EPSLanczosReorthogType`
 @*/
 PetscErrorCode EPSLanczosGetReorthog(EPS eps,EPSLanczosReorthogType *reorthog)
 {
@@ -829,6 +834,25 @@ static PetscErrorCode EPSView_Lanczos(EPS eps,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSLANCZOS - EPSLANCZOS = "lanczos" - A basic Krylov method for Hermitian
+   problems, with explicit restart.
+
+   Notes:
+   This solver is very basic and is not recommended in general, since it
+   will not be competitive with respect to other solvers.
+
+   The implemented method is Lanczos with explicit restart and deflation.
+   Generally, it is much better to use implicit restart as in `EPSKRYLOVSCHUR`.
+
+   Several reorthogonalization strategies can be selected with `EPSLanczosSetReorthog()`.
+   Some of them may result in a cheaper computation, but it will seldom be
+   enough to beat `EPSKRYLOVSCHUR`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSLanczosSetReorthog()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_Lanczos(EPS eps)
 {
   EPS_LANCZOS    *ctx;

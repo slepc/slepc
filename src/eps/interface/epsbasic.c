@@ -290,8 +290,8 @@ PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 }
 
 /*@
-   EPSReset - Resets the EPS context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   EPSReset - Resets the `EPS` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 
@@ -375,11 +375,14 @@ PetscErrorCode EPSDestroy(EPS *eps)
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum
-   of interest. It is used in combination with EPSSetWhichEigenpairs().
+   of interest. It is used in combination with `EPSSetWhichEigenpairs()`.
+
+   When PETSc is built with real scalars, it is not possible to specify a
+   complex target.
 
    In the case of complex scalars, a complex value can be provided in the
-   command line with [+/-][realnumber][+/-]realnumberi with no spaces, e.g.
-   -eps_target 1.0+2.0i
+   command line with `[+/-][realnumber][+/-]realnumberi` with no spaces, e.g.
+   `-eps_target 1.0+2.0i`.
 
    Level: intermediate
 
@@ -434,22 +437,25 @@ PetscErrorCode EPSGetTarget(EPS eps,PetscScalar* target)
 -  intb - right end of the interval
 
    Options Database Key:
-.  -eps_interval <a,b> - set [a,b] as the interval of interest
+.  -eps_interval <a,b> - set $[a,b]$ as the interval of interest
 
    Notes:
    Spectrum slicing is a technique employed for computing all eigenvalues of
-   symmetric eigenproblems in a given interval. This function provides the
-   interval to be considered. It must be used in combination with EPS_ALL, see
-   EPSSetWhichEigenpairs().
+   symmetric eigenproblems in a given interval, see section [](#sec:slice).
+   This function provides the interval to be considered. It must be used in
+   combination with `EPS_ALL`, see `EPSSetWhichEigenpairs()`.
+
+   A computational interval is also needed when using polynomial filters,
+   see `STFILTER` and section [](#sec:filter).
 
    In the command-line option, two values must be provided. For an open interval,
-   one can give an infinite, e.g., -eps_interval 1.0,inf or -eps_interval -inf,1.0.
+   one can give an infinite, e.g., `-eps_interval 1.0,inf` or `-eps_interval -inf,1.0`.
    An open interval in the programmatic interface can be specified with
-   PETSC_MAX_REAL and -PETSC_MAX_REAL.
+   `PETSC_MAX_REAL` and -`PETSC_MAX_REAL`.
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSGetInterval()`, `EPSSetWhichEigenpairs()`
+.seealso: [](ch:eps), [](#sec:slice), [](#sec:filter), `EPSGetInterval()`, `EPSSetWhichEigenpairs()`, `STFILTER`
 @*/
 PetscErrorCode EPSSetInterval(EPS eps,PetscReal inta,PetscReal intb)
 {
@@ -504,8 +510,8 @@ PetscErrorCode EPSGetInterval(EPS eps,PetscReal* inta,PetscReal* intb)
 -  st   - the spectral transformation object
 
    Note:
-   Use EPSGetST() to retrieve the spectral transformation context (for example,
-   to free it at the end of the computations).
+   Use `EPSGetST()` to retrieve the spectral transformation context at a later time
+   (for example, to free it at the end of the computations).
 
    Level: advanced
 
@@ -524,7 +530,7 @@ PetscErrorCode EPSSetST(EPS eps,ST st)
 }
 
 /*@
-   EPSGetST - Obtain the spectral transformation (ST) object associated
+   EPSGetST - Obtain the spectral transformation (`ST`) object associated
    to the eigensolver object.
 
    Not Collective
@@ -617,7 +623,7 @@ PetscErrorCode EPSGetBV(EPS eps,BV *V)
 -  rg  - the region object
 
    Note:
-   Use EPSGetRG() to retrieve the region context (for example,
+   Use `EPSGetRG()` to retrieve the region context at a later time (for example,
    to free it at the end of the computations).
 
    Level: advanced
@@ -677,7 +683,7 @@ PetscErrorCode EPSGetRG(EPS eps,RG *rg)
 -  ds  - the direct solver object
 
    Note:
-   Use EPSGetDS() to retrieve the direct solver context (for example,
+   Use `EPSGetDS()` to retrieve the direct solver context at a later time (for example,
    to free it at the end of the computations).
 
    Level: advanced
@@ -726,7 +732,7 @@ PetscErrorCode EPSGetDS(EPS eps,DS *ds)
 }
 
 /*@
-   EPSIsGeneralized - Ask if the EPS object corresponds to a generalized
+   EPSIsGeneralized - Ask if the `EPS` object corresponds to a generalized
    eigenvalue problem.
 
    Not Collective
@@ -735,7 +741,7 @@ PetscErrorCode EPSGetDS(EPS eps,DS *ds)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is generalized
 
    Level: intermediate
 
@@ -751,7 +757,7 @@ PetscErrorCode EPSIsGeneralized(EPS eps,PetscBool* is)
 }
 
 /*@
-   EPSIsHermitian - Ask if the EPS object corresponds to a Hermitian
+   EPSIsHermitian - Ask if the `EPS` object corresponds to a Hermitian
    eigenvalue problem.
 
    Not Collective
@@ -760,7 +766,7 @@ PetscErrorCode EPSIsGeneralized(EPS eps,PetscBool* is)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is Hermitian
 
    Level: intermediate
 
@@ -776,8 +782,8 @@ PetscErrorCode EPSIsHermitian(EPS eps,PetscBool* is)
 }
 
 /*@
-   EPSIsPositive - Ask if the EPS object corresponds to an eigenvalue
-   problem type that requires a positive (semi-) definite matrix B.
+   EPSIsPositive - Ask if the `EPS` object corresponds to an eigenvalue
+   problem type that requires a positive (semi-) definite matrix $B$.
 
    Not Collective
 
@@ -785,7 +791,7 @@ PetscErrorCode EPSIsHermitian(EPS eps,PetscBool* is)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is positive (semi-) definite
 
    Level: intermediate
 
@@ -801,7 +807,7 @@ PetscErrorCode EPSIsPositive(EPS eps,PetscBool* is)
 }
 
 /*@
-   EPSIsStructured - Ask if the EPS object corresponds to a structured
+   EPSIsStructured - Ask if the `EPS` object corresponds to a structured
    eigenvalue problem.
 
    Not Collective
@@ -810,11 +816,11 @@ PetscErrorCode EPSIsPositive(EPS eps,PetscBool* is)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is structured
 
    Note:
    The result will be true if the problem type has been set to some
-   structured type such as EPS_BSE. This is independent of whether the
+   structured type such as `EPS_BSE`. This is independent of whether the
    input matrix has been built with a certain structure with a helper function.
 
    Level: intermediate

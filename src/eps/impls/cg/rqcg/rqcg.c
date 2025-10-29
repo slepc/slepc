@@ -257,8 +257,7 @@ static PetscErrorCode EPSRQCGSetReset_RQCG(EPS eps,PetscInt nrest)
 }
 
 /*@
-   EPSRQCGSetReset - Sets the reset parameter of the RQCG iteration. Every
-   nrest iterations, the solver performs a Rayleigh-Ritz projection step.
+   EPSRQCGSetReset - Sets the reset parameter of the RQCG iteration.
 
    Logically Collective
 
@@ -267,11 +266,15 @@ static PetscErrorCode EPSRQCGSetReset_RQCG(EPS eps,PetscInt nrest)
 -  nrest - the number of iterations between resets
 
    Options Database Key:
-.  -eps_rqcg_reset - Sets the reset parameter
+.  -eps_rqcg_reset - sets the reset parameter
+
+   Note:
+   The meaning of the reset parameter is that every `nrest` iterations the
+   solver performs a Rayleigh-Ritz projection step.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSRQCGGetReset()`
+.seealso: [](ch:eps), `EPSRQCG`, `EPSRQCGGetReset()`
 @*/
 PetscErrorCode EPSRQCGSetReset(EPS eps,PetscInt nrest)
 {
@@ -304,7 +307,7 @@ static PetscErrorCode EPSRQCGGetReset_RQCG(EPS eps,PetscInt *nrest)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSRQCGSetReset()`
+.seealso: [](ch:eps), `EPSRQCG`, `EPSRQCGSetReset()`
 @*/
 PetscErrorCode EPSRQCGGetReset(EPS eps,PetscInt *nrest)
 {
@@ -363,6 +366,22 @@ static PetscErrorCode EPSView_RQCG(EPS eps,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSRQCG - EPSRQCG = "rqcg" - The Rayleigh Quotient Conjugate Gradient method.
+
+   Notes:
+   This is a preconditioned eigensolver for computing leftmost
+   eigenvalues, similar to `EPSLOBPCG`, but usually less competitive.
+
+   The description of the method is in {cite:p}`Ber06`
+
+   The preconditioner is specified via the internal `ST` object and its
+   associated `KSP`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetST()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_RQCG(EPS eps)
 {
   EPS_RQCG       *rqcg;

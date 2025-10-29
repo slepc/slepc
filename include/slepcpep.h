@@ -192,7 +192,8 @@ typedef enum { PEP_STOP_BASIC,
 .  `PEP_CONVERGED_USER`         - converged due to a user-defined condition
 .  `PEP_DIVERGED_ITS`           - exceeded the maximum number of allowed iterations
 .  `PEP_DIVERGED_BREAKDOWN`     - generic breakdown in method
--  `PEP_DIVERGED_SYMMETRY_LOST` - pseudo-Lanczos was not able to keep symmetry
+.  `PEP_DIVERGED_SYMMETRY_LOST` - pseudo-Lanczos was not able to keep symmetry
+-  `PEP_CONVERGED_ITERATING`    - the solver is still running
 
    Level: intermediate
 

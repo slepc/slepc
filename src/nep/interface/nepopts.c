@@ -25,7 +25,7 @@
 +  nep      - the nonlinear eigensolver context
 .  opt      - the command line option for this monitor
 .  name     - the monitor type one is seeking
-.  ctx      - an optional user context for the monitor, or NULL
+.  ctx      - an optional user context for the monitor, or `NULL`
 -  trackall - whether this monitor tracks all eigenvalues or not
 
    Level: developer
@@ -875,12 +875,12 @@ PetscErrorCode NEPGetStoppingTest(NEP nep,NEPStop *stop)
 -  trackall - whether compute all residuals or not
 
    Notes:
-   If the user sets trackall=PETSC_TRUE then the solver explicitly computes
+   If the user sets `trackall`=`PETSC_TRUE` then the solver explicitly computes
    the residual for each eigenpair approximation. Computing the residual is
    usually an expensive operation and solvers commonly compute the associated
    residual to the first unconverged eigenpair.
 
-   The option '-nep_monitor_all' automatically activates this option.
+   The option `-nep_monitor_all` automatically activates this option.
 
    Level: developer
 
@@ -1050,13 +1050,13 @@ PetscErrorCode NEPGetRefine(NEP nep,NEPRefine *refine,PetscInt *npart,PetscReal 
 
 /*@
    NEPSetOptionsPrefix - Sets the prefix used for searching for all
-   NEP options in the database.
+   `NEP` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  nep - the nonlinear eigensolver context
--  prefix - the prefix string to prepend to all NEP option requests
++  nep    - the nonlinear eigensolver context
+-  prefix - the prefix string to prepend to all `NEP` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -1064,10 +1064,10 @@ PetscErrorCode NEPGetRefine(NEP nep,NEPRefine *refine,PetscInt *npart,PetscReal 
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different NEP contexts, one could call
+   different `NEP` contexts, one could call
 .vb
-      NEPSetOptionsPrefix(nep1,"neig1_")
-      NEPSetOptionsPrefix(nep2,"neig2_")
+   NEPSetOptionsPrefix(nep1,"neig1_")
+   NEPSetOptionsPrefix(nep2,"neig2_")
 .ve
 
    Level: advanced
@@ -1090,13 +1090,13 @@ PetscErrorCode NEPSetOptionsPrefix(NEP nep,const char prefix[])
 
 /*@
    NEPAppendOptionsPrefix - Appends to the prefix used for searching for all
-   NEP options in the database.
+   `NEP` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  nep - the nonlinear eigensolver context
--  prefix - the prefix string to prepend to all NEP option requests
++  nep    - the nonlinear eigensolver context
+-  prefix - the prefix string to prepend to all `NEP` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.

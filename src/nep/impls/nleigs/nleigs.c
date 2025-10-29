@@ -1320,7 +1320,7 @@ static PetscErrorCode NEPNLEIGSSetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGS
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPNLEIGSGetSingularitiesFunction()`, `NEPSetProblemType()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetSingularitiesFunction()`, `NEPSetProblemType()`
 @*/
 PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesFn *fun,void *ctx)
 {
@@ -1355,7 +1355,7 @@ static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGS
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSSetSingularitiesFunction()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetSingularitiesFunction()`
 @*/
 PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesFn **fun,void **ctx)
 {
@@ -1397,7 +1397,7 @@ static PetscErrorCode NEPNLEIGSSetRestart_NLEIGS(NEP nep,PetscReal keep)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSGetRestart()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetRestart()`
 @*/
 PetscErrorCode NEPNLEIGSSetRestart(NEP nep,PetscReal keep)
 {
@@ -1430,7 +1430,7 @@ static PetscErrorCode NEPNLEIGSGetRestart_NLEIGS(NEP nep,PetscReal *keep)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSSetRestart()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetRestart()`
 @*/
 PetscErrorCode NEPNLEIGSGetRestart(NEP nep,PetscReal *keep)
 {
@@ -1471,7 +1471,7 @@ static PetscErrorCode NEPNLEIGSSetLocking_NLEIGS(NEP nep,PetscBool lock)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSGetLocking()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetLocking()`
 @*/
 PetscErrorCode NEPNLEIGSSetLocking(NEP nep,PetscBool lock)
 {
@@ -1504,7 +1504,7 @@ static PetscErrorCode NEPNLEIGSGetLocking_NLEIGS(NEP nep,PetscBool *lock)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSSetLocking()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetLocking()`
 @*/
 PetscErrorCode NEPNLEIGSGetLocking(NEP nep,PetscBool *lock)
 {
@@ -1563,7 +1563,7 @@ static PetscErrorCode NEPNLEIGSSetInterpolation_NLEIGS(NEP nep,PetscReal tol,Pet
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSGetInterpolation()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetInterpolation()`
 @*/
 PetscErrorCode NEPNLEIGSSetInterpolation(NEP nep,PetscReal tol,PetscInt degree)
 {
@@ -1600,7 +1600,7 @@ static PetscErrorCode NEPNLEIGSGetInterpolation_NLEIGS(NEP nep,PetscReal *tol,Pe
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSSetInterpolation()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetInterpolation()`
 @*/
 PetscErrorCode NEPNLEIGSGetInterpolation(NEP nep,PetscReal *tol,PetscInt *degree)
 {
@@ -1658,7 +1658,7 @@ static PetscErrorCode NEPNLEIGSSetRKShifts_NLEIGS(NEP nep,PetscInt ns,PetscScala
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSGetRKShifts()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetRKShifts()`
 @*/
 PetscErrorCode NEPNLEIGSSetRKShifts(NEP nep,PetscInt ns,PetscScalar shifts[])
 {
@@ -1702,7 +1702,7 @@ static PetscErrorCode NEPNLEIGSGetRKShifts_NLEIGS(NEP nep,PetscInt *ns,PetscScal
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSSetRKShifts()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetRKShifts()`
 @*/
 PetscErrorCode NEPNLEIGSGetRKShifts(NEP nep,PetscInt *ns,PetscScalar *shifts[]) PeNS
 {
@@ -1766,7 +1766,7 @@ static PetscErrorCode NEPNLEIGSGetKSPs_NLEIGS(NEP nep,PetscInt *nsolve,KSP **ksp
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSSetRKShifts()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetRKShifts()`
 @*/
 PetscErrorCode NEPNLEIGSGetKSPs(NEP nep,PetscInt *nsolve,KSP **ksp)
 {
@@ -1814,7 +1814,7 @@ static PetscErrorCode NEPNLEIGSSetFullBasis_NLEIGS(NEP nep,PetscBool fullbasis)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSGetFullBasis()`, `NEPNLEIGSGetEPS()`, `NEPSetTwoSided()`, `BVCreateTensor()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetFullBasis()`, `NEPNLEIGSGetEPS()`, `NEPSetTwoSided()`, `BVCreateTensor()`
 @*/
 PetscErrorCode NEPNLEIGSSetFullBasis(NEP nep,PetscBool fullbasis)
 {
@@ -1848,7 +1848,7 @@ static PetscErrorCode NEPNLEIGSGetFullBasis_NLEIGS(NEP nep,PetscBool *fullbasis)
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPNLEIGSSetFullBasis()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetFullBasis()`
 @*/
 PetscErrorCode NEPNLEIGSGetFullBasis(NEP nep,PetscBool *fullbasis)
 {

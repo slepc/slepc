@@ -636,7 +636,7 @@ static PetscErrorCode PEPTOARSetRestart_TOAR(PEP pep,PetscReal keep)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPTOARGetRestart()`
+.seealso: [](ch:pep), `PEPTOAR`, `PEPTOARGetRestart()`
 @*/
 PetscErrorCode PEPTOARSetRestart(PEP pep,PetscReal keep)
 {
@@ -669,7 +669,7 @@ static PetscErrorCode PEPTOARGetRestart_TOAR(PEP pep,PetscReal *keep)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPTOARSetRestart()`
+.seealso: [](ch:pep), `PEPTOAR`, `PEPTOARSetRestart()`
 @*/
 PetscErrorCode PEPTOARGetRestart(PEP pep,PetscReal *keep)
 {
@@ -710,7 +710,7 @@ static PetscErrorCode PEPTOARSetLocking_TOAR(PEP pep,PetscBool lock)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPTOARGetLocking()`
+.seealso: [](ch:pep), `PEPTOAR`, `PEPTOARGetLocking()`
 @*/
 PetscErrorCode PEPTOARSetLocking(PEP pep,PetscBool lock)
 {
@@ -743,7 +743,7 @@ static PetscErrorCode PEPTOARGetLocking_TOAR(PEP pep,PetscBool *lock)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPTOARSetLocking()`
+.seealso: [](ch:pep), `PEPTOAR`, `PEPTOARSetLocking()`
 @*/
 PetscErrorCode PEPTOARGetLocking(PEP pep,PetscBool *lock)
 {

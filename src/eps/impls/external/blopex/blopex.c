@@ -296,7 +296,7 @@ static PetscErrorCode EPSBLOPEXSetBlockSize_BLOPEX(EPS eps,PetscInt bs)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSBLOPEXGetBlockSize()`
+.seealso: [](ch:eps), `EPSBLOPEX`, `EPSBLOPEXGetBlockSize()`
 @*/
 PetscErrorCode EPSBLOPEXSetBlockSize(EPS eps,PetscInt bs)
 {
@@ -329,7 +329,7 @@ static PetscErrorCode EPSBLOPEXGetBlockSize_BLOPEX(EPS eps,PetscInt *bs)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSBLOPEXSetBlockSize()`
+.seealso: [](ch:eps), `EPSBLOPEX`, `EPSBLOPEXSetBlockSize()`
 @*/
 PetscErrorCode EPSBLOPEXGetBlockSize(EPS eps,PetscInt *bs)
 {
@@ -384,6 +384,17 @@ static PetscErrorCode EPSSetFromOptions_BLOPEX(EPS eps,PetscOptionItems PetscOpt
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSBLOPEX - EPSBLOPEX = "blopex" - A wrapper to BLOPEX {cite:p}`Kny07`.
+
+   Note:
+   In principle, the method used here is the same as in `EPSLOBPCG`, but in
+   practice convergence may be different.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_BLOPEX(EPS eps)
 {
   EPS_BLOPEX     *ctx;

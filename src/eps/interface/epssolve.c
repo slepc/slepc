@@ -95,26 +95,34 @@ static PetscErrorCode EPSComputeValues(EPS eps)
 .  eps - the linear eigensolver context
 
    Options Database Keys:
-+  -eps_view - print information about the solver used
-.  -eps_view_mat0 - view the first matrix (A)
-.  -eps_view_mat1 - view the second matrix (B)
++  -eps_view - print information about the solver once the solve is complete
+.  -eps_view_pre - print information about the solver before the solve starts
+.  -eps_view_mat0 - view the first matrix ($A$)
+.  -eps_view_mat1 - view the second matrix ($B$)
 .  -eps_view_vectors - view the computed eigenvectors
 .  -eps_view_values - view the computed eigenvalues
-.  -eps_converged_reason - print reason for convergence, and number of iterations
+.  -eps_converged_reason - print reason for convergence/divergence, and number of iterations
 .  -eps_error_absolute - print absolute errors of each eigenpair
 .  -eps_error_relative - print relative errors of each eigenpair
 -  -eps_error_backward - print backward errors of each eigenpair
 
    Notes:
+   The problem matrices are specified with `EPSSetOperators()`.
+
+   `EPSSolve()` will return without generating an error regardless of whether
+   all requested solutions were computed or not. Call `EPSGetConverged()` to get the
+   actual number of computed solutions, and `EPSGetConvergedReason()` to determine if
+   the solver converged or failed and why.
+
    All the command-line options listed above admit an optional argument specifying
-   the viewer type and options. For instance, use '-eps_view_mat0 binary:amatrix.bin'
-   to save the A matrix to a binary file, '-eps_view_values draw' to draw the computed
-   eigenvalues graphically, or '-eps_error_relative :myerr.m:ascii_matlab' to save
+   the viewer type and options. For instance, use `-eps_view_mat0 binary:amatrix.bin`
+   to save the $A$ matrix to a binary file, `-eps_view_values draw` to draw the computed
+   eigenvalues graphically, or `-eps_error_relative :myerr.m:ascii_matlab` to save
    the errors in a file that can be executed in Matlab.
 
    Level: beginner
 
-.seealso: [](ch:eps), `EPSCreate()`, `EPSSetUp()`, `EPSDestroy()`, `EPSSetTolerances()`
+.seealso: [](ch:eps), `EPSCreate()`, `EPSSetUp()`, `EPSDestroy()`, `EPSSetOperators()`, `EPSGetConverged()`, `EPSGetConvergedReason()`
 @*/
 PetscErrorCode EPSSolve(EPS eps)
 {
@@ -221,7 +229,7 @@ PetscErrorCode EPSSolve(EPS eps)
 
 /*@
    EPSGetIterationNumber - Gets the current iteration number. If the
-   call to EPSSolve() is complete, then it returns the number of iterations
+   call to `EPSSolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
@@ -233,10 +241,10 @@ PetscErrorCode EPSSolve(EPS eps)
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If EPSSolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `EPSSolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call EPSGetConvergedReason() to determine if the solver converged or
+   Call `EPSGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate
@@ -263,8 +271,11 @@ PetscErrorCode EPSGetIterationNumber(EPS eps,PetscInt *its)
    Output Parameter:
 .  nconv - number of converged eigenpairs
 
-   Note:
-   This function should be called after EPSSolve() has finished.
+   Notes:
+   This function should be called after `EPSSolve()` has finished.
+
+   The value `nconv` may be different from the number of requested solutions
+   `nev`, but not larger than `ncv`, see `EPSSetDimensions()`.
 
    Level: beginner
 
@@ -327,16 +338,16 @@ PetscErrorCode EPSGetConvergedReason(EPS eps,EPSConvergedReason *reason)
 .  v - an array of vectors
 
    Notes:
-   This function should be called after EPSSolve() has finished.
+   This function should be called after `EPSSolve()` has finished.
 
-   The user should provide in v an array of nconv vectors, where nconv is
-   the value returned by EPSGetConverged().
+   The user should provide in `v` an array of `nconv` vectors, where `nconv`
+   is the value returned by `EPSGetConverged()`.
 
-   The first k vectors returned in v span an invariant subspace associated
-   with the first k computed eigenvalues (note that this is not true if the
-   k-th eigenvalue is complex and matrix A is real; in this case the first
-   k+1 vectors should be used). An invariant subspace X of A satisfies Ax
-   in X for all x in X (a similar definition applies for generalized
+   The first $k$ vectors returned in `v` span an invariant subspace associated
+   with the first $k$ computed eigenvalues (note that this is not true if the
+   $k$-th eigenvalue is complex and matrix $A$ is real; in this case the first
+   $k+1$ vectors should be used). An invariant subspace $X$ of $A$ satisfies
+   $Ax\in X, \forall x\in X$ (a similar definition applies for generalized
    eigenproblems).
 
    Level: intermediate
@@ -372,8 +383,8 @@ PetscErrorCode EPSGetInvariantSubspace(EPS eps,Vec v[])
 }
 
 /*@
-   EPSGetEigenpair - Gets the i-th solution of the eigenproblem as computed by
-   EPSSolve(). The solution consists in both the eigenvalue and the eigenvector.
+   EPSGetEigenpair - Gets the `i`-th solution of the eigenproblem as computed by
+   `EPSSolve()`. The solution consists in both the eigenvalue and the eigenvector.
 
    Collective
 
@@ -388,22 +399,22 @@ PetscErrorCode EPSGetInvariantSubspace(EPS eps,Vec v[])
 -  Vi   - imaginary part of eigenvector
 
    Notes:
-   It is allowed to pass NULL for Vr and Vi, if the eigenvector is not
-   required. Otherwise, the caller must provide valid Vec objects, i.e.,
-   they must be created by the calling program with e.g. MatCreateVecs().
+   It is allowed to pass `NULL` for `Vr` and `Vi`, if the eigenvector is not
+   required. Otherwise, the caller must provide valid `Vec` objects, i.e.,
+   they must be created by the calling program with e.g. `MatCreateVecs()`.
 
-   If the eigenvalue is real, then eigi and Vi are set to zero. If PETSc is
+   If the eigenvalue is real, then `eigi` and `Vi` are set to zero. If PETSc is
    configured with complex scalars the eigenvalue is stored
-   directly in eigr (eigi is set to zero) and the eigenvector in Vr (Vi is
-   set to zero). In both cases, the user can pass NULL in eigi and Vi.
+   directly in `eigr` (`eigi` is set to zero) and the eigenvector in `Vr` (`Vi` is
+   set to zero). In both cases, the user can pass `NULL` in `eigi` and `Vi`.
 
-   The index i should be a value between 0 and nconv-1 (see EPSGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `EPSGetConverged()`).
    Eigenpairs are indexed according to the ordering criterion established
-   with EPSSetWhichEigenpairs().
+   with `EPSSetWhichEigenpairs()`.
 
    The 2-norm of the eigenvector is one unless the problem is generalized
    Hermitian. In this case the eigenvector is normalized with respect to the
-   norm defined by the B matrix.
+   norm defined by the $B$ matrix.
 
    Level: beginner
 
@@ -426,7 +437,7 @@ PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar 
 }
 
 /*@
-   EPSGetEigenvalue - Gets the i-th eigenvalue as computed by EPSSolve().
+   EPSGetEigenvalue - Gets the `i`-th eigenvalue as computed by `EPSSolve()`.
 
    Not Collective
 
@@ -439,13 +450,13 @@ PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar 
 -  eigi - imaginary part of eigenvalue
 
    Notes:
-   If the eigenvalue is real, then eigi is set to zero. If PETSc is
+   If the eigenvalue is real, then `eigi` is set to zero. If PETSc is
    configured with complex scalars the eigenvalue is stored
-   directly in eigr (eigi is set to zero).
+   directly in `eigr` (`eigi` is set to zero).
 
-   The index i should be a value between 0 and nconv-1 (see EPSGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `EPSGetConverged()`).
    Eigenpairs are indexed according to the ordering criterion established
-   with EPSSetWhichEigenpairs().
+   with `EPSSetWhichEigenpairs()`.
 
    Level: beginner
 
@@ -514,7 +525,7 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
 }
 
 /*@
-   EPSGetEigenvector - Gets the i-th right eigenvector as computed by EPSSolve().
+   EPSGetEigenvector - Gets the `i`-th right eigenvector as computed by `EPSSolve()`.
 
    Collective
 
@@ -527,21 +538,21 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
 -  Vi   - imaginary part of eigenvector
 
    Notes:
-   The caller must provide valid Vec objects, i.e., they must be created
-   by the calling program with e.g. MatCreateVecs().
+   The caller must provide valid `Vec` objects, i.e., they must be created
+   by the calling program with e.g. `MatCreateVecs()`.
 
-   If the corresponding eigenvalue is real, then Vi is set to zero. If PETSc is
+   If the corresponding eigenvalue is real, then `Vi` is set to zero. If PETSc is
    configured with complex scalars the eigenvector is stored
-   directly in Vr (Vi is set to zero). In any case, the user can pass NULL in Vr
-   or Vi if one of them is not required.
+   directly in `Vr` (`Vi` is set to zero). In any case, the user can pass `NULL` in `Vr`
+   or `Vi` if one of them is not required.
 
-   The index i should be a value between 0 and nconv-1 (see EPSGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `EPSGetConverged()`).
    Eigenpairs are indexed according to the ordering criterion established
-   with EPSSetWhichEigenpairs().
+   with `EPSSetWhichEigenpairs()`.
 
    The 2-norm of the eigenvector is one unless the problem is generalized
    Hermitian. In this case the eigenvector is normalized with respect to the
-   norm defined by the B matrix.
+   norm defined by the $B$ matrix.
 
    Level: beginner
 
@@ -566,7 +577,7 @@ PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
 }
 
 /*@
-   EPSGetLeftEigenvector - Gets the i-th left eigenvector as computed by EPSSolve().
+   EPSGetLeftEigenvector - Gets the `i`-th left eigenvector as computed by `EPSSolve()`.
 
    Collective
 
@@ -579,20 +590,20 @@ PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
 -  Wi   - imaginary part of left eigenvector
 
    Notes:
-   The caller must provide valid Vec objects, i.e., they must be created
-   by the calling program with e.g. MatCreateVecs().
+   The caller must provide valid `Vec` objects, i.e., they must be created
+   by the calling program with e.g. `MatCreateVecs()`.
 
-   If the corresponding eigenvalue is real, then Wi is set to zero. If PETSc is
-   configured with complex scalars the eigenvector is stored directly in Wr
-   (Wi is set to zero). In any case, the user can pass NULL in Wr or Wi if
+   If the corresponding eigenvalue is real, then `Wi` is set to zero. If PETSc is
+   configured with complex scalars the eigenvector is stored directly in `Wr`
+   (`Wi` is set to zero). In any case, the user can pass `NULL` in `Wr` or `Wi` if
    one of them is not required.
 
-   The index i should be a value between 0 and nconv-1 (see EPSGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `EPSGetConverged()`).
    Eigensolutions are indexed according to the ordering criterion established
-   with EPSSetWhichEigenpairs().
+   with `EPSSetWhichEigenpairs()`.
 
-   Left eigenvectors are available only if the twosided flag was set, see
-   EPSSetTwoSided().
+   Left eigenvectors are available only if the `twosided` flag was set, see
+   `EPSSetTwoSided()`.
 
    Level: intermediate
 
@@ -645,7 +656,7 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
 }
 
 /*@
-   EPSGetErrorEstimate - Returns the error estimate associated to the i-th
+   EPSGetErrorEstimate - Returns the error estimate associated to the `i`-th
    computed eigenpair.
 
    Not Collective
@@ -659,12 +670,12 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
 
    Notes:
    This is the error estimate used internally by the eigensolver. The actual
-   error bound can be computed with EPSComputeError(). See also the users
-   manual for details.
+   error bound can be computed with `EPSComputeError()`. See discussion at
+   section [](#sec:errbnd).
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSComputeError()`
+.seealso: [](ch:eps), [](#sec:errbnd), `EPSComputeError()`
 @*/
 PetscErrorCode EPSGetErrorEstimate(EPS eps,PetscInt i,PetscReal *errest)
 {
@@ -753,25 +764,30 @@ PetscErrorCode EPSComputeResidualNorm_Private(EPS eps,PetscBool trans,PetscScala
 
 /*@
    EPSComputeError - Computes the error (based on the residual norm) associated
-   with the i-th computed eigenpair.
+   with the `i`-th computed eigenpair.
 
    Collective
 
    Input Parameters:
 +  eps  - the linear eigensolver context
 .  i    - the solution index
--  type - the type of error to compute
+-  type - the type of error to compute, see `EPSErrorType`
 
    Output Parameter:
 .  error - the error
 
    Notes:
    The error can be computed in various ways, all of them based on the residual
-   norm ||Ax-kBx||_2 where k is the eigenvalue and x is the eigenvector.
+   norm $\|Ax-\lambda Bx\|_2$ where $(\lambda,x)$ is the approximate eigenpair.
+
+   If the computation of left eigenvectors was enabled with `EPSSetTwoSided()`,
+   then the error will be computed using the maximum of the value above and
+   the left residual norm $\|y^*A-\lambda y^*B\|_2$, where $y$ is the approximate left
+   eigenvector.
 
    Level: beginner
 
-.seealso: [](ch:eps), `EPSErrorType`, `EPSSolve()`, `EPSGetErrorEstimate()`
+.seealso: [](ch:eps), `EPSErrorType`, `EPSSolve()`, `EPSGetErrorEstimate()`, `EPSSetTwoSided()`
 @*/
 PetscErrorCode EPSComputeError(EPS eps,PetscInt i,EPSErrorType type,PetscReal *error)
 {

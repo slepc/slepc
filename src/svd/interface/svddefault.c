@@ -169,7 +169,7 @@ PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscIn
 }
 
 /*@
-   SVDSetWorkVecs - Sets a number of work vectors into an SVD object.
+   SVDSetWorkVecs - Sets a number of work vectors into an `SVD` object.
 
    Collective
 
@@ -178,8 +178,8 @@ PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscIn
 .  nleft  - number of work vectors of dimension equal to left singular vector
 -  nright - number of work vectors of dimension equal to right singular vector
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin SVD
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `SVD`
    implementations.
 
    Level: developer

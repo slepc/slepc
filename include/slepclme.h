@@ -280,7 +280,7 @@ M*/
 
 /*MC
    LME_CONVERGED_ITERATING - This flag is returned if `LMEGetConvergedReason()` is called
-   while `LMESolve()` is still running..
+   while `LMESolve()` is still running.
 
    Level: intermediate
 

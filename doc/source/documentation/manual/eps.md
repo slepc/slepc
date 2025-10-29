@@ -6,7 +6,7 @@ The Eigenvalue Problem Solver (`EPS`) is the main object provided by SLEPc. It i
 {#sec:eig label="sec:eig"}
 ## Eigenvalue Problems
 
-In this section, we briefly present some basic concepts about eigenvalue problems as well as general techniques used to solve them. The description is not intended to be exhaustive. The objective is simply to define terms that will be referred to throughout the rest of the manual. Readers who are familiar with the terminology and the solution approach can skip this section. For a more comprehensive description, we refer the reader to monographs such as {cite:p}`Ste01,Bai00,Saa92,Par80`. A historical perspective of the topic can be found in {cite:p}`Gol00`. See also the SLEPc [technical reports](#str).
+In this section, we briefly present some basic concepts about eigenvalue problems as well as general techniques used to solve them. The description is not intended to be exhaustive. The objective is simply to define terms that will be referred to throughout the rest of the manual. Readers who are familiar with the terminology and the solution approach can skip this section. For a more comprehensive description, we refer the reader to monographs such as {cite:p}`Ste01a,Bai00,Saa92,Par80`. A historical perspective of the topic can be found in {cite:p}`Gol00`. See also the SLEPc [technical reports](#str).
 
 In the standard formulation, the linear eigenvalue problem consists in determining $\lambda\in\mathbb{C}$ for which the equation
 

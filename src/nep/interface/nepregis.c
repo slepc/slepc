@@ -45,7 +45,7 @@ PetscErrorCode NEPRegisterAll(void)
 }
 
 /*@C
-  NEPMonitorRegisterAll - Registers all the monitors in the NEP package.
+  NEPMonitorRegisterAll - Registers all the monitors in the `NEP` package.
 
   Not Collective
 

@@ -65,7 +65,7 @@ PetscErrorCode SVDRegisterAll(void)
 }
 
 /*@C
-  SVDMonitorRegisterAll - Registers all the monitors in the SVD package.
+  SVDMonitorRegisterAll - Registers all the monitors in the `SVD` package.
 
   Not Collective
 

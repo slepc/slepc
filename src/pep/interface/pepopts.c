@@ -25,7 +25,7 @@
 +  pep      - the polynomial eigensolver context
 .  opt      - the command line option for this monitor
 .  name     - the monitor type one is seeking
-.  ctx      - an optional user context for the monitor, or NULL
+.  ctx      - an optional user context for the monitor, or `NULL`
 -  trackall - whether this monitor tracks all eigenvalues or not
 
    Level: developer
@@ -699,12 +699,12 @@ PetscErrorCode PEPGetBasis(PEP pep,PEPBasis *basis)
 -  trackall - whether compute all residuals or not
 
    Notes:
-   If the user sets trackall=PETSC_TRUE then the solver explicitly computes
+   If the user sets `trackall`=`PETSC_TRUE` then the solver explicitly computes
    the residual for each eigenpair approximation. Computing the residual is
    usually an expensive operation and solvers commonly compute the associated
    residual to the first unconverged eigenpair.
 
-   The option '-pep_monitor_all' automatically activates this option.
+   The option `-pep_monitor_all` automatically activates this option.
 
    Level: developer
 
@@ -1271,13 +1271,13 @@ PetscErrorCode PEPGetRefine(PEP pep,PEPRefine *refine,PetscInt *npart,PetscReal 
 
 /*@
    PEPSetOptionsPrefix - Sets the prefix used for searching for all
-   PEP options in the database.
+   `PEP` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  pep - the polynomial eigensolver context
--  prefix - the prefix string to prepend to all PEP option requests
++  pep    - the polynomial eigensolver context
+-  prefix - the prefix string to prepend to all `PEP` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -1285,10 +1285,10 @@ PetscErrorCode PEPGetRefine(PEP pep,PEPRefine *refine,PetscInt *npart,PetscReal 
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different PEP contexts, one could call
+   different `PEP` contexts, one could call
 .vb
-      PEPSetOptionsPrefix(pep1,"qeig1_")
-      PEPSetOptionsPrefix(pep2,"qeig2_")
+   PEPSetOptionsPrefix(pep1,"qeig1_")
+   PEPSetOptionsPrefix(pep2,"qeig2_")
 .ve
 
    Level: advanced
@@ -1313,13 +1313,13 @@ PetscErrorCode PEPSetOptionsPrefix(PEP pep,const char prefix[])
 
 /*@
    PEPAppendOptionsPrefix - Appends to the prefix used for searching for all
-   PEP options in the database.
+   `PEP` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  pep - the polynomial eigensolver context
--  prefix - the prefix string to prepend to all PEP option requests
++  pep    - the polynomial eigensolver context
+-  prefix - the prefix string to prepend to all `PEP` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.

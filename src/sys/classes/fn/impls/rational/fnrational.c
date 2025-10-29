@@ -265,7 +265,7 @@ static PetscErrorCode FNRationalSetNumerator_Rational(FN fn,PetscInt np,PetscSca
 
    Level: intermediate
 
-.seealso: [](sec:fn), `FNRationalSetDenominator()`, `FNRationalGetNumerator()`
+.seealso: [](sec:fn), `FNRATIONAL`, `FNRationalSetDenominator()`, `FNRationalGetNumerator()`
 @*/
 PetscErrorCode FNRationalSetNumerator(FN fn,PetscInt np,PetscScalar pcoeff[])
 {
@@ -314,7 +314,7 @@ static PetscErrorCode FNRationalGetNumerator_Rational(FN fn,PetscInt *np,PetscSc
 
    Level: intermediate
 
-.seealso: [](sec:fn), `FNRationalSetNumerator()`
+.seealso: [](sec:fn), `FNRATIONAL`, `FNRationalSetNumerator()`
 @*/
 PetscErrorCode FNRationalGetNumerator(FN fn,PetscInt *np,PetscScalar *pcoeff[]) PeNS
 {
@@ -362,7 +362,7 @@ static PetscErrorCode FNRationalSetDenominator_Rational(FN fn,PetscInt nq,PetscS
 
    Level: intermediate
 
-.seealso: [](sec:fn), `FNRationalSetNumerator()`, `FNRationalGetDenominator()`
+.seealso: [](sec:fn), `FNRATIONAL`, `FNRationalSetNumerator()`, `FNRationalGetDenominator()`
 @*/
 PetscErrorCode FNRationalSetDenominator(FN fn,PetscInt nq,PetscScalar qcoeff[])
 {
@@ -411,7 +411,7 @@ static PetscErrorCode FNRationalGetDenominator_Rational(FN fn,PetscInt *nq,Petsc
 
    Level: intermediate
 
-.seealso: [](sec:fn), `FNRationalSetDenominator()`
+.seealso: [](sec:fn), `FNRATIONAL`, `FNRationalSetDenominator()`
 @*/
 PetscErrorCode FNRationalGetDenominator(FN fn,PetscInt *nq,PetscScalar *qcoeff[]) PeNS
 {
