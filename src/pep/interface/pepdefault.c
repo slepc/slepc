@@ -14,7 +14,7 @@
 #include <slepc/private/pepimpl.h>     /*I "slepcpep.h" I*/
 
 /*@
-   PEPSetWorkVecs - Sets a number of work vectors into a PEP object.
+   PEPSetWorkVecs - Sets a number of work vectors into a `PEP` object.
 
    Collective
 
@@ -22,8 +22,8 @@
 +  pep - the polynomial eigensolver context
 -  nw  - number of work vectors to allocate
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin PEP
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `PEP`
    implementations.
 
    Level: developer

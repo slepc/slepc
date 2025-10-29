@@ -25,7 +25,7 @@
 +  eps      - the linear eigensolver context
 .  opt      - the command line option for this monitor
 .  name     - the monitor type one is seeking
-.  ctx      - an optional user context for the monitor, or NULL
+.  ctx      - an optional user context for the monitor, or `NULL`
 -  trackall - whether this monitor tracks all eigenvalues or not
 
    Level: developer
@@ -1350,12 +1350,12 @@ PetscErrorCode EPSGetTrueResidual(EPS eps,PetscBool *trueres)
 -  trackall - whether to compute all residuals or not
 
    Notes:
-   If the user sets trackall=PETSC_TRUE then the solver computes (or estimates)
+   If the user sets `trackall`=`PETSC_TRUE` then the solver computes (or estimates)
    the residual norm for each eigenpair approximation. Computing the residual is
    usually an expensive operation and solvers commonly compute only the residual
    associated to the first unconverged eigenpair.
 
-   The option '-eps_monitor_all' automatically activates this option.
+   The option `-eps_monitor_all` automatically activates this option.
 
    Level: developer
 

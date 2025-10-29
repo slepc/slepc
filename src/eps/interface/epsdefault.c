@@ -169,7 +169,7 @@ PetscErrorCode EPSComputeVectors_Schur(EPS eps)
 }
 
 /*@
-   EPSSetWorkVecs - Sets a number of work vectors into an EPS object.
+   EPSSetWorkVecs - Sets a number of work vectors into an `EPS` object.
 
    Collective
 
@@ -177,8 +177,8 @@ PetscErrorCode EPSComputeVectors_Schur(EPS eps)
 +  eps - the linear eigensolver context
 -  nw  - number of work vectors to allocate
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin EPS
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `EPS`
    implementations.
 
    Level: developer

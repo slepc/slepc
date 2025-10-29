@@ -654,7 +654,7 @@ PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
 +  svd      - the singular value solver context
 .  opt      - the command line option for this monitor
 .  name     - the monitor type one is seeking
-.  ctx      - an optional user context for the monitor, or NULL
+.  ctx      - an optional user context for the monitor, or `NULL`
 -  trackall - whether this monitor tracks all singular values or not
 
    Level: developer
@@ -947,12 +947,12 @@ PetscErrorCode SVDIsHyperbolic(SVD svd,PetscBool* is)
 -  trackall - whether to compute all residuals or not
 
    Notes:
-   If the user sets trackall=PETSC_TRUE then the solver computes (or estimates)
+   If the user sets `trackall`=`PETSC_TRUE` then the solver computes (or estimates)
    the residual norm for each singular value approximation. Computing the residual is
    usually an expensive operation and solvers commonly compute only the residual
    associated to the first unconverged singular value.
 
-   The option '-svd_monitor_all' automatically activates this option.
+   The option `-svd_monitor_all` automatically activates this option.
 
    Level: developer
 
