@@ -71,15 +71,11 @@ PetscErrorCode SVDConvergedMaxIt(SVD svd,PetscReal sigma,PetscReal res,PetscReal
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to SVD_CONVERGED_ITERATING
-   (zero).
-
-   SVDStoppingBasic() will stop if all requested singular values are converged, or if
+   `SVDStoppingBasic()` will stop if all requested singular values are converged, or if
    the maximum number of iterations has been reached.
 
-   Use SVDSetStoppingTest() to provide your own test instead of using this one.
+   This is the default stopping test.
+   Use `SVDSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 
@@ -114,24 +110,19 @@ PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nc
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged singular triplets (ignored here)
 .  nsv    - number of requested singular triplets (ignored here)
--  ctx    - context containing additional data (SVDStoppingCtx)
+-  ctx    - context containing additional data (`SVDStoppingCtx`)
 
    Output Parameter:
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to SVD_CONVERGED_ITERATING
-   (zero).
-
-   SVDStoppingThreshold() will stop when one of the computed singular values is not
-   above/below the threshold given at SVDSetThreshold(). If a number of wanted singular
-   values has been specified via SVDSetDimensions() then it is also taken into account,
+   `SVDStoppingThreshold()` will stop when one of the computed singular values is not
+   above/below the threshold given at `SVDSetThreshold()`. If a number of wanted singular
+   values has been specified via `SVDSetDimensions()` then it is also taken into account,
    and the solver will stop when one of the two conditions (threshold or number of
    converged values) is met.
 
-   Use SVDSetStoppingTest() to provide your own test instead of using this one.
+   Use `SVDSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 

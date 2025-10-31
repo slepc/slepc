@@ -361,13 +361,14 @@ static PetscErrorCode SVDLanczosSetOneSide_Lanczos(SVD svd,PetscBool oneside)
 -  oneside - boolean flag indicating if the method is one-sided or not
 
    Options Database Key:
-.  -svd_lanczos_oneside <boolean> - Indicates the boolean flag
+.  -svd_lanczos_oneside <boolean> - enable the one-sided variant
 
    Note:
    By default, a two-sided variant is selected, which is sometimes slightly
    more robust. However, the one-sided variant is faster because it avoids
    the orthogonalization associated to left singular vectors. It also saves
-   the memory required for storing such vectors.
+   the memory required for storing such vectors. See more details in
+   {cite:p}`Her07c,Her08`.
 
    Level: advanced
 
@@ -436,6 +437,27 @@ static PetscErrorCode SVDView_Lanczos(SVD svd,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   SVDLANCZOS - SVDLANCZOS = "lanczos" - A basic Golub-Kahan-Lanczos
+   bidiagonalization method with explicit restart.
+
+   Notes:
+   Only available for standard SVD problems.
+
+   This solver is very basic and is not recommended in general, since it
+   will not be competitive with respect to other solvers.
+
+   The implemented method is Lanczos bidiagonalization with explicit restart
+   and deflation. Generally, it is much better to use Lanczos with implicit
+   restart (also known as thick-restart Lanczos) as implemented in `SVDTRLANCZOS`.
+
+   The implementation includes a one-sided orthogonalization option, and
+   efficient parallel orthogonalization, see the details in {cite:p}`Her07c,Her08`.
+
+   Level: beginner
+
+.seealso: [](ch:svd), [](#sec:svdback), `SVD`, `SVDType`, `SVDSetType()`, `SVDSetProblemType()`, `SVDTRLANCZOS`
+M*/
 SLEPC_EXTERN PetscErrorCode SVDCreate_Lanczos(SVD svd)
 {
   SVD_LANCZOS    *ctx;

@@ -151,6 +151,27 @@ static PetscErrorCode SVDSolve_Randomized(SVD svd)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   SVDRANDOMIZED - SVDRANDOMIZED = "randomized" - A basic randomization-based
+   singular value solver.
+
+   Notes:
+   Only available for standard SVD problems.
+
+   This solver relies on randomization techniques described in {cite:p}`Hal11`.
+   It is different from other solvers in the sense that it assumes that the
+   input matrix has low rank, in which case the computation will be very fast.
+   Otherwise, the solver will proceed iteratively as a subspace iteration
+   solver (which may have slow convergence), until the required accuracy is reached.
+   Alternatively, it is possible to set a limited number of iterations (e.g., 1)
+   and the solver will return approximate bases of the dominant singular spaces.
+   Note that in this latter case, the individual singular vectors are not good
+   approximations, so residuals are expected to be large.
+
+   Level: beginner
+
+.seealso: [](ch:svd), [](#sec:svdback), `SVD`, `SVDType`, `SVDSetType()`, `SVDSetProblemType()`, `SVDTRLANCZOS`
+M*/
 SLEPC_EXTERN PetscErrorCode SVDCreate_Randomized(SVD svd)
 {
   PetscFunctionBegin;

@@ -369,16 +369,18 @@ static PetscErrorCode SVDPRIMMESetBlockSize_PRIMME(SVD svd,PetscInt bs)
 -  bs - block size
 
    Options Database Key:
-.  -svd_primme_blocksize - Sets the max allowed block size value
+.  -svd_primme_blocksize - sets the maximux allowed block size
 
    Notes:
-   If the block size is not set, the value established by primme_svds_initialize
+   If the block size is not set, the value established by `primme_svds_initialize`
    is used.
 
    The user should set the block size based on the architecture specifics
    of the target computer, as well as any a priori knowledge of multiplicities.
-   The code does NOT require bs > 1 to find multiple eigenvalues. For some
-   methods, keeping bs = 1 yields the best overall performance.
+   The code does NOT require `bs` > 1 to find multiple eigenvalues. For some
+   methods, keeping `bs` = 1 yields the best overall performance.
+
+   See the documentation of PRIMME {cite:p}`Sta10` for details.
 
    Level: advanced
 
@@ -447,8 +449,10 @@ static PetscErrorCode SVDPRIMMESetMethod_PRIMME(SVD svd,SVDPRIMMEMethod method)
    Options Database Key:
 .  -svd_primme_method - Sets the method for the PRIMME SVD solver
 
-   Note:
-   If not set, the method defaults to SVD_PRIMME_HYBRID.
+   Notes:
+   If not set, the method defaults to `SVD_PRIMME_HYBRID`.
+
+   See the documentation of PRIMME {cite:p}`Sta10` for a description of the methods.
 
    Level: advanced
 
@@ -496,6 +500,20 @@ PetscErrorCode SVDPRIMMEGetMethod(SVD svd,SVDPRIMMEMethod *method)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   SVDPRIMME - SVDPRIMME = "primme" - A wrapper to PRIMME {cite:p}`Sta10`.
+
+   Notes:
+   Only available for standard SVD problems.
+
+   The PRIMME library provides several singular value solvers. The
+   default one is generally a good choice, but the user can select another
+   with `SVDPRIMMESetMethod()`.
+
+   Level: beginner
+
+.seealso: [](ch:svd), `SVD`, `SVDType`, `SVDSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode SVDCreate_PRIMME(SVD svd)
 {
   SVD_PRIMME     *primme;

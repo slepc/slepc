@@ -360,7 +360,7 @@ PetscErrorCode SVDMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 -  U   - the basis vectors object for left singular vectors
 
    Note:
-   Use SVDGetBV() to retrieve the basis vectors contexts (for example,
+   Use `SVDGetBV()` to retrieve the basis vectors contexts (for example,
    to free them at the end of the computations).
 
    Level: advanced
@@ -438,7 +438,7 @@ PetscErrorCode SVDGetBV(SVD svd,BV *V,BV *U)
 -  ds  - the direct solver object
 
    Note:
-   Use SVDGetDS() to retrieve the direct solver context (for example,
+   Use `SVDGetDS()` to retrieve the direct solver context (for example,
    to free it at the end of the computations).
 
    Level: advanced

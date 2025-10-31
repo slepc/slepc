@@ -246,6 +246,22 @@ static PetscErrorCode SVDSetDSType_LAPACK(SVD svd)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   SVDLAPACK - SVDLAPACK = "lapack" - A wrapper to LAPACK singular value solvers.
+
+   Notes:
+   This is not really a full-featured singular value solver but simply an interface to
+   some LAPACK routines {cite:p}`And99`. These routines operate sequentially
+   in dense mode and therefore are suitable only for small size problems.
+   This solver should be used only for debugging purposes.
+
+   The LAPACK routine is not called directly, instead a `DS` object of
+   the appropriate type is set up.
+
+   Level: beginner
+
+.seealso: [](ch:svd), `SVD`, `SVDType`, `SVDSetType()`, `DS`
+M*/
 SLEPC_EXTERN PetscErrorCode SVDCreate_LAPACK(SVD svd)
 {
   PetscFunctionBegin;
