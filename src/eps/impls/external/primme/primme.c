@@ -580,7 +580,7 @@ PetscErrorCode EPSPRIMMEGetMethod(EPS eps,EPSPRIMMEMethod *method)
    EPSPRIMME - EPSPRIMME = "primme" - A wrapper to PRIMME {cite:p}`Sta10`.
 
    Note:
-   The PRIMME library implements several closely related algorithms. The
+   The PRIMME library implements several closely related eigensolvers. The
    default one is generally a good choice, but the user can select another
    with `EPSPRIMMESetMethod()`.
 

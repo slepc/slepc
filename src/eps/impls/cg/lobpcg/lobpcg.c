@@ -679,14 +679,15 @@ static PetscErrorCode EPSDestroy_LOBPCG(EPS eps)
    it is intended for computing leftmost eigenvalues of Hermitian
    problems, and not interior eigenvalues.
 
-   The implemented method is LOBPCG {cite:p}`Kny01`
+   The implemented method is LOBPCG {cite:p}`Kny01`. Note that SLEPc
+   provides another implementation of LOBPCG via BLOPEX, see `EPSBLOPEX`.
 
    The preconditioner is specified via the internal `ST` object and its
    associated `KSP`.
 
    Level: beginner
 
-.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetST()`
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetST()`, `EPSBLOPEX`
 M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_LOBPCG(EPS eps)
 {

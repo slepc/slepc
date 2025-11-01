@@ -594,7 +594,7 @@ PetscErrorCode EPSSetDeflationSpace(EPS eps,PetscInt n,Vec v[])
 
    Notes:
    Some solvers such as `EPSKRYLOVSCHUR` start to iterate on a single vector
-   (initial vector). In that case, only `is[0] is taken into account and the
+   (initial vector). In that case, only `is[0]` is taken into account and the
    other vectors are ignored. But other solvers such as `EPSSUBSPACE` are
    able to make use of the whole initial subspace as an initial guess.
 
