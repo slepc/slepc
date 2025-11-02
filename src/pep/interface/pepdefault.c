@@ -130,15 +130,11 @@ PetscErrorCode PEPConvergedAbsolute(PEP pep,PetscScalar eigr,PetscScalar eigi,Pe
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to PEP_CONVERGED_ITERATING
-   (zero).
-
-   PEPStoppingBasic() will stop if all requested eigenvalues are converged, or if
+   `PEPStoppingBasic()` will stop if all requested eigenvalues are converged, or if
    the maximum number of iterations has been reached.
 
-   Use PEPSetStoppingTest() to provide your own test instead of using this one.
+   This is the default stopping test.
+   Use `PEPSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 

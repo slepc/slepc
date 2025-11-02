@@ -745,15 +745,19 @@ static PetscErrorCode PEPLinearSetLinearization_Linear(PEP pep,PetscReal alpha,P
 -  beta  - second parameter of the linearization
 
    Options Database Key:
-.  -pep_linear_linearization <alpha,beta> - Sets the coefficients
+.  -pep_linear_linearization <alpha,beta> - sets the coefficients
 
    Notes:
-   Cannot pass zero for both alpha and beta. The default values are
-   alpha=1 and beta=0.
+   See section [](#sec:linearization) for the general expressions of
+   the linearizations. Note that the expressions are different depending
+   on `PEPProblemType`.
+
+   Cannot pass zero for both `alpha` and `beta`. The default values are
+   `alpha`=1 and `beta`=0.
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPLINEAR`, `PEPLinearGetLinearization()`
+.seealso: [](ch:pep), [](#sec:linearization), `PEPLINEAR`, `PEPProblemType`, `PEPLinearGetLinearization()`
 @*/
 PetscErrorCode PEPLinearSetLinearization(PEP pep,PetscReal alpha,PetscReal beta)
 {
@@ -813,7 +817,7 @@ static PetscErrorCode PEPLinearSetExplicitMatrix_Linear(PEP pep,PetscBool explic
 }
 
 /*@
-   PEPLinearSetExplicitMatrix - Indicate if the matrices A and B for the
+   PEPLinearSetExplicitMatrix - Indicate if the matrices $A$ and $B$ for the
    linearization of the problem must be built explicitly.
 
    Logically Collective
@@ -823,7 +827,7 @@ static PetscErrorCode PEPLinearSetExplicitMatrix_Linear(PEP pep,PetscBool explic
 -  explicitmat - boolean flag indicating if the matrices are built explicitly
 
    Options Database Key:
-.  -pep_linear_explicitmatrix <boolean> - Indicates the boolean flag
+.  -pep_linear_explicitmatrix <boolean> - set the boolean flag
 
    Level: advanced
 
@@ -849,7 +853,7 @@ static PetscErrorCode PEPLinearGetExplicitMatrix_Linear(PEP pep,PetscBool *expli
 
 /*@
    PEPLinearGetExplicitMatrix - Returns the flag indicating if the matrices
-   A and B for the linearization are built explicitly.
+   $A$ and $B$ for the linearization are built explicitly.
 
    Not Collective
 
@@ -886,7 +890,7 @@ static PetscErrorCode PEPLinearSetEPS_Linear(PEP pep,EPS eps)
 }
 
 /*@
-   PEPLinearSetEPS - Associate an eigensolver object (EPS) to the
+   PEPLinearSetEPS - Associate a linear eigensolver object (`EPS`) to the
    polynomial eigenvalue solver.
 
    Collective
@@ -927,7 +931,7 @@ static PetscErrorCode PEPLinearGetEPS_Linear(PEP pep,EPS *eps)
 }
 
 /*@
-   PEPLinearGetEPS - Retrieve the eigensolver object (EPS) associated
+   PEPLinearGetEPS - Retrieve the linear eigensolver object (`EPS`) associated
    to the polynomial eigenvalue solver.
 
    Collective
@@ -1002,6 +1006,25 @@ static PetscErrorCode PEPDestroy_Linear(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   PEPLINEAR - PEPLINEAR = "linear" - A linearization-based solver that
+   uses `EPS` to solve the resulting linear eigenproblem.
+
+   Notes:
+   A linear eigenvalue problem is obtained by linearization, as described
+   in section [](#sec:linearization), where the linearization parameters
+   can be set via `PEPLinearSetLinearization()`. Note that the linearization
+   is done differently depending on `PEPProblemType`. Then the matrices of
+   the linearization are passed to an `EPS` object. Use `PEPLinearGetEPS()`
+   to configure this solver.
+
+   By default, the matrices of the linearization are handled implicitly via
+   shell matrices, but this can be changed with `PEPLinearSetExplicitMatrix()`.
+
+   Level: beginner
+
+.seealso: [](ch:pep), [](#sec:linearization), `PEP`, `PEPType`, `PEPProblemType`, `PEPSetType()`, `PEPLinearSetLinearization()`, `PEPLinearGetEPS()`, `PEPLinearSetExplicitMatrix()`
+M*/
 SLEPC_EXTERN PetscErrorCode PEPCreate_Linear(PEP pep)
 {
   PEP_LINEAR     *ctx;

@@ -133,7 +133,7 @@ PetscErrorCode PEPMonitorCancel(PEP pep)
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPDefaultMonitor()`
+.seealso: [](ch:pep), `PEPMonitorSet()`
 @*/
 PetscErrorCode PEPGetMonitorContext(PEP pep,void *ctx)
 {

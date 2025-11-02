@@ -52,7 +52,7 @@ PetscErrorCode PEPExtractVectors(PEP pep)
 }
 
 /*@
-   PEPSolve - Solves the polynomial eigensystem.
+   PEPSolve - Solves the polynomial eigenproblem.
 
    Collective
 
@@ -60,25 +60,33 @@ PetscErrorCode PEPExtractVectors(PEP pep)
 .  pep - the polynomial eigensolver context
 
    Options Database Keys:
-+  -pep_view - print information about the solver used
-.  -pep_view_matk - view the coefficient matrix Ak (replace k by an integer from 0 to nmat-1)
++  -pep_view - print information about the solver once the solve is complete
+.  -pep_view_pre - print information about the solver before the solve starts
+.  -pep_view_matk - view the coefficient matrix $A_k$ (replace `k` by an integer from 0 to `nmat`-1)
 .  -pep_view_vectors - view the computed eigenvectors
 .  -pep_view_values - view the computed eigenvalues
-.  -pep_converged_reason - print reason for convergence, and number of iterations
+.  -pep_converged_reason - print reason for convergence/divergence, and number of iterations
 .  -pep_error_absolute - print absolute errors of each eigenpair
 .  -pep_error_relative - print relative errors of each eigenpair
 -  -pep_error_backward - print backward errors of each eigenpair
 
    Notes:
+   The problem matrices are specified with `PEPSetOperators()`.
+
+   `PEPSolve()` will return without generating an error regardless of whether
+   all requested solutions were computed or not. Call `PEPGetConverged()` to get the
+   actual number of computed solutions, and `PEPGetConvergedReason()` to determine if
+   the solver converged or failed and why.
+
    All the command-line options listed above admit an optional argument specifying
-   the viewer type and options. For instance, use '-pep_view_mat0 binary:amatrix.bin'
-   to save the A matrix to a binary file, '-pep_view_values draw' to draw the computed
-   eigenvalues graphically, or '-pep_error_relative :myerr.m:ascii_matlab' to save
+   the viewer type and options. For instance, use `-pep_view_mat0 binary:matrix0.bin`
+   to save the $A_0$ matrix to a binary file, `-pep_view_values draw` to draw the computed
+   eigenvalues graphically, or `-pep_error_relative :myerr.m:ascii_matlab` to save
    the errors in a file that can be executed in Matlab.
 
    Level: beginner
 
-.seealso: [](ch:pep), `PEPCreate()`, `PEPSetUp()`, `PEPDestroy()`, `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPCreate()`, `PEPSetUp()`, `PEPDestroy()`, `PEPSetTolerances()`, `PEPGetConverged()`, `PEPGetConvergedReason()`
 @*/
 PetscErrorCode PEPSolve(PEP pep)
 {
@@ -263,8 +271,8 @@ PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
 }
 
 /*@
-   PEPGetEigenpair - Gets the i-th solution of the eigenproblem as computed by
-   PEPSolve(). The solution consists in both the eigenvalue and the eigenvector.
+   PEPGetEigenpair - Gets the `i`-th solution of the eigenproblem as computed by
+   `PEPSolve()`. The solution consists in both the eigenvalue and the eigenvector.
 
    Collective
 
@@ -279,19 +287,21 @@ PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
 -  Vi   - imaginary part of eigenvector
 
    Notes:
-   It is allowed to pass NULL for Vr and Vi, if the eigenvector is not
-   required. Otherwise, the caller must provide valid Vec objects, i.e.,
-   they must be created by the calling program with e.g. MatCreateVecs().
+   It is allowed to pass `NULL` for `Vr` and `Vi`, if the eigenvector is not
+   required. Otherwise, the caller must provide valid `Vec` objects, i.e.,
+   they must be created by the calling program with e.g. `MatCreateVecs()`.
 
-   If the eigenvalue is real, then eigi and Vi are set to zero. If PETSc is
+   If the eigenvalue is real, then `eigi` and `Vi` are set to zero. If PETSc is
    configured with complex scalars the eigenvalue is stored
-   directly in eigr (eigi is set to zero) and the eigenvector in Vr (Vi is
-   set to zero). In any case, the user can pass NULL in Vr or Vi if one of
+   directly in `eigr` (`eigi` is set to zero) and the eigenvector in `Vr` (`Vi` is
+   set to zero). In any case, the user can pass `NULL` in `Vr` or `Vi` if one of
    them is not required.
 
-   The index i should be a value between 0 and nconv-1 (see PEPGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `PEPGetConverged()`).
    Eigenpairs are indexed according to the ordering criterion established
-   with PEPSetWhichEigenpairs().
+   with `PEPSetWhichEigenpairs()`.
+
+   The eigenvector is normalized to have unit norm.
 
    Level: beginner
 
@@ -328,7 +338,7 @@ PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar 
 }
 
 /*@
-   PEPGetErrorEstimate - Returns the error estimate associated to the i-th
+   PEPGetErrorEstimate - Returns the error estimate associated to the `i`-th
    computed eigenpair.
 
    Not Collective
@@ -340,10 +350,9 @@ PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar 
    Output Parameter:
 .  errest - the error estimate
 
-   Notes:
+   Note:
    This is the error estimate used internally by the eigensolver. The actual
-   error bound can be computed with PEPComputeError(). See also the users
-   manual for details.
+   error bound can be computed with `PEPComputeError()`.
 
    Level: advanced
 

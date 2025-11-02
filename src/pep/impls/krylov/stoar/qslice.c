@@ -326,19 +326,19 @@ static inline PetscErrorCode PEPQSliceEvaluateQEP(PEP pep,PetscScalar x,Mat M,Ma
 -  hyperbolic - flag indicating that the problem is hyperbolic
 
    Notes:
-   This function is intended for quadratic eigenvalue problems, Q(lambda)=A*lambda^2+B*lambda+C,
-   with symmetric (or Hermitian) coefficient matrices A,B,C.
+   This function is intended for quadratic eigenvalue problems, $Q(\lambda)=K+\lambda C+\lambda^2M$,
+   with symmetric (or Hermitian) coefficient matrices $K$, $C$, $M$.
 
-   On output, the flag 'definite' may have the values -1 (meaning that the QEP is not
+   On output, the flag `definite` may have the values -1 (meaning that the QEP is not
    definite), 1 (if the problem is definite), or 0 if the algorithm was not able to
    determine whether the problem is definite or not.
 
-   If definite=1, the output flag 'hyperbolic' informs in a similar way about whether the
+   If `definite`=1, the output flag `hyperbolic` informs in a similar way about whether the
    problem is hyperbolic or not.
 
-   If definite=1, the computed values xi and mu satisfy Q(xi)<0 and Q(mu)>0, as
-   obtained via the method proposed in [Niendorf and Voss, LAA 2010]. Furthermore, if
-   hyperbolic=1 then only xi is computed.
+   If `definite`=1, the computed values `xi` and `mu` satisfy $Q(\xi)<0$ and $Q(\mu)>0$,
+   as obtained via the method proposed by {cite:t}`Nie10`. Furthermore, if
+   `hyperbolic`=1 then only `xi` is computed.
 
    Level: advanced
 

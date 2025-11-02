@@ -1567,10 +1567,12 @@ static PetscErrorCode PEPJDSetFix_JD(PEP pep,PetscReal fix)
    Options Database Key:
 .  -pep_jd_fix - the fix value
 
-   Note:
+   Notes:
    The target in the correction equation is fixed at the first iterations.
-   When the norm of the residual vector is lower than the fix value,
+   When the norm of the residual vector is lower than the `fix` value,
    the target is set to the corresponding eigenvalue.
+
+   Detailed information can be found at {cite:p}`Cam20a`.
 
    Level: advanced
 
@@ -1605,11 +1607,6 @@ static PetscErrorCode PEPJDGetFix_JD(PEP pep,PetscReal *fix)
 
    Output Parameter:
 .  fix - threshold for changing the target
-
-   Note:
-   The target in the correction equation is fixed at the first iterations.
-   When the norm of the residual vector is lower than the fix value,
-   the target is set to the corresponding eigenvalue.
 
    Level: advanced
 
@@ -1647,9 +1644,9 @@ static PetscErrorCode PEPJDSetReusePreconditioner_JD(PEP pep,PetscBool reusepc)
 .  -pep_jd_reuse_preconditioner - the reuse flag
 
    Note:
-   The default value is False. If set to True, the preconditioner is built
+   The default value is `PETSC_FALSE`. If set to `PETSC_TRUE`, the preconditioner is built
    only at the beginning, using the target value. Otherwise, it may be rebuilt
-   (depending on the fix parameter) at each iteration from the Ritz value.
+   (depending on the `fix` parameter) at each iteration from the Ritz value.
 
    Level: advanced
 
@@ -1725,9 +1722,11 @@ static PetscErrorCode PEPJDSetMinimalityIndex_JD(PEP pep,PetscInt mmidx)
    Options Database Key:
 .  -pep_jd_minimality_index - the minimality index value
 
-   Note:
+   Notes:
    The default value is equal to the degree of the polynomial. A smaller value
    can be used if the wanted eigenvectors are known to be linearly independent.
+
+   Detailed information can be found at {cite:p}`Cam20a`.
 
    Level: advanced
 
@@ -1802,10 +1801,13 @@ static PetscErrorCode PEPJDSetProjection_JD(PEP pep,PEPJDProjection proj)
 
    Input Parameters:
 +  pep  - the polynomial eigensolver context
--  proj - the type of projection
+-  proj - the type of projection, see `PEPJDProjection` for possible values
 
    Options Database Key:
-.  -pep_jd_projection - the projection type, either orthogonal or harmonic
+.  -pep_jd_projection - the projection type, either `orthogonal` or `harmonic`
+
+   Note:
+   Detailed information can be found at {cite:p}`Cam20a`.
 
    Level: advanced
 
@@ -1953,6 +1955,27 @@ static PetscErrorCode PEPDestroy_JD(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   PEPJD - PEPJD = "jd" - The Jacobi-Davidson method for polynomial eigenproblems.
+
+   Notes:
+   This is a preconditioned eigensolver, that is, it may be competitive
+   when computing interior eigenvalues in case the shift-and-invert spectral
+   transformation is too costly and a good preconditioner is available.
+
+   The implemented method is polynomial Jacobi-Davidson {cite:p}`Sle96`.
+   It is possible to set several options of the algorithm, such as the
+   restart (`PEPJDSetRestart()`) or the fix parameter (`PEPJDSetFix()`).
+   The details of the SLEPc implementation are in {cite:p}`Cam20a`.
+
+   The preconditioner is specified via the internal `ST` object and its
+   associated `KSP`. The preconditioner will be recomputed whenever the
+   shift is updated, unless this is disabled with `PEPJDSetReusePreconditioner()`.
+
+   Level: beginner
+
+.seealso: [](ch:pep), `PEP`, `PEPType`, `PEPSetType()`, `PEPGetST()`, `PEPJDSetRestart()`, `PEPJDSetFix()`, `PEPJDSetReusePreconditioner()`
+M*/
 SLEPC_EXTERN PetscErrorCode PEPCreate_JD(PEP pep)
 {
   PEP_JD         *pjd;

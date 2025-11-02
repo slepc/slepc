@@ -537,11 +537,12 @@ Similar expressions can be used in the convergence criterion used to accept conv
  |--------------------------|-----------------|------------------|--------------------------------------
  |Absolute                  |`PEP_CONV_ABS`   |`-pep_conv_abs`   |$\\|r\\|$
  |Relative to eigenvalue    |`PEP_CONV_REL`   |`-pep_conv_rel`   |$\\|r\\|/\|\lambda\|$
- |Relative to matrix norms  |`PEP_CONV_NORM`  |`-pep_conv_norm`  |$\\|r\\|/(\sum_j\\|A_j\\|\|\lambda_i\|^j)$
+ |Relative to matrix norms  |`PEP_CONV_NORM`  |`-pep_conv_norm`  |$\\|r\\|/(\sum_j\\|A_j\\|\|\lambda\|^j)$
  |User-defined              |`PEP_CONV_USER`  |`-pep_conv_user`  |*user function*
 
 :::
 
+{#sec:scaling label="sec:scaling"}
 ### Scaling
 
 When solving a quadratic eigenproblem via linearization, an accurate solution of the generalized eigenproblem does not necessarily imply a similar level of accuracy for the quadratic problem. {cite:t}`Tis00` shows that in the case of the linearization {math:numref}`eq:n1`, a small backward error in the generalized eigenproblem guarantees a small backward error in the quadratic eigenproblem. However, this holds only if $M$, $C$ and $K$ have a similar norm.
@@ -564,6 +565,7 @@ PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,PetscInt its,Pe
 
 See the manual page for details and the description in {cite:p}`Cam16a`.
 
+{#sec:pepextr label="sec:pepextr"}
 ### Extraction
 
 Some of the eigensolvers provided in the `PEP` package are based on solving the linearized eigenproblem of equation {math:numref}`eq:firstcompfull`. From the eigenvector $y$ of the linearization, it is possible to extract the eigenvector $x$ of the polynomial eigenproblem. The most straightforward way is to take the first block of $y$, but there are other, more elaborate extraction strategies. For instance, one may compute the norm of the residual {math:numref}`eq:respol` for every block of $y$, and take the one that gives the smallest residual. The different extraction techniques may be selected with:

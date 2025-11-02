@@ -39,7 +39,7 @@ PetscErrorCode PEPSetDefaultST_Transform(PEP pep)
 }
 
 /*@
-   PEPSetDSType - Sets the type of the internal DS object based on the current
+   PEPSetDSType - Sets the type of the internal `DS` object based on the current
    settings of the polynomial eigensolver.
 
    Collective
@@ -49,7 +49,7 @@ PetscErrorCode PEPSetDefaultST_Transform(PEP pep)
 
    Note:
    This function need not be called explicitly, since it will be called at
-   both PEPSetFromOptions() and PEPSetUp().
+   both `PEPSetFromOptions()` and `PEPSetUp()`.
 
    Level: developer
 
@@ -262,14 +262,14 @@ PetscErrorCode PEPSetUp(PEP pep)
 
    Input Parameters:
 +  pep  - the polynomial eigensolver context
-.  nmat - number of matrices in array A
+.  nmat - number of matrices in array `A`
 -  A    - the array of matrices associated with the eigenproblem
 
    Notes:
-   The polynomial eigenproblem is defined as P(l)*x=0, where l is
-   the eigenvalue, x is the eigenvector, and P(l) is defined as
-   P(l) = A_0 + l*A_1 + ... + l^d*A_d, with d=nmat-1 (the degree of P).
-   For non-monomial bases, this expression is different.
+   The polynomial eigenproblem is defined as $P(\lambda)x=0$, where $\lambda$
+   is the eigenvalue, $x$ is the eigenvector, and $P$ is defined as
+   $P(\lambda) = A_0 + \lambda A_1 + \dots + \lambda^d A_d$, with $d$=`nmat`-1
+   (the degree of $P$). For non-monomial bases, this expression is different.
 
    Level: beginner
 
@@ -344,7 +344,7 @@ PetscErrorCode PEPGetOperators(PEP pep,PetscInt k,Mat *A)
 }
 
 /*@
-   PEPGetNumMatrices - Returns the number of matrices stored in the PEP.
+   PEPGetNumMatrices - Returns the number of matrices stored in the `PEP`.
 
    Not Collective
 
@@ -352,7 +352,7 @@ PetscErrorCode PEPGetOperators(PEP pep,PetscInt k,Mat *A)
 .  pep - the polynomial eigensolver context
 
    Output Parameter:
-.  nmat - the number of matrices passed in PEPSetOperators()
+.  nmat - the number of matrices passed in `PEPSetOperators()`
 
    Level: intermediate
 
@@ -382,7 +382,7 @@ PetscErrorCode PEPGetNumMatrices(PEP pep,PetscInt *nmat)
    Some solvers start to iterate on a single vector (initial vector). In that case,
    the other vectors are ignored.
 
-   These vectors do not persist from one PEPSolve() call to the other, so the
+   These vectors do not persist from one `PEPSolve()` call to the other, so the
    initial space should be set every time.
 
    The vectors do not need to be mutually orthonormal, since they are explicitly
