@@ -294,13 +294,13 @@ PetscErrorCode NEPApplyAdjoint(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat 
     PetscCall(VecSet(y,0.0));
     for (i=0;i<nep->nt;i++) {
       PetscCall(FNEvaluateFunction(nep->f[i],lambda,&alpha));
-      PetscCall(MatMultTranspose(nep->A[i],w,v));
+      PetscCall(MatMultHermitianTranspose(nep->A[i],w,v));
       PetscCall(VecAXPY(y,alpha,v));
     }
   } else {
     if (!A) A = nep->function;
     PetscCall(NEPComputeFunction(nep,lambda,A,A));
-    PetscCall(MatMultTranspose(A,w,y));
+    PetscCall(MatMultHermitianTranspose(A,w,y));
   }
   PetscCall(VecDestroy(&w));
   PetscCall(VecConjugate(y));
