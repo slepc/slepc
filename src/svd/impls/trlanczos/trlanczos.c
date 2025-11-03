@@ -1761,7 +1761,7 @@ static PetscErrorCode SVDTRLanczosSetOneSide_TRLanczos(SVD svd,PetscBool oneside
 -  oneside - boolean flag indicating if the method is one-sided or not
 
    Options Database Key:
-.  -svd_trlanczos_oneside <boolean> - enable the one-sided variant
+.  -svd_trlanczos_oneside \<oneside\> - enable the one-sided variant
 
    Notes:
    By default, a two-sided variant is selected, which is sometimes slightly
@@ -2162,7 +2162,7 @@ static PetscErrorCode SVDTRLanczosSetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
 -  explicitmat - Boolean flag indicating if $Z$ is built explicitly
 
    Options Database Key:
-.  -svd_trlanczos_explicitmatrix <boolean> - enable the explicit construction of the stacked matrix
+.  -svd_trlanczos_explicitmatrix \<explicitmat\> - enable the explicit construction of the stacked matrix
 
    Note:
    This option is relevant for the GSVD case only.
@@ -2240,7 +2240,7 @@ static PetscErrorCode SVDTRLanczosSetScale_TRLanczos(SVD svd,PetscReal scale)
 -  scale - scale parameter
 
    Options Database Key:
-.  -svd_trlanczos_scale <real> - scale factor/threshold
+.  -svd_trlanczos_scale \<scale\> - scale factor/threshold
 
    Notes:
    This parameter is relevant for the GSVD case only. If the parameter is

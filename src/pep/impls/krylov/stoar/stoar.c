@@ -878,9 +878,9 @@ static PetscErrorCode PEPSTOARSetDimensions_STOAR(PEP pep,PetscInt nev,PetscInt 
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -pep_stoar_nev <nev> - sets the number of eigenvalues
-.  -pep_stoar_ncv <ncv> - sets the dimension of the subspace
--  -pep_stoar_mpd <mpd> - sets the maximum projected dimension
++  -pep_stoar_nev \<nev\> - sets the number of eigenvalues
+.  -pep_stoar_ncv \<ncv\> - sets the dimension of the subspace
+-  -pep_stoar_mpd \<mpd\> - sets the maximum projected dimension
 
    Notes:
    These parameters are relevant only for spectrum slicing runs, that is, when

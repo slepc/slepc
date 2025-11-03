@@ -268,8 +268,8 @@ PetscErrorCode LMEGetTolerances(LME lme,PetscReal *tol,PetscInt *maxits)
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -lme_tol <tol> - Sets the convergence tolerance
--  -lme_max_it <maxits> - Sets the maximum number of iterations allowed
++  -lme_tol \<tol\>       - sets the convergence tolerance
+-  -lme_max_it \<maxits\> - sets the maximum number of iterations allowed
 
    Notes:
    Use `PETSC_CURRENT` to retain the current value of any of the parameters.
@@ -340,7 +340,7 @@ PetscErrorCode LMEGetDimensions(LME lme,PetscInt *ncv)
 -  ncv - the maximum dimension of the subspace to be used by the solver
 
    Options Database Key:
-.  -lme_ncv <ncv> - sets the dimension of the subspace
+.  -lme_ncv \<ncv\> - sets the dimension of the subspace
 
    Notes:
    Use `PETSC_DETERMINE` for `ncv` to assign a reasonably good value, which is

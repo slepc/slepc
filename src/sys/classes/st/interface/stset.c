@@ -26,7 +26,7 @@ PetscFunctionList STList = NULL;
 -  type - a known type
 
    Options Database Key:
-.  -st_type <type> - Sets `ST` type
+.  -st_type \<type\> - sets the `ST` type
 
    Notes:
    Normally, it is best to call the `EPSSetFromOptions()` function and
@@ -156,7 +156,7 @@ PetscErrorCode STSetFromOptions(ST st)
          `SUBSET_NONZERO_PATTERN`, or `UNKNOWN_NONZERO_PATTERN`
 
    Options Database Key:
-.  -st_matstructure <str> - the structure flag, one of `same`, `different`, `subset`, `unknown`.
+.  -st_matstructure \<str\> - the structure flag, one of `same`, `different`, `subset`, `unknown`
 
    Notes:
    If the sparsity pattern of the second matrix is equal or a subset of the
@@ -229,7 +229,7 @@ PetscErrorCode STGetMatStructure(ST st,MatStructure *str)
 -  mode - the mode
 
    Options Database Key:
-.  -st_matmode <mode> - Indicates the mode, one of `copy`, `inplace`, `shell`
+.  -st_matmode \<mode\> - set the mode, one of `copy`, `inplace`, `shell`
 
    Notes:
    By default (`ST_MATMODE_COPY`), a copy of matrix $A$ is made and then
@@ -304,7 +304,7 @@ PetscErrorCode STGetMatMode(ST st,STMatMode *mode)
 -  flg - the boolean flag
 
    Options Database Key:
-.  -st_transform <bool> - Activate/deactivate the computation of matrices.
+.  -st_transform \<flg\> - toggle the computation of matrices
 
    Notes:
    This flag is intended for the case of polynomial eigenproblems solved

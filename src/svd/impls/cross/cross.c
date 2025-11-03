@@ -430,7 +430,7 @@ static PetscErrorCode SVDCrossSetExplicitMatrix_Cross(SVD svd,PetscBool explicit
 -  explicitmat - `PETSC_TRUE` if $A^*A$ must be built explicitly
 
    Options Database Key:
-.  -svd_cross_explicitmatrix <boolean> - toggle the explicit construction of the matrix
+.  -svd_cross_explicitmatrix \<explicitmat\> - toggle the explicit construction of the matrix
 
    Notes:
    In GSVD there are two cross product matrices, $A^*A$ and $B^*B$. In HSVD the

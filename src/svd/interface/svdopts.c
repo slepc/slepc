@@ -90,8 +90,8 @@ PetscErrorCode SVDGetImplicitTranspose(SVD svd,PetscBool *impl)
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -svd_tol <tol> - sets the convergence tolerance
--  -svd_max_it <maxits> - sets the maximum number of iterations allowed
++  -svd_tol \<tol\>       - sets the convergence tolerance
+-  -svd_max_it \<maxits\> - sets the maximum number of iterations allowed
 
    Note:
    Use `PETSC_CURRENT` to retain the current value of any of the parameters.
@@ -168,8 +168,8 @@ PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
 -  rel   - whether the threshold is relative or not
 
    Options Database Keys:
-+  -svd_threshold_absolute <thres> - sets an absolute threshold
--  -svd_threshold_relative <thres> - sets a relative threshold
++  -svd_threshold_absolute \<thres\> - sets an absolute threshold
+-  -svd_threshold_relative \<thres\> - sets a relative threshold
 
    Notes:
    This function internally calls `SVDSetStoppingTest()` to set a special stopping
@@ -268,9 +268,9 @@ PetscErrorCode SVDGetThreshold(SVD svd,PetscReal *thres,PetscBool *rel)
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -svd_nsv <nsv> - Sets the number of singular values
-.  -svd_ncv <ncv> - Sets the dimension of the subspace
--  -svd_mpd <mpd> - Sets the maximum projected dimension
++  -svd_nsv \<nsv\> - Sets the number of singular values
+.  -svd_ncv \<ncv\> - Sets the dimension of the subspace
+-  -svd_mpd \<mpd\> - Sets the maximum projected dimension
 
    Notes:
    Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a reasonably good value, which is

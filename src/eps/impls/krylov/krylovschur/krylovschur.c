@@ -550,7 +550,7 @@ static PetscErrorCode EPSKrylovSchurSetPartitions_KrylovSchur(EPS eps,PetscInt n
 -  npart - number of partitions
 
    Options Database Key:
-.  -eps_krylovschur_partitions <npart> - sets the number of partitions
+.  -eps_krylovschur_partitions \<npart\> - sets the number of partitions
 
    Notes:
    This call makes sense only for spectrum slicing runs, that is, when
@@ -732,9 +732,9 @@ static PetscErrorCode EPSKrylovSchurSetDimensions_KrylovSchur(EPS eps,PetscInt n
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -eps_krylovschur_nev <nev> - sets the number of eigenvalues
-.  -eps_krylovschur_ncv <ncv> - sets the dimension of the subspace
--  -eps_krylovschur_mpd <mpd> - sets the maximum projected dimension
++  -eps_krylovschur_nev \<nev\> - sets the number of eigenvalues
+.  -eps_krylovschur_ncv \<ncv\> - sets the dimension of the subspace
+-  -eps_krylovschur_mpd \<mpd\> - sets the maximum projected dimension
 
    Notes:
    These parameters are relevant only for spectrum slicing runs, that is, when

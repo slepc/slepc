@@ -194,7 +194,7 @@ PetscErrorCode RGGetOptionsPrefix(RG rg,const char *prefix[])
 -  type - a known type
 
    Options Database Key:
-.  -rg_type <type> - Sets `RG` type
+.  -rg_type \<type\> - sets `RG` type
 
    Level: beginner
 
@@ -663,7 +663,7 @@ PetscErrorCode RGComputeQuadrature(RG rg,RGQuadRule quad,PetscInt n,PetscScalar 
 -  flg - the boolean flag
 
    Options Database Key:
-.  -rg_complement <bool> - Activate/deactivate complementing of the region
+.  -rg_complement \<flg\> - activate/deactivate complementing of the region
 
    Level: intermediate
 
@@ -714,7 +714,7 @@ PetscErrorCode RGGetComplement(RG rg,PetscBool *flg)
 -  sfactor - the scaling factor
 
    Options Database Key:
-.  -rg_scale <real> - Sets the scaling factor
+.  -rg_scale \<sfactor\> - sets the scaling factor
 
    Level: intermediate
 

@@ -1556,8 +1556,8 @@ static PetscErrorCode NEPNLEIGSSetInterpolation_NLEIGS(NEP nep,PetscReal tol,Pet
 -  degree - maximum degree of interpolation
 
    Options Database Keys:
-+  -nep_nleigs_interpolation_tol <tol>       - sets the tolerance to stop computing divided differences
--  -nep_nleigs_interpolation_degree <degree> - sets the maximum degree of interpolation
++  -nep_nleigs_interpolation_tol \<tol\>       - sets the tolerance to stop computing divided differences
+-  -nep_nleigs_interpolation_degree \<degree\> - sets the maximum degree of interpolation
 
    Note:
    `PETSC_CURRENT` can be used to preserve the current value of any of the

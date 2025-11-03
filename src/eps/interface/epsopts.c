@@ -295,8 +295,8 @@ PetscErrorCode EPSGetTolerances(EPS eps,PetscReal *tol,PetscInt *maxits)
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -eps_tol <tol>       - sets the convergence tolerance
--  -eps_max_it <maxits> - sets the maximum number of iterations allowed
++  -eps_tol \<tol\>       - sets the convergence tolerance
+-  -eps_max_it \<maxits\> - sets the maximum number of iterations allowed
 
    Note:
    Use `PETSC_CURRENT` to retain the current value of any of the parameters.
@@ -374,9 +374,9 @@ PetscErrorCode EPSGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -eps_nev <nev> - sets the number of eigenvalues
-.  -eps_ncv <ncv> - sets the dimension of the subspace
--  -eps_mpd <mpd> - sets the maximum projected dimension
++  -eps_nev \<nev\> - sets the number of eigenvalues
+.  -eps_ncv \<ncv\> - sets the dimension of the subspace
+-  -eps_mpd \<mpd\> - sets the maximum projected dimension
 
    Notes:
    Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a reasonably good value, which is
@@ -540,8 +540,8 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
 -  rel   - whether the threshold is relative or not
 
    Options Database Keys:
-+  -eps_threshold_absolute <thres> - sets an absolute threshold
--  -eps_threshold_relative <thres> - sets a relative threshold
++  -eps_threshold_absolute \<thres\> - sets an absolute threshold
+-  -eps_threshold_relative \<thres\> - sets a relative threshold
 
    Notes:
    This function internally calls `EPSSetStoppingTest()` to set a special stopping
@@ -1123,9 +1123,9 @@ PetscErrorCode EPSGetExtraction(EPS eps,EPSExtraction *extr)
 -  cutoff - cutoff value
 
    Options Database Keys:
-+  -eps_balance <method> - the balancing method, one of `none`, `oneside`, `twoside`, or `user`
-.  -eps_balance_its <its> - number of iterations
--  -eps_balance_cutoff <cutoff> - cutoff value
++  -eps_balance \<bal\>           - the balancing method, one of `none`, `oneside`, `twoside`, or `user`
+.  -eps_balance_its \<its\>       - number of iterations
+-  -eps_balance_cutoff \<cutoff\> - cutoff value
 
    Notes:
    When balancing is enabled, the solver works implicitly with matrix $DAD^{-1}$,
@@ -1226,7 +1226,7 @@ PetscErrorCode EPSGetBalance(EPS eps,EPSBalance *bal,PetscInt *its,PetscReal *cu
 -  twosided - whether the two-sided variant is to be used or not
 
    Options Database Key:
-.  -eps_two_sided <boolean> - toggles the twosided flag
+.  -eps_two_sided \<twosided\> - toggles the twosided flag
 
    Notes:
    If the user sets `twosided`=`PETSC_TRUE` then the solver uses a variant of
@@ -1289,7 +1289,7 @@ PetscErrorCode EPSGetTwoSided(EPS eps,PetscBool *twosided)
 -  trueres - whether true residuals are required or not
 
    Options Database Key:
-.  -eps_true_residual <boolean> - toggles the true residual
+.  -eps_true_residual \<trueres\> - toggles the true residual
 
    Notes:
    If the user sets `trueres`=`PETSC_TRUE` then the solver explicitly computes
@@ -1405,7 +1405,7 @@ PetscErrorCode EPSGetTrackAll(EPS eps,PetscBool *trackall)
 -  purify - whether purification is done or not, use `PETSC_FALSE` to disable it
 
    Options Database Key:
-.  -eps_purify <boolean> - Sets/resets the boolean flag `purify`
+.  -eps_purify \<purify\> - Sets/resets the boolean flag `purify`
 
    Notes:
    By default, eigenvectors of generalized symmetric eigenproblems are purified

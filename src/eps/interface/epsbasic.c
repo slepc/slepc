@@ -139,7 +139,7 @@ PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
 -  type - a known method
 
    Options Database Key:
-.  -eps_type <method> - Sets the method; use `-help` for a list
+.  -eps_type \<type\> - sets the method; use `-help` for a list
     of available methods
 
    Notes:
@@ -371,7 +371,7 @@ PetscErrorCode EPSDestroy(EPS *eps)
 -  target - the value of the target
 
    Options Database Key:
-.  -eps_target <scalar> - the value of the target
+.  -eps_target \<target\> - the value of the target
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum

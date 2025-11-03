@@ -228,7 +228,7 @@ static PetscErrorCode NEPNArnoldiSetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
           the Jacobian is built, etc.
 
    Options Database Key:
-.  -nep_narnoldi_lag_preconditioner <lag> - the lag value
+.  -nep_narnoldi_lag_preconditioner \<lag\> - the lag value
 
    Notes:
    The default is 1.

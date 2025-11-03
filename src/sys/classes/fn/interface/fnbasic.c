@@ -204,7 +204,7 @@ PetscErrorCode FNGetOptionsPrefix(FN fn,const char *prefix[])
 -  type - a known type
 
    Options Database Key:
-.  -fn_type <type> - Sets `FN` type
+.  -fn_type \<type\> - sets the `FN` type
 
    Note:
    The default is `FNRATIONAL`, which includes polynomials as a particular
@@ -332,7 +332,7 @@ PetscErrorCode FNGetScale(FN fn,PetscScalar *alpha,PetscScalar *beta)
 -  meth - an index identifying the method
 
    Options Database Key:
-.  -fn_method <meth> - Sets the method
+.  -fn_method \<meth\> - sets the method
 
    Notes:
    In some `FN` types there are more than one algorithm available for computing
@@ -391,7 +391,7 @@ PetscErrorCode FNGetMethod(FN fn,PetscInt *meth)
 -  pmode - the parallel mode
 
    Options Database Key:
-.  -fn_parallel <mode> - Sets the parallel mode, either `redundant` or `synchronized`
+.  -fn_parallel \<pmode\> - sets the parallel mode, either `redundant` or `synchronized`
 
    Notes:
    This is relevant only when the function is evaluated on a matrix, with

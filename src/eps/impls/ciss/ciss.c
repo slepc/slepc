@@ -1005,7 +1005,7 @@ static PetscErrorCode EPSCISSSetUseST_CISS(EPS eps,PetscBool usest)
 -  usest  - boolean flag to use the `ST` object or not
 
    Options Database Key:
-.  -eps_ciss_usest <bool> - whether the `ST` object will be used or not
+.  -eps_ciss_usest \<usest\> - whether the `ST` object will be used or not
 
    Note:
    When this option is set, the linear solves can be configured by

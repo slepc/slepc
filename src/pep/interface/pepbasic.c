@@ -135,7 +135,7 @@ PetscErrorCode PEPCreate(MPI_Comm comm,PEP *outpep)
 -  type - a known method
 
    Options Database Key:
-.  -pep_type <method> - Sets the method; use `-help` for a list
+.  -pep_type \<type\> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
@@ -647,7 +647,7 @@ PetscErrorCode PEPRefineGetKSP(PEP pep,KSP *ksp)
 -  target - the value of the target
 
    Options Database Key:
-.  -pep_target <scalar> - the value of the target
+.  -pep_target \<target\> - the value of the target
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum

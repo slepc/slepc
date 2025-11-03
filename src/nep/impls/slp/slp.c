@@ -297,7 +297,7 @@ static PetscErrorCode NEPSLPSetDeflationThreshold_SLP(NEP nep,PetscReal deftol)
 -  deftol - the threshold value
 
    Options Database Key:
-.  -nep_slp_deflation_threshold <deftol> - set the threshold
+.  -nep_slp_deflation_threshold \<deftol\> - set the threshold
 
    Notes:
    Normally, the solver iterates on the extended problem in order to deflate
