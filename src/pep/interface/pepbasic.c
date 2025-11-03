@@ -135,7 +135,7 @@ PetscErrorCode PEPCreate(MPI_Comm comm,PEP *outpep)
 -  type - a known method
 
    Options Database Key:
-.  -pep_type <method> - Sets the method; use `-help` for a list
+.  -pep_type \<type\> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
@@ -367,7 +367,7 @@ PetscErrorCode PEPDestroy(PEP *pep)
 -  bv  - the basis vectors object
 
    Note:
-   Use PEPGetBV() to retrieve the basis vectors context (for example,
+   Use `PEPGetBV()` to retrieve the basis vectors context (for example,
    to free it at the end of the computations).
 
    Level: advanced
@@ -426,7 +426,7 @@ PetscErrorCode PEPGetBV(PEP pep,BV *bv)
 -  rg  - the region object
 
    Note:
-   Use PEPGetRG() to retrieve the region context (for example,
+   Use `PEPGetRG()` to retrieve the region context (for example,
    to free it at the end of the computations).
 
    Level: advanced
@@ -487,7 +487,7 @@ PetscErrorCode PEPGetRG(PEP pep,RG *rg)
 -  ds  - the direct solver object
 
    Note:
-   Use PEPGetDS() to retrieve the direct solver context (for example,
+   Use `PEPGetDS()` to retrieve the direct solver context (for example,
    to free it at the end of the computations).
 
    Level: advanced
@@ -546,7 +546,7 @@ PetscErrorCode PEPGetDS(PEP pep,DS *ds)
 -  st  - the spectral transformation object
 
    Note:
-   Use PEPGetST() to retrieve the spectral transformation context (for example,
+   Use `PEPGetST()` to retrieve the spectral transformation context (for example,
    to free it at the end of the computations).
 
    Level: advanced
@@ -566,7 +566,7 @@ PetscErrorCode PEPSetST(PEP pep,ST st)
 }
 
 /*@
-   PEPGetST - Obtain the spectral transformation (ST) object associated
+   PEPGetST - Obtain the spectral transformation (`ST`) object associated
    to the eigensolver object.
 
    Not Collective
@@ -596,7 +596,7 @@ PetscErrorCode PEPGetST(PEP pep,ST *st)
 }
 
 /*@
-   PEPRefineGetKSP - Obtain the ksp object used by the eigensolver
+   PEPRefineGetKSP - Obtain the `KSP` object used by the eigensolver
    object in the refinement phase.
 
    Collective
@@ -605,7 +605,7 @@ PetscErrorCode PEPGetST(PEP pep,ST *st)
 .  pep - the polynomial eigensolver context
 
    Output Parameter:
-.  ksp - ksp context
+.  ksp - the linear solver context
 
    Level: advanced
 
@@ -647,15 +647,18 @@ PetscErrorCode PEPRefineGetKSP(PEP pep,KSP *ksp)
 -  target - the value of the target
 
    Options Database Key:
-.  -pep_target <scalar> - the value of the target
+.  -pep_target \<target\> - the value of the target
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum
-   of interest. It is used in combination with PEPSetWhichEigenpairs().
+   of interest. It is used in combination with `PEPSetWhichEigenpairs()`.
+
+   When PETSc is built with real scalars, it is not possible to specify a
+   complex target.
 
    In the case of complex scalars, a complex value can be provided in the
-   command line with [+/-][realnumber][+/-]realnumberi with no spaces, e.g.
-   -pep_target 1.0+2.0i
+   command line with `[+/-][realnumber][+/-]realnumberi` with no spaces, e.g.
+   `-pep_target 1.0+2.0i`.
 
    Level: intermediate
 
@@ -710,22 +713,23 @@ PetscErrorCode PEPGetTarget(PEP pep,PetscScalar* target)
 -  intb - right end of the interval
 
    Options Database Key:
-.  -pep_interval <a,b> - set [a,b] as the interval of interest
+.  -pep_interval <a,b> - set $[a,b]$ as the interval of interest
 
    Notes:
    Spectrum slicing is a technique employed for computing all eigenvalues of
-   symmetric eigenproblems in a given interval. This function provides the
-   interval to be considered. It must be used in combination with PEP_ALL, see
-   PEPSetWhichEigenpairs().
+   symmetric eigenproblems in a given interval, see section [](#sec:qslice).
+   This function provides the interval to be considered. It must be used in
+   combination with `PEP_ALL`, see `PEPSetWhichEigenpairs()`. Note that in
+   polynomial eigenproblems spectrum slicing is implemented in `PEPSTOAR` only.
 
    In the command-line option, two values must be provided. For an open interval,
-   one can give an infinite, e.g., -pep_interval 1.0,inf or -pep_interval -inf,1.0.
+   one can give an infinite, e.g., `-pep_interval 1.0,inf` or `-pep_interval -inf,1.0`.
    An open interval in the programmatic interface can be specified with
-   PETSC_MAX_REAL and -PETSC_MAX_REAL.
+   `PETSC_MAX_REAL` and -`PETSC_MAX_REAL`.
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPGetInterval()`, `PEPSetWhichEigenpairs()`
+.seealso: [](ch:pep), [](#sec:qslice), `PEPGetInterval()`, `PEPSetWhichEigenpairs()`, `PEPSTOAR`
 @*/
 PetscErrorCode PEPSetInterval(PEP pep,PetscReal inta,PetscReal intb)
 {

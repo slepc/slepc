@@ -575,7 +575,7 @@ static PetscErrorCode DSHSVDSetReorthogonalize_HSVD(DS ds,PetscBool reorth)
 -  reorth - the reorthogonalization flag
 
    Options Database Key:
-.  -ds_hsvd_reorthog <bool> - sets the reorthogonalization flag
+.  -ds_hsvd_reorthog \<reorth\> - sets the reorthogonalization flag
 
    Note:
    The computed left vectors (`U`) should be orthogonal with respect to the signature (`D`).

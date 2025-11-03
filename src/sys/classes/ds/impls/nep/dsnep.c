@@ -725,7 +725,7 @@ static PetscErrorCode DSNEPSetMinimality_NEP(DS ds,PetscInt n)
 -  n  - the maximum minimality index
 
    Options Database Key:
-.  -ds_nep_minimality <n> - sets the maximum minimality index
+.  -ds_nep_minimality \<n\> - sets the maximum minimality index
 
    Notes:
    The maximum minimality index is used only in the contour integral method,
@@ -812,8 +812,8 @@ static PetscErrorCode DSNEPSetRefine_NEP(DS ds,PetscReal tol,PetscInt its)
 -  its - the number of iterations
 
    Options Database Keys:
-+  -ds_nep_refine_tol <tol> - sets the tolerance
--  -ds_nep_refine_its <its> - sets the number of Newton iterations
++  -ds_nep_refine_tol \<tol\> - sets the tolerance
+-  -ds_nep_refine_its \<its\> - sets the number of Newton iterations
 
    Notes:
    Iterative refinement of eigenpairs is currently used only in the contour
@@ -897,7 +897,7 @@ static PetscErrorCode DSNEPSetIntegrationPoints_NEP(DS ds,PetscInt ip)
 -  ip - the number of integration points
 
    Options Database Key:
-.  -ds_nep_integration_points <ip> - sets the number of integration points
+.  -ds_nep_integration_points \<ip\> - sets the number of integration points
 
    Notes:
    This parameter is relevant only in the contour integral method.
@@ -974,7 +974,7 @@ static PetscErrorCode DSNEPSetSamplingSize_NEP(DS ds,PetscInt p)
 -  p  - the number of columns for the sampling matrix
 
    Options Database Key:
-.  -ds_nep_sampling_size <p> - the number of sampling columns
+.  -ds_nep_sampling_size \<p\> - the number of sampling columns
 
    Note:
    This parameter is relevant only in the contour integral method.

@@ -309,7 +309,7 @@ PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nc
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs (ignored here)
 .  nev    - number of requested eigenpairs (ignored here)
--  ctx    - context containing additional data (EPSStoppingCtx)
+-  ctx    - context containing additional data (`EPSStoppingCtx`)
 
    Output Parameter:
 .  reason - result of the stopping test

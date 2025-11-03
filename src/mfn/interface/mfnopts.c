@@ -169,8 +169,8 @@ PetscErrorCode MFNGetTolerances(MFN mfn,PetscReal *tol,PetscInt *maxits)
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -mfn_tol <tol> - Sets the convergence tolerance
--  -mfn_max_it <maxits> - Sets the maximum number of iterations allowed
++  -mfn_tol \<tol\>       - sets the convergence tolerance
+-  -mfn_max_it \<maxits\> - sets the maximum number of iterations allowed
 
    Notes:
    Use `PETSC_CURRENT` to retain the current value of any of the parameters.
@@ -241,7 +241,7 @@ PetscErrorCode MFNGetDimensions(MFN mfn,PetscInt *ncv)
 -  ncv - the maximum dimension of the subspace to be used by the solver
 
    Options Database Key:
-.  -mfn_ncv <ncv> - Sets the dimension of the subspace
+.  -mfn_ncv \<ncv\> - sets the dimension of the subspace
 
    Notes:
    Use `PETSC_DETERMINE` for `ncv` to assign a reasonably good value, which is

@@ -639,6 +639,12 @@ static PetscErrorCode PEPValuesView_MATLAB(PEP pep,PetscViewer viewer)
    Options Database Key:
 .  -pep_view_values - print computed eigenvalues
 
+   Note:
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-pep_view_values :evals.m:ascii_matlab` to save the values in a file
+   that can be executed in Matlab.
+
    Level: intermediate
 
 .seealso: [](ch:pep), `PEPSolve()`, `PEPVectorsView()`, `PEPErrorView()`
@@ -730,12 +736,16 @@ PetscErrorCode PEPValuesViewFromOptions(PEP pep)
 -  viewer - the viewer
 
    Options Database Key:
-.  -pep_view_vectors - output eigenvectors.
+.  -pep_view_vectors - output eigenvectors
 
-   Note:
+   Notes:
    If PETSc was configured with real scalars, complex conjugate eigenvectors
    will be viewed as two separate real vectors, one containing the real part
    and another one containing the imaginary part.
+
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-pep_view_vectors binary:evecs.bin` to save the vectors in a binary file.
 
    Level: intermediate
 

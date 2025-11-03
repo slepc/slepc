@@ -239,7 +239,7 @@ PetscErrorCode PEPSetFromOptions(PEP pep)
 
 /*@
    PEPGetTolerances - Gets the tolerance and maximum iteration count used
-   by the PEP convergence tests.
+   by the `PEP` convergence tests.
 
    Not Collective
 
@@ -250,8 +250,8 @@ PetscErrorCode PEPSetFromOptions(PEP pep)
 +  tol - the convergence tolerance
 -  maxits - maximum number of iterations
 
-   Notes:
-   The user can specify NULL for any parameter that is not needed.
+   Note:
+   The user can specify `NULL` for any parameter that is not needed.
 
    Level: intermediate
 
@@ -268,24 +268,24 @@ PetscErrorCode PEPGetTolerances(PEP pep,PetscReal *tol,PetscInt *maxits)
 
 /*@
    PEPSetTolerances - Sets the tolerance and maximum iteration count used
-   by the PEP convergence tests.
+   by the `PEP` convergence tests.
 
    Logically Collective
 
    Input Parameters:
-+  pep - the polynomial eigensolver context
-.  tol - the convergence tolerance
++  pep    - the polynomial eigensolver context
+.  tol    - the convergence tolerance
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -pep_tol <tol> - Sets the convergence tolerance
--  -pep_max_it <maxits> - Sets the maximum number of iterations allowed
++  -pep_tol \<tol\>       - sets the convergence tolerance
+-  -pep_max_it \<maxits\> - sets the maximum number of iterations allowed
 
-   Notes:
-   Use PETSC_CURRENT to retain the current value of any of the parameters.
-   Use PETSC_DETERMINE for either argument to assign a default value computed
+   Note:
+   Use `PETSC_CURRENT` to retain the current value of any of the parameters.
+   Use `PETSC_DETERMINE` for either argument to assign a default value computed
    internally (may be different in each solver).
-   For maxits use PETSC_UMLIMITED to indicate there is no upper bound on this value.
+   For `maxits` use `PETSC_UNLIMITED` to indicate there is no upper bound on this value.
 
    Level: intermediate
 
@@ -331,7 +331,7 @@ PetscErrorCode PEPSetTolerances(PEP pep,PetscReal tol,PetscInt maxits)
 -  mpd - the maximum dimension allowed for the projected problem
 
    Notes:
-   The user can specify NULL for any parameter that is not needed.
+   The user can specify `NULL` for any parameter that is not needed.
 
    Level: intermediate
 
@@ -360,26 +360,28 @@ PetscErrorCode PEPGetDimensions(PEP pep,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -pep_nev <nev> - Sets the number of eigenvalues
-.  -pep_ncv <ncv> - Sets the dimension of the subspace
--  -pep_mpd <mpd> - Sets the maximum projected dimension
++  -pep_nev \<nev\> - sets the number of eigenvalues
+.  -pep_ncv \<ncv\> - sets the dimension of the subspace
+-  -pep_mpd \<mpd\> - sets the maximum projected dimension
 
    Notes:
-   Use PETSC_DETERMINE for ncv and mpd to assign a reasonably good value, which is
-   dependent on the solution method. For any of the arguments, use PETSC_CURRENT
+   Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a reasonably good value, which is
+   dependent on the solution method. For any of the arguments, use `PETSC_CURRENT`
    to preserve the current value.
 
-   The parameters ncv and mpd are intimately related, so that the user is advised
-   to set one of them at most. Normal usage is that
-   (a) in cases where nev is small, the user sets ncv (a reasonable default is 2*nev); and
-   (b) in cases where nev is large, the user sets mpd.
+   The parameters `ncv` and `mpd` are intimately related, so that the user is advised
+   to set one of them at most. Normal usage is\:
 
-   The value of ncv should always be between nev and (nev+mpd), typically
-   ncv=nev+mpd. If nev is not too large, mpd=nev is a reasonable choice, otherwise
+    1. in cases where `nev` is small, the user sets `ncv` (a reasonable default is `2*nev`).
+    2. in cases where `nev` is large, the user sets `mpd`.
+
+   The value of `ncv` should always be between `nev` and `(nev+mpd)`, typically
+   `ncv=nev+mpd`. If `nev` is not too large, `mpd=nev` is a reasonable choice, otherwise
    a smaller value should be used.
 
-   When computing all eigenvalues in an interval, see PEPSetInterval(), these
-   parameters lose relevance, and tuning must be done with PEPSTOARSetDimensions().
+   When computing all eigenvalues in an interval, see `PEPSetInterval()`, these
+   parameters lose relevance, and tuning must be done with
+   `PEPSTOARSetDimensions()`.
 
    Level: intermediate
 
@@ -420,50 +422,35 @@ PetscErrorCode PEPSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 
    Input Parameters:
 +  pep   - the polynomial eigensolver context
--  which - the portion of the spectrum to be sought
+-  which - the portion of the spectrum to be sought, see `PEPWhich` for possible values
 
    Options Database Keys:
-+   -pep_largest_magnitude - Sets largest eigenvalues in magnitude
-.   -pep_smallest_magnitude - Sets smallest eigenvalues in magnitude
-.   -pep_largest_real - Sets largest real parts
-.   -pep_smallest_real - Sets smallest real parts
-.   -pep_largest_imaginary - Sets largest imaginary parts
-.   -pep_smallest_imaginary - Sets smallest imaginary parts
-.   -pep_target_magnitude - Sets eigenvalues closest to target
-.   -pep_target_real - Sets real parts closest to target
-.   -pep_target_imaginary - Sets imaginary parts closest to target
--   -pep_all - Sets all eigenvalues in an interval or region
++  -pep_largest_magnitude  - sets largest eigenvalues in magnitude
+.  -pep_smallest_magnitude - sets smallest eigenvalues in magnitude
+.  -pep_largest_real       - sets largest real parts
+.  -pep_smallest_real      - sets smallest real parts
+.  -pep_largest_imaginary  - sets largest imaginary parts
+.  -pep_smallest_imaginary - sets smallest imaginary parts
+.  -pep_target_magnitude   - sets eigenvalues closest to target
+.  -pep_target_real        - sets real parts closest to target
+.  -pep_target_imaginary   - sets imaginary parts closest to target
+-  -pep_all                - sets all eigenvalues in an interval or region
 
    Notes:
-   The parameter 'which' can have one of these values
-
-+     PEP_LARGEST_MAGNITUDE - largest eigenvalues in magnitude (default)
-.     PEP_SMALLEST_MAGNITUDE - smallest eigenvalues in magnitude
-.     PEP_LARGEST_REAL - largest real parts
-.     PEP_SMALLEST_REAL - smallest real parts
-.     PEP_LARGEST_IMAGINARY - largest imaginary parts
-.     PEP_SMALLEST_IMAGINARY - smallest imaginary parts
-.     PEP_TARGET_MAGNITUDE - eigenvalues closest to the target (in magnitude)
-.     PEP_TARGET_REAL - eigenvalues with real part closest to target
-.     PEP_TARGET_IMAGINARY - eigenvalues with imaginary part closest to target
-.     PEP_ALL - all eigenvalues contained in a given interval or region
--     PEP_WHICH_USER - user defined ordering set with PEPSetEigenvalueComparison()
-
-   Not all eigensolvers implemented in PEP account for all the possible values
-   stated above. If SLEPc is compiled for real numbers PEP_LARGEST_IMAGINARY
-   and PEP_SMALLEST_IMAGINARY use the absolute value of the imaginary part
+   Not all eigensolvers implemented in `PEP` account for all the possible values
+   of `which`. Also, some values make sense only for certain types of
+   problems. If SLEPc is compiled for real numbers `PEP_LARGEST_IMAGINARY`
+   and `PEP_SMALLEST_IMAGINARY` use the absolute value of the imaginary part
    for eigenvalue selection.
 
-   The target is a scalar value provided with PEPSetTarget().
+   The target is a scalar value provided with `PEPSetTarget()`.
 
-   The criterion PEP_TARGET_IMAGINARY is available only in case PETSc and
+   The criterion `PEP_TARGET_IMAGINARY` is available only in case PETSc and
    SLEPc have been built with complex scalars.
 
-   PEP_ALL is intended for use in combination with an interval (see
-   PEPSetInterval()), when all eigenvalues within the interval are requested,
-   and also for computing all eigenvalues in a region with the CISS solver.
-   In both cases, the number of eigenvalues is unknown, so the nev parameter
-   has a different sense, see PEPSetDimensions().
+   `PEP_ALL` is intended for use in combination with an interval (see
+   `PEPSetInterval()`), when all eigenvalues within the interval are requested,
+   and also for computing all eigenvalues in a region with the `PEPCISS` solver.
 
    Level: intermediate
 
@@ -515,9 +502,6 @@ PetscErrorCode PEPSetWhichEigenpairs(PEP pep,PEPWhich which)
     Output Parameter:
 .   which - the portion of the spectrum to be sought
 
-    Notes:
-    See PEPSetWhichEigenpairs() for possible values of 'which'.
-
     Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetWhichEigenpairs()`, `PEPWhich`
@@ -533,20 +517,14 @@ PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
 
 /*@C
    PEPSetEigenvalueComparison - Specifies the eigenvalue comparison function
-   when PEPSetWhichEigenpairs() is set to PEP_WHICH_USER.
+   when `PEPSetWhichEigenpairs()` is set to `PEP_WHICH_USER`.
 
    Logically Collective
 
    Input Parameters:
 +  pep  - the polynomial eigensolver context
-.  comp - a pointer to the comparison function
+.  comp - the comparison function, see `SlepcEigenvalueComparisonFn` for the calling sequence
 -  ctx  - a context pointer (the last parameter to the comparison function)
-
-   Note:
-   The returning parameter 'res' can be
-+  negative - if the 1st eigenvalue is preferred to the 2st one
-.  zero     - if both eigenvalues are equally preferred
--  positive - if the 2st eigenvalue is preferred to the 1st one
 
    Level: advanced
 
@@ -575,11 +553,10 @@ PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *c
 +  -pep_general - general problem with no particular structure
 .  -pep_hermitian - problem whose coefficient matrices are Hermitian
 .  -pep_hyperbolic - Hermitian problem that satisfies the definition of hyperbolic
--  -pep_gyroscopic - problem with Hamiltonian structure
+-  -pep_gyroscopic - problem with gyroscopic structure
 
    Notes:
-   Allowed values for the problem type are general (PEP_GENERAL), Hermitian
-   (PEP_HERMITIAN), hyperbolic (PEP_HYPERBOLIC), and gyroscopic (PEP_GYROSCOPIC).
+   See `PEPProblemType` for possible problem types.
 
    This function is used to instruct SLEPc to exploit certain structure in
    the polynomial eigenproblem. By default, no particular structure is assumed.
@@ -608,7 +585,7 @@ PetscErrorCode PEPSetProblemType(PEP pep,PEPProblemType type)
 }
 
 /*@
-   PEPGetProblemType - Gets the problem type from the PEP object.
+   PEPGetProblemType - Gets the problem type from the `PEP` object.
 
    Not Collective
 
@@ -639,15 +616,15 @@ PetscErrorCode PEPGetProblemType(PEP pep,PEPProblemType *type)
 
    Input Parameters:
 +  pep   - the polynomial eigensolver context
--  basis - the type of polynomial basis
+-  basis - the type of polynomial basis, see `PEPBasis` for possible values
 
    Options Database Key:
-.  -pep_basis <basis> - Select the basis type
+.  -pep_basis \<basis\> - Select the basis type
 
-   Notes:
-   By default, the coefficient matrices passed via PEPSetOperators() are
+   Note:
+   By default, the coefficient matrices passed via `PEPSetOperators()` are
    expressed in the monomial basis, i.e.
-   P(lambda) = A_0 + lambda*A_1 + lambda^2*A_2 + ... + lambda^d*A_d.
+   $P(\lambda) = A_0 + \lambda A_1 + \lambda^2 A_2 + \dots + \lambda^d A_d$.
    Other polynomial bases may have better numerical behavior, but the user
    must then pass the coefficient matrices accordingly.
 
@@ -665,7 +642,7 @@ PetscErrorCode PEPSetBasis(PEP pep,PEPBasis basis)
 }
 
 /*@
-   PEPGetBasis - Gets the type of polynomial basis from the PEP object.
+   PEPGetBasis - Gets the type of polynomial basis from the `PEP` object.
 
    Not Collective
 
@@ -752,11 +729,15 @@ PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
 
    Input Parameters:
 +  pep     - the polynomial eigensolver context
-.  conv    - convergence test function, see PEPConvergenceTestFn for the calling sequence
-.  ctx     - context for private data for the convergence routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
+.  conv    - convergence test function, see `PEPConvergenceTestFn` for the calling sequence
+.  ctx     - context for private data for the convergence routine (may be `NULL`)
+-  destroy - a routine for destroying the context (may be `NULL`), see `PetscCtxDestroyFn`
+             for the calling sequence
 
-   Note:
+   Notes:
+   When this is called with a user-defined function, then the convergence
+   criterion is set to `PEP_CONV_USER`, see `PEPSetConvergenceTest()`.
+
    If the error estimate returned by the convergence test function is less than
    the tolerance, then the eigenvalue is accepted as converged.
 
@@ -790,20 +771,13 @@ PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,
 
    Input Parameters:
 +  pep  - the polynomial eigensolver context
--  conv - the type of convergence test
+-  conv - the type of convergence test, see `PEPConv` for possible values
 
    Options Database Keys:
-+  -pep_conv_abs    - Sets the absolute convergence test
-.  -pep_conv_rel    - Sets the convergence test relative to the eigenvalue
-.  -pep_conv_norm   - Sets the convergence test relative to the matrix norms
--  -pep_conv_user   - Selects the user-defined convergence test
-
-   Note:
-   The parameter 'conv' can have one of these values
-+     PEP_CONV_ABS    - absolute error ||r||
-.     PEP_CONV_REL    - error relative to the eigenvalue l, ||r||/|l|
-.     PEP_CONV_NORM   - error relative matrix norms, ||r||/sum_i(l^i*||A_i||)
--     PEP_CONV_USER   - function set by PEPSetConvergenceTestFunction()
++  -pep_conv_abs    - sets the absolute convergence test
+.  -pep_conv_rel    - sets the convergence test relative to the eigenvalue
+.  -pep_conv_norm   - sets the convergence test relative to the matrix norms
+-  -pep_conv_user   - selects the user-defined convergence test
 
    Level: intermediate
 
@@ -862,15 +836,16 @@ PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
 
    Input Parameters:
 +  pep     - the polynomial eigensolver context
-.  stop    - stopping test function, see PEPStoppingTestFn for the calling sequence
-.  ctx     - context for private data for the stopping routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
+.  stop    - stopping test function, see `PEPStoppingTestFn` for the calling sequence
+.  ctx     - context for private data for the stopping routine (may be `NULL`)
+-  destroy - a routine for destroying the context (may be `NULL`), see `PetscCtxDestroyFn`
+             for the calling sequence
 
    Note:
-   Normal usage is to first call the default routine PEPStoppingBasic() and then
-   set reason to PEP_CONVERGED_USER if some user-defined conditions have been
-   met. To let the eigensolver continue iterating, the result must be left as
-   PEP_CONVERGED_ITERATING.
+   When implementing a function for this, normal usage is to first call the
+   default routine `PEPStoppingBasic()` and then set `reason` to `PEP_CONVERGED_USER`
+   if some user-defined conditions have been met. To let the eigensolver continue
+   iterating, the result must be left as `PEP_CONVERGED_ITERATING`.
 
    Level: advanced
 
@@ -900,16 +875,11 @@ PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void *
 
    Input Parameters:
 +  pep  - the polynomial eigensolver context
--  stop - the type of stopping test
+-  stop - the type of stopping test, see `PEPStop`
 
    Options Database Keys:
-+  -pep_stop_basic - Sets the default stopping test
--  -pep_stop_user  - Selects the user-defined stopping test
-
-   Note:
-   The parameter 'stop' can have one of these values
-+     PEP_STOP_BASIC - default stopping test
--     PEP_STOP_USER  - function set by PEPSetStoppingTestFunction()
++  -pep_stop_basic - sets the default stopping test
+-  -pep_stop_user  - selects the user-defined stopping test
 
    Level: advanced
 
@@ -965,7 +935,7 @@ PetscErrorCode PEPGetStoppingTest(PEP pep,PEPStop *stop)
 
    Input Parameters:
 +  pep    - the polynomial eigensolver context
-.  scale  - scaling strategy
+.  scale  - scaling strategy, see `PEPScale` for possible values
 .  alpha  - the scaling factor used in the scalar strategy
 .  Dl     - the left diagonal matrix of the diagonal scaling algorithm
 .  Dr     - the right diagonal matrix of the diagonal scaling algorithm
@@ -973,35 +943,36 @@ PetscErrorCode PEPGetStoppingTest(PEP pep,PEPStop *stop)
 -  lambda - approximation to wanted eigenvalues (modulus)
 
    Options Database Keys:
-+  -pep_scale <type> - scaling type, one of <none,scalar,diagonal,both>
-.  -pep_scale_factor <alpha> - the scaling factor
-.  -pep_scale_its <its> - number of iterations
--  -pep_scale_lambda <lambda> - approximation to eigenvalues
++  -pep_scale \<scale\>         - set the scaling type, one of `none`,`scalar`,`diagonal`,`both`
+.  -pep_scale_factor \<alpha\>  - set the scaling factor
+.  -pep_scale_its \<its\>       - set the number of iterations
+-  -pep_scale_lambda \<lambda\> - set the approximation to eigenvalues
 
    Notes:
    There are two non-exclusive scaling strategies, scalar and diagonal.
+   See discussion in section [](#sec:scaling).
 
    In the scalar strategy, scaling is applied to the eigenvalue, that is,
-   mu = lambda/alpha is the new eigenvalue and all matrices are scaled
-   accordingly. After solving the scaled problem, the original lambda is
-   recovered. Parameter 'alpha' must be positive. Use PETSC_DETERMINE to let
-   the solver compute a reasonable scaling factor, and PETSC_CURRENT to
+   $\mu = \lambda/\alpha$ is the new eigenvalue and all matrices are scaled
+   accordingly. After solving the scaled problem, the original $\lambda$ is
+   recovered. Parameter `alpha` must be positive. Use `PETSC_DETERMINE` to let
+   the solver compute a reasonable scaling factor, and `PETSC_CURRENT` to
    retain a previously set value.
 
-   In the diagonal strategy, the solver works implicitly with matrix Dl*A*Dr,
-   where Dl and Dr are appropriate diagonal matrices. This improves the accuracy
-   of the computed results in some cases. The user may provide the Dr and Dl
-   matrices represented as Vec objects storing diagonal elements. If not
+   In the diagonal strategy, the solver works implicitly with matrix $D_\ell P(\lambda)D_r$,
+   where $D_\ell$ and $D_r$ are appropriate diagonal matrices. This improves the accuracy
+   of the computed results in some cases. The user may provide the `Dl` and `Dr`
+   matrices represented as `Vec` objects storing diagonal elements. If not
    provided, these matrices are computed internally. This option requires
-   that the polynomial coefficient matrices are of MATAIJ type.
-   The parameter 'its' is the number of iterations performed by the method.
-   Parameter 'lambda' must be positive. Use PETSC_DETERMINE or set lambda = 1.0
-   if no information about eigenvalues is available. PETSC_CURRENT can also
-   be used to leave its and lambda unchanged.
+   that the polynomial coefficient matrices are of `MATAIJ` type.
+   The parameter `its` is the number of iterations performed by the method.
+   Parameter `lambda` must be positive. Use `PETSC_DETERMINE` or set `lambda` = 1.0
+   if no information about eigenvalues is available. `PETSC_CURRENT` can also
+   be used to leave `its` and `lambda` unchanged.
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPGetScale()`
+.seealso: [](ch:pep), [](#sec:scaling), `PEPGetScale()`
 @*/
 PetscErrorCode PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,PetscInt its,PetscReal lambda)
 {
@@ -1053,7 +1024,7 @@ PetscErrorCode PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,
 }
 
 /*@
-   PEPGetScale - Gets the scaling strategy used by the PEP object, and the
+   PEPGetScale - Gets the scaling strategy used by the `PEP` object, and the
    associated parameters.
 
    Not Collective
@@ -1069,13 +1040,13 @@ PetscErrorCode PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,
 .  its    - number of iterations of the diagonal scaling algorithm
 -  lambda - approximation to wanted eigenvalues (modulus)
 
+   Notes:
+   The user can specify `NULL` for any parameter that is not needed.
+
+   If `Dl` or `Dr` were not set by the user, then the ones computed internally are
+   returned (or a `NULL` pointer if called before `PEPSetUp()`).
+
    Level: intermediate
-
-   Note:
-   The user can specify NULL for any parameter that is not needed.
-
-   If Dl or Dr were not set by the user, then the ones computed internally are
-   returned (or a null pointer if called before PEPSetUp).
 
 .seealso: [](ch:pep), `PEPSetScale()`, `PEPSetUp()`
 @*/
@@ -1099,14 +1070,20 @@ PetscErrorCode PEPGetScale(PEP pep,PEPScale *scale,PetscReal *alpha,Vec *Dl,Vec 
 
    Input Parameters:
 +  pep     - the polynomial eigensolver context
--  extract - extraction strategy
+-  extract - extraction strategy, see `PEPExtract` for possible values
 
    Options Database Key:
-.  -pep_extract <type> - extraction type, one of <none,norm,residual,structured>
+.  -pep_extract \<extract\> - extraction type, one of `none`,`norm`,`residual`,`structured`
+
+   Note:
+   This is relevant for solvers based on linearization. Once the solver has
+   converged, the polynomial eigenvectors can be extracted from the
+   eigenvectors of the linearized problem in different ways. See the
+   discussion in section [](#sec:pepextr).
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPGetExtract()`
+.seealso: [](ch:pep), [](#sec:pepextr), `PEPExtract`, `PEPGetExtract()`
 @*/
 PetscErrorCode PEPSetExtract(PEP pep,PEPExtract extract)
 {
@@ -1118,7 +1095,7 @@ PetscErrorCode PEPSetExtract(PEP pep,PEPExtract extract)
 }
 
 /*@
-   PEPGetExtract - Gets the extraction strategy used by the PEP object.
+   PEPGetExtract - Gets the extraction strategy used by the `PEP` object.
 
    Not Collective
 
@@ -1149,20 +1126,24 @@ PetscErrorCode PEPGetExtract(PEP pep,PEPExtract *extract)
 
    Input Parameters:
 +  pep    - the polynomial eigensolver context
-.  refine - refinement type
+.  refine - refinement type, see `PEPRefine` for possible values
 .  npart  - number of partitions of the communicator
 .  tol    - the convergence tolerance
 .  its    - maximum number of refinement iterations
--  scheme - which scheme to be used for solving the involved linear systems
+-  scheme - the scheme for solving the involved linear systems, see `PEPRefineScheme`
+            for possible values
 
    Options Database Keys:
-+  -pep_refine <type> - refinement type, one of <none,simple,multiple>
-.  -pep_refine_partitions <n> - the number of partitions
-.  -pep_refine_tol <tol> - the tolerance
-.  -pep_refine_its <its> - number of iterations
--  -pep_refine_scheme - to set the scheme for the linear solves
++  -pep_refine \<refine\>           - set the refinement type, one of `none`,`simple`,`multiple`
+.  -pep_refine_partitions \<npart\> - set the number of partitions
+.  -pep_refine_tol \<tol\>         - set the tolerance
+.  -pep_refine_its \<its\>         - set the number of iterations
+-  -pep_refine_scheme \<scheme\>   - set the scheme for the linear solves, `schur`,`mbe`, or `explicit`
 
    Notes:
+   This function configures the parameters of Newton iterative refinement,
+   see section [](#sec:refine) for a discussion of the different strategies.
+
    By default, iterative refinement is disabled, since it may be very
    costly. There are two possible refinement strategies, simple and multiple.
    The simple approach performs iterative refinement on each of the
@@ -1172,25 +1153,25 @@ PetscErrorCode PEPGetExtract(PEP pep,PEPExtract *extract)
 
    In some cases, especially when using direct solvers within the
    iterative refinement method, it may be helpful for improved scalability
-   to split the communicator in several partitions. The npart parameter
+   to split the communicator in several partitions. The `npart` parameter
    indicates how many partitions to use (defaults to 1).
 
-   The tol and its parameters specify the stopping criterion. In the simple
+   The `tol` and `its` parameters specify the stopping criterion. In the simple
    method, refinement continues until the residual of each eigenpair is
-   below the tolerance (tol defaults to the PEP tol, but may be set to a
+   below the tolerance (`tol` defaults to the `PEP` tolerance, but may be set to a
    different value). In contrast, the multiple method simply performs its
    refinement iterations (just one by default).
 
-   The scheme argument is used to change the way in which linear systems are
+   The `scheme` argument is used to change the way in which linear systems are
    solved. Possible choices are explicit, mixed block elimination (MBE),
    and Schur complement.
 
-   Use PETSC_CURRENT to retain the current value of npart, tol or its. Use
-   PETSC_DETERMINE to assign a default value.
+   Use `PETSC_CURRENT` to retain the current value of `npart`, `tol` or `its`. Use
+   `PETSC_DETERMINE` to assign a default value.
 
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPGetRefine()`
+.seealso: [](ch:pep), [](#sec:refine), `PEPGetRefine()`
 @*/
 PetscErrorCode PEPSetRefine(PEP pep,PEPRefine refine,PetscInt npart,PetscReal tol,PetscInt its,PEPRefineScheme scheme)
 {
@@ -1235,7 +1216,7 @@ PetscErrorCode PEPSetRefine(PEP pep,PEPRefine refine,PetscInt npart,PetscReal to
 }
 
 /*@
-   PEPGetRefine - Gets the refinement strategy used by the PEP object, and the
+   PEPGetRefine - Gets the refinement strategy used by the `PEP` object, and the
    associated parameters.
 
    Not Collective
@@ -1250,10 +1231,10 @@ PetscErrorCode PEPSetRefine(PEP pep,PEPRefine refine,PetscInt npart,PetscReal to
 .  its    - maximum number of refinement iterations
 -  scheme - the scheme used for solving linear systems
 
-   Level: intermediate
-
    Note:
-   The user can specify NULL for any parameter that is not needed.
+   The user can specify `NULL` for any parameter that is not needed.
+
+   Level: intermediate
 
 .seealso: [](ch:pep), `PEPSetRefine()`
 @*/

@@ -765,7 +765,7 @@ PetscErrorCode EPSValuesViewFromOptions(EPS eps)
 -  viewer - the viewer
 
    Options Database Key:
-.  -eps_view_vectors - output eigenvectors.
+.  -eps_view_vectors - output eigenvectors
 
    Notes:
    If PETSc was configured with real scalars, complex conjugate eigenvectors

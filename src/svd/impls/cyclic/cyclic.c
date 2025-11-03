@@ -892,20 +892,27 @@ static PetscErrorCode SVDCyclicSetExplicitMatrix_Cyclic(SVD svd,PetscBool explic
 
 /*@
    SVDCyclicSetExplicitMatrix - Indicate if the eigensolver operator
-   H(A) = [ 0  A ; A^T 0 ] must be computed explicitly.
+   $H(A)=\begin{bmatrix}0&A\\A^*&0\end{bmatrix}$ must be computed explicitly.
 
    Logically Collective
 
    Input Parameters:
 +  svd         - the singular value solver context
--  explicitmat - boolean flag indicating if H(A) is built explicitly
+-  explicitmat - `PETSC_TRUE` if $H(A)$ must be built explicitly
 
    Options Database Key:
-.  -svd_cyclic_explicitmatrix <boolean> - Indicates the boolean flag
+.  -svd_cyclic_explicitmatrix \<explicitmat\> - toggle the explicit construction of the matrix
+
+   Notes:
+   In GSVD and HSVD the equivalent eigenvalue problem has generalized form,
+   and hence two matrices are built. See [](#sec:svdback) for details.
+
+   By default the matrices are not built explicitly, but handled as shell matrices,
+   see `MATSHELL`.
 
    Level: advanced
 
-.seealso: [](ch:svd), `SVDCYCLIC`, `SVDCyclicGetExplicitMatrix()`
+.seealso: [](ch:svd), [](#sec:svdback), `SVDCYCLIC`, `SVDCyclicGetExplicitMatrix()`, `MATSHELL`
 @*/
 PetscErrorCode SVDCyclicSetExplicitMatrix(SVD svd,PetscBool explicitmat)
 {
@@ -926,7 +933,8 @@ static PetscErrorCode SVDCyclicGetExplicitMatrix_Cyclic(SVD svd,PetscBool *expli
 }
 
 /*@
-   SVDCyclicGetExplicitMatrix - Returns the flag indicating if H(A) is built explicitly.
+   SVDCyclicGetExplicitMatrix - Returns the flag indicating if the cyclic
+   matrix $H(A)$ is built explicitly.
 
    Not Collective
 
@@ -963,7 +971,7 @@ static PetscErrorCode SVDCyclicSetEPS_Cyclic(SVD svd,EPS eps)
 }
 
 /*@
-   SVDCyclicSetEPS - Associate an eigensolver object (EPS) to the
+   SVDCyclicSetEPS - Associate an eigensolver object (`EPS`) to the
    singular value solver.
 
    Collective
@@ -1005,7 +1013,7 @@ static PetscErrorCode SVDCyclicGetEPS_Cyclic(SVD svd,EPS *eps)
 }
 
 /*@
-   SVDCyclicGetEPS - Retrieve the eigensolver object (EPS) associated
+   SVDCyclicGetEPS - Retrieve the eigensolver object (`EPS`) associated
    to the singular value solver.
 
    Collective
@@ -1071,6 +1079,25 @@ static PetscErrorCode SVDDestroy_Cyclic(SVD svd)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   SVDCYCLIC - SVDCYCLIC = "cyclic" - Solve the singular value problem
+   via an equivalent eigenvalue problem with the cyclic matrix.
+
+   Notes:
+   This will do the computation with a subsidiary eigensolver on an
+   equivalent eigenvalue problem. For the standard SVD, the eigensolver
+   operates with the cyclic matrix
+   $H(A)=\left[\begin{smallmatrix}0&A\\A^*&0\end{smallmatrix}\right]$.
+   See the section [](#sec:svdback) for details on the formulation for
+   each SVD type.
+
+   To manipulate the internal eigensolvers, use `SVDCyclicGetEPS()` or
+   use the corresponding command-line options.
+
+   Level: beginner
+
+.seealso: [](ch:svd), [](#sec:svdback), `SVD`, `SVDType`, `SVDSetType()`, `SVDSetProblemType()`, `SVDTRLANCZOS`, `SVDCyclicGetEPS()`
+M*/
 SLEPC_EXTERN PetscErrorCode SVDCreate_Cyclic(SVD svd)
 {
   SVD_CYCLIC     *cyclic;

@@ -135,7 +135,7 @@ PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
 -  type     - a known method
 
    Options Database Key:
-.  -nep_type <method> - Sets the method; use `-help` for a list
+.  -nep_type \<type\> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
@@ -338,7 +338,7 @@ PetscErrorCode NEPReset(NEP nep)
 }
 
 /*@
-   NEPDestroy - Destroys the NEP context.
+   NEPDestroy - Destroys the `NEP` context.
 
    Collective
 
@@ -382,7 +382,7 @@ PetscErrorCode NEPDestroy(NEP *nep)
 -  bv  - the basis vectors object
 
    Note:
-   Use NEPGetBV() to retrieve the basis vectors context (for example,
+   Use `NEPGetBV()` to retrieve the basis vectors context (for example,
    to free it at the end of the computations).
 
    Level: advanced
@@ -441,7 +441,7 @@ PetscErrorCode NEPGetBV(NEP nep,BV *bv)
 -  rg  - the region object
 
    Note:
-   Use NEPGetRG() to retrieve the region context (for example,
+   Use `NEPGetRG()` to retrieve the region context (for example,
    to free it at the end of the computations).
 
    Level: advanced
@@ -502,7 +502,7 @@ PetscErrorCode NEPGetRG(NEP nep,RG *rg)
 -  ds  - the direct solver object
 
    Note:
-   Use NEPGetDS() to retrieve the direct solver context (for example,
+   Use `NEPGetDS()` to retrieve the direct solver context (for example,
    to free it at the end of the computations).
 
    Level: advanced
@@ -552,7 +552,7 @@ PetscErrorCode NEPGetDS(NEP nep,DS *ds)
 }
 
 /*@
-   NEPRefineGetKSP - Obtain the ksp object used by the eigensolver
+   NEPRefineGetKSP - Obtain the `KSP` object used by the eigensolver
    object in the refinement phase.
 
    Collective
@@ -561,7 +561,7 @@ PetscErrorCode NEPGetDS(NEP nep,DS *ds)
 .  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  ksp - ksp context
+.  ksp - the linear solver context
 
    Level: advanced
 
@@ -603,15 +603,18 @@ PetscErrorCode NEPRefineGetKSP(NEP nep,KSP *ksp)
 -  target - the value of the target
 
    Options Database Key:
-.  -nep_target <scalar> - the value of the target
+.  -nep_target \<target\> - the value of the target
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum
-   of interest. It is used in combination with NEPSetWhichEigenpairs().
+   of interest. It is used in combination with `NEPSetWhichEigenpairs()`.
+
+   When PETSc is built with real scalars, it is not possible to specify a
+   complex target.
 
    In the case of complex scalars, a complex value can be provided in the
-   command line with [+/-][realnumber][+/-]realnumberi with no spaces, e.g.
-   -nep_target 1.0+2.0i
+   command line with `[+/-][realnumber][+/-]realnumberi` with no spaces, e.g.
+   `-nep_target 1.0+2.0i`.
 
    Level: intermediate
 
@@ -654,7 +657,7 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
 }
 
 /*@C
-   NEPSetFunction - Sets the function to compute the nonlinear Function T(lambda)
+   NEPSetFunction - Sets the function to compute the nonlinear Function $T(\lambda)$
    as well as the location to store the matrix.
 
    Collective
@@ -662,11 +665,11 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
    Input Parameters:
 +  nep - the nonlinear eigensolver context
 .  F   - Function matrix
-.  P   - preconditioner matrix (usually same as F)
-.  fun - Function evaluation routine (if NULL then NEP retains any
-         previously set value), see NEPFunctionFn for the calling sequence
+.  P   - preconditioner matrix (usually the same as `F`)
+.  fun - Function evaluation routine (if `NULL` then `NEP` retains any
+         previously set value), see `NEPFunctionFn` for the calling sequence
 -  ctx - [optional] user-defined context for private data for the Function
-         evaluation routine (may be NULL) (if NULL then NEP retains any
+         evaluation routine (may be `NULL`) (if `NULL` then `NEP` retains any
          previously set value)
 
    Level: beginner
@@ -712,10 +715,10 @@ PetscErrorCode NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,void *ctx)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  F   - location to stash Function matrix (or NULL)
-.  P   - location to stash preconditioner matrix (or NULL)
-.  fun - location to put Function function (or NULL)
--  ctx - location to stash Function context (or NULL)
++  F   - location to stash Function matrix (or `NULL`)
+.  P   - location to stash preconditioner matrix (or `NULL`)
+.  fun - location to put Function function (or `NULL`)
+-  ctx - location to stash Function context (or `NULL`)
 
    Level: advanced
 
@@ -734,7 +737,7 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,void **c
 }
 
 /*@C
-   NEPSetJacobian - Sets the function to compute the Jacobian T'(lambda) as well
+   NEPSetJacobian - Sets the function to compute the Jacobian $T'(\lambda)$ as well
    as the location to store the matrix.
 
    Collective
@@ -742,10 +745,10 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,void **c
    Input Parameters:
 +  nep - the nonlinear eigensolver context
 .  J   - Jacobian matrix
-.  jac - Jacobian evaluation routine (if NULL then NEP retains any
-         previously set value), see NEPJacobianFn for the calling sequence
+.  jac - Jacobian evaluation routine (if `NULL` then `NEP` retains any
+         previously set value), see `NEPJacobianFn` for the calling sequence
 -  ctx - [optional] user-defined context for private data for the Jacobian
-         evaluation routine (may be NULL) (if NULL then NEP retains any
+         evaluation routine (may be `NULL`) (if `NULL` then `NEP` retains any
          previously set value)
 
    Level: beginner
@@ -784,9 +787,9 @@ PetscErrorCode NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,void *ctx)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  J   - location to stash Jacobian matrix (or NULL)
-.  jac - location to put Jacobian function (or NULL)
--  ctx - location to stash Jacobian context (or NULL)
++  J   - location to stash Jacobian matrix (or `NULL`)
+.  jac - location to put Jacobian function (or `NULL`)
+-  ctx - location to stash Jacobian context (or `NULL`)
 
    Level: advanced
 
@@ -817,20 +820,20 @@ PetscErrorCode NEPGetJacobian(NEP nep,Mat *J,NEPJacobianFn **jac,void **ctx)
 -  str - structure flag for matrices
 
    Notes:
-   The nonlinear operator is written as T(lambda) = sum_i A_i*f_i(lambda),
-   for i=1,...,n. The derivative T'(lambda) can be obtained using the
-   derivatives of f_i.
+   The nonlinear operator is written as $T(\lambda) = \sum_i A_i f_i(\lambda)$,
+   for $i=1,\dots,n$. The derivative $T'(\lambda)$ can be obtained using the
+   derivatives of $f_i$.
 
-   The structure flag provides information about A_i's nonzero pattern
-   (see MatStructure enum). If all matrices have the same pattern, then
-   use SAME_NONZERO_PATTERN. If the patterns are different but contained
-   in the pattern of the first one, then use SUBSET_NONZERO_PATTERN. If
-   patterns are known to be different, use DIFFERENT_NONZERO_PATTERN.
-   If set to UNKNOWN_NONZERO_PATTERN, the patterns will be compared to
+   The structure flag provides information about $A_i$'s nonzero pattern
+   (see `MatStructure`). If all matrices have the same pattern, then
+   use `SAME_NONZERO_PATTERN`. If the patterns are different but contained
+   in the pattern of the first one, then use `SUBSET_NONZERO_PATTERN`. If
+   patterns are known to be different, use `DIFFERENT_NONZERO_PATTERN`.
+   If set to `UNKNOWN_NONZERO_PATTERN`, the patterns will be compared to
    determine if they are equal.
 
-   This function must be called before NEPSetUp(). If it is called again
-   after NEPSetUp() then the NEP object is reset.
+   This function must be called before `NEPSetUp()`. If it is called again
+   after `NEPSetUp()` then the `NEP` object is reset.
 
    Level: beginner
 
@@ -920,8 +923,8 @@ PetscErrorCode NEPGetSplitOperatorTerm(NEP nep,PetscInt k,Mat *A,FN *f)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  n   - the number of terms passed in NEPSetSplitOperator()
--  str - the matrix structure flag passed in NEPSetSplitOperator()
++  n   - the number of terms passed in `NEPSetSplitOperator()`
+-  str - the matrix structure flag passed in `NEPSetSplitOperator()`
 
    Level: intermediate
 
@@ -951,21 +954,21 @@ PetscErrorCode NEPGetSplitOperatorInfo(NEP nep,PetscInt *n,MatStructure *str)
 -  strp - structure flag for matrices
 
    Notes:
-   The matrix for the preconditioner is expressed as P(lambda) =
-   sum_i P_i*f_i(lambda), for i=1,...,n, where the f_i functions
-   are the same as in NEPSetSplitOperator(). It is not necessary to call
+   The matrix for the preconditioner is expressed as $P(\lambda) =
+   \sum_i P_i f_i(\lambda)$, for $i=1,\dots,n$, where the $f_i$ functions
+   are the same as in `NEPSetSplitOperator()`. It is not necessary to call
    this function. If it is not invoked, then the preconditioner is
-   built from T(lambda), i.e., both matrices and functions passed in
-   NEPSetSplitOperator().
+   built from $T(\lambda)$, i.e., both matrices and functions passed in
+   `NEPSetSplitOperator()`.
 
-   The structure flag provides information about P_i's nonzero pattern
-   in the same way as in NEPSetSplitOperator().
+   The structure flag provides information about $P_i$'s nonzero pattern
+   in the same way as in `NEPSetSplitOperator()`.
 
    If the functions defining the preconditioner operator were different
-   from the ones given in NEPSetSplitOperator(), then the split form
+   from the ones given in `NEPSetSplitOperator()`, then the split form
    cannot be used. Use the callback interface instead.
 
-   Use ntp=0 to reset a previously set split preconditioner.
+   Use `ntp=0` to reset a previously set split preconditioner.
 
    Level: advanced
 
@@ -1050,8 +1053,8 @@ PetscErrorCode NEPGetSplitPreconditionerTerm(NEP nep,PetscInt k,Mat *P)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  n    - the number of terms passed in NEPSetSplitPreconditioner()
--  strp - the matrix structure flag passed in NEPSetSplitPreconditioner()
++  n    - the number of terms passed in `NEPSetSplitPreconditioner()`
+-  strp - the matrix structure flag passed in `NEPSetSplitPreconditioner()`
 
    Level: advanced
 

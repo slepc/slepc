@@ -44,7 +44,7 @@ PetscErrorCode NEPComputeVectors(NEP nep)
 }
 
 /*@
-   NEPSolve - Solves the nonlinear eigensystem.
+   NEPSolve - Solves the nonlinear eigenproblem.
 
    Collective
 
@@ -52,26 +52,32 @@ PetscErrorCode NEPComputeVectors(NEP nep)
 .  nep - the nonlinear eigensolver context
 
    Options Database Keys:
-+  -nep_view - print information about the solver used
-.  -nep_view_matk - view the split form matrix Ak (replace k by an integer from 0 to nt-1)
-.  -nep_view_fnk - view the split form function fk (replace k by an integer from 0 to nt-1)
++  -nep_view - print information about the solver once the solve is complete
+.  -nep_view_pre - print information about the solver before the solve starts
+.  -nep_view_matk - view the split form matrix $A_k$ (replace `k` by an integer from 0 to `nt`-1)
+.  -nep_view_fnk - view the split form function $f_k$ (replace `k` by an integer from 0 to `nt`-1)
 .  -nep_view_vectors - view the computed eigenvectors
 .  -nep_view_values - view the computed eigenvalues
-.  -nep_converged_reason - print reason for convergence, and number of iterations
+.  -nep_converged_reason - print reason for convergence/divergence, and number of iterations
 .  -nep_error_absolute - print absolute errors of each eigenpair
 .  -nep_error_relative - print relative errors of each eigenpair
 -  -nep_error_backward - print backward errors of each eigenpair
 
    Notes:
+   `NEPSolve()` will return without generating an error regardless of whether
+   all requested solutions were computed or not. Call `NEPGetConverged()` to get the
+   actual number of computed solutions, and `NEPGetConvergedReason()` to determine if
+   the solver converged or failed and why.
+
    All the command-line options listed above admit an optional argument specifying
-   the viewer type and options. For instance, use '-nep_view_vectors binary:myvecs.bin'
-   to save the eigenvectors to a binary file, '-nep_view_values draw' to draw the computed
-   eigenvalues graphically, or '-nep_error_relative :myerr.m:ascii_matlab' to save
+   the viewer type and options. For instance, use `-nep_view_vectors binary:myvecs.bin`
+   to save the eigenvectors to a binary file, `-nep_view_values draw` to draw the computed
+   eigenvalues graphically, or `-nep_error_relative :myerr.m:ascii_matlab` to save
    the errors in a file that can be executed in Matlab.
 
    Level: beginner
 
-.seealso: [](ch:nep), `NEPCreate()`, `NEPSetUp()`, `NEPDestroy()`, `NEPSetTolerances()`
+.seealso: [](ch:nep), `NEPCreate()`, `NEPSetUp()`, `NEPDestroy()`, `NEPSetTolerances()`, `NEPGetConverged()`, `NEPGetConvergedReason()`
 @*/
 PetscErrorCode NEPSolve(NEP nep)
 {
@@ -152,11 +158,11 @@ PetscErrorCode NEPSolve(NEP nep)
    Notes:
    This is available for split operator only.
 
-   The nonlinear operator T(lambda) is projected onto span(V), where V is
+   The nonlinear operator $T(\lambda)$ is projected onto $\operatorname{span}(V)$, where $V$ is
    an orthonormal basis built internally by the solver. The projected
-   operator is equal to sum_i V'*A_i*V*f_i(lambda), so this function
-   computes all matrices Ei = V'*A_i*V, and stores them in the extra
-   matrices inside DS. Only rows/columns in the range [j0,j1-1] are computed,
+   operator is equal to $\sum_i V^* A_i V f_i(\lambda)$, so this function
+   computes all matrices $E_i = V^* A_i V$, and stores them in the extra
+   matrices inside `DS`, see `DSMatType`. Only rows/columns in the range [`j0`,`j1`-1] are computed,
    the previous ones are assumed to be available already.
 
    Level: developer
@@ -184,7 +190,7 @@ PetscErrorCode NEPProjectOperator(NEP nep,PetscInt j0,PetscInt j1)
 }
 
 /*@
-   NEPApplyFunction - Applies the nonlinear function T(lambda) to a given vector.
+   NEPApplyFunction - Applies the nonlinear function $T(\lambda)$ to a given vector.
 
    Collective
 
@@ -201,10 +207,10 @@ PetscErrorCode NEPProjectOperator(NEP nep,PetscInt j0,PetscInt j1)
 
    Note:
    If the nonlinear operator is represented in split form, the result
-   y = T(lambda)*x is computed without building T(lambda) explicitly. In
-   that case, parameters A and B are not used. Otherwise, the matrix
-   T(lambda) is built and the effect is the same as a call to
-   NEPComputeFunction() followed by a MatMult().
+   $y = T(\lambda)x$ is computed without building $T(\lambda)$ explicitly. In
+   that case, parameters `A` and `B` are not used. Otherwise, the matrix
+   $T(\lambda)$ is built and the effect is the same as a call to
+   `NEPComputeFunction()` followed by a `MatMult()`.
 
    Level: developer
 
@@ -240,7 +246,7 @@ PetscErrorCode NEPApplyFunction(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat
 }
 
 /*@
-   NEPApplyAdjoint - Applies the adjoint nonlinear function T(lambda)^* to a given vector.
+   NEPApplyAdjoint - Applies the adjoint nonlinear function $T^*(\lambda)$ to a given vector.
 
    Collective
 
@@ -254,6 +260,13 @@ PetscErrorCode NEPApplyFunction(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat
 +  y   - result vector
 .  A   - (optional) Function matrix, for callback interface only
 -  B   - (unused) preconditioning matrix
+
+   Note:
+   If the nonlinear operator is represented in split form, the result
+   $y = T^*(\lambda)x$ is computed without building $T(\lambda)$ explicitly. In
+   that case, parameters `A` and `B` are not used. Otherwise, the matrix
+   $T(\lambda)$ is built and the effect is the same as a call to
+   `NEPComputeFunction()` followed by a `MatMultHermitianTranspose()`.
 
    Level: developer
 
@@ -295,7 +308,7 @@ PetscErrorCode NEPApplyAdjoint(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat 
 }
 
 /*@
-   NEPApplyJacobian - Applies the nonlinear Jacobian T'(lambda) to a given vector.
+   NEPApplyJacobian - Applies the nonlinear Jacobian $T'(\lambda)$ to a given vector.
 
    Collective
 
@@ -311,10 +324,10 @@ PetscErrorCode NEPApplyAdjoint(NEP nep,PetscScalar lambda,Vec x,Vec v,Vec y,Mat 
 
    Note:
    If the nonlinear operator is represented in split form, the result
-   y = T'(lambda)*x is computed without building T'(lambda) explicitly. In
-   that case, parameter A is not used. Otherwise, the matrix
-   T'(lambda) is built and the effect is the same as a call to
-   NEPComputeJacobian() followed by a MatMult().
+   $y = T'(\lambda)x$ is computed without building $T'(\lambda)$ explicitly. In
+   that case, parameter `A` is not used. Otherwise, the matrix
+   $T'(\lambda)$ is built and the effect is the same as a call to
+   `NEPComputeJacobian()` followed by a `MatMult()`.
 
    Level: developer
 
@@ -447,8 +460,8 @@ PetscErrorCode NEPGetConvergedReason(NEP nep,NEPConvergedReason *reason)
 }
 
 /*@
-   NEPGetEigenpair - Gets the i-th solution of the eigenproblem as computed by
-   NEPSolve(). The solution consists in both the eigenvalue and the eigenvector.
+   NEPGetEigenpair - Gets the `i`-th solution of the eigenproblem as computed by
+   `NEPSolve()`. The solution consists in both the eigenvalue and the eigenvector.
 
    Collective
 
@@ -463,19 +476,21 @@ PetscErrorCode NEPGetConvergedReason(NEP nep,NEPConvergedReason *reason)
 -  Vi   - imaginary part of eigenvector
 
    Notes:
-   It is allowed to pass NULL for Vr and Vi, if the eigenvector is not
-   required. Otherwise, the caller must provide valid Vec objects, i.e.,
-   they must be created by the calling program with e.g. MatCreateVecs().
+   It is allowed to pass `NULL` for `Vr` and `Vi`, if the eigenvector is not
+   required. Otherwise, the caller must provide valid `Vec` objects, i.e.,
+   they must be created by the calling program with e.g. `MatCreateVecs()`.
 
-   If the eigenvalue is real, then eigi and Vi are set to zero. If PETSc is
+   If the eigenvalue is real, then `eigi` and `Vi` are set to zero. If PETSc is
    configured with complex scalars the eigenvalue is stored
-   directly in eigr (eigi is set to zero) and the eigenvector in Vr (Vi is
-   set to zero). In any case, the user can pass NULL in Vr or Vi if one of
-   them is not required.
+   directly in `eigr` (`eigi` is set to zero) and the eigenvector in `Vr` (`Vi`
+   is set to zero). In any case, the user can pass `NULL` in any argument that
+   is not required.
 
-   The index i should be a value between 0 and nconv-1 (see NEPGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `NEPGetConverged()`).
    Eigenpairs are indexed according to the ordering criterion established
-   with NEPSetWhichEigenpairs().
+   with `NEPSetWhichEigenpairs()`.
+
+   The eigenvector is normalized to have unit norm.
 
    Level: beginner
 
@@ -512,7 +527,7 @@ PetscErrorCode NEPGetEigenpair(NEP nep,PetscInt i,PetscScalar *eigr,PetscScalar 
 }
 
 /*@
-   NEPGetLeftEigenvector - Gets the i-th left eigenvector as computed by NEPSolve().
+   NEPGetLeftEigenvector - Gets the `i`-th left eigenvector as computed by `NEPSolve()`.
 
    Collective
 
@@ -525,20 +540,20 @@ PetscErrorCode NEPGetEigenpair(NEP nep,PetscInt i,PetscScalar *eigr,PetscScalar 
 -  Wi   - imaginary part of left eigenvector
 
    Notes:
-   The caller must provide valid Vec objects, i.e., they must be created
-   by the calling program with e.g. MatCreateVecs().
+   The caller must provide valid `Vec` objects, i.e., they must be created
+   by the calling program with e.g. `MatCreateVecs()`.
 
-   If the corresponding eigenvalue is real, then Wi is set to zero. If PETSc is
-   configured with complex scalars the eigenvector is stored directly in Wr
-   (Wi is set to zero). In any case, the user can pass NULL in Wr or Wi if one of
-   them is not required.
+   If the corresponding eigenvalue is real, then `Wi` is set to zero. If PETSc is
+   configured with complex scalars the eigenvector is stored directly in `Wr`
+   (`Wi` is set to zero). In any case, the user can pass `NULL` in `Wr` or `Wi` if
+   one of them is not required.
 
-   The index i should be a value between 0 and nconv-1 (see NEPGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `NEPGetConverged()`).
    Eigensolutions are indexed according to the ordering criterion established
-   with NEPSetWhichEigenpairs().
+   with `NEPSetWhichEigenpairs()`.
 
    Left eigenvectors are available only if the twosided flag was set, see
-   NEPSetTwoSided().
+   `NEPSetTwoSided()`.
 
    Level: intermediate
 
@@ -564,7 +579,7 @@ PetscErrorCode NEPGetLeftEigenvector(NEP nep,PetscInt i,Vec Wr,Vec Wi)
 }
 
 /*@
-   NEPGetErrorEstimate - Returns the error estimate associated to the i-th
+   NEPGetErrorEstimate - Returns the error estimate associated to the `i`-th
    computed eigenpair.
 
    Not Collective
@@ -576,9 +591,9 @@ PetscErrorCode NEPGetLeftEigenvector(NEP nep,PetscInt i,Vec Wr,Vec Wi)
    Output Parameter:
 .  errest - the error estimate
 
-   Notes:
+   Note:
    This is the error estimate used internally by the eigensolver. The actual
-   error bound can be computed with NEPComputeError().
+   error bound can be computed with `NEPComputeError()`.
 
    Level: advanced
 
@@ -729,8 +744,8 @@ PetscErrorCode NEPComputeError(NEP nep,PetscInt i,NEPErrorType type,PetscReal *e
 }
 
 /*@
-   NEPComputeFunction - Computes the function matrix T(lambda) that has been
-   set with NEPSetFunction().
+   NEPComputeFunction - Computes the function matrix $T(\lambda)$ that has been
+   set with `NEPSetFunction()`.
 
    Collective
 
@@ -742,14 +757,14 @@ PetscErrorCode NEPComputeError(NEP nep,PetscInt i,NEPErrorType type,PetscReal *e
 +  A   - Function matrix
 -  B   - optional preconditioning matrix
 
-   Notes:
-   NEPComputeFunction() is typically used within nonlinear eigensolvers
+   Note:
+   `NEPComputeFunction()` is typically used within nonlinear eigensolvers
    implementations, so most users would not generally call this routine
    themselves.
 
    Level: developer
 
-.seealso: [](ch:nep), `NEPSetFunction()`, `NEPGetFunction()`
+.seealso: [](ch:nep), `NEPSetFunction()`, `NEPGetFunction()`, `NEPComputeJacobian()`
 @*/
 PetscErrorCode NEPComputeFunction(NEP nep,PetscScalar lambda,Mat A,Mat B)
 {
@@ -780,8 +795,8 @@ PetscErrorCode NEPComputeFunction(NEP nep,PetscScalar lambda,Mat A,Mat B)
 }
 
 /*@
-   NEPComputeJacobian - Computes the Jacobian matrix T'(lambda) that has been
-   set with NEPSetJacobian().
+   NEPComputeJacobian - Computes the Jacobian matrix $T'(\lambda)$ that has been
+   set with `NEPSetJacobian()`.
 
    Collective
 
@@ -798,7 +813,7 @@ PetscErrorCode NEPComputeFunction(NEP nep,PetscScalar lambda,Mat A,Mat B)
 
    Level: developer
 
-.seealso: [](ch:nep), `NEPSetJacobian()`, `NEPGetJacobian()`
+.seealso: [](ch:nep), `NEPSetJacobian()`, `NEPGetJacobian()`, `NEPComputeFunction()`
 @*/
 PetscErrorCode NEPComputeJacobian(NEP nep,PetscScalar lambda,Mat A)
 {

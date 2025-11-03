@@ -288,12 +288,12 @@ static PetscErrorCode NEPInterpolSetInterpolation_Interpol(NEP nep,PetscReal tol
 -  deg - maximum degree of interpolation
 
    Options Database Keys:
-+  -nep_interpol_interpolation_tol <tol> - Sets the tolerance to stop computing polynomial coefficients
--  -nep_interpol_interpolation_degree <degree> - Sets the maximum degree of interpolation
++  -nep_interpol_interpolation_tol \<tol\>    - sets the tolerance to stop computing polynomial coefficients
+-  -nep_interpol_interpolation_degree \<deg\> - sets the maximum degree of interpolation
 
    Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
 
    Level: advanced
 
@@ -357,7 +357,7 @@ static PetscErrorCode NEPInterpolSetPEP_Interpol(NEP nep,PEP pep)
 }
 
 /*@
-   NEPInterpolSetPEP - Associate a polynomial eigensolver object (PEP) to the
+   NEPInterpolSetPEP - Associate a polynomial eigensolver object (`PEP`) to the
    nonlinear eigenvalue solver.
 
    Collective
@@ -398,7 +398,7 @@ static PetscErrorCode NEPInterpolGetPEP_Interpol(NEP nep,PEP *pep)
 }
 
 /*@
-   NEPInterpolGetPEP - Retrieve the polynomial eigensolver object (PEP)
+   NEPInterpolGetPEP - Retrieve the polynomial eigensolver object (`PEP`)
    associated with the nonlinear eigenvalue solver.
 
    Collective
@@ -463,6 +463,22 @@ static PetscErrorCode NEPDestroy_Interpol(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   NEPINTERPOL - NEPINTERPOL = "interpol" - Solve the nonlinear
+   eigenvalue problem via polynomial interpolation.
+
+   Note:
+   This solver will approximate the nonlinear eigenvalue problem
+   with a polynomial eigenvalue problem and use `PEP` to solve it.
+   This is appropriate in nonlinear problems without singularities
+   and whose eigenvalues are all real. The degree of the polynomial
+   should generally be large, in which case a non-monomial representation
+   such as Chebyshev should be used {cite:p}`Kre14`.
+
+   Level: beginner
+
+.seealso: [](ch:nep), `NEP`, `NEPType`, `NEPSetType()`, `NEPSLPGetEPS()`, `NEPSetTwoSided()`, `NEPSLPGetEPSLeft()`
+M*/
 SLEPC_EXTERN PetscErrorCode NEPCreate_Interpol(NEP nep)
 {
   NEP_INTERPOL   *ctx;

@@ -631,6 +631,12 @@ static PetscErrorCode NEPValuesView_MATLAB(NEP nep,PetscViewer viewer)
    Options Database Key:
 .  -nep_view_values - print computed eigenvalues
 
+   Note:
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-nep_view_values :evals.m:ascii_matlab` to save the values in a file
+   that can be executed in Matlab.
+
    Level: intermediate
 
 .seealso: [](ch:nep), `NEPSolve()`, `NEPVectorsView()`, `NEPErrorView()`
@@ -722,7 +728,7 @@ PetscErrorCode NEPValuesViewFromOptions(NEP nep)
 -  viewer - the viewer
 
    Options Database Key:
-.  -nep_view_vectors - output eigenvectors.
+.  -nep_view_vectors - output eigenvectors
 
    Notes:
    If PETSc was configured with real scalars, complex conjugate eigenvectors
@@ -731,7 +737,11 @@ PetscErrorCode NEPValuesViewFromOptions(NEP nep)
 
    If left eigenvectors were computed with a two-sided eigensolver, the right
    and left eigenvectors are interleaved, that is, the vectors are output in
-   the following order X0, Y0, X1, Y1, X2, Y2, ...
+   the following order\: `X0, Y0, X1, Y1, X2, Y2, ...`
+
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-nep_view_vectors binary:evecs.bin` to save the vectors in a binary file.
 
    Level: intermediate
 

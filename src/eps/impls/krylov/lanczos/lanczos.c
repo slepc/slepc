@@ -843,7 +843,8 @@ static PetscErrorCode EPSView_Lanczos(EPS eps,PetscViewer viewer)
    will not be competitive with respect to other solvers.
 
    The implemented method is Lanczos with explicit restart and deflation.
-   Generally, it is much better to use implicit restart as in `EPSKRYLOVSCHUR`.
+   Generally, it is much better to use Lanczos with implicit restart (also
+   known as thick-restart Lanczos) as implemented in `EPSKRYLOVSCHUR`.
 
    Several reorthogonalization strategies can be selected with `EPSLanczosSetReorthog()`.
    Some of them may result in a cheaper computation, but it will seldom be

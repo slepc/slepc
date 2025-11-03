@@ -454,7 +454,7 @@ typedef enum { EPS_STOP_BASIC,
 M*/
 
 /*MC
-   EPS_STOP_USER - The user-provided function.
+   EPS_STOP_USER - The user-provided stopping test.
 
    Note:
    Customized stopping test using the user-provided function given with
@@ -525,7 +525,7 @@ M*/
 
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSSolve()`, `EPSGetConvergedReason()`, `EPSConvergedReason` `EPSSetStoppingTestFunction()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSGetConvergedReason()`, `EPSConvergedReason`, `EPSSetStoppingTestFunction()`
 M*/
 
 /*MC
@@ -557,7 +557,7 @@ M*/
 M*/
 
 /*MC
-   EPS_CONVERGED_ITERATING - This flag is returned if `EPSGetConvergedReason()` is called
+   EPS_CONVERGED_ITERATING - This value is returned if `EPSGetConvergedReason()` is called
    while `EPSSolve()` is still running.
 
    Level: intermediate
@@ -726,7 +726,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterCreateFn(PetscView
 
 /*S
    EPSMonitorRegisterDestroyFn - A function prototype for functions that do the after
-   use destruction when provided to `EPSMonitorRegister()`
+   use destruction when provided to `EPSMonitorRegister()`.
 
    Calling Sequence:
 .  vf - a `PetscViewerAndFormat` object to be destroyed, including any context

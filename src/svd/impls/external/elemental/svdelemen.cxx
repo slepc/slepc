@@ -94,6 +94,22 @@ static PetscErrorCode SVDReset_Elemental(SVD svd)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   SVDELEMENTAL - SVDELEMENTAL = "elemental" - A wrapper to Elemental
+   singular value solvers {cite:p}`Pou13`.
+
+   Notes:
+   Only available for standard SVD problems.
+
+   Elemental has a direct singular value solver, that is, the full spectrum
+   is computed. Its storage format is similar to ScaLAPACK, but different,
+   and it may have better parallel performance in some cases. The
+   SLEPc solver is also in charge of the redistribution of matrices.
+
+   Level: beginner
+
+.seealso: [](ch:svd), `SVD`, `SVDType`, `SVDSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode SVDCreate_Elemental(SVD svd)
 {
   SVD_Elemental  *ctx;

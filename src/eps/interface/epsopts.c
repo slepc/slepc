@@ -290,15 +290,15 @@ PetscErrorCode EPSGetTolerances(EPS eps,PetscReal *tol,PetscInt *maxits)
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context
-.  tol - the convergence tolerance
++  eps    - the linear eigensolver context
+.  tol    - the convergence tolerance
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -eps_tol <tol> - Sets the convergence tolerance
--  -eps_max_it <maxits> - Sets the maximum number of iterations allowed
++  -eps_tol \<tol\>       - sets the convergence tolerance
+-  -eps_max_it \<maxits\> - sets the maximum number of iterations allowed
 
-   Notes:
+   Note:
    Use `PETSC_CURRENT` to retain the current value of any of the parameters.
    Use `PETSC_DETERMINE` for either argument to assign a default value computed
    internally (may be different in each solver).
@@ -374,9 +374,9 @@ PetscErrorCode EPSGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -eps_nev <nev> - Sets the number of eigenvalues
-.  -eps_ncv <ncv> - Sets the dimension of the subspace
--  -eps_mpd <mpd> - Sets the maximum projected dimension
++  -eps_nev \<nev\> - sets the number of eigenvalues
+.  -eps_ncv \<ncv\> - sets the dimension of the subspace
+-  -eps_mpd \<mpd\> - sets the maximum projected dimension
 
    Notes:
    Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a reasonably good value, which is
@@ -439,16 +439,16 @@ PetscErrorCode EPSSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
 -  which - the portion of the spectrum to be sought, see `EPSWhich` for possible values
 
    Options Database Keys:
-+   -eps_largest_magnitude - Sets largest eigenvalues in magnitude
-.   -eps_smallest_magnitude - Sets smallest eigenvalues in magnitude
-.   -eps_largest_real - Sets largest real parts
-.   -eps_smallest_real - Sets smallest real parts
-.   -eps_largest_imaginary - Sets largest imaginary parts
-.   -eps_smallest_imaginary - Sets smallest imaginary parts
-.   -eps_target_magnitude - Sets eigenvalues closest to target
-.   -eps_target_real - Sets real parts closest to target
-.   -eps_target_imaginary - Sets imaginary parts closest to target
--   -eps_all - Sets all eigenvalues in an interval or region
++  -eps_largest_magnitude  - sets largest eigenvalues in magnitude
+.  -eps_smallest_magnitude - sets smallest eigenvalues in magnitude
+.  -eps_largest_real       - sets largest real parts
+.  -eps_smallest_real      - sets smallest real parts
+.  -eps_largest_imaginary  - sets largest imaginary parts
+.  -eps_smallest_imaginary - sets smallest imaginary parts
+.  -eps_target_magnitude   - sets eigenvalues closest to target
+.  -eps_target_real        - sets real parts closest to target
+.  -eps_target_imaginary   - sets imaginary parts closest to target
+-  -eps_all                - sets all eigenvalues in an interval or region
 
    Notes:
    Not all eigensolvers implemented in `EPS` account for all the possible values
@@ -540,8 +540,8 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
 -  rel   - whether the threshold is relative or not
 
    Options Database Keys:
-+  -eps_threshold_absolute <thres> - sets an absolute threshold
--  -eps_threshold_relative <thres> - sets a relative threshold
++  -eps_threshold_absolute \<thres\> - sets an absolute threshold
+-  -eps_threshold_relative \<thres\> - sets a relative threshold
 
    Notes:
    This function internally calls `EPSSetStoppingTest()` to set a special stopping
@@ -758,10 +758,10 @@ PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,
 -  conv - the type of convergence test, see `EPSConv` for possible values
 
    Options Database Keys:
-+  -eps_conv_abs  - Sets the absolute convergence test
-.  -eps_conv_rel  - Sets the convergence test relative to the eigenvalue
-.  -eps_conv_norm - Sets the convergence test relative to the matrix norms
--  -eps_conv_user - Selects the user-defined convergence test
++  -eps_conv_abs  - sets the absolute convergence test
+.  -eps_conv_rel  - sets the convergence test relative to the eigenvalue
+.  -eps_conv_norm - sets the convergence test relative to the matrix norms
+-  -eps_conv_user - selects the user-defined convergence test
 
    Level: intermediate
 
@@ -827,7 +827,7 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
 
    Note:
    When implementing a function for this, normal usage is to first call the
-   default routine `EPSStoppingBasic()` and then set reason to `EPS_CONVERGED_USER`
+   default routine `EPSStoppingBasic()` and then set `reason` to `EPS_CONVERGED_USER`
    if some user-defined conditions have been met. To let the eigensolver continue
    iterating, the result must be left as `EPS_CONVERGED_ITERATING`.
 
@@ -863,9 +863,9 @@ PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *
 -  stop - the type of stopping test, see `EPSStop`
 
    Options Database Keys:
-+  -eps_stop_basic     - Sets the default stopping test
-.  -eps_stop_threshold - Sets the threshold stopping test
--  -eps_stop_user      - Selects the user-defined stopping test
++  -eps_stop_basic     - sets the default stopping test
+.  -eps_stop_threshold - sets the threshold stopping test
+-  -eps_stop_user      - selects the user-defined stopping test
 
    Level: advanced
 
@@ -1123,9 +1123,9 @@ PetscErrorCode EPSGetExtraction(EPS eps,EPSExtraction *extr)
 -  cutoff - cutoff value
 
    Options Database Keys:
-+  -eps_balance <method> - the balancing method, one of `none`, `oneside`, `twoside`, or `user`
-.  -eps_balance_its <its> - number of iterations
--  -eps_balance_cutoff <cutoff> - cutoff value
++  -eps_balance \<bal\>           - the balancing method, one of `none`, `oneside`, `twoside`, or `user`
+.  -eps_balance_its \<its\>       - number of iterations
+-  -eps_balance_cutoff \<cutoff\> - cutoff value
 
    Notes:
    When balancing is enabled, the solver works implicitly with matrix $DAD^{-1}$,
@@ -1226,7 +1226,7 @@ PetscErrorCode EPSGetBalance(EPS eps,EPSBalance *bal,PetscInt *its,PetscReal *cu
 -  twosided - whether the two-sided variant is to be used or not
 
    Options Database Key:
-.  -eps_two_sided <boolean> - toggles the twosided flag
+.  -eps_two_sided \<twosided\> - toggles the twosided flag
 
    Notes:
    If the user sets `twosided`=`PETSC_TRUE` then the solver uses a variant of
@@ -1289,7 +1289,7 @@ PetscErrorCode EPSGetTwoSided(EPS eps,PetscBool *twosided)
 -  trueres - whether true residuals are required or not
 
    Options Database Key:
-.  -eps_true_residual <boolean> - toggles the true residual
+.  -eps_true_residual \<trueres\> - toggles the true residual
 
    Notes:
    If the user sets `trueres`=`PETSC_TRUE` then the solver explicitly computes
@@ -1405,7 +1405,7 @@ PetscErrorCode EPSGetTrackAll(EPS eps,PetscBool *trackall)
 -  purify - whether purification is done or not, use `PETSC_FALSE` to disable it
 
    Options Database Key:
-.  -eps_purify <boolean> - Sets/resets the boolean flag `purify`
+.  -eps_purify \<purify\> - Sets/resets the boolean flag `purify`
 
    Notes:
    By default, eigenvectors of generalized symmetric eigenproblems are purified

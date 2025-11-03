@@ -524,12 +524,12 @@ static PetscErrorCode PEPSTOARSetLocking_STOAR(PEP pep,PetscBool lock)
 
    Input Parameters:
 +  pep  - the polynomial eigensolver context
--  lock - true if the locking variant must be selected
+-  lock - `PETSC_TRUE` if the locking variant must be selected
 
    Options Database Key:
-.  -pep_stoar_locking - Sets the locking flag
+.  -pep_stoar_locking - sets the locking flag
 
-   Notes:
+   Note:
    The default is to lock converged eigenpairs when the method restarts.
    This behavior can be changed so that all directions are kept in the
    working subspace even if already converged to working accuracy (the
@@ -639,33 +639,35 @@ static PetscErrorCode PEPSTOARGetInertias_STOAR(PEP pep,PetscInt *n,PetscReal *s
 -  inertias - the values of the inertia in each shift
 
    Notes:
-   If called after PEPSolve(), all shifts used internally by the solver are
+   If called after `PEPSolve()`, all shifts used internally by the solver are
    returned (including both endpoints and any intermediate ones). If called
-   before PEPSolve() and after PEPSetUp() then only the information of the
+   before `PEPSolve()` and after `PEPSetUp()` then only the information of the
    endpoints of subintervals is available.
 
-   This function is only available for spectrum slicing runs.
+   This function is only available for spectrum slicing runs, that is, when
+   an interval has been given with `PEPSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:qslice).
 
-   The returned arrays should be freed by the user. Can pass NULL in any of
+   The returned arrays should be freed by the user. Can pass `NULL` in any of
    the two arrays if not required.
 
    Fortran Notes:
    The calling sequence from Fortran is
 .vb
    PEPSTOARGetInertias(pep,n,shifts,inertias,ierr)
-   integer n
-   double precision shifts(*)
-   integer inertias(*)
+   PetscInt  n
+   PetscReal shifts(*)
+   PetscInt  inertias(*)
 .ve
-   The arrays should be at least of length n. The value of n can be determined
+   The arrays should be at least of length `n`. The value of `n` can be determined
    by an initial call
 .vb
-   PEPSTOARGetInertias(pep,n,PETSC_NULL_REAL,PETSC_NULL_INTEGER,ierr)
+   PEPSTOARGetInertias(pep,n,PETSC_NULL_REAL_ARRAY,PETSC_NULL_INTEGER_ARRAY,ierr)
 .ve
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPSTOAR`, `PEPSetInterval()`
+.seealso: [](ch:pep), [](#sec:qslice), `PEPSTOAR`, `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARGetInertias(PEP pep,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[]) PeNS
 {
@@ -697,10 +699,13 @@ static PetscErrorCode PEPSTOARSetDetectZeros_STOAR(PEP pep,PetscBool detect)
 -  detect - check for zeros
 
    Options Database Key:
-.  -pep_stoar_detect_zeros - Check for zeros; this takes an optional
-   bool value (0/1/no/yes/true/false)
+.  -pep_stoar_detect_zeros - toggle the zero detection
 
    Notes:
+   This flag makes sense only for spectrum slicing runs, that is, when
+   an interval has been given with `PEPSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:qslice).
+
    A zero in the factorization indicates that a shift coincides with an eigenvalue.
 
    This flag is turned off by default, and may be necessary in some cases.
@@ -709,7 +714,7 @@ static PetscErrorCode PEPSTOARSetDetectZeros_STOAR(PEP pep,PetscBool detect)
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPSTOAR`, `PEPSetInterval()`
+.seealso: [](ch:pep), [](#sec:qslice), `PEPSTOAR`, `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARSetDetectZeros(PEP pep,PetscBool detect)
 {
@@ -766,8 +771,8 @@ static PetscErrorCode PEPSTOARSetLinearization_STOAR(PEP pep,PetscReal alpha,Pet
 }
 
 /*@
-   PEPSTOARSetLinearization - Set the coefficients that define
-   the linearization of a quadratic eigenproblem.
+   PEPSTOARSetLinearization - Set the coefficients that define the
+   symmetric linearization of a quadratic eigenproblem used in STOAR.
 
    Logically Collective
 
@@ -777,15 +782,18 @@ static PetscErrorCode PEPSTOARSetLinearization_STOAR(PEP pep,PetscReal alpha,Pet
 -  beta  - second parameter of the linearization
 
    Options Database Key:
-.  -pep_stoar_linearization <alpha,beta> - Sets the coefficients
+.  -pep_stoar_linearization <alpha,beta> - sets the coefficients
 
    Notes:
-   Cannot pass zero for both alpha and beta. The default values are
-   alpha=1 and beta=0.
+   See section [](#sec:linearization) for the general expression of
+   the symmetric linearization.
+
+   Cannot pass zero for both `alpha` and `beta`. The default values are
+   `alpha`=1 and `beta`=0.
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPSTOAR`, `PEPSTOARGetLinearization()`
+.seealso: [](ch:pep), [](#sec:linearization), `PEPSTOAR`, `PEPSTOARGetLinearization()`
 @*/
 PetscErrorCode PEPSTOARSetLinearization(PEP pep,PetscReal alpha,PetscReal beta)
 {
@@ -860,7 +868,6 @@ static PetscErrorCode PEPSTOARSetDimensions_STOAR(PEP pep,PetscInt nev,PetscInt 
 /*@
    PEPSTOARSetDimensions - Sets the dimensions used for each subsolve
    step in case of doing spectrum slicing for a computational interval.
-   The meaning of the parameters is the same as in PEPSetDimensions().
 
    Logically Collective
 
@@ -871,13 +878,24 @@ static PetscErrorCode PEPSTOARSetDimensions_STOAR(PEP pep,PetscInt nev,PetscInt 
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -pep_stoar_nev <nev> - Sets the number of eigenvalues
-.  -pep_stoar_ncv <ncv> - Sets the dimension of the subspace
--  -pep_stoar_mpd <mpd> - Sets the maximum projected dimension
++  -pep_stoar_nev \<nev\> - sets the number of eigenvalues
+.  -pep_stoar_ncv \<ncv\> - sets the dimension of the subspace
+-  -pep_stoar_mpd \<mpd\> - sets the maximum projected dimension
+
+   Notes:
+   These parameters are relevant only for spectrum slicing runs, that is, when
+   an interval has been given with `PEPSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:qslice).
+
+   The meaning of the parameters is the same as in `PEPSetDimensions()`, but
+   the ones here apply to every subsolve done by the child `PEP` object.
+
+   Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a default value. For any
+   of the arguments, use `PETSC_CURRENT` to preserve the current value.
 
    Level: advanced
 
-.seealso: [](ch:pep), `PEPSTOAR`, `PEPSTOARGetDimensions()`, `PEPSetDimensions()`, `PEPSetInterval()`
+.seealso: [](ch:pep), [](#sec:qslice), `PEPSTOAR`, `PEPSTOARGetDimensions()`, `PEPSetDimensions()`, `PEPSetInterval()`
 @*/
 PetscErrorCode PEPSTOARSetDimensions(PEP pep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -948,12 +966,11 @@ static PetscErrorCode PEPSTOARSetCheckEigenvalueType_STOAR(PEP pep,PetscBool che
 -  checket - check eigenvalue type
 
    Options Database Key:
-.  -pep_stoar_check_eigenvalue_type - Check eigenvalue type; this takes an optional
-   bool value (0/1/no/yes/true/false)
+.  -pep_stoar_check_eigenvalue_type - toggles the check of eigenvalue type
 
    Notes:
    This option is relevant only for spectrum slicing computations, but it is
-   ignored if the problem type is PEP_HYPERBOLIC.
+   ignored if the problem type is `PEP_HYPERBOLIC`.
 
    This flag is turned on by default, to guarantee that the computed eigenvalues
    have the same type (otherwise the computed solution might be wrong). But since
@@ -1051,6 +1068,27 @@ static PetscErrorCode PEPDestroy_STOAR(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   PEPSTOAR - PEPSTOAR = "stoar" - A symmetric variant of TOAR.
+
+   Notes:
+   This solver is available for quadratic eigenproblems only.
+
+   It is an alternative to `PEPTOAR` in the case of `PEP_HERMITIAN`
+   problems. It tries to exploit the symmetry of the matrices by working
+   with a special linearization where the matrices are Hermitian. However,
+   this pencil in indefinite, so it uses a pseudo-Lanczos recurrence that
+   may become numerically unstable. The method is described in {cite:p}`Cam16c`.
+
+   The solver incorporates support for interval computation with `PEPSetInterval()`.
+   Then it will proceed with a spectrum slicing scheme as described in
+   {cite:p}`Cam20b`. This is particularly useful in the case of `PEP_HYPERBOLIC`
+   problems.
+
+   Level: beginner
+
+.seealso: [](ch:pep), `PEP`, `PEPType`, `PEPSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode PEPCreate_STOAR(PEP pep)
 {
   PEP_STOAR      *ctx;

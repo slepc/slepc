@@ -134,7 +134,7 @@ static PetscErrorCode STFilterSetType_Filter(ST st,STFilterType type)
 -  type - the type of filter
 
    Options Database Key:
-.  -st_filter_type <type> - set the type of filter
+.  -st_filter_type \<type\> - set the type of filter
 
    Level: intermediate
 
@@ -384,7 +384,7 @@ static PetscErrorCode STFilterSetDegree_Filter(ST st,PetscInt deg)
 -  deg - polynomial degree
 
    Options Database Key:
-.  -st_filter_degree <deg> - sets the degree of the filter polynomial
+.  -st_filter_degree \<deg\> - sets the degree of the filter polynomial
 
    Level: intermediate
 
@@ -495,7 +495,7 @@ static PetscErrorCode STFilterSetDamping_Filter(ST st,STFilterDamping damping)
 -  damping - the type of damping
 
    Options Database Key:
-.  -st_filter_damping <damping> - sets the type of damping
+.  -st_filter_damping \<damping\> - sets the type of damping
 
    Note:
    Only used in `ST_FILTER_CHEBYSHEV` filters.

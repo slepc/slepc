@@ -668,7 +668,7 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
    Output Parameter:
 .  errest - the error estimate
 
-   Notes:
+   Note:
    This is the error estimate used internally by the eigensolver. The actual
    error bound can be computed with `EPSComputeError()`. See discussion at
    section [](#sec:errbnd).

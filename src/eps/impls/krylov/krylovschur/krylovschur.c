@@ -550,7 +550,7 @@ static PetscErrorCode EPSKrylovSchurSetPartitions_KrylovSchur(EPS eps,PetscInt n
 -  npart - number of partitions
 
    Options Database Key:
-.  -eps_krylovschur_partitions <npart> - sets the number of partitions
+.  -eps_krylovschur_partitions \<npart\> - sets the number of partitions
 
    Notes:
    This call makes sense only for spectrum slicing runs, that is, when
@@ -732,11 +732,11 @@ static PetscErrorCode EPSKrylovSchurSetDimensions_KrylovSchur(EPS eps,PetscInt n
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -eps_krylovschur_nev <nev> - Sets the number of eigenvalues
-.  -eps_krylovschur_ncv <ncv> - Sets the dimension of the subspace
--  -eps_krylovschur_mpd <mpd> - Sets the maximum projected dimension
++  -eps_krylovschur_nev \<nev\> - sets the number of eigenvalues
+.  -eps_krylovschur_ncv \<ncv\> - sets the dimension of the subspace
+-  -eps_krylovschur_mpd \<mpd\> - sets the maximum projected dimension
 
-   Note:
+   Notes:
    These parameters are relevant only for spectrum slicing runs, that is, when
    an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
    See more details in section [](#sec:slice).
@@ -988,9 +988,9 @@ static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,
    The calling sequence from Fortran is
 .vb
    EPSKrylovSchurGetInertias(eps,n,shifts,inertias,ierr)
-   PetscInt    n
-   PetscScalar shifts(*)
-   PetscInt    inertias(*)
+   PetscInt  n
+   PetscReal shifts(*)
+   PetscInt  inertias(*)
 .ve
    The arrays should be at least of length `n`. The value of `n` can be determined
    by an initial call
@@ -1645,8 +1645,7 @@ static PetscErrorCode EPSSetDefaultST_KrylovSchur(EPS eps)
 }
 
 /*MC
-   EPSKRYLOVSCHUR - EPSKRYLOVSCHUR = "krylovschur" - The simple power iteration and inverse
-   iteration.
+   EPSKRYLOVSCHUR - EPSKRYLOVSCHUR = "krylovschur" - Krylov-Schur method.
 
    Notes:
    This is the default solver, and is recommended in most situations.

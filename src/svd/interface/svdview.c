@@ -503,6 +503,12 @@ static PetscErrorCode SVDValuesView_MATLAB(SVD svd,PetscViewer viewer)
    Options Database Key:
 .  -svd_view_values - print computed singular values
 
+   Note:
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-svd_view_values :evals.m:ascii_matlab` to save the values in a file
+   that can be executed in Matlab.
+
    Level: intermediate
 
 .seealso: [](ch:svd), `SVDSolve()`, `SVDVectorsView()`, `SVDErrorView()`
@@ -596,9 +602,13 @@ PetscErrorCode SVDValuesViewFromOptions(SVD svd)
    Options Database Key:
 .  -svd_view_vectors - output singular vectors
 
-   Note:
+   Notes:
    Right and left singular vectors are interleaved, that is, the vectors are
-   output in the following order V0, U0, V1, U1, V2, U2, ...
+   output in the following order\: `V0, U0, V1, U1, V2, U2, ...`
+
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-svd_view_vectors binary:svecs.bin` to save the vectors in a binary file.
 
    Level: intermediate
 

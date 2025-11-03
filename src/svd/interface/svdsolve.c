@@ -92,26 +92,33 @@ PetscErrorCode SVDComputeVectors(SVD svd)
 
    Options Database Keys:
 +  -svd_view - print information about the solver used
-.  -svd_view_mat0 - view the first matrix (A)
-.  -svd_view_mat1 - view the second matrix (B)
-.  -svd_view_signature - view the signature matrix (omega)
+.  -svd_view_mat0 - view the first matrix ($A$)
+.  -svd_view_mat1 - view the second matrix ($B$)
+.  -svd_view_signature - view the signature matrix ($\Omega$)
 .  -svd_view_vectors - view the computed singular vectors
 .  -svd_view_values - view the computed singular values
-.  -svd_converged_reason - print reason for convergence, and number of iterations
+.  -svd_converged_reason - print reason for convergence/divergence, and number of iterations
 .  -svd_error_absolute - print absolute errors of each singular triplet
 .  -svd_error_relative - print relative errors of each singular triplet
 -  -svd_error_norm     - print errors relative to the matrix norms of each singular triplet
 
    Notes:
+   The problem matrices are specified with `SVDSetOperators()`.
+
+   `SVDSolve()` will return without generating an error regardless of whether
+   all requested solutions were computed or not. Call `SVDGetConverged()` to get the
+   actual number of computed solutions, and `SVDGetConvergedReason()` to determine if
+   the solver converged or failed and why.
+
    All the command-line options listed above admit an optional argument specifying
-   the viewer type and options. For instance, use '-svd_view_mat0 binary:amatrix.bin'
-   to save the A matrix to a binary file, '-svd_view_values draw' to draw the computed
-   singular values graphically, or '-svd_error_relative :myerr.m:ascii_matlab' to save
+   the viewer type and options. For instance, use `-svd_view_mat0 binary:amatrix.bin`
+   to save the $A$ matrix to a binary file, `-svd_view_values draw` to draw the computed
+   singular values graphically, or `-svd_error_relative :myerr.m:ascii_matlab` to save
    the errors in a file that can be executed in Matlab.
 
    Level: beginner
 
-.seealso: [](ch:svd), `SVDCreate()`, `SVDSetUp()`, `SVDDestroy()`
+.seealso: [](ch:svd), `SVDCreate()`, `SVDSetUp()`, `SVDDestroy()`, `SVDSetOperators()`, `SVDGetConverged()`, `SVDGetConvergedReason()`
 @*/
 PetscErrorCode SVDSolve(SVD svd)
 {
@@ -282,8 +289,8 @@ PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
 }
 
 /*@
-   SVDGetSingularTriplet - Gets the i-th triplet of the singular value decomposition
-   as computed by SVDSolve(). The solution consists in the singular value and its left
+   SVDGetSingularTriplet - Gets the `i`-th triplet of the singular value decomposition
+   as computed by `SVDSolve()`. The solution consists in the singular value and its left
    and right singular vectors.
 
    Collective
@@ -298,20 +305,20 @@ PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
 -  v     - right singular vector
 
    Note:
-   Both u or v can be NULL if singular vectors are not required.
-   Otherwise, the caller must provide valid Vec objects, i.e.,
-   they must be created by the calling program with e.g. MatCreateVecs().
+   Both `u` or `v` can be `NULL` if singular vectors are not required.
+   Otherwise, the caller must provide valid `Vec` objects, i.e.,
+   they must be created by the calling program with e.g. `MatCreateVecs()`.
 
-   The index i should be a value between 0 and nconv-1 (see SVDGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `SVDGetConverged()`).
    Singular triplets are indexed according to the ordering criterion established
-   with SVDSetWhichSingularTriplets().
+   with `SVDSetWhichSingularTriplets()`.
 
-   In the case of GSVD, the solution consists in three vectors u,v,x that are
-   returned as follows. Vector x is returned in the right singular vector
-   (argument v) and has length equal to the number of columns of A and B.
-   The other two vectors are returned stacked on top of each other [u;v] in
-   the left singular vector argument, with length equal to m+n (number of rows
-   of A plus number of rows of B).
+   In the case of GSVD, the solution consists in three vectors $u$, $v$, $x$ that are
+   returned as follows. Vector $x$ is returned in the right singular vector
+   (argument `v`) and has length equal to the number of columns of $A$ and $B$.
+   The other two vectors are returned stacked on top of each other $[u^*,v^*]^*$ in
+   the left singular vector argument `u`, with length equal to $m+n$ (number of rows
+   of $A$ plus number of rows of $B$).
 
    Level: beginner
 

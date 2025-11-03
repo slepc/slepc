@@ -14,7 +14,7 @@
 #include <slepc/private/nepimpl.h>       /*I "slepcnep.h" I*/
 
 /*@
-   NEPSetDSType - Sets the type of the internal DS object based on the current
+   NEPSetDSType - Sets the type of the internal `DS` object based on the current
    settings of the nonlinear eigensolver.
 
    Collective
@@ -24,7 +24,7 @@
 
    Note:
    This function need not be called explicitly, since it will be called at
-   both NEPSetFromOptions() and NEPSetUp().
+   both `NEPSetFromOptions()` and `NEPSetUp()`.
 
    Level: developer
 
@@ -229,7 +229,7 @@ PetscErrorCode NEPSetUp(NEP nep)
    Some solvers start to iterate on a single vector (initial vector). In that case,
    the other vectors are ignored.
 
-   These vectors do not persist from one NEPSolve() call to the other, so the
+   These vectors do not persist from one `NEPSolve()` call to the other, so the
    initial space should be set every time.
 
    The vectors do not need to be mutually orthonormal, since they are explicitly
