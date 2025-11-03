@@ -133,7 +133,7 @@ int main (int argc,char **argv)
 /*
    STCreate_Fold - Creates the spectrum folding ST context.
 
-   Input Parameter:
+   Input Parameters:
 +  A - problem matrix
 -  target - target value
 

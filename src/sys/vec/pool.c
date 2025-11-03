@@ -51,7 +51,7 @@ PetscErrorCode SlepcVecPoolCreate(Vec v,PetscInt init_size,VecPool *p)
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  p - pool of Vec.
 
    Level: developer

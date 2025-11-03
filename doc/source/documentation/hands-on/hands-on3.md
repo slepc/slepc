@@ -22,9 +22,9 @@ $ make ex7
 
 ## Source Code Details
 
-This example uses the PETSc function {external:doc}`MatLoad` to load a matrix from a file. The two matrix files are specified in the command line.  Note that these files have been converted from Matrix Market format to PETSc binary format.
+This example uses the PETSc function {external:doc}`MatLoad`() to load a matrix from a file. The two matrix files are specified in the command line.  Note that these files have been converted from Matrix Market format to PETSc binary format.
 
-Compare the source code of the example program with the previous ones. Note that, in this case, two matrix objects are passed in the `EPSSetOperators` function call:
+Compare the source code of the example program with the previous ones. Note that, in this case, two matrix objects are passed in the `EPSSetOperators()` function call:
 
 ```{code} c
 PetscCall(EPSSetOperators(eps,A,B));
@@ -50,14 +50,7 @@ The plot is drawn in an X11 pop-up window, so this requires that the display is 
 
 ## Spectral Transformations in Generalized Problems
 
-The following table shows the expressions of the operator in each of the available spectral transformations in the case of generalized problems. Note that both matrices A and B are involved.
-
-Spectral Transformation  |  Operator
----                      |  ---
-Shift of origin          |  {math}`B^{-1} A + \sigma I`
-Shift-and-invert         |  {math}`(A - \sigma B)^{-1} B`
-Cayley                   |  {math}`(A- \sigma B)^{-1} (A+ \nu B)`
-Preconditioner           |  {math}`K^{-1} \approx (A - \sigma B)^{-1}`
+Check again the table [](tab:transforms), which shows the expressions of the operator in each of the available spectral transformations. In this case, both matrices $A$ and $B$ are involved.
 
 In the case of generalized problems, the shift-and-invert transformation does not represent a cost penalty with respect to the simpler shift of origin, since in both cases the inverse of a matrix is required.
 

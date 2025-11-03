@@ -625,18 +625,18 @@ static PetscErrorCode PEPTOARSetRestart_TOAR(PEP pep,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -pep_toar_restart - Sets the restart parameter
+.  -pep_toar_restart - sets the restart parameter
 
-   Notes:
+   Note:
    Allowed values are in the range [0.1,0.9]. The default is 0.5.
 
    Level: advanced
 
-.seealso: `PEPTOARGetRestart()`
+.seealso: [](ch:pep), `PEPTOAR`, `PEPTOARGetRestart()`
 @*/
 PetscErrorCode PEPTOARSetRestart(PEP pep,PetscReal keep)
 {
@@ -662,14 +662,14 @@ static PetscErrorCode PEPTOARGetRestart_TOAR(PEP pep,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
 
    Level: advanced
 
-.seealso: `PEPTOARSetRestart()`
+.seealso: [](ch:pep), `PEPTOAR`, `PEPTOARSetRestart()`
 @*/
 PetscErrorCode PEPTOARGetRestart(PEP pep,PetscReal *keep)
 {
@@ -696,21 +696,21 @@ static PetscErrorCode PEPTOARSetLocking_TOAR(PEP pep,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
--  lock - true if the locking variant must be selected
++  pep  - the polynomial eigensolver context
+-  lock - `PETSC_TRUE` if the locking variant must be selected
 
    Options Database Key:
-.  -pep_toar_locking - Sets the locking flag
+.  -pep_toar_locking - sets the locking flag
 
-   Notes:
+   Note:
    The default is to lock converged eigenpairs when the method restarts.
-   This behaviour can be changed so that all directions are kept in the
+   This behavior can be changed so that all directions are kept in the
    working subspace even if already converged to working accuracy (the
    non-locking variant).
 
    Level: advanced
 
-.seealso: `PEPTOARGetLocking()`
+.seealso: [](ch:pep), `PEPTOAR`, `PEPTOARGetLocking()`
 @*/
 PetscErrorCode PEPTOARSetLocking(PEP pep,PetscBool lock)
 {
@@ -736,14 +736,14 @@ static PetscErrorCode PEPTOARGetLocking_TOAR(PEP pep,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `PEPTOARSetLocking()`
+.seealso: [](ch:pep), `PEPTOAR`, `PEPTOARSetLocking()`
 @*/
 PetscErrorCode PEPTOARGetLocking(PEP pep,PetscBool *lock)
 {
@@ -800,6 +800,22 @@ static PetscErrorCode PEPDestroy_TOAR(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   PEPTOAR - PEPTOAR = "toar" - The Two-level Orthogonal Arnoldi method (TOAR)
+   for polynomial eigenvalue problems.
+
+   Notes:
+   This is the default solver, and is recommended in most situations.
+
+   It implements the Two-level Orthogonal Arnoldi procedure {cite:p}`Lu16`,
+   which carries out an implicit linearization and operates with an
+   orthogonal Krylov basis stored in a compact form $V = (I \otimes U) S$.
+   The details of the SLEPc implementation can be found in {cite:p}`Cam16a`.
+
+   Level: beginner
+
+.seealso: [](ch:pep), `PEP`, `PEPType`, `PEPSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode PEPCreate_TOAR(PEP pep)
 {
   PEP_TOAR       *ctx;

@@ -222,13 +222,13 @@ static PetscErrorCode NEPNArnoldiSetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
    Logically Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  lag - 0 indicates NEVER rebuild, 1 means rebuild every time the Jacobian is
           computed within the nonlinear iteration, 2 means every second time
           the Jacobian is built, etc.
 
-   Options Database Keys:
-.  -nep_narnoldi_lag_preconditioner <lag> - the lag value
+   Options Database Key:
+.  -nep_narnoldi_lag_preconditioner \<lag\> - the lag value
 
    Notes:
    The default is 1.
@@ -236,7 +236,7 @@ static PetscErrorCode NEPNArnoldiSetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
 
    Level: intermediate
 
-.seealso: `NEPNArnoldiGetLagPreconditioner()`
+.seealso: [](ch:nep), `NEPNARNOLDI`, `NEPNArnoldiGetLagPreconditioner()`
 @*/
 PetscErrorCode NEPNArnoldiSetLagPreconditioner(NEP nep,PetscInt lag)
 {
@@ -262,14 +262,14 @@ static PetscErrorCode NEPNArnoldiGetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  lag - the lag parameter
 
    Level: intermediate
 
-.seealso: `NEPNArnoldiSetLagPreconditioner()`
+.seealso: [](ch:nep), `NEPNARNOLDI`, `NEPNArnoldiSetLagPreconditioner()`
 @*/
 PetscErrorCode NEPNArnoldiGetLagPreconditioner(NEP nep,PetscInt *lag)
 {
@@ -312,18 +312,18 @@ static PetscErrorCode NEPNArnoldiSetKSP_NArnoldi(NEP nep,KSP ksp)
 }
 
 /*@
-   NEPNArnoldiSetKSP - Associate a linear solver object (KSP) to the nonlinear
+   NEPNArnoldiSetKSP - Associate a linear solver object (`KSP`) to the nonlinear
    eigenvalue solver.
 
    Collective
 
    Input Parameters:
-+  nep - eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `NEPNArnoldiGetKSP()`
+.seealso: [](ch:nep), `NEPNARNOLDI`, `NEPNArnoldiGetKSP()`
 @*/
 PetscErrorCode NEPNArnoldiSetKSP(NEP nep,KSP ksp)
 {
@@ -354,20 +354,20 @@ static PetscErrorCode NEPNArnoldiGetKSP_NArnoldi(NEP nep,KSP *ksp)
 }
 
 /*@
-   NEPNArnoldiGetKSP - Retrieve the linear solver object (KSP) associated with
+   NEPNArnoldiGetKSP - Retrieve the linear solver object (`KSP`) associated with
    the nonlinear eigenvalue solver.
 
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `NEPNArnoldiSetKSP()`
+.seealso: [](ch:nep), `NEPNARNOLDI`, `NEPNArnoldiSetKSP()`
 @*/
 PetscErrorCode NEPNArnoldiGetKSP(NEP nep,KSP *ksp)
 {
@@ -418,6 +418,25 @@ static PetscErrorCode NEPDestroy_NArnoldi(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   NEPNARNOLDI - NEPNARNOLDI = "narnoldi" - Nonlinear Arnoldi method.
+
+   Notes:
+   This solver implements the N-Arnoldi method {cite:p}`Vos04`, a
+   projection method using an expanding subspace formed with the
+   RII iterate vectors. Hence there are similarities with `NEPRII`.
+   Call `NEPNArnoldiGetKSP` to configure the linear solver, and
+   `NEPNArnoldiSetLagPreconditioner()` to reduce the cost of updating
+   the preconditioner.
+
+   The solver incorporates deflation, so that several eigenpairs con be
+   computed. Details of the implementation in SLEPc can be found in
+   {cite:p}`Cam21`.
+
+   Level: beginner
+
+.seealso: [](ch:nep), `NEP`, `NEPType`, `NEPSetType()`, `NEPNArnoldiGetKSP()`, `NEPNArnoldiSetLagPreconditioner()`
+M*/
 SLEPC_EXTERN PetscErrorCode NEPCreate_NArnoldi(NEP nep)
 {
   NEP_NARNOLDI   *ctx;

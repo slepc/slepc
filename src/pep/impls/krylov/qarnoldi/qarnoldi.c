@@ -20,7 +20,7 @@
 
        [1] K. Meerbergen, "The Quadratic Arnoldi method for the solution
            of the quadratic eigenvalue problem", SIAM J. Matrix Anal.
-           Appl. 30(4):1462-1482, 2008.
+           Appl. 30(4):1462-1482, 2009.
 */
 
 #include <slepc/private/pepimpl.h>    /*I "slepcpep.h" I*/
@@ -317,18 +317,18 @@ static PetscErrorCode PEPQArnoldiSetRestart_QArnoldi(PEP pep,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
 .  -pep_qarnoldi_restart - Sets the restart parameter
 
-   Notes:
+   Note:
    Allowed values are in the range [0.1,0.9]. The default is 0.5.
 
    Level: advanced
 
-.seealso: `PEPQArnoldiGetRestart()`
+.seealso: [](ch:pep), `PEPQARNOLDI`, `PEPQArnoldiGetRestart()`
 @*/
 PetscErrorCode PEPQArnoldiSetRestart(PEP pep,PetscReal keep)
 {
@@ -354,14 +354,14 @@ static PetscErrorCode PEPQArnoldiGetRestart_QArnoldi(PEP pep,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
 
    Level: advanced
 
-.seealso: `PEPQArnoldiSetRestart()`
+.seealso: [](ch:pep), `PEPQARNOLDI`, `PEPQArnoldiSetRestart()`
 @*/
 PetscErrorCode PEPQArnoldiGetRestart(PEP pep,PetscReal *keep)
 {
@@ -388,21 +388,21 @@ static PetscErrorCode PEPQArnoldiSetLocking_QArnoldi(PEP pep,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
--  lock - true if the locking variant must be selected
++  pep  - the polynomial eigensolver context
+-  lock - `PETSC_TRUE` if the locking variant must be selected
 
    Options Database Key:
-.  -pep_qarnoldi_locking - Sets the locking flag
+.  -pep_qarnoldi_locking - sets the locking flag
 
-   Notes:
+   Note:
    The default is to lock converged eigenpairs when the method restarts.
-   This behaviour can be changed so that all directions are kept in the
+   This behavior can be changed so that all directions are kept in the
    working subspace even if already converged to working accuracy (the
    non-locking variant).
 
    Level: advanced
 
-.seealso: `PEPQArnoldiGetLocking()`
+.seealso: [](ch:pep), `PEPQARNOLDI`, `PEPQArnoldiGetLocking()`
 @*/
 PetscErrorCode PEPQArnoldiSetLocking(PEP pep,PetscBool lock)
 {
@@ -428,14 +428,14 @@ static PetscErrorCode PEPQArnoldiGetLocking_QArnoldi(PEP pep,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `PEPQArnoldiSetLocking()`
+.seealso: [](ch:pep), `PEPQARNOLDI`, `PEPQArnoldiSetLocking()`
 @*/
 PetscErrorCode PEPQArnoldiGetLocking(PEP pep,PetscBool *lock)
 {
@@ -489,6 +489,21 @@ static PetscErrorCode PEPDestroy_QArnoldi(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   PEPQARNOLDI - PEPQARNOLDI = "qarnoldi" - The Quadratic Arnoldi method (Q-Arnoldi)
+   for quadratic eigenvalue problems.
+
+   Notes:
+   This solver is available for quadratic eigenproblems only.
+
+   It implements the Q-Arnoldi method {cite:p}`Mee09`, which is not guaranteed
+   to be numerically stable. Users should prefer `PEPTOAR`, which
+   provides a similar algorithm with guaranteed numerical stability.
+
+   Level: beginner
+
+.seealso: [](ch:pep), `PEP`, `PEPType`, `PEPSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode PEPCreate_QArnoldi(PEP pep)
 {
   PEP_QARNOLDI   *ctx;

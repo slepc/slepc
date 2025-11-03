@@ -257,12 +257,12 @@ static PetscErrorCode NEPRIISetMaximumIterations_RII(NEP nep,PetscInt its)
    Logically Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  its - maximum inner iterations
 
    Level: advanced
 
-.seealso: `NEPRIIGetMaximumIterations()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIIGetMaximumIterations()`
 @*/
 PetscErrorCode NEPRIISetMaximumIterations(NEP nep,PetscInt its)
 {
@@ -288,14 +288,14 @@ static PetscErrorCode NEPRIIGetMaximumIterations_RII(NEP nep,PetscInt *its)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  its - maximum inner iterations
 
    Level: advanced
 
-.seealso: `NEPRIISetMaximumIterations()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIISetMaximumIterations()`
 @*/
 PetscErrorCode NEPRIIGetMaximumIterations(NEP nep,PetscInt *its)
 {
@@ -323,13 +323,13 @@ static PetscErrorCode NEPRIISetLagPreconditioner_RII(NEP nep,PetscInt lag)
    Logically Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  lag - 0 indicates NEVER rebuild, 1 means rebuild every time the Jacobian is
           computed within the nonlinear iteration, 2 means every second time
           the Jacobian is built, etc.
 
-   Options Database Keys:
-.  -nep_rii_lag_preconditioner <lag> - the lag value
+   Options Database Key:
+.  -nep_rii_lag_preconditioner \<lag\> - the lag value
 
    Notes:
    The default is 1.
@@ -337,7 +337,7 @@ static PetscErrorCode NEPRIISetLagPreconditioner_RII(NEP nep,PetscInt lag)
 
    Level: intermediate
 
-.seealso: `NEPRIIGetLagPreconditioner()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIIGetLagPreconditioner()`
 @*/
 PetscErrorCode NEPRIISetLagPreconditioner(NEP nep,PetscInt lag)
 {
@@ -363,14 +363,14 @@ static PetscErrorCode NEPRIIGetLagPreconditioner_RII(NEP nep,PetscInt *lag)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  lag - the lag parameter
 
    Level: intermediate
 
-.seealso: `NEPRIISetLagPreconditioner()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIISetLagPreconditioner()`
 @*/
 PetscErrorCode NEPRIIGetLagPreconditioner(NEP nep,PetscInt *lag)
 {
@@ -397,21 +397,21 @@ static PetscErrorCode NEPRIISetConstCorrectionTol_RII(NEP nep,PetscBool cct)
    Logically Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  cct - a boolean value
++  nep - the nonlinear eigensolver context
+-  cct - if `PETSC_FALSE`, the `KSP` relative tolerance is set to $2^{-i}$
 
-   Options Database Keys:
-.  -nep_rii_const_correction_tol <bool> - set the boolean flag
+   Options Database Key:
+.  -nep_rii_const_correction_tol \<cct\> - set a constant or dynamic stopping criterion
 
    Notes:
-   By default, an exponentially decreasing tolerance is set in the KSP used
+   By default, an exponentially decreasing tolerance is set in the `KSP` used
    within the nonlinear iteration, so that each Newton iteration requests
    better accuracy than the previous one. The constant correction tolerance
-   flag stops this behaviour.
+   flag stops this behavior.
 
    Level: intermediate
 
-.seealso: `NEPRIIGetConstCorrectionTol()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIIGetConstCorrectionTol()`, `NEPRIIGetKSP()`
 @*/
 PetscErrorCode NEPRIISetConstCorrectionTol(NEP nep,PetscBool cct)
 {
@@ -437,14 +437,14 @@ static PetscErrorCode NEPRIIGetConstCorrectionTol_RII(NEP nep,PetscBool *cct)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  cct - the value of the constant tolerance flag
 
    Level: intermediate
 
-.seealso: `NEPRIISetConstCorrectionTol()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIISetConstCorrectionTol()`
 @*/
 PetscErrorCode NEPRIIGetConstCorrectionTol(NEP nep,PetscBool *cct)
 {
@@ -471,21 +471,21 @@ static PetscErrorCode NEPRIISetHermitian_RII(NEP nep,PetscBool herm)
    Logically Collective
 
    Input Parameters:
-+  nep  - nonlinear eigenvalue solver
--  herm - a boolean value
++  nep  - the nonlinear eigensolver context
+-  herm - `PETSC_TRUE` if the Hermitian version is preferred
 
-   Options Database Keys:
-.  -nep_rii_hermitian <bool> - set the boolean flag
+   Options Database Key:
+.  -nep_rii_hermitian \<herm\> - toggle the Hermitian version
 
    Notes:
-   By default, the scalar nonlinear equation x'*inv(T(sigma))*T(z)*x=0 is solved
+   By default, the scalar nonlinear equation $x^*T(\sigma)^{-1}T(z)x=0$ is solved
    at each step of the nonlinear iteration. When this flag is set the simpler
-   form x'*T(z)*x=0 is used, which is supposed to be valid only for Hermitian
+   form $x^*T(z)x=0$ is used, which is supposed to be valid only for Hermitian
    problems.
 
    Level: intermediate
 
-.seealso: `NEPRIIGetHermitian()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIIGetHermitian()`
 @*/
 PetscErrorCode NEPRIISetHermitian(NEP nep,PetscBool herm)
 {
@@ -512,14 +512,14 @@ static PetscErrorCode NEPRIIGetHermitian_RII(NEP nep,PetscBool *herm)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  herm - the value of the hermitian flag
+.  herm - the value of the Hermitian flag
 
    Level: intermediate
 
-.seealso: `NEPRIISetHermitian()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIISetHermitian()`
 @*/
 PetscErrorCode NEPRIIGetHermitian(NEP nep,PetscBool *herm)
 {
@@ -546,13 +546,13 @@ static PetscErrorCode NEPRIISetDeflationThreshold_RII(NEP nep,PetscReal deftol)
    Logically Collective
 
    Input Parameters:
-+  nep    - nonlinear eigenvalue solver
++  nep    - the nonlinear eigensolver context
 -  deftol - the threshold value
 
-   Options Database Keys:
-.  -nep_rii_deflation_threshold <deftol> - set the threshold
+   Options Database Key:
+.  -nep_rii_deflation_threshold \<deftol\> - set the threshold
 
-   Notes:
+   Note:
    Normally, the solver iterates on the extended problem in order to deflate
    previously converged eigenpairs. If this threshold is set to a nonzero value,
    then once the residual error is below this threshold the solver will
@@ -562,7 +562,7 @@ static PetscErrorCode NEPRIISetDeflationThreshold_RII(NEP nep,PetscReal deftol)
 
    Level: advanced
 
-.seealso: `NEPRIIGetDeflationThreshold()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIIGetDeflationThreshold()`
 @*/
 PetscErrorCode NEPRIISetDeflationThreshold(NEP nep,PetscReal deftol)
 {
@@ -588,14 +588,14 @@ static PetscErrorCode NEPRIIGetDeflationThreshold_RII(NEP nep,PetscReal *deftol)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  deftol - the threshold
 
    Level: advanced
 
-.seealso: `NEPRIISetDeflationThreshold()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIISetDeflationThreshold()`
 @*/
 PetscErrorCode NEPRIIGetDeflationThreshold(NEP nep,PetscReal *deftol)
 {
@@ -619,18 +619,18 @@ static PetscErrorCode NEPRIISetKSP_RII(NEP nep,KSP ksp)
 }
 
 /*@
-   NEPRIISetKSP - Associate a linear solver object (KSP) to the nonlinear
+   NEPRIISetKSP - Associate a linear solver object (`KSP`) to the nonlinear
    eigenvalue solver.
 
    Collective
 
    Input Parameters:
-+  nep - eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `NEPRIIGetKSP()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIIGetKSP()`
 @*/
 PetscErrorCode NEPRIISetKSP(NEP nep,KSP ksp)
 {
@@ -661,20 +661,20 @@ static PetscErrorCode NEPRIIGetKSP_RII(NEP nep,KSP *ksp)
 }
 
 /*@
-   NEPRIIGetKSP - Retrieve the linear solver object (KSP) associated with
+   NEPRIIGetKSP - Retrieve the linear solver object (`KSP`) associated with
    the nonlinear eigenvalue solver.
 
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `NEPRIISetKSP()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIISetKSP()`
 @*/
 PetscErrorCode NEPRIIGetKSP(NEP nep,KSP *ksp)
 {
@@ -737,6 +737,31 @@ static PetscErrorCode NEPDestroy_RII(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   NEPRII - NEPRII = "rii" - Simple residual inverse iteration with
+   varying shift.
+
+   Notes:
+   This is the default solver, although it is very basic. Users are
+   advised to try other solvers.
+
+   This solver is based on the modification proposed by {cite:t}`Neu85`
+   of the classical residual inverse iteration method. At each step,
+   this method has to solve a system of linear equations. Call
+   `NEPRIIGetKSP()` to configure the `KSP` object used for this.
+   When using iterative linear solvers, the preconditioner will be updated
+   in each step or not, depending on `NEPRIISetLagPreconditioner()`, and
+   the tolerance will be constant or not depending on
+   `NEPRIISetConstCorrectionTol()`.
+
+   The solver incorporates deflation, so that several eigenpairs con be
+   computed. Details of the implementation in SLEPc can be found in
+   {cite:p}`Cam21`.
+
+   Level: beginner
+
+.seealso: [](ch:nep), `NEP`, `NEPType`, `NEPSetType()`, `NEPRIIGetKSP()`, `NEPRIISetLagPreconditioner()`, `NEPRIISetConstCorrectionTol()`
+M*/
 SLEPC_EXTERN PetscErrorCode NEPCreate_RII(NEP nep)
 {
   NEP_RII        *ctx;

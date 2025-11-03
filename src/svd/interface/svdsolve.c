@@ -88,30 +88,37 @@ PetscErrorCode SVDComputeVectors(SVD svd)
    Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Options Database Keys:
 +  -svd_view - print information about the solver used
-.  -svd_view_mat0 - view the first matrix (A)
-.  -svd_view_mat1 - view the second matrix (B)
-.  -svd_view_signature - view the signature matrix (omega)
+.  -svd_view_mat0 - view the first matrix ($A$)
+.  -svd_view_mat1 - view the second matrix ($B$)
+.  -svd_view_signature - view the signature matrix ($\Omega$)
 .  -svd_view_vectors - view the computed singular vectors
 .  -svd_view_values - view the computed singular values
-.  -svd_converged_reason - print reason for convergence, and number of iterations
+.  -svd_converged_reason - print reason for convergence/divergence, and number of iterations
 .  -svd_error_absolute - print absolute errors of each singular triplet
 .  -svd_error_relative - print relative errors of each singular triplet
 -  -svd_error_norm     - print errors relative to the matrix norms of each singular triplet
 
    Notes:
+   The problem matrices are specified with `SVDSetOperators()`.
+
+   `SVDSolve()` will return without generating an error regardless of whether
+   all requested solutions were computed or not. Call `SVDGetConverged()` to get the
+   actual number of computed solutions, and `SVDGetConvergedReason()` to determine if
+   the solver converged or failed and why.
+
    All the command-line options listed above admit an optional argument specifying
-   the viewer type and options. For instance, use '-svd_view_mat0 binary:amatrix.bin'
-   to save the A matrix to a binary file, '-svd_view_values draw' to draw the computed
-   singular values graphically, or '-svd_error_relative :myerr.m:ascii_matlab' to save
+   the viewer type and options. For instance, use `-svd_view_mat0 binary:amatrix.bin`
+   to save the $A$ matrix to a binary file, `-svd_view_values draw` to draw the computed
+   singular values graphically, or `-svd_error_relative :myerr.m:ascii_matlab` to save
    the errors in a file that can be executed in Matlab.
 
    Level: beginner
 
-.seealso: `SVDCreate()`, `SVDSetUp()`, `SVDDestroy()`
+.seealso: [](ch:svd), `SVDCreate()`, `SVDSetUp()`, `SVDDestroy()`, `SVDSetOperators()`, `SVDGetConverged()`, `SVDGetConvergedReason()`
 @*/
 PetscErrorCode SVDSolve(SVD svd)
 {
@@ -185,7 +192,7 @@ PetscErrorCode SVDSolve(SVD svd)
 
 /*@
    SVDGetIterationNumber - Gets the current iteration number. If the
-   call to SVDSolve() is complete, then it returns the number of iterations
+   call to `SVDSolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
@@ -197,15 +204,15 @@ PetscErrorCode SVDSolve(SVD svd)
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If SVDSolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `SVDSolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call SVDGetConvergedReason() to determine if the solver converged or
+   Call `SVDGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate
 
-.seealso: `SVDGetConvergedReason()`, `SVDSetTolerances()`
+.seealso: [](ch:svd), `SVDGetConvergedReason()`, `SVDSetTolerances()`
 @*/
 PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 {
@@ -217,7 +224,7 @@ PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 }
 
 /*@
-   SVDGetConvergedReason - Gets the reason why the SVDSolve() iteration was
+   SVDGetConvergedReason - Gets the reason why the `SVDSolve()` iteration was
    stopped.
 
    Not Collective
@@ -226,26 +233,19 @@ PetscErrorCode SVDGetIterationNumber(SVD svd,PetscInt *its)
 .  svd - the singular value solver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
-   (see SVDConvergedReason)
+.  reason - negative value indicates diverged, positive value converged, see
+   `SVDConvergedReason` for the possible values
 
    Options Database Key:
-.  -svd_converged_reason - print the reason to a viewer
+.  -svd_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  SVD_CONVERGED_TOL - converged up to tolerance
-.  SVD_CONVERGED_USER - converged due to a user-defined condition
-.  SVD_CONVERGED_MAXIT - reached the maximum number of iterations with SVD_CONV_MAXIT criterion
-.  SVD_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  SVD_DIVERGED_BREAKDOWN - generic breakdown in method
--  SVD_DIVERGED_SYMMETRY_LOST - underlying indefinite eigensolver was not able to keep symmetry
-
-   Can only be called after the call to SVDSolve() is complete.
+   Note:
+   If this routine is called before or doing the `SVDSolve()` the value of
+   `SVD_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 
-.seealso: `SVDSetTolerances()`, `SVDSolve()`, `SVDConvergedReason`
+.seealso: [](ch:svd), `SVDSetTolerances()`, `SVDSolve()`, `SVDConvergedReason`
 @*/
 PetscErrorCode SVDGetConvergedReason(SVD svd,SVDConvergedReason *reason)
 {
@@ -268,12 +268,15 @@ PetscErrorCode SVDGetConvergedReason(SVD svd,SVDConvergedReason *reason)
    Output Parameter:
 .  nconv - number of converged singular values
 
-   Note:
-   This function should be called after SVDSolve() has finished.
+   Notes:
+   This function should be called after `SVDSolve()` has finished.
+
+   The value `nconv` may be different from the number of requested solutions
+   `nsv`, but not larger than `ncv`, see `SVDSetDimensions()`.
 
    Level: beginner
 
-.seealso: `SVDSetDimensions()`, `SVDSolve()`, `SVDGetSingularTriplet()`
+.seealso: [](ch:svd), `SVDSetDimensions()`, `SVDSolve()`, `SVDGetSingularTriplet()`
 @*/
 PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
 {
@@ -286,14 +289,14 @@ PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
 }
 
 /*@
-   SVDGetSingularTriplet - Gets the i-th triplet of the singular value decomposition
-   as computed by SVDSolve(). The solution consists in the singular value and its left
+   SVDGetSingularTriplet - Gets the `i`-th triplet of the singular value decomposition
+   as computed by `SVDSolve()`. The solution consists in the singular value and its left
    and right singular vectors.
 
    Collective
 
    Input Parameters:
-+  svd - singular value solver context
++  svd - the singular value solver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -302,24 +305,24 @@ PetscErrorCode SVDGetConverged(SVD svd,PetscInt *nconv)
 -  v     - right singular vector
 
    Note:
-   Both u or v can be NULL if singular vectors are not required.
-   Otherwise, the caller must provide valid Vec objects, i.e.,
-   they must be created by the calling program with e.g. MatCreateVecs().
+   Both `u` or `v` can be `NULL` if singular vectors are not required.
+   Otherwise, the caller must provide valid `Vec` objects, i.e.,
+   they must be created by the calling program with e.g. `MatCreateVecs()`.
 
-   The index i should be a value between 0 and nconv-1 (see SVDGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `SVDGetConverged()`).
    Singular triplets are indexed according to the ordering criterion established
-   with SVDSetWhichSingularTriplets().
+   with `SVDSetWhichSingularTriplets()`.
 
-   In the case of GSVD, the solution consists in three vectors u,v,x that are
-   returned as follows. Vector x is returned in the right singular vector
-   (argument v) and has length equal to the number of columns of A and B.
-   The other two vectors are returned stacked on top of each other [u;v] in
-   the left singular vector argument, with length equal to m+n (number of rows
-   of A plus number of rows of B).
+   In the case of GSVD, the solution consists in three vectors $u$, $v$, $x$ that are
+   returned as follows. Vector $x$ is returned in the right singular vector
+   (argument `v`) and has length equal to the number of columns of $A$ and $B$.
+   The other two vectors are returned stacked on top of each other $[u^*,v^*]^*$ in
+   the left singular vector argument `u`, with length equal to $m+n$ (number of rows
+   of $A$ plus number of rows of $B$).
 
    Level: beginner
 
-.seealso: `SVDSolve()`, `SVDGetConverged()`, `SVDSetWhichSingularTriplets()`
+.seealso: [](ch:svd), `SVDSolve()`, `SVDGetConverged()`, `SVDSetWhichSingularTriplets()`
 @*/
 PetscErrorCode SVDGetSingularTriplet(SVD svd,PetscInt i,PetscReal *sigma,Vec u,Vec v)
 {
@@ -466,32 +469,32 @@ static PetscErrorCode SVDComputeResidualNorms_Hyperbolic(SVD svd,PetscReal sigma
 
 /*@
    SVDComputeError - Computes the error (based on the residual norm) associated
-   with the i-th singular triplet.
+   with the `i`-th singular triplet.
 
    Collective
 
    Input Parameters:
 +  svd  - the singular value solver context
 .  i    - the solution index
--  type - the type of error to compute
+-  type - the type of error to compute, see `SVDErrorType`
 
    Output Parameter:
 .  error - the error
 
    Notes:
    The error can be computed in various ways, all of them based on the residual
-   norm obtained as sqrt(n1^2+n2^2) with n1 = ||A*v-sigma*u||_2 and
-   n2 = ||A^T*u-sigma*v||_2, where sigma is the singular value, u is the left
-   singular vector and v is the right singular vector.
+   norm obtained as $\sqrt{\eta_1^2+\eta_2^2}$ with $\eta_1 = \|Av-\sigma u\|_2$ and
+   $\eta_2 = \|A^*u-\sigma v\|_2$, where $(\sigma,u,v)$ is the approximate singular
+   triplet.
 
    In the case of the GSVD, the two components of the residual norm are
-   n1 = ||s^2*A'*u-c*B'*B*x||_2 and n2 = ||c^2*B'*v-s*A'*A*x||_2, where [u;v]
-   are the left singular vectors and x is the right singular vector, with
-   sigma=c/s.
+   $\eta_1 = \|s^2 A^*u-cB^*Bx\|_2$ and $\eta_2 = ||c^2 B^*v-sA^*Ax||_2$, where
+   $(\sigma,u,v,x)$ is the approximate generalized singular quadruple, with
+   $\sigma=c/s$.
 
    Level: beginner
 
-.seealso: `SVDErrorType`, `SVDSolve()`
+.seealso: [](ch:svd), `SVDErrorType`, `SVDSolve()`
 @*/
 PetscErrorCode SVDComputeError(SVD svd,PetscInt i,SVDErrorType type,PetscReal *error)
 {

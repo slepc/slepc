@@ -293,11 +293,11 @@ static PetscErrorCode NEPSLPSetDeflationThreshold_SLP(NEP nep,PetscReal deftol)
    Logically Collective
 
    Input Parameters:
-+  nep    - nonlinear eigenvalue solver
++  nep    - the nonlinear eigensolver context
 -  deftol - the threshold value
 
-   Options Database Keys:
-.  -nep_slp_deflation_threshold <deftol> - set the threshold
+   Options Database Key:
+.  -nep_slp_deflation_threshold \<deftol\> - set the threshold
 
    Notes:
    Normally, the solver iterates on the extended problem in order to deflate
@@ -309,7 +309,7 @@ static PetscErrorCode NEPSLPSetDeflationThreshold_SLP(NEP nep,PetscReal deftol)
 
    Level: advanced
 
-.seealso: `NEPSLPGetDeflationThreshold()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPGetDeflationThreshold()`
 @*/
 PetscErrorCode NEPSLPSetDeflationThreshold(NEP nep,PetscReal deftol)
 {
@@ -335,14 +335,14 @@ static PetscErrorCode NEPSLPGetDeflationThreshold_SLP(NEP nep,PetscReal *deftol)
    Not Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  deftol - the threshold
 
    Level: advanced
 
-.seealso: `NEPSLPSetDeflationThreshold()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPSetDeflationThreshold()`
 @*/
 PetscErrorCode NEPSLPGetDeflationThreshold(NEP nep,PetscReal *deftol)
 {
@@ -366,18 +366,18 @@ static PetscErrorCode NEPSLPSetEPS_SLP(NEP nep,EPS eps)
 }
 
 /*@
-   NEPSLPSetEPS - Associate a linear eigensolver object (EPS) to the
+   NEPSLPSetEPS - Associate a linear eigensolver object (`EPS`) to the
    nonlinear eigenvalue solver.
 
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  eps - the eigensolver object
++  nep - the nonlinear eigensolver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `NEPSLPGetEPS()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPGetEPS()`
 @*/
 PetscErrorCode NEPSLPSetEPS(NEP nep,EPS eps)
 {
@@ -406,20 +406,20 @@ static PetscErrorCode NEPSLPGetEPS_SLP(NEP nep,EPS *eps)
 }
 
 /*@
-   NEPSLPGetEPS - Retrieve the linear eigensolver object (EPS) associated
+   NEPSLPGetEPS - Retrieve the linear eigensolver object (`EPS`) associated
    to the nonlinear eigenvalue solver.
 
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `NEPSLPSetEPS()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPSetEPS()`
 @*/
 PetscErrorCode NEPSLPGetEPS(NEP nep,EPS *eps)
 {
@@ -443,19 +443,19 @@ static PetscErrorCode NEPSLPSetEPSLeft_SLP(NEP nep,EPS eps)
 }
 
 /*@
-   NEPSLPSetEPSLeft - Associate a linear eigensolver object (EPS) to the
+   NEPSLPSetEPSLeft - Associate a linear eigensolver object (`EPS`) to the
    nonlinear eigenvalue solver, used to compute left eigenvectors in the
    two-sided variant of SLP.
 
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  eps - the eigensolver object
++  nep - the nonlinear eigensolver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `NEPSLPGetEPSLeft()`, `NEPSetTwoSided()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPGetEPSLeft()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPSLPSetEPSLeft(NEP nep,EPS eps)
 {
@@ -484,21 +484,21 @@ static PetscErrorCode NEPSLPGetEPSLeft_SLP(NEP nep,EPS *eps)
 }
 
 /*@
-   NEPSLPGetEPSLeft - Retrieve the linear eigensolver object (EPS) associated
+   NEPSLPGetEPSLeft - Retrieve the linear eigensolver object (`EPS`) associated
    to the nonlinear eigenvalue solver, used to compute left eigenvectors in the
    two-sided variant of SLP.
 
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `NEPSLPSetEPSLeft()`, `NEPSetTwoSided()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPSetEPSLeft()`, `NEPSetTwoSided()`
 @*/
 PetscErrorCode NEPSLPGetEPSLeft(NEP nep,EPS *eps)
 {
@@ -522,18 +522,22 @@ static PetscErrorCode NEPSLPSetKSP_SLP(NEP nep,KSP ksp)
 }
 
 /*@
-   NEPSLPSetKSP - Associate a linear solver object (KSP) to the nonlinear
+   NEPSLPSetKSP - Associate a linear solver object (`KSP`) to the nonlinear
    eigenvalue solver.
 
    Collective
 
    Input Parameters:
-+  nep - eigenvalue solver
++  nep - the nonlinear eigensolver context
 -  ksp - the linear solver object
+
+   Note:
+   This `KSP` object is used only for deflation, when computing more that
+   one eigenpair.
 
    Level: advanced
 
-.seealso: `NEPSLPGetKSP()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPGetKSP()`
 @*/
 PetscErrorCode NEPSLPSetKSP(NEP nep,KSP ksp)
 {
@@ -564,20 +568,24 @@ static PetscErrorCode NEPSLPGetKSP_SLP(NEP nep,KSP *ksp)
 }
 
 /*@
-   NEPSLPGetKSP - Retrieve the linear solver object (KSP) associated with
+   NEPSLPGetKSP - Retrieve the linear solver object (`KSP`) associated with
    the nonlinear eigenvalue solver.
 
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ksp - the linear solver object
 
+   Note:
+   This `KSP` object is used only for deflation, when computing more that
+   one eigenpair.
+
    Level: advanced
 
-.seealso: `NEPSLPSetKSP()`
+.seealso: [](ch:nep), `NEPSLP`, `NEPSLPSetKSP()`
 @*/
 PetscErrorCode NEPSLPGetKSP(NEP nep,KSP *ksp)
 {
@@ -642,6 +650,27 @@ static PetscErrorCode NEPDestroy_SLP(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   NEPSLP - NEPSLP = "slp" - Successive Linear Problems method.
+
+   Notes:
+   This solver is based on the classical Successive Linear Problems
+   (SLP) method proposed by {cite:t}`Ruh73`. At each step, this
+   method has to solve a linear eigenvalue problem. Call
+   `NEPSLPGetEPS()` to configure the `EPS` object used for this.
+
+   `NEPSLP` supports computing left eigenvectors when `NEPSetTwoSided()`
+   has been set. In that case, a different `EPS` is used for the left
+   recurrence, see `NEPSLPGetEPSLeft()`.
+
+   The solver incorporates deflation, so that several eigenpairs con be
+   computed. Details of the implementation in SLEPc can be found in
+   {cite:p}`Cam21`.
+
+   Level: beginner
+
+.seealso: [](ch:nep), `NEP`, `NEPType`, `NEPSetType()`, `NEPSLPGetEPS()`, `NEPSetTwoSided()`, `NEPSLPGetEPSLeft()`
+M*/
 SLEPC_EXTERN PetscErrorCode NEPCreate_SLP(NEP nep)
 {
   NEP_SLP        *ctx;

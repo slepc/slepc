@@ -14,21 +14,21 @@
 #include <slepc/private/nepimpl.h>     /*I "slepcnep.h" I*/
 
 /*@
-   NEPSetWorkVecs - Sets a number of work vectors into a NEP object
+   NEPSetWorkVecs - Sets a number of work vectors into a `NEP` object
 
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigensolver context
++  nep - the nonlinear eigensolver context
 -  nw  - number of work vectors to allocate
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin NEP
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `NEP`
    implementations.
 
    Level: developer
 
-.seealso: `NEPSetUp()`
+.seealso: [](ch:nep), `NEPSetUp()`
 @*/
 PetscErrorCode NEPSetWorkVecs(NEP nep,PetscInt nw)
 {
@@ -145,7 +145,7 @@ PetscErrorCode NEPConvergedNorm(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscR
    Collective
 
    Input Parameters:
-+  nep    - nonlinear eigensolver context obtained from NEPCreate()
++  nep    - the nonlinear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs
@@ -156,19 +156,15 @@ PetscErrorCode NEPConvergedNorm(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscR
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to NEP_CONVERGED_ITERATING
-   (zero).
-
-   NEPStoppingBasic() will stop if all requested eigenvalues are converged, or if
+   `NEPStoppingBasic()` will stop if all requested eigenvalues are converged, or if
    the maximum number of iterations has been reached.
 
-   Use NEPSetStoppingTest() to provide your own test instead of using this one.
+   This is the default stopping test.
+   Use `NEPSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 
-.seealso: `NEPSetStoppingTest()`, `NEPConvergedReason`, `NEPGetConvergedReason()`
+.seealso: [](ch:nep), `NEPSetStoppingTest()`, `NEPConvergedReason`, `NEPGetConvergedReason()`
 @*/
 PetscErrorCode NEPStoppingBasic(NEP nep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,NEPConvergedReason *reason,void *ctx)
 {

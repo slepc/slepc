@@ -15,7 +15,7 @@
 #include <petscdraw.h>
 
 /*@
-   SVDView - Prints the SVD data structure.
+   SVDView - Prints the `SVD` data structure.
 
    Collective
 
@@ -24,22 +24,21 @@
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -svd_view -  Calls SVDView() at end of SVDSolve()
+.  -svd_view -  Calls `SVDView()` at end of `SVDSolve()`
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
 
    Level: beginner
 
-.seealso: `EPSView()`
+.seealso: [](ch:svd), `SVDCreate()`, `SVDViewFromOptions()`, `EPSView()`
 @*/
 PetscErrorCode SVDView(SVD svd,PetscViewer viewer)
 {
@@ -111,18 +110,18 @@ PetscErrorCode SVDView(SVD svd,PetscViewer viewer)
 }
 
 /*@
-   SVDViewFromOptions - View from options
+   SVDViewFromOptions - View (print) an `SVD` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  svd  - the singular value solver context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: `SVDView()`, `SVDCreate()`
+.seealso: [](ch:svd), `SVDView()`, `SVDCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode SVDViewFromOptions(SVD svd,PetscObject obj,const char name[])
 {
@@ -133,7 +132,7 @@ PetscErrorCode SVDViewFromOptions(SVD svd,PetscObject obj,const char name[])
 }
 
 /*@
-   SVDConvergedReasonView - Displays the reason an SVD solve converged or diverged.
+   SVDConvergedReasonView - Displays the reason an `SVD` solve converged or diverged.
 
    Collective
 
@@ -141,18 +140,21 @@ PetscErrorCode SVDViewFromOptions(SVD svd,PetscObject obj,const char name[])
 +  svd - the singular value solver context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
-.  -svd_converged_reason - print reason for convergence, and number of iterations
+   Options Database Key:
+.  -svd_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Note:
-   To change the format of the output call PetscViewerPushFormat(viewer,format) before
-   this call. Use PETSC_VIEWER_DEFAULT for the default, use PETSC_VIEWER_FAILED to only
+   Notes:
+   Use `SVDConvergedReasonViewFromOptions()` to display the reason based on values
+   in the options database.
+
+   To change the format of the output call `PetscViewerPushFormat()` before this
+   call. Use `PETSC_VIEWER_DEFAULT` for the default, or `PETSC_VIEWER_FAILED` to only
    display a reason if it fails. The latter can be set in the command line with
-   -svd_converged_reason ::failed
+   `-svd_converged_reason ::failed`.
 
    Level: intermediate
 
-.seealso: `SVDSetTolerances()`, `SVDGetIterationNumber()`, `SVDConvergedReasonViewFromOptions()`
+.seealso: [](ch:svd), `SVDSetTolerances()`, `SVDGetIterationNumber()`, `SVDConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode SVDConvergedReasonView(SVD svd,PetscViewer viewer)
 {
@@ -174,16 +176,16 @@ PetscErrorCode SVDConvergedReasonView(SVD svd,PetscViewer viewer)
 
 /*@
    SVDConvergedReasonViewFromOptions - Processes command line options to determine if/how
-   the SVD converged reason is to be viewed.
+   the `SVD` converged reason is to be viewed.
 
    Collective
 
    Input Parameter:
 .  svd - the singular value solver context
 
-   Level: developer
+   Level: intermediate
 
-.seealso: `SVDConvergedReasonView()`
+.seealso: [](ch:svd), `SVDConvergedReasonView()`
 @*/
 PetscErrorCode SVDConvergedReasonViewFromOptions(SVD svd)
 {
@@ -303,12 +305,17 @@ static PetscErrorCode SVDErrorView_MATLAB(SVD svd,SVDErrorType etype,PetscViewer
    Notes:
    By default, this function checks the error of all singular triplets and prints
    the singular values if all of them are below the requested tolerance.
-   If the viewer has format=PETSC_VIEWER_ASCII_INFO_DETAIL then a table with
+   If the viewer has format `PETSC_VIEWER_ASCII_INFO_DETAIL` then a table with
    singular values and corresponding errors is printed.
+
+   All the command-line options listed above admit an optional argument
+   specifying the viewer type and options. For instance, use
+   `-svd_error_relative :myerr.m:ascii_matlab` to save the errors in a file
+   that can be executed in Matlab.
 
    Level: intermediate
 
-.seealso: `SVDSolve()`, `SVDValuesView()`, `SVDVectorsView()`
+.seealso: [](ch:svd), `SVDSolve()`, `SVDValuesView()`, `SVDVectorsView()`
 @*/
 PetscErrorCode SVDErrorView(SVD svd,SVDErrorType etype,PetscViewer viewer)
 {
@@ -353,7 +360,7 @@ PetscErrorCode SVDErrorView(SVD svd,SVDErrorType etype,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `SVDErrorView()`
+.seealso: [](ch:svd), `SVDErrorView()`
 @*/
 PetscErrorCode SVDErrorViewFromOptions(SVD svd)
 {
@@ -496,9 +503,15 @@ static PetscErrorCode SVDValuesView_MATLAB(SVD svd,PetscViewer viewer)
    Options Database Key:
 .  -svd_view_values - print computed singular values
 
+   Note:
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-svd_view_values :evals.m:ascii_matlab` to save the values in a file
+   that can be executed in Matlab.
+
    Level: intermediate
 
-.seealso: `SVDSolve()`, `SVDVectorsView()`, `SVDErrorView()`
+.seealso: [](ch:svd), `SVDSolve()`, `SVDVectorsView()`, `SVDErrorView()`
 @*/
 PetscErrorCode SVDValuesView(SVD svd,PetscViewer viewer)
 {
@@ -554,7 +567,7 @@ PetscErrorCode SVDValuesView(SVD svd,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `SVDValuesView()`
+.seealso: [](ch:svd), `SVDValuesView()`
 @*/
 PetscErrorCode SVDValuesViewFromOptions(SVD svd)
 {
@@ -589,13 +602,17 @@ PetscErrorCode SVDValuesViewFromOptions(SVD svd)
    Options Database Key:
 .  -svd_view_vectors - output singular vectors
 
-   Note:
+   Notes:
    Right and left singular vectors are interleaved, that is, the vectors are
-   output in the following order V0, U0, V1, U1, V2, U2, ...
+   output in the following order\: `V0, U0, V1, U1, V2, U2, ...`
+
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-svd_view_vectors binary:svecs.bin` to save the vectors in a binary file.
 
    Level: intermediate
 
-.seealso: `SVDSolve()`, `SVDValuesView()`, `SVDErrorView()`
+.seealso: [](ch:svd), `SVDSolve()`, `SVDValuesView()`, `SVDErrorView()`
 @*/
 PetscErrorCode SVDVectorsView(SVD svd,PetscViewer viewer)
 {
@@ -641,7 +658,7 @@ PetscErrorCode SVDVectorsView(SVD svd,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `SVDVectorsView()`
+.seealso: [](ch:svd), `SVDVectorsView()`
 @*/
 PetscErrorCode SVDVectorsViewFromOptions(SVD svd)
 {

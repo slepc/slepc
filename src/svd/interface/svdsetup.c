@@ -25,7 +25,7 @@
 
    Level: beginner
 
-.seealso: `SVDSolve()`, `SVDGetOperators()`
+.seealso: [](ch:svd), `SVDSolve()`, `SVDGetOperators()`
 @*/
 PetscErrorCode SVDSetOperators(SVD svd,Mat A,Mat B)
 {
@@ -92,7 +92,7 @@ PetscErrorCode SVDSetOperators(SVD svd,Mat A,Mat B)
 
    Level: intermediate
 
-.seealso: `SVDSolve()`, `SVDSetOperators()`
+.seealso: [](ch:svd), `SVDSolve()`, `SVDSetOperators()`
 @*/
 PetscErrorCode SVDGetOperators(SVD svd,Mat *A,Mat *B)
 {
@@ -110,15 +110,15 @@ PetscErrorCode SVDGetOperators(SVD svd,Mat *A,Mat *B)
 
    Input Parameters:
 +  svd   - the singular value solver context
--  omega - a vector containing the diagonal elements of the signature matrix (or NULL)
+-  omega - a vector containing the diagonal elements of the signature matrix (or `NULL`)
 
    Notes:
    The signature matrix is relevant only for hyperbolic problems (HSVD).
-   Use NULL to reset a previously set signature.
+   Use `NULL` to reset a previously set signature.
 
    Level: intermediate
 
-.seealso: `SVDSetProblemType()`, `SVDSetOperators()`, `SVDGetSignature()`
+.seealso: [](ch:svd), `SVDSetProblemType()`, `SVDSetOperators()`, `SVDGetSignature()`, `SVD_HYPERBOLIC`
 @*/
 PetscErrorCode SVDSetSignature(SVD svd,Vec omega)
 {
@@ -164,11 +164,11 @@ PetscErrorCode SVDSetSignature(SVD svd,Vec omega)
    The signature matrix is relevant only for hyperbolic problems (HSVD).
    If no signature has been set, this function will return a vector of all ones.
 
-   The user should pass a previously created Vec with the appropriate dimension.
+   The user should pass a previously created `Vec` with the appropriate dimension.
 
    Level: intermediate
 
-.seealso: `SVDSetSignature()`
+.seealso: [](ch:svd), `SVDSetSignature()`, `SVD_HYPERBOLIC`
 @*/
 PetscErrorCode SVDGetSignature(SVD svd,Vec omega)
 {
@@ -181,21 +181,21 @@ PetscErrorCode SVDGetSignature(SVD svd,Vec omega)
 }
 
 /*@
-   SVDSetDSType - Sets the type of the internal DS object based on the current
+   SVDSetDSType - Sets the type of the internal `DS` object based on the current
    settings of the singular value solver.
 
    Collective
 
    Input Parameter:
-.  svd - singular value solver context
+.  svd - the singular value solver context
 
    Note:
    This function need not be called explicitly, since it will be called at
-   both SVDSetFromOptions() and SVDSetUp().
+   both `SVDSetFromOptions()` and `SVDSetUp()`.
 
    Level: developer
 
-.seealso: `SVDSetFromOptions()`, `SVDSetUp()`
+.seealso: [](ch:svd), `SVDSetFromOptions()`, `SVDSetUp()`
 @*/
 PetscErrorCode SVDSetDSType(SVD svd)
 {
@@ -212,16 +212,16 @@ PetscErrorCode SVDSetDSType(SVD svd)
    Collective
 
    Input Parameter:
-.  svd   - singular value solver context
+.  svd - the singular value solver context
 
    Notes:
-   This function need not be called explicitly in most cases, since SVDSolve()
+   This function need not be called explicitly in most cases, since `SVDSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
    Level: developer
 
-.seealso: `SVDCreate()`, `SVDSolve()`, `SVDDestroy()`
+.seealso: [](ch:svd), `SVDCreate()`, `SVDSolve()`, `SVDDestroy()`
 @*/
 PetscErrorCode SVDSetUp(SVD svd)
 {
@@ -405,7 +405,7 @@ PetscErrorCode SVDSetUp(SVD svd)
 }
 
 /*@
-   SVDSetInitialSpaces - Specify two basis of vectors that constitute the initial
+   SVDSetInitialSpaces - Specify two bases of vectors that constitute the initial
    right and/or left spaces.
 
    Collective
@@ -425,18 +425,18 @@ PetscErrorCode SVDSetUp(SVD svd)
    Some solvers start to iterate on a single vector (initial vector). In that case,
    the other vectors are ignored.
 
-   These vectors do not persist from one SVDSolve() call to the other, so the
-   initial space should be set every time.
+   These vectors do not persist from one `SVDSolve()` call to the other, so the
+   initial spaces should be set every time.
 
    The vectors do not need to be mutually orthonormal, since they are explicitly
    orthonormalized internally.
 
    Common usage of this function is when the user can provide a rough approximation
-   of the wanted singular space. Then, convergence may be faster.
+   of the wanted singular spaces. Then, convergence may be faster.
 
    Level: intermediate
 
-.seealso: `SVDSetUp()`
+.seealso: [](ch:svd), `SVDSetUp()`
 @*/
 PetscErrorCode SVDSetInitialSpaces(SVD svd,PetscInt nr,Vec isr[],PetscInt nl,Vec isl[])
 {
@@ -498,19 +498,19 @@ PetscErrorCode SVDSetDimensions_Default(SVD svd)
    Collective
 
    Input Parameters:
-+  svd   - singular value solver context
++  svd   - the singular value solver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
    Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin SVD
+   This is `SLEPC_EXTERN` because it may be required by user plugin `SVD`
    implementations.
 
-   This is called at setup after setting the value of ncv and the flag leftbasis.
+   This is called at setup after setting the value of `ncv` and the flag `leftbasis`.
 
    Level: developer
 
-.seealso: `SVDSetUp()`
+.seealso: [](ch:svd), `SVDSetUp()`, `SVDSetDimensions()`
 @*/
 PetscErrorCode SVDAllocateSolution(SVD svd,PetscInt extra)
 {
@@ -566,11 +566,11 @@ PetscErrorCode SVDAllocateSolution(SVD svd,PetscInt extra)
    Collective
 
    Input Parameters:
-+  svd     - singular value solver context
++  svd     - the singular value solver context
 -  newsize - new size
 
    Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin SVD
+   This is `SLEPC_EXTERN` because it may be required by user plugin SVD
    implementations.
 
    This is called during the iteration in case the threshold stopping test has
@@ -578,7 +578,7 @@ PetscErrorCode SVDAllocateSolution(SVD svd,PetscInt extra)
 
    Level: developer
 
-.seealso: `SVDAllocateSolution()`, `SVDSetThreshold()`
+.seealso: [](ch:svd), `SVDAllocateSolution()`, `SVDSetThreshold()`
 @*/
 PetscErrorCode SVDReallocateSolution(SVD svd,PetscInt newsize)
 {

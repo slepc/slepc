@@ -76,7 +76,7 @@ static PetscErrorCode BVBiorthogonalizeGS(BV V,BV W,Vec v)
 }
 
 /*@
-   BVBiorthogonalizeColumn - Bi-orthogonalize a column of two BV objects.
+   BVBiorthogonalizeColumn - Bi-orthogonalize a column of two `BV` objects.
 
    Collective
 
@@ -86,12 +86,12 @@ static PetscErrorCode BVBiorthogonalizeGS(BV V,BV W,Vec v)
 -  j - index of column to be bi-orthonormalized
 
    Notes:
-   This function bi-orthogonalizes vectors V[j],W[j] against W[0..j-1],
-   and V[0..j-1], respectively, so that W[0..j]'*V[0..j] = diagonal.
+   This function bi-orthogonalizes vectors $v_j$, $w_j$ against $W_{0:j-1}$,
+   and $V_{0:j-1}$, respectively, so that $W_{0:j}^*V_{0:j}$ is diagonal.
 
    Level: advanced
 
-.seealso: `BVOrthogonalizeColumn()`, `BVBiorthonormalizeColumn()`
+.seealso: [](sec:bv), `BVOrthogonalizeColumn()`, `BVBiorthonormalizeColumn()`
 @*/
 PetscErrorCode BVBiorthogonalizeColumn(BV V,BV W,PetscInt j)
 {
@@ -144,7 +144,7 @@ PetscErrorCode BVBiorthogonalizeColumn(BV V,BV W,PetscInt j)
 }
 
 /*@
-   BVBiorthonormalizeColumn - Bi-orthonormalize a column of two BV objects.
+   BVBiorthonormalizeColumn - Bi-orthonormalize a column of two `BV` objects.
 
    Collective
 
@@ -153,17 +153,17 @@ PetscErrorCode BVBiorthogonalizeColumn(BV V,BV W,PetscInt j)
 .  W - second basis vectors context
 -  j - index of column to be bi-orthonormalized
 
-   Output Parameters:
+   Output Parameter:
 .  delta - (optional) value used for normalization
 
    Notes:
-   This function first bi-orthogonalizes vectors V[j],W[j] against W[0..j-1],
-   and V[0..j-1], respectively. Then, it scales the vectors with 1/delta, so
-   that the resulting vectors satisfy W[j]'*V[j] = 1.
+   This function first bi-orthogonalizes vectors $v_j$, $w_j$ against $W_{0:j-1}$,
+   and $V_{0:j-1}$, respectively. Then, it scales the vectors with $1/\delta$, so
+   that the resulting vectors satisfy $w_j^*v_j = 1$.
 
    Level: advanced
 
-.seealso: `BVOrthonormalizeColumn()`, `BVBiorthogonalizeColumn()`
+.seealso: [](sec:bv), `BVOrthonormalizeColumn()`, `BVBiorthogonalizeColumn()`
 @*/
 PetscErrorCode BVBiorthonormalizeColumn(BV V,BV W,PetscInt j,PetscReal *delta)
 {

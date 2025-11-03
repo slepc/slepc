@@ -23,7 +23,8 @@ program test1f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   RG             :: rg
-  PetscInt       :: i, n, inside, one
+  PetscInt       :: i, n, one
+  PetscInt       :: inside(1)
   PetscMPIInt    :: rank
   PetscErrorCode :: ierr
   PetscReal      :: re, im
@@ -61,9 +62,9 @@ program test1f
   ar = re
   ai = im
 #endif
-  PetscCallA(RGCheckInside(rg, one, ar, ai, inside, ierr))
+  PetscCallA(RGCheckInside(rg, one, [ar], [ai], inside, ierr))
   if (rank == 0) then
-    if (inside >= 0) then
+    if (inside(1) >= 0) then
       write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is inside the region'
     else
       write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is outside the region'
@@ -114,9 +115,9 @@ program test1f
   ar = re
   ai = im
 #endif
-  PetscCallA(RGCheckInside(rg, one, ar, ai, inside, ierr))
+  PetscCallA(RGCheckInside(rg, one, [ar], [ai], inside, ierr))
   if (rank == 0) then
-    if (inside >= 0) then
+    if (inside(1) >= 0) then
       write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is inside the region'
     else
       write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is outside the region'
@@ -165,9 +166,9 @@ program test1f
   ar = re
   ai = im
 #endif
-  PetscCallA(RGCheckInside(rg, one, ar, ai, inside, ierr))
+  PetscCallA(RGCheckInside(rg, one, [ar], [ai], inside, ierr))
   if (rank == 0) then
-    if (inside >= 0) then
+    if (inside(1) >= 0) then
       write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is inside the region'
     else
       write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is outside the region'

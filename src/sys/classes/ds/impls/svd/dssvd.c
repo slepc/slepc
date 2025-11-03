@@ -649,7 +649,7 @@ static PetscErrorCode DSSVDSetDimensions_SVD(DS ds,PetscInt m)
 }
 
 /*@
-   DSSVDSetDimensions - Sets the number of columns for a DSSVD.
+   DSSVDSetDimensions - Sets the number of columns for a `DSSVD`.
 
    Logically Collective
 
@@ -658,12 +658,12 @@ static PetscErrorCode DSSVDSetDimensions_SVD(DS ds,PetscInt m)
 -  m  - the number of columns
 
    Notes:
-   This call is complementary to DSSetDimensions(), to provide a dimension
-   that is specific to this DS type.
+   This call is complementary to `DSSetDimensions()`, to provide a dimension
+   that is specific to this `DS` type.
 
    Level: intermediate
 
-.seealso: `DSSVDGetDimensions()`, `DSSetDimensions()`
+.seealso: [](sec:ds), `DSSVD`, `DSSVDGetDimensions()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSSVDSetDimensions(DS ds,PetscInt m)
 {
@@ -684,19 +684,19 @@ static PetscErrorCode DSSVDGetDimensions_SVD(DS ds,PetscInt *m)
 }
 
 /*@
-   DSSVDGetDimensions - Returns the number of columns for a DSSVD.
+   DSSVDGetDimensions - Returns the number of columns for a `DSSVD`.
 
    Not Collective
 
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  m - the number of columns
 
    Level: intermediate
 
-.seealso: `DSSVDSetDimensions()`
+.seealso: [](sec:ds), `DSSVD`, `DSSVDSetDimensions()`
 @*/
 PetscErrorCode DSSVDGetDimensions(DS ds,PetscInt *m)
 {
@@ -747,35 +747,35 @@ static PetscErrorCode DSReallocate_SVD(DS ds,PetscInt ld)
 /*MC
    DSSVD - Dense Singular Value Decomposition.
 
-   Level: beginner
-
    Notes:
-   The problem is expressed as A = U*Sigma*V', where A is rectangular in
-   general, with n rows and m columns. Sigma is a diagonal matrix whose diagonal
-   elements are the arguments of DSSolve(). After solve, A is overwritten
-   with Sigma.
+   The problem is expressed as $A = U\Sigma V^*$, where $A$ is rectangular in
+   general, with $n$ rows and $m$ columns. $\Sigma$ is a diagonal matrix whose diagonal
+   elements are the arguments of `DSSolve()`. After solve, $A$ is overwritten
+   with $\Sigma$.
 
-   The orthogonal (or unitary) matrices of left and right singular vectors, U
-   and V, have size n and m, respectively. The number of columns m must
-   be specified via DSSVDSetDimensions().
+   The orthogonal (or unitary) matrices of left and right singular vectors, $U$
+   and $V$, have size $n$ and $m$, respectively. The number of columns $m$ must
+   be specified via `DSSVDSetDimensions()`.
 
-   If the DS object is in the intermediate state, A is assumed to be in upper
+   If the `DS` object is in the intermediate state, $A$ is assumed to be in upper
    bidiagonal form (possibly with an arrow) and is stored in compact format
-   on matrix T. Otherwise, no particular structure is assumed. The compact
-   storage is implemented for the square case only, m=n. The extra row should
+   on matrix $T$. Otherwise, no particular structure is assumed. The compact
+   storage is implemented for the square case only, $m=n$. The extra row should
    be interpreted in this case as an extra column.
 
    Used DS matrices:
-+  DS_MAT_A - problem matrix (used only if compact=false)
-.  DS_MAT_T - upper bidiagonal matrix
-.  DS_MAT_U - left singular vectors
--  DS_MAT_V - right singular vectors
++  `DS_MAT_A` - problem matrix (used only if `compact=PETSC_FALSE`)
+.  `DS_MAT_T` - upper bidiagonal matrix
+.  `DS_MAT_U` - left singular vectors
+-  `DS_MAT_V` - right singular vectors
 
    Implemented methods:
-+  0 - Implicit zero-shift QR for bidiagonals (_bdsqr)
--  1 - Divide and Conquer (_bdsdc or _gesdd)
++  0 - Implicit zero-shift QR for bidiagonals (`_bdsqr`)
+-  1 - Divide and Conquer (`_bdsdc` or `_gesdd`)
 
-.seealso: `DSCreate()`, `DSSetType()`, `DSType`, `DSSVDSetDimensions()`
+   Level: beginner
+
+.seealso: [](sec:ds), `DSCreate()`, `DSSetType()`, `DSType`, `DSSVDSetDimensions()`, `DSSetCompact()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_SVD(DS ds)
 {

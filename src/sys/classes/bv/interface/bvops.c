@@ -15,7 +15,7 @@
 #include <slepcds.h>
 
 /*@
-   BVMult - Computes Y = beta*Y + alpha*X*Q.
+   BVMult - Computes $Y = \beta Y + \alpha X Q$.
 
    Logically Collective
 
@@ -27,24 +27,24 @@
 -  Q     - (optional) sequential dense matrix
 
    Notes:
-   X and Y must be different objects. The case X=Y can be addressed with
-   BVMultInPlace().
+   `X` and `Y` must be different objects. The case `X=Y` can be addressed with
+   `BVMultInPlace()`.
 
-   If matrix Q is NULL, then an AXPY operation Y = beta*Y + alpha*X is done
-   (i.e. results as if Q = identity). If provided,
-   the matrix Q must be a sequential dense Mat, with all entries equal on
+   If matrix `Q` is `NULL`, then an AXPY operation $Y = \beta Y + \alpha X$ is
+   done (i.e., results as if $Q = I$). If provided,
+   the matrix `Q` must be a sequential dense `Mat`, with all entries equal on
    all processes (otherwise each process will compute a different update).
-   The dimensions of Q must be at least m,n where m is the number of active
-   columns of X and n is the number of active columns of Y.
+   The dimensions of `Q` must be at least `m,n` where `m` is the number of active
+   columns of `X` and `n` is the number of active columns of `Y`.
 
-   The leading columns of Y are not modified. Also, if X has leading
+   The leading columns of `Y` are not modified. Also, if `X` has leading
    columns specified, then these columns do not participate in the computation.
-   Hence, only rows (resp. columns) of Q starting from lx (resp. ly) are used,
-   where lx (resp. ly) is the number of leading columns of X (resp. Y).
+   Hence, only rows (resp. columns) of `Q` starting from `lx` (resp. `ly`) are used,
+   where `lx` (resp. `ly`) is the number of leading columns of `X` (resp. `Y`).
 
    Level: intermediate
 
-.seealso: `BVMultVec()`, `BVMultColumn()`, `BVMultInPlace()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVMultVec()`, `BVMultColumn()`, `BVMultInPlace()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVMult(BV Y,PetscScalar alpha,PetscScalar beta,BV X,Mat Q)
 {
@@ -80,7 +80,7 @@ PetscErrorCode BVMult(BV Y,PetscScalar alpha,PetscScalar beta,BV X,Mat Q)
 }
 
 /*@
-   BVMultVec - Computes y = beta*y + alpha*X*q.
+   BVMultVec - Computes $y = \beta y + \alpha X q$.
 
    Logically Collective
 
@@ -92,20 +92,20 @@ PetscErrorCode BVMult(BV Y,PetscScalar alpha,PetscScalar beta,BV X,Mat Q)
 -  q     - an array of scalars
 
    Notes:
-   This operation is the analogue of BVMult() but with a BV and a Vec,
-   instead of two BV. Note that arguments are listed in different order
-   with respect to BVMult().
+   This operation is the analogue of `BVMult()` but with a `BV` and a `Vec`,
+   instead of two `BV`s. Note that arguments are listed in different order
+   with respect to `BVMult()`.
 
-   If X has leading columns specified, then these columns do not participate
+   If `X` has leading columns specified, then these columns do not participate
    in the computation.
 
-   The length of array q must be equal to the number of active columns of X
-   minus the number of leading columns, i.e. the first entry of q multiplies
+   The length of array `q` must be equal to the number of active columns of `X`
+   minus the number of leading columns, i.e., the first entry of `q` multiplies
    the first non-leading column.
 
    Level: intermediate
 
-.seealso: `BVMult()`, `BVMultColumn()`, `BVMultInPlace()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVMult()`, `BVMultColumn()`, `BVMultInPlace()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVMultVec(BV X,PetscScalar alpha,PetscScalar beta,Vec y,PetscScalar q[])
 {
@@ -134,8 +134,8 @@ PetscErrorCode BVMultVec(BV X,PetscScalar alpha,PetscScalar beta,Vec y,PetscScal
 }
 
 /*@
-   BVMultColumn - Computes y = beta*y + alpha*X*q, where y is the j-th column
-   of X.
+   BVMultColumn - Computes $y = \beta y + \alpha X q$, where $y$ is the j-th column
+   of $X$.
 
    Logically Collective
 
@@ -147,22 +147,22 @@ PetscErrorCode BVMultVec(BV X,PetscScalar alpha,PetscScalar beta,Vec y,PetscScal
 -  q     - an array of scalars
 
    Notes:
-   This operation is equivalent to BVMultVec() but it uses column j of X
-   rather than taking a Vec as an argument. The number of active columns of
-   X is set to j before the computation, and restored afterwards.
-   If X has leading columns specified, then these columns do not participate
-   in the computation. Therefore, the length of array q must be equal to j
+   This operation is equivalent to `BVMultVec()` but it uses column `j` of `X`
+   rather than taking a `Vec` as an argument. The number of active columns of
+   `X` is set to `j` before the computation, and restored afterwards.
+   If `X` has leading columns specified, then these columns do not participate
+   in the computation. Therefore, the length of array `q` must be equal to `j`
    minus the number of leading columns.
 
-   Developer Notes:
-   If q is NULL, then the coefficients are taken from position nc+l of the
-   internal buffer vector, see BVGetBufferVec().
+   Developer Note:
+   If `q` is `NULL`, then the coefficients are taken from position `nc+l` of the
+   internal buffer vector, see `BVGetBufferVec()`.
 
    Level: advanced
 
-.seealso: `BVMult()`, `BVMultVec()`, `BVMultInPlace()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVMult()`, `BVMultVec()`, `BVMultInPlace()`, `BVSetActiveColumns()`
 @*/
-PetscErrorCode BVMultColumn(BV X,PetscScalar alpha,PetscScalar beta,PetscInt j,PetscScalar *q)
+PetscErrorCode BVMultColumn(BV X,PetscScalar alpha,PetscScalar beta,PetscInt j,PetscScalar q[])
 {
   PetscInt       ksave;
   Vec            y;
@@ -192,30 +192,30 @@ PetscErrorCode BVMultColumn(BV X,PetscScalar alpha,PetscScalar beta,PetscInt j,P
 }
 
 /*@
-   BVMultInPlace - Update a set of vectors as V(:,s:e-1) = V*Q(:,s:e-1).
+   BVMultInPlace - Update a set of vectors as $V_{:,s:e-1} = V Q_{:,s:e-1}$.
 
    Logically Collective
 
    Input Parameters:
 +  Q - a sequential dense matrix
-.  s - first column of V to be overwritten
--  e - first column of V not to be overwritten
+.  s - first column of `V` to be overwritten
+-  e - first column of `V` not to be overwritten
 
    Input/Output Parameter:
 .  V - basis vectors
 
    Notes:
-   The matrix Q must be a sequential dense Mat, with all entries equal on
+   The matrix `Q` must be a sequential dense `Mat`, with all entries equal on
    all processes (otherwise each process will compute a different update).
 
-   This function computes V(:,s:e-1) = V*Q(:,s:e-1), that is, given a set of
-   vectors V, columns from s to e-1 are overwritten with columns from s to
-   e-1 of the matrix-matrix product V*Q. Only columns s to e-1 of Q are
+   This function computes $V_{:,s:e-1} = V Q_{:,s:e-1}$, that is, given a set of
+   vectors $V$, columns from $s$ to $e-1$ are overwritten with columns from $s$ to
+   $e-1$ of the matrix-matrix product $V Q$. Only columns $s$ to $e-1$ of `Q` are
    referenced.
 
    Level: intermediate
 
-.seealso: `BVMult()`, `BVMultVec()`, `BVMultInPlaceHermitianTranspose()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVMult()`, `BVMultVec()`, `BVMultInPlaceHermitianTranspose()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVMultInPlace(BV V,Mat Q,PetscInt s,PetscInt e)
 {
@@ -245,25 +245,25 @@ PetscErrorCode BVMultInPlace(BV V,Mat Q,PetscInt s,PetscInt e)
 }
 
 /*@
-   BVMultInPlaceHermitianTranspose - Update a set of vectors as V(:,s:e-1) = V*Q'(:,s:e-1).
+   BVMultInPlaceHermitianTranspose - Update a set of vectors as $V_{:,s:e-1} = V Q_{:,s:e-1}^*$.
 
    Logically Collective
 
    Input Parameters:
 +  Q - a sequential dense matrix
-.  s - first column of V to be overwritten
--  e - first column of V not to be overwritten
+.  s - first column of `V` to be overwritten
+-  e - first column of `V` not to be overwritten
 
    Input/Output Parameter:
 .  V - basis vectors
 
    Notes:
-   This is a variant of BVMultInPlace() where the conjugate transpose
-   of Q is used.
+   This is a variant of `BVMultInPlace()` where the conjugate transpose
+   of `Q` is used.
 
    Level: intermediate
 
-.seealso: `BVMultInPlace()`
+.seealso: [](sec:bv), `BVMultInPlace()`
 @*/
 PetscErrorCode BVMultInPlaceHermitianTranspose(BV V,Mat Q,PetscInt s,PetscInt e)
 {
@@ -293,7 +293,7 @@ PetscErrorCode BVMultInPlaceHermitianTranspose(BV V,Mat Q,PetscInt s,PetscInt e)
 }
 
 /*@
-   BVScale - Multiply the BV entries by a scalar value.
+   BVScale - Multiply the `BV` entries by a scalar value.
 
    Logically Collective
 
@@ -306,7 +306,7 @@ PetscErrorCode BVMultInPlaceHermitianTranspose(BV V,Mat Q,PetscInt s,PetscInt e)
 
    Level: intermediate
 
-.seealso: `BVScaleColumn()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVScaleColumn()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVScale(BV bv,PetscScalar alpha)
 {
@@ -325,18 +325,18 @@ PetscErrorCode BVScale(BV bv,PetscScalar alpha)
 }
 
 /*@
-   BVScaleColumn - Scale one column of a BV.
+   BVScaleColumn - Scale one column of a `BV`.
 
    Logically Collective
 
    Input Parameters:
 +  bv    - basis vectors
-.  j     - column number to be scaled
+.  j     - index of column to be scaled
 -  alpha - scaling factor
 
    Level: intermediate
 
-.seealso: `BVScale()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVScale()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVScaleColumn(BV bv,PetscInt j,PetscScalar alpha)
 {
@@ -435,11 +435,11 @@ static inline PetscErrorCode BVSetRandomSignColumn_Private(BV bv,PetscInt k)
 }
 
 /*@
-   BVSetRandom - Set the columns of a BV to random numbers.
+   BVSetRandom - Set the columns of a `BV` to random numbers.
 
    Logically Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - basis vectors
 
    Note:
@@ -447,7 +447,7 @@ static inline PetscErrorCode BVSetRandomSignColumn_Private(BV bv,PetscInt k)
 
    Level: advanced
 
-.seealso: `BVSetRandomContext()`, `BVSetRandomColumn()`, `BVSetRandomNormal()`, `BVSetRandomSign()`, `BVSetRandomCond()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVSetRandomContext()`, `BVSetRandomColumn()`, `BVSetRandomNormal()`, `BVSetRandomSign()`, `BVSetRandomCond()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandom(BV bv)
 {
@@ -467,17 +467,17 @@ PetscErrorCode BVSetRandom(BV bv)
 }
 
 /*@
-   BVSetRandomColumn - Set one column of a BV to random numbers.
+   BVSetRandomColumn - Set one column of a `BV` to random numbers.
 
    Logically Collective
 
    Input Parameters:
 +  bv - basis vectors
--  j  - column number to be set
+-  j  - index of column to be set
 
    Level: advanced
 
-.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomNormal()`, `BVSetRandomCond()`
+.seealso: [](sec:bv), `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomNormal()`, `BVSetRandomCond()`
 @*/
 PetscErrorCode BVSetRandomColumn(BV bv,PetscInt j)
 {
@@ -497,7 +497,7 @@ PetscErrorCode BVSetRandomColumn(BV bv,PetscInt j)
 }
 
 /*@
-   BVSetRandomNormal - Set the columns of a BV to random numbers with a normal
+   BVSetRandomNormal - Set the columns of a `BV` to random numbers with a normal
    distribution.
 
    Logically Collective
@@ -508,7 +508,7 @@ PetscErrorCode BVSetRandomColumn(BV bv,PetscInt j)
    Notes:
    All active columns (except the leading ones) are modified.
 
-   Other functions such as BVSetRandom(), BVSetRandomColumn(), and BVSetRandomCond()
+   Other functions such as `BVSetRandom()`, `BVSetRandomColumn()`, and `BVSetRandomCond()`
    produce random numbers with a uniform distribution. This function returns values
    that fit a normal distribution (Gaussian).
 
@@ -518,7 +518,7 @@ PetscErrorCode BVSetRandomColumn(BV bv,PetscInt j)
 
    Level: advanced
 
-.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetRandomCond()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetRandomCond()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandomNormal(BV bv)
 {
@@ -547,7 +547,7 @@ PetscErrorCode BVSetRandomNormal(BV bv)
 }
 
 /*@
-   BVSetRandomSign - Set the entries of a BV to values 1 or -1 with equal
+   BVSetRandomSign - Set the entries of a `BV` to values 1 or -1 with equal
    probability.
 
    Logically Collective
@@ -560,7 +560,7 @@ PetscErrorCode BVSetRandomNormal(BV bv)
 
    This function is used, e.g., in contour integral methods when estimating
    the number of eigenvalues enclosed by the contour via an unbiased
-   estimator of tr(f(A)) [Bai et al., JCAM 1996].
+   estimator of $\operatorname{tr}(f(A))$ {cite:p}`Bai96`.
 
    Developer Notes:
    The current implementation obtains random numbers and then replaces them
@@ -568,7 +568,7 @@ PetscErrorCode BVSetRandomNormal(BV bv)
 
    Level: advanced
 
-.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandomSign(BV bv)
 {
@@ -591,7 +591,7 @@ PetscErrorCode BVSetRandomSign(BV bv)
 }
 
 /*@
-   BVSetRandomCond - Set the columns of a BV to random numbers, in a way that
+   BVSetRandomCond - Set the columns of a `BV` to random numbers, in a way that
    the generated matrix has a given condition number.
 
    Logically Collective
@@ -605,7 +605,7 @@ PetscErrorCode BVSetRandomSign(BV bv)
 
    Level: advanced
 
-.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetRandomNormal()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomColumn()`, `BVSetRandomNormal()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVSetRandomCond(BV bv,PetscReal condn)
 {
@@ -664,7 +664,7 @@ PetscErrorCode BVSetRandomCond(BV bv,PetscReal condn)
 }
 
 /*@
-   BVMatMult - Computes the matrix-vector product for each column, Y=A*V.
+   BVMatMult - Computes the matrix-vector product for each column, $Y=AV$.
 
    Neighbor-wise Collective
 
@@ -676,18 +676,18 @@ PetscErrorCode BVSetRandomCond(BV bv,PetscReal condn)
 .  Y - the result
 
    Notes:
-   Both V and Y must be distributed in the same manner. Only active columns
+   Both `V` and `Y` must be distributed in the same manner. Only active columns
    (excluding the leading ones) are processed.
-   In the result Y, columns are overwritten starting from the leading ones.
-   The number of active columns in V and Y should match, although they need
+   In the result `Y`, columns are overwritten starting from the leading ones.
+   The number of active columns in `V` and `Y` should match, although they need
    not be the same columns.
 
    It is possible to choose whether the computation is done column by column
-   or as a Mat-Mat product, see BVSetMatMultMethod().
+   or as a `Mat`-`Mat` product, see `BVSetMatMultMethod()`.
 
-   Level: beginner
+   Level: intermediate
 
-.seealso: `BVCopy()`, `BVSetActiveColumns()`, `BVMatMultColumn()`, `BVMatMultTranspose()`, `BVMatMultHermitianTranspose()`, `BVSetMatMultMethod()`
+.seealso: [](sec:bv), `BVCopy()`, `BVSetActiveColumns()`, `BVMatMultColumn()`, `BVMatMultTranspose()`, `BVMatMultHermitianTranspose()`, `BVSetMatMultMethod()`
 @*/
 PetscErrorCode BVMatMult(BV V,Mat A,BV Y)
 {
@@ -723,7 +723,7 @@ PetscErrorCode BVMatMult(BV V,Mat A,BV Y)
 
 /*@
    BVMatMultTranspose - Computes the matrix-vector product with the transpose
-   of a matrix for each column, Y=A^T*V.
+   of a matrix for each column, $Y=A^T V$.
 
    Neighbor-wise Collective
 
@@ -735,17 +735,17 @@ PetscErrorCode BVMatMult(BV V,Mat A,BV Y)
 .  Y - the result
 
    Notes:
-   Both V and Y must be distributed in the same manner. Only active columns
+   Both `V` and `Y` must be distributed in the same manner. Only active columns
    (excluding the leading ones) are processed.
-   In the result Y, columns are overwritten starting from the leading ones.
-   The number of active columns in V and Y should match, although they need
+   In the result `Y`, columns are overwritten starting from the leading ones.
+   The number of active columns in `V` and `Y` should match, although they need
    not be the same columns.
 
-   Currently implemented via MatCreateTranspose().
+   Currently implemented via `MatCreateTranspose()`.
 
-   Level: beginner
+   Level: intermediate
 
-.seealso: `BVMatMult()`, `BVMatMultHermitianTranspose()`
+.seealso: [](sec:bv), `BVMatMult()`, `BVMatMultHermitianTranspose()`, `BVMatMultTransposeColumn()`
 @*/
 PetscErrorCode BVMatMultTranspose(BV V,Mat A,BV Y)
 {
@@ -780,7 +780,7 @@ PetscErrorCode BVMatMultTranspose(BV V,Mat A,BV Y)
 
 /*@
    BVMatMultHermitianTranspose - Computes the matrix-vector product with the
-   conjugate transpose of a matrix for each column, Y=A^H*V.
+   conjugate transpose of a matrix for each column, $Y=A^* V$.
 
    Neighbor-wise Collective
 
@@ -792,17 +792,17 @@ PetscErrorCode BVMatMultTranspose(BV V,Mat A,BV Y)
 .  Y - the result
 
    Note:
-   Both V and Y must be distributed in the same manner. Only active columns
+   Both `V` and `Y` must be distributed in the same manner. Only active columns
    (excluding the leading ones) are processed.
-   In the result Y, columns are overwritten starting from the leading ones.
-   The number of active columns in V and Y should match, although they need
+   In the result `Y`, columns are overwritten starting from the leading ones.
+   The number of active columns in `V` and `Y` should match, although they need
    not be the same columns.
 
-   Currently implemented via MatCreateHermitianTranspose().
+   Currently implemented via `MatCreateHermitianTranspose()`.
 
-   Level: beginner
+   Level: intermediate
 
-.seealso: `BVMatMult()`, `BVMatMultTranspose()`
+.seealso: [](sec:bv), `BVMatMult()`, `BVMatMultTranspose()`, `BVMatMultHermitianTransposeColumn()`
 @*/
 PetscErrorCode BVMatMultHermitianTranspose(BV V,Mat A,BV Y)
 {
@@ -846,18 +846,18 @@ PetscErrorCode BVMatMultHermitianTranspose(BV V,Mat A,BV Y)
 
 /*@
    BVMatMultColumn - Computes the matrix-vector product for a specified
-   column, storing the result in the next column v_{j+1}=A*v_j.
+   column, storing the result in the next column $v_{j+1}=Av_j$.
 
    Neighbor-wise Collective
 
    Input Parameters:
 +  V - basis vectors context
 .  A - the matrix
--  j - the column
+-  j - the index of the column
 
-   Level: beginner
+   Level: intermediate
 
-.seealso: `BVMatMult()`, `BVMatMultTransposeColumn()`, `BVMatMultHermitianTransposeColumn()`
+.seealso: [](sec:bv), `BVMatMult()`, `BVMatMultTransposeColumn()`, `BVMatMultHermitianTransposeColumn()`
 @*/
 PetscErrorCode BVMatMultColumn(BV V,Mat A,PetscInt j)
 {
@@ -886,18 +886,18 @@ PetscErrorCode BVMatMultColumn(BV V,Mat A,PetscInt j)
 
 /*@
    BVMatMultTransposeColumn - Computes the transpose matrix-vector product for a
-   specified column, storing the result in the next column v_{j+1}=A^T*v_j.
+   specified column, storing the result in the next column $v_{j+1}=A^T v_j$.
 
    Neighbor-wise Collective
 
    Input Parameters:
 +  V - basis vectors context
 .  A - the matrix
--  j - the column
+-  j - the index of the column
 
-   Level: beginner
+   Level: intermediate
 
-.seealso: `BVMatMult()`, `BVMatMultColumn()`, `BVMatMultHermitianTransposeColumn()`
+.seealso: [](sec:bv), `BVMatMult()`, `BVMatMultColumn()`, `BVMatMultHermitianTransposeColumn()`
 @*/
 PetscErrorCode BVMatMultTransposeColumn(BV V,Mat A,PetscInt j)
 {
@@ -926,18 +926,18 @@ PetscErrorCode BVMatMultTransposeColumn(BV V,Mat A,PetscInt j)
 
 /*@
    BVMatMultHermitianTransposeColumn - Computes the conjugate-transpose matrix-vector
-   product for a specified column, storing the result in the next column v_{j+1}=A^H*v_j.
+   product for a specified column, storing the result in the next column $v_{j+1}=A^* v_j$.
 
    Neighbor-wise Collective
 
    Input Parameters:
 +  V - basis vectors context
 .  A - the matrix
--  j - the column
+-  j - the index of the column
 
-   Level: beginner
+   Level: intermediate
 
-.seealso: `BVMatMult()`, `BVMatMultColumn()`, `BVMatMultTransposeColumn()`
+.seealso: [](sec:bv), `BVMatMult()`, `BVMatMultColumn()`, `BVMatMultTransposeColumn()`, `BVMatMultHermitianTranspose()`
 @*/
 PetscErrorCode BVMatMultHermitianTransposeColumn(BV V,Mat A,PetscInt j)
 {

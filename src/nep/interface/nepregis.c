@@ -20,13 +20,13 @@ SLEPC_EXTERN PetscErrorCode NEPCreate_CISS(NEP);
 SLEPC_EXTERN PetscErrorCode NEPCreate_NLEIGS(NEP);
 
 /*@C
-   NEPRegisterAll - Registers all the solvers in the NEP package.
+   NEPRegisterAll - Registers all the solvers in the `NEP` package.
 
    Not Collective
 
    Level: advanced
 
-.seealso: `NEPRegister()`
+.seealso: [](ch:nep), `NEPRegister()`
 @*/
 PetscErrorCode NEPRegisterAll(void)
 {
@@ -45,13 +45,13 @@ PetscErrorCode NEPRegisterAll(void)
 }
 
 /*@C
-  NEPMonitorRegisterAll - Registers all the monitors in the NEP package.
+  NEPMonitorRegisterAll - Registers all the monitors in the `NEP` package.
 
   Not Collective
 
   Level: advanced
 
-.seealso: `NEPMonitorRegister()`
+.seealso: [](ch:nep), `NEPMonitorRegister()`
 @*/
 PetscErrorCode NEPMonitorRegisterAll(void)
 {

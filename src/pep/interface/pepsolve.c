@@ -52,33 +52,41 @@ PetscErrorCode PEPExtractVectors(PEP pep)
 }
 
 /*@
-   PEPSolve - Solves the polynomial eigensystem.
+   PEPSolve - Solves the polynomial eigenproblem.
 
    Collective
 
    Input Parameter:
-.  pep - eigensolver context obtained from PEPCreate()
+.  pep - the polynomial eigensolver context
 
    Options Database Keys:
-+  -pep_view - print information about the solver used
-.  -pep_view_matk - view the coefficient matrix Ak (replace k by an integer from 0 to nmat-1)
++  -pep_view - print information about the solver once the solve is complete
+.  -pep_view_pre - print information about the solver before the solve starts
+.  -pep_view_matk - view the coefficient matrix $A_k$ (replace `k` by an integer from 0 to `nmat`-1)
 .  -pep_view_vectors - view the computed eigenvectors
 .  -pep_view_values - view the computed eigenvalues
-.  -pep_converged_reason - print reason for convergence, and number of iterations
+.  -pep_converged_reason - print reason for convergence/divergence, and number of iterations
 .  -pep_error_absolute - print absolute errors of each eigenpair
 .  -pep_error_relative - print relative errors of each eigenpair
 -  -pep_error_backward - print backward errors of each eigenpair
 
    Notes:
+   The problem matrices are specified with `PEPSetOperators()`.
+
+   `PEPSolve()` will return without generating an error regardless of whether
+   all requested solutions were computed or not. Call `PEPGetConverged()` to get the
+   actual number of computed solutions, and `PEPGetConvergedReason()` to determine if
+   the solver converged or failed and why.
+
    All the command-line options listed above admit an optional argument specifying
-   the viewer type and options. For instance, use '-pep_view_mat0 binary:amatrix.bin'
-   to save the A matrix to a binary file, '-pep_view_values draw' to draw the computed
-   eigenvalues graphically, or '-pep_error_relative :myerr.m:ascii_matlab' to save
+   the viewer type and options. For instance, use `-pep_view_mat0 binary:matrix0.bin`
+   to save the $A_0$ matrix to a binary file, `-pep_view_values draw` to draw the computed
+   eigenvalues graphically, or `-pep_error_relative :myerr.m:ascii_matlab` to save
    the errors in a file that can be executed in Matlab.
 
    Level: beginner
 
-.seealso: `PEPCreate()`, `PEPSetUp()`, `PEPDestroy()`, `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPCreate()`, `PEPSetUp()`, `PEPDestroy()`, `PEPSetTolerances()`, `PEPGetConverged()`, `PEPGetConvergedReason()`
 @*/
 PetscErrorCode PEPSolve(PEP pep)
 {
@@ -166,7 +174,7 @@ PetscErrorCode PEPSolve(PEP pep)
 
 /*@
    PEPGetIterationNumber - Gets the current iteration number. If the
-   call to PEPSolve() is complete, then it returns the number of iterations
+   call to `PEPSolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
@@ -178,15 +186,15 @@ PetscErrorCode PEPSolve(PEP pep)
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If PEPSolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `PEPSolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call PEPGetConvergedReason() to determine if the solver converged or
+   Call `PEPGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate
 
-.seealso: `PEPGetConvergedReason()`, `PEPSetTolerances()`
+.seealso: [](ch:pep), `PEPGetConvergedReason()`, `PEPSetTolerances()`
 @*/
 PetscErrorCode PEPGetIterationNumber(PEP pep,PetscInt *its)
 {
@@ -208,12 +216,15 @@ PetscErrorCode PEPGetIterationNumber(PEP pep,PetscInt *its)
    Output Parameter:
 .  nconv - number of converged eigenpairs
 
-   Note:
-   This function should be called after PEPSolve() has finished.
+   Notes:
+   This function should be called after `PEPSolve()` has finished.
+
+   The value `nconv` may be different from the number of requested solutions
+   `nev`, but not larger than `ncv`, see `PEPSetDimensions()`.
 
    Level: beginner
 
-.seealso: `PEPSetDimensions()`, `PEPSolve()`, `PEPGetEigenpair()`
+.seealso: [](ch:pep), `PEPSetDimensions()`, `PEPSolve()`, `PEPGetEigenpair()`
 @*/
 PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 {
@@ -226,7 +237,7 @@ PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 }
 
 /*@
-   PEPGetConvergedReason - Gets the reason why the PEPSolve() iteration was
+   PEPGetConvergedReason - Gets the reason why the `PEPSolve()` iteration was
    stopped.
 
    Not Collective
@@ -235,24 +246,19 @@ PetscErrorCode PEPGetConverged(PEP pep,PetscInt *nconv)
 .  pep - the polynomial eigensolver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `PEPConvergedReason` for the possible values
 
    Options Database Key:
-.  -pep_converged_reason - print the reason to a viewer
+.  -pep_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Notes:
-   Possible values for reason are
-+  PEP_CONVERGED_TOL - converged up to tolerance
-.  PEP_CONVERGED_USER - converged due to a user-defined condition
-.  PEP_DIVERGED_ITS - required more than max_it iterations to reach convergence
-.  PEP_DIVERGED_BREAKDOWN - generic breakdown in method
--  PEP_DIVERGED_SYMMETRY_LOST - pseudo-Lanczos was not able to keep symmetry
-
-   Can only be called after the call to PEPSolve() is complete.
+   Note:
+   If this routine is called before or doing the `PEPSolve()` the value of
+   `PEP_CONVERGED_ITERATING` is returned.
 
    Level: intermediate
 
-.seealso: `PEPSetTolerances()`, `PEPSolve()`, `PEPConvergedReason`
+.seealso: [](ch:pep), `PEPSetTolerances()`, `PEPSolve()`, `PEPConvergedReason`
 @*/
 PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
 {
@@ -265,13 +271,13 @@ PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
 }
 
 /*@
-   PEPGetEigenpair - Gets the i-th solution of the eigenproblem as computed by
-   PEPSolve(). The solution consists in both the eigenvalue and the eigenvector.
+   PEPGetEigenpair - Gets the `i`-th solution of the eigenproblem as computed by
+   `PEPSolve()`. The solution consists in both the eigenvalue and the eigenvector.
 
    Collective
 
    Input Parameters:
-+  pep - polynomial eigensolver context
++  pep - the polynomial eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -281,23 +287,25 @@ PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
 -  Vi   - imaginary part of eigenvector
 
    Notes:
-   It is allowed to pass NULL for Vr and Vi, if the eigenvector is not
-   required. Otherwise, the caller must provide valid Vec objects, i.e.,
-   they must be created by the calling program with e.g. MatCreateVecs().
+   It is allowed to pass `NULL` for `Vr` and `Vi`, if the eigenvector is not
+   required. Otherwise, the caller must provide valid `Vec` objects, i.e.,
+   they must be created by the calling program with e.g. `MatCreateVecs()`.
 
-   If the eigenvalue is real, then eigi and Vi are set to zero. If PETSc is
+   If the eigenvalue is real, then `eigi` and `Vi` are set to zero. If PETSc is
    configured with complex scalars the eigenvalue is stored
-   directly in eigr (eigi is set to zero) and the eigenvector in Vr (Vi is
-   set to zero). In any case, the user can pass NULL in Vr or Vi if one of
+   directly in `eigr` (`eigi` is set to zero) and the eigenvector in `Vr` (`Vi` is
+   set to zero). In any case, the user can pass `NULL` in `Vr` or `Vi` if one of
    them is not required.
 
-   The index i should be a value between 0 and nconv-1 (see PEPGetConverged()).
+   The index `i` should be a value between 0 and `nconv`-1 (see `PEPGetConverged()`).
    Eigenpairs are indexed according to the ordering criterion established
-   with PEPSetWhichEigenpairs().
+   with `PEPSetWhichEigenpairs()`.
+
+   The eigenvector is normalized to have unit norm.
 
    Level: beginner
 
-.seealso: `PEPSolve()`, `PEPGetConverged()`, `PEPSetWhichEigenpairs()`
+.seealso: [](ch:pep), `PEPSolve()`, `PEPGetConverged()`, `PEPSetWhichEigenpairs()`
 @*/
 PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar *eigi,Vec Vr,Vec Vi)
 {
@@ -330,26 +338,25 @@ PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar 
 }
 
 /*@
-   PEPGetErrorEstimate - Returns the error estimate associated to the i-th
+   PEPGetErrorEstimate - Returns the error estimate associated to the `i`-th
    computed eigenpair.
 
    Not Collective
 
    Input Parameters:
-+  pep - polynomial eigensolver context
++  pep - the polynomial eigensolver context
 -  i   - index of eigenpair
 
    Output Parameter:
 .  errest - the error estimate
 
-   Notes:
+   Note:
    This is the error estimate used internally by the eigensolver. The actual
-   error bound can be computed with PEPComputeError(). See also the users
-   manual for details.
+   error bound can be computed with `PEPComputeError()`.
 
    Level: advanced
 
-.seealso: `PEPComputeError()`
+.seealso: [](ch:pep), `PEPComputeError()`
 @*/
 PetscErrorCode PEPGetErrorEstimate(PEP pep,PetscInt i,PetscReal *errest)
 {
@@ -444,26 +451,25 @@ PetscErrorCode PEPComputeResidualNorm_Private(PEP pep,PetscScalar kr,PetscScalar
 
 /*@
    PEPComputeError - Computes the error (based on the residual norm) associated
-   with the i-th computed eigenpair.
+   with the `i`-th computed eigenpair.
 
    Collective
 
    Input Parameters:
 +  pep  - the polynomial eigensolver context
 .  i    - the solution index
--  type - the type of error to compute
+-  type - the type of error to compute, see `PEPErrorType`
 
    Output Parameter:
 .  error - the error
 
-   Notes:
+   Note:
    The error can be computed in various ways, all of them based on the residual
-   norm ||P(l)x||_2 where l is the eigenvalue and x is the eigenvector.
-   See the users guide for additional details.
+   norm $\|P(\lambda)x\|_2$ where $(\lambda,x)$ is the approximate eigenpair.
 
    Level: beginner
 
-.seealso: `PEPErrorType`, `PEPSolve()`, `PEPGetErrorEstimate()`
+.seealso: [](ch:pep), `PEPErrorType`, `PEPSolve()`, `PEPGetErrorEstimate()`
 @*/
 PetscErrorCode PEPComputeError(PEP pep,PetscInt i,PEPErrorType type,PetscReal *error)
 {

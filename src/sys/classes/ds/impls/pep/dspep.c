@@ -303,7 +303,7 @@ static PetscErrorCode DSPEPSetDegree_PEP(DS ds,PetscInt d)
 }
 
 /*@
-   DSPEPSetDegree - Sets the polynomial degree for a DSPEP.
+   DSPEPSetDegree - Sets the polynomial degree for a `DSPEP`.
 
    Logically Collective
 
@@ -313,7 +313,7 @@ static PetscErrorCode DSPEPSetDegree_PEP(DS ds,PetscInt d)
 
    Level: intermediate
 
-.seealso: `DSPEPGetDegree()`
+.seealso: [](sec:ds), `DSPEP`, `DSPEPGetDegree()`
 @*/
 PetscErrorCode DSPEPSetDegree(DS ds,PetscInt d)
 {
@@ -334,19 +334,19 @@ static PetscErrorCode DSPEPGetDegree_PEP(DS ds,PetscInt *d)
 }
 
 /*@
-   DSPEPGetDegree - Returns the polynomial degree for a DSPEP.
+   DSPEPGetDegree - Returns the polynomial degree for a `DSPEP`.
 
    Not Collective
 
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  d - the degree
 
    Level: intermediate
 
-.seealso: `DSPEPSetDegree()`
+.seealso: [](sec:ds), `DSPEP`, `DSPEPSetDegree()`
 @*/
 PetscErrorCode DSPEPGetDegree(DS ds,PetscInt *d)
 {
@@ -372,7 +372,7 @@ static PetscErrorCode DSPEPSetCoefficients_PEP(DS ds,PetscReal *pbc)
 }
 
 /*@
-   DSPEPSetCoefficients - Sets the polynomial basis coefficients for a DSPEP.
+   DSPEPSetCoefficients - Sets the polynomial basis coefficients for a `DSPEP`.
 
    Logically Collective
 
@@ -387,15 +387,15 @@ static PetscErrorCode DSPEPSetCoefficients_PEP(DS ds,PetscReal *pbc)
    diagonal blocks. Depending on the polynomial basis (Chebyshev, Legendre, ...)
    the coefficients must be different.
 
-   There must be a total of 3*(d+1) coefficients, where d is the degree of the
-   polynomial. The coefficients are arranged in three groups, alpha, beta, and
-   gamma, according to the definition of the three-term recurrence. In the case
-   of the monomial basis, alpha=1 and beta=gamma=0, in which case it is not
+   There must be a total of $3(d+1)$ coefficients, where $d$ is the degree of the
+   polynomial. The coefficients are arranged in three groups, $\alpha_i$, $\beta_i$, and
+   $\gamma_i$, according to the definition of the three-term recurrence. In the case
+   of the monomial basis, $\alpha_i=1$ and $\beta_i=\gamma_i=0$, in which case it is not
    necessary to invoke this function.
 
    Level: advanced
 
-.seealso: `DSPEPGetCoefficients()`, `DSPEPSetDegree()`
+.seealso: [](sec:ds), `DSPEP`, `DSPEPGetCoefficients()`, `DSPEPSetDegree()`
 @*/
 PetscErrorCode DSPEPSetCoefficients(DS ds,PetscReal pbc[])
 {
@@ -420,29 +420,26 @@ static PetscErrorCode DSPEPGetCoefficients_PEP(DS ds,PetscReal *pbc[])
 }
 
 /*@C
-   DSPEPGetCoefficients - Returns the polynomial basis coefficients for a DSPEP.
+   DSPEPGetCoefficients - Returns the polynomial basis coefficients for a `DSPEP`.
 
    Not Collective
 
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  pbc - the polynomial basis coefficients
 
    Note:
-   The returned array has length 3*(d+1) and should be freed by the user.
+   The returned array has length $3(d+1)$, where $d$ is the degree of the
+   polynomial, and should be freed by the user.
 
    Fortran Notes:
-   The calling sequence from Fortran is
-.vb
-   DSPEPGetCoefficients(eps,pbc,ierr)
-   double precision pbc(d+1) output
-.ve
+   In Fortran the user must provide in argument `pbc` a sufficiently large array.
 
    Level: advanced
 
-.seealso: `DSPEPSetCoefficients()`
+.seealso: [](sec:ds), `DSPEP`, `DSPEPSetCoefficients()`
 @*/
 PetscErrorCode DSPEPGetCoefficients(DS ds,PetscReal *pbc[]) PeNS
 {
@@ -483,35 +480,35 @@ static PetscErrorCode DSMatGetSize_PEP(DS ds,DSMatType t,PetscInt *rows,PetscInt
 /*MC
    DSPEP - Dense Polynomial Eigenvalue Problem.
 
-   Level: beginner
-
    Notes:
-   The problem is expressed as P(lambda)*x = 0, where P(.) is a matrix
-   polynomial of degree d. The eigenvalues lambda are the arguments
-   returned by DSSolve().
+   The problem is expressed as $P(\lambda)x = 0$, where $P(\cdot)$ is a
+   polynomial matrix of degree $d$. The eigenvalues $\lambda$ are the arguments
+   returned by `DSSolve()`.
 
-   The degree of the polynomial, d, can be set with DSPEPSetDegree(), with
-   the first d+1 extra matrices of the DS defining the matrix polynomial. By
-   default, the polynomial is expressed in the monomial basis, but a
+   The degree of the polynomial, $d$, can be set with `DSPEPSetDegree()`, with
+   the first $d+1$ extra matrices of the `DS` storing the polynomial coefficient.
+   By default, the polynomial is expressed in the monomial basis, but a
    different basis can be used by setting the corresponding coefficients
-   via DSPEPSetCoefficients().
+   via `DSPEPSetCoefficients()`.
 
-   The problem is solved via linearization, by building a pencil (A,B) of
-   size p*n and solving the corresponding GNHEP.
+   The problem is solved via linearization, by building a pencil $(A,B)$ of
+   size $d\cdot n$ and solving the corresponding `GNHEP`.
 
    Used DS matrices:
-+  DS_MAT_Ex - coefficients of the matrix polynomial
-.  DS_MAT_X  - right eigenvectors
-.  DS_MAT_Y  - left eigenvectors
-.  DS_MAT_A  - (workspace) first matrix of the linearization
-.  DS_MAT_B  - (workspace) second matrix of the linearization
-.  DS_MAT_W  - (workspace) right eigenvectors of the linearization
--  DS_MAT_U  - (workspace) left eigenvectors of the linearization
++  `DS_MAT_E0` to `DS_MAT_E9` - coefficients of the matrix polynomial
+.  `DS_MAT_X`  - right eigenvectors
+.  `DS_MAT_Y`  - left eigenvectors
+.  `DS_MAT_A`  - (workspace) first matrix of the linearization
+.  `DS_MAT_B`  - (workspace) second matrix of the linearization
+.  `DS_MAT_W`  - (workspace) right eigenvectors of the linearization
+-  `DS_MAT_U`  - (workspace) left eigenvectors of the linearization
 
    Implemented methods:
-.  0 - QZ iteration on the linearization (_ggev)
+.  0 - QZ iteration on the linearization (`_ggev`)
 
-.seealso: `DSCreate()`, `DSSetType()`, `DSType`, `DSPEPSetDegree()`, `DSPEPSetCoefficients()`
+   Level: beginner
+
+.seealso: [](sec:ds), `DSCreate()`, `DSSetType()`, `DSType`, `DSPEPSetDegree()`, `DSPEPSetCoefficients()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_PEP(DS ds)
 {

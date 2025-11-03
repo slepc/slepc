@@ -28,7 +28,7 @@ PetscFunctionList NEPMonitorDestroyList       = NULL;
 PetscBool         NEPMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   NEPCreate - Creates the default NEP context.
+   NEPCreate - Creates the `NEP` context.
 
    Collective
 
@@ -36,11 +36,14 @@ PetscBool         NEPMonitorRegisterAllCalled = PETSC_FALSE;
 .  comm - MPI communicator
 
    Output Parameter:
-.  outnep - location to put the NEP context
+.  outnep - location to put the `NEP` context
+
+   Note:
+   The default `NEP` type is `NEPRII`.
 
    Level: beginner
 
-.seealso: `NEPSetUp()`, `NEPSolve()`, `NEPDestroy()`, `NEP`
+.seealso: [](ch:nep), `NEPSetUp()`, `NEPSolve()`, `NEPDestroy()`, `NEP`
 @*/
 PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
 {
@@ -123,7 +126,7 @@ PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
 }
 
 /*@
-   NEPSetType - Selects the particular solver to be used in the NEP object.
+   NEPSetType - Selects the particular solver to be used in the `NEP` object.
 
    Logically Collective
 
@@ -132,23 +135,23 @@ PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
 -  type     - a known method
 
    Options Database Key:
-.  -nep_type <method> - Sets the method; use -help for a list
+.  -nep_type \<type\> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
-   See "slepc/include/slepcnep.h" for available methods.
+   See `NEPType` for available methods. The default is `NEPRII`.
 
-   Normally, it is best to use the NEPSetFromOptions() command and
-   then set the NEP type from the options database rather than by using
+   Normally, it is best to use the `NEPSetFromOptions()` command and
+   then set the `NEP` type from the options database rather than by using
    this routine.  Using the options database provides the user with
    maximum flexibility in evaluating the different available methods.
-   The NEPSetType() routine is provided for those situations where it
+   The `NEPSetType()` routine is provided for those situations where it
    is necessary to set the iterative solver independently of the command
    line or options database.
 
    Level: intermediate
 
-.seealso: `NEPType`
+.seealso: [](ch:nep), `NEPType`
 @*/
 PetscErrorCode NEPSetType(NEP nep,NEPType type)
 {
@@ -175,19 +178,19 @@ PetscErrorCode NEPSetType(NEP nep,NEPType type)
 }
 
 /*@
-   NEPGetType - Gets the NEP type as a string from the NEP object.
+   NEPGetType - Gets the `NEP` type as a string from the `NEP` object.
 
    Not Collective
 
    Input Parameter:
-.  nep - the eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  type - name of NEP method
+.  type - name of `NEP` method
 
    Level: intermediate
 
-.seealso: `NEPSetType()`
+.seealso: [](ch:nep), `NEPSetType()`
 @*/
 PetscErrorCode NEPGetType(NEP nep,NEPType *type)
 {
@@ -207,22 +210,23 @@ PetscErrorCode NEPGetType(NEP nep,NEPType *type)
 +  name - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
-   NEPRegister() may be called multiple times to add several user-defined solvers.
+   Note:
+   `NEPRegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    NEPRegister("my_solver",MySolverCreate);
+   NEPRegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
-$     NEPSetType(nep,"my_solver")
-   or at runtime via the option
-$     -nep_type my_solver
+.vb
+   NEPSetType(nep,"my_solver")
+.ve
+   or at runtime via the option `-nep_type my_solver`.
 
    Level: advanced
 
-.seealso: `NEPRegisterAll()`
+.seealso: [](ch:nep), `NEPRegisterAll()`
 @*/
 PetscErrorCode NEPRegister(const char *name,PetscErrorCode (*function)(NEP))
 {
@@ -233,24 +237,25 @@ PetscErrorCode NEPRegister(const char *name,PetscErrorCode (*function)(NEP))
 }
 
 /*@C
-   NEPMonitorRegister - Registers a  NEP monitor routine that may be accessed with NEPMonitorSetFromOptions().
+   NEPMonitorRegister - Registers a `NEP` monitor routine that may be accessed with
+   `NEPMonitorSetFromOptions()`.
 
    Not Collective
 
    Input Parameters:
 +  name    - name of a new monitor routine
-.  vtype   - a PetscViewerType for the output
-.  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine, see NEPMonitorRegisterFn
-.  create  - creation routine, or NULL
--  destroy - destruction routine, or NULL
+.  vtype   - a `PetscViewerType` for the output
+.  format  - a `PetscViewerFormat` for the output
+.  monitor - monitor routine, see `NEPMonitorRegisterFn`
+.  create  - creation routine, or `NULL`
+-  destroy - destruction routine, or `NULL`
 
    Notes:
-   NEPMonitorRegister() may be called multiple times to add several user-defined monitors.
+   `NEPMonitorRegister()` may be called multiple times to add several user-defined monitors.
 
-   The calling sequence for the given function matches the calling sequence of NEPMonitorFn
-   functions passed to NEPMonitorSet() with the additional requirement that its final argument
-   be a PetscViewerAndFormat.
+   The calling sequence for the given function matches the calling sequence of `NEPMonitorFn`
+   functions passed to `NEPMonitorSet()` with the additional requirement that its final argument
+   be a `PetscViewerAndFormat`.
 
    Example Usage:
 .vb
@@ -258,13 +263,14 @@ PetscErrorCode NEPRegister(const char *name,PetscErrorCode (*function)(NEP))
 .ve
 
    Then, your monitor can be chosen with the procedural interface via
-$      NEPMonitorSetFromOptions(nep,"-nep_monitor_my_monitor","my_monitor",NULL)
-   or at runtime via the option
-$      -nep_monitor_my_monitor
+.vb
+   NEPMonitorSetFromOptions(nep,"-nep_monitor_my_monitor","my_monitor",NULL);
+.ve
+   or at runtime via the option `-nep_monitor_my_monitor`.
 
    Level: advanced
 
-.seealso: `NEPMonitorSet()`, `NEPMonitorRegisterAll()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorRegisterAll()`, `NEPMonitorSetFromOptions()`
 @*/
 PetscErrorCode NEPMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,NEPMonitorRegisterFn *monitor,NEPMonitorRegisterCreateFn *create,NEPMonitorRegisterDestroyFn *destroy)
 {
@@ -302,17 +308,17 @@ PetscErrorCode NEPReset_Problem(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 /*@
-   NEPReset - Resets the NEP context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   NEPReset - Resets the `NEP` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 
    Input Parameter:
-.  nep - eigensolver context obtained from NEPCreate()
+.  nep - the nonlinear eigensolver context
 
    Level: advanced
 
-.seealso: `NEPDestroy()`
+.seealso: [](ch:nep), `NEPDestroy()`
 @*/
 PetscErrorCode NEPReset(NEP nep)
 {
@@ -332,16 +338,16 @@ PetscErrorCode NEPReset(NEP nep)
 }
 
 /*@
-   NEPDestroy - Destroys the NEP context.
+   NEPDestroy - Destroys the `NEP` context.
 
    Collective
 
    Input Parameter:
-.  nep - eigensolver context obtained from NEPCreate()
+.  nep - the nonlinear eigensolver context
 
    Level: beginner
 
-.seealso: `NEPCreate()`, `NEPSetUp()`, `NEPSolve()`
+.seealso: [](ch:nep), `NEPCreate()`, `NEPSetUp()`, `NEPSolve()`
 @*/
 PetscErrorCode NEPDestroy(NEP *nep)
 {
@@ -372,16 +378,16 @@ PetscErrorCode NEPDestroy(NEP *nep)
    Collective
 
    Input Parameters:
-+  nep - eigensolver context obtained from NEPCreate()
++  nep - the nonlinear eigensolver context
 -  bv  - the basis vectors object
 
    Note:
-   Use NEPGetBV() to retrieve the basis vectors context (for example,
+   Use `NEPGetBV()` to retrieve the basis vectors context (for example,
    to free it at the end of the computations).
 
    Level: advanced
 
-.seealso: `NEPGetBV()`
+.seealso: [](ch:nep), `NEPGetBV()`
 @*/
 PetscErrorCode NEPSetBV(NEP nep,BV bv)
 {
@@ -401,15 +407,15 @@ PetscErrorCode NEPSetBV(NEP nep,BV bv)
 
    Not Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  bv - basis vectors context
 
    Level: advanced
 
-.seealso: `NEPSetBV()`
+.seealso: [](ch:nep), `NEPSetBV()`
 @*/
 PetscErrorCode NEPGetBV(NEP nep,BV *bv)
 {
@@ -431,16 +437,16 @@ PetscErrorCode NEPGetBV(NEP nep,BV *bv)
    Collective
 
    Input Parameters:
-+  nep - eigensolver context obtained from NEPCreate()
++  nep - the nonlinear eigensolver context
 -  rg  - the region object
 
    Note:
-   Use NEPGetRG() to retrieve the region context (for example,
+   Use `NEPGetRG()` to retrieve the region context (for example,
    to free it at the end of the computations).
 
    Level: advanced
 
-.seealso: `NEPGetRG()`
+.seealso: [](ch:nep), `NEPGetRG()`
 @*/
 PetscErrorCode NEPSetRG(NEP nep,RG rg)
 {
@@ -462,15 +468,15 @@ PetscErrorCode NEPSetRG(NEP nep,RG rg)
 
    Not Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  rg - region context
 
    Level: advanced
 
-.seealso: `NEPSetRG()`
+.seealso: [](ch:nep), `NEPSetRG()`
 @*/
 PetscErrorCode NEPGetRG(NEP nep,RG *rg)
 {
@@ -492,16 +498,16 @@ PetscErrorCode NEPGetRG(NEP nep,RG *rg)
    Collective
 
    Input Parameters:
-+  nep - eigensolver context obtained from NEPCreate()
++  nep - the nonlinear eigensolver context
 -  ds  - the direct solver object
 
    Note:
-   Use NEPGetDS() to retrieve the direct solver context (for example,
+   Use `NEPGetDS()` to retrieve the direct solver context (for example,
    to free it at the end of the computations).
 
    Level: advanced
 
-.seealso: `NEPGetDS()`
+.seealso: [](ch:nep), `NEPGetDS()`
 @*/
 PetscErrorCode NEPSetDS(NEP nep,DS ds)
 {
@@ -521,15 +527,15 @@ PetscErrorCode NEPSetDS(NEP nep,DS ds)
 
    Not Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  ds - direct solver context
 
    Level: advanced
 
-.seealso: `NEPSetDS()`
+.seealso: [](ch:nep), `NEPSetDS()`
 @*/
 PetscErrorCode NEPGetDS(NEP nep,DS *ds)
 {
@@ -546,20 +552,20 @@ PetscErrorCode NEPGetDS(NEP nep,DS *ds)
 }
 
 /*@
-   NEPRefineGetKSP - Obtain the ksp object used by the eigensolver
+   NEPRefineGetKSP - Obtain the `KSP` object used by the eigensolver
    object in the refinement phase.
 
    Collective
 
-   Input Parameters:
-.  nep - eigensolver context obtained from NEPCreate()
+   Input Parameter:
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  ksp - ksp context
+.  ksp - the linear solver context
 
    Level: advanced
 
-.seealso: `NEPSetRefine()`
+.seealso: [](ch:nep), `NEPSetRefine()`
 @*/
 PetscErrorCode NEPRefineGetKSP(NEP nep,KSP *ksp)
 {
@@ -593,23 +599,26 @@ PetscErrorCode NEPRefineGetKSP(NEP nep,KSP *ksp)
    Logically Collective
 
    Input Parameters:
-+  nep    - eigensolver context
++  nep    - the nonlinear eigensolver context
 -  target - the value of the target
 
    Options Database Key:
-.  -nep_target <scalar> - the value of the target
+.  -nep_target \<target\> - the value of the target
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum
-   of interest. It is used in combination with NEPSetWhichEigenpairs().
+   of interest. It is used in combination with `NEPSetWhichEigenpairs()`.
+
+   When PETSc is built with real scalars, it is not possible to specify a
+   complex target.
 
    In the case of complex scalars, a complex value can be provided in the
-   command line with [+/-][realnumber][+/-]realnumberi with no spaces, e.g.
-   -nep_target 1.0+2.0i
+   command line with `[+/-][realnumber][+/-]realnumberi` with no spaces, e.g.
+   `-nep_target 1.0+2.0i`.
 
    Level: intermediate
 
-.seealso: `NEPGetTarget()`, `NEPSetWhichEigenpairs()`
+.seealso: [](ch:nep), `NEPGetTarget()`, `NEPSetWhichEigenpairs()`
 @*/
 PetscErrorCode NEPSetTarget(NEP nep,PetscScalar target)
 {
@@ -626,7 +635,7 @@ PetscErrorCode NEPSetTarget(NEP nep,PetscScalar target)
    Not Collective
 
    Input Parameter:
-.  nep - eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
 .  target - the value of the target
@@ -636,7 +645,7 @@ PetscErrorCode NEPSetTarget(NEP nep,PetscScalar target)
 
    Level: intermediate
 
-.seealso: `NEPSetTarget()`
+.seealso: [](ch:nep), `NEPSetTarget()`
 @*/
 PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
 {
@@ -648,48 +657,48 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
 }
 
 /*@C
-   NEPSetFunction - Sets the function to compute the nonlinear Function T(lambda)
+   NEPSetFunction - Sets the function to compute the nonlinear Function $T(\lambda)$
    as well as the location to store the matrix.
 
    Collective
 
    Input Parameters:
-+  nep - the NEP context
-.  A   - Function matrix
-.  B   - preconditioner matrix (usually same as A)
-.  fun - Function evaluation routine (if NULL then NEP retains any
-         previously set value), see NEPFunctionFn for the calling sequence
++  nep - the nonlinear eigensolver context
+.  F   - Function matrix
+.  P   - preconditioner matrix (usually the same as `F`)
+.  fun - Function evaluation routine (if `NULL` then `NEP` retains any
+         previously set value), see `NEPFunctionFn` for the calling sequence
 -  ctx - [optional] user-defined context for private data for the Function
-         evaluation routine (may be NULL) (if NULL then NEP retains any
+         evaluation routine (may be `NULL`) (if `NULL` then `NEP` retains any
          previously set value)
 
    Level: beginner
 
-.seealso: `NEPGetFunction()`, `NEPSetJacobian()`
+.seealso: [](ch:nep), `NEPGetFunction()`, `NEPSetJacobian()`
 @*/
-PetscErrorCode NEPSetFunction(NEP nep,Mat A,Mat B,NEPFunctionFn *fun,void *ctx)
+PetscErrorCode NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
-  if (A) PetscValidHeaderSpecific(A,MAT_CLASSID,2);
-  if (B) PetscValidHeaderSpecific(B,MAT_CLASSID,3);
-  if (A) PetscCheckSameComm(nep,1,A,2);
-  if (B) PetscCheckSameComm(nep,1,B,3);
+  if (F) PetscValidHeaderSpecific(F,MAT_CLASSID,2);
+  if (P) PetscValidHeaderSpecific(P,MAT_CLASSID,3);
+  if (F) PetscCheckSameComm(nep,1,F,2);
+  if (P) PetscCheckSameComm(nep,1,P,3);
 
   if (nep->state) PetscCall(NEPReset(nep));
   else if (nep->fui && nep->fui!=NEP_USER_INTERFACE_CALLBACK) PetscCall(NEPReset_Problem(nep));
 
   if (fun) nep->computefunction = fun;
   if (ctx) nep->functionctx     = ctx;
-  if (A) {
-    PetscCall(PetscObjectReference((PetscObject)A));
+  if (F) {
+    PetscCall(PetscObjectReference((PetscObject)F));
     PetscCall(MatDestroy(&nep->function));
-    nep->function = A;
+    nep->function = F;
   }
-  if (B) {
-    PetscCall(PetscObjectReference((PetscObject)B));
+  if (P) {
+    PetscCall(PetscObjectReference((PetscObject)P));
     PetscCall(MatDestroy(&nep->function_pre));
-    nep->function_pre = B;
+    nep->function_pre = P;
   }
   nep->fui   = NEP_USER_INTERFACE_CALLBACK;
   nep->state = NEP_STATE_INITIAL;
@@ -706,62 +715,62 @@ PetscErrorCode NEPSetFunction(NEP nep,Mat A,Mat B,NEPFunctionFn *fun,void *ctx)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  A   - location to stash Function matrix (or NULL)
-.  B   - location to stash preconditioner matrix (or NULL)
-.  fun - location to put Function function (or NULL)
--  ctx - location to stash Function context (or NULL)
++  F   - location to stash Function matrix (or `NULL`)
+.  P   - location to stash preconditioner matrix (or `NULL`)
+.  fun - location to put Function function (or `NULL`)
+-  ctx - location to stash Function context (or `NULL`)
 
    Level: advanced
 
-.seealso: `NEPSetFunction()`
+.seealso: [](ch:nep), `NEPSetFunction()`
 @*/
-PetscErrorCode NEPGetFunction(NEP nep,Mat *A,Mat *B,NEPFunctionFn **fun,void **ctx)
+PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,void **ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
   NEPCheckCallback(nep,1);
-  if (A)   *A   = nep->function;
-  if (B)   *B   = nep->function_pre;
+  if (F)   *F   = nep->function;
+  if (P)   *P   = nep->function_pre;
   if (fun) *fun = nep->computefunction;
   if (ctx) *ctx = nep->functionctx;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
 /*@C
-   NEPSetJacobian - Sets the function to compute the Jacobian T'(lambda) as well
+   NEPSetJacobian - Sets the function to compute the Jacobian $T'(\lambda)$ as well
    as the location to store the matrix.
 
    Collective
 
    Input Parameters:
-+  nep - the NEP context
-.  A   - Jacobian matrix
-.  jac - Jacobian evaluation routine (if NULL then NEP retains any
-         previously set value), see NEPJacobianFn for the calling sequence
++  nep - the nonlinear eigensolver context
+.  J   - Jacobian matrix
+.  jac - Jacobian evaluation routine (if `NULL` then `NEP` retains any
+         previously set value), see `NEPJacobianFn` for the calling sequence
 -  ctx - [optional] user-defined context for private data for the Jacobian
-         evaluation routine (may be NULL) (if NULL then NEP retains any
+         evaluation routine (may be `NULL`) (if `NULL` then `NEP` retains any
          previously set value)
 
    Level: beginner
 
-.seealso: `NEPSetFunction()`, `NEPGetJacobian()`
+.seealso: [](ch:nep), `NEPSetFunction()`, `NEPGetJacobian()`
 @*/
-PetscErrorCode NEPSetJacobian(NEP nep,Mat A,NEPJacobianFn *jac,void *ctx)
+PetscErrorCode NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
-  if (A) PetscValidHeaderSpecific(A,MAT_CLASSID,2);
-  if (A) PetscCheckSameComm(nep,1,A,2);
+  if (J) PetscValidHeaderSpecific(J,MAT_CLASSID,2);
+  if (J) PetscCheckSameComm(nep,1,J,2);
 
   if (nep->state) PetscCall(NEPReset(nep));
   else if (nep->fui && nep->fui!=NEP_USER_INTERFACE_CALLBACK) PetscCall(NEPReset_Problem(nep));
 
   if (jac) nep->computejacobian = jac;
   if (ctx) nep->jacobianctx     = ctx;
-  if (A) {
-    PetscCall(PetscObjectReference((PetscObject)A));
+  if (J) {
+    PetscCall(PetscObjectReference((PetscObject)J));
     PetscCall(MatDestroy(&nep->jacobian));
-    nep->jacobian = A;
+    nep->jacobian = J;
   }
   nep->fui   = NEP_USER_INTERFACE_CALLBACK;
   nep->state = NEP_STATE_INITIAL;
@@ -778,20 +787,20 @@ PetscErrorCode NEPSetJacobian(NEP nep,Mat A,NEPJacobianFn *jac,void *ctx)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  A   - location to stash Jacobian matrix (or NULL)
-.  jac - location to put Jacobian function (or NULL)
--  ctx - location to stash Jacobian context (or NULL)
++  J   - location to stash Jacobian matrix (or `NULL`)
+.  jac - location to put Jacobian function (or `NULL`)
+-  ctx - location to stash Jacobian context (or `NULL`)
 
    Level: advanced
 
-.seealso: `NEPSetJacobian()`
+.seealso: [](ch:nep), `NEPSetJacobian()`
 @*/
-PetscErrorCode NEPGetJacobian(NEP nep,Mat *A,NEPJacobianFn **jac,void **ctx)
+PetscErrorCode NEPGetJacobian(NEP nep,Mat *J,NEPJacobianFn **jac,void **ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
   NEPCheckCallback(nep,1);
-  if (A)   *A   = nep->jacobian;
+  if (J)   *J   = nep->jacobian;
   if (jac) *jac = nep->computejacobian;
   if (ctx) *ctx = nep->jacobianctx;
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -811,24 +820,24 @@ PetscErrorCode NEPGetJacobian(NEP nep,Mat *A,NEPJacobianFn **jac,void **ctx)
 -  str - structure flag for matrices
 
    Notes:
-   The nonlinear operator is written as T(lambda) = sum_i A_i*f_i(lambda),
-   for i=1,...,n. The derivative T'(lambda) can be obtained using the
-   derivatives of f_i.
+   The nonlinear operator is written as $T(\lambda) = \sum_i A_i f_i(\lambda)$,
+   for $i=1,\dots,n$. The derivative $T'(\lambda)$ can be obtained using the
+   derivatives of $f_i$.
 
-   The structure flag provides information about A_i's nonzero pattern
-   (see MatStructure enum). If all matrices have the same pattern, then
-   use SAME_NONZERO_PATTERN. If the patterns are different but contained
-   in the pattern of the first one, then use SUBSET_NONZERO_PATTERN. If
-   patterns are known to be different, use DIFFERENT_NONZERO_PATTERN.
-   If set to UNKNOWN_NONZERO_PATTERN, the patterns will be compared to
+   The structure flag provides information about $A_i$'s nonzero pattern
+   (see `MatStructure`). If all matrices have the same pattern, then
+   use `SAME_NONZERO_PATTERN`. If the patterns are different but contained
+   in the pattern of the first one, then use `SUBSET_NONZERO_PATTERN`. If
+   patterns are known to be different, use `DIFFERENT_NONZERO_PATTERN`.
+   If set to `UNKNOWN_NONZERO_PATTERN`, the patterns will be compared to
    determine if they are equal.
 
-   This function must be called before NEPSetUp(). If it is called again
-   after NEPSetUp() then the NEP object is reset.
+   This function must be called before `NEPSetUp()`. If it is called again
+   after `NEPSetUp()` then the `NEP` object is reset.
 
    Level: beginner
 
-.seealso: `NEPGetSplitOperatorTerm()`, `NEPGetSplitOperatorInfo()`, `NEPSetSplitPreconditioner()`
+.seealso: [](ch:nep), `NEPGetSplitOperatorTerm()`, `NEPGetSplitOperatorInfo()`, `NEPSetSplitPreconditioner()`
 @*/
 PetscErrorCode NEPSetSplitOperator(NEP nep,PetscInt nt,Mat A[],FN f[],MatStructure str)
 {
@@ -890,7 +899,7 @@ PetscErrorCode NEPSetSplitOperator(NEP nep,PetscInt nt,Mat A[],FN f[],MatStructu
 
    Level: intermediate
 
-.seealso: `NEPSetSplitOperator()`, `NEPGetSplitOperatorInfo()`
+.seealso: [](ch:nep), `NEPSetSplitOperator()`, `NEPGetSplitOperatorInfo()`
 @*/
 PetscErrorCode NEPGetSplitOperatorTerm(NEP nep,PetscInt k,Mat *A,FN *f)
 {
@@ -914,12 +923,12 @@ PetscErrorCode NEPGetSplitOperatorTerm(NEP nep,PetscInt k,Mat *A,FN *f)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  n   - the number of terms passed in NEPSetSplitOperator()
--  str - the matrix structure flag passed in NEPSetSplitOperator()
++  n   - the number of terms passed in `NEPSetSplitOperator()`
+-  str - the matrix structure flag passed in `NEPSetSplitOperator()`
 
    Level: intermediate
 
-.seealso: `NEPSetSplitOperator()`, `NEPGetSplitOperatorTerm()`
+.seealso: [](ch:nep), `NEPSetSplitOperator()`, `NEPGetSplitOperatorTerm()`
 @*/
 PetscErrorCode NEPGetSplitOperatorInfo(NEP nep,PetscInt *n,MatStructure *str)
 {
@@ -945,25 +954,25 @@ PetscErrorCode NEPGetSplitOperatorInfo(NEP nep,PetscInt *n,MatStructure *str)
 -  strp - structure flag for matrices
 
    Notes:
-   The matrix for the preconditioner is expressed as P(lambda) =
-   sum_i P_i*f_i(lambda), for i=1,...,n, where the f_i functions
-   are the same as in NEPSetSplitOperator(). It is not necessary to call
+   The matrix for the preconditioner is expressed as $P(\lambda) =
+   \sum_i P_i f_i(\lambda)$, for $i=1,\dots,n$, where the $f_i$ functions
+   are the same as in `NEPSetSplitOperator()`. It is not necessary to call
    this function. If it is not invoked, then the preconditioner is
-   built from T(lambda), i.e., both matrices and functions passed in
-   NEPSetSplitOperator().
+   built from $T(\lambda)$, i.e., both matrices and functions passed in
+   `NEPSetSplitOperator()`.
 
-   The structure flag provides information about P_i's nonzero pattern
-   in the same way as in NEPSetSplitOperator().
+   The structure flag provides information about $P_i$'s nonzero pattern
+   in the same way as in `NEPSetSplitOperator()`.
 
    If the functions defining the preconditioner operator were different
-   from the ones given in NEPSetSplitOperator(), then the split form
+   from the ones given in `NEPSetSplitOperator()`, then the split form
    cannot be used. Use the callback interface instead.
 
-   Use ntp=0 to reset a previously set split preconditioner.
+   Use `ntp=0` to reset a previously set split preconditioner.
 
    Level: advanced
 
-.seealso: `NEPGetSplitPreconditionerTerm()`, `NEPGetSplitPreconditionerInfo()`, `NEPSetSplitOperator()`
+.seealso: [](ch:nep), `NEPGetSplitPreconditionerTerm()`, `NEPGetSplitPreconditionerInfo()`, `NEPSetSplitOperator()`
 @*/
 PetscErrorCode NEPSetSplitPreconditioner(NEP nep,PetscInt ntp,Mat P[],MatStructure strp)
 {
@@ -1019,7 +1028,7 @@ PetscErrorCode NEPSetSplitPreconditioner(NEP nep,PetscInt ntp,Mat P[],MatStructu
 
    Level: advanced
 
-.seealso: `NEPSetSplitPreconditioner()`, `NEPGetSplitPreconditionerInfo()`
+.seealso: [](ch:nep), `NEPSetSplitPreconditioner()`, `NEPGetSplitPreconditionerInfo()`
 @*/
 PetscErrorCode NEPGetSplitPreconditionerTerm(NEP nep,PetscInt k,Mat *P)
 {
@@ -1044,12 +1053,12 @@ PetscErrorCode NEPGetSplitPreconditionerTerm(NEP nep,PetscInt k,Mat *P)
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  n    - the number of terms passed in NEPSetSplitPreconditioner()
--  strp - the matrix structure flag passed in NEPSetSplitPreconditioner()
++  n    - the number of terms passed in `NEPSetSplitPreconditioner()`
+-  strp - the matrix structure flag passed in `NEPSetSplitPreconditioner()`
 
    Level: advanced
 
-.seealso: `NEPSetSplitPreconditioner()`, `NEPGetSplitPreconditionerTerm()`
+.seealso: [](ch:nep), `NEPSetSplitPreconditioner()`, `NEPGetSplitPreconditionerTerm()`
 @*/
 PetscErrorCode NEPGetSplitPreconditionerInfo(NEP nep,PetscInt *n,MatStructure *strp)
 {

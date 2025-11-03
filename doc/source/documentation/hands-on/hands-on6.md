@@ -19,7 +19,7 @@ $ make PETSC_ARCH=arch-linux-gnu-c-opt-complex ex4
 
 ## Source Code Details
 
-This example program is very similar to that of exercise 3. It uses the PETSc function {external:doc}`MatLoad` to load a matrix from a file. The matrix file is specified in the command line.
+This example program is very similar to that of exercise 3. It uses the PETSc function {external:doc}`MatLoad`() to load a matrix from a file. The matrix file is specified in the command line.
 
 ## Running the Program
 
@@ -47,7 +47,7 @@ Try to find out how much time was spent is solving the eigenvalue problem. Is th
 
 ## Instrumenting the Source Code
 
-If we are just interested in knowing the time used by the eigensolver, then it may be better to let our example program inform us. With the function {external:doc}`PetscTime`, it is possible to obtain the current time of day (wall-clock time) in seconds. Edit the source code and add two calls to this function just before and after the `EPSSolve` call, as in the following fragment of code:
+If we are just interested in knowing the time used by the eigensolver, then it may be better to let our example program inform us. With the function {external:doc}`PetscTime`(), it is possible to obtain the current time of day (wall-clock time) in seconds. Edit the source code and add two calls to this function just before and after the `EPSSolve()` call, as in the following fragment of code:
 
 ```{code} c
 PetscCall(PetscTime(&t1;));

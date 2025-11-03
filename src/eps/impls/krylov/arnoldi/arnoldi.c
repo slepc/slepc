@@ -161,20 +161,21 @@ static PetscErrorCode EPSArnoldiSetDelayed_Arnoldi(EPS eps,PetscBool delayed)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  delayed - boolean flag
 
    Options Database Key:
-.  -eps_arnoldi_delayed - Activates delayed reorthogonalization in Arnoldi
+.  -eps_arnoldi_delayed - Activates delayed reorthogonalization in `EPSARNOLDI`
 
    Note:
-   Delayed reorthogonalization is an aggressive optimization for the Arnoldi
+   Delayed reorthogonalization is an aggressive optimization for the `EPSARNOLDI`
    eigensolver than may provide better scalability, but sometimes makes the
-   solver converge less than the default algorithm.
+   solver converge more slowly compared to the default algorithm. The details
+   can be found in {cite:p}`Her07`.
 
    Level: advanced
 
-.seealso: `EPSArnoldiGetDelayed()`
+.seealso: [](ch:eps), `EPSARNOLDI`, `EPSArnoldiGetDelayed()`
 @*/
 PetscErrorCode EPSArnoldiSetDelayed(EPS eps,PetscBool delayed)
 {
@@ -201,14 +202,14 @@ static PetscErrorCode EPSArnoldiGetDelayed_Arnoldi(EPS eps,PetscBool *delayed)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  delayed - boolean flag indicating if delayed reorthogonalization has been enabled
 
    Level: advanced
 
-.seealso: `EPSArnoldiSetDelayed()`
+.seealso: [](ch:eps), `EPSARNOLDI`, `EPSArnoldiSetDelayed()`
 @*/
 PetscErrorCode EPSArnoldiGetDelayed(EPS eps,PetscBool *delayed)
 {
@@ -239,6 +240,21 @@ static PetscErrorCode EPSView_Arnoldi(EPS eps,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSARNOLDI - EPSARNOLDI = "arnoldi" - A basic Krylov method for non-Hermitian
+   problems, with explicit restart.
+
+   Notes:
+   This solver is very basic and is not recommended in general, since it
+   will not be competitive with respect to other solvers.
+
+   The implemented method is Arnoldi with explicit restart and deflation.
+   Generally, it is much better to use implicit restart as in `EPSKRYLOVSCHUR`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_Arnoldi(EPS eps)
 {
   EPS_ARNOLDI    *ctx;

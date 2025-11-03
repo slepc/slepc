@@ -134,16 +134,18 @@ static PetscErrorCode EPSDestroy_GD(EPS eps)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps         - the linear eigensolver context
 -  krylovstart - boolean flag
 
    Options Database Key:
-.  -eps_gd_krylov_start - Activates starting the searching subspace with a
-    Krylov basis
+.  -eps_gd_krylov_start - activate starting the searching subspace with a Krylov basis
+
+   Note:
+   See discussion at `EPSGDSetInitialSize()`.
 
    Level: advanced
 
-.seealso: `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDGetKrylovStart()`, `EPSGDSetInitialSize()`
 @*/
 PetscErrorCode EPSGDSetKrylovStart(EPS eps,PetscBool krylovstart)
 {
@@ -161,15 +163,14 @@ PetscErrorCode EPSGDSetKrylovStart(EPS eps,PetscBool krylovstart)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
-   Output Parameters:
-.  krylovstart - boolean flag indicating if the search subspace is started
-   with a Krylov basis
+   Output Parameter:
+.  krylovstart - boolean flag indicating if the search subspace is started with a Krylov basis
 
    Level: advanced
 
-.seealso: `EPSGDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDSetKrylovStart()`
 @*/
 PetscErrorCode EPSGDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 {
@@ -187,15 +188,18 @@ PetscErrorCode EPSGDGetKrylovStart(EPS eps,PetscBool *krylovstart)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps       - the linear eigensolver context
 -  blocksize - number of vectors added to the search space in every iteration
 
    Options Database Key:
 .  -eps_gd_blocksize - number of vectors added to the search space in every iteration
 
+   Note:
+   Detailed information can be found at {cite:p}`Rom14`.
+
    Level: advanced
 
-.seealso: `EPSGDSetKrylovStart()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDSetKrylovStart()`
 @*/
 PetscErrorCode EPSGDSetBlockSize(EPS eps,PetscInt blocksize)
 {
@@ -213,14 +217,14 @@ PetscErrorCode EPSGDSetBlockSize(EPS eps,PetscInt blocksize)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  blocksize - number of vectors added to the search space in every iteration
 
    Level: advanced
 
-.seealso: `EPSGDSetBlockSize()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDSetBlockSize()`
 @*/
 PetscErrorCode EPSGDGetBlockSize(EPS eps,PetscInt *blocksize)
 {
@@ -238,21 +242,23 @@ PetscErrorCode EPSGDGetBlockSize(EPS eps,PetscInt *blocksize)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
-.  minv - number of vectors of the searching subspace after restarting
++  eps   - the linear eigensolver context
+.  minv  - number of vectors of the searching subspace after restarting
 -  plusk - number of vectors saved from the previous iteration
 
    Options Database Keys:
-+  -eps_gd_minv - number of vectors of the searching subspace after restarting
++  -eps_gd_minv  - number of vectors of the searching subspace after restarting
 -  -eps_gd_plusk - number of vectors saved from the previous iteration
 
-   Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   Notes:
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
+
+   Detailed information can be found at {cite:p}`Rom14`.
 
    Level: advanced
 
-.seealso: `EPSGDGetRestart()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDGetRestart()`
 @*/
 PetscErrorCode EPSGDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
 {
@@ -271,15 +277,15 @@ PetscErrorCode EPSGDSetRestart(EPS eps,PetscInt minv,PetscInt plusk)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
-+  minv - number of vectors of the searching subspace after restarting
++  minv  - number of vectors of the searching subspace after restarting
 -  plusk - number of vectors saved from the previous iteration
 
    Level: advanced
 
-.seealso: `EPSGDSetRestart()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDSetRestart()`
 @*/
 PetscErrorCode EPSGDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 {
@@ -295,23 +301,25 @@ PetscErrorCode EPSGDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps         - the linear eigensolver context
 -  initialsize - number of vectors of the initial searching subspace
 
    Options Database Key:
 .  -eps_gd_initial_size - number of vectors of the initial searching subspace
 
    Notes:
-   If EPSGDGetKrylovStart() is PETSC_FALSE and the user provides vectors with
-   EPSSetInitialSpace(), up to initialsize vectors will be used; and if the
-   provided vectors are not enough, the solver completes the subspace with
-   random vectors. In the case of EPSGDGetKrylovStart() being PETSC_TRUE, the solver
+   If the flag in `EPSGDSetKrylovStart()` is set to `PETSC_FALSE` and the user
+   provides vectors with `EPSSetInitialSpace()`, up to `initialsize` vectors will be used;
+   and if the provided vectors are not enough, the solver completes the subspace with
+   random vectors. In case the `EPSGDSetKrylovStart()` flag is `PETSC_TRUE`, the solver
    gets the first vector provided by the user or, if not available, a random vector,
-   and expands the Krylov basis up to initialsize vectors.
+   and expands the Krylov basis up to `initialsize` vectors.
+
+   Detailed information can be found at {cite:p}`Rom14`.
 
    Level: advanced
 
-.seealso: `EPSGDGetInitialSize()`, `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDGetInitialSize()`, `EPSGDSetKrylovStart()`
 @*/
 PetscErrorCode EPSGDSetInitialSize(EPS eps,PetscInt initialsize)
 {
@@ -328,22 +336,14 @@ PetscErrorCode EPSGDSetInitialSize(EPS eps,PetscInt initialsize)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  initialsize - number of vectors of the initial searching subspace
 
-   Notes:
-   If EPSGDGetKrylovStart() is PETSC_FALSE and the user provides vectors with
-   EPSSetInitialSpace(), up to initialsize vectors will be used; and if the
-   provided vectors are not enough, the solver completes the subspace with
-   random vectors. In the case of EPSGDGetKrylovStart() being PETSC_TRUE, the solver
-   gets the first vector provided by the user or, if not available, a random vector,
-   and expands the Krylov basis up to initialsize vectors.
-
    Level: advanced
 
-.seealso: `EPSGDSetInitialSize()`, `EPSGDGetKrylovStart()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDSetInitialSize()`, `EPSGDGetKrylovStart()`
 @*/
 PetscErrorCode EPSGDGetInitialSize(EPS eps,PetscInt *initialsize)
 {
@@ -361,15 +361,18 @@ PetscErrorCode EPSGDGetInitialSize(EPS eps,PetscInt *initialsize)
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenproblem solver context
--  borth - whether to B-orthogonalize the search subspace
++  eps   - the linear eigensolver context
+-  borth - whether to $B$-orthogonalize the search subspace
 
    Options Database Key:
-.  -eps_gd_borth - Set the orthogonalization used in the search subspace
+.  -eps_gd_borth - toggle the $B$-orthogonalization
+
+   Note:
+   Detailed information can be found at {cite:p}`Rom14`.
 
    Level: advanced
 
-.seealso: `EPSGDGetBOrth()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDGetBOrth()`
 @*/
 PetscErrorCode EPSGDSetBOrth(EPS eps,PetscBool borth)
 {
@@ -387,14 +390,14 @@ PetscErrorCode EPSGDSetBOrth(EPS eps,PetscBool borth)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
-   Output Parameters:
-.  borth - whether to B-orthogonalize the search subspace
+   Output Parameter:
+.  borth - whether to $B$-orthogonalize the search subspace
 
    Level: advanced
 
-.seealso: `EPSGDSetBOrth()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDSetBOrth()`
 @*/
 PetscErrorCode EPSGDGetBOrth(EPS eps,PetscBool *borth)
 {
@@ -420,20 +423,21 @@ static PetscErrorCode EPSGDSetDoubleExpansion_GD(EPS eps,PetscBool doubleexp)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  doubleexp - the boolean flag
 
-   Options Database Keys:
+   Options Database Key:
 .  -eps_gd_double_expansion - activate the double-expansion variant of GD
 
-   Notes:
-   In the double expansion variant the search subspace is expanded with K*[A*x B*x]
-   instead of the classic K*r, where K is the preconditioner, x the selected
-   approximate eigenvector and r its associated residual vector.
+   Note:
+   In the double expansion variant the search subspace is expanded with $K[Ax, Bx]$
+   instead of the classic $Kr$, where $K$ is the preconditioner, $x$ the selected
+   approximate eigenvector and $r$ its associated residual vector. More details
+   can be found in {cite:p}`Hoc12`.
 
    Level: advanced
 
-.seealso: `EPSGDGetDoubleExpansion()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDGetDoubleExpansion()`
 @*/
 PetscErrorCode EPSGDSetDoubleExpansion(EPS eps,PetscBool doubleexp)
 {
@@ -460,14 +464,14 @@ static PetscErrorCode EPSGDGetDoubleExpansion_GD(EPS eps,PetscBool *doubleexp)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  doubleexp - the flag
 
    Level: advanced
 
-.seealso: `EPSGDSetDoubleExpansion()`
+.seealso: [](ch:eps), `EPSGD`, `EPSGDSetDoubleExpansion()`
 @*/
 PetscErrorCode EPSGDGetDoubleExpansion(EPS eps,PetscBool *doubleexp)
 {
@@ -478,6 +482,27 @@ PetscErrorCode EPSGDGetDoubleExpansion(EPS eps,PetscBool *doubleexp)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSGD - EPSGD = "gd" - The generalized Davidson method.
+
+   Notes:
+   This is a preconditioned eigensolver, that is, it may be competitive
+   when computing interior eigenvalues in case the shift-and-invert spectral
+   transformation is too costly and a good preconditioner is available.
+
+   The implemented method is Generalized Davidson, where any `PC`
+   preconditioner can be used, in contrast to the original Davidson method
+   that used a diagonal preconditioner.
+
+   The preconditioner is specified via the internal `ST` object and its
+   associated `KSP`.
+
+   Details of the implementation are described in {cite:p}`Rom14`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetST()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_GD(EPS eps)
 {
   EPS_DAVIDSON    *data;

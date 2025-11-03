@@ -332,26 +332,26 @@ static PetscErrorCode BVTensorBuildFirstColumn_Tensor(BV V,PetscInt k)
 
 /*@
    BVTensorBuildFirstColumn - Builds the first column of the tensor basis vectors
-   V from the data contained in the first k columns of U.
+   `V` from the data contained in the first `k` columns of `U`.
 
    Collective
 
    Input Parameters:
 +  V - the basis vectors context
--  k - the number of columns of U with relevant information
+-  k - the number of columns of `U` with relevant information
 
    Notes:
-   At most d columns are considered, where d is the degree of the tensor BV.
-   Given V = (I otimes U) S, this function computes the first column of V, that
-   is, it computes the coefficients of the first column of S by orthogonalizing
-   the first d columns of U. If k is less than d (or linearly dependent columns
+   At most $d$ columns are considered, where $d$ is the degree of the tensor `BV`.
+   Given $V = (I \otimes U) S$, this function computes the first column of $V$, that
+   is, it computes the coefficients of the first column of $S$ by orthogonalizing
+   the first $d$ columns of $U$. If `k` is less than $d$ (or linearly dependent columns
    are found) then additional random columns are used.
 
    The computed column has unit norm.
 
    Level: advanced
 
-.seealso: `BVCreateTensor()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVCreateTensor()`, `BVTensorGetDegree()`
 @*/
 PetscErrorCode BVTensorBuildFirstColumn(BV V,PetscInt k)
 {
@@ -536,8 +536,8 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
 }
 
 /*@
-   BVTensorCompress - Updates the U and S factors of the tensor basis vectors
-   object V by means of an SVD, removing redundant information.
+   BVTensorCompress - Updates the $U$ and $S$ factors of the tensor basis vectors
+   object `V` by means of an SVD, removing redundant information.
 
    Collective
 
@@ -547,19 +547,19 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
 
    Notes:
    This function is typically used when restarting Krylov solvers. Truncating a
-   tensor BV V = (I otimes U) S to its leading columns amounts to keeping the
-   leading columns of S. However, to effectively reduce the size of the
+   tensor `BV` $V = (I \otimes U) S$ to its leading columns amounts to keeping the
+   leading columns of $S$. However, to effectively reduce the size of the
    decomposition, it is necessary to compress it in a way that fewer columns of
-   U are employed. This can be achieved by means of an update that involves the
-   SVD of the low-rank matrix [S_0 S_1 ... S_{d-1}], where S_i are the pieces of S.
+   $U$ are employed. This can be achieved by means of an update that involves the
+   SVD of the low-rank matrix $[S_0, S_1, \dots, S_{d-1}]$, where $S_i$ are the pieces of $S$.
 
-   If newc is nonzero, then newc columns are added to the leading columns of V.
-   This means that the corresponding columns of the U and S factors will remain
+   If `newc` is nonzero, then `newc` columns are added to the leading columns of `V`.
+   This means that the corresponding columns of the $U$ and $S$ factors will remain
    invariant in subsequent operations.
 
    Level: advanced
 
-.seealso: `BVCreateTensor()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVCreateTensor()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVTensorCompress(BV V,PetscInt newc)
 {
@@ -580,7 +580,7 @@ static PetscErrorCode BVTensorGetDegree_Tensor(BV bv,PetscInt *d)
 }
 
 /*@
-   BVTensorGetDegree - Returns the number of blocks (degree) of the tensor BV.
+   BVTensorGetDegree - Returns the number of blocks (degree) of the tensor `BV`.
 
    Not Collective
 
@@ -592,7 +592,7 @@ static PetscErrorCode BVTensorGetDegree_Tensor(BV bv,PetscInt *d)
 
    Level: advanced
 
-.seealso: `BVCreateTensor()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVCreateTensor()`
 @*/
 PetscErrorCode BVTensorGetDegree(BV bv,PetscInt *d)
 {
@@ -617,7 +617,7 @@ static PetscErrorCode BVTensorGetFactors_Tensor(BV V,BV *U,Mat *S)
 
 /*@
    BVTensorGetFactors - Returns the two factors involved in the definition of the
-   tensor basis vectors object, V = (I otimes U) S.
+   tensor basis vectors object, $V = (I \otimes U) S$.
 
    Logically Collective
 
@@ -625,23 +625,23 @@ static PetscErrorCode BVTensorGetFactors_Tensor(BV V,BV *U,Mat *S)
 .  V - the basis vectors context
 
    Output Parameters:
-+  U - the BV factor
--  S - the Mat factor
++  U - the `BV` factor
+-  S - the `Mat` factor
 
    Notes:
    The returned factors are references (not copies) of the internal factors,
-   so modifying them will change the tensor BV as well. Some operations of the
-   tensor BV assume that U has orthonormal columns, so if the user modifies U
+   so modifying them will change the tensor `BV` as well. Some operations of the
+   tensor `BV` assume that `U` has orthonormal columns, so if the user modifies `U`
    this restriction must be taken into account.
 
-   The returned factors must not be destroyed. BVTensorRestoreFactors() must
+   The returned factors must not be destroyed. `BVTensorRestoreFactors()` must
    be called when they are no longer needed.
 
-   Pass a NULL vector for any of the arguments that is not needed.
+   Pass `NULL` for any of the arguments that is not needed.
 
    Level: advanced
 
-.seealso: `BVTensorRestoreFactors()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVCreateTensor()`, `BVTensorRestoreFactors()`
 @*/
 PetscErrorCode BVTensorGetFactors(BV V,BV *U,Mat *S)
 {
@@ -666,21 +666,21 @@ static PetscErrorCode BVTensorRestoreFactors_Tensor(BV V,BV *U,Mat *S)
 
 /*@
    BVTensorRestoreFactors - Restore the two factors that were obtained with
-   BVTensorGetFactors().
+   `BVTensorGetFactors()`.
 
    Logically Collective
 
    Input Parameters:
 +  V - the basis vectors context
-.  U - the BV factor (or NULL)
--  S - the Mat factor (or NULL)
+.  U - the `BV` factor (or `NULL`)
+-  S - the `Mat` factor (or `NULL`)
 
    Notes:
-   The arguments must match the corresponding call to BVTensorGetFactors().
+   The arguments must match the corresponding call to `BVTensorGetFactors()`.
 
    Level: advanced
 
-.seealso: `BVTensorGetFactors()`
+.seealso: [](sec:bv), `BVTENSOR`, `BVTensorGetFactors()`
 @*/
 PetscErrorCode BVTensorRestoreFactors(BV V,BV *U,Mat *S)
 {
@@ -712,6 +712,20 @@ static PetscErrorCode BVDestroy_Tensor(BV bv)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   BVTENSOR - BVTENSOR = "tensor" - A special basis vectors object represented
+   in compact form as $V = (I \otimes U) S$.
+
+   Level: beginner
+
+   Note:
+   This is not a general-purpose `BV` and cannot be used interchangeably with other
+   `BV` types. It is intended to store structured Krylov bases for eigensolvers
+   based on linearization.
+
+.seealso: [](sec:bv), `BV`, `BVType`, `BVSetType()`, `BVCreateTensor()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode BVCreate_Tensor(BV bv)
 {
   BV_TENSOR      *ctx;
@@ -740,37 +754,37 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Tensor(BV bv)
 }
 
 /*@
-   BVCreateTensor - Creates a tensor BV that is represented in compact form
-   as V = (I otimes U) S, where U has orthonormal columns.
+   BVCreateTensor - Creates a tensor `BV` that is represented in compact form
+   as $V = (I \otimes U) S$, where $U$ has orthonormal columns.
 
    Collective
 
    Input Parameters:
 +  U - a basis vectors object
--  d - the number of blocks (degree) of the tensor BV
+-  d - the number of blocks (degree) of the tensor `BV`
 
    Output Parameter:
 .  V - the new basis vectors context
 
    Notes:
-   The new basis vectors object is V = (I otimes U) S, where otimes denotes
-   the Kronecker product, I is the identity matrix of order d, and S is a
+   The new basis vectors object is $V = (I \otimes U) S$, where $\otimes$ denotes
+   the Kronecker product, $I$ is the identity matrix of order $d$, and $S$ is a
    sequential matrix allocated internally. This compact representation is
-   used e.g. to represent the Krylov basis generated with the linearization
-   of a matrix polynomial of degree d.
+   used, e.g., to represent the Krylov basis generated with the linearization
+   of a matrix polynomial of degree $d$.
 
-   The size of V (number of rows) is equal to d times n, where n is the size
-   of U. The dimensions of S are d times m rows and m-d+1 columns, where m is
-   the number of columns of U, so m should be at least d.
+   The size of `V` (number of rows) is equal to `d` times `n`, where `n` is the size
+   of `U`. Matrix $S$ has $d \times m$ rows and $m-d+1$ columns, where `m` is
+   the number of columns of `U`, so `m` should be at least `d`.
 
-   The communicator of V will be the same as U.
+   The communicator of `V` will be the same as `U`.
 
-   On input, the content of U is irrelevant. Alternatively, it may contain
-   some nonzero columns that will be used by BVTensorBuildFirstColumn().
+   On input, the content of `U` is irrelevant. Alternatively, it may contain
+   some nonzero columns that will be used by `BVTensorBuildFirstColumn()`.
 
    Level: advanced
 
-.seealso: `BVTensorGetDegree()`, `BVTensorGetFactors()`, `BVTensorBuildFirstColumn()`
+.seealso: [](sec:bv), `BVTensorGetDegree()`, `BVTensorGetFactors()`, `BVTensorBuildFirstColumn()`
 @*/
 PetscErrorCode BVCreateTensor(BV U,PetscInt d,BV *V)
 {

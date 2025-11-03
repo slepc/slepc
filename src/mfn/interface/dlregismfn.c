@@ -17,11 +17,11 @@ const char *const*MFNConvergedReasons = MFNConvergedReasons_Shifted + 2;
 
 /*@C
   MFNFinalizePackage - This function destroys everything in the SLEPc interface
-  to the MFN package. It is called from SlepcFinalize().
+  to the `MFN` package. It is called from `SlepcFinalize()`.
 
   Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: [](ch:mfn), `SlepcFinalize()`, `MFNInitializePackage()`
 @*/
 PetscErrorCode MFNFinalizePackage(void)
 {
@@ -37,13 +37,16 @@ PetscErrorCode MFNFinalizePackage(void)
 }
 
 /*@C
-  MFNInitializePackage - This function initializes everything in the MFN package.
-  It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-  on the first call to MFNCreate() when using static libraries.
+   MFNInitializePackage - This function initializes everything in the `MFN` package.
+   It is called from `PetscDLLibraryRegister_slepcmfn()` when using dynamic libraries, and
+   on the first call to `MFNCreate()` when using shared or static libraries.
 
-  Level: developer
+   Note:
+   This function never needs to be called by SLEPc users.
 
-.seealso: `SlepcInitialize()`
+   Level: developer
+
+.seealso: [](ch:mfn), `MFN`, `SlepcInitialize()`, `MFNFinalizePackage()`
 @*/
 PetscErrorCode MFNInitializePackage(void)
 {

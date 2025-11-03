@@ -372,18 +372,22 @@ static PetscErrorCode EPSKrylovSchurSetRestart_KrylovSchur(EPS eps,PetscReal kee
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -eps_krylovschur_restart - Sets the restart parameter
+.  -eps_krylovschur_restart - sets the restart parameter
 
    Notes:
-   Allowed values are in the range [0.1,0.9]. The default is 0.5.
+   Allowed values are in the range [0.1,0.9]. The default is 0.5, which means
+   that at restart the current subspace is compressed into another subspace
+   with a reduction of 50% in size.
+
+   Implementation details of Krylov-Schur in SLEPc can be found in {cite:p}`Her07b`.
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurGetRestart()`
+.seealso: [](ch:eps), `EPSKRYLOVSCHUR`, `EPSKrylovSchurGetRestart()`
 @*/
 PetscErrorCode EPSKrylovSchurSetRestart(EPS eps,PetscReal keep)
 {
@@ -410,14 +414,14 @@ static PetscErrorCode EPSKrylovSchurGetRestart_KrylovSchur(EPS eps,PetscReal *ke
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetRestart()`
+.seealso: [](ch:eps), `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetRestart()`
 @*/
 PetscErrorCode EPSKrylovSchurGetRestart(EPS eps,PetscReal *keep)
 {
@@ -444,21 +448,23 @@ static PetscErrorCode EPSKrylovSchurSetLocking_KrylovSchur(EPS eps,PetscBool loc
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigenproblem solver context
++  eps  - the linear eigensolver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
-.  -eps_krylovschur_locking - Sets the locking flag
+.  -eps_krylovschur_locking - sets the locking flag
 
    Notes:
    The default is to lock converged eigenpairs when the method restarts.
-   This behaviour can be changed so that all directions are kept in the
+   This behavior can be changed so that all directions are kept in the
    working subspace even if already converged to working accuracy (the
    non-locking variant).
 
+   Implementation details of Krylov-Schur in SLEPc can be found in {cite:p}`Her07b`.
+
    Level: advanced
 
-.seealso: `EPSKrylovSchurGetLocking()`
+.seealso: [](ch:eps), `EPSKRYLOVSCHUR`, `EPSKrylovSchurGetLocking()`
 @*/
 PetscErrorCode EPSKrylovSchurSetLocking(EPS eps,PetscBool lock)
 {
@@ -485,14 +491,14 @@ static PetscErrorCode EPSKrylovSchurGetLocking_KrylovSchur(EPS eps,PetscBool *lo
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetLocking()`
+.seealso: [](ch:eps), `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetLocking()`
 @*/
 PetscErrorCode EPSKrylovSchurGetLocking(EPS eps,PetscBool *lock)
 {
@@ -540,24 +546,28 @@ static PetscErrorCode EPSKrylovSchurSetPartitions_KrylovSchur(EPS eps,PetscInt n
    Logically Collective
 
    Input Parameters:
-+  eps   - the eigenproblem solver context
++  eps   - the linear eigensolver context
 -  npart - number of partitions
 
    Options Database Key:
-.  -eps_krylovschur_partitions <npart> - Sets the number of partitions
+.  -eps_krylovschur_partitions \<npart\> - sets the number of partitions
 
    Notes:
-   By default, npart=1 so all processes in the communicator participate in
-   the processing of the whole interval. If npart>1 then the interval is
-   divided into npart subintervals, each of them being processed by a
+   This call makes sense only for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:slice).
+
+   By default, `npart`=1 so all processes in the communicator participate in
+   the processing of the whole interval. If `npart`>1 then the interval is
+   divided into `npart` subintervals, each of them being processed by a
    subset of processes.
 
    The interval is split proportionally unless the separation points are
-   specified with EPSKrylovSchurSetSubintervals().
+   specified with `EPSKrylovSchurSetSubintervals()`.
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetSubintervals()`, `EPSSetInterval()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetSubintervals()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetPartitions(EPS eps,PetscInt npart)
 {
@@ -584,14 +594,14 @@ static PetscErrorCode EPSKrylovSchurGetPartitions_KrylovSchur(EPS eps,PetscInt *
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  npart - number of partitions
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetPartitions()`
+.seealso: [](ch:eps), `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetPartitions()`
 @*/
 PetscErrorCode EPSKrylovSchurGetPartitions(EPS eps,PetscInt *npart)
 {
@@ -619,14 +629,17 @@ static PetscErrorCode EPSKrylovSchurSetDetectZeros_KrylovSchur(EPS eps,PetscBool
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigenproblem solver context
++  eps    - the linear eigensolver context
 -  detect - check for zeros
 
    Options Database Key:
-.  -eps_krylovschur_detect_zeros - Check for zeros; this takes an optional
-   bool value (0/1/no/yes/true/false)
+.  -eps_krylovschur_detect_zeros - check for zeros
 
    Notes:
+   This flag makes sense only for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:slice).
+
    A zero in the factorization indicates that a shift coincides with an eigenvalue.
 
    This flag is turned off by default, and may be necessary in some cases,
@@ -636,7 +649,7 @@ static PetscErrorCode EPSKrylovSchurSetDetectZeros_KrylovSchur(EPS eps,PetscBool
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetPartitions()`, `EPSSetInterval()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetPartitions()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetDetectZeros(EPS eps,PetscBool detect)
 {
@@ -663,14 +676,14 @@ static PetscErrorCode EPSKrylovSchurGetDetectZeros_KrylovSchur(EPS eps,PetscBool
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  detect - whether zeros detection is enforced during factorizations
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetDetectZeros()`
+.seealso: [](ch:eps), `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetDetectZeros()`
 @*/
 PetscErrorCode EPSKrylovSchurGetDetectZeros(EPS eps,PetscBool *detect)
 {
@@ -709,28 +722,34 @@ static PetscErrorCode EPSKrylovSchurSetDimensions_KrylovSchur(EPS eps,PetscInt n
 /*@
    EPSKrylovSchurSetDimensions - Sets the dimensions used for each subsolve
    step in case of doing spectrum slicing for a computational interval.
-   The meaning of the parameters is the same as in EPSSetDimensions().
 
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  nev - number of eigenvalues to compute
 .  ncv - the maximum dimension of the subspace to be used by the subsolve
 -  mpd - the maximum dimension allowed for the projected problem
 
-   Options Database Key:
-+  -eps_krylovschur_nev <nev> - Sets the number of eigenvalues
-.  -eps_krylovschur_ncv <ncv> - Sets the dimension of the subspace
--  -eps_krylovschur_mpd <mpd> - Sets the maximum projected dimension
+   Options Database Keys:
++  -eps_krylovschur_nev \<nev\> - sets the number of eigenvalues
+.  -eps_krylovschur_ncv \<ncv\> - sets the dimension of the subspace
+-  -eps_krylovschur_mpd \<mpd\> - sets the maximum projected dimension
 
-   Note:
-   Use PETSC_DETERMINE for ncv and mpd to assign a default value. For any
-   of the arguments, use PETSC_CURRENT to preserve the current value.
+   Notes:
+   These parameters are relevant only for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:slice).
+
+   The meaning of the parameters is the same as in `EPSSetDimensions()`, but
+   the ones here apply to every subsolve done by the child `EPS` object.
+
+   Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a default value. For any
+   of the arguments, use `PETSC_CURRENT` to preserve the current value.
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurGetDimensions()`, `EPSSetDimensions()`, `EPSSetInterval()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSKrylovSchurGetDimensions()`, `EPSSetDimensions()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
 {
@@ -761,7 +780,7 @@ static PetscErrorCode EPSKrylovSchurGetDimensions_KrylovSchur(EPS eps,PetscInt *
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  nev - number of eigenvalues to compute
@@ -770,7 +789,7 @@ static PetscErrorCode EPSKrylovSchurGetDimensions_KrylovSchur(EPS eps,PetscInt *
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetDimensions()`
+.seealso: [](ch:eps), `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetDimensions()`
 @*/
 PetscErrorCode EPSKrylovSchurGetDimensions(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
@@ -803,22 +822,26 @@ static PetscErrorCode EPSKrylovSchurSetSubintervals_KrylovSchur(EPS eps,PetscRea
    Logically Collective
 
    Input Parameters:
-+  eps    - the eigenproblem solver context
++  eps    - the linear eigensolver context
 -  subint - array of real values specifying subintervals
 
    Notes:
-   This function must be called after EPSKrylovSchurSetPartitions(). For npart
-   partitions, the argument subint must contain npart+1 real values sorted in
-   ascending order, subint_0, subint_1, ..., subint_npart, where the first
-   and last values must coincide with the interval endpoints set with
-   EPSSetInterval().
+   This function is relevant only for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:slice).
 
-   The subintervals are then defined by two consecutive points [subint_0,subint_1],
-   [subint_1,subint_2], and so on.
+   It must be called after `EPSKrylovSchurSetPartitions()`. For `npart`
+   partitions, the argument `subint` must contain `npart+1` real values sorted in
+   ascending order, `subint_0, subint_1, ..., subint_npart`, where the first
+   and last values must coincide with the interval endpoints set with
+   `EPSSetInterval()`.
+
+   The subintervals are then defined by two consecutive points `[subint_0,subint_1]`,
+   `[subint_1,subint_2]`, and so on.
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubintervals()`, `EPSSetInterval()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubintervals()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurSetSubintervals(EPS eps,PetscReal subint[])
 {
@@ -851,31 +874,33 @@ static PetscErrorCode EPSKrylovSchurGetSubintervals_KrylovSchur(EPS eps,PetscRea
    Not Collective
 
    Input Parameter:
-.  eps    - the eigenproblem solver context
+.  eps    - the linear eigensolver context
 
    Output Parameter:
 .  subint - array of real values specifying subintervals
 
    Notes:
-   If the user passed values with EPSKrylovSchurSetSubintervals(), then the
-   same values are returned. Otherwise, the values computed internally are
+   If the user passed values with `EPSKrylovSchurSetSubintervals()`, then the
+   same values are returned here. Otherwise, the values computed internally are
    obtained.
 
-   This function is only available for spectrum slicing runs.
+   This function is only available for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:slice).
 
-   The returned array has length npart+1 (see EPSKrylovSchurGetPartitions())
+   The returned array has length `npart`+1 (see `EPSKrylovSchurGetPartitions()`)
    and should be freed by the user.
 
    Fortran Notes:
    The calling sequence from Fortran is
 .vb
    EPSKrylovSchurGetSubintervals(eps,subint,ierr)
-   double precision subint(npart+1) output
+   PetscReal subint(npart+1)
 .ve
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetSubintervals()`, `EPSKrylovSchurGetPartitions()`, `EPSSetInterval()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetSubintervals()`, `EPSKrylovSchurGetPartitions()`, `EPSSetInterval()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubintervals(EPS eps,PetscReal *subint[]) PeNS
 {
@@ -939,33 +964,35 @@ static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  n        - number of shifts, including the endpoints of the interval
 .  shifts   - the values of the shifts used internally in the solver
--  inertias - the values of the inertia in each shift
+-  inertias - the values of the inertia at each shift
 
    Notes:
-   If called after EPSSolve(), all shifts used internally by the solver are
+   If called after `EPSSolve()`, all shifts used internally by the solver are
    returned (including both endpoints and any intermediate ones). If called
-   before EPSSolve() and after EPSSetUp() then only the information of the
+   before `EPSSolve()` and after `EPSSetUp()` then only the information of the
    endpoints of subintervals is available.
 
-   This function is only available for spectrum slicing runs.
+   This function is only available for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:slice).
 
-   The returned arrays should be freed by the user. Can pass NULL in any of
+   The returned arrays should be freed by the user. Can pass `NULL` in any of
    the two arrays if not required.
 
    Fortran Notes:
    The calling sequence from Fortran is
 .vb
    EPSKrylovSchurGetInertias(eps,n,shifts,inertias,ierr)
-   integer n
-   double precision shifts(*)
-   integer inertias(*)
+   PetscInt  n
+   PetscReal shifts(*)
+   PetscInt  inertias(*)
 .ve
-   The arrays should be at least of length n. The value of n can be determined
+   The arrays should be at least of length `n`. The value of `n` can be determined
    by an initial call
 .vb
    EPSKrylovSchurGetInertias(eps,n,PETSC_NULL_REAL_ARRAY,PETSC_NULL_INTEGER_ARRAY,ierr)
@@ -973,7 +1000,7 @@ static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetSubintervals()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSSetInterval()`, `EPSKrylovSchurSetSubintervals()`
 @*/
 PetscErrorCode EPSKrylovSchurGetInertias(EPS eps,PetscInt *n,PetscReal *shifts[],PetscInt *inertias[]) PeNS
 {
@@ -1003,25 +1030,27 @@ static PetscErrorCode EPSKrylovSchurGetSubcommInfo_KrylovSchur(EPS eps,PetscInt 
    doing spectrum slicing for a computational interval with multiple
    communicators.
 
-   Collective on the subcommunicator (if v is given)
+   Collective on the subcommunicator (if `v` is given)
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  k - index of the subinterval for the calling process
-.  n - number of eigenvalues found in the k-th subinterval
+.  n - number of eigenvalues found in the `k`-th subinterval
 -  v - a vector owned by processes in the subcommunicator with dimensions
-       compatible for locally computed eigenvectors (or NULL)
+       compatible for locally computed eigenvectors (or `NULL`)
 
    Notes:
-   This function is only available for spectrum slicing runs.
+   This function is only available for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:slice).
 
-   The returned Vec should be destroyed by the user.
+   The returned `Vec` should be destroyed by the user.
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommPairs()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommPairs()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubcommInfo(EPS eps,PetscInt *k,PetscInt *n,Vec *v)
 {
@@ -1046,13 +1075,13 @@ static PetscErrorCode EPSKrylovSchurGetSubcommPairs_KrylovSchur(EPS eps,PetscInt
 }
 
 /*@
-   EPSKrylovSchurGetSubcommPairs - Gets the i-th eigenpair stored
+   EPSKrylovSchurGetSubcommPairs - Gets the `i`-th eigenpair stored
    internally in the subcommunicator to which the calling process belongs.
 
-   Collective on the subcommunicator (if v is given)
+   Collective on the subcommunicator (if `v` is given)
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  i   - index of the solution
 
    Output Parameters:
@@ -1060,16 +1089,21 @@ static PetscErrorCode EPSKrylovSchurGetSubcommPairs_KrylovSchur(EPS eps,PetscInt
 -  v   - the eigenvector
 
    Notes:
-   It is allowed to pass NULL for v if the eigenvector is not required.
-   Otherwise, the caller must provide a valid Vec objects, i.e.,
-   it must be created by the calling program with EPSKrylovSchurGetSubcommInfo().
+   This function is only available for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   And is relevant only when the number of partitions (`EPSKrylovSchurSetPartitions()`)
+   is larger than one. See more details in section [](#sec:slice).
 
-   The index i should be a value between 0 and n-1, where n is the number of
-   vectors in the local subinterval, see EPSKrylovSchurGetSubcommInfo().
+   It is allowed to pass `NULL` for `v` if the eigenvector is not required.
+   Otherwise, the caller must provide a valid `Vec` object, i.e.,
+   it must be created by the calling program with `EPSKrylovSchurGetSubcommInfo()`.
+
+   The index `i` should be a value between 0 and `n`-1, where `n` is the number of
+   vectors in the local subinterval, see `EPSKrylovSchurGetSubcommInfo()`.
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`, `EPSKrylovSchurGetSubcommMats()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`, `EPSKrylovSchurGetSubcommMats()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubcommPairs(EPS eps,PetscInt i,PetscScalar *eig,Vec v)
 {
@@ -1098,21 +1132,26 @@ static PetscErrorCode EPSKrylovSchurGetSubcommMats_KrylovSchur(EPS eps,Mat *A,Ma
    Collective on the subcommunicator
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  A  - the matrix associated with the eigensystem
 -  B  - the second matrix in the case of generalized eigenproblems
 
    Notes:
-   This is the analog of EPSGetOperators(), but returns the matrices distributed
+   This function is only available for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   And is relevant only when the number of partitions (`EPSKrylovSchurSetPartitions()`)
+   is larger than one. See more details in section [](#sec:slice).
+
+   This is the analog of `EPSGetOperators()`, but returns the matrices distributed
    differently (in the subcommunicator rather than in the parent communicator).
 
    These matrices should not be modified by the user.
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommInfo()`
 @*/
 PetscErrorCode EPSKrylovSchurGetSubcommMats(EPS eps,Mat *A,Mat *B)
 {
@@ -1176,36 +1215,41 @@ static PetscErrorCode EPSKrylovSchurUpdateSubcommMats_KrylovSchur(EPS eps,PetscS
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
-.  s   - scalar that multiplies the existing A matrix
-.  a   - scalar used in the axpy operation on A
-.  Au  - matrix used in the axpy operation on A
-.  t   - scalar that multiplies the existing B matrix
-.  b   - scalar used in the axpy operation on B
-.  Bu  - matrix used in the axpy operation on B
-.  str - structure flag
++  eps - the linear eigensolver context
+.  s   - scalar that multiplies the existing $A$ matrix
+.  a   - scalar used in the _axpy_ operation on $A$
+.  Au  - matrix used in the _axpy_ operation on $A$
+.  t   - scalar that multiplies the existing $B$ matrix
+.  b   - scalar used in the _axpy_ operation on $B$
+.  Bu  - matrix used in the _axpy_ operation on $B$
+.  str - structure flag, see `MatStructure`
 -  globalup - flag indicating if global matrices must be updated
 
    Notes:
+   This function is only available for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   And is relevant only when the number of partitions (`EPSKrylovSchurSetPartitions()`)
+   is larger than one. See more details in section [](#sec:slice).
+
    This function modifies the eigenproblem matrices at the subcommunicator level,
    and optionally updates the global matrices in the parent communicator. The updates
-   are expressed as A <-- s*A + a*Au,  B <-- t*B + b*Bu.
+   are expressed as $A \leftarrow s A + a A_u$ and $B \leftarrow t B + b B_u$.
 
    It is possible to update one of the matrices, or both.
 
-   The matrices Au and Bu must be equal in all subcommunicators.
+   The matrices `Au` and `Bu` must be equal in all subcommunicators.
 
-   The str flag is passed to the MatAXPY() operations to perform the updates.
+   The `str` flag is passed to the `MatAXPY()` operations to perform the updates.
 
-   If globalup is true, communication is carried out to reconstruct the updated
+   If `globalup` is `PETSC_TRUE`, communication is carried out to reconstruct the updated
    matrices in the parent communicator. The user must be warned that if global
    matrices are not in sync with subcommunicator matrices, the errors computed
-   by EPSComputeError() will be wrong even if the computed solution is correct
+   by `EPSComputeError()` will be wrong even if the computed solution is correct
    (the synchronization may be done only once at the end).
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommMats()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`, `EPSKrylovSchurGetSubcommMats()`
 @*/
 PetscErrorCode EPSKrylovSchurUpdateSubcommMats(EPS eps,PetscScalar s,PetscScalar a,Mat Au,PetscScalar t,PetscScalar b,Mat Bu,MatStructure str,PetscBool globalup)
 {
@@ -1336,30 +1380,33 @@ static PetscErrorCode EPSKrylovSchurGetKSP_KrylovSchur(EPS eps,KSP *ksp)
 
 /*@
    EPSKrylovSchurGetKSP - Retrieve the linear solver object associated with the
-   internal EPS object in case of doing spectrum slicing for a computational interval.
+   internal `EPS` object in case of doing spectrum slicing for a computational interval.
 
    Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  ksp - the internal KSP object
+.  ksp - the internal `KSP` object
 
    Notes:
    When invoked to compute all eigenvalues in an interval with spectrum
-   slicing, EPSKRYLOVSCHUR creates another EPS object internally that is
+   slicing, `EPSKRYLOVSCHUR` creates another `EPS` object internally that is
    used to compute eigenvalues by chunks near selected shifts. This function
-   allows access to the KSP object associated to this internal EPS object.
+   allows access to the `KSP` object associated to this internal `EPS` object.
 
-   This function is only available for spectrum slicing runs. In case of
-   having more than one partition, the returned KSP will be different
+   This function is only available for spectrum slicing runs, that is, when
+   an interval has been given with `EPSSetInterval()` and `STSINVERT` is set.
+   See more details in section [](#sec:slice).
+
+   In case of having more than one partition, the returned `KSP` will be different
    in MPI processes belonging to different partitions. Hence, if required,
-   EPSKrylovSchurSetPartitions() must be called BEFORE this function.
+   `EPSKrylovSchurSetPartitions()` must be called BEFORE this function.
 
    Level: advanced
 
-.seealso: `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`
+.seealso: [](ch:eps), [](#sec:slice), `EPSKRYLOVSCHUR`, `EPSSetInterval()`, `EPSKrylovSchurSetPartitions()`
 @*/
 PetscErrorCode EPSKrylovSchurGetKSP(EPS eps,KSP *ksp)
 {
@@ -1396,15 +1443,21 @@ static PetscErrorCode EPSKrylovSchurSetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context, see `EPSKrylovSchurBSEType` for possible values
 -  bse - the BSE method
 
    Options Database Key:
-.  -eps_krylovschur_bse_type - Sets the BSE type (either 'shao', 'gruning', or 'projectedbse')
+.  -eps_krylovschur_bse_type - Sets the BSE type, either `shao`, `gruning`, or `projectedbse`
+
+   Notes:
+   This function is relevant only for `EPS_BSE` problem types, see section
+   on [](#sec:structured).
+
+   A detailed description of the methods can be found in {cite:p}`Alv25`.
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurGetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
+.seealso: [](ch:eps), [](#sec:structured), `EPS_BSE`, `EPSKRYLOVSCHUR`, `EPSKrylovSchurGetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
 @*/
 PetscErrorCode EPSKrylovSchurSetBSEType(EPS eps,EPSKrylovSchurBSEType bse)
 {
@@ -1431,14 +1484,14 @@ static PetscErrorCode EPSKrylovSchurGetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  bse - the BSE method
 
    Level: advanced
 
-.seealso: `EPSKrylovSchurSetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
+.seealso: [](ch:eps), [](#sec:structured), `EPS_BSE`, `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetBSEType()`, `EPSKrylovSchurBSEType`, `MatCreateBSE()`
 @*/
 PetscErrorCode EPSKrylovSchurGetBSEType(EPS eps,EPSKrylovSchurBSEType *bse)
 {
@@ -1591,6 +1644,34 @@ static PetscErrorCode EPSSetDefaultST_KrylovSchur(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSKRYLOVSCHUR - EPSKRYLOVSCHUR = "krylovschur" - Krylov-Schur method.
+
+   Notes:
+   This is the default solver, and is recommended in most situations.
+
+   The implemented algorithm is the single-vector Krylov-Schur method proposed
+   by {cite:t}`Ste01b` for non-Hermitian eigenproblems. When the problem is
+   Hermitian, the solver will behave as a thick-restart Lanczos method
+   {cite:p}`Wu00` with full reorthogonalization.
+
+   The solver includes support for many features\:
+   - Harmonic extraction, see `EPSSetExtraction()`.
+   - Inertia-based spectrum slicing to compute all eigenvalues in an interval,
+     see {cite:p}`Cam12`.
+   - Polynomial filter to compute eigenvalues in an interval via `STFILTER`.
+   - Indefinite Lanczos to solve `EPSGHIEP` problems.
+   - Structured variants for problem types such as `EPSBSE`.
+   - A two-sided variant that also computes left eigenvectors.
+   - Arbitrary selection of eigenvalues, see `EPSSetArbitrarySelection()`.
+
+   Developer Note:
+   In the future, we would like to have a block version of Krylov-Schur.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSSetProblemType()`, `EPSSetExtraction()`, `EPSSetArbitrarySelection()`, `EPSSetTwoSided()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_KrylovSchur(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx;

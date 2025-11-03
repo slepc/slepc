@@ -201,7 +201,7 @@ The hyperbolic singular value decomposition (HSVD) was introduced in {cite:p}`On
 A=U\Sigma V^*,\qquad U^*\Omega U=\tilde\Omega,
 ```
 
- where $\Omega=\mathrm{diag}(\pm 1)$ is an $m\times m$ signature matrix provided by the user, while $\tilde\Omega$ is another signature matrix obtained as part of the solution. Sometimes $U$ is said to be a hyperexchange matrix, or also an $(\Omega,\tilde\Omega)$-orthogonal matrix. Note that in the problem definition normally found in the literature it is $V$ that is $(\Omega,\tilde\Omega)$-orthogonal and not $U$. We choose this definition for consistency with respect to the generalized HSVD of two matrices. If the user wants to compute the HSVD according to the alternative definition, then it suffices to (conjugate) transpose the input matrix $A$, using for instance {external:doc}`MatHermitianTranspose`.
+ where $\Omega=\mathrm{diag}(\pm 1)$ is an $m\times m$ signature matrix provided by the user, while $\tilde\Omega$ is another signature matrix obtained as part of the solution. Sometimes $U$ is said to be a hyperexchange matrix, or also an $(\Omega,\tilde\Omega)$-orthogonal matrix. Note that in the problem definition normally found in the literature it is $V$ that is $(\Omega,\tilde\Omega)$-orthogonal and not $U$. We choose this definition for consistency with respect to the generalized HSVD of two matrices. If the user wants to compute the HSVD according to the alternative definition, then it suffices to (conjugate) transpose the input matrix $A$, using for instance {external:doc}`MatHermitianTranspose`().
 
 As in the case of the SVD, the solution of the problem consists in singular triplets $(\sigma_i,u_i,v_i)$, with $\sigma_i$ real and nonnegative and sorted in nonincreasing order. Note that these quantities are different from those of section [](#sec:svd), even though we use the same notation here. With each singular triplet, there is an associated sign $\tilde\omega_i$ (either 1 or $-1$), the corresponding diagonal element of $\tilde\Omega$. In SLEPc, this value is not returned by the user interface, but if required it can be easily computed as $u_i^*\Omega u_i$.
 
@@ -281,20 +281,20 @@ PetscReal sigma;     /*  singular value      */
 PetscInt  j, nconv;
 PetscReal error;
 
-SVDCreate( PETSC_COMM_WORLD, &svd );
-SVDSetOperators( svd, A, NULL );
-SVDSetProblemType( svd, SVD_STANDARD );
-SVDSetFromOptions( svd );
-SVDSolve( svd );
-SVDGetConverged( svd, &nconv );
-for (j=0; j<nconv; j++) {
-  SVDGetSingularTriplet( svd, j, &sigma, u, v );
-  SVDComputeError( svd, j, SVD_ERROR_RELATIVE, &error );
+SVDCreate(PETSC_COMM_WORLD, &svd);
+SVDSetOperators(svd, A, NULL);
+SVDSetProblemType(svd, SVD_STANDARD);
+SVDSetFromOptions(svd);
+SVDSolve(svd);
+SVDGetConverged(svd, &nconv);
+for (j=0;j<nconv;j++) {
+  SVDGetSingularTriplet(svd, j, &sigma, u, v);
+  SVDComputeError(svd, j, SVD_ERROR_RELATIVE, &error);
 }
-SVDDestroy( &svd );
+SVDDestroy(&svd);
 ```
 
-The basic steps for computing a partial SVD with SLEPc are illustrated in listing [](#fig:ex-svd). The steps are more or less the same as those described in chapter [](#ch:eps) for the eigenvalue problem. First, the solver context is created with `SVDCreate`. Then the problem matrices have to be specified with `SVDSetOperators` and the type of problem can be selected via `SVDSetProblemType`. Then, a call to `SVDSolve` invokes the actual solver. After that, `SVDGetConverged` is used to determine how many solutions have been computed, which are retrieved with `SVDGetSingularTriplet`. Finally, `SVDDestroy` gets rid of the object.
+The basic steps for computing a partial SVD with SLEPc are illustrated in listing [](#fig:ex-svd). The steps are more or less the same as those described in chapter [](#ch:eps) for the eigenvalue problem. First, the solver context is created with `SVDCreate()`. Then the problem matrices have to be specified with `SVDSetOperators()` and the type of problem can be selected via `SVDSetProblemType()`. Then, a call to `SVDSolve()` invokes the actual solver. After that, `SVDGetConverged()` is used to determine how many solutions have been computed, which are retrieved with `SVDGetSingularTriplet()`. Finally, `SVDDestroy()` gets rid of the object.
 
 If one compares this example code with the `EPS` example in listing [](#fig:ex-eps), the most outstanding differences are the following:
 
@@ -328,7 +328,7 @@ The problem type can be specified with:
 SVDSetProblemType(SVD svd,SVDProblemType type);
 ```
 
-Note that in `SVD` it is currently not strictly required to call this function, since the problem type can be deduced from the information passed by the user: if only one matrix is passed to `SVDSetOperators` the problem type will default to a standard SVD (or hyperbolic SVD if a signature has been provided), while if two matrices are passed then it defaults to GSVD. Still, it is recommended to always call `SVDSetProblemType`. Table [](#tab:ptypesvd) lists the supported problem types.
+Note that in `SVD` it is currently not strictly required to call this function, since the problem type can be deduced from the information passed by the user: if only one matrix is passed to `SVDSetOperators()` the problem type will default to a standard SVD (or hyperbolic SVD if a signature has been provided), while if two matrices are passed then it defaults to GSVD. Still, it is recommended to always call `SVDSetProblemType()`. Table [](#tab:ptypesvd) lists the supported problem types.
 
 :::{table} Problem types considered in `SVD`
 :name: tab:ptypesvd
@@ -341,7 +341,7 @@ Note that in `SVD` it is currently not strictly required to call this function, 
 
 :::
 
-It is important to note that all SVD solvers in SLEPc make use of both $A$ and $A^*$, as suggested by the description in section [](#sec:svd). $A^*$ is not explicitly passed as an argument to `SVDSetOperators`, therefore it will have to stem from $A$. There are two possibilities for this: either $A$ is transposed explicitly and $A^*$ is created as a distinct matrix, or $A^*$ is handled implicitly via {external:doc}`MatMultTranspose` (or {external:doc}`MatMultHermitianTranspose` in the complex case) operations whenever a matrix-vector product is required in the algorithm. The default is to build $A^*$ explicitly, but this behavior can be changed with:
+It is important to note that all SVD solvers in SLEPc make use of both $A$ and $A^*$, as suggested by the description in section [](#sec:svd). $A^*$ is not explicitly passed as an argument to `SVDSetOperators()`, therefore it will have to stem from $A$. There are two possibilities for this: either $A$ is transposed explicitly and $A^*$ is created as a distinct matrix, or $A^*$ is handled implicitly via {external:doc}`MatMultTranspose`() (or {external:doc}`MatMultHermitianTranspose`() in the complex case) operations whenever a matrix-vector product is required in the algorithm. The default is to build $A^*$ explicitly, but this behavior can be changed with:
 
 ```{code} c
 SVDSetImplicitTranspose(SVD svd,PetscBool impl);
@@ -411,7 +411,7 @@ The available methods for computing the partial SVD are shown in table [List of 
 
 -   Solvers based on `EPS`. These solvers set up an `EPS` object internally, thus using the available eigensolvers for solving the SVD problem. The two possible approaches in this case are the cross product matrix and the cyclic matrix, as described in section [](#sec:svdback).
 
--   Specific SVD solvers. These are typically eigensolvers that have been adapted algorithmically to exploit the structure of the SVD or GSVD problems. There are two Lanczos-type solvers in this category: Lanczos and thick-restart Lanczos, see {cite:p}`Her07b` for a detailed description of these methods. In this category, we could also add the randomized SVD (RSVD), a special solver that does not compute individual singular vectors accurately, but rather a low-rank approximation of $A$ by means of randomization techniques.
+-   Specific SVD solvers. These are typically eigensolvers that have been adapted algorithmically to exploit the structure of the SVD or GSVD problems. There are two Lanczos-type solvers in this category: Lanczos and thick-restart Lanczos, see {cite:p}`Her07c` for a detailed description of these methods. In this category, we could also add the randomized SVD (RSVD), a special solver that does not compute individual singular vectors accurately, but rather a low-rank approximation of $A$ by means of randomization techniques.
 
 -   The LAPACK solver. This is an interface to some LAPACK routines, analog of those in the case of eigenproblems. These routines operate in dense mode with only one processor and therefore are suitable only for moderate size problems. This solver should be used only for debugging purposes.
 
@@ -488,7 +488,7 @@ Similarly, in the case of GSVD the thick-restart Lanczos solver uses a {external
 SVDTRLanczosGetKSP(SVD svd,KSP *ksp);
 ```
 
-or with the corresponding command-line options prefixed with `-svd_trlanczos_`. This {external:doc}`KSP` object is used to solve a linear least squares problem at each Lanczos step with coefficient matrix $Z$ equation {math:numref}`eq:qr`, which by default is a shell matrix but the user can choose to create it explicitly with the function `SVDTRLanczosSetExplicitMatrix`.
+or with the corresponding command-line options prefixed with `-svd_trlanczos_`. This {external:doc}`KSP` object is used to solve a linear least squares problem at each Lanczos step with coefficient matrix $Z$ equation {math:numref}`eq:qr`, which by default is a shell matrix but the user can choose to create it explicitly with the function `SVDTRLanczosSetExplicitMatrix()`.
 
 ## Retrieving the Solution
 
@@ -500,7 +500,7 @@ As in the case of eigenproblems, the number of computed singular triplets depend
 SVDGetConverged(SVD svd,PetscInt *nconv);
 ```
 
-Usually, the number of converged solutions, `nconv`, will be equal to `nsv`, but in general it can be a number ranging from 0 to `ncv` (here, `nsv` and `ncv` are the arguments of function `SVDSetDimensions`).
+Usually, the number of converged solutions, `nconv`, will be equal to `nsv`, but in general it can be a number ranging from 0 to `ncv` (here, `nsv` and `ncv` are the arguments of function `SVDSetDimensions()`).
 
 Normally, the user is interested in the singular values only, or the complete singular triplets. The function:
 
@@ -508,11 +508,11 @@ Normally, the user is interested in the singular values only, or the complete si
 SVDGetSingularTriplet(SVD svd,PetscInt j,PetscReal *sigma,Vec u,Vec v);
 ```
 
-returns the $j$-th computed singular triplet, $(\sigma_j,u_j,v_j)$, where both $u_j$ and $v_j$ are normalized to have unit norm[^hsvd]. Typically, this function is called inside a loop for each value of `j` from 0 to `nconv`--1. Note that singular values are ordered according to the same criterion specified with function `SVDSetWhichSingularTriplets` for selecting the portion of the spectrum of interest.
+returns the $j$-th computed singular triplet, $(\sigma_j,u_j,v_j)$, where both $u_j$ and $v_j$ are normalized to have unit norm[^hsvd]. Typically, this function is called inside a loop for each value of `j` from 0 to `nconv`--1. Note that singular values are ordered according to the same criterion specified with function `SVDSetWhichSingularTriplets()` for selecting the portion of the spectrum of interest.
 
-In some applications, it may be enough to compute only the right singular vectors. This is especially important in cases in which memory requirements are critical (remember that both $U_k$ and $V_k$ are dense matrices, and $U_k$ may require much more storage than $V_k$, see figure [](#fig:svd)). In SLEPc, there is no general option for specifying this, but the default behavior of some solvers is to compute only right vectors and allocate/compute left vectors only in the case that the user requests them. This is done in the `cross` solver and in some special variants of other solvers such as one-sided Lanczos (consult {cite:p}`Her07b` for specific solver options).
+In some applications, it may be enough to compute only the right singular vectors. This is especially important in cases in which memory requirements are critical (remember that both $U_k$ and $V_k$ are dense matrices, and $U_k$ may require much more storage than $V_k$, see figure [](#fig:svd)). In SLEPc, there is no general option for specifying this, but the default behavior of some solvers is to compute only right vectors and allocate/compute left vectors only in the case that the user requests them. This is done in the `cross` solver and in some special variants of other solvers such as one-sided Lanczos (consult {cite:p}`Her07c` for specific solver options).
 
-In the case of the GSVD, the `sigma` argument of `SVDGetSingularTriplet` contains $\sigma_i=c_i/s_i$ and the second {external:doc}`Vec` argument (`v`) contains the right singular vectors ($x_i$), while the first {external:doc}`Vec` argument (`u`) contains the other vectors of the decomposition stacked on top of each other, as a single $(m+p)$-vector: $\left[\begin{smallmatrix}u_i\\v_i\end{smallmatrix}\right]$.
+In the case of the GSVD, the `sigma` argument of `SVDGetSingularTriplet()` contains $\sigma_i=c_i/s_i$ and the second {external:doc}`Vec` argument (`v`) contains the right singular vectors ($x_i$), while the first {external:doc}`Vec` argument (`u`) contains the other vectors of the decomposition stacked on top of each other, as a single $(m+p)$-vector: $\left[\begin{smallmatrix}u_i\\v_i\end{smallmatrix}\right]$.
 
 :::{warning}
 In the GSVD, one has to be careful when dealing with the $(m+p)$-vector `u` in parallel runs, since the entries of the upper and lower part will get mixed unless we manage it as a {external:doc}`VECNEST`. One should follow a procedure similar to the one discussed in section [](#sec:structured-vectors).
@@ -528,7 +528,7 @@ In SVD computations, a-posteriori error bounds are much the same as in the case 
 \|r_\mathrm{SVD}\|_2=\left(\|A\tilde{v}-\tilde{\sigma}\tilde{u}\|_2^2+\|A^*\tilde{u}-\tilde{\sigma}\tilde{v}\|_2^2\right)^{\frac{1}{2}},
 ```
 
-where $\tilde{\sigma}$, $\tilde{u}$ and $\tilde{v}$ represent any of the `nconv` computed singular triplets delivered by `SVDGetSingularTriplet`.
+where $\tilde{\sigma}$, $\tilde{u}$ and $\tilde{v}$ represent any of the `nconv` computed singular triplets delivered by `SVDGetSingularTriplet()`.
 
 Given the above definition, the following relation holds
 
@@ -544,7 +544,7 @@ where $\sigma$ is an exact singular value. The associated error can be obtained 
 SVDComputeError(SVD svd,PetscInt j,SVDErrorType type,PetscReal *error);
 ```
 
-In the case of the GSVD, the function `SVDComputeError` will compute a residual norm based on the two relations {math:numref}`eq:gsvd`,
+In the case of the GSVD, the function `SVDComputeError()` will compute a residual norm based on the two relations {math:numref}`eq:gsvd`,
 
 ```{math}
 :label: eq:gsvd-residual-norm
@@ -566,7 +566,7 @@ where $\tilde\omega$ is the corresponding element of the signature $\tilde\Omega
 
 ### Controlling and Monitoring Convergence
 
-Similarly to the case of eigensolvers, in `SVD` the number of iterations carried out by the solver can be determined with `SVDGetIterationNumber`, and the tolerance and maximum number of iterations can be set with `SVDSetTolerances`. Also, convergence can be monitored with command-line keys `-svd_monitor`, `-svd_monitor_all`, `-svd_monitor_conv`, or graphically with `-svd_monitor draw::draw_lg`, or alternatively with `-svd_monitor_all draw::draw_lg`. See section [](#sec:monitor) for additional details.
+Similarly to the case of eigensolvers, in `SVD` the number of iterations carried out by the solver can be determined with `SVDGetIterationNumber()`, and the tolerance and maximum number of iterations can be set with `SVDSetTolerances()`. Also, convergence can be monitored with command-line keys `-svd_monitor`, `-svd_monitor_all`, `-svd_monitor_conv`, or graphically with `-svd_monitor draw::draw_lg`, or alternatively with `-svd_monitor_all draw::draw_lg`. See section [](#sec:monitor) for additional details.
 
 :::{table} Available possibilities for the convergence criterion, with $Z=A$ in the standard SVD or as defined in equation {math:numref}`eq:qr` for the GSVD
 :name: tab:svdconvergence

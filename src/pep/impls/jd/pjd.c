@@ -1486,7 +1486,7 @@ static PetscErrorCode PEPJDSetRestart_JD(PEP pep,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
++  pep  - the polynomial eigensolver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
@@ -1497,7 +1497,7 @@ static PetscErrorCode PEPJDSetRestart_JD(PEP pep,PetscReal keep)
 
    Level: advanced
 
-.seealso: `PEPJDGetRestart()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetRestart()`
 @*/
 PetscErrorCode PEPJDSetRestart(PEP pep,PetscReal keep)
 {
@@ -1523,14 +1523,14 @@ static PetscErrorCode PEPJDGetRestart_JD(PEP pep,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  keep - the restart parameter
 
    Level: advanced
 
-.seealso: `PEPJDSetRestart()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetRestart()`
 @*/
 PetscErrorCode PEPJDGetRestart(PEP pep,PetscReal *keep)
 {
@@ -1561,20 +1561,22 @@ static PetscErrorCode PEPJDSetFix_JD(PEP pep,PetscReal fix)
    Logically Collective
 
    Input Parameters:
-+  pep - the eigenproblem solver context
++  pep - the polynomial eigensolver context
 -  fix - threshold for changing the target
 
    Options Database Key:
 .  -pep_jd_fix - the fix value
 
-   Note:
+   Notes:
    The target in the correction equation is fixed at the first iterations.
-   When the norm of the residual vector is lower than the fix value,
+   When the norm of the residual vector is lower than the `fix` value,
    the target is set to the corresponding eigenvalue.
+
+   Detailed information can be found at {cite:p}`Cam20a`.
 
    Level: advanced
 
-.seealso: `PEPJDGetFix()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetFix()`
 @*/
 PetscErrorCode PEPJDSetFix(PEP pep,PetscReal fix)
 {
@@ -1601,19 +1603,14 @@ static PetscErrorCode PEPJDGetFix_JD(PEP pep,PetscReal *fix)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  fix - threshold for changing the target
 
-   Note:
-   The target in the correction equation is fixed at the first iterations.
-   When the norm of the residual vector is lower than the fix value,
-   the target is set to the corresponding eigenvalue.
-
    Level: advanced
 
-.seealso: `PEPJDSetFix()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetFix()`
 @*/
 PetscErrorCode PEPJDGetFix(PEP pep,PetscReal *fix)
 {
@@ -1640,20 +1637,20 @@ static PetscErrorCode PEPJDSetReusePreconditioner_JD(PEP pep,PetscBool reusepc)
    Logically Collective
 
    Input Parameters:
-+  pep     - the eigenproblem solver context
++  pep     - the polynomial eigensolver context
 -  reusepc - the reuse flag
 
    Options Database Key:
 .  -pep_jd_reuse_preconditioner - the reuse flag
 
    Note:
-   The default value is False. If set to True, the preconditioner is built
+   The default value is `PETSC_FALSE`. If set to `PETSC_TRUE`, the preconditioner is built
    only at the beginning, using the target value. Otherwise, it may be rebuilt
-   (depending on the fix parameter) at each iteration from the Ritz value.
+   (depending on the `fix` parameter) at each iteration from the Ritz value.
 
    Level: advanced
 
-.seealso: `PEPJDGetReusePreconditioner()`, `PEPJDSetFix()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetReusePreconditioner()`, `PEPJDSetFix()`
 @*/
 PetscErrorCode PEPJDSetReusePreconditioner(PEP pep,PetscBool reusepc)
 {
@@ -1679,14 +1676,14 @@ static PetscErrorCode PEPJDGetReusePreconditioner_JD(PEP pep,PetscBool *reusepc)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  reusepc - the reuse flag
 
    Level: advanced
 
-.seealso: `PEPJDSetReusePreconditioner()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetReusePreconditioner()`
 @*/
 PetscErrorCode PEPJDGetReusePreconditioner(PEP pep,PetscBool *reusepc)
 {
@@ -1719,19 +1716,21 @@ static PetscErrorCode PEPJDSetMinimalityIndex_JD(PEP pep,PetscInt mmidx)
    Logically Collective
 
    Input Parameters:
-+  pep   - the eigenproblem solver context
++  pep   - the polynomial eigensolver context
 -  mmidx - maximum minimality index
 
    Options Database Key:
 .  -pep_jd_minimality_index - the minimality index value
 
-   Note:
+   Notes:
    The default value is equal to the degree of the polynomial. A smaller value
    can be used if the wanted eigenvectors are known to be linearly independent.
 
+   Detailed information can be found at {cite:p}`Cam20a`.
+
    Level: advanced
 
-.seealso: `PEPJDGetMinimalityIndex()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetMinimalityIndex()`
 @*/
 PetscErrorCode PEPJDSetMinimalityIndex(PEP pep,PetscInt mmidx)
 {
@@ -1758,14 +1757,14 @@ static PetscErrorCode PEPJDGetMinimalityIndex_JD(PEP pep,PetscInt *mmidx)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  mmidx - minimality index
 
    Level: advanced
 
-.seealso: `PEPJDSetMinimalityIndex()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetMinimalityIndex()`
 @*/
 PetscErrorCode PEPJDGetMinimalityIndex(PEP pep,PetscInt *mmidx)
 {
@@ -1801,15 +1800,18 @@ static PetscErrorCode PEPJDSetProjection_JD(PEP pep,PEPJDProjection proj)
    Logically Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
--  proj - the type of projection
++  pep  - the polynomial eigensolver context
+-  proj - the type of projection, see `PEPJDProjection` for possible values
 
    Options Database Key:
-.  -pep_jd_projection - the projection type, either orthogonal or harmonic
+.  -pep_jd_projection - the projection type, either `orthogonal` or `harmonic`
+
+   Note:
+   Detailed information can be found at {cite:p}`Cam20a`.
 
    Level: advanced
 
-.seealso: `PEPJDGetProjection()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDGetProjection()`
 @*/
 PetscErrorCode PEPJDSetProjection(PEP pep,PEPJDProjection proj)
 {
@@ -1835,14 +1837,14 @@ static PetscErrorCode PEPJDGetProjection_JD(PEP pep,PEPJDProjection *proj)
    Not Collective
 
    Input Parameter:
-.  pep - the eigenproblem solver context
+.  pep - the polynomial eigensolver context
 
    Output Parameter:
 .  proj - the type of projection
 
    Level: advanced
 
-.seealso: `PEPJDSetProjection()`
+.seealso: [](ch:pep), `PEPJD`, `PEPJDSetProjection()`
 @*/
 PetscErrorCode PEPJDGetProjection(PEP pep,PEPJDProjection *proj)
 {
@@ -1953,6 +1955,27 @@ static PetscErrorCode PEPDestroy_JD(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   PEPJD - PEPJD = "jd" - The Jacobi-Davidson method for polynomial eigenproblems.
+
+   Notes:
+   This is a preconditioned eigensolver, that is, it may be competitive
+   when computing interior eigenvalues in case the shift-and-invert spectral
+   transformation is too costly and a good preconditioner is available.
+
+   The implemented method is polynomial Jacobi-Davidson {cite:p}`Sle96`.
+   It is possible to set several options of the algorithm, such as the
+   restart (`PEPJDSetRestart()`) or the fix parameter (`PEPJDSetFix()`).
+   The details of the SLEPc implementation are in {cite:p}`Cam20a`.
+
+   The preconditioner is specified via the internal `ST` object and its
+   associated `KSP`. The preconditioner will be recomputed whenever the
+   shift is updated, unless this is disabled with `PEPJDSetReusePreconditioner()`.
+
+   Level: beginner
+
+.seealso: [](ch:pep), `PEP`, `PEPType`, `PEPSetType()`, `PEPGetST()`, `PEPJDSetRestart()`, `PEPJDSetFix()`, `PEPJDSetReusePreconditioner()`
+M*/
 SLEPC_EXTERN PetscErrorCode PEPCreate_JD(PEP pep)
 {
   PEP_JD         *pjd;

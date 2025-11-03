@@ -238,21 +238,21 @@ PetscErrorCode EPSSetUpSort_Default(EPS eps)
 }
 
 /*@
-   EPSSetDSType - Sets the type of the internal DS object based on the current
+   EPSSetDSType - Sets the type of the internal `DS` object based on the current
    settings of the eigenvalue solver.
 
    Collective
 
    Input Parameter:
-.  eps - eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Note:
    This function need not be called explicitly, since it will be called at
-   both EPSSetFromOptions() and EPSSetUp().
+   both `EPSSetFromOptions()` and `EPSSetUp()`.
 
    Level: developer
 
-.seealso: `EPSSetFromOptions()`, `EPSSetUp()`
+.seealso: [](ch:eps), `EPSSetFromOptions()`, `EPSSetUp()`
 @*/
 PetscErrorCode EPSSetDSType(EPS eps)
 {
@@ -264,22 +264,22 @@ PetscErrorCode EPSSetDSType(EPS eps)
 
 /*@
    EPSSetUp - Sets up all the internal data structures necessary for the
-   execution of the eigensolver. Then calls STSetUp() for any set-up
-   operations associated to the ST object.
+   execution of the eigensolver. Then calls `STSetUp()` for any set-up
+   operations associated to the internal `ST` object.
 
    Collective
 
    Input Parameter:
-.  eps   - eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Notes:
-   This function need not be called explicitly in most cases, since EPSSolve()
+   This function need not be called explicitly in most cases, since `EPSSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
    Level: developer
 
-.seealso: `EPSCreate()`, `EPSSolve()`, `EPSDestroy()`, `STSetUp()`, `EPSSetInitialSpace()`
+.seealso: [](ch:eps), `EPSCreate()`, `EPSSolve()`, `EPSDestroy()`, `STSetUp()`, `EPSSetInitialSpace()`, `EPSSetDeflationSpace()`
 @*/
 PetscErrorCode EPSSetUp(EPS eps)
 {
@@ -443,23 +443,23 @@ PetscErrorCode EPSSetUp(EPS eps)
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  A  - the matrix associated with the eigensystem
 -  B  - the second matrix in the case of generalized eigenproblems
 
    Notes:
-   To specify a standard eigenproblem, use NULL for parameter B.
+   To specify a standard eigenproblem, use `NULL` for parameter `B`.
 
-   It must be called before EPSSetUp(). If it is called again after EPSSetUp() and
-   the matrix sizes have changed then the EPS object is reset.
+   It must be called before `EPSSetUp()`. If it is called again after `EPSSetUp()` and
+   the matrix sizes have changed then the `EPS` object is reset.
 
-   For structured eigenproblem types such as EPS_BSE (see EPSSetProblemType()), the
+   For structured eigenproblem types such as `EPS_BSE` (see `EPSSetProblemType()`), the
    provided matrices must have been created with the corresponding helper function,
-   i.e., MatCreateBSE().
+   i.e., `MatCreateBSE()`.
 
    Level: beginner
 
-.seealso: `EPSSolve()`, `EPSSetUp()`, `EPSReset()`, `EPSGetST()`, `STGetMatrix()`, `EPSSetProblemType()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSSetUp()`, `EPSReset()`, `EPSSetProblemType()`
 @*/
 PetscErrorCode EPSSetOperators(EPS eps,Mat A,Mat B)
 {
@@ -506,7 +506,7 @@ PetscErrorCode EPSSetOperators(EPS eps,Mat A,Mat B)
    Collective
 
    Input Parameter:
-.  eps - the EPS context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  A  - the matrix associated with the eigensystem
@@ -517,7 +517,7 @@ PetscErrorCode EPSSetOperators(EPS eps,Mat A,Mat B)
 
    Level: intermediate
 
-.seealso: `EPSSolve()`, `EPSGetST()`, `STGetMatrix()`, `STSetMatrices()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSGetST()`, `STGetMatrix()`, `STSetMatrices()`
 @*/
 PetscErrorCode EPSGetOperators(EPS eps,Mat *A,Mat *B)
 {
@@ -546,7 +546,7 @@ PetscErrorCode EPSGetOperators(EPS eps,Mat *A,Mat *B)
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  n   - number of vectors
 -  v   - set of basis vectors of the deflation space
 
@@ -556,7 +556,7 @@ PetscErrorCode EPSGetOperators(EPS eps,Mat *A,Mat *B)
    space. This can be used for instance in the case that an invariant
    subspace is known beforehand (such as the nullspace of the matrix).
 
-   These vectors do not persist from one EPSSolve() call to the other, so the
+   These vectors do not persist from one `EPSSolve()` call to the other, so the
    deflation space should be set every time.
 
    The vectors do not need to be mutually orthonormal, since they are explicitly
@@ -564,7 +564,7 @@ PetscErrorCode EPSGetOperators(EPS eps,Mat *A,Mat *B)
 
    Level: intermediate
 
-.seealso: `EPSSetInitialSpace()`
+.seealso: [](ch:eps), `EPSSetInitialSpace()`
 @*/
 PetscErrorCode EPSSetDeflationSpace(EPS eps,PetscInt n,Vec v[])
 {
@@ -588,15 +588,17 @@ PetscErrorCode EPSSetDeflationSpace(EPS eps,PetscInt n,Vec v[])
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  n   - number of vectors
 -  is  - set of basis vectors of the initial space
 
    Notes:
-   Some solvers start to iterate on a single vector (initial vector). In that case,
-   the other vectors are ignored.
+   Some solvers such as `EPSKRYLOVSCHUR` start to iterate on a single vector
+   (initial vector). In that case, only `is[0]` is taken into account and the
+   other vectors are ignored. But other solvers such as `EPSSUBSPACE` are
+   able to make use of the whole initial subspace as an initial guess.
 
-   These vectors do not persist from one EPSSolve() call to the other, so the
+   These vectors do not persist from one `EPSSolve()` call to the other, so the
    initial space should be set every time.
 
    The vectors do not need to be mutually orthonormal, since they are explicitly
@@ -607,7 +609,7 @@ PetscErrorCode EPSSetDeflationSpace(EPS eps,PetscInt n,Vec v[])
 
    Level: intermediate
 
-.seealso: `EPSSetLeftInitialSpace()`, `EPSSetDeflationSpace()`
+.seealso: [](ch:eps), `EPSSetLeftInitialSpace()`, `EPSSetDeflationSpace()`
 @*/
 PetscErrorCode EPSSetInitialSpace(EPS eps,PetscInt n,Vec is[])
 {
@@ -631,7 +633,7 @@ PetscErrorCode EPSSetInitialSpace(EPS eps,PetscInt n,Vec is[])
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  n   - number of vectors
 -  isl - set of basis vectors of the left initial space
 
@@ -640,11 +642,11 @@ PetscErrorCode EPSSetInitialSpace(EPS eps,PetscInt n,Vec is[])
    eigensolvers. Users should pass here an approximation of the left eigenspace,
    if available.
 
-   The same comments in EPSSetInitialSpace() are applicable here.
+   The same comments in `EPSSetInitialSpace()` are applicable here.
 
    Level: intermediate
 
-.seealso: `EPSSetInitialSpace()`, `EPSSetTwoSided()`
+.seealso: [](ch:eps), `EPSSetInitialSpace()`, `EPSSetTwoSided()`
 @*/
 PetscErrorCode EPSSetLeftInitialSpace(EPS eps,PetscInt n,Vec isl[])
 {
@@ -700,17 +702,17 @@ PetscErrorCode EPSSetDimensions_Default(EPS eps,PetscInt *nev,PetscInt *ncv,Pets
    Collective
 
    Input Parameters:
-+  eps   - eigensolver context
++  eps   - the linear eigensolver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin EPS
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `EPS`
    implementations.
 
    Level: developer
 
-.seealso: `EPSSetUp()`
+.seealso: [](ch:eps), `EPSSetUp()`, `EPSSetDimensions()`
 @*/
 PetscErrorCode EPSAllocateSolution(EPS eps,PetscInt extra)
 {
@@ -761,11 +763,11 @@ PetscErrorCode EPSAllocateSolution(EPS eps,PetscInt extra)
    Collective
 
    Input Parameters:
-+  eps     - eigensolver context
++  eps     - the linear eigensolver context
 -  newsize - new size
 
    Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin EPS
+   This is `SLEPC_EXTERN` because it may be required by user plugin `EPS`
    implementations.
 
    This is called during the iteration in case the threshold stopping test has
@@ -773,7 +775,7 @@ PetscErrorCode EPSAllocateSolution(EPS eps,PetscInt extra)
 
    Level: developer
 
-.seealso: `EPSAllocateSolution()`, `EPSSetThreshold()`
+.seealso: [](ch:eps), `EPSAllocateSolution()`, `EPSSetThreshold()`
 @*/
 PetscErrorCode EPSReallocateSolution(EPS eps,PetscInt newsize)
 {

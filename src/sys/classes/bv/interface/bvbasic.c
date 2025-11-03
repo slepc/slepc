@@ -17,7 +17,7 @@ PetscBool         BVRegisterAllCalled = PETSC_FALSE;
 PetscFunctionList BVList = NULL;
 
 /*@
-   BVSetType - Selects the type for the BV object.
+   BVSetType - Selects the type for the `BV` object.
 
    Logically Collective
 
@@ -26,11 +26,11 @@ PetscFunctionList BVList = NULL;
 -  type - a known type
 
    Options Database Key:
-.  -bv_type <type> - Sets BV type
+.  -bv_type \<type\> - Sets `BV` type
 
    Level: intermediate
 
-.seealso: `BVGetType()`
+.seealso: [](sec:bv), `BVGetType()`
 @*/
 PetscErrorCode BVSetType(BV bv,BVType type)
 {
@@ -64,7 +64,7 @@ PetscErrorCode BVSetType(BV bv,BVType type)
 }
 
 /*@
-   BVGetType - Gets the BV type name (as a string) from the BV context.
+   BVGetType - Gets the `BV` type name (as a string) from the `BV` context.
 
    Not Collective
 
@@ -76,7 +76,7 @@ PetscErrorCode BVSetType(BV bv,BVType type)
 
    Level: intermediate
 
-.seealso: `BVSetType()`
+.seealso: [](sec:bv), `BVSetType()`
 @*/
 PetscErrorCode BVGetType(BV bv,BVType *type)
 {
@@ -94,18 +94,18 @@ PetscErrorCode BVGetType(BV bv,BVType *type)
 
    Input Parameters:
 +  bv - the basis vectors
-.  n  - the local size (or PETSC_DECIDE to have it set)
-.  N  - the global size (or PETSC_DECIDE)
+.  n  - the local size (or `PETSC_DECIDE` to have it set)
+.  N  - the global size (or `PETSC_DECIDE`)
 -  m  - the number of columns
 
    Notes:
-   n and N cannot be both PETSC_DECIDE.
-   If one processor calls this with N of PETSC_DECIDE then all processors must,
+   `n` and `N` cannot be both `PETSC_DECIDE`.
+   If one process calls this with `N` equal to `PETSC_DECIDE` then all processes must,
    otherwise the program will hang.
 
    Level: beginner
 
-.seealso: `BVSetSizesFromVec()`, `BVGetSizes()`, `BVResize()`
+.seealso: [](sec:bv), `BVSetSizesFromVec()`, `BVGetSizes()`, `BVResize()`
 @*/
 PetscErrorCode BVSetSizes(BV bv,PetscInt n,PetscInt N,PetscInt m)
 {
@@ -161,7 +161,7 @@ PetscErrorCode BVSetSizes(BV bv,PetscInt n,PetscInt N,PetscInt m)
 
    Level: beginner
 
-.seealso: `BVSetSizes()`, `BVGetSizes()`, `BVResize()`
+.seealso: [](sec:bv), `BVSetSizes()`, `BVGetSizes()`, `BVResize()`
 @*/
 PetscErrorCode BVSetSizesFromVec(BV bv,Vec t,PetscInt m)
 {
@@ -210,15 +210,15 @@ PetscErrorCode BVSetSizesFromVec(BV bv,Vec t,PetscInt m)
 -  m  - the number of columns
 
    Note:
-   Normal usage requires that bv has already been given its sizes, otherwise
+   Normal usage requires that `bv` has already been given its sizes, otherwise
    the call fails. However, this function can also be used to determine if
-   a BV object has been initialized completely (sizes and type). For this,
-   call with n=NULL and N=NULL, then a return value of m=0 indicates that
-   the BV object is not ready for use yet.
+   a `BV` object has been initialized completely (sizes and type). For this,
+   call with `n=NULL` and `N=NULL`, then a return value of `m=0` indicates that
+   the `BV` object is not ready for use yet.
 
    Level: beginner
 
-.seealso: `BVSetSizes()`, `BVSetSizesFromVec()`
+.seealso: [](sec:bv), `BVSetSizes()`, `BVSetSizesFromVec()`
 @*/
 PetscErrorCode BVGetSizes(BV bv,PetscInt *n,PetscInt *N,PetscInt *m)
 {
@@ -246,16 +246,16 @@ PetscErrorCode BVGetSizes(BV bv,PetscInt *n,PetscInt *N,PetscInt *m)
 -  nc - number of constraints
 
    Notes:
-   This function sets the number of constraints to nc and marks all remaining
-   columns as regular. Normal user would call BVInsertConstraints() instead.
+   This function sets the number of constraints to `nc` and marks all remaining
+   columns as regular. Normal user would call `BVInsertConstraints()` instead.
 
-   If nc is smaller than the previously set value, then some of the constraints
-   are discarded. In particular, using nc=0 removes all constraints preserving
+   If `nc` is smaller than the previously set value, then some of the constraints
+   are discarded. In particular, using `nc=0` removes all constraints preserving
    the content of regular columns.
 
    Level: developer
 
-.seealso: `BVInsertConstraints()`
+.seealso: [](sec:bv), `BVInsertConstraints()`
 @*/
 PetscErrorCode BVSetNumConstraints(BV V,PetscInt nc)
 {
@@ -301,12 +301,12 @@ PetscErrorCode BVSetNumConstraints(BV V,PetscInt nc)
    Input Parameter:
 .  bv - the basis vectors
 
-   Output Parameters:
+   Output Parameter:
 .  nc - the number of constraints
 
    Level: advanced
 
-.seealso: `BVGetSizes()`, `BVInsertConstraints()`
+.seealso: [](sec:bv), `BVGetSizes()`, `BVInsertConstraints()`
 @*/
 PetscErrorCode BVGetNumConstraints(BV bv,PetscInt *nc)
 {
@@ -328,12 +328,12 @@ PetscErrorCode BVGetNumConstraints(BV bv,PetscInt *nc)
 -  copy - a flag indicating whether current values should be kept
 
    Note:
-   Internal storage is reallocated. If the copy flag is set to true, then
+   Internal storage is reallocated. If the `copy` flag is set to true, then
    the contents are copied to the leading part of the new space.
 
    Level: advanced
 
-.seealso: `BVSetSizes()`, `BVSetSizesFromVec()`
+.seealso: [](sec:bv), `BVSetSizes()`, `BVSetSizesFromVec()`
 @*/
 PetscErrorCode BVResize(BV bv,PetscInt m,PetscBool copy)
 {
@@ -399,24 +399,24 @@ PetscErrorCode BVResize(BV bv,PetscInt m,PetscBool copy)
 -  k  - number of active columns
 
    Notes:
-   In operations such as BVMult() or BVDot(), only the first k columns are
-   considered. This is useful when the BV is filled from left to right, so
-   the last m-k columns do not have relevant information.
+   In operations such as `BVMult()` or `BVDot()`, only the first `k` columns are
+   considered. This is useful when the `BV` is filled from left to right, so
+   the last `m-k` columns do not have relevant information.
 
-   Also in operations such as BVMult() or BVDot(), the first l columns are
-   normally not included in the computation. See the manpage of each
+   Also in operations such as `BVMult()` or `BVDot()`, the first `l` columns are
+   normally not included in the computation. See the manual page of each
    operation.
 
-   In orthogonalization operations, the first l columns are treated
+   In orthogonalization operations, the first `l` columns are treated
    differently, they participate in the orthogonalization but the computed
    coefficients are not stored.
 
-   Use PETSC_CURRENT to leave any of the values unchanged. Use PETSC_DETERMINE
-   to set l to the minimum value (0) and k to the maximum (m).
+   Use `PETSC_CURRENT` to leave any of the values unchanged. Use `PETSC_DETERMINE`
+   to set `l` to the minimum value (`0`) and `k` to the maximum (`m`).
 
    Level: intermediate
 
-.seealso: `BVGetActiveColumns()`, `BVSetSizes()`
+.seealso: [](sec:bv), `BVGetActiveColumns()`, `BVSetSizes()`
 @*/
 PetscErrorCode BVSetActiveColumns(BV bv,PetscInt l,PetscInt k)
 {
@@ -454,7 +454,7 @@ PetscErrorCode BVSetActiveColumns(BV bv,PetscInt l,PetscInt k)
 
    Level: intermediate
 
-.seealso: `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVGetActiveColumns(BV bv,PetscInt *l,PetscInt *k)
 {
@@ -472,27 +472,27 @@ PetscErrorCode BVGetActiveColumns(BV bv,PetscInt *l,PetscInt *k)
 
    Input Parameters:
 +  bv    - the basis vectors context
-.  B     - a symmetric matrix (may be NULL)
+.  B     - a Hermitian matrix (may be `NULL`)
 -  indef - a flag indicating if the matrix is indefinite
 
    Notes:
    This is used to specify a non-standard inner product, whose matrix
-   representation is given by B. Then, all inner products required during
-   orthogonalization are computed as (x,y)_B=y^H*B*x rather than the
-   standard form (x,y)=y^H*x.
+   representation is given by `B`. Then, all inner products required during
+   orthogonalization are computed as $(x,y)_B=y^*Bx$ rather than the
+   standard form $(x,y)=y^Hx$.
 
-   Matrix B must be real symmetric (or complex Hermitian). A genuine inner
-   product requires that B is also positive (semi-)definite. However, we
-   also allow for an indefinite B (setting indef=PETSC_TRUE), in which
+   Matrix `B` must be real symmetric (or complex Hermitian). A genuine inner
+   product requires that `B` is also positive (semi-)definite. However, we
+   also allow for an indefinite `B` (setting `indef=PETSC_TRUE`), in which
    case the orthogonalization uses an indefinite inner product.
 
-   This affects operations BVDot(), BVNorm(), BVOrthogonalize(), and variants.
+   This affects operations `BVDot()`, `BVNorm()`, `BVOrthogonalize()`, and variants.
 
-   Setting B=NULL has the same effect as if the identity matrix was passed.
+   Setting `B=NULL` has the same effect as if the identity matrix was passed.
 
    Level: advanced
 
-.seealso: `BVGetMatrix()`, `BVDot()`, `BVNorm()`, `BVOrthogonalize()`, `BVSetDefiniteTolerance()`
+.seealso: [](sec:bv), `BVGetMatrix()`, `BVDot()`, `BVNorm()`, `BVOrthogonalize()`, `BVSetDefiniteTolerance()`
 @*/
 PetscErrorCode BVSetMatrix(BV bv,Mat B,PetscBool indef)
 {
@@ -528,12 +528,12 @@ PetscErrorCode BVSetMatrix(BV bv,Mat B,PetscBool indef)
 .  bv    - the basis vectors context
 
    Output Parameters:
-+  B     - the matrix of the inner product (may be NULL)
++  B     - the matrix of the inner product (may be `NULL`)
 -  indef - the flag indicating if the matrix is indefinite
 
    Level: advanced
 
-.seealso: `BVSetMatrix()`
+.seealso: [](sec:bv), `BVSetMatrix()`
 @*/
 PetscErrorCode BVGetMatrix(BV bv,Mat *B,PetscBool *indef)
 {
@@ -562,7 +562,7 @@ PetscErrorCode BVGetMatrix(BV bv,Mat *B,PetscBool *indef)
 
    Level: advanced
 
-.seealso: `BVSetMatrix()`, `BVApplyMatrixBV()`
+.seealso: [](sec:bv), `BVSetMatrix()`, `BVApplyMatrixBV()`
 @*/
 PetscErrorCode BVApplyMatrix(BV bv,Vec x,Vec y)
 {
@@ -578,7 +578,7 @@ PetscErrorCode BVApplyMatrix(BV bv,Vec x,Vec y)
 }
 
 /*@
-   BVApplyMatrixBV - Multiplies the BV vectors by the matrix representation
+   BVApplyMatrixBV - Multiplies the `BV` vectors by the matrix representation
    of the inner product.
 
    Neighbor-wise Collective
@@ -590,15 +590,15 @@ PetscErrorCode BVApplyMatrix(BV bv,Vec x,Vec y)
 .  Y - the basis vectors to store the result (optional)
 
    Note:
-   This function computes Y = B*X, where B is the matrix given with
-   BVSetMatrix(). This operation is computed as in BVMatMult().
-   If no matrix was specified, then it just copies Y = X.
+   This function computes $Y = B X$, where $B$ is the matrix given with
+   `BVSetMatrix()`. This operation is computed as in `BVMatMult()`.
+   If no matrix was specified, then it just copies $Y = X$.
 
-   If no Y is given, the result is stored internally in the cached BV.
+   If no `Y` is given, the result is stored internally in the cached `BV`.
 
    Level: developer
 
-.seealso: `BVSetMatrix()`, `BVApplyMatrix()`, `BVMatMult()`, `BVGetCachedBV()`
+.seealso: [](sec:bv), `BVSetMatrix()`, `BVApplyMatrix()`, `BVMatMult()`, `BVGetCachedBV()`
 @*/
 PetscErrorCode BVApplyMatrixBV(BV X,BV Y)
 {
@@ -622,11 +622,11 @@ PetscErrorCode BVApplyMatrixBV(BV X,BV Y)
 -  omega - a vector representing the diagonal of the signature matrix
 
    Note:
-   The signature matrix Omega = V'*B*V is relevant only for an indefinite B.
+   The signature matrix $\Omega = V^*B V$ is relevant only for an indefinite $B$.
 
    Level: developer
 
-.seealso: `BVSetMatrix()`, `BVGetSignature()`
+.seealso: [](sec:bv), `BVSetMatrix()`, `BVGetSignature()`
 @*/
 PetscErrorCode BVSetSignature(BV bv,Vec omega)
 {
@@ -660,17 +660,17 @@ PetscErrorCode BVSetSignature(BV bv,Vec omega)
    Not Collective
 
    Input Parameter:
-.  bv    - the basis vectors context
+.  bv - the basis vectors context
 
    Output Parameter:
 .  omega - a vector representing the diagonal of the signature matrix
 
    Note:
-   The signature matrix Omega = V'*B*V is relevant only for an indefinite B.
+   The signature matrix $\Omega = V^*B V$ is relevant only for an indefinite $B$.
 
    Level: developer
 
-.seealso: `BVSetMatrix()`, `BVSetSignature()`
+.seealso: [](sec:bv), `BVSetMatrix()`, `BVSetSignature()`
 @*/
 PetscErrorCode BVGetSignature(BV bv,Vec omega)
 {
@@ -707,15 +707,15 @@ PetscErrorCode BVGetSignature(BV bv,Vec omega)
 -  buffer - the vector
 
    Notes:
-   Use BVGetBufferVec() to retrieve the vector (for example, to free it
+   Use `BVGetBufferVec()` to retrieve the vector (for example, to free it
    at the end of the computations).
 
-   The vector must be sequential of length (nc+m)*m, where m is the number
-   of columns of bv and nc is the number of constraints.
+   The vector must be sequential of length $(n_c+m)m$, where $m$ is the number
+   of columns of `bv` and $n_c$ is the number of constraints.
 
    Level: developer
 
-.seealso: `BVGetBufferVec()`, `BVSetSizes()`, `BVGetNumConstraints()`
+.seealso: [](sec:bv), `BVGetBufferVec()`, `BVSetSizes()`, `BVGetNumConstraints()`
 @*/
 PetscErrorCode BVSetBufferVec(BV bv,Vec buffer)
 {
@@ -739,11 +739,11 @@ PetscErrorCode BVSetBufferVec(BV bv,Vec buffer)
 }
 
 /*@
-   BVGetBufferVec - Obtain the buffer vector associated with the BV object.
+   BVGetBufferVec - Obtain the buffer vector associated with the `BV` object.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - the basis vectors context
 
    Output Parameter:
@@ -751,26 +751,26 @@ PetscErrorCode BVSetBufferVec(BV bv,Vec buffer)
 
    Notes:
    The vector is created if not available previously. It is a sequential vector
-   of length (nc+m)*m, where m is the number of columns of bv and nc is the number
+   of length $(n_c+m) m$, where $m$ is the number of columns of `bv` and $n_c$ is the number
    of constraints.
 
    Developer Notes:
-   The buffer vector is viewed as a column-major matrix with leading dimension
-   ld=nc+m, and m columns at most. In the most common usage, it has the structure
-.vb
-      | | C |
-      |s|---|
-      | | H |
-.ve
-   where H is an upper Hessenberg matrix of order m x (m-1), C contains coefficients
-   related to orthogonalization against constraints (first nc rows), and s is the
+   The buffer vector is viewed as a column-major matrix with leading dimension equal
+   to $n_c+m$, and $m$ columns at most. In the most common usage, it has the structure
+   $$
+     \left[\begin{array}{c|c}
+       s & \begin{array}{c} C \\\hline H \end{array}
+     \end{array}\right]
+   $$
+   where $H$ is an upper Hessenberg matrix of order $m (m-1)$, $C$ contains coefficients
+   related to orthogonalization against constraints (first $n_c$ rows), and $s$ is the
    first column that contains scratch values computed during Gram-Schmidt
-   orthogonalization. In particular, BVDotColumn() and BVMultColumn() use s to
+   orthogonalization. In particular, `BVDotColumn()` and `BVMultColumn()` use $s$ to
    store the coefficients.
 
    Level: developer
 
-.seealso: `BVSetBufferVec()`, `BVSetSizes()`, `BVGetNumConstraints()`, `BVDotColumn()`, `BVMultColumn()`
+.seealso: [](sec:bv), `BVSetBufferVec()`, `BVSetSizes()`, `BVGetNumConstraints()`, `BVDotColumn()`, `BVMultColumn()`
 @*/
 PetscErrorCode BVGetBufferVec(BV bv,Vec *buffer)
 {
@@ -791,7 +791,7 @@ PetscErrorCode BVGetBufferVec(BV bv,Vec *buffer)
 }
 
 /*@
-   BVSetRandomContext - Sets the PetscRandom object associated with the BV,
+   BVSetRandomContext - Sets the `PetscRandom` object associated with the `BV`,
    to be used in operations that need random numbers.
 
    Collective
@@ -802,7 +802,7 @@ PetscErrorCode BVGetBufferVec(BV bv,Vec *buffer)
 
    Level: advanced
 
-.seealso: `BVGetRandomContext()`, `BVSetRandom()`, `BVSetRandomNormal()`, `BVSetRandomColumn()`, `BVSetRandomCond()`
+.seealso: [](sec:bv), `BVGetRandomContext()`, `BVSetRandom()`, `BVSetRandomNormal()`, `BVSetRandomColumn()`, `BVSetRandomCond()`, `PetscRandomCreate()`
 @*/
 PetscErrorCode BVSetRandomContext(BV bv,PetscRandom rand)
 {
@@ -817,7 +817,7 @@ PetscErrorCode BVSetRandomContext(BV bv,PetscRandom rand)
 }
 
 /*@
-   BVGetRandomContext - Gets the PetscRandom object associated with the BV.
+   BVGetRandomContext - Gets the `PetscRandom` object associated with the `BV`.
 
    Collective
 
@@ -829,7 +829,7 @@ PetscErrorCode BVSetRandomContext(BV bv,PetscRandom rand)
 
    Level: advanced
 
-.seealso: `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomNormal()`, `BVSetRandomColumn()`, `BVSetRandomCond()`
+.seealso: [](sec:bv), `BVSetRandomContext()`, `BVSetRandom()`, `BVSetRandomNormal()`, `BVSetRandomColumn()`, `BVSetRandomCond()`
 @*/
 PetscErrorCode BVGetRandomContext(BV bv,PetscRandom* rand)
 {
@@ -850,16 +850,19 @@ PetscErrorCode BVGetRandomContext(BV bv,PetscRandom* rand)
 }
 
 /*@
-   BVSetFromOptions - Sets BV options from the options database.
+   BVSetFromOptions - Sets `BV` options from the options database.
 
    Collective
 
    Input Parameter:
 .  bv - the basis vectors context
 
+   Note:
+   To see all options, run your program with the `-help` option.
+
    Level: beginner
 
-.seealso: `BVSetOptionsPrefix()`
+.seealso: [](sec:bv), `BVSetOptionsPrefix()`
 @*/
 PetscErrorCode BVSetFromOptions(BV bv)
 {
@@ -920,27 +923,26 @@ PetscErrorCode BVSetFromOptions(BV bv)
 -  block  - the method of block orthogonalization
 
    Options Database Keys:
-+  -bv_orthog_type <type> - Where <type> is cgs for Classical Gram-Schmidt orthogonalization
-                         (default) or mgs for Modified Gram-Schmidt orthogonalization
-.  -bv_orthog_refine <ref> - Where <ref> is one of never, ifneeded (default) or always
-.  -bv_orthog_eta <eta> -  For setting the value of eta
--  -bv_orthog_block <block> - Where <block> is the block-orthogonalization method
++  -bv_orthog_type \<type\>     - the vector orthogonalization, either `cgs` or `mgs`
+.  -bv_orthog_refine \<refine\> - the refinement type, `never`, `ifneeded` (default) or `always`
+.  -bv_orthog_eta \<eta\>       - the value of `eta`
+-  -bv_orthog_block \<block\>   - the block-orthogonalization method
 
    Notes:
    The default settings work well for most problems.
 
-   The parameter eta should be a real value between 0 and 1, that is used only when
-   the refinement type is "ifneeded". Use PETSC_DETERMINE to set a reasonable
-   default value. Use PETSC_CURRENT to leave the current value unchanged.
+   The parameter `eta` should be a real value between 0 and 1, that is used only when
+   the refinement type is `ifneeded`. Use `PETSC_DETERMINE` to set a reasonable
+   default value. Use `PETSC_CURRENT` to leave the current value unchanged.
 
-   When using several processors, MGS is likely to result in bad scalability.
+   When using several processes, `BV_ORTHOG_MGS` is likely to result in bad scalability.
 
-   If the method set for block orthogonalization is GS, then the computation
+   If the method set for block orthogonalization is `BV_ORTHOG_BLOCK_GS`, then the computation
    is done column by column with the vector orthogonalization.
 
    Level: advanced
 
-.seealso: `BVOrthogonalizeColumn()`, `BVGetOrthogonalization()`, `BVOrthogType`, `BVOrthogRefineType`, `BVOrthogBlockType`
+.seealso: [](sec:bv), `BVOrthogonalizeColumn()`, `BVGetOrthogonalization()`, `BVOrthogType`, `BVOrthogRefineType`, `BVOrthogBlockType`
 @*/
 PetscErrorCode BVSetOrthogonalization(BV bv,BVOrthogType type,BVOrthogRefineType refine,PetscReal eta,BVOrthogBlockType block)
 {
@@ -988,7 +990,7 @@ PetscErrorCode BVSetOrthogonalization(BV bv,BVOrthogType type,BVOrthogRefineType
 }
 
 /*@
-   BVGetOrthogonalization - Gets the orthogonalization settings from the BV object.
+   BVGetOrthogonalization - Gets the orthogonalization settings from the `BV` object.
 
    Not Collective
 
@@ -1003,7 +1005,7 @@ PetscErrorCode BVSetOrthogonalization(BV bv,BVOrthogType type,BVOrthogRefineType
 
    Level: advanced
 
-.seealso: `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`, `BVOrthogType`, `BVOrthogRefineType`, `BVOrthogBlockType`
+.seealso: [](sec:bv), `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`, `BVOrthogType`, `BVOrthogRefineType`, `BVOrthogBlockType`
 @*/
 PetscErrorCode BVGetOrthogonalization(BV bv,BVOrthogType *type,BVOrthogRefineType *refine,PetscReal *eta,BVOrthogBlockType *block)
 {
@@ -1017,28 +1019,23 @@ PetscErrorCode BVGetOrthogonalization(BV bv,BVOrthogType *type,BVOrthogRefineTyp
 }
 
 /*@
-   BVSetMatMultMethod - Specifies the method used for the BVMatMult() operation.
+   BVSetMatMultMethod - Specifies the method used for the `BVMatMult()` operation.
 
    Logically Collective
 
    Input Parameters:
 +  bv     - the basis vectors context
--  method - the method for the BVMatMult() operation
+-  method - the method for the `BVMatMult()` operation
 
-   Options Database Keys:
-.  -bv_matmult <meth> - choose one of the methods: vecs, mat
+   Options Database Key:
+.  -bv_matmult \<method\> - choose one of the methods: `vecs`, `mat`
 
-   Notes:
-   Allowed values are
-+  BV_MATMULT_VECS - perform a matrix-vector multiply per each column
-.  BV_MATMULT_MAT - carry out a Mat-Mat product with a dense matrix
--  BV_MATMULT_MAT_SAVE - this case is deprecated
-
-   The default is BV_MATMULT_MAT except in the case of BVVECS.
+   Note:
+   The default is `BV_MATMULT_MAT` except in the case of `BVVECS`.
 
    Level: advanced
 
-.seealso: `BVMatMult()`, `BVGetMatMultMethod()`, `BVMatMultType`
+.seealso: [](sec:bv), `BVMatMult()`, `BVGetMatMultMethod()`, `BVMatMultType`
 @*/
 PetscErrorCode BVSetMatMultMethod(BV bv,BVMatMultType method)
 {
@@ -1061,7 +1058,7 @@ PetscErrorCode BVSetMatMultMethod(BV bv,BVMatMultType method)
 }
 
 /*@
-   BVGetMatMultMethod - Gets the method used for the BVMatMult() operation.
+   BVGetMatMultMethod - Gets the method used for the `BVMatMult()` operation.
 
    Not Collective
 
@@ -1069,11 +1066,11 @@ PetscErrorCode BVSetMatMultMethod(BV bv,BVMatMultType method)
 .  bv - basis vectors context
 
    Output Parameter:
-.  method - the method for the BVMatMult() operation
+.  method - the method for the `BVMatMult()` operation
 
    Level: advanced
 
-.seealso: `BVMatMult()`, `BVSetMatMultMethod()`, `BVMatMultType`
+.seealso: [](sec:bv), `BVMatMult()`, `BVSetMatMultMethod()`, `BVMatMultType`
 @*/
 PetscErrorCode BVGetMatMultMethod(BV bv,BVMatMultType *method)
 {
@@ -1085,7 +1082,7 @@ PetscErrorCode BVGetMatMultMethod(BV bv,BVMatMultType *method)
 }
 
 /*@
-   BVGetColumn - Returns a Vec object that contains the entries of the
+   BVGetColumn - Returns a `Vec` object that contains the entries of the
    requested column of the basis vectors object.
 
    Logically Collective
@@ -1098,20 +1095,20 @@ PetscErrorCode BVGetMatMultMethod(BV bv,BVMatMultType *method)
 .  v  - vector containing the jth column
 
    Notes:
-   The returned Vec must be seen as a reference (not a copy) of the BV
-   column, that is, modifying the Vec will change the BV entries as well.
+   The returned `Vec` must be seen as a reference (not a copy) of the `BV`
+   column, that is, modifying the `Vec` will change the `BV` entries as well.
 
-   The returned Vec must not be destroyed. BVRestoreColumn() must be
+   The returned `Vec` must not be destroyed. `BVRestoreColumn()` must be
    called when it is no longer needed. At most, two columns can be fetched,
    that is, this function can only be called twice before the corresponding
-   BVRestoreColumn() is invoked.
+   `BVRestoreColumn()` is invoked.
 
-   A negative index j selects the i-th constraint, where i=-j. Constraints
+   A negative index `j` selects the `i`-th constraint, where `i=-j`. Constraints
    should not be modified.
 
    Level: beginner
 
-.seealso: `BVRestoreColumn()`, `BVInsertConstraints()`
+.seealso: [](sec:bv), `BVRestoreColumn()`, `BVInsertConstraints()`
 @*/
 PetscErrorCode BVGetColumn(BV bv,PetscInt j,Vec *v)
 {
@@ -1137,21 +1134,21 @@ PetscErrorCode BVGetColumn(BV bv,PetscInt j,Vec *v)
 }
 
 /*@
-   BVRestoreColumn - Restore a column obtained with BVGetColumn().
+   BVRestoreColumn - Restore a column obtained with `BVGetColumn()`.
 
    Logically Collective
 
    Input Parameters:
 +  bv - the basis vectors context
 .  j  - the index of the column
--  v  - vector obtained with BVGetColumn()
+-  v  - vector obtained with `BVGetColumn()`
 
    Note:
-   The arguments must match the corresponding call to BVGetColumn().
+   The arguments must match the corresponding call to `BVGetColumn()`.
 
    Level: beginner
 
-.seealso: `BVGetColumn()`
+.seealso: [](sec:bv), `BVGetColumn()`
 @*/
 PetscErrorCode BVRestoreColumn(BV bv,PetscInt j,Vec *v)
 {
@@ -1184,33 +1181,33 @@ PetscErrorCode BVRestoreColumn(BV bv,PetscInt j,Vec *v)
 
 /*@C
    BVGetArray - Returns a pointer to a contiguous array that contains this
-   processor's portion of the BV data.
+   process' portion of the `BV` data.
 
    Logically Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - the basis vectors context
 
    Output Parameter:
 .  a  - location to put pointer to the array
 
    Notes:
-   BVRestoreArray() must be called when access to the array is no longer needed.
-   This operation may imply a data copy, for BV types that do not store
+   `BVRestoreArray()` must be called when access to the array is no longer needed.
+   This operation may imply a data copy, for `BV` types that do not store
    data contiguously in memory.
 
    The pointer will normally point to the first entry of the first column,
-   but if the BV has constraints then these go before the regular columns.
+   but if the `BV` has constraints then these go before the regular columns.
 
-   Note that for manipulating the pointer to the BV array, one must take into
+   Note that for manipulating the pointer to the `BV` array, one must take into
    account the leading dimension, which might be different from the local
-   number of rows, see BVGetLeadingDimension().
+   number of rows, see `BVGetLeadingDimension()`.
 
-   Use BVGetArrayRead() for read-only access.
+   Use `BVGetArrayRead()` for read-only access.
 
    Level: advanced
 
-.seealso: `BVRestoreArray()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArrayRead()`
+.seealso: [](sec:bv), `BVRestoreArray()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArrayRead()`, `BVType`
 @*/
 PetscErrorCode BVGetArray(BV bv,PetscScalar **a)
 {
@@ -1224,21 +1221,21 @@ PetscErrorCode BVGetArray(BV bv,PetscScalar **a)
 }
 
 /*@C
-   BVRestoreArray - Restore the BV object after BVGetArray() has been called.
+   BVRestoreArray - Restore the `BV` object after `BVGetArray()` has been called.
 
    Logically Collective
 
    Input Parameters:
 +  bv - the basis vectors context
--  a  - location of pointer to array obtained from BVGetArray()
+-  a  - location of pointer to array obtained from `BVGetArray()`
 
    Note:
-   This operation may imply a data copy, for BV types that do not store
+   This operation may imply a data copy, for `BV` types that do not store
    data contiguously in memory.
 
    Level: advanced
 
-.seealso: `BVGetColumn()`
+.seealso: [](sec:bv), `BVGetArray()`
 @*/
 PetscErrorCode BVRestoreArray(BV bv,PetscScalar **a)
 {
@@ -1254,27 +1251,27 @@ PetscErrorCode BVRestoreArray(BV bv,PetscScalar **a)
 
 /*@C
    BVGetArrayRead - Returns a read-only pointer to a contiguous array that
-   contains this processor's portion of the BV data.
+   contains this processor's portion of the `BV` data.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  bv - the basis vectors context
 
    Output Parameter:
 .  a  - location to put pointer to the array
 
    Notes:
-   BVRestoreArrayRead() must be called when access to the array is no
-   longer needed. This operation may imply a data copy, for BV types that
+   `BVRestoreArrayRead()` must be called when access to the array is no
+   longer needed. This operation may imply a data copy, for `BV` types that
    do not store data contiguously in memory.
 
    The pointer will normally point to the first entry of the first column,
-   but if the BV has constraints then these go before the regular columns.
+   but if the `BV` has constraints then these go before the regular columns.
 
    Level: advanced
 
-.seealso: `BVRestoreArray()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArray()`
+.seealso: [](sec:bv), `BVRestoreArray()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArray()`, `BVType`
 @*/
 PetscErrorCode BVGetArrayRead(BV bv,const PetscScalar **a)
 {
@@ -1288,18 +1285,18 @@ PetscErrorCode BVGetArrayRead(BV bv,const PetscScalar **a)
 }
 
 /*@C
-   BVRestoreArrayRead - Restore the BV object after BVGetArrayRead() has
+   BVRestoreArrayRead - Restore the `BV` object after `BVGetArrayRead()` has
    been called.
 
    Not Collective
 
    Input Parameters:
 +  bv - the basis vectors context
--  a  - location of pointer to array obtained from BVGetArrayRead()
+-  a  - location of pointer to array obtained from `BVGetArrayRead()`
 
    Level: advanced
 
-.seealso: `BVGetColumn()`
+.seealso: [](sec:bv), `BVGetArrayRead()`
 @*/
 PetscErrorCode BVRestoreArrayRead(BV bv,const PetscScalar **a)
 {
@@ -1313,7 +1310,7 @@ PetscErrorCode BVRestoreArrayRead(BV bv,const PetscScalar **a)
 }
 
 /*@
-   BVCreateVec - Creates a new Vec object with the same type and dimensions
+   BVCreateVec - Creates a new `Vec` object with the same type and dimensions
    as the columns of the basis vectors object.
 
    Collective
@@ -1325,11 +1322,11 @@ PetscErrorCode BVRestoreArrayRead(BV bv,const PetscScalar **a)
 .  v  - the new vector
 
    Note:
-   The user is responsible of destroying the returned vector.
+   The user is responsible for destroying the returned vector.
 
    Level: beginner
 
-.seealso: `BVCreateMat()`, `BVCreateVecEmpty()`
+.seealso: [](sec:bv), `BVCreateMat()`, `BVCreateVecEmpty()`
 @*/
 PetscErrorCode BVCreateVec(BV bv,Vec *v)
 {
@@ -1345,7 +1342,7 @@ PetscErrorCode BVCreateVec(BV bv,Vec *v)
 }
 
 /*@
-   BVCreateVecEmpty - Creates a new Vec object with the same type and dimensions
+   BVCreateVecEmpty - Creates a new `Vec` object with the same type and dimensions
    as the columns of the basis vectors object, but without internal array.
 
    Collective
@@ -1357,12 +1354,12 @@ PetscErrorCode BVCreateVec(BV bv,Vec *v)
 .  v  - the new vector
 
    Note:
-   This works as BVCreateVec(), but the new vector does not have the array allocated,
-   so the intended usage is with VecPlaceArray().
+   This works as `BVCreateVec()`, but the new vector does not have the array allocated,
+   so the intended usage is with `VecPlaceArray()`.
 
    Level: developer
 
-.seealso: `BVCreateVec()`
+.seealso: [](sec:bv), `BVCreateVec()`
 @*/
 PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
 {
@@ -1401,7 +1398,7 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
 }
 
 /*@
-   BVSetVecType - Set the vector type to be used when creating vectors via BVCreateVec().
+   BVSetVecType - Set the vector type to be used when creating vectors via `BVCreateVec()`.
 
    Collective
 
@@ -1412,10 +1409,10 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
    Level: advanced
 
    Note:
-   This is not needed if the BV object is set up with BVSetSizesFromVec(), but may be
-   required in the case of BVSetSizes() if one wants to work with non-standard vectors.
+   This is not needed if the `BV` object is set up with `BVSetSizesFromVec()`, but may be
+   required in the case of `BVSetSizes()` if one wants to work with non-standard vectors.
 
-.seealso: `BVGetVecType()`, `BVSetSizesFromVec()`, `BVSetSizes()`
+.seealso: [](sec:bv), `BVGetVecType()`, `BVSetSizesFromVec()`, `BVSetSizes()`
 @*/
 PetscErrorCode BVSetVecType(BV bv,VecType vtype)
 {
@@ -1434,7 +1431,7 @@ PetscErrorCode BVSetVecType(BV bv,VecType vtype)
 }
 
 /*@
-   BVGetVecType - Get the vector type to be used when creating vectors via BVCreateVec().
+   BVGetVecType - Get the vector type to be used when creating vectors via `BVCreateVec()`.
 
    Not Collective
 
@@ -1446,7 +1443,7 @@ PetscErrorCode BVSetVecType(BV bv,VecType vtype)
 
    Level: advanced
 
-.seealso: `BVSetVecType()`
+.seealso: [](sec:bv), `BVSetVecType()`, `BVCreateVec()`
 @*/
 PetscErrorCode BVGetVecType(BV bv,VecType *vtype)
 {
@@ -1458,8 +1455,8 @@ PetscErrorCode BVGetVecType(BV bv,VecType *vtype)
 }
 
 /*@
-   BVCreateMat - Creates a new Mat object of dense type and copies the contents
-   of the BV object.
+   BVCreateMat - Creates a new `Mat` object of dense type and copies the contents
+   of the `BV` object.
 
    Collective
 
@@ -1470,13 +1467,13 @@ PetscErrorCode BVGetVecType(BV bv,VecType *vtype)
 .  A  - the new matrix
 
    Notes:
-   The user is responsible of destroying the returned matrix.
+   The user is responsible for destroying the returned matrix.
 
-   The matrix contains all columns of the BV, not just the active columns.
+   The matrix contains all columns of the `BV`, not just the active columns.
 
    Level: intermediate
 
-.seealso: `BVCreateFromMat()`, `BVCreateVec()`, `BVGetMat()`
+.seealso: [](sec:bv), `BVCreateFromMat()`, `BVCreateVec()`, `BVGetMat()`
 @*/
 PetscErrorCode BVCreateMat(BV bv,Mat *A)
 {
@@ -1530,8 +1527,8 @@ PetscErrorCode BVGetMat_Default(BV bv,Mat *A)
 }
 
 /*@
-   BVGetMat - Returns a Mat object of dense type that shares the memory of
-   the BV object.
+   BVGetMat - Returns a `Mat` object of dense type that shares the memory of
+   the `BV` object.
 
    Collective
 
@@ -1543,15 +1540,15 @@ PetscErrorCode BVGetMat_Default(BV bv,Mat *A)
 
    Notes:
    The returned matrix contains only the active columns. If the content of
-   the Mat is modified, these changes are also done in the BV object. The
-   user must call BVRestoreMat() when no longer needed.
+   the `Mat` is modified, these changes are also done in the `BV` object. The
+   user must call `BVRestoreMat()` when no longer needed.
 
-   This operation implies a call to BVGetArray(), which may result in data
+   This operation implies a call to `BVGetArray()`, which may result in data
    copies.
 
    Level: advanced
 
-.seealso: `BVRestoreMat()`, `BVCreateMat()`, `BVGetArray()`
+.seealso: [](sec:bv), `BVRestoreMat()`, `BVCreateMat()`, `BVGetArray()`
 @*/
 PetscErrorCode BVGetMat(BV bv,Mat *A)
 {
@@ -1584,7 +1581,7 @@ PetscErrorCode BVRestoreMat_Default(BV bv,Mat *A)
 }
 
 /*@
-   BVRestoreMat - Restores the Mat obtained with BVGetMat().
+   BVRestoreMat - Restores the Mat obtained with `BVGetMat()`.
 
    Logically Collective
 
@@ -1593,13 +1590,13 @@ PetscErrorCode BVRestoreMat_Default(BV bv,Mat *A)
 -  A  - the fetched matrix
 
    Note:
-   A call to this function must match a previous call of BVGetMat().
-   The effect is that the contents of the Mat are copied back to the
-   BV internal data structures.
+   A call to this function must match a previous call of `BVGetMat()`.
+   The effect is that the contents of the `Mat` are copied back to the
+   `BV` internal data structures.
 
    Level: advanced
 
-.seealso: `BVGetMat()`, `BVRestoreArray()`
+.seealso: [](sec:bv), `BVGetMat()`, `BVRestoreArray()`
 @*/
 PetscErrorCode BVRestoreMat(BV bv,Mat *A)
 {
@@ -1642,7 +1639,7 @@ static inline PetscErrorCode BVDuplicate_Private(BV V,BV W)
 }
 
 /*@
-   BVDuplicate - Creates a new basis vector object of the same type and
+   BVDuplicate - Creates a new basis vectors object of the same type and
    dimensions as an existing one.
 
    Collective
@@ -1651,18 +1648,18 @@ static inline PetscErrorCode BVDuplicate_Private(BV V,BV W)
 .  V - basis vectors context
 
    Output Parameter:
-.  W - location to put the new BV
+.  W - location to put the new `BV`
 
    Notes:
-   The new BV has the same type and dimensions as V. Also, the inner
+   The new `BV` has the same type and dimensions as `V`. Also, the inner
    product matrix and orthogonalization options are copied.
 
-   BVDuplicate() DOES NOT COPY the entries, but rather allocates storage
-   for the new basis vectors. Use BVCopy() to copy the contents.
+   `BVDuplicate()` DOES NOT COPY the entries, but rather allocates storage
+   for the new basis vectors. Use `BVCopy()` to copy the content.
 
    Level: intermediate
 
-.seealso: `BVDuplicateResize()`, `BVCreate()`, `BVSetSizesFromVec()`, `BVCopy()`
+.seealso: [](sec:bv), `BVDuplicateResize()`, `BVCreate()`, `BVSetSizesFromVec()`, `BVCopy()`
 @*/
 PetscErrorCode BVDuplicate(BV V,BV *W)
 {
@@ -1681,7 +1678,7 @@ PetscErrorCode BVDuplicate(BV V,BV *W)
 }
 
 /*@
-   BVDuplicateResize - Creates a new basis vector object of the same type and
+   BVDuplicateResize - Creates a new basis vectors object of the same type and
    dimensions as an existing one, but with possibly different number of columns.
 
    Collective
@@ -1694,12 +1691,12 @@ PetscErrorCode BVDuplicate(BV V,BV *W)
 .  W - location to put the new BV
 
    Note:
-   This is equivalent of a call to BVDuplicate() followed by BVResize(). The
-   contents of V are not copied to W.
+   This is equivalent of a call to `BVDuplicate()` followed by `BVResize()`. The
+   contents of `V` are not copied to `W`.
 
    Level: intermediate
 
-.seealso: `BVDuplicate()`, `BVResize()`
+.seealso: [](sec:bv), `BVDuplicate()`, `BVResize()`
 @*/
 PetscErrorCode BVDuplicateResize(BV V,PetscInt m,BV *W)
 {
@@ -1719,8 +1716,8 @@ PetscErrorCode BVDuplicateResize(BV V,PetscInt m,BV *W)
 }
 
 /*@
-   BVGetCachedBV - Returns a BV object stored internally that holds the
-   result of B*X after a call to BVApplyMatrixBV().
+   BVGetCachedBV - Returns a `BV` object stored internally that holds the
+   result of $BX$ after a call to `BVApplyMatrixBV()`.
 
    Collective
 
@@ -1728,14 +1725,14 @@ PetscErrorCode BVDuplicateResize(BV V,PetscInt m,BV *W)
 .  bv    - the basis vectors context
 
    Output Parameter:
-.  cached - the cached BV
+.  cached - the cached `BV`
 
    Note:
-   The cached BV is created if not available previously.
+   The cached `BV` is created if not available previously.
 
    Level: developer
 
-.seealso: `BVApplyMatrixBV()`
+.seealso: [](sec:bv), `BVApplyMatrixBV()`
 @*/
 PetscErrorCode BVGetCachedBV(BV bv,BV *cached)
 {
@@ -1756,7 +1753,7 @@ PetscErrorCode BVGetCachedBV(BV bv,BV *cached)
 }
 
 /*@
-   BVCopy - Copies a basis vector object into another one, W <- V.
+   BVCopy - Copies a basis vector object into another one, $W \leftarrow V$.
 
    Logically Collective
 
@@ -1767,14 +1764,14 @@ PetscErrorCode BVGetCachedBV(BV bv,BV *cached)
 .  W - the copy
 
    Note:
-   Both V and W must be distributed in the same manner; local copies are
+   Both `V` and `W` must be distributed in the same manner; local copies are
    done. Only active columns (excluding the leading ones) are copied.
-   In the destination W, columns are overwritten starting from the leading ones.
+   In the destination `W`, columns are overwritten starting from the leading ones.
    Constraints are not copied.
 
    Level: beginner
 
-.seealso: `BVCopyVec()`, `BVCopyColumn()`, `BVDuplicate()`, `BVSetActiveColumns()`
+.seealso: [](sec:bv), `BVCopyVec()`, `BVCopyColumn()`, `BVDuplicate()`, `BVSetActiveColumns()`
 @*/
 PetscErrorCode BVCopy(BV V,BV W)
 {
@@ -1811,23 +1808,23 @@ PetscErrorCode BVCopy(BV V,BV W)
 }
 
 /*@
-   BVCopyVec - Copies one of the columns of a basis vectors object into a Vec.
+   BVCopyVec - Copies one of the columns of a basis vectors object into a `Vec`.
 
    Logically Collective
 
    Input Parameters:
 +  V - basis vectors context
--  j - the column number to be copied
+-  j - the index of the column to be copied
 
    Output Parameter:
 .  w - the copied column
 
    Note:
-   Both V and w must be distributed in the same manner; local copies are done.
+   Both `V` and `w` must be distributed in the same manner; local copies are done.
 
    Level: beginner
 
-.seealso: `BVCopy()`, `BVCopyColumn()`, `BVInsertVec()`
+.seealso: [](sec:bv), `BVCopy()`, `BVCopyColumn()`, `BVInsertVec()`
 @*/
 PetscErrorCode BVCopyVec(BV V,PetscInt j,Vec w)
 {
@@ -1866,7 +1863,7 @@ PetscErrorCode BVCopyVec(BV V,PetscInt j,Vec w)
 
    Level: beginner
 
-.seealso: `BVCopy()`, `BVCopyVec()`
+.seealso: [](sec:bv), `BVCopy()`, `BVCopyVec()`
 @*/
 PetscErrorCode BVCopyColumn(BV V,PetscInt j,PetscInt i)
 {
@@ -1923,7 +1920,7 @@ static PetscErrorCode BVGetSplit_Private(BV bv,PetscBool left,BV *split)
 }
 
 /*@
-   BVGetSplit - Splits the BV object into two BV objects that share the
+   BVGetSplit - Splits the `BV` object into two `BV` objects that share the
    internal data, one of them containing the leading columns and the other
    one containing the remaining columns.
 
@@ -1933,26 +1930,26 @@ static PetscErrorCode BVGetSplit_Private(BV bv,PetscBool left,BV *split)
 .  bv - the basis vectors context
 
    Output Parameters:
-+  L - left BV containing leading columns (can be NULL)
--  R - right BV containing remaining columns (can be NULL)
++  L - left `BV` containing leading columns (can be `NULL`)
+-  R - right `BV` containing remaining columns (can be `NULL`)
 
    Notes:
    The columns are split in two sets. The leading columns (including the
-   constraints) are assigned to the left BV and the remaining columns
-   are assigned to the right BV. The number of leading columns, as
-   specified with BVSetActiveColumns(), must be between 1 and m-1 (to
-   guarantee that both L and R have at least one column).
+   constraints) are assigned to the left `BV` and the remaining columns
+   are assigned to the right `BV`. The number of leading columns, as
+   specified with `BVSetActiveColumns()`, must be between `1` and `m-1` (to
+   guarantee that both `L` and `R` have at least one column).
 
-   The returned BV's must be seen as references (not copies) of the input
-   BV, that is, modifying them will change the entries of bv as well.
-   The returned BV's must not be destroyed. BVRestoreSplit() must be called
+   The returned `BV`s must be seen as references (not copies) of the input
+   `BV`, that is, modifying them will change the entries of `bv` as well.
+   The returned `BV`s must not be destroyed. `BVRestoreSplit()` must be called
    when they are no longer needed.
 
-   Pass NULL for any of the output BV's that is not needed.
+   Pass `NULL` for any of the output `BV`s that is not needed.
 
    Level: advanced
 
-.seealso: `BVRestoreSplit()`, `BVSetActiveColumns()`, `BVSetNumConstraints()`, `BVGetSplitRows()`
+.seealso: [](sec:bv), `BVRestoreSplit()`, `BVSetActiveColumns()`, `BVSetNumConstraints()`, `BVGetSplitRows()`
 @*/
 PetscErrorCode BVGetSplit(BV bv,BV *L,BV *R)
 {
@@ -1972,7 +1969,7 @@ PetscErrorCode BVGetSplit(BV bv,BV *L,BV *R)
 }
 
 /*@
-   BVRestoreSplit - Restore the BV objects obtained with BVGetSplit().
+   BVRestoreSplit - Restore the BV objects obtained with `BVGetSplit()`.
 
    Logically Collective
 
@@ -1982,11 +1979,11 @@ PetscErrorCode BVGetSplit(BV bv,BV *L,BV *R)
 -  R  - right BV obtained with BVGetSplit()
 
    Note:
-   The arguments must match the corresponding call to BVGetSplit().
+   The arguments must match the corresponding call to `BVGetSplit()`.
 
    Level: advanced
 
-.seealso: `BVGetSplit()`
+.seealso: [](sec:bv), `BVGetSplit()`
 @*/
 PetscErrorCode BVRestoreSplit(BV bv,BV *L,BV *R)
 {
@@ -2069,7 +2066,7 @@ static PetscErrorCode BVGetSplitRows_Private(BV bv,PetscBool top,IS is,BV *split
 }
 
 /*@
-   BVGetSplitRows - Splits the BV object into two BV objects that share the
+   BVGetSplitRows - Splits the `BV` object into two `BV` objects that share the
    internal data, using a disjoint horizontal splitting.
 
    Collective
@@ -2080,30 +2077,30 @@ static PetscErrorCode BVGetSplitRows_Private(BV bv,PetscBool top,IS is,BV *split
 -  islo - the index set that defines the lower part of the horizontal splitting
 
    Output Parameters:
-+  U - the resulting BV containing the upper rows
--  L - the resulting BV containing the lower rows
++  U - the resulting `BV` containing the upper rows
+-  L - the resulting `BV` containing the lower rows
 
    Notes:
    The index sets must be such that every MPI process can extract the selected
-   rows from its local part of the input BV, and this part must be contiguous.
-   With one process, isup will list contiguous indices starting from 0, and islo
+   rows from its local part of the input `BV`, and this part must be contiguous.
+   With one process, `isup` will list contiguous indices starting from 0, and `islo`
    will contain the remaining indices, hence we refer to upper and lower part.
    However, with several processes the indices will be interleaved because
-   isup will refer to the upper part of the local array.
+   `isup` will refer to the upper part of the local array.
 
-   The intended use of this function is with matrices of MATNEST type, where
-   MatNestGetISs() will return the appropriate index sets.
+   The intended use of this function is with matrices of `MATNEST` type, where
+   `MatNestGetISs()` will return the appropriate index sets.
 
-   The returned BV's must be seen as references (not copies) of the input
-   BV, that is, modifying them will change the entries of bv as well.
-   The returned BV's must not be destroyed. BVRestoreSplitRows() must be called
+   The returned `BV`s must be seen as references (not copies) of the input
+   `BV`, that is, modifying them will change the entries of `bv` as well.
+   The returned `BV`s must not be destroyed. `BVRestoreSplitRows()` must be called
    when they are no longer needed.
 
-   Pass NULL for any of the output BV's that is not needed.
+   Pass `NULL` for any of the output `BV`s that is not needed.
 
    Level: advanced
 
-.seealso: `BVRestoreSplitRows()`, `BVGetSplit()`
+.seealso: [](sec:bv), `BVRestoreSplitRows()`, `BVGetSplit()`
 @*/
 PetscErrorCode BVGetSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 {
@@ -2127,7 +2124,7 @@ PetscErrorCode BVGetSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 }
 
 /*@
-   BVRestoreSplitRows - Restore the BV objects obtained with BVGetSplitRows().
+   BVRestoreSplitRows - Restore the BV objects obtained with `BVGetSplitRows()`.
 
    Logically Collective
 
@@ -2135,15 +2132,15 @@ PetscErrorCode BVGetSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 +  bv - the basis vectors context
 .  isup - the index set that defines the upper part of the horizontal splitting
 .  islo - the index set that defines the lower part of the horizontal splitting
-.  U - the BV containing the upper rows
--  L - the BV containing the lower rows
+.  U - the `BV` containing the upper rows
+-  L - the `BV` containing the lower rows
 
    Note:
-   The arguments must match the corresponding call to BVGetSplitRows().
+   The arguments must match the corresponding call to `BVGetSplitRows()`.
 
    Level: advanced
 
-.seealso: `BVGetSplitRows()`
+.seealso: [](sec:bv), `BVGetSplitRows()`
 @*/
 PetscErrorCode BVRestoreSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 {
@@ -2170,23 +2167,23 @@ PetscErrorCode BVRestoreSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 -  deftol - the tolerance
 
    Options Database Key:
-.  -bv_definite_tol <deftol> - the tolerance
+.  -bv_definite_tol \<deftol\> - the tolerance
 
    Notes:
-   When using a non-standard inner product, see BVSetMatrix(), the solver needs
-   to compute sqrt(z'*B*z) for various vectors z. If the inner product has not
-   been declared indefinite, the value z'*B*z must be positive, but due to
+   When using a non-standard inner product, see `BVSetMatrix()`, the solver needs
+   to compute $\sqrt{z^*B z}$ for various vectors $z$. If the inner product has not
+   been declared indefinite, the value $z^*B z$ must be positive, but due to
    rounding error a tiny value may become negative. A tolerance is used to
-   detect this situation. Likewise, in complex arithmetic z'*B*z should be
+   detect this situation. Likewise, in complex arithmetic $z^*B z$ should be
    real, and we use the same tolerance to check whether a nonzero imaginary part
    can be considered negligible.
 
-   This function sets this tolerance, which defaults to 10*eps, where eps is
-   the machine epsilon. The default value should be good for most applications.
+   This function sets this tolerance, which defaults to `10*PETSC_MACHINE_EPSILON`.
+   The default value should be good for most applications.
 
    Level: advanced
 
-.seealso: `BVSetMatrix()`
+.seealso: [](sec:bv), `BVSetMatrix()`
 @*/
 PetscErrorCode BVSetDefiniteTolerance(BV bv,PetscReal deftol)
 {
@@ -2215,7 +2212,7 @@ PetscErrorCode BVSetDefiniteTolerance(BV bv,PetscReal deftol)
 
    Level: advanced
 
-.seealso: `BVSetDefiniteTolerance()`
+.seealso: [](sec:bv), `BVSetDefiniteTolerance()`
 @*/
 PetscErrorCode BVGetDefiniteTolerance(BV bv,PetscReal *deftol)
 {
@@ -2227,7 +2224,7 @@ PetscErrorCode BVGetDefiniteTolerance(BV bv,PetscReal *deftol)
 }
 
 /*@
-   BVSetLeadingDimension - Set the leading dimension to be used for storing the BV data.
+   BVSetLeadingDimension - Set the leading dimension to be used for storing the `BV` data.
 
    Not Collective
 
@@ -2236,11 +2233,11 @@ PetscErrorCode BVGetDefiniteTolerance(BV bv,PetscReal *deftol)
 -  ld - the leading dimension
 
    Notes:
-   This parameter is relevant for BVMAT, though it might be employed in other types
+   This parameter is relevant for `BVMAT`, though it might be employed in other types
    as well.
 
-   When the internal data of the BV is stored as a dense matrix, the leading dimension
-   has the same meaning as in MatDenseSetLDA(), i.e., the distance in number of
+   When the internal data of the `BV` is stored as a dense matrix, the leading dimension
+   has the same meaning as in `MatDenseSetLDA()`, i.e., the distance in number of
    elements from one entry of the matrix to the one in the next column at the same
    row. The leading dimension refers to the local array, and hence can be different
    in different processes.
@@ -2251,7 +2248,7 @@ PetscErrorCode BVGetDefiniteTolerance(BV bv,PetscReal *deftol)
 
    Level: advanced
 
-.seealso: `BVGetLeadingDimension()`
+.seealso: [](sec:bv), `BVGetLeadingDimension()`
 @*/
 PetscErrorCode BVSetLeadingDimension(BV bv,PetscInt ld)
 {
@@ -2268,7 +2265,7 @@ PetscErrorCode BVSetLeadingDimension(BV bv,PetscInt ld)
 }
 
 /*@
-   BVGetLeadingDimension - Returns the leading dimension of the BV.
+   BVGetLeadingDimension - Returns the leading dimension of the `BV`.
 
    Not Collective
 
@@ -2284,9 +2281,9 @@ PetscErrorCode BVSetLeadingDimension(BV bv,PetscInt ld)
    The returned value may be different in different processes.
 
    The leading dimension must be used when accessing the internal array via
-   BVGetArray() or BVGetArrayRead().
+   `BVGetArray()` or `BVGetArrayRead()`.
 
-.seealso: `BVSetLeadingDimension()`, `BVGetArray()`, `BVGetArrayRead()`
+.seealso: [](sec:bv), `BVSetLeadingDimension()`, `BVGetArray()`, `BVGetArrayRead()`
 @*/
 PetscErrorCode BVGetLeadingDimension(BV bv,PetscInt *ld)
 {

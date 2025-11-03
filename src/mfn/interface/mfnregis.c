@@ -14,13 +14,13 @@ SLEPC_EXTERN PetscErrorCode MFNCreate_Krylov(MFN);
 SLEPC_EXTERN PetscErrorCode MFNCreate_Expokit(MFN);
 
 /*@C
-  MFNRegisterAll - Registers all the matrix functions in the MFN package.
+  MFNRegisterAll - Registers all the matrix functions in the `MFN` package.
 
   Not Collective
 
   Level: advanced
 
-.seealso: `MFNRegister()`
+.seealso: [](ch:mfn), `MFNRegister()`
 @*/
 PetscErrorCode MFNRegisterAll(void)
 {
@@ -33,13 +33,13 @@ PetscErrorCode MFNRegisterAll(void)
 }
 
 /*@C
-  MFNMonitorRegisterAll - Registers all the monitors in the MFN package.
+  MFNMonitorRegisterAll - Registers all the monitors in the `MFN` package.
 
   Not Collective
 
   Level: advanced
 
-.seealso: `MFNMonitorRegister()`
+.seealso: [](ch:mfn), `MFNMonitorRegister()`
 @*/
 PetscErrorCode MFNMonitorRegisterAll(void)
 {

@@ -2,8 +2,8 @@
 
 The Eigenvalue Problem Solver (EPS) is the object provided by SLEPc for specifying a linear eigenvalue problem, either in standard or generalized form. It provides uniform and efficient access to all of the linear eigensolvers included in the package.
 
-EPS users can set various options at runtime via the options database (e.g., -eps_nev 4 -eps_type arnoldi). Options can also be set directly in application codes by calling the corresponding routines (e.g., EPSSetDimensions() / EPSSetType()).
+EPS users can set various options at runtime via the options database (e.g., `-eps_nev 4 -eps_type lobpcg`). Options can also be set directly in application codes by calling the corresponding routines (e.g., `EPSSetDimensions()` or `EPSSetType()`).
 
-Users guide section: [](ch:eps).
+Related Users Manual part: [](ch:eps).
 
 <a href="PETSC_DOC_OUT_ROOT_PLACEHOLDER/src/eps/tutorials/index.html">Examples</a><br>

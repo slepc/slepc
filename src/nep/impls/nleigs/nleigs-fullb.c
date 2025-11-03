@@ -417,17 +417,22 @@ PetscErrorCode NEPNLEIGSSetEPS_NLEIGS(NEP nep,EPS eps)
 }
 
 /*@
-   NEPNLEIGSSetEPS - Associate an eigensolver object (EPS) to the NLEIGS solver.
+   NEPNLEIGSSetEPS - Associate an eigensolver object (`EPS`) to the NLEIGS solver.
 
    Collective
 
    Input Parameters:
-+  nep - nonlinear eigenvalue solver
--  eps - the eigensolver object
++  nep - the nonlinear eigensolver context
+-  eps - the linear eigensolver context
+
+   Note:
+   By default, the linear eigensolver is integrated within the NLEIGS method.
+   This `EPS` object is used only in the case that the explicit basis
+   has been selected with `NEPNLEIGSSetFullBasis()`.
 
    Level: advanced
 
-.seealso: `NEPNLEIGSGetEPS()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetEPS()`, `NEPNLEIGSSetFullBasis()`
 @*/
 PetscErrorCode NEPNLEIGSSetEPS(NEP nep,EPS eps)
 {
@@ -473,20 +478,25 @@ PetscErrorCode NEPNLEIGSGetEPS_NLEIGS(NEP nep,EPS *eps)
 }
 
 /*@
-   NEPNLEIGSGetEPS - Retrieve the eigensolver object (EPS) associated
+   NEPNLEIGSGetEPS - Retrieve the linear eigensolver object (`EPS`) associated
    to the nonlinear eigenvalue solver.
 
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
+
+   Note:
+   By default, the linear eigensolver is integrated within the NLEIGS method.
+   This `EPS` object is used only in the case that the explicit basis
+   has been selected with `NEPNLEIGSSetFullBasis()`.
 
    Level: advanced
 
-.seealso: `NEPNLEIGSSetEPS()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetEPS()`, `NEPNLEIGSSetFullBasis()`
 @*/
 PetscErrorCode NEPNLEIGSGetEPS(NEP nep,EPS *eps)
 {

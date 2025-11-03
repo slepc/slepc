@@ -63,9 +63,9 @@ You should get an output similar to this
 
 Examine the source code of the sample program and locate the function calls mentioned in the following comments.
 
-**The Options Database**: All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the function {external:doc}`PetscOptionsGetInt` is used to check whether the user has provided a command-line option to set the value of `n`, the problem dimension. If so, the variable `n` is set accordingly; otherwise, `n` remains unchanged.
+**The Options Database**: All the PETSc functionality related to the options database is available in SLEPc. This allows the user to input control data at run time very easily. In this example, the function {external:doc}`PetscOptionsGetInt`() is used to check whether the user has provided a command-line option to set the value of `n`, the problem dimension. If so, the variable `n` is set accordingly; otherwise, `n` remains unchanged.
 
-**Vectors and Matrices**: Usage of matrices and vectors in SLEPc is exactly the same as in PETSc. The user can create a new parallel or sequential matrix, `A`, with subroutine {external:doc}`MatCreate`, where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with {external:doc}`MatSetValues` and then assembles it.
+**Vectors and Matrices**: Usage of matrices and vectors in SLEPc is exactly the same as in PETSc. The user can create a new parallel or sequential matrix, `A`, with subroutine {external:doc}`MatCreate`(), where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with {external:doc}`MatSetValues`() and then assembles it.
 
 **Solving the Eigenvalue Problem**: Usage of eigensolvers is very similar to other kinds of solvers provided by PETSc. After creating the matrix, the problem is solved by means of an `EPS` object (Eigenvalue Problem Solver) via the following sequence of function calls:
 
@@ -93,7 +93,7 @@ $ ./ex1 -eps_view
 ```
 
 :::{note}
-This option internally calls the function `EPSView`.  Alternatively, we could include a direct call to this function in the source code. Almost all command-line options have a related function call.
+This option internally calls the function `EPSView()`.  Alternatively, we could include a direct call to this function in the source code. Almost all command-line options have a related function call.
 :::
 :::{note}
 All the command-line options related to the `EPS` object have the `-eps_` prefix.
@@ -160,7 +160,7 @@ $ ./ex1 -n 400 -eps_nev 3 -eps_ncv 24
 
 Note that the default value of `ncv` depends on the value of `nev`.
 
-Try to set some of the above options directly in the source code by calling the related functions `EPSSetTolerances` and `EPSSetDimensions`.  Modify and recompile the program. Use `-eps_view` to check that the values are correctly set. Is it now possible to change these options from the command-line? Does this change whether you place the calls before or after the call to `EPSSetFromOptions`?
+Try to set some of the above options directly in the source code by calling the related functions `EPSSetTolerances()` and `EPSSetDimensions()`. Modify and recompile the program. Use `-eps_view` to check that the values are correctly set. Is it now possible to change these options from the command-line? Does this change whether you place the calls before or after the call to `EPSSetFromOptions()`?
 
 Convergence is usually bad when eigenvalues are close to each other, which is the case in this example. In order to see what is happening while the eigensolver iterates, we can use a monitor to display information associated to the convergence of eigenpairs at each iteration:
 
@@ -182,35 +182,22 @@ $ ./ex1 -n 700 -eps_nev 5 -eps_ncv 35 -eps_monitor_all draw::draw_lg -draw_pause
 The plot is drawn in an X11 pop-up window, so this requires that the display is set up correctly.
 :::
 
-## Changing the Eigensolver
+## Choosing the Eigensolver
 
-The convergence behavior for a particular problem also depends on the properties of the eigensolver being used. SLEPc provides several eigensolvers that can be selected in the source code with the function `EPSSetType`, or at run time:
+The convergence behavior for a particular problem also depends on the properties of the eigensolver being used. SLEPc provides several eigensolvers that can be selected in the source code with the function `EPSSetType()`, or at run time:
 
 ```{code} console
 $ ./ex1 -eps_nev 4 -eps_type lobpcg
 ```
 
-The following table shows some of the solvers available in SLEPc.
-
-Solver                                  |  Command-line Name  |  Parameter
----                                     |  ---                |  ---
-Krylov-Schur                            |  krylovschur        |  EPSKRYLOVSCHUR
-Generalized Davidson                    |  gd                 |  EPSGD
-Jacobi-Davidson                         |  jd                 |  EPSJD
-Rayleigh-quotient conjugate gradient    |  rqcg               |  EPSRQCG
-Locally optimal block preconditioned CG |  lobpcg             |  EPSLOBPCG
-Contour integral spectrum slice         |  ciss               |  EPSCISS
-Subspace Iteration                      |  subspace           |  EPSSUBSPACE
-Power / RQI                             |  power              |  EPSPOWER
-LAPACK                                  |  lapack             |  EPSLAPACK
-ARPACK                                  |  arpack             |  EPSARPACK
+Check the table of [](tab:solvers).
 
 :::{note}
-The LAPACK solver is not really a full-featured eigensolver but simply an interface to some LAPACK routines. These routines operate sequentially in dense mode and therefore are suitable only for small size problems. This solver should be used only for debugging purposes.
+The `lapack` solver is not really a full-featured eigensolver but simply an interface to some LAPACK routines. These routines operate sequentially in dense mode and therefore are suitable only for small size problems. This method should be used only for debugging purposes.
 :::
 
 :::{note}
-The last one (ARPACK) may or may not be available on your system, depending on whether it was enabled during installation of SLEPc. It consists in an interface to the external [ARPACK library](https://github.com/opencollab/arpack-ng). Interfaces to other external libraries may be available as well. These can be used as any other SLEPc native eigensolver.
+The last entries of the table (e.g., `arpack`) may or may not be available on your system, depending on whether they were enabled during installation of SLEPc. They are interfaces to external libraries that can be used as any other SLEPc native eigensolver, see the section [](sec:wrap).
 :::
 
 :::{note}

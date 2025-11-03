@@ -20,16 +20,16 @@
    Collective
 
    Input Parameter:
-.  mfn   - matrix function context
+.  mfn - the matrix function solver context
 
    Notes:
-   This function need not be called explicitly in most cases, since MFNSolve()
+   This function need not be called explicitly in most cases, since `MFNSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
    Level: developer
 
-.seealso: `MFNCreate()`, `MFNSolve()`, `MFNDestroy()`
+.seealso: [](ch:mfn), `MFNCreate()`, `MFNSolve()`, `MFNDestroy()`
 @*/
 PetscErrorCode MFNSetUp(MFN mfn)
 {
@@ -71,16 +71,16 @@ PetscErrorCode MFNSetUp(MFN mfn)
    Collective
 
    Input Parameters:
-+  mfn - the matrix function context
++  mfn - the matrix function solver context
 -  A   - the problem matrix
 
    Notes:
-   It must be called before MFNSetUp(). If it is called again after MFNSetUp() then
-   the MFN object is reset.
+   It must be called before `MFNSetUp()`. If it is called again after `MFNSetUp()` then
+   the `MFN` object is reset.
 
    Level: beginner
 
-.seealso: `MFNSolve()`, `MFNSetUp()`, `MFNReset()`
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNSetUp()`, `MFNReset()`
 @*/
 PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
 {
@@ -102,19 +102,19 @@ PetscErrorCode MFNSetOperator(MFN mfn,Mat A)
 }
 
 /*@
-   MFNGetOperator - Gets the matrix associated with the MFN object.
+   MFNGetOperator - Gets the matrix associated with the `MFN` object.
 
    Collective
 
    Input Parameter:
-.  mfn - the MFN context
+.  mfn - the matrix function solver context
 
-   Output Parameters:
+   Output Parameter:
 .  A  - the matrix for which the matrix function is to be computed
 
    Level: intermediate
 
-.seealso: `MFNSolve()`, `MFNSetOperator()`
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNSetOperator()`
 @*/
 PetscErrorCode MFNGetOperator(MFN mfn,Mat *A)
 {
@@ -132,17 +132,17 @@ PetscErrorCode MFNGetOperator(MFN mfn,Mat *A)
    Collective
 
    Input Parameters:
-+  mfn   - matrix function context
++  mfn   - the matrix function solver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin MFN
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `MFN`
    implementations.
 
    Level: developer
 
-.seealso: `MFNSetUp()`
+.seealso: [](ch:mfn), `MFNSetUp()`, `MFNSetDimensions()`
 @*/
 PetscErrorCode MFNAllocateSolution(MFN mfn,PetscInt extra)
 {

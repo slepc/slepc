@@ -22,20 +22,21 @@ SLEPC_EXTERN PetscErrorCode MFNInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode MFNFinalizePackage(void);
 
 /*S
-    MFN - SLEPc object that encapsulates functionality for matrix functions.
+   MFN - SLEPc object that encapsulates the functionality for matrix functions,
+   more precisely the action of a matrix function on a vector, $y=f(A)v$.
 
-    Level: beginner
+   Level: beginner
 
-.seealso:  `MFNCreate()`
+.seealso: [](ch:mfn), `MFNCreate()`
 S*/
 typedef struct _p_MFN* MFN;
 
 /*J
-    MFNType - String with the name of a method for computing matrix functions.
+   MFNType - String with the name of a method for computing matrix functions.
 
-    Level: beginner
+   Level: beginner
 
-.seealso: `MFNSetType()`, `MFN`
+.seealso: [](ch:mfn), `MFNSetType()`, `MFN`
 J*/
 typedef const char *MFNType;
 #define MFNKRYLOV   "krylov"
@@ -76,62 +77,64 @@ SLEPC_EXTERN PetscErrorCode MFNSetErrorIfNotConverged(MFN,PetscBool);
 SLEPC_EXTERN PetscErrorCode MFNGetErrorIfNotConverged(MFN,PetscBool*);
 
 /*S
-  MFNMonitorFn - A function prototype for functions provided to MFNMonitorSet()
+   MFNMonitorFn - A function prototype for functions provided to `MFNMonitorSet()`.
 
-  Calling Sequence:
-+   mfn    - matrix function context obtained from MFNCreate()
-.   its    - iteration number
-.   errest - error estimate
--   ctx    - optional monitoring context, as provided with MFNMonitorSet()
+   Calling Sequence:
++  mfn    - the matrix function solver context
+.  its    - iteration number
+.  errest - error estimate
+-  ctx    - optional monitoring context, as provided with `MFNMonitorSet()`
 
-  Level: beginner
+   Level: intermediate
 
-.seealso: `MFNMonitorSet()`
+.seealso: [](ch:mfn), `MFNMonitorSet()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorFn(MFN mfn,PetscInt its,PetscReal errest,void *ctx);
 
 /*S
-  MFNMonitorRegisterFn - A function prototype for functions provided to MFNMonitorRegister()
+   MFNMonitorRegisterFn - A function prototype for functions provided to `MFNMonitorRegister()`.
 
-  Calling Sequence:
-+   mfn    - matrix function context obtained from MFNCreate()
-.   its    - iteration number
-.   errest - error estimate
--   ctx    - PetscViewerAndFormat object
+   Calling Sequence:
++  mfn    - the matrix function solver context
+.  its    - iteration number
+.  errest - error estimate
+-  ctx    - `PetscViewerAndFormat` object
 
-  Level: beginner
+   Level: advanced
 
-  Note:
-  This is an MFNMonitorFn specialized for a context of PetscViewerAndFormat.
+   Note:
+   This is an `MFNMonitorFn` specialized for a context of `PetscViewerAndFormat`.
 
-.seealso: `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterCreateFn`, `MFNMonitorRegisterDestroyFn`
+.seealso: [](ch:mfn), `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterCreateFn`, `MFNMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterFn(MFN mfn,PetscInt its,PetscReal errest,PetscViewerAndFormat *ctx);
 
 /*S
-  MFNMonitorRegisterCreateFn - A function prototype for functions that do the creation when provided to MFNMonitorRegister()
+   MFNMonitorRegisterCreateFn - A function prototype for functions that do the
+   creation when provided to `MFNMonitorRegister()`.
 
-  Calling Sequence:
-+   viewer - the viewer to be used with the MFNMonitorRegisterFn
-.   format - the format of the viewer
-.   ctx    - a context for the monitor
--   result - a PetscViewerAndFormat object
+   Calling Sequence:
++  viewer - the viewer to be used with the `MFNMonitorRegisterFn`
+.  format - the format of the viewer
+.  ctx    - a context for the monitor
+-  result - a `PetscViewerAndFormat` object
 
-  Level: beginner
+   Level: advanced
 
-.seealso: `MFNMonitorRegisterFn`, `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterDestroyFn`
+.seealso: [](ch:mfn), `MFNMonitorRegisterFn`, `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterDestroyFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
 
 /*S
-  MFNMonitorRegisterDestroyFn - A function prototype for functions that do the after use destruction when provided to MFNMonitorRegister()
+   MFNMonitorRegisterDestroyFn - A function prototype for functions that do the after
+   use destruction when provided to `MFNMonitorRegister()`.
 
-  Calling Sequence:
-.   vf - a PetscViewerAndFormat object to be destroyed, including any context
+   Calling Sequence:
+.  vf - a `PetscViewerAndFormat` object to be destroyed, including any context
 
-  Level: beginner
+   Level: advanced
 
-.seealso: `MFNMonitorRegisterFn`, `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterCreateFn`
+.seealso: [](ch:mfn), `MFNMonitorRegisterFn`, `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterCreateFn`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
@@ -145,17 +148,31 @@ SLEPC_EXTERN MFNMonitorRegisterFn       MFNMonitorDefault;
 SLEPC_EXTERN MFNMonitorRegisterFn       MFNMonitorDefaultDrawLG;
 SLEPC_EXTERN MFNMonitorRegisterCreateFn MFNMonitorDefaultDrawLGCreate;
 
-SLEPC_EXTERN PetscErrorCode MFNSetOptionsPrefix(MFN,const char*);
-SLEPC_EXTERN PetscErrorCode MFNAppendOptionsPrefix(MFN,const char*);
+SLEPC_EXTERN PetscErrorCode MFNSetOptionsPrefix(MFN,const char[]);
+SLEPC_EXTERN PetscErrorCode MFNAppendOptionsPrefix(MFN,const char[]);
 SLEPC_EXTERN PetscErrorCode MFNGetOptionsPrefix(MFN,const char*[]);
 
 /*E
-    MFNConvergedReason - reason a matrix function iteration was said to
-         have converged or diverged
+   MFNConvergedReason - Reason a matrix function iteration was determined to
+   have converged or diverged.
 
-    Level: intermediate
+   Values:
++  `MFN_CONVERGED_TOL`       - converged up to tolerance
+.  `MFN_CONVERGED_ITS`       - solver completed the requested number of steps
+.  `MFN_DIVERGED_ITS`        - exceeded the maximum number of allowed iterations
+.  `MFN_DIVERGED_BREAKDOWN`  - generic breakdown in method
+-  `MFN_CONVERGED_ITERATING` - the solver is still running
 
-.seealso: `MFNSolve()`, `MFNGetConvergedReason()`, `MFNSetTolerances()`
+   Note:
+   Basic solvers (e.g., unrestarted Krylov iterations) cannot determine if the
+   computation is accurate up to the requested tolerance. In that case, the
+   converged reason is set to `MFN_CONVERGED_ITS` if the requested number of steps
+   (for instance, the `ncv` value in unrestarted Krylov methods) have been
+   completed successfully.
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNSetTolerances()`
 E*/
 typedef enum {/* converged */
               MFN_CONVERGED_TOL                =  1,
@@ -166,7 +183,57 @@ typedef enum {/* converged */
               MFN_CONVERGED_ITERATING          =  0} MFNConvergedReason;
 SLEPC_EXTERN const char *const*MFNConvergedReasons;
 
-SLEPC_EXTERN PetscErrorCode MFNGetConvergedReason(MFN,MFNConvergedReason *);
+/*MC
+   MFN_CONVERGED_TOL - The computed error estimate is below the tolerance.
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
+
+/*MC
+   MFN_CONVERGED_ITS - The solver completed the requested number of steps.
+
+   Note:
+   Basic solvers (e.g., unrestarted Krylov iterations) cannot determine if the
+   computation is accurate up to the requested tolerance. In that case, the
+   converged reason is set to `MFN_CONVERGED_ITS` if the requested number of steps
+   (for instance, the `ncv` value in unrestarted Krylov methods) have been
+   completed successfully.
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
+
+/*MC
+   MFN_DIVERGED_ITS - Ran out of iterations before the convergence criterion was
+   reached.
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
+
+/*MC
+   MFN_DIVERGED_BREAKDOWN - A breakdown in the solver was detected so the
+   method could not continue.
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
+
+/*MC
+   MFN_CONVERGED_ITERATING - This flag is returned if `MFNGetConvergedReason()` is called
+   while `MFNSolve()` is still running..
+
+   Level: intermediate
+
+.seealso: [](ch:mfn), `MFNSolve()`, `MFNGetConvergedReason()`, `MFNConvergedReason`
+M*/
+
+SLEPC_EXTERN PetscErrorCode MFNGetConvergedReason(MFN,MFNConvergedReason*);
 
 SLEPC_EXTERN PetscFunctionList MFNList;
 SLEPC_EXTERN PetscFunctionList MFNMonitorList;

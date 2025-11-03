@@ -286,6 +286,19 @@ SLEPC_EXTERN PetscErrorCode VecCreate_Comp(Vec V)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   VECCOMP - VECCOMP = "comp" - Vector type consisting of several subvectors,
+   each stored separately.
+
+   Level: developer
+
+   Notes:
+   This is similar to PETSc's `VECNEST` but customized for SLEPc's needs. In particular,
+   the number of child vectors can be modified dynamically, with `VecCompSetSubVecs()`.
+
+.seealso: `Vec`, `VecType`, `VecCreateComp()`, `VecCreateCompWithVecs()`
+M*/
+
 /*@
    VecCreateComp - Creates a new vector containing several subvectors,
    each stored separately.
@@ -293,7 +306,7 @@ SLEPC_EXTERN PetscErrorCode VecCreate_Comp(Vec V)
    Collective
 
    Input Parameters:
-+  comm - communicator for the new Vec
++  comm - communicator for the new `Vec`
 .  Nx   - array of (initial) global sizes of child vectors
 .  n    - number of child vectors
 .  t    - type of the child vectors
@@ -303,8 +316,8 @@ SLEPC_EXTERN PetscErrorCode VecCreate_Comp(Vec V)
 .  V - new vector
 
    Notes:
-   This is similar to PETSc's VecNest but customized for SLEPc's needs. In particular,
-   the number of child vectors can be modified dynamically, with VecCompSetSubVecs().
+   This is similar to PETSc's `VECNEST` but customized for SLEPc's needs. In particular,
+   the number of child vectors can be modified dynamically, with `VecCompSetSubVecs()`.
 
    Level: developer
 
@@ -329,12 +342,12 @@ PetscErrorCode VecCreateComp(MPI_Comm comm,PetscInt Nx[],PetscInt n,VecType t,Ve
 
 /*@
    VecCreateCompWithVecs - Creates a new vector containing several subvectors,
-   each stored separately, from an array of Vecs.
+   each stored separately, from an array of `Vec`s.
 
    Collective
 
    Input Parameters:
-+  x - array of Vecs
++  x - array of `Vec`s
 .  n - number of child vectors
 -  Vparent - (optional) template vector
 
@@ -404,7 +417,7 @@ static PetscErrorCode VecCompGetSubVecs_Comp(Vec win,PetscInt *n,const Vec **x)
 
 .seealso: `VecCreateComp()`
 @*/
-PetscErrorCode VecCompGetSubVecs(Vec win,PetscInt *n,const Vec **x)
+PetscErrorCode VecCompGetSubVecs(Vec win,PetscInt *n,const Vec *x[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(win,VEC_CLASSID,1);

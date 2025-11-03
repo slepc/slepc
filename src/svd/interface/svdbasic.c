@@ -28,7 +28,7 @@ PetscFunctionList SVDMonitorDestroyList       = NULL;
 PetscBool         SVDMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   SVDCreate - Creates the default SVD context.
+   SVDCreate - Creates the `SVD` context.
 
    Collective
 
@@ -36,14 +36,14 @@ PetscBool         SVDMonitorRegisterAllCalled = PETSC_FALSE;
 .  comm - MPI communicator
 
    Output Parameter:
-.  outsvd - location to put the SVD context
+.  outsvd - location to put the `SVD` context
 
    Note:
-   The default SVD type is SVDCROSS
+   The default `SVD` type is `SVDCROSS`.
 
    Level: beginner
 
-.seealso: `SVDSetUp()`, `SVDSolve()`, `SVDDestroy()`, `SVD`
+.seealso: [](ch:svd), `SVDSetUp()`, `SVDSolve()`, `SVDDestroy()`, `SVD`
 @*/
 PetscErrorCode SVDCreate(MPI_Comm comm,SVD *outsvd)
 {
@@ -119,17 +119,17 @@ PetscErrorCode SVDCreate(MPI_Comm comm,SVD *outsvd)
 }
 
 /*@
-   SVDReset - Resets the SVD context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   SVDReset - Resets the `SVD` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Level: advanced
 
-.seealso: `SVDDestroy()`
+.seealso: [](ch:svd), `SVDDestroy()`
 @*/
 PetscErrorCode SVDReset(SVD svd)
 {
@@ -156,16 +156,16 @@ PetscErrorCode SVDReset(SVD svd)
 }
 
 /*@
-   SVDDestroy - Destroys the SVD context.
+   SVDDestroy - Destroys the `SVD` context.
 
    Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Level: beginner
 
-.seealso: `SVDCreate()`, `SVDSetUp()`, `SVDSolve()`
+.seealso: [](ch:svd), `SVDCreate()`, `SVDSetUp()`, `SVDSolve()`
 @*/
 PetscErrorCode SVDDestroy(SVD *svd)
 {
@@ -190,7 +190,7 @@ PetscErrorCode SVDDestroy(SVD *svd)
 }
 
 /*@
-   SVDSetType - Selects the particular solver to be used in the SVD object.
+   SVDSetType - Selects the particular solver to be used in the `SVD` object.
 
    Logically Collective
 
@@ -199,24 +199,23 @@ PetscErrorCode SVDDestroy(SVD *svd)
 -  type     - a known method
 
    Options Database Key:
-.  -svd_type <method> - Sets the method; use -help for a list
+.  -svd_type \<type\> - Sets the method; use `-help` for a list
     of available methods
 
    Notes:
-   See "slepc/include/slepcsvd.h" for available methods. The default
-   is SVDCROSS.
+   See `SVDType` for available methods. The default is `SVDCROSS`.
 
-   Normally, it is best to use the SVDSetFromOptions() command and
-   then set the SVD type from the options database rather than by using
+   Normally, it is best to use the `SVDSetFromOptions()` command and
+   then set the `SVD` type from the options database rather than by using
    this routine.  Using the options database provides the user with
    maximum flexibility in evaluating the different available methods.
-   The SVDSetType() routine is provided for those situations where it
+   The `SVDSetType()` routine is provided for those situations where it
    is necessary to set the iterative solver independently of the command
    line or options database.
 
    Level: intermediate
 
-.seealso: `SVDType`
+.seealso: [](ch:svd), `SVDType`
 @*/
 PetscErrorCode SVDSetType(SVD svd,SVDType type)
 {
@@ -243,7 +242,7 @@ PetscErrorCode SVDSetType(SVD svd,SVDType type)
 }
 
 /*@
-   SVDGetType - Gets the SVD type as a string from the SVD object.
+   SVDGetType - Gets the `SVD` type as a string from the `SVD` object.
 
    Not Collective
 
@@ -251,11 +250,11 @@ PetscErrorCode SVDSetType(SVD svd,SVDType type)
 .  svd - the singular value solver context
 
    Output Parameter:
-.  type - name of SVD method
+.  type - name of `SVD` method
 
    Level: intermediate
 
-.seealso: `SVDSetType()`
+.seealso: [](ch:svd), `SVDSetType()`
 @*/
 PetscErrorCode SVDGetType(SVD svd,SVDType *type)
 {
@@ -275,22 +274,23 @@ PetscErrorCode SVDGetType(SVD svd,SVDType *type)
 +  name - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
-   SVDRegister() may be called multiple times to add several user-defined solvers.
+   Note:
+   `SVDRegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    SVDRegister("my_solver",MySolverCreate);
+   SVDRegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
-$     SVDSetType(svd,"my_solver")
-   or at runtime via the option
-$     -svd_type my_solver
+.vb
+   SVDSetType(svd,"my_solver")
+.ve
+   or at runtime via the option `-svd_type my_solver`.
 
    Level: advanced
 
-.seealso: `SVDRegisterAll()`
+.seealso: [](ch:svd), `SVDRegisterAll()`
 @*/
 PetscErrorCode SVDRegister(const char *name,PetscErrorCode (*function)(SVD))
 {
@@ -301,24 +301,25 @@ PetscErrorCode SVDRegister(const char *name,PetscErrorCode (*function)(SVD))
 }
 
 /*@C
-   SVDMonitorRegister - Registers an SVD monitor routine that may be accessed with SVDMonitorSetFromOptions().
+   SVDMonitorRegister - Registers an `SVD` monitor routine that may be accessed with
+   `SVDMonitorSetFromOptions()`.
 
    Not Collective
 
    Input Parameters:
 +  name    - name of a new monitor routine
-.  vtype   - a PetscViewerType for the output
-.  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine, see SVDMonitorRegisterFn
-.  create  - creation routine, or NULL
--  destroy - destruction routine, or NULL
+.  vtype   - a `PetscViewerType` for the output
+.  format  - a `PetscViewerFormat` for the output
+.  monitor - monitor routine, see `SVDMonitorRegisterFn`
+.  create  - creation routine, or `NULL`
+-  destroy - destruction routine, or `NULL`
 
    Notes:
-   SVDMonitorRegister() may be called multiple times to add several user-defined monitors.
+   `SVDMonitorRegister()` may be called multiple times to add several user-defined monitors.
 
-   The calling sequence for the given function matches the calling sequence of SVDMonitorFn
-   functions passed to SVDMonitorSet() with the additional requirement that its final argument
-   be a PetscViewerAndFormat.
+   The calling sequence for the given function matches the calling sequence of `SVDMonitorFn`
+   functions passed to `SVDMonitorSet()` with the additional requirement that its final argument
+   be a `PetscViewerAndFormat`.
 
    Example Usage:
 .vb
@@ -326,13 +327,14 @@ PetscErrorCode SVDRegister(const char *name,PetscErrorCode (*function)(SVD))
 .ve
 
    Then, your monitor can be chosen with the procedural interface via
-$      SVDMonitorSetFromOptions(svd,"-svd_monitor_my_monitor","my_monitor",NULL)
-   or at runtime via the option
-$      -svd_monitor_my_monitor
+.vb
+   SVDMonitorSetFromOptions(svd,"-svd_monitor_my_monitor","my_monitor",NULL);
+.ve
+   or at runtime via the option `-svd_monitor_my_monitor`.
 
    Level: advanced
 
-.seealso: `SVDMonitorSet()`, `SVDMonitorRegisterAll()`
+.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorRegisterAll()`, `SVDMonitorSetFromOptions()`
 @*/
 PetscErrorCode SVDMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,SVDMonitorRegisterFn *monitor,SVDMonitorRegisterCreateFn *create,SVDMonitorRegisterDestroyFn *destroy)
 {
@@ -353,17 +355,17 @@ PetscErrorCode SVDMonitorRegister(const char name[],PetscViewerType vtype,PetscV
    Collective
 
    Input Parameters:
-+  svd - singular value solver context obtained from SVDCreate()
++  svd - the singular value solver context
 .  V   - the basis vectors object for right singular vectors
 -  U   - the basis vectors object for left singular vectors
 
    Note:
-   Use SVDGetBV() to retrieve the basis vectors contexts (for example,
+   Use `SVDGetBV()` to retrieve the basis vectors contexts (for example,
    to free them at the end of the computations).
 
    Level: advanced
 
-.seealso: `SVDGetBV()`
+.seealso: [](ch:svd), `SVDGetBV()`
 @*/
 PetscErrorCode SVDSetBV(SVD svd,BV V,BV U)
 {
@@ -393,7 +395,7 @@ PetscErrorCode SVDSetBV(SVD svd,BV V,BV U)
    Not Collective
 
    Input Parameter:
-.  svd - singular value solver context obtained from SVDCreate()
+.  svd - the singular value solver context
 
    Output Parameters:
 +  V - basis vectors context for right singular vectors
@@ -401,7 +403,7 @@ PetscErrorCode SVDSetBV(SVD svd,BV V,BV U)
 
    Level: advanced
 
-.seealso: `SVDSetBV()`
+.seealso: [](ch:svd), `SVDSetBV()`
 @*/
 PetscErrorCode SVDGetBV(SVD svd,BV *V,BV *U)
 {
@@ -432,16 +434,16 @@ PetscErrorCode SVDGetBV(SVD svd,BV *V,BV *U)
    Collective
 
    Input Parameters:
-+  svd - singular value solver context obtained from SVDCreate()
++  svd - the singular value solver context
 -  ds  - the direct solver object
 
    Note:
-   Use SVDGetDS() to retrieve the direct solver context (for example,
+   Use `SVDGetDS()` to retrieve the direct solver context (for example,
    to free it at the end of the computations).
 
    Level: advanced
 
-.seealso: `SVDGetDS()`
+.seealso: [](ch:svd), `SVDGetDS()`
 @*/
 PetscErrorCode SVDSetDS(SVD svd,DS ds)
 {
@@ -461,15 +463,15 @@ PetscErrorCode SVDSetDS(SVD svd,DS ds)
 
    Not Collective
 
-   Input Parameters:
-.  svd - singular value solver context obtained from SVDCreate()
+   Input Parameter:
+.  svd - the singular value solver context
 
    Output Parameter:
 .  ds - direct solver context
 
    Level: advanced
 
-.seealso: `SVDSetDS()`
+.seealso: [](ch:svd), `SVDSetDS()`
 @*/
 PetscErrorCode SVDGetDS(SVD svd,DS *ds)
 {

@@ -576,7 +576,7 @@ static PetscErrorCode EPSLyapIISetRanks_LyapII(EPS eps,PetscInt rkc,PetscInt rkl
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 .  rkc - the compressed rank
 -  rkl - the Lyapunov rank
 
@@ -584,18 +584,18 @@ static PetscErrorCode EPSLyapIISetRanks_LyapII(EPS eps,PetscInt rkc,PetscInt rkl
 .  -eps_lyapii_ranks <rkc,rkl> - Sets the rank parameters
 
    Notes:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
 
    Lyapunov inverse iteration needs to solve a large-scale Lyapunov equation
-   at each iteration of the eigensolver. For this, an iterative solver (LME)
-   is used, which requires to prescribe the rank of the solution matrix X. This
-   is the meaning of parameter rkl. Later, this matrix is compressed into
-   another matrix of rank rkc. If not provided, rkl is a small multiple of rkc.
+   at each iteration of the eigensolver. For this, an iterative solver (`LME`)
+   is used, which requires to prescribe the rank of the solution matrix $X$. This
+   is the meaning of parameter `rkl`. Later, this matrix is compressed into
+   another matrix of rank `rkc`. If not provided, `rkl` is a small multiple of `rkc`.
 
    Level: intermediate
 
-.seealso: `EPSLyapIIGetRanks()`
+.seealso: [](ch:eps), `EPSLYAPII`, `EPSLyapIIGetRanks()`
 @*/
 PetscErrorCode EPSLyapIISetRanks(EPS eps,PetscInt rkc,PetscInt rkl)
 {
@@ -623,7 +623,7 @@ static PetscErrorCode EPSLyapIIGetRanks_LyapII(EPS eps,PetscInt *rkc,PetscInt *r
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  rkc - the compressed rank
@@ -631,7 +631,7 @@ static PetscErrorCode EPSLyapIIGetRanks_LyapII(EPS eps,PetscInt *rkc,PetscInt *r
 
    Level: intermediate
 
-.seealso: `EPSLyapIISetRanks()`
+.seealso: [](ch:eps), `EPSLYAPII`, `EPSLyapIISetRanks()`
 @*/
 PetscErrorCode EPSLyapIIGetRanks(EPS eps,PetscInt *rkc,PetscInt *rkl)
 {
@@ -654,18 +654,18 @@ static PetscErrorCode EPSLyapIISetLME_LyapII(EPS eps,LME lme)
 }
 
 /*@
-   EPSLyapIISetLME - Associate a linear matrix equation solver object (LME) to the
+   EPSLyapIISetLME - Associate a linear matrix equation solver object (`LME`) to the
    eigenvalue solver.
 
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
--  lme - the linear matrix equation solver object
++  eps - the linear eigensolver context
+-  lme - the linear matrix equation solver context
 
    Level: advanced
 
-.seealso: `EPSLyapIIGetLME()`
+.seealso: [](ch:eps), `EPSLYAPII`, `EPSLyapIIGetLME()`
 @*/
 PetscErrorCode EPSLyapIISetLME(EPS eps,LME lme)
 {
@@ -693,20 +693,20 @@ static PetscErrorCode EPSLyapIIGetLME_LyapII(EPS eps,LME *lme)
 }
 
 /*@
-   EPSLyapIIGetLME - Retrieve the linear matrix equation solver object (LME)
+   EPSLyapIIGetLME - Retrieve the linear matrix equation solver object (`LME`)
    associated with the eigenvalue solver.
 
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  lme - the linear matrix equation solver object
+.  lme - the linear matrix equation solver context
 
    Level: advanced
 
-.seealso: `EPSLyapIISetLME()`
+.seealso: [](ch:eps), `EPSLYAPII`, `EPSLyapIISetLME()`
 @*/
 PetscErrorCode EPSLyapIIGetLME(EPS eps,LME *lme)
 {
@@ -765,6 +765,26 @@ static PetscErrorCode EPSSetDefaultST_LyapII(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSLYAPII - EPSLYAPII = "lyapii" - The Lyapunov inverse iteration.
+
+   Notes:
+   This solver implements the method of Lyapunov inverse iteration
+   {cite:p}`Mee10,Elm13` to compute rightmost eigenvalues of
+   non-Hermitian matrices (or matrix pencils).
+
+   At each step of the eigensolver, a Lyapunov equation must be solved,
+   and this is done with an `LME` object, see `EPSLyapIIGetLME()`.
+
+   This solver may be useful for analyzing the stability of PDE's.
+   Note that the method requires the input matrix to be stable, so
+   it generally requires to shift the matrix before passing it in
+   `EPSSetOperators()`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSLyapIIGetLME()`, `EPSSetOperators()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_LyapII(EPS eps)
 {
   EPS_LYAPII     *ctx;

@@ -244,10 +244,10 @@ static PetscErrorCode STCayleySetAntishift_Cayley(ST st,PetscScalar newshift)
 
    Note:
    In the generalized Cayley transform, the operator can be expressed as
-   OP = inv(A - sigma B)*(A + nu B). This function sets the value of nu.
-   Use STSetShift() for setting sigma. The value nu=-sigma is not allowed.
+   $(A - \sigma B)^{-1}(A + \nu B)$. This function sets the value of $\nu$.
+   Use `STSetShift()` for setting $\sigma$. The value $\nu=-\sigma$ is not allowed.
 
-.seealso: `STSetShift()`, `STCayleyGetAntishift()`
+.seealso: [](ch:st), `STCAYLEY`. `STSetShift()`, `STCayleyGetAntishift()`
 @*/
 PetscErrorCode STCayleySetAntishift(ST st,PetscScalar nu)
 {
@@ -281,7 +281,7 @@ static PetscErrorCode STCayleyGetAntishift_Cayley(ST st,PetscScalar *nu)
 
    Level: intermediate
 
-.seealso: `STGetShift()`, `STCayleySetAntishift()`
+.seealso: [](ch:st), `STCAYLEY`, `STGetShift()`, `STCayleySetAntishift()`
 @*/
 PetscErrorCode STCayleyGetAntishift(ST st,PetscScalar *nu)
 {
@@ -315,6 +315,21 @@ static PetscErrorCode STDestroy_Cayley(ST st)
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STCayleyGetAntishift_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
+
+/*MC
+   STCAYLEY - STCAYLEY = "cayley" - The generalized Cayley transform.
+
+   Level: beginner
+
+   Notes:
+   The operator in this `ST` is $(A-\sigma B)^{-1}(A+\nu B)$, where $A$ and $B$
+   are the matrices set with `STSetMatrices()`, the shift $\sigma$ is given in
+   `STSetShift()`, and $\nu$ is given in `STCayleySetAntishift()`.
+
+   This transformation is mathematically equivalent to `STSINVERT`.
+
+.seealso: [](ch:st), `ST`, `STType`, `STSetType()`, `STSetMatrices()`, `STSetShift()`, `STCayleySetAntishift()`
+M*/
 
 SLEPC_EXTERN PetscErrorCode STCreate_Cayley(ST st)
 {

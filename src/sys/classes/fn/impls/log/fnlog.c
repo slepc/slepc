@@ -674,6 +674,14 @@ static PetscErrorCode FNView_Log(FN fn,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   FNLOG - FNLOG = "log" - The logarithm function $f(x)=\log x$.
+
+   Level: beginner
+
+.seealso: [](sec:fn), `FN`, `FNType`, `FNSetType()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode FNCreate_Log(FN fn)
 {
   PetscFunctionBegin;

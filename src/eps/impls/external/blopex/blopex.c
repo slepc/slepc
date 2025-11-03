@@ -288,7 +288,7 @@ static PetscErrorCode EPSBLOPEXSetBlockSize_BLOPEX(EPS eps,PetscInt bs)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  bs  - the block size
 
    Options Database Key:
@@ -296,7 +296,7 @@ static PetscErrorCode EPSBLOPEXSetBlockSize_BLOPEX(EPS eps,PetscInt bs)
 
    Level: advanced
 
-.seealso: `EPSBLOPEXGetBlockSize()`
+.seealso: [](ch:eps), `EPSBLOPEX`, `EPSBLOPEXGetBlockSize()`
 @*/
 PetscErrorCode EPSBLOPEXSetBlockSize(EPS eps,PetscInt bs)
 {
@@ -322,14 +322,14 @@ static PetscErrorCode EPSBLOPEXGetBlockSize_BLOPEX(EPS eps,PetscInt *bs)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  bs - the block size
 
    Level: advanced
 
-.seealso: `EPSBLOPEXSetBlockSize()`
+.seealso: [](ch:eps), `EPSBLOPEX`, `EPSBLOPEXSetBlockSize()`
 @*/
 PetscErrorCode EPSBLOPEXGetBlockSize(EPS eps,PetscInt *bs)
 {
@@ -384,6 +384,17 @@ static PetscErrorCode EPSSetFromOptions_BLOPEX(EPS eps,PetscOptionItems PetscOpt
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSBLOPEX - EPSBLOPEX = "blopex" - A wrapper to BLOPEX {cite:p}`Kny07`.
+
+   Note:
+   In principle, the method used here is the same as in `EPSLOBPCG`, but in
+   practice convergence may be different.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_BLOPEX(EPS eps)
 {
   EPS_BLOPEX     *ctx;

@@ -233,20 +233,20 @@ static PetscErrorCode BVOrthogonalizeGS(BV bv,PetscInt j,Vec v,PetscBool *which,
             of orthogonalization
 
    Notes:
-   This function is equivalent to BVOrthogonalizeColumn() but orthogonalizes
-   a vector as an argument rather than taking one of the BV columns. The
-   vector is orthogonalized against all active columns (k) and the constraints.
-   If H is given, it must have enough space to store k-l coefficients, where l
+   This function is equivalent to `BVOrthogonalizeColumn()` but orthogonalizes
+   a vector as an argument rather than taking one of the `BV` columns. The
+   vector is orthogonalized against all active columns (`k`) and the constraints.
+   If `H` is given, it must have enough space to store `k-l` coefficients, where `l`
    is the number of leading columns.
 
-   In the case of an indefinite inner product, the lindep parameter is not
+   In the case of an indefinite inner product, the `lindep` parameter is not
    computed (set to false).
 
    Level: advanced
 
-.seealso: `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`, `BVSetActiveColumns()`, `BVGetNumConstraints()`
+.seealso: [](sec:bv), `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`, `BVSetActiveColumns()`, `BVGetNumConstraints()`
 @*/
-PetscErrorCode BVOrthogonalizeVec(BV bv,Vec v,PetscScalar *H,PetscReal *norm,PetscBool *lindep)
+PetscErrorCode BVOrthogonalizeVec(BV bv,Vec v,PetscScalar H[],PetscReal *norm,PetscBool *lindep)
 {
   PetscInt       ksave,lsave;
 
@@ -289,30 +289,29 @@ PetscErrorCode BVOrthogonalizeVec(BV bv,Vec v,PetscScalar *H,PetscReal *norm,Pet
             of orthogonalization
 
    Notes:
-   This function applies an orthogonal projector to project vector V[j] onto
-   the orthogonal complement of the span of the columns V[0..j-1],
-   where V[.] are the vectors of BV. The columns V[0..j-1] are assumed to be
-   mutually orthonormal.
+   This function applies an orthogonal projector to project vector $v_j$ onto
+   the orthogonal complement of the span of the columns $v_{0:j-1}$.
+   The columns $v_{0:j-1}$ are assumed to be mutually orthonormal.
 
-   Leading columns V[0..l-1] also participate in the orthogonalization, as well
-   as the constraints. If H is given, it must have enough space to store
-   j-l+1 coefficients (the last coefficient will contain the value norm, unless
-   the norm argument is NULL).
+   Leading columns $v_{0:\ell-1}$ also participate in the orthogonalization, as well
+   as the constraints. If `H` is given, it must have enough space to store
+   $j-\ell+1$ coefficients (the last coefficient will contain the value `norm`, unless
+   the `norm` argument is `NULL`).
 
-   If a non-standard inner product has been specified with BVSetMatrix(),
+   If a non-standard inner product has been specified with `BVSetMatrix()`,
    then the vector is B-orthogonalized, using the non-standard inner product
-   defined by matrix B. The output vector satisfies V[j]'*B*V[0..j-1] = 0.
+   defined by matrix $B$. The output vector satisfies $v_j^*Bv_{0:j-1} = 0$.
 
-   This routine does not normalize the resulting vector, see BVOrthonormalizeColumn().
+   This routine does not normalize the resulting vector, see `BVOrthonormalizeColumn()`.
 
-   In the case of an indefinite inner product, the lindep parameter is not
+   In the case of an indefinite inner product, the `lindep` parameter is not
    computed (set to false).
 
    Level: advanced
 
-.seealso: `BVSetOrthogonalization()`, `BVSetMatrix()`, `BVSetActiveColumns()`, `BVOrthogonalize()`, `BVOrthogonalizeVec()`, `BVGetNumConstraints()`, `BVOrthonormalizeColumn()`
+.seealso: [](sec:bv), `BVSetOrthogonalization()`, `BVSetMatrix()`, `BVSetActiveColumns()`, `BVOrthogonalize()`, `BVOrthogonalizeVec()`, `BVGetNumConstraints()`, `BVOrthonormalizeColumn()`
 @*/
-PetscErrorCode BVOrthogonalizeColumn(BV bv,PetscInt j,PetscScalar *H,PetscReal *norm,PetscBool *lindep)
+PetscErrorCode BVOrthogonalizeColumn(BV bv,PetscInt j,PetscScalar H[],PetscReal *norm,PetscBool *lindep)
 {
   PetscInt       ksave,lsave;
 
@@ -356,26 +355,26 @@ PetscErrorCode BVOrthogonalizeColumn(BV bv,PetscInt j,PetscScalar *H,PetscReal *
              orthogonalization
 
    Notes:
-   This is equivalent to a call to BVOrthogonalizeColumn() followed by a
-   call to BVScaleColumn() with the reciprocal of the norm.
+   This is equivalent to a call to `BVOrthogonalizeColumn()` followed by a
+   call to `BVScaleColumn()` with the reciprocal of the norm.
 
-   This function first orthogonalizes vector V[j] with respect to V[0..j-1],
-   where V[.] are the vectors of BV. A byproduct of this computation is norm,
-   the norm of the vector after orthogonalization. Secondly, it scales the
-   vector with 1/norm, so that the resulting vector has unit norm.
+   This function first orthogonalizes vector $v_j$ with respect to $v_{0:j-1}$.
+   A byproduct of this computation is `norm`, the norm of the vector after
+   orthogonalization. Secondly, it scales the vector with `1/norm`, so that the
+   resulting vector has unit norm.
 
-   If after orthogonalization the vector V[j] is exactly zero, it cannot be normalized
-   because norm=0. In that case, it could be left as zero or replaced by a random
+   If after orthogonalization the vector $v_j$ is exactly zero, it cannot be normalized
+   because `norm=0`. In that case, it could be left as zero or replaced by a random
    vector that is then orthonormalized. The latter is achieved by setting the
-   argument replace to TRUE. The vector will be replaced by a random vector also
-   if lindep was set to TRUE, even if the norm is not exactly zero.
+   argument `replace` to `PETSC_TRUE`. The vector will be replaced by a random vector also
+   if `lindep` was set to `PETSC_TRUE`, even if the norm is not exactly zero.
 
-   If the vector has been replaced by a random vector, the output arguments norm and
-   lindep will be set according to the orthogonalization of this new vector.
+   If the vector has been replaced by a random vector, the output arguments `norm` and
+   `lindep` will be set according to the orthogonalization of this new vector.
 
    Level: advanced
 
-.seealso: `BVOrthogonalizeColumn()`, `BVScaleColumn()`
+.seealso: [](sec:bv), `BVOrthogonalizeColumn()`, `BVScaleColumn()`
 @*/
 PetscErrorCode BVOrthonormalizeColumn(BV bv,PetscInt j,PetscBool replace,PetscReal *norm,PetscBool *lindep)
 {
@@ -444,20 +443,21 @@ PetscErrorCode BVOrthonormalizeColumn(BV bv,PetscInt j,PetscBool replace,PetscRe
             of orthogonalization
 
    Notes:
-   This function is similar to BVOrthogonalizeColumn(), but V[j] is
-   orthogonalized only against columns V[i] having which[i]=PETSC_TRUE.
-   The length of array which must be j at least.
+   This function is similar to `BVOrthogonalizeColumn()`, but $v_j$ is
+   orthogonalized only against columns $v_i$ having `which[i]=PETSC_TRUE`.
+   The length of array `which` must be `j` at least.
 
-   The use of this operation is restricted to MGS orthogonalization type.
+   The use of this operation is restricted to MGS orthogonalization type,
+   `BV_ORTHOG_MGS`.
 
-   In the case of an indefinite inner product, the lindep parameter is not
+   In the case of an indefinite inner product, the `lindep` parameter is not
    computed (set to false).
 
    Level: advanced
 
-.seealso: `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`
+.seealso: [](sec:bv), `BVOrthogonalizeColumn()`, `BVSetOrthogonalization()`
 @*/
-PetscErrorCode BVOrthogonalizeSomeColumn(BV bv,PetscInt j,PetscBool *which,PetscScalar *H,PetscReal *norm,PetscBool *lindep)
+PetscErrorCode BVOrthogonalizeSomeColumn(BV bv,PetscInt j,PetscBool *which,PetscScalar H[],PetscReal *norm,PetscBool *lindep)
 {
   PetscInt       ksave,lsave;
 
@@ -501,9 +501,18 @@ static PetscErrorCode BVOrthogonalize_BlockGS(BV V,Mat R)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*
-   Orthogonalize a set of vectors with Gram-Schmidt, column by column.
- */
+/*MC
+   BV_ORTHOG_BLOCK_GS - Orthogonalize a set of vectors with Gram-Schmidt, column by column.
+
+   Note:
+   In this case, the block orthogonalization is done in the same way as the
+   orthogonalization of individual vectors, e.g., `BVOrthogonalizeColumn`, and
+   hence the settings provided via `BVSetOrthogonalization()` apply.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVOrthogBlockType`, `BVSetOrthogonalization()`, `BVOrthogonalize()`, `BV_ORTHOG_BLOCK_CHOL`, `BV_ORTHOG_BLOCK_TSQR`, `BV_ORTHOG_BLOCK_TSQRCHOL`, `BV_ORTHOG_BLOCK_SVQB`
+M*/
 static PetscErrorCode BVOrthogonalize_GS(BV V,Mat R)
 {
   PetscScalar    *r=NULL;
@@ -589,9 +598,19 @@ static inline PetscErrorCode BV_StoreCoeffsBlock_Default(BV bv,Mat R,PetscBool t
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*
-   Orthogonalize a set of vectors with Cholesky: R=chol(V'*V), Q=V*inv(R)
- */
+/*MC
+   BV_ORTHOG_BLOCK_CHOL - Orthogonalize a set of vectors $V$ with the Cholesky QR
+   method, that is, compute $R=\mathrm{chol}(V^*V)$, then obtain the
+   orthogonalized vectors as $Q=V R^{-1}$.
+
+   Developer Note:
+   This is plain Cholesky QR, which may fail in case of ill-conditioned $V$.
+   An iterated version such as CholeskyQR2 should be preferred {cite:p}`Yam15`.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVOrthogBlockType`, `BVSetOrthogonalization()`, `BVOrthogonalize()`, `BV_ORTHOG_BLOCK_GS`, `BV_ORTHOG_BLOCK_TSQR`, `BV_ORTHOG_BLOCK_TSQRCHOL`, `BV_ORTHOG_BLOCK_SVQB`
+M*/
 static PetscErrorCode BVOrthogonalize_Chol(BV V,Mat Rin)
 {
   Mat            R,S;
@@ -609,9 +628,13 @@ static PetscErrorCode BVOrthogonalize_Chol(BV V,Mat Rin)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*
-   Orthogonalize a set of vectors with the Tall-Skinny QR method
- */
+/*MC
+   BV_ORTHOG_BLOCK_TSQR - Orthogonalize a set of vectors with the Tall-Skinny QR method {cite:p}`Dem12`.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVOrthogBlockType`, `BVSetOrthogonalization()`, `BVOrthogonalize()`, `BV_ORTHOG_BLOCK_GS`, `BV_ORTHOG_BLOCK_CHOL`, `BV_ORTHOG_BLOCK_TSQRCHOL`, `BV_ORTHOG_BLOCK_SVQB`
+M*/
 static PetscErrorCode BVOrthogonalize_TSQR(BV V,Mat Rin)
 {
   PetscScalar    *pv,*r=NULL;
@@ -632,9 +655,15 @@ static PetscErrorCode BVOrthogonalize_TSQR(BV V,Mat Rin)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*
-   Orthogonalize a set of vectors with TSQR, but computing R only, then doing Q=V*inv(R)
- */
+/*MC
+   BV_ORTHOG_BLOCK_TSQRCHOL - Orthogonalize a set of vectors $V$ with the TSQR
+   method, but computing the triangular factor $R$ only, then retrieving the
+   orthogonalized vectors as $Q=V R^{-1}$.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVOrthogBlockType`, `BVSetOrthogonalization()`, `BVOrthogonalize()`, `BV_ORTHOG_BLOCK_GS`, `BV_ORTHOG_BLOCK_CHOL`, `BV_ORTHOG_BLOCK_TSQR`, `BV_ORTHOG_BLOCK_SVQB`
+M*/
 static PetscErrorCode BVOrthogonalize_TSQRCHOL(BV V,Mat Rin)
 {
   PetscScalar    *pv,*r=NULL;
@@ -659,9 +688,18 @@ static PetscErrorCode BVOrthogonalize_TSQRCHOL(BV V,Mat Rin)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*
-   Orthogonalize a set of vectors with SVQB
- */
+/*MC
+   BV_ORTHOG_BLOCK_SVQB - Orthogonalize a set of vectors with the SVQB method {cite:p}`Sta02`.
+
+   Note:
+   As opposed to other block orthogonalization methods, SVQB does not compute a
+   QR decomposition but a QB decomposition, i.e., the second factor is not
+   triangular.
+
+   Level: advanced
+
+.seealso: [](sec:bv), `BVOrthogBlockType`, `BVSetOrthogonalization()`, `BVOrthogonalize()`, `BV_ORTHOG_BLOCK_GS`, `BV_ORTHOG_BLOCK_CHOL`, `BV_ORTHOG_BLOCK_TSQR`, `BV_ORTHOG_BLOCK_TSQRCHOL`
+M*/
 static PetscErrorCode BVOrthogonalize_SVQB(BV V,Mat Rin)
 {
   Mat            R,S;
@@ -686,42 +724,51 @@ static PetscErrorCode BVOrthogonalize_SVQB(BV V,Mat Rin)
    Collective
 
    Input Parameters:
-+  V - basis vectors to be orthogonalized (or B-orthogonalized), modified on output
--  R - a sequential dense matrix (or NULL), on output the triangular factor of
++  V - basis vectors to be orthogonalized (or $B$-orthogonalized), modified on output
+-  R - a sequential dense matrix (or `NULL`), on output the triangular factor of
        the QR decomposition
 
    Notes:
-   On input, matrix R must be a square sequential dense Mat, with at least as many
-   rows and columns as the number of active columns of V. The output satisfies
-   V0 = V*R (where V0 represent the input V) and V'*V = I (or V'*B*V = I if an
-   inner product matrix B has been specified with BVSetMatrix()).
+   On input, matrix `R` must be a square sequential dense `Mat`, with at least as many
+   rows and columns as the number of active columns of `V`. The output satisfies
+   $V = \tilde V R$ (where $\tilde V$ represents `V` on exit) and $\tilde V^*\tilde V = I$
+   (or $\tilde V^*B\tilde V = I$ if an inner product matrix $B$ has been specified with
+   `BVSetMatrix()`).
 
-   If V has leading columns, then they are not modified (are assumed to be already
-   orthonormal) and the leading columns of R are not referenced. Let the
+   If `V` has leading columns, then they are not modified (are assumed to be already
+   orthonormal) and the leading columns of `R` are not referenced. Let the
    decomposition be
-.vb
-   [ V01 V02 ] = [ V1 V2 ] [ R11 R12 ]
-                           [  0  R22 ]
-.ve
-   then V1 is left unchanged (equal to V01) as well as R11 (it should satisfy
-   V01 = V1*R11).
+   $$
+     \begin{bmatrix}
+       V_1 & V_2
+     \end{bmatrix}=
+     \begin{bmatrix}
+       \tilde V_1 & \tilde V_2
+     \end{bmatrix}
+     \begin{bmatrix}
+       R_{11} & R_{12} \\
+            0 & R_{22}
+     \end{bmatrix}
+   $$
+   then $\tilde V_1$ is left unchanged (equal to $V_1$) as well as $R_{11}$ (they should
+   satisfy $V_1 = \tilde V_1 R_{11}$).
 
-   Can pass NULL if R is not required.
+   Can pass `NULL` if `R` is not required.
 
    The method to be used for block orthogonalization can be set with
-   BVSetOrthogonalization(). If set to GS, the computation is done column by
-   column with successive calls to BVOrthogonalizeColumn(). Note that in the
-   SVQB method the R factor is not upper triangular.
+   `BVSetOrthogonalization()`. If set to `BV_ORTHOG_BLOCK_GS`, the computation is done
+   column by column with successive calls to `BVOrthogonalizeColumn()`. Note that in the
+   `BV_ORTHOG_BLOCK_SVQB` method the `R` factor is not upper triangular.
 
-   If V is rank-deficient or very ill-conditioned, that is, one or more columns are
+   If `V` is rank-deficient or very ill-conditioned, that is, one or more columns are
    (almost) linearly dependent with respect to the rest, then the algorithm may
    break down or result in larger numerical error. Linearly dependent columns are
    essentially replaced by random directions, and the corresponding diagonal entry
-   in R is set to (nearly) zero.
+   in `R` is set to (nearly) zero.
 
    Level: intermediate
 
-.seealso: `BVOrthogonalizeColumn()`, `BVOrthogonalizeVec()`, `BVSetMatrix()`, `BVSetActiveColumns()`, `BVSetOrthogonalization()`, `BVOrthogBlockType`
+.seealso: [](sec:bv), `BVOrthogonalizeColumn()`, `BVOrthogonalizeVec()`, `BVSetMatrix()`, `BVSetActiveColumns()`, `BVSetOrthogonalization()`, `BVOrthogBlockType`
 @*/
 PetscErrorCode BVOrthogonalize(BV V,Mat R)
 {

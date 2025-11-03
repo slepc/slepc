@@ -16,31 +16,30 @@
 #include <petscdraw.h>
 
 /*@
-   NEPView - Prints the NEP data structure.
+   NEPView - Prints the `NEP` data structure.
 
    Collective
 
    Input Parameters:
-+  nep - the nonlinear eigenproblem solver context
++  nep - the nonlinear eigensolver context
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -nep_view -  Calls NEPView() at end of NEPSolve()
+.  -nep_view -  Calls `NEPView()` at end of `NEPSolve()`
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
 
    Level: beginner
 
-.seealso: `FNView()`
+.seealso: [](ch:nep), `NEPCreate()`, `NEPViewFromOptions()`, `FNView()`
 @*/
 PetscErrorCode NEPView(NEP nep,PetscViewer viewer)
 {
@@ -180,18 +179,18 @@ PetscErrorCode NEPView(NEP nep,PetscViewer viewer)
 }
 
 /*@
-   NEPViewFromOptions - View from options
+   NEPViewFromOptions - View (print) a `NEP` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  nep  - the nonlinear eigensolver context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: `NEPView()`, `NEPCreate()`
+.seealso: [](ch:nep), `NEPView()`, `NEPCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode NEPViewFromOptions(NEP nep,PetscObject obj,const char name[])
 {
@@ -202,7 +201,7 @@ PetscErrorCode NEPViewFromOptions(NEP nep,PetscObject obj,const char name[])
 }
 
 /*@
-   NEPConvergedReasonView - Displays the reason a NEP solve converged or diverged.
+   NEPConvergedReasonView - Displays the reason a `NEP` solve converged or diverged.
 
    Collective
 
@@ -210,18 +209,21 @@ PetscErrorCode NEPViewFromOptions(NEP nep,PetscObject obj,const char name[])
 +  nep - the nonlinear eigensolver context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
-.  -nep_converged_reason - print reason for convergence, and number of iterations
+   Options Database Key:
+.  -nep_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Note:
-   To change the format of the output call PetscViewerPushFormat(viewer,format) before
-   this call. Use PETSC_VIEWER_DEFAULT for the default, use PETSC_VIEWER_FAILED to only
+   Notes:
+   Use `NEPConvergedReasonViewFromOptions()` to display the reason based on values
+   in the options database.
+
+   To change the format of the output call `PetscViewerPushFormat()` before this
+   call. Use `PETSC_VIEWER_DEFAULT` for the default, or `PETSC_VIEWER_FAILED` to only
    display a reason if it fails. The latter can be set in the command line with
-   -nep_converged_reason ::failed
+   `-nep_converged_reason ::failed`.
 
    Level: intermediate
 
-.seealso: `NEPSetConvergenceTest()`, `NEPSetTolerances()`, `NEPGetIterationNumber()`, `NEPConvergedReasonViewFromOptions()`
+.seealso: [](ch:nep), `NEPSetConvergenceTest()`, `NEPSetTolerances()`, `NEPGetIterationNumber()`, `NEPConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode NEPConvergedReasonView(NEP nep,PetscViewer viewer)
 {
@@ -243,16 +245,16 @@ PetscErrorCode NEPConvergedReasonView(NEP nep,PetscViewer viewer)
 
 /*@
    NEPConvergedReasonViewFromOptions - Processes command line options to determine if/how
-   the NEP converged reason is to be viewed.
+   the `NEP` converged reason is to be viewed.
 
    Collective
 
    Input Parameter:
 .  nep - the nonlinear eigensolver context
 
-   Level: developer
+   Level: intermediate
 
-.seealso: `NEPConvergedReasonView()`
+.seealso: [](ch:nep), `NEPConvergedReasonView()`
 @*/
 PetscErrorCode NEPConvergedReasonViewFromOptions(NEP nep)
 {
@@ -385,12 +387,17 @@ static PetscErrorCode NEPErrorView_MATLAB(NEP nep,NEPErrorType etype,PetscViewer
    Notes:
    By default, this function checks the error of all eigenpairs and prints
    the eigenvalues if all of them are below the requested tolerance.
-   If the viewer has format=PETSC_VIEWER_ASCII_INFO_DETAIL then a table with
+   If the viewer has format `PETSC_VIEWER_ASCII_INFO_DETAIL` then a table with
    eigenvalues and corresponding errors is printed.
+
+   All the command-line options listed above admit an optional argument
+   specifying the viewer type and options. For instance, use
+   `-nep_error_relative :myerr.m:ascii_matlab` to save the errors in a file
+   that can be executed in Matlab.
 
    Level: intermediate
 
-.seealso: `NEPSolve()`, `NEPValuesView()`, `NEPVectorsView()`
+.seealso: [](ch:nep), `NEPSolve()`, `NEPValuesView()`, `NEPVectorsView()`
 @*/
 PetscErrorCode NEPErrorView(NEP nep,NEPErrorType etype,PetscViewer viewer)
 {
@@ -435,7 +442,7 @@ PetscErrorCode NEPErrorView(NEP nep,NEPErrorType etype,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `NEPErrorView()`
+.seealso: [](ch:nep), `NEPErrorView()`
 @*/
 PetscErrorCode NEPErrorViewFromOptions(NEP nep)
 {
@@ -624,9 +631,15 @@ static PetscErrorCode NEPValuesView_MATLAB(NEP nep,PetscViewer viewer)
    Options Database Key:
 .  -nep_view_values - print computed eigenvalues
 
+   Note:
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-nep_view_values :evals.m:ascii_matlab` to save the values in a file
+   that can be executed in Matlab.
+
    Level: intermediate
 
-.seealso: `NEPSolve()`, `NEPVectorsView()`, `NEPErrorView()`
+.seealso: [](ch:nep), `NEPSolve()`, `NEPVectorsView()`, `NEPErrorView()`
 @*/
 PetscErrorCode NEPValuesView(NEP nep,PetscViewer viewer)
 {
@@ -682,7 +695,7 @@ PetscErrorCode NEPValuesView(NEP nep,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `NEPValuesView()`
+.seealso: [](ch:nep), `NEPValuesView()`
 @*/
 PetscErrorCode NEPValuesViewFromOptions(NEP nep)
 {
@@ -715,7 +728,7 @@ PetscErrorCode NEPValuesViewFromOptions(NEP nep)
 -  viewer - the viewer
 
    Options Database Key:
-.  -nep_view_vectors - output eigenvectors.
+.  -nep_view_vectors - output eigenvectors
 
    Notes:
    If PETSc was configured with real scalars, complex conjugate eigenvectors
@@ -724,11 +737,15 @@ PetscErrorCode NEPValuesViewFromOptions(NEP nep)
 
    If left eigenvectors were computed with a two-sided eigensolver, the right
    and left eigenvectors are interleaved, that is, the vectors are output in
-   the following order X0, Y0, X1, Y1, X2, Y2, ...
+   the following order\: `X0, Y0, X1, Y1, X2, Y2, ...`
+
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-nep_view_vectors binary:evecs.bin` to save the vectors in a binary file.
 
    Level: intermediate
 
-.seealso: `NEPSolve()`, `NEPValuesView()`, `NEPErrorView()`
+.seealso: [](ch:nep), `NEPSolve()`, `NEPValuesView()`, `NEPErrorView()`
 @*/
 PetscErrorCode NEPVectorsView(NEP nep,PetscViewer viewer)
 {
@@ -775,7 +792,7 @@ PetscErrorCode NEPVectorsView(NEP nep,PetscViewer viewer)
 
    Level: developer
 
-.seealso: `NEPVectorsView()`
+.seealso: [](ch:nep), `NEPVectorsView()`
 @*/
 PetscErrorCode NEPVectorsViewFromOptions(NEP nep)
 {

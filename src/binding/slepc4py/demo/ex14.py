@@ -63,7 +63,7 @@ def solve_lyap(A, C, rk):
     Print(f'Stopping condition: tol={tol}, maxit={maxit}')
     Print(f'Error estimate reported by the solver: {L.getErrorEstimate()}')
     if N<500:
-        Print(f'Computed residual norm: {L.LMEComputeError()}')
+        Print(f'Computed residual norm: {L.computeError()}')
     Print('')
 
     return X

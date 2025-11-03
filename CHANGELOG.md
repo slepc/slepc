@@ -416,7 +416,7 @@
 - Released under GNU LGPL license.
 - Improved support for the case that many eigenpairs are to be computed. This is especially so in
   the default eigensolver (Krylov-Schur) for symmetric problems, as well as for SVD computations. The
-  user can control the behaviour of the solver with a new parameter `mpd`, see `EPSSetDimensions()`.
+  user can control the behavior of the solver with a new parameter `mpd`, see `EPSSetDimensions()`.
 - Support for harmonic projection in the default eigensolver (Krylov-Schur), see `EPSSetExtraction()`.
   This can be useful for computing interior or rightmost eigenvalues without the need of a spectral
   transformation.

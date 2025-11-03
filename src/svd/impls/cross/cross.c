@@ -420,21 +420,29 @@ static PetscErrorCode SVDCrossSetExplicitMatrix_Cross(SVD svd,PetscBool explicit
 }
 
 /*@
-   SVDCrossSetExplicitMatrix - Indicate if the eigensolver operator A^T*A must
+   SVDCrossSetExplicitMatrix - Indicate if the eigensolver operator $A^*A$ must
    be computed explicitly.
 
    Logically Collective
 
    Input Parameters:
-+  svd         - singular value solver
--  explicitmat - boolean flag indicating if A^T*A is built explicitly
++  svd         - the singular value solver context
+-  explicitmat - `PETSC_TRUE` if $A^*A$ must be built explicitly
 
    Options Database Key:
-.  -svd_cross_explicitmatrix <boolean> - Indicates the boolean flag
+.  -svd_cross_explicitmatrix \<explicitmat\> - toggle the explicit construction of the matrix
+
+   Notes:
+   In GSVD there are two cross product matrices, $A^*A$ and $B^*B$. In HSVD the
+   expression for the cross product matrix is different, $A^*\Omega A$. See
+   [](#sec:svdback) for details.
+
+   By default the matrices are not built explicitly, but handled as shell matrices,
+   see `MATSHELL`.
 
    Level: advanced
 
-.seealso: `SVDCrossGetExplicitMatrix()`
+.seealso: [](ch:svd), [](#sec:svdback), `SVDCROSS`, `SVDCrossGetExplicitMatrix()`, `MATSHELL`
 @*/
 PetscErrorCode SVDCrossSetExplicitMatrix(SVD svd,PetscBool explicitmat)
 {
@@ -455,19 +463,19 @@ static PetscErrorCode SVDCrossGetExplicitMatrix_Cross(SVD svd,PetscBool *explici
 }
 
 /*@
-   SVDCrossGetExplicitMatrix - Returns the flag indicating if A^T*A is built explicitly.
+   SVDCrossGetExplicitMatrix - Returns the flag indicating if $A^*A$ is built explicitly.
 
    Not Collective
 
    Input Parameter:
-.  svd  - singular value solver
+.  svd  - the singular value solver context
 
    Output Parameter:
 .  explicitmat - the mode flag
 
    Level: advanced
 
-.seealso: `SVDCrossSetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDCROSS`, `SVDCrossSetExplicitMatrix()`
 @*/
 PetscErrorCode SVDCrossGetExplicitMatrix(SVD svd,PetscBool *explicitmat)
 {
@@ -492,18 +500,18 @@ static PetscErrorCode SVDCrossSetEPS_Cross(SVD svd,EPS eps)
 }
 
 /*@
-   SVDCrossSetEPS - Associate an eigensolver object (EPS) to the
+   SVDCrossSetEPS - Associate an eigensolver object (`EPS`) to the
    singular value solver.
 
    Collective
 
    Input Parameters:
-+  svd - singular value solver
--  eps - the eigensolver object
++  svd - the singular value solver context
+-  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `SVDCrossGetEPS()`
+.seealso: [](ch:svd), `SVDCROSS`, `SVDCrossGetEPS()`
 @*/
 PetscErrorCode SVDCrossSetEPS(SVD svd,EPS eps)
 {
@@ -534,20 +542,20 @@ static PetscErrorCode SVDCrossGetEPS_Cross(SVD svd,EPS *eps)
 }
 
 /*@
-   SVDCrossGetEPS - Retrieve the eigensolver object (EPS) associated
+   SVDCrossGetEPS - Retrieve the eigensolver object (`EPS`) associated
    to the singular value solver.
 
    Collective
 
    Input Parameter:
-.  svd - singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
-.  eps - the eigensolver object
+.  eps - the linear eigensolver context
 
    Level: advanced
 
-.seealso: `SVDCrossSetEPS()`
+.seealso: [](ch:svd), `SVDCROSS`, `SVDCrossSetEPS()`
 @*/
 PetscErrorCode SVDCrossGetEPS(SVD svd,EPS *eps)
 {
@@ -600,6 +608,26 @@ static PetscErrorCode SVDDestroy_Cross(SVD svd)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   SVDCROSS - SVDCROSS = "cross" - Solve the singular value problem
+   via an equivalent eigenvalue problem with the cross product matrix.
+
+   Notes:
+   This will do the computation with a subsidiary eigensolver on an
+   equivalent eigenvalue problem. For the standard SVD, the eigensolver
+   operates with the cross product matrix $A^*A$. See the section
+   [](#sec:svdback) for details on the formulation for each SVD type.
+
+   This is the default solver. In the case of standard SVD, the computation
+   done by this solver will be almost identical to the one with `SVDTRLANCZOS`.
+
+   To manipulate the internal eigensolvers, use `SVDCrossGetEPS()` or
+   use the corresponding command-line options.
+
+   Level: beginner
+
+.seealso: [](ch:svd), [](#sec:svdback), `SVD`, `SVDType`, `SVDSetType()`, `SVDSetProblemType()`, `SVDTRLANCZOS`, `SVDCrossGetEPS()`
+M*/
 SLEPC_EXTERN PetscErrorCode SVDCreate_Cross(SVD svd)
 {
   SVD_CROSS      *cross;

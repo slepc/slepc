@@ -19,12 +19,12 @@ PetscClassId      RG_CLASSID = 0;
 static PetscBool  RGPackageInitialized = PETSC_FALSE;
 
 /*@C
-   RGFinalizePackage - This function destroys everything in the Slepc interface
-   to the RG package. It is called from SlepcFinalize().
+   RGFinalizePackage - This function destroys everything in the SLEPc interface
+   to the `RG` package. It is called from `SlepcFinalize()`.
 
    Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: [](sec:rg), `SlepcFinalize()`, `BVInitializePackage()`
 @*/
 PetscErrorCode RGFinalizePackage(void)
 {
@@ -36,13 +36,16 @@ PetscErrorCode RGFinalizePackage(void)
 }
 
 /*@C
-  RGInitializePackage - This function initializes everything in the RG package.
-  It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-  on the first call to RGCreate() when using static libraries.
+   RGInitializePackage - This function initializes everything in the `RG` package.
+   It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
+   on the first call to `RGCreate()` when using shared or static libraries.
 
-  Level: developer
+   Note:
+   This function never needs to be called by SLEPc users.
 
-.seealso: `SlepcInitialize()`
+   Level: developer
+
+.seealso: [](sec:rg), `RG`, `SlepcInitialize()`, `RGFinalizePackage()`
 @*/
 PetscErrorCode RGInitializePackage(void)
 {
@@ -72,7 +75,7 @@ PetscErrorCode RGInitializePackage(void)
 }
 
 /*@
-   RGCreate - Creates an RG context.
+   RGCreate - Creates an `RG` context.
 
    Collective
 
@@ -80,11 +83,11 @@ PetscErrorCode RGInitializePackage(void)
 .  comm - MPI communicator
 
    Output Parameter:
-.  newrg - location to put the RG context
+.  newrg - location to put the `RG` context
 
    Level: beginner
 
-.seealso: `RGDestroy()`, `RG`
+.seealso: [](sec:rg), `RG`, `RGDestroy()`
 @*/
 PetscErrorCode RGCreate(MPI_Comm comm,RG *newrg)
 {
@@ -105,13 +108,13 @@ PetscErrorCode RGCreate(MPI_Comm comm,RG *newrg)
 
 /*@
    RGSetOptionsPrefix - Sets the prefix used for searching for all
-   RG options in the database.
+   `RG` options in the database.
 
    Logically Collective
 
    Input Parameters:
 +  rg     - the region context
--  prefix - the prefix string to prepend to all RG option requests
+-  prefix - the prefix string to prepend to all `RG` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -120,9 +123,9 @@ PetscErrorCode RGCreate(MPI_Comm comm,RG *newrg)
 
    Level: advanced
 
-.seealso: `RGAppendOptionsPrefix()`
+.seealso: [](sec:rg), `RGAppendOptionsPrefix()`
 @*/
-PetscErrorCode RGSetOptionsPrefix(RG rg,const char *prefix)
+PetscErrorCode RGSetOptionsPrefix(RG rg,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(rg,RG_CLASSID,1);
@@ -132,13 +135,13 @@ PetscErrorCode RGSetOptionsPrefix(RG rg,const char *prefix)
 
 /*@
    RGAppendOptionsPrefix - Appends to the prefix used for searching for all
-   RG options in the database.
+   `RG` options in the database.
 
    Logically Collective
 
    Input Parameters:
 +  rg     - the region context
--  prefix - the prefix string to prepend to all RG option requests
+-  prefix - the prefix string to prepend to all `RG` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -146,9 +149,9 @@ PetscErrorCode RGSetOptionsPrefix(RG rg,const char *prefix)
 
    Level: advanced
 
-.seealso: `RGSetOptionsPrefix()`
+.seealso: [](sec:rg), `RGSetOptionsPrefix()`
 @*/
-PetscErrorCode RGAppendOptionsPrefix(RG rg,const char *prefix)
+PetscErrorCode RGAppendOptionsPrefix(RG rg,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(rg,RG_CLASSID,1);
@@ -158,23 +161,19 @@ PetscErrorCode RGAppendOptionsPrefix(RG rg,const char *prefix)
 
 /*@
    RGGetOptionsPrefix - Gets the prefix used for searching for all
-   RG options in the database.
+   `RG` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  rg - the region context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 
-.seealso: `RGSetOptionsPrefix()`, `RGAppendOptionsPrefix()`
+.seealso: [](sec:rg), `RGSetOptionsPrefix()`, `RGAppendOptionsPrefix()`
 @*/
 PetscErrorCode RGGetOptionsPrefix(RG rg,const char *prefix[])
 {
@@ -186,7 +185,7 @@ PetscErrorCode RGGetOptionsPrefix(RG rg,const char *prefix[])
 }
 
 /*@
-   RGSetType - Selects the type for the RG object.
+   RGSetType - Selects the type for the `RG` object.
 
    Logically Collective
 
@@ -194,9 +193,12 @@ PetscErrorCode RGGetOptionsPrefix(RG rg,const char *prefix[])
 +  rg   - the region context
 -  type - a known type
 
-   Level: intermediate
+   Options Database Key:
+.  -rg_type \<type\> - sets `RG` type
 
-.seealso: `RGGetType()`
+   Level: beginner
+
+.seealso: [](sec:rg), `RGGetType()`
 @*/
 PetscErrorCode RGSetType(RG rg,RGType type)
 {
@@ -222,7 +224,7 @@ PetscErrorCode RGSetType(RG rg,RGType type)
 }
 
 /*@
-   RGGetType - Gets the RG type name (as a string) from the RG context.
+   RGGetType - Gets the `RG` type name (as a string) from the `RG` context.
 
    Not Collective
 
@@ -232,9 +234,9 @@ PetscErrorCode RGSetType(RG rg,RGType type)
    Output Parameter:
 .  type - name of the region
 
-   Level: intermediate
+   Level: beginner
 
-.seealso: `RGSetType()`
+.seealso: [](sec:rg), `RGSetType()`
 @*/
 PetscErrorCode RGGetType(RG rg,RGType *type)
 {
@@ -246,19 +248,19 @@ PetscErrorCode RGGetType(RG rg,RGType *type)
 }
 
 /*@
-   RGSetFromOptions - Sets RG options from the options database.
+   RGSetFromOptions - Sets `RG` options from the options database.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  rg - the region context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 
-.seealso: `RGSetOptionsPrefix()`
+.seealso: [](sec:rg), `RGSetOptionsPrefix()`
 @*/
 PetscErrorCode RGSetFromOptions(RG rg)
 {
@@ -286,7 +288,7 @@ PetscErrorCode RGSetFromOptions(RG rg)
 }
 
 /*@
-   RGView - Prints the RG data structure.
+   RGView - Prints the `RG` data structure.
 
    Collective
 
@@ -294,20 +296,22 @@ PetscErrorCode RGSetFromOptions(RG rg)
 +  rg - the region context
 -  viewer - optional visualization context
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
+
+   Use `RGViewFromOptions()` to allow the user to select many different `PetscViewerType`
+   and formats from the options database.
 
    Level: beginner
 
-.seealso: `RGCreate()`
+.seealso: [](sec:rg), `RGCreate()`, `RGViewFromOptions()`
 @*/
 PetscErrorCode RGView(RG rg,PetscViewer viewer)
 {
@@ -332,18 +336,18 @@ PetscErrorCode RGView(RG rg,PetscViewer viewer)
 }
 
 /*@
-   RGViewFromOptions - View from options
+   RGViewFromOptions - View (print) an `RG` object based on values in the options database.
 
    Collective
 
    Input Parameters:
 +  rg   - the region context
-.  obj  - optional object
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: `RGView()`, `RGCreate()`
+.seealso: [](sec:rg), `RGView()`, `RGCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode RGViewFromOptions(RG rg,PetscObject obj,const char name[])
 {
@@ -368,7 +372,7 @@ PetscErrorCode RGViewFromOptions(RG rg,PetscObject obj,const char name[])
 
    Level: beginner
 
-.seealso: `RGCheckInside()`
+.seealso: [](sec:rg), `RGCheckInside()`
 @*/
 PetscErrorCode RGIsTrivial(RG rg,PetscBool *trivial)
 {
@@ -395,18 +399,18 @@ PetscErrorCode RGIsTrivial(RG rg,PetscBool *trivial)
    Output Parameter:
 .  inside - array of results (1=inside, 0=on the contour, -1=outside)
 
-   Note:
-   The point a is expressed as a couple of PetscScalar variables ar,ai.
-   If built with complex scalars, the point is supposed to be stored in ar,
-   otherwise ar,ai contain the real and imaginary parts, respectively.
+   Notes:
+   The point `a` is expressed as a couple of `PetscScalar` variables `ar`, `ai`.
+   If built with complex scalars, the point is supposed to be stored in `ar`,
+   otherwise `ar`, `ai` contain the real and imaginary parts, respectively.
 
    If a scaling factor was set, the points are scaled before checking.
 
    Level: intermediate
 
-.seealso: `RGSetScale()`, `RGSetComplement()`
+.seealso: [](sec:rg), `RGSetScale()`, `RGSetComplement()`
 @*/
-PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,PetscInt *inside)
+PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar ar[],PetscScalar ai[],PetscInt inside[])
 {
   PetscReal      px,py;
   PetscInt       i;
@@ -446,10 +450,10 @@ PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,Pe
 
    Input Parameters:
 +  rg       - the region context
--  vertical - true if symmetry must be checked against the vertical axis
+-  vertical - `PETSC_TRUE` if symmetry must be checked against the vertical axis
 
    Output Parameter:
-.  symm - true if the region is axisymmetric
+.  symm - `PETSC_TRUE` if the region is axisymmetric
 
    Note:
    If the vertical argument is true, symmetry is checked with respect to
@@ -457,7 +461,7 @@ PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,Pe
 
    Level: intermediate
 
-.seealso: `RGCanUseConjugates()`
+.seealso: [](sec:rg), `RGCanUseConjugates()`
 @*/
 PetscErrorCode RGIsAxisymmetric(RG rg,PetscBool vertical,PetscBool *symm)
 {
@@ -478,7 +482,7 @@ PetscErrorCode RGIsAxisymmetric(RG rg,PetscBool vertical,PetscBool *symm)
 
    Input Parameters:
 +  rg       - the region context
--  realmats - true if the problem matrices are real
+-  realmats - `PETSC_TRUE` if the problem matrices are real
 
    Output Parameter:
 .  useconj  - whether it is possible to use conjugates
@@ -492,7 +496,7 @@ PetscErrorCode RGIsAxisymmetric(RG rg,PetscBool vertical,PetscBool *symm)
 
    Level: developer
 
-.seealso: `RGIsAxisymmetric()`
+.seealso: [](sec:rg), `RGIsAxisymmetric()`
 @*/
 PetscErrorCode RGCanUseConjugates(RG rg,PetscBool realmats,PetscBool *useconj)
 {
@@ -532,14 +536,14 @@ PetscErrorCode RGCanUseConjugates(RG rg,PetscBool realmats,PetscBool *useconj)
 +  cr - location to store real parts
 -  ci - location to store imaginary parts
 
-   Notes:
-   In real scalars, either cr or ci can be NULL (but not both). In complex
-   scalars, the coordinates are stored in cr, which cannot be NULL (ci is
+   Note:
+   In real scalars, either `cr` or `ci` can be `NULL` (but not both). In complex
+   scalars, the coordinates are stored in `cr`, which cannot be `NULL` (`ci` is
    not referenced).
 
    Level: intermediate
 
-.seealso: `RGComputeBoundingBox()`
+.seealso: [](sec:rg), `RGComputeBoundingBox()`, `RGSetScale()`
 @*/
 PetscErrorCode RGComputeContour(RG rg,PetscInt n,PetscScalar cr[],PetscScalar ci[])
 {
@@ -577,14 +581,14 @@ PetscErrorCode RGComputeContour(RG rg,PetscInt n,PetscScalar cr[],PetscScalar ci
 .  c - bottom endpoint of the bounding box in the imaginary axis
 -  d - top endpoint of the bounding box in the imaginary axis
 
-   Notes:
-   The bounding box is defined as [a,b]x[c,d]. In regions that are not bounded (e.g. an
+   Note:
+   The bounding box is defined as $[a,b]\times[c,d]$. In regions that are not bounded (e.g., an
    open interval) or with the complement flag set, it makes no sense to compute a bounding
    box, so the return values are infinite.
 
    Level: intermediate
 
-.seealso: `RGComputeContour()`
+.seealso: [](sec:rg), `RGComputeContour()`, `RGSetScale()`, `RGSetComplement()`
 @*/
 PetscErrorCode RGComputeBoundingBox(RG rg,PetscReal *a,PetscReal *b,PetscReal *c,PetscReal *d)
 {
@@ -624,16 +628,15 @@ PetscErrorCode RGComputeBoundingBox(RG rg,PetscReal *a,PetscReal *b,PetscReal *c
 -  w  - quadrature weights
 
    Notes:
-   In complex scalars, the values returned in z are often the same as those
-   computed by RGComputeContour(), but this is not the case in real scalars
+   In complex scalars, the values returned in `z` are often the same as those
+   computed by `RGComputeContour()`, but this is not the case in real scalars
    where all output arguments are real.
 
-   The computed values change for different quadrature rules (trapezoidal
-   or Chebyshev).
+   The computed values change for different quadrature rules.
 
-   Level: intermediate
+   Level: advanced
 
-.seealso: `RGComputeContour()`
+.seealso: [](sec:rg), `RGComputeContour()`
 @*/
 PetscErrorCode RGComputeQuadrature(RG rg,RGQuadRule quad,PetscInt n,PetscScalar z[],PetscScalar zn[],PetscScalar w[])
 {
@@ -660,11 +663,11 @@ PetscErrorCode RGComputeQuadrature(RG rg,RGQuadRule quad,PetscInt n,PetscScalar 
 -  flg - the boolean flag
 
    Options Database Key:
-.  -rg_complement <bool> - Activate/deactivate the complementation of the region
+.  -rg_complement \<flg\> - activate/deactivate complementing of the region
 
    Level: intermediate
 
-.seealso: `RGGetComplement()`
+.seealso: [](sec:rg), `RGGetComplement()`
 @*/
 PetscErrorCode RGSetComplement(RG rg,PetscBool flg)
 {
@@ -689,7 +692,7 @@ PetscErrorCode RGSetComplement(RG rg,PetscBool flg)
 
    Level: intermediate
 
-.seealso: `RGSetComplement()`
+.seealso: [](sec:rg), `RGSetComplement()`
 @*/
 PetscErrorCode RGGetComplement(RG rg,PetscBool *flg)
 {
@@ -711,11 +714,11 @@ PetscErrorCode RGGetComplement(RG rg,PetscBool *flg)
 -  sfactor - the scaling factor
 
    Options Database Key:
-.  -rg_scale <real> - Sets the scaling factor
+.  -rg_scale \<sfactor\> - sets the scaling factor
 
-   Level: advanced
+   Level: intermediate
 
-.seealso: `RGGetScale()`, `RGCheckInside()`
+.seealso: [](sec:rg), `RGGetScale()`, `RGCheckInside()`, `RGComputeContour()`
 @*/
 PetscErrorCode RGSetScale(RG rg,PetscReal sfactor)
 {
@@ -739,9 +742,9 @@ PetscErrorCode RGSetScale(RG rg,PetscReal sfactor)
    Output Parameter:
 .  sfactor - the scaling factor
 
-   Level: advanced
+   Level: intermediate
 
-.seealso: `RGSetScale()`
+.seealso: [](sec:rg), `RGSetScale()`
 @*/
 PetscErrorCode RGGetScale(RG rg,PetscReal *sfactor)
 {
@@ -770,7 +773,7 @@ PetscErrorCode RGGetScale(RG rg,PetscReal *sfactor)
 
    Level: developer
 
-.seealso: `RGPopScale()`, `RGSetScale()`
+.seealso: [](sec:rg), `RGPopScale()`, `RGSetScale()`
 @*/
 PetscErrorCode RGPushScale(RG rg,PetscReal sfactor)
 {
@@ -785,7 +788,7 @@ PetscErrorCode RGPushScale(RG rg,PetscReal sfactor)
 }
 
 /*@
-   RGPopScale - Pops the scaling factor set with RGPushScale().
+   RGPopScale - Pops the scaling factor set with `RGPushScale()`.
 
    Logically Collective
 
@@ -794,7 +797,7 @@ PetscErrorCode RGPushScale(RG rg,PetscReal sfactor)
 
    Level: developer
 
-.seealso: `RGPushScale()`
+.seealso: [](sec:rg), `RGPushScale()`
 @*/
 PetscErrorCode RGPopScale(RG rg)
 {
@@ -807,7 +810,7 @@ PetscErrorCode RGPopScale(RG rg)
 }
 
 /*@
-   RGDestroy - Destroys RG context that was created with RGCreate().
+   RGDestroy - Destroys `RG` context that was created with `RGCreate()`.
 
    Collective
 
@@ -816,7 +819,7 @@ PetscErrorCode RGPopScale(RG rg)
 
    Level: beginner
 
-.seealso: `RGCreate()`
+.seealso: [](sec:rg), `RGCreate()`
 @*/
 PetscErrorCode RGDestroy(RG *rg)
 {
@@ -830,7 +833,7 @@ PetscErrorCode RGDestroy(RG *rg)
 }
 
 /*@C
-   RGRegister - Adds a region to the RG package.
+   RGRegister - Adds a region to the `RG` package.
 
    Not Collective
 
@@ -838,12 +841,12 @@ PetscErrorCode RGDestroy(RG *rg)
 +  name - name of a new user-defined RG
 -  function - routine to create context
 
-   Notes:
-   RGRegister() may be called multiple times to add several user-defined regions.
+   Note:
+   `RGRegister()` may be called multiple times to add several user-defined regions.
 
    Level: advanced
 
-.seealso: `RGRegisterAll()`
+.seealso: [](sec:rg), `RGRegisterAll()`
 @*/
 PetscErrorCode RGRegister(const char *name,PetscErrorCode (*function)(RG))
 {

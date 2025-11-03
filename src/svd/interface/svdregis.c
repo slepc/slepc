@@ -30,13 +30,13 @@ SLEPC_EXTERN PetscErrorCode SVDCreate_PRIMME(SVD);
 #endif
 
 /*@C
-   SVDRegisterAll - Registers all the singular value solvers in the SVD package.
+   SVDRegisterAll - Registers all the singular value solvers in the `SVD` package.
 
    Not Collective
 
    Level: advanced
 
-.seealso: `SVDRegister()`
+.seealso: [](ch:svd), `SVDRegister()`
 @*/
 PetscErrorCode SVDRegisterAll(void)
 {
@@ -65,13 +65,13 @@ PetscErrorCode SVDRegisterAll(void)
 }
 
 /*@C
-  SVDMonitorRegisterAll - Registers all the monitors in the SVD package.
+  SVDMonitorRegisterAll - Registers all the monitors in the `SVD` package.
 
   Not Collective
 
   Level: advanced
 
-.seealso: `SVDMonitorRegister()`
+.seealso: [](ch:svd), `SVDMonitorRegister()`
 @*/
 PetscErrorCode SVDMonitorRegisterAll(void)
 {

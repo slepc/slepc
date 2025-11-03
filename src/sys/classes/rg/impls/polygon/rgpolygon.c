@@ -89,14 +89,14 @@ static PetscErrorCode RGPolygonSetVertices_Polygon(RG rg,PetscInt n,PetscScalar 
 -  vi - array of vertices (imaginary part)
 
    Options Database Keys:
-+  -rg_polygon_vertices - Sets the vertices
--  -rg_polygon_verticesi - Sets the vertices (imaginary part)
++  -rg_polygon_vertices - Comma-separated list of vertices
+-  -rg_polygon_verticesi - Comma-separated list of vertices (imaginary part)
 
    Notes:
-   In the case of complex scalars, only argument vr is used, containing
+   In the case of complex scalars, only argument `vr` is used, containing
    the complex vertices; the list of vertices can be provided in the
    command line with a comma-separated list of complex values
-   [+/-][realnumber][+/-]realnumberi with no spaces.
+   `[+/-][realnumber][+/-]realnumberi` with no spaces.
 
    When PETSc is built with real scalars, the real and imaginary parts of
    the vertices must be provided in two separate arrays (or two lists in
@@ -105,7 +105,7 @@ static PetscErrorCode RGPolygonSetVertices_Polygon(RG rg,PetscInt n,PetscScalar 
 
    Level: advanced
 
-.seealso: `RGPolygonGetVertices()`
+.seealso: [](sec:rg), `RGPOLYGON`, `RGPolygonGetVertices()`
 @*/
 PetscErrorCode RGPolygonSetVertices(RG rg,PetscInt n,PetscScalar vr[],PetscScalar vi[])
 {
@@ -160,13 +160,13 @@ static PetscErrorCode RGPolygonGetVertices_Polygon(RG rg,PetscInt *n,PetscScalar
 -  vi - array of vertices (imaginary part)
 
    Notes:
-   The values passed by user with RGPolygonSetVertices() are returned (or null
+   The values passed by user with `RGPolygonSetVertices()` are returned (or `NULL`
    pointers otherwise).
    The returned arrays should be freed by the user when no longer needed.
 
    Level: advanced
 
-.seealso: `RGPolygonSetVertices()`
+.seealso: [](sec:rg), `RGPOLYGON`, `RGPolygonSetVertices()`
 @*/
 PetscErrorCode RGPolygonGetVertices(RG rg,PetscInt *n,PetscScalar *vr[],PetscScalar *vi[]) PeNS
 {
@@ -439,6 +439,20 @@ static PetscErrorCode RGDestroy_Polygon(RG rg)
   PetscCall(PetscObjectComposeFunction((PetscObject)rg,"RGPolygonGetVertices_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
+
+/*MC
+   RGPOLYGON - RGPOLYGON = "polygon" - A polygonal region defined by its
+   vertices, given via `RGPolygonSetVertices()`.
+
+   Note:
+   The following figure shows an example of a polygonal region.
+
+   ![Polygonal region](../../_static/images/manual/svg/fig-rg-polygon.svg)
+
+   Level: beginner
+
+.seealso: [](sec:rg), `RG`, `RGType`, `RGSetType()`, `RGPolygonSetVertices()`
+M*/
 
 SLEPC_EXTERN PetscErrorCode RGCreate_Polygon(RG rg)
 {

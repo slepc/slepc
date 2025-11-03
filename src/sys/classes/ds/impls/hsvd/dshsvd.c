@@ -498,7 +498,7 @@ static PetscErrorCode DSHSVDSetDimensions_HSVD(DS ds,PetscInt m)
 }
 
 /*@
-   DSHSVDSetDimensions - Sets the number of columns for a DSHSVD.
+   DSHSVDSetDimensions - Sets the number of columns for a `DSHSVD`.
 
    Logically Collective
 
@@ -507,12 +507,12 @@ static PetscErrorCode DSHSVDSetDimensions_HSVD(DS ds,PetscInt m)
 -  m  - the number of columns
 
    Notes:
-   This call is complementary to DSSetDimensions(), to provide a dimension
-   that is specific to this DS type.
+   This call is complementary to `DSSetDimensions()`, to provide a dimension
+   that is specific to this `DS` type.
 
    Level: intermediate
 
-.seealso: `DSHSVDGetDimensions()`, `DSSetDimensions()`
+.seealso: [](sec:ds), `DSHSVD`, `DSHSVDGetDimensions()`, `DSSetDimensions()`
 @*/
 PetscErrorCode DSHSVDSetDimensions(DS ds,PetscInt m)
 {
@@ -533,19 +533,19 @@ static PetscErrorCode DSHSVDGetDimensions_HSVD(DS ds,PetscInt *m)
 }
 
 /*@
-   DSHSVDGetDimensions - Returns the number of columns for a DSHSVD.
+   DSHSVDGetDimensions - Returns the number of columns for a `DSHSVD`.
 
    Not Collective
 
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  m - the number of columns
 
    Level: intermediate
 
-.seealso: `DSHSVDSetDimensions()`
+.seealso: [](sec:ds), `DSHSVD`, `DSHSVDSetDimensions()`
 @*/
 PetscErrorCode DSHSVDGetDimensions(DS ds,PetscInt *m)
 {
@@ -566,7 +566,7 @@ static PetscErrorCode DSHSVDSetReorthogonalize_HSVD(DS ds,PetscBool reorth)
 }
 
 /*@
-   DSHSVDSetReorthogonalize - Sets the reorthogonalization of the left vectors in a DSHSVD.
+   DSHSVDSetReorthogonalize - Sets the reorthogonalization of the left vectors in a `DSHSVD`.
 
    Logically Collective
 
@@ -575,16 +575,16 @@ static PetscErrorCode DSHSVDSetReorthogonalize_HSVD(DS ds,PetscBool reorth)
 -  reorth - the reorthogonalization flag
 
    Options Database Key:
-.  -ds_hsvd_reorthog <bool> - sets the reorthogonalization flag
+.  -ds_hsvd_reorthog \<reorth\> - sets the reorthogonalization flag
 
    Note:
-   The computed left vectors (U) should be orthogonal with respect to the signature (D).
+   The computed left vectors (`U`) should be orthogonal with respect to the signature (`D`).
    But it may be necessary to enforce this with a final reorthogonalization step (omitted
    by default).
 
    Level: intermediate
 
-.seealso: `DSHSVDGetReorthogonalize()`
+.seealso: [](sec:ds), `DSHSVD`, `DSHSVDGetReorthogonalize()`
 @*/
 PetscErrorCode DSHSVDSetReorthogonalize(DS ds,PetscBool reorth)
 {
@@ -605,19 +605,19 @@ static PetscErrorCode DSHSVDGetReorthogonalize_HSVD(DS ds,PetscBool *reorth)
 }
 
 /*@
-   DSHSVDGetReorthogonalize - Returns the reorthogonalization flag of a DSHSVD.
+   DSHSVDGetReorthogonalize - Returns the reorthogonalization flag of a `DSHSVD`.
 
    Not Collective
 
    Input Parameter:
 .  ds - the direct solver context
 
-   Output Parameters:
+   Output Parameter:
 .  reorth - the reorthogonalization flag
 
    Level: intermediate
 
-.seealso: `DSHSVDSetReorthogonalize()`
+.seealso: [](sec:ds), `DSHSVD`, `DSHSVDSetReorthogonalize()`
 @*/
 PetscErrorCode DSHSVDGetReorthogonalize(DS ds,PetscBool *reorth)
 {
@@ -685,34 +685,34 @@ static PetscErrorCode DSReallocate_HSVD(DS ds,PetscInt ld)
 /*MC
    DSHSVD - Dense Hyperbolic Singular Value Decomposition.
 
-   Level: beginner
-
    Notes:
-   The problem is expressed as A = U*Sigma*V', where A is rectangular in
-   general, with n rows and m columns. U is orthogonal with respect to a
-   signature matrix, stored in D. V is orthogonal. Sigma is a diagonal
-   matrix whose diagonal elements are the arguments of DSSolve(). After
-   solve, A is overwritten with Sigma, D is overwritten with the new signature.
+   The problem is expressed as $A = U\Sigma V^*$, where $A$ is rectangular in
+   general, with $n$ rows and $m$ columns. $U$ is orthogonal with respect to a
+   signature matrix $\Omega$, stored in $D$, $V$ is orthogonal, $\Sigma$ is a diagonal
+   matrix whose diagonal elements are the arguments of `DSSolve()`. After
+   solve, $A$ is overwritten with $\Sigma$, $D$ is overwritten with the new signature.
 
-   The matrices of left and right singular vectors, U and V, have size n and m,
-   respectively. The number of columns m must be specified via DSHSVDSetDimensions().
+   The matrices of left and right singular vectors, $U$ and $V$, have size $n$ and $m$,
+   respectively. The number of columns m must be specified via `DSHSVDSetDimensions()`.
 
-   If the DS object is in the intermediate state, A is assumed to be in upper
+   If the `DS` object is in the intermediate state, $A$ is assumed to be in upper
    bidiagonal form (possibly with an arrow) and is stored in compact format
-   on matrix T. The compact storage is implemented for the square case
-   only, m=n. The extra row should be interpreted in this case as an extra column.
+   on matrix $T$. The compact storage is implemented for the square case
+   only, $m=n$. The extra row should be interpreted in this case as an extra column.
 
    Used DS matrices:
-+  DS_MAT_A - problem matrix (used only if compact=false)
-.  DS_MAT_T - upper bidiagonal matrix
-.  DS_MAT_D - diagonal matrix (signature)
-.  DS_MAT_U - left singular vectors
--  DS_MAT_V - right singular vectors
++  `DS_MAT_A` - problem matrix (used only if `compact=PETSC_FALSE`)
+.  `DS_MAT_T` - upper bidiagonal matrix
+.  `DS_MAT_D` - diagonal matrix (signature)
+.  `DS_MAT_U` - left singular vectors
+-  `DS_MAT_V` - right singular vectors
 
    Implemented methods:
-.  0 - Cross product A'*Omega*A
+.  0 - Cross product $A^*\Omega A$
 
-.seealso: `DSCreate()`, `DSSetType()`, `DSType`, `DSHSVDSetDimensions()`
+   Level: beginner
+
+.seealso: [](sec:ds), `DSCreate()`, `DSSetType()`, `DSType`, `DSHSVDSetDimensions()`, `DSSetCompact()`
 M*/
 SLEPC_EXTERN PetscErrorCode DSCreate_HSVD(DS ds)
 {

@@ -30,28 +30,28 @@
 -  breakdown - (optional) flag indicating that breakdown occurred
 
    Notes:
-   Computes an m-step Arnoldi factorization for matrix A. The first k columns
+   Computes an `m`-step Arnoldi factorization for matrix `A`. The first `k` columns
    are assumed to be locked and therefore they are not modified. On exit, the
    following relation is satisfied
 
-$                    A * V - V * H = beta*v_m * e_m^T
+                  $$ A V - V H = \beta v_m e_m^* $$
 
-   where the columns of V are the Arnoldi vectors (which are orthonormal), H is
-   an upper Hessenberg matrix, e_m is the m-th vector of the canonical basis.
-   On exit, beta contains the norm of V[m] before normalization.
+   where the columns of $V$ are the Arnoldi vectors (which are orthonormal), $H$ is
+   an upper Hessenberg matrix, $e_m$ is the $m$-th vector of the canonical basis.
+   On exit, `beta` contains the norm of $v_m$ before normalization.
 
    The breakdown flag indicates that orthogonalization failed, see
-   BVOrthonormalizeColumn(). In that case, on exit m contains the index of
+   `BVOrthonormalizeColumn()`. In that case, on exit `m` contains the index of
    the column that failed.
 
-   The values of k and m are not restricted to the active columns of V.
+   The values of `k` and `m` are not restricted to the active columns of `V`.
 
-   To create an Arnoldi factorization from scratch, set k=0 and make sure the
+   To create an Arnoldi factorization from scratch, set `k=0` and make sure the
    first column contains the normalized initial vector.
 
    Level: advanced
 
-.seealso: `BVMatLanczos()`, `BVSetActiveColumns()`, `BVOrthonormalizeColumn()`
+.seealso: [](sec:bv), `BVMatLanczos()`, `BVSetActiveColumns()`, `BVOrthonormalizeColumn()`
 @*/
 PetscErrorCode BVMatArnoldi(BV V,Mat A,Mat H,PetscInt k,PetscInt *m,PetscReal *beta,PetscBool *breakdown)
 {
@@ -129,38 +129,38 @@ PetscErrorCode BVMatArnoldi(BV V,Mat A,Mat H,PetscInt k,PetscInt *m,PetscReal *b
 -  breakdown - (optional) flag indicating that breakdown occurred
 
    Notes:
-   Computes an m-step Lanczos factorization for matrix A, with full
+   Computes an `m`-step Lanczos factorization for matrix `A`, with full
    reorthogonalization. At each Lanczos step, the corresponding Lanczos
    vector is orthogonalized with respect to all previous Lanczos vectors.
-   This is equivalent to computing an m-step Arnoldi factorization and
+   This is equivalent to computing an `m`-step Arnoldi factorization and
    exploting symmetry of the operator.
 
-   The first k columns are assumed to be locked and therefore they are
+   The first `k` columns are assumed to be locked and therefore they are
    not modified. On exit, the following relation is satisfied
 
-$                    A * V - V * T = beta*v_m * e_m^T
+                  $$ A V - V T = \beta v_m e_m^* $$
 
-   where the columns of V are the Lanczos vectors (which are B-orthonormal),
-   T is a real symmetric tridiagonal matrix, and e_m is the m-th vector of
-   the canonical basis. On exit, beta contains the B-norm of V[m] before
-   normalization. The T matrix is stored in a special way, its first column
+   where the columns of $V$ are the Lanczos vectors (which are $B$-orthonormal),
+   $T$ is a real symmetric tridiagonal matrix, and $e_m$ is the $m$-th vector of
+   the canonical basis. On exit, `beta` contains the $B$-norm of $v_m$ before
+   normalization. The $T$ matrix is stored in a special way, its first column
    contains the diagonal elements, and its second column the off-diagonal
-   ones. In complex scalars, the elements are stored as PetscReal and thus
+   ones. In complex scalars, the elements are stored as `PetscReal` and thus
    occupy only the first column of the Mat object. This is the same storage
-   scheme used in matrix DS_MAT_T obtained with DSGetMat().
+   scheme used in matrix `DS_MAT_T` obtained with `DSGetMat()`.
 
    The breakdown flag indicates that orthogonalization failed, see
-   BVOrthonormalizeColumn(). In that case, on exit m contains the index of
+   `BVOrthonormalizeColumn()`. In that case, on exit `m` contains the index of
    the column that failed.
 
-   The values of k and m are not restricted to the active columns of V.
+   The values of `k` and `m` are not restricted to the active columns of `V`.
 
-   To create a Lanczos factorization from scratch, set k=0 and make sure the
+   To create a Lanczos factorization from scratch, set `k=0` and make sure the
    first column contains the normalized initial vector.
 
    Level: advanced
 
-.seealso: `BVMatArnoldi()`, `BVSetActiveColumns()`, `BVOrthonormalizeColumn()`, `DSGetMat()`
+.seealso: [](sec:bv), `BVMatArnoldi()`, `BVSetActiveColumns()`, `BVOrthonormalizeColumn()`, `DSGetMat()`
 @*/
 PetscErrorCode BVMatLanczos(BV V,Mat A,Mat T,PetscInt k,PetscInt *m,PetscReal *beta,PetscBool *breakdown)
 {

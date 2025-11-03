@@ -416,15 +416,15 @@ static PetscErrorCode EPSLOBPCGSetBlockSize_LOBPCG(EPS eps,PetscInt bs)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  bs  - the block size
 
    Options Database Key:
-.  -eps_lobpcg_blocksize - Sets the block size
+.  -eps_lobpcg_blocksize - sets the block size
 
    Level: advanced
 
-.seealso: `EPSLOBPCGGetBlockSize()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGGetBlockSize()`
 @*/
 PetscErrorCode EPSLOBPCGSetBlockSize(EPS eps,PetscInt bs)
 {
@@ -450,14 +450,14 @@ static PetscErrorCode EPSLOBPCGGetBlockSize_LOBPCG(EPS eps,PetscInt *bs)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  bs - the block size
 
    Level: advanced
 
-.seealso: `EPSLOBPCGSetBlockSize()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGSetBlockSize()`
 @*/
 PetscErrorCode EPSLOBPCGGetBlockSize(EPS eps,PetscInt *bs)
 {
@@ -488,11 +488,11 @@ static PetscErrorCode EPSLOBPCGSetRestart_LOBPCG(EPS eps,PetscReal restart)
    Logically Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  restart - the percentage of the block of vectors to force a restart
 
    Options Database Key:
-.  -eps_lobpcg_restart - Sets the restart parameter
+.  -eps_lobpcg_restart - sets the restart parameter
 
    Notes:
    The meaning of this parameter is the proportion of vectors within the
@@ -502,7 +502,7 @@ static PetscErrorCode EPSLOBPCGSetRestart_LOBPCG(EPS eps,PetscReal restart)
 
    Level: advanced
 
-.seealso: `EPSLOBPCGGetRestart()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGGetRestart()`
 @*/
 PetscErrorCode EPSLOBPCGSetRestart(EPS eps,PetscReal restart)
 {
@@ -528,14 +528,14 @@ static PetscErrorCode EPSLOBPCGGetRestart_LOBPCG(EPS eps,PetscReal *restart)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  restart - the restart parameter
 
    Level: advanced
 
-.seealso: `EPSLOBPCGSetRestart()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGSetRestart()`
 @*/
 PetscErrorCode EPSLOBPCGGetRestart(EPS eps,PetscReal *restart)
 {
@@ -562,20 +562,20 @@ static PetscErrorCode EPSLOBPCGSetLocking_LOBPCG(EPS eps,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigenproblem solver context
++  eps  - the linear eigensolver context
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
-.  -eps_lobpcg_locking - Sets the locking flag
+.  -eps_lobpcg_locking - sets the locking flag
 
    Notes:
    This flag refers to soft locking (converged vectors within the current
-   block iterate), since hard locking is always used (when nev is larger
+   block iterate), since hard locking is always used (when `nev` is larger
    than the block size).
 
    Level: advanced
 
-.seealso: `EPSLOBPCGGetLocking()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGGetLocking()`
 @*/
 PetscErrorCode EPSLOBPCGSetLocking(EPS eps,PetscBool lock)
 {
@@ -601,14 +601,14 @@ static PetscErrorCode EPSLOBPCGGetLocking_LOBPCG(EPS eps,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `EPSLOBPCGSetLocking()`
+.seealso: [](ch:eps), `EPSLOBPCG`, `EPSLOBPCGSetLocking()`
 @*/
 PetscErrorCode EPSLOBPCGGetLocking(EPS eps,PetscBool *lock)
 {
@@ -669,6 +669,26 @@ static PetscErrorCode EPSDestroy_LOBPCG(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   EPSLOBPCG - EPSLOBPCG = "lobpcg" - The Locally Optimal Block Preconditioned
+   Conjugate Gradient method.
+
+   Notes:
+   This is a preconditioned eigensolver, that is, a preconditioner can
+   be used to accelerate convergence, but as opposed to Davidson methods
+   it is intended for computing leftmost eigenvalues of Hermitian
+   problems, and not interior eigenvalues.
+
+   The implemented method is LOBPCG {cite:p}`Kny01`. Note that SLEPc
+   provides another implementation of LOBPCG via BLOPEX, see `EPSBLOPEX`.
+
+   The preconditioner is specified via the internal `ST` object and its
+   associated `KSP`.
+
+   Level: beginner
+
+.seealso: [](ch:eps), `EPS`, `EPSType`, `EPSSetType()`, `EPSGetST()`, `EPSBLOPEX`
+M*/
 SLEPC_EXTERN PetscErrorCode EPSCreate_LOBPCG(EPS eps)
 {
   EPS_LOBPCG     *lobpcg;

@@ -28,7 +28,7 @@ PetscFunctionList EPSMonitorDestroyList       = NULL;
 PetscBool         EPSMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   EPSCreate - Creates the default EPS context.
+   EPSCreate - Creates the `EPS` context.
 
    Collective
 
@@ -36,14 +36,14 @@ PetscBool         EPSMonitorRegisterAllCalled = PETSC_FALSE;
 .  comm - MPI communicator
 
    Output Parameter:
-.  outeps - location to put the EPS context
+.  outeps - location to put the `EPS` context
 
    Note:
-   The default EPS type is EPSKRYLOVSCHUR
+   The default `EPS` type is `EPSKRYLOVSCHUR`.
 
    Level: beginner
 
-.seealso: `EPSSetUp()`, `EPSSolve()`, `EPSDestroy()`, `EPS`
+.seealso: [](ch:eps), `EPSSetUp()`, `EPSSolve()`, `EPSDestroy()`, `EPS`
 @*/
 PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
 {
@@ -130,33 +130,32 @@ PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
 }
 
 /*@
-   EPSSetType - Selects the particular solver to be used in the EPS object.
+   EPSSetType - Selects the particular solver to be used in the `EPS` object.
 
    Logically Collective
 
    Input Parameters:
-+  eps  - the eigensolver context
++  eps  - the linear eigensolver context
 -  type - a known method
 
    Options Database Key:
-.  -eps_type <method> - Sets the method; use -help for a list
+.  -eps_type \<type\> - sets the method; use `-help` for a list
     of available methods
 
    Notes:
-   See "slepc/include/slepceps.h" for available methods. The default
-   is EPSKRYLOVSCHUR.
+   See `EPSType` for available methods. The default is `EPSKRYLOVSCHUR`.
 
-   Normally, it is best to use the EPSSetFromOptions() command and
-   then set the EPS type from the options database rather than by using
+   Normally, it is best to use the `EPSSetFromOptions()` command and
+   then set the `EPS` type from the options database rather than by using
    this routine.  Using the options database provides the user with
    maximum flexibility in evaluating the different available methods.
-   The EPSSetType() routine is provided for those situations where it
+   The `EPSSetType()` routine is provided for those situations where it
    is necessary to set the iterative solver independently of the command
    line or options database.
 
    Level: intermediate
 
-.seealso: `STSetType()`, `EPSType`
+.seealso: [](ch:eps), `STSetType()`, `EPSType`
 @*/
 PetscErrorCode EPSSetType(EPS eps,EPSType type)
 {
@@ -183,19 +182,19 @@ PetscErrorCode EPSSetType(EPS eps,EPSType type)
 }
 
 /*@
-   EPSGetType - Gets the EPS type as a string from the EPS object.
+   EPSGetType - Gets the `EPS` type as a string from the `EPS` object.
 
    Not Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  type - name of EPS method
+.  type - name of `EPS` method
 
    Level: intermediate
 
-.seealso: `EPSSetType()`
+.seealso: [](ch:eps), `EPSSetType()`
 @*/
 PetscErrorCode EPSGetType(EPS eps,EPSType *type)
 {
@@ -215,22 +214,23 @@ PetscErrorCode EPSGetType(EPS eps,EPSType *type)
 +  name - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
-   EPSRegister() may be called multiple times to add several user-defined solvers.
+   Note:
+   `EPSRegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    EPSRegister("my_solver",MySolverCreate);
+   EPSRegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
-$     EPSSetType(eps,"my_solver")
-   or at runtime via the option
-$     -eps_type my_solver
+.vb
+   EPSSetType(eps,"my_solver")
+.ve
+   or at runtime via the option `-eps_type my_solver`.
 
    Level: advanced
 
-.seealso: `EPSRegisterAll()`
+.seealso: [](ch:eps), `EPSRegisterAll()`
 @*/
 PetscErrorCode EPSRegister(const char *name,PetscErrorCode (*function)(EPS))
 {
@@ -241,24 +241,25 @@ PetscErrorCode EPSRegister(const char *name,PetscErrorCode (*function)(EPS))
 }
 
 /*@C
-   EPSMonitorRegister - Registers an EPS monitor routine that may be accessed with EPSMonitorSetFromOptions().
+   EPSMonitorRegister - Registers an `EPS` monitor routine that may be accessed with
+   `EPSMonitorSetFromOptions()`.
 
    Not Collective
 
    Input Parameters:
 +  name    - name of a new monitor routine
-.  vtype   - a PetscViewerType for the output
-.  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine, see EPSMonitorRegisterFn
-.  create  - creation routine, or NULL
--  destroy - destruction routine, or NULL
+.  vtype   - a `PetscViewerType` for the output
+.  format  - a `PetscViewerFormat` for the output
+.  monitor - monitor routine, see `EPSMonitorRegisterFn`
+.  create  - creation routine, or `NULL`
+-  destroy - destruction routine, or `NULL`
 
    Notes:
-   EPSMonitorRegister() may be called multiple times to add several user-defined monitors.
+   `EPSMonitorRegister()` may be called multiple times to add several user-defined monitors.
 
-   The calling sequence for the given function matches the calling sequence of EPSMonitorFn
-   functions passed to EPSMonitorSet() with the additional requirement that its final argument
-   be a PetscViewerAndFormat.
+   The calling sequence for the given function matches the calling sequence of `EPSMonitorFn`
+   functions passed to `EPSMonitorSet()` with the additional requirement that its final argument
+   be a `PetscViewerAndFormat`.
 
    Example Usage:
 .vb
@@ -266,13 +267,14 @@ PetscErrorCode EPSRegister(const char *name,PetscErrorCode (*function)(EPS))
 .ve
 
    Then, your monitor can be chosen with the procedural interface via
-$      EPSMonitorSetFromOptions(eps,"-eps_monitor_my_monitor","my_monitor",NULL)
-   or at runtime via the option
-$      -eps_monitor_my_monitor
+.vb
+   EPSMonitorSetFromOptions(eps,"-eps_monitor_my_monitor","my_monitor",NULL)
+.ve
+   or at runtime via the option `-eps_monitor_my_monitor`.
 
    Level: advanced
 
-.seealso: `EPSMonitorSet()`, `EPSMonitorRegisterAll()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorRegisterAll()`, `EPSMonitorSetFromOptions()`
 @*/
 PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,EPSMonitorRegisterFn *monitor,EPSMonitorRegisterCreateFn *create,EPSMonitorRegisterDestroyFn *destroy)
 {
@@ -288,13 +290,13 @@ PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 }
 
 /*@
-   EPSReset - Resets the EPS context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   EPSReset - Resets the `EPS` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 
    Input Parameter:
-.  eps - eigensolver context obtained from EPSCreate()
+.  eps - the linear eigensolver context
 
    Note:
    This can be used when a problem of different matrix size wants to be solved.
@@ -304,7 +306,7 @@ PetscErrorCode EPSMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 
    Level: advanced
 
-.seealso: `EPSDestroy()`
+.seealso: [](ch:eps), `EPSDestroy()`
 @*/
 PetscErrorCode EPSReset(EPS eps)
 {
@@ -323,16 +325,16 @@ PetscErrorCode EPSReset(EPS eps)
 }
 
 /*@
-   EPSDestroy - Destroys the EPS context.
+   EPSDestroy - Destroys the `EPS` context.
 
    Collective
 
    Input Parameter:
-.  eps - eigensolver context obtained from EPSCreate()
+.  eps - the linear eigensolver context
 
    Level: beginner
 
-.seealso: `EPSCreate()`, `EPSSetUp()`, `EPSSolve()`
+.seealso: [](ch:eps), `EPSCreate()`, `EPSSetUp()`, `EPSSolve()`
 @*/
 PetscErrorCode EPSDestroy(EPS *eps)
 {
@@ -365,23 +367,26 @@ PetscErrorCode EPSDestroy(EPS *eps)
    Logically Collective
 
    Input Parameters:
-+  eps    - eigensolver context
++  eps    - the linear eigensolver context
 -  target - the value of the target
 
    Options Database Key:
-.  -eps_target <scalar> - the value of the target
+.  -eps_target \<target\> - the value of the target
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum
-   of interest. It is used in combination with EPSSetWhichEigenpairs().
+   of interest. It is used in combination with `EPSSetWhichEigenpairs()`.
+
+   When PETSc is built with real scalars, it is not possible to specify a
+   complex target.
 
    In the case of complex scalars, a complex value can be provided in the
-   command line with [+/-][realnumber][+/-]realnumberi with no spaces, e.g.
-   -eps_target 1.0+2.0i
+   command line with `[+/-][realnumber][+/-]realnumberi` with no spaces, e.g.
+   `-eps_target 1.0+2.0i`.
 
    Level: intermediate
 
-.seealso: `EPSGetTarget()`, `EPSSetWhichEigenpairs()`
+.seealso: [](ch:eps), `EPSGetTarget()`, `EPSSetWhichEigenpairs()`
 @*/
 PetscErrorCode EPSSetTarget(EPS eps,PetscScalar target)
 {
@@ -400,7 +405,7 @@ PetscErrorCode EPSSetTarget(EPS eps,PetscScalar target)
    Not Collective
 
    Input Parameter:
-.  eps - eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  target - the value of the target
@@ -410,7 +415,7 @@ PetscErrorCode EPSSetTarget(EPS eps,PetscScalar target)
 
    Level: intermediate
 
-.seealso: `EPSSetTarget()`
+.seealso: [](ch:eps), `EPSSetTarget()`
 @*/
 PetscErrorCode EPSGetTarget(EPS eps,PetscScalar* target)
 {
@@ -427,27 +432,30 @@ PetscErrorCode EPSGetTarget(EPS eps,PetscScalar* target)
    Logically Collective
 
    Input Parameters:
-+  eps  - eigensolver context
++  eps  - the linear eigensolver context
 .  inta - left end of the interval
 -  intb - right end of the interval
 
    Options Database Key:
-.  -eps_interval <a,b> - set [a,b] as the interval of interest
+.  -eps_interval <a,b> - set $[a,b]$ as the interval of interest
 
    Notes:
    Spectrum slicing is a technique employed for computing all eigenvalues of
-   symmetric eigenproblems in a given interval. This function provides the
-   interval to be considered. It must be used in combination with EPS_ALL, see
-   EPSSetWhichEigenpairs().
+   symmetric eigenproblems in a given interval, see section [](#sec:slice).
+   This function provides the interval to be considered. It must be used in
+   combination with `EPS_ALL`, see `EPSSetWhichEigenpairs()`.
+
+   A computational interval is also needed when using polynomial filters,
+   see `STFILTER` and section [](#sec:filter).
 
    In the command-line option, two values must be provided. For an open interval,
-   one can give an infinite, e.g., -eps_interval 1.0,inf or -eps_interval -inf,1.0.
+   one can give an infinite, e.g., `-eps_interval 1.0,inf` or `-eps_interval -inf,1.0`.
    An open interval in the programmatic interface can be specified with
-   PETSC_MAX_REAL and -PETSC_MAX_REAL.
+   `PETSC_MAX_REAL` and -`PETSC_MAX_REAL`.
 
    Level: intermediate
 
-.seealso: `EPSGetInterval()`, `EPSSetWhichEigenpairs()`
+.seealso: [](ch:eps), [](#sec:slice), [](#sec:filter), `EPSGetInterval()`, `EPSSetWhichEigenpairs()`, `STFILTER`
 @*/
 PetscErrorCode EPSSetInterval(EPS eps,PetscReal inta,PetscReal intb)
 {
@@ -470,7 +478,7 @@ PetscErrorCode EPSSetInterval(EPS eps,PetscReal inta,PetscReal intb)
    Not Collective
 
    Input Parameter:
-.  eps - eigensolver context
+.  eps - the linear eigensolver context
 
    Output Parameters:
 +  inta - left end of the interval
@@ -481,7 +489,7 @@ PetscErrorCode EPSSetInterval(EPS eps,PetscReal inta,PetscReal intb)
    Note:
    If the interval was not set by the user, then zeros are returned.
 
-.seealso: `EPSSetInterval()`
+.seealso: [](ch:eps), `EPSSetInterval()`
 @*/
 PetscErrorCode EPSGetInterval(EPS eps,PetscReal* inta,PetscReal* intb)
 {
@@ -498,16 +506,16 @@ PetscErrorCode EPSGetInterval(EPS eps,PetscReal* inta,PetscReal* intb)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context obtained from EPSCreate()
++  eps - the linear eigensolver context
 -  st   - the spectral transformation object
 
    Note:
-   Use EPSGetST() to retrieve the spectral transformation context (for example,
-   to free it at the end of the computations).
+   Use `EPSGetST()` to retrieve the spectral transformation context at a later time
+   (for example, to free it at the end of the computations).
 
    Level: advanced
 
-.seealso: `EPSGetST()`
+.seealso: [](ch:eps), `EPSGetST()`
 @*/
 PetscErrorCode EPSSetST(EPS eps,ST st)
 {
@@ -522,20 +530,20 @@ PetscErrorCode EPSSetST(EPS eps,ST st)
 }
 
 /*@
-   EPSGetST - Obtain the spectral transformation (ST) object associated
+   EPSGetST - Obtain the spectral transformation (`ST`) object associated
    to the eigensolver object.
 
    Not Collective
 
-   Input Parameters:
-.  eps - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  st - spectral transformation context
 
    Level: intermediate
 
-.seealso: `EPSSetST()`
+.seealso: [](ch:eps), `EPSSetST()`
 @*/
 PetscErrorCode EPSGetST(EPS eps,ST *st)
 {
@@ -557,12 +565,12 @@ PetscErrorCode EPSGetST(EPS eps,ST *st)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context obtained from EPSCreate()
++  eps - the linear eigensolver context
 -  V   - the basis vectors object
 
    Level: advanced
 
-.seealso: `EPSGetBV()`
+.seealso: [](ch:eps), `EPSGetBV()`
 @*/
 PetscErrorCode EPSSetBV(EPS eps,BV V)
 {
@@ -581,15 +589,15 @@ PetscErrorCode EPSSetBV(EPS eps,BV V)
 
    Not Collective
 
-   Input Parameters:
-.  eps - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  V - basis vectors context
 
    Level: advanced
 
-.seealso: `EPSSetBV()`
+.seealso: [](ch:eps), `EPSSetBV()`
 @*/
 PetscErrorCode EPSGetBV(EPS eps,BV *V)
 {
@@ -611,16 +619,16 @@ PetscErrorCode EPSGetBV(EPS eps,BV *V)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context obtained from EPSCreate()
++  eps - the linear eigensolver context
 -  rg  - the region object
 
    Note:
-   Use EPSGetRG() to retrieve the region context (for example,
+   Use `EPSGetRG()` to retrieve the region context at a later time (for example,
    to free it at the end of the computations).
 
    Level: advanced
 
-.seealso: `EPSGetRG()`
+.seealso: [](ch:eps), `EPSGetRG()`
 @*/
 PetscErrorCode EPSSetRG(EPS eps,RG rg)
 {
@@ -641,15 +649,15 @@ PetscErrorCode EPSSetRG(EPS eps,RG rg)
 
    Not Collective
 
-   Input Parameters:
-.  eps - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  rg - region context
 
    Level: advanced
 
-.seealso: `EPSSetRG()`
+.seealso: [](ch:eps), `EPSSetRG()`
 @*/
 PetscErrorCode EPSGetRG(EPS eps,RG *rg)
 {
@@ -671,16 +679,16 @@ PetscErrorCode EPSGetRG(EPS eps,RG *rg)
    Collective
 
    Input Parameters:
-+  eps - eigensolver context obtained from EPSCreate()
++  eps - the linear eigensolver context
 -  ds  - the direct solver object
 
    Note:
-   Use EPSGetDS() to retrieve the direct solver context (for example,
+   Use `EPSGetDS()` to retrieve the direct solver context at a later time (for example,
    to free it at the end of the computations).
 
    Level: advanced
 
-.seealso: `EPSGetDS()`
+.seealso: [](ch:eps), `EPSGetDS()`
 @*/
 PetscErrorCode EPSSetDS(EPS eps,DS ds)
 {
@@ -699,15 +707,15 @@ PetscErrorCode EPSSetDS(EPS eps,DS ds)
 
    Not Collective
 
-   Input Parameters:
-.  eps - eigensolver context obtained from EPSCreate()
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Output Parameter:
 .  ds - direct solver context
 
    Level: advanced
 
-.seealso: `EPSSetDS()`
+.seealso: [](ch:eps), `EPSSetDS()`
 @*/
 PetscErrorCode EPSGetDS(EPS eps,DS *ds)
 {
@@ -724,20 +732,20 @@ PetscErrorCode EPSGetDS(EPS eps,DS *ds)
 }
 
 /*@
-   EPSIsGeneralized - Ask if the EPS object corresponds to a generalized
+   EPSIsGeneralized - Ask if the `EPS` object corresponds to a generalized
    eigenvalue problem.
 
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is generalized
 
    Level: intermediate
 
-.seealso: `EPSIsHermitian()`, `EPSIsPositive()`, `EPSIsStructured()`
+.seealso: [](ch:eps), `EPSIsHermitian()`, `EPSIsPositive()`, `EPSIsStructured()`
 @*/
 PetscErrorCode EPSIsGeneralized(EPS eps,PetscBool* is)
 {
@@ -749,20 +757,20 @@ PetscErrorCode EPSIsGeneralized(EPS eps,PetscBool* is)
 }
 
 /*@
-   EPSIsHermitian - Ask if the EPS object corresponds to a Hermitian
+   EPSIsHermitian - Ask if the `EPS` object corresponds to a Hermitian
    eigenvalue problem.
 
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is Hermitian
 
    Level: intermediate
 
-.seealso: `EPSIsGeneralized()`, `EPSIsPositive()`, `EPSIsStructured()`
+.seealso: [](ch:eps), `EPSIsGeneralized()`, `EPSIsPositive()`, `EPSIsStructured()`
 @*/
 PetscErrorCode EPSIsHermitian(EPS eps,PetscBool* is)
 {
@@ -774,20 +782,20 @@ PetscErrorCode EPSIsHermitian(EPS eps,PetscBool* is)
 }
 
 /*@
-   EPSIsPositive - Ask if the EPS object corresponds to an eigenvalue
-   problem type that requires a positive (semi-) definite matrix B.
+   EPSIsPositive - Ask if the `EPS` object corresponds to an eigenvalue
+   problem type that requires a positive (semi-) definite matrix $B$.
 
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is positive (semi-) definite
 
    Level: intermediate
 
-.seealso: `EPSIsGeneralized()`, `EPSIsHermitian()`, `EPSIsStructured()`
+.seealso: [](ch:eps), `EPSIsGeneralized()`, `EPSIsHermitian()`, `EPSIsStructured()`
 @*/
 PetscErrorCode EPSIsPositive(EPS eps,PetscBool* is)
 {
@@ -799,25 +807,25 @@ PetscErrorCode EPSIsPositive(EPS eps,PetscBool* is)
 }
 
 /*@
-   EPSIsStructured - Ask if the EPS object corresponds to a structured
+   EPSIsStructured - Ask if the `EPS` object corresponds to a structured
    eigenvalue problem.
 
    Not Collective
 
    Input Parameter:
-.  eps - the eigenproblem solver context
+.  eps - the linear eigensolver context
 
    Output Parameter:
-.  is - the answer
+.  is - `PETSC_TRUE` if the problem is structured
 
    Note:
    The result will be true if the problem type has been set to some
-   structured type such as EPS_BSE. This is independent of whether the
+   structured type such as `EPS_BSE`. This is independent of whether the
    input matrix has been built with a certain structure with a helper function.
 
    Level: intermediate
 
-.seealso: `EPSIsGeneralized()`, `EPSIsHermitian()`, `EPSIsPositive()`, `EPSSetProblemType()`
+.seealso: [](ch:eps), `EPSIsGeneralized()`, `EPSIsHermitian()`, `EPSIsPositive()`, `EPSSetProblemType()`
 @*/
 PetscErrorCode EPSIsStructured(EPS eps,PetscBool* is)
 {

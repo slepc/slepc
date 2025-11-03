@@ -25,21 +25,21 @@
 -  impl - how to handle the transpose (implicitly or not)
 
    Options Database Key:
-.  -svd_implicittranspose - Activate the implicit transpose mode.
+.  -svd_implicittranspose - enable the implicit transpose mode
 
    Notes:
    By default, the transpose of the matrix is explicitly built (if the matrix
-   has defined the MatTranspose operation).
+   has defined the `MatTranspose()` operation, `MATOP_TRANSPOSE`).
 
-   If this flag is set to true, the solver does not build the transpose, but
-   handles it implicitly via MatMultTranspose() (or MatMultHermitianTranspose()
+   If this flag is set to `PETSC_TRUE`, the solver does not build the transpose, but
+   handles it implicitly via `MatMultTranspose()` (or `MatMultHermitianTranspose()`
    in the complex case) operations. This is likely to be more inefficient
-   than the default behaviour, both in sequential and in parallel, but
+   than the default behavior, both sequentially and in parallel, but
    requires less storage.
 
    Level: advanced
 
-.seealso: `SVDGetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
+.seealso: [](ch:svd), `SVDGetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
 @*/
 PetscErrorCode SVDSetImplicitTranspose(SVD svd,PetscBool impl)
 {
@@ -67,7 +67,7 @@ PetscErrorCode SVDSetImplicitTranspose(SVD svd,PetscBool impl)
 
    Level: advanced
 
-.seealso: `SVDSetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
+.seealso: [](ch:svd), `SVDSetImplicitTranspose()`, `SVDSolve()`, `SVDSetOperators()`
 @*/
 PetscErrorCode SVDGetImplicitTranspose(SVD svd,PetscBool *impl)
 {
@@ -79,8 +79,8 @@ PetscErrorCode SVDGetImplicitTranspose(SVD svd,PetscBool *impl)
 }
 
 /*@
-   SVDSetTolerances - Sets the tolerance and maximum
-   iteration count used by the default SVD convergence testers.
+   SVDSetTolerances - Sets the tolerance and maximum iteration count used
+   by the `SVD` convergence tests.
 
    Logically Collective
 
@@ -90,18 +90,18 @@ PetscErrorCode SVDGetImplicitTranspose(SVD svd,PetscBool *impl)
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -svd_tol <tol> - Sets the convergence tolerance
--  -svd_max_it <maxits> - Sets the maximum number of iterations allowed
++  -svd_tol \<tol\>       - sets the convergence tolerance
+-  -svd_max_it \<maxits\> - sets the maximum number of iterations allowed
 
    Note:
-   Use PETSC_CURRENT to retain the current value of any of the parameters.
-   Use PETSC_DETERMINE for either argument to assign a default value computed
+   Use `PETSC_CURRENT` to retain the current value of any of the parameters.
+   Use `PETSC_DETERMINE` for either argument to assign a default value computed
    internally (may be different in each solver).
-   For maxits use PETSC_UMLIMITED to indicate there is no upper bound on this value.
+   For `maxits` use `PETSC_UNLIMITED` to indicate there is no upper bound on this value.
 
    Level: intermediate
 
-.seealso: `SVDGetTolerances()`
+.seealso: [](ch:svd), `SVDGetTolerances()`
 @*/
 PetscErrorCode SVDSetTolerances(SVD svd,PetscReal tol,PetscInt maxits)
 {
@@ -142,11 +142,11 @@ PetscErrorCode SVDSetTolerances(SVD svd,PetscReal tol,PetscInt maxits)
 -  maxits - maximum number of iterations
 
    Notes:
-   The user can specify NULL for any parameter that is not needed.
+   The user can specify `NULL` for any parameter that is not needed.
 
    Level: intermediate
 
-.seealso: `SVDSetTolerances()`
+.seealso: [](ch:svd), `SVDSetTolerances()`
 @*/
 PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
 {
@@ -168,20 +168,21 @@ PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
 -  rel   - whether the threshold is relative or not
 
    Options Database Keys:
-+  -svd_threshold_absolute <thres> - Sets an absolute threshold
--  -svd_threshold_relative <thres> - Sets a relative threshold
++  -svd_threshold_absolute \<thres\> - sets an absolute threshold
+-  -svd_threshold_relative \<thres\> - sets a relative threshold
 
    Notes:
-   This function internally calls SVDSetStoppingTest() to set a special stopping
+   This function internally calls `SVDSetStoppingTest()` to set a special stopping
    test based on the threshold, where singular values are computed in sequence
-   until one of the computed singular values is below the threshold.
+   until one of the computed singular values is below the threshold `thres`.
 
    If the solver is configured to compute smallest singular values, then the
    threshold must be interpreted in the opposite direction, i.e., the computation
    will stop when one of the computed singular values is above the threshold.
 
    In the case of largest singular values, the threshold can be made relative
-   with respect to the largest singular value (i.e., the matrix norm).
+   with respect to the largest singular value (i.e., the matrix norm). Otherwise,
+   the argument `rel` should be `PETSC_FALSE`.
 
    The test against the threshold is done for converged singular values, which
    implies that the final number of converged singular values will be at least
@@ -191,27 +192,27 @@ PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
    will need to reallocate the basis of vectors internally, to have enough room
    to accommodate all the singular vectors. Hence, this option must be used with
    caution to avoid out-of-memory problems. The recommendation is to set the value
-   of ncv to be larger than the estimated number of singular values, to minimize
+   of `ncv` to be larger than the estimated number of singular values, to minimize
    the number of reallocations.
 
    This functionality is most useful when computing largest singular values. A
    typical use case is to compute a low rank approximation of a matrix. Suppose
-   we know that singular values decay abruptly around a certain index k, which
+   we know that singular values decay abruptly around a certain index $k$, which
    is unknown. Then using a small relative threshold such as 0.2 will guarantee that
-   the computed singular vectors capture the numerical rank k. However, if the matrix
+   the computed singular vectors capture the numerical rank $k$. However, if the matrix
    does not have low rank, i.e., singular values decay progressively, then a
    value of 0.2 will imply a very high cost, both computationally and in memory.
 
-   If a number of wanted singular values has been set with SVDSetDimensions()
+   If a number of wanted singular values has been set with `SVDSetDimensions()`
    it is also taken into account and the solver will stop when one of the two
    conditions (threshold or number of converged values) is met.
 
-   Use SVDSetStoppingTest() to return to the usual computation of a fixed number
+   Use `SVDSetStoppingTest()` to return to the usual computation of a fixed number
    of singular values.
 
    Level: advanced
 
-.seealso: `SVDGetThreshold()`, `SVDSetStoppingTest()`, `SVDSetDimensions()`, `SVDSetWhichSingularTriplets()`
+.seealso: [](ch:svd), `SVDGetThreshold()`, `SVDSetStoppingTest()`, `SVDSetDimensions()`, `SVDSetWhichSingularTriplets()`
 @*/
 PetscErrorCode SVDSetThreshold(SVD svd,PetscReal thres,PetscBool rel)
 {
@@ -243,7 +244,7 @@ PetscErrorCode SVDSetThreshold(SVD svd,PetscReal thres,PetscBool rel)
 
    Level: advanced
 
-.seealso: `SVDSetThreshold()`
+.seealso: [](ch:svd), `SVDSetThreshold()`
 @*/
 PetscErrorCode SVDGetThreshold(SVD svd,PetscReal *thres,PetscBool *rel)
 {
@@ -267,27 +268,28 @@ PetscErrorCode SVDGetThreshold(SVD svd,PetscReal *thres,PetscBool *rel)
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -svd_nsv <nsv> - Sets the number of singular values
-.  -svd_ncv <ncv> - Sets the dimension of the subspace
--  -svd_mpd <mpd> - Sets the maximum projected dimension
++  -svd_nsv \<nsv\> - Sets the number of singular values
+.  -svd_ncv \<ncv\> - Sets the dimension of the subspace
+-  -svd_mpd \<mpd\> - Sets the maximum projected dimension
 
    Notes:
-   Use PETSC_DETERMINE for ncv and mpd to assign a reasonably good value, which is
+   Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a reasonably good value, which is
    dependent on the solution method and the number of singular values required. For
-   any of the arguments, use PETSC_CURRENT to preserve the current value.
+   any of the arguments, use `PETSC_CURRENT` to preserve the current value.
 
-   The parameters ncv and mpd are intimately related, so that the user is advised
-   to set one of them at most. Normal usage is that
-   (a) in cases where nsv is small, the user sets ncv (a reasonable default is 2*nsv); and
-   (b) in cases where nsv is large, the user sets mpd.
+   The parameters `ncv` and `mpd` are intimately related, so that the user is advised
+   to set one of them at most. Normal usage is\:
 
-   The value of ncv should always be between nsv and (nsv+mpd), typically
-   ncv=nsv+mpd. If nsv is not too large, mpd=nsv is a reasonable choice, otherwise
+    1. In cases where `nsv` is small, the user sets `ncv` (a reasonable default is `2*nsv`).
+    1. In cases where `nsv` is large, the user sets `mpd`.
+
+   The value of `ncv` should always be between `nsv` and `(nsv+mpd)`, typically
+   `ncv=nsv+mpd`. If `nsv` is not too large, `mpd=nsv` is a reasonable choice, otherwise
    a smaller value should be used.
 
    Level: intermediate
 
-.seealso: `SVDGetDimensions()`
+.seealso: [](ch:svd), `SVDGetDimensions()`
 @*/
 PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
 {
@@ -323,7 +325,7 @@ PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value context
+.  svd - the singular value solver context
 
    Output Parameters:
 +  nsv - number of singular values to compute
@@ -331,11 +333,11 @@ PetscErrorCode SVDSetDimensions(SVD svd,PetscInt nsv,PetscInt ncv,PetscInt mpd)
 -  mpd - the maximum dimension allowed for the projected problem
 
    Notes:
-   The user can specify NULL for any parameter that is not needed.
+   The user can specify `NULL` for any parameter that is not needed.
 
    Level: intermediate
 
-.seealso: `SVDSetDimensions()`
+.seealso: [](ch:svd), `SVDSetDimensions()`
 @*/
 PetscErrorCode SVDGetDimensions(SVD svd,PetscInt *nsv,PetscInt *ncv,PetscInt *mpd)
 {
@@ -354,24 +356,18 @@ PetscErrorCode SVDGetDimensions(SVD svd,PetscInt *nsv,PetscInt *ncv,PetscInt *mp
     Logically Collective
 
     Input Parameter:
-.   svd - singular value solver context obtained from SVDCreate()
+.   svd - the singular value solver context
 
     Output Parameter:
-.   which - which singular triplets are to be sought
+.   which - which singular triplets are to be sought, see `SVDWhich` for possible values
 
     Options Database Keys:
-+   -svd_largest  - Sets largest singular values
--   -svd_smallest - Sets smallest singular values
-
-    Notes:
-    The parameter 'which' can have one of these values
-
-+     SVD_LARGEST  - largest singular values
--     SVD_SMALLEST - smallest singular values
++   -svd_largest  - sets largest singular values
+-   -svd_smallest - sets smallest singular values
 
     Level: intermediate
 
-.seealso: `SVDGetWhichSingularTriplets()`, `SVDWhich`
+.seealso: [](ch:svd), `SVDGetWhichSingularTriplets()`, `SVDWhich`
 @*/
 PetscErrorCode SVDSetWhichSingularTriplets(SVD svd,SVDWhich which)
 {
@@ -399,17 +395,14 @@ PetscErrorCode SVDSetWhichSingularTriplets(SVD svd,SVDWhich which)
     Not Collective
 
     Input Parameter:
-.   svd - singular value solver context obtained from SVDCreate()
+.   svd - the singular value solver context
 
     Output Parameter:
 .   which - which singular triplets are to be sought
 
-    Notes:
-    See SVDSetWhichSingularTriplets() for possible values of which
-
     Level: intermediate
 
-.seealso: `SVDSetWhichSingularTriplets()`, `SVDWhich`
+.seealso: [](ch:svd), `SVDSetWhichSingularTriplets()`, `SVDWhich`
 @*/
 PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
 {
@@ -427,18 +420,22 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver context obtained from SVDCreate()
-.  conv    - the convergence test function, see SVDConvergenceTestFn for the calling sequence
-.  ctx     - context for private data for the convergence routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
++  svd     - the singular value solver context
+.  conv    - the convergence test function, see `SVDConvergenceTestFn` for the calling sequence
+.  ctx     - context for private data for the convergence routine (may be `NULL`)
+-  destroy - a routine for destroying the context (may be `NULL`), see `PetscCtxDestroyFn`
+             for the calling sequence
 
-   Note:
+   Notes:
+   When this is called with a user-defined function, then the convergence
+   criterion is set to `SVD_CONV_USER`, see `SVDSetConvergenceTest()`.
+
    If the error estimate returned by the convergence test function is less than
    the tolerance, then the singular value is accepted as converged.
 
    Level: advanced
 
-.seealso: `SVDSetConvergenceTest()`, `SVDSetTolerances()`
+.seealso: [](ch:svd), `SVDSetConvergenceTest()`, `SVDSetTolerances()`
 @*/
 PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -466,29 +463,22 @@ PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,
    Logically Collective
 
    Input Parameters:
-+  svd  - singular value solver context obtained from SVDCreate()
--  conv - the type of convergence test
++  svd  - the singular value solver context
+-  conv - the type of convergence test, see `SVDConv` for possible values
 
    Options Database Keys:
-+  -svd_conv_abs   - Sets the absolute convergence test
-.  -svd_conv_rel   - Sets the convergence test relative to the singular value
-.  -svd_conv_norm  - Sets the convergence test relative to the matrix norm
-.  -svd_conv_maxit - Forces the maximum number of iterations as set by -svd_max_it
--  -svd_conv_user  - Selects the user-defined convergence test
++  -svd_conv_abs   - sets the absolute convergence test
+.  -svd_conv_rel   - sets the convergence test relative to the singular value
+.  -svd_conv_norm  - sets the convergence test relative to the matrix norms
+.  -svd_conv_maxit - forces the maximum number of iterations as set by `-svd_max_it`
+-  -svd_conv_user  - selects the user-defined convergence test
 
-   Notes:
-   The parameter 'conv' can have one of these values
-+     SVD_CONV_ABS   - absolute error ||r||
-.     SVD_CONV_REL   - error relative to the singular value sigma, ||r||/sigma
-.     SVD_CONV_NORM  - error relative to the matrix norms, ||r||/||Z||, with Z=A or Z=[A;B]
-.     SVD_CONV_MAXIT - no convergence until maximum number of iterations has been reached
--     SVD_CONV_USER  - function set by SVDSetConvergenceTestFunction()
-
-   The default in standard SVD is SVD_CONV_REL, while in GSVD the default is SVD_CONV_NORM.
+   Note:
+   The default in standard SVD is `SVD_CONV_REL`, while in GSVD the default is `SVD_CONV_NORM`.
 
    Level: intermediate
 
-.seealso: `SVDGetConvergenceTest()`, `SVDSetConvergenceTestFunction()`, `SVDSetStoppingTest()`, `SVDConv`
+.seealso: [](ch:svd), `SVDGetConvergenceTest()`, `SVDSetConvergenceTestFunction()`, `SVDSetStoppingTest()`, `SVDConv`
 @*/
 PetscErrorCode SVDSetConvergenceTest(SVD svd,SVDConv conv)
 {
@@ -517,15 +507,15 @@ PetscErrorCode SVDSetConvergenceTest(SVD svd,SVDConv conv)
 
    Not Collective
 
-   Input Parameters:
-.  svd   - singular value solver context obtained from SVDCreate()
+   Input Parameter:
+.  svd   - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  conv  - the type of convergence test
 
    Level: intermediate
 
-.seealso: `SVDSetConvergenceTest()`, `SVDConv`
+.seealso: [](ch:svd), `SVDSetConvergenceTest()`, `SVDConv`
 @*/
 PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
 {
@@ -543,20 +533,21 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver context obtained from SVDCreate()
-.  stop    - the stopping test function, see SVDStoppingTestFn for the calling sequence
-.  ctx     - context for private data for the stopping routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
++  svd     - the singular value solver context
+.  stop    - the stopping test function, see `SVDStoppingTestFn` for the calling sequence
+.  ctx     - context for private data for the stopping routine (may be `NULL`)
+-  destroy - a routine for destroying the context (may be `NULL`), see `PetscCtxDestroyFn`
+             for the calling sequence
 
    Note:
-   Normal usage is to first call the default routine SVDStoppingBasic() and then
-   set reason to SVD_CONVERGED_USER if some user-defined conditions have been
-   met. To let the singular value solver continue iterating, the result must be
-   left as SVD_CONVERGED_ITERATING.
+   When implementing a function for this, normal usage is to first call the
+   default routine `SVDStoppingBasic()` and then set `reason` to `SVD_CONVERGED_USER`
+   if some user-defined conditions have been met. To let the singular value solver
+   continue iterating, the result must be left as `SVD_CONVERGED_ITERATING`.
 
    Level: advanced
 
-.seealso: `SVDSetStoppingTest()`, `SVDStoppingBasic()`
+.seealso: [](ch:svd), `SVDSetStoppingTest()`, `SVDStoppingBasic()`
 @*/
 PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *ctx,PetscCtxDestroyFn *destroy)
 {
@@ -582,23 +573,17 @@ PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *
    Logically Collective
 
    Input Parameters:
-+  svd  - singular value solver context obtained from SVDCreate()
--  stop - the type of stopping test
++  svd  - the singular value solver context
+-  stop - the type of stopping test, see `SVDStop`
 
    Options Database Keys:
-+  -svd_stop_basic     - Sets the default stopping test
-.  -svd_stop_threshold - Sets the threshold stopping test
--  -svd_stop_user      - Selects the user-defined stopping test
-
-   Note:
-   The parameter 'stop' can have one of these values
-+     SVD_STOP_BASIC     - default stopping test
-.     SVD_STOP_THRESHOLD - threshold stopping test
--     SVD_STOP_USER      - function set by SVDSetStoppingTestFunction()
++  -svd_stop_basic     - sets the default stopping test
+.  -svd_stop_threshold - sets the threshold stopping test
+-  -svd_stop_user      - selects the user-defined stopping test
 
    Level: advanced
 
-.seealso: `SVDGetStoppingTest()`, `SVDSetStoppingTestFunction()`, `SVDSetConvergenceTest()`, `SVDStop`
+.seealso: [](ch:svd), `SVDGetStoppingTest()`, `SVDSetStoppingTestFunction()`, `SVDSetConvergenceTest()`, `SVDStop`
 @*/
 PetscErrorCode SVDSetStoppingTest(SVD svd,SVDStop stop)
 {
@@ -625,15 +610,15 @@ PetscErrorCode SVDSetStoppingTest(SVD svd,SVDStop stop)
 
    Not Collective
 
-   Input Parameters:
-.  svd   - singular value solver context obtained from SVDCreate()
+   Input Parameter:
+.  svd   - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  stop  - the type of stopping test
 
    Level: advanced
 
-.seealso: `SVDSetStoppingTest()`, `SVDStop`
+.seealso: [](ch:svd), `SVDSetStoppingTest()`, `SVDStop`
 @*/
 PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
 {
@@ -654,12 +639,12 @@ PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
 +  svd      - the singular value solver context
 .  opt      - the command line option for this monitor
 .  name     - the monitor type one is seeking
-.  ctx      - an optional user context for the monitor, or NULL
+.  ctx      - an optional user context for the monitor, or `NULL`
 -  trackall - whether this monitor tracks all singular values or not
 
    Level: developer
 
-.seealso: `SVDMonitorSet()`, `SVDSetTrackAll()`
+.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDSetTrackAll()`
 @*/
 PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name[],void *ctx,PetscBool trackall)
 {
@@ -694,21 +679,21 @@ PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name
 }
 
 /*@
-   SVDSetFromOptions - Sets SVD options from the options database.
-   This routine must be called before SVDSetUp() if the user is to be
-   allowed to set the solver type.
+   SVDSetFromOptions - Sets `SVD` options from the options database.
+   This routine must be called before `SVDSetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  svd - the singular value solver context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 
-.seealso: `SVDSetOptionsPrefix()`
+.seealso: [](ch:svd), `SVDSetOptionsPrefix()`
 @*/
 PetscErrorCode SVDSetFromOptions(SVD svd)
 {
@@ -827,13 +812,13 @@ PetscErrorCode SVDSetFromOptions(SVD svd)
 .  -svd_generalized - generalized singular value problem (GSVD)
 -  -svd_hyperbolic  - hyperbolic singular value problem (HSVD)
 
-   Notes:
-   The GSVD requires that two matrices have been passed via SVDSetOperators().
-   The HSVD requires that a signature matrix has been passed via SVDSetSignature().
+   Note:
+   The GSVD requires that two matrices have been passed via `SVDSetOperators()`.
+   The HSVD requires that a signature matrix has been passed via `SVDSetSignature()`.
 
    Level: intermediate
 
-.seealso: `SVDSetOperators()`, `SVDSetSignature()`, `SVDSetType()`, `SVDGetProblemType()`, `SVDProblemType`
+.seealso: [](ch:svd), `SVDSetOperators()`, `SVDSetSignature()`, `SVDSetType()`, `SVDGetProblemType()`, `SVDProblemType`
 @*/
 PetscErrorCode SVDSetProblemType(SVD svd,SVDProblemType type)
 {
@@ -875,7 +860,7 @@ PetscErrorCode SVDSetProblemType(SVD svd,SVDProblemType type)
 
    Level: intermediate
 
-.seealso: `SVDSetProblemType()`, `SVDProblemType`
+.seealso: [](ch:svd), `SVDSetProblemType()`, `SVDProblemType`
 @*/
 PetscErrorCode SVDGetProblemType(SVD svd,SVDProblemType *type)
 {
@@ -900,7 +885,7 @@ PetscErrorCode SVDGetProblemType(SVD svd,SVDProblemType *type)
 
    Level: intermediate
 
-.seealso: `SVDIsHyperbolic()`
+.seealso: [](ch:svd), `SVDIsHyperbolic()`
 @*/
 PetscErrorCode SVDIsGeneralized(SVD svd,PetscBool* is)
 {
@@ -925,7 +910,7 @@ PetscErrorCode SVDIsGeneralized(SVD svd,PetscBool* is)
 
    Level: intermediate
 
-.seealso: `SVDIsGeneralized()`
+.seealso: [](ch:svd), `SVDIsGeneralized()`
 @*/
 PetscErrorCode SVDIsHyperbolic(SVD svd,PetscBool* is)
 {
@@ -947,16 +932,16 @@ PetscErrorCode SVDIsHyperbolic(SVD svd,PetscBool* is)
 -  trackall - whether to compute all residuals or not
 
    Notes:
-   If the user sets trackall=PETSC_TRUE then the solver computes (or estimates)
+   If the user sets `trackall`=`PETSC_TRUE` then the solver computes (or estimates)
    the residual norm for each singular value approximation. Computing the residual is
    usually an expensive operation and solvers commonly compute only the residual
    associated to the first unconverged singular value.
 
-   The option '-svd_monitor_all' automatically activates this option.
+   The option `-svd_monitor_all` automatically activates this option.
 
    Level: developer
 
-.seealso: `SVDGetTrackAll()`
+.seealso: [](ch:svd), `SVDGetTrackAll()`
 @*/
 PetscErrorCode SVDSetTrackAll(SVD svd,PetscBool trackall)
 {
@@ -981,7 +966,7 @@ PetscErrorCode SVDSetTrackAll(SVD svd,PetscBool trackall)
 
    Level: developer
 
-.seealso: `SVDSetTrackAll()`
+.seealso: [](ch:svd), `SVDSetTrackAll()`
 @*/
 PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
 {
@@ -994,13 +979,13 @@ PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
 
 /*@
    SVDSetOptionsPrefix - Sets the prefix used for searching for all
-   SVD options in the database.
+   `SVD` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  svd - the singular value solver context
--  prefix - the prefix string to prepend to all SVD option requests
++  svd    - the singular value solver context
+-  prefix - the prefix string to prepend to all `SVD` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -1008,17 +993,17 @@ PetscErrorCode SVDGetTrackAll(SVD svd,PetscBool *trackall)
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different SVD contexts, one could call
+   different `SVD` contexts, one could call
 .vb
-      SVDSetOptionsPrefix(svd1,"svd1_")
-      SVDSetOptionsPrefix(svd2,"svd2_")
+   SVDSetOptionsPrefix(svd1,"svd1_")
+   SVDSetOptionsPrefix(svd2,"svd2_")
 .ve
 
    Level: advanced
 
-.seealso: `SVDAppendOptionsPrefix()`, `SVDGetOptionsPrefix()`
+.seealso: [](ch:svd), `SVDAppendOptionsPrefix()`, `SVDGetOptionsPrefix()`
 @*/
-PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char *prefix)
+PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -1033,13 +1018,13 @@ PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char *prefix)
 
 /*@
    SVDAppendOptionsPrefix - Appends to the prefix used for searching for all
-   SVD options in the database.
+   `SVD` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  svd - the singular value solver context
--  prefix - the prefix string to prepend to all SVD option requests
++  svd    - the singular value solver context
+-  prefix - the prefix string to prepend to all `SVD` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -1047,9 +1032,9 @@ PetscErrorCode SVDSetOptionsPrefix(SVD svd,const char *prefix)
 
    Level: advanced
 
-.seealso: `SVDSetOptionsPrefix()`, `SVDGetOptionsPrefix()`
+.seealso: [](ch:svd), `SVDSetOptionsPrefix()`, `SVDGetOptionsPrefix()`
 @*/
-PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char *prefix)
+PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -1064,23 +1049,19 @@ PetscErrorCode SVDAppendOptionsPrefix(SVD svd,const char *prefix)
 
 /*@
    SVDGetOptionsPrefix - Gets the prefix used for searching for all
-   SVD options in the database.
+   `SVD` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  svd - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 
-.seealso: `SVDSetOptionsPrefix()`, `SVDAppendOptionsPrefix()`
+.seealso: [](ch:svd), `SVDSetOptionsPrefix()`, `SVDAppendOptionsPrefix()`
 @*/
 PetscErrorCode SVDGetOptionsPrefix(SVD svd,const char *prefix[])
 {

@@ -1299,28 +1299,30 @@ static PetscErrorCode NEPNLEIGSSetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGS
 }
 
 /*@C
-   NEPNLEIGSSetSingularitiesFunction - Sets a user function to compute a discretization
-   of the singularity set (where T(.) is not analytic).
+   NEPNLEIGSSetSingularitiesFunction - Sets a user-defined callback function
+   to compute a discretization of the singularity set (the values where
+   $T(\cdot)$ is not analytic).
 
    Logically Collective
 
    Input Parameters:
-+  nep - the NEP context
-.  fun - user function (if NULL then NEP retains any previously set value)
++  nep - the nonlinear eigensolver context
+.  fun - user function (if `NULL` then `NEP` retains any previously set value)
 -  ctx - [optional] user-defined context for private data for the function
-         (may be NULL, in which case NEP retains any previously set value)
+         (may be `NULL`, in which case `NEP` retains any previously set value)
 
    Notes:
-   The user-defined function can set a smaller value of maxnp if necessary.
-   It is wrong to return a larger value.
-
-   If the problem type has been set to rational with NEPSetProblemType(),
+   If the problem type has been set to `NEP_RATIONAL` with `NEPSetProblemType()`,
    then it is not necessary to set the singularities explicitly since the
    solver will try to determine them automatically.
 
+   If the problem is `NEP_GENERAL`, it is also possible to omit the
+   singularities callback. In that case, a discretization of the singularity
+   set is approximated via the AAA algorithm {cite:p}`Nak18,Els19`.
+
    Level: intermediate
 
-.seealso: `NEPNLEIGSGetSingularitiesFunction()`, `NEPSetProblemType()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetSingularitiesFunction()`, `NEPSetProblemType()`
 @*/
 PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesFn *fun,void *ctx)
 {
@@ -1341,7 +1343,7 @@ static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGS
 }
 
 /*@C
-   NEPNLEIGSGetSingularitiesFunction - Returns the Function and optionally the user
+   NEPNLEIGSGetSingularitiesFunction - Returns the callback function and optionally the user
    provided context for computing a discretization of the singularity set.
 
    Not Collective
@@ -1350,12 +1352,12 @@ static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGS
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  fun - location to put the function (or NULL)
--  ctx - location to stash the function context (or NULL)
++  fun - location to put the function (or `NULL`)
+-  ctx - location to stash the function context (or `NULL`)
 
-   Level: advanced
+   Level: intermediate
 
-.seealso: `NEPNLEIGSSetSingularitiesFunction()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetSingularitiesFunction()`
 @*/
 PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesFn **fun,void **ctx)
 {
@@ -1390,14 +1392,14 @@ static PetscErrorCode NEPNLEIGSSetRestart_NLEIGS(NEP nep,PetscReal keep)
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -nep_nleigs_restart - Sets the restart parameter
+.  -nep_nleigs_restart - sets the restart parameter
 
    Notes:
    Allowed values are in the range [0.1,0.9]. The default is 0.5.
 
    Level: advanced
 
-.seealso: `NEPNLEIGSGetRestart()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetRestart()`
 @*/
 PetscErrorCode NEPNLEIGSSetRestart(NEP nep,PetscReal keep)
 {
@@ -1430,7 +1432,7 @@ static PetscErrorCode NEPNLEIGSGetRestart_NLEIGS(NEP nep,PetscReal *keep)
 
    Level: advanced
 
-.seealso: `NEPNLEIGSSetRestart()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetRestart()`
 @*/
 PetscErrorCode NEPNLEIGSGetRestart(NEP nep,PetscReal *keep)
 {
@@ -1461,17 +1463,17 @@ static PetscErrorCode NEPNLEIGSSetLocking_NLEIGS(NEP nep,PetscBool lock)
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
-.  -nep_nleigs_locking - Sets the locking flag
+.  -nep_nleigs_locking - sets the locking flag
 
    Notes:
    The default is to lock converged eigenpairs when the method restarts.
-   This behaviour can be changed so that all directions are kept in the
+   This behavior can be changed so that all directions are kept in the
    working subspace even if already converged to working accuracy (the
    non-locking variant).
 
    Level: advanced
 
-.seealso: `NEPNLEIGSGetLocking()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetLocking()`
 @*/
 PetscErrorCode NEPNLEIGSSetLocking(NEP nep,PetscBool lock)
 {
@@ -1504,7 +1506,7 @@ static PetscErrorCode NEPNLEIGSGetLocking_NLEIGS(NEP nep,PetscBool *lock)
 
    Level: advanced
 
-.seealso: `NEPNLEIGSSetLocking()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetLocking()`
 @*/
 PetscErrorCode NEPNLEIGSGetLocking(NEP nep,PetscBool *lock)
 {
@@ -1553,17 +1555,17 @@ static PetscErrorCode NEPNLEIGSSetInterpolation_NLEIGS(NEP nep,PetscReal tol,Pet
 .  tol    - tolerance to stop computing divided differences
 -  degree - maximum degree of interpolation
 
-   Options Database Key:
-+  -nep_nleigs_interpolation_tol <tol> - Sets the tolerance to stop computing divided differences
--  -nep_nleigs_interpolation_degree <degree> - Sets the maximum degree of interpolation
+   Options Database Keys:
++  -nep_nleigs_interpolation_tol \<tol\>       - sets the tolerance to stop computing divided differences
+-  -nep_nleigs_interpolation_degree \<degree\> - sets the maximum degree of interpolation
 
-   Notes:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   Note:
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
 
    Level: advanced
 
-.seealso: `NEPNLEIGSGetInterpolation()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetInterpolation()`
 @*/
 PetscErrorCode NEPNLEIGSSetInterpolation(NEP nep,PetscReal tol,PetscInt degree)
 {
@@ -1600,7 +1602,7 @@ static PetscErrorCode NEPNLEIGSGetInterpolation_NLEIGS(NEP nep,PetscReal *tol,Pe
 
    Level: advanced
 
-.seealso: `NEPNLEIGSSetInterpolation()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetInterpolation()`
 @*/
 PetscErrorCode NEPNLEIGSGetInterpolation(NEP nep,PetscReal *tol,PetscInt *degree)
 {
@@ -1642,23 +1644,23 @@ static PetscErrorCode NEPNLEIGSSetRKShifts_NLEIGS(NEP nep,PetscInt ns,PetscScala
 -  shifts - array of scalar values specifying the shifts
 
    Options Database Key:
-.  -nep_nleigs_rk_shifts - Sets the list of shifts
+.  -nep_nleigs_rk_shifts - sets the list of shifts
 
    Notes:
-   If only one shift is provided, the built subspace built is equivalent to
+   If only one shift is provided, the built subspace is equivalent to
    shift-and-invert Krylov-Schur (provided that the absolute convergence
-   criterion is used).
+   criterion is used). Otherwise, the rational Krylov variant is run.
 
    In the case of real scalars, complex shifts are not allowed. In the
    command line, a comma-separated list of complex values can be provided with
-   the format [+/-][realnumber][+/-]realnumberi with no spaces, e.g.
-   -nep_nleigs_rk_shifts 1.0+2.0i,1.5+2.0i,1.0+1.5i
+   the format `[+/-][realnumber][+/-]realnumberi` with no spaces, e.g.
+   `-nep_nleigs_rk_shifts 1.0+2.0i,1.5+2.0i,1.0+1.5i`.
 
-   Use ns=0 to remove previously set shifts.
+   Use `ns=0` to remove previously set shifts.
 
    Level: advanced
 
-.seealso: `NEPNLEIGSGetRKShifts()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetRKShifts()`
 @*/
 PetscErrorCode NEPNLEIGSSetRKShifts(NEP nep,PetscInt ns,PetscScalar shifts[])
 {
@@ -1702,7 +1704,7 @@ static PetscErrorCode NEPNLEIGSGetRKShifts_NLEIGS(NEP nep,PetscInt *ns,PetscScal
 
    Level: advanced
 
-.seealso: `NEPNLEIGSSetRKShifts()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetRKShifts()`
 @*/
 PetscErrorCode NEPNLEIGSGetRKShifts(NEP nep,PetscInt *ns,PetscScalar *shifts[]) PeNS
 {
@@ -1754,19 +1756,19 @@ static PetscErrorCode NEPNLEIGSGetKSPs_NLEIGS(NEP nep,PetscInt *nsolve,KSP **ksp
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigenvalue solver
+.  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  nsolve - number of returned KSP objects
++  nsolve - number of returned `KSP` objects
 -  ksp - array of linear solver object
 
-   Notes:
-   The number of KSP objects is equal to the number of shifts provided by the user,
+   Note:
+   The number of `KSP` objects is equal to the number of shifts provided by the user,
    or 1 if the user did not provide shifts.
 
    Level: advanced
 
-.seealso: `NEPNLEIGSSetRKShifts()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetRKShifts()`
 @*/
 PetscErrorCode NEPNLEIGSGetKSPs(NEP nep,PetscInt *nsolve,KSP **ksp)
 {
@@ -1796,25 +1798,25 @@ static PetscErrorCode NEPNLEIGSSetFullBasis_NLEIGS(NEP nep,PetscBool fullbasis)
    Logically Collective
 
    Input Parameters:
-+  nep  - the nonlinear eigensolver context
++  nep       - the nonlinear eigensolver context
 -  fullbasis - true if the full-basis variant must be selected
 
    Options Database Key:
-.  -nep_nleigs_full_basis - Sets the full-basis flag
+.  -nep_nleigs_full_basis - sets the full-basis flag
 
    Notes:
    The default is to use a compact representation of the Krylov basis, that is,
-   V = (I otimes U) S, with a tensor BV. This behaviour can be changed so that
-   the full basis V is explicitly stored and operated with. This variant is more
+   $V = (I \otimes U) S$, with a `BVTENSOR`. This behavior can be changed so that
+   the full basis $V$ is explicitly stored and operated with. This variant is more
    expensive in terms of memory and computation, but is necessary in some cases,
-   particularly for two-sided computations, see NEPSetTwoSided().
+   particularly for two-sided computations, see `NEPSetTwoSided()`.
 
-   In the full-basis variant, the NLEIGS solver uses an EPS object to explicitly
-   solve the linearized eigenproblem, see NEPNLEIGSGetEPS().
+   In the full-basis variant, the NLEIGS solver uses an `EPS` object to explicitly
+   solve the linearized eigenproblem, see `NEPNLEIGSGetEPS()`.
 
    Level: advanced
 
-.seealso: `NEPNLEIGSGetFullBasis()`, `NEPNLEIGSGetEPS()`, `NEPSetTwoSided()`, `BVCreateTensor()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSGetFullBasis()`, `NEPNLEIGSGetEPS()`, `NEPSetTwoSided()`, `BVCreateTensor()`
 @*/
 PetscErrorCode NEPNLEIGSSetFullBasis(NEP nep,PetscBool fullbasis)
 {
@@ -1848,7 +1850,7 @@ static PetscErrorCode NEPNLEIGSGetFullBasis_NLEIGS(NEP nep,PetscBool *fullbasis)
 
    Level: advanced
 
-.seealso: `NEPNLEIGSSetFullBasis()`
+.seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetFullBasis()`
 @*/
 PetscErrorCode NEPNLEIGSGetFullBasis(NEP nep,PetscBool *fullbasis)
 {
@@ -1994,6 +1996,39 @@ static PetscErrorCode NEPDestroy_NLEIGS(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   NEPNLEIGS - NEPNLEIGS = "nleigs" - The NLEIGS method.
+
+   Notes:
+   This solver implements the NLEIGS method {cite:p}`Gut14`, which
+   is based on rational interpolation followed by linearization.
+   In our implementation, the linear eigensolver for the linearization
+   operates with a compressed Krylov basis, as in the TOAR polynomial
+   eigensolver, see the detailed description in {cite:p}`Cam21`.
+
+   This method is particularly appropriate for nonlinear problems with
+   singularities. The solver will try to determine the singularities
+   automatically, but the user can also provide them with
+   `NEPNLEIGSSetSingularitiesFunction()`.
+
+   By default, the solver performs the static NLEIGS variant, with
+   constant shift given by `NEPSetTarget()`. But the dynamic variant
+   (rational Krylov) is also available if a list of shifts is given
+   in `NEPNLEIGSSetRKShifts()`.
+
+   `NEPNLEIGS` also implements a two-sided variant for computing left
+   eigenvectors when `NEPSetTwoSided()` has been set.
+
+   Apart from working with the compressed basis, it is also possible
+   to enable the operation with an explicit basis for the linear
+   eigensolver, see `NEPNLEIGSSetFullBasis()`. This allows using
+   other eigensolvers via an `EPS` object obtained with `NEPNLEIGSGetEPS()`.
+   Also, the explicit basis is activated in the two-sided variant.
+
+   Level: beginner
+
+.seealso: [](ch:nep), `NEP`, `NEPType`, `NEPSetType()`, `NEPNLEIGSSetSingularitiesFunction()`, `NEPSetTarget()`, `NEPNLEIGSSetRKShifts()`, `NEPNLEIGSSetFullBasis()`, `NEPNLEIGSGetEPS()`, `NEPSetTwoSided()`
+M*/
 SLEPC_EXTERN PetscErrorCode NEPCreate_NLEIGS(NEP nep)
 {
   NEP_NLEIGS     *ctx;

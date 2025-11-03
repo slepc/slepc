@@ -134,6 +134,24 @@ static PetscErrorCode SVDReset_ScaLAPACK(SVD svd)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   SVDSCALAPACK - SVDSCALAPACK = "scalapack" - A wrapper to the ScaLAPACK
+   singular value solver {cite:p}`Bla97`.
+
+   Notes:
+   Only available for standard SVD problems, using subroutine `pdgesvd` and
+   the analogs for other precisions.
+
+   This is a direct singular value solver, that is, the full decomposition
+   is computed. The computation involves redistributing the matrices from PETSc
+   storage to ScaLAPACK distribution, and vice versa (this is done automatically
+   by SLEPc). Alternatively, the user may create the problem matrices
+   already with type `MATSCALAPACK`.
+
+   Level: beginner
+
+.seealso: [](ch:svd), `SVD`, `SVDType`, `SVDSetType()`
+M*/
 SLEPC_EXTERN PetscErrorCode SVDCreate_ScaLAPACK(SVD svd)
 {
   SVD_ScaLAPACK  *ctx;

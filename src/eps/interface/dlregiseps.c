@@ -27,11 +27,11 @@ const char *const*EPSConvergedReasons = EPSConvergedReasons_Shifted + 4;
 
 /*@C
   EPSFinalizePackage - This function destroys everything in the SLEPc interface
-  to the EPS package. It is called from SlepcFinalize().
+  to the `EPS` package. It is called from `SlepcFinalize()`.
 
   Level: developer
 
-.seealso: `SlepcFinalize()`
+.seealso: [](ch:eps), `SlepcFinalize()`, `EPSInitializePackage()`
 @*/
 PetscErrorCode EPSFinalizePackage(void)
 {
@@ -47,13 +47,16 @@ PetscErrorCode EPSFinalizePackage(void)
 }
 
 /*@C
-  EPSInitializePackage - This function initializes everything in the EPS package.
-  It is called from PetscDLLibraryRegister() when using dynamic libraries, and
-  on the first call to EPSCreate() when using static libraries.
+   EPSInitializePackage - This function initializes everything in the `EPS` package.
+   It is called from `PetscDLLibraryRegister_slepceps()` when using dynamic libraries, and
+   on the first call to `EPSCreate()` when using shared or static libraries.
 
-  Level: developer
+   Note:
+   This function never needs to be called by SLEPc users.
 
-.seealso: `SlepcInitialize()`
+   Level: developer
+
+.seealso: [](ch:eps), `EPS`, `SlepcInitialize()`, `EPSFinalizePackage()`
 @*/
 PetscErrorCode EPSInitializePackage(void)
 {

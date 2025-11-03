@@ -224,6 +224,24 @@ static PetscErrorCode STSetShift_Sinvert(ST st,PetscScalar newshift)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   STSINVERT - STSINVERT = "sinvert" - The shift-and-invert spectral
+   transformation.
+
+   Level: beginner
+
+   Notes:
+   The operator in this `ST` is $(A-\sigma B)^{-1}B$, where $A$ and $B$ are the
+   matrices set with `STSetMatrices()` and the shift $\sigma$ is given in
+   `STSetShift()`.
+
+   This is used to enhance convergence of eigenvalues in the neighborhood of
+   $\sigma$, at the cost of solving a system of linear equations at each
+   eigensolver step.
+
+.seealso: [](ch:st), `ST`, `STType`, `STSetType()`, `STSetMatrices()`, `STSetShift()`
+M*/
+
 SLEPC_EXTERN PetscErrorCode STCreate_Sinvert(ST st)
 {
   PetscFunctionBegin;

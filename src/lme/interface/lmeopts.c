@@ -22,14 +22,14 @@
    Collective
 
    Input Parameters:
-+  lme      - the linear matrix equation context
++  lme  - the linear matrix equation solver context
 .  opt  - the command line option for this monitor
 .  name - the monitor type one is seeking
--  ctx  - an optional user context for the monitor, or NULL
+-  ctx  - an optional user context for the monitor, or `NULL`
 
    Level: developer
 
-.seealso: `LMEMonitorSet()`
+.seealso: [](ch:lme), `LMEMonitorSet()`
 @*/
 PetscErrorCode LMEMonitorSetFromOptions(LME lme,const char opt[],const char name[],void *ctx)
 {
@@ -63,21 +63,21 @@ PetscErrorCode LMEMonitorSetFromOptions(LME lme,const char opt[],const char name
 }
 
 /*@
-   LMESetFromOptions - Sets LME options from the options database.
-   This routine must be called before LMESetUp() if the user is to be
-   allowed to set the solver type.
+   LMESetFromOptions - Sets `LME` options from the options database.
+   This routine must be called before `LMESetUp()` if the user is to be
+   allowed to configure the solver.
 
    Collective
 
-   Input Parameters:
+   Input Parameter:
 .  lme - the linear matrix equation solver context
 
-   Notes:
-   To see all options, run your program with the -help option.
+   Note:
+   To see all options, run your program with the `-help` option.
 
    Level: beginner
 
-.seealso: `LMESetOptionsPrefix()`
+.seealso: [](ch:lme), `LMESetOptionsPrefix()`
 @*/
 PetscErrorCode LMESetFromOptions(LME lme)
 {
@@ -149,39 +149,37 @@ PetscErrorCode LMESetFromOptions(LME lme)
 -  type - a known type of matrix equation
 
    Options Database Keys:
-+  -lme_lyapunov - continuous-time Lyapunov equation A*X+X*A'=-C
-.  -lme_sylvester - continuous-time Sylvester equation A*X+X*B=C
-.  -lme_gen_lyapunov - generalized Lyapunov equation A*X*D'+D*X*A'=-C
-.  -lme_gen_sylvester - generalized Sylvester equation A*X*E+D*X*B=C
-.  -lme_dt_lyapunov - discrete-time Lyapunov equation A*X*A'-X=-C
--  -lme_stein - Stein equation A*X*E+X=C
++  -lme_lyapunov - continuous-time Lyapunov equation
+.  -lme_sylvester - Sylvester equation
+.  -lme_gen_lyapunov - generalized Lyapunov equation
+.  -lme_gen_sylvester - generalized Sylvester equation
+.  -lme_dt_lyapunov - discrete-time Lyapunov equation
+-  -lme_stein - Stein equation
 
    Notes:
-   The coefficient matrices A, B, D, E must be provided via LMESetCoefficients(),
+   The coefficient matrices $A$, $B$, $D$, $E$ must be provided via `LMESetCoefficients()`,
    but some of them are optional depending on the matrix equation.
 
-.vb
-                            equation              A    B    D    E
-                          -----------------      ---  ---  ---  ---
-       LME_LYAPUNOV        A*X+X*A'=-C           yes (A-t)  -    -
-       LME_SYLVESTER       A*X+X*B=C             yes  yes   -    -
-       LME_GEN_LYAPUNOV    A*X*D'+D*X*A'=-C      yes (A-t) yes (D-t)
-       LME_GEN_SYLVESTER   A*X*E+D*X*B=C         yes  yes  yes  yes
-       LME_DT_LYAPUNOV     A*X*A'-X=-C           yes   -    -  (A-t)
-       LME_STEIN           A*X*E+X=C             yes   -    -   yes
-.ve
+   Problem Type             | Equation         |`LMEProblemType`   | $A$ | $B$ | $D$ | $E$
+   -------------------------|------------------|-------------------|-----|-----|-----|-----
+   Continuous-Time Lyapunov | $AX+XA^*=-C$     |`LME_LYAPUNOV`     | yes |$A^*$|  -  |  -
+   Sylvester                | $AX+XB=C$        |`LME_SYLVESTER`    | yes | yes |  -  |  -
+   Generalized Lyapunov     | $AXD^*+DXA^*=-C$ |`LME_GEN_LYAPUNOV` | yes |$A^*$| yes |$D^*$
+   Generalized Sylvester    | $AXE+DXB=C$      |`LME_GEN_SYLVESTER`| yes | yes | yes | yes
+   Discrete-Time Lyapunov   | $AXA^*-X=-C$     |`LME_DT_LYAPUNOV`  | yes |  -  |  -  |$A^*$
+   Stein                    | $AXE-X=-C$       |`LME_STEIN`        | yes |  -  |  -  | yes
 
-   In the above table, the notation (A-t) means that this matrix need
+   In the above table, the notation $A^*$ means that this matrix need
    not be passed, but the user may choose to pass an explicit transpose
-   of matrix A (for improved efficiency).
+   of matrix $A$ (for improved efficiency).
 
    Also note that some of the equation types impose restrictions on the
    properties of the coefficient matrices and possibly on the right-hand
-   side C.
+   side $C$.
 
    Level: beginner
 
-.seealso: `LMESetCoefficients()`, `LMESetType()`, `LMEGetProblemType()`, `LMEProblemType`
+.seealso: [](ch:lme), `LMESetCoefficients()`, `LMESetType()`, `LMEGetProblemType()`, `LMEProblemType`
 @*/
 PetscErrorCode LMESetProblemType(LME lme,LMEProblemType type)
 {
@@ -206,7 +204,7 @@ PetscErrorCode LMESetProblemType(LME lme,LMEProblemType type)
 }
 
 /*@
-   LMEGetProblemType - Gets the matrix equation type from the LME object.
+   LMEGetProblemType - Gets the matrix equation type from the `LME` object.
 
    Not Collective
 
@@ -214,11 +212,11 @@ PetscErrorCode LMESetProblemType(LME lme,LMEProblemType type)
 .  lme - the linear matrix equation solver context
 
    Output Parameter:
-.  type - name of LME problem type
+.  type - the problem type
 
-   Level: intermediate
+   Level: beginner
 
-.seealso: `LMESetProblemType()`, `LMEProblemType`
+.seealso: [](ch:lme), `LMESetProblemType()`, `LMEProblemType`
 @*/
 PetscErrorCode LMEGetProblemType(LME lme,LMEProblemType *type)
 {
@@ -231,7 +229,7 @@ PetscErrorCode LMEGetProblemType(LME lme,LMEProblemType *type)
 
 /*@
    LMEGetTolerances - Gets the tolerance and maximum iteration count used
-   by the LME convergence tests.
+   by the `LME` convergence tests.
 
    Not Collective
 
@@ -242,12 +240,12 @@ PetscErrorCode LMEGetProblemType(LME lme,LMEProblemType *type)
 +  tol - the convergence tolerance
 -  maxits - maximum number of iterations
 
-   Notes:
-   The user can specify NULL for any parameter that is not needed.
+   Note:
+   The user can specify `NULL` for any parameter that is not needed.
 
    Level: intermediate
 
-.seealso: `LMESetTolerances()`
+.seealso: [](ch:lme), `LMESetTolerances()`
 @*/
 PetscErrorCode LMEGetTolerances(LME lme,PetscReal *tol,PetscInt *maxits)
 {
@@ -260,7 +258,7 @@ PetscErrorCode LMEGetTolerances(LME lme,PetscReal *tol,PetscInt *maxits)
 
 /*@
    LMESetTolerances - Sets the tolerance and maximum iteration count used
-   by the LME convergence tests.
+   by the `LME` convergence tests.
 
    Logically Collective
 
@@ -270,18 +268,18 @@ PetscErrorCode LMEGetTolerances(LME lme,PetscReal *tol,PetscInt *maxits)
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -lme_tol <tol> - Sets the convergence tolerance
--  -lme_max_it <maxits> - Sets the maximum number of iterations allowed
++  -lme_tol \<tol\>       - sets the convergence tolerance
+-  -lme_max_it \<maxits\> - sets the maximum number of iterations allowed
 
    Notes:
-   Use PETSC_CURRENT to retain the current value of any of the parameters.
-   Use PETSC_DETERMINE for either argument to assign a default value computed
+   Use `PETSC_CURRENT` to retain the current value of any of the parameters.
+   Use `PETSC_DETERMINE` for either argument to assign a default value computed
    internally (may be different in each solver).
-   For maxits use PETSC_UMLIMITED to indicate there is no upper bound on this value.
+   For `maxits` use `PETSC_UNLIMITED` to indicate there is no upper bound on this value.
 
    Level: intermediate
 
-.seealso: `LMEGetTolerances()`
+.seealso: [](ch:lme), `LMEGetTolerances()`
 @*/
 PetscErrorCode LMESetTolerances(LME lme,PetscReal tol,PetscInt maxits)
 {
@@ -321,7 +319,7 @@ PetscErrorCode LMESetTolerances(LME lme,PetscReal tol,PetscInt maxits)
 
    Level: intermediate
 
-.seealso: `LMESetDimensions()`
+.seealso: [](ch:lme), `LMESetDimensions()`
 @*/
 PetscErrorCode LMEGetDimensions(LME lme,PetscInt *ncv)
 {
@@ -341,16 +339,16 @@ PetscErrorCode LMEGetDimensions(LME lme,PetscInt *ncv)
 +  lme - the linear matrix equation solver context
 -  ncv - the maximum dimension of the subspace to be used by the solver
 
-   Options Database Keys:
-.  -lme_ncv <ncv> - Sets the dimension of the subspace
+   Options Database Key:
+.  -lme_ncv \<ncv\> - sets the dimension of the subspace
 
    Notes:
-   Use PETSC_DETERMINE for ncv to assign a reasonably good value, which is
+   Use `PETSC_DETERMINE` for `ncv` to assign a reasonably good value, which is
    dependent on the solution method.
 
    Level: intermediate
 
-.seealso: `LMEGetDimensions()`
+.seealso: [](ch:lme), `LMEGetDimensions()`
 @*/
 PetscErrorCode LMESetDimensions(LME lme,PetscInt ncv)
 {
@@ -368,25 +366,25 @@ PetscErrorCode LMESetDimensions(LME lme,PetscInt ncv)
 }
 
 /*@
-   LMESetErrorIfNotConverged - Causes LMESolve() to generate an error if the
+   LMESetErrorIfNotConverged - Causes `LMESolve()` to generate an error if the
    solver has not converged.
 
    Logically Collective
 
    Input Parameters:
 +  lme - the linear matrix equation solver context
--  flg - PETSC_TRUE indicates you want the error generated
+-  flg - `PETSC_TRUE` indicates you want the error generated
 
-   Options Database Keys:
-.  -lme_error_if_not_converged - this takes an optional truth value (0/1/no/yes/true/false)
-
-   Level: intermediate
+   Options Database Key:
+.  -lme_error_if_not_converged <true,false> - generate an error and stop the program
 
    Note:
    Normally SLEPc continues if the solver fails to converge, you can call
-   LMEGetConvergedReason() after a LMESolve() to determine if it has converged.
+   `LMEGetConvergedReason()` after a `LMESolve()` to determine if it has converged.
 
-.seealso: `LMEGetErrorIfNotConverged()`
+   Level: intermediate
+
+.seealso: [](ch:lme), `LMEGetErrorIfNotConverged()`
 @*/
 PetscErrorCode LMESetErrorIfNotConverged(LME lme,PetscBool flg)
 {
@@ -398,7 +396,7 @@ PetscErrorCode LMESetErrorIfNotConverged(LME lme,PetscBool flg)
 }
 
 /*@
-   LMEGetErrorIfNotConverged - Return a flag indicating whether LMESolve() will
+   LMEGetErrorIfNotConverged - Return a flag indicating whether `LMESolve()` will
    generate an error if the solver does not converge.
 
    Not Collective
@@ -407,11 +405,11 @@ PetscErrorCode LMESetErrorIfNotConverged(LME lme,PetscBool flg)
 .  lme - the linear matrix equation solver context
 
    Output Parameter:
-.  flag - PETSC_TRUE if it will generate an error, else PETSC_FALSE
+.  flag - `PETSC_TRUE` if it will generate an error, else `PETSC_FALSE`
 
    Level: intermediate
 
-.seealso: `LMESetErrorIfNotConverged()`
+.seealso: [](ch:lme), `LMESetErrorIfNotConverged()`
 @*/
 PetscErrorCode LMEGetErrorIfNotConverged(LME lme,PetscBool *flag)
 {
@@ -424,13 +422,13 @@ PetscErrorCode LMEGetErrorIfNotConverged(LME lme,PetscBool *flag)
 
 /*@
    LMESetOptionsPrefix - Sets the prefix used for searching for all
-   LME options in the database.
+   `LME` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  lme - the linear matrix equation solver context
--  prefix - the prefix string to prepend to all LME option requests
++  lme    - the linear matrix equation solver context
+-  prefix - the prefix string to prepend to all `LME` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -438,17 +436,17 @@ PetscErrorCode LMEGetErrorIfNotConverged(LME lme,PetscBool *flag)
    hyphen.
 
    For example, to distinguish between the runtime options for two
-   different LME contexts, one could call
+   different `LME` contexts, one could call
 .vb
-      LMESetOptionsPrefix(lme1,"fun1_")
-      LMESetOptionsPrefix(lme2,"fun2_")
+   LMESetOptionsPrefix(lme1,"fun1_")
+   LMESetOptionsPrefix(lme2,"fun2_")
 .ve
 
    Level: advanced
 
-.seealso: `LMEAppendOptionsPrefix()`, `LMEGetOptionsPrefix()`
+.seealso: [](ch:lme), `LMEAppendOptionsPrefix()`, `LMEGetOptionsPrefix()`
 @*/
-PetscErrorCode LMESetOptionsPrefix(LME lme,const char *prefix)
+PetscErrorCode LMESetOptionsPrefix(LME lme,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(lme,LME_CLASSID,1);
@@ -460,13 +458,13 @@ PetscErrorCode LMESetOptionsPrefix(LME lme,const char *prefix)
 
 /*@
    LMEAppendOptionsPrefix - Appends to the prefix used for searching for all
-   LME options in the database.
+   `LME` options in the database.
 
    Logically Collective
 
    Input Parameters:
-+  lme - the linear matrix equation solver context
--  prefix - the prefix string to prepend to all LME option requests
++  lme    - the linear matrix equation solver context
+-  prefix - the prefix string to prepend to all `LME` option requests
 
    Notes:
    A hyphen (-) must NOT be given at the beginning of the prefix name.
@@ -474,9 +472,9 @@ PetscErrorCode LMESetOptionsPrefix(LME lme,const char *prefix)
 
    Level: advanced
 
-.seealso: `LMESetOptionsPrefix()`, `LMEGetOptionsPrefix()`
+.seealso: [](ch:lme), `LMESetOptionsPrefix()`, `LMEGetOptionsPrefix()`
 @*/
-PetscErrorCode LMEAppendOptionsPrefix(LME lme,const char *prefix)
+PetscErrorCode LMEAppendOptionsPrefix(LME lme,const char prefix[])
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(lme,LME_CLASSID,1);
@@ -488,23 +486,19 @@ PetscErrorCode LMEAppendOptionsPrefix(LME lme,const char *prefix)
 
 /*@
    LMEGetOptionsPrefix - Gets the prefix used for searching for all
-   LME options in the database.
+   `LME` options in the database.
 
    Not Collective
 
-   Input Parameters:
+   Input Parameter:
 .  lme - the linear matrix equation solver context
 
-   Output Parameters:
+   Output Parameter:
 .  prefix - pointer to the prefix string used is returned
-
-   Note:
-   On the Fortran side, the user should pass in a string 'prefix' of
-   sufficient length to hold the prefix.
 
    Level: advanced
 
-.seealso: `LMESetOptionsPrefix()`, `LMEAppendOptionsPrefix()`
+.seealso: [](ch:lme), `LMESetOptionsPrefix()`, `LMEAppendOptionsPrefix()`
 @*/
 PetscErrorCode LMEGetOptionsPrefix(LME lme,const char *prefix[])
 {

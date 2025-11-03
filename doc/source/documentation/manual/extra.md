@@ -17,7 +17,7 @@ SLEPc mainly contains high level objects, as depicted in figure [](#fig:slepc). 
 
     -   Event logging, including user-defined events.
 
-    -   Direct wall-clock timing with {external:doc}`PetscTime`.
+    -   Direct wall-clock timing with {external:doc}`PetscTime`().
 
     -   Display detailed profile information and trace of events.
 
@@ -63,11 +63,11 @@ In some cases, these problems can be solved by reformulating them as a reduced-o
 
 All these cases can be easily handled in SLEPc by means of shell matrices. These are matrices that do not require explicit storage of the matrix entries. Instead, the user must provide subroutines for all the necessary matrix operations, typically only the application of the linear operator to a vector.
 
-Shell matrices, also called matrix-free matrices, are created in PETSc with the function {external:doc}`MatCreateShell`. Then, the function {external:doc}`MatShellSetOperation` is used to provide any user-defined shell matrix operations (see the {{'[PETSc Users Guide](https://petsc.org/{}/manual/mat/#application-specific-custom-matrices)'.format(branch)}} for additional details). Several examples are available in SLEPc that illustrate how to solve a matrix-free eigenvalue problem.
+Shell matrices, also called matrix-free matrices, are created in PETSc with the function {external:doc}`MatCreateShell`(). Then, the function {external:doc}`MatShellSetOperation`() is used to provide any user-defined shell matrix operations (see the {{'[PETSc Users Guide](https://petsc.org/{}/manual/mat/#application-specific-custom-matrices)'.format(branch)}} for additional details). Several examples are available in SLEPc that illustrate how to solve a matrix-free eigenvalue problem.
 
 In the simplest case, defining matrix-vector product operations (`MATOP_MULT`) is enough for using `EPS` with shell matrices. However, in the case of generalized problems, if matrix $B$ is also a shell matrix then it may be necessary to define other operations in order to be able to solve the linear system successfully, for example `MATOP_GET_DIAGONAL` to use an iterative linear solver with Jacobi preconditioning. On the other hand, if the shift-and-invert `ST` is to be used, then in addition it may also be necessary to define `MATOP_SHIFT` or `MATOP_AXPY` (see section [](#sec:explicit) for discussion).
 
-In the case of `SVD`, both $A$ and $A^*$ are required to solve the problem. So when computing the SVD, the shell matrix needs to have the `MATOP_MULT_TRANSPOSE` operation (or `MATOP_MULT_HERMITIAN_TRANSPOSE` in the case of complex scalars) in addition to `MATOP_MULT`. Alternatively, if $A^*$ is to be built explicitly, `MATOP_TRANSPOSE` is then the required operation. For details, see the manual page for `SVDSetImplicitTranspose`.
+In the case of `SVD`, both $A$ and $A^*$ are required to solve the problem. So when computing the SVD, the shell matrix needs to have the `MATOP_MULT_TRANSPOSE` operation (or `MATOP_MULT_HERMITIAN_TRANSPOSE` in the case of complex scalars) in addition to `MATOP_MULT`. Alternatively, if $A^*$ is to be built explicitly, `MATOP_TRANSPOSE` is then the required operation. For details, see the manual page for `SVDSetImplicitTranspose()`.
 
 {#sec:gpu}
 ## GPU Computing
@@ -82,13 +82,13 @@ CUDA provides a C/C++ compiler with CUDA extensions as well as the cuBLAS and cu
 $ ./configure --with-precision=single --with-cuda
 ```
 
-{external:doc}`VECCUDA` and {external:doc}`MATAIJCUSPARSE` are currently the mechanism in PETSc to run a computation on the GPU. {external:doc}`VECCUDA` is a special type of {external:doc}`Vec` whose array is mirrored in the GPU (and similarly for {external:doc}`MATAIJCUSPARSE`). PETSc takes care of keeping memory coherence between the two copies of the array, and performs the computation on the GPU when possible, trying to avoid unnecessary copies between the host and the device. For maximum efficiency, the user has to make sure that all vectors and matrices are of these types. If they are created in the standard way ({external:doc}`VecCreate` plus {external:doc}`VecSetFromOptions`) then it is sufficient to run the SLEPc program with
+{external:doc}`VECCUDA` and {external:doc}`MATAIJCUSPARSE` are currently the mechanism in PETSc to run a computation on the GPU. {external:doc}`VECCUDA` is a special type of {external:doc}`Vec` whose array is mirrored in the GPU (and similarly for {external:doc}`MATAIJCUSPARSE`). PETSc takes care of keeping memory coherence between the two copies of the array, and performs the computation on the GPU when possible, trying to avoid unnecessary copies between the host and the device. For maximum efficiency, the user has to make sure that all vectors and matrices are of these types. If they are created in the standard way ({external:doc}`VecCreate`() plus {external:doc}`VecSetFromOptions`()) then it is sufficient to run the SLEPc program with
 
 ```{code} console
 $ ./program -vec_type cuda -mat_type aijcusparse
 ```
 
-Note that the first option is unnecessary if no {external:doc}`Vec` is created in the main program, or if all vectors are created via {external:doc}`MatCreateVecs` from a {external:doc}`MATAIJCUSPARSE`.
+Note that the first option is unnecessary if no {external:doc}`Vec` is created in the main program, or if all vectors are created via {external:doc}`MatCreateVecs`() from a {external:doc}`MATAIJCUSPARSE`.
 
 For AMD GPUs the procedure is very similar, with HIP providing the compiler and ROCm providing the analogue libraries hipBLAS and hipSPARSE. To configure PETSc with HIP do:
 
@@ -112,16 +112,16 @@ A similar mechanism is available in SLEPc also for extending the system incorpor
 The following function:
 
 ```{code} c
-STShellSetApply(ST,PetscErrorCode(*)(ST,Vec,Vec));
+STShellSetApply(ST st,STShellApplyFn *apply)
 ```
 
 has to be invoked after the creation of the `ST` object in order to provide a routine that applies the operator to a vector. And this function:
 
 ```{code} c
-STShellSetBackTransform(ST,PetscErrorCode(*)(ST,PetscInt,PetscScalar*,PetscScalar*));
+STShellSetBackTransform(ST st,STShellBackTransformFn *backtr)
 ```
 
-can be used optionally to specify the routine for the back-transformation of eigenvalues. The two functions provided by the user can make use of any required user-defined information via a context that can be retrieved with `STShellGetContext`. The example program {{'[ex10.c](https://slepc.upv.es/{}/src/eps/tutorials/ex10.c.html)'.format(branch)}} illustrates the use of shell transformations.
+can be used optionally to specify the routine for the back-transformation of eigenvalues. The two functions provided by the user can make use of any required user-defined information via a context that can be retrieved with `STShellGetContext()`. The example program {{'[ex10.c](https://slepc.upv.es/{}/src/eps/tutorials/ex10.c.html)'.format(branch)}} illustrates the use of shell transformations.
 
 SLEPc further supports extensibility by allowing application programmers to code their own subroutines for unimplemented features such as new eigensolvers or new spectral transformations. It is possible to register these new methods to the system and use them as the rest of standard subroutines. For example, to implement a variant of the Subspace Iteration method, one could copy the SLEPc code associated with the `subspace` solver, modify it and register a new `EPS` type with the following line of code:
 
@@ -130,206 +130,6 @@ EPSRegister("newsubspace",EPSCreate_NEWSUB);
 ```
 
 After this call, the new solver could be used in the same way as the rest of SLEPc solvers, e.g. with `-eps_type newsubspace` in the command line. A similar mechanism is available for registering new types of the other classes.
-
-{#sec:sys}
-## Auxiliary Classes
-
-Apart from the main solver classes listed in table [](#tab:modules), SLEPc contains several auxiliary classes:
-
--   `ST`: Spectral Transformation, fully described in chapter [](#ch:st).
-
--   `FN`: Mathematical Function, required in application code to represent the constituent functions of the nonlinear operator in split form (chapter [](#ch:nep)), as well as the function to be used when computing the action of a matrix function on a vector (chapter [](#ch:mfn)).
-
--   `DS`: Direct Solver (or Dense System), can be seen as a wrapper to LAPACK functions used within SLEPc. It is mostly an internal object that need not be called by end users.
-
--   `BV`: Basis Vectors, provides the concept of a block of vectors that represent the basis of a subspace.
-
--   `RG`: Region, a way to define a region of the complex plane.
-
-{#sec:fn}
-### FN: Mathematical Functions
-
-The `FN` class provides a few predefined mathematical functions, including rational functions (of which polynomials are a particular case) and exponentials. Objects of this class are instantiated by providing the values of the relevant parameters. `FN` objects are created with `FNCreate` and it is necessary to select the type of function (rational, exponential, etc.) with `FNSetType`. Table [](#tab:fn) lists available functions.
-
-:::{table} Mathematical functions available as `FN` objects
-:name: tab:fn
-
- |Function                 |`FNType`      |Expression
- |-------------------------|--------------|-------------------------------------
- |Polynomial and rational  |`FNRATIONAL`  |$p(x)/q(x)$
- |Exponential              |`FNEXP`       |$e^x$
- |Logarithm                |`FNLOG`       |$\log x$
- |$\varphi$-functions      |`FNPHI`       |$\varphi_0(x)$, $\varphi_1(x)$, ...
- |Square root              |`FNSQRT`      |$\sqrt{x}$
- |Inverse square root      |`FNINVSQRT`   |$x^{-\frac{1}{2}}$
- |Combine two functions    |`FNCOMBINE`   |See text
-
-:::
-
-Parameters common to all `FN` types are the scaling factors, which are set with:
-
-```{code} c
-FNSetScale(FN fn,PetscScalar alpha,PetscScalar beta);
-```
-
-where `alpha` multiplies the argument and `beta` multiplies the result. With this, the actual function is $\beta\cdot f(\alpha\cdot x)$ for a given function $f(\cdot)$. For instance, an exponential function $f(x)=e^x$ will turn into
-
-```{math}
-:label: eq:exp-function
-
-g(x)=\beta e^{\alpha x}.
-```
-
-In a rational function there are specific parameters, namely the coefficients of the numerator and denominator,
-
-```{math}
-:label: eq:num-denum-coefficients
-
-r(x)=\frac{p(x)}{q(x)}
-=\frac{\nu_{n-1}x^{n-1}+\cdots+\nu_1x+\nu_0}{\delta_{m-1}x^{m-1}+\cdots+\delta_1x+\delta_0}.
-```
-
-These parameters are specified with:
-
-```{code} c
-FNRationalSetNumerator(FN fn,PetscInt np,PetscScalar *pcoeff);
-FNRationalSetDenominator(FN fn,PetscInt nq,PetscScalar *qcoeff);
-```
-
-Here, polynomials are passed as an array with high order coefficients appearing in low indices.
-
-The $\varphi$-functions are given by
-
-```{math}
-:label: eq:phi-functions
-
-\varphi_0(x)=e^x,\qquad \varphi_1(x)=\frac{e^x-1}{x},\qquad \varphi_k(x)=\frac{\varphi_{k-1}(x)-1/(k-1)!}{x},
-```
-
-where the index $k$ must be specified with `FNPhiSetIndex`.
-
-Whenever the solvers need to compute $f(x)$ or $f'(x)$ on a given scalar $x$, the following functions are invoked:
-
-```{code} c
-FNEvaluateFunction(FN fn,PetscScalar x,PetscScalar *y)
-FNEvaluateDerivative(FN fn,PetscScalar x,PetscScalar *y)
-```
-
-The function can also be evaluated as a matrix function, $B=f(A)$, where $A,B$ are small, dense, square matrices. This is done with `FNEvaluateFunctionMat`. Note that for a rational function, the corresponding expression would be $q(A)^{-1}p(A)$. For computing functions such as the exponential of a small matrix $A$, several methods are available. When the matrix $A$ is symmetric, the default is to compute $f(A)$ using the eigendecomposition $A=Q\Lambda Q^*$, for instance the exponential would be computed as $\exp(A)=Q\,\mathrm{diag}(e^{\lambda_i})Q^*$. In the general case, it is necessary to have recourse to one of the methods discussed in, e.g., {cite:p}`Hig10`.
-
-Finally, there is a mechanism to combine simple functions in order to create more complicated functions. For instance, the function
-
-```{math}
-:label: eq:combined-funct
-
-f(x) = (1-x^2) \exp\left( \frac{-x}{1+x^2} \right)
-```
-
-can be represented with an expression tree with three leaves (one exponential function and two rational functions) and two interior nodes (one of them is the root, $f(x)$). Interior nodes are simply `FN` objects of type `FNCOMBINE` that specify how the two children must be combined (with either addition, multiplication, division or function composition):
-
-```{code} c
-FNCombineSetChildren(FN fn,FNCombineType comb,FN f1,FN f2)
-```
-
-The combination of $f_1$ and $f_2$ with division will result in $f_1(x)/f_2(x)$ and $f_2(A)^{-1}f_1(A)$ in the case of matrices.
-
-{#sec:bv}
-### BV: Basis Vectors
-
-The `BV` class may be useful for advanced users, so we briefly describe it here for completeness. `BV` is a convenient way of handling a collection of vectors that often operate together, rather than working with an array of {external:doc}`Vec`. It can be seen as a generalization of {external:doc}`Vec` to a tall-skinny matrix with several columns.
-
-:::{table} Operations available for `BV` objects
-:name: tab:bv
-
- |Operation              |Block version      |Column version           |Vector version
- |-----------------------|-------------------|-------------------------|----------------------
- |$Y=X$                  |`BVCopy`           |`BVCopyColumn`           |`BVCopyVec`
- |$Y=\beta Y+\alpha XQ$  |`BVMult`           |`BVMultColumn`           |`BVMultVec`
- |$M=Y^*\!AX$            |`BVMatProject`     |--                       |--
- |$M=Y^*X$               |`BVDot`            |`BVDotColumn`            |`BVDotVec`
- |$Y=\alpha Y$           |`BVScale`          |`BVScaleColumn`          |--
- |$r=\\|X\\|_{type}$     |`BVNorm`           |`BVNormColumn`           |`BVNormVec`
- |Set to random values   |`BVSetRandom`      |`BVSetRandomColumn`      |--
- |Orthogonalize          |`BVOrthogonalize`  |`BVOrthogonalizeColumn`  |`BVOrthogonalizeVec`
-
-:::
-
-Table [](#tab:bv) shows a summary of the operations offered by the `BV` class, with variants that operate on the whole `BV`, on a single column, or on an external {external:doc}`Vec` object. Missing variants can be achieved simply with {external:doc}`Vec` and {external:doc}`Mat` operations. Other available variants not shown in the table are `BVMultInPlace`, `BVMultInPlaceHermitianTranspose` and `BVOrthogonalizeSomeColumn`.
-
-Most SLEPc solvers use a `BV` object to represent the working subspace basis. In particular, orthogonalization operations are mostly confined within `BV`. Hence, `BV` provides options for specifying the method of orthogonalization of vectors (Gram-Schmidt) as well as the method of block orthogonalization, see `BVSetOrthogonalization`.
-
-{#sec:rg}
-### RG: Region
-
-The `RG` object defines a region of the complex plane, that can be used to specify where eigenvalues must be sought. Currently, the following types of regions are available:
-
--   A (generalized) interval, defined as $[a,b]\times[c,d]$, where the four parameters can be set with `RGIntervalSetEndpoints`. This covers the particular cases of an interval on the real axis (setting $c=d=0$), the left halfplane $[-\infty,0]\times[-\infty,+\infty]$, a quadrant, etc. See figure [](#fig:rg-interval).
-```{figure} ../../_static/images/manual/svg/fig-rg-interval.svg
-:alt: Interval region defined via de RG class
-:name: fig:rg-interval
-
-Interval region defined via de RG class
-```
-
--   A polygon defined by its vertices, given via `RGPolygonSetVertices`. See figure [](#fig:rg-polygon).
-```{figure} ../../_static/images/manual/svg/fig-rg-polygon.svg
-:alt: Polygon region defined via de RG class
-:name: fig:rg-polygon
-
-Polygon region defined via de RG class
-```
-
--   An ellipse defined by its center, radius and vertical scale (1 by default), specified with `RGEllipseSetParameters`. See figure [](#fig:rg-ellipse).
-```{figure} ../../_static/images/manual/svg/fig-rg-ellipse.svg
-:alt: Ellipse region defined via de RG class
-:name: fig:rg-ellipse
-
-Ellipse region defined via de RG class
-```
-
--   A ring region similar to an ellipse but consisting of a thin stripe along the ellipse with optional start and end angles. See figure [](#fig:rg-ring). The parameters are set with `RGRingSetParameters`.
-```{figure} ../../_static/images/manual/svg/fig-rg-ring.svg
-:alt: Ring region defined via de RG class
-:name: fig:rg-ring
-
-Ring region defined via de RG class
-```
-
-Check table [](tab:rg) for the names that should be used in each case.
-
-:::{table} Regions available as `RG` objects
-:name: tab:rg
-
- |Region Type             |`RGType`      |Options Database
- |------------------------|--------------|------------------
- |(Generalized) Interval  |`RGINTERVAL`  |   `interval`
- |Polygon                 |`RGPOLYGON`   |   `polygon`
- |Ellipse                 |`RGELLIPSE`   |   `ellipse`
- |Ring                    |`RGRING`      |   `ring`
-
-:::
-
-Sometimes it is useful to specify the complement of a certain region, e.g., the part of the complex plane outside an ellipse. This can be achieved with:
-
-```{code} c
-RGSetComplement(RG rg,PetscBool flg)
-```
-
-or in the command line with `-rg_complement`.
-
-By default, a newly created `RG` object that is not set a type nor parameters must represent the whole complex plane (the same as `RGINTERVAL` with values $[-\infty,+\infty]\times[-\infty,+\infty]$). We call this the *trivial* region, and provide a function to test this situation:
-
-```{code} c
-RGIsTrivial(RG rg,PetscBool *trivial)
-```
-
-Another useful operation is to check whether a given point of the complex plane is inside the region or not:
-
-```{code} c
-RGCheckInside(RG rg,PetscInt n,PetscScalar *ar,PetscScalar *ai,PetscInt *inside)
-```
-
-Note that the point is represented as two {external:doc}`PetscScalar`'s, similarly to eigenvalues in SLEPc.
 
 ## Directory Structure
 
@@ -393,7 +193,7 @@ This list might be incomplete. Check the output of `./configure --help` for othe
 
 LAPACK {cite:p}`And99` is a software package for the solution of many different dense linear algebra problems, including various types of eigenvalue problems and singular value decompositions. SLEPc explicitly creates the operator matrix in dense form and then the appropriate LAPACK driver routine is invoked. Therefore, this interface should be used only for testing and validation purposes and not in a production code. The operator matrix is created by applying the operator to the columns of the identity matrix.
 
-**Installation**: PETSc already depends on LAPACK. The SLEPc interface to LAPACK can be used directly. If SLEPc's configure script complains about missing LAPACK functions, then reconfigure PETSc with option `--download-f2cblaslapack`.
+**Installation**: PETSc already depends on LAPACK. The SLEPc interface to LAPACK can be used directly. If SLEPc's `configure` script complains about missing LAPACK functions, then reconfigure PETSc with option `--download-f2cblaslapack`.
 
 #### ARPACK
 
@@ -413,7 +213,7 @@ PRIMME {cite:p}`Sta10` is a C library for finding a number of eigenvalues and th
 
 **Installation**: Type `make lib` after customizing the file `Make_flags` appropriately. Alternatively, the `--download-primme` option is also available in SLEPc's `configure`.
 
-**Specific options**: Since PRIMME contains preconditioned solvers, the SLEPc interface uses `STPRECOND`, as described in section [](#sec:precond). The SLEPc interface to this package allows the user to specify the maximum allowed block size with the function `EPSPRIMMESetBlockSize` or at run time with the option `-eps_primme_blocksize <size>`. For changing the particular algorithm within PRIMME, use the function `EPSPRIMMESetMethod`. PRIMME also provides a solver for the singular value decomposition that is interfaced in SLEPc's `SVD`, see `SVDPRIMMESetMethod`.
+**Specific options**: Since PRIMME contains preconditioned solvers, the SLEPc interface uses `STPRECOND`, as described in section [](#sec:precond). The SLEPc interface to this package allows the user to specify the maximum allowed block size with the function `EPSPRIMMESetBlockSize()` or at run time with the option `-eps_primme_blocksize <size>`. For changing the particular algorithm within PRIMME, use the function `EPSPRIMMESetMethod()`. PRIMME also provides a solver for the singular value decomposition that is interfaced in SLEPc's `SVD`, see `SVDPRIMMESetMethod()`.
 
 #### EVSL
 
@@ -421,7 +221,7 @@ PRIMME {cite:p}`Sta10` is a C library for finding a number of eigenvalues and th
 
 EVSL {cite:p}`Li19` is a sequential library that implements methods for computing all eigenvalues located in a given interval for real symmetric (standard or generalized) eigenvalue problems. Currently SLEPc only supports standard problems.
 
-**Installation**: The option `--download-evsl` is available in SLEPc's configure for easy installation. Alternatively, one can use an already installed version.
+**Installation**: The option `--download-evsl` is available in SLEPc's `configure` for easy installation. Alternatively, one can use an already installed version.
 
 #### BLOPEX
 
@@ -455,7 +255,7 @@ ELPA {cite:p}`Auc11` is a high-performance library for the parallel solution of 
 
 KSVD {cite:p}`Suk19` is a high performance software framework for computing a dense SVD on distributed-memory manycore systems. The KSVD solver relies on the polar decomposition (PD) based on the QR Dynamically-Weighted Halley (QDWH) and ZOLO-PD algorithms.
 
-**Installation**: The option `--download-ksvd` is available in SLEPc's configure for easy installation, which in turn requires adding `--download-polar` and `--download-elpa`.
+**Installation**: The option `--download-ksvd` is available in SLEPc's `configure` for easy installation, which in turn requires adding `--download-polar` and `--download-elpa`.
 
 #### ELEMENTAL
 
@@ -473,7 +273,7 @@ FEAST {cite:p}`Pol09` is a numerical library for solving the standard or general
 
 **Installation**: We only support the FEAST implementation included in Intel MKL. For using it from SLEPc it is necessary to configure PETSc with MKL by adding the corresponding option, e.g., `--with-blas-lapack-dir=$MKLROOT`.
 
-**Specific options**: The SLEPc interface to FEAST allows the user to specify the number of contour integration points with the function `EPSFEASTSetNumPoints` or at run time with the option `-eps_feast_num_points <n>`.
+**Specific options**: The SLEPc interface to FEAST allows the user to specify the number of contour integration points with the function `EPSFEASTSetNumPoints()` or at run time with the option `-eps_feast_num_points <n>`.
 
 #### CHASE
 
@@ -482,6 +282,14 @@ FEAST {cite:p}`Pol09` is a numerical library for solving the standard or general
 CHASE {cite:p}`Win19` is a modern and scalable library based on subspace iteration with polynomial acceleration to solve dense Hermitian (symmetric) algebraic eigenvalue problems, especially solving dense Hermitian eigenproblems arranged in a sequence. Novel to ChASE is the computation of the spectral estimates that enter in the filter and an optimization of the polynomial degree that further reduces the necessary floating-point operations.
 
 **Installation**: Currently, the CHASE interface in SLEPc is based on the MPI version with block-cyclic distribution, i.e., ScaLAPACK matrix storage, so it is necessary to enable ScaLAPACK during configuration of PETSc.
+
+#### SLICOT
+
+<https://www.slicot.org>
+
+SLICOT provides Fortran 77 implementations of numerical algorithms for computations in systems and control theory. In SLEPc, they are used in the `LME` module only, for solving Lyapunov equations of small size.
+
+**Installation**: The option `--download-slicot` is available in SLEPc's `configure` for easy installation.
 
 {#sec:fortran}
 ## Fortran Interface

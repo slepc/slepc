@@ -49,34 +49,39 @@ static PetscErrorCode MFNSolve_Private(MFN mfn,Vec b,Vec x)
 }
 
 /*@
-   MFNSolve - Solves the matrix function problem. Given a vector b, the
-   vector x = f(A)*b is returned.
+   MFNSolve - Solves the matrix function problem. Given a vector $b$, the
+   vector $x = f(A)b$ is returned.
 
    Collective
 
    Input Parameters:
-+  mfn - matrix function context obtained from MFNCreate()
++  mfn - the matrix function solver context
 -  b   - the right hand side vector
 
    Output Parameter:
-.  x   - the solution (this may be the same vector as b, then b will be
+.  x   - the solution (this may be the same vector as `b`, then `b` will be
          overwritten with the answer)
 
    Options Database Keys:
 +  -mfn_view - print information about the solver used
-.  -mfn_view_mat binary - save the matrix to the default binary viewer
-.  -mfn_view_rhs binary - save right hand side vector to the default binary viewer
-.  -mfn_view_solution binary - save computed solution vector to the default binary viewer
--  -mfn_converged_reason - print reason for convergence, and number of iterations
+.  -mfn_view_pre - print information about the solver before the solve starts
+.  -mfn_view_mat - view the matrix
+.  -mfn_view_rhs - view right hand side vector
+.  -mfn_view_solution - view computed solution vector
+-  -mfn_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:
-   The matrix A is specified with MFNSetOperator().
-   The function f is specified with MFNSetFN().
+   The matrix $A$ is specified with `MFNSetOperator()`. The function $f$ is
+   specified via the `FN` object obtained with `MFNGetFN()` or set with `MFNSetFN()`.
+
+   All the command-line options listed above admit an optional argument specifying
+   the viewer type and options. For instance, use `-mfn_view_mat binary:amatrix.bin`
+   to save the matrix to a binary file, or `-mfn_view_solution :sol.m:ascii_matlab`
+   to save the solution in a file that can be executed in Matlab.
 
    Level: beginner
 
-.seealso: `MFNCreate()`, `MFNSetUp()`, `MFNDestroy()`, `MFNSetTolerances()`,
-          `MFNSetOperator()`, `MFNSetFN()`
+.seealso: [](ch:mfn), `MFNCreate()`, `MFNSetUp()`, `MFNDestroy()`, `MFNSetTolerances()`, `MFNSetOperator()`, `MFNSetFN()`
 @*/
 PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
 {
@@ -92,25 +97,34 @@ PetscErrorCode MFNSolve(MFN mfn,Vec b,Vec x)
 }
 
 /*@
-   MFNSolveTranspose - Solves the transpose matrix function problem. Given a vector b,
-   the vector x = f(A^T)*b is returned.
+   MFNSolveTranspose - Solves the transpose matrix function problem. Given a vector $b$,
+   the vector $x = f(A^T)b$ is returned.
 
    Collective
 
    Input Parameters:
-+  mfn - matrix function context obtained from MFNCreate()
++  mfn - the matrix function solver context
 -  b   - the right hand side vector
 
    Output Parameter:
-.  x   - the solution (this may be the same vector as b, then b will be
+.  x   - the solution (this may be the same vector as `b`, then `b` will be
          overwritten with the answer)
 
-   Note:
-   See available options at MFNSolve().
+   Notes:
+   The matrix $A$ is specified with `MFNSetOperator()`. The function $f$ is
+   specified via the `FN` object obtained with `MFNGetFN()` or set with `MFNSetFN()`.
+
+   See available command-line options at `MFNSolve()`.
+
+   Developer Notes:
+   This is currently implemented with an explicit transpose matrix created
+   with `MatCreateTranspose()`.
+
+   Currently there is no conjugate-transpose version.
 
    Level: beginner
 
-.seealso: `MFNSolve()`
+.seealso: [](ch:mfn), `MFNSolve()`, `MatCreateTranspose()`
 @*/
 PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
 {
@@ -128,27 +142,27 @@ PetscErrorCode MFNSolveTranspose(MFN mfn,Vec b,Vec x)
 
 /*@
    MFNGetIterationNumber - Gets the current iteration number. If the
-   call to MFNSolve() is complete, then it returns the number of iterations
+   call to `MFNSolve()` is complete, then it returns the number of iterations
    carried out by the solution method.
 
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
 .  its - number of iterations
 
    Note:
-   During the i-th iteration this call returns i-1. If MFNSolve() is
-   complete, then parameter "its" contains either the iteration number at
+   During the $i$-th iteration this call returns $i-1$. If `MFNSolve()` is
+   complete, then parameter `its` contains either the iteration number at
    which convergence was successfully reached, or failure was detected.
-   Call MFNGetConvergedReason() to determine if the solver converged or
+   Call `MFNGetConvergedReason()` to determine if the solver converged or
    failed and why.
 
    Level: intermediate
 
-.seealso: `MFNGetConvergedReason()`, `MFNSetTolerances()`
+.seealso: [](ch:mfn), `MFNGetConvergedReason()`, `MFNSetTolerances()`
 @*/
 PetscErrorCode MFNGetIterationNumber(MFN mfn,PetscInt *its)
 {
@@ -160,36 +174,34 @@ PetscErrorCode MFNGetIterationNumber(MFN mfn,PetscInt *its)
 }
 
 /*@
-   MFNGetConvergedReason - Gets the reason why the MFNSolve() iteration was
+   MFNGetConvergedReason - Gets the reason why the `MFNSolve()` iteration was
    stopped.
 
    Not Collective
 
    Input Parameter:
-.  mfn - the matrix function context
+.  mfn - the matrix function solver context
 
    Output Parameter:
-.  reason - negative value indicates diverged, positive value converged
+.  reason - negative value indicates diverged, positive value converged, see
+   `MFNConvergedReason` for the possible values
+
+   Options Database Key:
+.  -mfn_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:
+   If this routine is called before or doing the `MFNSolve()` the value of
+   `MFN_CONVERGED_ITERATING` is returned.
 
-   Possible values for reason are
-+  MFN_CONVERGED_TOL - converged up to tolerance
-.  MFN_CONVERGED_ITS - solver completed the requested number of steps
-.  MFN_DIVERGED_ITS - required more than max_it iterations to reach convergence
--  MFN_DIVERGED_BREAKDOWN - generic breakdown in method
-
-   Can only be called after the call to MFNSolve() is complete.
-
-   Basic solvers (e.g. unrestarted Krylov iterations) cannot determine if the
+   Basic solvers (e.g., unrestarted Krylov iterations) cannot determine if the
    computation is accurate up to the requested tolerance. In that case, the
-   converged reason is set to MFN_CONVERGED_ITS if the requested number of steps
-   (for instance, the ncv value in unrestarted Krylov methods) have been
+   converged reason is set to `MFN_CONVERGED_ITS` if the requested number of steps
+   (for instance, the `ncv` value in unrestarted Krylov methods) have been
    completed successfully.
 
    Level: intermediate
 
-.seealso: `MFNSetTolerances()`, `MFNSolve()`, `MFNConvergedReason`, `MFNSetErrorIfNotConverged()`
+.seealso: [](ch:mfn), `MFNSetTolerances()`, `MFNSolve()`, `MFNConvergedReason`, `MFNSetErrorIfNotConverged()`
 @*/
 PetscErrorCode MFNGetConvergedReason(MFN mfn,MFNConvergedReason *reason)
 {

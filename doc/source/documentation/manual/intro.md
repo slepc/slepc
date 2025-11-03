@@ -228,25 +228,26 @@ Note that MPI may be deactivated during configuration of PETSc, if one wants to 
 
 All PETSc-compliant programs support the use of the `-h` or `-help` option as well as the `-v` or `-version` option. In the case of SLEPc programs, specific information for SLEPc is also displayed.
 
+{#sec:writing-prog}
 ## Writing SLEPc Programs
 
-Most SLEPc programs begin with a call to `SlepcInitialize`
+Most SLEPc programs begin with a call to `SlepcInitialize()`
 
 ```{code} c
 SlepcInitialize(int *argc,char ***args,const char file[],const char help[]);
 ```
 
-which initializes SLEPc, PETSc and MPI. This subroutine is very similar to {external:doc}`PetscInitialize`, and the arguments have the same meaning. In fact, internally `SlepcInitialize` calls {external:doc}`PetscInitialize`.
+which initializes SLEPc, PETSc and MPI. This subroutine is very similar to {external:doc}`PetscInitialize`(), and the arguments have the same meaning. In fact, internally `SlepcInitialize()` calls {external:doc}`PetscInitialize`().
 
 After this initialization, SLEPc programs can use communicators defined by PETSc. In most cases users can employ the communicator {external:doc}`PETSC_COMM_WORLD` to indicate all processes in a given run and {external:doc}`PETSC_COMM_SELF` to indicate a single process. MPI provides routines for generating new communicators consisting of subsets of processes, though most users rarely need to use these features. SLEPc users need not program much message passing directly with MPI, but they must be familiar with the basic concepts of message passing and distributed memory computing.
 
-All SLEPc programs should call `SlepcFinalize` as their final (or nearly final) statement
+All SLEPc programs should call `SlepcFinalize()` as their final (or nearly final) statement
 
 ```{code} c
 SlepcFinalize();
 ```
 
-This routine handles operations to be executed at the conclusion of the program, and calls {external:doc}`PetscFinalize` if `SlepcInitialize` began PETSc.
+This routine handles operations to be executed at the conclusion of the program, and calls {external:doc}`PetscFinalize`() if `SlepcInitialize()` began PETSc.
 
 **Note to Fortran Programmers**: In this manual all the examples and calling sequences are given for the C/C++ programming languages. However, Fortran programmers can use most of the functionality of SLEPc and PETSc from Fortran, with only minor differences in the user interface. For instance, the two functions mentioned above have their corresponding Fortran equivalent:
 
@@ -286,7 +287,7 @@ MatSetSizes(Mat A,PetscInt m,PetscInt n,PetscInt M,PetscInt N);
 MatSetFromOptions(Mat A);
 ```
 
-where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with {external:doc}`MatSetValues` and then assembles it.
+where the matrix format can be specified at runtime. The example creates a matrix, sets the nonzero values with {external:doc}`MatSetValues`() and then assembles it.
 
 **Eigensolvers**. Usage of eigensolvers is very similar to other kinds of solvers provided by PETSc. After creating the matrix (or matrices) that define the problem, $Ax = kx$ (or $Ax=kBx$), the user can then use `EPS` to solve the system with the following sequence of commands:
 

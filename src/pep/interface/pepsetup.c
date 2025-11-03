@@ -39,21 +39,21 @@ PetscErrorCode PEPSetDefaultST_Transform(PEP pep)
 }
 
 /*@
-   PEPSetDSType - Sets the type of the internal DS object based on the current
+   PEPSetDSType - Sets the type of the internal `DS` object based on the current
    settings of the polynomial eigensolver.
 
    Collective
 
    Input Parameter:
-.  pep - polynomial eigensolver context
+.  pep - the polynomial eigensolver context
 
    Note:
    This function need not be called explicitly, since it will be called at
-   both PEPSetFromOptions() and PEPSetUp().
+   both `PEPSetFromOptions()` and `PEPSetUp()`.
 
    Level: developer
 
-.seealso: `PEPSetFromOptions()`, `PEPSetUp()`
+.seealso: [](ch:pep), `PEPSetFromOptions()`, `PEPSetUp()`
 @*/
 PetscErrorCode PEPSetDSType(PEP pep)
 {
@@ -65,21 +65,21 @@ PetscErrorCode PEPSetDSType(PEP pep)
 
 /*@
    PEPSetUp - Sets up all the internal data structures necessary for the
-   execution of the PEP solver.
+   execution of the polynomial eigensolver.
 
    Collective
 
    Input Parameter:
-.  pep   - solver context
+.  pep - the polynomial eigensolver context
 
    Notes:
-   This function need not be called explicitly in most cases, since PEPSolve()
+   This function need not be called explicitly in most cases, since `PEPSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
    Level: developer
 
-.seealso: `PEPCreate()`, `PEPSolve()`, `PEPDestroy()`
+.seealso: [](ch:pep), `PEPCreate()`, `PEPSolve()`, `PEPDestroy()`
 @*/
 PetscErrorCode PEPSetUp(PEP pep)
 {
@@ -261,19 +261,19 @@ PetscErrorCode PEPSetUp(PEP pep)
    Collective
 
    Input Parameters:
-+  pep  - the eigenproblem solver context
-.  nmat - number of matrices in array A
++  pep  - the polynomial eigensolver context
+.  nmat - number of matrices in array `A`
 -  A    - the array of matrices associated with the eigenproblem
 
    Notes:
-   The polynomial eigenproblem is defined as P(l)*x=0, where l is
-   the eigenvalue, x is the eigenvector, and P(l) is defined as
-   P(l) = A_0 + l*A_1 + ... + l^d*A_d, with d=nmat-1 (the degree of P).
-   For non-monomial bases, this expression is different.
+   The polynomial eigenproblem is defined as $P(\lambda)x=0$, where $\lambda$
+   is the eigenvalue, $x$ is the eigenvector, and $P$ is defined as
+   $P(\lambda) = A_0 + \lambda A_1 + \dots + \lambda^d A_d$, with $d$=`nmat`-1
+   (the degree of $P$). For non-monomial bases, this expression is different.
 
    Level: beginner
 
-.seealso: `PEPSolve()`, `PEPGetOperators()`, `PEPGetNumMatrices()`, `PEPSetBasis()`
+.seealso: [](ch:pep), `PEPSolve()`, `PEPGetOperators()`, `PEPGetNumMatrices()`, `PEPSetBasis()`
 @*/
 PetscErrorCode PEPSetOperators(PEP pep,PetscInt nmat,Mat A[])
 {
@@ -323,7 +323,7 @@ PetscErrorCode PEPSetOperators(PEP pep,PetscInt nmat,Mat A[])
    Collective
 
    Input Parameters:
-+  pep - the PEP context
++  pep - the polynomial eigensolver context
 -  k   - the index of the requested matrix (starting in 0)
 
    Output Parameter:
@@ -331,7 +331,7 @@ PetscErrorCode PEPSetOperators(PEP pep,PetscInt nmat,Mat A[])
 
    Level: intermediate
 
-.seealso: `PEPSolve()`, `PEPSetOperators()`, `PEPGetNumMatrices()`
+.seealso: [](ch:pep), `PEPSolve()`, `PEPSetOperators()`, `PEPGetNumMatrices()`
 @*/
 PetscErrorCode PEPGetOperators(PEP pep,PetscInt k,Mat *A)
 {
@@ -344,19 +344,19 @@ PetscErrorCode PEPGetOperators(PEP pep,PetscInt k,Mat *A)
 }
 
 /*@
-   PEPGetNumMatrices - Returns the number of matrices stored in the PEP.
+   PEPGetNumMatrices - Returns the number of matrices stored in the `PEP`.
 
    Not Collective
 
    Input Parameter:
-.  pep - the PEP context
+.  pep - the polynomial eigensolver context
 
-   Output Parameters:
-.  nmat - the number of matrices passed in PEPSetOperators()
+   Output Parameter:
+.  nmat - the number of matrices passed in `PEPSetOperators()`
 
    Level: intermediate
 
-.seealso: `PEPSetOperators()`
+.seealso: [](ch:pep), `PEPSetOperators()`
 @*/
 PetscErrorCode PEPGetNumMatrices(PEP pep,PetscInt *nmat)
 {
@@ -382,7 +382,7 @@ PetscErrorCode PEPGetNumMatrices(PEP pep,PetscInt *nmat)
    Some solvers start to iterate on a single vector (initial vector). In that case,
    the other vectors are ignored.
 
-   These vectors do not persist from one PEPSolve() call to the other, so the
+   These vectors do not persist from one `PEPSolve()` call to the other, so the
    initial space should be set every time.
 
    The vectors do not need to be mutually orthonormal, since they are explicitly
@@ -393,7 +393,7 @@ PetscErrorCode PEPGetNumMatrices(PEP pep,PetscInt *nmat)
 
    Level: intermediate
 
-.seealso: `PEPSetUp()`
+.seealso: [](ch:pep), `PEPSetUp()`
 @*/
 PetscErrorCode PEPSetInitialSpace(PEP pep,PetscInt n,Vec is[])
 {
@@ -448,17 +448,17 @@ PetscErrorCode PEPSetDimensions_Default(PEP pep,PetscInt nev,PetscInt *ncv,Petsc
    Collective
 
    Input Parameters:
-+  pep   - eigensolver context
++  pep   - the polynomial eigensolver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin PEP
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `PEP`
    implementations.
 
    Level: developer
 
-.seealso: `PEPSetUp()`
+.seealso: [](ch:pep), `PEPSetUp()`, `PEPSetDimensions()`
 @*/
 PetscErrorCode PEPAllocateSolution(PEP pep,PetscInt extra)
 {

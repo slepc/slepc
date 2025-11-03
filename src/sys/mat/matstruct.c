@@ -24,23 +24,24 @@
 .  H  - the resulting matrix
 
    Notes:
-   The resulting matrix has the block form H = [ R C; -C^H -R^T ], where R is assumed
-   to be (complex) Hermitian and C complex symmetric. Note that this function does
+   The resulting matrix has the block form $$H = \begin{bmatrix} R & C \\ -C^* & -R^T \end{bmatrix},$$
+   where $R$ is assumed
+   to be (complex) Hermitian and $C$ complex symmetric. Note that this function does
    not check these properties, so if the matrices provided by the user do not satisfy
    them, then the solver will not behave as expected.
 
-   The obtained matrix can be used as an input matrix to EPS eigensolvers via
-   EPSSetOperators() for the case that the problem type is EPS_BSE. Note that the user
+   The obtained matrix can be used as an input matrix to `EPS` eigensolvers via
+   `EPSSetOperators()` for the case that the problem type is `EPS_BSE`. Note that the user
    cannot just build a matrix with the required structure, it must be done via this
    function.
 
-   In the current implementation, H is a MATNEST matrix, where R and C form the top
+   In the current implementation, `H` is a `MATNEST` matrix, where `R` and `C` form the top
    block row, while the bottom block row is composed of matrices of type
-   MATTRANSPOSEVIRTUAL and MATHERMITIANTRANSPOSEVIRTUAL scaled by -1.
+   `MATTRANSPOSEVIRTUAL` and `MATHERMITIANTRANSPOSEVIRTUAL` scaled by -1.
 
    Level: intermediate
 
-.seealso: `MatCreateNest()`, `EPSSetOperators()`, `EPSSetProblemType()`, `MatCreateHamiltonian()`
+.seealso: [](sec:structured), `MatCreateNest()`, `EPSSetOperators()`, `EPSSetProblemType()`, `MatCreateHamiltonian()`
 @*/
 PetscErrorCode MatCreateBSE(Mat R,Mat C,Mat *H)
 {
@@ -87,29 +88,30 @@ PetscErrorCode MatCreateBSE(Mat R,Mat C,Mat *H)
 
    Input Parameters:
 +  A - matrix for the (0,0) block
-.  B - matrix for the (0,1) block, must be real symmetric or Hermitian
--  C - matrix for the (1,0) block, must be real symmetric or Hermitian
+.  B - matrix for the (0,1) block, must be real symmetric or complex Hermitian
+-  C - matrix for the (1,0) block, must be real symmetric or complex Hermitian
 
    Output Parameter:
 .  H  - the resulting matrix
 
    Notes:
-   The resulting matrix has the block form H = [ A B; C -A^* ], where B and C are
+   The resulting matrix has the block form $$H = \begin{bmatrix} A & B \\ C & -A^* \end{bmatrix},$$
+   where $B$ and $C$ are
    assumed to be symmetric in the real case or Hermitian in the comples case. Note
    that this function does not check this property, so if the matrices provided by
    the user do not satisfy it, then the solver will not behave as expected.
 
-   The obtained matrix can be used as an input matrix to EPS eigensolvers via
-   EPSSetOperators() for the case that the problem type is EPS_HAMILT. Note that the
+   The obtained matrix can be used as an input matrix to `EPS` eigensolvers via
+   `EPSSetOperators()` for the case that the problem type is `EPS_HAMILT`. Note that the
    user cannot just build a matrix with the required structure, it must be done via
    this function.
 
-   In the current implementation, H is a MATNEST matrix, where the (1,1) block is
-   a matrix of type MATHERMITIANTRANSPOSEVIRTUAL obtained from A and scaled by -1.
+   In the current implementation, `H` is a `MATNEST` matrix, where the (1,1) block is
+   a matrix of type `MATHERMITIANTRANSPOSEVIRTUAL` obtained from `A` and scaled by -1.
 
    Level: intermediate
 
-.seealso: `MatCreateNest()`, `EPSSetOperators()`, `EPSSetProblemType()`, `MatCreateBSE()`
+.seealso: [](sec:structured), `MatCreateNest()`, `EPSSetOperators()`, `EPSSetProblemType()`, `MatCreateBSE()`
 @*/
 PetscErrorCode MatCreateHamiltonian(Mat A,Mat B,Mat C,Mat *H)
 {

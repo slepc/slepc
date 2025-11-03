@@ -28,7 +28,7 @@ PetscFunctionList LMEMonitorDestroyList       = NULL;
 PetscBool         LMEMonitorRegisterAllCalled = PETSC_FALSE;
 
 /*@
-   LMEView - Prints the LME data structure.
+   LMEView - Prints the `LME` data structure.
 
    Collective
 
@@ -37,22 +37,21 @@ PetscBool         LMEMonitorRegisterAllCalled = PETSC_FALSE;
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -lme_view -  Calls LMEView() at end of LMESolve()
+.  -lme_view - Calls `LMEView()` at end of `LMESolve()`
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
 
    Level: beginner
 
-.seealso: `LMECreate()`
+.seealso: [](ch:lme), `LMECreate()`, `LMEViewFromOptions()`
 @*/
 PetscErrorCode LMEView(LME lme,PetscViewer viewer)
 {
@@ -83,18 +82,18 @@ PetscErrorCode LMEView(LME lme,PetscViewer viewer)
 }
 
 /*@
-   LMEViewFromOptions - View from options
+   LMEViewFromOptions - View (print) an `LME` object based on values in the options database.
 
    Collective
 
    Input Parameters:
-+  lme  - the linear matrix equation context
-.  obj  - optional object
++  lme  - the linear matrix equation solver context
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: `LMEView()`, `LMECreate()`
+.seealso: [](ch:lme), `LMEView()`, `LMECreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode LMEViewFromOptions(LME lme,PetscObject obj,const char name[])
 {
@@ -104,26 +103,29 @@ PetscErrorCode LMEViewFromOptions(LME lme,PetscObject obj,const char name[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 /*@
-   LMEConvergedReasonView - Displays the reason an LME solve converged or diverged.
+   LMEConvergedReasonView - Displays the reason an `LME` solve converged or diverged.
 
    Collective
 
    Input Parameters:
-+  lme - the linear matrix equation context
++  lme - the linear matrix equation solver context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
-.  -lme_converged_reason - print reason for convergence, and number of iterations
+   Options Database Key:
+.  -lme_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Note:
-   To change the format of the output call PetscViewerPushFormat(viewer,format) before
-   this call. Use PETSC_VIEWER_DEFAULT for the default, use PETSC_VIEWER_FAILED to only
+   Notes:
+   Use `LMEConvergedReasonViewFromOptions()` to display the reason based on values
+   in the options database.
+
+   To change the format of the output call `PetscViewerPushFormat()` before this
+   call. Use `PETSC_VIEWER_DEFAULT` for the default, or `PETSC_VIEWER_FAILED` to only
    display a reason if it fails. The latter can be set in the command line with
-   -lme_converged_reason ::failed
+   `-lme_converged_reason ::failed`.
 
    Level: intermediate
 
-.seealso: `LMESetTolerances()`, `LMEGetIterationNumber()`, `LMEConvergedReasonViewFromOptions()`
+.seealso: [](ch:lme), `LMESetTolerances()`, `LMEGetIterationNumber()`, `LMEConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode LMEConvergedReasonView(LME lme,PetscViewer viewer)
 {
@@ -145,16 +147,16 @@ PetscErrorCode LMEConvergedReasonView(LME lme,PetscViewer viewer)
 
 /*@
    LMEConvergedReasonViewFromOptions - Processes command line options to determine if/how
-   the LME converged reason is to be viewed.
+   the `LME` converged reason is to be viewed.
 
    Collective
 
    Input Parameter:
-.  lme - the linear matrix equation context
+.  lme - the linear matrix equation solver context
 
-   Level: developer
+   Level: intermediate
 
-.seealso: `LMEConvergedReasonView()`
+.seealso: [](ch:lme), `LMEConvergedReasonView()`
 @*/
 PetscErrorCode LMEConvergedReasonViewFromOptions(LME lme)
 {
@@ -178,7 +180,7 @@ PetscErrorCode LMEConvergedReasonViewFromOptions(LME lme)
 }
 
 /*@
-   LMECreate - Creates the default LME context.
+   LMECreate - Creates the `LME` context.
 
    Collective
 
@@ -186,14 +188,14 @@ PetscErrorCode LMEConvergedReasonViewFromOptions(LME lme)
 .  comm - MPI communicator
 
    Output Parameter:
-.  outlme - location to put the LME context
+.  outlme - location to put the `LME` context
 
    Note:
-   The default LME type is LMEKRYLOV
+   The default `LME` type is `LMEKRYLOV`.
 
    Level: beginner
 
-.seealso: `LMESetUp()`, `LMESolve()`, `LMEDestroy()`, `LME`
+.seealso: [](ch:lme), `LMESetUp()`, `LMESolve()`, `LMEDestroy()`, `LME`
 @*/
 PetscErrorCode LMECreate(MPI_Comm comm,LME *outlme)
 {
@@ -233,33 +235,32 @@ PetscErrorCode LMECreate(MPI_Comm comm,LME *outlme)
 }
 
 /*@
-   LMESetType - Selects the particular solver to be used in the LME object.
+   LMESetType - Selects the particular solver to be used in the `LME` object.
 
    Logically Collective
 
    Input Parameters:
-+  lme  - the linear matrix equation context
++  lme  - the linear matrix equation solver context
 -  type - a known method
 
    Options Database Key:
-.  -lme_type <method> - Sets the method; use -help for a list
+.  -lme_type \<type\> - Sets the method; use -help for a list
     of available methods
 
    Notes:
-   See "slepc/include/slepclme.h" for available methods. The default
-   is LMEKRYLOV
+   See `LMEType` for available methods. The default is `LMEKRYLOV`.
 
-   Normally, it is best to use the LMESetFromOptions() command and
-   then set the LME type from the options database rather than by using
+   Normally, it is best to use the `LMESetFromOptions()` command and
+   then set the `LME` type from the options database rather than by using
    this routine.  Using the options database provides the user with
    maximum flexibility in evaluating the different available methods.
-   The LMESetType() routine is provided for those situations where it
+   The `LMESetType()` routine is provided for those situations where it
    is necessary to set the iterative solver independently of the command
    line or options database.
 
    Level: intermediate
 
-.seealso: `LMEType`
+.seealso: [](ch:lme), `LMEType`
 @*/
 PetscErrorCode LMESetType(LME lme,LMEType type)
 {
@@ -286,19 +287,19 @@ PetscErrorCode LMESetType(LME lme,LMEType type)
 }
 
 /*@
-   LMEGetType - Gets the LME type as a string from the LME object.
+   LMEGetType - Gets the `LME` type as a string from the `LME` object.
 
    Not Collective
 
    Input Parameter:
-.  lme - the linear matrix equation context
+.  lme - the linear matrix equation solver context
 
    Output Parameter:
-.  type - name of LME method
+.  type - name of `LME` method
 
    Level: intermediate
 
-.seealso: `LMESetType()`
+.seealso: [](ch:lme), `LMESetType()`
 @*/
 PetscErrorCode LMEGetType(LME lme,LMEType *type)
 {
@@ -318,22 +319,23 @@ PetscErrorCode LMEGetType(LME lme,LMEType *type)
 +  name - name of a new user-defined solver
 -  function - routine to create the solver context
 
-   Notes:
-   LMERegister() may be called multiple times to add several user-defined solvers.
+   Note:
+   `LMERegister()` may be called multiple times to add several user-defined solvers.
 
    Example Usage:
 .vb
-    LMERegister("my_solver",MySolverCreate);
+   LMERegister("my_solver",MySolverCreate);
 .ve
 
    Then, your solver can be chosen with the procedural interface via
-$     LMESetType(lme,"my_solver")
-   or at runtime via the option
-$     -lme_type my_solver
+.vb
+   LMESetType(lme,"my_solver")
+.ve
+   or at runtime via the option `-lme_type my_solver`.
 
    Level: advanced
 
-.seealso: `LMERegisterAll()`
+.seealso: [](ch:lme), `LMERegisterAll()`
 @*/
 PetscErrorCode LMERegister(const char *name,PetscErrorCode (*function)(LME))
 {
@@ -344,24 +346,25 @@ PetscErrorCode LMERegister(const char *name,PetscErrorCode (*function)(LME))
 }
 
 /*@C
-   LMEMonitorRegister - Registers an LME monitor routine that may be accessed with LMEMonitorSetFromOptions().
+   LMEMonitorRegister - Registers an `LME` monitor routine that may be accessed with
+   `LMEMonitorSetFromOptions()`.
 
    Not Collective
 
    Input Parameters:
 +  name    - name of a new monitor routine
-.  vtype   - a PetscViewerType for the output
-.  format  - a PetscViewerFormat for the output
-.  monitor - monitor routine, see LMEMonitorRegisterFn
-.  create  - creation routine, or NULL
--  destroy - destruction routine, or NULL
+.  vtype   - a `PetscViewerType` for the output
+.  format  - a `PetscViewerFormat` for the output
+.  monitor - monitor routine, see `LMEMonitorRegisterFn`
+.  create  - creation routine, or `NULL`
+-  destroy - destruction routine, or `NULL`
 
    Notes:
-   LMEMonitorRegister() may be called multiple times to add several user-defined monitors.
+   `LMEMonitorRegister()` may be called multiple times to add several user-defined monitors.
 
-   The calling sequence for the given function matches the calling sequence of LMEMonitorFn
-   functions passed to LMEMonitorSet() with the additional requirement that its final argument
-   be a PetscViewerAndFormat.
+   The calling sequence for the given function matches the calling sequence of `LMEMonitorFn`
+   functions passed to `LMEMonitorSet()` with the additional requirement that its final argument
+   be a `PetscViewerAndFormat`.
 
    Example Usage:
 .vb
@@ -369,13 +372,14 @@ PetscErrorCode LMERegister(const char *name,PetscErrorCode (*function)(LME))
 .ve
 
    Then, your monitor can be chosen with the procedural interface via
-$      LMEMonitorSetFromOptions(lme,"-lme_monitor_my_monitor","my_monitor",NULL)
-   or at runtime via the option
-$      -lme_monitor_my_monitor
+.vb
+   LMEMonitorSetFromOptions(lme,"-lme_monitor_my_monitor","my_monitor",NULL);
+.ve
+   or at runtime via the option `-lme_monitor_my_monitor`.
 
    Level: advanced
 
-.seealso: `LMEMonitorSet()`, `LMEMonitorRegisterAll()`
+.seealso: [](ch:lme), `LMEMonitorSet()`, `LMEMonitorRegisterAll()`, `LMEMonitorSetFromOptions()`
 @*/
 PetscErrorCode LMEMonitorRegister(const char name[],PetscViewerType vtype,PetscViewerFormat format,LMEMonitorRegisterFn *monitor,LMEMonitorRegisterCreateFn *create,LMEMonitorRegisterDestroyFn *destroy)
 {
@@ -391,17 +395,17 @@ PetscErrorCode LMEMonitorRegister(const char name[],PetscViewerType vtype,PetscV
 }
 
 /*@
-   LMEReset - Resets the LME context to the initial state (prior to setup)
-   and destroys any allocated Vecs and Mats.
+   LMEReset - Resets the `LME` context to the initial state (prior to setup)
+   and destroys any allocated `Vec`s and `Mat`s.
 
    Collective
 
    Input Parameter:
-.  lme - linear matrix equation context obtained from LMECreate()
+.  lme - the linear matrix equation solver context
 
    Level: advanced
 
-.seealso: `LMEDestroy()`
+.seealso: [](ch:lme), `LMEDestroy()`
 @*/
 PetscErrorCode LMEReset(LME lme)
 {
@@ -423,16 +427,16 @@ PetscErrorCode LMEReset(LME lme)
 }
 
 /*@
-   LMEDestroy - Destroys the LME context.
+   LMEDestroy - Destroys the `LME` context.
 
    Collective
 
    Input Parameter:
-.  lme - linear matrix equation context obtained from LMECreate()
+.  lme - the linear matrix equation solver context
 
    Level: beginner
 
-.seealso: `LMECreate()`, `LMESetUp()`, `LMESolve()`
+.seealso: [](ch:lme), `LMECreate()`, `LMESetUp()`, `LMESolve()`
 @*/
 PetscErrorCode LMEDestroy(LME *lme)
 {
@@ -453,16 +457,16 @@ PetscErrorCode LMEDestroy(LME *lme)
    Collective
 
    Input Parameters:
-+  lme - linear matrix equation context obtained from LMECreate()
++  lme - the linear matrix equation solver context
 -  bv  - the basis vectors object
 
    Note:
-   Use LMEGetBV() to retrieve the basis vectors context (for example,
+   Use `LMEGetBV()` to retrieve the basis vectors context (for example,
    to free it at the end of the computations).
 
    Level: advanced
 
-.seealso: `LMEGetBV()`
+.seealso: [](ch:lme), `LMEGetBV()`
 @*/
 PetscErrorCode LMESetBV(LME lme,BV bv)
 {
@@ -482,15 +486,15 @@ PetscErrorCode LMESetBV(LME lme,BV bv)
 
    Not Collective
 
-   Input Parameters:
-.  lme - linear matrix equation context obtained from LMECreate()
+   Input Parameter:
+.  lme - the linear matrix equation solver context
 
    Output Parameter:
 .  bv - basis vectors context
 
    Level: advanced
 
-.seealso: `LMESetBV()`
+.seealso: [](ch:lme), `LMESetBV()`
 @*/
 PetscErrorCode LMEGetBV(LME lme,BV *bv)
 {

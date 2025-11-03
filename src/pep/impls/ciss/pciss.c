@@ -527,33 +527,35 @@ static PetscErrorCode PEPCISSSetSizes_CISS(PEP pep,PetscInt ip,PetscInt bs,Petsc
    Logically Collective
 
    Input Parameters:
-+  pep   - the polynomial eigensolver context
-.  ip    - number of integration points
-.  bs    - block size
-.  ms    - moment size
-.  npart - number of partitions when splitting the communicator
-.  bsmax - max block size
--  realmats - all coefficient matrices of P(.) are real
++  pep      - the polynomial eigensolver context
+.  ip       - number of integration points
+.  bs       - block size
+.  ms       - moment size
+.  npart    - number of partitions when splitting the communicator
+.  bsmax    - max block size
+-  realmats - all coefficient matrices of $P(\cdot)$ are real
 
    Options Database Keys:
-+  -pep_ciss_integration_points - Sets the number of integration points
-.  -pep_ciss_blocksize - Sets the block size
-.  -pep_ciss_moments - Sets the moment size
-.  -pep_ciss_partitions - Sets the number of partitions
-.  -pep_ciss_maxblocksize - Sets the maximum block size
--  -pep_ciss_realmats - all coefficient matrices of P(.) are real
++  -pep_ciss_integration_points - sets the number of integration points
+.  -pep_ciss_blocksize          - sets the block size
+.  -pep_ciss_moments            - sets the moment size
+.  -pep_ciss_partitions         - sets the number of partitions
+.  -pep_ciss_maxblocksize       - sets the maximum block size
+-  -pep_ciss_realmats           - all coefficient matrices of $P(\cdot)$ are real
 
    Notes:
-   For all integer arguments, you can use PETSC_CURRENT to keep the current value, and
-   PETSC_DETERMINE to set them to a default value.
+   For all integer arguments, you can use `PETSC_CURRENT` to keep the current value, and
+   `PETSC_DETERMINE` to set them to a default value.
 
-   The default number of partitions is 1. This means the internal KSP object is shared
-   among all processes of the PEP communicator. Otherwise, the communicator is split
-   into npart communicators, so that npart KSP solves proceed simultaneously.
+   The default number of partitions is 1. This means the internal `KSP` object is shared
+   among all processes of the `PEP` communicator. Otherwise, the communicator is split
+   into `npart` communicators, so that `npart` `KSP` solves proceed simultaneously.
+
+   For a detailed description of the parameters see {cite:p}`Mae16`.
 
    Level: advanced
 
-.seealso: `PEPCISSGetSizes()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSGetSizes()`
 @*/
 PetscErrorCode PEPCISSSetSizes(PEP pep,PetscInt ip,PetscInt bs,PetscInt ms,PetscInt npart,PetscInt bsmax,PetscBool realmats)
 {
@@ -597,11 +599,11 @@ static PetscErrorCode PEPCISSGetSizes_CISS(PEP pep,PetscInt *ip,PetscInt *bs,Pet
 .  ms    - moment size
 .  npart - number of partitions when splitting the communicator
 .  bsmax - max block size
--  realmats - all coefficient matrices of P(.) are real
+-  realmats - all coefficient matrices of $P(\cdot)$ are real
 
    Level: advanced
 
-.seealso: `PEPCISSSetSizes()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetSizes()`
 @*/
 PetscErrorCode PEPCISSGetSizes(PEP pep,PetscInt *ip,PetscInt *bs,PetscInt *ms,PetscInt *npart,PetscInt *bsmax,PetscBool *realmats)
 {
@@ -643,16 +645,18 @@ static PetscErrorCode PEPCISSSetThreshold_CISS(PEP pep,PetscReal delta,PetscReal
 -  spur  - spurious threshold (to discard spurious eigenpairs)
 
    Options Database Keys:
-+  -pep_ciss_delta - Sets the delta
--  -pep_ciss_spurious_threshold - Sets the spurious threshold
++  -pep_ciss_delta              - sets the delta
+-  -pep_ciss_spurious_threshold - sets the spurious threshold
 
-   Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   Notes:
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
+
+   For a detailed description of the parameters see {cite:p}`Mae16`.
 
    Level: advanced
 
-.seealso: `PEPCISSGetThreshold()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSGetThreshold()`
 @*/
 PetscErrorCode PEPCISSSetThreshold(PEP pep,PetscReal delta,PetscReal spur)
 {
@@ -689,7 +693,7 @@ static PetscErrorCode PEPCISSGetThreshold_CISS(PEP pep,PetscReal *delta,PetscRea
 
    Level: advanced
 
-.seealso: `PEPCISSSetThreshold()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetThreshold()`
 @*/
 PetscErrorCode PEPCISSGetThreshold(PEP pep,PetscReal *delta,PetscReal *spur)
 {
@@ -731,16 +735,16 @@ static PetscErrorCode PEPCISSSetRefinement_CISS(PEP pep,PetscInt inner,PetscInt 
 -  blsize - number of iterative refinement iterations (blocksize loop)
 
    Options Database Keys:
-+  -pep_ciss_refine_inner - Sets number of inner iterations
--  -pep_ciss_refine_blocksize - Sets number of blocksize iterations
++  -pep_ciss_refine_inner     - sets number of inner iterations
+-  -pep_ciss_refine_blocksize - sets number of blocksize iterations
 
    Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default of 0 (no refinement).
 
    Level: advanced
 
-.seealso: `PEPCISSGetRefinement()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSGetRefinement()`
 @*/
 PetscErrorCode PEPCISSSetRefinement(PEP pep,PetscInt inner,PetscInt blsize)
 {
@@ -777,7 +781,7 @@ static PetscErrorCode PEPCISSGetRefinement_CISS(PEP pep,PetscInt *inner,PetscInt
 
    Level: advanced
 
-.seealso: `PEPCISSSetRefinement()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetRefinement()`
 @*/
 PetscErrorCode PEPCISSGetRefinement(PEP pep, PetscInt *inner, PetscInt *blsize)
 {
@@ -806,21 +810,22 @@ static PetscErrorCode PEPCISSSetExtraction_CISS(PEP pep,PEPCISSExtraction extrac
 
    Input Parameters:
 +  pep        - the polynomial eigensolver context
--  extraction - the extraction technique
+-  extraction - the extraction technique, see `PEPCISSExtraction` for possible values
 
    Options Database Key:
-.  -pep_ciss_extraction - Sets the extraction technique (either 'ritz', 'hankel' or 'caa')
+.  -pep_ciss_extraction - sets the extraction technique, either `ritz`, `hankel` or `caa`
 
    Notes:
-   By default, the Rayleigh-Ritz extraction is used (PEP_CISS_EXTRACTION_RITZ).
+   By default, the Rayleigh-Ritz extraction is used (`PEP_CISS_EXTRACTION_RITZ`),
+   see {cite:p}`Asa10`.
 
-   If the 'hankel' or the 'caa' option is specified (PEP_CISS_EXTRACTION_HANKEL or
-   PEP_CISS_EXTRACTION_CAA), then the Block Hankel method, or the Communication-avoiding
+   If the `hankel` or the `caa` option is specified (`PEP_CISS_EXTRACTION_HANKEL` or
+   `PEP_CISS_EXTRACTION_CAA`), then the block Hankel method, or the communication-avoiding
    Arnoldi method, respectively, is used for extracting eigenpairs.
 
    Level: advanced
 
-.seealso: `PEPCISSGetExtraction()`, `PEPCISSExtraction`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSGetExtraction()`, `PEPCISSExtraction`
 @*/
 PetscErrorCode PEPCISSSetExtraction(PEP pep,PEPCISSExtraction extraction)
 {
@@ -848,12 +853,12 @@ static PetscErrorCode PEPCISSGetExtraction_CISS(PEP pep,PEPCISSExtraction *extra
    Input Parameter:
 .  pep - the polynomial eigensolver context
 
-   Output Parameters:
+   Output Parameter:
 .  extraction - extraction technique
 
    Level: advanced
 
-.seealso: `PEPCISSSetExtraction()`, `PEPCISSExtraction`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetExtraction()`, `PEPCISSExtraction`
 @*/
 PetscErrorCode PEPCISSGetExtraction(PEP pep,PEPCISSExtraction *extraction)
 {
@@ -913,20 +918,20 @@ static PetscErrorCode PEPCISSGetKSPs_CISS(PEP pep,PetscInt *nsolve,KSP **ksp)
    Collective
 
    Input Parameter:
-.  pep - polynomial eigenvalue solver
+.  pep - the polynomial eigensolver context
 
    Output Parameters:
 +  nsolve - number of solver objects
--  ksp - array of linear solver object
+-  ksp    - array of linear solver objects
 
    Notes:
-   The number of KSP solvers is equal to the number of integration points divided by
+   The number of `KSP` solvers is equal to the number of integration points divided by
    the number of partitions. This value is halved in the case of real matrices with
    a region centered at the real axis.
 
    Level: advanced
 
-.seealso: `PEPCISSSetSizes()`
+.seealso: [](ch:pep), `PEPCISS`, `PEPCISSSetSizes()`
 @*/
 PetscErrorCode PEPCISSGetKSPs(PEP pep,PetscInt *nsolve,KSP **ksp)
 {
@@ -1058,6 +1063,28 @@ static PetscErrorCode PEPSetDSType_CISS(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   PEPCISS - PEPCISS = "ciss" - A contour integral eigensolver based on the
+   Sakurai-Sugiura scheme.
+
+   Notes:
+   This solver is based on the numerical contour integration idea
+   proposed initially for linear problems by {cite:t}`Sak03`. In polynomial
+   eigenproblems, a Rayleigh-Ritz projection is done, resulting in
+   a small dense polynomial eigenproblem {cite:p}`Asa10`.
+
+   Contour integral methods are able to compute all eigenvalues
+   lying inside a region of the complex plane. Use `PEPGetRG()` to
+   specify the region. However, the computational cost is usually high
+   because multiple linear systems must be solved. Use `PEPCISSGetKSPs()`
+   to configure the `KSP` objects for this.
+
+   Details of the implementation in SLEPc can be found in {cite:p}`Mae16`.
+
+   Level: beginner
+
+.seealso: [](ch:pep), `PEP`, `PEPType`, `PEPSetType()`, `PEPGetRG()`, `PEPCISSGetKSPs()`
+M*/
 SLEPC_EXTERN PetscErrorCode PEPCreate_CISS(PEP pep)
 {
   PEP_CISS       *ctx = (PEP_CISS*)pep->data;

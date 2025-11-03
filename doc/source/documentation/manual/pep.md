@@ -184,7 +184,7 @@ An alternative to linearization is to directly perform a projection of the polyn
 
 The user interface of the `PEP` package is very similar to `EPS`. For basic usage, the most noteworthy difference is that all coefficient matrices $A_i$ have to be supplied in the form of an array of {external:doc}`Mat`.
 
-A basic example code for solving a polynomial eigenproblem with `PEP` is shown in listing [](#fig:ex-pep), where the code for building matrices `A[0]`, `A[1]`, ... is omitted. The required steps are the same as those described in chapter [](#ch:eps) for the linear eigenproblem. As always, the solver context is created with `PEPCreate`. The coefficient matrices are provided with `PEPSetOperators`, and the problem type is specified with `PEPSetProblemType`. Calling `PEPSetFromOptions` allows the user to set up various options through the command line. The call to `PEPSolve` invokes the actual solver. Then, the solution is retrieved with `PEPGetConverged` and `PEPGetEigenpair`. Finally, `PEPDestroy` destroys the object.
+A basic example code for solving a polynomial eigenproblem with `PEP` is shown in listing [](#fig:ex-pep), where the code for building matrices `A[0]`, `A[1]`, ... is omitted. The required steps are the same as those described in chapter [](#ch:eps) for the linear eigenproblem. As always, the solver context is created with `PEPCreate()`. The coefficient matrices are provided with `PEPSetOperators()`, and the problem type is specified with `PEPSetProblemType()`. Calling `PEPSetFromOptions()` allows the user to set up various options through the command line. The call to `PEPSolve()` invokes the actual solver. Then, the solution is retrieved with `PEPGetConverged()` and `PEPGetEigenpair()`. Finally, `PEPDestroy()` destroys the object.
 
 ```{code-block} c
 :name: fig:ex-pep
@@ -198,17 +198,17 @@ PetscScalar kr, ki;    /*  eigenvalue, k        */
 PetscInt    j, nconv;
 PetscReal   error;
 
-PEPCreate( PETSC_COMM_WORLD, &pep );
-PEPSetOperators( pep, NMAT, A );
-PEPSetProblemType( pep, PEP_GENERAL );  /* optional */
-PEPSetFromOptions( pep );
-PEPSolve( pep );
-PEPGetConverged( pep, &nconv );
-for (j=0; j<nconv; j++) {
-  PEPGetEigenpair( pep, j, &kr, &ki, xr, xi );
-  PEPComputeError( pep, j, PEP_ERROR_BACKWARD, &error );
+PEPCreate(PETSC_COMM_WORLD, &pep);
+PEPSetOperators(pep, NMAT, A);
+PEPSetProblemType(pep, PEP_GENERAL);  /* optional */
+PEPSetFromOptions(pep);
+PEPSolve(pep);
+PEPGetConverged(pep, &nconv);
+for (j=0;j<nconv;j++) {
+  PEPGetEigenpair(pep, j, &kr, &ki, xr, xi);
+  PEPComputeError(pep, j, PEP_ERROR_BACKWARD, &error);
 }
-PEPDestroy( &pep );
+PEPDestroy(&pep);
 ```
 
 ## Defining the Problem
@@ -290,7 +290,7 @@ or in the command-line with `-pep_target`. As in `EPS`, complex values of $\tau$
 There is also support for spectrum slicing, that is, computing all eigenvalues in a given interval, see section [](#sec:qslice). For this, the user has to specify the computational interval with:
 
 ```{code} c
-PEPSetInterval(PEP pep,PetscScalar a,PetscScalar b);
+PEPSetInterval(PEP pep,PetscReal a,PetscReal b);
 ```
 
 or equivalently with `-pep_interval a,b`.
@@ -340,6 +340,7 @@ The default solver is `PEPTOAR`. The Two-level Orthogonal Arnoldi (TOAR) method 
  | Q-Arnoldi               | `PEPQARNOLDI` |`qarnoldi`        | Quadratic         | Monomial
  | Linearization via `EPS` | `PEPLINEAR`   |`linear`          | Arbitrary         | Any
  | Jacobi-Davidson         | `PEPJD`       |`jd`              | Arbitrary         | Monomial
+ | Contour integral SS     | `PEPCISS`     |`ciss`            | Arbitrary         | Monomial
 
 :::
 
@@ -362,7 +363,7 @@ For polynomial eigenproblems with degree $d>2$ the linearization is the one desc
 Another option of the `PEPLINEAR` solver is whether the matrices of the linearized problem are created explicitly or not. This is set with:
 
 ```{code} c
-PEPLinearSetExplicitMatrix(PEP pep,PetscBool exp);
+PEPLinearSetExplicitMatrix(PEP pep,PetscBool explicit);
 ```
 
 The explicit matrix option is available only for quadratic eigenproblems (higher degree polynomials are always handled implicitly). In the case of explicit creation, matrices $L_0$ and $L_1$ are created as true {external:doc}`Mat`'s, with explicit storage, whereas the implicit option works with *shell* {external:doc}`Mat`'s that operate only with the constituent blocks $M$, $C$ and $K$ (or $A_i$ in the general case). The explicit case requires more memory but gives more flexibility, e.g., for choosing a preconditioner. Some examples of usage via the command line are shown at the end of next section.
@@ -402,7 +403,7 @@ The polynomial eigenvalue problem of equation {math:numref}`eq:sinvquad` corresp
 T_k=\sum_{j=0}^{d-k}\binom{j+k}{k}\sigma^{j}A_{j+k},\qquad k=0,\ldots,d.
 ```
 
- The way this is implemented in SLEPc is that the `ST` object is in charge of computing the $T_k$ matrices, so that the `PEP` solver operates with these matrices as it would with the original $A_i$ matrices, without changing its behaviour. We say that `ST` performs the transformation.
+ The way this is implemented in SLEPc is that the `ST` object is in charge of computing the $T_k$ matrices, so that the `PEP` solver operates with these matrices as it would with the original $A_i$ matrices, without changing its behavior. We say that `ST` performs the transformation.
 
 An alternative would be to apply the shift-and-invert spectral transformation to the linearization {math:numref}`eq:firstcomp` in a smart way, making the polynomial eigensolver aware of this fact so that it can exploit the block structure of the linearization. Let $S_\sigma:=(L_0-\sigma L_1)^{-1}L_1$, then when the solver needs to extend the Arnoldi basis with an operation such as $z=S_\sigma w$, a linear solve is required with the form
 
@@ -433,9 +434,9 @@ Implementing the latter approach is more difficult (especially if different poly
 STSetTransform(ST st,PetscBool flg);
 ```
 
-(or in the command line `-st_transform`) to activate the first one (`ST` performs the transformation). Note that this flag belongs to `ST`, not `PEP` (use `PEPGetST` to extract it).
+(or in the command line `-st_transform`) to activate the first one (`ST` performs the transformation). Note that this flag belongs to `ST`, not `PEP` (use `PEPGetST()` to extract it).
 
-In terms of overall computational cost, both approaches are roughly equivalent, but the advantage of the second one is not having to store the $T_k$ matrices explicitly. It may also be slightly more accurate. Hence, the `STSetTransform` flag is turned off by default.
+In terms of overall computational cost, both approaches are roughly equivalent, but the advantage of the second one is not having to store the $T_k$ matrices explicitly. It may also be slightly more accurate. Hence, the `STSetTransform()` flag is turned off by default.
 
 A command line example would be:
 
@@ -482,10 +483,10 @@ Additional details can be found in {cite:p}`Cam20b`.
 
 ## Retrieving the Solution
 
-After the call to `PEPSolve` has finished, the computed results are stored internally. The procedure for retrieving the computed solution is exactly the same as in the case of `EPS`. The user has to call `PEPGetConverged` first, to obtain the number of converged solutions, then call `PEPGetEigenpair` repeatedly within a loop, once per each eigenvalue-eigenvector pair. The same considerations relative to complex eigenvalues apply, see section [](#sec:retrsol) for additional details.
+After the call to `PEPSolve()` has finished, the computed results are stored internally. The procedure for retrieving the computed solution is exactly the same as in the case of `EPS`. The user has to call `PEPGetConverged()` first, to obtain the number of converged solutions, then call `PEPGetEigenpair()` repeatedly within a loop, once per each eigenvalue-eigenvector pair. The same considerations relative to complex eigenvalues apply, see section [](#sec:retrsol) for additional details.
 
 **Controlling and Monitoring Convergence**:
-As in the case of `EPS`, in `PEP` the number of iterations carried out by the solver can be determined with `PEPGetIterationNumber`, and the tolerance and maximum number of iterations can be set with `PEPSetTolerances`. Also, convergence can be monitored with command-line keys `-pep_monitor`, `-pep_monitor_all`, `-pep_monitor_conv`, `-pep_monitor draw::draw_lg`, or `-pep_monitor_all draw::draw_lg`. See section [](#sec:monitor) for additional details.
+As in the case of `EPS`, in `PEP` the number of iterations carried out by the solver can be determined with `PEPGetIterationNumber()`, and the tolerance and maximum number of iterations can be set with `PEPSetTolerances()`. Also, convergence can be monitored with command-line keys `-pep_monitor`, `-pep_monitor_all`, `-pep_monitor_conv`, `-pep_monitor draw::draw_lg`, or `-pep_monitor_all draw::draw_lg`. See section [](#sec:monitor) for additional details.
 
 **Viewing the Solution**:
 Likewise to linear eigensolvers, there is support for various kinds of viewers for the solution. One can for instance use `-pep_view_values`, `-pep_view_vectors`, `-pep_error_relative`, or `-pep_converged_reason`. See description in section [](#sec:epsviewers).
@@ -517,7 +518,7 @@ is available to assess the accuracy of the computed solutions. This error is bas
 r=P(\tilde{\lambda})\tilde{x},
 ```
 
- where $\tilde{\lambda}$ and $\tilde{x}$ represent any of the `nconv` computed eigenpairs delivered by `PEPGetEigenpair`. From the residual norm, the error bound can be computed in different ways, see table [](#tab:peperrors). It is usually recommended to assess the accuracy of the solution using the backward error, defined as
+ where $\tilde{\lambda}$ and $\tilde{x}$ represent any of the `nconv` computed eigenpairs delivered by `PEPGetEigenpair()`. From the residual norm, the error bound can be computed in different ways, see table [](#tab:peperrors). It is usually recommended to assess the accuracy of the solution using the backward error, defined as
 
 ```{math}
 :label: eq:backward
@@ -527,7 +528,7 @@ r=P(\tilde{\lambda})\tilde{x},
 
  where $d$ is the degree of the polynomial. Note that the eigenvector is always assumed to have unit norm.
 
-Similar expressions can be used in the convergence criterion used to accept converged eigenpairs internally by the solver. The convergence test can be set via the corresponding command-line switch (see table [](#tab:pepconv)) or with `PEPSetConvergenceTest`.
+Similar expressions can be used in the convergence criterion used to accept converged eigenpairs internally by the solver. The convergence test can be set via the corresponding command-line switch (see table [](#tab:pepconv)) or with `PEPSetConvergenceTest()`.
 
 :::{table} Available possibilities for the convergence criterion
 :name: tab:pepconv
@@ -536,11 +537,12 @@ Similar expressions can be used in the convergence criterion used to accept conv
  |--------------------------|-----------------|------------------|--------------------------------------
  |Absolute                  |`PEP_CONV_ABS`   |`-pep_conv_abs`   |$\\|r\\|$
  |Relative to eigenvalue    |`PEP_CONV_REL`   |`-pep_conv_rel`   |$\\|r\\|/\|\lambda\|$
- |Relative to matrix norms  |`PEP_CONV_NORM`  |`-pep_conv_norm`  |$\\|r\\|/(\sum_j\\|A_j\\|\|\lambda_i\|^j)$
+ |Relative to matrix norms  |`PEP_CONV_NORM`  |`-pep_conv_norm`  |$\\|r\\|/(\sum_j\\|A_j\\|\|\lambda\|^j)$
  |User-defined              |`PEP_CONV_USER`  |`-pep_conv_user`  |*user function*
 
 :::
 
+{#sec:scaling label="sec:scaling"}
 ### Scaling
 
 When solving a quadratic eigenproblem via linearization, an accurate solution of the generalized eigenproblem does not necessarily imply a similar level of accuracy for the quadratic problem. {cite:t}`Tis00` shows that in the case of the linearization {math:numref}`eq:n1`, a small backward error in the generalized eigenproblem guarantees a small backward error in the quadratic eigenproblem. However, this holds only if $M$, $C$ and $K$ have a similar norm.
@@ -558,11 +560,12 @@ When the norm of $M$, $C$ and $K$ vary widely, {cite:t}`Tis00` recommends to sol
 In the general case of polynomials of arbitrary degree, a similar scheme is also possible, but it is not clear how to choose $\alpha$ to achieve the same goal. {cite:t}`Bet08` proposes such a scaling scheme as well as more general diagonal scalings $D_\ell P(\lambda)D_r$. In SLEPc, we provide these types of scalings, whose settings can be tuned with:
 
 ```{code} c
-PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,PetscInt its,PetscReal w);
+PEPSetScale(PEP pep,PEPScale scale,PetscReal alpha,Vec Dl,Vec Dr,PetscInt its,PetscReal lambda);
 ```
 
 See the manual page for details and the description in {cite:p}`Cam16a`.
 
+{#sec:pepextr label="sec:pepextr"}
 ### Extraction
 
 Some of the eigensolvers provided in the `PEP` package are based on solving the linearized eigenproblem of equation {math:numref}`eq:firstcompfull`. From the eigenvector $y$ of the linearization, it is possible to extract the eigenvector $x$ of the polynomial eigenproblem. The most straightforward way is to take the first block of $y$, but there are other, more elaborate extraction strategies. For instance, one may compute the norm of the residual {math:numref}`eq:respol` for every block of $y$, and take the one that gives the smallest residual. The different extraction techniques may be selected with:
@@ -580,7 +583,7 @@ As mentioned above, scaling can sometimes improve the accuracy of the computed s
 
 If good accuracy is required, one possibility is to perform a few steps of iterative refinement on the solution computed by the polynomial eigensolver algorithm. Iterative refinement can be seen as the Newton method applied to a set of nonlinear equations related to the polynomial eigenvalue problem {cite:p}`Bet11`. It is well known that global convergence of Newton's iteration is guaranteed only if the initial guess is close enough to the exact solution, so we still need an eigensolver such as TOAR to compute this initial guess.
 
-Iterative refinement can be very costly (sometimes a single refinement step is more expensive than the whole iteration to compute the initial guess with TOAR), that is why in SLEPc it is disabled by default. When the user activates it, the computation of Newton iterations will take place within `PEPSolve` as a final stage (identified as `PEPRefine` in the `-log_view` report).
+Iterative refinement can be very costly (sometimes a single refinement step is more expensive than the whole iteration to compute the initial guess with TOAR), that is why in SLEPc it is disabled by default. When the user activates it, the computation of Newton iterations will take place within `PEPSolve()` as a final stage (identified as `PEPRefine()` in the `-log_view` report).
 
 ```{code} c
 PEPSetRefine(PEP pep,PEPRefine refine,PetscInt npart,PetscReal tol,PetscInt its,PEPRefineScheme scheme);
@@ -588,7 +591,7 @@ PEPSetRefine(PEP pep,PEPRefine refine,PetscInt npart,PetscReal tol,PetscInt its,
 
 There are two types of refinement, identified as *simple* and *multiple*. The first one performs refinement on each eigenpair individually, while the second one considers the computed invariant pair as a whole. This latter approach is more costly but it is expected to be more robust in the presence of multiple eigenvalues.
 
-In `PEPSetRefine`, the argument `npart` indicates the number of partitions in which the communicator must be split. This can sometimes improve the scalability when refining many eigenpairs.
+In `PEPSetRefine()`, the argument `npart` indicates the number of partitions in which the communicator must be split. This can sometimes improve the scalability when refining many eigenpairs.
 
 Additional details can be found in {cite:p}`Cam16b`.
 

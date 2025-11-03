@@ -169,21 +169,21 @@ PetscErrorCode EPSComputeVectors_Schur(EPS eps)
 }
 
 /*@
-   EPSSetWorkVecs - Sets a number of work vectors into an EPS object.
+   EPSSetWorkVecs - Sets a number of work vectors into an `EPS` object.
 
    Collective
 
    Input Parameters:
-+  eps - eigensolver context
++  eps - the linear eigensolver context
 -  nw  - number of work vectors to allocate
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin EPS
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `EPS`
    implementations.
 
    Level: developer
 
-.seealso: `EPSSetUp()`
+.seealso: [](ch:eps), `EPSSetUp()`
 @*/
 PetscErrorCode EPSSetWorkVecs(EPS eps,PetscInt nw)
 {
@@ -262,7 +262,7 @@ PetscErrorCode EPSConvergedNorm(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscR
    Collective
 
    Input Parameters:
-+  eps    - eigensolver context obtained from EPSCreate()
++  eps    - the linear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs
@@ -273,19 +273,15 @@ PetscErrorCode EPSConvergedNorm(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscR
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to EPS_CONVERGED_ITERATING
-   (zero).
-
-   EPSStoppingBasic() will stop if all requested eigenvalues are converged, or if
+   `EPSStoppingBasic()` will stop if all requested eigenvalues are converged, or if
    the maximum number of iterations has been reached.
 
-   Use EPSSetStoppingTest() to provide your own test instead of using this one.
+   This is the default stopping test.
+   Use `EPSSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 
-.seealso: `EPSSetStoppingTest()`, `EPSStoppingThreshold()`, `EPSConvergedReason`, `EPSGetConvergedReason()`
+.seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSStoppingThreshold()`, `EPSConvergedReason`, `EPSGetConvergedReason()`
 @*/
 PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx)
 {
@@ -308,33 +304,28 @@ PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nc
    Collective
 
    Input Parameters:
-+  eps    - eigenvalue solver context obtained from EPSCreate()
++  eps    - the linear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs (ignored here)
 .  nev    - number of requested eigenpairs (ignored here)
--  ctx    - context containing additional data (EPSStoppingCtx)
+-  ctx    - context containing additional data (`EPSStoppingCtx`)
 
    Output Parameter:
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to EPS_CONVERGED_ITERATING
-   (zero).
-
-   EPSStoppingThreshold() will stop when one of the computed eigenvalues is not
-   above/below the threshold given at EPSSetThreshold(). If a number of wanted
-   eigenvalues has been specified via EPSSetDimensions() then it is also taken into
+   `EPSStoppingThreshold()` will stop when one of the computed eigenvalues is not
+   above/below the threshold given at `EPSSetThreshold()`. If a number of wanted
+   eigenvalues has been specified via `EPSSetDimensions()` then it is also taken into
    account, and the solver will stop when one of the two conditions (threshold or
    number of converged values) is met.
 
-   Use EPSSetStoppingTest() to provide your own test instead of using this one.
+   Use `EPSSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 
-.seealso: `EPSSetStoppingTest()`, `EPSStoppingBasic()`, `EPSSetThreshold()`, `EPSSetDimensions()`, `EPSConvergedReason`, `EPSGetConvergedReason()`
+.seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSStoppingBasic()`, `EPSSetThreshold()`, `EPSSetDimensions()`, `EPSConvergedReason`, `EPSGetConvergedReason()`
 @*/
 PetscErrorCode EPSStoppingThreshold(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx)
 {

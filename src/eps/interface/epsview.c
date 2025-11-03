@@ -16,31 +16,30 @@
 #include <petscdraw.h>
 
 /*@
-   EPSView - Prints the EPS data structure.
+   EPSView - Prints the `EPS` data structure.
 
    Collective
 
    Input Parameters:
-+  eps - the eigenproblem solver context
++  eps - the linear eigensolver context
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -eps_view -  Calls EPSView() at end of EPSSolve()
+.  -eps_view -  Calls `EPSView()` at end of `EPSSolve()`
 
-   Note:
+   Notes:
    The available visualization contexts include
-+     PETSC_VIEWER_STDOUT_SELF - standard output (default)
--     PETSC_VIEWER_STDOUT_WORLD - synchronized standard
-         output where only the first processor opens
-         the file.  All other processors send their
-         data to the first processor to print.
++     `PETSC_VIEWER_STDOUT_SELF` - standard output (default)
+-     `PETSC_VIEWER_STDOUT_WORLD` - synchronized standard output where only the
+         first process opens the file; all other processes send their data to the
+         first one to print
 
-   The user can open an alternative visualization context with
-   PetscViewerASCIIOpen() - output to a specified file.
+   The user can open an alternative visualization context with `PetscViewerASCIIOpen()`
+   to output to a specified file.
 
    Level: beginner
 
-.seealso: `STView()`
+.seealso: [](ch:eps), `EPSCreate()`, `EPSViewFromOptions()`, `STView()`
 @*/
 PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
 {
@@ -201,18 +200,18 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
 }
 
 /*@
-   EPSViewFromOptions - View from options
+   EPSViewFromOptions - View (print) an `EPS` object based on values in the options database.
 
    Collective
 
    Input Parameters:
-+  eps  - the eigensolver context
-.  obj  - optional object
++  eps  - the linear eigensolver context
+.  obj  - optional object that provides the options prefix used to query the options database
 -  name - command line option
 
    Level: intermediate
 
-.seealso: `EPSView()`, `EPSCreate()`
+.seealso: [](ch:eps), `EPSView()`, `EPSCreate()`, `PetscObjectViewFromOptions()`
 @*/
 PetscErrorCode EPSViewFromOptions(EPS eps,PetscObject obj,const char name[])
 {
@@ -223,26 +222,29 @@ PetscErrorCode EPSViewFromOptions(EPS eps,PetscObject obj,const char name[])
 }
 
 /*@
-   EPSConvergedReasonView - Displays the reason an EPS solve converged or diverged.
+   EPSConvergedReasonView - Displays the reason an `EPS` solve converged or diverged.
 
    Collective
 
    Input Parameters:
-+  eps - the eigensolver context
++  eps - the linear eigensolver context
 -  viewer - the viewer to display the reason
 
-   Options Database Keys:
-.  -eps_converged_reason - print reason for convergence, and number of iterations
+   Options Database Key:
+.  -eps_converged_reason - print reason for convergence/divergence, and number of iterations
 
-   Note:
-   To change the format of the output call PetscViewerPushFormat(viewer,format) before
-   this call. Use PETSC_VIEWER_DEFAULT for the default, use PETSC_VIEWER_FAILED to only
+   Notes:
+   Use `EPSConvergedReasonViewFromOptions()` to display the reason based on values
+   in the options database.
+
+   To change the format of the output call `PetscViewerPushFormat()` before this
+   call. Use `PETSC_VIEWER_DEFAULT` for the default, or `PETSC_VIEWER_FAILED` to only
    display a reason if it fails. The latter can be set in the command line with
-   -eps_converged_reason ::failed
+   `-eps_converged_reason ::failed`.
 
    Level: intermediate
 
-.seealso: `EPSSetConvergenceTest()`, `EPSSetTolerances()`, `EPSGetIterationNumber()`, `EPSConvergedReasonViewFromOptions()`
+.seealso: [](ch:eps), `EPSSetConvergenceTest()`, `EPSSetTolerances()`, `EPSGetIterationNumber()`, `EPSConvergedReasonViewFromOptions()`
 @*/
 PetscErrorCode EPSConvergedReasonView(EPS eps,PetscViewer viewer)
 {
@@ -266,16 +268,16 @@ PetscErrorCode EPSConvergedReasonView(EPS eps,PetscViewer viewer)
 
 /*@
    EPSConvergedReasonViewFromOptions - Processes command line options to determine if/how
-   the EPS converged reason is to be viewed.
+   the `EPS` converged reason is to be viewed.
 
    Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
-   Level: developer
+   Level: intermediate
 
-.seealso: `EPSConvergedReasonView()`
+.seealso: [](ch:eps), `EPSConvergedReasonView()`
 @*/
 PetscErrorCode EPSConvergedReasonViewFromOptions(EPS eps)
 {
@@ -400,7 +402,7 @@ static PetscErrorCode EPSErrorView_MATLAB(EPS eps,EPSErrorType etype,PetscViewer
    Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 .  etype  - error type
 -  viewer - optional visualization context
 
@@ -412,12 +414,17 @@ static PetscErrorCode EPSErrorView_MATLAB(EPS eps,EPSErrorType etype,PetscViewer
    Notes:
    By default, this function checks the error of all eigenpairs and prints
    the eigenvalues if all of them are below the requested tolerance.
-   If the viewer has format=PETSC_VIEWER_ASCII_INFO_DETAIL then a table with
+   If the viewer has format `PETSC_VIEWER_ASCII_INFO_DETAIL` then a table with
    eigenvalues and corresponding errors is printed.
+
+   All the command-line options listed above admit an optional argument
+   specifying the viewer type and options. For instance, use
+   `-eps_error_relative :myerr.m:ascii_matlab` to save the errors in a file
+   that can be executed in Matlab.
 
    Level: intermediate
 
-.seealso: `EPSSolve()`, `EPSValuesView()`, `EPSVectorsView()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSValuesView()`, `EPSVectorsView()`
 @*/
 PetscErrorCode EPSErrorView(EPS eps,EPSErrorType etype,PetscViewer viewer)
 {
@@ -458,11 +465,11 @@ PetscErrorCode EPSErrorView(EPS eps,EPSErrorType etype,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Level: developer
 
-.seealso: `EPSErrorView()`
+.seealso: [](ch:eps), `EPSErrorView()`
 @*/
 PetscErrorCode EPSErrorViewFromOptions(EPS eps)
 {
@@ -655,15 +662,21 @@ static PetscErrorCode EPSValuesView_MATLAB(EPS eps,PetscViewer viewer)
    Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 -  viewer - the viewer
 
    Options Database Key:
 .  -eps_view_values - print computed eigenvalues
 
+   Note:
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-eps_view_values :evals.m:ascii_matlab` to save the values in a file
+   that can be executed in Matlab.
+
    Level: intermediate
 
-.seealso: `EPSSolve()`, `EPSVectorsView()`, `EPSErrorView()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSVectorsView()`, `EPSErrorView()`
 @*/
 PetscErrorCode EPSValuesView(EPS eps,PetscViewer viewer)
 {
@@ -714,12 +727,12 @@ PetscErrorCode EPSValuesView(EPS eps,PetscViewer viewer)
 
    Collective
 
-   Input Parameters:
-.  eps - the eigensolver context
+   Input Parameter:
+.  eps - the linear eigensolver context
 
    Level: developer
 
-.seealso: `EPSValuesView()`
+.seealso: [](ch:eps), `EPSValuesView()`
 @*/
 PetscErrorCode EPSValuesViewFromOptions(EPS eps)
 {
@@ -748,11 +761,11 @@ PetscErrorCode EPSValuesViewFromOptions(EPS eps)
    Collective
 
    Input Parameters:
-+  eps    - the eigensolver context
++  eps    - the linear eigensolver context
 -  viewer - the viewer
 
    Options Database Key:
-.  -eps_view_vectors - output eigenvectors.
+.  -eps_view_vectors - output eigenvectors
 
    Notes:
    If PETSc was configured with real scalars, complex conjugate eigenvectors
@@ -761,11 +774,15 @@ PetscErrorCode EPSValuesViewFromOptions(EPS eps)
 
    If left eigenvectors were computed with a two-sided eigensolver, the right
    and left eigenvectors are interleaved, that is, the vectors are output in
-   the following order X0, Y0, X1, Y1, X2, Y2, ...
+   the following order\: `X0, Y0, X1, Y1, X2, Y2, ...`
+
+   The command-line option listed above admits an optional argument
+   specifying the viewer type and options. For instance, use
+   `-eps_view_vectors binary:evecs.bin` to save the vectors in a binary file.
 
    Level: intermediate
 
-.seealso: `EPSSolve()`, `EPSValuesView()`, `EPSErrorView()`
+.seealso: [](ch:eps), `EPSSolve()`, `EPSValuesView()`, `EPSErrorView()`
 @*/
 PetscErrorCode EPSVectorsView(EPS eps,PetscViewer viewer)
 {
@@ -807,11 +824,11 @@ PetscErrorCode EPSVectorsView(EPS eps,PetscViewer viewer)
    Collective
 
    Input Parameter:
-.  eps - the eigensolver context
+.  eps - the linear eigensolver context
 
    Level: developer
 
-.seealso: `EPSVectorsView()`
+.seealso: [](ch:eps), `EPSVectorsView()`
 @*/
 PetscErrorCode EPSVectorsViewFromOptions(EPS eps)
 {

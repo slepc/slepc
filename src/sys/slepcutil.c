@@ -69,7 +69,7 @@ PetscErrorCode SlepcBasisDestroy_Private(PetscInt *m,Vec **W)
 }
 
 /*@C
-   SlepcSNPrintfScalar - Prints a PetscScalar variable to a string of
+   SlepcSNPrintfScalar - Prints a `PetscScalar` variable to a string of
    given length.
 
    Not Collective
@@ -85,7 +85,7 @@ PetscErrorCode SlepcBasisDestroy_Private(PetscInt *m,Vec **W)
 
 .seealso: `PetscSNPrintf()`
 @*/
-PetscErrorCode SlepcSNPrintfScalar(char *str,size_t len,PetscScalar val,PetscBool exp)
+PetscErrorCode SlepcSNPrintfScalar(char str[],size_t len,PetscScalar val,PetscBool exp)
 {
 #if defined(PETSC_USE_COMPLEX)
   PetscReal      re,im;
@@ -119,20 +119,20 @@ PetscErrorCode SlepcSNPrintfScalar(char *str,size_t len,PetscScalar val,PetscBoo
 .  pkg - external package name
 
    Output Parameter:
-.  has - PETSC_TRUE if SLEPc is configured with the given package, else PETSC_FALSE
+.  has - `PETSC_TRUE` if SLEPc is configured with the given package, else `PETSC_FALSE`
 
    Level: intermediate
 
    Notes:
-   This is basically an alternative for SLEPC_HAVE_XXX whenever a preprocessor macro
-   is not available/desirable, e.g. in Python.
+   This is basically an alternative for `SLEPC_HAVE_XXX` whenever a preprocessor macro
+   is not available/desirable, e.g., in Python.
 
-   The external package name pkg is e.g. "arpack", "primme".
-   It should correspond to the name listed in  ./configure --help
+   The external package name pkg is, e.g., `arpack` or `primme`.
+   It should correspond to the name listed in  `./configure --help`.
 
-   The lookup is case insensitive, i.e. looking for "ARPACK" or "arpack" is the same.
+   The lookup is case insensitive, i.e. looking for `ARPACK` or `arpack` is the same.
 
-.seealso: `EPSType`, `SVDType`
+.seealso: [](sec:writing-prog), `EPSType`, `SVDType`
 @*/
 PetscErrorCode SlepcHasExternalPackage(const char pkg[], PetscBool *has)
 {

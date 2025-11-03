@@ -14,21 +14,21 @@
 #include <slepc/private/pepimpl.h>     /*I "slepcpep.h" I*/
 
 /*@
-   PEPSetWorkVecs - Sets a number of work vectors into a PEP object.
+   PEPSetWorkVecs - Sets a number of work vectors into a `PEP` object.
 
    Collective
 
    Input Parameters:
-+  pep - polynomial eigensolver context
++  pep - the polynomial eigensolver context
 -  nw  - number of work vectors to allocate
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin PEP
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `PEP`
    implementations.
 
    Level: developer
 
-.seealso: `PEPSetUp()`
+.seealso: [](ch:pep), `PEPSetUp()`
 @*/
 PetscErrorCode PEPSetWorkVecs(PEP pep,PetscInt nw)
 {
@@ -119,7 +119,7 @@ PetscErrorCode PEPConvergedAbsolute(PEP pep,PetscScalar eigr,PetscScalar eigi,Pe
    Collective
 
    Input Parameters:
-+  pep    - eigensolver context obtained from PEPCreate()
++  pep    - the polynomial eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
 .  nconv  - number of currently converged eigenpairs
@@ -130,19 +130,15 @@ PetscErrorCode PEPConvergedAbsolute(PEP pep,PetscScalar eigr,PetscScalar eigi,Pe
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to PEP_CONVERGED_ITERATING
-   (zero).
-
-   PEPStoppingBasic() will stop if all requested eigenvalues are converged, or if
+   `PEPStoppingBasic()` will stop if all requested eigenvalues are converged, or if
    the maximum number of iterations has been reached.
 
-   Use PEPSetStoppingTest() to provide your own test instead of using this one.
+   This is the default stopping test.
+   Use `PEPSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 
-.seealso: `PEPSetStoppingTest()`, `PEPConvergedReason`, `PEPGetConvergedReason()`
+.seealso: [](ch:pep), `PEPSetStoppingTest()`, `PEPConvergedReason`, `PEPGetConvergedReason()`
 @*/
 PetscErrorCode PEPStoppingBasic(PEP pep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,PEPConvergedReason *reason,void *ctx)
 {

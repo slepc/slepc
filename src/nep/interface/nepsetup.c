@@ -14,21 +14,21 @@
 #include <slepc/private/nepimpl.h>       /*I "slepcnep.h" I*/
 
 /*@
-   NEPSetDSType - Sets the type of the internal DS object based on the current
+   NEPSetDSType - Sets the type of the internal `DS` object based on the current
    settings of the nonlinear eigensolver.
 
    Collective
 
    Input Parameter:
-.  nep - nonlinear eigensolver context
+.  nep - the nonlinear eigensolver context
 
    Note:
    This function need not be called explicitly, since it will be called at
-   both NEPSetFromOptions() and NEPSetUp().
+   both `NEPSetFromOptions()` and `NEPSetUp()`.
 
    Level: developer
 
-.seealso: `NEPSetFromOptions()`, `NEPSetUp()`
+.seealso: [](ch:nep), `NEPSetFromOptions()`, `NEPSetUp()`
 @*/
 PetscErrorCode NEPSetDSType(NEP nep)
 {
@@ -40,21 +40,21 @@ PetscErrorCode NEPSetDSType(NEP nep)
 
 /*@
    NEPSetUp - Sets up all the internal data structures necessary for the
-   execution of the NEP solver.
+   execution of the nonlinear eigensolver.
 
    Collective
 
    Input Parameter:
-.  nep   - solver context
+.  nep - the nonlinear eigensolver context
 
    Notes:
-   This function need not be called explicitly in most cases, since NEPSolve()
+   This function need not be called explicitly in most cases, since `NEPSolve()`
    calls it. It can be useful when one wants to measure the set-up time
    separately from the solve time.
 
    Level: developer
 
-.seealso: `NEPCreate()`, `NEPSolve()`, `NEPDestroy()`
+.seealso: [](ch:nep), `NEPCreate()`, `NEPSolve()`, `NEPDestroy()`
 @*/
 PetscErrorCode NEPSetUp(NEP nep)
 {
@@ -229,7 +229,7 @@ PetscErrorCode NEPSetUp(NEP nep)
    Some solvers start to iterate on a single vector (initial vector). In that case,
    the other vectors are ignored.
 
-   These vectors do not persist from one NEPSolve() call to the other, so the
+   These vectors do not persist from one `NEPSolve()` call to the other, so the
    initial space should be set every time.
 
    The vectors do not need to be mutually orthonormal, since they are explicitly
@@ -240,7 +240,7 @@ PetscErrorCode NEPSetUp(NEP nep)
 
    Level: intermediate
 
-.seealso: `NEPSetUp()`
+.seealso: [](ch:nep), `NEPSetUp()`
 @*/
 PetscErrorCode NEPSetInitialSpace(NEP nep,PetscInt n,Vec is[])
 {
@@ -286,17 +286,17 @@ PetscErrorCode NEPSetDimensions_Default(NEP nep,PetscInt nev,PetscInt *ncv,Petsc
    Collective
 
    Input Parameters:
-+  nep   - eigensolver context
++  nep   - the nonlinear eigensolver context
 -  extra - number of additional positions, used for methods that require a
-           working basis slightly larger than ncv
+           working basis slightly larger than `ncv`
 
-   Developer Notes:
-   This is SLEPC_EXTERN because it may be required by user plugin NEP
+   Developer Note:
+   This is `SLEPC_EXTERN` because it may be required by user plugin `NEP`
    implementations.
 
    Level: developer
 
-.seealso: `PEPSetUp()`
+.seealso: [](ch:nep), `PEPSetUp()`, `PEPSetDimensions()`
 @*/
 PetscErrorCode NEPAllocateSolution(NEP nep,PetscInt extra)
 {

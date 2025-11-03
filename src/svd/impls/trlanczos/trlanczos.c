@@ -1757,23 +1757,24 @@ static PetscErrorCode SVDTRLanczosSetOneSide_TRLanczos(SVD svd,PetscBool oneside
    Logically Collective
 
    Input Parameters:
-+  svd     - singular value solver
++  svd     - the singular value solver context
 -  oneside - boolean flag indicating if the method is one-sided or not
 
    Options Database Key:
-.  -svd_trlanczos_oneside <boolean> - Indicates the boolean flag
+.  -svd_trlanczos_oneside \<oneside\> - enable the one-sided variant
 
    Notes:
    By default, a two-sided variant is selected, which is sometimes slightly
    more robust. However, the one-sided variant is faster because it avoids
-   the orthogonalization associated to left singular vectors.
+   the orthogonalization associated to left singular vectors. See more
+   details in {cite:p}`Her07c,Her08`.
 
    One-sided orthogonalization is also available for the GSVD, in which case
-   two orthogonalizations out of three are avoided.
+   two orthogonalizations out of three are avoided, see {cite:p}`Alv24`.
 
    Level: advanced
 
-.seealso: `SVDLanczosSetOneSide()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDLanczosSetOneSide()`
 @*/
 PetscErrorCode SVDTRLanczosSetOneSide(SVD svd,PetscBool oneside)
 {
@@ -1799,15 +1800,15 @@ static PetscErrorCode SVDTRLanczosGetOneSide_TRLanczos(SVD svd,PetscBool *onesid
 
    Not Collective
 
-   Input Parameters:
-.  svd     - singular value solver
+   Input Parameter:
+.  svd - the singular value solver context
 
-   Output Parameters:
+   Output Parameter:
 .  oneside - boolean flag indicating if the method is one-sided or not
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetOneSide()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosSetOneSide()`
 @*/
 PetscErrorCode SVDTRLanczosGetOneSide(SVD svd,PetscBool *oneside)
 {
@@ -1840,21 +1841,20 @@ static PetscErrorCode SVDTRLanczosSetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
 
 /*@
    SVDTRLanczosSetGBidiag - Sets the bidiagonalization choice to use in
-   the GSVD TRLanczos solver.
+   the GSVD `SVDTRLANCZOS` solver.
 
    Logically Collective
 
    Input Parameters:
-+  svd - the singular value solver
--  bidiag - the bidiagonalization choice
++  svd - the singular value solver context
+-  bidiag - the bidiagonalization choice, see `SVDTRLanczosGBidiag` for possible values
 
    Options Database Key:
-.  -svd_trlanczos_gbidiag - Sets the bidiagonalization choice (either 's' or 'juu'
-   or 'jlu')
+.  -svd_trlanczos_gbidiag - sets the bidiagonalization choice, either `single`, `upper` or `lower`
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetGBidiag()`, `SVDTRLanczosGBidiag`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosGetGBidiag()`, `SVDTRLanczosGBidiag`
 @*/
 PetscErrorCode SVDTRLanczosSetGBidiag(SVD svd,SVDTRLanczosGBidiag bidiag)
 {
@@ -1881,14 +1881,14 @@ static PetscErrorCode SVDTRLanczosGetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  bidiag - the bidiagonalization choice
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetGBidiag()`, `SVDTRLanczosGBidiag`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosSetGBidiag()`, `SVDTRLanczosGBidiag`
 @*/
 PetscErrorCode SVDTRLanczosGetGBidiag(SVD svd,SVDTRLanczosGBidiag *bidiag)
 {
@@ -1912,12 +1912,12 @@ static PetscErrorCode SVDTRLanczosSetKSP_TRLanczos(SVD svd,KSP ksp)
 }
 
 /*@
-   SVDTRLanczosSetKSP - Associate a linear solver object (KSP) to the SVD solver.
+   SVDTRLanczosSetKSP - Associate a linear solver object (`KSP`) to the SVD solver.
 
    Collective
 
    Input Parameters:
-+  svd - SVD solver
++  svd - the singular value solver context
 -  ksp - the linear solver object
 
    Note:
@@ -1925,7 +1925,7 @@ static PetscErrorCode SVDTRLanczosSetKSP_TRLanczos(SVD svd,KSP ksp)
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetKSP()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosGetKSP()`
 @*/
 PetscErrorCode SVDTRLanczosSetKSP(SVD svd,KSP ksp)
 {
@@ -1961,20 +1961,20 @@ static PetscErrorCode SVDTRLanczosGetKSP_TRLanczos(SVD svd,KSP *ksp)
 }
 
 /*@
-   SVDTRLanczosGetKSP - Retrieve the linear solver object (KSP) associated with
-   the SVD solver.
+   SVDTRLanczosGetKSP - Retrieve the linear solver object (`KSP`) associated with
+   the `SVDTRLANCZOS` solver.
 
    Collective
 
    Input Parameter:
-.  svd - SVD solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  ksp - the linear solver object
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetKSP()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosSetKSP()`
 @*/
 PetscErrorCode SVDTRLanczosGetKSP(SVD svd,KSP *ksp)
 {
@@ -2006,18 +2006,20 @@ static PetscErrorCode SVDTRLanczosSetRestart_TRLanczos(SVD svd,PetscReal keep)
    Logically Collective
 
    Input Parameters:
-+  svd  - the singular value solver
++  svd  - the singular value solver context
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -svd_trlanczos_restart - Sets the restart parameter
+.  -svd_trlanczos_restart - sets the restart parameter
 
    Notes:
-   Allowed values are in the range [0.1,0.9]. The default is 0.5.
+   Allowed values are in the range [0.1,0.9]. The default is 0.5, which means
+   that at restart the current subspace is compressed into another subspace
+   with a reduction of 50% in size.
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetRestart()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosGetRestart()`
 @*/
 PetscErrorCode SVDTRLanczosSetRestart(SVD svd,PetscReal keep)
 {
@@ -2044,14 +2046,14 @@ static PetscErrorCode SVDTRLanczosGetRestart_TRLanczos(SVD svd,PetscReal *keep)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  keep - the restart parameter
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetRestart()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosSetRestart()`
 @*/
 PetscErrorCode SVDTRLanczosGetRestart(SVD svd,PetscReal *keep)
 {
@@ -2078,21 +2080,21 @@ static PetscErrorCode SVDTRLanczosSetLocking_TRLanczos(SVD svd,PetscBool lock)
    Logically Collective
 
    Input Parameters:
-+  svd  - the singular value solver
--  lock - true if the locking variant must be selected
++  svd  - the singular value solver context
+-  lock - `PETSC_TRUE` if the locking variant must be selected
 
    Options Database Key:
-.  -svd_trlanczos_locking - Sets the locking flag
+.  -svd_trlanczos_locking - sets the locking flag
 
    Notes:
    The default is to lock converged singular triplets when the method restarts.
-   This behaviour can be changed so that all directions are kept in the
+   This behavior can be changed so that all directions are kept in the
    working subspace even if already converged to working accuracy (the
    non-locking variant).
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetLocking()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosGetLocking()`
 @*/
 PetscErrorCode SVDTRLanczosSetLocking(SVD svd,PetscBool lock)
 {
@@ -2119,14 +2121,14 @@ static PetscErrorCode SVDTRLanczosGetLocking_TRLanczos(SVD svd,PetscBool *lock)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  lock - the locking flag
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetLocking()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosSetLocking()`
 @*/
 PetscErrorCode SVDTRLanczosGetLocking(SVD svd,PetscBool *lock)
 {
@@ -2150,25 +2152,25 @@ static PetscErrorCode SVDTRLanczosSetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
 }
 
 /*@
-   SVDTRLanczosSetExplicitMatrix - Indicate if the matrix Z=[A;B] must
-   be built explicitly.
+   SVDTRLanczosSetExplicitMatrix - Indicate if the stacked matrix
+   $Z=[A^*,B^*]^*$ must be built explicitly.
 
    Logically Collective
 
    Input Parameters:
-+  svd         - singular value solver
--  explicitmat - Boolean flag indicating if Z=[A;B] is built explicitly
++  svd         - the singular value solver context
+-  explicitmat - Boolean flag indicating if $Z$ is built explicitly
 
    Options Database Key:
-.  -svd_trlanczos_explicitmatrix <boolean> - Indicates the boolean flag
+.  -svd_trlanczos_explicitmatrix \<explicitmat\> - enable the explicit construction of the stacked matrix
 
-   Notes:
+   Note:
    This option is relevant for the GSVD case only.
-   Z is the coefficient matrix of the KSP solver used internally.
+   $Z$ is the coefficient matrix of the `KSP` solver used internally.
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosGetExplicitMatrix()`
 @*/
 PetscErrorCode SVDTRLanczosSetExplicitMatrix(SVD svd,PetscBool explicitmat)
 {
@@ -2189,19 +2191,20 @@ static PetscErrorCode SVDTRLanczosGetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
 }
 
 /*@
-   SVDTRLanczosGetExplicitMatrix - Returns the flag indicating if Z=[A;B] is built explicitly.
+   SVDTRLanczosGetExplicitMatrix - Returns the flag indicating if the stacked matrix
+   $Z=[A^*,B^*]^*$ is built explicitly.
 
    Not Collective
 
    Input Parameter:
-.  svd  - singular value solver
+.  svd  - the singular value solver context
 
    Output Parameter:
 .  explicitmat - the mode flag
 
    Level: advanced
 
-.seealso: `SVDTRLanczosSetExplicitMatrix()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosSetExplicitMatrix()`
 @*/
 PetscErrorCode SVDTRLanczosGetExplicitMatrix(SVD svd,PetscBool *explicitmat)
 {
@@ -2233,24 +2236,25 @@ static PetscErrorCode SVDTRLanczosSetScale_TRLanczos(SVD svd,PetscReal scale)
    Logically Collective
 
    Input Parameters:
-+  svd   - singular value solver
++  svd   - the singular value solver context
 -  scale - scale parameter
 
    Options Database Key:
-.  -svd_trlanczos_scale <real> - scale factor/threshold
+.  -svd_trlanczos_scale \<scale\> - scale factor/threshold
 
    Notes:
    This parameter is relevant for the GSVD case only. If the parameter is
-   positive, it indicates the scale factor for B in matrix Z=[A;B]. If
+   positive, it indicates the scale factor to multiply $B$ in the stacked matrix
+   $Z=[A^*,B^*]^*$. If
    negative, its absolute value is the threshold for automatic scaling.
    In automatic scaling, whenever the largest approximate generalized singular
-   value (or the inverse of the smallest value, if SVD_SMALLEST is used)
-   exceeds the threshold, the computation is restarted with matrix B
+   value (or the inverse of the smallest value, if `SVD_SMALLEST` is used)
+   exceeds the threshold, the computation is restarted with matrix $B$
    scaled by that value.
 
    Level: advanced
 
-.seealso: `SVDTRLanczosGetScale()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosGetScale()`
 @*/
 PetscErrorCode SVDTRLanczosSetScale(SVD svd,PetscReal scale)
 {
@@ -2277,19 +2281,14 @@ static PetscErrorCode SVDTRLanczosGetScale_TRLanczos(SVD svd,PetscReal *scale)
    Not Collective
 
    Input Parameter:
-.  svd - the singular value solver
+.  svd - the singular value solver context
 
    Output Parameter:
 .  scale - the scale parameter
 
-   Notes:
-   This parameter is relevant for the GSVD case only. If the parameter is
-   positive, it indicates the scale factor for B in matrix Z=[A;B]. If
-   negative, its absolute value is the threshold for automatic scaling.
-
    Level: advanced
 
-.seealso: `SVDTRLanczosSetScale()`
+.seealso: [](ch:svd), `SVDTRLANCZOS`, `SVDTRLanczosSetScale()`
 @*/
 PetscErrorCode SVDTRLanczosGetScale(SVD svd,PetscReal *scale)
 {
@@ -2379,6 +2378,24 @@ static PetscErrorCode SVDSetDSType_TRLanczos(SVD svd)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   SVDTRLANCZOS - SVDTRLANCZOS = "trlanczos" - A thick-restart Golub-Kahan-Lanczos
+   bidiagonalization method.
+
+   Notes:
+   The implemented method is Lanczos bidiagonalization with thick restart. It should
+   generally provide much better convergence than the plain Lanczos in `SVDLANCZOS`.
+
+   The implementation includes a one-sided orthogonalization option, and
+   efficient parallel orthogonalization, see the details in {cite:p}`Her07c,Her08`.
+
+   This solver also provides support for the GSVD (see details in {cite:p}`Alv24`)
+   and the HSVD.
+
+   Level: beginner
+
+.seealso: [](ch:svd), [](#sec:svdback), `SVD`, `SVDType`, `SVDSetType()`, `SVDSetProblemType()`, `SVDTRLANCZOS`
+M*/
 SLEPC_EXTERN PetscErrorCode SVDCreate_TRLanczos(SVD svd)
 {
   SVD_TRLANCZOS  *ctx;
