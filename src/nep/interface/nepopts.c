@@ -162,8 +162,10 @@ PetscErrorCode NEPSetFromOptions(NEP nep)
     if (flg) PetscCall(NEPSetWhichEigenpairs(nep,NEP_TARGET_REAL));
     PetscCall(PetscOptionsBoolGroup("-nep_target_imaginary","Compute eigenvalues with imaginary parts closest to target","NEPSetWhichEigenpairs",&flg));
     if (flg) PetscCall(NEPSetWhichEigenpairs(nep,NEP_TARGET_IMAGINARY));
-    PetscCall(PetscOptionsBoolGroupEnd("-nep_all","Compute all eigenvalues in a region","NEPSetWhichEigenpairs",&flg));
+    PetscCall(PetscOptionsBoolGroup("-nep_all","Compute all eigenvalues in a region","NEPSetWhichEigenpairs",&flg));
     if (flg) PetscCall(NEPSetWhichEigenpairs(nep,NEP_ALL));
+    PetscCall(PetscOptionsBoolGroupEnd("-nep_which_user","Select the user-defined selection criterion","NEPSetWhichEigenpairs",&flg));
+    if (flg) PetscCall(NEPSetWhichEigenpairs(nep,NEP_WHICH_USER));
 
     PetscCall(PetscOptionsScalar("-nep_target","Value of the target","NEPSetTarget",nep->target,&s,&flg));
     if (flg) {
@@ -404,7 +406,8 @@ PetscErrorCode NEPSetDimensions(NEP nep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 .  -nep_target_magnitude   - sets eigenvalues closest to target
 .  -nep_target_real        - sets real parts closest to target
 .  -nep_target_imaginary   - sets imaginary parts closest to target
--  -nep_all                - sets all eigenvalues in a region
+.  -nep_all                - sets all eigenvalues in a region
+-  -nep_which_user         - select the user-defined selection criterion
 
    Notes:
    Not all eigensolvers implemented in `NEP` account for all the possible values

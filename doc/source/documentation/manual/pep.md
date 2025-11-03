@@ -312,7 +312,7 @@ Finally, we mention that the use of regions for filtering is also available in `
  |`PEP_TARGET_REAL`         |`-pep_target_real`         |Smallest $\|\mathrm{Re}(\lambda-\tau)\|$
  |`PEP_TARGET_IMAGINARY`    |`-pep_target_imaginary`    |Smallest $\|\mathrm{Im}(\lambda-\tau)\|$
  |`PEP_ALL`                 |`-pep_all`                 |All $\lambda\in[a,b]$
- |`PEP_WHICH_USER`          |` `                        |*user-defined*
+ |`PEP_WHICH_USER`          |`-pep_which_user`          |*user-defined*
 
 :::
 
