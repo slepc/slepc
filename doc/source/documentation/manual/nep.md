@@ -137,7 +137,7 @@ By default, `nev`=1. The other two arguments control the dimension of the subspa
  |`NEP_TARGET_REAL`         |`-nep_target_real`         |Smallest $\|\mathrm{Re}(\lambda-\tau)\|$
  |`NEP_TARGET_IMAGINARY`    |`-nep_target_imaginary`    |Smallest $\|\mathrm{Im}(\lambda-\tau)\|$
  |`NEP_ALL`                 |`-nep_all`                 |All $\lambda\in\Omega$
- |`NEP_WHICH_USER`          |` `                        |*user-defined*
+ |`NEP_WHICH_USER`          |`-nep_which_user`          |*user-defined*
 
 :::
 

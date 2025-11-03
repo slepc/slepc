@@ -193,8 +193,10 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
     if (flg) PetscCall(EPSSetWhichEigenpairs(eps,EPS_TARGET_REAL));
     PetscCall(PetscOptionsBoolGroup("-eps_target_imaginary","Compute eigenvalues with imaginary parts closest to target","EPSSetWhichEigenpairs",&flg));
     if (flg) PetscCall(EPSSetWhichEigenpairs(eps,EPS_TARGET_IMAGINARY));
-    PetscCall(PetscOptionsBoolGroupEnd("-eps_all","Compute all eigenvalues in an interval or a region","EPSSetWhichEigenpairs",&flg));
+    PetscCall(PetscOptionsBoolGroup("-eps_all","Compute all eigenvalues in an interval or a region","EPSSetWhichEigenpairs",&flg));
     if (flg) PetscCall(EPSSetWhichEigenpairs(eps,EPS_ALL));
+    PetscCall(PetscOptionsBoolGroupEnd("-eps_which_user","Select the user-defined selection criterion","EPSSetWhichEigenpairs",&flg));
+    if (flg) PetscCall(EPSSetWhichEigenpairs(eps,EPS_WHICH_USER));
 
     PetscCall(PetscOptionsScalar("-eps_target","Value of the target","EPSSetTarget",eps->target,&s,&flg));
     if (flg) {
@@ -448,7 +450,8 @@ PetscErrorCode EPSSetDimensions(EPS eps,PetscInt nev,PetscInt ncv,PetscInt mpd)
 .  -eps_target_magnitude   - sets eigenvalues closest to target
 .  -eps_target_real        - sets real parts closest to target
 .  -eps_target_imaginary   - sets imaginary parts closest to target
--  -eps_all                - sets all eigenvalues in an interval or region
+.  -eps_all                - sets all eigenvalues in an interval or region
+-  -eps_which_user         - select the user-defined selection criterion
 
    Notes:
    Not all eigensolvers implemented in `EPS` account for all the possible values

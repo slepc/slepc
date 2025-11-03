@@ -252,7 +252,7 @@ This setting is used both for configuring how the eigensolver seeks eigenvalues 
   `EPS_TARGET_REAL`         |`-eps_target_real`         |Smallest $\|\mathrm{Re}(\lambda-\tau)\|$
   `EPS_TARGET_IMAGINARY`    |`-eps_target_imaginary`    |Smallest $\|\mathrm{Im}(\lambda-\tau)\|$
   `EPS_ALL`                 |`-eps_all`                 |All $\lambda\in[a,b]$ or $\lambda\in\Omega$
-  `EPS_WHICH_USER`          |` `                        |*user-defined*
+  `EPS_WHICH_USER`          |`-eps_which_user`          |*user-defined*
 
 :::
 
