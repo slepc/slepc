@@ -398,20 +398,20 @@ static PetscErrorCode NEPRIISetConstCorrectionTol_RII(NEP nep,PetscBool cct)
 
    Input Parameters:
 +  nep - the nonlinear eigensolver context
--  cct - a boolean value
+-  cct - if `PETSC_FALSE`, the `KSP` relative tolerance is set to $2^{-i}$
 
    Options Database Key:
-.  -nep_rii_const_correction_tol <bool> - set the boolean flag
+.  -nep_rii_const_correction_tol <bool> - set a constant or dynamic stopping criterion
 
    Notes:
-   By default, an exponentially decreasing tolerance is set in the KSP used
+   By default, an exponentially decreasing tolerance is set in the `KSP` used
    within the nonlinear iteration, so that each Newton iteration requests
    better accuracy than the previous one. The constant correction tolerance
    flag stops this behavior.
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPRII`, `NEPRIIGetConstCorrectionTol()`
+.seealso: [](ch:nep), `NEPRII`, `NEPRIIGetConstCorrectionTol()`, `NEPRIIGetKSP()`
 @*/
 PetscErrorCode NEPRIISetConstCorrectionTol(NEP nep,PetscBool cct)
 {
@@ -472,15 +472,15 @@ static PetscErrorCode NEPRIISetHermitian_RII(NEP nep,PetscBool herm)
 
    Input Parameters:
 +  nep  - the nonlinear eigensolver context
--  herm - a boolean value
+-  herm - `PETSC_TRUE` if the Hermitian version is preferred
 
    Options Database Key:
-.  -nep_rii_hermitian <bool> - set the boolean flag
+.  -nep_rii_hermitian <bool> - toggle the Hermitian version
 
    Notes:
-   By default, the scalar nonlinear equation x'*inv(T(sigma))*T(z)*x=0 is solved
+   By default, the scalar nonlinear equation $x^*T(\sigma)^{-1}T(z)x=0$ is solved
    at each step of the nonlinear iteration. When this flag is set the simpler
-   form x'*T(z)*x=0 is used, which is supposed to be valid only for Hermitian
+   form $x^*T(z)x=0$ is used, which is supposed to be valid only for Hermitian
    problems.
 
    Level: intermediate
@@ -515,7 +515,7 @@ static PetscErrorCode NEPRIIGetHermitian_RII(NEP nep,PetscBool *herm)
 .  nep - the nonlinear eigensolver context
 
    Output Parameter:
-.  herm - the value of the hermitian flag
+.  herm - the value of the Hermitian flag
 
    Level: intermediate
 
@@ -552,7 +552,7 @@ static PetscErrorCode NEPRIISetDeflationThreshold_RII(NEP nep,PetscReal deftol)
    Options Database Key:
 .  -nep_rii_deflation_threshold <deftol> - set the threshold
 
-   Notes:
+   Note:
    Normally, the solver iterates on the extended problem in order to deflate
    previously converged eigenpairs. If this threshold is set to a nonzero value,
    then once the residual error is below this threshold the solver will
@@ -619,7 +619,7 @@ static PetscErrorCode NEPRIISetKSP_RII(NEP nep,KSP ksp)
 }
 
 /*@
-   NEPRIISetKSP - Associate a linear solver object (KSP) to the nonlinear
+   NEPRIISetKSP - Associate a linear solver object (`KSP`) to the nonlinear
    eigenvalue solver.
 
    Collective
@@ -661,7 +661,7 @@ static PetscErrorCode NEPRIIGetKSP_RII(NEP nep,KSP *ksp)
 }
 
 /*@
-   NEPRIIGetKSP - Retrieve the linear solver object (KSP) associated with
+   NEPRIIGetKSP - Retrieve the linear solver object (`KSP`) associated with
    the nonlinear eigenvalue solver.
 
    Collective
@@ -737,6 +737,31 @@ static PetscErrorCode NEPDestroy_RII(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   NEPRII - NEPRII = "rii" - Simple residual inverse iteration with
+   varying shift.
+
+   Notes:
+   This is the default solver, although it is very basic. Users are
+   advised to try other solvers.
+
+   This solver is based on the modification proposed by {cite:t}`Neu85`
+   of the classical residual inverse iteration method. At each step,
+   this method has to solve a system of linear equations. Call
+   `NEPRIIGetKSP()` to configure the `KSP` object used for this.
+   When using iterative linear solvers, the preconditioner will be updated
+   in each step or not, depending on `NEPRIISetLagPreconditioner()`, and
+   the tolerance will be constant or not depending on
+   `NEPRIISetConstCorrectionTol()`.
+
+   The solver incorporates deflation, so that several eigenpairs con be
+   computed. Details of the implementation in SLEPc can be found in
+   {cite:p}`Cam21`.
+
+   Level: beginner
+
+.seealso: [](ch:nep), `NEP`, `NEPType`, `NEPSetType()`, `NEPRIIGetKSP()`, `NEPRIISetLagPreconditioner()`, `NEPRIISetConstCorrectionTol()`
+M*/
 SLEPC_EXTERN PetscErrorCode NEPCreate_RII(NEP nep)
 {
   NEP_RII        *ctx;

@@ -156,15 +156,11 @@ PetscErrorCode NEPConvergedNorm(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscR
 .  reason - result of the stopping test
 
    Notes:
-   A positive value of reason indicates that the iteration has finished successfully
-   (converged), and a negative value indicates an error condition (diverged). If
-   the iteration needs to be continued, reason must be set to NEP_CONVERGED_ITERATING
-   (zero).
-
-   NEPStoppingBasic() will stop if all requested eigenvalues are converged, or if
+   `NEPStoppingBasic()` will stop if all requested eigenvalues are converged, or if
    the maximum number of iterations has been reached.
 
-   Use NEPSetStoppingTest() to provide your own test instead of using this one.
+   This is the default stopping test.
+   Use `NEPSetStoppingTest()` to provide your own test instead of using this one.
 
    Level: advanced
 

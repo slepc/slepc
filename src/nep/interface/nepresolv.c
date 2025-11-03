@@ -81,7 +81,7 @@ static PetscErrorCode MatDestroy_Resolvent(Mat M)
 }
 
 /*@
-   NEPApplyResolvent - Applies the resolvent T^{-1}(z) to a given vector.
+   NEPApplyResolvent - Applies the resolvent $T^{-1}(z)$ to a given vector.
 
    Collective
 
@@ -94,12 +94,12 @@ static PetscErrorCode MatDestroy_Resolvent(Mat M)
    Output Parameter:
 .  r     - result vector
 
-   Notes:
-   The resolvent T^{-1}(z) = sum_i (z-lambda_i)^{-1}*x_i*y_i' is evaluated at
-   z=omega and the matrix-vector multiplication r = T^{-1}(omega)*v is computed.
-   Vectors x_i and y_i are right and left eigenvectors, respectively, normalized
-   so that y_i'*T'(lambda_i)*x_i=1. The sum contains only eigenvectors that have
-   been previously computed with NEPSolve(), and if a region rg is given then only
+   Note:
+   The resolvent $T^{-1}(z) = \sum_i (z-\lambda_i)^{-1} x_i y_i^*$ is evaluated at
+   $z=\omega$ and the matrix-vector multiplication $r = T^{-1}(\omega) v$ is computed.
+   Vectors $x_i$ and $y_i$ are right and left eigenvectors, respectively, normalized
+   so that $y_i^*T'(\lambda_i)x_i=1$. The sum contains only eigenvectors that have
+   been previously computed with `NEPSolve()`, and if a region `rg` is given then only
    those corresponding to eigenvalues inside the region are considered.
 
    Level: intermediate

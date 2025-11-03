@@ -133,7 +133,7 @@ PetscErrorCode NEPMonitorCancel(NEP nep)
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPDefaultMonitor()`
+.seealso: [](ch:nep), `NEPMonitorSet()`
 @*/
 PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
 {

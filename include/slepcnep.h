@@ -50,22 +50,48 @@ typedef const char *NEPType;
 SLEPC_EXTERN PetscClassId NEP_CLASSID;
 
 /*E
-   NEPProblemType - Determines the type of the nonlinear eigenproblem
+   NEPProblemType - Determines the type of the nonlinear eigenproblem.
+
+   Values:
++  `NEP_GENERAL`  - no particular structure
+-  `NEP_RATIONAL` - problem defined in split form with all $f_i$ rational
+
+   Note:
+   Currently, the `NEP_RATIONAL` case is only used in `NEPNLEIGS` to
+   determine the singularities automatically.
 
    Level: intermediate
 
 .seealso: [](ch:nep), `NEPSetProblemType()`, `NEPGetProblemType()`
 E*/
 typedef enum { NEP_GENERAL  = 1,
-               NEP_RATIONAL = 2     /* NEP defined in split form with all f_i rational */
+               NEP_RATIONAL = 2
              } NEPProblemType;
 
 /*E
-   NEPWhich - Determines which part of the spectrum is requested
+   NEPWhich - Determines which part of the spectrum is requested.
+
+   Values:
++  `NEP_LARGEST_MAGNITUDE`  - largest $|\lambda|$
+.  `NEP_SMALLEST_MAGNITUDE` - smallest $|\lambda|$
+.  `NEP_LARGEST_REAL`       - largest $\mathrm{Re}(\lambda)$
+.  `NEP_SMALLEST_REAL`      - smallest $\mathrm{Re}(\lambda)$
+.  `NEP_LARGEST_IMAGINARY`  - largest $\mathrm{Im}(\lambda)$
+.  `NEP_SMALLEST_IMAGINARY` - smallest $\mathrm{Im}(\lambda)$
+.  `NEP_TARGET_MAGNITUDE`   - smallest $|\lambda-\tau|$
+.  `NEP_TARGET_REAL`        - smallest $|\mathrm{Re}(\lambda-\tau)|$
+.  `NEP_TARGET_IMAGINARY`   - smallest $|\mathrm{Im}(\lambda-\tau)|$
+.  `NEP_ALL`                - all $\lambda\in\Omega$
+-  `NEP_WHICH_USER`         - user-defined sorting criterion
+
+   Notes:
+   The target $\tau$ is a scalar value provided with `NEPSetTarget()`.
+
+   The case `NEP_ALL` needs a region $\Omega$ specified with an `RG` object.
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPSetWhichEigenpairs()`, `NEPGetWhichEigenpairs()`
+.seealso: [](ch:nep), `NEPSetWhichEigenpairs()`, `NEPSetTarget()`
 E*/
 typedef enum { NEP_LARGEST_MAGNITUDE  = 1,
                NEP_SMALLEST_MAGNITUDE = 2,
@@ -80,7 +106,12 @@ typedef enum { NEP_LARGEST_MAGNITUDE  = 1,
                NEP_WHICH_USER         = 11 } NEPWhich;
 
 /*E
-   NEPErrorType - The error type used to assess accuracy of computed solutions
+   NEPErrorType - The error type used to assess the accuracy of computed solutions.
+
+   Values:
++  `NEP_ERROR_ABSOLUTE` - compute error bound as $\|r\|$
+.  `NEP_ERROR_RELATIVE` - compute error bound as $\|r\|/|\lambda|$
+-  `NEP_ERROR_BACKWARD` - compute error bound as $\|r\|/(\sum_i|f_i(\lambda)|\|A_i\|)$
 
    Level: intermediate
 
@@ -92,11 +123,19 @@ typedef enum { NEP_ERROR_ABSOLUTE,
 SLEPC_EXTERN const char *NEPErrorTypes[];
 
 /*E
-   NEPRefine - The refinement type
+   NEPRefine - The type of Newton iterative refinement.
+
+   Values:
++  `NEP_REFINE_NONE`     - no refinement
+.  `NEP_REFINE_SIMPLE`   - refinement of each converged eigenpair individually
+-  `NEP_REFINE_MULTIPLE` - refinement of the invariant pair as a whole
+
+   Note:
+   See section [](#sec:refine) for a discussion of the different refinement strategies.
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPSetRefine()`
+.seealso: [](ch:nep), [](#sec:refine), `NEPSetRefine()`
 E*/
 typedef enum { NEP_REFINE_NONE,
                NEP_REFINE_SIMPLE,
@@ -104,11 +143,22 @@ typedef enum { NEP_REFINE_NONE,
 SLEPC_EXTERN const char *NEPRefineTypes[];
 
 /*E
-   NEPRefineScheme - The scheme used for solving linear systems during iterative refinement
+   NEPRefineScheme - The scheme used for solving linear systems during iterative refinement.
+
+   Values:
++  `NEP_REFINE_SCHEME_SCHUR`    - use the Schur complement
+.  `NEP_REFINE_SCHEME_MBE`      - use the mixed block elimination (MBE) scheme
+-  `NEP_REFINE_SCHEME_EXPLICIT` - build the full matrix explicitly
+
+   Note:
+   Iterative refinement may be very costly, due to the expensive linear
+   solves. These linear systems have a particular structure that can be
+   exploited in different ways, as described in {cite:p}`Cam16b`. See
+   `NEPSetRefine()` for additional details.
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPSetRefine()`
+.seealso: [](ch:nep), [](#sec:refine), `NEPSetRefine()`
 E*/
 typedef enum { NEP_REFINE_SCHEME_SCHUR    = 1,
                NEP_REFINE_SCHEME_MBE      = 2,
@@ -116,7 +166,13 @@ typedef enum { NEP_REFINE_SCHEME_SCHUR    = 1,
 SLEPC_EXTERN const char *NEPRefineSchemes[];
 
 /*E
-   NEPConv - Determines the convergence test
+   NEPConv - The convergence criterion to be used by the solver.
+
+   Values:
++  `NEP_CONV_ABS`  - absolute convergence criterion, $\|r\|$
+.  `NEP_CONV_REL`  - convergence criterion relative to eigenvalue, $\|r\|/|\lambda|$
+.  `NEP_CONV_NORM` - convergence criterion relative to matrix norms, $\|r\|/(\sum_j|f_j(\lambda)|\|A_j\|)$
+-  `NEP_CONV_USER` - convergence dictated by user-provided function
 
    Level: intermediate
 
@@ -128,7 +184,12 @@ typedef enum { NEP_CONV_ABS,
                NEP_CONV_USER } NEPConv;
 
 /*E
-   NEPStop - Determines the stopping test
+   NEPStop - The stopping test to decide the termination of the outer loop
+   of the eigensolver.
+
+   Values:
++  `NEP_STOP_BASIC` - default stopping test
+-  `NEP_STOP_USER`  - user-provided stopping test
 
    Level: advanced
 
@@ -136,6 +197,31 @@ typedef enum { NEP_CONV_ABS,
 E*/
 typedef enum { NEP_STOP_BASIC,
                NEP_STOP_USER } NEPStop;
+
+/*MC
+   NEP_STOP_BASIC - The default stopping test.
+
+   Note:
+   By default, the termination of the outer loop is decided by calling
+   `NEPStoppingBasic()`, which will stop if all requested eigenvalues are converged,
+   or if the maximum number of iterations has been reached.
+
+   Level: advanced
+
+.seealso: [](ch:nep), `NEPStop`, `NEPSetStoppingTest()`, `NEPStoppingBasic()`
+M*/
+
+/*MC
+   NEP_STOP_USER - The user-provided stopping test.
+
+   Note:
+   Customized stopping test using the user-provided function given with
+   `NEPSetStoppingTestFunction()`.
+
+   Level: advanced
+
+.seealso: [](ch:nep), `NEPStop`, `NEPSetStoppingTest()`, `NEPSetStoppingTestFunction()`
+M*/
 
 /*E
    NEPConvergedReason - Reason a nonlinear eigensolver was determined to have converged
@@ -166,6 +252,72 @@ typedef enum {/* converged */
               NEP_CONVERGED_ITERATING          =  0} NEPConvergedReason;
 SLEPC_EXTERN const char *const*NEPConvergedReasons;
 
+/*MC
+   NEP_CONVERGED_TOL - The computed error estimates, based on residual norms,
+   for all requested eigenvalues are below the tolerance.
+
+   Level: intermediate
+
+.seealso: [](ch:nep), `NEPSolve()`, `NEPGetConvergedReason()`, `NEPConvergedReason`
+M*/
+
+/*MC
+   NEP_CONVERGED_USER - The solver was declared converged due to a user-defined condition.
+
+   Note:
+   This happens only when a user-defined stopping test has been set with
+   `NEPSetStoppingTestFunction()`.
+
+   Level: intermediate
+
+.seealso: [](ch:nep), `NEPSolve()`, `NEPGetConvergedReason()`, `NEPConvergedReason`, `NEPSetStoppingTestFunction()`
+M*/
+
+/*MC
+   NEP_DIVERGED_ITS - Exceeded the maximum number of allowed iterations
+   before the convergence criterion was satisfied.
+
+   Level: intermediate
+
+.seealso: [](ch:nep), `NEPSolve()`, `NEPGetConvergedReason()`, `NEPConvergedReason`
+M*/
+
+/*MC
+   NEP_DIVERGED_BREAKDOWN - A breakdown in the solver was detected so the
+   method could not continue.
+
+   Level: intermediate
+
+.seealso: [](ch:nep), `NEPSolve()`, `NEPGetConvergedReason()`, `NEPConvergedReason`
+M*/
+
+/*MC
+   NEP_DIVERGED_LINEAR_SOLVE - The inner linear solve failed so the nonlinear
+   eigensolver could not continue.
+
+   Level: intermediate
+
+.seealso: [](ch:nep), `NEPSolve()`, `NEPGetConvergedReason()`, `NEPConvergedReason`
+M*/
+
+/*MC
+   NEP_DIVERGED_SUBSPACE_EXHAUSTED - The solver has run out of space for the
+   basis in the case of an unrestarted method.
+
+   Level: intermediate
+
+.seealso: [](ch:nep), `NEPSolve()`, `NEPGetConvergedReason()`, `NEPConvergedReason`
+M*/
+
+/*MC
+   NEP_CONVERGED_ITERATING - This value is returned if `NEPGetConvergedReason()` is called
+   while `NEPSolve()` is still running.
+
+   Level: intermediate
+
+.seealso: [](ch:nep), `NEPSolve()`, `NEPGetConvergedReason()`, `NEPConvergedReason`
+M*/
+
 SLEPC_EXTERN PetscErrorCode NEPCreate(MPI_Comm,NEP*);
 SLEPC_EXTERN PetscErrorCode NEPDestroy(NEP*);
 SLEPC_EXTERN PetscErrorCode NEPReset(NEP);
@@ -193,16 +345,16 @@ SLEPC_EXTERN PetscErrorCode NEPVectorsView(NEP,PetscViewer);
 SLEPC_EXTERN PetscErrorCode NEPVectorsViewFromOptions(NEP);
 
 /*S
-   NEPFunctionFn - A prototype of a NEP function evaluation function that
-   would be passed to NEPSetFunction()
+   NEPFunctionFn - A prototype of a `NEP` function evaluation function that
+   would be passed to `NEPSetFunction()`.
 
    Calling Sequence:
 +  nep    - the nonlinear eigensolver context
-.  lambda - the scalar argument where T(.) must be evaluated
-.  T      - matrix that will contain T(lambda)
+.  lambda - the scalar argument where $T(\cdot)$ must be evaluated
+.  T      - matrix that will contain $T(\lambda)$
 .  P      - [optional] different matrix to build the preconditioner
 -  ctx    - [optional] user-defined context for private data for the
-            function evaluation routine (may be NULL)
+            function evaluation routine (may be `NULL`)
 
    Level: beginner
 
@@ -211,14 +363,15 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPFunctionFn(NEP nep,PetscScalar lambda,Mat T,Mat P,void *ctx);
 
 /*S
-   NEPJacobianFn - A prototype of a NEP Jacobian evaluation function that would be passed to NEPSetJacobian()
+   NEPJacobianFn - A prototype of a `NEP` Jacobian evaluation function that
+   would be passed to `NEPSetJacobian()`.
 
    Calling Sequence:
 +  nep    - the nonlinear eigensolver context
-.  lambda - the scalar argument where T'(.) must be evaluated
-.  J      - matrix that will contain T'(lambda)
+.  lambda - the scalar argument where $T'(\cdot)$ must be evaluated
+.  J      - matrix that will contain $T'(\lambda)$
 -  ctx    - [optional] user-defined context for private data for the
-            Jacobian evaluation routine (may be NULL)
+            Jacobian evaluation routine (may be `NULL`)
 
    Level: beginner
 
@@ -386,8 +539,8 @@ SLEPC_EXTERN PetscErrorCode NEPSetWorkVecs(NEP,PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPAllocateSolution(NEP,PetscInt);
 
 /*S
-   NEPConvergenceTestFn - A prototype of a NEP convergence test function that
-   would be passed to NEPSetConvergenceTestFunction()
+   NEPConvergenceTestFn - A prototype of a `NEP` convergence test function that
+   would be passed to `NEPSetConvergenceTestFunction()`.
 
    Calling Sequence:
 +  nep    - the nonlinear eigensolver context
@@ -395,12 +548,11 @@ SLEPC_EXTERN PetscErrorCode NEPAllocateSolution(NEP,PetscInt);
 .  eigi   - imaginary part of the eigenvalue
 .  res    - residual norm associated to the eigenpair
 .  errest - [output] computed error estimate
--  ctx    - [optional] user-defined context for private data for the
-            convergence test routine (may be NULL)
+-  ctx    - optional convergence context, as set by `NEPSetConvergenceTestFunction()`
 
    Level: advanced
 
-.seealso: [](ch:nep), `NEPSetConvergenceTestFunction()`
+.seealso: [](ch:nep), `NEPSetConvergenceTest()`, `NEPSetConvergenceTestFunction()`
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPConvergenceTestFn(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
 
@@ -412,8 +564,8 @@ SLEPC_EXTERN NEPConvergenceTestFn NEPConvergedNorm;
 SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
 
 /*S
-   NEPStoppingTestFn - A prototype of a NEP stopping test function that would
-   be passed to NEPSetStoppingTestFunction()
+   NEPStoppingTestFn - A prototype of a `NEP` stopping test function that would
+   be passed to `NEPSetStoppingTestFunction()`.
 
    Calling Sequence:
 +  nep    - the nonlinear eigensolver context
@@ -422,8 +574,13 @@ SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTest
 .  nconv  - number of currently converged eigenpairs
 .  nev    - number of requested eigenpairs
 .  reason - [output] result of the stopping test
--  ctx    - [optional] user-defined context for private data for the
-            stopping test routine (may be NULL)
+-  ctx    - optional stopping context, as set by `NEPSetStoppingTestFunction()`
+
+   Note:
+   A positive value of `reason` indicates that the iteration has finished successfully
+   (converged), and a negative value indicates an error condition (diverged). If
+   the iteration needs to be continued, `reason` must be set to `NEP_CONVERGED_ITERATING`
+   (zero).
 
    Level: advanced
 
@@ -468,7 +625,12 @@ SLEPC_EXTERN PetscErrorCode NEPNArnoldiSetLagPreconditioner(NEP,PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPNArnoldiGetLagPreconditioner(NEP,PetscInt*);
 
 /*E
-   NEPCISSExtraction - determines the extraction technique in the CISS solver
+   NEPCISSExtraction - The extraction technique used in the CISS solver.
+
+   Values:
++  `NEP_CISS_EXTRACTION_RITZ`   - Rayleigh-Ritz extraction
+.  `NEP_CISS_EXTRACTION_HANKEL` - block Hankel method
+-  `NEP_CISS_EXTRACTION_CAA`    - communication-avoiding Arnoldi method
 
    Level: advanced
 
@@ -513,15 +675,19 @@ SLEPC_EXTERN PetscErrorCode NEPInterpolGetInterpolation(NEP,PetscReal*,PetscInt*
 
 /*S
    NEPNLEIGSSingularitiesFn - A prototype of a function that would be passed
-   to NEPNLEIGSSetSingularitiesFunction()
+   to `NEPNLEIGSSetSingularitiesFunction()`.
 
    Calling Sequence:
 +  nep   - the nonlinear eigensolver context
-.  maxnp - on input number of requested points in the discretization (can be set)
+.  maxnp - on input the number of requested points in the discretization (can be modified)
 .  xi    - computed values of the discretization
--  ctx   - optional context, as set by NEPNLEIGSSetSingularitiesFunction()
+-  ctx   - optional context, as set by `NEPNLEIGSSetSingularitiesFunction()`
 
-   Level: advanced
+   Note:
+   The user-defined function can set a smaller value of `maxnp` if necessary.
+   It is wrong to return a larger value.
+
+   Level: intermediate
 
 .seealso: [](ch:nep), `NEPNLEIGSSetSingularitiesFunction()`
 S*/

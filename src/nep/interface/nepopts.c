@@ -213,7 +213,7 @@ PetscErrorCode NEPSetFromOptions(NEP nep)
 
 /*@
    NEPGetTolerances - Gets the tolerance and maximum iteration count used
-   by the NEP convergence tests.
+   by the `NEP` convergence tests.
 
    Not Collective
 
@@ -225,7 +225,7 @@ PetscErrorCode NEPSetFromOptions(NEP nep)
 -  maxits - maximum number of iterations
 
    Notes:
-   The user can specify NULL for any parameter that is not needed.
+   The user can specify `NULL` for any parameter that is not needed.
 
    Level: intermediate
 
@@ -242,7 +242,7 @@ PetscErrorCode NEPGetTolerances(NEP nep,PetscReal *tol,PetscInt *maxits)
 
 /*@
    NEPSetTolerances - Sets the tolerance and maximum iteration count used
-   by the NEP convergence tests.
+   by the `NEP` convergence tests.
 
    Logically Collective
 
@@ -252,14 +252,14 @@ PetscErrorCode NEPGetTolerances(NEP nep,PetscReal *tol,PetscInt *maxits)
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -nep_tol <tol> - Sets the convergence tolerance
--  -nep_max_it <maxits> - Sets the maximum number of iterations allowed
++  -nep_tol <tol>       - sets the convergence tolerance
+-  -nep_max_it <maxits> - sets the maximum number of iterations allowed
 
-   Notes:
-   Use PETSC_CURRENT to retain the current value of any of the parameters.
-   Use PETSC_DETERMINE for either argument to assign a default value computed
+   Note:
+   Use `PETSC_CURRENT` to retain the current value of any of the parameters.
+   Use `PETSC_DETERMINE` for either argument to assign a default value computed
    internally (may be different in each solver).
-   For maxits use PETSC_UMLIMITED to indicate there is no upper bound on this value.
+   For `maxits` use `PETSC_UNLIMITED` to indicate there is no upper bound on this value.
 
    Level: intermediate
 
@@ -304,8 +304,8 @@ PetscErrorCode NEPSetTolerances(NEP nep,PetscReal tol,PetscInt maxits)
 .  ncv - the maximum dimension of the subspace to be used by the solver
 -  mpd - the maximum dimension allowed for the projected problem
 
-   Notes:
-   The user can specify NULL for any parameter that is not needed.
+   Note:
+   The user can specify `NULL` for any parameter that is not needed.
 
    Level: intermediate
 
@@ -334,22 +334,23 @@ PetscErrorCode NEPGetDimensions(NEP nep,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -nep_nev <nev> - Sets the number of eigenvalues
-.  -nep_ncv <ncv> - Sets the dimension of the subspace
--  -nep_mpd <mpd> - Sets the maximum projected dimension
++  -nep_nev <nev> - sets the number of eigenvalues
+.  -nep_ncv <ncv> - sets the dimension of the subspace
+-  -nep_mpd <mpd> - sets the maximum projected dimension
 
    Notes:
-   Use PETSC_DETERMINE for ncv and mpd to assign a reasonably good value, which is
-   dependent on the solution method. For any of the arguments, use PETSC_CURRENT
+   Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a reasonably good value, which is
+   dependent on the solution method. For any of the arguments, use `PETSC_CURRENT`
    to preserve the current value.
 
-   The parameters ncv and mpd are intimately related, so that the user is advised
-   to set one of them at most. Normal usage is that
-   (a) in cases where nev is small, the user sets ncv (a reasonable default is 2*nev); and
-   (b) in cases where nev is large, the user sets mpd.
+   The parameters `ncv` and `mpd` are intimately related, so that the user is advised
+   to set one of them at most. Normal usage is\:
 
-   The value of ncv should always be between nev and (nev+mpd), typically
-   ncv=nev+mpd. If nev is not too large, mpd=nev is a reasonable choice, otherwise
+    1. in cases where `nev` is small, the user sets `ncv` (a reasonable default is `2*nev`).
+    2. in cases where `nev` is large, the user sets `mpd`.
+
+   The value of `ncv` should always be between `nev` and `(nev+mpd)`, typically
+   `ncv=nev+mpd`. If `nev` is not too large, `mpd=nev` is a reasonable choice, otherwise
    a smaller value should be used.
 
    Level: intermediate
@@ -384,55 +385,45 @@ PetscErrorCode NEPSetDimensions(NEP nep,PetscInt nev,PetscInt ncv,PetscInt mpd)
 }
 
 /*@
-    NEPSetWhichEigenpairs - Specifies which portion of the spectrum is
-    to be sought.
+   NEPSetWhichEigenpairs - Specifies which portion of the spectrum is
+   to be sought.
 
-    Logically Collective
+   Logically Collective
 
-    Input Parameters:
-+   nep   - the nonlinear eigensolver context
--   which - the portion of the spectrum to be sought
+   Input Parameters:
++  nep   - the nonlinear eigensolver context
+-  which - the portion of the spectrum to be sought, see `NEPWhich` for possible values
 
-    Options Database Keys:
-+   -nep_largest_magnitude - Sets largest eigenvalues in magnitude
-.   -nep_smallest_magnitude - Sets smallest eigenvalues in magnitude
-.   -nep_largest_real - Sets largest real parts
-.   -nep_smallest_real - Sets smallest real parts
-.   -nep_largest_imaginary - Sets largest imaginary parts
-.   -nep_smallest_imaginary - Sets smallest imaginary parts
-.   -nep_target_magnitude - Sets eigenvalues closest to target
-.   -nep_target_real - Sets real parts closest to target
-.   -nep_target_imaginary - Sets imaginary parts closest to target
--   -nep_all - Sets all eigenvalues in a region
+   Options Database Keys:
++  -nep_largest_magnitude  - sets largest eigenvalues in magnitude
+.  -nep_smallest_magnitude - sets smallest eigenvalues in magnitude
+.  -nep_largest_real       - sets largest real parts
+.  -nep_smallest_real      - sets smallest real parts
+.  -nep_largest_imaginary  - sets largest imaginary parts
+.  -nep_smallest_imaginary - sets smallest imaginary parts
+.  -nep_target_magnitude   - sets eigenvalues closest to target
+.  -nep_target_real        - sets real parts closest to target
+.  -nep_target_imaginary   - sets imaginary parts closest to target
+-  -nep_all                - sets all eigenvalues in a region
 
-    Notes:
-    The parameter 'which' can have one of these values
+   Notes:
+   Not all eigensolvers implemented in `NEP` account for all the possible values
+   of `which`. Also, some values make sense only for certain types of
+   problems. If SLEPc is compiled for real numbers `NEP_LARGEST_IMAGINARY`
+   and `NEP_SMALLEST_IMAGINARY` use the absolute value of the imaginary part
+   for eigenvalue selection.
 
-+     NEP_LARGEST_MAGNITUDE - largest eigenvalues in magnitude (default)
-.     NEP_SMALLEST_MAGNITUDE - smallest eigenvalues in magnitude
-.     NEP_LARGEST_REAL - largest real parts
-.     NEP_SMALLEST_REAL - smallest real parts
-.     NEP_LARGEST_IMAGINARY - largest imaginary parts
-.     NEP_SMALLEST_IMAGINARY - smallest imaginary parts
-.     NEP_TARGET_MAGNITUDE - eigenvalues closest to the target (in magnitude)
-.     NEP_TARGET_REAL - eigenvalues with real part closest to target
-.     NEP_TARGET_IMAGINARY - eigenvalues with imaginary part closest to target
-.     NEP_ALL - all eigenvalues contained in a given region
--     NEP_WHICH_USER - user defined ordering set with NEPSetEigenvalueComparison()
+   The target is a scalar value provided with `NEPSetTarget()`.
 
-    Not all eigensolvers implemented in NEP account for all the possible values
-    stated above. If SLEPc is compiled for real numbers NEP_LARGEST_IMAGINARY
-    and NEP_SMALLEST_IMAGINARY use the absolute value of the imaginary part
-    for eigenvalue selection.
+   The criterion `NEP_TARGET_IMAGINARY` is available only in case PETSc and
+   SLEPc have been built with complex scalars.
 
-    The target is a scalar value provided with NEPSetTarget().
+   `NEP_ALL` is intended for use in the context of the `NEPCISS` solver for
+   computing all eigenvalues in a region.
 
-    NEP_ALL is intended for use in the context of the CISS solver for
-    computing all eigenvalues in a region.
+   Level: intermediate
 
-    Level: intermediate
-
-.seealso: [](ch:nep), `NEPGetWhichEigenpairs()`, `NEPSetTarget()`, `NEPSetEigenvalueComparison()`, `NEPWhich`
+.seealso: [](ch:nep), `NEPGetWhichEigenpairs()`, `NEPSetTarget()`, `NEPSetDimensions()`, `NEPSetEigenvalueComparison()`, `NEPWhich`
 @*/
 PetscErrorCode NEPSetWhichEigenpairs(NEP nep,NEPWhich which)
 {
@@ -480,9 +471,6 @@ PetscErrorCode NEPSetWhichEigenpairs(NEP nep,NEPWhich which)
     Output Parameter:
 .   which - the portion of the spectrum to be sought
 
-    Notes:
-    See NEPSetWhichEigenpairs() for possible values of 'which'.
-
     Level: intermediate
 
 .seealso: [](ch:nep), `NEPSetWhichEigenpairs()`, `NEPWhich`
@@ -498,20 +486,14 @@ PetscErrorCode NEPGetWhichEigenpairs(NEP nep,NEPWhich *which)
 
 /*@C
    NEPSetEigenvalueComparison - Specifies the eigenvalue comparison function
-   when NEPSetWhichEigenpairs() is set to NEP_WHICH_USER.
+   when `NEPSetWhichEigenpairs()` is set to `NEP_WHICH_USER`.
 
    Logically Collective
 
    Input Parameters:
 +  nep  - the nonlinear eigensolver context
-.  comp - a pointer to the comparison function
+.  comp - a pointer to the comparison function, see `SlepcEigenvalueComparisonFn` for the calling sequence
 -  ctx  - a context pointer (the last parameter to the comparison function)
-
-   Note:
-   The returning parameter 'res' can be
-+  negative - if the 1st eigenvalue is preferred to the 2st one
-.  zero     - if both eigenvalues are equally preferred
--  positive - if the 2st eigenvalue is preferred to the 1st one
 
    Level: advanced
 
@@ -538,13 +520,12 @@ PetscErrorCode NEPSetEigenvalueComparison(NEP nep,SlepcEigenvalueComparisonFn *c
 
    Options Database Keys:
 +  -nep_general - general problem with no particular structure
--  -nep_rational - a rational eigenvalue problem defined in split form with all f_i rational
+-  -nep_rational - a rational eigenvalue problem defined in split form with all $f_i$ rational
 
    Notes:
-   Allowed values for the problem type are general (NEP_GENERAL), and rational
-   (NEP_RATIONAL).
+   See `NEPProblemType` for possible problem types.
 
-   This function is used to provide a hint to the NEP solver to exploit certain
+   This function is used to provide a hint to the `NEP` solver to exploit certain
    properties of the nonlinear eigenproblem. This hint may be used or not,
    depending on the solver. By default, no particular structure is assumed.
 
@@ -566,7 +547,7 @@ PetscErrorCode NEPSetProblemType(NEP nep,NEPProblemType type)
 }
 
 /*@
-   NEPGetProblemType - Gets the problem type from the NEP object.
+   NEPGetProblemType - Gets the problem type from the `NEP` object.
 
    Not Collective
 
@@ -600,15 +581,16 @@ PetscErrorCode NEPGetProblemType(NEP nep,NEPProblemType *type)
 -  twosided - whether the two-sided variant is to be used or not
 
    Options Database Key:
-.  -nep_two_sided <boolean> - Sets/resets the twosided flag
+.  -nep_two_sided <boolean> - toggles the twosided flag
 
    Notes:
-   If the user sets twosided=PETSC_TRUE then the solver uses a variant of
+   If the user sets `twosided`=`PETSC_TRUE` then the solver uses a variant of
    the algorithm that computes both right and left eigenvectors. This is
-   usually much more costly. This option is not available in all solvers.
+   usually much more costly. This option is not available in all solvers,
+   see table [](#tab:solversn).
 
    When using two-sided solvers, the problem matrices must have both the
-   MatMult and MatMultTranspose operations defined.
+   `MATOP_MULT` and `MATOP_MULT_TRANSPOSE` operations defined.
 
    Level: advanced
 
@@ -659,11 +641,15 @@ PetscErrorCode NEPGetTwoSided(NEP nep,PetscBool *twosided)
 
    Input Parameters:
 +  nep     - the nonlinear eigensolver context
-.  conv    - convergence test function, see NEPConvergenceTestFn for the calling sequence
-.  ctx     - context for private data for the convergence routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
+.  conv    - convergence test function, see `NEPConvergenceTestFn` for the calling sequence
+.  ctx     - context for private data for the convergence routine (may be `NULL`)
+-  destroy - a routine for destroying the context (may be `NULL`), see `PetscCtxDestroyFn`
+             for the calling sequence
 
-   Note:
+   Notes:
+   When this is called with a user-defined function, then the convergence
+   criterion is set to `NEP_CONV_USER`, see `NEPSetConvergenceTest()`.
+
    If the error estimate returned by the convergence test function is less than
    the tolerance, then the eigenvalue is accepted as converged.
 
@@ -697,19 +683,13 @@ PetscErrorCode NEPSetConvergenceTestFunction(NEP nep,NEPConvergenceTestFn *conv,
 
    Input Parameters:
 +  nep  - the nonlinear eigensolver context
--  conv - the type of convergence test
+-  conv - the type of convergence test, see `NEPConv` for possible values
 
    Options Database Keys:
-+  -nep_conv_abs  - Sets the absolute convergence test
-.  -nep_conv_rel  - Sets the convergence test relative to the eigenvalue
--  -nep_conv_user - Selects the user-defined convergence test
-
-   Note:
-   The parameter 'conv' can have one of these values
-+     NEP_CONV_ABS  - absolute error ||r||
-.     NEP_CONV_REL  - error relative to the eigenvalue l, ||r||/|l|
-.     NEP_CONV_NORM - error relative matrix norms, ||r||/sum_i(|f_i(l)|*||A_i||)
--     NEP_CONV_USER - function set by NEPSetConvergenceTestFunction()
++  -nep_conv_abs    - sets the absolute convergence test
+.  -nep_conv_rel    - sets the convergence test relative to the eigenvalue
+.  -nep_conv_norm   - sets the convergence test relative to the matrix norms
+-  -nep_conv_user   - selects the user-defined convergence test
 
    Level: intermediate
 
@@ -768,15 +748,16 @@ PetscErrorCode NEPGetConvergenceTest(NEP nep,NEPConv *conv)
 
    Input Parameters:
 +  nep     - the nonlinear eigensolver context
-.  stop    - the stopping test function, see NEPStoppingTestFn for the calling sequence
-.  ctx     - context for private data for the stopping routine (may be NULL)
--  destroy - a routine for destroying the context (may be NULL), see PetscCtxDestroyFn for the calling sequence
+.  stop    - the stopping test function, see `NEPStoppingTestFn` for the calling sequence
+.  ctx     - context for private data for the stopping routine (may be `NULL`)
+-  destroy - a routine for destroying the context (may be `NULL`), see `PetscCtxDestroyFn`
+             for the calling sequence
 
    Note:
-   Normal usage is to first call the default routine NEPStoppingBasic() and then
-   set reason to NEP_CONVERGED_USER if some user-defined conditions have been
-   met. To let the eigensolver continue iterating, the result must be left as
-   NEP_CONVERGED_ITERATING.
+   When implementing a function for this, normal usage is to first call the
+   default routine `NEPStoppingBasic()` and then set `reason` to `NEP_CONVERGED_USER`
+   if some user-defined conditions have been met. To let the eigensolver continue
+   iterating, the result must be left as `NEP_CONVERGED_ITERATING`.
 
    Level: advanced
 
@@ -806,16 +787,11 @@ PetscErrorCode NEPSetStoppingTestFunction(NEP nep,NEPStoppingTestFn *stop,void *
 
    Input Parameters:
 +  nep  - the nonlinear eigensolver context
--  stop - the type of stopping test
+-  stop - the type of stopping test, see `NEPStop`
 
    Options Database Keys:
-+  -nep_stop_basic - Sets the default stopping test
--  -nep_stop_user  - Selects the user-defined stopping test
-
-   Note:
-   The parameter 'stop' can have one of these values
-+     NEP_STOP_BASIC - default stopping test
--     NEP_STOP_USER  - function set by NEPSetStoppingTestFunction()
++  -nep_stop_basic - sets the default stopping test
+-  -nep_stop_user  - selects the user-defined stopping test
 
    Level: advanced
 
@@ -928,20 +904,25 @@ PetscErrorCode NEPGetTrackAll(NEP nep,PetscBool *trackall)
 
    Input Parameters:
 +  nep    - the nonlinear eigensolver context
-.  refine - refinement type
+.  refine - refinement type, see `NEPRefine` for possible values
 .  npart  - number of partitions of the communicator
 .  tol    - the convergence tolerance
 .  its    - maximum number of refinement iterations
--  scheme - which scheme to be used for solving the involved linear systems
+-  scheme - which scheme to be used for solving the involved linear systems, see `NEPRefineScheme`
+            for possible values
 
    Options Database Keys:
-+  -nep_refine <type> - refinement type, one of <none,simple,multiple>
-.  -nep_refine_partitions <n> - the number of partitions
-.  -nep_refine_tol <tol> - the tolerance
-.  -nep_refine_its <its> - number of iterations
--  -nep_refine_scheme - to set the scheme for the linear solves
++  -nep_refine <type>         - set the refinement type, one of `none`,`simple`,`multiple`
+.  -nep_refine_partitions <n> - set the number of partitions
+.  -nep_refine_tol <tol>      - set the tolerance
+.  -nep_refine_its <its>      - set the number of iterations
+-  -nep_refine_scheme         - set the scheme for the linear solves, one of `schur`,`mbe`,`explicit`
 
    Notes:
+   This function configures the parameters of Newton iterative refinement,
+   see section [](#sec:refine) for a discussion of the different strategies
+   in the context of polynomial eigenproblems.
+
    By default, iterative refinement is disabled, since it may be very
    costly. There are two possible refinement strategies, simple and multiple.
    The simple approach performs iterative refinement on each of the
@@ -951,25 +932,25 @@ PetscErrorCode NEPGetTrackAll(NEP nep,PetscBool *trackall)
 
    In some cases, especially when using direct solvers within the
    iterative refinement method, it may be helpful for improved scalability
-   to split the communicator in several partitions. The npart parameter
+   to split the communicator in several partitions. The `npart` parameter
    indicates how many partitions to use (defaults to 1).
 
-   The tol and its parameters specify the stopping criterion. In the simple
+   The `tol` and `its` parameters specify the stopping criterion. In the simple
    method, refinement continues until the residual of each eigenpair is
-   below the tolerance (tol defaults to the NEP tol, but may be set to a
+   below the tolerance (`tol` defaults to the `NEP` tolerance, but may be set to a
    different value). In contrast, the multiple method simply performs its
    refinement iterations (just one by default).
 
-   The scheme argument is used to change the way in which linear systems are
+   The `scheme` argument is used to change the way in which linear systems are
    solved. Possible choices are explicit, mixed block elimination (MBE),
    and Schur complement.
 
-   Use PETSC_CURRENT to retain the current value of npart, tol or its. Use
-   PETSC_DETERMINE to assign a default value.
+   Use `PETSC_CURRENT` to retain the current value of `npart`, `tol` or `its`. Use
+   `PETSC_DETERMINE` to assign a default value.
 
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPGetRefine()`
+.seealso: [](ch:nep), [](#sec:refine), `NEPGetRefine()`
 @*/
 PetscErrorCode NEPSetRefine(NEP nep,NEPRefine refine,PetscInt npart,PetscReal tol,PetscInt its,NEPRefineScheme scheme)
 {
@@ -1014,7 +995,7 @@ PetscErrorCode NEPSetRefine(NEP nep,NEPRefine refine,PetscInt npart,PetscReal to
 }
 
 /*@
-   NEPGetRefine - Gets the refinement strategy used by the NEP object, and the
+   NEPGetRefine - Gets the refinement strategy used by the `NEP` object, and the
    associated parameters.
 
    Not Collective
@@ -1032,7 +1013,7 @@ PetscErrorCode NEPSetRefine(NEP nep,NEPRefine refine,PetscInt npart,PetscReal to
    Level: intermediate
 
    Note:
-   The user can specify NULL for any parameter that is not needed.
+   The user can specify `NULL` for any parameter that is not needed.
 
 .seealso: [](ch:nep), `NEPSetRefine()`
 @*/

@@ -366,7 +366,7 @@ static PetscErrorCode NEPSLPSetEPS_SLP(NEP nep,EPS eps)
 }
 
 /*@
-   NEPSLPSetEPS - Associate a linear eigensolver object (EPS) to the
+   NEPSLPSetEPS - Associate a linear eigensolver object (`EPS`) to the
    nonlinear eigenvalue solver.
 
    Collective
@@ -406,7 +406,7 @@ static PetscErrorCode NEPSLPGetEPS_SLP(NEP nep,EPS *eps)
 }
 
 /*@
-   NEPSLPGetEPS - Retrieve the linear eigensolver object (EPS) associated
+   NEPSLPGetEPS - Retrieve the linear eigensolver object (`EPS`) associated
    to the nonlinear eigenvalue solver.
 
    Collective
@@ -443,7 +443,7 @@ static PetscErrorCode NEPSLPSetEPSLeft_SLP(NEP nep,EPS eps)
 }
 
 /*@
-   NEPSLPSetEPSLeft - Associate a linear eigensolver object (EPS) to the
+   NEPSLPSetEPSLeft - Associate a linear eigensolver object (`EPS`) to the
    nonlinear eigenvalue solver, used to compute left eigenvectors in the
    two-sided variant of SLP.
 
@@ -484,7 +484,7 @@ static PetscErrorCode NEPSLPGetEPSLeft_SLP(NEP nep,EPS *eps)
 }
 
 /*@
-   NEPSLPGetEPSLeft - Retrieve the linear eigensolver object (EPS) associated
+   NEPSLPGetEPSLeft - Retrieve the linear eigensolver object (`EPS`) associated
    to the nonlinear eigenvalue solver, used to compute left eigenvectors in the
    two-sided variant of SLP.
 
@@ -522,7 +522,7 @@ static PetscErrorCode NEPSLPSetKSP_SLP(NEP nep,KSP ksp)
 }
 
 /*@
-   NEPSLPSetKSP - Associate a linear solver object (KSP) to the nonlinear
+   NEPSLPSetKSP - Associate a linear solver object (`KSP`) to the nonlinear
    eigenvalue solver.
 
    Collective
@@ -530,6 +530,10 @@ static PetscErrorCode NEPSLPSetKSP_SLP(NEP nep,KSP ksp)
    Input Parameters:
 +  nep - the nonlinear eigensolver context
 -  ksp - the linear solver object
+
+   Note:
+   This `KSP` object is used only for deflation, when computing more that
+   one eigenpair.
 
    Level: advanced
 
@@ -564,7 +568,7 @@ static PetscErrorCode NEPSLPGetKSP_SLP(NEP nep,KSP *ksp)
 }
 
 /*@
-   NEPSLPGetKSP - Retrieve the linear solver object (KSP) associated with
+   NEPSLPGetKSP - Retrieve the linear solver object (`KSP`) associated with
    the nonlinear eigenvalue solver.
 
    Collective
@@ -574,6 +578,10 @@ static PetscErrorCode NEPSLPGetKSP_SLP(NEP nep,KSP *ksp)
 
    Output Parameter:
 .  ksp - the linear solver object
+
+   Note:
+   This `KSP` object is used only for deflation, when computing more that
+   one eigenpair.
 
    Level: advanced
 
@@ -642,6 +650,27 @@ static PetscErrorCode NEPDestroy_SLP(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   NEPSLP - NEPSLP = "slp" - Successive Linear Problems method.
+
+   Notes:
+   This solver is based on the classical Successive Linear Problems
+   (SLP) method proposed by {cite:t}`Ruh73`. At each step, this
+   method has to solve a linear eigenvalue problem. Call
+   `NEPSLPGetEPS()` to configure the `EPS` object used for this.
+
+   `NEPSLP` supports computing left eigenvectors when `NEPSetTwoSided()`
+   has been set. In that case, a different `EPS` is used for the left
+   recurrence, see `NEPSLPGetEPSLeft()`.
+
+   The solver incorporates deflation, so that several eigenpairs con be
+   computed. Details of the implementation in SLEPc can be found in
+   {cite:p}`Cam21`.
+
+   Level: beginner
+
+.seealso: [](ch:nep), `NEP`, `NEPType`, `NEPSetType()`, `NEPSLPGetEPS()`, `NEPSetTwoSided()`, `NEPSLPGetEPSLeft()`
+M*/
 SLEPC_EXTERN PetscErrorCode NEPCreate_SLP(NEP nep)
 {
   NEP_SLP        *ctx;

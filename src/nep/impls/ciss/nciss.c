@@ -558,33 +558,35 @@ static PetscErrorCode NEPCISSSetSizes_CISS(NEP nep,PetscInt ip,PetscInt bs,Petsc
    Logically Collective
 
    Input Parameters:
-+  nep   - the nonlinear eigensolver context
-.  ip    - number of integration points
-.  bs    - block size
-.  ms    - moment size
-.  npart - number of partitions when splitting the communicator
-.  bsmax - max block size
--  realmats - T(z) is real for real z
++  nep      - the nonlinear eigensolver context
+.  ip       - number of integration points
+.  bs       - block size
+.  ms       - moment size
+.  npart    - number of partitions when splitting the communicator
+.  bsmax    - max block size
+-  realmats - $T(z)$ is real for real $z$
 
    Options Database Keys:
-+  -nep_ciss_integration_points - Sets the number of integration points
-.  -nep_ciss_blocksize - Sets the block size
-.  -nep_ciss_moments - Sets the moment size
-.  -nep_ciss_partitions - Sets the number of partitions
-.  -nep_ciss_maxblocksize - Sets the maximum block size
--  -nep_ciss_realmats - T(z) is real for real z
++  -nep_ciss_integration_points - sets the number of integration points
+.  -nep_ciss_blocksize          - sets the block size
+.  -nep_ciss_moments            - sets the moment size
+.  -nep_ciss_partitions         - sets the number of partitions
+.  -nep_ciss_maxblocksize       - sets the maximum block size
+-  -nep_ciss_realmats           - $T(z)$ is real for real $z$
 
    Notes:
-   For all integer arguments, you can use PETSC_CURRENT to keep the current value, and
-   PETSC_DETERMINE to set them to a default value.
+   For all integer arguments, you can use `PETSC_CURRENT` to keep the current value, and
+   `PETSC_DETERMINE` to set them to a default value.
 
-   The default number of partitions is 1. This means the internal KSP object is shared
-   among all processes of the NEP communicator. Otherwise, the communicator is split
-   into npart communicators, so that npart KSP solves proceed simultaneously.
+   The default number of partitions is 1. This means the internal `KSP` object is shared
+   among all processes of the `NEP` communicator. Otherwise, the communicator is split
+   into `npart` communicators, so that `npart` `KSP` solves proceed simultaneously.
 
-   The realmats flag can be set to true when T(.) is guaranteed to be real
+   The `realmats` flag can be set to `PETSC_TRUE` when $T(\cdot)$ is guaranteed to be real
    when the argument is a real value, for example, when all matrices in
-   the split form are real. When set to true, the solver avoids some computations.
+   the split form are real. When set to `PETSC_TRUE`, the solver avoids some computations.
+
+   For a detailed description of the parameters see {cite:p}`Mae16`.
 
    Level: advanced
 
@@ -627,12 +629,12 @@ static PetscErrorCode NEPCISSGetSizes_CISS(NEP nep,PetscInt *ip,PetscInt *bs,Pet
 .  nep - the nonlinear eigensolver context
 
    Output Parameters:
-+  ip    - number of integration points
-.  bs    - block size
-.  ms    - moment size
-.  npart - number of partitions when splitting the communicator
-.  bsmax - max block size
--  realmats - T(z) is real for real z
++  ip       - number of integration points
+.  bs       - block size
+.  ms       - moment size
+.  npart    - number of partitions when splitting the communicator
+.  bsmax    - max block size
+-  realmats - $T(z)$ is real for real $z$
 
    Level: advanced
 
@@ -678,12 +680,14 @@ static PetscErrorCode NEPCISSSetThreshold_CISS(NEP nep,PetscReal delta,PetscReal
 -  spur  - spurious threshold (to discard spurious eigenpairs)
 
    Options Database Keys:
-+  -nep_ciss_delta - Sets the delta
--  -nep_ciss_spurious_threshold - Sets the spurious threshold
++  -nep_ciss_delta              - sets the delta
+-  -nep_ciss_spurious_threshold - sets the spurious threshold
 
-   Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   Notes:
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default value.
+
+   For a detailed description of the parameters see {cite:p}`Mae16`.
 
    Level: advanced
 
@@ -766,12 +770,12 @@ static PetscErrorCode NEPCISSSetRefinement_CISS(NEP nep,PetscInt inner,PetscInt 
 -  blsize - number of iterative refinement iterations (blocksize loop)
 
    Options Database Keys:
-+  -nep_ciss_refine_inner - Sets number of inner iterations
--  -nep_ciss_refine_blocksize - Sets number of blocksize iterations
++  -nep_ciss_refine_inner     - sets number of inner iterations
+-  -nep_ciss_refine_blocksize - sets number of blocksize iterations
 
    Note:
-   PETSC_CURRENT can be used to preserve the current value of any of the
-   arguments, and PETSC_DETERMINE to set them to a default value.
+   `PETSC_CURRENT` can be used to preserve the current value of any of the
+   arguments, and `PETSC_DETERMINE` to set them to a default of 0 (no refinement).
 
    Level: advanced
 
@@ -841,16 +845,16 @@ static PetscErrorCode NEPCISSSetExtraction_CISS(NEP nep,NEPCISSExtraction extrac
 
    Input Parameters:
 +  nep        - the nonlinear eigensolver context
--  extraction - the extraction technique
+-  extraction - the extraction technique, see `NEPCISSExtraction` for possible values
 
    Options Database Key:
-.  -nep_ciss_extraction - Sets the extraction technique (either 'ritz', 'hankel' or 'caa')
+.  -nep_ciss_extraction - Sets the extraction technique, either `ritz`, `hankel` or `caa`
 
    Notes:
-   By default, the Rayleigh-Ritz extraction is used (NEP_CISS_EXTRACTION_RITZ).
+   By default, the Rayleigh-Ritz extraction is used (`NEP_CISS_EXTRACTION_RITZ`).
 
-   If the 'hankel' or the 'caa' option is specified (NEP_CISS_EXTRACTION_HANKEL or
-   NEP_CISS_EXTRACTION_CAA), then the Block Hankel method, or the Communication-avoiding
+   If the `hankel` or the `caa` option is specified (`NEP_CISS_EXTRACTION_HANKEL` or
+   `NEP_CISS_EXTRACTION_CAA`), then the block Hankel method, or the communication-avoiding
    Arnoldi method, respectively, is used for extracting eigenpairs.
 
    Level: advanced
@@ -953,7 +957,7 @@ static PetscErrorCode NEPCISSGetKSPs_CISS(NEP nep,PetscInt *nsolve,KSP **ksp)
 -  ksp - array of linear solver object
 
    Notes:
-   The number of KSP solvers is equal to the number of integration points divided by
+   The number of `KSP` solvers is equal to the number of integration points divided by
    the number of partitions. This value is halved in the case of real matrices with
    a region centered at the real axis.
 
@@ -1091,6 +1095,28 @@ static PetscErrorCode NEPSetDSType_CISS(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*MC
+   NEPCISS - NEPCISS = "ciss" - A contour integral eigensolver based on the
+   Sakurai-Sugiura scheme.
+
+   Notes:
+   This solver is based on the numerical contour integration idea
+   proposed initially for linear problems by {cite:t}`Sak03`. In nonlinear
+   eigenproblems, a Rayleigh-Ritz projection is done, resulting in
+   a small dense nonlinear eigenproblem {cite:p}`Asa09,Yok13`.
+
+   Contour integral methods are able to compute all eigenvalues
+   lying inside a region of the complex plane. Use `NEPGetRG()` to
+   specify the region. However, the computational cost is usually high
+   because multiple linear systems must be solved. Use `NEPCISSGetKSPs()`
+   to configure the `KSP` objects for this.
+
+   Details of the implementation in SLEPc can be found in {cite:p}`Mae16`.
+
+   Level: beginner
+
+.seealso: [](ch:nep), `NEP`, `NEPType`, `NEPSetType()`, `NEPGetRG()`
+M*/
 SLEPC_EXTERN PetscErrorCode NEPCreate_CISS(NEP nep)
 {
   NEP_CISS       *ctx = (NEP_CISS*)nep->data;
