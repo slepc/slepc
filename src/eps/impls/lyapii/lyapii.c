@@ -581,7 +581,7 @@ static PetscErrorCode EPSLyapIISetRanks_LyapII(EPS eps,PetscInt rkc,PetscInt rkl
 -  rkl - the Lyapunov rank
 
    Options Database Key:
-.  -eps_lyapii_ranks <rkc,rkl> - Sets the rank parameters
+.  -eps_lyapii_ranks <rkc,rkl> - sets the rank parameters
 
    Notes:
    `PETSC_CURRENT` can be used to preserve the current value of any of the

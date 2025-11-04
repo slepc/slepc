@@ -222,7 +222,7 @@ PetscErrorCode EPSJDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 -  blocksize - number of vectors added to the search space in every iteration
 
    Options Database Key:
-.  -eps_jd_blocksize - number of vectors added to the search space in every iteration
+.  -eps_jd_blocksize \<blocksize\> - number of vectors added to the search space in every iteration
 
    Note:
    Detailed information can be found at {cite:p}`Rom14`.
@@ -277,8 +277,8 @@ PetscErrorCode EPSJDGetBlockSize(EPS eps,PetscInt *blocksize)
 -  plusk - number of vectors saved from the previous iteration
 
    Options Database Keys:
-+  -eps_jd_minv  - number of vectors of the searching subspace after restarting
--  -eps_jd_plusk - number of vectors saved from the previous iteration
++  -eps_jd_minv \<minv\>   - number of vectors of the searching subspace after restarting
+-  -eps_jd_plusk \<plusk\> - number of vectors saved from the previous iteration
 
    Notes:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -335,7 +335,7 @@ PetscErrorCode EPSJDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 -  initialsize - number of vectors of the initial searching subspace
 
    Options Database Key:
-.  -eps_jd_initial_size - number of vectors of the initial searching subspace
+.  -eps_jd_initial_size \<initialsize\> - number of vectors of the initial searching subspace
 
    Notes:
    If the flag in `EPSJDSetKrylovStart()` is set to `PETSC_FALSE` and the user
@@ -406,7 +406,7 @@ static PetscErrorCode EPSJDSetFix_JD(EPS eps,PetscReal fix)
 -  fix - threshold for changing the target
 
    Options Database Key:
-.  -eps_jd_fix - the fix value
+.  -eps_jd_fix \<fix\> - the fix value
 
    Notes:
    The target in the correction equation is fixed at the first iterations.

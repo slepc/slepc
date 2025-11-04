@@ -381,8 +381,7 @@ PetscErrorCode DSGetMethod(DS ds,PetscInt *meth)
 -  pmode - the parallel mode
 
    Options Database Key:
-.  -ds_parallel \<pmode\> - sets the parallel mode, `redundant`, `synchronized`
-   or `distributed`
+.  -ds_parallel \<pmode\> - sets the parallel mode `redundant`,`synchronized`,`distributed`
 
    Notes:
    In the `redundant` parallel mode, all processes will make the computation

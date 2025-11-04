@@ -99,7 +99,7 @@ PetscErrorCode EPSMonitorSet(EPS eps,EPSMonitorFn *monitor,void *mctx,PetscCtxDe
 .  eps - the linear eigensolver context
 
    Options Database Key:
-.  -eps_monitor_cancel - Cancels all monitors that have been hardwired into a code by calls to
+.  -eps_monitor_cancel - cancels all monitors that have been hardwired into a code by calls to
                          `EPSMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate

@@ -95,16 +95,16 @@ static PetscErrorCode EPSComputeValues(EPS eps)
 .  eps - the linear eigensolver context
 
    Options Database Keys:
-+  -eps_view - print information about the solver once the solve is complete
-.  -eps_view_pre - print information about the solver before the solve starts
-.  -eps_view_mat0 - view the first matrix ($A$)
-.  -eps_view_mat1 - view the second matrix ($B$)
-.  -eps_view_vectors - view the computed eigenvectors
-.  -eps_view_values - view the computed eigenvalues
++  -eps_view             - print information about the solver once the solve is complete
+.  -eps_view_pre         - print information about the solver before the solve starts
+.  -eps_view_mat0        - view the first matrix ($A$)
+.  -eps_view_mat1        - view the second matrix ($B$)
+.  -eps_view_vectors     - view the computed eigenvectors
+.  -eps_view_values      - view the computed eigenvalues
 .  -eps_converged_reason - print reason for convergence/divergence, and number of iterations
-.  -eps_error_absolute - print absolute errors of each eigenpair
-.  -eps_error_relative - print relative errors of each eigenpair
--  -eps_error_backward - print backward errors of each eigenpair
+.  -eps_error_absolute   - print absolute errors of each eigenpair
+.  -eps_error_relative   - print relative errors of each eigenpair
+-  -eps_error_backward   - print backward errors of each eigenpair
 
    Notes:
    The problem matrices are specified with `EPSSetOperators()`.
@@ -302,7 +302,7 @@ PetscErrorCode EPSGetConverged(EPS eps,PetscInt *nconv)
 
    Output Parameter:
 .  reason - negative value indicates diverged, positive value converged, see
-   `EPSConvergedReason` for the possible values
+            `EPSConvergedReason` for the possible values
 
    Options Database Key:
 .  -eps_converged_reason - print reason for convergence/divergence, and number of iterations

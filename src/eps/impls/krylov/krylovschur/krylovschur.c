@@ -376,7 +376,7 @@ static PetscErrorCode EPSKrylovSchurSetRestart_KrylovSchur(EPS eps,PetscReal kee
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -eps_krylovschur_restart - sets the restart parameter
+.  -eps_krylovschur_restart \<keep\> - sets the restart parameter
 
    Notes:
    Allowed values are in the range [0.1,0.9]. The default is 0.5, which means
@@ -1447,7 +1447,7 @@ static PetscErrorCode EPSKrylovSchurSetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
 -  bse - the BSE method
 
    Options Database Key:
-.  -eps_krylovschur_bse_type - Sets the BSE type, either `shao`, `gruning`, or `projectedbse`
+.  -eps_krylovschur_bse_type \<bse\> - sets the BSE type, either `shao`, `gruning`, or `projectedbse`
 
    Notes:
    This function is relevant only for `EPS_BSE` problem types, see section

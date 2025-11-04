@@ -550,8 +550,8 @@ PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *c
 -  type - a known type of polynomial eigenvalue problem
 
    Options Database Keys:
-+  -pep_general - general problem with no particular structure
-.  -pep_hermitian - problem whose coefficient matrices are Hermitian
++  -pep_general    - general problem with no particular structure
+.  -pep_hermitian  - problem whose coefficient matrices are Hermitian
 .  -pep_hyperbolic - Hermitian problem that satisfies the definition of hyperbolic
 -  -pep_gyroscopic - problem with gyroscopic structure
 
@@ -774,10 +774,10 @@ PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,
 -  conv - the type of convergence test, see `PEPConv` for possible values
 
    Options Database Keys:
-+  -pep_conv_abs    - sets the absolute convergence test
-.  -pep_conv_rel    - sets the convergence test relative to the eigenvalue
-.  -pep_conv_norm   - sets the convergence test relative to the matrix norms
--  -pep_conv_user   - selects the user-defined convergence test
++  -pep_conv_abs  - sets the absolute convergence test
+.  -pep_conv_rel  - sets the convergence test relative to the eigenvalue
+.  -pep_conv_norm - sets the convergence test relative to the matrix norms
+-  -pep_conv_user - selects the user-defined convergence test
 
    Level: intermediate
 

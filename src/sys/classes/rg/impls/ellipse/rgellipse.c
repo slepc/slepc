@@ -53,9 +53,9 @@ static PetscErrorCode RGEllipseSetParameters_Ellipse(RG rg,PetscScalar center,Pe
 -  vscale - vertical scale of the ellipse
 
    Options Database Keys:
-+  -rg_ellipse_center - Sets the center
-.  -rg_ellipse_radius - Sets the radius
--  -rg_ellipse_vscale - Sets the vertical scale
++  -rg_ellipse_center \<center\> - sets the center
+.  -rg_ellipse_radius \<radius\> - sets the radius
+-  -rg_ellipse_vscale \<vscale\> - sets the vertical scale
 
    Notes:
    In the case of complex scalars, a complex center can be provided in the

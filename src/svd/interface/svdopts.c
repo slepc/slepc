@@ -268,9 +268,9 @@ PetscErrorCode SVDGetThreshold(SVD svd,PetscReal *thres,PetscBool *rel)
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -svd_nsv \<nsv\> - Sets the number of singular values
-.  -svd_ncv \<ncv\> - Sets the dimension of the subspace
--  -svd_mpd \<mpd\> - Sets the maximum projected dimension
++  -svd_nsv \<nsv\> - sets the number of singular values
+.  -svd_ncv \<ncv\> - sets the dimension of the subspace
+-  -svd_mpd \<mpd\> - sets the maximum projected dimension
 
    Notes:
    Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a reasonably good value, which is

@@ -567,12 +567,12 @@ static PetscErrorCode NEPCISSSetSizes_CISS(NEP nep,PetscInt ip,PetscInt bs,Petsc
 -  realmats - $T(z)$ is real for real $z$
 
    Options Database Keys:
-+  -nep_ciss_integration_points - sets the number of integration points
-.  -nep_ciss_blocksize          - sets the block size
-.  -nep_ciss_moments            - sets the moment size
-.  -nep_ciss_partitions         - sets the number of partitions
-.  -nep_ciss_maxblocksize       - sets the maximum block size
--  -nep_ciss_realmats           - $T(z)$ is real for real $z$
++  -nep_ciss_integration_points \<ip\> - sets the number of integration points
+.  -nep_ciss_blocksize \<bs\>          - sets the block size
+.  -nep_ciss_moments \<ms\>            - sets the moment size
+.  -nep_ciss_partitions \<npart\>      - sets the number of partitions
+.  -nep_ciss_maxblocksize \<bsmax\>    - sets the maximum block size
+-  -nep_ciss_realmats                  - $T(z)$ is real for real $z$
 
    Notes:
    For all integer arguments, you can use `PETSC_CURRENT` to keep the current value, and
@@ -680,8 +680,8 @@ static PetscErrorCode NEPCISSSetThreshold_CISS(NEP nep,PetscReal delta,PetscReal
 -  spur  - spurious threshold (to discard spurious eigenpairs)
 
    Options Database Keys:
-+  -nep_ciss_delta              - sets the delta
--  -nep_ciss_spurious_threshold - sets the spurious threshold
++  -nep_ciss_delta \<delta\>             - sets the delta
+-  -nep_ciss_spurious_threshold \<spur\> - sets the spurious threshold
 
    Notes:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -770,8 +770,8 @@ static PetscErrorCode NEPCISSSetRefinement_CISS(NEP nep,PetscInt inner,PetscInt 
 -  blsize - number of iterative refinement iterations (blocksize loop)
 
    Options Database Keys:
-+  -nep_ciss_refine_inner     - sets number of inner iterations
--  -nep_ciss_refine_blocksize - sets number of blocksize iterations
++  -nep_ciss_refine_inner \<inner\>      - sets number of inner iterations
+-  -nep_ciss_refine_blocksize \<blsize\> - sets number of blocksize iterations
 
    Note:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -848,7 +848,7 @@ static PetscErrorCode NEPCISSSetExtraction_CISS(NEP nep,NEPCISSExtraction extrac
 -  extraction - the extraction technique, see `NEPCISSExtraction` for possible values
 
    Options Database Key:
-.  -nep_ciss_extraction - Sets the extraction technique, either `ritz`, `hankel` or `caa`
+.  -nep_ciss_extraction \<extraction\> - Sets the extraction technique, either `ritz`, `hankel` or `caa`
 
    Notes:
    By default, the Rayleigh-Ritz extraction is used (`NEP_CISS_EXTRACTION_RITZ`).

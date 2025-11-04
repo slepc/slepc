@@ -60,15 +60,15 @@ PetscErrorCode PEPExtractVectors(PEP pep)
 .  pep - the polynomial eigensolver context
 
    Options Database Keys:
-+  -pep_view - print information about the solver once the solve is complete
-.  -pep_view_pre - print information about the solver before the solve starts
-.  -pep_view_matk - view the coefficient matrix $A_k$ (replace `k` by an integer from 0 to `nmat`-1)
-.  -pep_view_vectors - view the computed eigenvectors
-.  -pep_view_values - view the computed eigenvalues
++  -pep_view             - print information about the solver once the solve is complete
+.  -pep_view_pre         - print information about the solver before the solve starts
+.  -pep_view_matk        - view the coefficient matrix $A_k$ (replace `k` by an integer from 0 to `nmat`-1)
+.  -pep_view_vectors     - view the computed eigenvectors
+.  -pep_view_values      - view the computed eigenvalues
 .  -pep_converged_reason - print reason for convergence/divergence, and number of iterations
-.  -pep_error_absolute - print absolute errors of each eigenpair
-.  -pep_error_relative - print relative errors of each eigenpair
--  -pep_error_backward - print backward errors of each eigenpair
+.  -pep_error_absolute   - print absolute errors of each eigenpair
+.  -pep_error_relative   - print relative errors of each eigenpair
+-  -pep_error_backward   - print backward errors of each eigenpair
 
    Notes:
    The problem matrices are specified with `PEPSetOperators()`.

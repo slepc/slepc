@@ -321,7 +321,7 @@ static PetscErrorCode PEPQArnoldiSetRestart_QArnoldi(PEP pep,PetscReal keep)
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -pep_qarnoldi_restart - Sets the restart parameter
+.  -pep_qarnoldi_restart \<keep\> - sets the restart parameter
 
    Note:
    Allowed values are in the range [0.1,0.9]. The default is 0.5.

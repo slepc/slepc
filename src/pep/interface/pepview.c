@@ -25,7 +25,7 @@
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -pep_view -  Calls `PEPView()` at end of `PEPSolve()`
+.  -pep_view - calls `PEPView()` at end of `PEPSolve()`
 
    Notes:
    The available visualization contexts include

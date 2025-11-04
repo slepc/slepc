@@ -361,7 +361,7 @@ static PetscErrorCode SVDLanczosSetOneSide_Lanczos(SVD svd,PetscBool oneside)
 -  oneside - boolean flag indicating if the method is one-sided or not
 
    Options Database Key:
-.  -svd_lanczos_oneside \<oneside\> - enable the one-sided variant
+.  -svd_lanczos_oneside - enable the one-sided variant
 
    Note:
    By default, a two-sided variant is selected, which is sometimes slightly

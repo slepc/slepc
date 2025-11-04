@@ -278,7 +278,7 @@ static PetscErrorCode EPSFEASTSetNumPoints_FEAST(EPS eps,PetscInt npoints)
 -  npoints - number of contour integration points
 
    Options Database Key:
-.  -eps_feast_num_points - Sets the number of points
+.  -eps_feast_num_points \<npoints\> - sets the number of points
 
    Level: advanced
 

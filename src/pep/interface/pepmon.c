@@ -99,7 +99,7 @@ PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDe
 .  pep - the polynomial eigensolver context
 
    Options Database Key:
-.  -pep_monitor_cancel - Cancels all monitors that have been hardwired into a code by calls to
+.  -pep_monitor_cancel - cancels all monitors that have been hardwired into a code by calls to
                          `PEPMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate

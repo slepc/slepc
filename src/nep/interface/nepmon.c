@@ -99,7 +99,7 @@ PetscErrorCode NEPMonitorSet(NEP nep,NEPMonitorFn *monitor,void *mctx,PetscCtxDe
 .  nep - the nonlinear eigensolver context
 
    Options Database Key:
-.  -nep_monitor_cancel - Cancels all monitors that have been hardwired into a code by calls to
+.  -nep_monitor_cancel - cancels all monitors that have been hardwired into a code by calls to
                          `NEPMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate

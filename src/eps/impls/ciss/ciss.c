@@ -726,12 +726,12 @@ static PetscErrorCode EPSCISSSetSizes_CISS(EPS eps,PetscInt ip,PetscInt bs,Petsc
 -  realmats - $A$ and $B$ are real
 
    Options Database Keys:
-+  -eps_ciss_integration_points - sets the number of integration points
-.  -eps_ciss_blocksize          - sets the block size
-.  -eps_ciss_moments            - sets the moment size
-.  -eps_ciss_partitions         - sets the number of partitions
-.  -eps_ciss_maxblocksize       - sets the maximum block size
--  -eps_ciss_realmats           - $A$ and $B$ are real
++  -eps_ciss_integration_points \<ip\> - sets the number of integration points
+.  -eps_ciss_blocksize \<bs\>          - sets the block size
+.  -eps_ciss_moments \<ms\>            - sets the moment size
+.  -eps_ciss_partitions \<npart\>      - sets the number of partitions
+.  -eps_ciss_maxblocksize \<bsmax\>    - sets the maximum block size
+-  -eps_ciss_realmats                  - $A$ and $B$ are real
 
    Notes:
    For all integer arguments, you can use `PETSC_CURRENT` to keep the current value, and
@@ -835,8 +835,8 @@ static PetscErrorCode EPSCISSSetThreshold_CISS(EPS eps,PetscReal delta,PetscReal
 -  spur  - spurious threshold (to discard spurious eigenpairs)
 
    Options Database Keys:
-+  -eps_ciss_delta              - sets the delta
--  -eps_ciss_spurious_threshold - sets the spurious threshold
++  -eps_ciss_delta \<delta\>             - sets the delta
+-  -eps_ciss_spurious_threshold \<spur\> - sets the spurious threshold
 
    Notes:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -925,8 +925,8 @@ static PetscErrorCode EPSCISSSetRefinement_CISS(EPS eps,PetscInt inner,PetscInt 
 -  blsize - number of iterative refinement iterations (blocksize loop)
 
    Options Database Keys:
-+  -eps_ciss_refine_inner     - sets number of inner iterations
--  -eps_ciss_refine_blocksize - sets number of blocksize iterations
++  -eps_ciss_refine_inner \<inner\>      - sets number of inner iterations
+-  -eps_ciss_refine_blocksize \<blsize\> - sets number of blocksize iterations
 
    Notes:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -1005,7 +1005,7 @@ static PetscErrorCode EPSCISSSetUseST_CISS(EPS eps,PetscBool usest)
 -  usest  - boolean flag to use the `ST` object or not
 
    Options Database Key:
-.  -eps_ciss_usest \<usest\> - whether the `ST` object will be used or not
+.  -eps_ciss_usest - whether the `ST` object will be used or not
 
    Note:
    When this option is set, the linear solves can be configured by
@@ -1085,7 +1085,7 @@ static PetscErrorCode EPSCISSSetQuadRule_CISS(EPS eps,EPSCISSQuadRule quad)
 -  quad - the quadrature rule, see `EPSCISSQuadRule` for possible values
 
    Options Database Key:
-.  -eps_ciss_quadrule - Sets the quadrature rule, either `trapezoidal` or `chebyshev`
+.  -eps_ciss_quadrule \<quad\> - sets the quadrature rule, either `trapezoidal` or `chebyshev`
 
    Notes:
    By default, the trapezoidal rule is used (`EPS_CISS_QUADRULE_TRAPEZOIDAL`).
@@ -1161,7 +1161,7 @@ static PetscErrorCode EPSCISSSetExtraction_CISS(EPS eps,EPSCISSExtraction extrac
 -  extraction - the extraction technique, see `EPSCISSExtraction` for possible values
 
    Options Database Key:
-.  -eps_ciss_extraction - sets the extraction technique, either `ritz` or `hankel`
+.  -eps_ciss_extraction \<extraction\> - sets the extraction technique, either `ritz` or `hankel`
 
    Notes:
    By default, the Rayleigh-Ritz extraction is used (`EPS_CISS_EXTRACTION_RITZ`),
