@@ -1490,7 +1490,7 @@ static PetscErrorCode PEPJDSetRestart_JD(PEP pep,PetscReal keep)
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -pep_jd_restart - Sets the restart parameter
+.  -pep_jd_restart \<keep\> - sets the restart parameter
 
    Notes:
    Allowed values are in the range [0.1,0.9]. The default is 0.5.
@@ -1565,7 +1565,7 @@ static PetscErrorCode PEPJDSetFix_JD(PEP pep,PetscReal fix)
 -  fix - threshold for changing the target
 
    Options Database Key:
-.  -pep_jd_fix - the fix value
+.  -pep_jd_fix \<fix\> - the fix value
 
    Notes:
    The target in the correction equation is fixed at the first iterations.
@@ -1720,7 +1720,7 @@ static PetscErrorCode PEPJDSetMinimalityIndex_JD(PEP pep,PetscInt mmidx)
 -  mmidx - maximum minimality index
 
    Options Database Key:
-.  -pep_jd_minimality_index - the minimality index value
+.  -pep_jd_minimality_index \<mmidx\> - the minimality index value
 
    Notes:
    The default value is equal to the degree of the polynomial. A smaller value
@@ -1804,7 +1804,7 @@ static PetscErrorCode PEPJDSetProjection_JD(PEP pep,PEPJDProjection proj)
 -  proj - the type of projection, see `PEPJDProjection` for possible values
 
    Options Database Key:
-.  -pep_jd_projection - the projection type, either `orthogonal` or `harmonic`
+.  -pep_jd_projection \<proj\> - the projection type, either `orthogonal` or `harmonic`
 
    Note:
    Detailed information can be found at {cite:p}`Cam20a`.

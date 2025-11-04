@@ -209,7 +209,7 @@ static PetscErrorCode STFilterSetInterval_Filter(ST st,PetscReal inta,PetscReal 
 -  intb - right end of the interval
 
    Options Database Key:
-.  -st_filter_interval <a,b> - set [a,b] as the interval of interest
+.  -st_filter_interval <a,b> - set $[a,b]$ as the interval of interest
 
    Notes:
    The filter will be configured to emphasize eigenvalues contained in the given
@@ -297,7 +297,7 @@ static PetscErrorCode STFilterSetRange_Filter(ST st,PetscReal left,PetscReal rig
 -  right - right end of the spectral range
 
    Options Database Key:
-.  -st_filter_range <a,b> - set [a,b] as the numerical range
+.  -st_filter_range <lmin,lmax> - set $[\lambda_\mathrm{min},\lambda_\mathrm{max}]$ as the numerical range
 
    Notes:
    The filter will be most effective if the numerical range is tight, that is,

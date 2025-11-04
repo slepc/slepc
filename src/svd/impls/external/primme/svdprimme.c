@@ -369,7 +369,7 @@ static PetscErrorCode SVDPRIMMESetBlockSize_PRIMME(SVD svd,PetscInt bs)
 -  bs - block size
 
    Options Database Key:
-.  -svd_primme_blocksize - sets the maximux allowed block size
+.  -svd_primme_blocksize \<bs\> - sets the maximux allowed block size
 
    Notes:
    If the block size is not set, the value established by `primme_svds_initialize`
@@ -447,7 +447,7 @@ static PetscErrorCode SVDPRIMMESetMethod_PRIMME(SVD svd,SVDPRIMMEMethod method)
 -  method - method that will be used by PRIMME
 
    Options Database Key:
-.  -svd_primme_method - Sets the method for the PRIMME SVD solver
+.  -svd_primme_method \<method\> - sets the method for the PRIMME SVD solver
 
    Notes:
    If not set, the method defaults to `SVD_PRIMME_HYBRID`.

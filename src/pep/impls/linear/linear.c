@@ -827,7 +827,7 @@ static PetscErrorCode PEPLinearSetExplicitMatrix_Linear(PEP pep,PetscBool explic
 -  explicitmat - boolean flag indicating if the matrices are built explicitly
 
    Options Database Key:
-.  -pep_linear_explicitmatrix \<explicitmat\> - set the boolean flag
+.  -pep_linear_explicitmatrix - set the boolean flag
 
    Level: advanced
 

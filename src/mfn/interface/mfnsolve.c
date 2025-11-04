@@ -63,11 +63,11 @@ static PetscErrorCode MFNSolve_Private(MFN mfn,Vec b,Vec x)
          overwritten with the answer)
 
    Options Database Keys:
-+  -mfn_view - print information about the solver used
-.  -mfn_view_pre - print information about the solver before the solve starts
-.  -mfn_view_mat - view the matrix
-.  -mfn_view_rhs - view right hand side vector
-.  -mfn_view_solution - view computed solution vector
++  -mfn_view             - print information about the solver used
+.  -mfn_view_pre         - print information about the solver before the solve starts
+.  -mfn_view_mat         - view the matrix
+.  -mfn_view_rhs         - view right hand side vector
+.  -mfn_view_solution    - view computed solution vector
 -  -mfn_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:

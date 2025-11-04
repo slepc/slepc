@@ -228,7 +228,7 @@ static PetscErrorCode NEPNArnoldiSetLagPreconditioner_NArnoldi(NEP nep,PetscInt 
           the Jacobian is built, etc.
 
    Options Database Key:
-.  -nep_narnoldi_lag_preconditioner \<lag\> - the lag value
+.  -nep_narnoldi_lag_preconditioner \<lag\> - sets the lag value
 
    Notes:
    The default is 1.
@@ -425,7 +425,7 @@ static PetscErrorCode NEPDestroy_NArnoldi(NEP nep)
    This solver implements the N-Arnoldi method {cite:p}`Vos04`, a
    projection method using an expanding subspace formed with the
    RII iterate vectors. Hence there are similarities with `NEPRII`.
-   Call `NEPNArnoldiGetKSP` to configure the linear solver, and
+   Call `NEPNArnoldiGetKSP()` to configure the linear solver, and
    `NEPNArnoldiSetLagPreconditioner()` to reduce the cost of updating
    the preconditioner.
 

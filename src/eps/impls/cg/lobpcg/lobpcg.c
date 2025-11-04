@@ -420,7 +420,7 @@ static PetscErrorCode EPSLOBPCGSetBlockSize_LOBPCG(EPS eps,PetscInt bs)
 -  bs  - the block size
 
    Options Database Key:
-.  -eps_lobpcg_blocksize - sets the block size
+.  -eps_lobpcg_blocksize \<bs\> - sets the block size
 
    Level: advanced
 
@@ -492,7 +492,7 @@ static PetscErrorCode EPSLOBPCGSetRestart_LOBPCG(EPS eps,PetscReal restart)
 -  restart - the percentage of the block of vectors to force a restart
 
    Options Database Key:
-.  -eps_lobpcg_restart - sets the restart parameter
+.  -eps_lobpcg_restart \<restart\> - sets the restart parameter
 
    Notes:
    The meaning of this parameter is the proportion of vectors within the

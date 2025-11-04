@@ -199,8 +199,7 @@ PetscErrorCode SVDDestroy(SVD *svd)
 -  type     - a known method
 
    Options Database Key:
-.  -svd_type \<type\> - Sets the method; use `-help` for a list
-    of available methods
+.  -svd_type \<type\> - sets the method; use `-help` for a list of available methods
 
    Notes:
    See `SVDType` for available methods. The default is `SVDCROSS`.

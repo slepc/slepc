@@ -785,7 +785,7 @@ static PetscErrorCode EPSPowerSetShiftType_Power(EPS eps,EPSPowerShiftType shift
 -  shift - the type of shift, see `EPSPowerShiftType` for possible values
 
    Options Database Key:
-.  -eps_power_shift_type - sets the shift type, either `constant`, `rayleigh` or `wilkinson`
+.  -eps_power_shift_type \<shift\> - sets the shift type, either `constant`, `rayleigh` or `wilkinson`
 
    Notes:
    By default, shifts are constant (`EPS_POWER_SHIFT_CONSTANT`) and the iteration

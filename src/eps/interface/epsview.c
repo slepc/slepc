@@ -25,7 +25,7 @@
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -eps_view -  Calls `EPSView()` at end of `EPSSolve()`
+.  -eps_view - calls `EPSView()` at end of `EPSSolve()`
 
    Notes:
    The available visualization contexts include

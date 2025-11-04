@@ -1053,14 +1053,13 @@ PetscErrorCode EPSGetProblemType(EPS eps,EPSProblemType *type)
 -  extr - a known type of extraction
 
    Options Database Keys:
-+  -eps_ritz - Rayleigh-Ritz extraction
-.  -eps_harmonic - harmonic Ritz extraction
++  -eps_ritz              - Rayleigh-Ritz extraction
+.  -eps_harmonic          - harmonic Ritz extraction
 .  -eps_harmonic_relative - harmonic Ritz extraction relative to the eigenvalue
-.  -eps_harmonic_right - harmonic Ritz extraction for rightmost eigenvalues
-.  -eps_harmonic_largest - harmonic Ritz extraction for largest magnitude
-   (without target)
-.  -eps_refined - refined Ritz extraction
--  -eps_refined_harmonic - refined harmonic Ritz extraction
+.  -eps_harmonic_right    - harmonic Ritz extraction for rightmost eigenvalues
+.  -eps_harmonic_largest  - harmonic Ritz extraction for largest magnitude (without target)
+.  -eps_refined           - refined Ritz extraction
+-  -eps_refined_harmonic  - refined harmonic Ritz extraction
 
    Notes:
    Not all eigensolvers support all types of extraction.
@@ -1226,7 +1225,7 @@ PetscErrorCode EPSGetBalance(EPS eps,EPSBalance *bal,PetscInt *its,PetscReal *cu
 -  twosided - whether the two-sided variant is to be used or not
 
    Options Database Key:
-.  -eps_two_sided \<twosided\> - toggles the twosided flag
+.  -eps_two_sided - toggles the twosided flag
 
    Notes:
    If the user sets `twosided`=`PETSC_TRUE` then the solver uses a variant of
@@ -1289,7 +1288,7 @@ PetscErrorCode EPSGetTwoSided(EPS eps,PetscBool *twosided)
 -  trueres - whether true residuals are required or not
 
    Options Database Key:
-.  -eps_true_residual \<trueres\> - toggles the true residual
+.  -eps_true_residual - toggles the true residual
 
    Notes:
    If the user sets `trueres`=`PETSC_TRUE` then the solver explicitly computes
@@ -1405,7 +1404,7 @@ PetscErrorCode EPSGetTrackAll(EPS eps,PetscBool *trackall)
 -  purify - whether purification is done or not, use `PETSC_FALSE` to disable it
 
    Options Database Key:
-.  -eps_purify \<purify\> - Sets/resets the boolean flag `purify`
+.  -eps_purify - toggles the purification flag
 
    Notes:
    By default, eigenvectors of generalized symmetric eigenproblems are purified

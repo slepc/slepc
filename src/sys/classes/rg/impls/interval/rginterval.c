@@ -53,7 +53,7 @@ static PetscErrorCode RGIntervalSetEndpoints_Interval(RG rg,PetscReal a,PetscRea
 -  d - top endpoint of the interval in the imaginary axis
 
    Options Database Key:
-.  -rg_interval_endpoints - comma-separated list of values (two or four)
+.  -rg_interval_endpoints <a,b,c,d> - comma-separated list of values (two or four)
 
    Note:
    The region is defined as $[a,b]\times[c,d]$. Particular cases are an interval on

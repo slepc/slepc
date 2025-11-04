@@ -91,16 +91,16 @@ PetscErrorCode SVDComputeVectors(SVD svd)
 .  svd - the singular value solver context
 
    Options Database Keys:
-+  -svd_view - print information about the solver used
-.  -svd_view_mat0 - view the first matrix ($A$)
-.  -svd_view_mat1 - view the second matrix ($B$)
-.  -svd_view_signature - view the signature matrix ($\Omega$)
-.  -svd_view_vectors - view the computed singular vectors
-.  -svd_view_values - view the computed singular values
++  -svd_view             - print information about the solver used
+.  -svd_view_mat0        - view the first matrix ($A$)
+.  -svd_view_mat1        - view the second matrix ($B$)
+.  -svd_view_signature   - view the signature matrix ($\Omega$)
+.  -svd_view_vectors     - view the computed singular vectors
+.  -svd_view_values      - view the computed singular values
 .  -svd_converged_reason - print reason for convergence/divergence, and number of iterations
-.  -svd_error_absolute - print absolute errors of each singular triplet
-.  -svd_error_relative - print relative errors of each singular triplet
--  -svd_error_norm     - print errors relative to the matrix norms of each singular triplet
+.  -svd_error_absolute   - print absolute errors of each singular triplet
+.  -svd_error_relative   - print relative errors of each singular triplet
+-  -svd_error_norm       - print errors relative to the matrix norms of each singular triplet
 
    Notes:
    The problem matrices are specified with `SVDSetOperators()`.

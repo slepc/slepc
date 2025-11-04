@@ -23,14 +23,14 @@
 .  lme - the linear matrix equation solver context
 
    Options Database Keys:
-+  -lme_view - print information about the solver once the solve is complete
-.  -lme_view_pre - print information about the solver before the solve starts
-.  -lme_view_mat_a - view the A matrix
-.  -lme_view_mat_b - view the B matrix
-.  -lme_view_mat_d - view the D matrix
-.  -lme_view_mat_e - view the E matrix
-.  -lme_view_rhs - view the right hand side of the equation
-.  -lme_view_solution - view the computed solution
++  -lme_view             - print information about the solver once the solve is complete
+.  -lme_view_pre         - print information about the solver before the solve starts
+.  -lme_view_mat_a       - view the A matrix
+.  -lme_view_mat_b       - view the B matrix
+.  -lme_view_mat_d       - view the D matrix
+.  -lme_view_mat_e       - view the E matrix
+.  -lme_view_rhs         - view the right hand side of the equation
+.  -lme_view_solution    - view the computed solution
 -  -lme_converged_reason - print reason for convergence/divergence, and number of iterations
 
    Notes:

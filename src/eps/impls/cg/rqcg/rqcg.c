@@ -266,7 +266,7 @@ static PetscErrorCode EPSRQCGSetReset_RQCG(EPS eps,PetscInt nrest)
 -  nrest - the number of iterations between resets
 
    Options Database Key:
-.  -eps_rqcg_reset - sets the reset parameter
+.  -eps_rqcg_reset \<nrest\> - sets the reset parameter
 
    Note:
    The meaning of the reset parameter is that every `nrest` iterations the

@@ -52,16 +52,16 @@ PetscErrorCode NEPComputeVectors(NEP nep)
 .  nep - the nonlinear eigensolver context
 
    Options Database Keys:
-+  -nep_view - print information about the solver once the solve is complete
-.  -nep_view_pre - print information about the solver before the solve starts
-.  -nep_view_matk - view the split form matrix $A_k$ (replace `k` by an integer from 0 to `nt`-1)
-.  -nep_view_fnk - view the split form function $f_k$ (replace `k` by an integer from 0 to `nt`-1)
-.  -nep_view_vectors - view the computed eigenvectors
-.  -nep_view_values - view the computed eigenvalues
++  -nep_view             - print information about the solver once the solve is complete
+.  -nep_view_pre         - print information about the solver before the solve starts
+.  -nep_view_matk        - view the split form matrix $A_k$ (replace `k` by an integer from 0 to `nt`-1)
+.  -nep_view_fnk         - view the split form function $f_k$ (replace `k` by an integer from 0 to `nt`-1)
+.  -nep_view_vectors     - view the computed eigenvectors
+.  -nep_view_values      - view the computed eigenvalues
 .  -nep_converged_reason - print reason for convergence/divergence, and number of iterations
-.  -nep_error_absolute - print absolute errors of each eigenpair
-.  -nep_error_relative - print relative errors of each eigenpair
--  -nep_error_backward - print backward errors of each eigenpair
+.  -nep_error_absolute   - print absolute errors of each eigenpair
+.  -nep_error_relative   - print relative errors of each eigenpair
+-  -nep_error_backward   - print backward errors of each eigenpair
 
    Notes:
    `NEPSolve()` will return without generating an error regardless of whether

@@ -304,7 +304,7 @@ PetscErrorCode STGetMatMode(ST st,STMatMode *mode)
 -  flg - the boolean flag
 
    Options Database Key:
-.  -st_transform \<flg\> - toggle the computation of matrices
+.  -st_transform - toggle the computation of matrices
 
    Notes:
    This flag is intended for the case of polynomial eigenproblems solved

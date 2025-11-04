@@ -365,7 +365,7 @@ static PetscErrorCode EPSEVSLSetRange_EVSL(EPS eps,PetscReal lmin,PetscReal lmax
 -  lmax - right end of the interval
 
    Options Database Key:
-.  -eps_evsl_range <a,b> - set $[a,b]$ as the numerical range
+.  -eps_evsl_range <lmin,lmax> - set $[\lambda_\mathrm{min},\lambda_\mathrm{max}]$ as the numerical range
 
    Notes:
    The filter will be most effective if the numerical range is tight, that is, `lmin`

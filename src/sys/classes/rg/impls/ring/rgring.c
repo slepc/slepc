@@ -83,12 +83,12 @@ static PetscErrorCode RGRingSetParameters_Ring(RG rg,PetscScalar center,PetscRea
 -  width     - width of the ring
 
    Options Database Keys:
-+  -rg_ring_center     - Sets the center
-.  -rg_ring_radius     - Sets the radius
-.  -rg_ring_vscale     - Sets the vertical scale
-.  -rg_ring_startangle - Sets the right-hand side angle
-.  -rg_ring_endangle   - Sets the left-hand side angle
--  -rg_ring_width      - Sets the width of the ring
++  -rg_ring_center \<center\>        - sets the center
+.  -rg_ring_radius \<radius\>        - sets the radius
+.  -rg_ring_vscale \<vscale\>        - sets the vertical scale
+.  -rg_ring_startangle \<start_ang\> - sets the right-hand side angle
+.  -rg_ring_endangle \<end_ang\>     - sets the left-hand side angle
+-  -rg_ring_width \<width\>          - sets the width of the ring
 
    Notes:
    The values of `center`, `radius` and `vscale` have the same meaning as in the

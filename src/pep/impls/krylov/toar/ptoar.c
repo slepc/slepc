@@ -629,7 +629,7 @@ static PetscErrorCode PEPTOARSetRestart_TOAR(PEP pep,PetscReal keep)
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -pep_toar_restart - sets the restart parameter
+.  -pep_toar_restart \<keep\> - sets the restart parameter
 
    Note:
    Allowed values are in the range [0.1,0.9]. The default is 0.5.
