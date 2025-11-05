@@ -1,8 +1,6 @@
 Test BVGetSplitRows (length 10, l=3, k=5, nc=0).
   type: nest
-  Matrix object:
-    type=nest, rows=2, cols=2
-    MatNest structure:
+    MatNest, rows=2, cols=2,  structure:
     (0,0) : type=seqaij, rows=10, cols=10
     (0,1) : NULL
     (1,0) : NULL
