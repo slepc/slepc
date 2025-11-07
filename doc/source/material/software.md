@@ -48,6 +48,11 @@ The list below shows software packages that use SLEPc or expose part of its func
   6. [FEMFFUSION](https://femffusion.webs.upv.es/): a finite element method code for nuclear reactor modelling.
   7. [Milonga](https://www.seamplex.com/milonga): a free nuclear reactor core analysis code.
 
+## Linear solvers and preconditioners
+
+  1. [HPDDM](https://github.com/hpddm/hpddm): high-performance unified framework for domain decomposition methods.
+  2. [BAMG](https://gitlab.com/knepley/bamg): Bootstrap AMG for PETSc.
+
 ## Other
 
   1. [SALSA](https://icl.utk.edu/salsa/): Self-Adapting Large-scale Solver Architecture.
