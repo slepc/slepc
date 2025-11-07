@@ -536,12 +536,12 @@ static PetscErrorCode PEPCISSSetSizes_CISS(PEP pep,PetscInt ip,PetscInt bs,Petsc
 -  realmats - all coefficient matrices of $P(\cdot)$ are real
 
    Options Database Keys:
-+  -pep_ciss_integration_points - sets the number of integration points
-.  -pep_ciss_blocksize          - sets the block size
-.  -pep_ciss_moments            - sets the moment size
-.  -pep_ciss_partitions         - sets the number of partitions
-.  -pep_ciss_maxblocksize       - sets the maximum block size
--  -pep_ciss_realmats           - all coefficient matrices of $P(\cdot)$ are real
++  -pep_ciss_integration_points \<ip\> - sets the number of integration points
+.  -pep_ciss_blocksize \<bs\>          - sets the block size
+.  -pep_ciss_moments \<ms\>            - sets the moment size
+.  -pep_ciss_partitions \<npart\>      - sets the number of partitions
+.  -pep_ciss_maxblocksize \<bsmax\>    - sets the maximum block size
+-  -pep_ciss_realmats                  - all coefficient matrices of $P(\cdot)$ are real
 
    Notes:
    For all integer arguments, you can use `PETSC_CURRENT` to keep the current value, and
@@ -645,8 +645,8 @@ static PetscErrorCode PEPCISSSetThreshold_CISS(PEP pep,PetscReal delta,PetscReal
 -  spur  - spurious threshold (to discard spurious eigenpairs)
 
    Options Database Keys:
-+  -pep_ciss_delta              - sets the delta
--  -pep_ciss_spurious_threshold - sets the spurious threshold
++  -pep_ciss_delta \<delta\>             - sets the delta
+-  -pep_ciss_spurious_threshold \<spur\> - sets the spurious threshold
 
    Notes:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -735,8 +735,8 @@ static PetscErrorCode PEPCISSSetRefinement_CISS(PEP pep,PetscInt inner,PetscInt 
 -  blsize - number of iterative refinement iterations (blocksize loop)
 
    Options Database Keys:
-+  -pep_ciss_refine_inner     - sets number of inner iterations
--  -pep_ciss_refine_blocksize - sets number of blocksize iterations
++  -pep_ciss_refine_inner \<inner\>      - sets number of inner iterations
+-  -pep_ciss_refine_blocksize \<blsize\> - sets number of blocksize iterations
 
    Note:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -813,7 +813,7 @@ static PetscErrorCode PEPCISSSetExtraction_CISS(PEP pep,PEPCISSExtraction extrac
 -  extraction - the extraction technique, see `PEPCISSExtraction` for possible values
 
    Options Database Key:
-.  -pep_ciss_extraction - sets the extraction technique, either `ritz`, `hankel` or `caa`
+.  -pep_ciss_extraction \<extraction\> - sets the extraction technique, either `ritz`, `hankel` or `caa`
 
    Notes:
    By default, the Rayleigh-Ritz extraction is used (`PEP_CISS_EXTRACTION_RITZ`),

@@ -139,8 +139,7 @@ PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
 -  type - a known method
 
    Options Database Key:
-.  -eps_type \<type\> - sets the method; use `-help` for a list
-    of available methods
+.  -eps_type \<type\> - sets the method; use `-help` for a list of available methods
 
    Notes:
    See `EPSType` for available methods. The default is `EPSKRYLOVSCHUR`.

@@ -100,7 +100,7 @@ PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDe
 .  svd - the singular value solver context
 
    Options Database Key:
-.  -svd_monitor_cancel - Cancels all monitors that have been hardwired into a code by calls to
+.  -svd_monitor_cancel - cancels all monitors that have been hardwired into a code by calls to
                          `SVDMonitorSet()`, but does not cancel those set via the options database.
 
    Level: intermediate

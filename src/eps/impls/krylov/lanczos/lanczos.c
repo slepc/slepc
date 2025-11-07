@@ -747,7 +747,7 @@ static PetscErrorCode EPSLanczosSetReorthog_Lanczos(EPS eps,EPSLanczosReorthogTy
 -  reorthog - the type of reorthogonalization, see `EPSLanczosReorthogType` for possible values
 
    Options Database Key:
-.  -eps_lanczos_reorthog - sets the reorthogonalization type
+.  -eps_lanczos_reorthog \<reorthog\> - sets the reorthogonalization type
 
    Notes:
    Details of the different reorthogonalization strategies can be found in

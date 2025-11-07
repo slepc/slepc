@@ -24,7 +24,7 @@
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -svd_view -  Calls `SVDView()` at end of `SVDSolve()`
+.  -svd_view - calls `SVDView()` at end of `SVDSolve()`
 
    Notes:
    The available visualization contexts include

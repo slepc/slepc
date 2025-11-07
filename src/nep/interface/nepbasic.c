@@ -131,12 +131,11 @@ PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
    Logically Collective
 
    Input Parameters:
-+  nep      - the nonlinear eigensolver context
--  type     - a known method
++  nep  - the nonlinear eigensolver context
+-  type - a known method
 
    Options Database Key:
-.  -nep_type \<type\> - Sets the method; use `-help` for a list
-    of available methods
+.  -nep_type \<type\> - sets the method; use `-help` for a list of available methods
 
    Notes:
    See `NEPType` for available methods. The default is `NEPRII`.

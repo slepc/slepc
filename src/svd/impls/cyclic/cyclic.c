@@ -901,7 +901,7 @@ static PetscErrorCode SVDCyclicSetExplicitMatrix_Cyclic(SVD svd,PetscBool explic
 -  explicitmat - `PETSC_TRUE` if $H(A)$ must be built explicitly
 
    Options Database Key:
-.  -svd_cyclic_explicitmatrix \<explicitmat\> - toggle the explicit construction of the matrix
+.  -svd_cyclic_explicitmatrix - toggle the explicit construction of the matrix
 
    Notes:
    In GSVD and HSVD the equivalent eigenvalue problem has generalized form,

@@ -135,8 +135,7 @@ PetscErrorCode PEPCreate(MPI_Comm comm,PEP *outpep)
 -  type - a known method
 
    Options Database Key:
-.  -pep_type \<type\> - Sets the method; use `-help` for a list
-    of available methods
+.  -pep_type \<type\> - sets the method; use `-help` for a list of available methods
 
    Notes:
    See `PEPType` for available methods. The default is `PEPTOAR`.

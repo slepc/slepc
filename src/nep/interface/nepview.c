@@ -25,7 +25,7 @@
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -nep_view -  Calls `NEPView()` at end of `NEPSolve()`
+.  -nep_view - calls `NEPView()` at end of `NEPSolve()`
 
    Notes:
    The available visualization contexts include

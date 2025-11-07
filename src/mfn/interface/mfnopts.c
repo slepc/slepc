@@ -277,7 +277,7 @@ PetscErrorCode MFNSetDimensions(MFN mfn,PetscInt ncv)
 -  flg - `PETSC_TRUE` indicates you want the error generated
 
    Options Database Key:
-.  -mfn_error_if_not_converged <true,false> - generate an error and stop the program
+.  -mfn_error_if_not_converged - generate an error and stop the program
 
    Note:
    Normally SLEPc continues if the solver fails to converge, you can call

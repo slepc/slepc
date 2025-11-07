@@ -149,12 +149,12 @@ PetscErrorCode LMESetFromOptions(LME lme)
 -  type - a known type of matrix equation
 
    Options Database Keys:
-+  -lme_lyapunov - continuous-time Lyapunov equation
-.  -lme_sylvester - Sylvester equation
-.  -lme_gen_lyapunov - generalized Lyapunov equation
++  -lme_lyapunov      - continuous-time Lyapunov equation
+.  -lme_sylvester     - Sylvester equation
+.  -lme_gen_lyapunov  - generalized Lyapunov equation
 .  -lme_gen_sylvester - generalized Sylvester equation
-.  -lme_dt_lyapunov - discrete-time Lyapunov equation
--  -lme_stein - Stein equation
+.  -lme_dt_lyapunov   - discrete-time Lyapunov equation
+-  -lme_stein         - Stein equation
 
    Notes:
    The coefficient matrices $A$, $B$, $D$, $E$ must be provided via `LMESetCoefficients()`,
@@ -376,7 +376,7 @@ PetscErrorCode LMESetDimensions(LME lme,PetscInt ncv)
 -  flg - `PETSC_TRUE` indicates you want the error generated
 
    Options Database Key:
-.  -lme_error_if_not_converged <true,false> - generate an error and stop the program
+.  -lme_error_if_not_converged - generate an error and stop the program
 
    Note:
    Normally SLEPc continues if the solver fails to converge, you can call

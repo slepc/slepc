@@ -238,7 +238,7 @@ static PetscErrorCode STCayleySetAntishift_Cayley(ST st,PetscScalar newshift)
 -  nu  - the anti-shift
 
    Options Database Key:
-.  -st_cayley_antishift - Sets the value of the anti-shift
+.  -st_cayley_antishift \<nu\> - sets the value of the anti-shift
 
    Level: intermediate
 

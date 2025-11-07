@@ -89,8 +89,8 @@ static PetscErrorCode RGPolygonSetVertices_Polygon(RG rg,PetscInt n,PetscScalar 
 -  vi - array of vertices (imaginary part)
 
    Options Database Keys:
-+  -rg_polygon_vertices - Comma-separated list of vertices
--  -rg_polygon_verticesi - Comma-separated list of vertices (imaginary part)
++  -rg_polygon_vertices  <vr1,vr2,...> - comma-separated list of vertices
+-  -rg_polygon_verticesi <vi1,vi2,...> - comma-separated list of vertices (imaginary part)
 
    Notes:
    In the case of complex scalars, only argument `vr` is used, containing

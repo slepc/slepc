@@ -37,7 +37,7 @@ PetscBool         LMEMonitorRegisterAllCalled = PETSC_FALSE;
 -  viewer - optional visualization context
 
    Options Database Key:
-.  -lme_view - Calls `LMEView()` at end of `LMESolve()`
+.  -lme_view - calls `LMEView()` at end of `LMESolve()`
 
    Notes:
    The available visualization contexts include
@@ -244,8 +244,7 @@ PetscErrorCode LMECreate(MPI_Comm comm,LME *outlme)
 -  type - a known method
 
    Options Database Key:
-.  -lme_type \<type\> - Sets the method; use -help for a list
-    of available methods
+.  -lme_type \<type\> - sets the method; use -help for a list of available methods
 
    Notes:
    See `LMEType` for available methods. The default is `LMEKRYLOV`.

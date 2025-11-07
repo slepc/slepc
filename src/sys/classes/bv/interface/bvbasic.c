@@ -26,7 +26,7 @@ PetscFunctionList BVList = NULL;
 -  type - a known type
 
    Options Database Key:
-.  -bv_type \<type\> - Sets `BV` type
+.  -bv_type \<type\> - sets `BV` type
 
    Level: intermediate
 

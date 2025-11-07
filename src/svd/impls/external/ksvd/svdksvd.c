@@ -193,7 +193,7 @@ static PetscErrorCode SVDKSVDSetEigenMethod_KSVD(SVD svd,SVDKSVDEigenMethod eige
 -  eigen - method that will be used by KSVD for the eigenproblem
 
    Options Database Key:
-.  -svd_ksvd_eigen_method - sets the method for the KSVD eigensolver
+.  -svd_ksvd_eigen_method \<eigen\> - sets the method for the KSVD eigensolver
 
    If not set, the method defaults to `SVD_KSVD_EIGEN_MRRR`.
 
@@ -262,7 +262,7 @@ static PetscErrorCode SVDKSVDSetPolarMethod_KSVD(SVD svd,SVDKSVDPolarMethod pola
 -  polar - method that will be used by KSVD for the polar decomposition
 
    Options Database Key:
-.  -svd_ksvd_polar_method - sets the method for the KSVD polar decomposition
+.  -svd_ksvd_polar_method \<polar\> - sets the method for the KSVD polar decomposition
 
    If not set, the method defaults to `SVD_KSVD_POLAR_QDWH`.
 

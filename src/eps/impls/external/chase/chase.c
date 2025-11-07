@@ -157,8 +157,8 @@ static PetscErrorCode EPSCHASESetDegree_ChASE(EPS eps,PetscInt deg,PetscBool opt
 -  opt - internal optimization of polynomial degree
 
    Options Database Keys:
-+  -eps_chase_degree - Sets the initial degree
--  -eps_chase_degree_opt - Enables/disables the optimization
++  -eps_chase_degree \<deg\> - set the initial degree
+-  -eps_chase_degree_opt     - toggle the optimization
 
    Note:
    See the documentation of ChASE {cite:p}`Win19` for details.

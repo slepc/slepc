@@ -663,7 +663,7 @@ PetscErrorCode RGComputeQuadrature(RG rg,RGQuadRule quad,PetscInt n,PetscScalar 
 -  flg - the boolean flag
 
    Options Database Key:
-.  -rg_complement \<flg\> - activate/deactivate complementing of the region
+.  -rg_complement - activate/deactivate complementing of the region
 
    Level: intermediate
 

@@ -1392,7 +1392,7 @@ static PetscErrorCode NEPNLEIGSSetRestart_NLEIGS(NEP nep,PetscReal keep)
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -nep_nleigs_restart - sets the restart parameter
+.  -nep_nleigs_restart \<keep\> - sets the restart parameter
 
    Notes:
    Allowed values are in the range [0.1,0.9]. The default is 0.5.
@@ -1644,7 +1644,7 @@ static PetscErrorCode NEPNLEIGSSetRKShifts_NLEIGS(NEP nep,PetscInt ns,PetscScala
 -  shifts - array of scalar values specifying the shifts
 
    Options Database Key:
-.  -nep_nleigs_rk_shifts - sets the list of shifts
+.  -nep_nleigs_rk_shifts <s0,s1,...> - sets the list of shifts
 
    Notes:
    If only one shift is provided, the built subspace is equivalent to

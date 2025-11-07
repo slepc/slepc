@@ -1761,7 +1761,7 @@ static PetscErrorCode SVDTRLanczosSetOneSide_TRLanczos(SVD svd,PetscBool oneside
 -  oneside - boolean flag indicating if the method is one-sided or not
 
    Options Database Key:
-.  -svd_trlanczos_oneside \<oneside\> - enable the one-sided variant
+.  -svd_trlanczos_oneside - enable the one-sided variant
 
    Notes:
    By default, a two-sided variant is selected, which is sometimes slightly
@@ -1850,7 +1850,7 @@ static PetscErrorCode SVDTRLanczosSetGBidiag_TRLanczos(SVD svd,SVDTRLanczosGBidi
 -  bidiag - the bidiagonalization choice, see `SVDTRLanczosGBidiag` for possible values
 
    Options Database Key:
-.  -svd_trlanczos_gbidiag - sets the bidiagonalization choice, either `single`, `upper` or `lower`
+.  -svd_trlanczos_gbidiag \<bidiag\> - sets the bidiagonalization choice, either `single`, `upper` or `lower`
 
    Level: advanced
 
@@ -2010,7 +2010,7 @@ static PetscErrorCode SVDTRLanczosSetRestart_TRLanczos(SVD svd,PetscReal keep)
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -svd_trlanczos_restart - sets the restart parameter
+.  -svd_trlanczos_restart \<keep\> - sets the restart parameter
 
    Notes:
    Allowed values are in the range [0.1,0.9]. The default is 0.5, which means
@@ -2162,7 +2162,7 @@ static PetscErrorCode SVDTRLanczosSetExplicitMatrix_TRLanczos(SVD svd,PetscBool 
 -  explicitmat - Boolean flag indicating if $Z$ is built explicitly
 
    Options Database Key:
-.  -svd_trlanczos_explicitmatrix \<explicitmat\> - enable the explicit construction of the stacked matrix
+.  -svd_trlanczos_explicitmatrix - enable the explicit construction of the stacked matrix
 
    Note:
    This option is relevant for the GSVD case only.

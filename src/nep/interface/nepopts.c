@@ -522,7 +522,7 @@ PetscErrorCode NEPSetEigenvalueComparison(NEP nep,SlepcEigenvalueComparisonFn *c
 -  type - a known type of nonlinear eigenvalue problem
 
    Options Database Keys:
-+  -nep_general - general problem with no particular structure
++  -nep_general  - general problem with no particular structure
 -  -nep_rational - a rational eigenvalue problem defined in split form with all $f_i$ rational
 
    Notes:
@@ -584,7 +584,7 @@ PetscErrorCode NEPGetProblemType(NEP nep,NEPProblemType *type)
 -  twosided - whether the two-sided variant is to be used or not
 
    Options Database Key:
-.  -nep_two_sided \<twosided\> - toggles the twosided flag
+.  -nep_two_sided - toggles the twosided flag
 
    Notes:
    If the user sets `twosided`=`PETSC_TRUE` then the solver uses a variant of
@@ -689,10 +689,10 @@ PetscErrorCode NEPSetConvergenceTestFunction(NEP nep,NEPConvergenceTestFn *conv,
 -  conv - the type of convergence test, see `NEPConv` for possible values
 
    Options Database Keys:
-+  -nep_conv_abs    - sets the absolute convergence test
-.  -nep_conv_rel    - sets the convergence test relative to the eigenvalue
-.  -nep_conv_norm   - sets the convergence test relative to the matrix norms
--  -nep_conv_user   - selects the user-defined convergence test
++  -nep_conv_abs  - sets the absolute convergence test
+.  -nep_conv_rel  - sets the convergence test relative to the eigenvalue
+.  -nep_conv_norm - sets the convergence test relative to the matrix norms
+-  -nep_conv_user - selects the user-defined convergence test
 
    Level: intermediate
 
