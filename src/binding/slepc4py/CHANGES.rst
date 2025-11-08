@@ -21,7 +21,7 @@ Release 3.24.0
   ``SLEPC4PY_BUILD_PYSABI=1``) for building with ``Py_LIMITED_API``
   (Python Stable ABI) under Python 3.10+ (requires Cython 3.1+).
 
-- Add support for standard Python operators for `BV` and `FN` classes.
+- Add support for standard Python operators for ``BV`` and ``FN`` classes.
 
 - Add new ``LME`` class.
 
@@ -67,7 +67,7 @@ Release 3.22.0
 
 - Update to SLEPc 3.22.0.
 - In slepc4py now `EPS.getEigenpair()` and `EPS.getEigenvalue()` will return a real value
-instead of a complex, if the problem is of Hermitian or generalized Hermitian type.
+  instead of a complex, if the problem is of Hermitian or generalized Hermitian type.
 
 
 Release 3.21.2

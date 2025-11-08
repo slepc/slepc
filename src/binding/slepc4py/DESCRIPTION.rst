@@ -1,13 +1,15 @@
 SLEPc for Python
 ================
 
-Python bindings for SLEPc.
+Python bindings for SLEPc_.
+
+.. _SLEPc:    https://slepc.upv.es
 
 Install
 -------
 
 If you have a working MPI implementation and the ``mpicc`` compiler
-wrapper is on your search path, it highly recommended to install
+wrapper is on your search path, it is highly recommended to install
 ``mpi4py`` first::
 
   $ pip install mpi4py
@@ -24,7 +26,7 @@ and finally::
 Citations
 ---------
 
-If SLEPc for Python been significant to a project that leads to an
+If SLEPc for Python has been significant to a project that leads to an
 academic publication, please acknowledge that fact by citing the
 project.
 
