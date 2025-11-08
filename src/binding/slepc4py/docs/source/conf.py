@@ -486,6 +486,7 @@ html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
     'navigation_with_keys': True,
     "footer_end": ["theme-version", "last-updated"],
+    "header_links_before_dropdown": 10, # before "more"
 }
 git_describe_version = subprocess.check_output(['git', 'describe', '--always']).strip().decode('utf-8') # noqa: S603, S607
 html_last_updated_fmt = r'%Y-%m-%dT%H:%M:%S%z (' + git_describe_version + ')'

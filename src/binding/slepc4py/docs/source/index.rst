@@ -27,6 +27,30 @@ SLEPc for Python
    systems of equations. Thus, slepc4py_ must be used together with
    its companion petsc4py_.
 
+Discussion and Support
+======================
+
++ You can write to the `PETSc Users Mailing List
+  <https://petsc.org/release/community/mailing/#mailing-lists>`__
++ See also the `contact information for SLEPc
+  <https://slepc.upv.es/release/contact>`__
++ Issue Tracker:  https://gitlab.com/slepc/slepc/-/issues
++ Git Repository: https://gitlab.com/slepc/slepc.git
+  (the source code is in ``src/binding/slepc4py``)
++ Current release in PyPI: https://pypi.org/project/slepc4py/
+
+Acknowledgments
+===============
+
+L. Dalcin was partially supported by the
+Extreme Computing Research Center (ECRC),
+Division of Computer, Electrical, and
+Mathematical Sciences & Engineering (CEMSE),
+King Abdullah University of Science and Technology (KAUST).
+
+See additional acknowledgements related to `the SLEPc project
+<https://slepc.upv.es/release/contact/acknowledgement.html>`__.
+
 Contents
 ========
 
