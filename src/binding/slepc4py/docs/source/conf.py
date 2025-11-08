@@ -377,6 +377,8 @@ def _process_demos(*demos):
         html_static_path.append(demo_copy_name)
     with open(os.path.join('demo', 'demo.rst'), 'w') as demofile:
         demofile.write("""
+.. _demos:
+
 slepc4py demos
 ==============
 

@@ -11,14 +11,16 @@ SLEPc for Python
 
 .. topic:: Abstract
 
-   This document describes slepc4py_, a Python_ port to the SLEPc_
+   This document describes slepc4py_, a Python_ wrapper to the SLEPc_
    libraries.
 
    SLEPc_ is a software package for the parallel solution of
    large-scale eigenvalue problems. It can be used for computing
    eigenvalues and eigenvectors of large, sparse matrices, or matrix
    pairs, and also for computing singular values and vectors of a
-   rectangular matrix.
+   rectangular matrix. It also provides more advanced functionality
+   such as solvers for nonlinear eigenvalue problems (either polynomial
+   or general) and matrix functions.
 
    SLEPc_ relies on PETSc_ for basic functionality such as the
    representation of matrices and vectors, and the solution of linear
