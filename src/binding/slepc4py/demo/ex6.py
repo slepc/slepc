@@ -1,6 +1,20 @@
-# ------------------------------------------------------------------------
-#   Computes exp(t*A)*v for a matrix associated with a Markov model
-# ------------------------------------------------------------------------
+# ex6.py: Compute exp(t*A)*v for a matrix from a Markov model
+# ===========================================================
+#
+# This example illustrates the functionality in slepc4py for computing
+# matrix functions, or more precisely, the application of a matrix
+# function on a given vector. The example works with the exponential
+# function, which is most commonly found in applications.
+#
+# The main focus of slepc4py is eigenvalue and singular value problems,
+# but it has some codes to deal with matrix functions, which sometimes
+# are needed in the context of eigenproblems, but have interest on
+# their own.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex6.py>`__.
+
+# Initialization is similar to previous examples.
 
 import sys, slepc4py
 slepc4py.init(sys.argv)
@@ -10,11 +24,11 @@ from slepc4py import SLEPc
 
 Print = PETSc.Sys.Print
 
+# This function builds a matrix that implements a Markov model of a random
+# walk on a triangular grid. The entries of the matrix represent
+# probabilities of moving to neighboring cells in the grid.
 
 def build_matrix(m):
-    """
-    Markov model of a random walk on a triangular grid
-    """
     N = m*(m+1)/2
     Print("Markov y=exp(t*A)*e_1, N=%d (m=%d)"% (N, m))
     A = PETSc.Mat().create()
@@ -52,6 +66,16 @@ def build_matrix(m):
     A.assemble()
     return A
 
+# The following function solves the problem. This case is quite different
+# from eigenproblems, and is more similar to solving a linear system of
+# equations with `KSP <petsc4py.PETSc.KSP>`. To configure the problem we
+# must provide the matrix and the function (the exponential in this case).
+# Note how the internal `FN` object is extracted from the `MFN` solver.
+# Also, it is often necessary to specify a scale factor, which in this
+# case represents the time for which we want to obtain the evolved state.
+# Once the solver is set up, we call `solve() <MFN.solve()>` passing the
+# right-hand side vector ``b`` and the solution vector ``x``.
+
 def solve_exp(t, A, b, x):
     # Setup the solver
     M = SLEPc.MFN().create()
@@ -75,6 +99,11 @@ def solve_exp(t, A, b, x):
     Print("Stopping condition: tol=%.4g, maxit=%d" % (tol, maxit))
     Print("Computed vector at time t=%.4g has norm %g" % (t.real, x.norm()))
     Print("")
+
+# The main program processes the command-line option ``m`` (size of the
+# grid), builds the matrix and calls the solver. Note how the vectors are
+# created from the matrix. In this case, the right-hand side vector is
+# the first element of the canonical basis.
 
 if __name__ == '__main__':
     opts = PETSc.Options()

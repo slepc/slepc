@@ -1,41 +1,43 @@
-"""
-This example program solves the Laplace problem using the Proper Orthogonal
-Decomposition (POD) reduced-order modeling technique. For a full description
-of the technique the reader is referred to the papers:
-[1] K. Kunisch and S. Volkwein. Galerkin proper orthogonal decomposition methods
-    for a general equation in fluid dynamics. SIAM Journal on Numerical Analusis,
-    40(2):492-515, 2003
-[2] S. Volkwein, Optimal control of a phase-field model using the proper orthogonal
-    decomposition, Z. Angew. Math. Mech., 81(2001):83-97
+# ex10.py: Laplace problem using the Proper Orthogonal Decomposition
+# ==================================================================
+#
+# This example program solves the Laplace problem using the Proper Orthogonal
+# Decomposition (POD) reduced-order modeling technique. For a full description
+# of the technique the reader is referred to [1]_, [2]_.
+#
+# The method is split into an offline (computationally intensive) and an online
+# (computationally cheap) phase. This has many applications including real-time
+# simulation, uncertainty quantification and inverse problems, where similar
+# models must be evaluated quickly and many times.
+#
+# Offline phase:
+#
+# 1. A set of solution snapshots of the 1D Laplace problem in the full
+#    problem space are constructed and assembled into the columns of a dense
+#    matrix :math:`S`.
+# 2. A standard eigenvalue decomposition is performed on the
+#    matrix :math:`S^T S`.
+# 3. The eigenvectors and eigenvalues are projected back to the
+#    original eigenvalue problem :math:`S`.
+# 4. The leading eigenvectors then form the POD basis.
+#
+# Online phase:
+#
+# 1. The operator corresponding to the discrete Laplacian is
+#    projected onto the POD basis.
+# 2. The operator corresponding to the right-hand side is
+#    projected onto the POD basis.
+# 3. The reduced (dense) problem expressed in the POD basis is solved.
+# 4. The reduced solution is projected back to the full
+#    problem space.
+#
+# Contributed by: Elisa Schenone, Jack S. Hale.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex10.py>`__.
 
-The method is split into an offline (computationally intensive) and an online
-(computationally cheap) phase. This has many applications including real-time
-simulation, uncertainty quantification and inverse problems, where similar
-models must be evaluated quickly and many times. 
-
-Offline phase:
-    1. A set of solution snapshots of the 1D Laplace problem in the full
-       problem space are constructed and assembled into the columns of a dense
-       matrix S.
-    2. A standard eigenvalue decomposition is performed on the
-       matrix S.T*S.
-    3. The eigenvectors and eigenvalues are projected back to the
-       original eigenvalue problem S.
-    4. The leading eigenvectors then form the POD basis.
-
-Online phase:
-    1. The operator corresponding to the discrete Laplacian is
-       projected onto the POD basis.
-    2. The operator corresponding to the right-hand side is
-       projected onto the POD basis.
-    3. The reduced (dense) problem expressed in the POD basis is solved.
-    4. The reduced solution is projected back to the full
-       problem space.
-
-Authors:
-Elisa Schenone <elisa.schenone@uni.lu>
-Jack S. Hale <jack.hale@uni.lu>
-"""
+# Initialization is similar to previous examples, but importing some
+# additional modules.
 
 try: range = xrange
 except: pass
@@ -50,11 +52,10 @@ import numpy
 import random
 import math
 
+# This function builds the discrete Laplacian operator in 1 dimension
+# with homogeneous Dirichlet boundary conditions.
+
 def construct_operator(m):
-    """
-    Standard symmetric eigenproblem corresponding to the Laplacian operator in
-    1 dimension with homogeneous Dirichlet boundary conditions.
-    """
     # Create matrix for 1D Laplacian operator
     A = PETSc.Mat().create(PETSc.COMM_SELF)
     A.setSizes([m, m])
@@ -76,13 +77,11 @@ def construct_operator(m):
 
     return A
 
+# Set bell-shape function as the solution of the Laplacian problem in
+# 1 dimension with homogeneous Dirichlet boundary conditions and
+# compute the associated discrete RHS.
 
 def set_problem_rhs(m):
-    """
-    Set bell-shape function as the solution of the Laplacian problem in
-    1 dimension with homogeneous Dirichlet boundary conditions and 
-    compute the associated discrete RHS.
-    """
     # Create 1D mass matrix operator
     M = PETSc.Mat().create(PETSc.COMM_SELF)
     M.setSizes([m, m])
@@ -99,7 +98,7 @@ def set_problem_rhs(m):
             M[i, i] = diagv
         if i > 1: M[i, i - 1] = offdx
         if i < m - 2: M[i, i + 1] = offdx
-        
+
     M.assemble()
 
     x_0 = 0.3
@@ -123,10 +122,9 @@ def set_problem_rhs(m):
 
     return RHS, uex
 
+# Solve 1D Laplace problem with FEM.
+
 def solve_laplace_problem(A, RHS):
-    """
-    Solve 1D Laplace problem with FEM.
-    """
     u = A.createVecs('right')
     r, c = A.getOrdering("natural")
     A.factorILU(r, c)
@@ -134,11 +132,9 @@ def solve_laplace_problem(A, RHS):
     A.setUnfactored()
     return u
 
+# Solve 1D Laplace problem with POD (dense matrix).
 
 def solve_laplace_problem_pod(A, RHS, u):
-    """ 
-    Solve 1D Laplace problem with POD (dense matrix).
-    """
     ksp = PETSc.KSP().create(PETSc.COMM_SELF)
     ksp.setOperators(A)
     ksp.setType('preonly')
@@ -150,16 +146,14 @@ def solve_laplace_problem_pod(A, RHS, u):
 
     return u
 
+# Set ``N`` solution of the 1D Laplace problem as columns of a matrix
+# (snapshot matrix).
+#
+# Note: For simplicity we do not perform a linear solve, but use
+# some analytical solution:
+# :math:`z(x) = \exp(-(x - \mu)^2 / \sigma)`.
 
 def construct_snapshot_matrix(A, N, m):
-    """ 
-    Set N solution of the 1D Laplace problem as columns of a matrix
-    (snapshot matrix). 
-    
-    Note: For simplicity we do not perform a linear solve, but use
-    some analytical solution:
-    z(x) = exp(-(x - mu)**2 / sigma)
-    """
     snapshots = PETSc.Mat().create(PETSc.COMM_SELF)
     snapshots.setSizes([m, N])
     snapshots.setType('seqdense')
@@ -176,28 +170,29 @@ def construct_snapshot_matrix(A, N, m):
             snapshots.setValue(j, i, value)
     snapshots.assemble()
 
-    return snapshots 
+    return snapshots
+
+# Solve the eigenvalue problem: the eigenvectors of this problem form the
+# POD basis.
 
 def solve_eigenproblem(snapshots, N):
-    """
-    Solve the eigenvalue problem: the eigenvectors of this problem form the
-    POD basis.
-    """
     print('Solving POD basis eigenproblem using eigensolver...')
-    
+
     Es = SLEPc.EPS()
     Es.create(PETSc.COMM_SELF)
     Es.setDimensions(N)
-    Es.setProblemType(SLEPc.EPS.ProblemType.NHEP) 
+    Es.setProblemType(SLEPc.EPS.ProblemType.NHEP)
     Es.setTolerances(1.0e-8, 500);
     Es.setKrylovSchurRestart(0.6)
-    Es.setWhichEigenpairs(SLEPc.EPS.Which.LARGEST_REAL) 
+    Es.setWhichEigenpairs(SLEPc.EPS.Which.LARGEST_REAL)
     Es.setOperators(snapshots)
     Es.setFromOptions()
 
     Es.solve()
     print('Solved POD basis eigenproblem.')
     return Es
+
+# Function to project :math:`S^TS` eigenvectors to :math:`S` eigenvectors.
 
 def project_STS_eigenvectors_to_S_eigenvectors(bvEs, S):
     sizes = S.getSizes()[0]
@@ -206,7 +201,7 @@ def project_STS_eigenvectors_to_S_eigenvectors(bvEs, S):
     bv.setSizes(sizes, N)
     bv.setActiveColumns(0, N)
     bv.setFromOptions()
-    
+
     tmpvec2 = S.createVecs('left')
     for i in range(N):
         tmpvec = bvEs.getColumn(i)
@@ -216,12 +211,13 @@ def project_STS_eigenvectors_to_S_eigenvectors(bvEs, S):
 
     return bv
 
+# Function to project the reduced space to the full space.
 
 def project_reduced_to_full_space(alpha, bv):
     uu = bv.getColumn(0)
     uPOD = uu.duplicate()
     bv.restoreColumn(0,uu)
-    
+
     scatter, Wr = PETSc.Scatter.toAll(alpha)
     scatter.begin(alpha, Wr, PETSc.InsertMode.INSERT, PETSc.ScatterMode.FORWARD)
     scatter.end(alpha, Wr, PETSc.InsertMode.INSERT, PETSc.ScatterMode.FORWARD)
@@ -231,28 +227,30 @@ def project_reduced_to_full_space(alpha, bv):
 
     return uPOD
 
+# The main function realizes the full procedure.
+
 def main():
     problem_dim = 200
     num_snapshots = 30
     num_pod_basis_functions = 8
-    
+
     assert(num_pod_basis_functions <= num_snapshots)
-    
+
     A = construct_operator(problem_dim)
     S = construct_snapshot_matrix(A, num_snapshots, problem_dim)
-    
+
     # Instead of solving the SVD of S, we solve the standard
     # eigenvalue problem on S.T*S
     STS = S.transposeMatMult(S)
-    
+
     Es = solve_eigenproblem(STS, num_pod_basis_functions)
     nconv = Es.getConverged()
     print('Number of converged eigenvalues: %i' % nconv)
     Es.view()
-    
+
     # get the EPS solution in a BV object
     bvEs = Es.getBV()
-    bvEs.setActiveColumns(0, num_pod_basis_functions) 
+    bvEs.setActiveColumns(0, num_pod_basis_functions)
 
     # set the bv POD basis
     bv = project_STS_eigenvectors_to_S_eigenvectors(bvEs, S)
@@ -278,7 +276,7 @@ def main():
 
     # Set the RHS and the exact solution
     RHS, uex = set_problem_rhs(problem_dim)
-    
+
     # Project the RHS on the POD basis
     RHSred = PETSc.Vec().createWithArray(bv.dotVec(RHS))
 
@@ -300,4 +298,8 @@ def main():
 if __name__ == '__main__':
     main()
 
-
+# .. [1] K. Kunisch and S. Volkwein. Galerkin proper orthogonal decomposition methods
+#    for a general equation in fluid dynamics. SIAM Journal on Numerical Analysis,
+#    40(2):492-515, 2003.
+# .. [2] S. Volkwein, Optimal control of a phase-field model using the proper orthogonal
+#    decomposition, Z. Angew. Math. Mech., 81:83-97, 2001.

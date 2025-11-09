@@ -1,67 +1,104 @@
-# ------------------------------------------------------------------------
-#   Solve nonlinear (in eigenvalue k) EVP using the NEP module
+# ex13.py: Nonlinear eigenproblem with contour integral
+# =====================================================
 #
-#            u_xx(x) + nc^2*k^2*u(x) + g(k)*D0*k^2*u(x) = 0
+# This example solves a nonlinear eigenvalue problem with the `NEP
+# <slepc4py.SLEPc.NEP>` module configured to apply a contour integral
+# method.
 #
-#            where g(k) = gt/(k-ka + i*gt)  # ka=8.0, gt=0.5
-#                  D0 = 0.5
-#                  nc  = 1.2
+# The problem arises from the PDE
 #
-#            u(0) = 0
-#            u_x(1) = i*k*u(1)
-##
-##
+# .. math::
 #
-#   Discretization:
+#    u_{xx}(x) + n_c^2 \lambda^2 u(x) + g(\lambda) D_0 \lambda^2 u(x) = 0
 #
-#            n grid points:  x1=0.0 .. xn=1.0
+# where
 #
-#            u1 is at x=0.0
-#            un is at x=1.0
+# .. math::
 #
-#            step size h = 1/(n-1)
+#    g(\lambda) &= g_t/(\lambda-k_a + i g_t), \\
+#    k_a &= 8.0, \\
+#    g_t &= 0.5, \\
+#    D_0 &= 0.5, \\
+#    n_c &= 1.2,
 #
-#   u_xx(x_i) = 1/h**2 * (u_im1 - 2 u_i + u_ip1)
-#             = 1/h**2 dot((1, -2, 1), (u_im1, u_i, u_ip1))
+# and the boundary conditions are
 #
-#   BC x=0: u1 = 0.0
-#   BC x=1: u'(1) ~ 1/2*( u'(1+h/2) + u'(1-h/2) )
-#                 = 1/2*( (u_np1-u_n)/h  + (u_n-u_nm1)/h )
-#                 = 1/(2h)*(u_np1 - u_nm1) = ik * u_n
-#           => u_np1 = 2i*h*k u_n + u_nm1
+# .. math::
 #
-#           laplace term for un:
-#               1/h**2 (u_nm1 - 2u_n + u_np1)
-#                  = 1/h**2 (u_nm1 - 2u_n + 2ihk u_n + u_nm1)
-#                  = 1/h**2 (2 u_nm1 + (2ihk - 2) u_n)
-#                  = 1/h**2 dot((2, 2ihk -2), (u_nm1, u_n))
+#    u(0) &= 0 \\
+#    u_x(1) &= i \lambda u(1).
 #
-#   The above discretization allows us to write the nonlinear PDE
-#   in the following split-operator form
+# For the discretization, :math:`n` grid points are used, :math:`x_1=0,\dots,x_n=1`,
+# with step size :math:`h = 1/(n-1)`. Hence,
 #
-#           {A + k^2 nc^2 Id + g(k)*k^2*D0 Id + 2ik/h D} u = 0
+# .. math::
 #
-#           f1 = 1, f2 = nc^2 k^2, f3 = g(k)k^2D0, f4 = 2ik/h
+#    u_{xx}(x_i) &= \frac{1}{h^2} (u_{i-1} - 2 u_i + u_{i+1}) \\
+#                &= \frac{1}{h^2} [1, -2, 1] [u_{i-1}, u_i, u_{i+1}]^T.
 #
-#           A  = (1 0 0 ... )
-#                (0 ....... )
-#                (0 ....... )
-#                (0 ....... )
-#                (......... )
+# The boundary condition at :math:`x=0` is :math:`u_1=0`, and at :math:`x=1`:
 #
-#           Id = (0 0 0 ... )
-#                (0 1 0 ... )
-#                (0 0 1 ... )
-#                (0 0 0 ... )
-#                (......... )
+# .. math::
 #
-#           D  = (0 0 0 ... )
-#                (0 ....... )
-#                (0 ....... )
-#                (0 ....... )
-#                (......... )
+#    u'(1) &= 1/2 ( u'(1+h/2) + u'(1-h/2) ) \\
+#          &= 1/2 ( (u_{n+1}-u_n)/h  + (u_n-u_{n-1})/h ) \\
+#          &= 1/(2h) (u_{n+1} - u_{n-1}) = i\lambda u_n,
 #
-# ------------------------------------------------------------------------
+# and therefore
+#
+# .. math::
+#
+#    u_{n+1} = 2i h \lambda u_n + u_{n-1}.
+#
+# The Laplace term for :math:`u_n` is
+#
+# .. math::
+#
+#    &= \frac{1}{h^2} (u_{n-1} - 2u_n + u_{n+1}) \\
+#    &= \frac{1}{h^2} (u_{n-1} - 2u_n + 2ih\lambda u_n + u_{n-1}) \\
+#    &= \frac{1}{h^2} (2 u_{n-1} + (2ih\lambda - 2) u_n) \\
+#    &= \frac{1}{h^2} [2, 2ih\lambda -2] [u_{n-1}, u_n]^T.
+#
+# The above discretization allows us to write the nonlinear PDE in the
+# following split-operator form
+#
+# .. math::
+#
+#    \{A + \lambda^2 n_c^2 I_d + g(\lambda) \lambda^2 D_0 I_d + 2i\lambda/h D\} u = 0
+#
+# so :math:`f_1 = 1`, :math:`f_2 = n_c^2 \lambda^2`, :math:`f_3 = g(\lambda)
+# \lambda^2D_0`, :math:`f_4 = 2i\lambda/h`, with coefficient matrices
+#
+# .. math::
+#
+#    A = \begin{bmatrix}
+#        1 & 0 & 0 & \dots & 0 \\
+#        0 & * & * & \dots & 0 \\
+#        0 & * & * & \dots & 0 \\
+#        \vdots & \vdots & \vdots & \ddots & \vdots \\
+#        0 & 0 & 0 & \dots & *
+#        \end{bmatrix},
+#    I_d = \begin{bmatrix}
+#        0 & 0 & 0 & \dots & 0 \\
+#        0 & 1 & 0 & \dots & 0 \\
+#        0 & 0 & 1 & \dots & 0 \\
+#        \vdots & \vdots & \vdots & \ddots & \vdots \\
+#        0 & 0 & 0 & \dots & 0
+#        \end{bmatrix},
+#    D = \begin{bmatrix}
+#        0 & 0 & 0 & \dots & 0 \\
+#        0 & 0 & 0 & \dots & 0 \\
+#        0 & 0 & 0 & \dots & 0 \\
+#        \vdots & \vdots & \vdots & \ddots & \vdots \\
+#        0 & 0 & 0 & \dots & 1
+#        \end{bmatrix}.
+#
+# Contributed by: Thomas Hisch.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex13.py>`__.
+
+# Initialization by importing slepc4py, petsc4py, numpy and scipy.
 
 import sys
 
@@ -82,11 +119,13 @@ from slepc4py import SLEPc
 
 Print = PETSc.Sys.Print
 
+# Check that the selected PETSc/SLEPc are built with complex scalars.
 
 if not np.issubdtype(PETSc.ScalarType, np.complexfloating):
     Print("Demo should only be executed with complex PETSc scalars")
     exit(0)
 
+# Long function that defines the nonlinear eigenproblem and solves it.
 
 def solve(n):
     L = 1.0
@@ -250,6 +289,9 @@ def solve(n):
 
     return np.asarray(evals), rg_params, ka, gt
 
+# The main function reads the problem size ``n`` from the command line,
+# solves the problem with the above function, and then plots the computed
+# eigenvalues.
 
 def main():
     opts = PETSc.Options()

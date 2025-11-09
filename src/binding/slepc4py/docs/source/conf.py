@@ -383,10 +383,11 @@ slepc4py demos
 ==============
 
 .. toctree::
+   :maxdepth: 1
 
 """)
         for demo in demos:
-            demofile.write('    ' + os.path.splitext(demo)[0] + '\n')
+            demofile.write('   ' + os.path.splitext(demo)[0] + '\n')
         demofile.write('\n')
 
 
@@ -394,7 +395,22 @@ html_static_path = ['_static']
 html_css_files = [ # relative to the html_static_path
                   'css/slepc.css',
                   ]
-_process_demos('ex1.py')
+_process_demos(
+                'ex1.py',
+                'ex2.py',
+                'ex3.py',
+                'ex4.py',
+                'ex5.py',
+                'ex6.py',
+                'ex7.py',
+                'ex8.py',
+                'ex9.py',
+                'ex10.py',
+                'ex11.py',
+                'ex12.py',
+                'ex13.py',
+                'ex14.py',
+                )
 
 
 def setup(app):

@@ -1,6 +1,15 @@
-# ------------------------------------------------------------------------
-#   Generalized symmetric-definite eigenproblem
-# ------------------------------------------------------------------------
+# ex9.py: Generalized symmetric-definite eigenproblem
+# ===================================================
+#
+# This example computes eigenvalues and eigenvectors of a generalized
+# symmetric-definite eigenvalue problem, where the first matrix is the
+# discrete Laplacian in two dimensions and the second matrix is quasi
+# diagonal.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex9.py>`__.
+
+# Initialization is similar to previous examples.
 
 try: range = xrange
 except: pass
@@ -13,10 +22,9 @@ from slepc4py import SLEPc
 
 Print = PETSc.Sys.Print
 
+# This function builds the discretized Laplacian operator in 2 dimensions.
+
 def Laplacian2D(m, n):
-    """
-    Builds discretized Laplacian operator in 2 dimensions.
-    """
     # Create matrix for 2D Laplacian operator
     A = PETSc.Mat().create()
     A.setSizes([m*n, m*n])
@@ -39,10 +47,10 @@ def Laplacian2D(m, n):
     A.assemble()
     return A
 
+# This function builds a quasi-diagonal matrix. It is two times the identity
+# matrix except for the 2x2 leading submatrix ``[6 -1; -1 1]``.
+
 def QuasiDiagonal(N):
-    """
-    Builds matrix diag(2)+[6 -1; -1 1]
-    """
     # Create matrix
     B = PETSc.Mat().create()
     B.setSizes([N, N])
@@ -58,6 +66,14 @@ def QuasiDiagonal(N):
         B[1,1] = 1.0
     B.assemble()
     return B
+
+# The following function receives the two matrices and solves the
+# eigenproblem. In this example we illustrate how to pass objects
+# that have been created beforehand, instead of extracting the internal
+# objects. We are using a spectral transformation of type `ST.Type.PRECOND`
+# and a Block Jacobi preconditioner. We want to compute the leftmost
+# eigenvalues. The selected eigensolver is LOBPCG, which is appropriate
+# for this use case. After the solve, we print the computed solution.
 
 def solve_eigensystem(A, B, problem_type=SLEPc.EPS.ProblemType.GHEP):
     # Create the results vectors
@@ -113,13 +129,15 @@ def solve_eigensystem(A, B, problem_type=SLEPc.EPS.ProblemType.GHEP):
               Print(" %12f       %12g" % (k.real, error))
         Print("")
 
+# The main program simply processes three user-defined command-line options
+# and calls the other functions.
+
 def main():
     opts = PETSc.Options()
     N = opts.getInt('N', 10)
     m = opts.getInt('m', N)
     n = opts.getInt('n', m)
-    Print("Symmetric-definite Eigenproblem, "
-          "N=%d (%dx%d grid)" % (m*n, m, n))
+    Print("Symmetric-definite Eigenproblem, N=%d (%dx%d grid)" % (m*n, m, n))
     A = Laplacian2D(m,n)
     B = QuasiDiagonal(m*n)
     solve_eigensystem(A,B)

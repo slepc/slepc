@@ -1,6 +1,13 @@
-# ------------------------------------------------------------------------
-#   Standard symmetric eigenproblem for the Laplacian operator in 2-D
-# ------------------------------------------------------------------------
+# ex2.py: Standard symmetric eigenproblem for the 2-D Laplacian
+# =============================================================
+#
+# This example computes eigenvalues and eigenvectors of the discrete Laplacian
+# on a two-dimensional domain with finite differences.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex2.py>`__.
+
+# Initialization is similar to previous examples.
 
 try: range = xrange
 except: pass
@@ -13,11 +20,12 @@ from slepc4py import SLEPc
 
 Print = PETSc.Sys.Print
 
+# In this example we have organized the code in several functions. This
+# one builds the finite-difference Laplacian matrix by computing the
+# indices of each entry. An alternative would be to use the functionality
+# offered by `DMDA <petsc4py.PETSc.DMDA>`.
+
 def construct_operator(m, n):
-    """
-    Standard symmetric eigenproblem corresponding to the
-    Laplacian operator in 2 dimensions.
-    """
     # Create matrix for 2D Laplacian operator
     A = PETSc.Mat().create()
     A.setSizes([m*n, m*n])
@@ -39,6 +47,13 @@ def construct_operator(m, n):
         if j< n-1: J = I+1; A[I,J] = offdy
     A.assemble()
     return A
+
+# This function receives the matrix and the problem type, then solves the
+# eigenvalue problem and prints information about the computed solution.
+# Although we know that eigenvalues and eigenvectors are real in this
+# example, the function is prepared to solve it as a non-symmetric problem,
+# by passing `SLEPc.EPS.ProblemType.NHEP`, that is why the code handles
+# possibly complex eigenvalues and eigenvectors.
 
 def solve_eigensystem(A, problem_type=SLEPc.EPS.ProblemType.HEP):
     # Create the result vectors
@@ -77,6 +92,9 @@ def solve_eigensystem(A, problem_type=SLEPc.EPS.ProblemType.HEP):
             else:
               Print(" %12f       %12g" % (k.real, error))
         Print("")
+
+# The main program simply processes three user-defined command-line options
+# and calls the other two functions.
 
 def main():
     opts = PETSc.Options()

@@ -1,6 +1,14 @@
-# ------------------------------------------------------------------------
-#   Solves a Lypunov equation with the shifted 2-D Laplacian
-# ------------------------------------------------------------------------
+# ex14.py: Lyapunov equation with the shifted 2-D Laplacian
+# =========================================================
+#
+# This example illustrates the use of slepc4py linear matrix equations
+# solver object. In particular, a Lyapunov equation is solved, where
+# the coefficient matrix is the shifted 2-D Laplacian.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex14.py>`__.
+
+# Initialization is similar to previous examples.
 
 import sys, slepc4py
 slepc4py.init(sys.argv)
@@ -10,11 +18,12 @@ from slepc4py import SLEPc
 
 Print = PETSc.Sys.Print
 
+# Once again, a function to build the discretized Laplacian operator
+# in two dimensions. In this case, we build the shifted negative
+# Laplacian because the Lyapunov equation requires the coefficient
+# matrix being stable.
 
 def Laplacian2D(m, n, sigma):
-    """
-    Builds shifted negative discretized Laplacian operator in 2 dimensions.
-    """
     # Create matrix for 2D Laplacian operator
     A = PETSc.Mat().create()
     A.setSizes([m*n, m*n])
@@ -32,7 +41,17 @@ def Laplacian2D(m, n, sigma):
     A.assemble()
     return A
 
-def solve_lyap(A, C, rk):
+# The following function solves the continuous-time Lyapunov equation
+#
+# .. math::
+#    AX + XA^* = -C
+#
+# where :math:`C` is supposed to have low rank. The solution :math:`X`
+# also has low rank, which will be restricted to ``rk`` if it was
+# provided as an argument of the function. After solving the equation,
+# this function computes and prints a residual norm.
+
+def solve_lyap(A, C, rk=0):
     # Setup the solver
     L = SLEPc.LME().create()
     L.setProblemType(SLEPc.LME.ProblemType.LYAPUNOV)
@@ -68,6 +87,14 @@ def solve_lyap(A, C, rk):
 
     return X
 
+# The main function processes several command-line arguments such as
+# the grid dimension (``n``, ``m``), the shift ``sigma`` and the rank
+# of the solution, ``rank``.
+#
+# The coefficient matrix ``A`` is built with the function above, while
+# the right-hand side matrix ``C`` must be built as a low-rank matrix
+# using `Mat.createLRC() <petsc4py.PETSc.Mat.createLRC>`.
+
 if __name__ == '__main__':
     opts = PETSc.Options()
     n = opts.getInt('n', 15)
@@ -91,4 +118,3 @@ if __name__ == '__main__':
     C = PETSc.Mat().createLRC(None, C1, None, None)
 
     X = solve_lyap(A, C, rk)
-

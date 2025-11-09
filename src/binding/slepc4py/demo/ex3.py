@@ -1,6 +1,13 @@
-# ------------------------------------------------------------------------
-#   Matrix-free eigenproblem for the Laplacian operator in 2-D
-# ------------------------------------------------------------------------
+# ex3.py: Matrix-free eigenproblem for the 2-D Laplacian
+# ======================================================
+#
+# This example solves the eigenproblem for the 2-D discrete Laplacian
+# without building the matrix explicitly.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex3.py>`__.
+
+# Initialization is similar to previous examples.
 
 import sys, slepc4py
 slepc4py.init(sys.argv)
@@ -9,10 +16,18 @@ from petsc4py import PETSc
 from slepc4py import SLEPc
 import numpy as np
 
-# this a sequential example
+# In this case, the program cannot be run in parallel, so we check that
+# the number of MPI processes is 1. In order to enable parallelism, we
+# should implement a parallel matrix-vector operation ourselves, which
+# is not done in this example.
+
 assert PETSc.COMM_WORLD.getSize() == 1
 
 Print = PETSc.Sys.Print
+
+# This function computes the matrix-vector product f = L*x where the
+# Laplacian L is not built explicitly, and the vectors x,f are viewed
+# as two-dimensional arrays associated to grid points.
 
 def laplace2d(U, x, f):
     U[:,:] = 0
@@ -32,6 +47,11 @@ def laplace2d(U, x, f):
          (2*u - uE - uW) * (hy/hx) \
        + (2*u - uN - uS) * (hx/hy) \
 
+# For a matrix-free solution in slepc4py we have to create a class that
+# wraps the matrix-vector operation and optionally other operations of
+# the matrix. In this case, we provide the constructor and the ``mult``
+# operation, that simply calls the ``laplace2d`` function above.
+
 class Laplacian2D(object):
 
     def __init__(self, m, n):
@@ -45,15 +65,22 @@ class Laplacian2D(object):
         yy = y.getArray(readonly=0).reshape(m,n)
         laplace2d(self.U, xx, yy)
 
+# In this example, building the matrix amounts to creating an object of
+# the class defined above, and passing it to a special petsc4py matrix
+# with `createPython() <petsc4py.PETSc.Mat.createPython>`.
+
 def construct_operator(m, n):
-    """
-    Standard symmetric eigenproblem corresponding to the
-    Laplacian operator in 2 dimensions. Uses *shell* matrix.
-    """
     # Create shell matrix
     context = Laplacian2D(m,n)
     A = PETSc.Mat().createPython([m*n,m*n], context)
     return A
+
+# This function receives the matrix and the problem type, then solves the
+# eigenvalue problem and prints information about the computed solution.
+# Although we know that eigenvalues and eigenvectors are real in this
+# example, the function is prepared to solve it as a non-symmetric problem,
+# by passing `SLEPc.EPS.ProblemType.NHEP`, that is why the code handles
+# possibly complex eigenvalues and eigenvectors.
 
 def solve_eigensystem(A, problem_type=SLEPc.EPS.ProblemType.HEP):
     # Create the result vectors
@@ -92,6 +119,8 @@ def solve_eigensystem(A, problem_type=SLEPc.EPS.ProblemType.HEP):
               Print(" %12f       %12g" % (k.real, error))
         Print("")
 
+# The main program simply processes three user-defined command-line options
+# and calls the other two functions.
 
 def main():
     opts = PETSc.Options()
