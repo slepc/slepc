@@ -1,19 +1,36 @@
-# ------------------------------------------------------------------------
-#   Solve parabolic partial differential equation with time delay tau
+# ex8.py: Nonlinear eigenproblem with split form
+# ==============================================
 #
-#            u_t = u_xx + a*u(t) + b*u(t-tau)
-#            u(0,t) = u(pi,t) = 0
+# This example solves a nonlinear eigenvalue problem where the
+# nonlinear function is expressed in split form.
 #
-#   with a = 20 and b(x) = -4.1+x*(1-exp(x-pi)).
+# We want to solve the following parabolic partial differential
+# equation with time delay :math:`\tau`
 #
-#   Discretization leads to a DDE of dimension n
+# .. math::
 #
-#            -u' = A*u(t) + B*u(t-tau)
+#    u_t    &= u_{xx} + a u(t) + b u(t-\tau) \\
+#    u(0,t) &= u(\pi,t) = 0
 #
-#   which results in the nonlinear eigenproblem
+# with :math:`a = 20` and :math:`b(x) = -4.1+x (1-e^{x-\pi})`.
 #
-#            (-lambda*I + A + exp(-tau*lambda)*B)*u = 0
-# ------------------------------------------------------------------------
+# Discretization leads to a DDE of dimension :math:`n`
+#
+# .. math::
+#
+#    -u' = A u(t) + B u(t-\tau)
+#
+# which results in the nonlinear eigenproblem
+#
+# .. math::
+#
+#    (-\lambda I + A + e^{-\tau\lambda}B)u = 0.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex8.py>`__.
+
+# Initialization is similar to previous examples. In this case we also
+# need to import some math symbols.
 
 import sys, slepc4py
 slepc4py.init(sys.argv)
@@ -25,19 +42,29 @@ from math import pi
 
 Print = PETSc.Sys.Print
 
+# This script has two command-line options: the discretization size ``n``
+# and the time delay ``tau``.
+
 opts = PETSc.Options()
 n = opts.getInt('n', 128)
 tau = opts.getReal('tau', 0.001)
 a = 20
 h = pi/(n+1)
 
-# Setup the solver
+# Next we have to set up the solver. In this case, we are going to
+# represent the nonlinear problem in split form, i.e., as a sum of
+# terms made of a constant matrix multiplied by a scalar nonlinear
+# function.
+
 nep = SLEPc.NEP().create()
 
-# Create problem matrices
-#   Identity matrix
+# The first term involves the identity matrix.
+
 Id = PETSc.Mat().createConstantDiagonal([n, n], 1.0)
-#   A = 1/h^2*tridiag(1,-2,1) + a*I
+
+# The second term has a tridiagonal matrix obtained from the
+# discretization, :math:`A = \frac{1}{h^2}\operatorname{tridiag}(1,-2,1) + a I`.
+
 A = PETSc.Mat().create()
 A.setSizes([n, n])
 A.setFromOptions()
@@ -53,7 +80,9 @@ if rend == n:
 for i in range(rstart, rend):
   A[i, i-1:i+2] = [vo, vd, vo]
 A.assemble()
-#   B = diag(b(xi))
+
+# The third term includes a diagonal matrix :math:`B = \operatorname{diag}(b(x_i))`.
+
 B = PETSc.Mat().create()
 B.setSizes([n, n])
 B.setFromOptions()
@@ -64,7 +93,9 @@ for i in range(rstart, rend):
 B.assemble()
 B.setOption(PETSc.Mat.Option.HERMITIAN, True)
 
-# Functions: f1=-lambda, f2=1.0, f3=exp(-tau*lambda)
+# Apart from the matrices, we have to create the functions, represented with
+# `FN` objects: :math:`f_1=-\lambda, f_2=1, f_3=\exp(-\tau\lambda)`.
+
 f1 = SLEPc.FN().create()
 f1.setType(SLEPc.FN.Type.RATIONAL)
 f1.setRationalNumerator([-1, 0])
@@ -75,17 +106,23 @@ f3 = SLEPc.FN().create()
 f3.setType(SLEPc.FN.Type.EXP)
 f3.setScale(-tau)
 
-# Set the split operator. Note that A is passed first so that
-#      SUBSET_NONZERO_PATTERN can be used
+# Put all the information together to define the split operator. Note that
+# ``A`` is passed first so that `SUBSET <petsc4py.PETSc.Mat.Structure.SUBSET>`
+# nonzero_pattern can be used.
+
 nep.setSplitOperator([A, Id, B], [f2, f1, f3], PETSc.Mat.Structure.SUBSET)
 
-# Customize options
+# Now we can set some options and call the solver.
+
 nep.setTolerances(tol=1e-9)
 nep.setDimensions(1)
 nep.setFromOptions()
 
-# Solve the problem
 nep.solve()
+
+# Once the solver has finished, we print some information together with
+# the computed solution. For each computed eigenpair, we print the
+# eigenvalue and the residual norm.
 
 its = nep.getIterationNumber()
 Print("Number of iterations of the method: %i" % its)
@@ -115,5 +152,3 @@ if nconv > 0:
     else:
       Print( " %12f       %12g" % (k.real, res) )
   Print()
-
-

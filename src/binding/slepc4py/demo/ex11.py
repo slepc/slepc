@@ -1,6 +1,14 @@
-# ------------------------------------------------------------------------
-#   2-D Laplacian Eigenproblem solved with contour integral
-# ------------------------------------------------------------------------
+# ex11.py: 2-D Laplacian eigenproblem solved with contour integral
+# ================================================================
+#
+# This example is similar to ``ex2.py``, but employs a contour integral
+# solver. It illustrates how to define a region of the complex plane
+# using an `RG` object.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex11.py>`__.
+
+# Initialization is similar to previous examples.
 
 try: range = xrange
 except: pass
@@ -13,11 +21,9 @@ from slepc4py import SLEPc
 
 Print = PETSc.Sys.Print
 
+# Build the finite-difference 2-D Laplacian matrix.
+
 def construct_operator(m, n):
-    """
-    Standard symmetric eigenproblem corresponding to the
-    Laplacian operator in 2 dimensions.
-    """
     # Create matrix for 2D Laplacian operator
     A = PETSc.Mat().create()
     A.setSizes([m*n, m*n])
@@ -40,6 +46,14 @@ def construct_operator(m, n):
     A.assemble()
     return A
 
+# In the main function, first two command-line options are processed to
+# set the grid dimensions. Then the matrix is built and passed to the
+# solver object. In this case, the solver is configured to use the contour
+# integral method. Next, the region of interest is defined, in this case
+# an ellipse centered at the origin, with radius 0.2 and vertical scaling
+# of 0.1. Finally, the solver is run. In this example, we illustrate how to
+# print the solution using the solver method `errorView() <EPS.errorView()>`.
+
 def main():
     opts = PETSc.Options()
     n = opts.getInt('n', 32)
@@ -48,22 +62,18 @@ def main():
           "N=%d (%dx%d grid)\n" % (m*n, m, n))
     A = construct_operator(m,n)
 
-    # Solver object
     E = SLEPc.EPS().create()
     E.setOperators(A)
     E.setProblemType(SLEPc.EPS.ProblemType.HEP)
     E.setType(SLEPc.EPS.Type.CISS)
 
-    # Define region of interest
     R = E.getRG()
     R.setType(SLEPc.RG.Type.ELLIPSE)
     R.setEllipseParameters(0.0,0.2,0.1)
     E.setFromOptions()
 
-    # Compute solution
     E.solve()
 
-    # Print solution
     vw = PETSc.Viewer.STDOUT()
     vw.pushFormat(PETSc.Viewer.Format.ASCII_INFO_DETAIL)
     E.errorView(viewer=vw)

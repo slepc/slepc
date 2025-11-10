@@ -1,6 +1,18 @@
-# ------------------------------------------------------------------------
-#   Simple quadratic eigenvalue problem
-# ------------------------------------------------------------------------
+# ex5.py: Simple quadratic eigenvalue problem
+# ===========================================
+#
+# This example solves a polynomial eigenvalue problem of degree 2,
+# which is the most commonly found in applications. Larger degree
+# polynomials are handled similarly. The coefficient matrices in
+# this example do not come from an application, they are just simple
+# matrices that are easy to build, just to illustrate how it works.
+# The eigenvalues in this example are purely imaginary and come in
+# conjugate pairs.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex5.py>`__.
+
+# Initialization is similar to previous examples.
 
 import sys, slepc4py
 slepc4py.init(sys.argv)
@@ -10,12 +22,12 @@ from slepc4py import SLEPc
 
 Print = PETSc.Sys.Print
 
+# A function to build the matrices. The lowest degree coefficient is
+# the 2-D Laplacian, the highest degree one is the identity matrix,
+# and the other matrix is set to zero (which means that this problem
+# could have been solved as a linear eigenproblem).
 
 def construct_operators(m,n):
-    """
-    Standard symmetric eigenproblem corresponding to the
-    Laplacian operator in 2 dimensions.
-    """
     Print("Quadratic Eigenproblem, N=%d (%dx%d grid)"% (m*n, m, n))
     # K is the 2-D Laplacian
     K = PETSc.Mat().create()
@@ -41,8 +53,12 @@ def construct_operators(m,n):
     C.assemble()
     # M is the identity matrix
     M = PETSc.Mat().createConstantDiagonal([n*m, n*m], 1.0)
-    #
+
     return M, C, K
+
+# The polynomial eigenvalue solver is similar to the linear eigensolver
+# used in previous examples. The main difference is that we must provide
+# a list of matrices, from lowest to highest degree.
 
 def solve_eigensystem(M, C, K):
     # Setup the eigensolver
@@ -80,6 +96,9 @@ def solve_eigensystem(M, C, K):
                 Print("%12f         %12g" % (k.real, error))
     Print("")
 
+# The main program simply processes two user-defined command-line options
+# (the dimensions of the mesh) and calls the other two functions.
+
 if __name__ == '__main__':
     opts = PETSc.Options()
     m = opts.getInt('m', 32)
@@ -87,4 +106,3 @@ if __name__ == '__main__':
     M, C, K = construct_operators(m,n)
     solve_eigensystem(M, C, K)
     M = C = K = None
-
