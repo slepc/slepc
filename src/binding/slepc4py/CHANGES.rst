@@ -1,315 +1,169 @@
-=========================
-CHANGES: SLEPc for Python
-=========================
+Release 3.24
+------------
 
-:Author:  Lisandro Dalcin
-:Contact: dalcinl@gmail.com
-
-
-Release 3.24.1
-==============
-
-- Update to SLEPc 3.24.1.
-
-
-Release 3.24.0
-==============
-
-- Update to SLEPc 3.24.0.
+- Update to SLEPc 3.24.
 
 - Support (opt-in via setting the environment variable
   ``SLEPC4PY_BUILD_PYSABI=1``) for building with ``Py_LIMITED_API``
   (Python Stable ABI) under Python 3.10+ (requires Cython 3.1+).
 
-- Add support for standard Python operators for ``BV`` and ``FN`` classes.
+- Add support for standard Python operators for `BV` and `FN` classes.
 
-- Add new ``LME`` class.
-
-
-Release 3.23.3
-==============
-
-- Update to SLEPc 3.23.3.
+- Add new `LME` class.
 
 
-Release 3.23.2
-==============
+Release 3.23
+------------
 
-- Update to SLEPc 3.23.2.
-
-
-Release 3.23.1
-==============
-
-- Update to SLEPc 3.23.1.
+- Update to SLEPc 3.23.
 
 
-Release 3.23.0
-==============
+Release 3.22
+------------
 
-- Update to SLEPc 3.23.0.
-
-
-Release 3.22.2
-==============
-
-- Update to SLEPc 3.22.2.
-
-
-Release 3.22.1
-==============
-
-- Update to SLEPc 3.22.1.
-
-
-Release 3.22.0
-==============
-
-- Update to SLEPc 3.22.0.
+- Update to SLEPc 3.22.
 - In slepc4py now `EPS.getEigenpair()` and `EPS.getEigenvalue()` will return a real value
   instead of a complex, if the problem is of Hermitian or generalized Hermitian type.
 
 
-Release 3.21.2
-==============
+Release 3.21
+------------
 
-- Update to SLEPc 3.21.2.
-
-
-Release 3.21.1
-==============
-
-- Update to SLEPc 3.21.1.
+- Update to SLEPc 3.21.
 
 
-Release 3.21.0
-==============
+Release 3.20
+------------
 
-- Update to SLEPc 3.21.0.
-
-
-Release 3.20.2
-==============
-
-- Update to SLEPc 3.20.2.
+- Update to SLEPc 3.20.
 
 
-Release 3.20.1
-==============
+Release 3.19
+------------
 
-- Update to SLEPc 3.20.1.
-
-
-Release 3.20.0
-==============
-
-- Update to SLEPc 3.20.0.
+- Update to SLEPc 3.19.
 
 
-Release 3.19.2
-==============
+Release 3.18
+------------
 
-- Update to SLEPc 3.19.2.
-
-
-Release 3.19.1
-==============
-
-- Update to SLEPc 3.19.1.
+- Update to SLEPc 3.18.
 
 
-Release 3.19.0
-==============
+Release 3.17
+------------
 
-- Update to SLEPc 3.19.0.
-
-
-Release 3.18.3
-==============
-
-- Update to SLEPc 3.18.3.
+- Update to SLEPc 3.17.
 
 
-Release 3.18.2
-==============
+Release 3.16
+------------
 
-- Update to SLEPc 3.18.2.
-
-
-Release 3.18.1
-==============
-
-- Update to SLEPc 3.18.1.
+- Update to SLEPc 3.16.
 
 
-Release 3.18.0
-==============
+Release 3.15
+------------
 
-- Update to SLEPc 3.18 release.
-
-
-Release 3.17.2
-==============
-
-- Update to SLEPc 3.17.2.
-
-
-Release 3.17.1
-==============
-
-- Update to SLEPc 3.17.1.
-
-
-Release 3.17.0
-==============
-
-- Update to SLEPc 3.17 release.
-
-
-Release 3.16.2
-==============
-
-- Update to SLEPc 3.16.2.
-
-
-Release 3.16.1
-==============
-
-- Update to SLEPc 3.16.1.
-
-
-Release 3.16.0
-==============
-
-- Update to SLEPc 3.16 release.
-
-
-Release 3.15.2
-==============
-
-- Update to SLEPc 3.15.2.
-
-
-Release 3.15.1
-==============
-
+- Update to SLEPc 3.15.
 - Updates in installation scripts.
 
 
-Release 3.15.0
-==============
+Release 3.14
+------------
 
-- Update to SLEPc 3.15 release.
-
-
-Release 3.14.0
-==============
-
-- Update to SLEPc 3.14 release.
+- Update to SLEPc 3.14.
 
 
-Release 3.13.0
-==============
+Release 3.13
+------------
 
-- Update to SLEPc 3.13 release.
-
-
-Release 3.12.0
-==============
-
-- Update to SLEPc 3.12 release.
+- Update to SLEPc 3.13.
 
 
-Release 3.11.0
-==============
+Release 3.12
+------------
 
-- Update to SLEPc 3.11 release.
-
-
-Release 3.10.0
-==============
-
-- Update to SLEPc 3.10 release.
+- Update to SLEPc 3.12.
 
 
-Release 3.9.0
-=============
+Release 3.11
+------------
 
-- Update to SLEPc 3.9 release.
-
-
-Release 3.8.0
-=============
-
-- Update to SLEPc 3.8 release.
+- Update to SLEPc 3.11.
 
 
-Release 3.7.0
-=============
+Release 3.10
+------------
 
-- Update to SLEPc 3.7 release.
-
-
-Release 3.6.0
-=============
-
-- Update to SLEPc 3.6 release.
+- Update to SLEPc 3.10.
 
 
-Release 3.5.1
-=============
+Release 3.9
+-----------
 
+- Update to SLEPc 3.9.
+
+
+Release 3.8
+-----------
+
+- Update to SLEPc 3.8.
+
+
+Release 3.7
+-----------
+
+- Update to SLEPc 3.7.
+
+
+Release 3.6
+-----------
+
+- Update to SLEPc 3.6.
+
+
+Release 3.5
+-----------
+
+- Update to SLEPc 3.5.
 - Add RG class introduced in SLEPc 3.5 release.
 - Add PySlepcXXX_New/Get C API functions.
 - Fix compilation problem with complex scalars on OS X.
 - Fix outdated SWIG interface file.
 
 
-Release 3.5
-===========
-
-- Update to SLEPc 3.5 release.
-
-
 Release 3.4
-===========
+-----------
 
-- Update to SLEPc 3.4 release.
-
-
-Release 3.3.1
-=============
-
-- Regenerate the wrappers using Cython 0.18 and fix binary
-  compatibility issues with petsc4py 3.3.1 .
+- Update to SLEPc 3.4.
 
 
 Release 3.3
-===========
+-----------
 
-- Update to SLEPc 3.3 release.
+- Update to SLEPc 3.3.
+- Regenerate the wrappers using Cython 0.18 and fix binary
+  compatibility issues with petsc4py 3.3.1.
 
 
 Release 1.2
-===========
+-----------
 
-- Update to SLEPc 3.2 release.
+- Update to SLEPc 3.2.
 
 
 Release 1.1
-===========
+-----------
 
-* Support for new QEP quadratic eigenproblem solver in SLEPc.
-
-* Support for ``pip install slepc4py`` to download and install SLEPc.
-
-* Support for PETSc/SLEPc static library builds (Linux-only).
-
-* Preliminar support for Python 3.
+- Support for new QEP quadratic eigenproblem solver in SLEPc.
+- Support for ``pip install slepc4py`` to download and install SLEPc.
+- Support for PETSc/SLEPc static library builds (Linux-only).
+- Preliminary support for Python 3.
 
 
 Release 1.0.0
-=============
+-------------
 
-This is the fist release of the all-new, Cython-based, implementation
-of *SLEPc for Python*.
+- This is the fist release of the all-new, Cython-based, implementation
+  of *SLEPc for Python*.

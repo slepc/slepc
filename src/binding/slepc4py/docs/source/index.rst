@@ -63,6 +63,7 @@ Contents
    tutorial
    install
    citing
+   changes
 
 .. toctree::
    :caption: Python specifics
