@@ -122,6 +122,7 @@ docsclean:
 	-@${RM} docs/*.info docs/*.[137]
 	-@${RM} docs/*.html docs/*.pdf
 	-@${RM} -r docs/html
+	-@${RM} -r docs/source/_build
 	-@${RM} -r docs/source/demo
 	-@${RM} -r docs/source/reference
 	-@${RM} docs/source/*.inv

@@ -272,7 +272,6 @@ latex_documents = [
         ]
 
 latex_additional_files = [
-     'documentation/manual/latex/frontpage.tex.txt',
      '_static/images/manual/pdf/logo-upv.pdf',
      '_static/images/manual/pdf/logo-dsic-black.pdf',
 ]
