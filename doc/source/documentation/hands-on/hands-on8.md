@@ -96,7 +96,7 @@ ST Object: 1 MPI processes
       tolerance for zero pivot 2.22045e-14
       matrix ordering: nd
       factor fill ratio given 5., needed 1.
-        Factored matrix follows:
+        Factored matrix:
           Mat Object: 1 MPI processes
             type: seqaij
             rows=100, cols=100
@@ -104,7 +104,7 @@ ST Object: 1 MPI processes
             total: nonzeros=100, allocated nonzeros=100
             total number of mallocs used during MatSetValues calls =0
               not using I-node routines
-    linear system matrix = precond matrix:
+    linear system matrix, which is also used to construct the preconditioner:
     Mat Object: 1 MPI processes
       type: seqaij
       rows=100, cols=100
