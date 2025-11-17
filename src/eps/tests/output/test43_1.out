@@ -23,7 +23,7 @@ PC Object: 4 MPI processes
   PC Object: (pc_hpddm_levels_1_) 4 MPI processes
     type: shell
       no name
-    linear system matrix = precond matrix:
+    linear system matrix, which is also used to construct the preconditioner:
     Mat Object: 4 MPI processes
       type: mpiaij
       total number of mallocs used during MatSetValues calls=0
@@ -44,15 +44,15 @@ PC Object: 4 MPI processes
         out-of-place factorization
         tolerance for zero pivot 2.22045e-14
         matrix ordering: nd
-          Factored matrix follows:
+          Factored matrix:
             Mat Object: (pc_hpddm_levels_1_sub_) 1 MPI process
               type: seqaij
               package used to perform factorization: petsc
-      linear system matrix = precond matrix:
+      linear system matrix, which is also used to construct the preconditioner:
       Mat Object: (pc_hpddm_levels_1_sub_) 1 MPI process
         type: seqaij
         total number of mallocs used during MatSetValues calls=0
-    linear system matrix = precond matrix:
+    linear system matrix, which is also used to construct the preconditioner:
     Mat Object: 4 MPI processes
       type: mpiaij
       total number of mallocs used during MatSetValues calls=0
@@ -67,17 +67,17 @@ PC Object: 4 MPI processes
         out-of-place factorization
         tolerance for zero pivot 2.22045e-14
         matrix ordering: natural
-          Factored matrix follows:
+          Factored matrix:
             Mat Object: (pc_hpddm_coarse_) 1 MPI process
               type: seqsbaij
               package used to perform factorization: petsc
                   block size is 10
-      linear system matrix = precond matrix:
+      linear system matrix, which is also used to construct the preconditioner:
       Mat Object: (pc_hpddm_coarse_) 1 MPI process
         type: seqsbaij
         total number of mallocs used during MatSetValues calls=0
             block size is 10
-  linear system matrix = precond matrix:
+  linear system matrix, which is also used to construct the preconditioner:
   Mat Object: 4 MPI processes
     type: mpiaij
     total number of mallocs used during MatSetValues calls=0
