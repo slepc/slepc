@@ -6,12 +6,12 @@ Overview
 --------
 
 Welcome to SLEPc for Python. This package provides Python bindings for
-SLEPc_, the * Scalable Library for Eigenvalue Problem Computations*.
+SLEPc_, the *Scalable Library for Eigenvalue Problem Computations*.
 
 Dependencies
 ------------
 
-* Python_ 2.7, 3.3 or above.
+* Python_ 3.6 or above.
 
 * A recent NumPy_ release.
 
@@ -33,6 +33,4 @@ Dependencies
 Documentation
 -------------
 
-* https://slepc4py.readthedocs.org/, This does not contain the epydoc-generated API reference.
-
-* https://slepc.upv.es/slepc4py-current/docs/, This is for the last release, not the in-development version.
+* https://slepc.upv.es/release/slepc4py

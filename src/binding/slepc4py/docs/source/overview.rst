@@ -29,7 +29,7 @@ are also available.
 .. [2] Vicente Hernandez, Jose E. Roman and Vicente Vidal.
    SLEPc: A Scalable and Flexible Toolkit for the Solution of
    Eigenvalue Problems, ACM Trans. Math. Softw. 31(3), pp. 351-362,
-   2005.
+   2005. https://doi.org/10.1145/1089014.1089019
 
 .. include:: links.txt
 
@@ -39,20 +39,23 @@ Features
 
 Currently, the following types of eigenproblems can be addressed:
 
-* Standard eigenvalue problem, *Ax=kx*, either for Hermitian or
+* Standard eigenvalue problem, :math:`Ax = \lambda x`, either for Hermitian or
   non-Hermitian matrices.
 
-* Generalized eigenvalue problem, *Ax=kBx*, either Hermitian
+* Generalized eigenvalue problem, :math:`Ax = \lambda Bx`, either Hermitian
   positive-definite or not.
 
 * Partial singular value decomposition of a rectangular matrix,
-  *Au=sv*.
+  :math:`Au = \sigma v`.
 
-* Polynomial eigenvalue problem, *P(k)x=0*.
+* Generalized singular values of a matrix pair, :math:`Ax = cu`,
+  :math:`Bx = sv`.
 
-* Nonlinear eigenvalue problem, *T(k)x=0*.
+* Polynomial eigenvalue problem, :math:`P(\lambda)=0`.
 
-* Computing the action of a matrix function on a vector, *w=f(alpha A)v*.
+* Nonlinear eigenvalue problem, :math:`T(\lambda)=0`.
+
+* Computing the action of a matrix function on a vector, :math:`w=f(\alpha A)v`.
 
 For the linear eigenvalue problem, the following methods are available:
 
@@ -65,20 +68,22 @@ For the linear eigenvalue problem, the following methods are available:
 * Subspace iteration and single vector iterations (inverse iteration,
   RQI).
 
-* Conjugate gradient for the minimization of the Rayleigh quotient.
+* Conjugate gradient methods such as LOBPCG.
 
-* A contour integral solver.
+* A contour integral solver using high-order moments.
 
 For singular value computations, the following alternatives can be
 used:
 
-* Use an eigensolver via the cross-product matrix *A'A* or the cyclic
-  matrix *[0 A; A' 0]*.
+* Use an eigensolver via the cross-product matrix :math:`A^*A` or the cyclic
+  matrix :math:`\left[\begin{smallmatrix}0&A\\A^*&0\end{smallmatrix}\right]`.
 
 * Explicitly restarted Lanczos bidiagonalization.
 
 * Implicitly restarted Lanczos bidiagonalization (thick-restart
   Lanczos).
+
+* A basic randomized solver.
 
 For polynomial eigenvalue problems, the following methods are available:
 
@@ -88,6 +93,10 @@ For polynomial eigenvalue problems, the following methods are available:
 * TOAR and Q-Arnoldi, memory efficient variants of Arnoldi for polynomial
   eigenproblems.
 
+* Jacobi-Davidson for polynomial eigenproblems.
+
+* A contour integral solver using high-order moments.
+
 For general nonlinear eigenvalue problems, the following methods can be used:
 
 * Solve a polynomial eigenproblem obtained via polynomial interpolation.
@@ -96,15 +105,19 @@ For general nonlinear eigenvalue problems, the following methods can be used:
 
 * Newton-type methods such as SLP or RII.
 
+* A subspace projection method (nonlinear Arnoldi).
+
+* A contour integral solver using high-order moments.
+
 Computation of interior eigenvalues is supported by means of the
 following methodologies:
 
 * Spectral transformations, such as shift-and-invert. This technique
-  implicitly uses the inverse of the shifted matrix *(A-tI)* in order
-  to compute eigenvalues closest to a given target value, *t*.
+  implicitly uses the inverse of the shifted matrix :math:`A-\sigma I` in order
+  to compute eigenvalues closest to a given target value, :math:`\sigma`.
 
 * Harmonic extraction, a cheap alternative to shift-and-invert that
-  also tries to approximate eigenvalues closest to a target, *t*, but
+  also tries to approximate eigenvalues closest to a target, :math:`\sigma`, but
   without requiring a matrix inversion.
 
 Other remarkable features include:
@@ -120,14 +133,14 @@ Other remarkable features include:
 * Run-time flexibility, by specifying numerous setting at the command
   line.
 
-* Ability to do the computation in parallel.
+* Ability to do the computation in parallel and/or using GPUs.
 
 
 Components
 ----------
 
 SLEPc provides the following components, which are mirrored by slepc4py
-for its use from Python. The first five components are solvers for
+for its use from Python. The first six components are solvers for
 different classes of problems, while the rest can be considered
 auxiliary object.
 
@@ -142,27 +155,27 @@ auxiliary object.
       parameters, such as the maximum dimension of the subspace to be
       used during the computation.
 
-:SVD: This component is the analog of EPS for the case of Singular
+:SVD: This component is the analog of ``EPS`` for the case of Singular
       Value Decompositions. The user provides a rectangular matrix and
       specifies how many singular values and vectors are to be
       computed, whether the largest or smallest ones, as well as some
       other parameters for fine tuning the computation. Different
-      solvers are available, as in the case of EPS.
+      solvers are available, as in the case of ``EPS``.
 
-:PEP: This component is the analog of EPS for the case of Polynomial
+:PEP: This component is the analog of ``EPS`` for the case of Polynomial
       Eigenvalue Problems. The user provides the coefficient matrices of
       the polynomial. Several parameters can be specified, as in
-      the case of EPS. It is also possible to indicate whether the
+      the case of ``EPS``. It is also possible to indicate whether the
       problem belongs to a special type, e.g., symmetric or gyroscopic.
 
 :NEP: This component covers the case of general nonlinear eigenproblems,
-      T(lambda)x=0. The user provides the parameter-dependent matrix T
-      via the split form or by means of callback functions.
+      :math:`T(\lambda)=0`. The user provides the parameter-dependent
+      matrix :math:`T` via the split form or by means of callback functions.
 
 :MFN: This component provides the functionality for computing the action
-      of a matrix function on a vector. Given a matrix A and a vector b,
-      the call MFNSolve(mfn,b,x) computes x=f(A)b, where f is a function
-      such as the exponential.
+      of a matrix function on a vector. Given a matrix :math:`A` and a
+      vector :math:`b`, the call ``MFNSolve(mfn,b,x)`` computes
+      :math:`x=f(A)b`, where :math:`f` is a function such as the exponential.
 
 :LME: This component provides the functionality for solving linear matrix
       equations such as Lyapunov or Sylvester where the solution has low
@@ -179,19 +192,19 @@ auxiliary object.
 :BV:  This component encapsulates the concept of a set of Basis Vectors
       spanning a vector space. This component provides convenient access
       to common operations such as orthogonalization of vectors. The
-      BV component is usually not required by end-users.
+      ``BV`` component is usually not required by end-users.
 
 :DS:  The Dense System (or Direct Solver) component, used internally to
       solve dense eigenproblems of small size that appear in the course
       of iterative eigensolvers.
 
 :FN:  A component used to define mathematical functions. This is required
-      by the end-user for instance to define function T(.) when solving
-      nonlinear eigenproblems with NEP in split form.
+      by the end-user for instance to define function :math:`T(\cdot)` when
+      solving nonlinear eigenproblems with ``NEP`` in split form.
 
 :RG:  A component used to define a region of the complex plane such as an
       ellipse or a rectangle. This is required by end-users in some cases
       such as contour-integral eigensolvers.
 
 In addition to the above components, some extra functionality is provided
-in the :Sys: and :Util: sections.
+in the ``Sys`` and ``Util`` sections.

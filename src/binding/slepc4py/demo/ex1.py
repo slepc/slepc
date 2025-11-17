@@ -1,16 +1,15 @@
-# Standard symmetric eigenproblem for the Laplacian operator in 1-D
-# =================================================================
+# ex1.py: Standard symmetric eigenproblem for the 1-D Laplacian
+# =============================================================
+#
+# This example computes eigenvalues and eigenvectors of the discrete Laplacian
+# on a one-dimensional domain with finite differences.
+#
+# The full source code for this demo can be `downloaded here
+# <../_static/ex1.py>`__.
 
-# This tutorial is intended for basic use of slepc4py. For more advanced use,
-# the reader is referred to SLEPc tutorials as well as to slepc4py reference
-# documentation.
-#
-# The source code for this demo can be `downloaded here
-# <../_static/ex1.py>`__
-#
 # The first thing to do is initialize the libraries. This is normally not
 # required, as it is done automatically at import time. However, if you want to
-# gain access to the facilities for accessing command-line options, the
+# gain access to the facilities for setting command-line options, the
 # following lines must be executed by the main script prior to any petsc4py or
 # slepc4py calls:
 
@@ -27,7 +26,7 @@ import numpy
 
 # At this point, we can use any petsc4py and slepc4py operations. For instance,
 # the following lines allow the user to specify an integer command-line
-# argument n with a default value of 30 (see the next section for example usage
+# argument ``n`` with a default value of 30 (see below for example usage
 # of command-line options):
 
 opts = PETSc.Options()
@@ -119,9 +118,10 @@ Print( "Number of converged eigenpairs %d" % nconv )
 # For each of the ``nconv`` eigenpairs, we can retrieve the eigenvalue ``k``,
 # and the eigenvector, which is represented by means of two petsc4py vectors
 # ``vr`` and ``vi`` (the real and imaginary part of the eigenvector, since for
-# real matrices the eigenvalue and eigenvector may be complex). We also compute
-# the corresponding relative errors in order to make sure that the computed
-# solution is indeed correct:
+# real matrices the eigenvalue and eigenvector may be complex). In this
+# example we know that both the eigenvalue and eigenvector are real, so only
+# one vector ``v`` is needed. We also compute the corresponding relative errors
+# in order to make sure that the computed solution is indeed correct:
 
 if nconv > 0:
   # Create the results vectors
@@ -168,7 +168,7 @@ if nconv > 0:
 #        3.837916        8.34269e-08
 #
 # For specifying different setting for the solver parameters, we can use SLEPc
-# command-line options with the -eps prefix. For instance, to change the number
+# command-line options with the ``-eps`` prefix. For instance, to change the number
 # of requested eigenvalues and the tolerance:
 #
 # .. code-block:: console

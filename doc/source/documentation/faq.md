@@ -130,11 +130,11 @@ The following instructions can be followed to install the conda-forge variant of
 >
 > Verify we are running the complex variant
 > ```{code} console
-> $ python -c '
+> $ python -c "
 >   from slepc4py import SLEPc
 >   from petsc4py import PETSc
 >   print(PETSc.ScalarType)
-> '
+> "
 > ```
 
 ## 15. spack: how to install slepc4py with complex scalars

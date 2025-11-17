@@ -1,3 +1,5 @@
+(install)=
+
 # Installation
 
 SLEPc is available on some package managers. Select the tabs below to show the corresponding information. Note that some of them provide separate packages for the real and complex versions.
