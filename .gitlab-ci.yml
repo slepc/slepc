@@ -191,7 +191,7 @@ gnu-cxx-complex-nofort:
 gnu-c-complex-nompi-int64:
   extends: .stage-1
   tags:
-    - linux-debian, name:jepri
+    - linux-ubuntu, name:pakhet
   variables:
     PETSC_CONFIG_OPTS: COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' --with-mpi=0 --with-fc=0 --with-scalar-type=complex --with-64-bit-indices
     DISABLE_TESTS: 1
@@ -505,9 +505,8 @@ gnu-c-complex-multilib:
     - .stage-2
     - .linux_test
   tags:
-    - linux-ubuntu, name:satet
+    - linux-ubuntu, name:pakhet
   variables:
-    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-single-library=0 --with-library-name-suffix=Complex --download-metis --download-parmetis --download-scalapack --with-cxx-dialect=17
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-elpa --download-chase
 
@@ -699,11 +698,10 @@ gnu-c-multilib:
     - .stage-3
     - .linux_test
   tags:
-    - linux-suse, name:igai
+    - linux-ubuntu, name:pakhet
   variables:
-    LOAD_MODULES: cmake/4.0.1
     PETSC_CONFIG_OPTS: --with-single-library=0 --download-scalapack --download-netlib-lapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-evsl --download-chase --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex --with-packages-download-dir=/var/local/downloads
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-evsl --download-chase --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --with-packages-download-dir=/var/local/downloads
 
 gnu-c-c99-nompi:
   extends:
@@ -787,7 +785,7 @@ gnu-c-float128:
     - .stage-3
     - .linux_test
   tags:
-    - name:jepri
+    - name:pakhet
   variables:
     PETSC_CONFIG_OPTS: --download-f2cblaslapack --with-precision=__float128
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
@@ -808,11 +806,10 @@ gnu-c-single:
     - .stage-3
     - .linux_test
   tags:
-    - name:jepri
+    - name:pakhet
   variables:
     PETSC_CONFIG_OPTS: --with-precision=single --download-scalapack
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0
-    LOAD_MODULES: cmake/4.0.1
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1
 
 gnu-c-debug:
   extends:
@@ -909,10 +906,10 @@ intel-c-mkl-install:
     - .stage-3
     - .linux_test_nofflags
   tags:
-    - compiler:intel, name:igai
+    - compiler:intel, name:pakhet
   variables:
-    LOAD_MODULES: icc mpi mkl
-    PETSC_CONFIG_OPTS: --with-cc=mpiicc --with-fc=mpiifort --with-cxx=mpiicpc --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso=1 --with-scalapack=1 --prefix=../install
+    LOAD_MODULES: compiler mpi mkl
+    PETSC_CONFIG_OPTS: --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso=1 --with-scalapack=1 --prefix=../install
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --prefix=../install --download-hpddm
     INSTALL: 1
 
@@ -974,7 +971,7 @@ intel-c-int64-nompi-mkl:
     - .stage-3
     - .linux_test_nofflags
   tags:
-    - compiler:intel, name:jepri
+    - compiler:intel, name:pakhet
   variables:
     LOAD_MODULES: compiler mpi mkl
     PETSC_CONFIG_OPTS: --with-cc=icx --with-fc=ifx --with-cxx=icpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-64-bit-indices --with-64-bit-blas-indices --with-mpi=0 --COPTFLAGS='-O -g -fp-model=precise' --CXXOPTFLAGS='-O -g -fp-model=precise' --FOPTFLAGS='-O -g -fp-model=precise'
@@ -1017,9 +1014,8 @@ gnu-c-static-multilib:
     - .stage-3
     - .linux_test
   tags:
-    - name:satet
+    - name:pakhet
   variables:
-    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-shared-libraries=0 --with-single-library=0
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme --download-blopex
 
@@ -1109,7 +1105,7 @@ total-coverage:
 .docs:
   stage: stage-2
   tags:
-    - name:satet
+    - name:pakhet
   before_script:
     - git fetch --unshallow --tags origin +release:remotes/origin/release +main:remotes/origin/main
     - printf "PATH:$PATH\n"
