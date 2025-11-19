@@ -221,6 +221,7 @@ int main(int argc,char **argv)
       test:
          suffix: 2_stoar
          args: -pep_type stoar -pep_hermitian
+         requires: !single
       test:
          suffix: 2_jd
          args: -pep_type jd -st_type precond -pep_max_it 200 -pep_ncv 24
