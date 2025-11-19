@@ -165,6 +165,7 @@ int main(int argc,char **argv)
       suffix: 1_cross_gd
       args: -type cross -epstype gd
       output_file: output/test1_1.out
+      requires: !single
 
    test:
       suffix: 1_cyclic_gd
