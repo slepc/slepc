@@ -15,10 +15,11 @@ class Slicot(package.Package):
   def __init__(self,argdb,log):
     package.Package.__init__(self,argdb,log)
     self.packagename    = 'slicot'
+    self.packagetype    = 'cmake'
     self.installable    = True
     self.downloadable   = True
     #self.gitcommit      = 'a037f7eb76134d45e7d222b7f017d5cbd16eb731'
-    self.version        = '5.9'
+    self.version        = '5.9.1'
     obj = self.version if hasattr(self,'version') else self.gitcommit
     self.url            = 'https://github.com/SLICOT/SLICOT-Reference/archive/'+('v'+obj if hasattr(self,'version') else obj)+'.tar.gz'
     self.archive        = 'slicot-'+obj+'.tar.gz'
@@ -43,29 +44,23 @@ class Slicot(package.Package):
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
     externdir = slepc.GetExternalPackagesDir(archdir)
     builddir  = self.Download(externdir,slepc.downloaddir)
-    libname = 'libslicot.a'
 
-    # Makefile
-    cont  = 'FORTRAN   = '+petsc.fc+'\n'
-    cont += 'OPTS      = '+petsc.getFFlags()+'\n'
-    cont += 'ARCH      = '+petsc.ar+'\n'
-    cont += 'ARCHFLAGS = '+petsc.ar_flags+'\n'
-    cont += 'SLICOTLIB = ../'+libname+'\n'
-    cont += 'LPKAUXLIB = ../'+libname+'\n'  # TODO: use a separate library for this
-    self.WriteMakefile('make_Unix.inc',builddir,cont)
-
-    # Build package
-    target = 'lib'
-    (result,output) = self.RunCommand('cd '+builddir+' && '+petsc.make+' -f makefile_Unix cleanlib && '+petsc.make+' -f makefile_Unix -j'+petsc.make_np+' '+target)
-    if result:
-      self.log.Exit('Installation of SLICOT failed')
-
-    # Move files
-    incdir,libdir = slepc.CreatePrefixDirs(prefixdir)
-    os.rename(os.path.join(builddir,libname),os.path.join(libdir,libname))
+    # Build with cmake
+    builddir = slepc.CreateDir(builddir,'build')
+    confopt = ['-DCMAKE_INSTALL_PREFIX='+prefixdir, '-DCMAKE_INSTALL_NAME_DIR:STRING="'+os.path.join(prefixdir,'lib')+'"', '-DCMAKE_INSTALL_LIBDIR:STRING="lib"', '-DCMAKE_C_COMPILER="'+petsc.cc+'"', '-DCMAKE_C_FLAGS:STRING="'+petsc.getCFlags()+'"', '-DCMAKE_Fortran_COMPILER="'+petsc.fc+'"', '-DCMAKE_Fortran_FLAGS:STRING="'+petsc.getFFlags()+'"', '-DSLICOT_TESTING=OFF']
+    confopt.append('-DCMAKE_BUILD_TYPE='+('Debug' if petsc.debug else 'Release'))
+    if petsc.buildsharedlib:
+      confopt = confopt + ['-DBUILD_SHARED_LIBS=ON', '-DCMAKE_INSTALL_RPATH:PATH='+os.path.join(prefixdir,'lib')]
+    else:
+      confopt.append('-DBUILD_SHARED_LIBS=OFF')
+    if petsc.ind64:
+      confopt.append('-DSLICOT_INTEGER8=ON')
+    if 'MSYSTEM' in os.environ:
+      confopt.append('-G "MSYS Makefiles"')
+    (result,output) = self.RunCommand('cd '+builddir+' && '+petsc.cmake+' '+' '.join(confopt)+' '+self.buildflags+' .. && '+petsc.make+' -j'+petsc.make_np+' && '+petsc.make+' install')
 
     # Check build
     functions = ['sb03od']
     libs = [['-lslicot']]
-    dirs = [libdir]
+    dirs = [os.path.join(prefixdir,'lib'),os.path.join(prefixdir,'lib64')]
     self.FortranLib(slepcconf,slepcvars,dirs,libs,functions)
