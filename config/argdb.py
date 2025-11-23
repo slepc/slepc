@@ -15,6 +15,9 @@ class ArgDB:
   def __init__(self,argv):
     # standardize options
     for l in range(1,len(argv)):
+      if argv[l].endswith('=yes'): argv[l] = argv[l].replace('=yes','=1')
+      if argv[l].endswith('=no'): argv[l] = argv[l].replace('=no','=0')
+    for l in range(1,len(argv)):
       name = argv[l]
       if name.startswith('--enable'):
         argv[l] = name.replace('--enable','--with')
@@ -22,13 +25,15 @@ class ArgDB:
       elif name.startswith('--disable'):
         argv[l] = name.replace('--disable','--with')
         if name.find('=') == -1: argv[l] += '=0'
-        elif name.endswith('=1'): argv[l].replace('=1','=0')
+        elif name.endswith('=1'): argv[l] = argv[l].replace('=1','=0')
       elif name.startswith('--without'):
         argv[l] = name.replace('--without','--with')
         if name.find('=') == -1: argv[l] += '=0'
-        elif name.endswith('=1'): argv[l].replace('=1','=0')
+        elif name.endswith('=1'): argv[l] = argv[l].replace('=1','=0')
       elif name.startswith('--with'):
         if name.find('=') == -1: argv[l] += '=1'
+      elif name.startswith('--download'):
+        if name.endswith('=1'): argv[l] = name[:-2]
     self.argdb = argv[1:]
     self.useda = []
 
