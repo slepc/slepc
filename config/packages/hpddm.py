@@ -47,7 +47,7 @@ class HPDDM(package.Package):
     d = os.path.join(petsc.dir,petsc.arch,'lib')
     l = self.slflag+d+' -L'+d+' -lpetsc'
     d = libdir
-    cmd = petsc.cxx+' '+petsc.getCXXFlags()+' -I'+os.path.join('.','include')+' -I'+os.path.join(petsc.dir,petsc.arch,'include')+' -I'+os.path.join(slepc.dir,'include')+' -I'+os.path.join(archdir,'include')+' -I'+os.path.join(petsc.dir,'include')
+    cmd = petsc.cxx+' '+petsc.getCXXFlags()+' -I'+os.path.join('.','include')+' '+petsc.blaslapack_include+' -I'+os.path.join(petsc.dir,petsc.arch,'include')+' -I'+os.path.join(slepc.dir,'include')+' -I'+os.path.join(archdir,'include')+' -I'+os.path.join(petsc.dir,'include')
     if not 'slepc' in petsc.packages:
       cmd += ' -DPETSC_HAVE_SLEPC=1 -DSLEPC_LIB_DIR="'+d+'"'
     line = 'cd '+builddir+' && '+cmd+' '
