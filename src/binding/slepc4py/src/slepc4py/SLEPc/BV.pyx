@@ -74,7 +74,14 @@ class BVSVDMethod(object):
 
 cdef class BV(Object):
 
-    """BV."""
+    """
+    Basis Vectors.
+
+    The `BV` package provides the concept of a block of vectors that
+    represent the basis of a subspace. It is a convenient way of handling
+    a collection of vectors that often operate together, rather than
+    working with an array of `petsc4py.PETSc.Vec`.
+    """
 
     Type             = BVType
     OrthogType       = BVOrthogType

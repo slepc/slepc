@@ -45,7 +45,13 @@ class LMEProblemType(object):
 
 cdef class LME(Object):
 
-    """LME."""
+    """
+    Linear Matrix Equation.
+
+    Linear Matrix Equation (`LME`) is the object provided by slepc4py for
+    solving linear matrix equations such as Lyapunov or Sylvester where
+    the solution has low rank.
+    """
 
     Type            = LMEType
     ConvergedReason = LMEConvergedReason

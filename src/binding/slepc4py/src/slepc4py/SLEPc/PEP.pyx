@@ -218,7 +218,15 @@ class PEPCISSExtraction(object):
 
 cdef class PEP(Object):
 
-    """PEP."""
+    """
+    Polynomial Eigenvalue Problem Solver.
+
+    The Polynomial Eigenvalue Problem (`PEP`) solver is the object provided
+    by slepc4py for specifying a polynomial eigenvalue problem. Apart from the
+    specific solvers for this type of problems, there is an `EPS`-based solver,
+    i.e., it uses a solver from `EPS` to solve a generalized eigenproblem
+    obtained after linearization.
+    """
 
     Type            = PEPType
     ProblemType     = PEPProblemType

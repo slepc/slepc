@@ -38,7 +38,15 @@ class FNParallelType(object):
 
 cdef class FN(Object):
 
-    """FN."""
+    """
+    Mathematical Function.
+
+    The `FN` package provides the functionality to represent a simple
+    mathematical function such as an exponential, a polynomial or a rational
+    function. This is used as a building block for defining the function
+    associated to the nonlinear eigenproblem, as well as for specifying which
+    function to use when computing the action of a matrix function on a vector.
+    """
 
     Type         = FNType
     CombineType  = FNCombineType

@@ -59,7 +59,18 @@ class STFilterDamping(object):
 
 cdef class ST(Object):
 
-    """ST."""
+    """
+    Spectral Transformation.
+
+    The Spectral Transformation (`ST`) class encapsulates the functionality
+    required for acceleration techniques based on the transformation of the
+    spectrum. The eigensolvers implemented in `EPS` work by applying an
+    operator to a set of vectors and this operator can adopt different forms.
+    The `ST` object handles all the different possibilities in a uniform way,
+    so that the solver can proceed without knowing which transformation has
+    been selected. Polynomial eigensolvers in `PEP` also support spectral
+    transformation.
+    """
 
     Type          = STType
     MatMode       = STMatMode

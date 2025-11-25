@@ -1,7 +1,9 @@
 # -----------------------------------------------------------------------------
 
 cdef class Util:
-    """Util."""
+    """
+    Other utilities such as the creation of structured matrices.
+    """
 
     @classmethod
     def createMatBSE(cls, Mat R: petsc4py.PETSc.Mat, Mat C: petsc4py.PETSc.Mat) -> petsc4py.PETSc.Mat:

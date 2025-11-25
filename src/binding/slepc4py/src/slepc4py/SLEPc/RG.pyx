@@ -21,7 +21,13 @@ class RGQuadRule(object):
 
 cdef class RG(Object):
 
-    """RG."""
+    """
+    Region.
+
+    The `RG` package provides a way to define a region of the complex plane.
+    This is used in various eigensolvers to specify where the wanted
+    eigenvalues are located.
+    """
 
     Type     = RGType
     QuadRule = RGQuadRule

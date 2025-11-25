@@ -265,7 +265,14 @@ class EPSCISSExtraction(object):
 
 cdef class EPS(Object):
 
-    """EPS."""
+    """
+    Eigenvalue Problem Solver.
+
+    The Eigenvalue Problem Solver (`EPS`) is the object provided by slepc4py
+    for specifying a linear eigenvalue problem, either in standard or
+    generalized form. It provides uniform and efficient access to all of the
+    linear eigensolvers included in the package.
+    """
 
     Type            = EPSType
     ProblemType     = EPSProblemType

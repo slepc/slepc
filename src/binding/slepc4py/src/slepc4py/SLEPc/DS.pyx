@@ -75,7 +75,14 @@ class DSParallelType(object):
 
 cdef class DS(Object):
 
-    """DS."""
+    """
+    Direct Solver (or Dense System).
+
+    The `DS` package provides auxiliary routines that are internally used by
+    the different slepc4py solvers. It is used to represent low-dimensional
+    eigenproblems that must be solved within iterative solvers with direct
+    methods. It can be seen as a structured wrapper to LAPACK functionality.
+    """
 
     Type         = DSType
     StateType    = DSStateType

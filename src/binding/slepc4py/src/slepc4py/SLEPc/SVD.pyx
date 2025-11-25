@@ -134,7 +134,16 @@ class SVDTRLanczosGBidiag(object):
 
 cdef class SVD(Object):
 
-    """SVD."""
+    """
+    Singular Value Decomposition Solver.
+
+    The Singular Value Decomposition Solver (`SVD`) is very similar to the
+    `EPS` object, but intended for the computation of the partial SVD of a
+    rectangular matrix. With this type of object, the user can specify an
+    SVD problem and solve it with any of the different solvers encapsulated
+    by the package. Some of these solvers are actually implemented through
+    calls to `EPS` eigensolvers.
+    """
 
     Type            = SVDType
     ProblemType     = SVDProblemType

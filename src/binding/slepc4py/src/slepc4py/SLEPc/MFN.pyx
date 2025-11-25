@@ -32,7 +32,14 @@ class MFNConvergedReason(object):
 
 cdef class MFN(Object):
 
-    """MFN."""
+    """
+    Matrix Function.
+
+    Matrix Function (`MFN`) is the object provided by slepc4py for computing
+    the action of a matrix function on a vector. Given a matrix :math:`A` and
+    a vector :math:`b`, the call ``mfn.solve(b,x)`` computes
+    :math:`x=f(A)b`, where :math:`f` is a function such as the exponential.
+    """
 
     Type            = MFNType
     ConvergedReason = MFNConvergedReason
