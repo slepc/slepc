@@ -83,6 +83,7 @@ cdef class BV(Object):
     OrthogBlockType  = BVOrthogBlockType
     BlockType        = BVOrthogBlockType
     MatMultType      = BVMatMultType
+    SVDMethod        = BVSVDMethod
 
     def __cinit__(self):
         self.obj = <PetscObject*> &self.bv
@@ -1714,5 +1715,6 @@ del BVOrthogType
 del BVOrthogRefineType
 del BVOrthogBlockType
 del BVMatMultType
+del BVSVDMethod
 
 # -----------------------------------------------------------------------------

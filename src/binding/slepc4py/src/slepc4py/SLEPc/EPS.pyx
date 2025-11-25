@@ -3457,6 +3457,7 @@ del EPSConv
 del EPSStop
 del EPSConvergedReason
 del EPSPowerShiftType
+del EPSKrylovSchurBSEType
 del EPSLanczosReorthogType
 del EPSCISSQuadRule
 del EPSCISSExtraction

@@ -923,5 +923,7 @@ cdef class ST(Object):
 
 del STType
 del STMatMode
+del STFilterType
+del STFilterDamping
 
 # -----------------------------------------------------------------------------

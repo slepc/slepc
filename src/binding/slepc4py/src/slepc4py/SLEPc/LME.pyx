@@ -48,8 +48,8 @@ cdef class LME(Object):
     """LME."""
 
     Type            = LMEType
-    ProblemType     = LMEProblemType
     ConvergedReason = LMEConvergedReason
+    ProblemType     = LMEProblemType
 
     def __cinit__(self):
         self.obj = <PetscObject*> &self.lme
