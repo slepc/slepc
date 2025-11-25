@@ -27,6 +27,7 @@ class PETSc(package.Package):
     conf += 'PETSC_SCALAR=' + self.scalar + '\n'
     conf += 'PETSC_PRECISION=' + self.precision + '\n'
     conf += 'BLASLAPACK_LIB=' + self.blaslapack_lib + '\n'
+    conf += 'BLASLAPACK_INCLUDE=' + self.blaslapack_include + '\n'
     conf += 'CC=' + self.cc + '\n'
     conf += 'CC_FLAGS=' + self.cc_flags + '\n'
     if hasattr(self,'fc'):
@@ -125,7 +126,7 @@ class PETSc(package.Package):
           elif k == 'BUILDSHAREDLIB' and v=='yes':
             self.buildsharedlib = True
           else:
-            if k in ['AR','AR_FLAGS','AR_LIB_SUFFIX','BFORT','BLASLAPACK_LIB','CC','CC_FLAGS','CC_LINKER_SLFLAG','CMAKE','CONFIGURE_OPTIONS','CPP','CXX','CXX_FLAGS','FC_FLAGS','FC_VERSION','LIB_NAME_SUFFIX','MAKE','MAKE_NP','PREFIXDIR','RANLIB','SCALAPACK_LIB','SEDINPLACE','SL_LINKER_SUFFIX']:
+            if k in ['AR','AR_FLAGS','AR_LIB_SUFFIX','BFORT','BLASLAPACK_LIB','BLASLAPACK_INCLUDE','CC','CC_FLAGS','CC_LINKER_SLFLAG','CMAKE','CONFIGURE_OPTIONS','CPP','CXX','CXX_FLAGS','FC_FLAGS','FC_VERSION','LIB_NAME_SUFFIX','MAKE','MAKE_NP','PREFIXDIR','RANLIB','SCALAPACK_LIB','SEDINPLACE','SL_LINKER_SUFFIX']:
               setattr(self,k.lower(),v)
     except:
       self.log.Exit('Cannot process file ' + self.petscvariables)

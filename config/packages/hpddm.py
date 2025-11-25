@@ -32,8 +32,6 @@ class HPDDM(package.Package):
       self.log.Exit(pkg+' requires a functioning C++ compiler')
     if not petsc.buildsharedlib:
       self.log.Exit(pkg+' requires a shared library build')
-    if 'slepc' in petsc.packages:
-      self.log.Exit(pkg+' requires PETSc to be built without SLEPc')
     package.Package.Precondition(self,slepc,petsc)
 
   def DownloadAndInstall(self,slepcconf,slepcvars,slepc,petsc,archdir,prefixdir):
@@ -49,7 +47,9 @@ class HPDDM(package.Package):
     d = os.path.join(petsc.dir,petsc.arch,'lib')
     l = self.slflag+d+' -L'+d+' -lpetsc'
     d = libdir
-    cmd = petsc.cxx+' '+petsc.getCXXFlags()+' -I'+os.path.join('.','include')+' -I'+os.path.join(petsc.dir,petsc.arch,'include')+' -I'+os.path.join(slepc.dir,'include')+' -I'+os.path.join(archdir,'include')+' -I'+os.path.join(petsc.dir,'include')+' -DPETSC_HAVE_SLEPC=1 -DSLEPC_LIB_DIR="'+d+'"'
+    cmd = petsc.cxx+' '+petsc.getCXXFlags()+' -I'+os.path.join('.','include')+' '+petsc.blaslapack_include+' -I'+os.path.join(petsc.dir,petsc.arch,'include')+' -I'+os.path.join(slepc.dir,'include')+' -I'+os.path.join(archdir,'include')+' -I'+os.path.join(petsc.dir,'include')
+    if not 'slepc' in petsc.packages:
+      cmd += ' -DPETSC_HAVE_SLEPC=1 -DSLEPC_LIB_DIR="'+d+'"'
     line = 'cd '+builddir+' && '+cmd+' '
     if self.packagename not in petsc.packages: # KSPHPDDM and PCHPDDM sources have not been compiled by PETSc which was configured without --download-hpddm, so do it here
       line = line+os.path.join('interface','petsc','ksp','hpddm.cxx')+' -c -o '+os.path.join('interface','ksphpddm.o')+' && '+cmd+' '+os.path.join('interface','petsc','pc','pchpddm.cxx')+' -c -o '+os.path.join('interface','pchpddm.o')+' && '+cmd+' '
@@ -57,7 +57,7 @@ class HPDDM(package.Package):
     (result,output) = self.RunCommand(line)
     if result:
       self.log.Exit('Compilation of HPDDM failed')
-    (result,output) = self.RunCommand('cd '+builddir+' && make -f SONAME_SL_LINKER soname && make -f SONAME_SL_LINKER sl_linker')
+    (result,output) = self.RunCommand('cd '+builddir+' && make --no-print-directory -f SONAME_SL_LINKER soname && make --no-print-directory -f SONAME_SL_LINKER sl_linker')
     if result:
       self.log.Exit('Calling PETSc SONAME_FUNCTION or SL_LINKER_FUNCTION failed')
     lines = output.splitlines()
