@@ -3,7 +3,7 @@
 Lyapunov equation, N=100 (10x10 grid)
 
 [0] <mat:seqaij> MatSetUp_Seq_Hash(): Using hash-based MatSetValues() for MATSEQAIJ because no preallocation provided
-[0] <mat:seqaij> MatAssemblyEnd_SeqAIJ(): Matrix size: 100 X 100; storage space: 0 unneeded,460 used
+[0] <mat:seqaij> MatAssemblyEnd_SeqAIJ(): Matrix size: 100 X 100; storage space: 0 unneeded, 460 used
 [0] <mat:seqaij> MatAssemblyEnd_SeqAIJ(): Number of mallocs during MatSetValues() is 0
 [0] <mat:seqaij> MatAssemblyEnd_SeqAIJ(): Maximum nonzeros in any row is 5
 [0] <mat:seqaij> MatCheckCompressedRow(): Found the ratio (num_zerorows 0)/(num_localrows 100) < 0.6. Do not use CompressedRow routines.
