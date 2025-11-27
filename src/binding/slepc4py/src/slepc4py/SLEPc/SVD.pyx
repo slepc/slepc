@@ -2,22 +2,28 @@
 
 class SVDType(object):
     """
-    SVD types.
+    SVD type.
+
+    Native singular value solvers.
 
     - `CROSS`:      Eigenproblem with the cross-product matrix.
     - `CYCLIC`:     Eigenproblem with the cyclic matrix.
-    - `LAPACK`:     Wrappers to dense SVD solvers in Lapack.
-    - `LANCZOS`:    Lanczos.
+    - `LANCZOS`:    Explicitly restarted Lanczos.
     - `TRLANCZOS`:  Thick-restart Lanczos.
     - `RANDOMIZED`: Iterative RSVD for low-rank matrices.
 
     Wrappers to external SVD solvers
-    (should be enabled during installation of SLEPc)
+    (should be enabled during installation of SLEPc).
 
-    - `SCALAPACK`:
-    - `KSVD`:
-    - `ELEMENTAL`:
-    - `PRIMME`:
+    - `LAPACK`:     Sequential dense SVD solver.
+    - `SCALAPACK`:  Parallel dense SVD solver.
+    - `KSVD`:       Parallel dense SVD solver.
+    - `ELEMENTAL`:  Parallel dense SVD solver.
+    - `PRIMME`:     Iterative SVD solvers of Davidson type.
+
+    See Also
+    --------
+    slepc.SVDType
     """
     CROSS      = S_(SVDCROSS)
     CYCLIC     = S_(SVDCYCLIC)

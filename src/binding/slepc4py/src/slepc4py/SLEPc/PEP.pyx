@@ -4,19 +4,21 @@ class PEPType(object):
     """
     PEP type.
 
-    Polynomial eigensolvers.
-
-    - `LINEAR`:   Linearization via EPS.
-    - `QARNOLDI`: Q-Arnoldi for quadratic problems.
     - `TOAR`:     Two-level orthogonal Arnoldi.
     - `STOAR`:    Symmetric TOAR.
+    - `QARNOLDI`: Q-Arnoldi for quadratic problems.
+    - `LINEAR`:   Linearization via EPS.
     - `JD`:       Polynomial Jacobi-Davidson.
     - `CISS`:     Contour integral spectrum slice.
+
+    See Also
+    --------
+    slepc.PEPType
     """
-    LINEAR   = S_(PEPLINEAR)
-    QARNOLDI = S_(PEPQARNOLDI)
     TOAR     = S_(PEPTOAR)
     STOAR    = S_(PEPSTOAR)
+    QARNOLDI = S_(PEPQARNOLDI)
+    LINEAR   = S_(PEPLINEAR)
     JD       = S_(PEPJD)
     CISS     = S_(PEPCISS)
 

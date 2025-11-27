@@ -4,21 +4,23 @@ class NEPType(object):
     """
     NEP type.
 
-    Nonlinear eigensolvers.
-
     - `RII`:      Residual inverse iteration.
     - `SLP`:      Successive linear problems.
     - `NARNOLDI`: Nonlinear Arnoldi.
+    - `NLEIGS`:   Fully rational Krylov method for nonlinear eigenproblems.
     - `CISS`:     Contour integral spectrum slice.
     - `INTERPOL`: Polynomial interpolation.
-    - `NLEIGS`:   Fully rational Krylov method for nonlinear eigenproblems.
+
+    See Also
+    --------
+    slepc.NEPType
     """
     RII      = S_(NEPRII)
     SLP      = S_(NEPSLP)
     NARNOLDI = S_(NEPNARNOLDI)
+    NLEIGS   = S_(NEPNLEIGS)
     CISS     = S_(NEPCISS)
     INTERPOL = S_(NEPINTERPOL)
-    NLEIGS   = S_(NEPNLEIGS)
 
 class NEPProblemType(object):
     """

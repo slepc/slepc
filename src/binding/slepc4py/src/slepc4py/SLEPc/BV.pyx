@@ -1,7 +1,21 @@
 # -----------------------------------------------------------------------------
 
 class BVType(object):
-    """BV type."""
+    """
+    BV type.
+
+    - `MAT`: A `BV` stored as a dense `petsc.Mat`.
+    - `SVEC`: A `BV` stored as a single `petsc.Vec`.
+    - `VECS`: A `BV` stored as an array of independent `petsc.Vec`.
+    - `CONTIGUOUS`: A `BV` stored as an array of `petsc.Vec`
+      sharing a contiguous array of scalars.
+    - `TENSOR`: A special `BV` represented in compact form as
+      :math:`V = (I \otimes U) S`.
+
+    See Also
+    --------
+    slepc.BVType
+    """
     MAT        = S_(BVMAT)
     SVEC       = S_(BVSVEC)
     VECS       = S_(BVVECS)

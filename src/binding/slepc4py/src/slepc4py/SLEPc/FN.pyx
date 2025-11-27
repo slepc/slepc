@@ -1,7 +1,21 @@
 # -----------------------------------------------------------------------------
 
 class FNType(object):
-    """FN type."""
+    """
+    FN type.
+
+    - `COMBINE`: A math function defined by combining two functions.
+    - `RATIONAL`: A rational function :math:`f(x)=p(x)/q(x)`.
+    - `EXP`: The exponential function :math:`f(x)=e^x`.
+    - `LOG`: The logarithm function :math:`f(x)=\log{x}`.
+    - `PHI`: One of the Phi_k functions with index k.
+    - `SQRT`: The square root function :math:`f(x)=\sqrt{x}`.
+    - `INVSQRT`: The inverse square root function.
+
+    See Also
+    --------
+    slepc.FNType
+    """
     COMBINE  = S_(FNCOMBINE)
     RATIONAL = S_(FNRATIONAL)
     EXP      = S_(FNEXP)

@@ -1,7 +1,18 @@
 # -----------------------------------------------------------------------------
 
 class RGType(object):
-    """RG type."""
+    """
+    RG type.
+
+    - `INTERVAL`: A (generalized) interval.
+    - `POLYGON`: A polygonal region defined by its vertices.
+    - `ELLIPSE`: An ellipse defined by its center, radius and vertical scale.
+    - `RING`: A ring region.
+
+    See Also
+    --------
+    slepc.RGType
+    """
     INTERVAL   = S_(RGINTERVAL)
     POLYGON    = S_(RGPOLYGON)
     ELLIPSE    = S_(RGELLIPSE)

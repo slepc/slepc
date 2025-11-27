@@ -4,10 +4,12 @@ class MFNType(object):
     """
     MFN type.
 
-    Action of a matrix function on a vector.
-
     - `KRYLOV`:  Restarted Krylov solver.
     - `EXPOKIT`: Implementation of the method in Expokit.
+
+    See Also
+    --------
+    slepc.MFNType
     """
     KRYLOV   = S_(MFNKRYLOV)
     EXPOKIT  = S_(MFNEXPOKIT)

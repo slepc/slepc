@@ -1,7 +1,26 @@
 # -----------------------------------------------------------------------------
 
 class DSType(object):
-    """DS type."""
+    """
+    DS type.
+
+    - `HEP`: Dense Hermitian Eigenvalue Problem.
+    - `NHEP`: Dense Non-Hermitian Eigenvalue Problem.
+    - `GHEP`: Dense Generalized Hermitian Eigenvalue Problem.
+    - `GHIEP`: Dense Generalized Hermitian Indefinite Eigenvalue Problem.
+    - `GNHEP`: Dense Generalized Non-Hermitian Eigenvalue Problem.
+    - `NHEPTS`: Dense Non-Hermitian Eigenvalue Problem (special variant
+      intended for two-sided Krylov solvers).
+    - `SVD`: Dense Singular Value Decomposition.
+    - `HSVD`: Dense Hyperbolic Singular Value Decomposition.
+    - `GSVD`: Dense Generalized Singular Value Decomposition.
+    - `PEP`: Dense Polynomial Eigenvalue Problem.
+    - `NEP`: Dense Nonlinear Eigenvalue Problem.
+
+    See Also
+    --------
+    slepc.DSType
+    """
     HEP     = S_(DSHEP)
     NHEP    = S_(DSNHEP)
     GHEP    = S_(DSGHEP)

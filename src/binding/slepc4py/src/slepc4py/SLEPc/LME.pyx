@@ -5,6 +5,10 @@ class LMEType(object):
     LME type.
 
     - `KRYLOV`:  Restarted Krylov solver.
+
+    See Also
+    --------
+    slepc.LMEType
     """
     KRYLOV   = S_(LMEKRYLOV)
 

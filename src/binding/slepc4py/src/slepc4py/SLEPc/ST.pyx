@@ -2,21 +2,25 @@
 
 class STType(object):
     """
-    ST types.
+    ST type.
 
-    - `SHELL`:   User-defined.
     - `SHIFT`:   Shift from origin.
     - `SINVERT`: Shift-and-invert.
     - `CAYLEY`:  Cayley transform.
     - `PRECOND`: Preconditioner.
     - `FILTER`:  Polynomial filter.
+    - `SHELL`:   User-defined.
+
+    See Also
+    --------
+    slepc.STType
     """
-    SHELL   = S_(STSHELL)
     SHIFT   = S_(STSHIFT)
     SINVERT = S_(STSINVERT)
     CAYLEY  = S_(STCAYLEY)
     PRECOND = S_(STPRECOND)
     FILTER  = S_(STFILTER)
+    SHELL   = S_(STSHELL)
 
 class STMatMode(object):
     """
