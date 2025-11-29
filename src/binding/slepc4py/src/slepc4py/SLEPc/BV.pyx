@@ -301,7 +301,7 @@ cdef class BV(Object):
         Parameters
         ----------
         bv_type
-            The inner product type to be used.
+            The basis vectors type to be used.
         """
         cdef SlepcBVType cval = NULL
         bv_type = str2bytes(bv_type, &cval)
@@ -316,7 +316,7 @@ cdef class BV(Object):
         Returns
         -------
         str
-            The inner product type currently being used.
+            The basis vectors type currently being used.
         """
         cdef SlepcBVType bv_type = NULL
         CHKERR( BVGetType(self.bv, &bv_type) )

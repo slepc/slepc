@@ -98,7 +98,7 @@ cdef class RG(Object):
         Parameters
         ----------
         rg_type
-            The inner product type to be used.
+            The region type to be used.
         """
         cdef SlepcRGType cval = NULL
         rg_type = str2bytes(rg_type, &cval)
@@ -113,7 +113,7 @@ cdef class RG(Object):
         Returns
         -------
         str
-            The inner product type currently being used.
+            The region type currently being used.
         """
         cdef SlepcRGType rg_type = NULL
         CHKERR( RGGetType(self.rg, &rg_type) )

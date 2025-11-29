@@ -189,7 +189,7 @@ cdef class FN(Object):
         Parameters
         ----------
         fn_type
-            The inner product type to be used.
+            The math function type to be used.
         """
         cdef SlepcFNType cval = NULL
         fn_type = str2bytes(fn_type, &cval)
@@ -204,7 +204,7 @@ cdef class FN(Object):
         Returns
         -------
         str
-            The inner product type currently being used.
+            The math function type currently being used.
         """
         cdef SlepcFNType fn_type = NULL
         CHKERR( FNGetType(self.fn, &fn_type) )
