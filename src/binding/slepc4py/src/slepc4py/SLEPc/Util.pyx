@@ -25,7 +25,11 @@ cdef class Util:
         Returns
         -------
         petsc4py.PETSc.Mat
-            The matrix with the block form :math:`H = [ R\; C; {-C}^H\; {-R}^T ]`.
+            The matrix with the block form :math:`H = [ R\; C; {-C}^*\; {-R}^T ]`.
+
+        See Also
+        --------
+        slepc.MatCreateBSE
         """
         cdef Mat H = Mat()
         CHKERR( MatCreateBSE(R.mat, C.mat, &H.mat) )
@@ -50,7 +54,11 @@ cdef class Util:
         Returns
         -------
         petsc4py.PETSc.Mat
-            The matrix with the block form :math:`H = [ A B; C -A^* ]`.
+            The matrix with the block form :math:`H = [ A\; B; C\; -A^* ]`.
+
+        See Also
+        --------
+        slepc.MatCreateHamiltonian
         """
         cdef Mat H = Mat()
         CHKERR( MatCreateHamiltonian(A.mat, B.mat, C.mat, &H.mat) )
