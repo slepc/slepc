@@ -1,7 +1,9 @@
 # -----------------------------------------------------------------------------
 
 cdef class Sys:
-    """Sys."""
+    """
+    System utilities.
+    """
 
     @classmethod
     def getVersion(

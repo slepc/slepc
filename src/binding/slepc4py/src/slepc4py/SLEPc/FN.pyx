@@ -1,7 +1,21 @@
 # -----------------------------------------------------------------------------
 
 class FNType(object):
-    """FN type."""
+    """
+    FN type.
+
+    - `COMBINE`: A math function defined by combining two functions.
+    - `RATIONAL`: A rational function :math:`f(x)=p(x)/q(x)`.
+    - `EXP`: The exponential function :math:`f(x)=e^x`.
+    - `LOG`: The logarithm function :math:`f(x)=\log{x}`.
+    - `PHI`: One of the Phi_k functions with index k.
+    - `SQRT`: The square root function :math:`f(x)=\sqrt{x}`.
+    - `INVSQRT`: The inverse square root function.
+
+    See Also
+    --------
+    slepc.FNType
+    """
     COMBINE  = S_(FNCOMBINE)
     RATIONAL = S_(FNRATIONAL)
     EXP      = S_(FNEXP)
@@ -38,7 +52,15 @@ class FNParallelType(object):
 
 cdef class FN(Object):
 
-    """FN."""
+    """
+    Mathematical Function.
+
+    The `FN` package provides the functionality to represent a simple
+    mathematical function such as an exponential, a polynomial or a rational
+    function. This is used as a building block for defining the function
+    associated to the nonlinear eigenproblem, as well as for specifying which
+    function to use when computing the action of a matrix function on a vector.
+    """
 
     Type         = FNType
     CombineType  = FNCombineType
@@ -167,7 +189,7 @@ cdef class FN(Object):
         Parameters
         ----------
         fn_type
-            The inner product type to be used.
+            The math function type to be used.
         """
         cdef SlepcFNType cval = NULL
         fn_type = str2bytes(fn_type, &cval)
@@ -182,7 +204,7 @@ cdef class FN(Object):
         Returns
         -------
         str
-            The inner product type currently being used.
+            The math function type currently being used.
         """
         cdef SlepcFNType fn_type = NULL
         CHKERR( FNGetType(self.fn, &fn_type) )

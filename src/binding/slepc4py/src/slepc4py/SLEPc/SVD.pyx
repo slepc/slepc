@@ -2,22 +2,28 @@
 
 class SVDType(object):
     """
-    SVD types.
+    SVD type.
+
+    Native singular value solvers.
 
     - `CROSS`:      Eigenproblem with the cross-product matrix.
     - `CYCLIC`:     Eigenproblem with the cyclic matrix.
-    - `LAPACK`:     Wrappers to dense SVD solvers in Lapack.
-    - `LANCZOS`:    Lanczos.
+    - `LANCZOS`:    Explicitly restarted Lanczos.
     - `TRLANCZOS`:  Thick-restart Lanczos.
     - `RANDOMIZED`: Iterative RSVD for low-rank matrices.
 
     Wrappers to external SVD solvers
-    (should be enabled during installation of SLEPc)
+    (should be enabled during installation of SLEPc).
 
-    - `SCALAPACK`:
-    - `KSVD`:
-    - `ELEMENTAL`:
-    - `PRIMME`:
+    - `LAPACK`:     Sequential dense SVD solver.
+    - `SCALAPACK`:  Parallel dense SVD solver.
+    - `KSVD`:       Parallel dense SVD solver.
+    - `ELEMENTAL`:  Parallel dense SVD solver.
+    - `PRIMME`:     Iterative SVD solvers of Davidson type.
+
+    See Also
+    --------
+    slepc.SVDType
     """
     CROSS      = S_(SVDCROSS)
     CYCLIC     = S_(SVDCYCLIC)
@@ -134,7 +140,16 @@ class SVDTRLanczosGBidiag(object):
 
 cdef class SVD(Object):
 
-    """SVD."""
+    """
+    Singular Value Decomposition Solver.
+
+    The Singular Value Decomposition Solver (`SVD`) is very similar to the
+    `EPS` object, but intended for the computation of the partial SVD of a
+    rectangular matrix. With this type of object, the user can specify an
+    SVD problem and solve it with any of the different solvers encapsulated
+    by the package. Some of these solvers are actually implemented through
+    calls to `EPS` eigensolvers.
+    """
 
     Type            = SVDType
     ProblemType     = SVDProblemType

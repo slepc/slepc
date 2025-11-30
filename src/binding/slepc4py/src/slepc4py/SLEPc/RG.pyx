@@ -1,7 +1,18 @@
 # -----------------------------------------------------------------------------
 
 class RGType(object):
-    """RG type."""
+    """
+    RG type.
+
+    - `INTERVAL`: A (generalized) interval.
+    - `POLYGON`: A polygonal region defined by its vertices.
+    - `ELLIPSE`: An ellipse defined by its center, radius and vertical scale.
+    - `RING`: A ring region.
+
+    See Also
+    --------
+    slepc.RGType
+    """
     INTERVAL   = S_(RGINTERVAL)
     POLYGON    = S_(RGPOLYGON)
     ELLIPSE    = S_(RGELLIPSE)
@@ -21,7 +32,13 @@ class RGQuadRule(object):
 
 cdef class RG(Object):
 
-    """RG."""
+    """
+    Region.
+
+    The `RG` package provides a way to define a region of the complex plane.
+    This is used in various eigensolvers to specify where the wanted
+    eigenvalues are located.
+    """
 
     Type     = RGType
     QuadRule = RGQuadRule
@@ -81,7 +98,7 @@ cdef class RG(Object):
         Parameters
         ----------
         rg_type
-            The inner product type to be used.
+            The region type to be used.
         """
         cdef SlepcRGType cval = NULL
         rg_type = str2bytes(rg_type, &cval)
@@ -96,7 +113,7 @@ cdef class RG(Object):
         Returns
         -------
         str
-            The inner product type currently being used.
+            The region type currently being used.
         """
         cdef SlepcRGType rg_type = NULL
         CHKERR( RGGetType(self.rg, &rg_type) )

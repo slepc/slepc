@@ -5,6 +5,10 @@ class LMEType(object):
     LME type.
 
     - `KRYLOV`:  Restarted Krylov solver.
+
+    See Also
+    --------
+    slepc.LMEType
     """
     KRYLOV   = S_(LMEKRYLOV)
 
@@ -45,11 +49,17 @@ class LMEProblemType(object):
 
 cdef class LME(Object):
 
-    """LME."""
+    """
+    Linear Matrix Equation.
+
+    Linear Matrix Equation (`LME`) is the object provided by slepc4py for
+    solving linear matrix equations such as Lyapunov or Sylvester where
+    the solution has low rank.
+    """
 
     Type            = LMEType
-    ProblemType     = LMEProblemType
     ConvergedReason = LMEConvergedReason
+    ProblemType     = LMEProblemType
 
     def __cinit__(self):
         self.obj = <PetscObject*> &self.lme

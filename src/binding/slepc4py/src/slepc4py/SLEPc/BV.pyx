@@ -1,7 +1,21 @@
 # -----------------------------------------------------------------------------
 
 class BVType(object):
-    """BV type."""
+    """
+    BV type.
+
+    - `MAT`: A `BV` stored as a dense `petsc.Mat`.
+    - `SVEC`: A `BV` stored as a single `petsc.Vec`.
+    - `VECS`: A `BV` stored as an array of independent `petsc.Vec`.
+    - `CONTIGUOUS`: A `BV` stored as an array of `petsc.Vec`
+      sharing a contiguous array of scalars.
+    - `TENSOR`: A special `BV` represented in compact form as
+      :math:`V = (I \otimes U) S`.
+
+    See Also
+    --------
+    slepc.BVType
+    """
     MAT        = S_(BVMAT)
     SVEC       = S_(BVSVEC)
     VECS       = S_(BVVECS)
@@ -74,7 +88,14 @@ class BVSVDMethod(object):
 
 cdef class BV(Object):
 
-    """BV."""
+    """
+    Basis Vectors.
+
+    The `BV` package provides the concept of a block of vectors that
+    represent the basis of a subspace. It is a convenient way of handling
+    a collection of vectors that often operate together, rather than
+    working with an array of `petsc4py.PETSc.Vec`.
+    """
 
     Type             = BVType
     OrthogType       = BVOrthogType
@@ -83,6 +104,7 @@ cdef class BV(Object):
     OrthogBlockType  = BVOrthogBlockType
     BlockType        = BVOrthogBlockType
     MatMultType      = BVMatMultType
+    SVDMethod        = BVSVDMethod
 
     def __cinit__(self):
         self.obj = <PetscObject*> &self.bv
@@ -279,7 +301,7 @@ cdef class BV(Object):
         Parameters
         ----------
         bv_type
-            The inner product type to be used.
+            The basis vectors type to be used.
         """
         cdef SlepcBVType cval = NULL
         bv_type = str2bytes(bv_type, &cval)
@@ -294,7 +316,7 @@ cdef class BV(Object):
         Returns
         -------
         str
-            The inner product type currently being used.
+            The basis vectors type currently being used.
         """
         cdef SlepcBVType bv_type = NULL
         CHKERR( BVGetType(self.bv, &bv_type) )
@@ -1714,5 +1736,6 @@ del BVOrthogType
 del BVOrthogRefineType
 del BVOrthogBlockType
 del BVMatMultType
+del BVSVDMethod
 
 # -----------------------------------------------------------------------------

@@ -4,19 +4,21 @@ class PEPType(object):
     """
     PEP type.
 
-    Polynomial eigensolvers.
-
-    - `LINEAR`:   Linearization via EPS.
-    - `QARNOLDI`: Q-Arnoldi for quadratic problems.
     - `TOAR`:     Two-level orthogonal Arnoldi.
     - `STOAR`:    Symmetric TOAR.
+    - `QARNOLDI`: Q-Arnoldi for quadratic problems.
+    - `LINEAR`:   Linearization via EPS.
     - `JD`:       Polynomial Jacobi-Davidson.
     - `CISS`:     Contour integral spectrum slice.
+
+    See Also
+    --------
+    slepc.PEPType
     """
-    LINEAR   = S_(PEPLINEAR)
-    QARNOLDI = S_(PEPQARNOLDI)
     TOAR     = S_(PEPTOAR)
     STOAR    = S_(PEPSTOAR)
+    QARNOLDI = S_(PEPQARNOLDI)
+    LINEAR   = S_(PEPLINEAR)
     JD       = S_(PEPJD)
     CISS     = S_(PEPCISS)
 
@@ -218,7 +220,15 @@ class PEPCISSExtraction(object):
 
 cdef class PEP(Object):
 
-    """PEP."""
+    """
+    Polynomial Eigenvalue Problem Solver.
+
+    The Polynomial Eigenvalue Problem (`PEP`) solver is the object provided
+    by slepc4py for specifying a polynomial eigenvalue problem. Apart from the
+    specific solvers for this type of problems, there is an `EPS`-based solver,
+    i.e., it uses a solver from `EPS` to solve a generalized eigenproblem
+    obtained after linearization.
+    """
 
     Type            = PEPType
     ProblemType     = PEPProblemType

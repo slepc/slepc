@@ -4,7 +4,7 @@ class EPSType(object):
     """
     EPS type.
 
-    Native sparse eigensolvers.
+    Native eigenvalue solvers.
 
     - `POWER`:        Power Iteration, Inverse Iteration, RQI.
     - `SUBSPACE`:     Subspace Iteration.
@@ -17,22 +17,25 @@ class EPSType(object):
     - `LOBPCG`:       Locally Optimal Block Preconditioned Conjugate Gradient.
     - `CISS`:         Contour Integral Spectrum Slicing.
     - `LYAPII`:       Lyapunov inverse iteration.
-    - `LAPACK`:       Wrappers to dense eigensolvers in Lapack.
 
     Wrappers to external eigensolvers
-    (should be enabled during installation of SLEPc)
+    (should be enabled during installation of SLEPc).
 
-    - `ARPACK`:
-    - `BLOPEX`:
-    - `PRIMME`:
-    - `FEAST`:
-    - `SCALAPACK`:
-    - `ELPA`:
-    - `ELEMENTAL`:
-    - `EVSL`:
-    - `CHASE`:
+    - `LAPACK`:       Sequential dense eigensolver.
+    - `ARPACK`:       Iterative Krylov-based eigensolver.
+    - `BLOPEX`:       Implementation of LOBPCG.
+    - `PRIMME`:       Iterative eigensolvers of Davidson type.
+    - `FEAST`:        Contour integral eigensolver.
+    - `SCALAPACK`:    Parallel dense eigensolver for symmetric problems.
+    - `ELPA`:         Parallel dense eigensolver for symmetric problems.
+    - `ELEMENTAL`:    Parallel dense eigensolver for symmetric problems.
+    - `EVSL`:         Iterative eigensolver based on polynomial filters.
+    - `CHASE`:        Subspace iteration accelerated with polynomials.
+
+    See Also
+    --------
+    slepc.EPSType
     """
-    # provided implementations
     POWER        = S_(EPSPOWER)
     SUBSPACE     = S_(EPSSUBSPACE)
     ARNOLDI      = S_(EPSARNOLDI)
@@ -45,7 +48,6 @@ class EPSType(object):
     CISS         = S_(EPSCISS)
     LYAPII       = S_(EPSLYAPII)
     LAPACK       = S_(EPSLAPACK)
-    # with external libraries
     ARPACK       = S_(EPSARPACK)
     BLOPEX       = S_(EPSBLOPEX)
     PRIMME       = S_(EPSPRIMME)
@@ -265,7 +267,14 @@ class EPSCISSExtraction(object):
 
 cdef class EPS(Object):
 
-    """EPS."""
+    """
+    Eigenvalue Problem Solver.
+
+    The Eigenvalue Problem Solver (`EPS`) is the object provided by slepc4py
+    for specifying a linear eigenvalue problem, either in standard or
+    generalized form. It provides uniform and efficient access to all of the
+    linear eigensolvers included in the package.
+    """
 
     Type            = EPSType
     ProblemType     = EPSProblemType
@@ -3457,6 +3466,7 @@ del EPSConv
 del EPSStop
 del EPSConvergedReason
 del EPSPowerShiftType
+del EPSKrylovSchurBSEType
 del EPSLanczosReorthogType
 del EPSCISSQuadRule
 del EPSCISSExtraction
