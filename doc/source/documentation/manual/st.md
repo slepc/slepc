@@ -257,7 +257,7 @@ STSetSplitPreconditioner(ST st,PetscInt n,Mat Psplit[],MatStructure strp);
 Note that preconditioned eigensolvers in `EPS` select `STPRECOND` by default, so the user does not need to specify it explicitly.
 
 {#sec:filter}
-### Polynomial Filtering
+### Polynomial Filter
 
 The type `STFILTER` is also special. It is used in the case of standard symmetric (or Hermitian) eigenvalue problems when the eigenvalues of interest are interior to the spectrum and we want to avoid the high cost associated with the matrix factorization of the shift-and-invert spectral transformation. The techniques generically known as *polynomial filtering* aim at this goal.
 
@@ -271,7 +271,17 @@ p(A)x=\theta x,
 
  where $p(\cdot)$ is a suitable high-degree polynomial. Once the polynomial is built, the eigensolver relies on `STApply()` to compute approximations of the eigenvalues $\theta$ of the transformed problem. These approximations must be processed in some way in order to recover the $\lambda$ eigenvalues. Note that in this case there is no `STBackTransform()` operation. Details of the method can be found in {cite:p}`Fan12`.
 
-Currently, SLEPc provides several types of polynomial filtering techniques, which can be selected via `STFilterSetType()`. Note that the external package EVSL also implements polynomial filters to compute all eigenvalues in an interval.
+Currently, SLEPc provides several types of polynomial filtering techniques, which can be selected via `STFilterSetType()`. Note that the external solver `EPSEVSL` also implements polynomial filters to compute all eigenvalues in an interval.
+
+When computing interior eigenvalues with `STFILTER` the following considerations must be taken into account:
+
+* This technique is an option when the wanted eigenvalues are interior but shift-and-invert (or [](#sec:slice)) is not affordable because computing a factorization is too expensive or cannot be done (e.g., with a shell matrix).
+
+* The user should call `EPSSetInterval()` and select `EPS_ALL` for the wanted eigenvalues. The interval information is passed to `ST`, so there is no need to call `STFilterSetInterval()`. `STFILTER` will build the filter using this interval and the spectral range, the interval containing all the eigenvalues, set with `STFilterSetRange()`. It is generally recommended to also omit the call to the latter and let SLEPc compute an estimate internally, because if the provided spectral range is not accurate the filter may not work correctly.
+
+* The degree of the polynomial can be set with `STFilterSetDegree()`. Convergence may be slow, it depends on the distribution of eigenvalues and the shape of the filter, which in turn depends on the polynomial degree and the two intervals mentioned above. In difficult problems, it may be necessary to increase the degree to 2000 or even more. There is no good way to estimate an appropriate value of the degree, but if the solver returns 0 eigenvalues in the first iteration then it may indicate that the filter is not sharp enough, so the degree should be increased.
+
+* If the interval is very narrow, the degree of the polynomial should generally be large. It may be better to use a larger interval with more eigenvalues, even if only a few eigenvalues are needed. In any case, the solver should be configured with a sufficiently large subspace dimension (`ncv` in `EPSSetDimensions()`) to hold as many eigenvectors as eigenvalues contained in the interval, and an even larger value will generally benefit convergence.
 
 ## Advanced Usage
 
