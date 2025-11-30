@@ -92,14 +92,14 @@ static PetscErrorCode RGRingSetParameters_Ring(RG rg,PetscScalar center,PetscRea
 
    Notes:
    The values of `center`, `radius` and `vscale` have the same meaning as in the
-   ellipse region. The `startangle` and `endangle` define the span of the ring
+   ellipse region. The `start_ang` and `end_ang` define the span of the ring
    (by default it is the whole ring), while the `width` is the separation
    between the two concentric ellipses (above and below the radius by
    `width/2`).
 
    The start and end angles are expressed as a fraction of the circumference.
    The allowed range is $[0,\dots,1]$, with `0` corresponding to 0 radians, `0.25` to
-   $\pi/2$ radians, and so on. It is allowed to have `startangle`>`endangle`, in
+   $\pi/2$ radians, and so on. It is allowed to have `start_ang`>`end_ang`, in
    which case the ring region crosses over the zero angle.
 
    In the case of complex scalars, a complex center can be provided in the
@@ -112,7 +112,7 @@ static PetscErrorCode RGRingSetParameters_Ring(RG rg,PetscScalar center,PetscRea
 
    For all arguments except `center`, you can use `PETSC_CURRENT` to keep the current
    value, and `PETSC_DETERMINE` to set them to a default value (1 for `radius`, `vscale`,
-   `end_ang`, 0 for `start_and`, and 0.1 for `width`).
+   `end_ang`, 0 for `start_ang`, and 0.1 for `width`).
 
    Level: advanced
 

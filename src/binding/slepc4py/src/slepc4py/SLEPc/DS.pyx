@@ -41,6 +41,10 @@ class DSStateType(object):
     - `INTERMEDIATE`: Reduced to Hessenberg or tridiagonal form (or equivalent).
     - `CONDENSED`:    Reduced to Schur or diagonal form (or equivalent).
     - `TRUNCATED`:    Condensed form truncated to a smaller size.
+
+    See Also
+    --------
+    slepc.DSStateType
     """
     RAW          = DS_STATE_RAW
     INTERMEDIATE = DS_STATE_INTERMEDIATE
@@ -63,6 +67,10 @@ class DSMatType(object):
     - `U`:  left singular vectors.
     - `V`:  right singular vectors.
     - `W`:  workspace matrix.
+
+    See Also
+    --------
+    slepc.DSMatType
     """
     A  = DS_MAT_A
     B  = DS_MAT_B
@@ -79,12 +87,16 @@ class DSMatType(object):
 
 class DSParallelType(object):
     """
-    DS parallel types.
+    Indicates the parallel mode that the direct solver will use.
 
     - `REDUNDANT`:    Every process performs the computation redundantly.
     - `SYNCHRONIZED`: The first process sends the result to the rest.
     - `DISTRIBUTED`:  Used in some cases to distribute the computation among
-                      processes.
+      processes.
+
+    See Also
+    --------
+    slepc.DSParallelType
     """
     REDUNDANT    = DS_PARALLEL_REDUNDANT
     SYNCHRONIZED = DS_PARALLEL_SYNCHRONIZED
@@ -123,6 +135,10 @@ cdef class DS(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        slepc.DSView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( DSView(self.ds, vwr) )
@@ -132,6 +148,10 @@ cdef class DS(Object):
         Destroy the DS object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.DSDestroy
         """
         CHKERR( DSDestroy(&self.ds) )
         self.ds = NULL
@@ -142,6 +162,10 @@ cdef class DS(Object):
         Reset the DS object.
 
         Collective.
+
+        See Also
+        --------
+        allocate, slepc.DSReset
         """
         CHKERR( DSReset(self.ds) )
 
@@ -155,6 +179,10 @@ cdef class DS(Object):
         ----------
         comm
             MPI communicator; if not provided, it defaults to all processes.
+
+        See Also
+        --------
+        duplicate, slepc.DSCreate
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcDS newds = NULL
@@ -172,6 +200,10 @@ cdef class DS(Object):
         ----------
         ds_type
             The direct solver type to be used.
+
+        See Also
+        --------
+        getType, slepc.DSSetType
         """
         cdef SlepcDSType cval = NULL
         ds_type = str2bytes(ds_type, &cval)
@@ -187,6 +219,10 @@ cdef class DS(Object):
         -------
         str
             The direct solver type currently being used.
+
+        See Also
+        --------
+        setType, slepc.DSGetType
         """
         cdef SlepcDSType ds_type = NULL
         CHKERR( DSGetType(self.ds, &ds_type) )
@@ -208,6 +244,10 @@ cdef class DS(Object):
         A hyphen (``-``) must NOT be given at the beginning of the
         prefix name.  The first character of all runtime options is
         AUTOMATICALLY the hyphen.
+
+        See Also
+        --------
+        appendOptionsPrefix, getOptionsPrefix, slepc.DSSetOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -223,6 +263,10 @@ cdef class DS(Object):
         ----------
         prefix
             The prefix string to prepend to all DS option requests.
+
+        See Also
+        --------
+        setOptionsPrefix, getOptionsPrefix, slepc.DSSetOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -238,6 +282,10 @@ cdef class DS(Object):
         -------
         str
             The prefix string set for this DS object.
+
+        See Also
+        --------
+        appendOptionsPrefix, setOptionsPrefix, slepc.DSSetOptionsPrefix
         """
         cdef const char *prefix = NULL
         CHKERR( DSGetOptionsPrefix(self.ds, &prefix) )
@@ -253,6 +301,10 @@ cdef class DS(Object):
         -----
         To see all options, run your program with the ``-help``
         option.
+
+        See Also
+        --------
+        setOptionsPrefix, slepc.DSSetFromOptions
         """
         CHKERR( DSSetFromOptions(self.ds) )
 
@@ -261,6 +313,21 @@ cdef class DS(Object):
         Duplicate the DS object with the same type and dimensions.
 
         Collective.
+
+        Returns
+        -------
+        DS
+            The new object.
+
+        Notes
+        -----
+        This method does not copy the matrices, and the new object does not
+        even have internal arrays allocated. Use `allocate()` to use the new
+        `DS`.
+
+        See Also
+        --------
+        create, allocate, slepc.DSDuplicate
         """
         cdef DS ds = type(self)()
         CHKERR( DSDuplicate(self.ds, &ds.ds) )
@@ -279,6 +346,15 @@ cdef class DS(Object):
         ld
             Leading dimension (maximum allowed dimension for the
             matrices, including the extra row if present).
+
+        Notes
+        -----
+        If the leading dimension is different from a previously set value, then
+        all matrices are destroyed with `reset()`.
+
+        See Also
+        --------
+        getLeadingDimension, setDimensions, setExtraRow, reset, slepc.DSAllocate
         """
         cdef PetscInt val = asInt(ld)
         CHKERR( DSAllocate(self.ds, val) )
@@ -293,6 +369,10 @@ cdef class DS(Object):
         -------
         int
             Leading dimension (maximum allowed dimension for the matrices).
+
+        See Also
+        --------
+        allocate, setDimensions, slepc.DSGetLeadingDimension
         """
         cdef PetscInt val = 0
         CHKERR( DSGetLeadingDimension(self.ds, &val) )
@@ -317,8 +397,15 @@ cdef class DS(Object):
         (such as diagonal, Schur or generalized Schur), or in a
         truncated state.
 
-        This function is normally used to return to the raw state when
-        the condensed structure is destroyed.
+        The state is automatically changed in functions such as `solve()`
+        or `truncate()`. This function is normally used to return to the
+        raw state when the condensed structure is destroyed, or to indicate
+        that `solve()` must start with a problem that already has an
+        intermediate form.
+
+        See Also
+        --------
+        getState, solve, truncate, slepc.DSSetState
         """
         cdef SlepcDSStateType val = state
         CHKERR( DSSetState(self.ds, val) )
@@ -333,6 +420,10 @@ cdef class DS(Object):
         -------
         StateType
             The current state.
+
+        See Also
+        --------
+        setState, slepc.DSGetState
         """
         cdef SlepcDSStateType val = DS_STATE_RAW
         CHKERR( DSGetState(self.ds, &val) )
@@ -348,6 +439,10 @@ cdef class DS(Object):
         ----------
         pmode
             The parallel mode.
+
+        See Also
+        --------
+        getParallel, slepc.DSSetParallel
         """
         cdef SlepcDSParallelType val = pmode
         CHKERR( DSSetParallel(self.ds, val) )
@@ -362,6 +457,10 @@ cdef class DS(Object):
         -------
         ParallelType
             The parallel mode.
+
+        See Also
+        --------
+        setParallel, slepc.DSGetParallel
         """
         cdef SlepcDSParallelType val = DS_PARALLEL_REDUNDANT
         CHKERR( DSGetParallel(self.ds, &val) )
@@ -369,7 +468,7 @@ cdef class DS(Object):
 
     def setDimensions(self, n: int | None = None, l: int | None = None, k: int | None = None) -> None:
         """
-        Set the matrices sizes in the DS object.
+        Set the matrix sizes in the DS object.
 
         Logically collective.
 
@@ -385,6 +484,14 @@ cdef class DS(Object):
         Notes
         -----
         The internal arrays are not reallocated.
+
+        Some `DS` types have additional dimensions, e.g., the number of columns
+        in `DS.Type.SVD`. For these, you should call a specific interface
+        function.
+
+        See Also
+        --------
+        getDimensions, allocate, slepc.DSSetDimensions
         """
         cdef PetscInt ival1 = PETSC_CURRENT
         cdef PetscInt ival2 = PETSC_CURRENT
@@ -410,6 +517,15 @@ cdef class DS(Object):
             Intermediate dimension (e.g., position of arrow).
         t: int
             Truncated length.
+
+        Notes
+        -----
+        The ``t`` value makes sense only if `truncate()` has been called.
+        Otherwise it is equal to ``n``.
+
+        See Also
+        --------
+        setDimensions, truncate, getLeadingDimension, slepc.DSGetDimensions
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -428,6 +544,10 @@ cdef class DS(Object):
         ----------
         bs
             The block size.
+
+        See Also
+        --------
+        getBlockSize, slepc.DSSetBlockSize
         """
         cdef PetscInt val = bs
         CHKERR( DSSetBlockSize(self.ds, val) )
@@ -442,6 +562,10 @@ cdef class DS(Object):
         -------
         int
             The block size.
+
+        See Also
+        --------
+        setBlockSize, slepc.DSGetBlockSize
         """
         cdef PetscInt val = 0
         CHKERR( DSGetBlockSize(self.ds, &val) )
@@ -457,6 +581,10 @@ cdef class DS(Object):
         ----------
         meth
             An index identifying the method.
+
+        See Also
+        --------
+        getMethod, slepc.DSSetMethod
         """
         cdef PetscInt val = meth
         CHKERR( DSSetMethod(self.ds, val) )
@@ -471,6 +599,10 @@ cdef class DS(Object):
         -------
         int
             Identifier of the method.
+
+        See Also
+        --------
+        setMethod, slepc.DSGetMethod
         """
         cdef PetscInt val = 0
         CHKERR( DSGetMethod(self.ds, &val) )
@@ -478,14 +610,14 @@ cdef class DS(Object):
 
     def setCompact(self, comp: bool) -> None:
         """
-        Set the matrices' compact storage flag.
+        Set the compact flag for storage of matrices.
 
         Logically collective.
 
         Parameters
         ----------
         comp
-            True means compact storage.
+            ``True`` means compact storage.
 
         Notes
         -----
@@ -496,6 +628,10 @@ cdef class DS(Object):
         `DS.MatType.T`) or the non-compact one (`DS.MatType.A`).
 
         The default is ``False``.
+
+        See Also
+        --------
+        getCompact, slepc.DSSetCompact
         """
         cdef PetscBool val = asBool(comp)
         CHKERR( DSSetCompact(self.ds, val) )
@@ -510,6 +646,10 @@ cdef class DS(Object):
         -------
         bool
             The flag.
+
+        See Also
+        --------
+        setCompact, slepc.DSGetCompact
         """
         cdef PetscBool val = PETSC_FALSE
         CHKERR( DSGetCompact(self.ds, &val) )
@@ -524,17 +664,21 @@ cdef class DS(Object):
         Parameters
         ----------
         ext
-            True if the matrix has extra row.
+            ``True`` if the matrix has extra row.
 
         Notes
         -----
         In Krylov methods it is useful that the matrix representing the direct
-        solver has one extra row, i.e., has dimension :math:`(n+1) n`. If
-        this flag is activated, all transformations applied to the right of the
-        matrix also affect this additional row. In that case, :math:`(n+1)`
-        must be less or equal than the leading dimension.
+        solver has one extra row, i.e., has :math:`(n+1)` rows and :math:`(n+1)`
+        columns. If this flag is activated, all transformations applied to the
+        right of the matrix also affect this additional row. In that case,
+        :math:`(n+1)` must be less or equal than the leading dimension.
 
         The default is ``False``.
+
+        See Also
+        --------
+        getExtraRow, solve, allocate, slepc.DSSetExtraRow
         """
         cdef PetscBool val = asBool(ext)
         CHKERR( DSSetExtraRow(self.ds, val) )
@@ -549,6 +693,10 @@ cdef class DS(Object):
         -------
         bool
             The flag.
+
+        See Also
+        --------
+        setExtraRow, slepc.DSGetExtraRow
         """
         cdef PetscBool val = PETSC_FALSE
         CHKERR( DSGetExtraRow(self.ds, &val) )
@@ -563,18 +711,22 @@ cdef class DS(Object):
         Parameters
         ----------
         ref
-            True if refined vectors must be used.
+            ``True`` if refined vectors must be used.
 
         Notes
         -----
         Normally the vectors returned in `DS.MatType.X` are eigenvectors of
         the projected matrix. With this flag activated, `vectors()` will return
         the right singular vector of the smallest singular value of matrix
-        :math:`At - theta I`, where :math:`At` is the extended
-        :math:`(n+1) times n` matrix and :math:`theta` is the Ritz value.
+        :math:`\hat A - \eta I`, where :math:`\hat A` is the extended
+        matrix (with extra row) and :math:`\eta` is the Ritz value.
         This is used in the refined Ritz approximation.
 
         The default is ``False``.
+
+        See Also
+        --------
+        getRefined, vectors, setExtraRow, slepc.DSSetRefined
         """
         cdef PetscBool val = asBool(ref)
         CHKERR( DSSetRefined(self.ds, val) )
@@ -589,6 +741,10 @@ cdef class DS(Object):
         -------
         bool
             The flag.
+
+        See Also
+        --------
+        setRefined, slepc.DSGetRefined
         """
         cdef PetscBool val = PETSC_FALSE
         CHKERR( DSGetRefined(self.ds, &val) )
@@ -606,6 +762,10 @@ cdef class DS(Object):
             The new size.
         trim
             A flag to indicate if the factorization must be trimmed.
+
+        See Also
+        --------
+        setDimensions, setExtraRow, slepc.DSTruncate
         """
         cdef PetscInt val = asInt(n)
         cdef PetscBool flg = asBool(trim)
@@ -619,12 +779,16 @@ cdef class DS(Object):
 
         Perform all necessary operations so that the extra row gets up-to-date
         after a call to `DS.solve()`.
+
+        See Also
+        --------
+        slepc.DSUpdateExtraRow
         """
         CHKERR( DSUpdateExtraRow(self.ds) )
 
     def getMat(self, matname: MatType) -> Mat:
         """
-        Get the requested matrix as a sequential dense Mat object.
+        Get the requested matrix as a sequential dense ``Mat`` object.
 
         Not collective.
 
@@ -637,6 +801,19 @@ cdef class DS(Object):
         -------
         petsc4py.PETSc.Mat
             The matrix.
+
+        Notes
+        -----
+        The returned matrix has sizes equal to the current `DS` dimensions
+        (see `setDimensions()`), and contains the values that would be
+        obtained with `getArray()`. If the `DS` was truncated, then the number
+        of rows is equal to the dimension prior to truncation, see `truncate()`.
+
+        When no longer needed the user must call `restoreMat()`.
+
+        See Also
+        --------
+        restoreMat, setDimensions, getArray, truncate, slepc.DSGetMat
         """
         cdef SlepcDSMatType mname = matname
         cdef Mat mat = Mat()
@@ -656,6 +833,10 @@ cdef class DS(Object):
             The selected matrix.
         mat
             The matrix previously obtained with `getMat()`.
+
+        See Also
+        --------
+        getMat, slepc.DSRestoreMat
         """
         cdef SlepcDSMatType mname = matname
         CHKERR( PetscObjectDereference(<PetscObject>mat.mat) )
@@ -669,8 +850,13 @@ cdef class DS(Object):
 
         Parameters
         ----------
-        readonly
-            Enable to obtain a read only array.
+        matname
+            The selected matrix.
+
+        Returns
+        -------
+        ArrayScalar
+            The array.
 
         See Also
         --------
@@ -688,9 +874,9 @@ cdef class DS(Object):
         cdef npy_intp dims[2], strides[2]
         dims[0] = <npy_intp>m; strides[0] = <npy_intp>sizeof(PetscScalar)
         dims[1] = <npy_intp>n; strides[1] = <npy_intp>(lda*sizeof(PetscScalar))
-        cdef ndarray array = <object>PyArray_New(<PyTypeObject*>ndarray, 2,
-                                                 dims, typenum, strides,
-                                                 data, itemsize, flags, NULL)
+        cdef ndarray array = PyArray_New(<PyTypeObject*>ndarray, 2,
+                                         dims, typenum, strides,
+                                         data, itemsize, flags, NULL)
         Py_INCREF(self)
         PyArray_SetBaseObject(array, self)
         CHKERR(DSRestoreArray(self.ds, matname, &data))
@@ -705,7 +891,11 @@ cdef class DS(Object):
         Parameters
         ----------
         matname
-            The requested matrix.
+            The matrix to be changed.
+
+        See Also
+        --------
+        slepc.DSSetIdentity
         """
         cdef SlepcDSMatType mname = matname
         CHKERR( DSSetIdentity(self.ds, mname) )
@@ -722,6 +912,10 @@ cdef class DS(Object):
         -------
         float
             Condition number.
+
+        See Also
+        --------
+        slepc.DSCond
         """
         cdef PetscReal rval = 0
         CHKERR( DSCond(self.ds, &rval) )
@@ -737,6 +931,10 @@ cdef class DS(Object):
         -------
         ArrayScalar
             Eigenvalues or singular values.
+
+        See Also
+        --------
+        slepc.DSSolve
         """
         n = self.getDimensions()[0]
         cdef PetscScalar *eigr = NULL
@@ -759,8 +957,12 @@ cdef class DS(Object):
 
         Parameters
         ----------
-        matname: `DS.MatType` enumerate
+        matname
            The matrix, used to indicate which vectors are required.
+
+        See Also
+        --------
+        slepc.DSVectors
         """
         cdef SlepcDSMatType mname = matname
         CHKERR( DSVectors(self.ds, mname, NULL, NULL) )
@@ -777,6 +979,15 @@ cdef class DS(Object):
         ----------
         m
             The number of columns.
+
+        Notes
+        -----
+        This call is complementary to `setDimensions()`, to provide a dimension
+        that is specific to this `DS.Type`.
+
+        See Also
+        --------
+        setDimensions, getSVDDimensions, slepc.DSSVDSetDimensions
         """
         cdef PetscInt val = asInt(m)
         CHKERR( DSSVDSetDimensions(self.ds, val) )
@@ -791,6 +1002,10 @@ cdef class DS(Object):
         -------
         int
             The number of columns.
+
+        See Also
+        --------
+        setSVDDimensions, slepc.DSSVDGetDimensions
         """
         cdef PetscInt val = 0
         CHKERR( DSSVDGetDimensions(self.ds, &val) )
@@ -806,6 +1021,15 @@ cdef class DS(Object):
         ----------
         m
             The number of columns.
+
+        Notes
+        -----
+        This call is complementary to `setDimensions()`, to provide a dimension
+        that is specific to this `DS.Type`.
+
+        See Also
+        --------
+        setDimensions, getHSVDDimensions, slepc.DSHSVDSetDimensions
         """
         cdef PetscInt val = asInt(m)
         CHKERR( DSHSVDSetDimensions(self.ds, val) )
@@ -820,6 +1044,10 @@ cdef class DS(Object):
         -------
         int
             The number of columns.
+
+        See Also
+        --------
+        setHSVDDimensions, slepc.DSHSVDGetDimensions
         """
         cdef PetscInt val = 0
         CHKERR( DSHSVDGetDimensions(self.ds, &val) )
@@ -837,6 +1065,15 @@ cdef class DS(Object):
             The number of columns.
         p
             The number of rows for the second matrix.
+
+        Notes
+        -----
+        This call is complementary to `setDimensions()`, to provide dimensions
+        that are specific to this `DS.Type`.
+
+        See Also
+        --------
+        setDimensions, getGSVDDimensions, slepc.DSGSVDSetDimensions
         """
         cdef PetscInt val1 = asInt(m)
         cdef PetscInt val2 = asInt(p)
@@ -854,6 +1091,10 @@ cdef class DS(Object):
             The number of columns.
         p: int
             The number of rows for the second matrix.
+
+        See Also
+        --------
+        setGSVDDimensions, slepc.DSGSVDGetDimensions
         """
         cdef PetscInt val1 = 0
         cdef PetscInt val2 = 0
@@ -870,6 +1111,10 @@ cdef class DS(Object):
         ----------
         deg
             The polynomial degree.
+
+        See Also
+        --------
+        getPEPDegree, slepc.DSPEPSetDegree
         """
         cdef PetscInt val = asInt(deg)
         CHKERR( DSPEPSetDegree(self.ds, val) )
@@ -884,6 +1129,10 @@ cdef class DS(Object):
         -------
         int
             The polynomial degree.
+
+        See Also
+        --------
+        setPEPDegree, slepc.DSPEPGetDegree
         """
         cdef PetscInt val = 0
         CHKERR( DSPEPGetDegree(self.ds, &val) )
@@ -899,6 +1148,25 @@ cdef class DS(Object):
         ----------
         pbc
             Coefficients.
+
+        Notes
+        -----
+        This function is required only in the case of a polynomial specified in
+        a non-monomial basis, to provide the coefficients that will be used
+        during the linearization, multiplying the identity blocks on the three
+        main diagonal blocks. Depending on the polynomial basis (Chebyshev,
+        Legendre, ...) the coefficients must be different.
+
+        There must be a total of :math:`3(d+1)` coefficients, where :math:`d` is
+        the degree of the polynomial. The coefficients are arranged in three
+        groups, :math:`a_i, b_i, c_i`, according to the definition
+        of the three-term recurrence. In the case of the monomial basis,
+        :math:`a_i=1` and :math:`b_i=c_i=0`, in which case it is
+        not necessary to invoke this function.
+
+        See Also
+        --------
+        getPEPCoefficients, slepc.DSPEPSetCoefficients
         """
         cdef PetscInt na = 0
         cdef PetscReal *a = NULL
@@ -915,6 +1183,10 @@ cdef class DS(Object):
         -------
         ArrayReal
             Coefficients.
+
+        See Also
+        --------
+        setPEPCoefficients, slepc.DSPEPGetCoefficients
         """
         cdef PetscInt np = 0
         cdef PetscReal *coeff = NULL

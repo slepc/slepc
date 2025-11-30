@@ -172,7 +172,7 @@ PetscErrorCode STSetFromOptions(ST st)
 
    Level: advanced
 
-.seealso: [](ch:st), `STSetMatrices()`, `MatAXPY()`
+.seealso: [](ch:st), `STGetMatStructure()`, `STSetMatrices()`, `MatAXPY()`
 @*/
 PetscErrorCode STSetMatStructure(ST st,MatStructure str)
 {
@@ -243,7 +243,7 @@ PetscErrorCode STGetMatStructure(ST st,MatStructure *str)
 
    With `ST_MATMODE_SHELL`, the solver works with an implicit shell
    matrix that represents the shifted matrix. This mode is the most efficient
-   in creating the shifted matrix but it places serious limitations to the
+   in creating the transformed matrix but it places serious limitations to the
    linear solves performed in each iteration of the eigensolver (typically,
    only iterative solvers with Jacobi preconditioning can be used).
 
