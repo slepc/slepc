@@ -754,7 +754,7 @@ cdef class SVD(Object):
         """
         CHKERR( SVDSetDS(self.svd, ds.ds) )
 
-    def getOperators(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
+    def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
         Get the matrices associated with the singular value problem.
 
@@ -794,7 +794,7 @@ cdef class SVD(Object):
         cdef PetscMat Bmat = B.mat if B is not None else <PetscMat>NULL
         CHKERR( SVDSetOperators(self.svd, A.mat, Bmat) )
 
-    def getSignature(self, Vec omega: petsc4py.PETSc.Vec | None = None) -> petsc4py.PETSc.Vec:
+    def getSignature(self, Vec omega = None) -> Vec:
         """
         Get the signature matrix defining a hyperbolic singular value problem.
 
@@ -1507,7 +1507,7 @@ cdef class SVD(Object):
         CHKERR( SVDTRLanczosGetLocking(self.svd, &tval) )
         return toBool(tval)
 
-    def setTRLanczosKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
+    def setTRLanczosKSP(self, KSP ksp) -> None:
         """
         Set a linear solver object associated to the SVD solver.
 

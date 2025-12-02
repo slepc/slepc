@@ -622,7 +622,7 @@ cdef class DS(Object):
         """
         CHKERR( DSUpdateExtraRow(self.ds) )
 
-    def getMat(self, matname: MatType) -> petsc4py.PETSc.Mat:
+    def getMat(self, matname: MatType) -> Mat:
         """
         Get the requested matrix as a sequential dense Mat object.
 

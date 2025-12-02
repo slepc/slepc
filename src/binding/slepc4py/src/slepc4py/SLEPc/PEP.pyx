@@ -1048,7 +1048,7 @@ cdef class PEP(Object):
         """
         CHKERR( PEPSetDS(self.pep, ds.ds) )
 
-    def getOperators(self) -> list[petsc4py.PETSc.Mat]:
+    def getOperators(self) -> list[Mat]:
         """
         Get the matrices associated with the eigenvalue problem.
 

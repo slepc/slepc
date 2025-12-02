@@ -228,7 +228,7 @@ cdef class BV(Object):
         CHKERR( SlepcCLEAR(self.obj) ); self.bv = newbv
         return self
 
-    def createMat(self) -> petsc4py.PETSc.Mat:
+    def createMat(self) -> Mat:
         """
         Create a new Mat object of dense type and copy the contents of the BV.
 
@@ -628,7 +628,7 @@ cdef class BV(Object):
 
     #
 
-    def getMatrix(self) -> tuple[petsc4py.PETSc.Mat, bool] | tuple[None, bool]:
+    def getMatrix(self) -> tuple[Mat, bool] | tuple[None, bool]:
         """
         Get the matrix representation of the inner product.
 
@@ -872,7 +872,7 @@ cdef class BV(Object):
         CHKERR( BVGetNumConstraints(self.bv, &val) )
         return toInt(val)
 
-    def createVec(self) -> petsc4py.PETSc.Vec:
+    def createVec(self) -> Vec:
         """
         Create a Vec with the type and dimensions of the columns of the BV.
 
@@ -1037,7 +1037,7 @@ cdef class BV(Object):
         m = array_s(k - l, mval)
         return m
 
-    def getColumn(self, j: int) -> petsc4py.PETSc.Vec:
+    def getColumn(self, j: int) -> Vec:
         """
         Get a Vec object with the entries of the column of the BV object.
 
@@ -1084,7 +1084,7 @@ cdef class BV(Object):
         CHKERR( PetscObjectDereference(<PetscObject>v.vec) )
         CHKERR( BVRestoreColumn(self.bv, ival, &v.vec) )
 
-    def getMat(self) -> petsc4py.PETSc.Mat:
+    def getMat(self) -> Mat:
         """
         Get a Mat object of dense type that shares the memory of the BV object.
 
@@ -1126,7 +1126,7 @@ cdef class BV(Object):
         CHKERR( PetscObjectDereference(<PetscObject>A.mat) )
         CHKERR( BVRestoreMat(self.bv, &A.mat) )
 
-    def dot(self, BV Y) -> petsc4py.PETSc.Mat:
+    def dot(self, BV Y) -> Mat:
         """
         Compute the 'block-dot' product of two basis vectors objects.
 
@@ -1171,7 +1171,7 @@ cdef class BV(Object):
         CHKERR( BVDot(X.bv, Y.bv, M.mat) )
         return M
 
-    def matProject(self, Mat A: petsc4py.PETSc.Mat | None, BV Y) -> petsc4py.PETSc.Mat:
+    def matProject(self, Mat A: Mat | None, BV Y) -> Mat:
         """
         Compute the projection of a matrix onto a subspace.
 

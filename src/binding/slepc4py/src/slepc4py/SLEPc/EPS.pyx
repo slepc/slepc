@@ -1204,7 +1204,7 @@ cdef class EPS(Object):
         """
         CHKERR( EPSSetRG(self.eps, rg.rg) )
 
-    def getOperators(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
+    def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
         Get the matrices associated with the eigenvalue problem.
 
@@ -1663,7 +1663,7 @@ cdef class EPS(Object):
         else:
             return toComplex(sval1, sval2)
 
-    def getInvariantSubspace(self) -> list[petsc4py.PETSc.Vec]:
+    def getInvariantSubspace(self) -> list[Vec]:
         """
         Get an orthonormal basis of the computed invariant subspace.
 
@@ -1762,7 +1762,7 @@ cdef class EPS(Object):
         CHKERR( EPSComputeError(self.eps, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype: ErrorType | None = None, Viewer viewer or None: petsc4py.PETSc.Viewer | None = None) -> None:
+    def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
         """
         Display the errors associated with the computed solution.
 
@@ -2189,7 +2189,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetDimensions(self.eps, &ival1, &ival2, &ival3) )
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
-    def getKrylovSchurSubcommInfo(self) -> tuple[int, int, petsc4py.PETSc.Vec]:
+    def getKrylovSchurSubcommInfo(self) -> tuple[int, int, Vec]:
         """
         Get information related to the case of doing spectrum slicing.
 
@@ -2252,7 +2252,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetSubcommPairs(self.eps, i, &sval, vec) )
         return toScalar(sval)
 
-    def getKrylovSchurSubcommMats(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
+    def getKrylovSchurSubcommMats(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
         Get the eigenproblem matrices stored in the subcommunicator.
 

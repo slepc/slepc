@@ -1534,7 +1534,7 @@ cdef class NEP(Object):
         CHKERR( NEPRIIGetDeflationThreshold(self.nep, &rval) )
         return toReal(rval)
 
-    def setRIIKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
+    def setRIIKSP(self, KSP ksp) -> None:
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
@@ -1654,7 +1654,7 @@ cdef class NEP(Object):
         CHKERR( PetscINCREF(eps.obj) )
         return eps
 
-    def setSLPKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
+    def setSLPKSP(self, KSP ksp) -> None:
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
@@ -1685,7 +1685,7 @@ cdef class NEP(Object):
 
     #
 
-    def setNArnoldiKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
+    def setNArnoldiKSP(self, KSP ksp) -> None:
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 

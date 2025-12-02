@@ -317,7 +317,7 @@ cdef class MFN(Object):
         """
         CHKERR( MFNSetBV(self.mfn, bv.bv) )
 
-    def getOperator(self) -> petsc4py.PETSc.Mat:
+    def getOperator(self) -> Mat:
         """
         Get the matrix associated with the MFN object.
 

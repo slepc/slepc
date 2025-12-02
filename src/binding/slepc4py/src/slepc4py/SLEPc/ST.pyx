@@ -390,7 +390,7 @@ cdef class ST(Object):
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
         CHKERR( STSetMatrices(self.st, <PetscInt>n, mats) )
 
-    def getMatrices(self) -> list[petsc4py.PETSc.Mat]:
+    def getMatrices(self) -> list[Mat]:
         """
         Get the matrices associated with the eigenvalue problem.
 
@@ -457,7 +457,7 @@ cdef class ST(Object):
         CHKERR( STGetMatStructure(self.st, &val) )
         return val
 
-    def setKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
+    def setKSP(self, KSP ksp) -> None:
         """
         Set the ``KSP`` object associated with the spectral transformation.
 
@@ -506,7 +506,7 @@ cdef class ST(Object):
         cdef PetscMat Pmat = P.mat if P is not None else <PetscMat>NULL
         CHKERR( STSetPreconditionerMat(self.st, Pmat) )
 
-    def getPreconditionerMat(self) -> petsc4py.PETSc.Mat:
+    def getPreconditionerMat(self) -> Mat:
         """
         Get the matrix previously set by setPreconditionerMat().
 
@@ -522,7 +522,8 @@ cdef class ST(Object):
         CHKERR( PetscINCREF(P.obj) )
         return P
 
-    def setSplitPreconditioner(self, operators: list[petsc4py.PETSc.Mat], structure: petsc4py.PETSc.Mat.Structure | None = None) -> None:
+    def setSplitPreconditioner(self, operators: list[petsc4py.PETSc.Mat], structure: petsc4py.PETSc.Mat.
+Structure | None = None) -> None:
         """
         Set the matrices to be used to build the preconditioner.
 
@@ -651,7 +652,7 @@ cdef class ST(Object):
         """
         CHKERR( STApplyMat(self.st, x.mat, y.mat) )
 
-    def getOperator(self) -> petsc4py.PETSc.Mat:
+    def getOperator(self) -> Mat:
         """
         Get a shell matrix that represents the operator of the spectral transformation.
 
