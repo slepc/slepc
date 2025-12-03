@@ -1271,7 +1271,7 @@ PetscErrorCode BVRestoreArray(BV bv,PetscScalar **a)
 
    Level: advanced
 
-.seealso: [](sec:bv), `BVRestoreArray()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArray()`, `BVType`
+.seealso: [](sec:bv), `BVRestoreArrayRead()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArray()`, `BVType`
 @*/
 PetscErrorCode BVGetArrayRead(BV bv,const PetscScalar **a)
 {

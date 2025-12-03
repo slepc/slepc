@@ -411,6 +411,49 @@ cdef class BV(Object):
         CHKERR( BVGetLeadingDimension(self.bv, &val) )
         return toInt(val)
 
+    def getArray(self, readonly: bool = False) -> ArrayScalar:
+        """
+        Return the array where the data is stored.
+
+        Not collective.
+
+        Parameters
+        ----------
+        readonly
+            Enable to obtain a read only array.
+
+        See Also
+        --------
+        slepc.BVGetArray, slepc.BVGetArrayRead
+
+        """
+        cdef PetscInt m=0, N=0, lda=0, k=0, l=0
+        cdef PetscScalar *data = NULL
+        CHKERR(BVGetSizes(self.bv, NULL, &N, NULL))
+        CHKERR(BVGetLeadingDimension(self.bv, &lda))
+        CHKERR(BVGetActiveColumns(self.bv, &l, &k))
+        m = k-l
+        if readonly:
+            CHKERR(BVGetArrayRead(self.bv, <const PetscScalar**>&data))
+        else:
+            CHKERR(BVGetArray(self.bv, &data))
+        cdef int typenum = NPY_PETSC_SCALAR
+        cdef int itemsize = <int>sizeof(PetscScalar)
+        cdef int flags = NPY_ARRAY_FARRAY_RO if readonly else NPY_ARRAY_FARRAY
+        cdef npy_intp dims[2], strides[2]
+        dims[0] = <npy_intp>N; strides[0] = <npy_intp>sizeof(PetscScalar)
+        dims[1] = <npy_intp>m; strides[1] = <npy_intp>(lda*sizeof(PetscScalar))
+        cdef ndarray array = <object>PyArray_New(<PyTypeObject*>ndarray, 2,
+                                                 dims, typenum, strides,
+                                                 data, itemsize, flags, NULL)
+        Py_INCREF(self)
+        PyArray_SetBaseObject(array, self)
+        if readonly:
+            CHKERR(BVRestoreArrayRead(self.bv, <const PetscScalar**>&data))
+        else:
+            CHKERR(BVRestoreArray(self.bv, &data))
+        return array
+
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
         """
         Set the prefix used for searching for all BV options in the database.
