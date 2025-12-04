@@ -661,6 +661,41 @@ cdef class DS(Object):
         CHKERR( PetscObjectDereference(<PetscObject>mat.mat) )
         CHKERR( DSRestoreMat(self.ds, mname, &mat.mat) )
 
+    def getArray(self, matname: MatType) -> ArrayScalar:
+        """
+        Return the array where the data is stored.
+
+        Not collective.
+
+        Parameters
+        ----------
+        readonly
+            Enable to obtain a read only array.
+
+        See Also
+        --------
+        slepc.DSGetArray
+
+        """
+        cdef PetscInt m=0, n=0, lda=0, k=0, l=0
+        cdef PetscScalar *data = NULL
+        CHKERR(DSMatGetSize(self.ds, matname, &m, &n))
+        CHKERR(DSGetLeadingDimension(self.ds, &lda))
+        CHKERR(DSGetArray(self.ds, matname, &data))
+        cdef int typenum = NPY_PETSC_SCALAR
+        cdef int itemsize = <int>sizeof(PetscScalar)
+        cdef int flags = NPY_ARRAY_FARRAY
+        cdef npy_intp dims[2], strides[2]
+        dims[0] = <npy_intp>m; strides[0] = <npy_intp>sizeof(PetscScalar)
+        dims[1] = <npy_intp>n; strides[1] = <npy_intp>(lda*sizeof(PetscScalar))
+        cdef ndarray array = <object>PyArray_New(<PyTypeObject*>ndarray, 2,
+                                                 dims, typenum, strides,
+                                                 data, itemsize, flags, NULL)
+        Py_INCREF(self)
+        PyArray_SetBaseObject(array, self)
+        CHKERR(DSRestoreArray(self.ds, matname, &data))
+        return array
+
     def setIdentity(self, matname: MatType) -> None:
         """
         Set the identity on the active part of a matrix.
