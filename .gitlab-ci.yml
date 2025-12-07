@@ -538,7 +538,7 @@ pip-install:
   extends: .test
   stage: stage-3
   tags:
-    - pip, name:satet
+    - pip, name:pakhet
   before_script:
     - date
     - hostname
@@ -569,24 +569,26 @@ pip-install:
       cd ..
       set -eu pipefail
       rm -rf /tmp/venv
-      python -m venv /tmp/venv
+      ${PYTHON} -m venv /tmp/venv
       source /tmp/venv/bin/activate
       set -x
-      python -m pip install --upgrade pip
+      ${PYTHON} -m pip install --upgrade pip
       wheelhouse=$PWD/wheelhouse
       rm -rf $wheelhouse
       mkdir -p $wheelhouse
       export PIP_WHEEL_DIR=$wheelhouse
       export PIP_FIND_LINKS=$wheelhouse
-      python -m pip wheel $petsc
-      python -m pip wheel $petsc/src/binding/petsc4py
-      python -m pip wheel $slepc
-      python -m pip wheel $slepc/src/binding/slepc4py
-      python -m pip install --pre slepc4py
-      python -m pip list
-      python -m slepc --prefix
-      python -m slepc4py
+      ${PYTHON} -m pip wheel $petsc
+      ${PYTHON} -m pip wheel $petsc/src/binding/petsc4py
+      ${PYTHON} -m pip wheel $slepc
+      ${PYTHON} -m pip wheel $slepc/src/binding/slepc4py
+      ${PYTHON} -m pip install --pre slepc4py
+      ${PYTHON} -m pip list
+      ${PYTHON} -m slepc --prefix
+      ${PYTHON} -m slepc4py
       make -C $slepc/src/binding/slepc4py/demo
+  variables:
+    PYTHON: python3
   after_script:
     - date
 
@@ -816,11 +818,11 @@ gnu-c-debug:
     - .stage-3
     - .coverage_test
   tags:
-    - name:hapy
+    - name:satet
   variables:
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-primme --download-blopex --download-hpddm --download-evsl
-    LOAD_MODULES: mpi
 
 gnu-c-complex-debug:
   extends:
@@ -871,7 +873,7 @@ intel-c-mkl-libs:
     - .stage-3
     - .linux_test_nofflags
   tags:
-    - compiler:intel, name:sejmet
+    - compiler:intel, name:pakhet
   variables:
     LOAD_MODULES: compiler mpi mkl
     PETSC_CONFIG_OPTS: --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso --with-scalapack --download-mumps --download-metis --download-parmetis --download-suitesparse
@@ -918,7 +920,7 @@ clang-c-single:
     - .stage-3
     - .linux_test
   tags:
-    - compiler:clang, name:maat
+    - compiler:clang, name:pakhet
   variables:
     PETSC_CONFIG_OPTS: --with-cc=/opt/mpich/clang/bin/mpicc --with-cxx=/opt/mpich/clang/bin/mpicxx --with-fc=0 --with-mpiexec=/opt/mpich/clang/bin/mpiexec --with-precision=single
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme
