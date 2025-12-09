@@ -1250,6 +1250,49 @@ cdef class BV(Object):
         CHKERR( BVMatMult(self.bv, A.mat, Y.bv) )
         return Y
 
+    def matMultTranspose(self, Mat A, BV Y=None) -> BV:
+        """
+        Pre-multiplication with the transpose of a matrix.
+
+        Neighbor-wise collective.
+
+        :math:`Y = A^T V`.
+
+        Parameters
+        ----------
+        A
+            The matrix.
+
+        Returns
+        -------
+        BV
+            The result.
+
+        Notes
+        -----
+        Only active columns (excluding the leading ones) are processed.
+        """
+        cdef MPI_Comm comm = PetscObjectComm(<PetscObject>self.bv)
+        cdef SlepcBVType bv_type = NULL
+        cdef PetscInt n=0, N=0, m=0
+        cdef SlepcBVOrthogType val1 = BV_ORTHOG_CGS
+        cdef SlepcBVOrthogRefineType val2 = BV_ORTHOG_REFINE_IFNEEDED
+        cdef SlepcBVOrthogBlockType val3 = BV_ORTHOG_BLOCK_GS
+        cdef PetscReal rval = PETSC_DEFAULT
+        if Y is None: Y = BV()
+        if Y.bv == NULL:
+            CHKERR( BVGetType(self.bv, &bv_type) )
+            CHKERR( MatGetLocalSize(A.mat, NULL, &n) )
+            CHKERR( MatGetSize(A.mat, NULL, &N) )
+            CHKERR( BVGetSizes(self.bv, NULL, NULL, &m) )
+            CHKERR( BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3) )
+            CHKERR( BVCreate(comm, &Y.bv) )
+            CHKERR( BVSetType(Y.bv, bv_type) )
+            CHKERR( BVSetSizes(Y.bv, n, N, m) )
+            CHKERR( BVSetOrthogonalization(Y.bv, val1, val2, rval, val3) )
+        CHKERR( BVMatMultTranspose(self.bv, A.mat, Y.bv) )
+        return Y
+
     def matMultHermitianTranspose(self, Mat A, BV Y=None) -> BV:
         """
         Pre-multiplication with the conjugate transpose of a matrix.

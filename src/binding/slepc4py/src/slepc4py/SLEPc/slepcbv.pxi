@@ -98,6 +98,7 @@ cdef extern from * nogil:
 
     PetscErrorCode BVMatProject(SlepcBV,PetscMat,SlepcBV,PetscMat)
     PetscErrorCode BVMatMult(SlepcBV,PetscMat,SlepcBV)
+    PetscErrorCode BVMatMultTranspose(SlepcBV,PetscMat,SlepcBV)
     PetscErrorCode BVMatMultHermitianTranspose(SlepcBV,PetscMat,SlepcBV)
     PetscErrorCode BVMatMultColumn(SlepcBV,PetscMat,PetscInt)
     PetscErrorCode BVMatMultTransposeColumn(SlepcBV,PetscMat,PetscInt)
