@@ -92,7 +92,7 @@ class Elpa(package.Package):
     incdir,libdir = slepc.CreatePrefixDirs(prefixdir)
 
     # Build package
-    confopt = ['--prefix='+prefixdir, '--libdir='+os.path.join(prefixdir,'lib'), 'CC="'+petsc.cc+'"', 'CFLAGS="'+petsc.getCFlags()+'"', 'F77="'+petsc.fc+'"', 'FFLAGS="'+petsc.getFFlags()+'"', 'FC="'+petsc.fc+'"', 'FCFLAGS="'+petsc.getFFlags()+'"', 'CXX="'+petsc.cxx+'"', 'CXXFLAGS="'+petsc.getCXXFlags()+'"', 'CPP="'+petsc.cpp+'"', 'SCALAPACK_LDFLAGS="'+petsc.scalapack_lib+'"', '--disable-sse', '--disable-sse-assembly', '--disable-avx', '--disable-avx2', '--disable-avx512', '--disable-c-tests', '--disable-cpp-tests']
+    confopt = ['--prefix='+prefixdir, '--libdir='+os.path.join(prefixdir,'lib'), 'CC="'+petsc.cc+'"', 'CFLAGS="'+petsc.getCFlags()+'"', 'F77="'+petsc.fc+'"', 'FFLAGS="'+petsc.getFFlags()+'"', 'FC="'+petsc.fc+'"', 'FCFLAGS="'+petsc.getFFlags()+'"', 'CXX="'+petsc.cxx+'"', 'CXXFLAGS="'+petsc.getCXXFlags()+'"', 'CPP="'+petsc.cpp+'"', 'SCALAPACK_LDFLAGS="'+petsc.scalapack_lib+'"', '--disable-sse', '--disable-sse-assembly', '--disable-avx', '--disable-avx2', '--disable-avx512', '--disable-c-tests', '--disable-cpp-tests', '--disable-fortran-tests', '--disable-Fortran-tests']
     if petsc.fc_version.startswith('nvf'):
       confopt.append('LIBS="'+petsc.blaslapack_lib+' -lnvf"')
     else:
