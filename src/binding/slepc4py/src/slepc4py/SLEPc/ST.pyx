@@ -573,7 +573,7 @@ cdef class ST(Object):
 
         Parameters
         ----------
-        `petsc4py.PETSc.KSP`
+        ksp
             The linear solver object.
 
         See Also

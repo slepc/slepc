@@ -439,7 +439,7 @@ cdef class BV(Object):
 
         Notes
         -----
-        Either ``n`` or ``N`` (but not both) can be ``PETSc.DETERMINE``
+        Either ``n`` or ``N`` (but not both) can be `DETERMINE`
         or ``None`` to have it automatically set.
 
         See Also
@@ -2274,7 +2274,7 @@ cdef class BV(Object):
         Notes
         -----
         The output satisfies :math:`V_0 = V R` (where :math:`V_0` represent the
-        input :math:`V`) and :math:`V^* V = I`(or $V^*B V = I$ if an inner
+        input :math:`V`) and :math:`V^* V = I` (or :math:`V^*BV=I` if an inner
         product matrix :math:`B` has been specified with `setMatrix()`).
 
         See Also

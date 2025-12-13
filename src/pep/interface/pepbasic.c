@@ -716,7 +716,7 @@ PetscErrorCode PEPGetTarget(PEP pep,PetscScalar* target)
 
    Notes:
    Spectrum slicing is a technique employed for computing all eigenvalues of
-   symmetric eigenproblems in a given interval, see section [](#sec:qslice).
+   symmetric quadratic eigenproblems in a given interval, see section [](#sec:qslice).
    This function provides the interval to be considered. It must be used in
    combination with `PEP_ALL`, see `PEPSetWhichEigenpairs()`. Note that in
    polynomial eigenproblems spectrum slicing is implemented in `PEPSTOAR` only.

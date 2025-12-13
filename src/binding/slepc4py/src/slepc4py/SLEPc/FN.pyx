@@ -28,10 +28,10 @@ class FNCombineType(object):
     """
     FN type of combination of child functions.
 
-    - `ADD`:       Addition         f(x) = f1(x)+f2(x)
-    - `MULTIPLY`:  Multiplication   f(x) = f1(x)*f2(x)
-    - `DIVIDE`:    Division         f(x) = f1(x)/f2(x)
-    - `COMPOSE`:   Composition      f(x) = f2(f1(x))
+    - `ADD`:       Addition       :math:`f(x) = f_1(x)+f_2(x)`
+    - `MULTIPLY`:  Multiplication :math:`f(x) = f_1(x)f_2(x)`
+    - `DIVIDE`:    Division       :math:`f(x) = f_1(x)/f_2(x)`
+    - `COMPOSE`:   Composition    :math:`f(x) = f_2(f_1(x))`
 
     See Also
     --------
