@@ -260,7 +260,8 @@ if hasattr(petsc,'fc') and petsc.fortran:
   if os.path.isdir(ftndir): shutil.rmtree(ftndir)
   # run generatefortranbindings.py
   try:
-    from utils import generatefortranbindings
+    sys.path.insert(0, os.path.join(petsc.dir,'lib','petsc','bin'))
+    import generatefortranbindings
     generatefortranbindings.main(petsc.dir,slepc.dir,petsc.archname)
   except RuntimeError as e:
     log.Exit('Unable to generate Fortran bindings:\n'+str(e))

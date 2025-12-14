@@ -100,7 +100,7 @@ chk_slepcdir:
 
 .PHONY: fortranbindings
 fortranbindings: deletefortranbindings
-	@${PYTHON} config/utils/generatefortranbindings.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch=${PETSC_ARCH}
+	@${PYTHON} ${PETSC_DIR}/lib/petsc/bin/generatefortranbindings.py --slepc-dir=${SLEPC_DIR} --petsc-dir=${PETSC_DIR} --petsc-arch=${PETSC_ARCH}
 
 .PHONY: deletefortranbindings
 deletefortranbindings:
