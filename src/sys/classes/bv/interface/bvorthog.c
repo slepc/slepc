@@ -47,7 +47,7 @@ static inline PetscErrorCode BVDotColumnInc(BV X,PetscInt j,PetscScalar *q)
 }
 
 /*
-   BVOrthogonalizeMGS1 - Compute one step of Modified Gram-Schmidt
+   BVOrthogonalizeMGS1 - Compute one step of modified Gram-Schmidt
 */
 static PetscErrorCode BVOrthogonalizeMGS1(BV bv,PetscInt j,Vec v,PetscBool *which,PetscScalar *h,PetscScalar *c,PetscReal *onrm,PetscReal *nrm)
 {

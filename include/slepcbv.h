@@ -70,7 +70,7 @@ typedef enum { BV_ORTHOG_CGS,
 SLEPC_EXTERN const char *BVOrthogTypes[];
 
 /*MC
-   BV_ORTHOG_CGS - Use Classical Gram-Schmidt for orthogonalization of vectors.
+   BV_ORTHOG_CGS - Use classical Gram-Schmidt for orthogonalization of vectors.
 
    Level: advanced
 
@@ -82,7 +82,7 @@ SLEPC_EXTERN const char *BVOrthogTypes[];
 M*/
 
 /*MC
-   BV_ORTHOG_MGS - Use Modified Gram-Schmidt for orthogonalization of vectors.
+   BV_ORTHOG_MGS - Use modified Gram-Schmidt for orthogonalization of vectors.
 
    Level: advanced
 
