@@ -39,7 +39,7 @@ program test17f
   PetscReal      :: shifts(MAXSHI)
   PetscScalar    :: eval, one, mone, zero
   PetscErrorCode :: ierr
-  MPI_Comm       :: comm
+  MPIU_Comm      :: comm
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
