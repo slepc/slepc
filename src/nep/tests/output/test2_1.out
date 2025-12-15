@@ -46,7 +46,7 @@ NEP Object: 1 MPI process
     updating the preconditioner every 1 iterations
     KSP Object: (nep_rii_) 1 MPI process
       type: gmres
-        restart=30, using Classical (unmodified) Gram-Schmidt Orthogonalization with no iterative refinement
+        restart=30, using classical (unmodified) Gram-Schmidt orthogonalization with no iterative refinement
       maximum iterations=10000, initial guess is zero
       left preconditioning
       using PRECONDITIONED norm type for convergence test
@@ -93,7 +93,7 @@ DS Object: 1 MPI process
   type: nhep
   KSP Object: (nep_refine_) 1 MPI process
     type: gmres
-      restart=30, using Classical (unmodified) Gram-Schmidt Orthogonalization with no iterative refinement
+      restart=30, using classical (unmodified) Gram-Schmidt orthogonalization with no iterative refinement
     maximum iterations=10000, initial guess is zero
     left preconditioning
     using PRECONDITIONED norm type for convergence test

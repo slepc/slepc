@@ -14,7 +14,7 @@
 #include <slepc/private/bvimpl.h>          /*I   "slepcbv.h"   I*/
 
 /*
-   BVBiorthogonalizeMGS1 - Compute one step of Modified Gram-Schmidt bi-orthogonalization
+   BVBiorthogonalizeMGS1 - Compute one step of modified Gram-Schmidt bi-orthogonalization
 */
 static PetscErrorCode BVBiorthogonalizeMGS1(BV V,BV W,Vec v,PetscScalar *h,PetscScalar *c)
 {

@@ -31,7 +31,7 @@ ST Object: 1 MPI process
   number of matrices: 1
   KSP Object: (st_) 1 MPI process
     type: gmres
-      restart=30, using Classical (unmodified) Gram-Schmidt Orthogonalization with no iterative refinement
+      restart=30, using classical (unmodified) Gram-Schmidt orthogonalization with no iterative refinement
     maximum iterations=5, initial guess is zero
     left preconditioning
     using DEFAULT norm type for convergence test
