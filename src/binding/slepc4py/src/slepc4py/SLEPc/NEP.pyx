@@ -28,6 +28,10 @@ class NEPProblemType(object):
 
     - `GENERAL`:  General nonlinear eigenproblem.
     - `RATIONAL`: NEP defined in split form with all :math:`f_i` rational.
+
+    See Also
+    --------
+    slepc.NEPProblemType
     """
     GENERAL  = NEP_GENERAL
     RATIONAL = NEP_RATIONAL
@@ -39,6 +43,10 @@ class NEPErrorType(object):
     - `ABSOLUTE`: Absolute error.
     - `RELATIVE`: Relative error.
     - `BACKWARD`: Backward error.
+
+    See Also
+    --------
+    slepc.NEPErrorType
     """
     ABSOLUTE = NEP_ERROR_ABSOLUTE
     RELATIVE = NEP_ERROR_RELATIVE
@@ -59,6 +67,10 @@ class NEPWhich(object):
     - `TARGET_IMAGINARY`:   Imaginary part closest to target.
     - `ALL`:                All eigenvalues in a region.
     - `USER`:               User defined selection.
+
+    See Also
+    --------
+    slepc.NEPWhich
     """
     LARGEST_MAGNITUDE  = NEP_LARGEST_MAGNITUDE
     SMALLEST_MAGNITUDE = NEP_SMALLEST_MAGNITUDE
@@ -76,16 +88,18 @@ class NEPConvergedReason(object):
     """
     NEP convergence reasons.
 
-    - `CONVERGED_TOL`:               All eigenpairs converged to requested
-                                     tolerance.
-    - `CONVERGED_USER`:              User-defined convergence criterion
-                                     satisfied.
-    - `DIVERGED_ITS`:                Maximum number of iterations exceeded.
-    - `DIVERGED_BREAKDOWN`:          Solver failed due to breakdown.
-    - `DIVERGED_LINEAR_SOLVE`:       Inner linear solve failed.
+    - `CONVERGED_TOL`: All eigenpairs converged to requested tolerance.
+    - `CONVERGED_USER`: User-defined convergence criterion satisfied.
+    - `DIVERGED_ITS`: Maximum number of iterations exceeded.
+    - `DIVERGED_BREAKDOWN`: Solver failed due to breakdown.
+    - `DIVERGED_LINEAR_SOLVE`: Inner linear solve failed.
     - `DIVERGED_SUBSPACE_EXHAUSTED`: Run out of space for the basis in an
-                                     unrestarted solver.
-    - `CONVERGED_ITERATING`:         Iteration not finished yet.
+      unrestarted solver.
+    - `CONVERGED_ITERATING`: Iteration not finished yet.
+
+    See Also
+    --------
+    slepc.NEPConvergedReason
     """
     CONVERGED_TOL               = NEP_CONVERGED_TOL
     CONVERGED_USER              = NEP_CONVERGED_USER
@@ -103,6 +117,10 @@ class NEPRefine(object):
     - `NONE`:     No refinement.
     - `SIMPLE`:   Refine eigenpairs one by one.
     - `MULTIPLE`: Refine all eigenpairs simultaneously (invariant pair).
+
+    See Also
+    --------
+    slepc.NEPRefine
     """
     NONE     = NEP_REFINE_NONE
     SIMPLE   = NEP_REFINE_SIMPLE
@@ -115,6 +133,10 @@ class NEPRefineScheme(object):
     - `SCHUR`:    Schur complement.
     - `MBE`:      Mixed block elimination.
     - `EXPLICIT`: Build the explicit matrix.
+
+    See Also
+    --------
+    slepc.NEPRefineScheme
     """
     SCHUR    = NEP_REFINE_SCHEME_SCHUR
     MBE      = NEP_REFINE_SCHEME_MBE
@@ -128,6 +150,10 @@ class NEPConv(object):
     - `REL`:  Convergence test relative to the eigenvalue.
     - `NORM`: Convergence test relative to the matrix norms.
     - `USER`: User-defined convergence test.
+
+    See Also
+    --------
+    slepc.NEPConv
     """
     ABS  = NEP_CONV_ABS
     REL  = NEP_CONV_REL
@@ -140,6 +166,10 @@ class NEPStop(object):
 
     - `BASIC`: Default stopping test.
     - `USER`:  User-defined stopping test.
+
+    See Also
+    --------
+    slepc.NEPStop
     """
     BASIC = NEP_STOP_BASIC
     USER  = NEP_STOP_USER
@@ -151,6 +181,10 @@ class NEPCISSExtraction(object):
     - `RITZ`:   Ritz extraction.
     - `HANKEL`: Extraction via Hankel eigenproblem.
     - `CAA`:    Communication-avoiding Arnoldi.
+
+    See Also
+    --------
+    slepc.NEPCISSExtraction
     """
     RITZ   = NEP_CISS_EXTRACTION_RITZ
     HANKEL = NEP_CISS_EXTRACTION_HANKEL
@@ -197,6 +231,10 @@ cdef class NEP(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        slepc.NEPView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( NEPView(self.nep, vwr) )
@@ -206,6 +244,10 @@ cdef class NEP(Object):
         Destroy the NEP object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.NEPDestroy
         """
         CHKERR( NEPDestroy(&self.nep) )
         self.nep = NULL
@@ -216,6 +258,10 @@ cdef class NEP(Object):
         Reset the NEP object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.NEPReset
         """
         CHKERR( NEPReset(self.nep) )
 
@@ -229,6 +275,10 @@ cdef class NEP(Object):
         ----------
         comm
             MPI communicator. If not provided, it defaults to all processes.
+
+        See Also
+        --------
+        slepc.NEPCreate
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcNEP newnep = NULL
@@ -246,6 +296,18 @@ cdef class NEP(Object):
         ----------
         nep_type
             The solver to be used.
+
+        Notes
+        -----
+        The default is `RII`. Normally, it is best to use
+        `setFromOptions()` and then set the NEP type from the options
+        database rather than by using this routine. Using the options
+        database provides the user with maximum flexibility in
+        evaluating the different available methods.
+
+        See Also
+        --------
+        getType, slepc.NEPSetType
         """
         cdef SlepcNEPType cval = NULL
         nep_type = str2bytes(nep_type, &cval)
@@ -261,6 +323,10 @@ cdef class NEP(Object):
         -------
         str
             The solver currently being used.
+
+        See Also
+        --------
+        setType, slepc.NEPGetType
         """
         cdef SlepcNEPType nep_type = NULL
         CHKERR( NEPGetType(self.nep, &nep_type) )
@@ -276,6 +342,10 @@ cdef class NEP(Object):
         -------
         str
             The prefix string set for this NEP object.
+
+        See Also
+        --------
+        setOptionsPrefix, appendOptionsPrefix, slepc.NEPGetOptionsPrefix
         """
         cdef const char *prefix = NULL
         CHKERR( NEPGetOptionsPrefix(self.nep, &prefix) )
@@ -291,6 +361,22 @@ cdef class NEP(Object):
         ----------
         prefix
             The prefix string to prepend to all NEP option requests.
+
+        Notes
+        -----
+        A hyphen (-) must NOT be given at the beginning of the prefix
+        name.  The first character of all runtime options is
+        AUTOMATICALLY the hyphen.
+
+        For example, to distinguish between the runtime options for
+        two different NEP contexts, one could call::
+
+            N1.setOptionsPrefix("nep1_")
+            N2.setOptionsPrefix("nep2_")
+
+        See Also
+        --------
+        appendOptionsPrefix, getOptionsPrefix, slepc.NEPGetOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -306,6 +392,10 @@ cdef class NEP(Object):
         ----------
         prefix
             The prefix string to prepend to all NEP option requests.
+
+        See Also
+        --------
+        setOptionsPrefix, getOptionsPrefix, slepc.NEPAppendOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -317,8 +407,16 @@ cdef class NEP(Object):
 
         Collective.
 
+        Notes
+        -----
+        To see all options, run your program with the ``-help`` option.
+
         This routine must be called before `setUp()` if the user is to be
         allowed to set the solver type.
+
+        See Also
+        --------
+        setOptionsPrefix, slepc.NEPSetFromOptions
         """
         CHKERR( NEPSetFromOptions(self.nep) )
 
@@ -332,6 +430,10 @@ cdef class NEP(Object):
         -------
         ProblemType
             The problem type that was previously set.
+
+        See Also
+        --------
+        setProblemType, slepc.NEPGetProblemType
         """
         cdef SlepcNEPProblemType val = NEP_GENERAL
         CHKERR( NEPGetProblemType(self.nep, &val) )
@@ -347,6 +449,17 @@ cdef class NEP(Object):
         ----------
         problem_type
             The problem type to be set.
+
+        Notes
+        -----
+        This function is used to provide a hint to the `NEP` solver
+        to exploit certain properties of the nonlinear eigenproblem.
+        This hint may be used or not, depending on the solver. By
+        default, no particular structure is assumed.
+
+        See Also
+        --------
+        getProblemType, slepc.NEPSetProblemType
         """
         cdef SlepcNEPProblemType val = problem_type
         CHKERR( NEPSetProblemType(self.nep, val) )
@@ -361,6 +474,10 @@ cdef class NEP(Object):
         -------
         Which
             The portion of the spectrum to be sought by the solver.
+
+        See Also
+        --------
+        setWhichEigenpairs, slepc.NEPGetWhichEigenpairs
         """
         cdef SlepcNEPWhich val = NEP_LARGEST_MAGNITUDE
         CHKERR( NEPGetWhichEigenpairs(self.nep, &val) )
@@ -376,6 +493,27 @@ cdef class NEP(Object):
         ----------
         which
             The portion of the spectrum to be sought by the solver.
+
+        Notes
+        -----
+        Not all eigensolvers implemented in NEP account for all the
+        possible values. Also, some values make sense only for certain
+        types of problems. If SLEPc is compiled for real numbers
+        `NEP.Which.LARGEST_IMAGINARY` and
+        `NEP.Which.SMALLEST_IMAGINARY` use the absolute value of the
+        imaginary part for eigenvalue selection.
+
+        The target is a scalar value provided with `setTarget()`.
+
+        The criterion `NEP.Which.TARGET_IMAGINARY` is available only
+        in case PETSc and SLEPc have been built with complex scalars.
+
+        `NEP.Which.ALL` is intended for use in the context of the
+        `PEP.Type.CISS` solver for computing all eigenvalues in a region.
+
+        See Also
+        --------
+        getWhichEigenpairs, setTarget, slepc.PEPSetWhichEigenpairs
         """
         cdef SlepcNEPWhich val = which
         CHKERR( NEPSetWhichEigenpairs(self.nep, val) )
@@ -394,6 +532,10 @@ cdef class NEP(Object):
         Notes
         -----
         If the target was not set by the user, then zero is returned.
+
+        See Also
+        --------
+        setTarget, slepc.NEPGetTarget
         """
         cdef PetscScalar sval = 0
         CHKERR( NEPGetTarget(self.nep, &sval) )
@@ -415,6 +557,13 @@ cdef class NEP(Object):
         The target is a scalar value used to determine the portion of
         the spectrum of interest. It is used in combination with
         `setWhichEigenpairs()`.
+
+        When PETSc is built with real scalars, it is not possible to
+        specify a complex target.
+
+        See Also
+        --------
+        getTarget, setWhichEigenpairs, slepc.NEPSetTarget
         """
         cdef PetscScalar sval = asScalar(target)
         CHKERR( NEPSetTarget(self.nep, sval) )
@@ -434,6 +583,10 @@ cdef class NEP(Object):
             The convergence tolerance.
         maxit: int
             The maximum number of iterations.
+
+        See Also
+        --------
+        setTolerances, slepc.NEPGetTolerances
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
@@ -452,6 +605,15 @@ cdef class NEP(Object):
             The convergence tolerance.
         maxit
             The maximum number of iterations.
+
+        Notes
+        -----
+        Use `DETERMINE` for ``max_it`` to assign a reasonably good value,
+        which is dependent on the solution method.
+
+        See Also
+        --------
+        getTolerances, slepc.NEPSetTolerances
         """
         cdef PetscReal rval = PETSC_CURRENT
         cdef PetscInt  ival = PETSC_CURRENT
@@ -470,6 +632,10 @@ cdef class NEP(Object):
         Conv
             The method used to compute the error estimate
             used in the convergence test.
+
+        See Also
+        --------
+        setConvergenceTest, slepc.NEPGetConvergenceTest
         """
         cdef SlepcNEPConv conv = NEP_CONV_REL
         CHKERR( NEPGetConvergenceTest(self.nep, &conv) )
@@ -486,6 +652,10 @@ cdef class NEP(Object):
         conv
             The method used to compute the error estimate
             used in the convergence test.
+
+        See Also
+        --------
+        getConvergenceTest, slepc.NEPSetConvergenceTest
         """
         cdef SlepcNEPConv tconv = conv
         CHKERR( NEPSetConvergenceTest(self.nep, tconv) )
@@ -495,9 +665,6 @@ cdef class NEP(Object):
         Get the refinement strategy used by the NEP object.
 
         Not collective.
-
-        Get the refinement strategy used by the NEP object and the associated
-        parameters.
 
         Returns
         -------
@@ -510,7 +677,11 @@ cdef class NEP(Object):
         its: int
             The maximum number of refinement iterations.
         scheme: RefineScheme
-            Scheme for solving linear systems
+            Scheme for solving linear systems.
+
+        See Also
+        --------
+        setRefine, slepc.NEPGetRefine
         """
         cdef SlepcNEPRefine ref = NEP_REFINE_NONE
         cdef PetscInt npart = 1
@@ -547,7 +718,11 @@ cdef class NEP(Object):
         its
             The maximum number of refinement iterations.
         scheme
-            Scheme for linear system solves
+            Scheme for solving linear systems.
+
+        See Also
+        --------
+        getRefine, slepc.NEPSetRefine
         """
         cdef SlepcNEPRefine tref = ref
         cdef PetscInt tnpart = PETSC_CURRENT
@@ -570,6 +745,10 @@ cdef class NEP(Object):
         -------
         `petsc4py.PETSc.KSP`
             The linear solver object.
+
+        See Also
+        --------
+        setRefine, slepc.NEPRefineGetKSP
         """
         cdef KSP ksp = KSP()
         CHKERR( NEPRefineGetKSP(self.nep, &ksp.ksp) )
@@ -585,7 +764,11 @@ cdef class NEP(Object):
         Returns
         -------
         bool
-            Whether the solver compute all residuals or not.
+            Whether the solver computes all residuals or not.
+
+        See Also
+        --------
+        setTrackAll, slepc.NEPGetTrackAll
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( NEPGetTrackAll(self.nep, &tval) )
@@ -600,7 +783,11 @@ cdef class NEP(Object):
         Parameters
         ----------
         trackall
-            Whether compute all residuals or not.
+            Whether to compute all residuals or not.
+
+        See Also
+        --------
+        getTrackAll, slepc.NEPSetTrackAll
         """
         cdef PetscBool tval = trackall
         CHKERR( NEPSetTrackAll(self.nep, tval) )
@@ -622,6 +809,10 @@ cdef class NEP(Object):
             Maximum dimension of the subspace to be used by the solver.
         mpd: int
             Maximum dimension allowed for the projected problem.
+
+        See Also
+        --------
+        setDimensions, slepc.NEPGetDimensions
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -651,6 +842,29 @@ cdef class NEP(Object):
             Maximum dimension of the subspace to be used by the solver.
         mpd
             Maximum dimension allowed for the projected problem.
+
+        Notes
+        -----
+        Use `DETERMINE` for ``ncv`` and ``mpd`` to assign a reasonably good
+        value, which is dependent on the solution method.
+
+        The parameters ``ncv`` and ``mpd`` are intimately related, so that
+        the user is advised to set one of them at most. Normal usage
+        is the following:
+
+        + In cases where ``nev`` is small, the user sets ``ncv``
+          (a reasonable default is 2 * ``nev``).
+
+        + In cases where ``nev`` is large, the user sets ``mpd``.
+
+        The value of ``ncv`` should always be between ``nev`` and (``nev`` +
+        ``mpd``), typically ``ncv`` = ``nev`` + ``mpd``. If ``nev`` is not too
+        large, ``mpd`` = ``nev`` is a reasonable choice, otherwise a
+        smaller value should be used.
+
+        See Also
+        --------
+        getDimensions, slepc.NEPSetDimensions
         """
         cdef PetscInt ival1 = PETSC_CURRENT
         cdef PetscInt ival2 = PETSC_CURRENT
@@ -670,6 +884,10 @@ cdef class NEP(Object):
         -------
         BV
             The basis vectors context.
+
+        See Also
+        --------
+        setBV, slepc.NEPGetBV
         """
         cdef BV bv = BV()
         CHKERR( NEPGetBV(self.nep, &bv.bv) )
@@ -686,6 +904,10 @@ cdef class NEP(Object):
         ----------
         bv
             The basis vectors context.
+
+        See Also
+        --------
+        getBV, slepc.NEPSetBV
         """
         CHKERR( NEPSetBV(self.nep, bv.bv) )
 
@@ -699,6 +921,10 @@ cdef class NEP(Object):
         -------
         RG
             The region context.
+
+        See Also
+        --------
+        setRG, slepc.NEPGetRG
         """
         cdef RG rg = RG()
         CHKERR( NEPGetRG(self.nep, &rg.rg) )
@@ -715,6 +941,10 @@ cdef class NEP(Object):
         ----------
         rg
             The region context.
+
+        See Also
+        --------
+        getRG, slepc.NEPSetRG
         """
         CHKERR( NEPSetRG(self.nep, rg.rg) )
 
@@ -728,6 +958,10 @@ cdef class NEP(Object):
         -------
         DS
             The direct solver context.
+
+        See Also
+        --------
+        setDS, slepc.NEPGetDS
         """
         cdef DS ds = DS()
         CHKERR( NEPGetDS(self.nep, &ds.ds) )
@@ -744,6 +978,10 @@ cdef class NEP(Object):
         ----------
         ds
             The direct solver context.
+
+        See Also
+        --------
+        getDS, slepc.NEPSetDS
         """
         CHKERR( NEPSetDS(self.nep, ds.ds) )
 
@@ -758,7 +996,26 @@ cdef class NEP(Object):
         Parameters
         ----------
         space
-            The initial space
+            The initial space.
+
+        Notes
+        -----
+        Some solvers start to iterate on a single vector (initial vector).
+        In that case, only the first vector is taken into account and the
+        other vectors are ignored.
+
+        These vectors do not persist from one `solve()` call to the other,
+        so the initial space should be set every time.
+
+        The vectors do not need to be mutually orthonormal, since they are
+        explicitly orthonormalized internally.
+
+        Common usage of this function is when the user can provide a rough
+        approximation of the wanted eigenspace. Then, convergence may be faster.
+
+        See Also
+        --------
+        setUp, slepc.NEPSetInitialSpace
         """
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
@@ -779,6 +1036,10 @@ cdef class NEP(Object):
         Set a function to decide when to stop the outer iteration of the eigensolver.
 
         Logically collective.
+
+        See Also
+        --------
+        getStoppingTest, slepc.NEPSetStoppingTestFunction
         """
         if stopping is not None:
             if args is None: args = ()
@@ -791,9 +1052,18 @@ cdef class NEP(Object):
 
     def getStoppingTest(self) -> NEPStoppingFunction:
         """
-        Get the stopping function.
+        Get the stopping test function.
 
         Not collective.
+
+        Returns
+        -------
+        NEPStoppingFunction
+            The stopping test function.
+
+        See Also
+        --------
+        setStoppingTest
         """
         return self.get_attr('__stopping__')
 
@@ -809,6 +1079,10 @@ cdef class NEP(Object):
         Append a monitor function to the list of monitors.
 
         Logically collective.
+
+        See Also
+        --------
+        getMonitor, cancelMonitor, slepc.NEPMonitorSet
         """
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
@@ -825,6 +1099,15 @@ cdef class NEP(Object):
         Get the list of monitor functions.
 
         Not collective.
+
+        Returns
+        -------
+        NEPMonitorFunction
+            The list of monitor functions.
+
+        See Also
+        --------
+        setMonitor
         """
         return self.get_attr('__monitor__')
 
@@ -833,6 +1116,10 @@ cdef class NEP(Object):
         Clear all monitors for a `NEP` object.
 
         Logically collective.
+
+        See Also
+        --------
+        slepc.NEPMonitorCancel
         """
         CHKERR( NEPMonitorCancel(self.nep) )
         self.set_attr('__monitor__', None)
@@ -841,20 +1128,42 @@ cdef class NEP(Object):
 
     def setUp(self) -> None:
         """
-        Set up all the necessary internal data structures.
+        Set up all the internal data structures.
 
         Collective.
 
-        Set up all the internal data structures necessary for the execution of
-        the eigensolver.
+        Notes
+        -----
+        Sets up all the internal data structures necessary for the execution
+        of the eigensolver.
+
+        This function need not be called explicitly in most cases,
+        since `solve()` calls it. It can be useful when one wants to
+        measure the set-up time separately from the solve time.
+
+        See Also
+        --------
+        solve, slepc.NEPSetUp
         """
         CHKERR( NEPSetUp(self.nep) )
 
     def solve(self) -> None:
         """
-        Solve the eigensystem.
+        Solve the nonlinear eigenproblem.
 
         Collective.
+
+        Notes
+        -----
+        `solve()` will return without generating an error regardless of
+        whether all requested solutions were computed or not. Call
+        `getConverged()` to get the actual number of computed solutions,
+        and `getConvergedReason()` to determine if the solver converged
+        or failed and why.
+
+        See Also
+        --------
+        setUp, getConverged, getConvergedReason, slepc.NEPSolve
         """
         CHKERR( NEPSolve(self.nep) )
 
@@ -871,6 +1180,10 @@ cdef class NEP(Object):
         -------
         int
             Iteration number.
+
+        See Also
+        --------
+        getConvergedReason, setTolerances, slepc.NEPGetIterationNumber
         """
         cdef PetscInt ival = 0
         CHKERR( NEPGetIterationNumber(self.nep, &ival) )
@@ -885,8 +1198,11 @@ cdef class NEP(Object):
         Returns
         -------
         ConvergedReason
-            Negative value indicates diverged, positive value
-            converged.
+            Negative value indicates diverged, positive value converged.
+
+        See Also
+        --------
+        setTolerances, solve, slepc.NEPGetConvergedReason
         """
         cdef SlepcNEPConvergedReason val = NEP_CONVERGED_ITERATING
         CHKERR( NEPGetConvergedReason(self.nep, &val) )
@@ -900,8 +1216,19 @@ cdef class NEP(Object):
 
         Returns
         -------
-        int
+        nconv: int
             Number of converged eigenpairs.
+
+        Notes
+        -----
+        This function should be called after `solve()` has finished.
+
+        The value ``nconv`` may be different from the number of requested
+        solutions ``nev``, but not larger than ``ncv``, see `setDimensions()`.
+
+        See Also
+        --------
+        setDimensions, solve, getEigenpair, slepc.NEPGetConverged
         """
         cdef PetscInt ival = 0
         CHKERR( NEPGetConverged(self.nep, &ival) )
@@ -928,6 +1255,18 @@ cdef class NEP(Object):
         -------
         complex
             The computed eigenvalue.
+
+        Notes
+        -----
+        The index ``i`` should be a value between ``0`` and ``nconv-1`` (see
+        `getConverged()`). Eigenpairs are indexed according to the ordering
+        criterion established with `setWhichEigenpairs()`.
+
+        The eigenvector is normalized to have unit norm.
+
+        See Also
+        --------
+        solve, getConverged, setWhichEigenpairs, slepc.NEPGetEigenpair
         """
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
@@ -958,8 +1297,12 @@ cdef class NEP(Object):
         according to the ordering criterion established with
         `setWhichEigenpairs()`.
 
-        Left eigenvectors are available only if the twosided flag was set
-        with `setTwoSided()`.
+        Left eigenvectors are available only if the ``twosided`` flag was
+        set with `setTwoSided()`.
+
+        See Also
+        --------
+        getEigenpair, getConverged, setTwoSided, slepc.NEPGetLeftEigenvector
         """
         cdef PetscVec vecr = Wr.vec if Wr is not None else <PetscVec>NULL
         cdef PetscVec veci = Wi.vec if Wi is not None else <PetscVec>NULL
@@ -980,6 +1323,15 @@ cdef class NEP(Object):
         -------
         float
             Error estimate.
+
+        Notes
+        -----
+        This is the error estimate used internally by the eigensolver.
+        The actual error bound can be computed with `computeError()`.
+
+        See Also
+        --------
+        computeError, slepc.NEPGetErrorEstimate
         """
         cdef PetscReal rval = 0
         CHKERR( NEPGetErrorEstimate(self.nep, i, &rval) )
@@ -987,7 +1339,7 @@ cdef class NEP(Object):
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
         """
-        Compute the error  associated with the i-th computed eigenpair.
+        Compute the error associated with the i-th computed eigenpair.
 
         Collective.
 
@@ -1007,6 +1359,20 @@ cdef class NEP(Object):
             The error bound, computed in various ways from the residual norm
             :math:`\|T(\lambda)x\|_2` where :math:`\lambda` is the eigenvalue
             and :math:`x` is the eigenvector.
+
+        Notes
+        -----
+        The index ``i`` should be a value between ``0`` and ``nconv-1``
+        (see `getConverged()`).
+
+        If the computation of left eigenvectors was enabled with `setTwoSided()`,
+        then the error will be computed using the maximum of the value above and
+        the left residual norm  :math:`\|y^*T(\lambda)\|_2`, where :math:`y`
+        is the approximate left eigenvector.
+
+        See Also
+        --------
+        getErrorEstimate, setTwoSided, slepc.NEPComputeError
         """
         cdef SlepcNEPErrorType et = NEP_ERROR_RELATIVE
         cdef PetscReal rval = 0
@@ -1020,7 +1386,7 @@ cdef class NEP(Object):
 
         Collective.
 
-        Display the eigenvalues and the errors associated with the computed solution
+        Display the errors and the eigenvalues.
 
         Parameters
         ----------
@@ -1037,6 +1403,9 @@ cdef class NEP(Object):
         If the viewer has format ``ASCII_INFO_DETAIL`` then a table with
         eigenvalues and corresponding errors is printed.
 
+        See Also
+        --------
+        solve, valuesView, vectorsView, slepc.NEPErrorView
         """
         cdef SlepcNEPErrorType et = NEP_ERROR_RELATIVE
         if etype is not None: et = etype
@@ -1054,6 +1423,10 @@ cdef class NEP(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        solve, vectorsView, errorView, slepc.NEPValuesView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( NEPValuesView(self.nep, vwr) )
@@ -1069,6 +1442,10 @@ cdef class NEP(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        solve, valuesView, errorView, slepc.NEPVectorsView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( NEPVectorsView(self.nep, vwr) )
@@ -1094,11 +1471,15 @@ cdef class NEP(Object):
         Parameters
         ----------
         function
-            Function evaluation routine
+            Function evaluation routine.
         F
-            Function matrix
+            Function matrix.
         P
-            preconditioner matrix (usually the same as F)
+            Preconditioner matrix (usually the same as ``F``).
+
+        See Also
+        --------
+        setJacobian, getFunction, slepc.NEPSetFunction
         """
         cdef PetscMat Fmat = F.mat if F is not None else <PetscMat>NULL
         cdef PetscMat Pmat = P.mat if P is not None else Fmat
@@ -1120,14 +1501,18 @@ cdef class NEP(Object):
         Get the function to compute the nonlinear Function :math:`T(\lambda)`
         and the matrix.
 
-        Parameters
-        ----------
-        F
-            Function matrix
-        P
-            preconditioner matrix (usually the same as the F)
-        function
-            Function evaluation routine
+        Returns
+        -------
+        F: petsc4py.PETSc.Mat
+            Function matrix.
+        P: petsc4py.PETSc.Mat
+            Preconditioner matrix (usually the same as the F).
+        function: NEPFunction
+            Function evaluation routine.
+
+        See Also
+        --------
+        setFunction, slepc.NEPGetFunction
         """
         cdef Mat F = Mat()
         cdef Mat P = Mat()
@@ -1155,9 +1540,13 @@ cdef class NEP(Object):
         Parameters
         ----------
         jacobian
-            Jacobian evaluation routine
+            Jacobian evaluation routine.
         J
-            Jacobian matrix
+            Jacobian matrix.
+
+        See Also
+        --------
+        setFunction, getJacobian, slepc.NEPSetJacobian
         """
         cdef PetscMat Jmat = J.mat if J is not None else <PetscMat>NULL
         if jacobian is not None:
@@ -1178,12 +1567,16 @@ cdef class NEP(Object):
         Get the function to compute the Jacobian :math:`T'(\lambda)` and the
         matrix.
 
-        Parameters
-        ----------
-        J
-            Jacobian matrix
-        jacobian
-            Jacobian evaluation routine
+        Returns
+        -------
+        J: petsc4py.PETSc.Mat
+            Jacobian matrix.
+        jacobian: NEPJacobian
+            Jacobian evaluation routine.
+
+        See Also
+        --------
+        setJacobian, slepc.NEPGetJacobian
         """
         cdef Mat J = Mat()
         CHKERR( NEPGetJacobian(self.nep, &J.mat, NULL, NULL) )
@@ -1210,6 +1603,23 @@ cdef class NEP(Object):
             Scalar functions of the split form.
         structure
             Structure flag for matrices.
+
+        Notes
+        -----
+        The nonlinear operator is written as
+        :math:`T(\lambda) = \sum_i A_i f_i(\lambda)`, for :math:`i=1,\dots,n`.
+        The derivative :math:`T'(\lambda)` can be obtained using the
+        derivatives of :math:`f_i`.
+
+        The ``structure`` flag provides information about :math:`A_i`'s
+        nonzero pattern.
+
+        This function must be called before `setUp()`. If it is called
+        again after `setUp()` then the `NEP` object is reset.
+
+        See Also
+        --------
+        getSplitOperator, slepc.NEPSetSplitOperator
         """
         if isinstance(A, Mat): A = [A]
         if isinstance(f, FN):  f = [f]
@@ -1239,6 +1649,10 @@ cdef class NEP(Object):
             Scalar functions of the split form.
         structure: petsc4py.PETSc.Mat.Structure
             Structure flag for matrices.
+
+        See Also
+        --------
+        setSplitOperator, slepc.NEPGetSplitOperatorInfo, slepc.NEPGetSplitOperatorTerm
         """
         cdef Mat A
         cdef FN  f
@@ -1276,6 +1690,10 @@ cdef class NEP(Object):
             Coefficient matrices of the split preconditioner.
         structure
             Structure flag for matrices.
+
+        See Also
+        --------
+        getSplitPreconditioner, slepc.NEPSetSplitPreconditioner
         """
         if isinstance(P, Mat): P = [P]
         cdef PetscMat *Ps = NULL
@@ -1298,6 +1716,10 @@ cdef class NEP(Object):
             Coefficient matrices of the split preconditioner.
         structure: petsc4py.PETSc.Mat.Structure
             Structure flag for matrices.
+
+        See Also
+        --------
+        setSplitPreconditioner, slepc.NEPGetSplitPreconditionerTerm
         """
         cdef Mat P
         cdef PetscMat mat = NULL
@@ -1324,6 +1746,10 @@ cdef class NEP(Object):
         -------
         bool
             Whether the two-sided variant is to be used or not.
+
+        See Also
+        --------
+        setTwoSided, slepc.NEPGetTwoSided
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( NEPGetTwoSided(self.nep, &tval) )
@@ -1342,6 +1768,20 @@ cdef class NEP(Object):
         ----------
         twosided
             Whether the two-sided variant is to be used or not.
+
+        Notes
+        -----
+        If the user sets ``twosided`` to ``True`` then the solver uses a
+        variant of the algorithm that computes both right and left
+        eigenvectors. This is usually much more costly. This option is not
+        available in all solvers.
+
+        When using two-sided solvers, the problem matrices must have both
+        the ``Mat.mult`` and ``Mat.multTranspose`` operations defined.
+
+        See Also
+        --------
+        getTwoSided, getLeftEigenvector, slepc.NEPSetTwoSided
         """
         cdef PetscBool tval = asBool(twosided)
         CHKERR( NEPSetTwoSided(self.nep, tval) )
@@ -1368,6 +1808,21 @@ cdef class NEP(Object):
             Placeholder for the result vector.
         rg
             Region.
+
+        Notes
+        -----
+        The resolvent :math:`T^{-1}(z)=\sum_i(z-\lambda_i)^{-1}x_iy_i^*`
+        is evaluated at :math:`z=\omega` and the matrix-vector product
+        :math:`r = T^{-1}(\omega) v` is computed. Vectors :math:`x_i,y_i`
+        are right and left eigenvectors, respectively, normalized so that
+        :math:`y_i^*T'(\lambda_i)x_i=1`. The sum contains only eigenvectors
+        that have been previously computed with `solve()`, and if a region
+        ``rg`` is given then only those corresponding to eigenvalues inside
+        the region are considered.
+
+        See Also
+        --------
+        solve, getLeftEigenvector, slepc.NEPApplyResolvent
         """
         cdef PetscScalar sval = asScalar(omega)
         cdef SlepcRG region = rg.rg if rg is not None else <SlepcRG>NULL
@@ -1387,6 +1842,10 @@ cdef class NEP(Object):
             0 indicates NEVER rebuild, 1 means rebuild every time the Jacobian is
             computed within the nonlinear iteration, 2 means every second time
             the Jacobian is built, etc.
+
+        See Also
+        --------
+        getRIILagPreconditioner, slepc.NEPRIISetLagPreconditioner
         """
         cdef PetscInt ival = asInt(lag)
         CHKERR( NEPRIISetLagPreconditioner(self.nep, ival) )
@@ -1401,6 +1860,10 @@ cdef class NEP(Object):
         -------
         int
             The lag parameter.
+
+        See Also
+        --------
+        setRIILagPreconditioner, slepc.NEPRIIGetLagPreconditioner
         """
         cdef PetscInt ival = 0
         CHKERR( NEPRIIGetLagPreconditioner(self.nep, &ival) )
@@ -1415,7 +1878,18 @@ cdef class NEP(Object):
         Parameters
         ----------
         cct
-             If True, the `petsc4py.PETSc.KSP` relative tolerance is constant.
+             If ``True``, the `petsc4py.PETSc.KSP` relative tolerance is constant.
+
+        Notes
+        -----
+        By default, an exponentially decreasing tolerance is set in the
+        ``KSP`` used within the nonlinear iteration, so that each Newton
+        iteration requests better accuracy than the previous one. The
+        constant correction tolerance flag stops this behavior.
+
+        See Also
+        --------
+        getRIIConstCorrectionTol, slepc.NEPRIISetConstCorrectionTol
         """
         cdef PetscBool val = asBool(cct)
         CHKERR( NEPRIISetConstCorrectionTol(self.nep, val) )
@@ -1429,7 +1903,12 @@ cdef class NEP(Object):
         Returns
         -------
         bool
-            If True, the `petsc4py.PETSc.KSP` relative tolerance is constant.
+            If ``True``, the `petsc4py.PETSc.KSP` relative tolerance is
+            constant.
+
+        See Also
+        --------
+        setRIIConstCorrectionTol, slepc.NEPRIIGetConstCorrectionTol
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( NEPRIIGetConstCorrectionTol(self.nep, &tval) )
@@ -1448,6 +1927,10 @@ cdef class NEP(Object):
         ----------
         its
              Maximum inner iterations.
+
+        See Also
+        --------
+        getRIIMaximumIterations, slepc.NEPRIISetMaximumIterations
         """
         cdef PetscInt ival = asInt(its)
         CHKERR( NEPRIISetMaximumIterations(self.nep, ival) )
@@ -1462,6 +1945,10 @@ cdef class NEP(Object):
         -------
         int
             Maximum inner iterations.
+
+        See Also
+        --------
+        setRIIMaximumIterations, slepc.NEPRIIGetMaximumIterations
         """
         cdef PetscInt ival = 0
         CHKERR( NEPRIIGetMaximumIterations(self.nep, &ival) )
@@ -1479,7 +1966,19 @@ cdef class NEP(Object):
         Parameters
         ----------
         herm
-            If True, the Hermitian version is used.
+            If ``True``, the Hermitian version is used.
+
+        Notes
+        -----
+        By default, the scalar nonlinear equation
+        :math:`x^*T(\sigma)^{-1}T(z)x=0` is solved at each step of the
+        nonlinear iteration. When this flag is set the simpler form
+        :math:`x^*T(z)x=0` is used, which is supposed to be valid only
+        for Hermitian problems.
+
+        See Also
+        --------
+        getRIIHermitian, slepc.NEPRIISetHermitian
         """
         cdef PetscBool val = asBool(herm)
         CHKERR( NEPRIISetHermitian(self.nep, val) )
@@ -1490,13 +1989,14 @@ cdef class NEP(Object):
 
         Not collective.
 
-        Get the flag about using the Hermitian version of the scalar nonlinear
-        equation.
-
         Returns
         -------
         bool
-            If True, the Hermitian version is used.
+            If ``True``, the Hermitian version is used.
+
+        See Also
+        --------
+        setRIIHermitian, slepc.NEPRIIGetHermitian
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( NEPRIIGetHermitian(self.nep, &tval) )
@@ -1515,6 +2015,20 @@ cdef class NEP(Object):
         ----------
         deftol
             The threshold value.
+
+        Notes
+        -----
+        Normally, the solver iterates on the extended problem in order
+        to deflate previously converged eigenpairs. If this threshold
+        is set to a nonzero value, then once the residual error is below
+        this threshold the solver will continue the iteration without
+        deflation. The intention is to be able to improve the current
+        eigenpair further, despite having previous eigenpairs with
+        somewhat bad precision.
+
+        See Also
+        --------
+        getRIIDeflationThreshold, slepc.NEPRIISetDeflationThreshold
         """
         cdef PetscReal val = asReal(deftol)
         CHKERR( NEPRIISetDeflationThreshold(self.nep, val) )
@@ -1529,12 +2043,16 @@ cdef class NEP(Object):
         -------
         float
             The threshold value.
+
+        See Also
+        --------
+        setRIIDeflationThreshold, slepc.NEPRIIGetDeflationThreshold
         """
         cdef PetscReal rval = 0.0
         CHKERR( NEPRIIGetDeflationThreshold(self.nep, &rval) )
         return toReal(rval)
 
-    def setRIIKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
+    def setRIIKSP(self, KSP ksp) -> None:
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
@@ -1542,8 +2060,12 @@ cdef class NEP(Object):
 
         Parameters
         ----------
-        ``ksp``
+        ksp
             The linear solver object.
+
+        See Also
+        --------
+        getRIIKSP, slepc.NEPRIISetKSP
         """
         CHKERR( NEPRIISetKSP(self.nep, ksp.ksp) )
 
@@ -1555,8 +2077,12 @@ cdef class NEP(Object):
 
         Returns
         -------
-        `petsc4py.PETSc.KSP`
+        petsc4py.PETSc.KSP
             The linear solver object.
+
+        See Also
+        --------
+        setRIIKSP, slepc.NEPRIIGetKSP
         """
         cdef KSP ksp = KSP()
         CHKERR( NEPRIIGetKSP(self.nep, &ksp.ksp) )
@@ -1575,6 +2101,20 @@ cdef class NEP(Object):
         ----------
         deftol
             The threshold value.
+
+        Notes
+        -----
+        Normally, the solver iterates on the extended problem in order
+        to deflate previously converged eigenpairs. If this threshold
+        is set to a nonzero value, then once the residual error is below
+        this threshold the solver will continue the iteration without
+        deflation. The intention is to be able to improve the current
+        eigenpair further, despite having previous eigenpairs with
+        somewhat bad precision.
+
+        See Also
+        --------
+        getSLPDeflationThreshold, slepc.NEPSLPSetDeflationThreshold
         """
         cdef PetscReal val = asReal(deftol)
         CHKERR( NEPSLPSetDeflationThreshold(self.nep, val) )
@@ -1589,6 +2129,10 @@ cdef class NEP(Object):
         -------
         float
             The threshold value.
+
+        See Also
+        --------
+        setSLPDeflationThreshold, slepc.NEPSLPGetDeflationThreshold
         """
         cdef PetscReal rval = 0.0
         CHKERR( NEPSLPGetDeflationThreshold(self.nep, &rval) )
@@ -1604,6 +2148,10 @@ cdef class NEP(Object):
         ----------
         eps
             The linear eigensolver.
+
+        See Also
+        --------
+        getSLPEPS, slepc.NEPSLPSetEPS
         """
         CHKERR( NEPSLPSetEPS(self.nep, eps.eps) )
 
@@ -1617,6 +2165,10 @@ cdef class NEP(Object):
         -------
         EPS
             The linear eigensolver.
+
+        See Also
+        --------
+        setSLPEPS, slepc.NEPSLPGetEPS
         """
         cdef EPS eps = EPS()
         CHKERR( NEPSLPGetEPS(self.nep, &eps.eps) )
@@ -1635,6 +2187,10 @@ cdef class NEP(Object):
         ----------
         eps
             The linear eigensolver.
+
+        See Also
+        --------
+        setTwoSided, setSLPEPS, getSLPEPSLeft, slepc.NEPSLPSetEPSLeft
         """
         CHKERR( NEPSLPSetEPSLeft(self.nep, eps.eps) )
 
@@ -1648,13 +2204,17 @@ cdef class NEP(Object):
         -------
         EPS
             The linear eigensolver.
+
+        See Also
+        --------
+        setSLPEPSLeft, slepc.NEPSLPGetEPSLeft
         """
         cdef EPS eps = EPS()
         CHKERR( NEPSLPGetEPSLeft(self.nep, &eps.eps) )
         CHKERR( PetscINCREF(eps.obj) )
         return eps
 
-    def setSLPKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
+    def setSLPKSP(self, KSP ksp) -> None:
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
@@ -1662,8 +2222,12 @@ cdef class NEP(Object):
 
         Parameters
         ----------
-        ``ksp``
+        ksp
             The linear solver object.
+
+        See Also
+        --------
+        getSLPKSP, slepc.NEPSLPSetKSP
         """
         CHKERR( NEPSLPSetKSP(self.nep, ksp.ksp) )
 
@@ -1675,8 +2239,12 @@ cdef class NEP(Object):
 
         Returns
         -------
-        `petsc4py.PETSc.KSP`
+        petsc4py.PETSc.KSP
             The linear solver object.
+
+        See Also
+        --------
+        setSLPKSP, slepc.NEPSLPGetKSP
         """
         cdef KSP ksp = KSP()
         CHKERR( NEPSLPGetKSP(self.nep, &ksp.ksp) )
@@ -1685,7 +2253,7 @@ cdef class NEP(Object):
 
     #
 
-    def setNArnoldiKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
+    def setNArnoldiKSP(self, KSP ksp) -> None:
         """
         Set a linear solver object associated to the nonlinear eigensolver.
 
@@ -1693,8 +2261,12 @@ cdef class NEP(Object):
 
         Parameters
         ----------
-        ``ksp``
+        ksp
             The linear solver object.
+
+        See Also
+        --------
+        getNArnoldiKSP, slepc.NEPNArnoldiSetKSP
         """
         CHKERR( NEPNArnoldiSetKSP(self.nep, ksp.ksp) )
 
@@ -1706,8 +2278,12 @@ cdef class NEP(Object):
 
         Returns
         -------
-        `petsc4py.PETSc.KSP`
+        petsc4py.PETSc.KSP
             The linear solver object.
+
+        See Also
+        --------
+        setNArnoldiKSP, slepc.NEPNArnoldiGetKSP
         """
         cdef KSP ksp = KSP()
         CHKERR( NEPNArnoldiGetKSP(self.nep, &ksp.ksp) )
@@ -1731,6 +2307,10 @@ cdef class NEP(Object):
         -----
         The default is 1. The preconditioner is ALWAYS built in the first
         iteration of a nonlinear solve.
+
+        See Also
+        --------
+        getNArnoldiLagPreconditioner, slepc.NEPNArnoldiSetLagPreconditioner
         """
         cdef PetscInt ival = asInt(lag)
         CHKERR( NEPNArnoldiSetLagPreconditioner(self.nep, ival) )
@@ -1745,6 +2325,10 @@ cdef class NEP(Object):
         -------
         int
             The lag parameter.
+
+        See Also
+        --------
+        setNArnoldiLagPreconditioner, slepc.NEPNArnoldiGetLagPreconditioner
         """
         cdef PetscInt ival = 0
         CHKERR( NEPNArnoldiGetLagPreconditioner(self.nep, &ival) )
@@ -1762,6 +2346,10 @@ cdef class NEP(Object):
         ----------
         pep
             The polynomial eigensolver.
+
+        See Also
+        --------
+        getInterpolPEP, slepc.NEPInterpolSetPEP
         """
         CHKERR( NEPInterpolSetPEP(self.nep, pep.pep) )
 
@@ -1771,13 +2359,14 @@ cdef class NEP(Object):
 
         Collective.
 
-        Get the polynomial eigensolver object associated with the nonlinear
-        eigensolver.
-
         Returns
         -------
         PEP
             The polynomial eigensolver.
+
+        See Also
+        --------
+        setInterpolPEP, slepc.NEPInterpolGetPEP
         """
         cdef PEP pep = PEP()
         CHKERR( NEPInterpolGetPEP(self.nep, &pep.pep) )
@@ -1790,15 +2379,16 @@ cdef class NEP(Object):
 
         Collective.
 
-        Set the tolerance and maximum degree when building the interpolation
-        polynomial.
-
         Parameters
         ----------
         tol
             The tolerance to stop computing polynomial coefficients.
         deg
             The maximum degree of interpolation.
+
+        See Also
+        --------
+        getInterpolInterpolation, slepc.NEPInterpolSetInterpolation
         """
         cdef PetscReal rval = PETSC_CURRENT
         cdef PetscInt  ival = PETSC_CURRENT
@@ -1818,6 +2408,10 @@ cdef class NEP(Object):
             The tolerance to stop computing polynomial coefficients.
         deg: int
             The maximum degree of interpolation.
+
+        See Also
+        --------
+        setInterpolInterpolation, slepc.NEPInterpolGetInterpolation
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
@@ -1842,6 +2436,10 @@ cdef class NEP(Object):
         Notes
         -----
         Allowed values are in the range [0.1,0.9]. The default is 0.5.
+
+        See Also
+        --------
+        getNLEIGSRestart, slepc.NEPNLEIGSSetRestart
         """
         cdef PetscReal val = asReal(keep)
         CHKERR( NEPNLEIGSSetRestart(self.nep, val) )
@@ -1856,6 +2454,10 @@ cdef class NEP(Object):
         -------
         float
             The number of vectors to be kept at restart.
+
+        See Also
+        --------
+        setNLEIGSRestart, slepc.NEPNLEIGSGetRestart
         """
         cdef PetscReal val = 0
         CHKERR( NEPNLEIGSGetRestart(self.nep, &val) )
@@ -1870,7 +2472,7 @@ cdef class NEP(Object):
         Parameters
         ----------
         lock
-            True if the locking variant must be selected.
+            ``True`` if the locking variant must be selected.
 
         Notes
         -----
@@ -1878,6 +2480,10 @@ cdef class NEP(Object):
         This behavior can be changed so that all directions are kept in the
         working subspace even if already converged to working accuracy (the
         non-locking variant).
+
+        See Also
+        --------
+        getNLEIGSLocking, slepc.NEPNLEIGSSetLocking
         """
         cdef PetscBool val = asBool(lock)
         CHKERR( NEPNLEIGSSetLocking(self.nep, val) )
@@ -1892,6 +2498,10 @@ cdef class NEP(Object):
         -------
         bool
             The locking flag.
+
+        See Also
+        --------
+        setNLEIGSLocking, slepc.NEPNLEIGSGetLocking
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( NEPNLEIGSGetLocking(self.nep, &tval) )
@@ -1912,6 +2522,10 @@ cdef class NEP(Object):
             The tolerance to stop computing divided differences.
         deg
             The maximum degree of interpolation.
+
+        See Also
+        --------
+        getNLEIGSInterpolation, slepc.NEPNLEIGSSetInterpolation
         """
         cdef PetscReal rval = PETSC_CURRENT
         cdef PetscInt  ival = PETSC_CURRENT
@@ -1934,6 +2548,10 @@ cdef class NEP(Object):
             The tolerance to stop computing divided differences.
         deg: int
             The maximum degree of interpolation.
+
+        See Also
+        --------
+        setNLEIGSInterpolation, slepc.NEPNLEIGSGetInterpolation
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
@@ -1952,7 +2570,23 @@ cdef class NEP(Object):
         Parameters
         ----------
         fullbasis
-            True if the full-basis variant must be selected.
+            ``True`` if the full-basis variant must be selected.
+
+        Notes
+        -----
+        The default is to use a compact representation of the Krylov basis,
+        that is, :math:`V = (I \otimes U) S`, with a `BV` of type `TENSOR`.
+        This behavior can be changed so that the full basis :math:`V` is
+        explicitly stored and operated with. This variant is more expensive
+        in terms of memory and computation, but is necessary in some cases,
+        particularly for two-sided computations, see `setTwoSided()`.
+
+        In the full-basis variant, the NLEIGS solver uses an `EPS` object to
+        explicitly solve the linearized eigenproblem, see `getNLEIGSEPS()`.
+
+        See Also
+        --------
+        setTwoSided, getNLEIGSFullBasis, getNLEIGSEPS, slepc.NEPNLEIGSSetFullBasis
         """
         cdef PetscBool val = asBool(fullbasis)
         CHKERR( NEPNLEIGSSetFullBasis(self.nep, val) )
@@ -1966,7 +2600,11 @@ cdef class NEP(Object):
         Returns
         -------
         bool
-            True if the full-basis variant must be selected.
+            ``True`` if the full-basis variant is selected.
+
+        See Also
+        --------
+        setNLEIGSFullBasis, slepc.NEPNLEIGSGetFullBasis
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( NEPNLEIGSGetFullBasis(self.nep, &tval) )
@@ -1982,6 +2620,10 @@ cdef class NEP(Object):
         ----------
         eps
             The linear eigensolver.
+
+        See Also
+        --------
+        getNLEIGSEPS, slepc.NEPNLEIGSSetEPS
         """
         CHKERR( NEPNLEIGSSetEPS(self.nep, eps.eps) )
 
@@ -1995,6 +2637,10 @@ cdef class NEP(Object):
         -------
         EPS
             The linear eigensolver.
+
+        See Also
+        --------
+        setNLEIGSEPS, slepc.NEPNLEIGSGetEPS
         """
         cdef EPS eps = EPS()
         CHKERR( NEPNLEIGSGetEPS(self.nep, &eps.eps) )
@@ -2011,6 +2657,17 @@ cdef class NEP(Object):
         ----------
         shifts
             Values specifying the shifts.
+
+        Notes
+        -----
+        If only one shift is provided, the built subspace is equivalent
+        to shift-and-invert Krylov-Schur (provided that the absolute
+        convergence criterion is used). Otherwise, the rational Krylov
+        variant is run.
+
+        See Also
+        --------
+        getNLEIGSRKShifts, getNLEIGSKSPs, slepc.NEPNLEIGSSetRKShifts
         """
         cdef PetscInt na = 0
         cdef PetscScalar *a = NULL
@@ -2027,6 +2684,10 @@ cdef class NEP(Object):
         -------
         ArrayScalar
             The shift values.
+
+        See Also
+        --------
+        setNLEIGSRKShifts, slepc.NEPNLEIGSGetRKShifts
         """
         cdef PetscInt np = 0
         cdef PetscScalar *coeff = NULL
@@ -2053,6 +2714,10 @@ cdef class NEP(Object):
         -----
         The number of `petsc4py.PETSc.KSP` solvers is equal to the number of
         shifts provided by the user, or 1 if the user did not provide shifts.
+
+        See Also
+        --------
+        setNLEIGSRKShifts, slepc.NEPNLEIGSGetKSPs
         """
         cdef PetscInt i = 0, n = 0
         cdef PetscKSP *p = NULL
@@ -2071,6 +2736,10 @@ cdef class NEP(Object):
         ----------
         extraction
             The extraction technique.
+
+        See Also
+        --------
+        getCISSExtraction, slepc.NEPCISSSetExtraction
         """
         cdef SlepcNEPCISSExtraction val = extraction
         CHKERR( NEPCISSSetExtraction(self.nep, val) )
@@ -2085,6 +2754,10 @@ cdef class NEP(Object):
         -------
         CISSExtraction
             The extraction technique.
+
+        See Also
+        --------
+        setCISSExtraction, slepc.NEPCISSGetExtraction
         """
         cdef SlepcNEPCISSExtraction val = NEP_CISS_EXTRACTION_RITZ
         CHKERR( NEPCISSGetExtraction(self.nep, &val) )
@@ -2117,15 +2790,19 @@ cdef class NEP(Object):
         bsmax
             Maximum block size.
         realmats
-            True if A and B are real.
+            ``True`` if A and B are real.
 
         Notes
         -----
         The default number of partitions is 1. This means the internal
         `petsc4py.PETSc.KSP` object is shared among all processes of the `NEP`
-        communicator. Otherwise, the communicator is split into npart
+        communicator. Otherwise, the communicator is split into ``npart``
         communicators, so that ``npart`` `petsc4py.PETSc.KSP` solves proceed
         simultaneously.
+
+        See Also
+        --------
+        getCISSSizes, setCISSThreshold, setCISSRefinement, slepc.NEPCISSSetSizes
         """
         cdef PetscInt  ival1 = PETSC_CURRENT
         cdef PetscInt  ival2 = PETSC_CURRENT
@@ -2159,7 +2836,11 @@ cdef class NEP(Object):
         bsmax: int
             Maximum block size.
         realmats: bool
-            True if A and B are real.
+            ``True`` if A and B are real.
+
+        See Also
+        --------
+        setCISSSizes, slepc.NEPCISSGetSizes
         """
         cdef PetscInt  ival1 = 0
         cdef PetscInt  ival2 = 0
@@ -2182,6 +2863,10 @@ cdef class NEP(Object):
             Threshold for numerical rank.
         spur
             Spurious threshold (to discard spurious eigenpairs).
+
+        See Also
+        --------
+        getCISSThreshold, slepc.NEPCISSSetThreshold
         """
         cdef PetscReal rval1 = PETSC_CURRENT
         cdef PetscReal rval2 = PETSC_CURRENT
@@ -2201,6 +2886,10 @@ cdef class NEP(Object):
             Threshold for numerical rank.
         spur: float
             Spurious threshold (to discard spurious eigenpairs.
+
+        See Also
+        --------
+        setCISSThreshold, slepc.NEPCISSGetThreshold
         """
         cdef PetscReal delta = 0
         cdef PetscReal spur  = 0
@@ -2219,6 +2908,10 @@ cdef class NEP(Object):
             Number of iterative refinement iterations (inner loop).
         blsize
             Number of iterative refinement iterations (blocksize loop).
+
+        See Also
+        --------
+        getCISSRefinement, slepc.NEPCISSSetRefinement
         """
         cdef PetscInt ival1 = PETSC_CURRENT
         cdef PetscInt ival2 = PETSC_CURRENT
@@ -2238,6 +2931,10 @@ cdef class NEP(Object):
             Number of iterative refinement iterations (inner loop).
         blsize: int
             Number of iterative refinement iterations (blocksize loop).
+
+        See Also
+        --------
+        setCISSRefinement, slepc.NEPCISSGetRefinement
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -2261,6 +2958,10 @@ cdef class NEP(Object):
         integration points divided by the number of partitions. This value is
         halved in the case of real matrices with a region centered at the real
         axis.
+
+        See Also
+        --------
+        setCISSSizes, slepc.NEPCISSGetKSPs
         """
         cdef PetscInt i = 0, n = 0
         cdef PetscKSP *p = NULL
@@ -2310,21 +3011,21 @@ cdef class NEP(Object):
             self.setTrackAll(value)
 
     property bv:
-        """The basis vectors (BV) object associated."""
+        """The basis vectors (`BV`) object associated."""
         def __get__(self) -> BV:
             return self.getBV()
         def __set__(self, value):
             self.setBV(value)
 
     property rg:
-        """The region (RG) object associated."""
+        """The region (`RG`) object associated."""
         def __get__(self) -> RG:
             return self.getRG()
         def __set__(self, value):
             self.setRG(value)
 
     property ds:
-        """The direct solver (DS) object associated."""
+        """The direct solver (`DS`) object associated."""
         def __get__(self) -> DS:
             return self.getDS()
         def __set__(self, value):

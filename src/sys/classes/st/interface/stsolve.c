@@ -40,7 +40,7 @@ PetscErrorCode STApply_Generic(ST st,Vec x,Vec y)
 
    Level: developer
 
-.seealso: [](ch:st), `STApplyTranspose()`, `STApplyHermitianTranspose()`
+.seealso: [](ch:st), `STApplyTranspose()`, `STApplyHermitianTranspose()`, `STApplyMat()`
 @*/
 PetscErrorCode STApply(ST st,Vec x,Vec y)
 {

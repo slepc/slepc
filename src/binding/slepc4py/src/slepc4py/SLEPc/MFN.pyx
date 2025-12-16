@@ -18,10 +18,14 @@ class MFNConvergedReason(object):
     """
     MFN convergence reasons.
 
-    - 'MFN_CONVERGED_TOL': All eigenpairs converged to requested tolerance.
-    - 'MFN_CONVERGED_ITS': Solver completed the requested number of steps.
-    - 'MFN_DIVERGED_ITS': Maximum number of iterations exceeded.
-    - 'MFN_DIVERGED_BREAKDOWN': Generic breakdown in method.
+    - `CONVERGED_TOL`: All eigenpairs converged to requested tolerance.
+    - `CONVERGED_ITS`: Solver completed the requested number of steps.
+    - `DIVERGED_ITS`: Maximum number of iterations exceeded.
+    - `DIVERGED_BREAKDOWN`: Generic breakdown in method.
+
+    See Also
+    --------
+    slepc.MFNConvergedReason
     """
     CONVERGED_TOL       = MFN_CONVERGED_TOL
     CONVERGED_ITS       = MFN_CONVERGED_ITS
@@ -61,6 +65,10 @@ cdef class MFN(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        slepc.MFNView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( MFNView(self.mfn, vwr) )
@@ -70,6 +78,10 @@ cdef class MFN(Object):
         Destroy the MFN object.
 
         Logically collective.
+
+        See Also
+        --------
+        slepc.MFNDestroy
         """
         CHKERR( MFNDestroy(&self.mfn) )
         self.mfn = NULL
@@ -80,6 +92,10 @@ cdef class MFN(Object):
         Reset the MFN object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.MFNReset
         """
         CHKERR( MFNReset(self.mfn) )
 
@@ -93,6 +109,10 @@ cdef class MFN(Object):
         ----------
         comm
             MPI communicator. If not provided, it defaults to all processes.
+
+        See Also
+        --------
+        slepc.MFNCreate
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcMFN newmfn = NULL
@@ -110,6 +130,18 @@ cdef class MFN(Object):
         ----------
         mfn_type
             The solver to be used.
+
+        Notes
+        -----
+        The default is ``KRYLOV``. Normally, it is best to use
+        `setFromOptions()` and then set the MFN type from the options
+        database rather than by using this routine. Using the options
+        database provides the user with maximum flexibility in
+        evaluating the different available methods.
+
+        See Also
+        --------
+        getType, slepc.MFNSetType
         """
         cdef SlepcMFNType cval = NULL
         mfn_type = str2bytes(mfn_type, &cval)
@@ -125,6 +157,10 @@ cdef class MFN(Object):
         -------
         str
             The solver currently being used.
+
+        See Also
+        --------
+        setType, slepc.MFNGetType
         """
         cdef SlepcMFNType mfn_type = NULL
         CHKERR( MFNGetType(self.mfn, &mfn_type) )
@@ -140,6 +176,10 @@ cdef class MFN(Object):
         -------
         str
             The prefix string set for this MFN object.
+
+        See Also
+        --------
+        setOptionsPrefix, appendOptionsPrefix, slepc.MFNGetOptionsPrefix
         """
         cdef const char *prefix = NULL
         CHKERR( MFNGetOptionsPrefix(self.mfn, &prefix) )
@@ -155,6 +195,22 @@ cdef class MFN(Object):
         ----------
         prefix
             The prefix string to prepend to all MFN option requests.
+
+        Notes
+        -----
+        A hyphen (-) must NOT be given at the beginning of the prefix
+        name.  The first character of all runtime options is
+        AUTOMATICALLY the hyphen.
+
+        For example, to distinguish between the runtime options for
+        two different MFN contexts, one could call::
+
+            M1.setOptionsPrefix("mfn1_")
+            M2.setOptionsPrefix("mfn2_")
+
+        See Also
+        --------
+        appendOptionsPrefix, getOptionsPrefix, slepc.MFNGetOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -170,6 +226,10 @@ cdef class MFN(Object):
         ----------
         prefix
             The prefix string to prepend to all MFN option requests.
+
+        See Also
+        --------
+        setOptionsPrefix, getOptionsPrefix, slepc.MFNAppendOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -181,9 +241,16 @@ cdef class MFN(Object):
 
         Collective.
 
-        Set MFN options from the options database. This routine must
-        be called before `setUp()` if the user is to be allowed to set
-        the solver type.
+        Notes
+        -----
+        To see all options, run your program with the ``-help`` option.
+
+        This routine must be called before `setUp()` if the user is to be
+        allowed to set the solver type.
+
+        See Also
+        --------
+        setOptionsPrefix, slepc.MFNSetFromOptions
         """
         CHKERR( MFNSetFromOptions(self.mfn) )
 
@@ -193,15 +260,16 @@ cdef class MFN(Object):
 
         Not collective.
 
-        Get the tolerance and maximum iteration count used by the
-        default MFN convergence tests.
-
         Returns
         -------
         tol: float
             The convergence tolerance.
         max_it: int
-            The maximum number of iterations
+            The maximum number of iterations.
+
+        See Also
+        --------
+        setTolerances, slepc.MFNGetTolerances
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
@@ -222,7 +290,11 @@ cdef class MFN(Object):
         tol
             The convergence tolerance.
         max_it
-            The maximum number of iterations
+            The maximum number of iterations.
+
+        See Also
+        --------
+        getTolerances, slepc.MFNSetTolerances
         """
         cdef PetscReal rval = PETSC_CURRENT
         cdef PetscInt  ival = PETSC_CURRENT
@@ -240,6 +312,10 @@ cdef class MFN(Object):
         -------
         int
             Maximum dimension of the subspace to be used by the solver.
+
+        See Also
+        --------
+        setDimensions, slepc.MFNGetDimensions
         """
         cdef PetscInt ival = 0
         CHKERR( MFNGetDimensions(self.mfn, &ival) )
@@ -255,6 +331,10 @@ cdef class MFN(Object):
         ----------
         ncv
             Maximum dimension of the subspace to be used by the solver.
+
+        See Also
+        --------
+        getDimensions, slepc.MFNSetDimensions
         """
         cdef PetscInt ival = asInt(ncv)
         CHKERR( MFNSetDimensions(self.mfn, ival) )
@@ -269,6 +349,10 @@ cdef class MFN(Object):
         -------
         FN
             The math function context.
+
+        See Also
+        --------
+        setFN, slepc.MFNGetFN
         """
         cdef FN fn = FN()
         CHKERR( MFNGetFN(self.mfn, &fn.fn) )
@@ -285,6 +369,10 @@ cdef class MFN(Object):
         ----------
         fn
             The math function context.
+
+        See Also
+        --------
+        getFN, slepc.MFNSetFN
         """
         CHKERR( MFNSetFN(self.mfn, fn.fn) )
 
@@ -298,6 +386,10 @@ cdef class MFN(Object):
         -------
         BV
             The basis vectors context.
+
+        See Also
+        --------
+        setBV, slepc.MFNGetBV
         """
         cdef BV bv = BV()
         CHKERR( MFNGetBV(self.mfn, &bv.bv) )
@@ -314,10 +406,14 @@ cdef class MFN(Object):
         ----------
         bv
             The basis vectors context.
+
+        See Also
+        --------
+        getBV, slepc.MFNSetBV
         """
         CHKERR( MFNSetBV(self.mfn, bv.bv) )
 
-    def getOperator(self) -> petsc4py.PETSc.Mat:
+    def getOperator(self) -> Mat:
         """
         Get the matrix associated with the MFN object.
 
@@ -327,6 +423,10 @@ cdef class MFN(Object):
         -------
         petsc4py.PETSc.Mat
             The matrix for which the matrix function is to be computed.
+
+        See Also
+        --------
+        setOperator, slepc.MFNGetOperator
         """
         cdef Mat A = Mat()
         CHKERR( MFNGetOperator(self.mfn, &A.mat) )
@@ -343,6 +443,15 @@ cdef class MFN(Object):
         ----------
         A
             The problem matrix.
+
+        Notes
+        -----
+        This must be called before `setUp()`. If called again after
+        `setUp()` then the `MFN` object is reset.
+
+        See Also
+        --------
+        getOperator, slepc.MFNSetOperator
         """
         CHKERR( MFNSetOperator(self.mfn, A.mat) )
 
@@ -358,6 +467,10 @@ cdef class MFN(Object):
         Append a monitor function to the list of monitors.
 
         Logically collective.
+
+        See Also
+        --------
+        getMonitor, cancelMonitor, slepc.MFNMonitorSet
         """
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
@@ -370,7 +483,16 @@ cdef class MFN(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> MFNMonitorFunction:
-        """Get the list of monitor functions."""
+        """
+        Get the list of monitor functions.
+
+        Not collective.
+
+        Returns
+        -------
+        MFNMonitorFunction
+            The list of monitor functions.
+        """
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
@@ -378,6 +500,10 @@ cdef class MFN(Object):
         Clear all monitors for an `MFN` object.
 
         Logically collective.
+
+        See Also
+        --------
+        slepc.MFNMonitorCancel
         """
         CHKERR( MFNMonitorCancel(self.mfn) )
         self.set_attr('__monitor__', None)
@@ -392,6 +518,10 @@ cdef class MFN(Object):
 
         Set up all the internal data structures necessary for the execution
         of the eigensolver.
+
+        See Also
+        --------
+        solve, slepc.MFNSetUp
         """
         CHKERR( MFNSetUp(self.mfn) )
 
@@ -410,6 +540,16 @@ cdef class MFN(Object):
             The right hand side vector.
         x
             The solution.
+
+        Notes
+        -----
+        The matrix :math:`A` is specified with `setOperator()`. The function
+        :math:`f` is specified via the `FN` object obtained with `getFN()`
+        or set with `setFN()`.
+
+        See Also
+        --------
+        setOperator, getFN, solveTranspose, slepc.MFNSolve
         """
         CHKERR( MFNSolve(self.mfn, b.vec, x.vec) )
 
@@ -428,6 +568,16 @@ cdef class MFN(Object):
             The right hand side vector.
         x
             The solution.
+
+        Notes
+        -----
+        The matrix :math:`A` is specified with `setOperator()`. The function
+        :math:`f` is specified via the `FN` object obtained with `getFN()`
+        or set with `setFN()`.
+
+        See Also
+        --------
+        setOperator, getFN, solve, slepc.MFNSolveTranspose
         """
         CHKERR( MFNSolveTranspose(self.mfn, b.vec, x.vec) )
 
@@ -445,6 +595,10 @@ cdef class MFN(Object):
         -------
         int
             Iteration number.
+
+        See Also
+        --------
+        getConvergedReason, slepc.MFNGetIterationNumber
         """
         cdef PetscInt ival = 0
         CHKERR( MFNGetIterationNumber(self.mfn, &ival) )
@@ -460,6 +614,10 @@ cdef class MFN(Object):
         -------
         ConvergedReason
             Negative value indicates diverged, positive value converged.
+
+        See Also
+        --------
+        setTolerances, solve, setErrorIfNotConverged, slepc.MFNGetConvergedReason
         """
         cdef SlepcMFNConvergedReason val = MFN_CONVERGED_ITERATING
         CHKERR( MFNGetConvergedReason(self.mfn, &val) )
@@ -474,7 +632,17 @@ cdef class MFN(Object):
         Parameters
         ----------
         flg
-            True indicates you want the error generated.
+            ``True`` indicates you want the error generated.
+
+        Notes
+        -----
+        Normally SLEPc continues if the solver fails to converge, you can
+        call `getConvergedReason()` after a `solve()` to determine if it
+        has converged.
+
+        See Also
+        --------
+        getConvergedReason, solve, slepc.MFNSetErrorIfNotConverged
         """
         cdef PetscBool tval = flg
         CHKERR( MFNSetErrorIfNotConverged(self.mfn, tval) )
@@ -491,7 +659,11 @@ cdef class MFN(Object):
         Returns
         -------
         bool
-            True indicates you want the error generated.
+            ``True`` indicates you want the error generated.
+
+        See Also
+        --------
+        setErrorIfNotConverged, slepc.MFNGetErrorIfNotConverged
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( MFNGetErrorIfNotConverged(self.mfn, &tval) )
@@ -514,14 +686,14 @@ cdef class MFN(Object):
             self.setTolerances(max_it=value)
 
     property fn:
-        """The math function (FN) object associated to the MFN object."""
+        """The math function (`FN`) object associated to the MFN object."""
         def __get__(self) -> FN:
             return self.getFN()
         def __set__(self, value):
             self.setBV(value)
 
     property bv:
-        """The basis vectors (BV) object associated to the MFN object."""
+        """The basis vectors (`BV`) object associated to the MFN object."""
         def __get__(self) -> BV:
             return self.getFN()
         def __set__(self, value):

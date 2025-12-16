@@ -28,10 +28,14 @@ class FNCombineType(object):
     """
     FN type of combination of child functions.
 
-    - `ADD`:       Addition         f(x) = f1(x)+f2(x)
-    - `MULTIPLY`:  Multiplication   f(x) = f1(x)*f2(x)
-    - `DIVIDE`:    Division         f(x) = f1(x)/f2(x)
-    - `COMPOSE`:   Composition      f(x) = f2(f1(x))
+    - `ADD`:       Addition       :math:`f(x) = f_1(x)+f_2(x)`
+    - `MULTIPLY`:  Multiplication :math:`f(x) = f_1(x)f_2(x)`
+    - `DIVIDE`:    Division       :math:`f(x) = f_1(x)/f_2(x)`
+    - `COMPOSE`:   Composition    :math:`f(x) = f_2(f_1(x))`
+
+    See Also
+    --------
+    slepc.FNCombineType
     """
     ADD      = FN_COMBINE_ADD
     MULTIPLY = FN_COMBINE_MULTIPLY
@@ -44,6 +48,10 @@ class FNParallelType(object):
 
     - `REDUNDANT`:    Every process performs the computation redundantly.
     - `SYNCHRONIZED`: The first process sends the result to the rest.
+
+    See Also
+    --------
+    slepc.FNParallelType
     """
     REDUNDANT    = FN_PARALLEL_REDUNDANT
     SYNCHRONIZED = FN_PARALLEL_SYNCHRONIZED
@@ -149,6 +157,10 @@ cdef class FN(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        slepc.FNView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( FNView(self.fn, vwr) )
@@ -158,6 +170,10 @@ cdef class FN(Object):
         Destroy the FN object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.FNDestroy
         """
         CHKERR( FNDestroy(&self.fn) )
         self.fn = NULL
@@ -173,6 +189,10 @@ cdef class FN(Object):
         ----------
         comm
             MPI communicator; if not provided, it defaults to all processes.
+
+        See Also
+        --------
+        slepc.FNCreate
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcFN newfn = NULL
@@ -190,6 +210,10 @@ cdef class FN(Object):
         ----------
         fn_type
             The math function type to be used.
+
+        See Also
+        --------
+        getType, slepc.FNSetType
         """
         cdef SlepcFNType cval = NULL
         fn_type = str2bytes(fn_type, &cval)
@@ -205,6 +229,10 @@ cdef class FN(Object):
         -------
         str
             The math function type currently being used.
+
+        See Also
+        --------
+        setType, slepc.FNGetType
         """
         cdef SlepcFNType fn_type = NULL
         CHKERR( FNGetType(self.fn, &fn_type) )
@@ -226,6 +254,10 @@ cdef class FN(Object):
         A hyphen (``-``) must NOT be given at the beginning of the
         prefix name.  The first character of all runtime options is
         AUTOMATICALLY the hyphen.
+
+        See Also
+        --------
+        appendOptionsPrefix, getOptionsPrefix, slepc.FNGetOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -241,6 +273,10 @@ cdef class FN(Object):
         ----------
         prefix
             The prefix string to prepend to all FN option requests.
+
+        See Also
+        --------
+        setOptionsPrefix, getOptionsPrefix, slepc.FNAppendOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -256,6 +292,10 @@ cdef class FN(Object):
         -------
         str
             The prefix string set for this FN object.
+
+        See Also
+        --------
+        setOptionsPrefix, appendOptionsPrefix, slepc.FNGetOptionsPrefix
         """
         cdef const char *prefix = NULL
         CHKERR( FNGetOptionsPrefix(self.fn, &prefix) )
@@ -271,6 +311,10 @@ cdef class FN(Object):
         -----
         To see all options, run your program with the ``-help``
         option.
+
+        See Also
+        --------
+        setOptionsPrefix, slepc.FNSetFromOptions
         """
         CHKERR( FNSetFromOptions(self.fn) )
 
@@ -288,6 +332,15 @@ cdef class FN(Object):
         comm
             MPI communicator; if not provided, it defaults to the
             object's communicator.
+
+        Returns
+        -------
+        FN
+            The new object.
+
+        See Also
+        --------
+        create, slepc.FNDuplicate
         """
         cdef MPI_Comm ccomm = def_Comm(comm, PetscObjectComm(<PetscObject>self.fn))
         cdef FN fn = type(self)()
@@ -298,7 +351,7 @@ cdef class FN(Object):
 
     def evaluateFunction(self, x: Scalar) -> Scalar:
         """
-        Compute the value of the function f(x) for a given x.
+        Compute the value of the function :math:`f(x)` for a given x.
 
         Not collective.
 
@@ -310,7 +363,16 @@ cdef class FN(Object):
         Returns
         -------
         Scalar
-            The result of f(x).
+            The result of :math:`f(x)`.
+
+        Notes
+        -----
+        Scaling factors are taken into account, so the actual function
+        evaluation will return :math:`b f(a x)`.
+
+        See Also
+        --------
+        evaluateDerivative, evaluateFunctionMat, setScale, slepc.FNEvaluateFunction
         """
         cdef PetscScalar sval = 0
         cdef PetscScalar sarg = asScalar(x)
@@ -332,13 +394,22 @@ cdef class FN(Object):
         -------
         Scalar
             The result of :math:`f'(x)`.
+
+        Notes
+        -----
+        Scaling factors are taken into account, so the actual derivative
+        evaluation will return :math:`ab f'(a x)`.
+
+        See Also
+        --------
+        evaluateFunction, setScale, slepc.FNEvaluateDerivative
         """
         cdef PetscScalar sval = 0
         cdef PetscScalar sarg = asScalar(x)
         CHKERR( FNEvaluateDerivative(self.fn, sarg, &sval) )
         return toScalar(sval)
 
-    def evaluateFunctionMat(self, Mat A: petsc4py.PETSc.Mat, Mat B: petsc4py.PETSc.Mat | None = None) -> petsc4py.PETSc.Mat:
+    def evaluateFunctionMat(self, Mat A, Mat B: Mat | None = None) -> Mat:
         """
         Compute the value of the function :math:`f(A)` for a given matrix A.
 
@@ -355,14 +426,23 @@ cdef class FN(Object):
         -------
         petsc4py.PETSc.Mat
             The result of :math:`f(A)`.
+
+        Notes
+        -----
+        Scaling factors are taken into account, so the actual function
+        evaluation will return :math:`b f(a A)`.
+
+        See Also
+        --------
+        evaluateFunction, evaluateFunctionMatVec, slepc.FNEvaluateFunctionMat
         """
         if B is None: B = A.duplicate()
         CHKERR( FNEvaluateFunctionMat(self.fn, A.mat, B.mat) )
         return B
 
-    def evaluateFunctionMatVec(self, Mat A: petsc4py.PETSc.Mat, Vec v: petsc4py.PETSc.Vec | None = None) -> petsc4py.PETSc.Vec:
+    def evaluateFunctionMatVec(self, Mat A, Vec v: Vec | None = None) -> Vec:
         """
-        Compute the first column of the matrix f(A) for a given matrix A.
+        Compute the first column of the matrix :math:`f(A)`.
 
         Logically collective.
 
@@ -374,7 +454,17 @@ cdef class FN(Object):
         Returns
         -------
         petsc4py.PETSc.Vec
-            The first column of the result f(A).
+            The first column of the result :math:`f(A)`.
+
+        Notes
+        -----
+        This operation is similar to `evaluateFunctionMat()` but returns only
+        the first column of :math:`f(A)`, hence saving computations in most
+        cases.
+
+        See Also
+        --------
+        evaluateFunctionMat, slepc.FNEvaluateFunctionMatVec
         """
         if v is None: v = A.createVecs('left')
         CHKERR( FNEvaluateFunctionMatVec(self.fn, A.mat, v.vec) )
@@ -392,6 +482,10 @@ cdef class FN(Object):
             Inner scaling (argument), default is 1.0.
         beta
             Outer scaling (result), default is 1.0.
+
+        See Also
+        --------
+        getScale, evaluateFunction, slepc.FNSetScale
         """
         cdef PetscScalar aval = 1.0
         cdef PetscScalar bval = 1.0
@@ -411,6 +505,10 @@ cdef class FN(Object):
             Inner scaling (argument).
         beta: Scalar
             Outer scaling (result).
+
+        See Also
+        --------
+        setScale, slepc.FNGetScale
         """
         cdef PetscScalar aval = 0, bval = 0
         CHKERR( FNGetScale(self.fn, &aval, &bval) )
@@ -437,6 +535,10 @@ cdef class FN(Object):
         `FN.evaluateFunctionMat()` is a symmetric/Hermitian matrix, then
         the computation is done via the eigendecomposition, rather than
         with the general algorithm.
+
+        See Also
+        --------
+        getMethod, slepc.FNSetMethod
         """
         cdef PetscInt val = asInt(meth)
         CHKERR( FNSetMethod(self.fn, val) )
@@ -451,6 +553,10 @@ cdef class FN(Object):
         -------
         int
             An index identifying the method.
+
+        See Also
+        --------
+        setMethod, slepc.FNGetMethod
         """
         cdef PetscInt val = 0
         CHKERR( FNGetMethod(self.fn, &val) )
@@ -466,6 +572,15 @@ cdef class FN(Object):
         ----------
         pmode
             The parallel mode.
+
+        Notes
+        -----
+        This is relevant only when the function is evaluated on a matrix, with
+        either `evaluateFunctionMat()` or `evaluateFunctionMatVec()`.
+
+        See Also
+        --------
+        evaluateFunctionMat, getParallel, slepc.FNSetParallel
         """
         cdef SlepcFNParallelType val = pmode
         CHKERR( FNSetParallel(self.fn, val) )
@@ -480,6 +595,10 @@ cdef class FN(Object):
         -------
         ParallelType
             The parallel mode.
+
+        See Also
+        --------
+        setParallel, slepc.FNGetParallel
         """
         cdef SlepcFNParallelType val = FN_PARALLEL_REDUNDANT
         CHKERR( FNGetParallel(self.fn, &val) )
@@ -497,6 +616,10 @@ cdef class FN(Object):
         ----------
         alpha
             Coefficients.
+
+        See Also
+        --------
+        setRationalDenominator, slepc.FNRationalSetNumerator
         """
         cdef PetscInt na = 0
         cdef PetscScalar *a = NULL
@@ -513,6 +636,10 @@ cdef class FN(Object):
         -------
         ArrayScalar
             Coefficients.
+
+        See Also
+        --------
+        setRationalNumerator, slepc.FNRationalGetNumerator
         """
         cdef PetscInt np = 0
         cdef PetscScalar *coeff = NULL
@@ -534,6 +661,10 @@ cdef class FN(Object):
         ----------
         alpha
             Coefficients.
+
+        See Also
+        --------
+        setRationalNumerator, slepc.FNRationalSetDenominator
         """
         cdef PetscInt na = 0
         cdef PetscScalar *a = NULL
@@ -550,6 +681,10 @@ cdef class FN(Object):
         -------
         ArrayScalar
             Coefficients.
+
+        See Also
+        --------
+        setRationalDenominator, slepc.FNRationalGetDenominator
         """
         cdef PetscInt np = 0
         cdef PetscScalar *coeff = NULL
@@ -579,6 +714,10 @@ cdef class FN(Object):
             First function.
         f2
             Second function.
+
+        See Also
+        --------
+        getCombineChildren, slepc.FNCombineSetChildren
         """
         cdef SlepcFNCombineType val = comb
         CHKERR( FNCombineSetChildren(self.fn, val, f1.fn, f2.fn) )
@@ -601,6 +740,10 @@ cdef class FN(Object):
             First function.
         f2: FN
             Second function.
+
+        See Also
+        --------
+        setCombineChildren, slepc.FNCombineGetChildren
         """
         cdef SlepcFNCombineType comb
         cdef FN f1 = FN()
@@ -620,6 +763,14 @@ cdef class FN(Object):
         ----------
         k
             The index.
+
+        Notes
+        -----
+        If not set, the default index is 1.
+
+        See Also
+        --------
+        getPhiIndex, slepc.FNPhiSetIndex
         """
         cdef PetscInt val = asInt(k)
         CHKERR( FNPhiSetIndex(self.fn, val) )
@@ -634,6 +785,10 @@ cdef class FN(Object):
         -------
         int
             The index.
+
+        See Also
+        --------
+        setPhiIndex, slepc.FNPhiGetIndex
         """
         cdef PetscInt val = 0
         CHKERR( FNPhiGetIndex(self.fn, &val) )

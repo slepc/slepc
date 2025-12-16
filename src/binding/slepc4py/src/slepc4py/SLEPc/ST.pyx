@@ -29,7 +29,11 @@ class STMatMode(object):
     - `COPY`:    A working copy of the matrix is created.
     - `INPLACE`: The operation is computed in-place.
     - `SHELL`:   The matrix :math:`A - \sigma B` is handled as an
-                 implicit matrix.
+      implicit matrix.
+
+    See Also
+    --------
+    slepc.STMatMode
     """
     COPY    = ST_MATMODE_COPY
     INPLACE = ST_MATMODE_INPLACE
@@ -41,6 +45,10 @@ class STFilterType(object):
 
     - ``FILTLAN``:  An adapted implementation of the Filtered Lanczos Package.
     - ``CHEBYSEV``: A polynomial filter based on a truncated Chebyshev series.
+
+    See Also
+    --------
+    slepc.STFilterType
     """
     FILTLAN   = ST_FILTER_FILTLAN
     CHEBYSHEV = ST_FILTER_CHEBYSHEV
@@ -53,6 +61,10 @@ class STFilterDamping(object):
     - `JACKSON`: Jackson damping
     - `LANCZOS`: Lanczos damping
     - `FEJER`:   Fejer damping
+
+    See Also
+    --------
+    slepc.STFilterDamping
     """
     NONE    = ST_FILTER_DAMPING_NONE
     JACKSON = ST_FILTER_DAMPING_JACKSON
@@ -96,6 +108,10 @@ cdef class ST(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        slepc.STView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( STView(self.st, vwr) )
@@ -105,6 +121,10 @@ cdef class ST(Object):
         Destroy the ST object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.STDestroy
         """
         CHKERR( STDestroy(&self.st) )
         self.st = NULL
@@ -115,6 +135,10 @@ cdef class ST(Object):
         Reset the ST object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.STReset
         """
         CHKERR( STReset(self.st) )
 
@@ -128,6 +152,10 @@ cdef class ST(Object):
         ----------
         comm
             MPI communicator; if not provided, it defaults to all processes.
+
+        See Also
+        --------
+        slepc.STCreate
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcST newst = NULL
@@ -148,12 +176,15 @@ cdef class ST(Object):
 
         Notes
         -----
-        See `ST.Type` for available methods. The default is
-        `ST.Type.SHIFT` with a zero shift.  Normally, it is best to
-        use `setFromOptions()` and then set the ST type from the
-        options database rather than by using this routine.  Using the
+        The default is `SHIFT` with a zero shift. Normally, it is best
+        to use `setFromOptions()` and then set the ST type from the
+        options database rather than by using this routine. Using the
         options database provides the user with maximum flexibility in
         evaluating the different available methods.
+
+        See Also
+        --------
+        getType, slepc.STSetType
         """
         cdef SlepcSTType cval = NULL
         st_type = str2bytes(st_type, &cval)
@@ -169,6 +200,10 @@ cdef class ST(Object):
         -------
         str
             The spectral transformation currently being used.
+
+        See Also
+        --------
+        setType, slepc.STGetType
         """
         cdef SlepcSTType st_type = NULL
         CHKERR( STGetType(self.st, &st_type) )
@@ -190,6 +225,10 @@ cdef class ST(Object):
         A hyphen (``-``) must NOT be given at the beginning of the
         prefix name.  The first character of all runtime options is
         AUTOMATICALLY the hyphen.
+
+        See Also
+        --------
+        appendOptionsPrefix, getOptionsPrefix, slepc.STGetOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -205,6 +244,10 @@ cdef class ST(Object):
         -------
         str
             The prefix string set for this ST object.
+
+        See Also
+        --------
+        setOptionsPrefix, appendOptionsPrefix, slepc.STGetOptionsPrefix
         """
         cdef const char *prefix = NULL
         CHKERR( STGetOptionsPrefix(self.st, &prefix) )
@@ -220,6 +263,10 @@ cdef class ST(Object):
         ----------
         prefix
             The prefix string to prepend to all ST option requests.
+
+        See Also
+        --------
+        setOptionsPrefix, getOptionsPrefix, slepc.STAppendOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -231,12 +278,16 @@ cdef class ST(Object):
 
         Collective.
 
+        Notes
+        -----
+        To see all options, run your program with the ``-help`` option.
+
         This routine must be called before `setUp()` if the user is to be
         allowed to set the solver type.
 
-        Notes
-        -----
-        To see all options, run your program with the -help option.
+        See Also
+        --------
+        setOptionsPrefix, slepc.STSetFromOptions
         """
         CHKERR( STSetFromOptions(self.st) )
 
@@ -258,6 +309,13 @@ cdef class ST(Object):
         In some spectral transformations, changing the shift may have
         associated a lot of work, for example recomputing a
         factorization.
+
+        This function is normally not directly called by users, since the
+        shift is indirectly set by `EPS.setTarget()`.
+
+        See Also
+        --------
+        getShift, slepc.STSetShift
         """
         cdef PetscScalar sval = asScalar(shift)
         CHKERR( STSetShift(self.st, sval) )
@@ -272,6 +330,10 @@ cdef class ST(Object):
         -------
         Scalar
             The value of the shift.
+
+        See Also
+        --------
+        setShift, slepc.STGetShift
         """
         cdef PetscScalar sval = 0
         CHKERR( STGetShift(self.st, &sval) )
@@ -288,9 +350,13 @@ cdef class ST(Object):
         flag
             This flag is intended for the case of polynomial
             eigenproblems solved via linearization.
-            If this flag is False (default) the spectral transformation
+            If this flag is ``False`` (default) the spectral transformation
             is applied to the linearization (handled by the eigensolver),
             otherwise it is applied to the original problem.
+
+        See Also
+        --------
+        getTransform, slepc.STSetTransform
         """
         cdef PetscBool sval = asBool(flag)
         CHKERR( STSetTransform(self.st, sval) )
@@ -306,9 +372,13 @@ cdef class ST(Object):
         bool
             This flag is intended for the case of polynomial
             eigenproblems solved via linearization.
-            If this flag is False (default) the spectral transformation
+            If this flag is ``False`` (default) the spectral transformation
             is applied to the linearization (handled by the eigensolver),
             otherwise it is applied to the original problem.
+
+        See Also
+        --------
+        setTransform, slepc.STGetTransform
         """
         cdef PetscBool sval = PETSC_FALSE
         CHKERR( STGetTransform(self.st, &sval) )
@@ -316,12 +386,12 @@ cdef class ST(Object):
 
     def setMatMode(self, mode: MatMode) -> None:
         """
-        Set a flag to indicate how the matrix is being shifted.
+        Set a flag related to management of transformed matrices.
 
         Logically collective.
 
-        Set a flag to indicate how the matrix is being shifted in the
-        shift-and-invert and Cayley spectral transformations.
+        The flag indicates how the transformed matrices are being
+        stored in the spectral transformation.
 
         Parameters
         ----------
@@ -331,25 +401,28 @@ cdef class ST(Object):
         Notes
         -----
         By default (`ST.MatMode.COPY`), a copy of matrix :math:`A` is made
-        and then this copy is shifted explicitly, e.g.
-        :math:`A \leftarrow (A - s B)`.
+        and then this copy is modified explicitly, e.g.,
+        :math:`A \leftarrow (A - \sigma B)`.
 
-        With `ST.MatMode.INPLACE`, the original matrix :math:`A` is shifted at
-        `setUp()` and unshifted at the end of the computations. With respect to
+        With `ST.MatMode.INPLACE`, the original matrix :math:`A` is modified at
+        `setUp()` and reverted at the end of the computations. With respect to
         the previous one, this mode avoids a copy of matrix :math:`A`. However,
         a backdraw is that the recovered matrix might be slightly different
         from the original one (due to roundoff).
 
         With `ST.MatMode.SHELL`, the solver works with an implicit shell matrix
         that represents the shifted matrix. This mode is the most efficient in
-        creating the shifted matrix but it places serious limitations to the
+        creating the transformed matrix but it places serious limitations to the
         linear solves performed in each iteration of the eigensolver
         (typically, only iterative solvers with Jacobi preconditioning can be
         used).
 
-        In the case of generalized problems, in the two first modes the matrix
-        :math:`A - s B` has to be computed explicitly. The efficiency of
-        this computation can be controlled with `setMatStructure()`.
+        In the two first modes the efficiency of this computation can be
+        controlled with `setMatStructure()`.
+
+        See Also
+        --------
+        setMatrices, setMatStructure, getMatMode, slepc.STSetMatMode
         """
         cdef SlepcSTMatMode val = mode
         CHKERR( STSetMatMode(self.st, val) )
@@ -367,6 +440,10 @@ cdef class ST(Object):
         -------
         MatMode
             The mode flag.
+
+        See Also
+        --------
+        setMatMode, slepc.STGetMatMode
         """
         cdef SlepcSTMatMode val = ST_MATMODE_INPLACE
         CHKERR( STGetMatMode(self.st, &val) )
@@ -382,6 +459,22 @@ cdef class ST(Object):
         ----------
         operators
             The matrices associated with the eigensystem.
+
+        Notes
+        -----
+        It must be called before `setUp()`. If it is called again after
+        `setUp()` then the `ST` object is reset.
+
+        In standard eigenproblems only one matrix is passed, while in
+        generalized problems two matrices are provided. The number of
+        matrices is larger in polynomial eigenproblems.
+
+        In normal usage, matrices are provided via the corresponding
+        `EPS` of `PEP` interface function.
+
+        See Also
+        --------
+        getMatrices, setUp, reset, slepc.STSetMatrices
         """
         operators = tuple(operators)
         cdef PetscMat *mats = NULL
@@ -390,7 +483,7 @@ cdef class ST(Object):
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
         CHKERR( STSetMatrices(self.st, <PetscInt>n, mats) )
 
-    def getMatrices(self) -> list[petsc4py.PETSc.Mat]:
+    def getMatrices(self) -> list[Mat]:
         """
         Get the matrices associated with the eigenvalue problem.
 
@@ -400,6 +493,10 @@ cdef class ST(Object):
         -------
         list of petsc4py.PETSc.Mat
             The matrices associated with the eigensystem.
+
+        See Also
+        --------
+        setMatrices, slepc.STGetNumMatrices, slepc.STGetMatrix
         """
         cdef Mat A
         cdef PetscMat mat = NULL
@@ -414,50 +511,61 @@ cdef class ST(Object):
 
     def setMatStructure(self, structure: petsc4py.PETSc.Mat.Structure) -> None:
         """
-        Set an internal Mat.Structure attribute.
+        Set the matrix structure attribute.
 
         Logically collective.
 
-        Set an internal Mat.Structure attribute to indicate which is the
-        relation of the sparsity pattern of the two matrices :math:`A` and
-        :math:`B` constituting the generalized eigenvalue problem. This
-        function has no effect in the case of standard eigenproblems.
+        Set an internal `petsc4py.PETSc.Mat.Structure` attribute to indicate
+        which is the relation of the sparsity pattern of all the `ST` matrices.
 
         Parameters
         ----------
         structure
-            Either same, different, or a subset of the non-zero
-            sparsity pattern.
+            The matrix structure specification.
 
         Notes
         -----
         By default, the sparsity patterns are assumed to be
         different. If the patterns are equal or a subset then it is
         recommended to set this attribute for efficiency reasons (in
-        particular, for internal *AXPY()* matrix operations).
+        particular, for internal ``Mat.axpy()`` operations).
+
+        This function has no effect in the case of standard eigenproblems.
+
+        In case of polynomial eigenproblems, the flag applies to all
+        matrices relative to the first one.
+
+        See Also
+        --------
+        getMatStructure, setMatrices, slepc.STSetMatStructure
         """
         cdef PetscMatStructure val = matstructure(structure)
         CHKERR( STSetMatStructure(self.st, val) )
 
     def getMatStructure(self) -> petsc4py.PETSc.Mat.Structure:
         """
-        Get the internal Mat.Structure attribute.
+        Get the internal matrix structure attribute.
 
         Not collective.
 
-        Get the internal Mat.Structure attribute to indicate which is
-        the relation of the sparsity pattern of the matrices.
+        Get the internal `petsc4py.PETSc.Mat.Structure` attribute to
+        indicate which is the relation of the sparsity pattern of the
+        matrices.
 
         Returns
         -------
         petsc4py.PETSc.Mat.Structure
             The structure flag.
+
+        See Also
+        --------
+        setMatStructure, slepc.STGetMatStructure
         """
         cdef PetscMatStructure val
         CHKERR( STGetMatStructure(self.st, &val) )
         return val
 
-    def setKSP(self, KSP ksp: petsc4py.PETSc.KSP) -> None:
+    def setKSP(self, KSP ksp) -> None:
         """
         Set the ``KSP`` object associated with the spectral transformation.
 
@@ -465,8 +573,12 @@ cdef class ST(Object):
 
         Parameters
         ----------
-        `petsc4py.PETSc.KSP`
+        ksp
             The linear solver object.
+
+        See Also
+        --------
+        getKSP, slepc.STSetKSP
         """
         CHKERR( STSetKSP(self.st, ksp.ksp) )
 
@@ -481,11 +593,9 @@ cdef class ST(Object):
         `petsc4py.PETSc.KSP`
             The linear solver object.
 
-        Notes
-        -----
-        On output, the internal value of `petsc4py.PETSc.KSP` can be ``NULL`` if the
-        combination of eigenproblem type and selected transformation
-        does not require to solve a linear system of equations.
+        See Also
+        --------
+        setKSP, slepc.STGetKSP
         """
         cdef KSP ksp = KSP()
         CHKERR( STGetKSP(self.st, &ksp.ksp) )
@@ -502,13 +612,43 @@ cdef class ST(Object):
         ----------
         P
             The matrix that will be used in constructing the preconditioner.
+
+        Notes
+        -----
+        This matrix will be passed to the internal ``KSP`` object (via the last
+        argument of ``KSP.setOperators()``) as the matrix to be
+        used when constructing the preconditioner. If no matrix is set then
+        :math:`A-\sigma B` will be used to build the preconditioner, being
+        :math:`\sigma` the value set by `setShift()`.
+
+        More precisely, this is relevant for spectral transformations that
+        represent a rational matrix function, and use a ``KSP`` object for the
+        denominator. It includes also the `PRECOND` case. If the user has a
+        good approximation to matrix that can be used to build a cheap
+        preconditioner, it can be passed with this function. Note that it
+        affects only the ``Pmat`` argument of ``KSP.setOperators()``,
+        not the ``Amat`` argument.
+
+        If a preconditioner matrix is set, the default is to use an iterative
+        ``KSP`` rather than a direct method.
+
+        An alternative to pass an approximation of :math:`A-\sigma B` with this
+        function is to provide approximations of :math:`A` and :math:`B` via
+        `setSplitPreconditioner()`. The difference is that when :math:`\sigma`
+        changes the preconditioner is recomputed.
+
+        A call with no matrix argument will remove a previously set matrix.
+
+        See Also
+        --------
+        getPreconditionerMat, slepc.STSetPreconditionerMat
         """
         cdef PetscMat Pmat = P.mat if P is not None else <PetscMat>NULL
         CHKERR( STSetPreconditionerMat(self.st, Pmat) )
 
-    def getPreconditionerMat(self) -> petsc4py.PETSc.Mat:
+    def getPreconditionerMat(self) -> Mat:
         """
-        Get the matrix previously set by setPreconditionerMat().
+        Get the matrix previously set by `setPreconditionerMat()`.
 
         Not collective.
 
@@ -516,13 +656,18 @@ cdef class ST(Object):
         -------
         petsc4py.PETSc.Mat
             The matrix that will be used in constructing the preconditioner.
+
+        See Also
+        --------
+        setPreconditionerMat, slepc.STGetPreconditionerMat
         """
         cdef Mat P = Mat()
         CHKERR( STGetPreconditionerMat(self.st, &P.mat) )
         CHKERR( PetscINCREF(P.obj) )
         return P
 
-    def setSplitPreconditioner(self, operators: list[petsc4py.PETSc.Mat], structure: petsc4py.PETSc.Mat.Structure | None = None) -> None:
+    def setSplitPreconditioner(self, operators: list[petsc4py.PETSc.Mat], structure: petsc4py.PETSc.Mat.
+Structure | None = None) -> None:
         """
         Set the matrices to be used to build the preconditioner.
 
@@ -532,6 +677,33 @@ cdef class ST(Object):
         ----------
         operators
             The matrices associated with the preconditioner.
+        structure
+            The matrix structure specification.
+
+        Notes
+        -----
+        The number of matrices passed here must be the same as in `setMatrices()`.
+
+        For linear eigenproblems, the preconditioner matrix is computed as
+        :math:`P(\sigma) = A_0-\sigma B_0`, where :math:`A_0,B_0` are
+        approximations of :math:`A,B` (the eigenproblem matrices) provided via the
+        ``operators`` argument in this function. Compared to `setPreconditionerMat()`,
+        this function allows setting a preconditioner in a way that is independent
+        of the shift :math:`\sigma`. Whenever the value of :math:`\sigma` changes
+        the preconditioner is recomputed.
+
+        Similarly, for polynomial eigenproblems the matrix for the preconditioner
+        is expressed as :math:`P(\sigma) = \sum_i P_i \phi_i(\sigma)`, for
+        :math:`i=1,\dots,n`, where :math:`P_i` are given in ``operators`` and the
+        :math:`\phi_i`'s are the polynomial basis functions.
+
+        The ``structure`` flag provides information about the relative nonzero
+        pattern of the ``operators`` matrices, in the same way as in
+        `setMatStructure()`.
+
+        See Also
+        --------
+        getSplitPreconditioner, setPreconditionerMat, slepc.STSetSplitPreconditioner
         """
         operators = tuple(operators)
         cdef PetscMatStructure cstructure = matstructure(structure)
@@ -553,6 +725,10 @@ cdef class ST(Object):
             The list of matrices associated with the preconditioner.
         petsc4py.PETSc.Mat.Structure
             The structure flag.
+
+        See Also
+        --------
+        slepc.STGetSplitPreconditionerInfo, slepc.STGetSplitPreconditionerTerm
         """
         cdef PetscInt k=0,n=0
         cdef PetscMatStructure cstructure
@@ -572,6 +748,10 @@ cdef class ST(Object):
         Prepare for the use of a spectral transformation.
 
         Collective.
+
+        See Also
+        --------
+        apply, slepc.STSetUp
         """
         CHKERR( STSetUp(self.st) )
 
@@ -582,7 +762,7 @@ cdef class ST(Object):
         Collective.
 
         Apply the spectral transformation operator to a vector, for instance
-        :math:`(A - s B)^{-1} B` in the case of the shift-and-invert
+        :math:`y=(A-\sigma B)^{-1}Bx` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
         Parameters
@@ -591,6 +771,10 @@ cdef class ST(Object):
             The input vector.
         y
             The result vector.
+
+        See Also
+        --------
+        applyTranspose, applyHermitianTranspose, applyMat, slepc.STApply
         """
         CHKERR( STApply(self.st, x.vec, y.vec) )
 
@@ -601,7 +785,7 @@ cdef class ST(Object):
         Collective.
 
         Apply the transpose of the operator to a vector, for instance
-        :math:`B^T(A - s B)^{-T}` in the case of the shift-and-invert
+        :math:`y=B^T(A-\sigma B)^{-T}x` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
         Parameters
@@ -610,17 +794,21 @@ cdef class ST(Object):
             The input vector.
         y
             The result vector.
+
+        See Also
+        --------
+        apply, applyHermitianTranspose, slepc.STApplyTranspose
         """
         CHKERR( STApplyTranspose(self.st, x.vec, y.vec) )
 
     def applyHermitianTranspose(self, Vec x, Vec y) -> None:
         """
-        Apply the hermitian-transpose of the operator to a vector.
+        Apply the Hermitian-transpose of the operator to a vector.
 
         Collective.
 
-        Apply the hermitian-transpose of the operator to a vector, for instance
-        :math:`B^H(A - s B)^{-H}` in the case of the shift-and-invert
+        Apply the Hermitian-transpose of the operator to a vector, for instance
+        :math:`y=B^*(A - \sigma B)^{-*}x` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
         Parameters
@@ -629,29 +817,37 @@ cdef class ST(Object):
             The input vector.
         y
             The result vector.
+
+        See Also
+        --------
+        apply, applyTranspose, slepc.STApplyHermitianTranspose
         """
         CHKERR( STApplyHermitianTranspose(self.st, x.vec, y.vec) )
 
-    def applyMat(self, Mat x, Mat y) -> None:
+    def applyMat(self, Mat X, Mat Y) -> None:
         """
         Apply the spectral transformation operator to a matrix.
 
         Collective.
 
         Apply the spectral transformation operator to a matrix, for instance
-        :math:`(A - s B)^{-1} B` in the case of the shift-and-invert
+        :math:`Y=(A-\sigma B)^{-1}BX` in the case of the shift-and-invert
         transformation and generalized eigenproblem.
 
         Parameters
         ----------
-        x
+        X
             The input matrix.
-        y
+        Y
             The result matrix.
-        """
-        CHKERR( STApplyMat(self.st, x.mat, y.mat) )
 
-    def getOperator(self) -> petsc4py.PETSc.Mat:
+        See Also
+        --------
+        apply, slepc.STApplyMat
+        """
+        CHKERR( STApplyMat(self.st, X.mat, Y.mat) )
+
+    def getOperator(self) -> Mat:
         """
         Get a shell matrix that represents the operator of the spectral transformation.
 
@@ -661,6 +857,38 @@ cdef class ST(Object):
         -------
         petsc4py.PETSc.Mat
             Operator matrix.
+
+        Notes
+        -----
+        The operator is defined in linear eigenproblems only, not in
+        polynomial ones, so the call will fail if more than 2 matrices
+        were passed in `setMatrices()`.
+
+        The returned shell matrix is essentially a wrapper to the `apply()`
+        and `applyTranspose()` operations. The operator can often be expressed as
+
+        .. math::
+
+           Op = D K^{-1} M D^{-1}
+
+        where :math:`D` is the balancing matrix, and :math:`M` and :math:`K` are
+        two matrices corresponding to the numerator and denominator for spectral
+        transformations that represent a rational matrix function.
+
+        The preconditioner matrix :math:`K` typically depends on the value of the
+        shift, and its inverse is handled via an internal ``KSP`` object. Normal
+        usage does not require explicitly calling `getOperator()`, but it can be
+        used to force the creation of :math:`K` and :math:`M`, and then :math:`K`
+        is passed to the ``KSP``. This is useful for setting options associated
+        with the ``PCFactor`` (to set MUMPS options, for instance).
+
+        The returned matrix must NOT be destroyed by the user. Instead, when no
+        longer needed it must be returned with `restoreOperator()`. In particular,
+        this is required before modifying the `ST` matrices or the shift.
+
+        See Also
+        --------
+        apply, setMatrices, setShift, restoreOperator, slepc.STGetOperator
         """
         cdef Mat op = Mat()
         CHKERR( STGetOperator(self.st, &op.mat) )
@@ -676,14 +904,18 @@ cdef class ST(Object):
         Parameters
         ----------
         op
-            Operator matrix previously obtained with getOperator().
+            Operator matrix previously obtained with `getOperator()`.
+
+        See Also
+        --------
+        getOperator, slepc.STRestoreOperator
         """
         CHKERR( PetscObjectDereference(<PetscObject>op.mat) )
         CHKERR( STRestoreOperator(self.st, &op.mat) )
 
     #
 
-    def setCayleyAntishift(self, tau: Scalar) -> None:
+    def setCayleyAntishift(self, mu: Scalar) -> None:
         """
         Set the value of the anti-shift for the Cayley spectral transformation.
 
@@ -691,17 +923,20 @@ cdef class ST(Object):
 
         Parameters
         ----------
-        tau
+        mu
             The anti-shift.
 
         Notes
         -----
         In the generalized Cayley transform, the operator can be expressed as
-        :math:`OP = inv(A - \sigma B) (A + tau B)`. This function sets
-        the value of :math:`tau`.  Use `setShift()` for setting
-        :math:`\sigma`.
+        :math:`(A - \sigma B)^{-1}(A + \mu B)`. This function sets the value
+        of :math:`mu`.  Use `setShift()` for setting :math:`\sigma`.
+
+        See Also
+        --------
+        setShift, getCayleyAntishift, slepc.STCayleySetAntishift
         """
-        cdef PetscScalar sval = asScalar(tau)
+        cdef PetscScalar sval = asScalar(mu)
         CHKERR( STCayleySetAntishift(self.st, sval) )
 
     def getCayleyAntishift(self) -> Scalar:
@@ -714,6 +949,10 @@ cdef class ST(Object):
         -------
         Scalar
             The anti-shift.
+
+        See Also
+        --------
+        setCayleyAntishift, slepc.STCayleyGetAntishift
         """
         cdef PetscScalar sval = 0
         CHKERR( STCayleyGetAntishift(self.st, &sval) )
@@ -729,6 +968,10 @@ cdef class ST(Object):
         ---------
         filter_type
             The type of filter.
+
+        See Also
+        --------
+        getFilterType, slepc.STFilterSetType
         """
         cdef SlepcSTFilterType val = filter_type
         CHKERR( STFilterSetType(self.st, val) )
@@ -743,6 +986,10 @@ cdef class ST(Object):
         -------
         FilterType
             The type of filter.
+
+        See Also
+        --------
+        setFilterType, slepc.STFilterGetType
         """
         cdef SlepcSTFilterType val = ST_FILTER_FILTLAN
         CHKERR( STFilterGetType(self.st, &val) )
@@ -771,7 +1018,11 @@ cdef class ST(Object):
         Common usage is to set the interval in `EPS` with `EPS.setInterval()`.
 
         The interval must be contained within the numerical range of the
-        matrix, see `ST.setFilterRange()`.
+        matrix, see `setFilterRange()`.
+
+        See Also
+        --------
+        getFilterInterval, setFilterRange, slepc.STFilterSetInterval
         """
         cdef PetscReal rval1 = asReal(inta)
         cdef PetscReal rval2 = asReal(intb)
@@ -789,6 +1040,10 @@ cdef class ST(Object):
             The left end of the interval.
         intb: float
             The right end of the interval.
+
+        See Also
+        --------
+        setFilterInterval, slepc.STFilterGetInterval
         """
         cdef PetscReal inta = 0
         cdef PetscReal intb = 0
@@ -807,15 +1062,19 @@ cdef class ST(Object):
         Parameters
         ----------
         left
-            The left end of the interval.
+            The left end of the spectral range.
         right
-            The right end of the interval.
+            The right end of the spectral range.
 
         Notes
         -----
         The filter will be most effective if the numerical range is tight,
-        that is, left and right are good approximations to the leftmost and
-        rightmost eigenvalues, respectively.
+        that is, ``left`` and ``right`` are good approximations to the
+        leftmost and rightmost eigenvalues, respectively.
+
+        See Also
+        --------
+        setFilterInterval, getFilterRange, slepc.STFilterSetRange
         """
         cdef PetscReal rval1 = asReal(left)
         cdef PetscReal rval2 = asReal(right)
@@ -830,9 +1089,13 @@ cdef class ST(Object):
         Returns
         -------
         left: float
-            The left end of the interval.
+            The left end of the spectral range.
         right: float
-            The right end of the interval.
+            The right end of the spectral range.
+
+        See Also
+        --------
+        getFilterInterval, slepc.STFilterGetRange
         """
         cdef PetscReal left = 0
         cdef PetscReal right = 0
@@ -849,6 +1112,10 @@ cdef class ST(Object):
         ----------
         deg
             The polynomial degree.
+
+        See Also
+        --------
+        getFilterDegree, slepc.STFilterSetDegree
         """
         cdef PetscInt val = asInt(deg)
         CHKERR( STFilterSetDegree(self.st, val) )
@@ -863,6 +1130,10 @@ cdef class ST(Object):
         -------
         int
             The polynomial degree.
+
+        See Also
+        --------
+        setFilterDegree, slepc.STFilterGetDegree
         """
         cdef PetscInt val = 0
         CHKERR( STFilterGetDegree(self.st, &val) )
@@ -878,6 +1149,14 @@ cdef class ST(Object):
         ---------
         damping
             The type of damping.
+
+        Notes
+        -----
+        Only used in `FilterType.CHEBYSHEV` filters.
+
+        See Also
+        --------
+        getFilterDamping, slepc.STFilterSetDamping
         """
         cdef SlepcSTFilterDamping val = damping
         CHKERR( STFilterSetDamping(self.st, val) )
@@ -892,6 +1171,10 @@ cdef class ST(Object):
         -------
         FilterDamping
             The type of damping.
+
+        See Also
+        --------
+        setFilterDamping, slepc.STFilterGetDamping
         """
         cdef SlepcSTFilterDamping val = ST_FILTER_DAMPING_NONE
         CHKERR( STFilterGetDamping(self.st, &val) )
