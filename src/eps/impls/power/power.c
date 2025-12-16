@@ -293,7 +293,7 @@ static PetscErrorCode EPSPowerFormFunction_Update(SNES snes,Vec x,Vec y,void *ct
   PetscCall(Normalize(Bx,bx,power->idx,power->p,power->sign_normalization,&sign));
   PetscCall(VecAXPY(y,-1.0,Bx));
   /* Keep tracking eigenvalue update. It would be useful when we want to monitor solver progress via snes monitor. */
-  eps->eigr[(eps->nconv < eps->nev)? eps->nconv:(eps->nconv-1)] = 1.0/(bx*sign);
+  eps->eigr[(eps->nconv < eps->nev)? eps->nconv:(eps->nconv-1)] = 1.0/((PetscScalar)bx*sign);
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -456,7 +456,7 @@ static PetscErrorCode EPSSolve_Power(EPS eps)
      * Assign eigenvalue to theta to make the rest of the code consistent
      */
     if (power->update) theta = eps->eigr[eps->nconv];
-    else if (power->nonlinear) theta = 1.0/(norm*sign); /* Eigenvalue: 1/|Bx| */
+    else if (power->nonlinear) theta = 1.0/((PetscScalar)norm*sign); /* Eigenvalue: 1/|Bx| */
 
     if (power->shift_type == EPS_POWER_SHIFT_CONSTANT) { /* direct & inverse iteration */
 

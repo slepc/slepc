@@ -4,7 +4,7 @@ class EPSType(object):
     """
     EPS type.
 
-    Native sparse eigensolvers.
+    Native eigenvalue solvers.
 
     - `POWER`:        Power Iteration, Inverse Iteration, RQI.
     - `SUBSPACE`:     Subspace Iteration.
@@ -17,22 +17,25 @@ class EPSType(object):
     - `LOBPCG`:       Locally Optimal Block Preconditioned Conjugate Gradient.
     - `CISS`:         Contour Integral Spectrum Slicing.
     - `LYAPII`:       Lyapunov inverse iteration.
-    - `LAPACK`:       Wrappers to dense eigensolvers in Lapack.
 
     Wrappers to external eigensolvers
-    (should be enabled during installation of SLEPc)
+    (should be enabled during installation of SLEPc).
 
-    - `ARPACK`:
-    - `BLOPEX`:
-    - `PRIMME`:
-    - `FEAST`:
-    - `SCALAPACK`:
-    - `ELPA`:
-    - `ELEMENTAL`:
-    - `EVSL`:
-    - `CHASE`:
+    - `LAPACK`:       Sequential dense eigensolver.
+    - `ARPACK`:       Iterative Krylov-based eigensolver.
+    - `BLOPEX`:       Implementation of LOBPCG.
+    - `PRIMME`:       Iterative eigensolvers of Davidson type.
+    - `FEAST`:        Contour integral eigensolver.
+    - `SCALAPACK`:    Parallel dense eigensolver for symmetric problems.
+    - `ELPA`:         Parallel dense eigensolver for symmetric problems.
+    - `ELEMENTAL`:    Parallel dense eigensolver for symmetric problems.
+    - `EVSL`:         Iterative eigensolver based on polynomial filters.
+    - `CHASE`:        Subspace iteration accelerated with polynomials.
+
+    See Also
+    --------
+    slepc.EPSType
     """
-    # provided implementations
     POWER        = S_(EPSPOWER)
     SUBSPACE     = S_(EPSSUBSPACE)
     ARNOLDI      = S_(EPSARNOLDI)
@@ -45,7 +48,6 @@ class EPSType(object):
     CISS         = S_(EPSCISS)
     LYAPII       = S_(EPSLYAPII)
     LAPACK       = S_(EPSLAPACK)
-    # with external libraries
     ARPACK       = S_(EPSARPACK)
     BLOPEX       = S_(EPSBLOPEX)
     PRIMME       = S_(EPSPRIMME)
@@ -65,10 +67,14 @@ class EPSProblemType(object):
     - `GHEP`:   Generalized Hermitian eigenproblem.
     - `GNHEP`:  Generalized Non-Hermitian eigenproblem.
     - `PGNHEP`: Generalized Non-Hermitian eigenproblem
-                with positive definite :math:`B`.
+      with positive definite :math:`B`.
     - `GHIEP`:  Generalized Hermitian-indefinite eigenproblem.
     - `BSE`:    Structured Bethe-Salpeter eigenproblem.
     - `HAMILT`: Hamiltonian eigenproblem.
+
+    See Also
+    --------
+    slepc.EPSProblemType
     """
     HEP    = EPS_HEP
     NHEP   = EPS_NHEP
@@ -88,9 +94,13 @@ class EPSExtraction(object):
     - `HARMONIC_RELATIVE`: Harmonic extraction relative to the eigenvalue.
     - `HARMONIC_RIGHT`:    Harmonic extraction for rightmost eigenvalues.
     - `HARMONIC_LARGEST`:  Harmonic extraction for largest magnitude (without
-                           target).
+      target).
     - `REFINED`:           Refined extraction.
     - `REFINED_HARMONIC`:  Refined harmonic extraction.
+
+    See Also
+    --------
+    slepc.EPSExtraction
     """
     RITZ              = EPS_RITZ
     HARMONIC          = EPS_HARMONIC
@@ -108,6 +118,10 @@ class EPSBalance(object):
     - `ONESIDE`:  One-sided balancing.
     - `TWOSIDE`:  Two-sided balancing.
     - `USER`:     User-provided balancing matrices.
+
+    See Also
+    --------
+    slepc.EPSBalance
     """
     NONE    = EPS_BALANCE_NONE
     ONESIDE = EPS_BALANCE_ONESIDE
@@ -121,6 +135,10 @@ class EPSErrorType(object):
     - `ABSOLUTE`: Absolute error.
     - `RELATIVE`: Relative error.
     - `BACKWARD`: Backward error.
+
+    See Also
+    --------
+    slepc.EPSErrorType
     """
     ABSOLUTE = EPS_ERROR_ABSOLUTE
     RELATIVE = EPS_ERROR_RELATIVE
@@ -141,6 +159,10 @@ class EPSWhich(object):
     - `TARGET_IMAGINARY`:   Imaginary part closest to target.
     - `ALL`:                All eigenvalues in an interval.
     - `USER`:               User defined selection.
+
+    See Also
+    --------
+    slepc.EPSWhich
     """
     LARGEST_MAGNITUDE  = EPS_LARGEST_MAGNITUDE
     SMALLEST_MAGNITUDE = EPS_SMALLEST_MAGNITUDE
@@ -162,6 +184,10 @@ class EPSConv(object):
     - `REL`:  Convergence test relative to the eigenvalue.
     - `NORM`: Convergence test relative to the matrix norms.
     - `USER`: User-defined convergence test.
+
+    See Also
+    --------
+    slepc.EPSConv
     """
     ABS  = EPS_CONV_ABS
     REL  = EPS_CONV_REL
@@ -175,6 +201,10 @@ class EPSStop(object):
     - `BASIC`:     Default stopping test.
     - `USER`:      User-defined stopping test.
     - `THRESHOLD`: Threshold stopping test.
+
+    See Also
+    --------
+    slepc.EPSStop
     """
     BASIC     = EPS_STOP_BASIC
     USER      = EPS_STOP_USER
@@ -190,6 +220,10 @@ class EPSConvergedReason(object):
     - `DIVERGED_BREAKDOWN`:     Solver failed due to breakdown.
     - `DIVERGED_SYMMETRY_LOST`: Lanczos-type method could not preserve symmetry.
     - `CONVERGED_ITERATING`:    Iteration not finished yet.
+
+    See Also
+    --------
+    slepc.EPSConvergedReason
     """
     CONVERGED_TOL          = EPS_CONVERGED_TOL
     CONVERGED_USER         = EPS_CONVERGED_USER
@@ -206,6 +240,10 @@ class EPSPowerShiftType(object):
     - `CONSTANT`:  Constant shift.
     - `RAYLEIGH`:  Rayleigh quotient.
     - `WILKINSON`: Wilkinson shift.
+
+    See Also
+    --------
+    slepc.EPSPowerShiftType
     """
     CONSTANT  = EPS_POWER_SHIFT_CONSTANT
     RAYLEIGH  = EPS_POWER_SHIFT_RAYLEIGH
@@ -218,6 +256,10 @@ class EPSKrylovSchurBSEType(object):
     - `SHAO`:         Lanczos recurrence for H square.
     - `GRUNING`:      Lanczos recurrence for H.
     - `PROJECTEDBSE`: Lanczos where the projected problem has BSE structure.
+
+    See Also
+    --------
+    slepc.EPSKrylovSchurBSEType
     """
     SHAO         = EPS_KRYLOVSCHUR_BSE_SHAO
     GRUNING      = EPS_KRYLOVSCHUR_BSE_GRUNING
@@ -233,6 +275,10 @@ class EPSLanczosReorthogType(object):
     - `PERIODIC`:  Periodic reorthogonalization.
     - `PARTIAL`:   Partial reorthogonalization.
     - `DELAYED`:   Delayed reorthogonalization.
+
+    See Also
+    --------
+    slepc.EPSLanczosReorthogType
     """
     LOCAL     = EPS_LANCZOS_REORTHOG_LOCAL
     FULL      = EPS_LANCZOS_REORTHOG_FULL
@@ -247,6 +293,10 @@ class EPSCISSQuadRule(object):
 
     - `TRAPEZOIDAL`: Trapezoidal rule.
     - `CHEBYSHEV`:   Chebyshev points.
+
+    See Also
+    --------
+    slepc.EPSCISSQuadRule
     """
     TRAPEZOIDAL = EPS_CISS_QUADRULE_TRAPEZOIDAL
     CHEBYSHEV   = EPS_CISS_QUADRULE_CHEBYSHEV
@@ -257,6 +307,10 @@ class EPSCISSExtraction(object):
 
     - `RITZ`:   Ritz extraction.
     - `HANKEL`: Extraction via Hankel eigenproblem.
+
+    See Also
+    --------
+    slepc.EPSCISSExtraction
     """
     RITZ   = EPS_CISS_EXTRACTION_RITZ
     HANKEL = EPS_CISS_EXTRACTION_HANKEL
@@ -265,7 +319,14 @@ class EPSCISSExtraction(object):
 
 cdef class EPS(Object):
 
-    """EPS."""
+    """
+    Eigenvalue Problem Solver.
+
+    The Eigenvalue Problem Solver (`EPS`) is the object provided by slepc4py
+    for specifying a linear eigenvalue problem, either in standard or
+    generalized form. It provides uniform and efficient access to all of the
+    linear eigensolvers included in the package.
+    """
 
     Type            = EPSType
     ProblemType     = EPSProblemType
@@ -298,6 +359,10 @@ cdef class EPS(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        slepc.EPSView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( EPSView(self.eps, vwr) )
@@ -307,6 +372,10 @@ cdef class EPS(Object):
         Destroy the EPS object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.EPSDestroy
         """
         CHKERR( EPSDestroy(&self.eps) )
         self.eps = NULL
@@ -317,6 +386,10 @@ cdef class EPS(Object):
         Reset the EPS object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.EPSReset
         """
         CHKERR( EPSReset(self.eps) )
 
@@ -330,6 +403,10 @@ cdef class EPS(Object):
         ----------
         comm
             MPI communicator; if not provided, it defaults to all processes.
+
+        See Also
+        --------
+        slepc.EPSCreate
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcEPS neweps = NULL
@@ -350,12 +427,15 @@ cdef class EPS(Object):
 
         Notes
         -----
-        See `EPS.Type` for available methods. The default is
-        `EPS.Type.KRYLOVSCHUR`.  Normally, it is best to use
+        The default is `KRYLOVSCHUR`. Normally, it is best to use
         `setFromOptions()` and then set the EPS type from the options
-        database rather than by using this routine.  Using the options
+        database rather than by using this routine. Using the options
         database provides the user with maximum flexibility in
         evaluating the different available methods.
+
+        See Also
+        --------
+        getType, slepc.EPSSetType
         """
         cdef SlepcEPSType cval = NULL
         eps_type = str2bytes(eps_type, &cval)
@@ -371,6 +451,10 @@ cdef class EPS(Object):
         -------
         str
             The solver currently being used.
+
+        See Also
+        --------
+        setType, slepc.EPSGetType
         """
         cdef SlepcEPSType eps_type = NULL
         CHKERR( EPSGetType(self.eps, &eps_type) )
@@ -386,6 +470,10 @@ cdef class EPS(Object):
         -------
         str
             The prefix string set for this EPS object.
+
+        See Also
+        --------
+        setOptionsPrefix, appendOptionsPrefix, slepc.EPSGetOptionsPrefix
         """
         cdef const char *prefix = NULL
         CHKERR( EPSGetOptionsPrefix(self.eps, &prefix) )
@@ -413,6 +501,10 @@ cdef class EPS(Object):
 
             E1.setOptionsPrefix("eig1_")
             E2.setOptionsPrefix("eig2_")
+
+        See Also
+        --------
+        appendOptionsPrefix, getOptionsPrefix, slepc.EPSGetOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -428,6 +520,10 @@ cdef class EPS(Object):
         ----------
         prefix
             The prefix string to prepend to all EPS option requests.
+
+        See Also
+        --------
+        setOptionsPrefix, getOptionsPrefix, slepc.EPSAppendOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -439,13 +535,16 @@ cdef class EPS(Object):
 
         Collective.
 
+        Notes
+        -----
+        To see all options, run your program with the ``-help`` option.
+
         This routine must be called before `setUp()` if the user is to be
         allowed to set the solver type.
 
-        Notes
-        -----
-        To see all options, run your program with the ``-help``
-        option.
+        See Also
+        --------
+        setOptionsPrefix, slepc.EPSSetFromOptions
         """
         CHKERR( EPSSetFromOptions(self.eps) )
 
@@ -461,6 +560,10 @@ cdef class EPS(Object):
         -------
         ProblemType
             The problem type that was previously set.
+
+        See Also
+        --------
+        setProblemType, slepc.EPSGetProblemType
         """
         cdef SlepcEPSProblemType val = EPS_NHEP
         CHKERR( EPSGetProblemType(self.eps, &val) )
@@ -479,17 +582,25 @@ cdef class EPS(Object):
 
         Notes
         -----
-        Allowed values are: Hermitian (HEP), non-Hermitian (NHEP), generalized
-        Hermitian (GHEP), generalized non-Hermitian (GNHEP), and generalized
-        non-Hermitian with positive semi-definite B (PGNHEP).
-
-        This function must be used to instruct SLEPc to exploit symmetry. If
+        This function must be used to instruct SLEPc to exploit symmetry or
+        other kind of structure. If
         no problem type is specified, by default a non-Hermitian problem is
         assumed (either standard or generalized). If the user knows that the
-        problem is Hermitian (i.e. :math:`A=A^H`) or generalized Hermitian
-        (i.e. :math:`A=A^H`, :math:`B=B^H`, and :math:`B` positive definite)
+        problem is Hermitian (i.e., :math:`A=A^*`) or generalized Hermitian
+        (i.e., :math:`A=A^*`, :math:`B=B^*`, and :math:`B` positive definite)
         then it is recommended to set the problem type so that eigensolver can
         exploit these properties.
+
+        If the user does not call this function, the solver will use a
+        reasonable guess.
+
+        For structured problem types such as `BSE`, the matrices passed in via
+        `setOperators()` must have been created with the corresponding helper
+        function, i.e., `createMatBSE()`.
+
+        See Also
+        --------
+        setOperators, createMatBSE, getProblemType, slepc.EPSSetProblemType
         """
         cdef SlepcEPSProblemType val = problem_type
         CHKERR( EPSSetProblemType(self.eps, val) )
@@ -503,7 +614,11 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            True if two matrices were set with `setOperators()`.
+            ``True`` if the problem is generalized.
+
+        See Also
+        --------
+        isHermitian, isPositive, isStructured, slepc.EPSIsGeneralized
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSIsGeneralized(self.eps, &tval) )
@@ -518,7 +633,11 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            True if the problem type set with `setProblemType()` was Hermitian.
+            ``True`` if the problem is Hermitian.
+
+        See Also
+        --------
+        isGeneralized, isPositive, isStructured, slepc.EPSIsHermitian
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSIsHermitian(self.eps, &tval) )
@@ -536,7 +655,11 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            True if the problem type set with `setProblemType()` was positive.
+            ``True`` if the problem is positive (semi-) definite.
+
+        See Also
+        --------
+        isGeneralized, isHermitian, isStructured, slepc.EPSIsPositive
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSIsPositive(self.eps, &tval) )
@@ -551,7 +674,17 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            True if the problem type set with `setProblemType()` was structured.
+            ``True`` if the problem is structured.
+
+        Notes
+        -----
+        The result will be ``True`` if the problem type has been set to some
+        structured type such as `BSE`. This is independent of whether the input
+        matrix has been built with a certain structure with a helper function.
+
+        See Also
+        --------
+        isGeneralized, isHermitian, isPositive, slepc.EPSIsStructured
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSIsStructured(self.eps, &tval) )
@@ -566,11 +699,15 @@ cdef class EPS(Object):
         Returns
         -------
         balance: Balance
-            The balancing method
+            The balancing method.
         iterations: int
-            Number of iterations of the balancing algorithm
+            Number of iterations of the balancing algorithm.
         cutoff: float
-            Cutoff value
+            Cutoff value.
+
+        See Also
+        --------
+        setBalance, slepc.EPSGetBalance
         """
         cdef SlepcEPSBalance val = EPS_BALANCE_ONESIDE
         cdef PetscInt ival = 0
@@ -589,17 +726,35 @@ cdef class EPS(Object):
 
         Logically collective.
 
-        Set the balancing technique to be used by the eigensolver, and some
-        parameters associated to it.
-
         Parameters
         ----------
         balance
-            The balancing method
+            The balancing method.
         iterations
-            Number of iterations of the balancing algorithm
+            Number of iterations of the balancing algorithm.
         cutoff
-            Cutoff value
+            Cutoff value.
+
+        Notes
+        -----
+        When balancing is enabled, the solver works implicitly with matrix
+        :math:`DAD^{-1}`, where :math:`D` is an appropriate diagonal matrix.
+        This improves the accuracy of the computed results in some cases.
+
+        Balancing makes sense only for non-Hermitian problems when the
+        required precision is high (i.e., with a small tolerance).
+
+        By default, balancing is disabled. The two-sided method is much more
+        effective than the one-sided counterpart, but it requires the system
+        matrices to have the ``Mat.multTranspose()`` operation defined.
+
+        The parameter ``iterations`` is the number of iterations performed
+        by the method. The ``cutoff`` value is used only in the two-side
+        variant.
+
+        See Also
+        --------
+        setBalance, slepc.EPSGetBalance
         """
         cdef SlepcEPSBalance val = EPS_BALANCE_NONE
         cdef PetscInt  ival = PETSC_CURRENT
@@ -620,6 +775,10 @@ cdef class EPS(Object):
         -------
         Extraction
             The method of extraction.
+
+        See Also
+        --------
+        setExtraction, slepc.EPSGetExtraction
         """
         cdef SlepcEPSExtraction val = EPS_RITZ
         CHKERR( EPSGetExtraction(self.eps, &val) )
@@ -627,7 +786,7 @@ cdef class EPS(Object):
 
     def setExtraction(self, extraction: Extraction) -> None:
         """
-        Set the extraction type used by the EPS object.
+        Set the extraction type used by the eigensolver.
 
         Logically collective.
 
@@ -638,14 +797,17 @@ cdef class EPS(Object):
 
         Notes
         -----
-        Not all eigensolvers support all types of extraction. See the
-        SLEPc documentation for details.
+        Not all eigensolvers support all types of extraction.
 
         By default, a standard Rayleigh-Ritz extraction is used. Other
         extractions may be useful when computing interior eigenvalues.
 
         Harmonic-type extractions are used in combination with a
-        *target*. See `setTarget()`.
+        *target*, see `setTarget()`.
+
+        See Also
+        --------
+        getExtraction, setTarget, slepc.EPSSetExtraction
         """
         cdef SlepcEPSExtraction val = extraction
         CHKERR( EPSSetExtraction(self.eps, val) )
@@ -660,6 +822,10 @@ cdef class EPS(Object):
         -------
         Which
             The portion of the spectrum to be sought by the solver.
+
+        See Also
+        --------
+        setWhichEigenpairs, slepc.EPSGetWhichEigenpairs
         """
         cdef SlepcEPSWhich val = EPS_LARGEST_MAGNITUDE
         CHKERR( EPSGetWhichEigenpairs(self.eps, &val) )
@@ -684,6 +850,20 @@ cdef class EPS(Object):
         `EPS.Which.LARGEST_IMAGINARY` and
         `EPS.Which.SMALLEST_IMAGINARY` use the absolute value of the
         imaginary part for eigenvalue selection.
+
+        The target is a scalar value provided with `setTarget()`.
+
+        The criterion `EPS.Which.TARGET_IMAGINARY` is available only
+        in case PETSc and SLEPc have been built with complex scalars.
+
+        `EPS.Which.ALL` is intended for use in combination with an
+        interval (see `setInterval()`), when all eigenvalues within the
+        interval are requested, or in the context of the `EPS.Type.CISS`
+        solver for computing all eigenvalues in a region.
+
+        See Also
+        --------
+        setTarget, setInterval, getWhichEigenpairs, slepc.EPSSetWhichEigenpairs
         """
         cdef SlepcEPSWhich val = which
         CHKERR( EPSSetWhichEigenpairs(self.eps, val) )
@@ -700,6 +880,10 @@ cdef class EPS(Object):
             The threshold.
         rel: bool
             Whether the threshold is relative or not.
+
+        See Also
+        --------
+        setThreshold, slepc.EPSGetThreshold
         """
         cdef PetscReal rval = 0
         cdef PetscBool tval = PETSC_FALSE
@@ -725,7 +909,11 @@ cdef class EPS(Object):
         the threshold, where eigenvalues are computed in sequence
         until one of the computed eigenvalues is below/above the
         threshold (depending on whether largest or smallest eigenvalues
-        are computed).
+        are computed). The details are given in `slepc.EPSSetThreshold`.
+
+        See Also
+        --------
+        setStoppingTest, getThreshold, slepc.EPSSetThreshold
         """
         cdef PetscReal rval = asReal(thres)
         cdef PetscBool tval = asBool(rel)
@@ -745,6 +933,10 @@ cdef class EPS(Object):
         Notes
         -----
         If the target was not set by the user, then zero is returned.
+
+        See Also
+        --------
+        setTarget, slepc.EPSGetTarget
         """
         cdef PetscScalar sval = 0
         CHKERR( EPSGetTarget(self.eps, &sval) )
@@ -766,6 +958,13 @@ cdef class EPS(Object):
         The target is a scalar value used to determine the portion of
         the spectrum of interest. It is used in combination with
         `setWhichEigenpairs()`.
+
+        When PETSc is built with real scalars, it is not possible to
+        specify a complex target.
+
+        See Also
+        --------
+        getTarget, slepc.EPSSetTarget
         """
         cdef PetscScalar sval = asScalar(target)
         CHKERR( EPSSetTarget(self.eps, sval) )
@@ -786,6 +985,10 @@ cdef class EPS(Object):
         Notes
         -----
         If the interval was not set by the user, then zeros are returned.
+
+        See Also
+        --------
+        setInterval, slepc.EPSGetInterval
         """
         cdef PetscReal inta = 0
         cdef PetscReal intb = 0
@@ -812,6 +1015,13 @@ cdef class EPS(Object):
         This function provides the interval to be considered. It must
         be used in combination with `EPS.Which.ALL`, see
         `setWhichEigenpairs()`.
+
+        A computational interval is also needed when using polynomial
+        filters, see `slepc.STFILTER`.
+
+        See Also
+        --------
+        getInterval, setWhichEigenpairs, slepc.EPSSetInterval, slepc.STFILTER
         """
         cdef PetscReal rval1 = asReal(inta)
         cdef PetscReal rval2 = asReal(intb)
@@ -834,6 +1044,10 @@ cdef class EPS(Object):
             The convergence tolerance.
         max_it: int
             The maximum number of iterations.
+
+        See Also
+        --------
+        setTolerances, slepc.EPSGetTolerances
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
@@ -855,8 +1069,12 @@ cdef class EPS(Object):
 
         Notes
         -----
-        Use `DECIDE` for maxits to assign a reasonably good value,
+        Use `DETERMINE` for ``max_it`` to assign a reasonably good value,
         which is dependent on the solution method.
+
+        See Also
+        --------
+        getTolerances, slepc.EPSSetTolerances
         """
         cdef PetscReal rval = PETSC_CURRENT
         cdef PetscInt  ival = PETSC_CURRENT
@@ -874,6 +1092,10 @@ cdef class EPS(Object):
         -------
         bool
             Whether the two-sided variant is to be used or not.
+
+        See Also
+        --------
+        setTwoSided, slepc.EPSGetTwoSided
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGetTwoSided(self.eps, &tval) )
@@ -889,6 +1111,20 @@ cdef class EPS(Object):
         ----------
         twosided
             Whether the two-sided variant is to be used or not.
+
+        Notes
+        -----
+        If the user sets ``twosided`` to ``True`` then the solver uses a
+        variant of the algorithm that computes both right and left
+        eigenvectors. This is usually much more costly. This option is not
+        available in all solvers.
+
+        When using two-sided solvers, the problem matrices must have both
+        the ``Mat.mult`` and ``Mat.multTranspose`` operations defined.
+
+        See Also
+        --------
+        getTwoSided, getLeftEigenvector, slepc.EPSSetTwoSided
         """
         cdef PetscBool tval = asBool(twosided)
         CHKERR( EPSSetTwoSided(self.eps, tval) )
@@ -903,6 +1139,10 @@ cdef class EPS(Object):
         -------
         bool
             Whether purification is activated or not.
+
+        See Also
+        --------
+        setPurify, slepc.EPSGetPurify
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGetPurify(self.eps, &tval) )
@@ -917,7 +1157,19 @@ cdef class EPS(Object):
         Parameters
         ----------
         purify
-            True to activate purification (default).
+            ``True`` to activate purification (default).
+
+        Notes
+        -----
+        By default, eigenvectors of generalized symmetric eigenproblems are
+        purified in order to purge directions in the nullspace of matrix
+        :math:`B`. If the user knows that :math:`B` is non-singular, then
+        purification can be safely deactivated and some computational cost
+        is avoided (this is particularly important in interval computations).
+
+        See Also
+        --------
+        getPurify, setInterval, slepc.EPSSetPurify
         """
         cdef PetscBool tval = asBool(purify)
         CHKERR( EPSSetPurify(self.eps, tval) )
@@ -933,6 +1185,10 @@ cdef class EPS(Object):
         Conv
             The method used to compute the error estimate
             used in the convergence test.
+
+        See Also
+        --------
+        setConvergenceTest, slepc.EPSGetConvergenceTest
         """
         cdef SlepcEPSConv conv = EPS_CONV_REL
         CHKERR( EPSGetConvergenceTest(self.eps, &conv) )
@@ -949,6 +1205,10 @@ cdef class EPS(Object):
         conv
             The method used to compute the error estimate
             used in the convergence test.
+
+        See Also
+        --------
+        getConvergenceTest, slepc.EPSSetConvergenceTest
         """
         cdef SlepcEPSConv tconv = conv
         CHKERR( EPSSetConvergenceTest(self.eps, tconv) )
@@ -962,7 +1222,11 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            Whether the solver compute all residuals or not.
+            Whether the solver computes true residuals or not.
+
+        See Also
+        --------
+        setTrueResidual, slepc.EPSGetTrueResidual
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGetTrueResidual(self.eps, &tval) )
@@ -977,7 +1241,11 @@ cdef class EPS(Object):
         Parameters
         ----------
         trueres
-            Whether compute the true residual or not.
+            Whether the solver computes true residuals or not.
+
+        See Also
+        --------
+        getTrueResidual, slepc.EPSSetTrueResidual
         """
         cdef PetscBool tval = asBool(trueres)
         CHKERR( EPSSetTrueResidual(self.eps, tval) )
@@ -991,7 +1259,11 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            Whether the solver compute all residuals or not.
+            Whether the solver computes all residuals or not.
+
+        See Also
+        --------
+        setTrackAll, slepc.EPSGetTrackAll
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGetTrackAll(self.eps, &tval) )
@@ -1006,7 +1278,11 @@ cdef class EPS(Object):
         Parameters
         ----------
         trackall
-            Whether compute all residuals or not.
+            Whether to compute all residuals or not.
+
+        See Also
+        --------
+        getTrackAll, slepc.EPSSetTrackAll
         """
         cdef PetscBool tval = asBool(trackall)
         CHKERR( EPSSetTrackAll(self.eps, tval) )
@@ -1025,6 +1301,10 @@ cdef class EPS(Object):
             Maximum dimension of the subspace to be used by the solver.
         mpd: int
             Maximum dimension allowed for the projected problem.
+
+        See Also
+        --------
+        setDimensions, slepc.EPSGetDimensions
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -1054,7 +1334,7 @@ cdef class EPS(Object):
 
         Notes
         -----
-        Use `DECIDE` for ``ncv`` and ``mpd`` to assign a reasonably good
+        Use `DETERMINE` for ``ncv`` and ``mpd`` to assign a reasonably good
         value, which is dependent on the solution method.
 
         The parameters ``ncv`` and ``mpd`` are intimately related, so that
@@ -1070,6 +1350,14 @@ cdef class EPS(Object):
         ``mpd``), typically ``ncv`` = ``nev`` + ``mpd``. If ``nev`` is not too
         large, ``mpd`` = ``nev`` is a reasonable choice, otherwise a
         smaller value should be used.
+
+        When computing all eigenvalues in an interval, see `setInterval()`,
+        these parameters lose relevance, and tuning must be done with
+        `setKrylovSchurDimensions()`.
+
+        See Also
+        --------
+        getDimensions, setKrylovSchurDimensions, slepc.EPSSetDimensions
         """
         cdef PetscInt ival1 = PETSC_CURRENT
         cdef PetscInt ival2 = PETSC_CURRENT
@@ -1089,6 +1377,10 @@ cdef class EPS(Object):
         -------
         ST
             The spectral transformation.
+
+        See Also
+        --------
+        setST, slepc.EPSGetST
         """
         cdef ST st = ST()
         CHKERR( EPSGetST(self.eps, &st.st) )
@@ -1105,12 +1397,16 @@ cdef class EPS(Object):
         ----------
         st
             The spectral transformation.
+
+        See Also
+        --------
+        getST, slepc.EPSSetST
         """
         CHKERR( EPSSetST(self.eps, st.st) )
 
     def getBV(self) -> BV:
         """
-        Get the basis vector objects associated to the eigensolver.
+        Get the basis vectors object associated to the eigensolver.
 
         Not collective.
 
@@ -1118,6 +1414,10 @@ cdef class EPS(Object):
         -------
         BV
             The basis vectors context.
+
+        See Also
+        --------
+        setBV, slepc.EPSGetBV
         """
         cdef BV bv = BV()
         CHKERR( EPSGetBV(self.eps, &bv.bv) )
@@ -1134,6 +1434,10 @@ cdef class EPS(Object):
         ----------
         bv
             The basis vectors context.
+
+        See Also
+        --------
+        getBV, slepc.EPSSetBV
         """
         CHKERR( EPSSetBV(self.eps, bv.bv) )
 
@@ -1147,6 +1451,10 @@ cdef class EPS(Object):
         -------
         DS
             The direct solver context.
+
+        See Also
+        --------
+        setDS, slepc.EPSGetDS
         """
         cdef DS ds = DS()
         CHKERR( EPSGetDS(self.eps, &ds.ds) )
@@ -1163,6 +1471,10 @@ cdef class EPS(Object):
         ----------
         ds
             The direct solver context.
+
+        See Also
+        --------
+        getDS, slepc.EPSSetDS
         """
         CHKERR( EPSSetDS(self.eps, ds.ds) )
 
@@ -1176,6 +1488,10 @@ cdef class EPS(Object):
         -------
         RG
             The region context.
+
+        See Also
+        --------
+        setRG, slepc.EPSGetRG
         """
         cdef RG rg = RG()
         CHKERR( EPSGetRG(self.eps, &rg.rg) )
@@ -1192,10 +1508,14 @@ cdef class EPS(Object):
         ----------
         rg
             The region context.
+
+        See Also
+        --------
+        getRG, slepc.EPSSetRG
         """
         CHKERR( EPSSetRG(self.eps, rg.rg) )
 
-    def getOperators(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
+    def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
         Get the matrices associated with the eigenvalue problem.
 
@@ -1207,6 +1527,10 @@ cdef class EPS(Object):
             The matrix associated with the eigensystem.
         B: petsc4py.PETSc.Mat
             The second matrix in the case of generalized eigenproblems.
+
+        See Also
+        --------
+        setOperators, slepc.EPSGetOperators
         """
         cdef Mat A = Mat()
         cdef Mat B = Mat()
@@ -1231,20 +1555,34 @@ cdef class EPS(Object):
         B
             The second matrix in the case of generalized eigenproblems;
             if not provided, a standard eigenproblem is assumed.
+
+        Notes
+        -----
+        It must be called before `setUp()`. If it is called again after
+        `setUp()` and the matrix sizes have changed then the `EPS` object
+        is reset.
+
+        For structured eigenproblem types such as `BSE`, see `setProblemType()`,
+        the provided matrices must have been created with the corresponding
+        helper function, i.e., `createMatBSE()`.
+
+        See Also
+        --------
+        getOperators, solve, setUp, reset, setProblemType, slepc.EPSSetOperators
         """
         cdef PetscMat Bmat = B.mat if B is not None else <PetscMat>NULL
         CHKERR( EPSSetOperators(self.eps, A.mat, Bmat) )
 
     def setDeflationSpace(self, space: Vec | list[Vec]) -> None:
         """
-        Add vectors to the basis of the deflation space.
+        Set vectors to form a basis of the deflation space.
 
         Collective.
 
         Parameters
         ----------
         space
-            Set of basis vectors to be added to the deflation space.
+            Set of basis vectors of the deflation space.
 
         Notes
         -----
@@ -1254,11 +1592,15 @@ cdef class EPS(Object):
         instance in the case that an invariant subspace is known
         beforehand (such as the nullspace of the matrix).
 
+        These vectors do not persist from one `solve()` call to the other,
+        so the deflation space should be set every time.
+
         The vectors do not need to be mutually orthonormal, since they
         are explicitly orthonormalized internally.
 
-        These vectors do not persist from one `solve()` call to the other,
-        so the deflation space should be set every time.
+        See Also
+        --------
+        setInitialSpace, slepc.EPSSetDeflationSpace
         """
         if isinstance(space, Vec): space = [space]
         cdef PetscVec* vs = NULL
@@ -1278,22 +1620,27 @@ cdef class EPS(Object):
         Parameters
         ----------
         space
-            The initial space
+            Set of basis vectors of the initial space.
 
         Notes
         -----
         Some solvers start to iterate on a single vector (initial vector).
-        In that case, the other vectors are ignored.
+        In that case, only the first vector is taken into account and the
+        other vectors are ignored. But other solvers such as `SUBSPACE` are
+        able to make use of the whole initial subspace as an initial guess.
 
-        In contrast to `setDeflationSpace()`, these vectors do not persist
-        from one `solve()` call to the other, so the initial space should be
-        set every time.
+        These vectors do not persist from one `solve()` call to the other,
+        so the initial space should be set every time.
 
         The vectors do not need to be mutually orthonormal, since they are
         explicitly orthonormalized internally.
 
         Common usage of this function is when the user can provide a rough
         approximation of the wanted eigenspace. Then, convergence may be faster.
+
+        See Also
+        --------
+        setDeflationSpace, setLeftInitialSpace, slepc.EPSSetInitialSpace
         """
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
@@ -1311,7 +1658,7 @@ cdef class EPS(Object):
         Parameters
         ----------
         space
-            The left initial space
+            Set of basis vectors of the left initial space.
 
         Notes
         -----
@@ -1320,6 +1667,10 @@ cdef class EPS(Object):
         of the left eigenspace, if available.
 
         The same comments in `setInitialSpace()` are applicable here.
+
+        See Also
+        --------
+        setInitialSpace, setTwoSided, slepc.EPSSetLeftInitialSpace
         """
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
@@ -1337,9 +1688,13 @@ cdef class EPS(Object):
         kargs: dict[str, Any] | None = None,
     ) -> None:
         """
-        Set when to stop the outer iteration of the eigensolver.
+        Set a function to decide when to stop the outer iteration of the eigensolver.
 
         Logically collective.
+
+        See Also
+        --------
+        getStoppingTest, slepc.EPSSetStoppingTestFunction
         """
         if stopping is not None:
             if args is None: args = ()
@@ -1352,13 +1707,20 @@ cdef class EPS(Object):
 
     def getStoppingTest(self) -> EPSStoppingFunction:
         """
-        Get the stopping function.
+        Get the stopping test function.
 
         Not collective.
+
+        Returns
+        -------
+        EPSStoppingFunction
+            The stopping test function.
+
+        See Also
+        --------
+        setStoppingTest
         """
         return self.get_attr('__stopping__')
-
-    #
 
     def setArbitrarySelection(
         self,
@@ -1374,6 +1736,10 @@ cdef class EPS(Object):
         Set a function to look for eigenvalues according to an arbitrary
         selection criterion. This criterion can be based on a computation
         involving the current eigenvector approximation.
+
+        See Also
+        --------
+        getArbitrarySelection, slepc.EPSSetArbitrarySelection
         """
         if arbitrary is not None:
             if args is None: args = ()
@@ -1385,7 +1751,22 @@ cdef class EPS(Object):
             self.set_attr('__arbitrary__', None)
             CHKERR( EPSSetArbitrarySelection(self.eps, NULL, NULL) )
 
-    #
+    def getArbitrarySelection(self) -> EPSArbitraryFunction:
+        """
+        Get the arbitrary selection function.
+
+        Not collective.
+
+        Returns
+        -------
+        EPSArbitraryFunction
+            The arbitrary selection function.
+
+        See Also
+        --------
+        setArbitrarySelection
+        """
+        return self.get_attr('__arbitrary__')
 
     def setEigenvalueComparison(
         self,
@@ -1398,8 +1779,14 @@ cdef class EPS(Object):
 
         Logically collective.
 
-        Specify the eigenvalue comparison function when `setWhichEigenpairs()`
+        Notes
+        -----
+        This eigenvalue comparison function is used when `setWhichEigenpairs()`
         is set to `EPS.Which.USER`.
+
+        See Also
+        --------
+        getEigenvalueComparison, slepc.EPSSetEigenvalueComparison
         """
         if comparison is not None:
             if args is None: args = ()
@@ -1411,6 +1798,23 @@ cdef class EPS(Object):
             self.set_attr('__comparison__', None)
             CHKERR( EPSSetEigenvalueComparison(self.eps, NULL, NULL) )
 
+    def getEigenvalueComparison(self) -> EPSEigenvalueComparison:
+        """
+        Get the eigenvalue comparison function.
+
+        Not collective.
+
+        Returns
+        -------
+        EPSEigenvalueComparison
+            The eigenvalue comparison function.
+
+        See Also
+        --------
+        setEigenvalueComparison
+        """
+        return self.get_attr('__comparison__')
+
     def setMonitor(
         self,
         monitor: EPSMonitorFunction | None,
@@ -1421,6 +1825,10 @@ cdef class EPS(Object):
         Append a monitor function to the list of monitors.
 
         Logically collective.
+
+        See Also
+        --------
+        getMonitor, cancelMonitor, slepc.EPSMonitorSet
         """
         if monitor is None: return
         cdef object monitorlist = self.get_attr('__monitor__')
@@ -1433,7 +1841,20 @@ cdef class EPS(Object):
         monitorlist.append((monitor, args, kargs))
 
     def getMonitor(self) -> EPSMonitorFunction:
-        """Get the list of monitor functions."""
+        """
+        Get the list of monitor functions.
+
+        Not collective.
+
+        Returns
+        -------
+        EPSMonitorFunction
+            The list of monitor functions.
+
+        See Also
+        --------
+        setMonitor
+        """
         return self.get_attr('__monitor__')
 
     def cancelMonitor(self) -> None:
@@ -1441,6 +1862,10 @@ cdef class EPS(Object):
         Clear all monitors for an `EPS` object.
 
         Logically collective.
+
+        See Also
+        --------
+        slepc.EPSMonitorCancel
         """
         CHKERR( EPSMonitorCancel(self.eps) )
         self.set_attr('__monitor__', None)
@@ -1453,14 +1878,19 @@ cdef class EPS(Object):
 
         Collective.
 
-        Set up all the internal data structures necessary for the execution
-        of the eigensolver.
-
         Notes
         -----
+        Sets up all the internal data structures necessary for the execution
+        of the eigensolver. This includes the setup of the internal `ST`
+        object.
+
         This function need not be called explicitly in most cases,
         since `solve()` calls it. It can be useful when one wants to
         measure the set-up time separately from the solve time.
+
+        See Also
+        --------
+        solve, setInitialSpace, setDeflationSpace, slepc.EPSSetUp
         """
         CHKERR( EPSSetUp(self.eps) )
 
@@ -1469,6 +1899,20 @@ cdef class EPS(Object):
         Solve the eigensystem.
 
         Collective.
+
+        Notes
+        -----
+        The problem matrices are specified with `setOperators()`.
+
+        `solve()` will return without generating an error regardless of
+        whether all requested solutions were computed or not. Call
+        `getConverged()` to get the actual number of computed solutions,
+        and `getConvergedReason()` to determine if the solver converged
+        or failed and why.
+
+        See Also
+        --------
+        setUp, setOperators, getConverged, getConvergedReason, slepc.EPSSolve
         """
         CHKERR( EPSSolve(self.eps) )
 
@@ -1485,6 +1929,10 @@ cdef class EPS(Object):
         -------
         int
             Iteration number.
+
+        See Also
+        --------
+        getConvergedReason, setTolerances, slepc.EPSGetIterationNumber
         """
         cdef PetscInt ival = 0
         CHKERR( EPSGetIterationNumber(self.eps, &ival) )
@@ -1500,6 +1948,10 @@ cdef class EPS(Object):
         -------
         ConvergedReason
             Negative value indicates diverged, positive value converged.
+
+        See Also
+        --------
+        setTolerances, solve, slepc.EPSGetConvergedReason
         """
         cdef SlepcEPSConvergedReason val = EPS_CONVERGED_ITERATING
         CHKERR( EPSGetConvergedReason(self.eps, &val) )
@@ -1513,12 +1965,19 @@ cdef class EPS(Object):
 
         Returns
         -------
-        int
+        nconv: int
             Number of converged eigenpairs.
 
         Notes
         -----
         This function should be called after `solve()` has finished.
+
+        The value ``nconv`` may be different from the number of requested
+        solutions ``nev``, but not larger than ``ncv``, see `setDimensions()`.
+
+        See Also
+        --------
+        setDimensions, solve, getEigenpair, slepc.EPSGetConverged
         """
         cdef PetscInt ival = 0
         CHKERR( EPSGetConverged(self.eps, &ival) )
@@ -1547,6 +2006,10 @@ cdef class EPS(Object):
         The index ``i`` should be a value between ``0`` and ``nconv-1`` (see
         `getConverged()`). Eigenpairs are indexed according to the ordering
         criterion established with `setWhichEigenpairs()`.
+
+        See Also
+        --------
+        getConverged, setWhichEigenpairs, getEigenpair, slepc.EPSGetEigenvalue
         """
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
@@ -1560,7 +2023,7 @@ cdef class EPS(Object):
 
     def getEigenvector(self, i: int, Vec Vr = None, Vec Vi = None) -> None:
         """
-        Get the i-th eigenvector as computed by `solve()`.
+        Get the i-th right eigenvector as computed by `solve()`.
 
         Collective.
 
@@ -1579,6 +2042,14 @@ cdef class EPS(Object):
         ``nconv-1`` (see `getConverged()`). Eigenpairs are indexed
         according to the ordering criterion established with
         `setWhichEigenpairs()`.
+
+        The 2-norm of the eigenvector is one unless the problem is
+        generalized Hermitian. In this case the eigenvector is normalized
+        with respect to the norm defined by the B matrix.
+
+        See Also
+        --------
+        getConverged, setWhichEigenpairs, getEigenpair, slepc.EPSGetEigenvector
         """
         cdef PetscVec vecr = Vr.vec if Vr is not None else <PetscVec>NULL
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
@@ -1595,9 +2066,9 @@ cdef class EPS(Object):
         i
             Index of the solution to be obtained.
         Wr
-            Placeholder for the returned eigenvector (real part).
+            Placeholder for the returned left eigenvector (real part).
         Wi
-            Placeholder for the returned eigenvector (imaginary part).
+            Placeholder for the returned left eigenvector (imaginary part).
 
         Notes
         -----
@@ -1607,6 +2078,10 @@ cdef class EPS(Object):
 
         Left eigenvectors are available only if the twosided flag was set
         with `setTwoSided()`.
+
+        See Also
+        --------
+        getConverged, setWhichEigenpairs, getEigenpair, slepc.EPSGetLeftEigenvector
         """
         cdef PetscVec vecr = Wr.vec if Wr is not None else <PetscVec>NULL
         cdef PetscVec veci = Wi.vec if Wi is not None else <PetscVec>NULL
@@ -1641,6 +2116,14 @@ cdef class EPS(Object):
         The index ``i`` should be a value between ``0`` and ``nconv-1`` (see
         `getConverged()`). Eigenpairs are indexed according to the ordering
         criterion established with `setWhichEigenpairs()`.
+
+        The 2-norm of the eigenvector is one unless the problem is
+        generalized Hermitian. In this case the eigenvector is normalized
+        with respect to the norm defined by the B matrix.
+
+        See Also
+        --------
+        solve, getConverged, setWhichEigenpairs, slepc.EPSGetEigenpair
         """
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
@@ -1654,7 +2137,7 @@ cdef class EPS(Object):
         else:
             return toComplex(sval1, sval2)
 
-    def getInvariantSubspace(self) -> list[petsc4py.PETSc.Vec]:
+    def getInvariantSubspace(self) -> list[Vec]:
         """
         Get an orthonormal basis of the computed invariant subspace.
 
@@ -1670,9 +2153,14 @@ cdef class EPS(Object):
         This function should be called after `solve()` has finished.
 
         The returned vectors span an invariant subspace associated
-        with the computed eigenvalues. An invariant subspace ``X`` of
-        ``A` satisfies ``A x`` in ``X`` for all ``x`` in ``X`` (a
-        similar definition applies for generalized eigenproblems).
+        with the computed eigenvalues. An invariant subspace
+        :math:`X` of :math:`A` satisfies :math:`A x \in X`, for all
+        :math:`x \in X` (a similar definition applies for generalized
+        eigenproblems).
+
+        See Also
+        --------
+        getEigenpair, getConverged, solve, slepc.EPSGetInvariantSubspace
         """
         cdef PetscInt i = 0, ncv = 0
         cdef PetscVec v = NULL, *isp = NULL
@@ -1711,9 +2199,12 @@ cdef class EPS(Object):
 
         Notes
         -----
-        This is the error estimate used internally by the
-        eigensolver. The actual error bound can be computed with
-        `computeError()`.
+        This is the error estimate used internally by the eigensolver.
+        The actual error bound can be computed with `computeError()`.
+
+        See Also
+        --------
+        computeError, slepc.EPSGetErrorEstimate
         """
         cdef PetscReal rval = 0
         CHKERR( EPSGetErrorEstimate(self.eps, i, &rval) )
@@ -1739,13 +2230,22 @@ cdef class EPS(Object):
         -------
         float
             The error bound, computed in various ways from the residual norm
-            :math:`\|Ax-kBx\|_2` where :math:`k` is the eigenvalue and
-            :math:`x` is the eigenvector.
+            :math:`\|Ax-\lambda Bx\|_2` where :math:`\lambda` is the eigenvalue
+            and :math:`x` is the eigenvector.
 
         Notes
         -----
-        The index ``i`` should be a value between ``0`` and
-        ``nconv-1`` (see `getConverged()`).
+        The index ``i`` should be a value between ``0`` and ``nconv-1``
+        (see `getConverged()`).
+
+        If the computation of left eigenvectors was enabled with `setTwoSided()`,
+        then the error will be computed using the maximum of the value above and
+        the left residual norm  :math:`\|y^*A-\lambda y^*B\|_2`, where :math:`y`
+        is the approximate left eigenvector.
+
+        See Also
+        --------
+        getErrorEstimate, setTwoSided, slepc.EPSComputeError
         """
         cdef SlepcEPSErrorType et = EPS_ERROR_RELATIVE
         cdef PetscReal rval = 0
@@ -1753,7 +2253,7 @@ cdef class EPS(Object):
         CHKERR( EPSComputeError(self.eps, i, et, &rval) )
         return toReal(rval)
 
-    def errorView(self, etype: ErrorType | None = None, Viewer viewer or None: petsc4py.PETSc.Viewer | None = None) -> None:
+    def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
         """
         Display the errors associated with the computed solution.
 
@@ -1775,6 +2275,10 @@ cdef class EPS(Object):
         the eigenvalues if all of them are below the requested tolerance.
         If the viewer has format ``ASCII_INFO_DETAIL`` then a table with
         eigenvalues and corresponding errors is printed.
+
+        See Also
+        --------
+        solve, valuesView, vectorsView, slepc.EPSErrorView
         """
         cdef SlepcEPSErrorType et = EPS_ERROR_RELATIVE
         if etype is not None: et = etype
@@ -1792,6 +2296,10 @@ cdef class EPS(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        solve, vectorsView, errorView, slepc.EPSValuesView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( EPSValuesView(self.eps, vwr) )
@@ -1807,6 +2315,10 @@ cdef class EPS(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        solve, valuesView, errorView, slepc.EPSVectorsView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( EPSVectorsView(self.eps, vwr) )
@@ -1841,6 +2353,10 @@ cdef class EPS(Object):
         (`EPS.PowerShiftType.RAYLEIGH` or
         `EPS.PowerShiftType.WILKINSON`). In this case, the iteration
         behaves rather like a cubic converging method as RQI.
+
+        See Also
+        --------
+        getPowerShiftType, slepc.EPSPowerSetShiftType
         """
         cdef SlepcEPSPowerShiftType val = shift
         CHKERR( EPSPowerSetShiftType(self.eps, val) )
@@ -1855,6 +2371,10 @@ cdef class EPS(Object):
         -------
         PowerShiftType
             The type of shift.
+
+        See Also
+        --------
+        setPowerShiftType, slepc.EPSPowerGetShiftType
         """
         cdef SlepcEPSPowerShiftType val = EPS_POWER_SHIFT_CONSTANT
         CHKERR( EPSPowerGetShiftType(self.eps, &val) )
@@ -1869,7 +2389,7 @@ cdef class EPS(Object):
         Parameters
         ----------
         delayed
-            True if delayed reorthogonalization is to be used.
+            ``True`` if delayed reorthogonalization is to be used.
 
         Notes
         -----
@@ -1878,8 +2398,12 @@ cdef class EPS(Object):
 
         Delayed reorthogonalization is an aggressive optimization for
         the Arnoldi eigensolver than may provide better scalability,
-        but sometimes makes the solver converge less than the default
-        algorithm.
+        but sometimes makes the solver converge more slowly compared
+        to the default algorithm.
+
+        See Also
+        --------
+        getArnoldiDelayed, slepc.EPSArnoldiSetDelayed
         """
         cdef PetscBool val = asBool(delayed)
         CHKERR( EPSArnoldiSetDelayed(self.eps, val) )
@@ -1893,7 +2417,11 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            True if delayed reorthogonalization is to be used.
+            ``True`` if delayed reorthogonalization is to be used.
+
+        See Also
+        --------
+        setArnoldiDelayed, slepc.EPSArnoldiGetDelayed
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSArnoldiGetDelayed(self.eps, &tval) )
@@ -1914,6 +2442,10 @@ cdef class EPS(Object):
         -----
         This call is only relevant if the type was set to
         `EPS.Type.LANCZOS` with `setType()`.
+
+        See Also
+        --------
+        getLanczosReorthogType, slepc.EPSLanczosSetReorthog
         """
         cdef SlepcEPSLanczosReorthogType val = reorthog
         CHKERR( EPSLanczosSetReorthog(self.eps, val) )
@@ -1928,6 +2460,10 @@ cdef class EPS(Object):
         -------
         LanczosReorthogType
             The type of reorthogonalization.
+
+        See Also
+        --------
+        setLanczosReorthogType, slepc.EPSLanczosGetReorthog
         """
         cdef SlepcEPSLanczosReorthogType val = \
             EPS_LANCZOS_REORTHOG_LOCAL
@@ -1952,6 +2488,10 @@ cdef class EPS(Object):
         This call is only relevant if the type was set to
         `EPS.Type.KRYLOVSCHUR` with `setType()` and the problem
         type to `EPS.ProblemType.BSE` with `setProblemType()`.
+
+        See Also
+        --------
+        createMatBSE, getKrylovSchurBSEType, slepc.EPSKrylovSchurSetBSEType
         """
         cdef SlepcEPSKrylovSchurBSEType val = bse
         CHKERR( EPSKrylovSchurSetBSEType(self.eps, val) )
@@ -1966,6 +2506,10 @@ cdef class EPS(Object):
         -------
         KrylovSchurBSEType
             The BSE method.
+
+        See Also
+        --------
+        setKrylovSchurBSEType, slepc.EPSKrylovSchurGetBSEType
         """
         cdef SlepcEPSKrylovSchurBSEType val = EPS_KRYLOVSCHUR_BSE_SHAO
         CHKERR( EPSKrylovSchurGetBSEType(self.eps, &val) )
@@ -1987,6 +2531,10 @@ cdef class EPS(Object):
         Notes
         -----
         Allowed values are in the range [0.1,0.9]. The default is 0.5.
+
+        See Also
+        --------
+        getKrylovSchurRestart, slepc.EPSKrylovSchurSetRestart
         """
         cdef PetscReal val = asReal(keep)
         CHKERR( EPSKrylovSchurSetRestart(self.eps, val) )
@@ -2001,6 +2549,10 @@ cdef class EPS(Object):
         -------
         float
             The number of vectors to be kept at restart.
+
+        See Also
+        --------
+        setKrylovSchurRestart, slepc.EPSKrylovSchurGetRestart
         """
         cdef PetscReal val = 0
         CHKERR( EPSKrylovSchurGetRestart(self.eps, &val) )
@@ -2015,7 +2567,7 @@ cdef class EPS(Object):
         Parameters
         ----------
         lock
-            True if the locking variant must be selected.
+            ``True`` if the locking variant must be selected.
 
         Notes
         -----
@@ -2023,6 +2575,10 @@ cdef class EPS(Object):
         This behavior can be changed so that all directions are kept in the
         working subspace even if already converged to working accuracy (the
         non-locking variant).
+
+        See Also
+        --------
+        getKrylovSchurLocking, slepc.EPSKrylovSchurSetLocking
         """
         cdef PetscBool val = asBool(lock)
         CHKERR( EPSKrylovSchurSetLocking(self.eps, val) )
@@ -2037,6 +2593,10 @@ cdef class EPS(Object):
         -------
         bool
             The locking flag.
+
+        See Also
+        --------
+        setKrylovSchurLocking, slepc.EPSKrylovSchurGetLocking
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSKrylovSchurGetLocking(self.eps, &tval) )
@@ -2059,10 +2619,20 @@ cdef class EPS(Object):
 
         Notes
         -----
-        By default, npart=1 so all processes in the communicator participate in
-        the processing of the whole interval. If npart>1 then the interval is
-        divided into npart subintervals, each of them being processed by a
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+
+        By default, ``npart=1`` so all processes in the communicator participate
+        in the processing of the whole interval. If ``npart>1`` then the interval
+        is divided into ``npart`` subintervals, each of them being processed by a
         subset of processes.
+
+        The interval is split proportionally unless the separation points are
+        specified with `setKrylovSchurSubintervals()`.
+
+        See Also
+        --------
+        setInterval, getKrylovSchurPartitions, slepc.EPSKrylovSchurSetPartitions
         """
         cdef PetscInt val = asInt(npart)
         CHKERR( EPSKrylovSchurSetPartitions(self.eps, val) )
@@ -2077,6 +2647,10 @@ cdef class EPS(Object):
         -------
         int
             The number of partitions.
+
+        See Also
+        --------
+        setKrylovSchurPartitions, slepc.EPSKrylovSchurGetPartitions
         """
         cdef PetscInt val = 0
         CHKERR( EPSKrylovSchurGetPartitions(self.eps, &val) )
@@ -2094,17 +2668,24 @@ cdef class EPS(Object):
         Parameters
         ----------
         detect
-            True if zeros must checked for.
+            ``True`` if zeros must checked for.
 
         Notes
         -----
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+
         A zero in the factorization indicates that a shift coincides with
         an eigenvalue.
 
         This flag is turned off by default, and may be necessary in some cases,
         especially when several partitions are being used. This feature currently
         requires an external package for factorizations with support for zero
-        detection, e.g. MUMPS.
+        detection, e.g., MUMPS.
+
+        See Also
+        --------
+        setInterval, getKrylovSchurDetectZeros, slepc.EPSKrylovSchurSetDetectZeros
         """
         cdef PetscBool val = asBool(detect)
         CHKERR( EPSKrylovSchurSetDetectZeros(self.eps, val) )
@@ -2119,6 +2700,10 @@ cdef class EPS(Object):
         -------
         bool
             The zero detection flag.
+
+        See Also
+        --------
+        setKrylovSchurDetectZeros, slepc.EPSKrylovSchurGetDetectZeros
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSKrylovSchurGetDetectZeros(self.eps, &tval) )
@@ -2135,10 +2720,6 @@ cdef class EPS(Object):
 
         Logically collective.
 
-        Set the dimensions used for each subsolve step in case of doing
-        spectrum slicing for a computational interval. The meaning of the
-        parameters is the same as in `setDimensions()`.
-
         Parameters
         ----------
         nev
@@ -2147,6 +2728,18 @@ cdef class EPS(Object):
             Maximum dimension of the subspace to be used by the solver.
         mpd
             Maximum dimension allowed for the projected problem.
+
+        Notes
+        -----
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+
+        The meaning of the parameters is the same as in `setDimensions()`, but
+        the ones here apply to every subsolve done by the child `EPS` object.
+
+        See Also
+        --------
+        setInterval, getKrylovSchurDimensions, slepc.EPSKrylovSchurSetDimensions
         """
         cdef PetscInt ival1 = PETSC_CURRENT
         cdef PetscInt ival2 = PETSC_CURRENT
@@ -2162,9 +2755,6 @@ cdef class EPS(Object):
 
         Not collective.
 
-        Get the dimensions used for each subsolve step in case of doing
-        spectrum slicing for a computational interval.
-
         Returns
         -------
         nev: int
@@ -2173,6 +2763,10 @@ cdef class EPS(Object):
             Maximum dimension of the subspace to be used by the solver.
         mpd: int
             Maximum dimension allowed for the projected problem.
+
+        See Also
+        --------
+        setKrylovSchurDimensions, slepc.EPSKrylovSchurGetDimensions
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -2180,11 +2774,11 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetDimensions(self.eps, &ival1, &ival2, &ival3) )
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
-    def getKrylovSchurSubcommInfo(self) -> tuple[int, int, petsc4py.PETSc.Vec]:
+    def getKrylovSchurSubcommInfo(self) -> tuple[int, int, Vec]:
         """
         Get information related to the case of doing spectrum slicing.
 
-        Collective on the subcommunicator (if v is given).
+        Collective on the subcommunicator.
 
         Get information related to the case of doing spectrum slicing
         for a computational interval with multiple communicators.
@@ -2192,18 +2786,21 @@ cdef class EPS(Object):
         Returns
         -------
         k: int
-            Number of the subinterval for the calling process.
+            Index of the subinterval for the calling process.
         n: int
-            Number of eigenvalues found in the k-th subinterval.
+            Number of eigenvalues found in the ``k``-th subinterval.
         v: petsc4py.PETSc.Vec
             A vector owned by processes in the subcommunicator with dimensions
             compatible for locally computed eigenvectors.
 
         Notes
         -----
-        This function is only available for spectrum slicing runs.
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
 
-        The returned Vec should be destroyed by the user.
+        See Also
+        --------
+        getKrylovSchurSubcommPairs, slepc.EPSKrylovSchurGetSubcommInfo
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -2211,7 +2808,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetSubcommInfo(self.eps, &ival1, &ival2, &vec.vec) )
         return (toInt(ival1), toInt(ival2), vec)
 
-    def getKrylovSchurSubcommPairs(self, i: int, Vec V) -> Scalar:
+    def getKrylovSchurSubcommPairs(self, i: int, Vec v = None) -> Scalar:
         """
         Get the i-th eigenpair stored in the multi-communicator of the process.
 
@@ -2224,7 +2821,7 @@ cdef class EPS(Object):
         ----------
         i
             Index of the solution to be obtained.
-        V
+        v
             Placeholder for the returned eigenvector.
 
         Returns
@@ -2234,16 +2831,28 @@ cdef class EPS(Object):
 
         Notes
         -----
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+        And is relevant only when the number of partitions
+        (`setKrylovSchurPartitions()`) is larger than one.
+
+        Argument ``v`` must be a valid ``Vec`` object, created by calling
+        `getKrylovSchurSubcommInfo()`.
+
         The index ``i`` should be a value between ``0`` and ``n-1``,
         where ``n`` is the number of vectors in the local subinterval,
         see `getKrylovSchurSubcommInfo()`.
+
+        See Also
+        --------
+        getKrylovSchurSubcommMats, slepc.EPSKrylovSchurGetSubcommPairs
         """
         cdef PetscScalar sval = 0
-        cdef PetscVec vec = V.vec if V is not None else <PetscVec>NULL
+        cdef PetscVec vec = v.vec if v is not None else <PetscVec>NULL
         CHKERR( EPSKrylovSchurGetSubcommPairs(self.eps, i, &sval, vec) )
         return toScalar(sval)
 
-    def getKrylovSchurSubcommMats(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat] | tuple[petsc4py.PETSc.Mat, None]:
+    def getKrylovSchurSubcommMats(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
         Get the eigenproblem matrices stored in the subcommunicator.
 
@@ -2261,10 +2870,19 @@ cdef class EPS(Object):
 
         Notes
         -----
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+        And is relevant only when the number of partitions
+        (`setKrylovSchurPartitions()`) is larger than one.
+
         This is the analog of `getOperators()`, but returns the matrices distributed
         differently (in the subcommunicator rather than in the parent communicator).
 
         These matrices should not be modified by the user.
+
+        See Also
+        --------
+        setInterval, setKrylovSchurPartitions, slepc.EPSKrylovSchurGetSubcommMats
         """
         cdef Mat A = Mat()
         cdef Mat B = Mat()
@@ -2316,6 +2934,11 @@ cdef class EPS(Object):
 
         Notes
         -----
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+        And is relevant only when the number of partitions
+        (`setKrylovSchurPartitions()`) is larger than one.
+
         This function modifies the eigenproblem matrices at subcommunicator
         level, and optionally updates the global matrices in the parent
         communicator.  The updates are expressed as
@@ -2329,9 +2952,12 @@ cdef class EPS(Object):
         The ``structure`` flag is passed to the `petsc4py.PETSc.Mat.axpy`
         operations to perform the updates.
 
-        If ``globalup`` is True, communication is carried out to reconstruct
+        If ``globalup`` is ``True``, communication is carried out to reconstruct
         the updated matrices in the parent communicator.
 
+        See Also
+        --------
+        setInterval, setKrylovSchurPartitions, slepc.EPSKrylovSchurUpdateSubcommMats
         """
         cdef PetscMat Amat = Au.mat if Au is not None else <PetscMat>NULL
         cdef PetscMat Bmat = Bu.mat if Bu is not None else <PetscMat>NULL
@@ -2346,23 +2972,30 @@ cdef class EPS(Object):
         Logically collective.
 
         Set the subinterval boundaries for spectrum slicing with a
-        computational interval.
+        computational interval with several partitions.
 
         Parameters
         ----------
         subint
-            Real values specifying subintervals
+            Real values specifying subintervals.
 
         Notes
         -----
-        This function must be called after setKrylovSchurPartitions().
-        For npart partitions, the argument subint must contain npart+1
-        real values sorted in ascending order:
-        subint_0, subint_1, ..., subint_npart,
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+
+        This function must be called after `setKrylovSchurPartitions()`.
+        For ``npart`` partitions, the argument ``subint`` must contain
+        ``npart+1`` real values sorted in ascending order:
+        ``subint_0``, ``subint_1``, ..., ``subint_npart``,
         where the first and last values must coincide with the interval
-        endpoints set with EPSSetInterval().
+        endpoints set with `setInterval()`.
         The subintervals are then defined by two consecutive points:
-        [subint_0,subint_1], [subint_1,subint_2], and so on.
+        ``[subint_0,subint_1]``, ``[subint_1,subint_2]``, and so on.
+
+        See Also
+        --------
+        setInterval, setKrylovSchurPartitions, slepc.EPSKrylovSchurSetSubintervals
         """
         cdef PetscBool match = PETSC_FALSE
         CHKERR( PetscObjectTypeCompare(<PetscObject>self.eps, EPSKRYLOVSCHUR, &match) )
@@ -2388,7 +3021,20 @@ cdef class EPS(Object):
         Returns
         -------
         ArrayReal
-            Real values specifying subintervals
+            Real values specifying subintervals.
+
+        Notes
+        -----
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+
+        If the user passed values with `setKrylovSchurSubintervals()`, then the
+        same values are returned here. Otherwise, the values computed internally
+        are obtained.
+
+        See Also
+        --------
+        setKrylovSchurSubintervals, slepc.EPSKrylovSchurGetSubintervals
         """
         cdef PetscReal *subintarray = NULL
         cdef PetscInt nparts = 0
@@ -2416,6 +3062,20 @@ cdef class EPS(Object):
             The values of the shifts used internally in the solver.
         inertias: ArrayInt
             The values of the inertia in each shift.
+
+        Notes
+        -----
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+
+        If called after `solve()`, all shifts used internally by the solver are
+        returned (including both endpoints and any intermediate ones). If called
+        before `solve()` and after `setUp()` then only the information of the
+        endpoints of subintervals is available.
+
+        See Also
+        --------
+        setInterval, setKrylovSchurSubintervals, slepc.EPSKrylovSchurGetInertias
         """
         cdef PetscReal *shiftsarray = NULL
         cdef PetscInt *inertiasarray = NULL
@@ -2444,6 +3104,26 @@ cdef class EPS(Object):
         -------
         `petsc4py.PETSc.KSP`
             The linear solver object.
+
+        Notes
+        -----
+        This call makes sense only for spectrum slicing runs, that is, when
+        an interval has been given with `setInterval()` and `SINVERT` is set.
+
+        When invoked to compute all eigenvalues in an interval with spectrum
+        slicing, `KRYLOVSCHUR` creates another `EPS` object internally that is
+        used to compute eigenvalues by chunks near selected shifts. This function
+        allows access to the ``KSP`` object associated to this internal `EPS`
+        object.
+
+        In case of having more than one partition, the returned ``KSP`` will be
+        different in MPI processes belonging to different partitions. Hence, if
+        required, `setKrylovSchurPartitions()` must be called BEFORE this
+        function.
+
+        See Also
+        --------
+        setInterval, setKrylovSchurPartitions, slepc.EPSKrylovSchurGetKSP
         """
         cdef KSP ksp = KSP()
         CHKERR( EPSKrylovSchurGetKSP(self.eps, &ksp.ksp) )
@@ -2461,7 +3141,11 @@ cdef class EPS(Object):
         Parameters
         ----------
         krylovstart
-            True if starting the search subspace with a Krylov basis.
+            ``True`` if starting the search subspace with a Krylov basis.
+
+        See Also
+        --------
+        setGDInitialSize, getGDKrylovStart, slepc.EPSGDSetKrylovStart
         """
         cdef PetscBool val = asBool(krylovstart)
         CHKERR( EPSGDSetKrylovStart(self.eps, val) )
@@ -2475,7 +3159,11 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            True if starting the search subspace with a Krylov basis.
+            ``True`` if starting the search subspace with a Krylov basis.
+
+        See Also
+        --------
+        setGDKrylovStart, slepc.EPSGDGetKrylovStart
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGDGetKrylovStart(self.eps, &tval) )
@@ -2494,6 +3182,10 @@ cdef class EPS(Object):
         ----------
         bs
             The number of vectors added to the search space in every iteration.
+
+        See Also
+        --------
+        getGDBlockSize, slepc.EPSGDSetBlockSize
         """
         cdef PetscInt ival = asInt(bs)
         CHKERR( EPSGDSetBlockSize(self.eps, ival) )
@@ -2511,6 +3203,10 @@ cdef class EPS(Object):
         -------
         int
             The number of vectors added to the search space in every iteration.
+
+        See Also
+        --------
+        setGDBlockSize, slepc.EPSGDGetBlockSize
         """
         cdef PetscInt ival = 0
         CHKERR( EPSGDGetBlockSize(self.eps, &ival) )
@@ -2531,6 +3227,10 @@ cdef class EPS(Object):
             The number of vectors of the search subspace after restart.
         plusk
             The number of vectors saved from the previous iteration.
+
+        See Also
+        --------
+        getGDRestart, slepc.EPSGDSetRestart
         """
         cdef PetscInt ival1 = PETSC_CURRENT
         cdef PetscInt ival2 = PETSC_CURRENT
@@ -2553,6 +3253,10 @@ cdef class EPS(Object):
             The number of vectors of the search subspace after restart.
         plusk: int
             The number of vectors saved from the previous iteration.
+
+        See Also
+        --------
+        setGDRestart, slepc.EPSGDGetRestart
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -2569,6 +3273,20 @@ cdef class EPS(Object):
         ----------
         initialsize
             The number of vectors of the initial searching subspace.
+
+        Notes
+        -----
+        If the flag in `setGDKrylovStart()` is set to ``False`` and the user
+        provides vectors with `setInitialSpace()`, up to ``initialsize``
+        vectors will be used; and if the provided vectors are not enough, the
+        solver completes the subspace with random vectors. In case the
+        `setGDKrylovStart()` flag is ``True``, the solver gets the first
+        vector provided by the user or, if not available, a random vector,
+        and expands the Krylov basis up to ``initialsize`` vectors.
+
+        See Also
+        --------
+        setGDKrylovStart, getGDInitialSize, slepc.EPSGDSetInitialSize
         """
         cdef PetscInt ival = asInt(initialsize)
         CHKERR( EPSGDSetInitialSize(self.eps, ival) )
@@ -2583,12 +3301,16 @@ cdef class EPS(Object):
         -------
         int
             The number of vectors of the initial searching subspace.
+
+        See Also
+        --------
+        setGDInitialSize, slepc.EPSGDGetInitialSize
         """
         cdef PetscInt ival = 0
         CHKERR( EPSGDGetInitialSize(self.eps, &ival) )
         return toInt(ival)
 
-    def setGDBOrth(self, borth: bool) -> int:
+    def setGDBOrth(self, borth: bool) -> None:
         """
         Set the orthogonalization that will be used in the search subspace.
 
@@ -2601,6 +3323,10 @@ cdef class EPS(Object):
         ----------
         borth
             Whether to B-orthogonalize the search subspace.
+
+        See Also
+        --------
+        getGDBOrth, slepc.EPSGDSetBOrth
         """
         cdef PetscBool tval = asBool(borth)
         CHKERR( EPSGDSetBOrth(self.eps, tval) )
@@ -2618,6 +3344,10 @@ cdef class EPS(Object):
         -------
         bool
             Whether to B-orthogonalize the search subspace.
+
+        See Also
+        --------
+        setGDBOrth, slepc.EPSGDGetBOrth
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGDGetBOrth(self.eps, &tval) )
@@ -2629,16 +3359,22 @@ cdef class EPS(Object):
 
         Logically collective.
 
-        Set a variant where the search subspace is expanded with
-        :math:`K [A x, B x]` (double expansion) instead of the
-        classic :math:`K r`, where K is the preconditioner, x the
-        selected approximate eigenvector and :math:`r` its associated residual
-        vector.
-
         Parameters
         ----------
         doubleexp
-            True if using double expansion.
+            ``True`` if using double expansion.
+
+        Notes
+        -----
+        In the double expansion variant the search subspace is expanded with
+        :math:`K [A x, B x]` (double expansion) instead of the
+        classic :math:`K r`, where :math:`K` is the preconditioner, :math:`x`
+        the selected approximate eigenvector and :math:`r` its associated
+        residual vector.
+
+        See Also
+        --------
+        getGDDoubleExpansion, slepc.EPSGDSetDoubleExpansion
         """
         cdef PetscBool val = asBool(doubleexp)
         CHKERR( EPSGDSetDoubleExpansion(self.eps, val) )
@@ -2655,7 +3391,11 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            True if using double expansion.
+            ``True`` if using double expansion.
+
+        See Also
+        --------
+        setGDDoubleExpansion, slepc.EPSGDGetDoubleExpansion
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSGDGetDoubleExpansion(self.eps, &tval) )
@@ -2672,7 +3412,11 @@ cdef class EPS(Object):
         Parameters
         ----------
         krylovstart
-            True if starting the search subspace with a Krylov basis.
+            ``True`` if starting the search subspace with a Krylov basis.
+
+        See Also
+        --------
+        setJDInitialSize, getJDKrylovStart, slepc.EPSJDSetKrylovStart
         """
         cdef PetscBool val = asBool(krylovstart)
         CHKERR( EPSJDSetKrylovStart(self.eps, val) )
@@ -2686,7 +3430,11 @@ cdef class EPS(Object):
         Returns
         -------
         bool
-            True if starting the search subspace with a Krylov basis.
+            ``True`` if starting the search subspace with a Krylov basis.
+
+        See Also
+        --------
+        setJDKrylovStart, slepc.EPSJDGetKrylovStart
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSJDGetKrylovStart(self.eps, &tval) )
@@ -2705,6 +3453,10 @@ cdef class EPS(Object):
         ----------
         bs
             The number of vectors added to the search space in every iteration.
+
+        See Also
+        --------
+        getJDBlockSize, slepc.EPSJDSetBlockSize
         """
         cdef PetscInt ival = asInt(bs)
         CHKERR( EPSJDSetBlockSize(self.eps, ival) )
@@ -2722,6 +3474,10 @@ cdef class EPS(Object):
         -------
         int
             The number of vectors added to the search space in every iteration.
+
+        See Also
+        --------
+        setJDBlockSize, slepc.EPSJDGetBlockSize
         """
         cdef PetscInt ival = 0
         CHKERR( EPSJDGetBlockSize(self.eps, &ival) )
@@ -2742,6 +3498,10 @@ cdef class EPS(Object):
             The number of vectors of the search subspace after restart.
         plusk
             The number of vectors saved from the previous iteration.
+
+        See Also
+        --------
+        getJDRestart, slepc.EPSJDSetRestart
         """
         cdef PetscInt ival1 = PETSC_CURRENT
         cdef PetscInt ival2 = PETSC_CURRENT
@@ -2764,6 +3524,10 @@ cdef class EPS(Object):
             The number of vectors of the search subspace after restart.
         plusk: int
             The number of vectors saved from the previous iteration.
+
+        See Also
+        --------
+        setJDRestart, slepc.EPSJDGetRestart
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -2780,6 +3544,20 @@ cdef class EPS(Object):
         ----------
         initialsize
             The number of vectors of the initial searching subspace.
+
+        Notes
+        -----
+        If the flag in `setJDKrylovStart()` is set to ``False`` and the user
+        provides vectors with `setInitialSpace()`, up to ``initialsize``
+        vectors will be used; and if the provided vectors are not enough, the
+        solver completes the subspace with random vectors. In case the
+        `setJDKrylovStart()` flag is ``True``, the solver gets the first
+        vector provided by the user or, if not available, a random vector,
+        and expands the Krylov basis up to ``initialsize`` vectors.
+
+        See Also
+        --------
+        setJDKrylovStart, getJDInitialSize, slepc.EPSJDSetInitialSize
         """
         cdef PetscInt ival = asInt(initialsize)
         CHKERR( EPSJDSetInitialSize(self.eps, ival) )
@@ -2794,6 +3572,10 @@ cdef class EPS(Object):
         -------
         int
             The number of vectors of the initial searching subspace.
+
+        See Also
+        --------
+        setJDInitialSize, slepc.EPSJDGetInitialSize
         """
         cdef PetscInt ival = 0
         CHKERR( EPSJDGetInitialSize(self.eps, &ival) )
@@ -2813,8 +3595,12 @@ cdef class EPS(Object):
         Notes
         -----
         The target in the correction equation is fixed at the first iterations.
-        When the norm of the residual vector is lower than the fix value,
+        When the norm of the residual vector is lower than the ``fix`` value,
         the target is set to the corresponding eigenvalue.
+
+        See Also
+        --------
+        getJDFix, slepc.EPSJDSetFix
         """
         cdef PetscReal val = asReal(fix)
         CHKERR( EPSJDSetFix(self.eps, val) )
@@ -2829,6 +3615,10 @@ cdef class EPS(Object):
         -------
         float
             The threshold for changing the target.
+
+        See Also
+        --------
+        setJDFix, slepc.EPSJDGetFix
         """
         cdef PetscReal val = 0
         CHKERR( EPSJDGetFix(self.eps, &val) )
@@ -2840,14 +3630,22 @@ cdef class EPS(Object):
 
         Logically collective.
 
-        Deactivate the dynamic stopping criterion that sets the
-        `petsc4py.PETSc.KSP` relative tolerance to ``0.5**i``, where ``i`` is
-        the number of `EPS` iterations from the last converged value.
-
         Parameters
         ----------
         constant
-            If False, the `petsc4py.PETSc.KSP` relative tolerance is set to ``0.5**i``.
+            If ``False``, the `petsc4py.PETSc.KSP` relative tolerance is set
+            to ``0.5**i``.
+
+        Notes
+        -----
+        If this flag is set to ``False``, then the `petsc4py.PETSc.KSP`
+        relative tolerance is dynamically set to ``0.5**i``, where ``i`` is
+        the number of `EPS` iterations since the last converged value.
+        By the default, a constant tolerance is used.
+
+        See Also
+        --------
+        getJDConstCorrectionTol, slepc.EPSJDSetConstCorrectionTol
         """
         cdef PetscBool tval = asBool(constant)
         CHKERR( EPSJDSetConstCorrectionTol(self.eps, tval) )
@@ -2858,13 +3656,14 @@ cdef class EPS(Object):
 
         Not collective.
 
-        Get the flag indicating if the dynamic stopping is being used for
-        solving the correction equation.
-
         Returns
         -------
         bool
-            True if the dynamic stopping criterion is not being used.
+            ``True`` if the dynamic stopping criterion is not being used.
+
+        See Also
+        --------
+        setJDConstCorrectionTol, slepc.EPSJDGetConstCorrectionTol
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSJDGetConstCorrectionTol(self.eps, &tval) )
@@ -2883,6 +3682,10 @@ cdef class EPS(Object):
         ----------
         borth
             Whether to B-orthogonalize the search subspace.
+
+        See Also
+        --------
+        getJDBOrth, slepc.EPSJDSetBOrth
         """
         cdef PetscBool tval = asBool(borth)
         CHKERR( EPSJDSetBOrth(self.eps, tval) )
@@ -2900,6 +3703,10 @@ cdef class EPS(Object):
         -------
         bool
             Whether to B-orthogonalize the search subspace.
+
+        See Also
+        --------
+        setJDBOrth, slepc.EPSJDGetBOrth
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSJDGetBOrth(self.eps, &tval) )
@@ -2913,13 +3720,19 @@ cdef class EPS(Object):
 
         Logically collective.
 
-        Every nrest iterations the solver performs a Rayleigh-Ritz projection
-        step.
-
         Parameters
         ----------
         nrest
             The number of iterations between resets.
+
+        Notes
+        -----
+        Every ``nrest`` iterations the solver performs a Rayleigh-Ritz
+        projection step.
+
+        See Also
+        --------
+        getRQCGReset, slepc.EPSRQCGSetReset
         """
         cdef PetscInt val = asInt(nrest)
         CHKERR( EPSRQCGSetReset(self.eps, val) )
@@ -2934,6 +3747,10 @@ cdef class EPS(Object):
         -------
         int
             The number of iterations between resets.
+
+        See Also
+        --------
+        setRQCGReset, slepc.EPSRQCGGetReset
         """
         cdef PetscInt val = 0
         CHKERR( EPSRQCGGetReset(self.eps, &val) )
@@ -2949,6 +3766,10 @@ cdef class EPS(Object):
         ----------
         bs
             The block size.
+
+        See Also
+        --------
+        getLOBPCGBlockSize, slepc.EPSLOBPCGSetBlockSize
         """
         cdef PetscInt ival = asInt(bs)
         CHKERR( EPSLOBPCGSetBlockSize(self.eps, ival) )
@@ -2963,6 +3784,10 @@ cdef class EPS(Object):
         -------
         int
             The block size.
+
+        See Also
+        --------
+        setLOBPCGBlockSize, slepc.EPSLOBPCGGetBlockSize
         """
         cdef PetscInt ival = 0
         CHKERR( EPSLOBPCGGetBlockSize(self.eps, &ival) )
@@ -2974,10 +3799,6 @@ cdef class EPS(Object):
 
         Logically collective.
 
-        The meaning of this parameter is the proportion of vectors within the
-        current block iterate that must have converged in order to force a
-        restart with hard locking.
-
         Parameters
         ----------
         restart
@@ -2985,7 +3806,14 @@ cdef class EPS(Object):
 
         Notes
         -----
+        The meaning of this parameter is the proportion of vectors within the
+        current block iterate that must have converged in order to force a
+        restart with hard locking.
         Allowed values are in the range [0.1,1.0]. The default is 0.9.
+
+        See Also
+        --------
+        getLOBPCGRestart, slepc.EPSLOBPCGSetRestart
         """
         cdef PetscReal val = asReal(restart)
         CHKERR( EPSLOBPCGSetRestart(self.eps, val) )
@@ -3000,6 +3828,10 @@ cdef class EPS(Object):
         -------
         float
             The restart parameter.
+
+        See Also
+        --------
+        setLOBPCGRestart, slepc.EPSLOBPCGGetRestart
         """
         cdef PetscReal val = 0
         CHKERR( EPSLOBPCGGetRestart(self.eps, &val) )
@@ -3014,13 +3846,17 @@ cdef class EPS(Object):
         Parameters
         ----------
         lock
-            True if the locking variant must be selected.
+            ``True`` if the locking variant must be selected.
 
         Notes
         -----
         This flag refers to soft locking (converged vectors within the current
-        block iterate), since hard locking is always used (when nev is larger
-        than the block size).
+        block iterate), since hard locking is always used (when ``nev`` is
+        larger than the block size).
+
+        See Also
+        --------
+        getLOBPCGLocking, slepc.EPSLOBPCGSetLocking
         """
         cdef PetscBool val = asBool(lock)
         CHKERR( EPSLOBPCGSetLocking(self.eps, val) )
@@ -3035,6 +3871,10 @@ cdef class EPS(Object):
         -------
         bool
             The locking flag.
+
+        See Also
+        --------
+        setLOBPCGLocking, slepc.EPSLOBPCGGetLocking
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSLOBPCGGetLocking(self.eps, &tval) )
@@ -3052,6 +3892,19 @@ cdef class EPS(Object):
             The compressed rank.
         rkl
             The Lyapunov rank.
+
+        Notes
+        -----
+        Lyapunov inverse iteration needs to solve a large-scale Lyapunov
+        equation at each iteration of the eigensolver. For this, an iterative
+        solver (`LME`) is used, which requires to prescribe the rank of the
+        solution matrix :math:`X`. This is the meaning of parameter ``rkl``.
+        Later, this matrix is compressed into another matrix of rank ``rkc``.
+        If not provided, ``rkl`` is a small multiple of ``rkc``.
+
+        See Also
+        --------
+        getLyapIIRanks, slepc.EPSLyapIISetRanks
         """
         cdef PetscInt ival1 = PETSC_CURRENT
         cdef PetscInt ival2 = PETSC_CURRENT
@@ -3071,6 +3924,10 @@ cdef class EPS(Object):
             The compressed rank.
         rkl: int
             The Lyapunov rank.
+
+        See Also
+        --------
+        setLyapIIRanks, slepc.EPSLyapIIGetRanks
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -3089,6 +3946,10 @@ cdef class EPS(Object):
         ----------
         extraction
             The extraction technique.
+
+        See Also
+        --------
+        getCISSExtraction, slepc.EPSCISSSetExtraction
         """
         cdef SlepcEPSCISSExtraction val = extraction
         CHKERR( EPSCISSSetExtraction(self.eps, val) )
@@ -3103,6 +3964,10 @@ cdef class EPS(Object):
         -------
         CISSExtraction
             The extraction technique.
+
+        See Also
+        --------
+        setCISSExtraction, slepc.EPSCISSGetExtraction
         """
         cdef SlepcEPSCISSExtraction val = EPS_CISS_EXTRACTION_RITZ
         CHKERR( EPSCISSGetExtraction(self.eps, &val) )
@@ -3118,6 +3983,10 @@ cdef class EPS(Object):
         ----------
         quad
             The quadrature rule.
+
+        See Also
+        --------
+        getCISSQuadRule, slepc.EPSCISSSetQuadRule
         """
         cdef SlepcEPSCISSQuadRule val = quad
         CHKERR( EPSCISSSetQuadRule(self.eps, val) )
@@ -3132,6 +4001,10 @@ cdef class EPS(Object):
         -------
         CISSQuadRule
             The quadrature rule.
+
+        See Also
+        --------
+        setCISSQuadRule, slepc.EPSCISSGetQuadRule
         """
         cdef SlepcEPSCISSQuadRule val = EPS_CISS_QUADRULE_TRAPEZOIDAL
         CHKERR( EPSCISSGetQuadRule(self.eps, &val) )
@@ -3164,15 +4037,19 @@ cdef class EPS(Object):
         bsmax
             Maximum block size.
         realmats
-            True if A and B are real.
+            ``True`` if A and B are real.
 
         Notes
         -----
         The default number of partitions is 1. This means the internal
         `petsc4py.PETSc.KSP` object is shared among all processes of the
-        `EPS` communicator. Otherwise, the communicator is split into npart
+        `EPS` communicator. Otherwise, the communicator is split into ``npart``
         communicators, so that ``npart`` `petsc4py.PETSc.KSP` solves proceed
         simultaneously.
+
+        See Also
+        --------
+        getCISSSizes, setCISSThreshold, setCISSRefinement, slepc.EPSCISSSetSizes
         """
         cdef PetscInt  ival1 = PETSC_CURRENT
         cdef PetscInt  ival2 = PETSC_CURRENT
@@ -3206,7 +4083,11 @@ cdef class EPS(Object):
         bsmax: int
             Maximum block size.
         realmats: bool
-            True if A and B are real.
+            ``True`` if A and B are real.
+
+        See Also
+        --------
+        setCISSSizes, slepc.EPSCISSGetSizes
         """
         cdef PetscInt  ival1 = 0
         cdef PetscInt  ival2 = 0
@@ -3229,6 +4110,10 @@ cdef class EPS(Object):
             Threshold for numerical rank.
         spur
             Spurious threshold (to discard spurious eigenpairs).
+
+        See Also
+        --------
+        getCISSThreshold, slepc.EPSCISSSetThreshold
         """
         cdef PetscReal rval1 = PETSC_CURRENT
         cdef PetscReal rval2 = PETSC_CURRENT
@@ -3248,6 +4133,10 @@ cdef class EPS(Object):
             Threshold for numerical rank.
         spur: float
             Spurious threshold (to discard spurious eigenpairs.
+
+        See Also
+        --------
+        setCISSThreshold, slepc.EPSCISSGetThreshold
         """
         cdef PetscReal delta = 0
         cdef PetscReal spur  = 0
@@ -3266,6 +4155,10 @@ cdef class EPS(Object):
             Number of iterative refinement iterations (inner loop).
         blsize
             Number of iterative refinement iterations (blocksize loop).
+
+        See Also
+        --------
+        getCISSRefinement, slepc.EPSCISSSetRefinement
         """
         cdef PetscInt ival1 = PETSC_CURRENT
         cdef PetscInt ival2 = PETSC_CURRENT
@@ -3285,6 +4178,10 @@ cdef class EPS(Object):
             Number of iterative refinement iterations (inner loop).
         blsize: int
             Number of iterative refinement iterations (blocksize loop).
+
+        See Also
+        --------
+        setCISSRefinement, slepc.EPSCISSGetRefinement
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
@@ -3297,13 +4194,24 @@ cdef class EPS(Object):
 
         Logically collective.
 
-        Set a flag indicating that the CISS solver will use the `ST`
-        object for the linear solves.
-
         Parameters
         ----------
         usest
             Whether to use the `ST` object or not.
+
+        Notes
+        -----
+        When this option is set, the linear solves can be configured by
+        setting options for the `petsc4py.PETSc.KSP` object obtained with
+        `ST.getKSP()`. Otherwise, several `petsc4py.PETSc.KSP` objects are
+        created, which can be accessed with `getCISSKSPs()`.
+
+        The default is to use the `ST`, unless several partitions have been
+        specified, see `setCISSSizes()`.
+
+        See Also
+        --------
+        getCISSUseST, getCISSKSPs, setCISSSizes, slepc.EPSCISSSetUseST
         """
         cdef PetscBool tval = asBool(usest)
         CHKERR( EPSCISSSetUseST(self.eps, tval) )
@@ -3318,6 +4226,10 @@ cdef class EPS(Object):
         -------
         bool
             Whether to use the `ST` object or not.
+
+        See Also
+        --------
+        setCISSUseST, slepc.EPSCISSGetUseST
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( EPSCISSGetUseST(self.eps, &tval) )
@@ -3340,6 +4252,10 @@ cdef class EPS(Object):
         integration points divided by the number of partitions. This value is
         halved in the case of real matrices with a region centered at the real
         axis.
+
+        See Also
+        --------
+        setCISSSizes, slepc.EPSCISSGetKSPs
         """
         cdef PetscInt i = 0, n = 0
         cdef PetscKSP *p = NULL
@@ -3418,28 +4334,28 @@ cdef class EPS(Object):
             self.setTrackAll(value)
 
     property st:
-        """The spectral transformation (ST) object associated."""
+        """The spectral transformation (`ST`) object associated."""
         def __get__(self) -> ST:
             return self.getST()
         def __set__(self, value):
             self.setST(value)
 
     property bv:
-        """The basis vectors (BV) object associated."""
+        """The basis vectors (`BV`) object associated."""
         def __get__(self) -> BV:
             return self.getBV()
         def __set__(self, value):
             self.setBV(value)
 
     property rg:
-        """The region (RG) object associated."""
+        """The region (`RG`) object associated."""
         def __get__(self) -> RG:
             return self.getRG()
         def __set__(self, value):
             self.setRG(value)
 
     property ds:
-        """The direct solver (DS) object associated."""
+        """The direct solver (`DS`) object associated."""
         def __get__(self) -> DS:
             return self.getDS()
         def __set__(self, value):
@@ -3457,6 +4373,7 @@ del EPSConv
 del EPSStop
 del EPSConvergedReason
 del EPSPowerShiftType
+del EPSKrylovSchurBSEType
 del EPSLanczosReorthogType
 del EPSCISSQuadRule
 del EPSCISSExtraction

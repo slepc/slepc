@@ -247,7 +247,7 @@ PetscErrorCode BVGetSizes(BV bv,PetscInt *n,PetscInt *N,PetscInt *m)
 
    Notes:
    This function sets the number of constraints to `nc` and marks all remaining
-   columns as regular. Normal user would call `BVInsertConstraints()` instead.
+   columns as regular. Normal usage would be to call `BVInsertConstraints()` instead.
 
    If `nc` is smaller than the previously set value, then some of the constraints
    are discarded. In particular, using `nc=0` removes all constraints preserving
@@ -479,7 +479,7 @@ PetscErrorCode BVGetActiveColumns(BV bv,PetscInt *l,PetscInt *k)
    This is used to specify a non-standard inner product, whose matrix
    representation is given by `B`. Then, all inner products required during
    orthogonalization are computed as $(x,y)_B=y^*Bx$ rather than the
-   standard form $(x,y)=y^Hx$.
+   standard form $(x,y)=y^*x$.
 
    Matrix `B` must be real symmetric (or complex Hermitian). A genuine inner
    product requires that `B` is also positive (semi-)definite. However, we
@@ -1271,7 +1271,7 @@ PetscErrorCode BVRestoreArray(BV bv,PetscScalar **a)
 
    Level: advanced
 
-.seealso: [](sec:bv), `BVRestoreArray()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArray()`, `BVType`
+.seealso: [](sec:bv), `BVRestoreArrayRead()`, `BVInsertConstraints()`, `BVGetLeadingDimension()`, `BVGetArray()`, `BVType`
 @*/
 PetscErrorCode BVGetArrayRead(BV bv,const PetscScalar **a)
 {
@@ -1412,7 +1412,7 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
    This is not needed if the `BV` object is set up with `BVSetSizesFromVec()`, but may be
    required in the case of `BVSetSizes()` if one wants to work with non-standard vectors.
 
-.seealso: [](sec:bv), `BVGetVecType()`, `BVSetSizesFromVec()`, `BVSetSizes()`
+.seealso: [](sec:bv), `BVCreateVec()`, `BVGetVecType()`, `BVSetSizesFromVec()`, `BVSetSizes()`
 @*/
 PetscErrorCode BVSetVecType(BV bv,VecType vtype)
 {
@@ -1691,7 +1691,7 @@ PetscErrorCode BVDuplicate(BV V,BV *W)
 .  W - location to put the new BV
 
    Note:
-   This is equivalent of a call to `BVDuplicate()` followed by `BVResize()`. The
+   This is equivalent to a call to `BVDuplicate()` followed by `BVResize()`. The
    contents of `V` are not copied to `W`.
 
    Level: intermediate
@@ -1858,8 +1858,8 @@ PetscErrorCode BVCopyVec(BV V,PetscInt j,Vec w)
 
    Input Parameters:
 +  V - basis vectors context
-.  j - the number of the source column
--  i - the number of the destination column
+.  j - the index of the source column
+-  i - the index of the destination column
 
    Level: beginner
 

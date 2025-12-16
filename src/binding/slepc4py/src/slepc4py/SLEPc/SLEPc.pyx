@@ -107,6 +107,7 @@ cdef inline PetscScalar asScalar(object value) except? <PetscScalar>-1.0:
 cdef extern from "Python.h":
      double PyComplex_RealAsDouble(object)
      double PyComplex_ImagAsDouble(object)
+     void Py_INCREF(object)
 
 cdef inline object toComplex(PetscScalar rvalue, PetscScalar ivalue):
     return complex(toScalar(rvalue), toScalar(ivalue))

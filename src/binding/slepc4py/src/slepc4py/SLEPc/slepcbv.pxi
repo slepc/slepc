@@ -47,6 +47,10 @@ cdef extern from * nogil:
     PetscErrorCode BVResize(SlepcBV,PetscInt,PetscBool)
     PetscErrorCode BVSetLeadingDimension(SlepcBV,PetscInt)
     PetscErrorCode BVGetLeadingDimension(SlepcBV,PetscInt*)
+    PetscErrorCode BVGetArray(SlepcBV,PetscScalar**)
+    PetscErrorCode BVGetArrayRead(SlepcBV,const PetscScalar**)
+    PetscErrorCode BVRestoreArray(SlepcBV,PetscScalar**)
+    PetscErrorCode BVRestoreArrayRead(SlepcBV,const PetscScalar**)
 
     PetscErrorCode BVSetOptionsPrefix(SlepcBV,char[])
     PetscErrorCode BVGetOptionsPrefix(SlepcBV,char*[])
@@ -94,6 +98,7 @@ cdef extern from * nogil:
 
     PetscErrorCode BVMatProject(SlepcBV,PetscMat,SlepcBV,PetscMat)
     PetscErrorCode BVMatMult(SlepcBV,PetscMat,SlepcBV)
+    PetscErrorCode BVMatMultTranspose(SlepcBV,PetscMat,SlepcBV)
     PetscErrorCode BVMatMultHermitianTranspose(SlepcBV,PetscMat,SlepcBV)
     PetscErrorCode BVMatMultColumn(SlepcBV,PetscMat,PetscInt)
     PetscErrorCode BVMatMultTransposeColumn(SlepcBV,PetscMat,PetscInt)

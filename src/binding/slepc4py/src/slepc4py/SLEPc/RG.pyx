@@ -1,7 +1,18 @@
 # -----------------------------------------------------------------------------
 
 class RGType(object):
-    """RG type."""
+    """
+    RG type.
+
+    - `INTERVAL`: A (generalized) interval.
+    - `POLYGON`: A polygonal region defined by its vertices.
+    - `ELLIPSE`: An ellipse defined by its center, radius and vertical scale.
+    - `RING`: A ring region.
+
+    See Also
+    --------
+    slepc.RGType
+    """
     INTERVAL   = S_(RGINTERVAL)
     POLYGON    = S_(RGPOLYGON)
     ELLIPSE    = S_(RGELLIPSE)
@@ -13,6 +24,10 @@ class RGQuadRule(object):
 
     - `TRAPEZOIDAL`: Trapezoidal rule.
     - `CHEBYSHEV`:   Chebyshev points.
+
+    See Also
+    --------
+    slepc.RGQuadRule
     """
     TRAPEZOIDAL = EPS_CISS_QUADRULE_TRAPEZOIDAL
     CHEBYSHEV   = EPS_CISS_QUADRULE_CHEBYSHEV
@@ -21,7 +36,13 @@ class RGQuadRule(object):
 
 cdef class RG(Object):
 
-    """RG."""
+    """
+    Region.
+
+    The `RG` package provides a way to define a region of the complex plane.
+    This is used in various eigensolvers to specify where the wanted
+    eigenvalues are located.
+    """
 
     Type     = RGType
     QuadRule = RGQuadRule
@@ -41,6 +62,10 @@ cdef class RG(Object):
         viewer
             Visualization context; if not provided, the standard
             output is used.
+
+        See Also
+        --------
+        slepc.RGView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
         CHKERR( RGView(self.rg, vwr) )
@@ -50,6 +75,10 @@ cdef class RG(Object):
         Destroy the RG object.
 
         Collective.
+
+        See Also
+        --------
+        slepc.RGDestroy
         """
         CHKERR( RGDestroy(&self.rg) )
         self.rg = NULL
@@ -65,6 +94,10 @@ cdef class RG(Object):
         ----------
         comm
             MPI communicator; if not provided, it defaults to all processes.
+
+        See Also
+        --------
+        slepc.RGCreate
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcRG newrg = NULL
@@ -81,7 +114,11 @@ cdef class RG(Object):
         Parameters
         ----------
         rg_type
-            The inner product type to be used.
+            The region type to be used.
+
+        See Also
+        --------
+        getType, slepc.RGSetType
         """
         cdef SlepcRGType cval = NULL
         rg_type = str2bytes(rg_type, &cval)
@@ -96,7 +133,11 @@ cdef class RG(Object):
         Returns
         -------
         str
-            The inner product type currently being used.
+            The region type currently being used.
+
+        See Also
+        --------
+        setType, slepc.RGGetType
         """
         cdef SlepcRGType rg_type = NULL
         CHKERR( RGGetType(self.rg, &rg_type) )
@@ -118,6 +159,10 @@ cdef class RG(Object):
         A hyphen (``-``) must NOT be given at the beginning of the
         prefix name.  The first character of all runtime options is
         AUTOMATICALLY the hyphen.
+
+        See Also
+        --------
+        appendOptionsPrefix, getOptionsPrefix, slepc.RGGetOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -133,6 +178,10 @@ cdef class RG(Object):
         -------
         str
             The prefix string set for this RG object.
+
+        See Also
+        --------
+        setOptionsPrefix, appendOptionsPrefix, slepc.RGGetOptionsPrefix
         """
         cdef const char *prefix = NULL
         CHKERR( RGGetOptionsPrefix(self.rg, &prefix) )
@@ -148,6 +197,10 @@ cdef class RG(Object):
         ----------
         prefix
             The prefix string to prepend to all RG option requests.
+
+        See Also
+        --------
+        setOptionsPrefix, getOptionsPrefix, slepc.RGAppendOptionsPrefix
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
@@ -163,6 +216,10 @@ cdef class RG(Object):
         -----
         To see all options, run your program with the ``-help``
         option.
+
+        See Also
+        --------
+        setOptionsPrefix, slepc.RGSetFromOptions
         """
         CHKERR( RGSetFromOptions(self.rg) )
 
@@ -177,9 +234,13 @@ cdef class RG(Object):
         Returns
         -------
         bool
-            True if the region is equal to the whole complex plane, e.g.,
+            ``True`` if the region is equal to the whole complex plane, e.g.,
             an interval region with all four endpoints unbounded or an
             ellipse with infinite radius.
+
+        See Also
+        --------
+        checkInside, slepc.RGIsTrivial
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( RGIsTrivial(self.rg, &tval) )
@@ -187,7 +248,7 @@ cdef class RG(Object):
 
     def isAxisymmetric(self, vertical: bool = False) -> bool:
         """
-        Determine if the region is symmetric wrt. the real or imaginary axis.
+        Determine if the region is axisymmetric.
 
         Not collective.
 
@@ -197,12 +258,16 @@ cdef class RG(Object):
         Parameters
         ----------
         vertical
-            True if symmetry must be checked against the vertical axis.
+            ``True`` if symmetry must be checked against the vertical axis.
 
         Returns
         -------
         bool
-            True if the region is axisymmetric.
+            ``True`` if the region is axisymmetric.
+
+        See Also
+        --------
+        canUseConjugates, slepc.RGIsAxisymmetric
         """
         cdef PetscBool val = asBool(vertical)
         cdef PetscBool tval = PETSC_FALSE
@@ -219,6 +284,10 @@ cdef class RG(Object):
         -------
         bool
             Whether the region is complemented or not.
+
+        See Also
+        --------
+        setComplement, slepc.RGGetComplement
         """
         cdef PetscBool tval = PETSC_FALSE
         CHKERR( RGGetComplement(self.rg, &tval) )
@@ -234,6 +303,10 @@ cdef class RG(Object):
         ----------
         comp
             Activate/deactivate the complementation of the region.
+
+        See Also
+        --------
+        getComplement, slepc.RGSetComplement
         """
         cdef PetscBool tval = asBool(comp)
         CHKERR( RGSetComplement(self.rg, tval) )
@@ -251,6 +324,10 @@ cdef class RG(Object):
         ----------
         sfactor
             The scaling factor (default=1).
+
+        See Also
+        --------
+        getScale, checkInside, computeContour, slepc.RGSetScale
         """
         cdef PetscReal rval = 1.0
         if sfactor is not None: rval = asReal(sfactor)
@@ -266,6 +343,10 @@ cdef class RG(Object):
         -------
         float
             The scaling factor.
+
+        See Also
+        --------
+        setScale, slepc.RGGetScale
         """
         cdef PetscReal rval = 0
         CHKERR( RGGetScale(self.rg, &rval) )
@@ -286,6 +367,14 @@ cdef class RG(Object):
         -------
         ArrayInt
             Computed result for each point (1=inside, 0=on the contour, -1=outside).
+
+        Notes
+        -----
+        If a scaling factor was set, the points are scaled before checking.
+
+        See Also
+        --------
+        setScale, setComplement, slepc.RGCheckInside
         """
         cdef Py_ssize_t i = 0, n = len(a)
         cdef PetscScalar *ar = NULL, *ai = NULL
@@ -305,7 +394,7 @@ cdef class RG(Object):
 
     def computeContour(self, n: int) -> list[complex]:
         """
-        Compute the coordinates of several points of the contour on the region.
+        Compute points on the contour of the region.
 
         Not collective.
 
@@ -321,6 +410,10 @@ cdef class RG(Object):
         -------
         list of complex
             Computed points.
+
+        See Also
+        --------
+        computeBoundingBox, setScale, slepc.RGComputeContour
         """
         cdef PetscInt k = asInt(n), i = 0
         cdef PetscScalar *cr = NULL, *ci = NULL
@@ -336,7 +429,7 @@ cdef class RG(Object):
 
     def computeBoundingBox(self) -> tuple[float, float, float, float]:
         """
-        Endpoints of a rectangle in the complex plane containing the region.
+        Compute box containing the region.
 
         Not collective.
 
@@ -346,13 +439,17 @@ cdef class RG(Object):
         Returns
         -------
         a: float
-            The left endpoint of the bounding box in the real axis
+            The left endpoint of the bounding box in the real axis.
         b: float
-            The right endpoint of the bounding box in the real axis
+            The right endpoint of the bounding box in the real axis.
         c: float
-            The left endpoint of the bounding box in the imaginary axis
+            The bottom endpoint of the bounding box in the imaginary axis.
         d: float
-            The right endpoint of the bounding box in the imaginary axis
+            The top endpoint of the bounding box in the imaginary axis.
+
+        See Also
+        --------
+        computeContour, setScale, slepc.RGComputeBoundingBox
         """
         cdef PetscReal a = 0, b = 0, c = 0, d = 0
         CHKERR( RGComputeBoundingBox(self.rg, &a, &b, &c, &d) )
@@ -370,12 +467,24 @@ cdef class RG(Object):
         Parameters
         ----------
         realmats
-            True if the problem matrices are real.
+            ``True`` if the problem matrices are real.
 
         Returns
         -------
         bool
             Whether it is possible to use conjugates.
+
+        Notes
+        -----
+        If some integration points are the conjugates of other points, then the
+        associated computational cost can be saved. This depends on the problem
+        matrices being real and also the region being symmetric with respect to
+        the horizontal axis. The result is ``false`` if using real arithmetic or
+        in the case of a flat region (height equal to zero).
+
+        See Also
+        --------
+        isAxisymmetric, slepc.RGCanUseConjugates
         """
         cdef PetscBool bval = asBool(realmats)
         cdef PetscBool tval = PETSC_FALSE
@@ -406,6 +515,18 @@ cdef class RG(Object):
             Normalized quadrature points.
         w: ArrayScalar
             Quadrature weights.
+
+        Notes
+        -----
+        In complex scalars, the values returned in ``z`` are often the same as
+        those computed by `computeContour()`, but this is not the case in real
+        scalars where all output arguments are real.
+
+        The computed values change for different quadrature rules.
+
+        See Also
+        --------
+        computeContour, slepc.RGComputeQuadrature
         """
         cdef SlepcRGQuadRule val = quad
         cdef PetscInt k = asInt(n), i = 0
@@ -432,6 +553,15 @@ cdef class RG(Object):
             The radius.
         vscale
             The vertical scale.
+
+        Notes
+        -----
+        When PETSc is built with real scalars, the center is restricted to a
+        real value.
+
+        See Also
+        --------
+        getEllipseParameters, slepc.RGEllipseSetParameters
         """
         cdef PetscScalar sval = asScalar(center)
         cdef PetscReal val1 = asReal(radius)
@@ -453,6 +583,10 @@ cdef class RG(Object):
             The radius.
         vscale: float
             The vertical scale.
+
+        See Also
+        --------
+        setEllipseParameters, slepc.RGEllipseGetParameters
         """
         cdef PetscScalar sval = 0
         cdef PetscReal val1 = 0
@@ -473,9 +607,23 @@ cdef class RG(Object):
         b
             The right endpoint in the real axis.
         c
-            The upper endpoint in the imaginary axis.
+            The bottom endpoint in the imaginary axis.
         d
-            The lower endpoint in the imaginary axis.
+            The top endpoint in the imaginary axis.
+
+        Notes
+        -----
+        The region is defined as :math:`[a,b] x [c,d]`. Particular cases are an
+        interval on the real axis (:math:`c=d=0`), similarly for the imaginary
+        axis (:math:`a=b=0`), the whole complex plane
+        (:math:`a=-\infty,b=\infty,c=-\infty,d=\infty`), and so on.
+
+        When PETSc is built with real scalars, the region must be symmetric with
+        respect to the real axis.
+
+        See Also
+        --------
+        getIntervalEndpoints, slepc.RGIntervalSetEndpoints
         """
         cdef PetscReal va = asReal(a)
         cdef PetscReal vb = asReal(b)
@@ -496,9 +644,13 @@ cdef class RG(Object):
         b: float
             The right endpoint in the real axis.
         c: float
-            The upper endpoint in the imaginary axis.
+            The bottom endpoint in the imaginary axis.
         d: float
-            The lower endpoint in the imaginary axis.
+            The top endpoint in the imaginary axis.
+
+        See Also
+        --------
+        setIntervalEndpoints, slepc.RGIntervalGetEndpoints
         """
         cdef PetscReal va = 0
         cdef PetscReal vb = 0
@@ -517,6 +669,10 @@ cdef class RG(Object):
         ----------
         v
             The vertices.
+
+        See Also
+        --------
+        getPolygonVertices, slepc.RGPolygonSetVertices
         """
         cdef Py_ssize_t i = 0, n = len(v)
         cdef PetscScalar *vr = NULL, *vi = NULL
@@ -541,6 +697,10 @@ cdef class RG(Object):
         -------
         ArrayComplex
             The vertices.
+
+        See Also
+        --------
+        setPolygonVertices, slepc.RGPolygonGetVertices
         """
         cdef PetscInt n = 0
         cdef PetscScalar *vr = NULL, *vi = NULL
@@ -581,6 +741,28 @@ cdef class RG(Object):
             The left-hand side angle.
         width
             The width of the ring.
+
+        Notes
+        -----
+        The values of ``center``, ``radius`` and ``vscale`` have the same
+        meaning as in the ellipse region. The ``start_ang`` and ``end_ang``
+        define the span of the ring (by default it is the whole ring), while
+        the ``width`` is the separation between the two concentric ellipses
+        (above and below the radius by ``width/2``).
+
+        The start and end angles are expressed as a fraction of the
+        circumference. The allowed range is :math:`[0,\dots,1]`, with ``0``
+        corresponding to 0 radians, ``0.25`` to :math:`\pi/2` radians, and so
+        on. It is allowed to have ``start_ang`` > ``end_ang``, in which case
+        the ring region crosses over the zero angle.
+
+        When PETSc is built with real scalars, the center is restricted to a
+        real value, and the start and end angles must be such that the region
+        is symmetric with respect to the real axis.
+
+        See Also
+        --------
+        getRingParameters, slepc.RGRingSetParameters
         """
         cdef PetscScalar sval = asScalar(center)
         cdef PetscReal val1 = asReal(radius)
@@ -610,6 +792,10 @@ cdef class RG(Object):
             The left-hand side angle.
         width: float
             The width of the ring.
+
+        See Also
+        --------
+        setRingParameters, slepc.RGRingGetParameters
         """
         cdef PetscScalar sval = 0
         cdef PetscReal val1 = 0

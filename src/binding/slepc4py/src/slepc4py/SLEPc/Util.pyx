@@ -1,7 +1,9 @@
 # -----------------------------------------------------------------------------
 
 cdef class Util:
-    """Util."""
+    """
+    Other utilities such as the creation of structured matrices.
+    """
 
     @classmethod
     def createMatBSE(cls, Mat R: petsc4py.PETSc.Mat, Mat C: petsc4py.PETSc.Mat) -> petsc4py.PETSc.Mat:
@@ -23,7 +25,11 @@ cdef class Util:
         Returns
         -------
         petsc4py.PETSc.Mat
-            The matrix with the block form :math:`H = [ R\; C; {-C}^H\; {-R}^T ]`.
+            The matrix with the block form :math:`H = [ R\; C; {-C}^*\; {-R}^T ]`.
+
+        See Also
+        --------
+        slepc.MatCreateBSE
         """
         cdef Mat H = Mat()
         CHKERR( MatCreateBSE(R.mat, C.mat, &H.mat) )
@@ -48,7 +54,11 @@ cdef class Util:
         Returns
         -------
         petsc4py.PETSc.Mat
-            The matrix with the block form :math:`H = [ A B; C -A^* ]`.
+            The matrix with the block form :math:`H = [ A\; B; C\; -A^* ]`.
+
+        See Also
+        --------
+        slepc.MatCreateHamiltonian
         """
         cdef Mat H = Mat()
         CHKERR( MatCreateHamiltonian(A.mat, B.mat, C.mat, &H.mat) )

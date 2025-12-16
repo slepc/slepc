@@ -230,7 +230,7 @@ PetscErrorCode LMEGetCoefficients(LME lme,Mat *A,Mat *B,Mat *D,Mat *E)
 
    Level: beginner
 
-.seealso: [](ch:lme), `LMESetSolution()`, `LMESetProblemType()`
+.seealso: [](ch:lme), `LMESetSolution()`, `LMESetProblemType()`, `LMEGetRHS()`
 @*/
 PetscErrorCode LMESetRHS(LME lme,Mat C)
 {
