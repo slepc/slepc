@@ -9,7 +9,7 @@ The list below shows software packages that use SLEPc or expose part of its func
   3. [dolfin-adjoint](http://www.dolfin-adjoint.org): automatic computation of adjoint linear models using DOLFIN (FEniCS). See also [tlm_adjoint](https://github.com/jrmaddison/tlm_adjoint).
   4. [Firedrake](https://www.firedrakeproject.org/): an automated system for the solution of PDEs with FEM. See [here](https://www.firedrakeproject.org/demos/qgbasinmodes.py) an example that uses SLEPc.
   5. [libMesh](https://libmesh.github.io): a C++ framework for the numerical simulation of partial differential equations.
-  6. [deal.II](https://dealii.org/): a finite element Differential Equations Analysis Library. See [here](https://dealii.org/9.0.0/doxygen/deal.II/step_36) an example that uses SLEPc.
+  6. [deal.II](https://dealii.org/): a finite element Differential Equations Analysis Library. See [here](https://dealii.org/current/doxygen/deal.II/step_36.html) an example that uses SLEPc.
   7. [GetDP](https://www.getdp.info): a General Environment for the Treatment of Discrete Problems. See [here](https://gitlab.onelab.info/doc/models/-/wikis/Bloch-modes-in-periodic-waveguides) an example that computes eigenvalues.
   8. [MOOSE](https://mooseframework.inl.gov/): Multiphysics Object Oriented Simulation Environment.
   9. [PHAML](https://www.nist.gov/programs-projects/parallel-hierarchical-adaptive-multilevel-project-phaml): adaptive finite elements for elliptic PDEs.
