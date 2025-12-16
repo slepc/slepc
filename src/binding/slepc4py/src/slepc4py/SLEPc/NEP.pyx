@@ -1067,7 +1067,52 @@ cdef class NEP(Object):
         """
         return self.get_attr('__stopping__')
 
-    #
+    def setEigenvalueComparison(
+        self,
+        comparison: NEPEigenvalueComparison | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
+        """
+        Set an eigenvalue comparison function.
+
+        Logically collective.
+
+        Notes
+        -----
+        This eigenvalue comparison function is used when `setWhichEigenpairs()`
+        is set to `NEP.Which.USER`.
+
+        See Also
+        --------
+        getEigenvalueComparison, slepc.NEPSetEigenvalueComparison
+        """
+        if comparison is not None:
+            if args is None: args = ()
+            if kargs is None: kargs = {}
+            self.set_attr('__comparison__', (comparison, args, kargs))
+            ctx = self.get_attr('__comparison__')
+            CHKERR( NEPSetEigenvalueComparison(self.nep, NEP_Comparison, <void*>ctx) )
+        else:
+            self.set_attr('__comparison__', None)
+            CHKERR( NEPSetEigenvalueComparison(self.nep, NULL, NULL) )
+
+    def getEigenvalueComparison(self) -> NEPEigenvalueComparison:
+        """
+        Get the eigenvalue comparison function.
+
+        Not collective.
+
+        Returns
+        -------
+        NEPEigenvalueComparison
+            The eigenvalue comparison function.
+
+        See Also
+        --------
+        setEigenvalueComparison
+        """
+        return self.get_attr('__comparison__')
 
     def setMonitor(
         self,

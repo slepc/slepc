@@ -96,6 +96,12 @@ cdef extern from * nogil:
                                             PetscReal*,
                                             PetscInt,
                                             void*) except PETSC_ERR_PYTHON
+    ctypedef PetscErrorCode (*SlepcPEPComparisonFunction)(PetscScalar,
+                                               PetscScalar,
+                                               PetscScalar,
+                                               PetscScalar,
+                                               PetscInt*,
+                                               void*) except PETSC_ERR_PYTHON
 
     PetscErrorCode PEPCreate(MPI_Comm,SlepcPEP*)
     PetscErrorCode PEPDestroy(SlepcPEP*)
@@ -147,6 +153,7 @@ cdef extern from * nogil:
 
     PetscErrorCode PEPSetStoppingTestFunction(SlepcPEP,SlepcPEPStoppingFunction,void*,SlepcPEPCtxDel)
     PetscErrorCode PEPStoppingBasic(SlepcPEP,PetscInt,PetscInt,PetscInt,PetscInt,SlepcPEPConvergedReason*,void*) except PETSC_ERR_PYTHON
+    PetscErrorCode PEPSetEigenvalueComparison(SlepcPEP,SlepcPEPComparisonFunction,void*);
 
     PetscErrorCode PEPSetConvergenceTest(SlepcPEP,SlepcPEPConv)
     PetscErrorCode PEPGetConvergenceTest(SlepcPEP,SlepcPEPConv*)
@@ -254,6 +261,21 @@ cdef PetscErrorCode PEP_Stopping(
     elif reason is False: r[0] = PEP_CONVERGED_ITERATING
     elif reason is True:  r[0] = PEP_CONVERGED_USER
     else:                 r[0] = reason
+    return PETSC_SUCCESS
+
+# -----------------------------------------------------------------------------
+
+cdef PetscErrorCode PEP_Comparison(
+    PetscScalar  ar,
+    PetscScalar  ai,
+    PetscScalar  br,
+    PetscScalar  bi,
+    PetscInt*    res,
+    void         *ctx,
+    ) except PETSC_ERR_PYTHON with gil:
+    (comparison, args, kargs) = <object>ctx
+    r = comparison(toComplex(ar, ai), toComplex(br, bi), args, **kargs)
+    res[0] = asInt(r)
     return PETSC_SUCCESS
 
 # -----------------------------------------------------------------------------

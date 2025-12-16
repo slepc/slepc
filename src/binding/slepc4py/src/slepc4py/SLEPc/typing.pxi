@@ -32,8 +32,10 @@ cdef EPSArbitraryFunction
 cdef EPSEigenvalueComparison
 cdef EPSMonitorFunction
 cdef PEPStoppingFunction
+cdef PEPEigenvalueComparison
 cdef PEPMonitorFunction
 cdef NEPStoppingFunction
+cdef NEPEigenvalueComparison
 cdef NEPMonitorFunction
 cdef SVDStoppingFunction
 cdef SVDMonitorFunction

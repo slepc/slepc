@@ -1497,7 +1497,52 @@ cdef class PEP(Object):
         """
         return self.get_attr('__stopping__')
 
-    #
+    def setEigenvalueComparison(
+        self,
+        comparison: PEPEigenvalueComparison | None,
+        args: tuple[Any, ...] | None = None,
+        kargs: dict[str, Any] | None = None,
+    ) -> None:
+        """
+        Set an eigenvalue comparison function.
+
+        Logically collective.
+
+        Notes
+        -----
+        This eigenvalue comparison function is used when `setWhichEigenpairs()`
+        is set to `PEP.Which.USER`.
+
+        See Also
+        --------
+        getEigenvalueComparison, slepc.PEPSetEigenvalueComparison
+        """
+        if comparison is not None:
+            if args is None: args = ()
+            if kargs is None: kargs = {}
+            self.set_attr('__comparison__', (comparison, args, kargs))
+            ctx = self.get_attr('__comparison__')
+            CHKERR( PEPSetEigenvalueComparison(self.pep, PEP_Comparison, <void*>ctx) )
+        else:
+            self.set_attr('__comparison__', None)
+            CHKERR( PEPSetEigenvalueComparison(self.pep, NULL, NULL) )
+
+    def getEigenvalueComparison(self) -> PEPEigenvalueComparison:
+        """
+        Get the eigenvalue comparison function.
+
+        Not collective.
+
+        Returns
+        -------
+        PEPEigenvalueComparison
+            The eigenvalue comparison function.
+
+        See Also
+        --------
+        setEigenvalueComparison
+        """
+        return self.get_attr('__comparison__')
 
     def setMonitor(
         self,
