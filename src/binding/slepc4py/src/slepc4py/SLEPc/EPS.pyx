@@ -1722,8 +1722,6 @@ cdef class EPS(Object):
         """
         return self.get_attr('__stopping__')
 
-    #
-
     def setArbitrarySelection(
         self,
         arbitrary: EPSArbitraryFunction | None,
@@ -1769,8 +1767,6 @@ cdef class EPS(Object):
         setArbitrarySelection
         """
         return self.get_attr('__arbitrary__')
-
-    #
 
     def setEigenvalueComparison(
         self,

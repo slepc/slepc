@@ -40,8 +40,10 @@ __all__ = [
     'EPSEigenvalueComparison',
     'EPSMonitorFunction',
     'PEPStoppingFunction',
+    'PEPEigenvalueComparison',
     'PEPMonitorFunction',
     'NEPStoppingFunction',
+    'NEPEigenvalueComparison',
     'NEPMonitorFunction',
     'SVDStoppingFunction',
     'SVDMonitorFunction',
@@ -97,6 +99,9 @@ EPSMonitorFunction = Callable[[EPS, int, int, ArrayScalar, ArrayScalar, ArrayRea
 PEPStoppingFunction = Callable[[PEP, int, int, int, int], PEP.ConvergedReason]
 """:py:class:`PEP <slepc4py.SLEPc.PEP>` stopping test callback."""
 
+PEPEigenvalueComparison = Callable[[Scalar, Scalar, Scalar, Scalar], int]
+""":py:class:`PEP <slepc4py.SLEPc.NEP>` eigenvalue comparison callback."""
+
 PEPMonitorFunction = Callable[[PEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
 """:py:class:`PEP <slepc4py.SLEPc.PEP>` monitor callback."""
 
@@ -104,6 +109,9 @@ PEPMonitorFunction = Callable[[PEP, int, int, ArrayScalar, ArrayScalar, ArrayRea
 
 NEPStoppingFunction = Callable[[NEP, int, int, int, int], NEP.ConvergedReason]
 """:py:class:`NEP <slepc4py.SLEPc.NEP>` stopping test callback."""
+
+NEPEigenvalueComparison = Callable[[Scalar, Scalar, Scalar, Scalar], int]
+""":py:class:`NEP <slepc4py.SLEPc.NEP>` eigenvalue comparison callback."""
 
 NEPMonitorFunction = Callable[[NEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
 """:py:class:`NEP <slepc4py.SLEPc.NEP>` monitor callback."""
@@ -122,8 +130,12 @@ SVDStoppingFunction = Callable[[SVD, int, int, int, int], SVD.ConvergedReason]
 SVDMonitorFunction = Callable[[SVD, int, int, ArrayReal, ArrayReal, int], None]
 """:py:class:`SVD <slepc4py.SLEPc.SVD>` monitor callback."""
 
+# --- MFN ---
+
 MFNMonitorFunction = Callable[[MFN, int, float], None]
 """`MFN` monitor callback."""
+
+# --- LME ---
 
 LMEMonitorFunction = Callable[[LME, int, float], None]
 """`LME` monitor callback."""

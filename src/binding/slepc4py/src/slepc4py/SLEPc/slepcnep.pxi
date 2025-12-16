@@ -86,6 +86,12 @@ cdef extern from * nogil:
                                             PetscReal*,
                                             PetscInt,
                                             void*) except PETSC_ERR_PYTHON
+    ctypedef PetscErrorCode (*SlepcNEPComparisonFunction)(PetscScalar,
+                                               PetscScalar,
+                                               PetscScalar,
+                                               PetscScalar,
+                                               PetscInt*,
+                                               void*) except PETSC_ERR_PYTHON
 
     PetscErrorCode NEPCreate(MPI_Comm,SlepcNEP*)
     PetscErrorCode NEPDestroy(SlepcNEP*)
@@ -162,6 +168,7 @@ cdef extern from * nogil:
 
     PetscErrorCode NEPSetStoppingTestFunction(SlepcNEP,SlepcNEPStoppingFunction,void*,SlepcNEPCtxDel)
     PetscErrorCode NEPStoppingBasic(SlepcNEP,PetscInt,PetscInt,PetscInt,PetscInt,SlepcNEPConvergedReason*,void*) except PETSC_ERR_PYTHON
+    PetscErrorCode NEPSetEigenvalueComparison(SlepcNEP,SlepcNEPComparisonFunction,void*);
 
     PetscErrorCode NEPRIISetLagPreconditioner(SlepcNEP,PetscInt)
     PetscErrorCode NEPRIIGetLagPreconditioner(SlepcNEP,PetscInt*)
@@ -285,6 +292,21 @@ cdef PetscErrorCode NEP_Stopping(
     elif reason is False: r[0] = NEP_CONVERGED_ITERATING
     elif reason is True:  r[0] = NEP_CONVERGED_USER
     else:                 r[0] = reason
+    return PETSC_SUCCESS
+
+# -----------------------------------------------------------------------------
+
+cdef PetscErrorCode NEP_Comparison(
+    PetscScalar  ar,
+    PetscScalar  ai,
+    PetscScalar  br,
+    PetscScalar  bi,
+    PetscInt*    res,
+    void         *ctx,
+    ) except PETSC_ERR_PYTHON with gil:
+    (comparison, args, kargs) = <object>ctx
+    r = comparison(toComplex(ar, ai), toComplex(br, bi), args, **kargs)
+    res[0] = asInt(r)
     return PETSC_SUCCESS
 
 # -----------------------------------------------------------------------------
