@@ -60,7 +60,6 @@ typedef struct {
   PetscBool         useconj;
   Mat               J;             /* auxiliary matrix when using subcomm */
   BV                pV;
-  NEP_CISS_PROJECT  dsctxf;
   PetscObjectId     rgid;
   PetscObjectState  rgstate;
 } NEP_CISS;
@@ -260,9 +259,8 @@ static PetscErrorCode NEPSetUp_CISS(NEP nep)
     if (nep->fui==NEP_USER_INTERFACE_SPLIT) PetscCall(DSNEPSetFN(nep->ds,nep->nt,nep->f));
     else {
       PetscCall(PetscNew(&dsctxf));
-      PetscCall(DSNEPSetComputeMatrixFunction(nep->ds,NEPContourDSComputeMatrix,dsctxf));
       dsctxf->nep = nep;
-      ctx->dsctxf = dsctxf;
+      PetscCall(DSNEPSetComputeMatrixFunction(nep->ds,NEPContourDSComputeMatrix,dsctxf,PetscCtxDestroyDefault));
     }
   }
   PetscCall(DSAllocate(nep->ds,nep->ncv));
@@ -284,6 +282,7 @@ static PetscErrorCode NEPSolve_CISS(NEP nep)
   Vec              si;
   SlepcSC          sc;
   PetscRandom      rand;
+  NEP_CISS_PROJECT dsctxf;
 
   PetscFunctionBegin;
   PetscCall(DSGetSlepcSC(nep->ds,&sc));
@@ -419,7 +418,10 @@ static PetscErrorCode NEPSolve_CISS(NEP nep)
             PetscCall(BVMatProject(ctx->S,nep->A[i],ctx->S,E));
             PetscCall(DSRestoreMat(nep->ds,DSMatExtra[i],&E));
           }
-        } else { ctx->dsctxf->Q = ctx->S; }
+        } else {
+          PetscCall(DSNEPGetComputeMatrixFunction(nep->ds,NULL,(void**)&dsctxf,NULL));
+          dsctxf->Q = ctx->S;
+        }
       }
       PetscCall(DSSolve(nep->ds,nep->eigr,nep->eigi));
       PetscCall(DSSynchronize(nep->ds,nep->eigr,nep->eigi));
@@ -984,7 +986,6 @@ static PetscErrorCode NEPReset_CISS(NEP nep)
   PetscCall(SlepcContourDataReset(ctx->contour));
   PetscCall(MatDestroy(&ctx->J));
   PetscCall(BVDestroy(&ctx->pV));
-  if (ctx->extraction == NEP_CISS_EXTRACTION_RITZ && nep->fui==NEP_USER_INTERFACE_CALLBACK) PetscCall(PetscFree(ctx->dsctxf));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

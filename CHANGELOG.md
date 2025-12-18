@@ -1,5 +1,17 @@
 # Changelog of SLEPc versions
 
+## [unreleased]
+
+### Added
+
+- New context destroy functions `EPSSetArbitrarySelectionContextDestroy()` and
+  `STShellSetContextDestroy()`.
+
+### Changed
+
+- A new argument "destroy" (a routine for destroying the context) has been added to
+  `DSNEPSetComputeMatrixFunction()`.
+
 ## [3.24] - 2025-09-30
 
 ### Added

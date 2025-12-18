@@ -884,7 +884,7 @@ PetscErrorCode NEPDeflationProjectOperator(NEP_EXT_OP extop,BV Vext,DS ds,PetscI
       PetscCall(BVCreateVec(extop->X,&proj->w));
       PetscCall(BVDuplicateResize(extop->X,proj->dim,&proj->V1));
     }
-    PetscCall(DSNEPSetComputeMatrixFunction(ds,NEPDeflationDSNEPComputeMatrix,(void*)proj));
+    PetscCall(DSNEPSetComputeMatrixFunction(ds,NEPDeflationDSNEPComputeMatrix,(void*)proj,NULL));
   }
 
   /* Split Vext in V1 and V2 */

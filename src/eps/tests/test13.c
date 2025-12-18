@@ -23,6 +23,15 @@ PetscErrorCode MyArbitrarySelection(PetscScalar eigr,PetscScalar eigi,Vec xr,Vec
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+PetscErrorCode MyArbitrarySelectionDestroy(void **ctx)
+{
+  Vec             xref = *(Vec*)*ctx;
+
+  PetscFunctionBeginUser;
+  PetscCall(VecDestroy(&xref));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 int main(int argc,char **argv)
 {
   Mat            A;           /* problem matrices */
@@ -67,25 +76,25 @@ int main(int argc,char **argv)
                 Solve eigenproblem and store some solution
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
   PetscCall(EPSSolve(eps));
-  PetscCall(MatCreateVecs(A,&sxr,NULL));
-  PetscCall(MatCreateVecs(A,&sxi,NULL));
   PetscCall(EPSGetConverged(eps,&nconv));
   if (nconv>0) {
+    PetscCall(MatCreateVecs(A,&sxr,NULL));
+    PetscCall(MatCreateVecs(A,&sxi,NULL));
     PetscCall(EPSGetEigenpair(eps,0,&seigr,&seigi,sxr,sxi));
+    PetscCall(VecDestroy(&sxi));
     PetscCall(EPSErrorView(eps,EPS_ERROR_RELATIVE,NULL));
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                  Solve eigenproblem using an arbitrary selection
        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
     PetscCall(EPSSetArbitrarySelection(eps,MyArbitrarySelection,&sxr));
+    PetscCall(EPSSetArbitrarySelectionContextDestroy(eps,MyArbitrarySelectionDestroy));
     PetscCall(EPSSetWhichEigenpairs(eps,EPS_LARGEST_MAGNITUDE));
     PetscCall(EPSSolve(eps));
     PetscCall(EPSErrorView(eps,EPS_ERROR_RELATIVE,NULL));
   } else PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Problem: no eigenpairs converged.\n"));
 
   PetscCall(EPSDestroy(&eps));
-  PetscCall(VecDestroy(&sxr));
-  PetscCall(VecDestroy(&sxi));
   PetscCall(MatDestroy(&A));
   PetscCall(SlepcFinalize());
   return 0;

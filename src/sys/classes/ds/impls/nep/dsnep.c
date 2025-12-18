@@ -12,17 +12,18 @@
 #include <slepcblaslapack.h>
 
 typedef struct {
-  PetscInt       nf;                 /* number of functions in f[] */
-  FN             f[DS_NUM_EXTRA];    /* functions defining the nonlinear operator */
-  PetscInt       max_mid;            /* maximum minimality index */
-  PetscInt       nnod;               /* number of nodes for quadrature rules */
-  PetscInt       spls;               /* number of sampling columns for quadrature rules */
-  PetscInt       Nit;                /* number of refinement iterations */
-  PetscReal      rtol;               /* tolerance of Newton refinement */
-  RG             rg;                 /* region for contour integral */
-  PetscLayout    map;                /* used to distribute work among MPI processes */
-  void           *computematrixctx;
-  DSNEPMatrixFunctionFn *computematrix;
+  PetscInt              nf;                     /* number of functions in f[] */
+  FN                    f[DS_NUM_EXTRA];        /* functions defining the nonlinear operator */
+  PetscInt              max_mid;                /* maximum minimality index */
+  PetscInt              nnod;                   /* number of nodes for quadrature rules */
+  PetscInt              spls;                   /* number of sampling columns for quadrature rules */
+  PetscInt              Nit;                    /* number of refinement iterations */
+  PetscReal             rtol;                   /* tolerance of Newton refinement */
+  RG                    rg;                     /* region for contour integral */
+  PetscLayout           map;                    /* used to distribute work among MPI processes */
+  DSNEPMatrixFunctionFn *computematrix;         /* user-provided compute matrix function */
+  void                  *computematrixctx;      /* context for the compute matrix function */
+  PetscCtxDestroyFn     *computematrixdestroy;  /* context destroy function */
 } DS_NEP;
 
 /*
@@ -1026,13 +1027,15 @@ PetscErrorCode DSNEPGetSamplingSize(DS ds,PetscInt *p)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode DSNEPSetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctionFn *fun,void *ctx)
+static PetscErrorCode DSNEPSetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctionFn *fun,void *ctx,PetscCtxDestroyFn *destroy)
 {
   DS_NEP *dsctx = (DS_NEP*)ds->data;
 
   PetscFunctionBegin;
-  dsctx->computematrix    = fun;
-  dsctx->computematrixctx = ctx;
+  if (dsctx->computematrixdestroy) PetscCall((*dsctx->computematrixdestroy)(&dsctx->computematrixctx));
+  dsctx->computematrix        = fun;
+  dsctx->computematrixctx     = ctx;
+  dsctx->computematrixdestroy = destroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -1043,9 +1046,11 @@ static PetscErrorCode DSNEPSetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
    Logically Collective
 
    Input Parameters:
-+  ds  - the direct solver context
-.  fun - matrix function evaluation routine, see `DSNEPMatrixFunctionFn` for the calling sequence
--  ctx - a context pointer (the last parameter to the user function)
++  ds      - the direct solver context
+.  fun     - matrix function evaluation routine, see `DSNEPMatrixFunctionFn` for the calling sequence
+.  ctx     - a context pointer (the last parameter to the user function)
+-  destroy - a routine for destroying the context (may be `NULL`), see `PetscCtxDestroyFn`
+             for the calling sequence
 
    Note:
    The result is computed as $T(\lambda) = \sum_i E_i f_i(\lambda)$, and similarly
@@ -1055,21 +1060,22 @@ static PetscErrorCode DSNEPSetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
 
 .seealso: [](sec:ds), `DSNEP`, `DSNEPGetComputeMatrixFunction()`
 @*/
-PetscErrorCode DSNEPSetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn *fun,void *ctx)
+PetscErrorCode DSNEPSetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn *fun,void *ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(ds,DS_CLASSID,1);
-  PetscTryMethod(ds,"DSNEPSetComputeMatrixFunction_C",(DS,DSNEPMatrixFunctionFn*,void*),(ds,fun,ctx));
+  PetscTryMethod(ds,"DSNEPSetComputeMatrixFunction_C",(DS,DSNEPMatrixFunctionFn*,void*,PetscCtxDestroyFn*),(ds,fun,ctx,destroy));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctionFn **fun,void *ctx)
+static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctionFn **fun,void **ctx,PetscCtxDestroyFn **destroy)
 {
   DS_NEP *dsctx = (DS_NEP*)ds->data;
 
   PetscFunctionBegin;
   if (fun) *fun = dsctx->computematrix;
-  if (ctx) *(void**)ctx = dsctx->computematrixctx;
+  if (ctx) *ctx = dsctx->computematrixctx;
+  if (destroy) *destroy = dsctx->computematrixdestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -1083,18 +1089,19 @@ static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
 .  ds  - the direct solver context
 
    Output Parameters:
-+  fun - the pointer to the user function
--  ctx - the context pointer
++  fun     - the pointer to the user function
+.  ctx     - the context pointer
+-  destroy - a routine for destroying the context (may be `NULL`)
 
    Level: developer
 
 .seealso: [](sec:ds), `DSNEP`, `DSNEPSetComputeMatrixFunction()`
 @*/
-PetscErrorCode DSNEPGetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn **fun,void *ctx)
+PetscErrorCode DSNEPGetComputeMatrixFunction(DS ds,DSNEPMatrixFunctionFn **fun,void **ctx,PetscCtxDestroyFn **destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(ds,DS_CLASSID,1);
-  PetscUseMethod(ds,"DSNEPGetComputeMatrixFunction_C",(DS,DSNEPMatrixFunctionFn**,void*),(ds,fun,ctx));
+  PetscUseMethod(ds,"DSNEPGetComputeMatrixFunction_C",(DS,DSNEPMatrixFunctionFn**,void**,PetscCtxDestroyFn**),(ds,fun,ctx,destroy));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -1226,6 +1233,7 @@ static PetscErrorCode DSDestroy_NEP(DS ds)
   for (i=0;i<ctx->nf;i++) PetscCall(FNDestroy(&ctx->f[i]));
   PetscCall(RGDestroy(&ctx->rg));
   PetscCall(PetscLayoutDestroy(&ctx->map));
+  if (ctx->computematrixdestroy) PetscCall((*ctx->computematrixdestroy)(&ctx->computematrixctx));
   PetscCall(PetscFree(ds->data));
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSNEPSetFN_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSNEPGetFN_C",NULL));
