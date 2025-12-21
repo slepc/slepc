@@ -189,4 +189,10 @@ int main(int argc,char **argv)
          args: -pep_type stoar -pep_scale scalar -st_transform
          requires: double
 
+   test:
+      suffix: 2
+      args: -pep_nev 2 -pep_smallest_magnitude -pep_ncv 48 -pep_max_it 500
+      filter: sed -e "s/[0-9]\.[0-9]*e[+-]\([0-9]*\)/removed/g"
+      requires: !single
+
 TEST*/

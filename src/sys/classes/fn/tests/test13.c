@@ -132,7 +132,7 @@ int main(int argc,char **argv)
       output_file: output/test13_1.out
       test:
          suffix: 1
-         args: -fn_scale .04,2 -n 75
+         args: -fn_scale .04,2 -n 75 -inplace {{0 1}}
          requires: c99_complex !__float128
       test:
          suffix: 1_triang

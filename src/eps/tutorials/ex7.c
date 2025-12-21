@@ -211,4 +211,15 @@ int main(int argc,char **argv)
       args: -f1 ${SLEPC_DIR}/share/slepc/datafiles/matrices/bfw62a.petsc -f2 ${SLEPC_DIR}/share/slepc/datafiles/matrices/bfw62a.petsc -eps_nev 4 -terse
       requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
 
+   testset:
+      args: -f1 ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -eps_nev 2 -terse
+      requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
+      localrunfiles: rdb200vecs.bin
+      test:
+         suffix: 4
+         args: -eps_type subspace -ninitial 2 -finitial rdb200vecs.bin
+      test:
+         suffix: 5
+         args: -nconstr 2 -fconstr rdb200vecs.bin
+
 TEST*/

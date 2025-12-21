@@ -135,10 +135,20 @@ int main(int argc,char **argv)
 
 /*TEST
 
-   test:
-      suffix: 1
+   testset:
       nsize: 1
-      args: -bv_orthog_block gs -bv_type {{vecs contiguous svec mat}shared output}
+      args: -bv_orthog_block gs
       output_file: output/test12_1.out
+      test:
+         suffix: 1
+         args: -bv_type {{vecs contiguous svec mat}}
+      test:
+         suffix: 1_cuda
+         args: -bv_type {{svec mat}} -vec_type cuda
+         requires: cuda
+      test:
+         suffix: 1_hip
+         args: -bv_type {{svec mat}} -vec_type hip
+         requires: hip
 
 TEST*/

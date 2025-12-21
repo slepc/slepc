@@ -1,0 +1,15 @@
+
+Generalized eigenproblem stored in file.
+
+ Reading REAL matrices from binary files...
+ Matrix B was not provided, setting B=I
+
+ Number of iterations of the method: 2
+ Number of linear iterations of the method: 0
+ Solution method: subspace
+
+ Number of requested eigenvalues: 2
+ Stopping condition: tol=1e-08, maxit=100
+ All requested eigenvalues computed up to the required tolerance:
+     -35.00752, -34.10419
+

@@ -18,12 +18,14 @@ static char help[] = "Test STFILTER interface functions.\n\n"
 
 int main(int argc,char **argv)
 {
-  Mat            A;
-  EPS            eps;
-  ST             st;
-  PetscInt       N,n=10,m,Istart,Iend,II,i,j,degree;
-  PetscBool      flag,modify=PETSC_FALSE,terse;
-  PetscReal      inta,intb,rleft,rright;
+  Mat             A;
+  EPS             eps;
+  ST              st;
+  PetscInt        N,n=10,m,Istart,Iend,II,i,j,degree;
+  PetscBool       flag,modify=PETSC_FALSE,terse;
+  PetscReal       inta,intb,rleft,rright;
+  STFilterType    ftype;
+  STFilterDamping damp;
 
   PetscFunctionBeginUser;
   PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
@@ -76,11 +78,16 @@ int main(int argc,char **argv)
   /* print filter information */
   PetscCall(PetscObjectTypeCompare((PetscObject)st,STFILTER,&flag));
   if (flag) {
+    PetscCall(STFilterGetType(st,&ftype));
     PetscCall(STFilterGetDegree(st,&degree));
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Filter degree: %" PetscInt_FMT "\n",degree));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Filter type: %s, degree: %" PetscInt_FMT "\n",STFilterTypes[ftype],degree));
     PetscCall(STFilterGetInterval(st,&inta,&intb));
     PetscCall(STFilterGetRange(st,&rleft,&rright));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD," Requested interval: [%g,%g],  range: [%g,%g]\n\n",(double)inta,(double)intb,(double)rleft,(double)rright));
+    if (ftype==ST_FILTER_CHEBYSHEV) {
+      PetscCall(STFilterGetDamping(st,&damp));
+      PetscCall(PetscPrintf(PETSC_COMM_WORLD," Damping: %s\n",STFilterDampings[damp]));
+    }
   }
 
   PetscCall(PetscOptionsHasName(NULL,NULL,"-terse",&terse));
@@ -139,13 +146,14 @@ int main(int argc,char **argv)
    test:
       suffix: 4
       args: -terse -st_filter_type chebyshev -st_filter_damping {{none jackson}}
-      filter: sed -e "s/0.161982,7.83797/0.162007,7.83897/"
+      filter: sed -e "s/0.161982,7.83797/0.162007,7.83897/" | sed -e "s/CHEBYSHEV/FILTLAN/" | grep -v Damping
       output_file: output/test31_1.out
       requires: !single
 
    test:
       suffix: 5
       args: -modify -terse -st_filter_range -0.5,8 -st_filter_type chebyshev -st_filter_damping {{lanczos fejer}}
+      filter: sed -e "s/CHEBYSHEV/FILTLAN/" | grep -v Damping
       output_file: output/test31_2.out
       requires: !single
 

@@ -159,7 +159,7 @@ end program test7f
 !   test:
 !      suffix: 1
 !      nsize: 1
-!      args: -fn_scale .13,2 -n 19 -fn_method {{0 1 2 3}shared output}
+!      args: -fn_scale .13,2 -n 19 -fn_method {{0 1 2 3}} -inplace {{0 1}}
 !      filter: grep -v "computing matrix functions"
 !      output_file: output/test7f_1.out
 !

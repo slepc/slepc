@@ -178,5 +178,10 @@ end program ex16f
 !      suffix: 1
 !      args: -pep_nev 4 -pep_ncv 19 -terse
 !      requires: !complex
+!   test:
+!      suffix: 2
+!      args: -pep_nev 4 -pep_smallest_real -terse
+!      output_file: output/ex16f_1.out
+!      requires: !complex
 !
 !TEST*/

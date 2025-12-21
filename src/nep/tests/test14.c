@@ -109,8 +109,13 @@ int main(int argc,char **argv)
 
 /*TEST
 
-   test:
-      suffix: 1
+   testset:
       args: -nep_type slp -nep_nev 2 -terse
+      output_file: output/test14_1.out
+      test:
+         suffix: 1
+      test:
+         suffix: 1_norm
+         args: -nep_conv_norm
 
 TEST*/

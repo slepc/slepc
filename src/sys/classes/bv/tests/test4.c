@@ -170,7 +170,7 @@ int main(int argc,char **argv)
       args: -n 18 -kx 12 -ky 8
       test:
          suffix: 1
-         args: -bv_type {{vecs contiguous svec mat}shared output}
+         args: -bv_type {{vecs contiguous svec mat}}
       test:
          suffix: 1_vecs_vmip
          args: -bv_type vecs -bv_vecs_vmip 1
@@ -184,6 +184,14 @@ int main(int argc,char **argv)
          requires: hip
       test:
          suffix: 2
-         args: -bv_type {{vecs contiguous svec mat}shared output} -trans
+         args: -bv_type {{vecs contiguous svec mat}} -trans
+      test:
+         suffix: 2_cuda
+         args: -bv_type {{svec mat}} -vec_type cuda -trans
+         requires: cuda
+      test:
+         suffix: 2_hip
+         args: -bv_type {{svec mat}} -vec_type hip -trans
+         requires: hip
 
 TEST*/
