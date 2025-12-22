@@ -904,7 +904,7 @@ nvidia-cxx-mpi:
     - compiler:nvidia, name:hapy
   variables:
     LOAD_MODULES: nvhpc/23.5
-    PETSC_CONFIG_OPTS: --with-cc=mpicc --with-fc=mpifort --with-cxx=mpicxx --with-fortran-bindings=0 --with-clanguage=c++ --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
+    PETSC_CONFIG_OPTS: --with-cc=mpicc --with-fc=mpifort --with-cxx=mpicxx --with-fortran-bindings=0 --with-clanguage=c++ --with-cuda
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
     TEST_OPTS: -j4 -l12
 
