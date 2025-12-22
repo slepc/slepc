@@ -18,6 +18,7 @@
 #if !defined(PETSC_USE_DEBUG)
 
 #define SlepcValidVecComp(y,arg) do {(void)(y);} while (0)
+#define SlepcValidVecsComp(y,n,arg) do {(void)(y);} while (0)
 
 #else
 
@@ -25,6 +26,10 @@
   do { \
     PetscCheck(((Vec_Comp*)(y)->data)->nx>=((Vec_Comp*)(y)->data)->n->n,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONGSTATE,"Invalid number of subvectors required: Parameter #%d",arg); \
   } while (0)
+#define SlepcValidVecsComp(y,n,arg) \
+  for (PetscInt __i=0;__i<n;__i++) { \
+    PetscCheck(((Vec_Comp*)(y)[__i]->data)->nx>=((Vec_Comp*)(y)[__i]->data)->n->n,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONGSTATE,"Invalid number of subvectors required: Parameter #%d",arg); \
+  }
 
 #endif
 

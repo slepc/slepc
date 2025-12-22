@@ -29,7 +29,7 @@ static PetscErrorCode __SUF__(VecDot_Comp)(Vec a,Vec b,PetscScalar *z)
   SlepcValidVecComp(a,1);
   SlepcValidVecComp(b,2);
   if (as->x[0]->ops->dot_local) {
-    for (i=0,sum=0.0;i<as->n->n;i++) {
+    for (i=0;i<as->n->n;i++) {
       PetscUseTypeMethod(as->x[i],dot_local,bs->x[i],&work);
       sum += work;
     }
@@ -38,7 +38,7 @@ static PetscErrorCode __SUF__(VecDot_Comp)(Vec a,Vec b,PetscScalar *z)
     PetscCallMPI(MPIU_Allreduce(&work,&sum,1,MPIU_SCALAR,MPIU_SUM,PetscObjectComm((PetscObject)a)));
 #endif
   } else {
-    for (i=0,sum=0.0;i<as->n->n;i++) {
+    for (i=0;i<as->n->n;i++) {
       PetscCall(VecDot(as->x[i],bs->x[i],&work));
       sum += work;
     }
@@ -56,7 +56,7 @@ static PetscErrorCode __SUF__(VecMDot_Comp)(Vec a,PetscInt n,const Vec b[],Petsc
 
   PetscFunctionBegin;
   SlepcValidVecComp(a,1);
-  for (i=0;i<n;i++) SlepcValidVecComp(b[i],3);
+  SlepcValidVecsComp(b,n,3);
 
   if (as->n->n == 0) {
     *z = 0;
@@ -67,11 +67,13 @@ static PetscErrorCode __SUF__(VecMDot_Comp)(Vec a,PetscInt n,const Vec b[],Petsc
 
 #if defined(__WITH_MPI__)
   if (as->x[0]->ops->mdot_local) {
-    r = work0; work = z;
+    r = work0;
+    work = z;
   } else
 #endif
   {
-    r = z; work = work0;
+    r = z;
+    work = work0;
   }
 
   /* z[i] <- a.x' * b[i].x */
@@ -105,7 +107,7 @@ static PetscErrorCode __SUF__(VecTDot_Comp)(Vec a,Vec b,PetscScalar *z)
   SlepcValidVecComp(a,1);
   SlepcValidVecComp(b,2);
   if (as->x[0]->ops->tdot_local) {
-    for (i=0,sum=0.0;i<as->n->n;i++) {
+    for (i=0;i<as->n->n;i++) {
       PetscUseTypeMethod(as->x[i],tdot_local,bs->x[i],&work);
       sum += work;
     }
@@ -114,7 +116,7 @@ static PetscErrorCode __SUF__(VecTDot_Comp)(Vec a,Vec b,PetscScalar *z)
     PetscCallMPI(MPIU_Allreduce(&work,&sum,1,MPIU_SCALAR,MPIU_SUM,PetscObjectComm((PetscObject)a)));
 #endif
   } else {
-    for (i=0,sum=0.0;i<as->n->n;i++) {
+    for (i=0;i<as->n->n;i++) {
       PetscCall(VecTDot(as->x[i],bs->x[i],&work));
       sum += work;
     }
@@ -132,7 +134,7 @@ static PetscErrorCode __SUF__(VecMTDot_Comp)(Vec a,PetscInt n,const Vec b[],Pets
 
   PetscFunctionBegin;
   SlepcValidVecComp(a,1);
-  for (i=0;i<n;i++) SlepcValidVecComp(b[i],3);
+  SlepcValidVecsComp(b,n,3);
 
   if (as->n->n == 0) {
     *z = 0;
@@ -143,11 +145,13 @@ static PetscErrorCode __SUF__(VecMTDot_Comp)(Vec a,PetscInt n,const Vec b[],Pets
 
 #if defined(__WITH_MPI__)
   if (as->x[0]->ops->mtdot_local) {
-    r = work0; work = z;
+    r = work0;
+    work = z;
   } else
 #endif
   {
-    r = z; work = work0;
+    r = z;
+    work = work0;
   }
 
   /* z[i] <- a.x' * b[i].x */
@@ -181,19 +185,40 @@ static PetscErrorCode __SUF__(VecNorm_Comp)(Vec a,NormType t,PetscReal *norm)
   SlepcValidVecComp(a,1);
   /* Initialize norm */
   switch (t) {
-    case NORM_1: case NORM_INFINITY: *norm = 0.0; break;
-    case NORM_2: case NORM_FROBENIUS: *norm = 1.0; s = 0.0; break;
-    case NORM_1_AND_2: norm[0] = 0.0; norm[1] = 1.0; s = 0.0; break;
+    case NORM_1:
+    case NORM_INFINITY:
+      *norm = 0.0;
+      break;
+    case NORM_2:
+    case NORM_FROBENIUS:
+      *norm = 1.0;
+      s = 0.0;
+      break;
+    case NORM_1_AND_2:
+      norm[0] = 0.0;
+      norm[1] = 1.0;
+      s = 0.0;
+      break;
   }
   for (i=0;i<as->n->n;i++) {
     if (as->x[0]->ops->norm_local) PetscUseTypeMethod(as->x[i],norm_local,t,work);
     else PetscCall(VecNorm(as->x[i],t,work));
     /* norm+= work */
     switch (t) {
-      case NORM_1: *norm+= *work; break;
-      case NORM_2: case NORM_FROBENIUS: AddNorm2(norm,&s,*work); break;
-      case NORM_1_AND_2: norm[0]+= work[0]; AddNorm2(&norm[1],&s,work[1]); break;
-      case NORM_INFINITY: *norm = PetscMax(*norm,*work); break;
+      case NORM_1:
+        *norm += *work;
+        break;
+      case NORM_2:
+      case NORM_FROBENIUS:
+        AddNorm2(norm,&s,*work);
+        break;
+      case NORM_1_AND_2:
+        norm[0] += work[0];
+        AddNorm2(&norm[1],&s,work[1]);
+        break;
+      case NORM_INFINITY:
+        *norm = PetscMax(*norm,*work);
+        break;
     }
   }
 
@@ -207,13 +232,17 @@ static PetscErrorCode __SUF__(VecNorm_Comp)(Vec a,NormType t,PetscReal *norm)
       work[0] = *norm;
       PetscCallMPI(MPIU_Allreduce(work,norm,1,MPIU_REAL,MPIU_SUM,PetscObjectComm((PetscObject)a)));
       break;
-    case NORM_2: case NORM_FROBENIUS:
-      work[0] = *norm; work[1] = s;
+    case NORM_2:
+    case NORM_FROBENIUS:
+      work[0] = *norm;
+      work[1] = s;
       PetscCallMPI(MPIU_Allreduce(work,work0,1,MPIU_NORM2,MPIU_NORM2_SUM,PetscObjectComm((PetscObject)a)));
       *norm = GetNorm2(work0[0],work0[1]);
       break;
     case NORM_1_AND_2:
-      work[0] = norm[0]; work[1] = norm[1]; work[2] = s;
+      work[0] = norm[0];
+      work[1] = norm[1];
+      work[2] = s;
       PetscCallMPI(MPIU_Allreduce(work,work0,1,MPIU_NORM1_AND_2,MPIU_NORM2_SUM,PetscObjectComm((PetscObject)a)));
       norm[0] = work0[0];
       norm[1] = GetNorm2(work0[1],work0[2]);
@@ -227,9 +256,16 @@ static PetscErrorCode __SUF__(VecNorm_Comp)(Vec a,NormType t,PetscReal *norm)
 #else
   /* Norm correction */
   switch (t) {
-    case NORM_2: case NORM_FROBENIUS: *norm = GetNorm2(*norm,s); break;
-    case NORM_1_AND_2: norm[1] = GetNorm2(norm[1],s); break;
-    default: ;
+    case NORM_1:
+    case NORM_INFINITY:
+      break;
+    case NORM_2:
+    case NORM_FROBENIUS:
+      *norm = GetNorm2(*norm,s);
+      break;
+    case NORM_1_AND_2:
+      norm[1] = GetNorm2(norm[1],s);
+      break;
   }
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -272,11 +308,14 @@ PetscErrorCode __SUF__(VecDotNorm2_Comp)(Vec v,Vec w,PetscScalar *dp,PetscScalar
 
 #if defined(__WITH_MPI__)
     /* [dp, nm] <- Allreduce([dp0, nm0]) */
-    work[0] = dp0; work[1] = nm0;
+    work[0] = dp0;
+    work[1] = nm0;
     PetscCallMPI(MPIU_Allreduce(work,&work[2],2,MPIU_SCALAR,MPIU_SUM,PetscObjectComm((PetscObject)v)));
-    *dp = work[2]; *nm = work[3];
+    *dp = work[2];
+    *nm = work[3];
 #else
-    *dp = dp0; *nm = nm0;
+    *dp = dp0;
+    *nm = nm0;
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);
 }
