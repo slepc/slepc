@@ -3,4 +3,6 @@ FN Object: 1 MPI process
   type: exp
     exponential: exp(+1e-09*x)
 The 1-norm of f(A) is 1.
+||exp(A)*exp(-A)-I||_F < 100*eps
 The 1-norm of f(A) is 1.
+||exp(A)*exp(-A)-I||_F < 100*eps

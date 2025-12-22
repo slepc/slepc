@@ -1,0 +1,15 @@
+
+Generalized eigenproblem stored in file.
+
+ Reading REAL matrices from binary files...
+ Matrix B was not provided, setting B=I
+
+ Number of iterations of the method: 5
+ Number of linear iterations of the method: 0
+ Solution method: krylovschur
+
+ Number of requested eigenvalues: 2
+ Stopping condition: tol=1e-08, maxit=100
+ All requested eigenvalues computed up to the required tolerance:
+     -33.20131, -32.68111
+

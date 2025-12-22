@@ -225,9 +225,9 @@ int main(int argc,char **argv)
 
    test:
       suffix: 6
-      args: -fn_scale 1e-9 -fn_method {{2 3}}
+      args: -fn_scale 1e-9 -fn_method {{2 3}} -checkerror
       filter: grep -v "computing matrix functions"
-      requires: c99_complex !single
+      requires: c99_complex !single !__float128
       output_file: output/test3_6.out
 
 TEST*/

@@ -16,6 +16,7 @@ int main(int argc,char **argv)
 {
   Mat            M,T,D,block[4];
   Vec            t,v,v1,v2,w,*C;
+  VecType        vtype;
   BV             X,U,L;
   IS             is[2];
   PetscInt       i,j,n=10,k=5,l=3,nc=0,rstart,rend;
@@ -43,7 +44,9 @@ int main(int argc,char **argv)
   }
   PetscCall(MatAssemblyBegin(T,MAT_FINAL_ASSEMBLY));
   PetscCall(MatAssemblyEnd(T,MAT_FINAL_ASSEMBLY));
+  PetscCall(MatGetVecType(T,&vtype));
   PetscCall(MatCreateConstantDiagonal(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,n,n,1.0,&D));
+  PetscCall(MatSetVecType(D,vtype));
 
   block[0] = T;
   block[1] = block[2] = NULL;

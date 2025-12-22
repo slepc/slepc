@@ -84,7 +84,7 @@ PetscErrorCode BVMultInPlace_BLAS_Private(BV bv,PetscInt m_,PetscInt k_,PetscInt
   PetscCall(PetscBLASIntCast(k_,&k));
   PetscCall(PetscBLASIntCast(lda_,&lda));
   PetscCall(PetscBLASIntCast(ldb_,&ldb));
-  PetscCall(BVAllocateWork_Private(bv,BLOCKSIZE*n_));
+  PetscCall(BVAllocateWork_Private(bv,bs*n_));
   if (PetscUnlikely(btrans)) {
     pb = (PetscScalar*)B+s;
     bt = "C";
@@ -122,8 +122,8 @@ PetscErrorCode BVMultInPlace_Vecs_Private(BV bv,PetscInt m_,PetscInt n_,PetscInt
   PetscCall(PetscBLASIntCast(m_,&m));
   PetscCall(PetscBLASIntCast(n_,&n));
   PetscCall(PetscBLASIntCast(k_,&k));
-  PetscCall(BVAllocateWork_Private(bv,2*BLOCKSIZE*n_));
-  out = bv->work+BLOCKSIZE*n_;
+  PetscCall(BVAllocateWork_Private(bv,2*bs*n_));
+  out = bv->work+bs*n_;
   if (btrans) bt = "C";
   else bt = "N";
   l = m % bs;

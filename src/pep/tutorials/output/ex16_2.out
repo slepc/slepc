@@ -1,0 +1,10 @@
+
+Quadratic Eigenproblem, N=100 (10x10 grid)
+
+ Number of requested eigenvalues: 2
+
+           k          ||P(k)x||/||kx||
+   ----------------- ------------------
+ -0.000679+0.054139i    removed
+ -0.000679-0.054139i    removed
+
