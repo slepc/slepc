@@ -198,8 +198,9 @@ gnu-cxx-complex-nofort:
 gnu-c-complex-nompi-int64:
   extends: .stage-1
   tags:
-    - linux-ubuntu, name:pakhet
+    - linux-ubuntu, name:satet
   variables:
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' --with-mpi=0 --with-fc=0 --with-scalar-type=complex --with-64-bit-indices
     DISABLE_TESTS: 1
 
@@ -215,10 +216,9 @@ gnu-c-py:
 gnu-c99-mlib-static:
   extends: .stage-1
   tags:
-    - linux-ubuntu, name:satet
+    - linux-ubuntu, name:pakhet
   variables:
-    LOAD_MODULES: mpich/4.3.0
-    PETSC_CONFIG_OPTS: --with-single-library=0 --with-shared-libraries=0 COPTFLAGS="-O -std=c99" FPPFLAGS=-fno-underscoring
+    PETSC_CONFIG_OPTS: COPTFLAGS="-O -std=c99" FPPFLAGS=-fno-underscoring --with-single-library=0 --with-shared-libraries=0
     TEST_SEARCH: eps_tests-test10_1
 
 gnu-lint:
@@ -472,10 +472,10 @@ gnu-cxx-complex:
     - .stage-2
     - .linux_test
   tags:
-    - name:sejmet
+    - name:maat
   variables:
     PETSC_CONFIG_OPTS: --with-clanguage=C++ --with-scalar-type=complex --with-fortran-bindings=0
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.0 --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0 --with-primme-dir=/usr/local/opt/primme-3.2 --with-blopex-dir=/usr/local/opt/blopex
 
 gnu-c-cuda:
   extends:
@@ -545,7 +545,7 @@ pip-install:
   extends: .test
   stage: stage-3
   tags:
-    - pip, name:satet
+    - pip, name:pakhet
   before_script:
     - date
     - hostname
@@ -576,24 +576,26 @@ pip-install:
       cd ..
       set -eu pipefail
       rm -rf /tmp/venv
-      python -m venv /tmp/venv
+      ${PYTHON} -m venv /tmp/venv
       source /tmp/venv/bin/activate
       set -x
-      python -m pip install --upgrade pip
+      ${PYTHON} -m pip install --upgrade pip
       wheelhouse=$PWD/wheelhouse
       rm -rf $wheelhouse
       mkdir -p $wheelhouse
       export PIP_WHEEL_DIR=$wheelhouse
       export PIP_FIND_LINKS=$wheelhouse
-      python -m pip wheel $petsc
-      python -m pip wheel $petsc/src/binding/petsc4py
-      python -m pip wheel $slepc
-      python -m pip wheel $slepc/src/binding/slepc4py
-      python -m pip install --pre slepc4py
-      python -m pip list
-      python -m slepc --prefix
-      python -m slepc4py
+      ${PYTHON} -m pip wheel $petsc
+      ${PYTHON} -m pip wheel $petsc/src/binding/petsc4py
+      ${PYTHON} -m pip wheel $slepc
+      ${PYTHON} -m pip wheel $slepc/src/binding/slepc4py
+      ${PYTHON} -m pip install --pre slepc4py
+      ${PYTHON} -m pip list
+      ${PYTHON} -m slepc --prefix
+      ${PYTHON} -m slepc4py
       make -C $slepc/src/binding/slepc4py/demo
+  variables:
+    PYTHON: python3
   after_script:
     - date
 
@@ -823,21 +825,22 @@ gnu-c-debug:
     - .stage-3
     - .coverage_test
   tags:
-    - name:hapy
+    - name:satet
   variables:
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXFLAGS='-O -g' --with-cxx-dialect=11
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-primme --download-blopex --download-hpddm --download-evsl
-    LOAD_MODULES: mpi
 
 gnu-c-complex-debug:
   extends:
     - .stage-3
     - .coverage_test
   tags:
-    - name:jepri
+    - name:satet
   variables:
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-scalar-type=complex --with-debugging=1
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0 --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --download-hpddm
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --download-hpddm
 
 intel-c-complex-int64-mkl:
   extends:
@@ -878,7 +881,7 @@ intel-c-mkl-libs:
     - .stage-3
     - .linux_test_nofflags
   tags:
-    - compiler:intel, name:sejmet
+    - compiler:intel, name:pakhet
   variables:
     LOAD_MODULES: compiler mpi mkl
     PETSC_CONFIG_OPTS: --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso --with-scalapack --download-mumps --download-metis --download-parmetis --download-suitesparse
@@ -925,7 +928,7 @@ clang-c-single:
     - .stage-3
     - .linux_test
   tags:
-    - compiler:clang, name:maat
+    - compiler:clang, name:pakhet
   variables:
     PETSC_CONFIG_OPTS: --with-cc=/opt/mpich/clang/bin/mpicc --with-cxx=/opt/mpich/clang/bin/mpicxx --with-fc=0 --with-mpiexec=/opt/mpich/clang/bin/mpiexec --with-precision=single
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme
@@ -948,7 +951,7 @@ gnu-c-cuda-int64:
     - gpu:nvidia, name:hapy
   variables:
     LOAD_MODULES: mpi
-    PETSC_CONFIG_OPTS: --with-cuda --with-64-bit-indices --with-magma-dir=/usr/local/opt/magma-2.7.1
+    PETSC_CONFIG_OPTS: --with-fc=0 --with-cuda --with-64-bit-indices --with-magma-dir=/usr/local/opt/magma-2.7.1
     TEST_OPTS: -j2 -l6 query=requires queryval=cuda
     MAKE_CUDAFLAGS: --compiler-options -Wall,-Wunused-parameter,-Wno-deprecated-declarations,-Werror
 
@@ -967,9 +970,8 @@ gnu-c-complex128:
     - .stage-3
     - .linux_test
   tags:
-    - name:satet
+    - name:jepri
   variables:
-    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-f2cblaslapack --with-precision=__float128 --with-clanguage=c++
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
