@@ -86,6 +86,7 @@ PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
   eps->stoppinguser    = NULL;
   eps->stoppingdestroy = NULL;
   eps->arbitrary       = NULL;
+  eps->arbitrarydestroy= NULL;
   eps->convergedctx    = NULL;
   eps->stoppingctx     = NULL;
   eps->arbitraryctx    = NULL;
@@ -355,6 +356,7 @@ PetscErrorCode EPSDestroy(EPS *eps)
   PetscCall(SlepcBasisDestroy_Private(&(*eps)->ninil,&(*eps)->ISL));
   if ((*eps)->convergeddestroy) PetscCall((*(*eps)->convergeddestroy)(&(*eps)->convergedctx));
   if ((*eps)->stoppingdestroy) PetscCall((*(*eps)->stoppingdestroy)(&(*eps)->stoppingctx));
+  if ((*eps)->arbitrarydestroy) PetscCall((*(*eps)->arbitrarydestroy)(&(*eps)->arbitraryctx));
   PetscCall(EPSMonitorCancel(*eps));
   PetscCall(PetscHeaderDestroy(eps));
   PetscFunctionReturn(PETSC_SUCCESS);

@@ -110,6 +110,7 @@ struct _p_EPS {
   EPSStoppingTestFn         *stoppinguser;
   PetscCtxDestroyFn         *stoppingdestroy;
   SlepcArbitrarySelectionFn *arbitrary;
+  PetscCtxDestroyFn         *arbitrarydestroy;
   void                      *convergedctx;
   void                      *stoppingctx;
   void                      *arbitraryctx;

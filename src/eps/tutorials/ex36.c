@@ -38,6 +38,7 @@ static char help[] = "Use the matrix exponential to compute rightmost eigenvalue
 /* Routines for shell spectral transformation */
 PetscErrorCode STApply_Exp(ST,Vec,Vec);
 PetscErrorCode STBackTransform_Exp(ST,PetscInt,PetscScalar*,PetscScalar*);
+PetscErrorCode STDestroy_Exp(void**);
 
 int main(int argc,char **argv)
 {
@@ -128,6 +129,7 @@ int main(int argc,char **argv)
     PetscCall(STShellSetApply(st,STApply_Exp));
     PetscCall(STShellSetBackTransform(st,STBackTransform_Exp));
     PetscCall(STShellSetContext(st,mfn));
+    PetscCall(STShellSetContextDestroy(st,STDestroy_Exp));
     PetscCall(PetscObjectSetName((PetscObject)st,"STEXP"));
   }
 
@@ -156,7 +158,6 @@ int main(int argc,char **argv)
   }
   PetscCall(EPSDestroy(&eps));
   PetscCall(MatDestroy(&A));
-  if (isShell) PetscCall(MFNDestroy(&mfn));
 #else
   SETERRQ(PETSC_COMM_WORLD,PETSC_ERR_SUP,"This example requires C99 complex numbers");
 #endif
@@ -224,6 +225,21 @@ PetscErrorCode STApply_Exp(ST st,Vec x,Vec y)
   PetscFunctionBeginUser;
   PetscCall(STShellGetContext(st,&mfn));
   PetscCall(MFNSolve(mfn,x,y));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+   STDestroy_Exp - This routine destroys the shell ST context.
+
+   Input Parameter:
+.  ctx - user-defined spectral transformation context
+*/
+PetscErrorCode STDestroy_Exp(void **ctx)
+{
+  MFN       mfn = (MFN)*ctx;
+
+  PetscFunctionBeginUser;
+  PetscCall(MFNDestroy(&mfn));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

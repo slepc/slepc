@@ -828,6 +828,7 @@ SLEPC_EXTERN PetscErrorCode EPSSetStoppingTestFunction(EPS,EPSStoppingTestFn*,vo
 
 SLEPC_EXTERN PetscErrorCode EPSSetEigenvalueComparison(EPS,SlepcEigenvalueComparisonFn*,void*);
 SLEPC_EXTERN PetscErrorCode EPSSetArbitrarySelection(EPS,SlepcArbitrarySelectionFn*,void*);
+SLEPC_EXTERN PetscErrorCode EPSSetArbitrarySelectionContextDestroy(EPS,PetscCtxDestroyFn*);
 
 /* --------- options specific to particular eigensolvers -------- */
 

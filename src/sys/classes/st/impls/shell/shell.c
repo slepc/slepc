@@ -15,12 +15,22 @@
 #include <slepc/private/stimpl.h>        /*I "slepcst.h" I*/
 
 typedef struct {
-  void           *ctx;                       /* user provided context */
-  PetscErrorCode (*apply)(ST,Vec,Vec);
-  PetscErrorCode (*applytrans)(ST,Vec,Vec);
-  PetscErrorCode (*applyhermtrans)(ST,Vec,Vec);
-  PetscErrorCode (*backtransform)(ST,PetscInt n,PetscScalar*,PetscScalar*);
+  void              *ctx;                       /* user-provided context */
+  PetscCtxDestroyFn *destroy;                   /* context destroy */
+  PetscErrorCode    (*apply)(ST,Vec,Vec);
+  PetscErrorCode    (*applytrans)(ST,Vec,Vec);
+  PetscErrorCode    (*applyhermtrans)(ST,Vec,Vec);
+  PetscErrorCode    (*backtransform)(ST,PetscInt n,PetscScalar*,PetscScalar*);
 } ST_SHELL;
+
+static PetscErrorCode STShellGetContext_Shell(ST st,void *ctx)
+{
+  ST_SHELL *shell = (ST_SHELL*)st->data;
+
+  PetscFunctionBegin;
+  *(void**)ctx = shell->ctx;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
 
 /*@C
    STShellGetContext - Returns the user-provided context associated with an `STSHELL`.
@@ -39,14 +49,20 @@ typedef struct {
 @*/
 PetscErrorCode STShellGetContext(ST st,void *ctx)
 {
-  PetscBool      flg;
-
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
   PetscAssertPointer(ctx,2);
-  PetscCall(PetscObjectTypeCompare((PetscObject)st,STSHELL,&flg));
-  if (!flg) *(void**)ctx = NULL;
-  else      *(void**)ctx = ((ST_SHELL*)st->data)->ctx;
+  PetscUseMethod(st,"STShellGetContext_C",(ST,void*),(st,ctx));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode STShellSetContext_Shell(ST st,void *ctx)
+{
+  ST_SHELL *shell = (ST_SHELL*)st->data;
+
+  PetscFunctionBegin;
+  if (shell->destroy) PetscCall((*shell->destroy)(&shell->ctx));
+  shell->ctx = ctx;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -56,7 +72,7 @@ PetscErrorCode STShellGetContext(ST st,void *ctx)
    Logically Collective
 
    Input Parameters:
-+  st - the shell ST
++  st  - the shell `ST`
 -  ctx - the context
 
    Level: advanced
@@ -66,17 +82,45 @@ PetscErrorCode STShellGetContext(ST st,void *ctx)
    for this function that tells Fortran the Fortran derived data type that
    you are passing in as the `ctx` argument.
 
-.seealso: [](ch:st), `STSHELL`, `STShellGetContext()`
+.seealso: [](ch:st), `STSHELL`, `STShellGetContext()`, `STShellSetContextDestroy()`
 @*/
 PetscErrorCode STShellSetContext(ST st,void *ctx)
 {
-  ST_SHELL       *shell = (ST_SHELL*)st->data;
-  PetscBool      flg;
-
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
-  PetscCall(PetscObjectTypeCompare((PetscObject)st,STSHELL,&flg));
-  if (flg) shell->ctx = ctx;
+  PetscTryMethod(st,"STShellSetContext_C",(ST,void*),(st,ctx));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode STShellSetContextDestroy_Shell(ST st,PetscCtxDestroyFn *destroy)
+{
+  ST_SHELL *shell = (ST_SHELL*)st->data;
+
+  PetscFunctionBegin;
+  shell->destroy = destroy;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@C
+   STShellSetContextDestroy - Set a context destroy function for the `STSHELL`
+   context.
+
+   Logically Collective
+
+   Input Parameters:
++  st      - the shell `ST`
+-  destroy - context destroy function, see `PetscCtxDestroyFn` for its calling sequence
+
+   Level: advanced
+
+.seealso: [](ch:st), `STSHELL`, STShellSetContext()`
+@*/
+PetscErrorCode STShellSetContextDestroy(ST st,PetscCtxDestroyFn *destroy)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(st,ST_CLASSID,1);
+  PetscAssertPointer(destroy,2);
+  PetscTryMethod(st,"STShellSetContextDestroy_C",(ST,PetscCtxDestroyFn*),(st,destroy));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -165,8 +209,14 @@ PetscErrorCode STIsInjective_Shell(ST st,PetscBool* is)
 
 static PetscErrorCode STDestroy_Shell(ST st)
 {
+  ST_SHELL *shell = (ST_SHELL*)st->data;
+
   PetscFunctionBegin;
+  if (shell->destroy) PetscCall((*shell->destroy)(&shell->ctx));
   PetscCall(PetscFree(st->data));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellGetContext_C",NULL));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetContext_C",NULL));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetContextDestroy_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetApply_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetApplyTranspose_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetApplyHermitianTranspose_C",NULL));
@@ -342,6 +392,9 @@ SLEPC_EXTERN PetscErrorCode STCreate_Shell(ST st)
   st->ops->backtransform   = STBackTransform_Shell;
   st->ops->destroy         = STDestroy_Shell;
 
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellGetContext_C",STShellGetContext_Shell));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetContext_C",STShellSetContext_Shell));
+  PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetContextDestroy_C",STShellSetContextDestroy_Shell));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetApply_C",STShellSetApply_Shell));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetApplyTranspose_C",STShellSetApplyTranspose_Shell));
 #if defined(PETSC_USE_COMPLEX)

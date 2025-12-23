@@ -696,15 +696,39 @@ PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *f
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSSetWhichEigenpairs()`
+.seealso: [](ch:eps), `EPSSetWhichEigenpairs()`, `EPSSetArbitrarySelectionContextDestroy()`
 @*/
 PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,void *ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
+  if (eps->arbitrarydestroy) PetscCall((*eps->arbitrarydestroy)(&eps->arbitraryctx));
   eps->arbitrary    = func;
   eps->arbitraryctx = ctx;
   eps->state        = EPS_STATE_INITIAL;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@C
+   EPSSetArbitrarySelectionContextDestroy - Set a context destroy function for the
+   context used in the arbitrary selection.
+
+   Logically Collective
+
+   Input Parameters:
++  eps     - the linear eigensolver context
+-  destroy - context destroy function, see `PetscCtxDestroyFn` for its calling sequence
+
+   Level: advanced
+
+.seealso: [](ch:eps), `EPSSetArbitrarySelection()`
+@*/
+PetscErrorCode EPSSetArbitrarySelectionContextDestroy(EPS eps,PetscCtxDestroyFn *destroy)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
+  PetscAssertPointer(destroy,2);
+  eps->arbitrarydestroy = destroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
