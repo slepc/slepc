@@ -192,7 +192,7 @@ int main(int argc,char **argv)
          args: -svd_type cross -svd_cross_explicitmatrix {{0 1}}
          suffix: 3_cross
       test:
-         args: -svd_type cyclic -svd_cyclic_explicitmatrix {{0 1}} -svd_cyclic_bv_definite_tol 1e-13 -svd_cyclic_st_ksp_type gcr -svd_cyclic_st_pc_type jacobi -svd_ncv 250
+         args: -svd_type cyclic -svd_cyclic_explicitmatrix {{0 1}} -svd_cyclic_bv_definite_tol 1e-13 -svd_cyclic_st_ksp_type gcr -svd_cyclic_st_pc_type jacobi -svd_ncv 230
          suffix: 3_cyclic
       test:
          args: -svd_type trlanczos -svd_trlanczos_explicitmatrix {{0 1}} -bv_definite_tol 1e-13
