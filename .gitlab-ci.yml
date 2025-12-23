@@ -944,7 +944,7 @@ gnu-c-cuda-int64:
     - gpu:nvidia, name:hapy
   variables:
     LOAD_MODULES: mpi
-    PETSC_CONFIG_OPTS: --with-cuda --with-64-bit-indices --with-magma-dir=/usr/local/opt/magma-2.7.1
+    PETSC_CONFIG_OPTS: --with-fc=0 --with-cuda --with-64-bit-indices --with-magma-dir=/usr/local/opt/magma-2.7.1
     TEST_OPTS: -j2 -l6 query=requires queryval=cuda
     MAKE_CUDAFLAGS: --compiler-options -Wall,-Wunused-parameter,-Wno-deprecated-declarations,-Werror
 
