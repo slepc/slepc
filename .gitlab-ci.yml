@@ -829,8 +829,9 @@ gnu-c-complex-debug:
     - .stage-3
     - .coverage_test
   tags:
-    - name:jepri
+    - name:satet
   variables:
+    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-scalar-type=complex --with-debugging=1
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --with-arpack-dir=/usr/local/opt/arpack-ng-3.8.0 --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --download-hpddm
 
@@ -962,9 +963,8 @@ gnu-c-complex128:
     - .stage-3
     - .linux_test
   tags:
-    - name:satet
+    - name:jepri
   variables:
-    LOAD_MODULES: mpich/4.3.0
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --download-f2cblaslapack --with-precision=__float128 --with-clanguage=c++
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
