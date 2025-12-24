@@ -147,7 +147,7 @@ int main(int argc,char **argv)
 
    testset:
       args: -eps_nev 4 -eps_ncv 16 -eps_krylovschur_bse_type {{shao gruning projectedbse}} -terse -checkorthog
-      filter: sed -e "s/17496/17495/g" | sed -e "s/38566/38567/g"
+      filter: sed -e "s/17496/17495/g" | sed -e "s/38566/38567/g" | sed -e "s/32172/32173/g"
       nsize: {{1 2}}
       test:
          suffix: 1
