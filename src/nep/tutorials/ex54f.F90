@@ -36,7 +36,7 @@ module shell_ctx_interfaces
   interface MatCreateShell
     subroutine MatCreateShell(comm, mloc, nloc, m, n, ctx, mat, ierr)
       use shell_ctx
-      MPI_Comm       :: comm
+      MPIU_Comm      :: comm
       PetscInt       :: mloc, nloc, m, n
       type(MatCtx)   :: ctx
       Mat            :: mat
