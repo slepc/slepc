@@ -727,7 +727,6 @@ PetscErrorCode EPSSetArbitrarySelectionContextDestroy(EPS eps,PetscCtxDestroyFn 
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
-  PetscAssertPointer((void*)destroy,2);
   eps->arbitrarydestroy = destroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
