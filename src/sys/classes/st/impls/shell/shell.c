@@ -119,7 +119,7 @@ PetscErrorCode STShellSetContextDestroy(ST st,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
-  PetscAssertPointer(destroy,2);
+  PetscAssertPointer((void*)destroy,2);
   PetscTryMethod(st,"STShellSetContextDestroy_C",(ST,PetscCtxDestroyFn*),(st,destroy));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
