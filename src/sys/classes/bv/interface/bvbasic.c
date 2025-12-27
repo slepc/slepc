@@ -159,15 +159,28 @@ PetscErrorCode BVSetSizes(BV bv,PetscInt n,PetscInt N,PetscInt m)
 .  t  - the template vector
 -  m  - the number of columns
 
+   Notes:
+   Apart from the local and global sizes, the template vector `t` is also used
+   to get the vector type, which will be set as the `BV` vector type with
+   `BVSetVecType()`. This is relevant in cases where computation must be done
+   on the GPU.
+
+   If `t` is a nested vector (type `VECNEST`), then the vector type will be
+   obtained from the first subvector. The rationale is that `BV` will operate
+   internally with regular vectors, even though the user problem is defined via
+   nested matrices and vectors.
+
    Level: beginner
 
-.seealso: [](sec:bv), `BVSetSizes()`, `BVGetSizes()`, `BVResize()`
+.seealso: [](sec:bv), `BVSetSizes()`, `BVGetSizes()`, `BVResize()`, `BVSetVecType()`
 @*/
 PetscErrorCode BVSetSizesFromVec(BV bv,Vec t,PetscInt m)
 {
   PetscInt       ma;
   PetscLayout    map;
   VecType        vtype;
+  PetscBool      nest;
+  Vec            v;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(bv,BV_CLASSID,1);
@@ -176,7 +189,11 @@ PetscErrorCode BVSetSizesFromVec(BV bv,Vec t,PetscInt m)
   PetscValidLogicalCollectiveInt(bv,m,3);
   PetscCheck(m>0,PetscObjectComm((PetscObject)bv),PETSC_ERR_ARG_INCOMP,"Number of columns %" PetscInt_FMT " must be positive",m);
   PetscCheck(!bv->map,PetscObjectComm((PetscObject)bv),PETSC_ERR_SUP,"Vector layout was already defined by a previous call to BVSetSizes/FromVec");
-  PetscCall(VecGetType(t,&vtype));
+  PetscCall(PetscObjectTypeCompare((PetscObject)t,VECNEST,&nest));
+  if (nest) {
+    PetscCall(VecNestGetSubVec(t,0,&v));
+    PetscCall(VecGetType(v,&vtype));
+  } else PetscCall(VecGetType(t,&vtype));
   PetscCall(BVSetVecType(bv,vtype));
   PetscCall(VecGetLayout(t,&map));
   PetscCall(PetscLayoutReference(map,&bv->map));

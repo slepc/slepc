@@ -872,7 +872,7 @@ In the case of structured eigenproblems, one has to create the eigenvectors in a
 
 To understand the problem, it is important to note that the block matrices {math:numref}`eq:bse` or {math:numref}`eq:hamilt` are represented as PETSc matrices of type {external:doc}`MATNEST`, which implies that the individual blocks are stored independently (in parallel). The vectors associated with those matrices have the same distribution. For instance, if we are using two MPI processes, then process 0 will store the first half of the top part of the vector, and the first half of the bottom part, while process 1 will store the second half of both parts. Hence, the entries assigned to the different processes are not consecutive, but interleaved, so if we access that vector as a standard {external:doc}`Vec` the order of entries will be different when we change the number of processes.
 
-The solution is to work with the top and bottom subvectors separately. There are two possible approaches for this, as explained next.
+The solution is to work with the top and bottom subvectors separately. There are three possible approaches for this, as explained next.
 
 The first solution is to create a vector of type {external:doc}`VECNEST` compatible with the {external:doc}`MATNEST`. For instance in BSE, {math:numref}`eq:bse`, we can create it from the $R$ and $C$ blocks, as follows (assuming both matrices have the same local and global sizes):
 
@@ -896,6 +896,13 @@ and then, after calling `EPSGetEigenvector()` on a standard vector `x`, extract 
     VecRestoreSubVector(x,is[0],&x1);
     VecRestoreSubVector(x,is[1],&x2);
 ```
+
+Finally, a third possibility is to modify the vector type of the nested matrix, so that it creates nested vectors. For instance:
+```{code} c
+    MatCreateBSE(R,C,&H);
+    MatNestSetVecType(H,VECNEST);
+```
+Then, if we create `x` with {external:doc}`MatCreateVecs`(`H`,`&x`,`NULL`) then it will be a {external:doc}`VECNEST` as in the first solution, and we can use {external:doc}`VecNestGetSubVec`() to extract the individual blocks.
 
 ```{only} html
 <p class="rubric">References</p>
