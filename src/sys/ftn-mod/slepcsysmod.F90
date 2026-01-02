@@ -16,7 +16,6 @@ module slepcsys
   use, intrinsic :: iso_c_binding
   use slepcsysdef
   use petscmat
-#include <../src/sys/ftn-mod/slepcsys.h90>
 #include <../ftn/sys/slepcall.h90>
   interface SlepcInitialize
     module procedure SlepcInitializeWithHelp, SlepcInitializeNoHelp, SlepcInitializeNoArguments
