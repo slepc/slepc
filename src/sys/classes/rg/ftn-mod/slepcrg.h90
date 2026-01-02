@@ -7,17 +7,17 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-      interface RGPolygonGetVertices
-        subroutine RGPolygonGetVertices(a, b, c, d, z)
-          use, intrinsic :: ISO_C_BINDING
-          import tRG
-          RG a
-          PetscInt b
-          PetscScalar c(*)
-          PetscScalar d(*)
-          PetscErrorCode z
-        end subroutine
-      end interface RGPolygonGetVertices
+interface
+  subroutine RGPolygonGetVertices(a, b, c, d, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tRG
+    RG a
+    PetscInt b
+    PetscScalar c(*)
+    PetscScalar d(*)
+    PetscErrorCode z
+  end subroutine
+end interface
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::RGPolygonGetVertices
 #endif

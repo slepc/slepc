@@ -7,19 +7,19 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-      interface SVDMonitorSet
-        subroutine SVDMonitorSet(a, b, c, d, z)
-          use, intrinsic :: ISO_C_BINDING
-          import tSVD
-          SVD a
-          external b
-          type(*) c
-          external d
-          PetscErrorCode z
-        end subroutine
-      end interface SVDMonitorSet
+interface
+  subroutine SVDMonitorSet(a, b, c, d, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tSVD
+    SVD a
+    external b
+    type(*) c
+    external d
+    PetscErrorCode z
+  end subroutine
+end interface
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::SVDMonitorSet
 #endif
 
-      external SVDMonitorConvergedCreate
+external SVDMonitorConvergedCreate
