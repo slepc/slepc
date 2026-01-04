@@ -8,7 +8,6 @@
 #  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #
 
-from __future__ import print_function
 import sys, os, log, package
 
 class Slepc4py(package.Package):
