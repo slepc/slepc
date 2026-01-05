@@ -293,21 +293,20 @@ PetscErrorCode EPSMonitorAll(EPS eps,PetscInt its,PetscInt nconv,PetscScalar eig
 @*/
 PetscErrorCode EPSMonitorConverged(EPS eps,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
-  PetscInt       i;
+  PetscInt       i,*oldnconv;
   PetscScalar    er,ei;
   PetscViewer    viewer = vf->viewer;
-  SlepcConvMon   ctx;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
   PetscValidHeaderSpecific(viewer,PETSC_VIEWER_CLASSID,8);
-  ctx = (SlepcConvMon)vf->data;
+  oldnconv = (PetscInt*)vf->data;
   if (its==1 && ((PetscObject)eps)->prefix) PetscCall(PetscViewerASCIIPrintf(viewer,"  Convergence history for %s solve.\n",((PetscObject)eps)->prefix));
-  if (its==1) ctx->oldnconv = 0;
-  if (ctx->oldnconv!=nconv) {
+  if (its==1) *oldnconv = 0;
+  if (*oldnconv!=nconv) {
     PetscCall(PetscViewerPushFormat(viewer,vf->format));
     PetscCall(PetscViewerASCIIAddTab(viewer,((PetscObject)eps)->tablevel));
-    for (i=ctx->oldnconv;i<nconv;i++) {
+    for (i=*oldnconv;i<nconv;i++) {
       PetscCall(PetscViewerASCIIPrintf(viewer,"%3" PetscInt_FMT " EPS converged value (error) #%" PetscInt_FMT,its,i));
       PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
       er = eigr[i]; ei = eigi[i];
@@ -318,30 +317,20 @@ PetscErrorCode EPSMonitorConverged(EPS eps,PetscInt its,PetscInt nconv,PetscScal
     }
     PetscCall(PetscViewerASCIISubtractTab(viewer,((PetscObject)eps)->tablevel));
     PetscCall(PetscViewerPopFormat(viewer));
-    ctx->oldnconv = nconv;
+    *oldnconv = nconv;
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
 PetscErrorCode EPSMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
-  SlepcConvMon   mctx;
+  PetscInt *oldnconv;
 
   PetscFunctionBegin;
   PetscCall(PetscViewerAndFormatCreate(viewer,format,vf));
-  PetscCall(PetscNew(&mctx));
-  mctx->ctx = ctx;
-  (*vf)->data = (void*)mctx;
-  PetscFunctionReturn(PETSC_SUCCESS);
-}
-
-PetscErrorCode EPSMonitorConvergedDestroy(PetscViewerAndFormat **vf)
-{
-  PetscFunctionBegin;
-  if (!*vf) PetscFunctionReturn(PETSC_SUCCESS);
-  PetscCall(PetscFree((*vf)->data));
-  PetscCall(PetscViewerDestroy(&(*vf)->viewer));
-  PetscCall(PetscFree(*vf));
+  PetscCall(PetscNew(&oldnconv));
+  (*vf)->data = (void*)oldnconv;
+  (*vf)->data_destroy = PetscCtxDestroyDefault;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -593,13 +582,13 @@ PetscErrorCode EPSMonitorConvergedDrawLG(EPS eps,PetscInt its,PetscInt nconv,Pet
 @*/
 PetscErrorCode EPSMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
-  SlepcConvMon   mctx;
+  PetscInt *oldnconv;
 
   PetscFunctionBegin;
   PetscCall(PetscViewerAndFormatCreate(viewer,format,vf));
-  PetscCall(PetscNew(&mctx));
-  mctx->ctx = ctx;
-  (*vf)->data = (void*)mctx;
+  PetscCall(PetscNew(&oldnconv));
+  (*vf)->data = (void*)oldnconv;
+  (*vf)->data_destroy = PetscCtxDestroyDefault;
   PetscCall(PetscViewerMonitorLGSetUp(viewer,NULL,"Convergence History","Number Converged",1,NULL,PETSC_DECIDE,PETSC_DECIDE,400,300));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

@@ -82,4 +82,3 @@
 #endif
 
       external NEPMonitorConvergedCreate
-      external NEPMonitorConvergedDestroy

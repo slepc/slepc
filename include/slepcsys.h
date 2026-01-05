@@ -78,11 +78,6 @@
 #include <slepcvec.h>
 
 /*
-    Context for monitors of type XXXMonitorConverged
-*/
-typedef struct _n_SlepcConvMon* SlepcConvMon;
-
-/*
     Initialization of SLEPc and other system routines
 */
 SLEPC_EXTERN PetscErrorCode SlepcInitialize(int*,char***,const char[],const char[]);

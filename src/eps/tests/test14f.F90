@@ -154,7 +154,7 @@ program test14f
   PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, vf, ierr))
   PetscCallA(EPSMonitorSet(eps, EPSMONITORFIRST, vf, PetscViewerAndFormatDestroy, ierr))
   PetscCallA(EPSMonitorConvergedCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, PETSC_NULL_VEC, vf, ierr))
-  PetscCallA(EPSMonitorSet(eps, EPSMONITORCONVERGED, vf, EPSMonitorConvergedDestroy, ierr))
+  PetscCallA(EPSMonitorSet(eps, EPSMONITORCONVERGED, vf, PetscViewerAndFormatDestroy, ierr))
   PetscCallA(EPSMonitorCancel(eps, ierr))
 
   PetscCallA(EPSGetST(eps, st, ierr))

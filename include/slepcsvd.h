@@ -517,7 +517,6 @@ SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorConverged;
 SLEPC_EXTERN SVDMonitorRegisterCreateFn  SVDMonitorConvergedCreate;
 SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorConvergedDrawLG;
 SLEPC_EXTERN SVDMonitorRegisterCreateFn  SVDMonitorConvergedDrawLGCreate;
-SLEPC_EXTERN SVDMonitorRegisterDestroyFn SVDMonitorConvergedDestroy;
 SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorConditioning;
 
 SLEPC_EXTERN PetscFunctionList SVDList;
