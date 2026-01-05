@@ -138,7 +138,7 @@ program test4f
 
   PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, vf, ierr))
   PetscCallA(SVDMonitorSet(svd, SVDMONITORFIRST, vf, PetscViewerAndFormatDestroy, ierr))
-  PetscCallA(SVDMonitorConvergedCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, PETSC_NULL_VEC, vf, ierr))
+  PetscCallA(SVDMonitorConvergedCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, PETSC_NULL, vf, ierr))
   PetscCallA(SVDMonitorSet(svd, SVDMONITORCONVERGED, vf, PetscViewerAndFormatDestroy, ierr))
   PetscCallA(SVDMonitorCancel(svd, ierr))
 

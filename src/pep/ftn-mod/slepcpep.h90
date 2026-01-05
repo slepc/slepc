@@ -27,10 +27,20 @@ interface
     external d
     PetscErrorCode z
   end subroutine
+
+  subroutine PEPMonitorConvergedCreate(a, b, c, d, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tPetscViewer, ePetscViewerFormat
+    PetscViewer a
+    PetscViewerFormat b
+    type(*) c
+    PetscViewerAndFormat d
+    PetscErrorCode z
+  end subroutine
 end interface
+
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::PEPSTOARGetInertias
 !DEC$ ATTRIBUTES DLLEXPORT::PEPMonitorSet
+!DEC$ ATTRIBUTES DLLEXPORT::PEPMonitorConvergedCreate
 #endif
-
-external PEPMonitorConvergedCreate

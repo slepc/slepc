@@ -56,13 +56,23 @@ interface
     external d
     PetscErrorCode z
   end subroutine
+
+  subroutine NEPMonitorConvergedCreate(a, b, c, d, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tPetscViewer, ePetscViewerFormat
+    PetscViewer a
+    PetscViewerFormat b
+    type(*) c
+    PetscViewerAndFormat d
+    PetscErrorCode z
+  end subroutine
 end interface
+
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPNLEIGSGetRKShifts
 !DEC$ ATTRIBUTES DLLEXPORT::NEPSetFunction
 !DEC$ ATTRIBUTES DLLEXPORT::NEPSetJacobian
 !DEC$ ATTRIBUTES DLLEXPORT::NEPNLEIGSSetSingularitiesFunction
 !DEC$ ATTRIBUTES DLLEXPORT::NEPMonitorSet
+!DEC$ ATTRIBUTES DLLEXPORT::NEPMonitorConvergedCreate
 #endif
-
-external NEPMonitorConvergedCreate
