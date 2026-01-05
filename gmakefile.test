@@ -116,7 +116,7 @@ endif
 $(generatedtest) : $(slepcconf) $(slepcvariables) $(PETSCCONFIGDIR)/gmakegentest.py $(TESTDIR)/.DIR | $$(@D)/.DIR
 	$(PYTHON) $(PETSCCONFIGDIR)/gmakegentest.py --petsc-dir=$(PETSC_DIR) --petsc-arch=$(PETSC_ARCH_DIR) --testdir=$(TESTDIR) --srcdir=$(TESTSRCDIR) --pkg-name=slepc --pkg-pkgs=$(spkgs) --pkg-arch=$(PETSC_ARCH) --pkg-dir=$(SLEPC_DIR)
 
-ifneq ($(filter-out help clean distclean check info gmakeinfo slepc_libs all install install-lib checkbadSource deletefortranbindings fortranbindings alletags lint_slepc get%,$(MAKECMDGOALS:clean%=clean)),)
+ifneq ($(filter-out help clean distclean check info gmakeinfo slepc_libs all install install-lib checkbadSource deletefortranbindings fortranbindings alletags lint_slepc shellcheck checkshellcheck get%,$(MAKECMDGOALS:clean%=clean)),)
 include $(generatedtest)
 endif
 
