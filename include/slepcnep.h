@@ -522,7 +522,6 @@ SLEPC_EXTERN NEPMonitorRegisterFn        NEPMonitorConverged;
 SLEPC_EXTERN NEPMonitorRegisterCreateFn  NEPMonitorConvergedCreate;
 SLEPC_EXTERN NEPMonitorRegisterFn        NEPMonitorConvergedDrawLG;
 SLEPC_EXTERN NEPMonitorRegisterCreateFn  NEPMonitorConvergedDrawLGCreate;
-SLEPC_EXTERN NEPMonitorRegisterDestroyFn NEPMonitorConvergedDestroy;
 
 SLEPC_EXTERN PetscErrorCode NEPSetOptionsPrefix(NEP,const char[]);
 SLEPC_EXTERN PetscErrorCode NEPAppendOptionsPrefix(NEP,const char[]);

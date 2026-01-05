@@ -17,7 +17,6 @@
 #define epsmonitorfirst_                  EPSMONITORFIRST
 #define epsmonitorconverged_              EPSMONITORCONVERGED
 #define epsmonitorconvergedcreate_        EPSMONITORCONVERGEDCREATE
-#define epsmonitorconvergeddestroy_       EPSMONITORCONVERGEDDESTROY
 #define epsconvergedabsolute_             EPSCONVERGEDABSOLUTE
 #define epsconvergedrelative_             EPSCONVERGEDRELATIVE
 #define epsconvergednorm_                 EPSCONVERGEDNORM
@@ -33,7 +32,6 @@
 #define epsmonitorfirst_                  epsmonitorfirst
 #define epsmonitorconverged_              epsmonitorconverged
 #define epsmonitorconvergedcreate_        epsmonitorconvergedcreate
-#define epsmonitorconvergeddestroy_       epsmonitorconvergeddestroy
 #define epsconvergedabsolute_             epsconvergedabsolute
 #define epsconvergedrelative_             epsconvergedrelative
 #define epsconvergednorm_                 epsconvergednorm
@@ -59,11 +57,6 @@ SLEPC_EXTERN void epsmonitorconvergedcreate_(PetscViewer *vin,PetscViewerFormat 
   PetscPatchDefaultViewers_Fortran(vin,v);
   CHKFORTRANNULLOBJECT(ctx);
   *ierr = EPSMonitorConvergedCreate(v,*format,ctx,vf);
-}
-
-SLEPC_EXTERN void epsmonitorconvergeddestroy_(PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = EPSMonitorConvergedDestroy(vf);
 }
 
 static struct {
@@ -130,7 +123,7 @@ SLEPC_EXTERN void epsmonitorset_(EPS *eps,void (*monitor)(EPS*,PetscInt*,PetscIn
   if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)epsmonitorall_) {
     *ierr = EPSMonitorSet(*eps,(EPSMonitorFn*)EPSMonitorAll,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)epsmonitorconverged_) {
-    *ierr = EPSMonitorSet(*eps,(EPSMonitorFn*)EPSMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)EPSMonitorConvergedDestroy);
+    *ierr = EPSMonitorSet(*eps,(EPSMonitorFn*)EPSMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)epsmonitorfirst_) {
     *ierr = EPSMonitorSet(*eps,(EPSMonitorFn*)EPSMonitorFirst,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else {

@@ -753,7 +753,6 @@ SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorConverged;
 SLEPC_EXTERN EPSMonitorRegisterCreateFn  EPSMonitorConvergedCreate;
 SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorConvergedDrawLG;
 SLEPC_EXTERN EPSMonitorRegisterCreateFn  EPSMonitorConvergedDrawLGCreate;
-SLEPC_EXTERN EPSMonitorRegisterDestroyFn EPSMonitorConvergedDestroy;
 
 SLEPC_EXTERN PetscErrorCode EPSSetOptionsPrefix(EPS,const char[]);
 SLEPC_EXTERN PetscErrorCode EPSAppendOptionsPrefix(EPS,const char[]);

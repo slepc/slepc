@@ -18,7 +18,6 @@
 #define svdmonitorconditioning_           SVDMONITORCONDITIONING
 #define svdmonitorconverged_              SVDMONITORCONVERGED
 #define svdmonitorconvergedcreate_        SVDMONITORCONVERGEDCREATE
-#define svdmonitorconvergeddestroy_       SVDMONITORCONVERGEDDESTROY
 #define svdconvergedabsolute_             SVDCONVERGEDABSOLUTE
 #define svdconvergedrelative_             SVDCONVERGEDRELATIVE
 #define svdconvergednorm_                 SVDCONVERGEDNORM
@@ -34,7 +33,6 @@
 #define svdmonitorconditioning_           svdmonitorconditioning
 #define svdmonitorconverged_              svdmonitorconverged
 #define svdmonitorconvergedcreate_        svdmonitorconvergedcreate
-#define svdmonitorconvergeddestroy_       svdmonitorconvergeddestroy
 #define svdconvergedabsolute_             svdconvergedabsolute
 #define svdconvergedrelative_             svdconvergedrelative
 #define svdconvergednorm_                 svdconvergednorm
@@ -60,11 +58,6 @@ SLEPC_EXTERN void svdmonitorconvergedcreate_(PetscViewer *vin,PetscViewerFormat 
   PetscPatchDefaultViewers_Fortran(vin,v);
   CHKFORTRANNULLOBJECT(ctx);
   *ierr = SVDMonitorConvergedCreate(v,*format,ctx,vf);
-}
-
-SLEPC_EXTERN void svdmonitorconvergeddestroy_(PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = SVDMonitorConvergedDestroy(vf);
 }
 
 static struct {
@@ -117,7 +110,7 @@ SLEPC_EXTERN void svdmonitorset_(SVD *svd,void (*monitor)(SVD*,PetscInt*,PetscIn
   if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)svdmonitorall_) {
     *ierr = SVDMonitorSet(*svd,(SVDMonitorFn*)SVDMonitorAll,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)svdmonitorconverged_) {
-    *ierr = SVDMonitorSet(*svd,(SVDMonitorFn*)SVDMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)SVDMonitorConvergedDestroy);
+    *ierr = SVDMonitorSet(*svd,(SVDMonitorFn*)SVDMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)svdmonitorfirst_) {
     *ierr = SVDMonitorSet(*svd,(SVDMonitorFn*)SVDMonitorFirst,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else {

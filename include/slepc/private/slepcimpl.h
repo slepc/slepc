@@ -47,12 +47,6 @@ M*/
                                   "Must call SlepcInitialize instead of PetscInitialize to use SLEPc classes")) || \
                       PetscHeaderCreate(h,classid,class_name,descr,mansec,comm,destroy,view)))
 
-/* context for monitors of type XXXMonitorConverged */
-struct _n_SlepcConvMon {
-  void     *ctx;
-  PetscInt oldnconv;  /* previous value of nconv */
-};
-
 /* context for structured eigenproblem matrices created via MatCreateXXX */
 struct _n_SlepcMatStruct {
   PetscInt    cookie;    /* identify which structured matrix */

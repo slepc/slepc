@@ -23,4 +23,3 @@
 #endif
 
       external SVDMonitorConvergedCreate
-      external SVDMonitorConvergedDestroy

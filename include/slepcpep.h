@@ -661,7 +661,6 @@ SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorConverged;
 SLEPC_EXTERN PEPMonitorRegisterCreateFn  PEPMonitorConvergedCreate;
 SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorConvergedDrawLG;
 SLEPC_EXTERN PEPMonitorRegisterCreateFn  PEPMonitorConvergedDrawLGCreate;
-SLEPC_EXTERN PEPMonitorRegisterDestroyFn PEPMonitorConvergedDestroy;
 
 SLEPC_EXTERN PetscErrorCode PEPSetOptionsPrefix(PEP,const char[]);
 SLEPC_EXTERN PetscErrorCode PEPAppendOptionsPrefix(PEP,const char[]);

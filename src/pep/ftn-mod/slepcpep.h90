@@ -38,4 +38,3 @@
 #endif
 
       external PEPMonitorConvergedCreate
-      external PEPMonitorConvergedDestroy

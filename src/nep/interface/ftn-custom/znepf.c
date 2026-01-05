@@ -17,7 +17,6 @@
 #define nepmonitorfirst_                  NEPMONITORFIRST
 #define nepmonitorconverged_              NEPMONITORCONVERGED
 #define nepmonitorconvergedcreate_        NEPMONITORCONVERGEDCREATE
-#define nepmonitorconvergeddestroy_       NEPMONITORCONVERGEDDESTROY
 #define nepconvergedabsolute_             NEPCONVERGEDABSOLUTE
 #define nepconvergedrelative_             NEPCONVERGEDRELATIVE
 #define nepsetconvergencetestfunction_    NEPSETCONVERGENCETESTFUNCTION
@@ -33,7 +32,6 @@
 #define nepmonitorfirst_                  nepmonitorfirst
 #define nepmonitorconverged_              nepmonitorconverged
 #define nepmonitorconvergedcreate_        nepmonitorconvergedcreate
-#define nepmonitorconvergeddestroy_       nepmonitorconvergeddestroy
 #define nepconvergedabsolute_             nepconvergedabsolute
 #define nepconvergedrelative_             nepconvergedrelative
 #define nepsetconvergencetestfunction_    nepsetconvergencetestfunction
@@ -59,11 +57,6 @@ SLEPC_EXTERN void nepmonitorconvergedcreate_(PetscViewer *vin,PetscViewerFormat 
   PetscPatchDefaultViewers_Fortran(vin,v);
   CHKFORTRANNULLOBJECT(ctx);
   *ierr = NEPMonitorConvergedCreate(v,*format,ctx,vf);
-}
-
-SLEPC_EXTERN void nepmonitorconvergeddestroy_(PetscViewerAndFormat **vf,PetscErrorCode *ierr)
-{
-  *ierr = NEPMonitorConvergedDestroy(vf);
 }
 
 static struct {
@@ -147,7 +140,7 @@ SLEPC_EXTERN void nepmonitorset_(NEP *nep,void (*monitor)(NEP*,PetscInt*,PetscIn
   if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)nepmonitorall_) {
     *ierr = NEPMonitorSet(*nep,(NEPMonitorFn*)NEPMonitorAll,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)nepmonitorconverged_) {
-    *ierr = NEPMonitorSet(*nep,(NEPMonitorFn*)NEPMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)NEPMonitorConvergedDestroy);
+    *ierr = NEPMonitorSet(*nep,(NEPMonitorFn*)NEPMonitorConverged,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)nepmonitorfirst_) {
     *ierr = NEPMonitorSet(*nep,(NEPMonitorFn*)NEPMonitorFirst,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else {

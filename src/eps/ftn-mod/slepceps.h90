@@ -51,4 +51,3 @@
 #endif
 
       external EPSMonitorConvergedCreate
-      external EPSMonitorConvergedDestroy

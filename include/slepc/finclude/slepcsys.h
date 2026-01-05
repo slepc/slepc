@@ -17,6 +17,4 @@
 
 #define SlepcSC type(tSlepcSC)
 
-#define SlepcConvMon PetscFortranAddr
-
 #endif
