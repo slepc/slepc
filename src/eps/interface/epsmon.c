@@ -283,13 +283,15 @@ PetscErrorCode EPSMonitorAll(EPS eps,PetscInt its,PetscInt nconv,PetscScalar eig
    Options Database Key:
 .  -eps_monitor_conv - activates `EPSMonitorConverged()`
 
-   Note:
+   Notes:
    This is not called directly by users, rather one calls `EPSMonitorSet()`, with this
    function as an argument, to cause the monitor to be used during the `EPS` solve.
 
+   Call `EPSMonitorConvergedCreate()` to create the context used with this monitor.
+
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorFirst()`, `EPSMonitorAll()`
+.seealso: [](ch:eps), `EPSMonitorSet()`, `EPSMonitorConvergedCreate()`, `EPSMonitorFirst()`, `EPSMonitorAll()`
 @*/
 PetscErrorCode EPSMonitorConverged(EPS eps,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -322,6 +324,23 @@ PetscErrorCode EPSMonitorConverged(EPS eps,PetscInt its,PetscInt nconv,PetscScal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@C
+   EPSMonitorConvergedCreate - Creates the context for the convergence history monitor.
+
+   Collective
+
+   Input Parameters:
++  viewer - the viewer
+.  format - the viewer format
+-  ctx    - an optional user context
+
+   Output Parameter:
+.  vf     - the viewer and format context
+
+   Level: intermediate
+
+.seealso: [](ch:eps), `EPSMonitorSet()`
+@*/
 PetscErrorCode EPSMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
   PetscInt *oldnconv;

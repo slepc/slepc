@@ -272,13 +272,15 @@ PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eig
    Options Database Key:
 .  -nep_monitor_conv - activates `NEPMonitorConverged()`
 
-   Note:
+   Notes:
    This is not called directly by users, rather one calls `NEPMonitorSet()`, with this
    function as an argument, to cause the monitor to be used during the `NEP` solve.
 
+   Call `NEPMonitorConvergedCreate()` to create the context used with this monitor.
+
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorFirst()`, `NEPMonitorAll()`
+.seealso: [](ch:nep), `NEPMonitorSet()`, `NEPMonitorConvergedCreate()`, `NEPMonitorFirst()`, `NEPMonitorAll()`
 @*/
 PetscErrorCode NEPMonitorConverged(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -313,6 +315,23 @@ PetscErrorCode NEPMonitorConverged(NEP nep,PetscInt its,PetscInt nconv,PetscScal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@C
+   NEPMonitorConvergedCreate - Creates the context for the convergence history monitor.
+
+   Collective
+
+   Input Parameters:
++  viewer - the viewer
+.  format - the viewer format
+-  ctx    - an optional user context
+
+   Output Parameter:
+.  vf     - the viewer and format context
+
+   Level: intermediate
+
+.seealso: [](ch:nep), `NEPMonitorSet()`
+@*/
 PetscErrorCode NEPMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
   PetscInt *oldnconv;

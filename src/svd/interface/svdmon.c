@@ -256,13 +256,15 @@ PetscErrorCode SVDMonitorAll(SVD svd,PetscInt its,PetscInt nconv,PetscReal sigma
    Options Database Key:
 .  -svd_monitor_conv - activates `SVDMonitorConverged()`
 
-   Note:
+   Notes:
    This is not called directly by users, rather one calls `SVDMonitorSet()`, with this
    function as an argument, to cause the monitor to be used during the `SVD` solve.
 
+   Call `SVDMonitorConvergedCreate()` to create the context used with this monitor.
+
    Level: intermediate
 
-.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorFirst()`, `SVDMonitorConditioning()`, `SVDMonitorAll()`
+.seealso: [](ch:svd), `SVDMonitorSet()`, `SVDMonitorConvergedCreate()`, `SVDMonitorFirst()`, `SVDMonitorConditioning()`, `SVDMonitorAll()`
 @*/
 PetscErrorCode SVDMonitorConverged(SVD svd,PetscInt its,PetscInt nconv,PetscReal sigma[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -291,6 +293,23 @@ PetscErrorCode SVDMonitorConverged(SVD svd,PetscInt its,PetscInt nconv,PetscReal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@C
+   SVDMonitorConvergedCreate - Creates the context for the convergence history monitor.
+
+   Collective
+
+   Input Parameters:
++  viewer - the viewer
+.  format - the viewer format
+-  ctx    - an optional user context
+
+   Output Parameter:
+.  vf     - the viewer and format context
+
+   Level: intermediate
+
+.seealso: [](ch:svd), `SVDMonitorSet()`
+@*/
 PetscErrorCode SVDMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
   PetscInt *oldnconv;

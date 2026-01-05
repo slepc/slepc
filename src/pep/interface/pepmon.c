@@ -299,13 +299,15 @@ PetscErrorCode PEPMonitorAll(PEP pep,PetscInt its,PetscInt nconv,PetscScalar eig
    Options Database Key:
 .  -pep_monitor_conv - activates `PEPMonitorConverged()`
 
-   Note:
+   Notes:
    This is not called directly by users, rather one calls `PEPMonitorSet()`, with this
    function as an argument, to cause the monitor to be used during the `PEP` solve.
 
+   Call `PEPMonitorConvergedCreate()` to create the context used with this monitor.
+
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorFirst()`, `PEPMonitorAll()`
+.seealso: [](ch:pep), `PEPMonitorSet()`, `PEPMonitorConvergedCreate()`, `PEPMonitorFirst()`, `PEPMonitorAll()`
 @*/
 PetscErrorCode PEPMonitorConverged(PEP pep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscViewerAndFormat *vf)
 {
@@ -343,6 +345,23 @@ PetscErrorCode PEPMonitorConverged(PEP pep,PetscInt its,PetscInt nconv,PetscScal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@C
+   PEPMonitorConvergedCreate - Creates the context for the convergence history monitor.
+
+   Collective
+
+   Input Parameters:
++  viewer - the viewer
+.  format - the viewer format
+-  ctx    - an optional user context
+
+   Output Parameter:
+.  vf     - the viewer and format context
+
+   Level: intermediate
+
+.seealso: [](ch:pep), `PEPMonitorSet()`
+@*/
 PetscErrorCode PEPMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
 {
   PetscInt *oldnconv;
