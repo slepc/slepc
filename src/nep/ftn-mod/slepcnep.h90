@@ -7,78 +7,72 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-      interface NEPNLEIGSGetRKShifts
-        subroutine NEPNLEIGSGetRKShifts(a, b, c, z)
-          use, intrinsic :: ISO_C_BINDING
-          import tNEP
-          NEP a
-          PetscInt b
-          PetscScalar c(*)
-          PetscErrorCode z
-        end subroutine
-      end interface NEPNLEIGSGetRKShifts
+interface
+  subroutine NEPNLEIGSGetRKShifts(a, b, c, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tNEP
+    NEP a
+    PetscInt b
+    PetscScalar c(*)
+    PetscErrorCode z
+  end subroutine
+
+  subroutine NEPSetFunction(a, b, c, d, e, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tNEP, tMat
+    NEP a
+    Mat b
+    Mat c
+    external d
+    type(*) e
+    PetscErrorCode z
+  end subroutine
+
+  subroutine NEPSetJacobian(a, b, c, d, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tNEP, tMat
+    NEP a
+    Mat b
+    external c
+    type(*) d
+    PetscErrorCode z
+  end subroutine
+
+  subroutine NEPNLEIGSSetSingularitiesFunction(a, b, c, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tNEP
+    NEP a
+    external b
+    type(*) c
+    PetscErrorCode z
+  end subroutine
+
+  subroutine NEPMonitorSet(a, b, c, d, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tNEP
+    NEP a
+    external b
+    type(*) c
+    external d
+    PetscErrorCode z
+  end subroutine
+
+  subroutine NEPMonitorConvergedCreate(a, b, c, d, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tPetscViewer, ePetscViewerFormat
+    PetscViewer a
+    PetscViewerFormat b
+    type(*) c
+    PetscViewerAndFormat d
+    PetscErrorCode z
+  end subroutine
+end interface
+
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPNLEIGSGetRKShifts
-#endif
-
-      interface NEPSetFunction
-        subroutine NEPSetFunction(a, b, c, d, e, z)
-          use, intrinsic :: ISO_C_BINDING
-          import tNEP, tMat
-          NEP a
-          Mat b
-          Mat c
-          external d
-          type(*) e
-          PetscErrorCode z
-        end subroutine
-      end interface NEPSetFunction
-#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPSetFunction
-#endif
-
-      interface NEPSetJacobian
-        subroutine NEPSetJacobian(a, b, c, d, z)
-          use, intrinsic :: ISO_C_BINDING
-          import tNEP, tMat
-          NEP a
-          Mat b
-          external c
-          type(*) d
-          PetscErrorCode z
-        end subroutine
-      end interface NEPSetJacobian
-#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPSetJacobian
-#endif
-
-      interface NEPNLEIGSSetSingularitiesFunction
-        subroutine NEPNLEIGSSetSingularitiesFunction(a, b, c, z)
-          use, intrinsic :: ISO_C_BINDING
-          import tNEP
-          NEP a
-          external b
-          type(*) c
-          PetscErrorCode z
-        end subroutine
-      end interface NEPNLEIGSSetSingularitiesFunction
-#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPNLEIGSSetSingularitiesFunction
-#endif
-
-      interface NEPMonitorSet
-        subroutine NEPMonitorSet(a, b, c, d, z)
-          use, intrinsic :: ISO_C_BINDING
-          import tNEP
-          NEP a
-          external b
-          type(*) c
-          external d
-          PetscErrorCode z
-        end subroutine
-      end interface NEPMonitorSet
-#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPMonitorSet
+!DEC$ ATTRIBUTES DLLEXPORT::NEPMonitorConvergedCreate
 #endif
-
-      external NEPMonitorConvergedCreate

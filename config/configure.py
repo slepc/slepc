@@ -9,7 +9,6 @@
 #  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #
 
-from __future__ import print_function
 import os, sys, time, shutil
 
 def WriteModulesFile(modules,version,sdir):

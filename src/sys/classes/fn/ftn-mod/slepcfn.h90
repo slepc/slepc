@@ -7,30 +7,26 @@
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-      interface FNRationalGetNumerator
-        subroutine FNRationalGetNumerator(a, b, c, z)
-          use, intrinsic :: ISO_C_BINDING
-          import tFN
-          FN a
-          PetscInt b
-          PetscScalar c(*)
-          PetscErrorCode z
-        end subroutine
-      end interface FNRationalGetNumerator
+interface
+  subroutine FNRationalGetNumerator(a, b, c, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tFN
+    FN a
+    PetscInt b
+    PetscScalar c(*)
+    PetscErrorCode z
+  end subroutine
+
+  subroutine FNRationalGetDenominator(a, b, c, z)
+    use, intrinsic :: ISO_C_BINDING
+    import tFN
+    FN a
+    PetscInt b
+    PetscScalar c(*)
+    PetscErrorCode z
+  end subroutine
+end interface
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::FNRationalGetNumerator
-#endif
-
-      interface FNRationalGetDenominator
-        subroutine FNRationalGetDenominator(a, b, c, z)
-          use, intrinsic :: ISO_C_BINDING
-          import tFN
-          FN a
-          PetscInt b
-          PetscScalar c(*)
-          PetscErrorCode z
-        end subroutine
-      end interface FNRationalGetDenominator
-#if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::FNRationalGetDenominator
 #endif

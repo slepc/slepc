@@ -184,7 +184,7 @@ program test2f
 
   PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, vf, ierr))
   PetscCallA(NEPMonitorSet(nep, NEPMONITORFIRST, vf, PetscViewerAndFormatDestroy, ierr))
-  PetscCallA(NEPMonitorConvergedCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, PETSC_NULL_VEC, vf, ierr))
+  PetscCallA(NEPMonitorConvergedCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, PETSC_NULL, vf, ierr))
   PetscCallA(NEPMonitorSet(nep, NEPMONITORCONVERGED, vf, PetscViewerAndFormatDestroy, ierr))
   PetscCallA(NEPMonitorCancel(nep, ierr))
 

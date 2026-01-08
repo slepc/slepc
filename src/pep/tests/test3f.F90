@@ -190,7 +190,7 @@ program test3f
 
   PetscCallA(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, vf, ierr))
   PetscCallA(PEPMonitorSet(pep, PEPMONITORFIRST, vf, PetscViewerAndFormatDestroy, ierr))
-  PetscCallA(PEPMonitorConvergedCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, PETSC_NULL_VEC, vf, ierr))
+  PetscCallA(PEPMonitorConvergedCreate(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT, PETSC_NULL, vf, ierr))
   PetscCallA(PEPMonitorSet(pep, PEPMONITORCONVERGED, vf, PetscViewerAndFormatDestroy, ierr))
   PetscCallA(PEPMonitorCancel(pep, ierr))
 
