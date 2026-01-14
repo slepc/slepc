@@ -648,7 +648,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterDestroyFn(PetscVie
 SLEPC_EXTERN PetscErrorCode PEPMonitor(PEP,PetscInt,PetscInt,PetscScalar[],PetscScalar[],PetscReal[],PetscInt);
 SLEPC_EXTERN PetscErrorCode PEPMonitorSet(PEP,PEPMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode PEPMonitorCancel(PEP);
-SLEPC_EXTERN PetscErrorCode PEPGetMonitorContext(PEP,void*);
+SLEPC_EXTERN PetscErrorCode PEPGetMonitorContext(PEP,PetscCtxRt);
 
 SLEPC_EXTERN PetscErrorCode PEPMonitorSetFromOptions(PEP,const char[],const char[],void*,PetscBool);
 SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorFirst;

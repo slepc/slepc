@@ -380,9 +380,9 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPJacobianFn(NEP nep,PetscScalar lambda,Mat J,void *ctx);
 
 SLEPC_EXTERN PetscErrorCode NEPSetFunction(NEP,Mat,Mat,NEPFunctionFn*,void*);
-SLEPC_EXTERN PetscErrorCode NEPGetFunction(NEP,Mat*,Mat*,NEPFunctionFn**,void**);
+SLEPC_EXTERN PetscErrorCode NEPGetFunction(NEP,Mat*,Mat*,NEPFunctionFn**,PetscCtxRt);
 SLEPC_EXTERN PetscErrorCode NEPSetJacobian(NEP,Mat,NEPJacobianFn*,void*);
-SLEPC_EXTERN PetscErrorCode NEPGetJacobian(NEP,Mat*,NEPJacobianFn**,void**);
+SLEPC_EXTERN PetscErrorCode NEPGetJacobian(NEP,Mat*,NEPJacobianFn**,PetscCtxRt);
 PETSC_DEPRECATED_FUNCTION(3, 12, 0, "NEPSetFunction() and NEPSetJacobian()", ) static inline PetscErrorCode NEPSetDerivatives(NEP nep,Mat A,PetscErrorCode (*fun)(NEP,PetscScalar,PetscInt,Mat,void*),void *ctx) {(void)A;(void)fun;(void)ctx;SETERRQ(PetscObjectComm((PetscObject)nep),PETSC_ERR_SUP,"Not implemented in this version");}
 PETSC_DEPRECATED_FUNCTION(3, 12, 0, "NEPGetFunction() and NEPGetJacobian()", ) static inline PetscErrorCode NEPGetDerivatives(NEP nep,Mat *A,PetscErrorCode (**fun)(NEP,PetscScalar,PetscInt,Mat,void*),void **ctx) {(void)A;(void)fun;(void)ctx;SETERRQ(PetscObjectComm((PetscObject)nep),PETSC_ERR_SUP,"Not implemented in this version");}
 SLEPC_EXTERN PetscErrorCode NEPSetSplitOperator(NEP,PetscInt,Mat[],FN[],MatStructure);
@@ -509,7 +509,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterDestroyFn(PetscVie
 SLEPC_EXTERN PetscErrorCode NEPMonitor(NEP,PetscInt,PetscInt,PetscScalar[],PetscScalar[],PetscReal[],PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPMonitorSet(NEP,NEPMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode NEPMonitorCancel(NEP);
-SLEPC_EXTERN PetscErrorCode NEPGetMonitorContext(NEP,void*);
+SLEPC_EXTERN PetscErrorCode NEPGetMonitorContext(NEP,PetscCtxRt);
 
 SLEPC_EXTERN PetscErrorCode NEPMonitorSetFromOptions(NEP,const char[],const char[],void*,PetscBool);
 SLEPC_EXTERN NEPMonitorRegisterFn        NEPMonitorFirst;
@@ -693,7 +693,7 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPNLEIGSSingularitiesFn(NEP nep,PetscInt *maxnp,PetscScalar *xi,void *ctx);
 
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP,NEPNLEIGSSingularitiesFn*,void*);
-SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP,NEPNLEIGSSingularitiesFn**,void**);
+SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP,NEPNLEIGSSingularitiesFn**,PetscCtxRt);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetRestart(NEP,PetscReal);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetRestart(NEP,PetscReal*);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetLocking(NEP,PetscBool);

@@ -1332,13 +1332,13 @@ PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesF
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGSSingularitiesFn **fun,void **ctx)
+static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGSSingularitiesFn **fun,PetscCtxRt ctx)
 {
   NEP_NLEIGS *nepctx=(NEP_NLEIGS*)nep->data;
 
   PetscFunctionBegin;
   if (fun) *fun = nepctx->computesingularities;
-  if (ctx) *ctx = nepctx->singularitiesctx;
+  if (ctx) *(void**)ctx = nepctx->singularitiesctx;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -1359,11 +1359,11 @@ static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGS
 
 .seealso: [](ch:nep), `NEPNLEIGS`, `NEPNLEIGSSetSingularitiesFunction()`
 @*/
-PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesFn **fun,void **ctx)
+PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP nep,NEPNLEIGSSingularitiesFn **fun,PetscCtxRt ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
-  PetscUseMethod(nep,"NEPNLEIGSGetSingularitiesFunction_C",(NEP,PetscErrorCode(**)(NEP,PetscInt*,PetscScalar*,void*),void**),(nep,fun,ctx));
+  PetscUseMethod(nep,"NEPNLEIGSGetSingularitiesFunction_C",(NEP,PetscErrorCode(**)(NEP,PetscInt*,PetscScalar*,void*),PetscCtxRt),(nep,fun,ctx));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

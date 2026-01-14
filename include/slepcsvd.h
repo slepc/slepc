@@ -504,7 +504,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterDestroyFn(PetscVie
 SLEPC_EXTERN PetscErrorCode SVDMonitor(SVD,PetscInt,PetscInt,PetscReal[],PetscReal[],PetscInt);
 SLEPC_EXTERN PetscErrorCode SVDMonitorSet(SVD,SVDMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode SVDMonitorCancel(SVD);
-SLEPC_EXTERN PetscErrorCode SVDGetMonitorContext(SVD,void*);
+SLEPC_EXTERN PetscErrorCode SVDGetMonitorContext(SVD,PetscCtxRt);
 
 SLEPC_EXTERN PetscErrorCode SVDMonitorSetFromOptions(SVD,const char[],const char[],void*,PetscBool);
 SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorFirst;

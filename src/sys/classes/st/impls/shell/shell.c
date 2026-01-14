@@ -23,7 +23,7 @@ typedef struct {
   STShellBackTransformFn           *backtransform;
 } ST_SHELL;
 
-static PetscErrorCode STShellGetContext_Shell(ST st,void *ctx)
+static PetscErrorCode STShellGetContext_Shell(ST st,PetscCtxRt ctx)
 {
   ST_SHELL *shell = (ST_SHELL*)st->data;
 
@@ -47,12 +47,12 @@ static PetscErrorCode STShellGetContext_Shell(ST st,void *ctx)
 
 .seealso: [](ch:st), `STSHELL`, `STShellSetContext()`
 @*/
-PetscErrorCode STShellGetContext(ST st,void *ctx)
+PetscErrorCode STShellGetContext(ST st,PetscCtxRt ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
   PetscAssertPointer(ctx,2);
-  PetscUseMethod(st,"STShellGetContext_C",(ST,void*),(st,ctx));
+  PetscUseMethod(st,"STShellGetContext_C",(ST,PetscCtxRt),(st,ctx));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

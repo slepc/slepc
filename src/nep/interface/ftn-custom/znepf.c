@@ -81,9 +81,9 @@ static PetscErrorCode ourmonitor(NEP nep,PetscInt i,PetscInt nc,PetscScalar *er,
   PetscObjectUseFortranCallback(nep,_cb.monitor,(NEP*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,void*,PetscErrorCode*),(&nep,&i,&nc,er,ei,d,&l,_ctx,&ierr));
 }
 
-static PetscErrorCode ourdestroy(void **ctx)
+static PetscErrorCode ourdestroy(PetscCtxRt ctx)
 {
-  NEP nep = (NEP)*ctx;
+  NEP nep = *(NEP*)ctx;
   PetscObjectUseFortranCallback(nep,_cb.monitordestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
@@ -92,9 +92,9 @@ static PetscErrorCode ourconvergence(NEP nep,PetscScalar eigr,PetscScalar eigi,P
   PetscObjectUseFortranCallback(nep,_cb.convergence,(NEP*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),(&nep,&eigr,&eigi,&res,errest,_ctx,&ierr));
 }
 
-static PetscErrorCode ourconvdestroy(void **ctx)
+static PetscErrorCode ourconvdestroy(PetscCtxRt ctx)
 {
-  NEP nep = (NEP)*ctx;
+  NEP nep = *(NEP*)ctx;
   PetscObjectUseFortranCallback(nep,_cb.convdestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
@@ -103,9 +103,9 @@ static PetscErrorCode ourstopping(NEP nep,PetscInt its,PetscInt max_it,PetscInt 
   PetscObjectUseFortranCallback(nep,_cb.stopping,(NEP*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,NEPConvergedReason*,void*,PetscErrorCode*),(&nep,&its,&max_it,&nconv,&nev,reason,_ctx,&ierr));
 }
 
-static PetscErrorCode ourstopdestroy(void **ctx)
+static PetscErrorCode ourstopdestroy(PetscCtxRt ctx)
 {
-  NEP nep = (NEP)*ctx;
+  NEP nep = *(NEP*)ctx;
   PetscObjectUseFortranCallback(nep,_cb.stopdestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
@@ -133,7 +133,7 @@ static PetscErrorCode ournepjacobian(NEP nep,PetscScalar lambda,Mat J,void *ctx)
   PetscObjectUseFortranCallback(nep,_cb.jacobian,(NEP*,PetscScalar*,Mat*,void*,PetscErrorCode* PETSC_F90_2PTR_PROTO_NOVAR),(&nep,&lambda,&J,_ctx,&ierr PETSC_F90_2PTR_PARAM(ptr)));
 }
 
-SLEPC_EXTERN void nepmonitorset_(NEP *nep,void (*monitor)(NEP*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,void*,PetscErrorCode*),void *mctx,PetscCtxDestroyFn monitordestroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void nepmonitorset_(NEP *nep,void (*monitor)(NEP*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,void*,PetscErrorCode*),void *mctx,void (*monitordestroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(mctx);
   CHKFORTRANNULLFUNCTION(monitordestroy);
@@ -153,7 +153,7 @@ SLEPC_EXTERN void nepmonitorset_(NEP *nep,void (*monitor)(NEP*,PetscInt*,PetscIn
 SLEPC_EXTERN void nepconvergedabsolute_(NEP*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 SLEPC_EXTERN void nepconvergedrelative_(NEP*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void nepsetconvergencetestfunction_(NEP *nep,void (*func)(NEP*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void nepsetconvergencetestfunction_(NEP *nep,void (*func)(NEP*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void *ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);
@@ -170,7 +170,7 @@ SLEPC_EXTERN void nepsetconvergencetestfunction_(NEP *nep,void (*func)(NEP*,Pets
 
 SLEPC_EXTERN void nepstoppingbasic_(NEP*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,NEPConvergedReason*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void nepsetstoppingtestfunction_(NEP *nep,void (*func)(NEP*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,NEPConvergedReason*,void*,PetscErrorCode*),void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void nepsetstoppingtestfunction_(NEP *nep,void (*func)(NEP*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,NEPConvergedReason*,void*,PetscErrorCode*),void *ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);

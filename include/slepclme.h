@@ -218,7 +218,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterDestroyFn(PetscVie
 SLEPC_EXTERN PetscErrorCode LMEMonitor(LME,PetscInt,PetscReal);
 SLEPC_EXTERN PetscErrorCode LMEMonitorSet(LME,LMEMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode LMEMonitorCancel(LME);
-SLEPC_EXTERN PetscErrorCode LMEGetMonitorContext(LME,void*);
+SLEPC_EXTERN PetscErrorCode LMEGetMonitorContext(LME,PetscCtxRt);
 
 SLEPC_EXTERN PetscErrorCode LMEMonitorSetFromOptions(LME,const char[],const char[],void*);
 SLEPC_EXTERN LMEMonitorRegisterFn       LMEMonitorDefault;

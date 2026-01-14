@@ -371,7 +371,7 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode DSNEPMatrixFunctionFn(DS ds,PetscScalar lambda,PetscBool deriv,DSMatType mat,void *ctx);
 
 SLEPC_EXTERN PetscErrorCode DSNEPSetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn*,void*,PetscCtxDestroyFn*);
-SLEPC_EXTERN PetscErrorCode DSNEPGetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn**,void**,PetscCtxDestroyFn**);
+SLEPC_EXTERN PetscErrorCode DSNEPGetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn**,PetscCtxRt,PetscCtxDestroyFn**);
 
 SLEPC_EXTERN PetscFunctionList DSList;
 SLEPC_EXTERN PetscErrorCode DSRegister(const char[],PetscErrorCode(*)(DS));

@@ -36,18 +36,18 @@ static PetscErrorCode ourmonitor(LME lme,PetscInt i,PetscReal d,void *ctx)
   PetscObjectUseFortranCallback(lme,_cb.monitor,(LME*,PetscInt*,PetscReal*,void*,PetscErrorCode*),(&lme,&i,&d,_ctx,&ierr));
 }
 
-static PetscErrorCode ourdestroy(void** ctx)
+static PetscErrorCode ourdestroy(PetscCtxRt ctx)
 {
-  LME lme = (LME)*ctx;
+  LME lme = *(LME*)ctx;
   PetscObjectUseFortranCallback(lme,_cb.monitordestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
-SLEPC_EXTERN void lmemonitorset_(LME *lme,void (*monitor)(LME*,PetscInt*,PetscReal*,void*,PetscErrorCode*),void *mctx,PetscCtxDestroyFn monitordestroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void lmemonitorset_(LME *lme,void (*monitor)(LME*,PetscInt*,PetscReal*,void*,PetscErrorCode*),void *mctx,void (*monitordestroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(mctx);
   CHKFORTRANNULLFUNCTION(monitordestroy);
   if ((PetscFortranCallbackFn*)monitor == (PetscFortranCallbackFn*)lmemonitordefault_) {
-    *ierr = LMEMonitorSet(*lme,(LMEMonitorFn*)LMEMonitorDefault,*(PetscViewerAndFormat**)mctx,(PetscErrorCode (*)(void**))PetscViewerAndFormatDestroy);
+    *ierr = LMEMonitorSet(*lme,(LMEMonitorFn*)LMEMonitorDefault,*(PetscViewerAndFormat**)mctx,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy);
   } else {
     *ierr = PetscObjectSetFortranCallback((PetscObject)*lme,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.monitor,(PetscFortranCallbackFn*)monitor,mctx); if (*ierr) return;
     *ierr = PetscObjectSetFortranCallback((PetscObject)*lme,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.monitordestroy,(PetscFortranCallbackFn*)monitordestroy,mctx); if (*ierr) return;

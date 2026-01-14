@@ -17,36 +17,6 @@ interface
     PetscErrorCode z
   end subroutine
 
-  subroutine NEPSetFunction(a, b, c, d, e, z)
-    use, intrinsic :: ISO_C_BINDING
-    import tNEP, tMat
-    NEP a
-    Mat b
-    Mat c
-    external d
-    type(*) e
-    PetscErrorCode z
-  end subroutine
-
-  subroutine NEPSetJacobian(a, b, c, d, z)
-    use, intrinsic :: ISO_C_BINDING
-    import tNEP, tMat
-    NEP a
-    Mat b
-    external c
-    type(*) d
-    PetscErrorCode z
-  end subroutine
-
-  subroutine NEPNLEIGSSetSingularitiesFunction(a, b, c, z)
-    use, intrinsic :: ISO_C_BINDING
-    import tNEP
-    NEP a
-    external b
-    type(*) c
-    PetscErrorCode z
-  end subroutine
-
   subroutine NEPMonitorSet(a, b, c, d, z)
     use, intrinsic :: ISO_C_BINDING
     import tNEP

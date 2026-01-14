@@ -23,9 +23,9 @@ PetscErrorCode MyArbitrarySelection(PetscScalar eigr,PetscScalar eigi,Vec xr,Vec
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-PetscErrorCode MyArbitrarySelectionDestroy(void **ctx)
+PetscErrorCode MyArbitrarySelectionDestroy(PetscCtxRt ctx)
 {
-  Vec             xref = *(Vec*)*ctx;
+  Vec             xref = **(Vec**)ctx;
 
   PetscFunctionBeginUser;
   PetscCall(VecDestroy(&xref));

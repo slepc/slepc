@@ -141,7 +141,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterDestroyFn(PetscVie
 SLEPC_EXTERN PetscErrorCode MFNMonitor(MFN,PetscInt,PetscReal);
 SLEPC_EXTERN PetscErrorCode MFNMonitorSet(MFN,MFNMonitorFn,void*,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode MFNMonitorCancel(MFN);
-SLEPC_EXTERN PetscErrorCode MFNGetMonitorContext(MFN,void*);
+SLEPC_EXTERN PetscErrorCode MFNGetMonitorContext(MFN,PetscCtxRt);
 
 SLEPC_EXTERN PetscErrorCode MFNMonitorSetFromOptions(MFN,const char[],const char[],void*);
 SLEPC_EXTERN MFNMonitorRegisterFn       MFNMonitorDefault;

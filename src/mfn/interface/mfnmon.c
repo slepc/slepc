@@ -128,7 +128,7 @@ PetscErrorCode MFNMonitorCancel(MFN mfn)
 
 .seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
-PetscErrorCode MFNGetMonitorContext(MFN mfn,void *ctx)
+PetscErrorCode MFNGetMonitorContext(MFN mfn,PetscCtxRt ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(mfn,MFN_CLASSID,1);

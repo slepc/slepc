@@ -135,7 +135,7 @@ PetscErrorCode NEPMonitorCancel(NEP nep)
 
 .seealso: [](ch:nep), `NEPMonitorSet()`
 @*/
-PetscErrorCode NEPGetMonitorContext(NEP nep,void *ctx)
+PetscErrorCode NEPGetMonitorContext(NEP nep,PetscCtxRt ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);

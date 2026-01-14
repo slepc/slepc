@@ -76,9 +76,9 @@ static PetscErrorCode ourmonitor(EPS eps,PetscInt i,PetscInt nc,PetscScalar *er,
   PetscObjectUseFortranCallback(eps,_cb.monitor,(EPS*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,void*,PetscErrorCode*),(&eps,&i,&nc,er,ei,d,&l,_ctx,&ierr));
 }
 
-static PetscErrorCode ourdestroy(void **ctx)
+static PetscErrorCode ourdestroy(PetscCtxRt ctx)
 {
-  EPS eps = (EPS)*ctx;
+  EPS eps = *(EPS*)ctx;
   PetscObjectUseFortranCallback(eps,_cb.monitordestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
@@ -87,9 +87,9 @@ static PetscErrorCode ourconvergence(EPS eps,PetscScalar eigr,PetscScalar eigi,P
   PetscObjectUseFortranCallback(eps,_cb.convergence,(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),(&eps,&eigr,&eigi,&res,errest,_ctx,&ierr));
 }
 
-static PetscErrorCode ourconvdestroy(void **ctx)
+static PetscErrorCode ourconvdestroy(PetscCtxRt ctx)
 {
-  EPS eps = (EPS)*ctx;
+  EPS eps = *(EPS*)ctx;
   PetscObjectUseFortranCallback(eps,_cb.convdestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
@@ -98,9 +98,9 @@ static PetscErrorCode ourstopping(EPS eps,PetscInt its,PetscInt max_it,PetscInt 
   PetscObjectUseFortranCallback(eps,_cb.stopping,(EPS*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,EPSConvergedReason*,void*,PetscErrorCode*),(&eps,&its,&max_it,&nconv,&nev,reason,_ctx,&ierr));
 }
 
-static PetscErrorCode ourstopdestroy(void **ctx)
+static PetscErrorCode ourstopdestroy(PetscCtxRt ctx)
 {
-  EPS eps = (EPS)*ctx;
+  EPS eps = *(EPS*)ctx;
   PetscObjectUseFortranCallback(eps,_cb.stopdestroy,(void*,PetscErrorCode*),(_ctx,&ierr));
 }
 
@@ -116,7 +116,7 @@ static PetscErrorCode ourarbitraryfunc(PetscScalar er,PetscScalar ei,Vec xr,Vec 
   PetscObjectUseFortranCallback(eps,_cb.arbitrary,(PetscScalar*,PetscScalar*,Vec*,Vec*,PetscScalar*,PetscScalar*,void*,PetscErrorCode*),(&er,&ei,&xr,&xi,rr,ri,_ctx,&ierr));
 }
 
-SLEPC_EXTERN void epsmonitorset_(EPS *eps,void (*monitor)(EPS*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,void*,PetscErrorCode*),void *mctx,PetscCtxDestroyFn monitordestroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void epsmonitorset_(EPS *eps,void (*monitor)(EPS*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscReal*,PetscInt*,void*,PetscErrorCode*),void *mctx,void (*monitordestroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(mctx);
   CHKFORTRANNULLFUNCTION(monitordestroy);
@@ -137,7 +137,7 @@ SLEPC_EXTERN void epsconvergedabsolute_(EPS*,PetscScalar*,PetscScalar*,PetscReal
 SLEPC_EXTERN void epsconvergedrelative_(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 SLEPC_EXTERN void epsconvergednorm_(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void epssetconvergencetestfunction_(EPS *eps,void (*func)(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void epssetconvergencetestfunction_(EPS *eps,void (*func)(EPS*,PetscScalar*,PetscScalar*,PetscReal*,PetscReal*,void*,PetscErrorCode*),void *ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);
@@ -157,7 +157,7 @@ SLEPC_EXTERN void epssetconvergencetestfunction_(EPS *eps,void (*func)(EPS*,Pets
 SLEPC_EXTERN void epsstoppingbasic_(EPS*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,EPSConvergedReason*,void*,PetscErrorCode*);
 SLEPC_EXTERN void epsstoppingthreshold_(EPS*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,EPSConvergedReason*,void*,PetscErrorCode*);
 
-SLEPC_EXTERN void epssetstoppingtestfunction_(EPS *eps,void (*func)(EPS*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,EPSConvergedReason*,void*,PetscErrorCode*),void *ctx,PetscCtxDestroyFn destroy,PetscErrorCode *ierr)
+SLEPC_EXTERN void epssetstoppingtestfunction_(EPS *eps,void (*func)(EPS*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,EPSConvergedReason*,void*,PetscErrorCode*),void *ctx,void (*destroy)(void*,PetscErrorCode*),PetscErrorCode *ierr)
 {
   CHKFORTRANNULLOBJECT(ctx);
   CHKFORTRANNULLFUNCTION(destroy);

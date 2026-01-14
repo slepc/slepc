@@ -272,7 +272,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellApplyHermitianTransposeFn(ST 
 S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellBackTransformFn(ST st,PetscInt n,PetscScalar *eigr,PetscScalar *eigi);
 
-SLEPC_EXTERN PetscErrorCode STShellGetContext(ST,void*);
+SLEPC_EXTERN PetscErrorCode STShellGetContext(ST,PetscCtxRt);
 SLEPC_EXTERN PetscErrorCode STShellSetContext(ST,void*);
 SLEPC_EXTERN PetscErrorCode STShellSetDestroy(ST,STShellDestroyFn*);
 SLEPC_EXTERN PetscErrorCode STShellSetApply(ST,STShellApplyFn*);

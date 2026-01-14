@@ -29,41 +29,6 @@ module shell_ctx
   end type MatCtx
 end module shell_ctx
 
-module shell_ctx_interfaces
-  use shell_ctx
-  implicit none
-
-  interface MatCreateShell
-    subroutine MatCreateShell(comm, mloc, nloc, m, n, ctx, mat, ierr)
-      use shell_ctx
-      MPIU_Comm      :: comm
-      PetscInt       :: mloc, nloc, m, n
-      type(MatCtx)   :: ctx
-      Mat            :: mat
-      PetscErrorCode :: ierr
-    end subroutine MatCreateShell
-  end interface MatCreateShell
-
-  interface MatShellSetContext
-    subroutine MatShellSetContext(mat, ctx, ierr)
-      use shell_ctx
-      Mat            :: mat
-      type(MatCtx)   :: ctx
-      PetscErrorCode :: ierr
-    end subroutine MatShellSetContext
-  end interface MatShellSetContext
-
-  interface MatShellGetContext
-    subroutine MatShellGetContext(mat, ctx, ierr)
-      use shell_ctx
-      Mat                   :: mat
-      type(MatCtx), pointer :: ctx
-      PetscErrorCode        :: ierr
-    end subroutine matShellGetContext
-  end interface MatShellGetContext
-
-end module shell_ctx_interfaces
-
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Module used to implement the shell matrix operations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -78,7 +43,7 @@ contains
   !
   subroutine MyNEPFunction(nep, lambda, T, P, ctx, ierr)
     use slepcnep
-    use shell_ctx_interfaces
+    use shell_ctx
     implicit none
 
     NEP                   :: nep
@@ -97,7 +62,7 @@ contains
   !
   subroutine MyNEPJacobian(nep, lambda, T, ctx, ierr)
     use slepcnep
-    use shell_ctx_interfaces
+    use shell_ctx
     implicit none
 
     NEP                   :: nep
@@ -116,7 +81,7 @@ contains
   ! Here A=(D-lambda*I) where D is a diagonal matrix
   !
   subroutine MatMult_A(A, x, y, ierr)
-    use shell_ctx_interfaces
+    use shell_ctx
     implicit none
 
     Mat                   :: A
@@ -143,7 +108,7 @@ contains
   ! MatDuplicate_A - Shell matrix operation, duplicates A
   !
   subroutine MatDuplicate_A(A, opt, M, ierr)
-    use shell_ctx_interfaces
+    use shell_ctx
     implicit none
 
     Mat                   :: A, M
@@ -165,7 +130,7 @@ contains
   ! MatDestroy_A - Shell matrix operation, destroys A
   !
   subroutine MatDestroy_A(A, ierr)
-    use shell_ctx_interfaces
+    use shell_ctx
     implicit none
 
     Mat                   :: A
@@ -201,7 +166,7 @@ end module ex54fmodule
 
 program ex54f
   use slepcnep
-  use shell_ctx_interfaces
+  use shell_ctx
   use ex54fmodule
   implicit none
 
