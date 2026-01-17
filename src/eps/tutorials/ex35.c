@@ -26,7 +26,7 @@ typedef struct {
 /* Routines for shell spectral transformation */
 PetscErrorCode STCreate_Fold(Mat,PetscScalar,FoldShellST**);
 PetscErrorCode STApply_Fold(ST,Vec,Vec);
-PetscErrorCode STDestroy_Fold(void**);
+PetscErrorCode STDestroy_Fold(ST);
 
 int main (int argc,char **argv)
 {
@@ -93,7 +93,7 @@ int main (int argc,char **argv)
     /* Create the context for the user-defined spectral transform */
     PetscCall(STCreate_Fold(A,target,&fold));
     PetscCall(STShellSetContext(st,fold));
-    PetscCall(STShellSetContextDestroy(st,STDestroy_Fold));
+    PetscCall(STShellSetDestroy(st,STDestroy_Fold));
 
     /* Set callback function for applying the operator (in this case we do not
        provide a back-transformation callback since the mapping is not one-to-one) */
@@ -183,13 +183,14 @@ PetscErrorCode STApply_Fold(ST st,Vec x,Vec y)
    STDestroy_Fold - This routine destroys the shell ST context.
 
    Input Parameter:
-.  ctx - user-defined spectral transformation context
+.  st - spectral transformation context
 */
-PetscErrorCode STDestroy_Fold(void **ctx)
+PetscErrorCode STDestroy_Fold(ST st)
 {
-  FoldShellST *fold = (FoldShellST*)*ctx;
+  FoldShellST *fold;
 
   PetscFunctionBeginUser;
+  PetscCall(STShellGetContext(st,&fold));
   PetscCall(MatDestroy(&fold->A));
   PetscCall(VecDestroy(&fold->w));
   PetscCall(PetscFree(fold));
