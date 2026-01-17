@@ -199,6 +199,19 @@ SLEPC_EXTERN PetscErrorCode STRegister(const char[],PetscErrorCode(*)(ST));
 /* --------- options specific to particular spectral transformations-------- */
 
 /*S
+   STShellDestroyFn - A prototype of a function for destroying the context
+   set with `STShellSetContext()` in an `STSHELL`.
+
+   Calling Sequence:
+.  st   - the spectral transformation context
+
+   Level: advanced
+
+.seealso: [](ch:st), `STShellSetDestroy()`, `STShellSetContext()`
+S*/
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellDestroyFn(ST st);
+
+/*S
    STShellApplyFn - A prototype of a function for the user-defined `STApply()`
    operation in an `STSHELL`.
 
@@ -261,7 +274,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode STShellBackTransformFn(ST st,PetscIn
 
 SLEPC_EXTERN PetscErrorCode STShellGetContext(ST,void*);
 SLEPC_EXTERN PetscErrorCode STShellSetContext(ST,void*);
-SLEPC_EXTERN PetscErrorCode STShellSetContextDestroy(ST,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode STShellSetDestroy(ST,STShellDestroyFn*);
 SLEPC_EXTERN PetscErrorCode STShellSetApply(ST,STShellApplyFn*);
 SLEPC_EXTERN PetscErrorCode STShellSetApplyTranspose(ST,STShellApplyTransposeFn*);
 SLEPC_EXTERN PetscErrorCode STShellSetApplyHermitianTranspose(ST,STShellApplyHermitianTransposeFn*);

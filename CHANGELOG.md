@@ -5,7 +5,7 @@
 ### Added
 
 - New context destroy functions `EPSSetArbitrarySelectionContextDestroy()` and
-  `STShellSetContextDestroy()`.
+  `STShellSetDestroy()`.
 
 ### Changed
 
