@@ -17,16 +17,6 @@ interface
     PetscErrorCode z
   end subroutine
 
-  subroutine NEPMonitorSet(a, b, c, d, z)
-    use, intrinsic :: ISO_C_BINDING
-    import tNEP
-    NEP a
-    external b
-    type(*) c
-    external d
-    PetscErrorCode z
-  end subroutine
-
   subroutine NEPMonitorConvergedCreate(a, b, c, d, z)
     use, intrinsic :: ISO_C_BINDING
     import tPetscViewer, ePetscViewerFormat
@@ -40,9 +30,5 @@ end interface
 
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::NEPNLEIGSGetRKShifts
-!DEC$ ATTRIBUTES DLLEXPORT::NEPSetFunction
-!DEC$ ATTRIBUTES DLLEXPORT::NEPSetJacobian
-!DEC$ ATTRIBUTES DLLEXPORT::NEPNLEIGSSetSingularitiesFunction
-!DEC$ ATTRIBUTES DLLEXPORT::NEPMonitorSet
 !DEC$ ATTRIBUTES DLLEXPORT::NEPMonitorConvergedCreate
 #endif

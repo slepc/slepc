@@ -36,7 +36,7 @@ PetscErrorCode PEPMonitor(PEP pep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 +  pep            - the polynomial eigensolver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `PEPMonitorFn`
-.  mctx           - [optional] context for private data for the monitor routine
+.  ctx            - [optional] context for private data for the monitor routine
                     (use `NULL` if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be `NULL`),
                     see `PetscCtxDestroyFn` for the calling sequence
@@ -72,7 +72,7 @@ PetscErrorCode PEPMonitor(PEP pep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
 
 .seealso: [](ch:pep), `PEPMonitorFirst()`, `PEPMonitorAll()`, `PEPMonitorConverged()`, `PEPMonitorFirstDrawLG()`, `PEPMonitorAllDrawLG()`, `PEPMonitorConvergedDrawLG()`, `PEPMonitorCancel()`
 @*/
-PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,PetscCtx ctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscInt  i;
   PetscBool identical;
@@ -80,12 +80,12 @@ PetscErrorCode PEPMonitorSet(PEP pep,PEPMonitorFn *monitor,void *mctx,PetscCtxDe
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
   for (i=0;i<pep->numbermonitors;i++) {
-    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)pep->monitor[i],pep->monitorcontext[i],pep->monitordestroy[i],&identical));
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,ctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)pep->monitor[i],pep->monitorcontext[i],pep->monitordestroy[i],&identical));
     if (identical) PetscFunctionReturn(PETSC_SUCCESS);
   }
   PetscCheck(pep->numbermonitors<MAXPEPMONITORS,PetscObjectComm((PetscObject)pep),PETSC_ERR_ARG_OUTOFRANGE,"Too many PEP monitors set");
   pep->monitor[pep->numbermonitors]           = monitor;
-  pep->monitorcontext[pep->numbermonitors]    = mctx;
+  pep->monitorcontext[pep->numbermonitors]    = ctx;
   pep->monitordestroy[pep->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -362,7 +362,7 @@ PetscErrorCode PEPMonitorConverged(PEP pep,PetscInt its,PetscInt nconv,PetscScal
 
 .seealso: [](ch:pep), `PEPMonitorSet()`
 @*/
-PetscErrorCode PEPMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
+PetscErrorCode PEPMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,PetscCtx ctx,PetscViewerAndFormat **vf)
 {
   PetscInt *oldnconv;
 

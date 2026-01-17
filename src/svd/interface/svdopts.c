@@ -437,7 +437,7 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
 
 .seealso: [](ch:svd), `SVDSetConvergenceTest()`, `SVDSetTolerances()`
 @*/
-PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,void *ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode SVDSetConvergenceTestFunction(SVD svd,SVDConvergenceTestFn *conv,PetscCtx ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -549,7 +549,7 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
 
 .seealso: [](ch:svd), `SVDSetStoppingTest()`, `SVDStoppingBasic()`
 @*/
-PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,void *ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode SVDSetStoppingTestFunction(SVD svd,SVDStoppingTestFn *stop,PetscCtx ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -646,7 +646,7 @@ PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
 
 .seealso: [](ch:svd), `SVDMonitorSet()`, `SVDSetTrackAll()`
 @*/
-PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name[],void *ctx,PetscBool trackall)
+PetscErrorCode SVDMonitorSetFromOptions(SVD svd,const char opt[],const char name[],PetscCtx ctx,PetscBool trackall)
 {
   PetscErrorCode       (*mfunc)(SVD,PetscInt,PetscInt,PetscReal*,PetscReal*,PetscInt,void*);
   PetscErrorCode       (*cfunc)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);

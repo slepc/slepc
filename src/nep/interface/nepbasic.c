@@ -675,7 +675,7 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
 
 .seealso: [](ch:nep), `NEPGetFunction()`, `NEPSetJacobian()`
 @*/
-PetscErrorCode NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,void *ctx)
+PetscErrorCode NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,PetscCtx ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
@@ -754,7 +754,7 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,PetscCtx
 
 .seealso: [](ch:nep), `NEPSetFunction()`, `NEPGetJacobian()`
 @*/
-PetscErrorCode NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,void *ctx)
+PetscErrorCode NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,PetscCtx ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);

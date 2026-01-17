@@ -89,7 +89,7 @@ SLEPC_EXTERN PetscErrorCode MFNGetErrorIfNotConverged(MFN,PetscBool*);
 
 .seealso: [](ch:mfn), `MFNMonitorSet()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorFn(MFN mfn,PetscInt its,PetscReal errest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorFn(MFN mfn,PetscInt its,PetscReal errest,PetscCtx ctx);
 
 /*S
    MFNMonitorRegisterFn - A function prototype for functions provided to `MFNMonitorRegister()`.
@@ -123,7 +123,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterFn(MFN mfn,PetscIn
 
 .seealso: [](ch:mfn), `MFNMonitorRegisterFn`, `MFNMonitorSet()`, `MFNMonitorRegister()`, `MFNMonitorFn`, `MFNMonitorRegisterDestroyFn`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,PetscCtx ctx,PetscViewerAndFormat **result);
 
 /*S
    MFNMonitorRegisterDestroyFn - A function prototype for functions that do the after
@@ -139,11 +139,11 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode MFNMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
 SLEPC_EXTERN PetscErrorCode MFNMonitor(MFN,PetscInt,PetscReal);
-SLEPC_EXTERN PetscErrorCode MFNMonitorSet(MFN,MFNMonitorFn,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode MFNMonitorSet(MFN,MFNMonitorFn,PetscCtx,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode MFNMonitorCancel(MFN);
 SLEPC_EXTERN PetscErrorCode MFNGetMonitorContext(MFN,PetscCtxRt);
 
-SLEPC_EXTERN PetscErrorCode MFNMonitorSetFromOptions(MFN,const char[],const char[],void*);
+SLEPC_EXTERN PetscErrorCode MFNMonitorSetFromOptions(MFN,const char[],const char[],PetscCtx);
 SLEPC_EXTERN MFNMonitorRegisterFn       MFNMonitorDefault;
 SLEPC_EXTERN MFNMonitorRegisterFn       MFNMonitorDefaultDrawLG;
 SLEPC_EXTERN MFNMonitorRegisterCreateFn MFNMonitorDefaultDrawLGCreate;

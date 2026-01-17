@@ -32,7 +32,7 @@
 
 .seealso: [](ch:pep), `PEPMonitorSet()`, `PEPSetTrackAll()`
 @*/
-PetscErrorCode PEPMonitorSetFromOptions(PEP pep,const char opt[],const char name[],void *ctx,PetscBool trackall)
+PetscErrorCode PEPMonitorSetFromOptions(PEP pep,const char opt[],const char name[],PetscCtx ctx,PetscBool trackall)
 {
   PetscErrorCode       (*mfunc)(PEP,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
   PetscErrorCode       (*cfunc)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
@@ -533,7 +533,7 @@ PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
 
 .seealso: [](ch:pep), `PEPSetWhichEigenpairs()`, `PEPWhich`
 @*/
-PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *comp,void *ctx)
+PetscErrorCode PEPSetEigenvalueComparison(PEP pep,SlepcEigenvalueComparisonFn *comp,PetscCtx ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
@@ -748,7 +748,7 @@ PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
 
 .seealso: [](ch:pep), `PEPSetConvergenceTest()`, `PEPSetTolerances()`
 @*/
-PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,void *ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode PEPSetConvergenceTestFunction(PEP pep,PEPConvergenceTestFn *conv,PetscCtx ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
@@ -854,7 +854,7 @@ PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
 
 .seealso: [](ch:pep), `PEPSetStoppingTest()`, `PEPStoppingBasic()`
 @*/
-PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,void *ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode PEPSetStoppingTestFunction(PEP pep,PEPStoppingTestFn *stop,PetscCtx ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);

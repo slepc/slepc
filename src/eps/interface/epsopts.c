@@ -32,7 +32,7 @@
 
 .seealso: [](ch:eps), `EPSMonitorSet()`, `EPSSetTrackAll()`
 @*/
-PetscErrorCode EPSMonitorSetFromOptions(EPS eps,const char opt[],const char name[],void *ctx,PetscBool trackall)
+PetscErrorCode EPSMonitorSetFromOptions(EPS eps,const char opt[],const char name[],PetscCtx ctx,PetscBool trackall)
 {
   PetscErrorCode       (*mfunc)(EPS,PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscReal*,PetscInt,void*);
   PetscErrorCode       (*cfunc)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
@@ -652,7 +652,7 @@ PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
 
 .seealso: [](ch:eps), `EPSSetWhichEigenpairs()`, `EPSWhich`
 @*/
-PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *func,void *ctx)
+PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *func,PetscCtx ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -698,7 +698,7 @@ PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *f
 
 .seealso: [](ch:eps), `EPSSetWhichEigenpairs()`, `EPSSetArbitrarySelectionContextDestroy()`
 @*/
-PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,void *ctx)
+PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,PetscCtx ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -755,7 +755,7 @@ PetscErrorCode EPSSetArbitrarySelectionContextDestroy(EPS eps,PetscCtxDestroyFn 
 
 .seealso: [](ch:eps), `EPSSetConvergenceTest()`, `EPSSetTolerances()`
 @*/
-PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,void *ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode EPSSetConvergenceTestFunction(EPS eps,EPSConvergenceTestFn *func,PetscCtx ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -861,7 +861,7 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
 
 .seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSStoppingBasic()`
 @*/
-PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,void *ctx,PetscCtxDestroyFn *destroy)
+PetscErrorCode EPSSetStoppingTestFunction(EPS eps,EPSStoppingTestFn *func,PetscCtx ctx,PetscCtxDestroyFn *destroy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);

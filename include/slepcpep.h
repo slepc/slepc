@@ -592,7 +592,7 @@ SLEPC_EXTERN PetscErrorCode PEPGetTrackAll(PEP,PetscBool*);
 
 .seealso: [](ch:pep), `PEPMonitorSet()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorFn(PEP pep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscCtx ctx);
 
 /*S
    PEPMonitorRegisterFn - A function prototype for functions provided to `PEPMonitorRegister()`.
@@ -630,7 +630,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterFn(PEP pep,PetscIn
 
 .seealso: [](ch:pep), `PEPMonitorRegisterFn`, `PEPMonitorSet()`, `PEPMonitorRegister()`, `PEPMonitorFn`, `PEPMonitorRegisterDestroyFn`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,PetscCtx ctx,PetscViewerAndFormat **result);
 
 /*S
    PEPMonitorRegisterDestroyFn - A function prototype for functions that do the after
@@ -646,11 +646,11 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
 SLEPC_EXTERN PetscErrorCode PEPMonitor(PEP,PetscInt,PetscInt,PetscScalar[],PetscScalar[],PetscReal[],PetscInt);
-SLEPC_EXTERN PetscErrorCode PEPMonitorSet(PEP,PEPMonitorFn,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode PEPMonitorSet(PEP,PEPMonitorFn,PetscCtx,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode PEPMonitorCancel(PEP);
 SLEPC_EXTERN PetscErrorCode PEPGetMonitorContext(PEP,PetscCtxRt);
 
-SLEPC_EXTERN PetscErrorCode PEPMonitorSetFromOptions(PEP,const char[],const char[],void*,PetscBool);
+SLEPC_EXTERN PetscErrorCode PEPMonitorSetFromOptions(PEP,const char[],const char[],PetscCtx,PetscBool);
 SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorFirst;
 SLEPC_EXTERN PEPMonitorRegisterFn        PEPMonitorFirstDrawLG;
 SLEPC_EXTERN PEPMonitorRegisterCreateFn  PEPMonitorFirstDrawLGCreate;
@@ -692,14 +692,14 @@ SLEPC_EXTERN PetscErrorCode PEPAllocateSolution(PEP,PetscInt);
 
 .seealso: [](ch:pep), `PEPSetConvergenceTest()`, `PEPSetConvergenceTestFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPConvergenceTestFn(PEP pep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPConvergenceTestFn(PEP pep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,PetscCtx ctx);
 
 SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTest(PEP,PEPConv);
 SLEPC_EXTERN PetscErrorCode PEPGetConvergenceTest(PEP,PEPConv*);
 SLEPC_EXTERN PEPConvergenceTestFn PEPConvergedAbsolute;
 SLEPC_EXTERN PEPConvergenceTestFn PEPConvergedRelative;
 SLEPC_EXTERN PEPConvergenceTestFn PEPConvergedNorm;
-SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTestFunction(PEP,PEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTestFunction(PEP,PEPConvergenceTestFn*,PetscCtx,PetscCtxDestroyFn*);
 
 /*S
    PEPStoppingTestFn - A prototype of a `PEP` stopping test function that would be
@@ -724,14 +724,14 @@ SLEPC_EXTERN PetscErrorCode PEPSetConvergenceTestFunction(PEP,PEPConvergenceTest
 
 .seealso: [](ch:pep), `PEPSetStoppingTestFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPStoppingTestFn(PEP pep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,PEPConvergedReason *reason,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode PEPStoppingTestFn(PEP pep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,PEPConvergedReason *reason,PetscCtx ctx);
 
 SLEPC_EXTERN PetscErrorCode PEPSetStoppingTest(PEP,PEPStop);
 SLEPC_EXTERN PetscErrorCode PEPGetStoppingTest(PEP,PEPStop*);
 SLEPC_EXTERN PEPStoppingTestFn PEPStoppingBasic;
-SLEPC_EXTERN PetscErrorCode PEPSetStoppingTestFunction(PEP,PEPStoppingTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode PEPSetStoppingTestFunction(PEP,PEPStoppingTestFn*,PetscCtx,PetscCtxDestroyFn*);
 
-SLEPC_EXTERN PetscErrorCode PEPSetEigenvalueComparison(PEP,SlepcEigenvalueComparisonFn*,void*);
+SLEPC_EXTERN PetscErrorCode PEPSetEigenvalueComparison(PEP,SlepcEigenvalueComparisonFn*,PetscCtx);
 
 /* --------- options specific to particular eigensolvers -------- */
 

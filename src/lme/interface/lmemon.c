@@ -36,7 +36,7 @@ PetscErrorCode LMEMonitor(LME lme,PetscInt it,PetscReal errest)
 +  lme            - the linear matrix equation solver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `LMEMonitorFn`
-.  mctx           - [optional] context for private data for the monitor routine
+.  ctx            - [optional] context for private data for the monitor routine
                     (use `NULL` if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be `NULL`),
                     see `PetscCtxDestroyFn` for the calling sequence
@@ -65,7 +65,7 @@ PetscErrorCode LMEMonitor(LME lme,PetscInt it,PetscReal errest)
 
 .seealso: [](ch:lme), `LMEMonitorDefault()`, `LMEMonitorDefaultDrawLG()`, `LMEMonitorCancel()`
 @*/
-PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,PetscCtx ctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscInt  i;
   PetscBool identical;
@@ -73,12 +73,12 @@ PetscErrorCode LMEMonitorSet(LME lme,LMEMonitorFn *monitor,void *mctx,PetscCtxDe
   PetscFunctionBegin;
   PetscValidHeaderSpecific(lme,LME_CLASSID,1);
   for (i=0;i<lme->numbermonitors;i++) {
-    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)lme->monitor[i],lme->monitorcontext[i],lme->monitordestroy[i],&identical));
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,ctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)lme->monitor[i],lme->monitorcontext[i],lme->monitordestroy[i],&identical));
     if (identical) PetscFunctionReturn(PETSC_SUCCESS);
   }
   PetscCheck(lme->numbermonitors<MAXLMEMONITORS,PetscObjectComm((PetscObject)lme),PETSC_ERR_ARG_OUTOFRANGE,"Too many LME monitors set");
   lme->monitor[lme->numbermonitors]           = monitor;
-  lme->monitorcontext[lme->numbermonitors]    = mctx;
+  lme->monitorcontext[lme->numbermonitors]    = ctx;
   lme->monitordestroy[lme->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

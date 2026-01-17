@@ -684,7 +684,7 @@ SLEPC_EXTERN PetscErrorCode EPSSetLeftInitialSpace(EPS,PetscInt,Vec[]);
 
 .seealso: [](ch:eps), `EPSMonitorSet()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorFn(EPS eps,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorFn(EPS eps,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscCtx ctx);
 
 /*S
    EPSMonitorRegisterFn - A function prototype for functions provided to `EPSMonitorRegister()`.
@@ -722,7 +722,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterFn(EPS eps,PetscIn
 
 .seealso: [](ch:eps), `EPSMonitorRegisterFn`, `EPSMonitorSet()`, `EPSMonitorRegister()`, `EPSMonitorFn`, `EPSMonitorRegisterDestroyFn`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,PetscCtx ctx,PetscViewerAndFormat **result);
 
 /*S
    EPSMonitorRegisterDestroyFn - A function prototype for functions that do the after
@@ -738,11 +738,11 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
 SLEPC_EXTERN PetscErrorCode EPSMonitor(EPS,PetscInt,PetscInt,PetscScalar[],PetscScalar[],PetscReal[],PetscInt);
-SLEPC_EXTERN PetscErrorCode EPSMonitorSet(EPS,EPSMonitorFn,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode EPSMonitorSet(EPS,EPSMonitorFn,PetscCtx,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode EPSMonitorCancel(EPS);
 SLEPC_EXTERN PetscErrorCode EPSGetMonitorContext(EPS,PetscCtxRt);
 
-SLEPC_EXTERN PetscErrorCode EPSMonitorSetFromOptions(EPS,const char[],const char[],void*,PetscBool);
+SLEPC_EXTERN PetscErrorCode EPSMonitorSetFromOptions(EPS,const char[],const char[],PetscCtx,PetscBool);
 SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorFirst;
 SLEPC_EXTERN EPSMonitorRegisterFn        EPSMonitorFirstDrawLG;
 SLEPC_EXTERN EPSMonitorRegisterCreateFn  EPSMonitorFirstDrawLGCreate;
@@ -785,14 +785,14 @@ SLEPC_EXTERN PetscErrorCode EPSReallocateSolution(EPS,PetscInt);
 
 .seealso: [](ch:eps), `EPSSetConvergenceTest()`, `EPSSetConvergenceTestFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSConvergenceTestFn(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSConvergenceTestFn(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,PetscCtx ctx);
 
 SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTest(EPS,EPSConv);
 SLEPC_EXTERN PetscErrorCode EPSGetConvergenceTest(EPS,EPSConv*);
 SLEPC_EXTERN EPSConvergenceTestFn EPSConvergedAbsolute;
 SLEPC_EXTERN EPSConvergenceTestFn EPSConvergedRelative;
 SLEPC_EXTERN EPSConvergenceTestFn EPSConvergedNorm;
-SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTestFn*,PetscCtx,PetscCtxDestroyFn*);
 
 /*S
    EPSStoppingTestFn - A prototype of an `EPS` stopping test function that would
@@ -817,16 +817,16 @@ SLEPC_EXTERN PetscErrorCode EPSSetConvergenceTestFunction(EPS,EPSConvergenceTest
 
 .seealso: [](ch:eps), `EPSSetStoppingTest()`, `EPSSetStoppingTestFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSStoppingTestFn(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode EPSStoppingTestFn(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,PetscCtx ctx);
 
 SLEPC_EXTERN PetscErrorCode EPSSetStoppingTest(EPS,EPSStop);
 SLEPC_EXTERN PetscErrorCode EPSGetStoppingTest(EPS,EPSStop*);
 SLEPC_EXTERN EPSStoppingTestFn EPSStoppingBasic;
 SLEPC_EXTERN EPSStoppingTestFn EPSStoppingThreshold;
-SLEPC_EXTERN PetscErrorCode EPSSetStoppingTestFunction(EPS,EPSStoppingTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode EPSSetStoppingTestFunction(EPS,EPSStoppingTestFn*,PetscCtx,PetscCtxDestroyFn*);
 
-SLEPC_EXTERN PetscErrorCode EPSSetEigenvalueComparison(EPS,SlepcEigenvalueComparisonFn*,void*);
-SLEPC_EXTERN PetscErrorCode EPSSetArbitrarySelection(EPS,SlepcArbitrarySelectionFn*,void*);
+SLEPC_EXTERN PetscErrorCode EPSSetEigenvalueComparison(EPS,SlepcEigenvalueComparisonFn*,PetscCtx);
+SLEPC_EXTERN PetscErrorCode EPSSetArbitrarySelection(EPS,SlepcArbitrarySelectionFn*,PetscCtx);
 SLEPC_EXTERN PetscErrorCode EPSSetArbitrarySelectionContextDestroy(EPS,PetscCtxDestroyFn*);
 
 /* --------- options specific to particular eigensolvers -------- */

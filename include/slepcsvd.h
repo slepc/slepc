@@ -449,7 +449,7 @@ SLEPC_EXTERN PetscErrorCode SVDGetTrackAll(SVD,PetscBool*);
 
 .seealso: [](ch:svd), `SVDMonitorSet()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal sigma[],PetscReal errest[],PetscInt nest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorFn(SVD svd,PetscInt its,PetscInt nconv,PetscReal sigma[],PetscReal errest[],PetscInt nest,PetscCtx ctx);
 
 /*S
    SVDMonitorRegisterFn - A function prototype for functions provided to `SVDMonitorRegister()`.
@@ -486,7 +486,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterFn(SVD svd,PetscIn
 
 .seealso: [](ch:svd), `SVDMonitorRegisterFn`, `SVDMonitorSet()`, `SVDMonitorRegister()`, `SVDMonitorFn`, `SVDMonitorRegisterDestroyFn`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,PetscCtx ctx,PetscViewerAndFormat **result);
 
 /*S
    SVDMonitorRegisterDestroyFn - A function prototype for functions that do the after
@@ -502,11 +502,11 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
 SLEPC_EXTERN PetscErrorCode SVDMonitor(SVD,PetscInt,PetscInt,PetscReal[],PetscReal[],PetscInt);
-SLEPC_EXTERN PetscErrorCode SVDMonitorSet(SVD,SVDMonitorFn,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode SVDMonitorSet(SVD,SVDMonitorFn,PetscCtx,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode SVDMonitorCancel(SVD);
 SLEPC_EXTERN PetscErrorCode SVDGetMonitorContext(SVD,PetscCtxRt);
 
-SLEPC_EXTERN PetscErrorCode SVDMonitorSetFromOptions(SVD,const char[],const char[],void*,PetscBool);
+SLEPC_EXTERN PetscErrorCode SVDMonitorSetFromOptions(SVD,const char[],const char[],PetscCtx,PetscBool);
 SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorFirst;
 SLEPC_EXTERN SVDMonitorRegisterFn        SVDMonitorFirstDrawLG;
 SLEPC_EXTERN SVDMonitorRegisterCreateFn  SVDMonitorFirstDrawLGCreate;
@@ -544,7 +544,7 @@ SLEPC_EXTERN PetscErrorCode SVDReallocateSolution(SVD,PetscInt);
 
 .seealso: [](ch:svd), `SVDSetConvergenceTest()`, `SVDSetConvergenceTestFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDConvergenceTestFn(SVD svd,PetscReal sigma,PetscReal res,PetscReal *errest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDConvergenceTestFn(SVD svd,PetscReal sigma,PetscReal res,PetscReal *errest,PetscCtx ctx);
 
 SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTest(SVD,SVDConv);
 SLEPC_EXTERN PetscErrorCode SVDGetConvergenceTest(SVD,SVDConv*);
@@ -552,7 +552,7 @@ SLEPC_EXTERN SVDConvergenceTestFn SVDConvergedAbsolute;
 SLEPC_EXTERN SVDConvergenceTestFn SVDConvergedRelative;
 SLEPC_EXTERN SVDConvergenceTestFn SVDConvergedNorm;
 SLEPC_EXTERN SVDConvergenceTestFn SVDConvergedMaxIt;
-SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTestFunction(SVD,SVDConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTestFunction(SVD,SVDConvergenceTestFn*,PetscCtx,PetscCtxDestroyFn*);
 
 /*S
    SVDStoppingTestFn - A prototype of an `SVD` stopping test function that would
@@ -577,13 +577,13 @@ SLEPC_EXTERN PetscErrorCode SVDSetConvergenceTestFunction(SVD,SVDConvergenceTest
 
 .seealso: [](ch:svd), `SVDSetStoppingTest()`, `SVDSetStoppingTestFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDStoppingTestFn(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SVDStoppingTestFn(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,PetscCtx ctx);
 
 SLEPC_EXTERN PetscErrorCode SVDSetStoppingTest(SVD,SVDStop);
 SLEPC_EXTERN PetscErrorCode SVDGetStoppingTest(SVD,SVDStop*);
 SLEPC_EXTERN SVDStoppingTestFn SVDStoppingBasic;
 SLEPC_EXTERN SVDStoppingTestFn SVDStoppingThreshold;
-SLEPC_EXTERN PetscErrorCode SVDSetStoppingTestFunction(SVD,SVDStoppingTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode SVDSetStoppingTestFunction(SVD,SVDStoppingTestFn*,PetscCtx,PetscCtxDestroyFn*);
 
 /* --------- options specific to particular solvers -------- */
 
