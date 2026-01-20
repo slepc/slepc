@@ -36,7 +36,7 @@ int main(int argc,char **argv)
   PetscScalar    a,b,c,d;
   PetscReal      lev;
   PetscInt       n=24,Istart,Iend,i,nconv;
-  PetscBool      terse,checkorthog;
+  PetscBool      terse,checkorthog,nest=PETSC_FALSE;
   Vec            t,*x,*y;
 
   PetscFunctionBeginUser;
@@ -90,6 +90,10 @@ int main(int argc,char **argv)
   PetscCall(MatAssemblyEnd(C,MAT_FINAL_ASSEMBLY));
 
   PetscCall(MatCreateBSE(R,C,&H));
+
+  /* if you prefer, set the vector type so that MatCreateVecs() returns nested vectors */
+  PetscCall(PetscOptionsGetBool(NULL,NULL,"-nest",&nest,NULL));
+  if (nest) PetscCall(MatNestSetVecType(H,VECNEST));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 Create the eigensolver and set various options
@@ -146,7 +150,7 @@ int main(int argc,char **argv)
 /*TEST
 
    testset:
-      args: -eps_nev 4 -eps_ncv 16 -eps_krylovschur_bse_type {{shao gruning projectedbse}} -terse -checkorthog
+      args: -eps_nev 4 -eps_ncv 16 -eps_krylovschur_bse_type {{shao gruning projectedbse}} -terse -checkorthog -nest {{0 1}}
       filter: sed -e "s/17496/17495/g" | sed -e "s/38566/38567/g" | sed -e "s/32172/32173/g"
       nsize: {{1 2}}
       test:

@@ -289,7 +289,7 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
     if (eps->reason != EPS_CONVERGED_ITERATING) break;
 
     /* Compute nxtsrr (iteration of next projection step) */
-    nxtsrr = PetscMin(eps->max_it,PetscMax((PetscInt)PetscFloorReal(stpfac*its),init));
+    nxtsrr = PetscMax((PetscInt)PetscFloorReal(stpfac*its),init);
 
     if (ngrp!=nogrp || ngrp==0 || arsd>=oarsd) {
       idsrr = nxtsrr - its;

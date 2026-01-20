@@ -416,6 +416,9 @@ PetscErrorCode EPSGetInvariantSubspace(EPS eps,Vec v[])
    Hermitian. In this case the eigenvector is normalized with respect to the
    norm defined by the $B$ matrix.
 
+   In case of structured eigenproblems such as `EPS_BSE`, see the discussion about
+   [](#sec:structured-vectors).
+
    Level: beginner
 
 .seealso: [](ch:eps), `EPSGetEigenvalue()`, `EPSGetEigenvector()`, `EPSGetLeftEigenvector()`, `EPSSolve()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetInvariantSubspace()`
@@ -554,6 +557,9 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
    Hermitian. In this case the eigenvector is normalized with respect to the
    norm defined by the $B$ matrix.
 
+   In case of structured eigenproblems such as `EPS_BSE`, see the discussion about
+   [](#sec:structured-vectors).
+
    Level: beginner
 
 .seealso: [](ch:eps), `EPSSolve()`, `EPSGetConverged()`, `EPSSetWhichEigenpairs()`, `EPSGetEigenpair()`, `EPSGetLeftEigenvector()`
@@ -604,6 +610,9 @@ PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
 
    Left eigenvectors are available only if the `twosided` flag was set, see
    `EPSSetTwoSided()`.
+
+   In case of structured eigenproblems such as `EPS_BSE`, see the discussion about
+   [](#sec:structured-vectors).
 
    Level: intermediate
 
