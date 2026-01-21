@@ -45,12 +45,13 @@ program ex22f
   FN             :: f1, f2, f3, funs(3)   ! functions to define the nonlinear operator
   NEP            :: nep                   ! nonlinear eigensolver context
   NEPType        :: tname
-  PetscScalar    :: one, bb, coeffs(2), scal
+  PetscScalar    :: bb, coeffs(2), scal
   PetscReal      :: tau, h, aa, xi, tol
-  PetscInt       :: n, i, k, nev, Istart, Iend
+  PetscInt       :: n, i, nev, Istart, Iend
   PetscMPIInt    :: rank
   PetscErrorCode :: ierr
   PetscBool      :: flg, terse
+  PetscScalar, parameter :: one = 1.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -66,7 +67,6 @@ program ex22f
     write (*, '(/a,i4,a,f6.3)') 'Delay Eigenproblem, n =', n, ', tau =', tau
   end if
 
-  one = 1.0
   aa = 20.0
   h = PETSC_PI/real(n + 1)
 
@@ -118,16 +118,14 @@ program ex22f
 
   PetscCallA(FNCreate(PETSC_COMM_WORLD, f1, ierr))
   PetscCallA(FNSetType(f1, FNRATIONAL, ierr))
-  k = 2
   coeffs(1) = -1.0
   coeffs(2) = 0.0
-  PetscCallA(FNRationalSetNumerator(f1, k, coeffs, ierr))
+  PetscCallA(FNRationalSetNumerator(f1, 2_PETSC_INT_KIND, coeffs, ierr))
 
   PetscCallA(FNCreate(PETSC_COMM_WORLD, f2, ierr))
   PetscCallA(FNSetType(f2, FNRATIONAL, ierr))
-  k = 1
   coeffs(1) = 1.0
-  PetscCallA(FNRationalSetNumerator(f2, k, coeffs, ierr))
+  PetscCallA(FNRationalSetNumerator(f2, 1_PETSC_INT_KIND, coeffs, ierr))
 
   PetscCallA(FNCreate(PETSC_COMM_WORLD, f3, ierr))
   PetscCallA(FNSetType(f3, FNEXP, ierr))
@@ -143,14 +141,13 @@ program ex22f
 
 ! ** Set the split operator. Note that A is passed first so that
 ! ** SUBSET_NONZERO_PATTERN can be used
-  k = 3
   mats(1) = A
   mats(2) = Id
   mats(3) = B
   funs(1) = f2
   funs(2) = f1
   funs(3) = f3
-  PetscCallA(NEPSetSplitOperator(nep, k, mats, funs, SUBSET_NONZERO_PATTERN, ierr))
+  PetscCallA(NEPSetSplitOperator(nep, 3_PETSC_INT_KIND, mats, funs, SUBSET_NONZERO_PATTERN, ierr))
   PetscCallA(NEPSetProblemType(nep, NEP_GENERAL, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -159,10 +156,8 @@ program ex22f
 
   tol = 1e-9
   PetscCallA(NEPSetTolerances(nep, tol, PETSC_CURRENT_INTEGER, ierr))
-  k = 1
-  PetscCallA(NEPSetDimensions(nep, k, PETSC_DETERMINE_INTEGER, PETSC_DETERMINE_INTEGER, ierr))
-  k = 0
-  PetscCallA(NEPRIISetLagPreconditioner(nep, k, ierr))
+  PetscCallA(NEPSetDimensions(nep, 1_PETSC_INT_KIND, PETSC_DETERMINE_INTEGER, PETSC_DETERMINE_INTEGER, ierr))
+  PetscCallA(NEPRIISetLagPreconditioner(nep, 0_PETSC_INT_KIND, ierr))
 
 ! ** Set solver parameters at runtime
   PetscCallA(NEPSetFromOptions(nep, ierr))

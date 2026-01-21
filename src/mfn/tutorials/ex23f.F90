@@ -39,6 +39,7 @@ program ex23f
   PetscErrorCode     :: ierr
   PetscBool          :: flg
   MFNConvergedReason :: reason
+  PetscScalar, parameter :: one = 1.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -127,8 +128,7 @@ program ex23f
   PetscCallA(MFNSetOperator(mfn, A, ierr))
   PetscCallA(MFNGetFN(mfn, f, ierr))
   PetscCallA(FNSetType(f, FNEXP, ierr))
-  z = 1.0
-  PetscCallA(FNSetScale(f, t, z, ierr))
+  PetscCallA(FNSetScale(f, t, one, ierr))
   tol = 0.0000001
   PetscCallA(MFNSetTolerances(mfn, tol, PETSC_CURRENT_INTEGER, ierr))
 

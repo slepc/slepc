@@ -50,8 +50,8 @@ contains
     PetscScalar           :: lambda
     Mat                   :: T, P
     PetscInt              :: ctx
-    PetscErrorCode        :: ierr
     type(MatCtx), pointer :: ctxT
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(MatShellGetContext(T, ctxT, ierr))
     ctxT%lambda = lambda
@@ -69,8 +69,8 @@ contains
     PetscScalar           :: lambda
     Mat                   :: T
     PetscInt              :: ctx
-    PetscErrorCode        :: ierr
     type(MatCtx), pointer :: ctxT
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(MatShellGetContext(T, ctxT, ierr))
     ctxT%lambda = lambda
@@ -86,15 +86,14 @@ contains
 
     Mat                   :: A
     Vec                   :: x, y
-    PetscErrorCode        :: ierr
     PetscInt              :: i, istart, iend
     PetscScalar           :: val
     type(MatCtx), pointer :: ctxA
+    PetscErrorCode, intent(out) :: ierr
 !
     PetscCall(VecGetOwnershipRange(x, istart, iend, ierr))
     do i = istart, iend - 1
-      val = i + 1
-      val = 1.0/val
+      val = 1.0/real(i + 1)
       PetscCall(VecSetValue(y, i, val, INSERT_VALUES, ierr))
     end do
     PetscCall(VecAssemblyBegin(y, ierr))
@@ -113,9 +112,9 @@ contains
 
     Mat                   :: A, M
     MatDuplicateOption    :: opt
-    PetscErrorCode        :: ierr
     PetscInt              :: ml, nl
     type(MatCtx), pointer :: ctxM, ctxA
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(MatGetLocalSize(A, ml, nl, ierr))
     PetscCall(MatShellGetContext(A, ctxA, ierr))
@@ -134,8 +133,8 @@ contains
     implicit none
 
     Mat                   :: A
-    PetscErrorCode        :: ierr
     type(MatCtx), pointer :: ctxA
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(MatShellGetContext(A, ctxA, ierr))
     deallocate (ctxA)
@@ -152,11 +151,10 @@ contains
     Mat            :: B
     Vec            :: x
     Vec            :: y
-    PetscErrorCode :: ierr
-    PetscScalar    :: mone
+    PetscErrorCode, intent(out) :: ierr
+    PetscScalar, parameter :: mone = -1.0
 
     PetscCall(VecCopy(x, y, ierr))
-    mone = -1.0
     PetscCall(VecScale(y, mone, ierr))
   end subroutine MatMult_B
 

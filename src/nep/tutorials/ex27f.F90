@@ -38,13 +38,9 @@ contains
     NEP            :: nep
     PetscScalar    :: lambda, val(0:2), t
     Mat            :: fun, B
-    PetscInt       :: ctx, i, n, col(0:2), Istart, Iend, Istart0, Iend0, one, two, three
-    PetscErrorCode :: ierr
+    PetscInt       :: ctx, i, n, col(0:2), Istart, Iend, Istart0, Iend0
     PetscBool      :: FirstBlock = PETSC_FALSE, LastBlock = PETSC_FALSE
-
-    one = 1
-    two = 2
-    three = 3
+    PetscErrorCode, intent(out) :: ierr
 
     ! ** Compute Function entries and insert into matrix
     t = sqrt(lambda)
@@ -65,7 +61,7 @@ contains
       col(0) = i - 1
       col(1) = i
       col(2) = i + 1
-      PetscCall(MatSetValues(fun, one, [i], three, col, val, INSERT_VALUES, ierr))
+      PetscCall(MatSetValues(fun, 1_PETSC_INT_KIND, [i], 3_PETSC_INT_KIND, col, val, INSERT_VALUES, ierr))
     end do
 
     if (LastBlock) then
@@ -74,7 +70,7 @@ contains
       col(1) = n - 1
       val(0) = 1.0
       val(1) = t - 2.0
-      PetscCall(MatSetValues(fun, one, [i], two, col, val, INSERT_VALUES, ierr))
+      PetscCall(MatSetValues(fun, 1_PETSC_INT_KIND, [i], 2_PETSC_INT_KIND, col, val, INSERT_VALUES, ierr))
     end if
 
     if (FirstBlock) then
@@ -83,7 +79,7 @@ contains
       col(1) = 1
       val(0) = t - 2.0
       val(1) = 1.0
-      PetscCall(MatSetValues(fun, one, [i], two, col, val, INSERT_VALUES, ierr))
+      PetscCall(MatSetValues(fun, 1_PETSC_INT_KIND, [i], 2_PETSC_INT_KIND, col, val, INSERT_VALUES, ierr))
     end if
 
     ! ** Assemble matrix
@@ -105,8 +101,8 @@ contains
     PetscScalar    :: lambda, t
     Mat            :: jac
     PetscInt       :: ctx
-    PetscErrorCode :: ierr
     Vec            :: d
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(MatCreateVecs(jac, d, PETSC_NULL_VEC, ierr))
     t = 0.5/sqrt(lambda)
@@ -135,9 +131,9 @@ contains
     NEP            :: nep
     PetscInt       :: maxnp, dummy
     PetscScalar    :: xi(0:maxnp - 1)
-    PetscErrorCode :: ierr
     PetscReal      :: h
     PetscInt       :: i
+    PetscErrorCode, intent(out) :: ierr
 
     h = 11.0/real(maxnp - 1)
     xi(0) = -1e-5
@@ -163,14 +159,15 @@ program ex27f
   NEP                :: nep
   Mat                :: A(2), F, J
   NEPType            :: ntype
-  PetscInt           :: n = 100, nev, Istart, Iend, i, col, one, two, three
+  PetscInt           :: n = 100, nev, Istart, Iend, i, col
   PetscErrorCode     :: ierr
   PetscBool          :: terse, flg, split = PETSC_TRUE
   PetscReal          :: ia, ib, ic, id
   RG                 :: rg
   FN                 :: fn(2)
-  PetscScalar        :: coeffs, sigma, done
+  PetscScalar        :: coeffs, sigma
   character(len=128) :: string
+  PetscScalar, parameter :: one = 1.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -185,10 +182,6 @@ program ex27f
     write (string, *) 'Square root eigenproblem, n=', n, '\n'
   end if
   PetscCallA(PetscPrintf(PETSC_COMM_WORLD, trim(string), ierr))
-  done = 1.0
-  one = 1
-  two = 2
-  three = 3
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Create nonlinear eigensolver context and set options
@@ -226,40 +219,40 @@ program ex27f
     do i = Istart, Iend - 1
       if (i > 0) then
         col = i - 1
-        PetscCallA(MatSetValue(A(1), i, col, done, INSERT_VALUES, ierr))
+        PetscCallA(MatSetValue(A(1), i, col, one, INSERT_VALUES, ierr))
       end if
       if (i < n - 1) then
         col = i + 1
-        PetscCallA(MatSetValue(A(1), i, col, done, INSERT_VALUES, ierr))
+        PetscCallA(MatSetValue(A(1), i, col, one, INSERT_VALUES, ierr))
       end if
       PetscCallA(MatSetValue(A(1), i, i, coeffs, INSERT_VALUES, ierr))
     end do
     PetscCallA(MatAssemblyBegin(A(1), MAT_FINAL_ASSEMBLY, ierr))
     PetscCallA(MatAssemblyEnd(A(1), MAT_FINAL_ASSEMBLY, ierr))
 
-    PetscCallA(MatCreateConstantDiagonal(PETSC_COMM_WORLD, PETSC_DECIDE, PETSC_DECIDE, n, n, done, A(2), ierr))
+    PetscCallA(MatCreateConstantDiagonal(PETSC_COMM_WORLD, PETSC_DECIDE, PETSC_DECIDE, n, n, one, A(2), ierr))
 
     ! ** Define functions for the split form
     PetscCallA(FNCreate(PETSC_COMM_WORLD, fn(1), ierr))
     PetscCallA(FNSetType(fn(1), FNRATIONAL, ierr))
-    PetscCallA(FNRationalSetNumerator(fn(1), one, [done], ierr))
+    PetscCallA(FNRationalSetNumerator(fn(1), 1_PETSC_INT_KIND, [one], ierr))
     PetscCallA(FNCreate(PETSC_COMM_WORLD, fn(2), ierr))
     PetscCallA(FNSetType(fn(2), FNSQRT, ierr))
-    PetscCallA(NEPSetSplitOperator(nep, two, A, fn, SUBSET_NONZERO_PATTERN, ierr))
+    PetscCallA(NEPSetSplitOperator(nep, 2_PETSC_INT_KIND, A, fn, SUBSET_NONZERO_PATTERN, ierr))
   else
     ! ** Callback form: create matrix and set Function evaluation routine
     PetscCallA(MatCreate(PETSC_COMM_WORLD, F, ierr))
     PetscCallA(MatSetSizes(F, PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
     PetscCallA(MatSetFromOptions(F, ierr))
-    PetscCallA(MatSeqAIJSetPreallocation(F, three, PETSC_NULL_INTEGER_ARRAY, ierr))
-    PetscCallA(MatMPIAIJSetPreallocation(F, three, PETSC_NULL_INTEGER_ARRAY, one, PETSC_NULL_INTEGER_ARRAY, ierr))
+    PetscCallA(MatSeqAIJSetPreallocation(F, 3_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, ierr))
+    PetscCallA(MatMPIAIJSetPreallocation(F, 3_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, 1_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, ierr))
     PetscCallA(NEPSetFunction(nep, F, F, FormFunction, PETSC_NULL_INTEGER, ierr))
 
     PetscCallA(MatCreate(PETSC_COMM_WORLD, J, ierr))
     PetscCallA(MatSetSizes(J, PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
     PetscCallA(MatSetFromOptions(J, ierr))
-    PetscCallA(MatSeqAIJSetPreallocation(J, one, PETSC_NULL_INTEGER_ARRAY, ierr))
-    PetscCallA(MatMPIAIJSetPreallocation(J, one, PETSC_NULL_INTEGER_ARRAY, one, PETSC_NULL_INTEGER_ARRAY, ierr))
+    PetscCallA(MatSeqAIJSetPreallocation(J, 1_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, ierr))
+    PetscCallA(MatMPIAIJSetPreallocation(J, 1_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, 1_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, ierr))
     PetscCallA(NEPSetJacobian(nep, J, FormJacobian, PETSC_NULL_INTEGER, ierr))
   end if
 

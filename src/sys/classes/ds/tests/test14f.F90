@@ -27,7 +27,7 @@ program test14f
 
   Mat                  :: A   ! problem matrix
   DS                   :: ds  ! dense solver context
-  PetscInt             :: n, i, ld, zero
+  PetscInt             :: n, i, ld
   PetscMPIInt          :: rank
   PetscErrorCode       :: ierr
   PetscBool            :: flg
@@ -39,7 +39,6 @@ program test14f
 ! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  zero = 0
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 10
@@ -59,7 +58,7 @@ program test14f
   PetscCallA(DSSetFromOptions(ds, ierr))
   ld = n
   PetscCallA(DSAllocate(ds, ld, ierr))
-  PetscCallA(DSSetDimensions(ds, n, zero, zero, ierr))
+  PetscCallA(DSSetDimensions(ds, n, 0_PETSC_INT_KIND, 0_PETSC_INT_KIND, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Fill with Grcar matrix

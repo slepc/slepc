@@ -127,17 +127,16 @@ contains
 
     Mat                  :: A
     Vec                  :: x, y
-    PetscInt             :: trans, one, N
+    PetscInt             :: trans, N
     PetscScalar, pointer :: xx(:), yy(:)
-    PetscErrorCode       :: ierr
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(MatGetSize(A, N, PETSC_NULL_INTEGER, ierr))
     PetscCall(VecGetArrayRead(x, xx, ierr))
     PetscCall(VecGetArray(y, yy, ierr))
 
     trans = 0
-    one = 1
-    call mvmisg(trans, N, one, xx, N, yy, N)
+    call mvmisg(trans, N, 1_PETSC_INT_KIND, xx, N, yy, N)
 
     PetscCall(VecRestoreArrayRead(x, xx, ierr))
     PetscCall(VecRestoreArray(y, yy, ierr))
@@ -159,17 +158,16 @@ contains
 
     Mat                  :: A
     Vec                  :: x, y
-    PetscInt             :: trans, one, N
+    PetscInt             :: trans, N
     PetscScalar, pointer :: xx(:), yy(:)
-    PetscErrorCode       :: ierr
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(MatGetSize(A, N, PETSC_NULL_INTEGER, ierr))
     PetscCall(VecGetArrayRead(x, xx, ierr))
     PetscCall(VecGetArray(y, yy, ierr))
 
     trans = 1
-    one = 1
-    call mvmisg(trans, N, one, xx, N, yy, N)
+    call mvmisg(trans, N, 1_PETSC_INT_KIND, xx, N, yy, N)
 
     PetscCall(VecRestoreArrayRead(x, xx, ierr))
     PetscCall(VecRestoreArray(y, yy, ierr))

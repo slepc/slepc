@@ -43,8 +43,8 @@ contains
     Mat            :: fun, B
     type(User)     :: ctx
     PetscReal      :: h
-    PetscInt       :: i, n, j(3), Istart, Iend, one, two, three
-    PetscErrorCode :: ierr
+    PetscInt       :: i, n, j(3), Istart, Iend
+    PetscErrorCode, intent(out) :: ierr
 
 !   ** Compute Function entries and insert into matrix
     PetscCall(MatGetSize(fun, n, PETSC_NULL_INTEGER, ierr))
@@ -52,9 +52,6 @@ contains
     h = ctx%h
     c = ctx%kappa/(lambda - ctx%kappa)
     d = n
-    one = 1
-    two = 2
-    three = 3
 
 !   ** Boundary points
     if (Istart == 0) then
@@ -63,7 +60,7 @@ contains
       j(2) = 1
       A(1) = 2.0*(d - lambda*h/3.0)
       A(2) = -d - lambda*h/6.0
-      PetscCall(MatSetValues(fun, one, [i], two, j, A, INSERT_VALUES, ierr))
+      PetscCall(MatSetValues(fun, 1_PETSC_INT_KIND, [i], 2_PETSC_INT_KIND, j, A, INSERT_VALUES, ierr))
       Istart = Istart + 1
     end if
 
@@ -73,7 +70,7 @@ contains
       j(2) = n - 1
       A(1) = -d - lambda*h/6.0
       A(2) = d - lambda*h/3.0 + lambda*c
-      PetscCall(MatSetValues(fun, one, [i], two, j, A, INSERT_VALUES, ierr))
+      PetscCall(MatSetValues(fun, 1_PETSC_INT_KIND, [i], 2_PETSC_INT_KIND, j, A, INSERT_VALUES, ierr))
       Iend = Iend - 1
     end if
 
@@ -85,7 +82,7 @@ contains
       A(1) = -d - lambda*h/6.0
       A(2) = 2.0*(d - lambda*h/3.0)
       A(3) = -d - lambda*h/6.0
-      PetscCall(MatSetValues(fun, one, [i], three, j, A, INSERT_VALUES, ierr))
+      PetscCall(MatSetValues(fun, 1_PETSC_INT_KIND, [i], 3_PETSC_INT_KIND, j, A, INSERT_VALUES, ierr))
     end do
 
 !   ** Assemble matrix
@@ -103,17 +100,14 @@ contains
     Mat            :: jac
     type(User)     :: ctx
     PetscReal      :: h
-    PetscInt       :: i, n, j(3), Istart, Iend, one, two, three
-    PetscErrorCode :: ierr
+    PetscInt       :: i, n, j(3), Istart, Iend
+    PetscErrorCode, intent(out) :: ierr
 
 !   ** Compute Jacobian entries and insert into matrix
     PetscCall(MatGetSize(jac, n, PETSC_NULL_INTEGER, ierr))
     PetscCall(MatGetOwnershipRange(jac, Istart, Iend, ierr))
     h = ctx%h
     c = ctx%kappa/(lambda - ctx%kappa)
-    one = 1
-    two = 2
-    three = 3
 
 !   ** Boundary points
     if (Istart == 0) then
@@ -122,7 +116,7 @@ contains
       j(2) = 1
       A(1) = -2.0*h/3.0
       A(2) = -h/6.0
-      PetscCall(MatSetValues(jac, one, [i], two, j, A, INSERT_VALUES, ierr))
+      PetscCall(MatSetValues(jac, 1_PETSC_INT_KIND, [i], 2_PETSC_INT_KIND, j, A, INSERT_VALUES, ierr))
       Istart = Istart + 1
     end if
 
@@ -132,7 +126,7 @@ contains
       j(2) = n - 1
       A(1) = -h/6.0
       A(2) = -h/3.0 - c*c
-      PetscCall(MatSetValues(jac, one, [i], two, j, A, INSERT_VALUES, ierr))
+      PetscCall(MatSetValues(jac, 1_PETSC_INT_KIND, [i], 2_PETSC_INT_KIND, j, A, INSERT_VALUES, ierr))
       Iend = Iend - 1
     end if
 
@@ -144,7 +138,7 @@ contains
       A(1) = -h/6.0
       A(2) = -2.0*h/3.0
       A(3) = -h/6.0
-      PetscCall(MatSetValues(jac, one, [i], three, j, A, INSERT_VALUES, ierr))
+      PetscCall(MatSetValues(jac, 1_PETSC_INT_KIND, [i], 3_PETSC_INT_KIND, j, A, INSERT_VALUES, ierr))
     end do
 
 !   ** Assemble matrix
@@ -164,17 +158,17 @@ program ex20f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   NEP            :: nep      ! nonlinear eigensolver
-  Vec            :: x, v(1)  ! eigenvector, auxiliary vector
+  Vec            :: x, v     ! eigenvector, auxiliary vector
   PetscScalar    :: lambda   ! eigenvalue
   Mat            :: F, J     ! Function and Jacobian matrices
   type(User)     :: ctx      ! user-defined context
   NEPType        :: tname
-  PetscInt       :: n, i, k, nev, its, maxit, nconv, three, one
+  PetscInt       :: n, i, nev, its, maxit, nconv
   PetscReal      :: tol, norm
-  PetscScalar    :: alpha
   PetscMPIInt    :: rank
   PetscBool      :: flg
   PetscErrorCode :: ierr
+  PetscScalar, parameter :: one = 1.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -191,9 +185,6 @@ program ex20f
   ctx%h = 1.0/real(n)
   ctx%kappa = 1.0
 
-  three = 3
-  one = 1
-
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Create matrix data structure to hold the Function and the Jacobian
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -201,14 +192,14 @@ program ex20f
   PetscCallA(MatCreate(PETSC_COMM_WORLD, F, ierr))
   PetscCallA(MatSetSizes(F, PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
   PetscCallA(MatSetFromOptions(F, ierr))
-  PetscCallA(MatSeqAIJSetPreallocation(F, three, PETSC_NULL_INTEGER_ARRAY, ierr))
-  PetscCallA(MatMPIAIJSetPreallocation(F, three, PETSC_NULL_INTEGER_ARRAY, one, PETSC_NULL_INTEGER_ARRAY, ierr))
+  PetscCallA(MatSeqAIJSetPreallocation(F, 3_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, ierr))
+  PetscCallA(MatMPIAIJSetPreallocation(F, 3_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, 1_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, ierr))
 
   PetscCallA(MatCreate(PETSC_COMM_WORLD, J, ierr))
   PetscCallA(MatSetSizes(J, PETSC_DECIDE, PETSC_DECIDE, n, n, ierr))
   PetscCallA(MatSetFromOptions(J, ierr))
-  PetscCallA(MatSeqAIJSetPreallocation(J, three, PETSC_NULL_INTEGER_ARRAY, ierr))
-  PetscCallA(MatMPIAIJSetPreallocation(J, three, PETSC_NULL_INTEGER_ARRAY, one, PETSC_NULL_INTEGER_ARRAY, ierr))
+  PetscCallA(MatSeqAIJSetPreallocation(J, 3_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, ierr))
+  PetscCallA(MatMPIAIJSetPreallocation(J, 3_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, 1_PETSC_INT_KIND, PETSC_NULL_INTEGER_ARRAY, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Create the eigensolver and set various options
@@ -224,8 +215,7 @@ program ex20f
 ! ** Customize nonlinear solver
   tol = 1e-9
   PetscCallA(NEPSetTolerances(nep, tol, PETSC_CURRENT_INTEGER, ierr))
-  k = 1
-  PetscCallA(NEPSetDimensions(nep, k, PETSC_DETERMINE_INTEGER, PETSC_DETERMINE_INTEGER, ierr))
+  PetscCallA(NEPSetDimensions(nep, 1_PETSC_INT_KIND, PETSC_DETERMINE_INTEGER, PETSC_DETERMINE_INTEGER, ierr))
 
 ! ** Set solver parameters at runtime
   PetscCallA(NEPSetFromOptions(nep, ierr))
@@ -236,12 +226,10 @@ program ex20f
 
 ! ** Evaluate initial guess
   PetscCallA(MatCreateVecs(F, x, PETSC_NULL_VEC, ierr))
-  PetscCallA(VecDuplicate(x, v(1), ierr))
-  alpha = 1.0
-  PetscCallA(VecSet(v(1), alpha, ierr))
-  k = 1
-  PetscCallA(NEPSetInitialSpace(nep, k, v, ierr))
-  PetscCallA(VecDestroy(v(1), ierr))
+  PetscCallA(VecDuplicate(x, v, ierr))
+  PetscCallA(VecSet(v, one, ierr))
+  PetscCallA(NEPSetInitialSpace(nep, 1_PETSC_INT_KIND, [v], ierr))
+  PetscCallA(VecDestroy(v, ierr))
 
 ! ** Call the solver
   PetscCallA(NEPSolve(nep, ierr))

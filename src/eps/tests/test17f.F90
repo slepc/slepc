@@ -28,7 +28,7 @@ program test17f
   KSP            :: ksp
   PC             :: pc
   Vec            :: v
-  PetscScalar    :: value
+  PetscScalar    :: val, eval
   PetscInt       :: n, m, i, j, k, Istart, Iend
   PetscInt       :: nev, ncv, mpd, nval
   PetscInt       :: row, col, nloc, nlocs, mlocs
@@ -37,9 +37,9 @@ program test17f
   PetscMPIInt    :: nprc, rank
   PetscReal      :: int0, int1, keep, subint(MAXSUB)
   PetscReal      :: shifts(MAXSHI)
-  PetscScalar    :: eval, one, mone, zero
   PetscErrorCode :: ierr
   MPIU_Comm      :: comm
+  PetscScalar, parameter :: one = 1.0, mone = -1.0, zero = 0.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -65,47 +65,47 @@ program test17f
   do II = Istart, Iend - 1
     i = II/n
     j = II - i*n
-    value = -1.0
+    val = -1.0
     row = II
     if (i > 0) then
       col = II - n
-      PetscCallA(MatSetValue(A, row, col, value, INSERT_VALUES, ierr))
+      PetscCallA(MatSetValue(A, row, col, val, INSERT_VALUES, ierr))
     end if
     if (i < n - 1) then
       col = II + n
-      PetscCallA(MatSetValue(A, row, col, value, INSERT_VALUES, ierr))
+      PetscCallA(MatSetValue(A, row, col, val, INSERT_VALUES, ierr))
     end if
     if (j > 0) then
       col = II - 1
-      PetscCallA(MatSetValue(A, row, col, value, INSERT_VALUES, ierr))
+      PetscCallA(MatSetValue(A, row, col, val, INSERT_VALUES, ierr))
     end if
     if (j < n - 1) then
       col = II + 1
-      PetscCallA(MatSetValue(A, row, col, value, INSERT_VALUES, ierr))
+      PetscCallA(MatSetValue(A, row, col, val, INSERT_VALUES, ierr))
     end if
     col = II
-    value = 4.0
-    PetscCallA(MatSetValue(A, row, col, value, INSERT_VALUES, ierr))
-    value = 2.0
-    PetscCallA(MatSetValue(B, row, col, value, INSERT_VALUES, ierr))
+    val = 4.0
+    PetscCallA(MatSetValue(A, row, col, val, INSERT_VALUES, ierr))
+    val = 2.0
+    PetscCallA(MatSetValue(B, row, col, val, INSERT_VALUES, ierr))
   end do
   if (Istart == 0) then
     row = 0
     col = 0
-    value = 6.0
-    PetscCallA(MatSetValue(B, row, col, value, INSERT_VALUES, ierr))
+    val = 6.0
+    PetscCallA(MatSetValue(B, row, col, val, INSERT_VALUES, ierr))
     row = 0
     col = 1
-    value = -1.0
-    PetscCallA(MatSetValue(B, row, col, value, INSERT_VALUES, ierr))
+    val = -1.0
+    PetscCallA(MatSetValue(B, row, col, val, INSERT_VALUES, ierr))
     row = 1
     col = 0
-    value = -1.0
-    PetscCallA(MatSetValue(B, row, col, value, INSERT_VALUES, ierr))
+    val = -1.0
+    PetscCallA(MatSetValue(B, row, col, val, INSERT_VALUES, ierr))
     row = 1
     col = 1
-    value = 1.0
-    PetscCallA(MatSetValue(B, row, col, value, INSERT_VALUES, ierr))
+    val = 1.0
+    PetscCallA(MatSetValue(B, row, col, val, INSERT_VALUES, ierr))
   end if
   PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))
   PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
@@ -244,14 +244,11 @@ program test17f
     PetscCallA(MatSetFromOptions(Au, ierr))
     PetscCallA(MatGetOwnershipRange(Au, Istart, Iend, ierr))
     do II = Istart, Iend - 1
-      value = 0.5
-      PetscCallA(MatSetValue(Au, II, II, value, INSERT_VALUES, ierr))
+      val = 0.5
+      PetscCallA(MatSetValue(Au, II, II, val, INSERT_VALUES, ierr))
     end do
     PetscCallA(MatAssemblyBegin(Au, MAT_FINAL_ASSEMBLY, ierr))
     PetscCallA(MatAssemblyEnd(Au, MAT_FINAL_ASSEMBLY, ierr))
-    one = 1.0
-    mone = -1.0
-    zero = 0.0
     PetscCallA(EPSKrylovSchurUpdateSubcommMats(eps, one, mone, Au, zero, zero, PETSC_NULL_MAT, DIFFERENT_NONZERO_PATTERN, PETSC_TRUE, ierr))
     PetscCallA(MatDestroy(Au, ierr))
   end if

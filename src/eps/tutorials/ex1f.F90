@@ -30,7 +30,7 @@ program ex1f
   Mat            :: A    ! operator matrix
   EPS            :: eps  ! eigenproblem solver context
   EPSType        :: tname
-  PetscInt       :: n, i, Istart, Iend, one, two, three
+  PetscInt       :: n, i, Istart, Iend
   PetscInt       :: nev
   PetscInt       :: row(1), col(3)
   PetscMPIInt    :: rank
@@ -42,9 +42,6 @@ program ex1f
 ! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  one = 1
-  two = 2
-  three = 3
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, "ex1f test"//c_new_line, ierr))
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 30
@@ -69,7 +66,7 @@ program ex1f
     col(2) = 1
     val(1) = 2.0
     val(2) = -1.0
-    PetscCallA(MatSetValues(A, one, row, two, col, val, INSERT_VALUES, ierr))
+    PetscCallA(MatSetValues(A, 1_PETSC_INT_KIND, row, 2_PETSC_INT_KIND, col, val, INSERT_VALUES, ierr))
     Istart = Istart + 1
   end if
   if (Iend == n) then
@@ -78,7 +75,7 @@ program ex1f
     col(2) = n - 1
     val(1) = -1.0
     val(2) = 2.0
-    PetscCallA(MatSetValues(A, one, row, two, col, val, INSERT_VALUES, ierr))
+    PetscCallA(MatSetValues(A, 1_PETSC_INT_KIND, row, 2_PETSC_INT_KIND, col, val, INSERT_VALUES, ierr))
     Iend = Iend - 1
   end if
   val(1) = -1.0
@@ -89,7 +86,7 @@ program ex1f
     col(1) = i - 1
     col(2) = i
     col(3) = i + 1
-    PetscCallA(MatSetValues(A, one, row, three, col, val, INSERT_VALUES, ierr))
+    PetscCallA(MatSetValues(A, 1_PETSC_INT_KIND, row, 3_PETSC_INT_KIND, col, val, INSERT_VALUES, ierr))
   end do
 
   PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))
