@@ -362,8 +362,8 @@ checkgitclean:
            false;\
         fi
 
-.PHONY: checkfprettifyformat
 # Check that all the Fortran source code in the repository satisfies the fprettify format
+.PHONY: checkfprettifyformat
 checkfprettifyformat: checkgitclean fprettify
 	@if ! git diff --quiet; then \
           printf "The current commit has Fortran source code formatting problems\n" ;\
@@ -379,6 +379,15 @@ checkfprettifyformat: checkgitclean fprettify
           fi;\
           false;\
         fi;
+
+# Check (more comprehensive) and fix the style/formatting of sh scripts
+.PHONY: checkshellcheck
+checkshellcheck:
+	@shellcheck --format=tty $$(git ls-files \*.sh) $$(file lib/slepc/bin/* lib/slepc/bin/maint/* | grep "/usr/bin/env sh" | cut -d: -f1)
+
+.PHONY: shellcheck
+shellcheck:
+	@shellcheck --format=diff $$(git ls-files \*.sh) $$(file lib/slepc/bin/* lib/slepc/bin/maint/* | grep "/usr/bin/env sh" | cut -d: -f1) | patch -p1
 
 # Compare ABI/API of two versions of PETSc library with the old one defined by PETSC_{DIR,ARCH}_ABI_OLD
 .PHONY: abitest
