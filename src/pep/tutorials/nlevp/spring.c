@@ -158,11 +158,19 @@ int main(int argc,char **argv)
       filter: sed -e "s/52565/52566/" | sed -e "s/90758/90759/"
       requires: !single
 
-   test:
-      suffix: 4
-      args: -n 300 -pep_hyperbolic -pep_interval -9.6,-.527 -pep_type stoar -st_type sinvert -st_pc_type cholesky -terse
+   testset:
+      args: -n 300 -pep_hyperbolic -pep_interval -9.6,-.527 -pep_type stoar -st_type sinvert -terse
       requires: !single
       timeoutfactor: 2
+      output_file: output/spring_4.out
+      test:
+         suffix: 4
+         args: -st_pc_type cholesky
+      test:
+         suffix: 4_telescope
+         nsize: 2
+         args: -st_pc_type telescope -st_telescope_pc_type cholesky -st_telescope_mat_mumps_icntl_13 1
+         requires: mumps !complex
 
    test:
       suffix: 5
