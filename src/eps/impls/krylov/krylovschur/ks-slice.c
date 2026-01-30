@@ -251,7 +251,13 @@ static PetscErrorCode EPSSliceGetInertia(EPS eps,PetscReal shift,PetscInt *inert
       PetscCall(PCRedundantGetKSP(pc,&kspr));
       PetscCall(KSPGetPC(kspr,&pc));
     }
+    PetscCall(PetscObjectTypeCompare((PetscObject)pc,PCTELESCOPE,&flg));
+    if (flg) {
+      PetscCall(PCTelescopeGetKSP(pc,&kspr));
+      PetscCall(KSPGetPC(kspr,&pc));
+    }
     PetscCall(PCFactorGetMatrix(pc,&F));
+    PetscCall(PCSetUp(pc));
     PetscCall(MatGetInertia(F,inertia,zeros,NULL));
   }
   if (inertia) PetscCall(PetscInfo(eps,"Computed inertia at shift %g: %" PetscInt_FMT "\n",(double)nzshift,*inertia));

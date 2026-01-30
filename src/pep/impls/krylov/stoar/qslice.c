@@ -148,7 +148,13 @@ static PetscErrorCode PEPQSliceMatGetInertia(PEP pep,PetscReal shift,PetscInt *i
     PetscCall(PCRedundantGetKSP(pc,&kspr));
     PetscCall(KSPGetPC(kspr,&pc));
   }
+  PetscCall(PetscObjectTypeCompare((PetscObject)pc,PCTELESCOPE,&flg));
+  if (flg) {
+    PetscCall(PCTelescopeGetKSP(pc,&kspr));
+    PetscCall(KSPGetPC(kspr,&pc));
+  }
   PetscCall(PCFactorGetMatrix(pc,&F));
+  PetscCall(PCSetUp(pc));
   PetscCall(MatGetInertia(F,inertia,zeros,NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
