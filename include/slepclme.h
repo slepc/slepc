@@ -166,7 +166,7 @@ PETSC_DEPRECATED_FUNCTION(3, 8, 0, "LMEDenseHessLyapunovChol()", ) static inline
 
 .seealso: [](ch:lme), `LMEMonitorSet()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorFn(LME lme,PetscInt its,PetscReal errest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorFn(LME lme,PetscInt its,PetscReal errest,PetscCtx ctx);
 
 /*S
    LMEMonitorRegisterFn - A function prototype for functions provided to `LMEMonitorRegister()`.
@@ -200,7 +200,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterFn(LME lme,PetscIn
 
 .seealso: [](ch:lme), `LMEMonitorRegisterFn`, `LMEMonitorSet()`, `LMEMonitorRegister()`, `LMEMonitorFn`, `LMEMonitorRegisterDestroyFn`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,PetscCtx ctx,PetscViewerAndFormat **result);
 
 /*S
    LMEMonitorRegisterDestroyFn - A function prototype for functions that do the after
@@ -216,11 +216,11 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode LMEMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
 SLEPC_EXTERN PetscErrorCode LMEMonitor(LME,PetscInt,PetscReal);
-SLEPC_EXTERN PetscErrorCode LMEMonitorSet(LME,LMEMonitorFn,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode LMEMonitorSet(LME,LMEMonitorFn,PetscCtx,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode LMEMonitorCancel(LME);
-SLEPC_EXTERN PetscErrorCode LMEGetMonitorContext(LME,void*);
+SLEPC_EXTERN PetscErrorCode LMEGetMonitorContext(LME,PetscCtxRt);
 
-SLEPC_EXTERN PetscErrorCode LMEMonitorSetFromOptions(LME,const char[],const char[],void*);
+SLEPC_EXTERN PetscErrorCode LMEMonitorSetFromOptions(LME,const char[],const char[],PetscCtx);
 SLEPC_EXTERN LMEMonitorRegisterFn       LMEMonitorDefault;
 SLEPC_EXTERN LMEMonitorRegisterFn       LMEMonitorDefaultDrawLG;
 SLEPC_EXTERN LMEMonitorRegisterCreateFn LMEMonitorDefaultDrawLGCreate;

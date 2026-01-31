@@ -31,7 +31,7 @@
 
 .seealso: [](ch:lme), `LMEMonitorSet()`
 @*/
-PetscErrorCode LMEMonitorSetFromOptions(LME lme,const char opt[],const char name[],void *ctx)
+PetscErrorCode LMEMonitorSetFromOptions(LME lme,const char opt[],const char name[],PetscCtx ctx)
 {
   PetscErrorCode       (*mfunc)(LME,PetscInt,PetscReal,void*);
   PetscErrorCode       (*cfunc)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);
@@ -58,7 +58,7 @@ PetscErrorCode LMEMonitorSetFromOptions(LME lme,const char opt[],const char name
 
   PetscCall((*cfunc)(viewer,format,ctx,&vf));
   PetscCall(PetscViewerDestroy(&viewer));
-  PetscCall(LMEMonitorSet(lme,mfunc,vf,(PetscErrorCode(*)(void **))dfunc));
+  PetscCall(LMEMonitorSet(lme,mfunc,vf,(PetscCtxDestroyFn*)dfunc));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

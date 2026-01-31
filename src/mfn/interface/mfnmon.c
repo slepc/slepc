@@ -36,7 +36,7 @@ PetscErrorCode MFNMonitor(MFN mfn,PetscInt it,PetscReal errest)
 +  mfn            - the matrix function solver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `MFNMonitorFn`
-.  mctx           - [optional] context for private data for the monitor routine
+.  ctx            - [optional] context for private data for the monitor routine
                     (use `NULL` if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be `NULL`),
                     see `PetscCtxDestroyFn` for the calling sequence
@@ -65,7 +65,7 @@ PetscErrorCode MFNMonitor(MFN mfn,PetscInt it,PetscReal errest)
 
 .seealso: [](ch:mfn), `MFNMonitorDefault()`, `MFNMonitorDefaultDrawLG()`, `MFNMonitorCancel()`
 @*/
-PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,PetscCtx ctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscInt  i;
   PetscBool identical;
@@ -73,12 +73,12 @@ PetscErrorCode MFNMonitorSet(MFN mfn,MFNMonitorFn *monitor,void *mctx,PetscCtxDe
   PetscFunctionBegin;
   PetscValidHeaderSpecific(mfn,MFN_CLASSID,1);
   for (i=0;i<mfn->numbermonitors;i++) {
-    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)mfn->monitor[i],mfn->monitorcontext[i],mfn->monitordestroy[i],&identical));
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,ctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)mfn->monitor[i],mfn->monitorcontext[i],mfn->monitordestroy[i],&identical));
     if (identical) PetscFunctionReturn(PETSC_SUCCESS);
   }
   PetscCheck(mfn->numbermonitors<MAXMFNMONITORS,PetscObjectComm((PetscObject)mfn),PETSC_ERR_ARG_OUTOFRANGE,"Too many MFN monitors set");
   mfn->monitor[mfn->numbermonitors]           = monitor;
-  mfn->monitorcontext[mfn->numbermonitors]    = mctx;
+  mfn->monitorcontext[mfn->numbermonitors]    = ctx;
   mfn->monitordestroy[mfn->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -128,7 +128,7 @@ PetscErrorCode MFNMonitorCancel(MFN mfn)
 
 .seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
-PetscErrorCode MFNGetMonitorContext(MFN mfn,void *ctx)
+PetscErrorCode MFNGetMonitorContext(MFN mfn,PetscCtxRt ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(mfn,MFN_CLASSID,1);

@@ -419,7 +419,7 @@ static PetscErrorCode NEPSolve_CISS(NEP nep)
             PetscCall(DSRestoreMat(nep->ds,DSMatExtra[i],&E));
           }
         } else {
-          PetscCall(DSNEPGetComputeMatrixFunction(nep->ds,NULL,(void**)&dsctxf,NULL));
+          PetscCall(DSNEPGetComputeMatrixFunction(nep->ds,NULL,(PetscCtxRt)&dsctxf,NULL));
           dsctxf->Q = ctx->S;
         }
       }

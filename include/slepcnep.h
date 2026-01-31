@@ -360,7 +360,7 @@ SLEPC_EXTERN PetscErrorCode NEPVectorsViewFromOptions(NEP);
 
 .seealso: [](ch:nep), `NEPSetFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPFunctionFn(NEP nep,PetscScalar lambda,Mat T,Mat P,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPFunctionFn(NEP nep,PetscScalar lambda,Mat T,Mat P,PetscCtx ctx);
 
 /*S
    NEPJacobianFn - A prototype of a `NEP` Jacobian evaluation function that
@@ -377,12 +377,12 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPFunctionFn(NEP nep,PetscScalar la
 
 .seealso: [](ch:nep), `NEPSetJacobian()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPJacobianFn(NEP nep,PetscScalar lambda,Mat J,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPJacobianFn(NEP nep,PetscScalar lambda,Mat J,PetscCtx ctx);
 
-SLEPC_EXTERN PetscErrorCode NEPSetFunction(NEP,Mat,Mat,NEPFunctionFn*,void*);
-SLEPC_EXTERN PetscErrorCode NEPGetFunction(NEP,Mat*,Mat*,NEPFunctionFn**,void**);
-SLEPC_EXTERN PetscErrorCode NEPSetJacobian(NEP,Mat,NEPJacobianFn*,void*);
-SLEPC_EXTERN PetscErrorCode NEPGetJacobian(NEP,Mat*,NEPJacobianFn**,void**);
+SLEPC_EXTERN PetscErrorCode NEPSetFunction(NEP,Mat,Mat,NEPFunctionFn*,PetscCtx);
+SLEPC_EXTERN PetscErrorCode NEPGetFunction(NEP,Mat*,Mat*,NEPFunctionFn**,PetscCtxRt);
+SLEPC_EXTERN PetscErrorCode NEPSetJacobian(NEP,Mat,NEPJacobianFn*,PetscCtx);
+SLEPC_EXTERN PetscErrorCode NEPGetJacobian(NEP,Mat*,NEPJacobianFn**,PetscCtxRt);
 PETSC_DEPRECATED_FUNCTION(3, 12, 0, "NEPSetFunction() and NEPSetJacobian()", ) static inline PetscErrorCode NEPSetDerivatives(NEP nep,Mat A,PetscErrorCode (*fun)(NEP,PetscScalar,PetscInt,Mat,void*),void *ctx) {(void)A;(void)fun;(void)ctx;SETERRQ(PetscObjectComm((PetscObject)nep),PETSC_ERR_SUP,"Not implemented in this version");}
 PETSC_DEPRECATED_FUNCTION(3, 12, 0, "NEPGetFunction() and NEPGetJacobian()", ) static inline PetscErrorCode NEPGetDerivatives(NEP nep,Mat *A,PetscErrorCode (**fun)(NEP,PetscScalar,PetscInt,Mat,void*),void **ctx) {(void)A;(void)fun;(void)ctx;SETERRQ(PetscObjectComm((PetscObject)nep),PETSC_ERR_SUP,"Not implemented in this version");}
 SLEPC_EXTERN PetscErrorCode NEPSetSplitOperator(NEP,PetscInt,Mat[],FN[],MatStructure);
@@ -453,7 +453,7 @@ SLEPC_EXTERN PetscErrorCode NEPGetConvergedReason(NEP,NEPConvergedReason*);
 
 .seealso: [](ch:nep), `NEPMonitorSet()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorFn(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorFn(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eigr[],PetscScalar eigi[],PetscReal errest[],PetscInt nest,PetscCtx ctx);
 
 /*S
    NEPMonitorRegisterFn - A function prototype for functions provided to `NEPMonitorRegister()`.
@@ -491,7 +491,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterFn(NEP nep,PetscIn
 
 .seealso: [](ch:nep), `NEPMonitorRegisterFn`, `NEPMonitorSet()`, `NEPMonitorRegister()`, `NEPMonitorFn`, `NEPMonitorRegisterDestroyFn`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **result);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterCreateFn(PetscViewer viewer,PetscViewerFormat format,PetscCtx ctx,PetscViewerAndFormat **result);
 
 /*S
    NEPMonitorRegisterDestroyFn - A function prototype for functions that do the after
@@ -507,11 +507,11 @@ S*/
 PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPMonitorRegisterDestroyFn(PetscViewerAndFormat **result);
 
 SLEPC_EXTERN PetscErrorCode NEPMonitor(NEP,PetscInt,PetscInt,PetscScalar[],PetscScalar[],PetscReal[],PetscInt);
-SLEPC_EXTERN PetscErrorCode NEPMonitorSet(NEP,NEPMonitorFn,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode NEPMonitorSet(NEP,NEPMonitorFn,PetscCtx,PetscCtxDestroyFn*);
 SLEPC_EXTERN PetscErrorCode NEPMonitorCancel(NEP);
-SLEPC_EXTERN PetscErrorCode NEPGetMonitorContext(NEP,void*);
+SLEPC_EXTERN PetscErrorCode NEPGetMonitorContext(NEP,PetscCtxRt);
 
-SLEPC_EXTERN PetscErrorCode NEPMonitorSetFromOptions(NEP,const char[],const char[],void*,PetscBool);
+SLEPC_EXTERN PetscErrorCode NEPMonitorSetFromOptions(NEP,const char[],const char[],PetscCtx,PetscBool);
 SLEPC_EXTERN NEPMonitorRegisterFn        NEPMonitorFirst;
 SLEPC_EXTERN NEPMonitorRegisterFn        NEPMonitorFirstDrawLG;
 SLEPC_EXTERN NEPMonitorRegisterCreateFn  NEPMonitorFirstDrawLGCreate;
@@ -553,14 +553,14 @@ SLEPC_EXTERN PetscErrorCode NEPAllocateSolution(NEP,PetscInt);
 
 .seealso: [](ch:nep), `NEPSetConvergenceTest()`, `NEPSetConvergenceTestFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPConvergenceTestFn(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPConvergenceTestFn(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscReal res,PetscReal *errest,PetscCtx ctx);
 
 SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTest(NEP,NEPConv);
 SLEPC_EXTERN PetscErrorCode NEPGetConvergenceTest(NEP,NEPConv*);
 SLEPC_EXTERN NEPConvergenceTestFn NEPConvergedAbsolute;
 SLEPC_EXTERN NEPConvergenceTestFn NEPConvergedRelative;
 SLEPC_EXTERN NEPConvergenceTestFn NEPConvergedNorm;
-SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTestFn*,PetscCtx,PetscCtxDestroyFn*);
 
 /*S
    NEPStoppingTestFn - A prototype of a `NEP` stopping test function that would
@@ -585,14 +585,14 @@ SLEPC_EXTERN PetscErrorCode NEPSetConvergenceTestFunction(NEP,NEPConvergenceTest
 
 .seealso: [](ch:nep), `NEPSetStoppingTestFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPStoppingTestFn(NEP nep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,NEPConvergedReason *reason,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPStoppingTestFn(NEP nep,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,NEPConvergedReason *reason,PetscCtx ctx);
 
 SLEPC_EXTERN PetscErrorCode NEPSetStoppingTest(NEP,NEPStop);
 SLEPC_EXTERN PetscErrorCode NEPGetStoppingTest(NEP,NEPStop*);
 SLEPC_EXTERN NEPStoppingTestFn NEPStoppingBasic;
-SLEPC_EXTERN PetscErrorCode NEPSetStoppingTestFunction(NEP,NEPStoppingTestFn*,void*,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode NEPSetStoppingTestFunction(NEP,NEPStoppingTestFn*,PetscCtx,PetscCtxDestroyFn*);
 
-SLEPC_EXTERN PetscErrorCode NEPSetEigenvalueComparison(NEP,SlepcEigenvalueComparisonFn*,void*);
+SLEPC_EXTERN PetscErrorCode NEPSetEigenvalueComparison(NEP,SlepcEigenvalueComparisonFn*,PetscCtx);
 
 /* --------- options specific to particular eigensolvers -------- */
 
@@ -690,10 +690,10 @@ SLEPC_EXTERN PetscErrorCode NEPInterpolGetInterpolation(NEP,PetscReal*,PetscInt*
 
 .seealso: [](ch:nep), `NEPNLEIGSSetSingularitiesFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPNLEIGSSingularitiesFn(NEP nep,PetscInt *maxnp,PetscScalar *xi,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode NEPNLEIGSSingularitiesFn(NEP nep,PetscInt *maxnp,PetscScalar *xi,PetscCtx ctx);
 
-SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP,NEPNLEIGSSingularitiesFn*,void*);
-SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP,NEPNLEIGSSingularitiesFn**,void**);
+SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetSingularitiesFunction(NEP,NEPNLEIGSSingularitiesFn*,PetscCtx);
+SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetSingularitiesFunction(NEP,NEPNLEIGSSingularitiesFn**,PetscCtxRt);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetRestart(NEP,PetscReal);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSGetRestart(NEP,PetscReal*);
 SLEPC_EXTERN PetscErrorCode NEPNLEIGSSetLocking(NEP,PetscBool);

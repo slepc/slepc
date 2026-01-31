@@ -36,7 +36,7 @@ PetscErrorCode SVDMonitor(SVD svd,PetscInt it,PetscInt nconv,PetscReal *sigma,Pe
 +  svd            - the singular value solver context
 .  monitor        - pointer to function (if this is `NULL`, it turns off monitoring),
                     see `SVDMonitorFn`
-.  mctx           - [optional] context for private data for the monitor routine
+.  ctx            - [optional] context for private data for the monitor routine
                     (use `NULL` if no context is desired)
 -  monitordestroy - [optional] routine that frees monitor context (may be `NULL`),
                     see `PetscCtxDestroyFn` for the calling sequence
@@ -73,7 +73,7 @@ PetscErrorCode SVDMonitor(SVD svd,PetscInt it,PetscInt nconv,PetscReal *sigma,Pe
 
 .seealso: [](ch:svd), `SVDMonitorFirst()`, `SVDMonitorAll()`, `SVDMonitorConverged()`, `SVDMonitorConditioning()`, `SVDMonitorFirstDrawLG()`, `SVDMonitorAllDrawLG()`, `SVDMonitorConvergedDrawLG()`, `SVDMonitorCancel()`
 @*/
-PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDestroyFn *monitordestroy)
+PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,PetscCtx ctx,PetscCtxDestroyFn *monitordestroy)
 {
   PetscInt  i;
   PetscBool identical;
@@ -81,12 +81,12 @@ PetscErrorCode SVDMonitorSet(SVD svd,SVDMonitorFn *monitor,void *mctx,PetscCtxDe
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
   for (i=0;i<svd->numbermonitors;i++) {
-    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,mctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)svd->monitor[i],svd->monitorcontext[i],svd->monitordestroy[i],&identical));
+    PetscCall(PetscMonitorCompare((PetscErrorCode(*)(void))(PetscVoidFn*)monitor,ctx,monitordestroy,(PetscErrorCode (*)(void))(PetscVoidFn*)svd->monitor[i],svd->monitorcontext[i],svd->monitordestroy[i],&identical));
     if (identical) PetscFunctionReturn(PETSC_SUCCESS);
   }
   PetscCheck(svd->numbermonitors<MAXSVDMONITORS,PetscObjectComm((PetscObject)svd),PETSC_ERR_ARG_OUTOFRANGE,"Too many SVD monitors set");
   svd->monitor[svd->numbermonitors]           = monitor;
-  svd->monitorcontext[svd->numbermonitors]    = mctx;
+  svd->monitorcontext[svd->numbermonitors]    = ctx;
   svd->monitordestroy[svd->numbermonitors++]  = monitordestroy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -136,7 +136,7 @@ PetscErrorCode SVDMonitorCancel(SVD svd)
 
 .seealso: [](ch:svd), `SVDMonitorSet()`
 @*/
-PetscErrorCode SVDGetMonitorContext(SVD svd,void *ctx)
+PetscErrorCode SVDGetMonitorContext(SVD svd,PetscCtxRt ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -310,7 +310,7 @@ PetscErrorCode SVDMonitorConverged(SVD svd,PetscInt its,PetscInt nconv,PetscReal
 
 .seealso: [](ch:svd), `SVDMonitorSet()`
 @*/
-PetscErrorCode SVDMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
+PetscErrorCode SVDMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,PetscCtx ctx,PetscViewerAndFormat **vf)
 {
   PetscInt *oldnconv;
 

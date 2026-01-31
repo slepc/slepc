@@ -31,7 +31,7 @@
 
 .seealso: [](ch:mfn), `MFNMonitorSet()`
 @*/
-PetscErrorCode MFNMonitorSetFromOptions(MFN mfn,const char opt[],const char name[],void *ctx)
+PetscErrorCode MFNMonitorSetFromOptions(MFN mfn,const char opt[],const char name[],PetscCtx ctx)
 {
   PetscErrorCode       (*mfunc)(MFN,PetscInt,PetscReal,void*);
   PetscErrorCode       (*cfunc)(PetscViewer,PetscViewerFormat,void*,PetscViewerAndFormat**);

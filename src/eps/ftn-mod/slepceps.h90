@@ -26,16 +26,6 @@ interface
     PetscErrorCode z
   end subroutine
 
-  subroutine EPSMonitorSet(a, b, c, d, z)
-    use, intrinsic :: ISO_C_BINDING
-    import tEPS
-    EPS a
-    external b
-    type(*) c
-    external d
-    PetscErrorCode z
-  end subroutine
-
   subroutine EPSMonitorConvergedCreate(a, b, c, d, z)
     use, intrinsic :: ISO_C_BINDING
     import tPetscViewer, ePetscViewerFormat
@@ -50,6 +40,5 @@ end interface
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)
 !DEC$ ATTRIBUTES DLLEXPORT::EPSKrylovSchurGetSubintervals
 !DEC$ ATTRIBUTES DLLEXPORT::EPSKrylovSchurGetInertias
-!DEC$ ATTRIBUTES DLLEXPORT::EPSMonitorSet
 !DEC$ ATTRIBUTES DLLEXPORT::EPSMonitorConvergedCreate
 #endif

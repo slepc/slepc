@@ -368,10 +368,10 @@ SLEPC_EXTERN PetscErrorCode DSNEPGetRG(DS,RG*);
 
 .seealso: [](sec:ds), `DSNEPSetComputeMatrixFunction()`
 S*/
-PETSC_EXTERN_TYPEDEF typedef PetscErrorCode DSNEPMatrixFunctionFn(DS ds,PetscScalar lambda,PetscBool deriv,DSMatType mat,void *ctx);
+PETSC_EXTERN_TYPEDEF typedef PetscErrorCode DSNEPMatrixFunctionFn(DS ds,PetscScalar lambda,PetscBool deriv,DSMatType mat,PetscCtx ctx);
 
-SLEPC_EXTERN PetscErrorCode DSNEPSetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn*,void*,PetscCtxDestroyFn*);
-SLEPC_EXTERN PetscErrorCode DSNEPGetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn**,void**,PetscCtxDestroyFn**);
+SLEPC_EXTERN PetscErrorCode DSNEPSetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn*,PetscCtx,PetscCtxDestroyFn*);
+SLEPC_EXTERN PetscErrorCode DSNEPGetComputeMatrixFunction(DS,DSNEPMatrixFunctionFn**,PetscCtxRt,PetscCtxDestroyFn**);
 
 SLEPC_EXTERN PetscFunctionList DSList;
 SLEPC_EXTERN PetscErrorCode DSRegister(const char[],PetscErrorCode(*)(DS));

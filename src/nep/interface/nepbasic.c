@@ -675,7 +675,7 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
 
 .seealso: [](ch:nep), `NEPGetFunction()`, `NEPSetJacobian()`
 @*/
-PetscErrorCode NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,void *ctx)
+PetscErrorCode NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,PetscCtx ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
@@ -723,7 +723,7 @@ PetscErrorCode NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,void *ctx)
 
 .seealso: [](ch:nep), `NEPSetFunction()`
 @*/
-PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,void **ctx)
+PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,PetscCtxRt ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
@@ -731,7 +731,7 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,void **c
   if (F)   *F   = nep->function;
   if (P)   *P   = nep->function_pre;
   if (fun) *fun = nep->computefunction;
-  if (ctx) *ctx = nep->functionctx;
+  if (ctx) *(void**)ctx = nep->functionctx;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -754,7 +754,7 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,void **c
 
 .seealso: [](ch:nep), `NEPSetFunction()`, `NEPGetJacobian()`
 @*/
-PetscErrorCode NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,void *ctx)
+PetscErrorCode NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,PetscCtx ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
@@ -794,14 +794,14 @@ PetscErrorCode NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,void *ctx)
 
 .seealso: [](ch:nep), `NEPSetJacobian()`
 @*/
-PetscErrorCode NEPGetJacobian(NEP nep,Mat *J,NEPJacobianFn **jac,void **ctx)
+PetscErrorCode NEPGetJacobian(NEP nep,Mat *J,NEPJacobianFn **jac,PetscCtxRt ctx)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
   NEPCheckCallback(nep,1);
   if (J)   *J   = nep->jacobian;
   if (jac) *jac = nep->computejacobian;
-  if (ctx) *ctx = nep->jacobianctx;
+  if (ctx) *(void**)ctx = nep->jacobianctx;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

@@ -110,7 +110,7 @@ int main(int argc,char **argv)
   PetscCall(LMESetErrorIfNotConverged(lme,PETSC_TRUE));
   /* test monitors */
   PetscCall(PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_DEFAULT,&vf));
-  PetscCall(LMEMonitorSet(lme,(PetscErrorCode (*)(LME,PetscInt,PetscReal,void*))LMEMonitorDefault,vf,(PetscErrorCode (*)(void**))PetscViewerAndFormatDestroy));
+  PetscCall(LMEMonitorSet(lme,(PetscErrorCode (*)(LME,PetscInt,PetscReal,void*))LMEMonitorDefault,vf,(PetscCtxDestroyFn*)PetscViewerAndFormatDestroy));
   /* PetscCall(LMEMonitorCancel(lme)); */
   PetscCall(LMESetFromOptions(lme));
 
