@@ -5,10 +5,12 @@ from typing import (  # novermin
     Callable,
     Sequence,
     Literal,
+    TypeAlias,
 )
 from numpy.typing import (
     NDArray,
 )
+import numpy as np
 from petsc4py.PETSc import (
     Vec,
     Mat,
@@ -45,6 +47,8 @@ __all__ = [
     'NEPStoppingFunction',
     'NEPEigenvalueComparison',
     'NEPMonitorFunction',
+    'NEPFunction',
+    'NEPJacobian',
     'SVDStoppingFunction',
     'SVDMonitorFunction',
     'MFNMonitorFunction',
@@ -61,16 +65,19 @@ PETSc was configured (``./configure --with-scalar-type=real|complex``).
 
 """
 
-ArrayInt = NDArray[int]
+ArrayBool = NDArray[np.bool_]
+"""Array of `bool`."""
+
+ArrayInt = NDArray[np.integer]
 """Array of `int`."""
 
-ArrayReal = NDArray[float]
+ArrayReal = NDArray[np.floating]
 """Array of `float`."""
 
-ArrayComplex = NDArray[complex]
+ArrayComplex = NDArray[np.complexfloating]
 """Array of `complex`."""
 
-ArrayScalar = NDArray[Scalar]
+ArrayScalar = NDArray[np.floating | np.complexfloating]
 """Array of `Scalar` numbers."""
 
 LayoutSizeSpec = int | tuple[int, int]

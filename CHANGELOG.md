@@ -6,6 +6,7 @@
 
 - New context destroy functions `EPSSetArbitrarySelectionContextDestroy()` and
   `STShellSetDestroy()`.
+- Typing stubs for the Python extension module `slepc4py.SLEPc`.
 
 ### Changed
 

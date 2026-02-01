@@ -12,7 +12,7 @@ include ${PETSC_DIR}/lib/petsc/conf/rules_util.mk
 
 vermin_slepc:
 	@vermin --violations -t=3.4- ${VERMIN_OPTIONS} ${SLEPC_DIR}/config
-	@vermin --violations -t=3.6- ${VERMIN_OPTIONS} ${SLEPC_DIR}/src/binding/slepc4py
+	@vermin --violations -t=3.6- --exclude-regex '\.pyi$$' ${VERMIN_OPTIONS} ${SLEPC_DIR}/src/binding/slepc4py
 
 lint_slepc:
 	${PYTHON3} ${SLEPC_DIR}/lib/slepc/bin/maint/slepcClangLinter.py $(LINTER_OPTIONS)
