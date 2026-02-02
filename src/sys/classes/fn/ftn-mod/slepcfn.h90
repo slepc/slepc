@@ -8,22 +8,22 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
 interface
-  subroutine FNRationalGetNumerator(a, b, c, z)
+  subroutine FNRationalGetNumerator(fn, np, pcoeffs, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tFN
-    FN a
-    PetscInt b
-    PetscScalar c(*)
-    PetscErrorCode z
+    FN fn
+    PetscInt np
+    PetscScalar pcoeffs(*)
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 
-  subroutine FNRationalGetDenominator(a, b, c, z)
+  subroutine FNRationalGetDenominator(fn, nq, qcoeffs, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tFN
-    FN a
-    PetscInt b
-    PetscScalar c(*)
-    PetscErrorCode z
+    FN fn
+    PetscInt nq
+    PetscScalar qcoeffs(*)
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 end interface
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)

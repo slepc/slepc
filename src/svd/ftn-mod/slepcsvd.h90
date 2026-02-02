@@ -8,14 +8,14 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
 interface
-  subroutine SVDMonitorConvergedCreate(a, b, c, d, z)
+  subroutine SVDMonitorConvergedCreate(viewer, format, ctx, vf, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tPetscViewer, ePetscViewerFormat
-    PetscViewer a
-    PetscViewerFormat b
-    type(*) c
-    PetscViewerAndFormat d
-    PetscErrorCode z
+    PetscViewer viewer
+    PetscViewerFormat format
+    type(*) ctx
+    PetscViewerAndFormat vf
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 end interface
 

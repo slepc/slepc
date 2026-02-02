@@ -8,14 +8,14 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
 interface
-  subroutine RGPolygonGetVertices(a, b, c, d, z)
+  subroutine RGPolygonGetVertices(rg, n, vr, vi, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tRG
-    RG a
-    PetscInt b
-    PetscScalar c(*)
-    PetscScalar d(*)
-    PetscErrorCode z
+    RG rg
+    PetscInt n
+    PetscScalar vr(*)
+    PetscScalar vi(*)
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 end interface
 #if defined(_WIN32) && defined(PETSC_USE_SHARED_LIBRARIES)

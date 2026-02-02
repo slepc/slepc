@@ -8,24 +8,24 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
 interface
-  subroutine PEPSTOARGetInertias(a, b, c, d, z)
+  subroutine PEPSTOARGetInertias(pep, n, shifts, inertias, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tPEP
-    PEP a
-    PetscInt b
-    PetscReal c(*)
-    PetscInt d(*)
-    PetscErrorCode z
+    PEP pep
+    PetscInt n
+    PetscReal shifts(*)
+    PetscInt inertias(*)
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 
-  subroutine PEPMonitorConvergedCreate(a, b, c, d, z)
+  subroutine PEPMonitorConvergedCreate(viewer, format, ctx, vf, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tPetscViewer, ePetscViewerFormat
-    PetscViewer a
-    PetscViewerFormat b
-    type(*) c
-    PetscViewerAndFormat d
-    PetscErrorCode z
+    PetscViewer viewer
+    PetscViewerFormat format
+    type(*) ctx
+    PetscViewerAndFormat vf
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 end interface
 
