@@ -332,7 +332,7 @@ PetscErrorCode NEPMonitorConverged(NEP nep,PetscInt its,PetscInt nconv,PetscScal
 
 .seealso: [](ch:nep), `NEPMonitorSet()`
 @*/
-PetscErrorCode NEPMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,void *ctx,PetscViewerAndFormat **vf)
+PetscErrorCode NEPMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat format,PetscCtx ctx,PetscViewerAndFormat **vf)
 {
   PetscInt *oldnconv;
 
