@@ -31,11 +31,12 @@ program ex16f
   PEP            :: pep             ! polynomial eigenproblem solver context
   PEPType        :: tname
   PetscInt       :: N, nx, ny, i, j, Istart, Iend, II
-  PetscInt       :: nev, ithree
+  PetscInt       :: nev
   PetscMPIInt    :: rank
   PetscErrorCode :: ierr
   PetscBool      :: flg, terse
-  PetscScalar    :: mone, two, four, val
+  PetscScalar    :: val
+  PetscScalar, parameter :: two = 2.0, four = 4.0, mone = -1.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -63,8 +64,6 @@ program ex16f
   PetscCallA(MatSetSizes(K, PETSC_DECIDE, PETSC_DECIDE, N, N, ierr))
   PetscCallA(MatSetFromOptions(K, ierr))
   PetscCallA(MatGetOwnershipRange(K, Istart, Iend, ierr))
-  mone = -1.0
-  four = 4.0
   do II = Istart, Iend - 1
     i = II/nx
     j = II - i*nx
@@ -90,7 +89,6 @@ program ex16f
   PetscCallA(MatSetSizes(C, PETSC_DECIDE, PETSC_DECIDE, N, N, ierr))
   PetscCallA(MatSetFromOptions(C, ierr))
   PetscCallA(MatGetOwnershipRange(C, Istart, Iend, ierr))
-  two = 2.0
   do II = Istart, Iend - 1
     i = II/nx
     j = II - i*nx
@@ -128,8 +126,7 @@ program ex16f
   A(1) = K
   A(2) = C
   A(3) = M
-  ithree = 3
-  PetscCallA(PEPSetOperators(pep, ithree, A, ierr))
+  PetscCallA(PEPSetOperators(pep, 3_PETSC_INT_KIND, A, ierr))
   PetscCallA(PEPSetProblemType(pep, PEP_GENERAL, ierr))
 
 ! ** Set solver parameters at runtime

@@ -43,11 +43,11 @@ contains
     implicit none
 
     EPS            :: eps
-    PetscErrorCode :: ierr
     PetscInt       :: its, nconv, nest, dummy
     PetscScalar    :: eigr(*), eigi(*)
     PetscReal      :: re, errest(*)
     PetscMPIInt    :: rank
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
     if (its > 0 .and. rank == 0) then
@@ -68,17 +68,16 @@ program test15f
 ! Declarations
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
-  Mat A     ! operator matrix
-  EPS eps   ! eigenproblem solver context
-  EPSType tname
-  PetscInt n, i, Istart, Iend
-  PetscInt nev
-  PetscInt col(3)
-  PetscInt i1, i2, i3
-  PetscMPIInt rank
-  PetscErrorCode ierr
-  PetscBool flg
-  PetscScalar value(3)
+  Mat            :: A     ! operator matrix
+  EPS            :: eps   ! eigenproblem solver context
+  EPSType        :: tname
+  PetscInt       :: n, i, Istart, Iend, nev
+  PetscInt       :: col(3)
+  PetscInt       :: i1, i2, i3
+  PetscMPIInt    :: rank
+  PetscErrorCode :: ierr
+  PetscBool      :: flg
+  PetscScalar    :: val(3)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -109,28 +108,28 @@ program test15f
     i = 0
     col(1) = 0
     col(2) = 1
-    value(1) = 2.0
-    value(2) = -1.0
-    PetscCallA(MatSetValues(A, i1, [i], i2, col, value, INSERT_VALUES, ierr))
+    val(1) = 2.0
+    val(2) = -1.0
+    PetscCallA(MatSetValues(A, i1, [i], i2, col, val, INSERT_VALUES, ierr))
     Istart = Istart + 1
   end if
   if (Iend == n) then
     i = n - 1
     col(1) = n - 2
     col(2) = n - 1
-    value(1) = -1.0
-    value(2) = 2.0
-    PetscCallA(MatSetValues(A, i1, [i], i2, col, value, INSERT_VALUES, ierr))
+    val(1) = -1.0
+    val(2) = 2.0
+    PetscCallA(MatSetValues(A, i1, [i], i2, col, val, INSERT_VALUES, ierr))
     Iend = Iend - 1
   end if
-  value(1) = -1.0
-  value(2) = 2.0
-  value(3) = -1.0
+  val(1) = -1.0
+  val(2) = 2.0
+  val(3) = -1.0
   do i = Istart, Iend - 1
     col(1) = i - 1
     col(2) = i
     col(3) = i + 1
-    PetscCallA(MatSetValues(A, i1, [i], i3, col, value, INSERT_VALUES, ierr))
+    PetscCallA(MatSetValues(A, i1, [i], i3, col, val, INSERT_VALUES, ierr))
   end do
 
   PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))

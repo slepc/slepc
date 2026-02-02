@@ -44,7 +44,7 @@ contains
 
     ST             :: st
     Vec            :: x, y
-    PetscErrorCode :: ierr
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(KSPSolve(myksp, x, y, ierr))
   end subroutine
@@ -65,7 +65,7 @@ contains
 
     ST             :: st
     Vec            :: x, y
-    PetscErrorCode :: ierr
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(KSPSolveTranspose(myksp, x, y, ierr))
   end subroutine
@@ -88,7 +88,7 @@ contains
 
     ST             :: st
     Vec            :: x, y, w
-    PetscErrorCode :: ierr
+    PetscErrorCode, intent(out) :: ierr
 
     PetscCall(VecDuplicate(x, w, ierr))
     PetscCall(VecCopy(x, w, ierr))
@@ -118,7 +118,7 @@ contains
     ST             :: st
     PetscInt       :: n, j
     PetscScalar    :: eigr(*), eigi(*)
-    PetscErrorCode :: ierr
+    PetscErrorCode, intent(out) :: ierr
 
     do j = 1, n
       eigr(j) = 1.0/eigr(j)
@@ -143,7 +143,7 @@ program ex10f
   EPS            :: eps  ! eigenproblem solver context
   ST             :: st
   EPSType        :: tname
-  PetscInt       :: n, i, Istart, Iend, one, two, three
+  PetscInt       :: n, i, Istart, Iend
   PetscInt       :: nev, row(1), col(3)
   PetscScalar    :: val(3)
   PetscBool      :: flg, isShell, terse
@@ -154,9 +154,6 @@ program ex10f
 ! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  one = 1
-  two = 2
-  three = 3
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   n = 30
@@ -181,7 +178,7 @@ program ex10f
     col(2) = 1
     val(1) = 2.0
     val(2) = -1.0
-    PetscCallA(MatSetValues(A, one, row, two, col, val, INSERT_VALUES, ierr))
+    PetscCallA(MatSetValues(A, 1_PETSC_INT_KIND, row, 2_PETSC_INT_KIND, col, val, INSERT_VALUES, ierr))
     Istart = Istart + 1
   end if
   if (Iend == n) then
@@ -190,7 +187,7 @@ program ex10f
     col(2) = n - 1
     val(1) = -1.0
     val(2) = 2.0
-    PetscCallA(MatSetValues(A, one, row, two, col, val, INSERT_VALUES, ierr))
+    PetscCallA(MatSetValues(A, 1_PETSC_INT_KIND, row, 2_PETSC_INT_KIND, col, val, INSERT_VALUES, ierr))
     Iend = Iend - 1
   end if
   val(1) = -1.0
@@ -201,7 +198,7 @@ program ex10f
     col(1) = i - 1
     col(2) = i
     col(3) = i + 1
-    PetscCallA(MatSetValues(A, one, row, three, col, val, INSERT_VALUES, ierr))
+    PetscCallA(MatSetValues(A, 1_PETSC_INT_KIND, row, 3_PETSC_INT_KIND, col, val, INSERT_VALUES, ierr))
   end do
 
   PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))

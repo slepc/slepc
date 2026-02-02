@@ -8,23 +8,23 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
 interface
-  subroutine NEPNLEIGSGetRKShifts(a, b, c, z)
+  subroutine NEPNLEIGSGetRKShifts(nep, ns, shifts, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tNEP
-    NEP a
-    PetscInt b
-    PetscScalar c(*)
-    PetscErrorCode z
+    NEP nep
+    PetscInt ns
+    PetscScalar shifts(*)
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 
-  subroutine NEPMonitorConvergedCreate(a, b, c, d, z)
+  subroutine NEPMonitorConvergedCreate(viewer, format, ctx, vf, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tPetscViewer, ePetscViewerFormat
-    PetscViewer a
-    PetscViewerFormat b
-    type(*) c
-    PetscViewerAndFormat d
-    PetscErrorCode z
+    PetscViewer viewer
+    PetscViewerFormat format
+    type(*) ctx
+    PetscViewerAndFormat vf
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 end interface
 

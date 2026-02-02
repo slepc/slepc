@@ -8,32 +8,32 @@
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !
 interface
-  subroutine EPSKrylovSchurGetSubintervals(a, b, z)
+  subroutine EPSKrylovSchurGetSubintervals(eps, subint, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tEPS
-    EPS a
-    PetscReal b(*)
-    PetscErrorCode z
+    EPS eps
+    PetscReal subint(*)
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 
-  subroutine EPSKrylovSchurGetInertias(a, b, c, d, z)
+  subroutine EPSKrylovSchurGetInertias(eps, n, shifts, inertias, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tEPS
-    EPS a
-    PetscInt b
-    PetscReal c(*)
-    PetscInt d(*)
-    PetscErrorCode z
+    EPS eps
+    PetscInt n
+    PetscReal shifts(*)
+    PetscInt inertias(*)
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 
-  subroutine EPSMonitorConvergedCreate(a, b, c, d, z)
+  subroutine EPSMonitorConvergedCreate(viewer, format, ctx, vf, ierr)
     use, intrinsic :: ISO_C_BINDING
     import tPetscViewer, ePetscViewerFormat
-    PetscViewer a
-    PetscViewerFormat b
-    type(*) c
-    PetscViewerAndFormat d
-    PetscErrorCode z
+    PetscViewer viewer
+    PetscViewerFormat format
+    type(*) ctx
+    PetscViewerAndFormat vf
+    PetscErrorCode, intent(out) :: ierr
   end subroutine
 end interface
 

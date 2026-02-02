@@ -36,8 +36,9 @@ program test7f
   PetscMPIInt    :: rank
   PetscErrorCode :: ierr
   PetscBool      :: flg
-  PetscScalar    :: val(3), one
-  Vec            :: v(1)
+  PetscScalar    :: val(3)
+  Vec            :: v
+  PetscScalar, parameter :: one = 1.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -96,13 +97,12 @@ program test7f
   PetscCallA(MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY, ierr))
   PetscCallA(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY, ierr))
 
-  PetscCallA(MatCreateVecs(A, v(1), PETSC_NULL_VEC, ierr))
-  one = 1.0
+  PetscCallA(MatCreateVecs(A, v, PETSC_NULL_VEC, ierr))
   if (Istart == 0) then
-    PetscCallA(VecSetValue(v(1), i0, one, INSERT_VALUES, ierr))
+    PetscCallA(VecSetValue(v, i0, one, INSERT_VALUES, ierr))
   end if
-  PetscCallA(VecAssemblyBegin(v(1), ierr))
-  PetscCallA(VecAssemblyEnd(v(1), ierr))
+  PetscCallA(VecAssemblyBegin(v, ierr))
+  PetscCallA(VecAssemblyEnd(v, ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Create the eigensolver and display info
@@ -120,7 +120,7 @@ program test7f
 
 ! ** Set initial vectors
   nini = 1
-  PetscCallA(EPSSetInitialSpace(eps, nini, v, ierr))
+  PetscCallA(EPSSetInitialSpace(eps, nini, [v], ierr))
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Solve the eigensystem
@@ -145,7 +145,7 @@ program test7f
   PetscCallA(EPSErrorView(eps, EPS_ERROR_RELATIVE, PETSC_NULL_VIEWER, ierr))
   PetscCallA(EPSDestroy(eps, ierr))
   PetscCallA(MatDestroy(A, ierr))
-  PetscCallA(VecDestroy(v(1), ierr))
+  PetscCallA(VecDestroy(v, ierr))
 
   PetscCallA(SlepcFinalize(ierr))
 end program test7f

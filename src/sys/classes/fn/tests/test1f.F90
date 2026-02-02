@@ -23,11 +23,12 @@ program test1f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   FN             :: fn
-  PetscInt       :: i, n, na, nb
+  PetscInt       :: i, n
   PetscMPIInt    :: rank
   PetscErrorCode :: ierr
-  PetscScalar    :: x, y, yp, p(10), q(10), five
+  PetscScalar    :: x, y, yp, p(10), q(10)
   PetscScalar    :: pp(10), qq(10), tau, eta
+  PetscScalar, parameter :: five = 5.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -40,14 +41,13 @@ program test1f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Polynomial p(x)
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  na = 5
   p(1) = -3.1
   p(2) = 1.1
   p(3) = 1.0
   p(4) = -2.0
   p(5) = 3.5
   PetscCallA(FNSetType(fn, FNRATIONAL, ierr))
-  PetscCallA(FNRationalSetNumerator(fn, na, p, ierr))
+  PetscCallA(FNRationalSetNumerator(fn, 5_PETSC_INT_KIND, p, ierr))
   PetscCallA(FNView(fn, PETSC_NULL_VIEWER, ierr))
   x = 2.2
   PetscCallA(FNEvaluateFunction(fn, x, y, ierr))
@@ -57,14 +57,12 @@ program test1f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Inverse of polynomial 1/q(x)
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  na = 0
-  nb = 3
   q(1) = -3.1
   q(2) = 1.1
   q(3) = 1.0
   PetscCallA(FNSetType(fn, FNRATIONAL, ierr))
-  PetscCallA(FNRationalSetNumerator(fn, na, PETSC_NULL_SCALAR_ARRAY, ierr))
-  PetscCallA(FNRationalSetDenominator(fn, nb, q, ierr))
+  PetscCallA(FNRationalSetNumerator(fn, 0_PETSC_INT_KIND, PETSC_NULL_SCALAR_ARRAY, ierr))
+  PetscCallA(FNRationalSetDenominator(fn, 3_PETSC_INT_KIND, q, ierr))
   PetscCallA(FNView(fn, PETSC_NULL_VIEWER, ierr))
   x = 2.2
   PetscCallA(FNEvaluateFunction(fn, x, y, ierr))
@@ -74,16 +72,14 @@ program test1f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Rational p(x)/q(x)
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  na = 2
-  nb = 3
   p(1) = 1.1
   p(2) = 1.1
   q(1) = 1.0
   q(2) = -2.0
   q(3) = 3.5
   PetscCallA(FNSetType(fn, FNRATIONAL, ierr))
-  PetscCallA(FNRationalSetNumerator(fn, na, p, ierr))
-  PetscCallA(FNRationalSetDenominator(fn, nb, q, ierr))
+  PetscCallA(FNRationalSetNumerator(fn, 2_PETSC_INT_KIND, p, ierr))
+  PetscCallA(FNRationalSetDenominator(fn, 3_PETSC_INT_KIND, q, ierr))
   tau = 1.2
   eta = 0.5
   PetscCallA(FNSetScale(fn, tau, eta, ierr))
@@ -105,12 +101,9 @@ program test1f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Constant
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  na = 1
-  nb = 0
-  five = 5.0
   PetscCallA(FNSetType(fn, FNRATIONAL, ierr))
-  PetscCallA(FNRationalSetNumerator(fn, na, [five], ierr))
-  PetscCallA(FNRationalSetDenominator(fn, nb, PETSC_NULL_SCALAR_ARRAY, ierr))
+  PetscCallA(FNRationalSetNumerator(fn, 1_PETSC_INT_KIND, [five], ierr))
+  PetscCallA(FNRationalSetDenominator(fn, 0_PETSC_INT_KIND, PETSC_NULL_SCALAR_ARRAY, ierr))
   PetscCallA(FNView(fn, PETSC_NULL_VIEWER, ierr))
   x = 2.2
   PetscCallA(FNEvaluateFunction(fn, x, y, ierr))

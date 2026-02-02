@@ -35,7 +35,8 @@ program ex15f
   PetscMPIInt    :: rank
   PetscErrorCode :: ierr
   PetscBool      :: flg
-  PetscScalar    :: one, alpha
+  PetscScalar    :: alpha
+  PetscScalar, parameter :: one = 1.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -61,7 +62,6 @@ program ex15f
   PetscCallA(MatSetFromOptions(A, ierr))
 
   PetscCallA(MatGetOwnershipRange(A, Istart, Iend, ierr))
-  one = 1.0
   do i = Istart, Iend - 1
     if (i == 0) then
       do j = 0, n - 1

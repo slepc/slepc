@@ -28,13 +28,13 @@ program test1f
   Mat                  :: Q, M
   BV                   :: X, Y
   PetscMPIInt          :: rank
-  PetscInt             :: i, j, n, k, l, izero, ione
+  PetscInt             :: i, j, n, k, l
   PetscScalar          :: z(KMAX), val
   PetscScalar, pointer :: qq(:, :)
-  PetscScalar          :: one, mone, two, zero
   PetscReal            :: nrm
   PetscBool            :: flg
   PetscErrorCode       :: ierr
+  PetscScalar, parameter :: one = 1.0, mone = -1.0, two = 2.0, zero = 0.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Beginning of program
@@ -43,12 +43,6 @@ program test1f
   n = 10
   k = 5
   l = 3
-  one = 1.0
-  mone = -1.0
-  two = 2.0
-  zero = 0.0
-  izero = 0
-  ione = 1
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   PetscCallA(PetscOptionsGetInt(PETSC_NULL_OPTIONS, PETSC_NULL_CHARACTER, '-n', n, flg, ierr))
@@ -123,29 +117,29 @@ program test1f
   PetscCallA(BVMult(Y, two, one, X, Q, ierr))
 
 ! ** Test BVMultVec
-  PetscCallA(BVGetColumn(Y, izero, v, ierr))
+  PetscCallA(BVGetColumn(Y, 0_PETSC_INT_KIND, v, ierr))
   z(1) = 2.0
   do i = 2, k
     z(i) = -0.5*z(i - 1)
   end do
   PetscCallA(BVMultVec(X, mone, one, v, z, ierr))
-  PetscCallA(BVRestoreColumn(Y, izero, v, ierr))
+  PetscCallA(BVRestoreColumn(Y, 0_PETSC_INT_KIND, v, ierr))
 
 ! ** Test BVDot
   PetscCallA(MatCreateSeqDense(PETSC_COMM_SELF, l, k, PETSC_NULL_SCALAR_ARRAY, M, ierr))
   PetscCallA(BVDot(X, Y, M, ierr))
 
 ! ** Test BVDotVec
-  PetscCallA(BVGetColumn(Y, izero, v, ierr))
+  PetscCallA(BVGetColumn(Y, 0_PETSC_INT_KIND, v, ierr))
   PetscCallA(BVDotVec(X, v, z, ierr))
-  PetscCallA(BVRestoreColumn(Y, izero, v, ierr))
+  PetscCallA(BVRestoreColumn(Y, 0_PETSC_INT_KIND, v, ierr))
 
 ! ** Test BVMultInPlace and BVScale
-  PetscCallA(BVMultInPlace(X, Q, ione, l, ierr))
+  PetscCallA(BVMultInPlace(X, Q, 1_PETSC_INT_KIND, l, ierr))
   PetscCallA(BVScale(X, two, ierr))
 
 ! ** Test BVNorm
-  PetscCallA(BVNormColumn(X, izero, NORM_2, nrm, ierr))
+  PetscCallA(BVNormColumn(X, 0_PETSC_INT_KIND, NORM_2, nrm, ierr))
   if (rank == 0) then
     write (*, '(a,f8.4)') '2-Norm of X[0] = ', nrm
   end if

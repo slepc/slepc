@@ -23,7 +23,7 @@ program test1f
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   RG             :: rg
-  PetscInt       :: i, n, one
+  PetscInt       :: i, n
   PetscInt       :: inside(1)
   PetscMPIInt    :: rank
   PetscErrorCode :: ierr
@@ -37,7 +37,6 @@ program test1f
 ! Beginning of program
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  one = 1
   PetscCallA(SlepcInitialize(PETSC_NULL_CHARACTER, ierr))
   PetscCallMPIA(MPI_Comm_rank(PETSC_COMM_WORLD, rank, ierr))
   PetscCallA(RGCreate(PETSC_COMM_WORLD, rg, ierr))
@@ -62,7 +61,7 @@ program test1f
   ar = re
   ai = im
 #endif
-  PetscCallA(RGCheckInside(rg, one, [ar], [ai], inside, ierr))
+  PetscCallA(RGCheckInside(rg, 1_PETSC_INT_KIND, [ar], [ai], inside, ierr))
   if (rank == 0) then
     if (inside(1) >= 0) then
       write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is inside the region'
@@ -115,7 +114,7 @@ program test1f
   ar = re
   ai = im
 #endif
-  PetscCallA(RGCheckInside(rg, one, [ar], [ai], inside, ierr))
+  PetscCallA(RGCheckInside(rg, 1_PETSC_INT_KIND, [ar], [ai], inside, ierr))
   if (rank == 0) then
     if (inside(1) >= 0) then
       write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is inside the region'
@@ -166,7 +165,7 @@ program test1f
   ar = re
   ai = im
 #endif
-  PetscCallA(RGCheckInside(rg, one, [ar], [ai], inside, ierr))
+  PetscCallA(RGCheckInside(rg, 1_PETSC_INT_KIND, [ar], [ai], inside, ierr))
   if (rank == 0) then
     if (inside(1) >= 0) then
       write (*, '(a,f4.1,a,f4.1,a)') 'Point (', re, ',', im, ') is inside the region'
