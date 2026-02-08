@@ -139,7 +139,7 @@ def get_petsc_arch():
     return PETSC_ARCH
 
 
-def config(prefix, dry_run=False):
+def config(prefix):
     log.info('SLEPc: configure')
     options = [
         '--prefix=' + prefix,
@@ -150,8 +150,6 @@ def config(prefix, dry_run=False):
     for opt in options:
         log.info(' '*4 + opt)
     # Run SLEPc configure
-    if dry_run:
-        return
     os.environ['PETSC_DIR'] = get_petsc_dir()
     os.environ['PETSC_ARCH'] = get_petsc_arch()
     python = sys.executable
@@ -187,11 +185,9 @@ def config(prefix, dry_run=False):
                 new_fh.write(contents)
 
 
-def build(dry_run=False):
+def build():
     log.info('SLEPc: build')
     # Run SLEPc build
-    if dry_run:
-        return
     PETSC_ARCH = get_petsc_arch()
     if PETSC_ARCH:
         PETSC_ARCH = 'PETSC_ARCH=' + PETSC_ARCH
@@ -202,11 +198,9 @@ def build(dry_run=False):
         raise RuntimeError(status)
 
 
-def install(dry_run=False):
+def install():
     log.info('SLEPc: install')
     # Run SLEPc install
-    if dry_run:
-        return
     PETSC_ARCH = get_petsc_arch()
     if PETSC_ARCH:
         PETSC_ARCH = 'PETSC_ARCH=' + PETSC_ARCH
@@ -248,9 +242,9 @@ class cmd_install(_install):
         #
         ctx = context().enter()
         try:
-            config(prefix, self.dry_run)
-            build(self.dry_run)
-            install(self.dry_run)
+            config(prefix)
+            build()
+            install()
         finally:
             ctx.exit()
         #
