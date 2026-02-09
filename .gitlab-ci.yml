@@ -596,6 +596,8 @@ pip-install:
     PYTHON: python3
   after_script:
     - date
+  dependencies:
+    - pause-for-approval
 
 #
 # Special job in stage-3 to check DESTDIR install (only in scheduled pipelines).
@@ -1190,6 +1192,8 @@ docs-review:
   except:
     variables:
       - $SLEPC_CI_SCHEDULED =~ /yes/
+  dependencies:
+    - pause-for-approval
 
 #
 # Build documentation for deployment
