@@ -1,5 +1,8 @@
 import os
 import sys
+import glob
+import subprocess
+from pathlib import Path
 
 from confpetsc import setup as _setup
 from confpetsc import Extension
@@ -16,6 +19,14 @@ from confpetsc import split_quoted
 from confpetsc import DistutilsError
 
 from confpetsc import PetscConfig
+
+try:
+    from setuptools import modified
+except ImportError:
+    try:
+        from setuptools import dep_util as modified
+    except ImportError:
+        from distutils import dep_util as modified
 
 # --------------------------------------------------------------------
 
@@ -220,6 +231,42 @@ class build_ext(_build_ext):
 
     def get_config_arch(self, arch):
         return config.Configure(self.slepc_dir, self.petsc_dir, arch)
+    def run(self):
+        self.build_sources()
+        _build_ext.run(self)
+        self.build_stubs()
+
+    def build_stubs(self):
+        pkgname = self.distribution.get_name()
+        modname = self.extensions[0].name.split(".")[-1]
+        srcdir = Path(__file__).parent.parent / 'src' / pkgname
+        blddir = Path(self.build_lib) / pkgname
+
+        alldeps = glob.glob(str(blddir / 'lib' / '*' / f'{modname}.*'))
+        target =  srcdir / f'{modname}.pyi'
+        if not (self.force or modified.newer_group(alldeps, target)):
+            log.debug(f"skipping '{modname}.*.so' -> '{target}' (up-to-date)")
+            return
+
+        env = os.environ.copy()
+        python_path = env.get('PYTHONPATH', "")
+        if python_path != "":
+            python_path += ":"
+        python_path += self.build_lib
+        env['PYTHONPATH'] = python_path
+        env.pop('PETSC_ARCH', None)
+
+        stubgen = Path(__file__).parent / 'stubgen.py'
+        rc = subprocess.call([sys.executable, stubgen], env=env) # noqa S603
+        if rc != 0:
+            log.warn("Stubs could not be generated.")
+            return
+
+        self.copy_file(
+            srcdir / f'{modname}.pyi',
+            blddir / f'{modname}.pyi',
+            level=self.verbose,
+        )
 
     def get_config_data(self, arch_list):
         DESTDIR = None
@@ -237,6 +284,26 @@ class build_ext(_build_ext):
             'PETSC_ARCH' : os.path.pathsep.join(arch_list)
         }
         return template, variables
+
+    def get_outputs(self):
+        self.check_extensions_list(self.extensions)
+        outputs = []
+        for ext in self.extensions:
+            fullname = self.get_ext_fullname(ext.name)
+            filename = self.get_ext_filename(fullname)
+            if isinstance(ext, Extension) and self.petsc_arch:
+                head, tail = os.path.split(filename)
+                for arch in self.petsc_arch:
+                    outfile = os.path.join(self.build_lib, head, arch, tail)
+                    outputs.append(outfile)
+            else:
+                outfile = os.path.join(self.build_lib, filename)
+                outputs.append(outfile)
+
+        pkgname = self.distribution.get_name()
+        modname = self.extensions[0].name.split(".")[-1]
+        outputs.append(os.path.join(self.build_lib, pkgname, f"{modname}.pyi"))
+        return list(set(outputs))
 
     def get_source_files(self):
         orig = log.set_threshold(log.WARN)

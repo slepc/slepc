@@ -51,7 +51,7 @@ uninstall:
 
 # ----
 
-.PHONY: lint ruff-lint cython-lint
+.PHONY: lint ruff-lint cython-lint stubtest
 CYTHONLINT_SRC = src demo
 CYTHONLINT_OPTS =
 RUFF_SRC = .
@@ -70,6 +70,24 @@ lint:
 	. ../../../doc/.venv-sphinx/bin/activate && python3 -m pip install -r ../../../doc/requirements.txt
 	. ../../../doc/.venv-sphinx/bin/activate && ${MAKE} cython-lint
 #	. ../../../doc/.venv-sphinx/bin/activate && ${MAKE} ruff-lint
+
+stubgen:
+	python -m pip install .
+	python conf/stubgen.py
+
+stubcheck:
+	python -m mypy.stubtest slepc4py --ignore-missing-stub --ignore-disjoint-bases
+
+stubdiff:
+	git diff --quiet -- src/slepc4py/SLEPc.pyi
+
+stubtest:
+	${RM} -r slepc4py-stubtest-env
+	${PYTHON} -m venv slepc4py-stubtest-env
+	. slepc4py-stubtest-env/bin/activate && python -m pip install -r conf/requirements-stubtest.txt
+	. slepc4py-stubtest-env/bin/activate && ${MAKE} stubgen
+	. slepc4py-stubtest-env/bin/activate && ${MAKE} stubcheck
+	. slepc4py-stubtest-env/bin/activate && ${MAKE} stubdiff
 
 # ----
 
