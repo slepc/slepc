@@ -47,6 +47,7 @@ variables:
       - web
     variables:
       - $CI_COMMIT_BRANCH == "main"
+  dependencies: []
 
 .test:
   extends: .test-basic
