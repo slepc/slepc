@@ -18,7 +18,7 @@ class Chase(package.Package):
     self.packagetype    = 'cmake'
     self.installable    = True
     self.downloadable   = True
-    self.version        = '1.5.0'
+    self.version        = '1.7.0'
     obj = self.version if hasattr(self,'version') else self.gitcommit
     self.url            = 'https://github.com/ChASE-library/ChASE/archive/'+('v'+obj if hasattr(self,'version') else obj)+'.tar.gz'
     self.archive        = 'ChASE-'+obj+'.tar.gz'
