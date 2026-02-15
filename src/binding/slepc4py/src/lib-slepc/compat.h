@@ -1,4 +1,4 @@
-#ifndef SLEPC4PY_COMPAT_H
+#if !defined(SLEPC4PY_COMPAT_H)
 #define SLEPC4PY_COMPAT_H
 
 #if !defined(PETSC_USE_COMPLEX)

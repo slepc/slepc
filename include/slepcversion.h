@@ -8,7 +8,7 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-#ifndef SLEPCVERSION_H
+#if !defined(SLEPCVERSION_H)
 #define SLEPCVERSION_H
 
 /* MANSEC = Sys */
@@ -20,7 +20,7 @@
 #define SLEPC_RELEASE_DATE       "September 30, 2025"
 #define SLEPC_VERSION_DATE       "unknown"
 
-#if !defined (SLEPC_VERSION_GIT)
+#if !defined(SLEPC_VERSION_GIT)
 #define SLEPC_VERSION_GIT        "unknown"
 #endif
 

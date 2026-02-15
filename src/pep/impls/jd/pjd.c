@@ -152,7 +152,7 @@ static PetscErrorCode PEPSetUp_JD(PEP pep)
   PetscCall(BVGetRandomContext(pep->V,&rand));  /* make sure the random context is available when duplicating */
   PetscCall(PEPSetWorkVecs(pep,5));
   pjd->ld = pep->nev;
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   pjd->ld++;
 #endif
   PetscCall(PetscMalloc2(pep->nmat,&pjd->TV,pep->nmat,&pjd->AX));
@@ -836,7 +836,7 @@ static PetscErrorCode MatCreateVecs_PEPJD(Mat A,Vec *right,Vec *left)
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(A,&matctx));
   pjd   = (PEP_JD*)matctx->pep->data;
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   kspsf = 2;
 #endif
   for (i=0;i<kspsf;i++) PetscCall(BVCreateVec(pjd->V,v+i));
@@ -877,7 +877,7 @@ static PetscErrorCode PEPJDUpdateExtendedPC(PEP pep,PetscScalar theta)
         S[n*j+j] += theta;
       }
       lw_ = 10*n_;
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
       PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&n_,&n_,S,&n_,sg,U,&n_,V,&n_,work,&lw_,&info));
 #else
       PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&n_,&n_,S,&n_,sg,U,&n_,V,&n_,work,&lw_,rwork,&info));
@@ -988,7 +988,7 @@ static PetscErrorCode PEPJDCreateShellPC(PEP pep,Vec *ww)
   /* Create the reference vector */
   PetscCall(BVGetColumn(pjd->V,0,&v[0]));
   v[1] = v[0];
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   kspsf = 2;
 #endif
   PetscCall(VecCreateCompWithVecs(v,kspsf,NULL,&pjd->vtempl));
@@ -1223,7 +1223,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
   pjd->nlock = 0;
   PetscCall(STGetKSP(pep->st,&ksp));
   PetscCall(KSPGetTolerances(ksp,&rtol,&abstol,&dtol,&maxits));
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   kspsf = 2;
 #endif
   PetscCall(PEPJDProcessInitialSpace(pep,ww));
@@ -1237,7 +1237,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
   PetscCall(BVCreateVec(pjd->V,&u[0]));
   PetscCall(VecDuplicate(u[0],&p[0]));
   PetscCall(VecDuplicate(u[0],&r[0]));
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   PetscCall(VecDuplicate(u[0],&u[1]));
   PetscCall(VecDuplicate(u[0],&p[1]));
   PetscCall(VecDuplicate(u[0],&r[1]));
@@ -1442,7 +1442,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
   PetscCall(VecDestroy(&u[0]));
   PetscCall(VecDestroy(&r[0]));
   PetscCall(VecDestroy(&p[0]));
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   PetscCall(VecDestroy(&u[1]));
   PetscCall(VecDestroy(&r[1]));
   PetscCall(VecDestroy(&p[1]));
