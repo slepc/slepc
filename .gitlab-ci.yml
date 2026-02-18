@@ -193,7 +193,7 @@ gnu-c-complex-nompi-int64:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    LOAD_MODULES: mpich/4.3.0
+    LOAD_MODULES: mpich/5.0.0
     PETSC_CONFIG_OPTS: COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' --with-mpi=0 --with-fc=0 --with-scalar-type=complex --with-64-bit-indices
     DISABLE_TESTS: 1
 
@@ -488,8 +488,8 @@ gnu-c-hip:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: mpich/4.3.0-rocm-6.3.3
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-hip --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
+    LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-hip --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse
 
 clang-c:
   extends:
@@ -752,7 +752,7 @@ gnu-c:
   tags:
     - linux-ubuntu, name:satet
   variables:
-    LOAD_MODULES: mpich/4.3.0
+    LOAD_MODULES: mpich/5.0.0
     PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-sowing
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py
     SLEPC4PY: 1
@@ -829,7 +829,7 @@ gnu-c-debug:
   tags:
     - name:satet
   variables:
-    LOAD_MODULES: mpich/4.3.0
+    LOAD_MODULES: mpich/5.0.0
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXOPTFLAGS='-O -g' --with-cxx-dialect=11
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-primme --download-blopex --download-hpddm --download-evsl
 
@@ -840,7 +840,7 @@ gnu-c-complex-debug:
   tags:
     - name:satet
   variables:
-    LOAD_MODULES: mpich/4.3.0
+    LOAD_MODULES: mpich/5.0.0
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-scalar-type=complex --with-debugging=1
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --download-blopex --download-hpddm
 
@@ -995,8 +995,8 @@ gnu-c-hip-complex:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: mpich/4.3.0-rocm-6.3.3
-    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip --LIBS=/opt/rocm-6.3.3/lib/llvm/lib/18/lib/linux/libclang_rt.profile-x86_64.a
+    LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
+    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip
 
 gnu-c-hip-single:
   extends:
@@ -1005,7 +1005,7 @@ gnu-c-hip-single:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: mpich/4.3.0-rocm-6.3.3
+    LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-precision=single --with-single-library=0 --with-hip
     TEST_OPTS: query=requires queryval=hip
 
@@ -1016,7 +1016,7 @@ gnu-c-hip-int64:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: mpich/4.3.0-rocm-6.3.3
+    LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-hip --with-64-bit-indices
     TEST_OPTS: query=requires queryval=hip
 
@@ -1037,7 +1037,7 @@ aocc-c:
   tags:
     - name:satet
   variables:
-    LOAD_MODULES: aocc/5.0.0 openmpi/5.0.7-aocc-5.0.0
+    LOAD_MODULES: aocc/5.0.0 openmpi/5.0.9-aocc-5.0.0
     PETSC_CONFIG_OPTS: --with-debugging=1 --with-fc=0
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
@@ -1048,7 +1048,7 @@ aocc-c-hip:
   tags:
     - gpu:amd, name:satet
   variables:
-    LOAD_MODULES: openmpi/5.0.7-aocc-5.0.0-rocm-6.3.3
+    LOAD_MODULES: openmpi/5.0.9-aocc-5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-hip --with-fc=0
 
 #
