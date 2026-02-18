@@ -480,7 +480,7 @@ static PetscErrorCode EPSSolve_LyapII(EPS eps)
     if (eps->errest[eps->nconv]<eps->tol) {
       k++;
       if (rk==2) {
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
         eps->eigr[eps->nconv+k] = eigr[0]; eps->eigi[eps->nconv+k] = -eigi[0];
 #else
         eps->eigr[eps->nconv+k] = PetscConj(eps->eigr[eps->nconv]);

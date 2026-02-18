@@ -410,7 +410,7 @@ static PetscErrorCode DSSolve_GSVD(DS ds,PetscScalar *wr,PetscScalar *wi)
 #if !defined(SLEPC_MISSING_LAPACK_GGSVD3)
   /* workspace query and memory allocation */
   lwork = -1;
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   PetscCallBLAS("LAPACKggsvd3",LAPACKggsvd3_("U","V","Q",&m1,&n1,&p1,&k,&l,&dummy,&ld,&dummy,&ld,&rdummy,&rdummy,&dummy,&ld,&dummy,&ld,&dummy,&ld,&a,&lwork,&idummy,&info));
   PetscCall(PetscBLASIntCast((PetscInt)a,&lwork));
 #else
@@ -418,7 +418,7 @@ static PetscErrorCode DSSolve_GSVD(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
 #endif
 
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   PetscCall(DSAllocateWork_Private(ds,lwork,2*ds->ld,ds->ld));
   alpha = ds->rwork;
   beta  = ds->rwork+ds->ld;
@@ -434,7 +434,7 @@ static PetscErrorCode DSSolve_GSVD(DS ds,PetscScalar *wr,PetscScalar *wi)
 #else  /* defined(SLEPC_MISSING_LAPACK_GGSVD3) */
 
   lwork = PetscMax(PetscMax(3*n,m),p)+n;
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   PetscCall(DSAllocateWork_Private(ds,lwork,2*ds->ld,ds->ld));
   alpha = ds->rwork;
   beta  = ds->rwork+ds->ld;

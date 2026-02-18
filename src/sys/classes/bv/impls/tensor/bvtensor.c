@@ -405,7 +405,7 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
       for (i=lock;i<lock+newc;i++) PetscCall(PetscArraycpy(M+(i-lock+j*newc)*nrow,S+i*lds+j*ctx->ld+lock,nrow));
     }
     PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
     PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&newctdeg,M,&nrow_,sg,pQ+offu,&rs1_,Z,&n_,work+nwu,&lw_,&info));
 #else
     PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&newctdeg,M,&nrow_,sg,pQ+offu,&rs1_,Z,&n_,work+nwu,&lw_,rwork+n,&info));
@@ -443,7 +443,7 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
     for (i=lock+newc;i<cs1;i++) PetscCall(PetscArraycpy(M+(i-lock-newc+j*nnc)*nrow,S+i*lds+j*ctx->ld+lock,nrow));
   }
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&nnctdeg,M,&nrow_,sg,pQ+offu+newc*rs1,&rs1_,Z,&n_,work+nwu,&lw_,&info));
 #else
   PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&nnctdeg,M,&nrow_,sg,pQ+offu+newc*rs1,&rs1_,Z,&n_,work+nwu,&lw_,rwork+n,&info));

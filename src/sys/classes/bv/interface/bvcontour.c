@@ -428,7 +428,7 @@ static PetscErrorCode BVSVDAndRank_QR(BV S,PetscReal delta,PetscScalar *pA,Petsc
   PetscCall(PetscMalloc2(5*ml,&work,5*ml,&rwork));
   lwork = 5*m;
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("O","N",&lda,&m,pA,&lda,sigma,NULL,&lda,NULL,&lda,work,&lwork,&info));
 #else
   PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("O","N",&lda,&m,pA,&lda,sigma,NULL,&lda,NULL,&lda,work,&lwork,rwork,&info));
@@ -471,7 +471,7 @@ static PetscErrorCode BVSVDAndRank_QR_CAA(BV S,PetscInt M,PetscInt L,PetscReal d
   for (j=0;j<m;j++) PetscCall(PetscArraycpy(R+j*m,pA+j*ml,m));
   lwork = 5*m;
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if !defined (PETSC_USE_COMPLEX)
+#if !defined(PETSC_USE_COMPLEX)
   PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","O",&m,&m,R,&m,sigma,U,&m,NULL,&m,work,&lwork,&info));
 #else
   PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","O",&m,&m,R,&m,sigma,U,&m,NULL,&m,work,&lwork,rwork,&info));

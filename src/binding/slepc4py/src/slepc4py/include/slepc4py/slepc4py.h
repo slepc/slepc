@@ -1,4 +1,4 @@
-#ifndef SLEPC4PY_H
+#if !defined(SLEPC4PY_H)
 #define SLEPC4PY_H
 
 #include <Python.h>
