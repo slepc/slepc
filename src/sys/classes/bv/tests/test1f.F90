@@ -90,7 +90,7 @@ program test1f
 ! ** Fill Y entries
   do j = 0, l - 1
     PetscCallA(BVGetColumn(Y, j, v, ierr))
-    val = real(j + 1)/4.0
+    val = real(j + 1, PETSC_REAL_KIND)/4.0
     PetscCallA(VecSet(v, val, ierr))
     PetscCallA(BVRestoreColumn(Y, j, v, ierr))
   end do

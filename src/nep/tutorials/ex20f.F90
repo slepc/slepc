@@ -182,7 +182,7 @@ program ex20f
     write (*, '(/a,i4)') 'Nonlinear Eigenproblem, n =', n
   end if
 
-  ctx%h = 1.0/real(n)
+  ctx%h = 1.0/real(n, PETSC_REAL_KIND)
   ctx%kappa = 1.0
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

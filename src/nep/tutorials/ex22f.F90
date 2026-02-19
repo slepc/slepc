@@ -68,7 +68,7 @@ program ex22f
   end if
 
   aa = 20.0
-  h = PETSC_PI/real(n + 1)
+  h = PETSC_PI/real(n + 1, PETSC_REAL_KIND)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! Create problem matrices

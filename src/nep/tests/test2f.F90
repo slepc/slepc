@@ -82,7 +82,7 @@ program test2f
   PetscCallA(MatSetFromOptions(A(3), ierr))
   PetscCallA(MatGetOwnershipRange(A(3), Istart, Iend, ierr))
   do i = Istart, Iend - 1
-    val = real(n)/real(i + 1)
+    val = real(n, PETSC_REAL_KIND)/real(i + 1, PETSC_REAL_KIND)
     PetscCallA(MatSetValue(A(3), i, i, val, INSERT_VALUES, ierr))
   end do
   PetscCallA(MatAssemblyBegin(A(3), MAT_FINAL_ASSEMBLY, ierr))

@@ -135,7 +135,7 @@ contains
     PetscInt       :: i
     PetscErrorCode, intent(out) :: ierr
 
-    h = 11.0/real(maxnp - 1)
+    h = 11.0/real(maxnp - 1, PETSC_REAL_KIND)
     xi(0) = -1e-5
     xi(maxnp - 1) = -1e+6
     do i = 1, maxnp - 2
