@@ -97,7 +97,7 @@ PetscErrorCode MatCreateBSE(Mat R,Mat C,Mat *H)
    Notes:
    The resulting matrix has the block form $$H = \begin{bmatrix} A & B \\ C & -A^* \end{bmatrix},$$
    where $B$ and $C$ are
-   assumed to be symmetric in the real case or Hermitian in the comples case. Note
+   assumed to be symmetric in the real case or Hermitian in the complex case. Note
    that this function does not check this property, so if the matrices provided by
    the user do not satisfy it, then the solver will not behave as expected.
 
