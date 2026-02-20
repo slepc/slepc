@@ -65,7 +65,7 @@ program ex23f
   PetscCallA(MatSetFromOptions(A, ierr))
   PetscCallA(MatGetOwnershipRange(A, Istart, Iend, ierr))
   ix = 0
-  cst = 0.5/real(m - 1)
+  cst = 0.5/real(m - 1, PETSC_REAL_KIND)
   do i = 1, m
     jmax = m - i + 1
     do j = 1, jmax

@@ -93,7 +93,7 @@ contains
 !
     PetscCall(VecGetOwnershipRange(x, istart, iend, ierr))
     do i = istart, iend - 1
-      val = 1.0/real(i + 1)
+      val = 1.0/real(i + 1, PETSC_REAL_KIND)
       PetscCall(VecSetValue(y, i, val, INSERT_VALUES, ierr))
     end do
     PetscCall(VecAssemblyBegin(y, ierr))
