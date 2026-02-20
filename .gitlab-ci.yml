@@ -754,7 +754,7 @@ gnu-c:
     - linux-ubuntu, name:satet
   variables:
     LOAD_MODULES: mpich/5.0.0
-    PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py --download-c2html --download-sowing
+    PETSC_CONFIG_OPTS: --download-superlu_dist --download-elemental --download-metis --download-parmetis --with-petsc4py
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-arpack-dir=/usr/local/opt/arpack-ng-3.9.1 --with-primme-dir=/usr/local/opt/primme-3.2 --with-evsl-dir=/usr/local/opt/evsl-nov21 --download-blopex --with-slepc4py
     SLEPC4PY: 1
     PKG_CONFIG: 1
