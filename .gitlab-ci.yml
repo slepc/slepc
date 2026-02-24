@@ -490,7 +490,6 @@ gnu-c-hip:
   variables:
     LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-hip --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse
-  allow_failure: true
 
 clang-c:
   extends:
@@ -998,7 +997,6 @@ gnu-c-hip-complex:
   variables:
     LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-hip
-  allow_failure: true
 
 gnu-c-hip-single:
   extends:
@@ -1010,7 +1008,6 @@ gnu-c-hip-single:
     LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-precision=single --with-single-library=0 --with-hip
     TEST_OPTS: query=requires queryval=hip
-  allow_failure: true
 
 gnu-c-hip-int64:
   extends:
@@ -1022,7 +1019,6 @@ gnu-c-hip-int64:
     LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-hip --with-64-bit-indices
     TEST_OPTS: query=requires queryval=hip
-  allow_failure: true
 
 gnu-c-static-multilib:
   extends:
