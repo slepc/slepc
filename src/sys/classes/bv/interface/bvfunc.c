@@ -160,7 +160,7 @@ PetscErrorCode BVDestroy(BV *bv)
 
    Level: beginner
 
-.seealso: [](sec:bv), `BV`, `BVDuplicate()`, `BVDestroy()`, `BVCreateTensor()` , `BVCreateFromMat()`
+.seealso: [](sec:bv), `BV`, `BVDuplicate()`, `BVDestroy()`, `BVCreateTensor()`, `BVCreateFromMat()`
 @*/
 PetscErrorCode BVCreate(MPI_Comm comm,BV *newbv)
 {

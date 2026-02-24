@@ -85,6 +85,8 @@ static inline PetscReal SlepcAbs(PetscReal x,PetscReal y)
    This function is not available from Fortran.
 
    Level: developer
+
+.seealso: `PetscAbsScalar()`
 M*/
 #if !defined(PETSC_USE_COMPLEX)
 #define SlepcAbsEigenvalue(x,y) SlepcAbs(x,y)

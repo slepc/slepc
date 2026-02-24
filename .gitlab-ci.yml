@@ -138,7 +138,7 @@ pause-for-approval:
         python3 -m pip install --upgrade pip==25.2
         python3 -m pip install --upgrade fprettify==0.3.7
         python3 -m pip install --upgrade vermin==1.7.0
-        make checkbadSource checkfprettifyformat SHELL=bash;
+        make checkbadSource checkfprettifyformat checkbadManualPages_slepc SHELL=bash;
         make -f gmakefile check_output SHELL=bash;
         vermin --version
         make vermin_slepc

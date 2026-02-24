@@ -409,7 +409,7 @@ PetscErrorCode FNGetMethod(FN fn,PetscInt *meth)
 
    Level: advanced
 
-.seealso: [](sec:fn), `FNEvaluateFunctionMat()` or `FNEvaluateFunctionMatVec()`, `FNGetParallel()`
+.seealso: [](sec:fn), `FNEvaluateFunctionMat()`, `FNEvaluateFunctionMatVec()`, `FNGetParallel()`
 @*/
 PetscErrorCode FNSetParallel(FN fn,FNParallelType pmode)
 {

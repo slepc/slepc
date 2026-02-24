@@ -37,7 +37,6 @@ PetscFunctionList STList = NULL;
    Level: beginner
 
 .seealso: [](ch:st), `STGetType()`, `EPSSetType()`, `EPSSetFromOptions()`
-
 @*/
 PetscErrorCode STSetType(ST st,STType type)
 {
@@ -79,7 +78,6 @@ PetscErrorCode STSetType(ST st,STType type)
    Level: intermediate
 
 .seealso: [](ch:st), `STSetType()`
-
 @*/
 PetscErrorCode STGetType(ST st,STType *type)
 {

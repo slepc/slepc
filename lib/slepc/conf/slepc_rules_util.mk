@@ -17,6 +17,9 @@ vermin_slepc:
 lint_slepc:
 	${PYTHON3} ${SLEPC_DIR}/lib/slepc/bin/maint/slepcClangLinter.py $(LINTER_OPTIONS)
 
+checkbadManualPages_slepc:
+	@${PYTHON} ${PETSC_DIR}/lib/petsc/bin/getAPI.py --package slepc ${SLEPC_DIR}
+
 help-lint_slepc:
 	@${PYTHON3} ${SLEPC_DIR}/lib/slepc/bin/maint/slepcClangLinter.py --help
 	-@echo "Basic usage:"

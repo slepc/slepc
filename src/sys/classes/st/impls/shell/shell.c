@@ -112,7 +112,7 @@ static PetscErrorCode STShellSetDestroy_Shell(ST st,STShellDestroyFn *destroy)
 
    Level: advanced
 
-.seealso: [](ch:st), `STSHELL`, STShellSetContext()`
+.seealso: [](ch:st), `STSHELL`, `STShellSetContext()`
 @*/
 PetscErrorCode STShellSetDestroy(ST st,STShellDestroyFn *destroy)
 {
