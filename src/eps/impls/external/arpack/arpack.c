@@ -166,12 +166,12 @@ static PetscErrorCode EPSSolve_ARPACK(EPS eps)
 
 #if !defined(PETSC_USE_COMPLEX)
     if (eps->ishermitian) {
-      PetscStackCallExternalVoid("ARPACKsaupd",ARPACKsaupd_(&fcomm,&ido,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
+      PetscCallExternalVoid("ARPACKsaupd",ARPACKsaupd_(&fcomm,&ido,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
     } else {
-      PetscStackCallExternalVoid("ARPACKnaupd",ARPACKnaupd_(&fcomm,&ido,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
+      PetscCallExternalVoid("ARPACKnaupd",ARPACKnaupd_(&fcomm,&ido,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
     }
 #else
-    PetscStackCallExternalVoid("ARPACKnaupd",ARPACKnaupd_(&fcomm,&ido,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,ar->rwork,&info));
+    PetscCallExternalVoid("ARPACKnaupd",ARPACKnaupd_(&fcomm,&ido,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,ar->rwork,&info));
 #endif
 
     if (ido == -1 || ido == 1 || ido == 2) {
@@ -223,12 +223,12 @@ static PetscErrorCode EPSSolve_ARPACK(EPS eps)
   if (eps->nconv > 0) {
 #if !defined(PETSC_USE_COMPLEX)
     if (eps->ishermitian) {
-      PetscStackCallExternalVoid("ARPACKseupd",ARPACKseupd_(&fcomm,&rvec,howmny,ar->select,eps->eigr,pV,&ld,&sigmar,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
+      PetscCallExternalVoid("ARPACKseupd",ARPACKseupd_(&fcomm,&rvec,howmny,ar->select,eps->eigr,pV,&ld,&sigmar,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
     } else {
-      PetscStackCallExternalVoid("ARPACKneupd",ARPACKneupd_(&fcomm,&rvec,howmny,ar->select,eps->eigr,eps->eigi,pV,&ld,&sigmar,&sigmai,ar->workev,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
+      PetscCallExternalVoid("ARPACKneupd",ARPACKneupd_(&fcomm,&rvec,howmny,ar->select,eps->eigr,eps->eigi,pV,&ld,&sigmar,&sigmai,ar->workev,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
     }
 #else
-    PetscStackCallExternalVoid("ARPACKneupd",ARPACKneupd_(&fcomm,&rvec,howmny,ar->select,eps->eigr,pV,&ld,&sigmar,ar->workev,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,ar->rwork,&info));
+    PetscCallExternalVoid("ARPACKneupd",ARPACKneupd_(&fcomm,&rvec,howmny,ar->select,eps->eigr,pV,&ld,&sigmar,ar->workev,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,ar->rwork,&info));
 #endif
     PetscCheck(info==0,PetscObjectComm((PetscObject)eps),PETSC_ERR_LIB,"Error reported by ARPACK subroutine xxEUPD (%" PetscInt_FMT ")",info);
   }
