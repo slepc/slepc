@@ -465,6 +465,8 @@ PetscErrorCode EPSSetOperators(EPS eps,Mat A,Mat B)
 {
   PetscInt       m,n,m0,mloc,nloc,mloc0,nmat;
   Mat            mat[2];
+  VecType        ta,tb;
+  PetscBool      same;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -485,6 +487,11 @@ PetscErrorCode EPSSetOperators(EPS eps,Mat A,Mat B)
     PetscCheck(mloc0==nloc,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONG,"B does not have equal row and column local sizes (%" PetscInt_FMT ", %" PetscInt_FMT ")",mloc0,nloc);
     PetscCheck(m==m0,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_INCOMP,"Dimensions of A and B do not match (%" PetscInt_FMT ", %" PetscInt_FMT ")",m,m0);
     PetscCheck(mloc==mloc0,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_INCOMP,"Local dimensions of A and B do not match (%" PetscInt_FMT ", %" PetscInt_FMT ")",mloc,mloc0);
+    /* make sure both matrices have compatible VecType */
+    PetscCall(MatGetVecType(A,&ta));
+    PetscCall(MatGetVecType(B,&tb));
+    PetscCall(PetscStrcmp(ta,tb,&same));
+    PetscCheck(same,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_INCOMP,"The provided matrices have different vector types (%s vs %s), consider calling MatSetVecType() in the one that is not on GPU",ta,tb);
   }
   if (eps->state && (n!=eps->n || nloc!=eps->nloc)) PetscCall(EPSReset(eps));
   eps->nrma = 0.0;
