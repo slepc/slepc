@@ -90,13 +90,13 @@ static PetscErrorCode SVDSolve_KSVD(SVD svd)
 
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
   /* allocate workspace */
-  PetscStackCallExternalVoid("pdgeqsvd",pdgeqsvd("V","V",eigen,a->M,a->N,a->loc,one,one,a->desc,svd->sigma,z->loc,one,one,z->desc,q->loc,one,one,q->desc,&minlwork,lwork,&minliwork,liwork,&info));
+  PetscCallExternalVoid("pdgeqsvd",pdgeqsvd("V","V",eigen,a->M,a->N,a->loc,one,one,a->desc,svd->sigma,z->loc,one,one,z->desc,q->loc,one,one,q->desc,&minlwork,lwork,&minliwork,liwork,&info));
   PetscCheck(!info,PetscObjectComm((PetscObject)svd),PETSC_ERR_LIB,"Error in KSVD subroutine pdgeqsvd: info=%d",(int)info);
   PetscCall(PetscBLASIntCast((PetscInt)minlwork,&lwork));
   PetscCall(PetscBLASIntCast(minliwork,&liwork));
   PetscCall(PetscMalloc2(lwork,&work,liwork,&iwork));
   /* call computational routine */
-  PetscStackCallExternalVoid("pdgeqsvd",pdgeqsvd("V","V",eigen,a->M,a->N,a->loc,one,one,a->desc,svd->sigma,z->loc,one,one,z->desc,q->loc,one,one,q->desc,work,lwork,iwork,liwork,&info));
+  PetscCallExternalVoid("pdgeqsvd",pdgeqsvd("V","V",eigen,a->M,a->N,a->loc,one,one,a->desc,svd->sigma,z->loc,one,one,z->desc,q->loc,one,one,q->desc,work,lwork,iwork,liwork,&info));
   PetscCheck(!info,PetscObjectComm((PetscObject)svd),PETSC_ERR_LIB,"Error in KSVD subroutine pdgeqsvd: info=%d",(int)info);
   PetscCall(PetscFree2(work,iwork));
   PetscCall(PetscFPTrapPop());
