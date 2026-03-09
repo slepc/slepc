@@ -21,7 +21,6 @@ The list below shows software packages that use SLEPc or expose part of its func
   15. [FEMuS](https://github.com/eaulisa/MyFEMuS): open-source Finite Element C++ library.
   16. [OpenCMISS](https://opencmiss.org/): Open Continuum Mechanics, Imaging, Signal processing and System identification.
   17. [SfePy](https://sfepy.org/doc-devel/): Simple Finite Elements in Python.
-  18. [ff-bifbox](https://github.com/cmdoug/ff-bifbox?tab=readme-ov-file): FreeFEM scripts for numerical continuation, bifurcation analysis, resolvent analysis, and time-integration of large-scale time-dependent nonlinear PDEs on adaptively refined meshes.
 
 ## Many-body calculations, quantum systems, photonics
 
@@ -48,6 +47,16 @@ The list below shows software packages that use SLEPc or expose part of its func
   6. [FEMFFUSION](https://femffusion.webs.upv.es/): a finite element method code for nuclear reactor modelling.
   7. [Milonga](https://www.seamplex.com/milonga): a free nuclear reactor core analysis code.
 
+## Fluid mechanics, acoustics
+
+  1. [ff-bifbox](https://github.com/cmdoug/ff-bifbox?tab=readme-ov-file): FreeFEM scripts for numerical continuation, bifurcation analysis, resolvent analysis, and time-integration of large-scale time-dependent nonlinear PDEs on adaptively refined meshes.
+  2. [ncpaprop](https://github.com/chetzer-ncpa/ncpaprop-release): NCPA Infrasound Propagation Modeling Package.
+  3. [BROADCAST](https://broadcast.readthedocs.io): a Python software that discretizes the compressible Navier-Stokes equations and extracts the linearized state derivative operators.
+  4. [helmholtz-x](https://doi.org/10.17863/CAM.112694): a python library built upon DOLFINx to solve a non-homogeneous Helmholtz equation, specifically thermoacoustic Helmholtz.
+  5. [RSVD-{math}`\Delta`t](https://github.com/AliFarghadan/RSVD-Delta-t/tree/Resolvent-analysis): Randomized Singular Value Decomposition with Time-stepping for large-scale resolvent analysis.
+  6. [Resolvent4py](https://github.com/albertopadovan/resolvent4py): A parallel Python package for analysis, model reduction and control of large-scale linear systems.
+  7. [FELiCS](https://felics.eu): Finite Element Linearized Combustion Solver.
+
 ## Linear solvers and preconditioners
 
   1. [HPDDM](https://github.com/hpddm/hpddm): high-performance unified framework for domain decomposition methods.
@@ -58,13 +67,8 @@ The list below shows software packages that use SLEPc or expose part of its func
   1. [SALSA](https://icl.utk.edu/salsa/): Self-Adapting Large-scale Solver Architecture.
   2. [Cubica](http://www.tkim.graphics/cubica/): a toolkit for subspace deformations.
   3. [Dome](http://faraday1.ucd.ie/dome.html): a power system analysis toolbox.
-  4. [ncpaprop](https://github.com/chetzer-ncpa/ncpaprop-release): NCPA Infrasound Propagation Modeling Package.
-  5. [EasterEig](https://github.com/nennigb/EasterEig): parametric eigenvalue problem depending on a parameter.
-  6. [pyGPCCA](https://github.com/msmdev/pyGPCCA): Generalized Perron Cluster Cluster Analysis.
-  7. [cmdtools](https://github.com/zib-cmd/cmdtools): a suite of tools used and/or developed in the Computational Molecular Design group of ZIB.
-  8. [BROADCAST](https://broadcast.readthedocs.io): a Python software that discretizes the compressible Navier-Stokes equations and extracts the linearized state derivative operators.
-  9. [VFI-MEMS](https://gitlab.tuwien.ac.at/andre.gesing/non_linear_eigenvalue): solve the dynamics of a MEMS resonator in a fluid with a nonlinear eigensolver.
-  10. [helmholtz-x](https://doi.org/10.17863/CAM.112694): a python library built upon DOLFINx to solve a non-homogeneous Helmholtz equation, specifically thermoacoustic Helmholtz.
-  11. [RSVD-{math}`\Delta`t](https://github.com/AliFarghadan/RSVD-Delta-t/tree/Resolvent-analysis): Randomized Singular Value Decomposition with Time-stepping for large-scale resolvent analysis
-  12. [OpenParEM](https://openparem.org): Open-source parallel electromagnetic simulators
-  13. [Resolvent4py](https://github.com/albertopadovan/resolvent4py): A parallel Python package for analysis, model reduction and control of large-scale linear systems
+  4. [EasterEig](https://github.com/nennigb/EasterEig): parametric eigenvalue problem depending on a parameter.
+  5. [pyGPCCA](https://github.com/msmdev/pyGPCCA): Generalized Perron Cluster Cluster Analysis.
+  6. [cmdtools](https://github.com/zib-cmd/cmdtools): a suite of tools used and/or developed in the Computational Molecular Design group of ZIB.
+  7. [VFI-MEMS](https://gitlab.tuwien.ac.at/andre.gesing/non_linear_eigenvalue): solve the dynamics of a MEMS resonator in a fluid with a nonlinear eigensolver.
+  8. [OpenParEM](https://openparem.org): Open-source parallel electromagnetic simulators.

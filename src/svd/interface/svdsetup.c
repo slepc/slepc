@@ -30,7 +30,8 @@
 PetscErrorCode SVDSetOperators(SVD svd,Mat A,Mat B)
 {
   PetscInt       Ma,Na,Mb,Nb,ma,na,mb,nb,M0,N0,m0,n0;
-  PetscBool      samesize=PETSC_TRUE;
+  PetscBool      samesize=PETSC_TRUE,same;
+  VecType        ta,tb;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
@@ -57,6 +58,11 @@ PetscErrorCode SVDSetOperators(SVD svd,Mat A,Mat B)
       PetscCall(MatGetLocalSize(svd->OPb,&m0,&n0));
       if (M0!=Mb || N0!=Nb || m0!=mb || n0!=nb) samesize = PETSC_FALSE;
     }
+    /* make sure both matrices have compatible VecType */
+    PetscCall(MatGetVecType(A,&ta));
+    PetscCall(MatGetVecType(B,&tb));
+    PetscCall(PetscStrcmp(ta,tb,&same));
+    PetscCheck(same,PetscObjectComm((PetscObject)svd),PETSC_ERR_ARG_INCOMP,"The provided matrices have different vector types (%s vs %s), consider calling MatSetVecType() in the one that is not on GPU",ta,tb);
   }
 
   PetscCall(PetscObjectReference((PetscObject)A));
