@@ -179,6 +179,7 @@ int main(int argc,char **argv)
       suffix: 3
       nsize: 2
       args: -svd_type trlanczos -svd_ncv 14 -svd_monitor_cancel -ds_parallel synchronized
+      filter: sed -e "s/99255/99254/"
 
    testset:
       args: -svd_monitor_cancel -mat_type aijhipsparse

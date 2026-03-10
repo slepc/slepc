@@ -208,7 +208,7 @@ PetscErrorCode MatGetDiagonal_Laplacian2D(Mat A,Vec diag)
          args: -eps_type {{rqcg lobpcg}}
       test:
          suffix: 2_lanczos
-         args: -eps_type lanczos -eps_lanczos_reorthog local
+         args: -eps_type lanczos -eps_lanczos_reorthog local -eps_ncv 20
       test:
          suffix: 2_arpack
          args: -eps_type arpack -eps_ncv 6
