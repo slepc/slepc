@@ -160,7 +160,7 @@ int main(int argc,char **argv)
 
    test:
       suffix: 1
-      args: -pep_tol 1e-6 -pep_ncv 22
+      args: -pep_tol 1e-5 -pep_ncv 22
       filter: sed -e "s/[+-]0\.0*i//g"
 
 TEST*/

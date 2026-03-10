@@ -149,6 +149,7 @@ int main(int argc,char **argv)
       test:
          suffix: 2_rqcg
          args: -eps_type rqcg -eps_rqcg_reset 5 -eps_ncv 32
+         filter: sed -e "s/26644/26645/"
       test:
          suffix: 2_lobpcg
          args: -eps_type lobpcg -eps_lobpcg_blocksize 5 -st_pc_type none

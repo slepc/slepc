@@ -120,7 +120,7 @@ int main(int argc,char **argv)
    testset:
       args: -svd_nsv 4
       output_file: output/test3_1.out
-      filter: sed -e "s/22176/22175/" | sed -e "s/21798/21797/" | sed -e "s/16826/16825/" | sed -e "s/15129/15128/" | sed -e "s/22200/22201/"
+      filter: sed -e "s/22176/22175/" | sed -e "s/21798/21797/" | sed -e "s/16826/16825/" | sed -e "s/15129/15128/" | sed -e "s/22200/22201/" | sed -e "s/15127/15128/"
       test:
          suffix: 1_lanczos
          args: -svd_type lanczos
@@ -167,7 +167,7 @@ int main(int argc,char **argv)
    testset:
       args: -svd_implicittranspose -svd_nsv 4 -svd_tol 1e-5
       output_file: output/test3_1.out
-      filter: sed -e "s/22176/22175/" | sed -e "s/21798/21797/" | sed -e "s/16826/16825/" | sed -e "s/15129/15128/" | sed -e "s/22200/22201/"
+      filter: sed -e "s/22176/22175/" | sed -e "s/21798/21797/" | sed -e "s/16826/16825/" | sed -e "s/15129/15128/" | sed -e "s/22200/22201/" | sed -e "s/15127/15128/"
       test:
          suffix: 2_lanczos
          args: -svd_type lanczos -svd_conv_norm

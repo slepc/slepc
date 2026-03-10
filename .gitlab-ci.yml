@@ -739,7 +739,6 @@ gnu-c-cuda-single:
   variables:
     LOAD_MODULES: mpi
     PETSC_CONFIG_OPTS: --with-precision=single --with-single-library=0 --with-cuda
-    TEST_OPTS: -j1 -l6 query=requires queryval=cuda
 
 gnu-c-multilib:
   extends:
@@ -993,7 +992,6 @@ gnu-c-cuda-int64:
   variables:
     LOAD_MODULES: mpi
     PETSC_CONFIG_OPTS: --with-fc=0 --with-cuda --with-64-bit-indices --with-magma-dir=/usr/local/opt/magma-2.7.1
-    TEST_OPTS: -j2 -l6 query=requires queryval=cuda
     MAKE_CUDAFLAGS: --compiler-options -Wall,-Wunused-parameter,-Wno-deprecated-declarations,-Werror
 
 gnu-c-nocxx:
@@ -1046,7 +1044,6 @@ gnu-c-hip-single:
   variables:
     LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-precision=single --with-single-library=0 --with-hip
-    TEST_OPTS: query=requires queryval=hip
 
 gnu-c-hip-int64:
   extends:
@@ -1057,7 +1054,6 @@ gnu-c-hip-int64:
   variables:
     LOAD_MODULES: mpich/5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-hip --with-64-bit-indices
-    TEST_OPTS: query=requires queryval=hip
 
 gnu-c-static-multilib:
   extends:
