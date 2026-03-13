@@ -70,7 +70,6 @@ static PetscErrorCode EPSSetUp_KrylovSchur_Filter(EPS eps)
   EPSCheckStandardCondition(eps,PETSC_TRUE," with polynomial filter");
   PetscCheck(eps->intb<PETSC_MAX_REAL || eps->inta>PETSC_MIN_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONG,"The defined computational interval should have at least one of their sides bounded");
   EPSCheckUnsupportedCondition(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_THRESHOLD,PETSC_TRUE," with polynomial filter");
-  if (eps->tol==(PetscReal)PETSC_DETERMINE) eps->tol = SLEPC_DEFAULT_TOL*1e-2;  /* use tighter tolerance */
   PetscCall(STFilterSetInterval(eps->st,eps->inta,eps->intb));
   if (!ctx->estimatedrange) {
     PetscCall(STFilterGetRange(eps->st,&rleft,&rright));
