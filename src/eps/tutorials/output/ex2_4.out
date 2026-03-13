@@ -2,7 +2,6 @@
 2-D Laplacian Eigenproblem, N=2070 (45x46 grid)
 
 
- Number of requested eigenvalues: 10
  Found 10 eigenvalues, all of them computed up to the required tolerance:
      4.54317, 4.54336, 4.55425, 4.55778, 4.56081, 4.56317, 4.56383, 4.56744, 
      4.56778, 4.56954

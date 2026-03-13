@@ -307,8 +307,8 @@ PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nc
 +  eps    - the linear eigensolver context
 .  its    - current number of iterations
 .  max_it - maximum number of iterations
-.  nconv  - number of currently converged eigenpairs (ignored here)
-.  nev    - number of requested eigenpairs (ignored here)
+.  nconv  - number of currently converged eigenpairs
+.  nev    - number of requested eigenpairs
 -  ctx    - context containing additional data (`EPSStoppingCtx`)
 
    Output Parameter:
@@ -329,38 +329,61 @@ PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nc
 @*/
 PetscErrorCode EPSStoppingThreshold(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx)
 {
-  PetscReal thres,firstev,lastev;
-  PetscBool magnit,rel;
+  PetscReal thres,firstev,lastev,firstnc,errest;
+  PetscBool magnit,rel,isfilter;
   EPSWhich  which;
 
   PetscFunctionBegin;
   *reason = EPS_CONVERGED_ITERATING;
   firstev = ((EPSStoppingCtx)ctx)->firstev;
   lastev  = ((EPSStoppingCtx)ctx)->lastev;
+  firstnc = ((EPSStoppingCtx)ctx)->firstnc;
+  errest  = ((EPSStoppingCtx)ctx)->errest;
   thres   = ((EPSStoppingCtx)ctx)->thres;
   rel     = ((EPSStoppingCtx)ctx)->threlative;
   which   = ((EPSStoppingCtx)ctx)->which;
-  magnit  = (which==EPS_SMALLEST_MAGNITUDE || which==EPS_LARGEST_MAGNITUDE || which==EPS_TARGET_MAGNITUDE)? PETSC_TRUE: PETSC_FALSE;
-  if (nconv && magnit && which==EPS_TARGET_MAGNITUDE && ((rel && ((thres>1.0 && lastev>thres*firstev) || (thres<1.0 && lastev<thres*firstev))) || (!rel && lastev>thres))) {
-    if (!rel) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is above the threshold %g\n",(double)lastev,(double)thres));
-    else if (thres>1.0) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is above the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
-    else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
-    *reason = EPS_CONVERGED_TOL;
-  } else if (nconv && magnit && ((which==EPS_LARGEST_MAGNITUDE && ((rel && lastev<thres*firstev) || (!rel && lastev<thres))) || (which==EPS_SMALLEST_MAGNITUDE && lastev>thres))) {
-    if (which==EPS_SMALLEST_MAGNITUDE) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is above the threshold %g\n",(double)lastev,(double)thres));
-    else if (!rel) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is below the threshold %g\n",(double)lastev,(double)thres));
-    else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
-    *reason = EPS_CONVERGED_TOL;
-  } else if (nconv && !magnit && ((which==EPS_LARGEST_REAL && lastev<thres) || (which==EPS_SMALLEST_REAL && lastev>thres))) {
-    if (which==EPS_LARGEST_REAL) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: eigenvalue %g is below the threshold %g\n",(double)lastev,(double)thres));
-    else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: eigenvalue %g is above the threshold %g\n",(double)lastev,(double)thres));
-    *reason = EPS_CONVERGED_TOL;
-  } else if (nev && nconv >= nev) {
-    PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: %" PetscInt_FMT " eigenpairs converged at iteration %" PetscInt_FMT "\n",nconv,its));
-    *reason = EPS_CONVERGED_TOL;
-  } else if (its >= max_it) {
-    *reason = EPS_DIVERGED_ITS;
-    PetscCall(PetscInfo(eps,"Linear eigensolver iteration reached maximum number of iterations (%" PetscInt_FMT ")\n",its));
+
+  PetscCall(PetscObjectTypeCompare((PetscObject)eps->st,STFILTER,&isfilter));
+  if (isfilter) {
+    /*
+      ((EPSStoppingCtx)ctx)->threlative   should be PETSC_FALSE
+      ((EPSStoppingCtx)ctx)->which        should be EPS_LARGEST_MAGNITUDE
+    */
+    if (nconv && firstnc+errest<thres) {
+      if (its==((EPSStoppingCtx)ctx)->its+1) {
+        PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g (plus error estimate %g) is below the threshold %g\n",(double)firstnc,(double)errest,(double)thres));
+        *reason = EPS_CONVERGED_TOL;
+      } else ((EPSStoppingCtx)ctx)->its = its;  /* wait until next iteration */
+    } else if (nev && nconv >= nev) {
+      PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: %" PetscInt_FMT " eigenpairs converged at iteration %" PetscInt_FMT "\n",nconv,its));
+      *reason = EPS_CONVERGED_TOL;
+    } else if (its >= max_it) {
+      *reason = EPS_DIVERGED_ITS;
+      PetscCall(PetscInfo(eps,"Linear eigensolver iteration reached maximum number of iterations (%" PetscInt_FMT ")\n",its));
+    }
+  } else {
+    magnit  = (which==EPS_SMALLEST_MAGNITUDE || which==EPS_LARGEST_MAGNITUDE || which==EPS_TARGET_MAGNITUDE)? PETSC_TRUE: PETSC_FALSE;
+    if (nconv && magnit && which==EPS_TARGET_MAGNITUDE && ((rel && ((thres>1.0 && lastev>thres*firstev) || (thres<1.0 && lastev<thres*firstev))) || (!rel && lastev>thres))) {
+      if (!rel) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is above the threshold %g\n",(double)lastev,(double)thres));
+      else if (thres>1.0) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is above the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
+      else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
+      *reason = EPS_CONVERGED_TOL;
+    } else if (nconv && magnit && ((which==EPS_LARGEST_MAGNITUDE && ((rel && lastev<thres*firstev) || (!rel && lastev<thres))) || (which==EPS_SMALLEST_MAGNITUDE && lastev>thres))) {
+      if (which==EPS_SMALLEST_MAGNITUDE) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is above the threshold %g\n",(double)lastev,(double)thres));
+      else if (!rel) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g is below the threshold %g\n",(double)lastev,(double)thres));
+      else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastev,(double)firstev,(double)thres));
+      *reason = EPS_CONVERGED_TOL;
+    } else if (nconv && !magnit && ((which==EPS_LARGEST_REAL && lastev<thres) || (which==EPS_SMALLEST_REAL && lastev>thres))) {
+      if (which==EPS_LARGEST_REAL) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: eigenvalue %g is below the threshold %g\n",(double)lastev,(double)thres));
+      else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: eigenvalue %g is above the threshold %g\n",(double)lastev,(double)thres));
+      *reason = EPS_CONVERGED_TOL;
+    } else if (nev && nconv >= nev) {
+      PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: %" PetscInt_FMT " eigenpairs converged at iteration %" PetscInt_FMT "\n",nconv,its));
+      *reason = EPS_CONVERGED_TOL;
+    } else if (its >= max_it) {
+      *reason = EPS_DIVERGED_ITS;
+      PetscCall(PetscInfo(eps,"Linear eigensolver iteration reached maximum number of iterations (%" PetscInt_FMT ")\n",its));
+    }
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }

@@ -282,19 +282,23 @@ struct _p_EPS {
 /*
     EPSSetCtxThreshold - Fills EPSStoppingCtx with data needed for the threshold stopping test
 */
-#define EPSSetCtxThreshold(eps,eigr,eigi,k) \
+#define EPSSetCtxThreshold(eps,eigr,eigi,err_est,k) \
   do { \
-    if (eps->stop==EPS_STOP_THRESHOLD && k) { \
-      PetscScalar __kr=eigr[k-1],__ki=eigi[k-1],__kr0=eigr[0],__ki0=eigi[0]; \
-      PetscCall(STBackTransform(eps->st,1,&__kr,&__ki)); \
-      PetscCall(STBackTransform(eps->st,1,&__kr0,&__ki0)); \
-      if (eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_SMALLEST_MAGNITUDE) { \
-        ((EPSStoppingCtx)eps->stoppingctx)->firstev = SlepcAbsEigenvalue(__kr0,__ki0); \
-        ((EPSStoppingCtx)eps->stoppingctx)->lastev  = SlepcAbsEigenvalue(__kr,__ki); \
+    if ((eps)->stop==EPS_STOP_THRESHOLD && k) { \
+      PetscScalar __kr=(eigr)[k-1],__ki=(eigi)[k-1],__krn=(eigr)[k],__kin=(eigi)[k],__kr0=(eigr)[0],__ki0=(eigi)[0]; \
+      PetscCall(STBackTransform((eps)->st,1,&__kr,&__ki)); \
+      PetscCall(STBackTransform((eps)->st,1,&__kr0,&__ki0)); \
+      PetscCall(STBackTransform((eps)->st,1,&__krn,&__kin)); \
+      if ((eps)->which==EPS_LARGEST_MAGNITUDE || (eps)->which==EPS_SMALLEST_MAGNITUDE) { \
+        ((EPSStoppingCtx)(eps)->stoppingctx)->firstev = SlepcAbsEigenvalue(__kr0,__ki0); \
+        ((EPSStoppingCtx)(eps)->stoppingctx)->lastev  = SlepcAbsEigenvalue(__kr,__ki); \
+        ((EPSStoppingCtx)(eps)->stoppingctx)->firstnc = SlepcAbsEigenvalue(__krn,__kin); \
       } else { \
-        ((EPSStoppingCtx)eps->stoppingctx)->firstev = PetscRealPart(__kr0); \
-        ((EPSStoppingCtx)eps->stoppingctx)->lastev  = PetscRealPart(__kr); \
+        ((EPSStoppingCtx)(eps)->stoppingctx)->firstev = PetscRealPart(__kr0); \
+        ((EPSStoppingCtx)(eps)->stoppingctx)->lastev  = PetscRealPart(__kr); \
+        ((EPSStoppingCtx)(eps)->stoppingctx)->firstnc = PetscRealPart(__krn); \
       } \
+      ((EPSStoppingCtx)(eps)->stoppingctx)->errest = (err_est)[k]; \
     } \
   } while (0)
 

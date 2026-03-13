@@ -176,7 +176,7 @@ int main(int argc,char **argv)
    testset:
       args: -n 45 -m 46 -eps_interval 4.54,4.57 -eps_ncv 24 -terse
       output_file: output/ex2_4.out
-      filter: grep -v Solution
+      filter: grep -v Solution | grep -v "Number of requested" | grep -v "Using threshold"
       requires: !single
       timeoutfactor: 2
       test:

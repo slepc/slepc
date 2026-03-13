@@ -155,40 +155,6 @@ PetscErrorCode EPSDelayedArnoldi1(EPS eps,PetscScalar *H,PetscInt ldh,PetscInt k
 }
 
 /*
-   EPSKrylovConvergence_Filter - Specialized version for STFILTER.
-*/
-static PetscErrorCode EPSKrylovConvergence_Filter(EPS eps,PetscBool getall,PetscInt kini,PetscInt nits,PetscReal beta,PetscReal gamma,PetscInt *kout)
-{
-  PetscInt       k,ninside,nconv;
-  PetscScalar    re,im;
-  PetscReal      resnorm;
-
-  PetscFunctionBegin;
-  ninside = 0;   /* count how many eigenvalues are located in the interval */
-  for (k=kini;k<kini+nits;k++) {
-    if (PetscRealPart(eps->eigr[k]) < gamma) break;
-    ninside++;
-  }
-  if (eps->trackall) getall = PETSC_TRUE;
-  eps->nev = ninside+kini;  /* adjust eigenvalue count */
-  nconv = 0;   /* count how many eigenvalues satisfy the convergence criterion */
-  for (k=kini;k<kini+(getall?nits:ninside);k++) {
-    /* eigenvalue */
-    re = eps->eigr[k];
-    im = eps->eigi[k];
-    PetscCall(DSVectors(eps->ds,DS_MAT_X,&k,&resnorm));
-    resnorm *= beta;
-    /* error estimate */
-    PetscCall((*eps->converged)(eps,re,im,resnorm,&eps->errest[k],eps->convergedctx));
-    if (eps->errest[k] < eps->tol) nconv++;
-    else if (!getall) break;
-  }
-  *kout = kini+nconv;
-  PetscCall(PetscInfo(eps,"Found %" PetscInt_FMT " eigenvalue approximations inside the interval (gamma=%g), k=%" PetscInt_FMT " nconv=%" PetscInt_FMT "\n",ninside,(double)gamma,k,nconv));
-  PetscFunctionReturn(PETSC_SUCCESS);
-}
-
-/*
    EPSKrylovConvergence - Implements the loop that checks for convergence
    in Krylov methods.
 
@@ -209,19 +175,11 @@ PetscErrorCode EPSKrylovConvergence(EPS eps,PetscBool getall,PetscInt kini,Petsc
 {
   PetscInt       k,newk,newk2,marker,ld,inside;
   PetscScalar    re,im,*Zr,*Zi,*X;
-  PetscReal      resnorm,gamma,lerrest;
-  PetscBool      isshift,isfilter,refined,istrivial;
+  PetscReal      resnorm,lerrest;
+  PetscBool      isshift,refined,istrivial;
   Vec            x=NULL,y=NULL,w[3];
 
   PetscFunctionBegin;
-  if (PetscUnlikely(eps->which == EPS_ALL)) {
-    PetscCall(PetscObjectTypeCompare((PetscObject)eps->st,STFILTER,&isfilter));
-    if (isfilter) {
-      PetscCall(STFilterGetThreshold(eps->st,&gamma));
-      PetscCall(EPSKrylovConvergence_Filter(eps,getall,kini,nits,beta,gamma,kout));
-      PetscFunctionReturn(PETSC_SUCCESS);
-    }
-  }
   PetscCall(RGIsTrivial(eps->rg,&istrivial));
   if (PetscUnlikely(eps->trueres)) {
     PetscCall(BVCreateVec(eps->V,&x));

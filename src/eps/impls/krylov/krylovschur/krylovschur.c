@@ -69,7 +69,7 @@ static PetscErrorCode EPSSetUp_KrylovSchur_Filter(EPS eps)
   EPSCheckHermitianCondition(eps,PETSC_TRUE," with polynomial filter");
   EPSCheckStandardCondition(eps,PETSC_TRUE," with polynomial filter");
   PetscCheck(eps->intb<PETSC_MAX_REAL || eps->inta>PETSC_MIN_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONG,"The defined computational interval should have at least one of their sides bounded");
-  EPSCheckUnsupportedCondition(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION | EPS_FEATURE_THRESHOLD,PETSC_TRUE," with polynomial filter");
+  EPSCheckUnsupportedCondition(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_EXTRACTION,PETSC_TRUE," with polynomial filter");
   PetscCall(STFilterSetInterval(eps->st,eps->inta,eps->intb));
   if (!ctx->estimatedrange) {
     PetscCall(STFilterGetRange(eps->st,&rleft,&rright));
@@ -82,9 +82,9 @@ static PetscErrorCode EPSSetUp_KrylovSchur_Filter(EPS eps)
     PetscCall(STFilterSetRange(eps->st,rleft,rright));
     ctx->estimatedrange = PETSC_TRUE;
   }
-  if (eps->ncv==PETSC_DETERMINE && eps->nev==0) eps->nev = 40;  /* user did not provide nev estimation */
+  PetscCall(EPSSetStoppingTest(eps,EPS_STOP_THRESHOLD));
   PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
-  PetscCheck(eps->ncv<=eps->nev+eps->mpd,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nev+mpd");
+  PetscCheck(eps->nev==0 || eps->ncv<=eps->nev+eps->mpd,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nev+mpd");
   if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -288,7 +288,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Default(EPS eps)
 
     /* Check convergence */
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,gamma,&k));
-    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,eps->errest,k);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
 
@@ -1571,7 +1571,7 @@ static PetscErrorCode EPSView_KrylovSchur(EPS eps,PetscViewer viewer)
     if (eps->problem_type==EPS_BSE) PetscCall(PetscViewerASCIIPrintf(viewer,"  BSE method: %s\n",EPSKrylovSchurBSETypes[ctx->bse]));
     if (eps->which==EPS_ALL) {
       PetscCall(PetscObjectTypeCompare((PetscObject)eps->st,STFILTER,&isfilt));
-      if (isfilt) PetscCall(PetscViewerASCIIPrintf(viewer,"  using filtering to extract all eigenvalues in an interval\n"));
+      if (isfilt) PetscCall(PetscViewerASCIIPrintf(viewer,"  using polynomial filtering%s\n",eps->nev?"":" to extract all eigenvalues in an interval"));
       else {
         PetscCall(PetscViewerASCIIPrintf(viewer,"  doing spectrum slicing with nev=%" PetscInt_FMT ", ncv=%" PetscInt_FMT ", mpd=%" PetscInt_FMT "\n",ctx->nev,ctx->ncv,ctx->mpd));
         if (ctx->npart>1) {

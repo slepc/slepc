@@ -285,7 +285,7 @@ PetscErrorCode EPSSetUp(EPS eps)
 {
   Mat            A,B;
   PetscInt       k,nmat;
-  PetscBool      flg;
+  PetscBool      flg,isfilter;
   EPSStoppingCtx ctx;
 
   PetscFunctionBegin;
@@ -363,7 +363,8 @@ PetscErrorCode EPSSetUp(EPS eps)
   PetscUseTypeMethod(eps,setup);
 
   /* threshold stopping test */
-  if (eps->stop==EPS_STOP_THRESHOLD) {
+  PetscCall(PetscObjectTypeCompare((PetscObject)eps->st,STFILTER,&isfilter));
+  if (eps->stop==EPS_STOP_THRESHOLD && !isfilter) {
     PetscCheck(eps->thres!=PETSC_MIN_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"Must give a threshold value with EPSSetThreshold()");
     PetscCheck(eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_SMALLEST_MAGNITUDE || eps->which==EPS_LARGEST_REAL || eps->which==EPS_SMALLEST_REAL || eps->which==EPS_TARGET_MAGNITUDE,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Threshold stopping test can only be used with largest/smallest/target magnitude or largest/smallest real selection of eigenvalues");
     if (eps->which==EPS_LARGEST_REAL || eps->which==EPS_SMALLEST_REAL) PetscCheck(eps->problem_type==EPS_HEP || eps->problem_type==EPS_GHEP || eps->problem_type==EPS_BSE || eps->problem_type==EPS_LREP,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Threshold stopping test with largest/smallest real can only be used in problems that have all eigenvalues real");
@@ -408,6 +409,18 @@ PetscErrorCode EPSSetUp(EPS eps)
   /* Setup ST */
   PetscCall(STSetUp(eps->st));
   PetscCall(EPSCheckCompatibleST(eps));
+
+  /* threshold stopping test for STFILTER */
+  if (isfilter) {
+    PetscCall(PetscNew(&ctx));
+    PetscCall(STFilterGetThreshold(eps->st,&eps->thres));
+    eps->threlative = PETSC_FALSE;
+    ctx->thres      = eps->thres;
+    ctx->threlative = eps->threlative;
+    ctx->which      = EPS_LARGEST_MAGNITUDE;
+    ctx->its        = -1;
+    PetscCall(EPSSetStoppingTestFunction(eps,EPSStoppingThreshold,ctx,PetscCtxDestroyDefault));
+  }
 
   /* process deflation and initial vectors */
   if (eps->nds<0) {
