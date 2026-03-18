@@ -581,11 +581,8 @@ Before use - please copy/install over to specified prefix: %s
 
   def runfix(self):
     self.fixConf()
-    using_build_backend = any(
-      os.environ.get(prefix + '_BUILD_BACKEND')
-      for prefix in ('_PYPROJECT_HOOKS', 'PEP517')
-    )
-    if using_build_backend:
+    self.building_wheel = bool(os.environ.get('SLEPC_BUILDING_WHEEL'))
+    if self.building_wheel:
       self.fixPythonWheel()
     return
 

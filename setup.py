@@ -97,6 +97,7 @@ def bootstrap():
     elif not (PETSC_ARCH and os.path.isdir(PETSC_ARCH_DIR)):
         PETSC_ARCH = None
         os.environ.pop('PETSC_ARCH', None)
+    os.environ['SLEPC_BUILDING_WHEEL'] = '1'
 
     # Generate package __init__.py and __main__.py files
     pkgdir = os.path.join('config', 'pypi')
@@ -158,31 +159,26 @@ def config(prefix):
     if status != 0:
         raise RuntimeError(status)
     # Fix SLEPc configuration
-    using_build_backend = any(
-        os.environ.get(prefix + '_BUILD_BACKEND')
-        for prefix in ('_PYPROJECT_HOOKS', 'PEP517')
-    )
-    if using_build_backend:
-        pdir = os.environ['SLEPC_DIR']
-        parch = os.environ['PETSC_ARCH']
-        if not parch:
-            makefile = os.path.join(pdir, 'lib', 'slepc', 'conf', 'slepcvariables')
-            with open(makefile, 'r') as mfile:
-                contents = mfile.readlines()
-            for line in contents:
-                if line.startswith('PETSC_ARCH'):
-                    parch = line.split('=')[1].strip()
-                    break
-        include = os.path.join(pdir, parch, 'include')
-        for filename in (
-            'slepcconf.h',
-        ):
-            filename = os.path.join(include, filename)
-            with open(filename, 'r') as old_fh:
-                contents = old_fh.read()
-            contents = contents.replace(prefix, '${SLEPC_DIR}')
-            with open(filename, 'w') as new_fh:
-                new_fh.write(contents)
+    pdir = os.environ['SLEPC_DIR']
+    parch = os.environ['PETSC_ARCH']
+    if not parch:
+        makefile = os.path.join(pdir, 'lib', 'slepc', 'conf', 'slepcvariables')
+        with open(makefile, 'r') as mfile:
+            contents = mfile.readlines()
+        for line in contents:
+            if line.startswith('PETSC_ARCH'):
+                parch = line.split('=')[1].strip()
+                break
+    include = os.path.join(pdir, parch, 'include')
+    for filename in (
+        'slepcconf.h',
+    ):
+        filename = os.path.join(include, filename)
+        with open(filename, 'r') as old_fh:
+            contents = old_fh.read()
+        contents = contents.replace(prefix, '${SLEPC_DIR}')
+        with open(filename, 'w') as new_fh:
+            new_fh.write(contents)
 
 
 def build():
