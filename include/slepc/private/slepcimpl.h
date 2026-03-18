@@ -24,13 +24,13 @@ SLEPC_INTERN PetscBool SlepcBeganPetsc;
     SlepcHeaderCreate - Creates a SLEPc object
 
     Input Parameters:
-+   classid - the classid associated with this object
++   classid    - the classid associated with this object
 .   class_name - string name of class; should be static
-.   descr - string containing short description; should be static
-.   mansec - string indicating section in manual pages; should be static
-.   comm - the MPI Communicator
-.   destroy - the destroy routine for this object
--   view - the view routine for this object
+.   descr      - string containing short description; should be static
+.   mansec     - string indicating section in manual pages; should be static
+.   comm       - the MPI Communicator
+.   destroy    - the destroy routine for this object
+-   view       - the view routine for this object
 
     Output Parameter:
 .   h - the newly created object

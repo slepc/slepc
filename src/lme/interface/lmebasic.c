@@ -244,7 +244,7 @@ PetscErrorCode LMECreate(MPI_Comm comm,LME *outlme)
 -  type - a known method
 
    Options Database Key:
-.  -lme_type \<type\> - sets the method; use -help for a list of available methods
+.  -lme_type type - sets the method; use -help for a list of available methods
 
    Notes:
    See `LMEType` for available methods. The default is `LMEKRYLOV`.

@@ -321,7 +321,7 @@ static PetscErrorCode PEPQArnoldiSetRestart_QArnoldi(PEP pep,PetscReal keep)
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -pep_qarnoldi_restart \<keep\> - sets the restart parameter
+.  -pep_qarnoldi_restart keep - sets the restart parameter
 
    Note:
    Allowed values are in the range [0.1,0.9]. The default is 0.5.
@@ -392,7 +392,7 @@ static PetscErrorCode PEPQArnoldiSetLocking_QArnoldi(PEP pep,PetscBool lock)
 -  lock - `PETSC_TRUE` if the locking variant must be selected
 
    Options Database Key:
-.  -pep_qarnoldi_locking - sets the locking flag
+.  -pep_qarnoldi_locking (true|false) - sets the locking flag
 
    Note:
    The default is to lock converged eigenpairs when the method restarts.

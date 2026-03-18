@@ -190,8 +190,8 @@ SLEPC_EXTERN const char *BVOrthogBlockTypes[];
 
    Values:
    Allowed values are
-+  `BV_MATMULT_VECS` - perform a matrix-vector multiply per each column
-.  `BV_MATMULT_MAT` - carry out a Mat-Mat product with a dense matrix
++  `BV_MATMULT_VECS`     - perform a matrix-vector multiply per each column
+.  `BV_MATMULT_MAT`      - carry out a Mat-Mat product with a dense matrix
 -  `BV_MATMULT_MAT_SAVE` - this case is deprecated
 
    Note:

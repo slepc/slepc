@@ -280,8 +280,8 @@ PetscErrorCode PEPGetTolerances(PEP pep,PetscReal *tol,PetscInt *maxits)
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -pep_tol \<tol\>       - sets the convergence tolerance
--  -pep_max_it \<maxits\> - sets the maximum number of iterations allowed
++  -pep_tol tol       - sets the convergence tolerance
+-  -pep_max_it maxits - sets the maximum number of iterations allowed
 
    Note:
    Use `PETSC_CURRENT` to retain the current value of any of the parameters.
@@ -362,9 +362,9 @@ PetscErrorCode PEPGetDimensions(PEP pep,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -pep_nev \<nev\> - sets the number of eigenvalues
-.  -pep_ncv \<ncv\> - sets the dimension of the subspace
--  -pep_mpd \<mpd\> - sets the maximum projected dimension
++  -pep_nev nev - sets the number of eigenvalues
+.  -pep_ncv ncv - sets the dimension of the subspace
+-  -pep_mpd mpd - sets the maximum projected dimension
 
    Notes:
    Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a reasonably good value, which is
@@ -622,7 +622,7 @@ PetscErrorCode PEPGetProblemType(PEP pep,PEPProblemType *type)
 -  basis - the type of polynomial basis, see `PEPBasis` for possible values
 
    Options Database Key:
-.  -pep_basis \<basis\> - Select the basis type
+.  -pep_basis (monomial|chebyshev1|chebyshev2|legendre|laguerre|hermite) - select the basis type
 
    Note:
    By default, the coefficient matrices passed via `PEPSetOperators()` are
@@ -946,10 +946,10 @@ PetscErrorCode PEPGetStoppingTest(PEP pep,PEPStop *stop)
 -  lambda - approximation to wanted eigenvalues (modulus)
 
    Options Database Keys:
-+  -pep_scale \<scale\>         - set the scaling type, one of `none`,`scalar`,`diagonal`,`both`
-.  -pep_scale_factor \<alpha\>  - set the scaling factor
-.  -pep_scale_its \<its\>       - set the number of iterations
--  -pep_scale_lambda \<lambda\> - set the approximation to eigenvalues
++  -pep_scale (none|scalar|diagonal|both) - set the scaling type
+.  -pep_scale_factor alpha                - set the scaling factor
+.  -pep_scale_its its                     - set the number of iterations
+-  -pep_scale_lambda lambda               - set the approximation to eigenvalues
 
    Notes:
    There are two non-exclusive scaling strategies, scalar and diagonal.
@@ -1076,7 +1076,7 @@ PetscErrorCode PEPGetScale(PEP pep,PEPScale *scale,PetscReal *alpha,Vec *Dl,Vec 
 -  extract - extraction strategy, see `PEPExtract` for possible values
 
    Options Database Key:
-.  -pep_extract \<extract\> - extraction type, one of `none`,`norm`,`residual`,`structured`
+.  -pep_extract (none|norm|residual|structured) - set the extraction type
 
    Note:
    This is relevant for solvers based on linearization. Once the solver has
@@ -1137,11 +1137,11 @@ PetscErrorCode PEPGetExtract(PEP pep,PEPExtract *extract)
             for possible values
 
    Options Database Keys:
-+  -pep_refine \<refine\>           - set the refinement type, one of `none`,`simple`,`multiple`
-.  -pep_refine_partitions \<npart\> - set the number of partitions
-.  -pep_refine_tol \<tol\>         - set the tolerance
-.  -pep_refine_its \<its\>         - set the number of iterations
--  -pep_refine_scheme \<scheme\>   - set the scheme for the linear solves, `schur`,`mbe`, or `explicit`
++  -pep_refine (none|simple|multiple)      - set the refinement type
+.  -pep_refine_partitions npart            - set the number of partitions
+.  -pep_refine_tol tol                     - set the tolerance
+.  -pep_refine_its its                     - set the number of iterations
+-  -pep_refine_scheme (schur|mbe|explicit) - set the scheme for the linear solves
 
    Notes:
    This function configures the parameters of Newton iterative refinement,

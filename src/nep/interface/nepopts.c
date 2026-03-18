@@ -254,8 +254,8 @@ PetscErrorCode NEPGetTolerances(NEP nep,PetscReal *tol,PetscInt *maxits)
 -  maxits - maximum number of iterations to use
 
    Options Database Keys:
-+  -nep_tol \<tol\>       - sets the convergence tolerance
--  -nep_max_it \<maxits\> - sets the maximum number of iterations allowed
++  -nep_tol tol       - sets the convergence tolerance
+-  -nep_max_it maxits - sets the maximum number of iterations allowed
 
    Note:
    Use `PETSC_CURRENT` to retain the current value of any of the parameters.
@@ -336,9 +336,9 @@ PetscErrorCode NEPGetDimensions(NEP nep,PetscInt *nev,PetscInt *ncv,PetscInt *mp
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -nep_nev \<nev\> - sets the number of eigenvalues
-.  -nep_ncv \<ncv\> - sets the dimension of the subspace
--  -nep_mpd \<mpd\> - sets the maximum projected dimension
++  -nep_nev nev - sets the number of eigenvalues
+.  -nep_ncv ncv - sets the dimension of the subspace
+-  -nep_mpd mpd - sets the maximum projected dimension
 
    Notes:
    Use `PETSC_DETERMINE` for `ncv` and `mpd` to assign a reasonably good value, which is
@@ -584,7 +584,7 @@ PetscErrorCode NEPGetProblemType(NEP nep,NEPProblemType *type)
 -  twosided - whether the two-sided variant is to be used or not
 
    Options Database Key:
-.  -nep_two_sided - toggles the twosided flag
+.  -nep_two_sided (true|false) - toggles the twosided flag
 
    Notes:
    If the user sets `twosided`=`PETSC_TRUE` then the solver uses a variant of
@@ -915,11 +915,11 @@ PetscErrorCode NEPGetTrackAll(NEP nep,PetscBool *trackall)
             for possible values
 
    Options Database Keys:
-+  -nep_refine \<refine\>           - set the refinement type, one of `none`,`simple`,`multiple`
-.  -nep_refine_partitions \<npart\> - set the number of partitions
-.  -nep_refine_tol \<tol\>          - set the tolerance
-.  -nep_refine_its \<its\>          - set the number of iterations
--  -nep_refine_scheme \<scheme\>    - set the scheme for the linear solves, `schur`,`mbe`, or `explicit`
++  -nep_refine (none|simple|multiple)      - set the refinement type
+.  -nep_refine_partitions npart            - set the number of partitions
+.  -nep_refine_tol tol                     - set the tolerance
+.  -nep_refine_its its                     - set the number of iterations
+-  -nep_refine_scheme (schur|mbe|explicit) - set the scheme for the linear solves
 
    Notes:
    This function configures the parameters of Newton iterative refinement,

@@ -527,7 +527,7 @@ static PetscErrorCode PEPSTOARSetLocking_STOAR(PEP pep,PetscBool lock)
 -  lock - `PETSC_TRUE` if the locking variant must be selected
 
    Options Database Key:
-.  -pep_stoar_locking - sets the locking flag
+.  -pep_stoar_locking (true|false) - sets the locking flag
 
    Note:
    The default is to lock converged eigenpairs when the method restarts.
@@ -699,7 +699,7 @@ static PetscErrorCode PEPSTOARSetDetectZeros_STOAR(PEP pep,PetscBool detect)
 -  detect - check for zeros
 
    Options Database Key:
-.  -pep_stoar_detect_zeros - toggle the zero detection
+.  -pep_stoar_detect_zeros (true|false) - toggle the zero detection
 
    Notes:
    This flag makes sense only for spectrum slicing runs, that is, when
@@ -782,7 +782,7 @@ static PetscErrorCode PEPSTOARSetLinearization_STOAR(PEP pep,PetscReal alpha,Pet
 -  beta  - second parameter of the linearization
 
    Options Database Key:
-.  -pep_stoar_linearization <alpha,beta> - sets the coefficients
+.  -pep_stoar_linearization alpha,beta - sets the coefficients
 
    Notes:
    See section [](#sec:linearization) for the general expression of
@@ -878,9 +878,9 @@ static PetscErrorCode PEPSTOARSetDimensions_STOAR(PEP pep,PetscInt nev,PetscInt 
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -pep_stoar_nev \<nev\> - sets the number of eigenvalues
-.  -pep_stoar_ncv \<ncv\> - sets the dimension of the subspace
--  -pep_stoar_mpd \<mpd\> - sets the maximum projected dimension
++  -pep_stoar_nev nev - sets the number of eigenvalues
+.  -pep_stoar_ncv ncv - sets the dimension of the subspace
+-  -pep_stoar_mpd mpd - sets the maximum projected dimension
 
    Notes:
    These parameters are relevant only for spectrum slicing runs, that is, when
@@ -966,7 +966,7 @@ static PetscErrorCode PEPSTOARSetCheckEigenvalueType_STOAR(PEP pep,PetscBool che
 -  checket - check eigenvalue type
 
    Options Database Key:
-.  -pep_stoar_check_eigenvalue_type - toggles the check of eigenvalue type
+.  -pep_stoar_check_eigenvalue_type (true|false) - toggles the check of eigenvalue type
 
    Notes:
    This option is relevant only for spectrum slicing computations, but it is

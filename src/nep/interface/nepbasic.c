@@ -135,7 +135,7 @@ PetscErrorCode NEPCreate(MPI_Comm comm,NEP *outnep)
 -  type - a known method
 
    Options Database Key:
-.  -nep_type \<type\> - sets the method; use `-help` for a list of available methods
+.  -nep_type type - sets the method; use `-help` for a list of available methods
 
    Notes:
    See `NEPType` for available methods. The default is `NEPRII`.
@@ -602,7 +602,7 @@ PetscErrorCode NEPRefineGetKSP(NEP nep,KSP *ksp)
 -  target - the value of the target
 
    Options Database Key:
-.  -nep_target \<target\> - the value of the target
+.  -nep_target target - the value of the target
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum

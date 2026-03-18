@@ -260,6 +260,9 @@ static PetscErrorCode NEPRIISetMaximumIterations_RII(NEP nep,PetscInt its)
 +  nep - the nonlinear eigensolver context
 -  its - maximum inner iterations
 
+   Options Database Key:
+.  -nep_rii_max_it its - set the maximum number of inner iterations
+
    Level: advanced
 
 .seealso: [](ch:nep), `NEPRII`, `NEPRIIGetMaximumIterations()`
@@ -329,7 +332,7 @@ static PetscErrorCode NEPRIISetLagPreconditioner_RII(NEP nep,PetscInt lag)
           the Jacobian is built, etc.
 
    Options Database Key:
-.  -nep_rii_lag_preconditioner \<lag\> - the lag value
+.  -nep_rii_lag_preconditioner lag - the lag value
 
    Notes:
    The default is 1.
@@ -401,7 +404,7 @@ static PetscErrorCode NEPRIISetConstCorrectionTol_RII(NEP nep,PetscBool cct)
 -  cct - if `PETSC_FALSE`, the `KSP` relative tolerance is set to $2^{-i}$
 
    Options Database Key:
-.  -nep_rii_const_correction_tol - set a constant or dynamic stopping criterion
+.  -nep_rii_const_correction_tol (true|false) - set a constant or dynamic stopping criterion
 
    Notes:
    By default, an exponentially decreasing tolerance is set in the `KSP` used
@@ -475,7 +478,7 @@ static PetscErrorCode NEPRIISetHermitian_RII(NEP nep,PetscBool herm)
 -  herm - `PETSC_TRUE` if the Hermitian version is preferred
 
    Options Database Key:
-.  -nep_rii_hermitian - toggle the Hermitian version
+.  -nep_rii_hermitian (true|false) - toggle the Hermitian version
 
    Notes:
    By default, the scalar nonlinear equation $x^*T(\sigma)^{-1}T(z)x=0$ is solved
@@ -550,7 +553,7 @@ static PetscErrorCode NEPRIISetDeflationThreshold_RII(NEP nep,PetscReal deftol)
 -  deftol - the threshold value
 
    Options Database Key:
-.  -nep_rii_deflation_threshold \<deftol\> - set the threshold
+.  -nep_rii_deflation_threshold deftol - set the threshold
 
    Note:
    Normally, the solver iterates on the extended problem in order to deflate

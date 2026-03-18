@@ -135,7 +135,7 @@ PetscErrorCode PEPCreate(MPI_Comm comm,PEP *outpep)
 -  type - a known method
 
    Options Database Key:
-.  -pep_type \<type\> - sets the method; use `-help` for a list of available methods
+.  -pep_type type - sets the method; use `-help` for a list of available methods
 
    Notes:
    See `PEPType` for available methods. The default is `PEPTOAR`.
@@ -646,7 +646,7 @@ PetscErrorCode PEPRefineGetKSP(PEP pep,KSP *ksp)
 -  target - the value of the target
 
    Options Database Key:
-.  -pep_target \<target\> - the value of the target
+.  -pep_target target - the value of the target
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum
@@ -712,7 +712,7 @@ PetscErrorCode PEPGetTarget(PEP pep,PetscScalar* target)
 -  intb - right end of the interval
 
    Options Database Key:
-.  -pep_interval <a,b> - set $[a,b]$ as the interval of interest
+.  -pep_interval a,b - set $[a,b]$ as the interval of interest
 
    Notes:
    Spectrum slicing is a technique employed for computing all eigenvalues of

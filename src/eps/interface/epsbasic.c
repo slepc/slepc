@@ -140,7 +140,7 @@ PetscErrorCode EPSCreate(MPI_Comm comm,EPS *outeps)
 -  type - a known method
 
    Options Database Key:
-.  -eps_type \<type\> - sets the method; use `-help` for a list of available methods
+.  -eps_type type - sets the method; use `-help` for a list of available methods
 
    Notes:
    See `EPSType` for available methods. The default is `EPSKRYLOVSCHUR`.
@@ -372,7 +372,7 @@ PetscErrorCode EPSDestroy(EPS *eps)
 -  target - the value of the target
 
    Options Database Key:
-.  -eps_target \<target\> - the value of the target
+.  -eps_target target - the value of the target
 
    Notes:
    The target is a scalar value used to determine the portion of the spectrum
@@ -438,7 +438,7 @@ PetscErrorCode EPSGetTarget(EPS eps,PetscScalar* target)
 -  intb - right end of the interval
 
    Options Database Key:
-.  -eps_interval <a,b> - set $[a,b]$ as the interval of interest
+.  -eps_interval a,b - set $[a,b]$ as the interval of interest
 
    Notes:
    Spectrum slicing is a technique employed for computing all eigenvalues of
@@ -508,7 +508,7 @@ PetscErrorCode EPSGetInterval(EPS eps,PetscReal* inta,PetscReal* intb)
 
    Input Parameters:
 +  eps - the linear eigensolver context
--  st   - the spectral transformation object
+-  st  - the spectral transformation object
 
    Note:
    Use `EPSGetST()` to retrieve the spectral transformation context at a later time

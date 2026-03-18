@@ -330,7 +330,7 @@ PetscErrorCode DSDuplicate(DS ds,DS *dsnew)
 -  meth - an index identifying the method
 
    Options Database Key:
-.  -ds_method \<meth\> - sets the method
+.  -ds_method meth - sets the method
 
    Level: intermediate
 
@@ -381,7 +381,7 @@ PetscErrorCode DSGetMethod(DS ds,PetscInt *meth)
 -  pmode - the parallel mode
 
    Options Database Key:
-.  -ds_parallel \<pmode\> - sets the parallel mode `redundant`,`synchronized`,`distributed`
+.  -ds_parallel (redundant|synchronized|distributed) - sets the parallel mode
 
    Notes:
    In the `redundant` parallel mode, all processes will make the computation
@@ -613,7 +613,7 @@ PetscErrorCode DSGetRefined(DS ds,PetscBool *ref)
 -  bs - the block size
 
    Options Database Key:
-.  -ds_block_size \<bs\> - sets the block size
+.  -ds_block_size bs - sets the block size
 
    Level: intermediate
 

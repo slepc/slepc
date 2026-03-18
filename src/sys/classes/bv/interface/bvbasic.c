@@ -26,7 +26,7 @@ PetscFunctionList BVList = NULL;
 -  type - a known type
 
    Options Database Key:
-.  -bv_type \<type\> - sets `BV` type
+.  -bv_type type - sets `BV` type
 
    Level: intermediate
 
@@ -940,10 +940,10 @@ PetscErrorCode BVSetFromOptions(BV bv)
 -  block  - the method of block orthogonalization
 
    Options Database Keys:
-+  -bv_orthog_type \<type\>     - the vector orthogonalization, either `cgs` or `mgs`
-.  -bv_orthog_refine \<refine\> - the refinement type, `never`, `ifneeded` (default) or `always`
-.  -bv_orthog_eta \<eta\>       - the value of `eta`
--  -bv_orthog_block \<block\>   - the block-orthogonalization method
++  -bv_orthog_type (cgs|mgs)                     - the vector orthogonalization
+.  -bv_orthog_refine (never|ifneeded|always)     - the refinement type, default is `ifneeded`
+.  -bv_orthog_eta eta                            - the value of `eta`
+-  -bv_orthog_block (gs|chol|tsqr|tsqrchol|svqb) - the block-orthogonalization method
 
    Notes:
    The default settings work well for most problems.
@@ -1045,7 +1045,7 @@ PetscErrorCode BVGetOrthogonalization(BV bv,BVOrthogType *type,BVOrthogRefineTyp
 -  method - the method for the `BVMatMult()` operation
 
    Options Database Key:
-.  -bv_matmult \<method\> - choose one of the methods: `vecs`, `mat`
+.  -bv_matmult (vecs|mat) - choose the method
 
    Note:
    The default is `BV_MATMULT_MAT` except in the case of `BVVECS`.
@@ -2184,7 +2184,7 @@ PetscErrorCode BVRestoreSplitRows(BV bv,IS isup,IS islo,BV *U,BV *L)
 -  deftol - the tolerance
 
    Options Database Key:
-.  -bv_definite_tol \<deftol\> - the tolerance
+.  -bv_definite_tol deftol - the tolerance
 
    Notes:
    When using a non-standard inner product, see `BVSetMatrix()`, the solver needs

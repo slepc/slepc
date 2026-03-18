@@ -138,7 +138,7 @@ static PetscErrorCode EPSDestroy_GD(EPS eps)
 -  krylovstart - boolean flag
 
    Options Database Key:
-.  -eps_gd_krylov_start - activate starting the searching subspace with a Krylov basis
+.  -eps_gd_krylov_start (true|false) - activate starting the searching subspace with a Krylov basis
 
    Note:
    See discussion at `EPSGDSetInitialSize()`.
@@ -192,7 +192,7 @@ PetscErrorCode EPSGDGetKrylovStart(EPS eps,PetscBool *krylovstart)
 -  blocksize - number of vectors added to the search space in every iteration
 
    Options Database Key:
-.  -eps_gd_blocksize \<blocksize\> - number of vectors added to the search space in every iteration
+.  -eps_gd_blocksize blocksize - number of vectors added to the search space in every iteration
 
    Note:
    Detailed information can be found at {cite:p}`Rom14`.
@@ -247,8 +247,8 @@ PetscErrorCode EPSGDGetBlockSize(EPS eps,PetscInt *blocksize)
 -  plusk - number of vectors saved from the previous iteration
 
    Options Database Keys:
-+  -eps_gd_minv \<minv\>   - number of vectors of the searching subspace after restarting
--  -eps_gd_plusk \<plusk\> - number of vectors saved from the previous iteration
++  -eps_gd_minv minv   - number of vectors of the searching subspace after restarting
+-  -eps_gd_plusk plusk - number of vectors saved from the previous iteration
 
    Notes:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -305,7 +305,7 @@ PetscErrorCode EPSGDGetRestart(EPS eps,PetscInt *minv,PetscInt *plusk)
 -  initialsize - number of vectors of the initial searching subspace
 
    Options Database Key:
-.  -eps_gd_initial_size \<initialsize\> - number of vectors of the initial searching subspace
+.  -eps_gd_initial_size initialsize - number of vectors of the initial searching subspace
 
    Notes:
    If the flag in `EPSGDSetKrylovStart()` is set to `PETSC_FALSE` and the user
@@ -365,7 +365,7 @@ PetscErrorCode EPSGDGetInitialSize(EPS eps,PetscInt *initialsize)
 -  borth - whether to $B$-orthogonalize the search subspace
 
    Options Database Key:
-.  -eps_gd_borth - toggle the $B$-orthogonalization
+.  -eps_gd_borth (true|false) - toggle the $B$-orthogonalization
 
    Note:
    Detailed information can be found at {cite:p}`Rom14`.
@@ -427,7 +427,7 @@ static PetscErrorCode EPSGDSetDoubleExpansion_GD(EPS eps,PetscBool doubleexp)
 -  doubleexp - the boolean flag
 
    Options Database Key:
-.  -eps_gd_double_expansion - activate the double-expansion variant of GD
+.  -eps_gd_double_expansion (true|false) - activate the double-expansion variant of GD
 
    Note:
    In the double expansion variant the search subspace is expanded with $K[Ax, Bx]$

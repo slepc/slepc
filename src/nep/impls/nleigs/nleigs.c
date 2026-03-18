@@ -1392,7 +1392,7 @@ static PetscErrorCode NEPNLEIGSSetRestart_NLEIGS(NEP nep,PetscReal keep)
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -nep_nleigs_restart \<keep\> - sets the restart parameter
+.  -nep_nleigs_restart keep - sets the restart parameter
 
    Notes:
    Allowed values are in the range [0.1,0.9]. The default is 0.5.
@@ -1463,7 +1463,7 @@ static PetscErrorCode NEPNLEIGSSetLocking_NLEIGS(NEP nep,PetscBool lock)
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
-.  -nep_nleigs_locking - sets the locking flag
+.  -nep_nleigs_locking (true|false) - sets the locking flag
 
    Notes:
    The default is to lock converged eigenpairs when the method restarts.
@@ -1556,8 +1556,8 @@ static PetscErrorCode NEPNLEIGSSetInterpolation_NLEIGS(NEP nep,PetscReal tol,Pet
 -  degree - maximum degree of interpolation
 
    Options Database Keys:
-+  -nep_nleigs_interpolation_tol \<tol\>       - sets the tolerance to stop computing divided differences
--  -nep_nleigs_interpolation_degree \<degree\> - sets the maximum degree of interpolation
++  -nep_nleigs_interpolation_tol tol       - sets the tolerance to stop computing divided differences
+-  -nep_nleigs_interpolation_degree degree - sets the maximum degree of interpolation
 
    Note:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -1644,7 +1644,7 @@ static PetscErrorCode NEPNLEIGSSetRKShifts_NLEIGS(NEP nep,PetscInt ns,PetscScala
 -  shifts - array of scalar values specifying the shifts
 
    Options Database Key:
-.  -nep_nleigs_rk_shifts <s0,s1,...> - sets the list of shifts
+.  -nep_nleigs_rk_shifts s0,s1,... - sets the list of shifts
 
    Notes:
    If only one shift is provided, the built subspace is equivalent to
@@ -1802,7 +1802,7 @@ static PetscErrorCode NEPNLEIGSSetFullBasis_NLEIGS(NEP nep,PetscBool fullbasis)
 -  fullbasis - true if the full-basis variant must be selected
 
    Options Database Key:
-.  -nep_nleigs_full_basis - sets the full-basis flag
+.  -nep_nleigs_full_basis (true|false) - sets the full-basis flag
 
    Notes:
    The default is to use a compact representation of the Krylov basis, that is,
