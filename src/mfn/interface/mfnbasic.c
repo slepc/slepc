@@ -241,7 +241,7 @@ PetscErrorCode MFNCreate(MPI_Comm comm,MFN *outmfn)
 -  type - a known method
 
    Options Database Key:
-.  -mfn_type \<type\> - sets the method; use `-help` for a list of available methods
+.  -mfn_type type - sets the method; use `-help` for a list of available methods
 
    Notes:
    See `MFNType` for available methods. The default is `MFNKRYLOV`.

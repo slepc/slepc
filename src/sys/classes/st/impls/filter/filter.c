@@ -134,7 +134,7 @@ static PetscErrorCode STFilterSetType_Filter(ST st,STFilterType type)
 -  type - the type of filter
 
    Options Database Key:
-.  -st_filter_type \<type\> - set the type of filter
+.  -st_filter_type (filtlan|chebyshev) - set the type of filter
 
    Level: intermediate
 
@@ -209,7 +209,7 @@ static PetscErrorCode STFilterSetInterval_Filter(ST st,PetscReal inta,PetscReal 
 -  intb - right end of the interval
 
    Options Database Key:
-.  -st_filter_interval <a,b> - set $[a,b]$ as the interval of interest
+.  -st_filter_interval a,b - set $[a,b]$ as the interval of interest
 
    Notes:
    The filter will be configured to emphasize eigenvalues contained in the given
@@ -297,7 +297,7 @@ static PetscErrorCode STFilterSetRange_Filter(ST st,PetscReal left,PetscReal rig
 -  right - right end of the spectral range
 
    Options Database Key:
-.  -st_filter_range <lmin,lmax> - set $[\lambda_\mathrm{min},\lambda_\mathrm{max}]$ as the numerical range
+.  -st_filter_range lmin,lmax - set $[\lambda_\mathrm{min},\lambda_\mathrm{max}]$ as the numerical range
 
    Notes:
    The filter will be most effective if the numerical range is tight, that is,
@@ -384,7 +384,7 @@ static PetscErrorCode STFilterSetDegree_Filter(ST st,PetscInt deg)
 -  deg - polynomial degree
 
    Options Database Key:
-.  -st_filter_degree \<deg\> - sets the degree of the filter polynomial
+.  -st_filter_degree deg - sets the degree of the filter polynomial
 
    Level: intermediate
 
@@ -495,7 +495,7 @@ static PetscErrorCode STFilterSetDamping_Filter(ST st,STFilterDamping damping)
 -  damping - the type of damping
 
    Options Database Key:
-.  -st_filter_damping \<damping\> - sets the type of damping
+.  -st_filter_damping (none|jackson|lanczos|fejer) - sets the type of damping
 
    Note:
    Only used in `ST_FILTER_CHEBYSHEV` filters.

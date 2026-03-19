@@ -376,7 +376,7 @@ static PetscErrorCode EPSKrylovSchurSetRestart_KrylovSchur(EPS eps,PetscReal kee
 -  keep - the number of vectors to be kept at restart
 
    Options Database Key:
-.  -eps_krylovschur_restart \<keep\> - sets the restart parameter
+.  -eps_krylovschur_restart keep - sets the restart parameter
 
    Notes:
    Allowed values are in the range [0.1,0.9]. The default is 0.5, which means
@@ -452,7 +452,7 @@ static PetscErrorCode EPSKrylovSchurSetLocking_KrylovSchur(EPS eps,PetscBool loc
 -  lock - true if the locking variant must be selected
 
    Options Database Key:
-.  -eps_krylovschur_locking - sets the locking flag
+.  -eps_krylovschur_locking (true|false) - sets the locking flag
 
    Notes:
    The default is to lock converged eigenpairs when the method restarts.
@@ -550,7 +550,7 @@ static PetscErrorCode EPSKrylovSchurSetPartitions_KrylovSchur(EPS eps,PetscInt n
 -  npart - number of partitions
 
    Options Database Key:
-.  -eps_krylovschur_partitions \<npart\> - sets the number of partitions
+.  -eps_krylovschur_partitions npart - sets the number of partitions
 
    Notes:
    This call makes sense only for spectrum slicing runs, that is, when
@@ -633,7 +633,7 @@ static PetscErrorCode EPSKrylovSchurSetDetectZeros_KrylovSchur(EPS eps,PetscBool
 -  detect - check for zeros
 
    Options Database Key:
-.  -eps_krylovschur_detect_zeros - check for zeros
+.  -eps_krylovschur_detect_zeros (true|false) - check for zeros
 
    Notes:
    This flag makes sense only for spectrum slicing runs, that is, when
@@ -732,9 +732,9 @@ static PetscErrorCode EPSKrylovSchurSetDimensions_KrylovSchur(EPS eps,PetscInt n
 -  mpd - the maximum dimension allowed for the projected problem
 
    Options Database Keys:
-+  -eps_krylovschur_nev \<nev\> - sets the number of eigenvalues
-.  -eps_krylovschur_ncv \<ncv\> - sets the dimension of the subspace
--  -eps_krylovschur_mpd \<mpd\> - sets the maximum projected dimension
++  -eps_krylovschur_nev nev - sets the number of eigenvalues
+.  -eps_krylovschur_ncv ncv - sets the dimension of the subspace
+-  -eps_krylovschur_mpd mpd - sets the maximum projected dimension
 
    Notes:
    These parameters are relevant only for spectrum slicing runs, that is, when
@@ -1447,7 +1447,7 @@ static PetscErrorCode EPSKrylovSchurSetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
 -  bse - the BSE method
 
    Options Database Key:
-.  -eps_krylovschur_bse_type \<bse\> - sets the BSE type, either `shao`, `gruning`, or `projectedbse`
+.  -eps_krylovschur_bse_type (shao|gruning|projectedbse) - sets the BSE type
 
    Notes:
    This function is relevant only for `EPS_BSE` problem types, see section

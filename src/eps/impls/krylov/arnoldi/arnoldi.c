@@ -165,7 +165,7 @@ static PetscErrorCode EPSArnoldiSetDelayed_Arnoldi(EPS eps,PetscBool delayed)
 -  delayed - boolean flag
 
    Options Database Key:
-.  -eps_arnoldi_delayed - Activates delayed reorthogonalization in `EPSARNOLDI`
+.  -eps_arnoldi_delayed (true|false) - activates delayed reorthogonalization in `EPSARNOLDI`
 
    Note:
    Delayed reorthogonalization is an aggressive optimization for the `EPSARNOLDI`

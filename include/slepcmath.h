@@ -41,7 +41,8 @@ static inline PetscReal SlepcDefaultTol(PetscReal tol)
    Not Collective
 
    Input parameters:
-.  x,y - the real numbers
++  x - the first real number
+-  y - the second real number
 
    Output parameter:
 .  return - the result
@@ -72,8 +73,8 @@ static inline PetscReal SlepcAbs(PetscReal x,PetscReal y)
    Not Collective
 
    Input parameters:
-+  x  - the real part of the complex number
--  y  - the imaginary part of the complex number
++  x - the real part of the complex number
+-  y - the imaginary part of the complex number
 
    Notes:
    This function computes $\sqrt{x^2+y^2}$, taking care not to cause unnecessary

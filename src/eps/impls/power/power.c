@@ -785,7 +785,7 @@ static PetscErrorCode EPSPowerSetShiftType_Power(EPS eps,EPSPowerShiftType shift
 -  shift - the type of shift, see `EPSPowerShiftType` for possible values
 
    Options Database Key:
-.  -eps_power_shift_type \<shift\> - sets the shift type, either `constant`, `rayleigh` or `wilkinson`
+.  -eps_power_shift_type (constant|rayleigh|wilkinson) - sets the shift type
 
    Notes:
    By default, shifts are constant (`EPS_POWER_SHIFT_CONSTANT`) and the iteration
@@ -869,7 +869,7 @@ static PetscErrorCode EPSPowerSetNonlinear_Power(EPS eps,PetscBool nonlinear)
 -  nonlinear - whether the problem is nonlinear or not
 
    Options Database Key:
-.  -eps_power_nonlinear - sets the nonlinear flag
+.  -eps_power_nonlinear (true|false) - sets the nonlinear flag
 
    Notes:
    If this flag is set, the solver assumes that the problem is nonlinear,
@@ -953,7 +953,7 @@ static PetscErrorCode EPSPowerSetUpdate_Power(EPS eps,PetscBool update)
 -  update - whether the residual is updated monolithically or not
 
    Options Database Key:
-.  -eps_power_update - sets the update flag
+.  -eps_power_update (true|false) - sets the update flag
 
    Note:
    This flag is relevant only in nonlinear problems, see `EPSPowerSetNonlinear()`.
@@ -1028,7 +1028,7 @@ static PetscErrorCode EPSPowerSetSignNormalization_Power(EPS eps,PetscBool sign_
                         element when performing normalization steps
 
    Options Database Key:
-.  -eps_power_sign_normalization - sets the sign normalization flag
+.  -eps_power_sign_normalization (true|false) - sets the sign normalization flag
 
    Note:
    This flag is relevant only in nonlinear problems, see `EPSPowerSetNonlinear()`.

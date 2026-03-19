@@ -292,7 +292,7 @@ static PetscErrorCode EPSBLOPEXSetBlockSize_BLOPEX(EPS eps,PetscInt bs)
 -  bs  - the block size
 
    Options Database Key:
-.  -eps_blopex_blocksize \<bs\> - Sets the block size
+.  -eps_blopex_blocksize bs - sets the block size
 
    Level: advanced
 

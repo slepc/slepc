@@ -1073,7 +1073,7 @@ gnu-c-static-multilib:
     PETSC_CONFIG_OPTS: --with-shared-libraries=0 --with-single-library=0
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme --download-blopex
 
-aocc-c:
+aocc-c-debug:
   extends:
     - .stage-3
     - .linux_test

@@ -745,7 +745,7 @@ static PetscErrorCode PEPLinearSetLinearization_Linear(PEP pep,PetscReal alpha,P
 -  beta  - second parameter of the linearization
 
    Options Database Key:
-.  -pep_linear_linearization <alpha,beta> - sets the coefficients
+.  -pep_linear_linearization alpha,beta - sets the coefficients
 
    Notes:
    See section [](#sec:linearization) for the general expressions of
@@ -827,7 +827,7 @@ static PetscErrorCode PEPLinearSetExplicitMatrix_Linear(PEP pep,PetscBool explic
 -  explicitmat - boolean flag indicating if the matrices are built explicitly
 
    Options Database Key:
-.  -pep_linear_explicitmatrix - set the boolean flag
+.  -pep_linear_explicitmatrix (true|false) - set the boolean flag
 
    Level: advanced
 

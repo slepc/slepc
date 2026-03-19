@@ -283,7 +283,7 @@ static PetscErrorCode EPSEVSLSetSlices_EVSL(EPS eps,PetscInt nslices)
 -  nslices - the number of slices
 
    Options Database Key:
-.  -eps_evsl_slices \<nslices\> - set the number of slices
+.  -eps_evsl_slices nslices - set the number of slices
 
    Notes:
    By default, one slice per MPI process is used. Depending on the number of
@@ -365,7 +365,7 @@ static PetscErrorCode EPSEVSLSetRange_EVSL(EPS eps,PetscReal lmin,PetscReal lmax
 -  lmax - right end of the interval
 
    Options Database Key:
-.  -eps_evsl_range <lmin,lmax> - set $[\lambda_\mathrm{min},\lambda_\mathrm{max}]$ as the numerical range
+.  -eps_evsl_range lmin,lmax - set $[\lambda_\mathrm{min},\lambda_\mathrm{max}]$ as the numerical range
 
    Notes:
    The filter will be most effective if the numerical range is tight, that is, `lmin`
@@ -476,11 +476,11 @@ static PetscErrorCode EPSEVSLSetDOSParameters_EVSL(EPS eps,EPSEVSLDOSMethod dos,
 -  npoints - number of sample points (Lanczos only)
 
    Options Database Keys:
-+  -eps_evsl_dos_method \<dos\>       - set the DOS method, either `kpm` or `lanczos`
-.  -eps_evsl_dos_nvec \<nvec\>        - set the number of sample vectors
-.  -eps_evsl_dos_degree \<deg\>       - set the polynomial degree
-.  -eps_evsl_dos_steps \<steps\>      - set the number of Lanczos steps
--  -eps_evsl_dos_npoints \<npoints\>  - set the number of sample points
++  -eps_evsl_dos_method (kpm|lanczos) - set the DOS method
+.  -eps_evsl_dos_nvec nvec            - set the number of sample vectors
+.  -eps_evsl_dos_degree deg           - set the polynomial degree
+.  -eps_evsl_dos_steps steps          - set the number of Lanczos steps
+-  -eps_evsl_dos_npoints npoints      - set the number of sample points
 
    Notes:
    The density of states (or spectral density) can be approximated with two
@@ -582,8 +582,8 @@ static PetscErrorCode EPSEVSLSetPolParameters_EVSL(EPS eps,PetscInt max_deg,Pets
 -  thresh  - threshold for accepting a value
 
    Options Database Keys:
-+  -eps_evsl_pol_max_deg \<max_deg\> - set maximum polynomial degree
--  -eps_evsl_pol_thresh \<thresh\>   - set the threshold
++  -eps_evsl_pol_max_deg max_deg - set maximum polynomial degree
+-  -eps_evsl_pol_thresh thresh   - set the threshold
 
    Notes:
    `PETSC_CURRENT` can be used to preserve the current value of any of the
@@ -662,7 +662,7 @@ static PetscErrorCode EPSEVSLSetDamping_EVSL(EPS eps,EPSEVSLDamping damping)
 -  damping - the type of damping, see `EPSEVSLDamping` for possible values
 
    Options Database Key:
-.  -eps_evsl_damping \<damping\> - set the type of damping
+.  -eps_evsl_damping (none|jackson|sigma) - set the type of damping
 
    Notes:
    Damping is applied when building the polynomial to be used when solving the
