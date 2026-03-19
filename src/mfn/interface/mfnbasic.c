@@ -552,7 +552,7 @@ PetscErrorCode MFNSetFN(MFN mfn,FN fn)
 
    Level: beginner
 
-.seealso: [](ch:mfn), `MFNSetFN()`. `MFNSolve()`
+.seealso: [](ch:mfn), `MFNSetFN()`, `MFNSolve()`
 @*/
 PetscErrorCode MFNGetFN(MFN mfn,FN *fn)
 {

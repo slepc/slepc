@@ -247,7 +247,7 @@ static PetscErrorCode STCayleySetAntishift_Cayley(ST st,PetscScalar newshift)
    $(A - \sigma B)^{-1}(A + \nu B)$. This function sets the value of $\nu$.
    Use `STSetShift()` for setting $\sigma$. The value $\nu=-\sigma$ is not allowed.
 
-.seealso: [](ch:st), `STCAYLEY`. `STSetShift()`, `STCayleyGetAntishift()`
+.seealso: [](ch:st), `STCAYLEY`, `STSetShift()`, `STCayleyGetAntishift()`
 @*/
 PetscErrorCode STCayleySetAntishift(ST st,PetscScalar nu)
 {
