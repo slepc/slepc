@@ -145,8 +145,6 @@ intersphinx_mapping = {
     'numpy': ('https://numpy.org/doc/stable/', None),
     'numpydoc': ('https://numpydoc.readthedocs.io/en/latest/', None),
     'mpi4py': ('https://mpi4py.readthedocs.io/en/stable/', None),
-    'pyopencl': ('https://documen.tician.de/pyopencl/', None),
-    'dlpack': ('https://dmlc.github.io/dlpack/latest/', None),
     'petsc': ('https://petsc.org/release/', None),
     'petsc4py': ('https://petsc.org/release/petsc4py/', None),
     'slepc': ('https://slepc.upv.es/release/', None),
