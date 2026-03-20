@@ -319,9 +319,7 @@ PetscErrorCode BVNormalize_BLAS_CUDA(BV,PetscInt m_,PetscInt n_,PetscScalar *d_A
   PetscCall(PetscLogGpuTimeBegin());
   for (j=0;j<n_;j++) {
     k = 1;
-#if !defined(PETSC_USE_COMPLEX)
-    if (eigi && eigi[j] != 0.0) k = 2;
-#endif
+    if (!PetscDefined(USE_COMPLEX) && eigi && eigi[j] != 0.0) k = 2;
     PetscCallCUBLAS(cublasXnrm2(cublasv2handle,m,d_A+j*lda_,one,&nrm));
     if (k==2) {
       PetscCallCUBLAS(cublasXnrm2(cublasv2handle,m,d_A+(j+1)*lda_,one,&nrm1));

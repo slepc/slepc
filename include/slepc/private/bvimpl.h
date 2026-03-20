@@ -488,7 +488,7 @@ static inline PetscErrorCode BV_SetDefaultLD(BV bv,PetscInt nloc)
    BV_MatDenseCUDAGetArrayRead - if Q is MATSEQDENSE it will allocate memory on the
    GPU and copy the contents; otherwise, calls MatDenseCUDAGetArrayRead()
 */
-static inline PetscErrorCode BV_MatDenseCUDAGetArrayRead(BV bv,Mat Q,const PetscScalar **d_q)
+static inline PetscErrorCode BV_MatDenseCUDAGetArrayRead(PETSC_UNUSED BV bv,Mat Q,const PetscScalar **d_q)
 {
   const PetscScalar *q;
   PetscInt          ldq,mq;
@@ -496,7 +496,6 @@ static inline PetscErrorCode BV_MatDenseCUDAGetArrayRead(BV bv,Mat Q,const Petsc
   PetscBool         matiscuda;
 
   PetscFunctionBegin;
-  (void)bv; // avoid unused parameter warning
   PetscCall(MatGetSize(Q,NULL,&mq));
   PetscCall(MatDenseGetLDA(Q,&ldq));
   PetscCall(PetscCuBLASIntCast(ldq,&ldq_));
@@ -515,12 +514,11 @@ static inline PetscErrorCode BV_MatDenseCUDAGetArrayRead(BV bv,Mat Q,const Petsc
    BV_MatDenseCUDARestoreArrayRead - restores the pointer obtained with BV_MatDenseCUDAGetArrayRead(),
    freeing the GPU memory in case of MATSEQDENSE
 */
-static inline PetscErrorCode BV_MatDenseCUDARestoreArrayRead(BV bv,Mat Q,const PetscScalar **d_q)
+static inline PetscErrorCode BV_MatDenseCUDARestoreArrayRead(PETSC_UNUSED BV bv,Mat Q,const PetscScalar **d_q)
 {
   PetscBool matiscuda;
 
   PetscFunctionBegin;
-  (void)bv; // avoid unused parameter warning
   PetscCall(PetscObjectTypeCompare((PetscObject)Q,MATSEQDENSECUDA,&matiscuda));
   if (matiscuda) PetscCall(MatDenseCUDARestoreArrayRead(Q,d_q));
   else {
@@ -562,7 +560,7 @@ SLEPC_INTERN PetscErrorCode BV_StoreCoefficients_CUDA(BV,PetscInt,PetscScalar*,P
    BV_MatDenseHIPGetArrayRead - if Q is MATSEQDENSE it will allocate memory on the
    GPU and copy the contents; otherwise, calls MatDenseHIPGetArrayRead()
 */
-static inline PetscErrorCode BV_MatDenseHIPGetArrayRead(BV bv,Mat Q,const PetscScalar **d_q)
+static inline PetscErrorCode BV_MatDenseHIPGetArrayRead(PETSC_UNUSED BV bv,Mat Q,const PetscScalar **d_q)
 {
   const PetscScalar *q;
   PetscInt          ldq,mq;
@@ -570,7 +568,6 @@ static inline PetscErrorCode BV_MatDenseHIPGetArrayRead(BV bv,Mat Q,const PetscS
   PetscBool         matiship;
 
   PetscFunctionBegin;
-  (void)bv; // avoid unused parameter warning
   PetscCall(MatGetSize(Q,NULL,&mq));
   PetscCall(MatDenseGetLDA(Q,&ldq));
   PetscCall(PetscHipBLASIntCast(ldq,&ldq_));
@@ -589,12 +586,11 @@ static inline PetscErrorCode BV_MatDenseHIPGetArrayRead(BV bv,Mat Q,const PetscS
    BV_MatDenseHIPRestoreArrayRead - restores the pointer obtained with BV_MatDenseHIPGetArrayRead(),
    freeing the GPU memory in case of MATSEQDENSE
 */
-static inline PetscErrorCode BV_MatDenseHIPRestoreArrayRead(BV bv,Mat Q,const PetscScalar **d_q)
+static inline PetscErrorCode BV_MatDenseHIPRestoreArrayRead(PETSC_UNUSED BV bv,Mat Q,const PetscScalar **d_q)
 {
   PetscBool matiship;
 
   PetscFunctionBegin;
-  (void)bv; // avoid unused parameter warning
   PetscCall(PetscObjectTypeCompare((PetscObject)Q,MATSEQDENSEHIP,&matiship));
   if (matiship) PetscCall(MatDenseHIPRestoreArrayRead(Q,d_q));
   else {

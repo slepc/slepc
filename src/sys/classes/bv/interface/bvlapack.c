@@ -101,9 +101,7 @@ PetscErrorCode BVNormalize_LAPACK_Private(BV bv,PetscInt m_,PetscInt n_,const Pe
   /* compute local norms */
   for (j=0;j<n_;j++) {
     k = 1;
-#if !defined(PETSC_USE_COMPLEX)
-    if (eigi && eigi[j] != 0.0) k = 2;
-#endif
+    if (!PetscDefined(USE_COMPLEX) && eigi && eigi[j] != 0.0) k = 2;
     rwork[j] = LAPACKlange_("F",&m,&k,(PetscScalar*)(A+j*lda_),&lda,rwork2);
     if (k==2) { rwork[j+1] = rwork[j]; j++; }
   }
