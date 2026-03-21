@@ -125,13 +125,11 @@ static inline PetscErrorCode SlepcViewEigenvector(PetscViewer viewer,Vec xr,Vec 
   PetscCall(PetscSNPrintf(vname+count,sizeof(vname)-count,"%" PetscInt_FMT "_%s",index,pname));
   PetscCall(PetscObjectSetName((PetscObject)xr,vname));
   PetscCall(VecView(xr,viewer));
-#if !defined(PETSC_USE_COMPLEX)
-  vname[count-1] = 'i';
-  PetscCall(PetscObjectSetName((PetscObject)xi,vname));
-  PetscCall(VecView(xi,viewer));
-#else
-  (void)xi;
-#endif
+  if (!PetscDefined(USE_COMPLEX)) {
+    vname[count-1] = 'i';
+    PetscCall(PetscObjectSetName((PetscObject)xi,vname));
+    PetscCall(VecView(xi,viewer));
+  }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
