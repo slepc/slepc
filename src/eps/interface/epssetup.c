@@ -332,12 +332,13 @@ PetscErrorCode EPSSetUp(EPS eps)
     PetscCall(STGetMatrix(eps->st,0,&A));
     if (eps->problem_type==EPS_BSE) PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_BSE,NULL));
     if (eps->problem_type==EPS_HAMILT) PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_HAMILT,NULL));
+    if (eps->problem_type==EPS_LREP) PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_LREP,NULL));
   }
 
   /* safeguard for small problems */
   if (eps->n == 0) PetscFunctionReturn(PETSC_SUCCESS);
   if (eps->nev > eps->n) eps->nev = eps->n;
-  if (eps->problem_type == EPS_BSE) {
+  if (eps->problem_type == EPS_BSE || eps->problem_type == EPS_LREP) {
     if (2*eps->ncv > eps->n) eps->ncv = eps->n/2;
   } else {
     if (eps->ncv > eps->n) eps->ncv = eps->n;
@@ -365,7 +366,7 @@ PetscErrorCode EPSSetUp(EPS eps)
   if (eps->stop==EPS_STOP_THRESHOLD) {
     PetscCheck(eps->thres!=PETSC_MIN_REAL,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"Must give a threshold value with EPSSetThreshold()");
     PetscCheck(eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_SMALLEST_MAGNITUDE || eps->which==EPS_LARGEST_REAL || eps->which==EPS_SMALLEST_REAL || eps->which==EPS_TARGET_MAGNITUDE,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Threshold stopping test can only be used with largest/smallest/target magnitude or largest/smallest real selection of eigenvalues");
-    if (eps->which==EPS_LARGEST_REAL || eps->which==EPS_SMALLEST_REAL) PetscCheck(eps->problem_type==EPS_HEP || eps->problem_type==EPS_GHEP || eps->problem_type==EPS_BSE,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Threshold stopping test with largest/smallest real can only be used in problems that have all eigenvaues real");
+    if (eps->which==EPS_LARGEST_REAL || eps->which==EPS_SMALLEST_REAL) PetscCheck(eps->problem_type==EPS_HEP || eps->problem_type==EPS_GHEP || eps->problem_type==EPS_BSE || eps->problem_type==EPS_LREP,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Threshold stopping test with largest/smallest real can only be used in problems that have all eigenvalues real");
     else PetscCheck(eps->thres>0.0,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"In case of largest/smallest/target magnitude the threshold value must be positive");
     PetscCheck(eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_TARGET_MAGNITUDE || !eps->threlative,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"Can only use a relative threshold with largest/target magnitude selection of eigenvalues");
     PetscCall(PetscNew(&ctx));
@@ -677,11 +678,11 @@ PetscErrorCode EPSSetLeftInitialSpace(EPS eps,PetscInt n,Vec isl[])
 PetscErrorCode EPSSetDimensions_Default(EPS eps,PetscInt *nev,PetscInt *ncv,PetscInt *mpd)
 {
   PetscBool      krylov;
-  PetscInt       nev2, n = eps->problem_type==EPS_BSE? eps->n/2: eps->n;
+  PetscInt       nev2, n = (eps->problem_type==EPS_BSE || eps->problem_type==EPS_LREP)? eps->n/2: eps->n;
 
   PetscFunctionBegin;
   if (*nev==0 && eps->stop!=EPS_STOP_THRESHOLD) *nev = 1;
-  nev2 = eps->problem_type==EPS_BSE? (*nev+1)/2: *nev;
+  nev2 = (eps->problem_type==EPS_BSE || eps->problem_type==EPS_LREP)? (*nev+1)/2: *nev;
   if (*ncv!=PETSC_DETERMINE) { /* ncv set */
     PetscCall(PetscObjectTypeCompareAny((PetscObject)eps,&krylov,EPSKRYLOVSCHUR,EPSARNOLDI,EPSLANCZOS,""));
     if (krylov) {

@@ -56,6 +56,7 @@ typedef struct _n_SlepcMatStruct* SlepcMatStruct;
 
 #define SLEPC_MAT_STRUCT_BSE     88101
 #define SLEPC_MAT_STRUCT_HAMILT  88102
+#define SLEPC_MAT_STRUCT_LREP    88103
 
 /*
   SlepcCheckMatStruct - Check that a given Mat is a structured matrix of the wanted type.
@@ -79,6 +80,24 @@ static inline PetscErrorCode SlepcCheckMatStruct(Mat A,PetscInt cookie,PetscBool
     PetscCheck(mctx && mctx->cookie==cookie,PetscObjectComm((PetscObject)A),PETSC_ERR_ARG_WRONG,"The type of structured matrix is different from the expected one");
   }
   if (flg) *flg = PETSC_TRUE;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+  SlepcCheckMatLREPReduced - Check whether a given LREP Mat is of reduced form or not.
+
+  True if the matrix has reduced form [0 K; M 0], otherwise it has the form [A B; -B -A].
+*/
+static inline PetscErrorCode SlepcCheckMatLREPReduced(Mat A,PetscBool *flg)
+{
+  Mat A00;
+
+  PetscFunctionBegin;
+  PetscAssertPointer(flg,2);
+  *flg = PETSC_FALSE;
+  PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_LREP,NULL));  /* error out if not LREP */
+  PetscCall(MatNestGetSubMat(A,0,0,&A00));
+  if (A00==NULL) *flg = PETSC_TRUE;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

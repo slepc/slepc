@@ -71,6 +71,7 @@ class EPSProblemType(object):
     - `GHIEP`:  Generalized Hermitian-indefinite eigenproblem.
     - `BSE`:    Structured Bethe-Salpeter eigenproblem.
     - `HAMILT`: Hamiltonian eigenproblem.
+    - `LREP`:   Structured Linear Response eigenvalue problem.
 
     See Also
     --------
@@ -84,6 +85,7 @@ class EPSProblemType(object):
     GHIEP  = EPS_GHIEP
     BSE    = EPS_BSE
     HAMILT = EPS_HAMILT
+    LREP   = EPS_LREP
 
 class EPSExtraction(object):
     """

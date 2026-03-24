@@ -365,7 +365,8 @@ static inline PetscErrorCode EPS_GetActualConverged(EPS eps,PetscInt *nconv)
   *nconv = eps->nconv;
   if (eps->isstructured) {
     if (eps->problem_type == EPS_BSE && (eps->which == EPS_SMALLEST_MAGNITUDE || eps->which == EPS_LARGEST_MAGNITUDE || eps->which == EPS_TARGET_MAGNITUDE)) *nconv *= 2;
-    if (eps->problem_type == EPS_HAMILT && (eps->which == EPS_SMALLEST_MAGNITUDE || eps->which == EPS_LARGEST_MAGNITUDE || eps->which == EPS_TARGET_MAGNITUDE)) *nconv *= 2;
+    else if (eps->problem_type == EPS_HAMILT && (eps->which == EPS_SMALLEST_MAGNITUDE || eps->which == EPS_LARGEST_MAGNITUDE || eps->which == EPS_TARGET_MAGNITUDE)) *nconv *= 2;
+    else if (eps->problem_type == EPS_LREP && (eps->which == EPS_SMALLEST_MAGNITUDE || eps->which == EPS_LARGEST_MAGNITUDE || eps->which == EPS_TARGET_MAGNITUDE)) *nconv *= 2;
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -504,6 +505,9 @@ static inline PetscErrorCode EPS_GetEigenvector(EPS eps,BV V,PetscInt i,Vec Vr,V
       if (Vr) PetscCall(VecScale(Vr,1.0/nrm));
       if (Vi) PetscCall(VecScale(Vi,1.0/nrm));
 #endif
+    } else if (eps->problem_type == EPS_LREP) {
+      /* TODO */
+      SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Not implemented yet");
     } else SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_LIB,"Inconsistent state");
   }
   PetscFunctionReturn(PETSC_SUCCESS);

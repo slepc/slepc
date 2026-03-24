@@ -488,8 +488,8 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
     if (eigi) *eigi = eps->eigi[k];
 #endif
   } else {
-    PetscCheck(eps->problem_type==EPS_BSE || eps->problem_type==EPS_HAMILT,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Problem type should be BSE or Hamiltonian");
-    if (eps->problem_type==EPS_BSE) {
+    PetscCheck(eps->problem_type==EPS_BSE || eps->problem_type==EPS_HAMILT || eps->problem_type==EPS_LREP,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Problem type should be BSE, Hamiltonian, or LREP");
+    if (eps->problem_type==EPS_BSE || eps->problem_type==EPS_LREP) {
       /* BSE problem, even index is +lambda, odd index is -lambda */
       k = eps->perm[i/2];
 #if defined(PETSC_USE_COMPLEX)

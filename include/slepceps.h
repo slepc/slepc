@@ -78,7 +78,8 @@ SLEPC_EXTERN PetscClassId EPS_CLASSID;
 .  `EPS_PGNHEP` - generalized non-Hermitian with positive (semi-)definite $B$
 .  `EPS_GHIEP`  - generalized Hermitian-indefinite
 .  `EPS_BSE`    - structured Bethe-Salpeter
--  `EPS_HAMILT` - structured Hamiltonian
+.  `EPS_HAMILT` - structured Hamiltonian
+-  `EPS_LREP`   - structured Linear Response
 
    Note:
    In real scalars, one should read the term Hermitian as symmetric.
@@ -94,7 +95,8 @@ typedef enum { EPS_HEP    = 1,
                EPS_PGNHEP = 5,
                EPS_GHIEP  = 6,
                EPS_BSE    = 7,
-               EPS_HAMILT = 8 } EPSProblemType;
+               EPS_HAMILT = 8,
+               EPS_LREP   = 9 } EPSProblemType;
 
 /*MC
    EPS_HEP - A Hermitian eigenvalue problem.
@@ -214,6 +216,27 @@ M*/
    Level: intermediate
 
 .seealso: [](ch:eps), [](sec:structured), `EPSProblemType`, `EPSSetProblemType()`
+M*/
+
+/*MC
+   EPS_LREP - A structured Linear Response eigenvalue problem.
+
+   Note:
+   The problem is formulated as $Hx=\lambda x$, where $H$ has the form
+     $$H_1 = \begin{bmatrix}
+        A & B \\
+       -B & -A
+        \end{bmatrix},$$
+   where $A$ and $B$ are real symmetric. An alternative form is
+     $$H_2 = \begin{bmatrix}
+        0 & K \\
+        M & 0
+        \end{bmatrix},$$
+   where $K=A-B$ and $M=A+B$.
+
+   Level: intermediate
+
+.seealso: [](ch:eps), [](sec:structured), `EPSProblemType`, `EPSSetProblemType()`, `MatCreateLREP()`
 M*/
 
 /*E

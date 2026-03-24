@@ -109,6 +109,10 @@ static PetscErrorCode EPSSetUp_KrylovSchur(EPS eps)
     else if (eps->problem_type==EPS_HAMILT) {
       PetscCheck(!PetscDefined(USE_COMPLEX),PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"The Hamiltonian Krylov-Schur eigensolver is not yet implemented for complex scalars");
       PetscCall(EPSSetUp_KrylovSchur_Hamilt(eps));
+    } else if (eps->problem_type==EPS_LREP) {
+      PetscCheck(!PetscDefined(USE_COMPLEX),PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"The LREP Krylov-Schur eigensolver does not support complex scalars, use BSE instead");
+      /* TODO PetscCall(EPSSetUp_KrylovSchur_LREP(eps));*/
+      SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Not implemented yet");
     } else SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Unknown matrix structure");
     PetscFunctionReturn(PETSC_SUCCESS);
   } else {

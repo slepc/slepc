@@ -4,6 +4,8 @@
 
 ### Added
 
+- `EPS`: new structured eigenvalue problem type `EPS_LREP` for the Linear Response
+  Eigenvalue Problem, see `MatCreateLREP()`.
 - New context destroy functions `EPSSetArbitrarySelectionContextDestroy()` and
   `STShellSetDestroy()`.
 - Typing stubs for the Python extension module `slepc4py.SLEPc`.

@@ -112,8 +112,10 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
     if (flg) PetscCall(EPSSetProblemType(eps,EPS_GHIEP));
     PetscCall(PetscOptionsBoolGroup("-eps_bse","Structured Bethe-Salpeter eigenvalue problem","EPSSetProblemType",&flg));
     if (flg) PetscCall(EPSSetProblemType(eps,EPS_BSE));
-    PetscCall(PetscOptionsBoolGroupEnd("-eps_hamiltonian","Structured Hamiltonian eigenvalue problem","EPSSetProblemType",&flg));
+    PetscCall(PetscOptionsBoolGroup("-eps_hamiltonian","Structured Hamiltonian eigenvalue problem","EPSSetProblemType",&flg));
     if (flg) PetscCall(EPSSetProblemType(eps,EPS_HAMILT));
+    PetscCall(PetscOptionsBoolGroupEnd("-eps_lrep","Structured Linear Response eigenvalue problem","EPSSetProblemType",&flg));
+    if (flg) PetscCall(EPSSetProblemType(eps,EPS_LREP));
 
     PetscCall(PetscOptionsBoolGroupBegin("-eps_ritz","Rayleigh-Ritz extraction","EPSSetExtraction",&flg));
     if (flg) PetscCall(EPSSetExtraction(eps,EPS_RITZ));
@@ -959,7 +961,8 @@ PetscErrorCode EPSGetStoppingTest(EPS eps,EPSStop *stop)
                                 with positive semi-definite $B$
 .  -eps_gen_indefinite        - generalized Hermitian-indefinite eigenvalue problem
 .  -eps_bse                   - structured Bethe-Salpeter eigenvalue problem
--  -eps_hamiltonian           - structured Hamiltonian eigenvalue problem
+.  -eps_hamiltonian           - structured Hamiltonian eigenvalue problem
+-  -eps_lrep                  - structured Linear Response eigenvalue problem
 
    Notes:
    This function must be used to instruct SLEPc to exploit symmetry or other
@@ -1031,6 +1034,12 @@ PetscErrorCode EPSSetProblemType(EPS eps,EPSProblemType type)
       eps->isstructured = PETSC_TRUE;
       break;
     case EPS_HAMILT:
+      eps->isgeneralized = PETSC_FALSE;
+      eps->ishermitian = PETSC_FALSE;
+      eps->ispositive = PETSC_FALSE;
+      eps->isstructured = PETSC_TRUE;
+      break;
+    case EPS_LREP:
       eps->isgeneralized = PETSC_FALSE;
       eps->ishermitian = PETSC_FALSE;
       eps->ispositive = PETSC_FALSE;

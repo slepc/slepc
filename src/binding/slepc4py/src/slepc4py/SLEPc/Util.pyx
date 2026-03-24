@@ -64,4 +64,38 @@ cdef class Util:
         CHKERR( MatCreateHamiltonian(A.mat, B.mat, C.mat, &H.mat) )
         return H
 
+    @classmethod
+    def createMatLREP(cls, Mat AK: petsc4py.PETSc.Mat, Mat BM: petsc4py.PETSc.Mat, red: bool = False) -> petsc4py.PETSc.Mat:
+        """
+        Create a matrix that can be used to define a LREP type problem.
+
+        Collective.
+
+        Create a matrix that can be used to define a structured Linear
+        Response eigenvalue problem.
+
+        Parameters
+        ----------
+        AK
+            The matrix for the diagonal block or the top block.
+        BM
+            The matrix for the off-diagonal block or the bottom block.
+        red
+            Whether the reduced form should be built.
+
+        Returns
+        -------
+        petsc4py.PETSc.Mat
+            The matrix with the block form :math:`H = [ A\; B; -B\; -A ]`
+            (non-reduced) or :math:`H = [ 0\; K; M\; 0 ]` (reduced).
+
+        See Also
+        --------
+        slepc.MatCreateLREP
+        """
+        cdef Mat H = Mat()
+        cdef PetscBool tval = asBool(red)
+        CHKERR( MatCreateLREP(AK.mat, BM.mat, tval, &H.mat) )
+        return H
+
 # -----------------------------------------------------------------------------
