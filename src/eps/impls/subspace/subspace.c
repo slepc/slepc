@@ -53,7 +53,7 @@ static PetscErrorCode EPSSetUp_Subspace_Filter(EPS eps)
     PetscCall(STFilterSetRange(eps->st,rleft,rright));
     ctx->estimatedrange = PETSC_TRUE;
   }
-  if (eps->ncv==PETSC_DETERMINE && eps->nev==1) eps->nev = 40;  /* user did not provide nev estimation */
+  PetscCall(EPSSetStoppingTest(eps,EPS_STOP_THRESHOLD));
   PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
   PetscCheck(eps->ncv<=eps->nev+eps->mpd,PetscObjectComm((PetscObject)eps),PETSC_ERR_USER_INPUT,"The value of ncv must not be larger than nev+mpd");
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -69,7 +69,6 @@ static PetscErrorCode EPSSetUp_Subspace(EPS eps)
   if (eps->max_it==PETSC_DETERMINE) eps->max_it = PetscMax(100,2*eps->n/eps->ncv);
   if (!eps->which) PetscCall(EPSSetWhichEigenpairs_Default(eps));
   if (eps->which==EPS_ALL) {
-    if (eps->nev==0) eps->nev = 1;
     PetscCall(PetscObjectTypeCompare((PetscObject)eps->st,STFILTER,&isfilt));
     PetscCheck(isfilt,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Spectrum slicing not supported in this solver");
     PetscCall(EPSSetUp_Subspace_Filter(eps));
@@ -77,7 +76,7 @@ static PetscErrorCode EPSSetUp_Subspace(EPS eps)
     PetscCheck(eps->which==EPS_LARGEST_MAGNITUDE || eps->which==EPS_TARGET_MAGNITUDE,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"This solver supports only largest magnitude or target magnitude eigenvalues");
     PetscCall(EPSSetDimensions_Default(eps,&eps->nev,&eps->ncv,&eps->mpd));
   }
-  EPSCheckUnsupported(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_EXTRACTION | EPS_FEATURE_THRESHOLD | EPS_FEATURE_TWOSIDED);
+  EPSCheckUnsupported(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_EXTRACTION | EPS_FEATURE_TWOSIDED);
   PetscCheck(eps->converged==EPSConvergedRelative,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"This solver only supports relative convergence test");
 
   PetscCall(EPSAllocateSolution(eps,0));
@@ -182,9 +181,9 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
   Mat            H,Q,S,T,B;
   BV             AV,R;
   PetscBool      indef;
-  PetscInt       i,k,ld,ngrp,nogrp,*itrsd,*itrsdold;
-  PetscInt       nxtsrr,idsrr,idort,nxtort,nv,ncv = eps->ncv,its,ninside;
-  PetscReal      arsd,oarsd,ctr,octr,ae,oae,*rsd,*orsd,tcond=1.0,gamma;
+  PetscInt       i,k,ngrp,nogrp,*itrsd,*itrsdold;
+  PetscInt       nxtsrr,idsrr,idort,nxtort,nv,its;
+  PetscReal      arsd,oarsd,ctr,octr,ae,oae,*rsd,*orsd,tcond=1.0;
   PetscScalar    *oeigr,*oeigi;
   /* Parameters */
   PetscInt       init = 5;        /* Number of initial iterations */
@@ -198,26 +197,25 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
 
   PetscFunctionBegin;
   its = 0;
-  PetscCall(PetscMalloc6(ncv,&rsd,ncv,&orsd,ncv,&oeigr,ncv,&oeigi,ncv,&itrsd,ncv,&itrsdold));
-  PetscCall(DSGetLeadingDimension(eps->ds,&ld));
+  PetscCall(PetscMalloc6(eps->ncv,&rsd,eps->ncv,&orsd,eps->ncv,&oeigr,eps->ncv,&oeigi,eps->ncv,&itrsd,eps->ncv,&itrsdold));
   PetscCall(BVDuplicate(eps->V,&AV));
   PetscCall(BVDuplicate(eps->V,&R));
   PetscCall(STGetOperator(eps->st,&S));
 
-  for (i=0;i<ncv;i++) {
+  for (i=0;i<eps->ncv;i++) {
     rsd[i] = 0.0;
     itrsd[i] = -1;
   }
 
   /* Complete the initial basis with random vectors and orthonormalize them */
-  for (k=eps->nini;k<ncv;k++) {
+  for (k=eps->nini;k<eps->ncv;k++) {
     PetscCall(BVSetRandomColumn(eps->V,k));
     PetscCall(BVOrthonormalizeColumn(eps->V,k,PETSC_TRUE,NULL,NULL));
   }
 
   while (eps->reason == EPS_CONVERGED_ITERATING) {
     eps->its++;
-    nv = PetscMin(eps->nconv+eps->mpd,ncv);
+    nv = PetscMin(eps->nconv+eps->mpd,eps->ncv);
     PetscCall(DSSetDimensions(eps->ds,nv,eps->nconv,0));
 
     for (i=eps->nconv;i<nv;i++) {
@@ -257,15 +255,6 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
     PetscCall(EPSSubspaceResidualNorms(R,eps->V,T,eps->nconv,nv,eps->eigi,rsd));
     PetscCall(DSRestoreMat(eps->ds,DS_MAT_A,&T));
 
-    if (eps->which==EPS_ALL && eps->its>1) {   /* adjust eigenvalue count */
-      ninside = 0;
-      PetscCall(STFilterGetThreshold(eps->st,&gamma));
-      for (i=eps->nconv;i<nv;i++) {
-        if (PetscRealPart(eps->eigr[i]) < gamma) break;
-        ninside++;
-      }
-      eps->nev = eps->nconv+ninside;
-    }
     for (i=eps->nconv;i<nv;i++) {
       itrsdold[i] = itrsd[i];
       itrsd[i] = its;
@@ -285,6 +274,7 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
     }
 
     PetscCall(EPSMonitor(eps,eps->its,eps->nconv,eps->eigr,eps->eigi,eps->errest,nv));
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,eps->errest,eps->nconv);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,eps->nconv,eps->nev,&eps->reason,eps->stoppingctx));
     if (eps->reason != EPS_CONVERGED_ITERATING) break;
 
@@ -327,6 +317,16 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
       PetscCall(BVOrthogonalize(eps->V,NULL));
       nxtort = PetscMin(its+idort,nxtsrr);
     } while (its<nxtsrr);
+
+    if (eps->stop==EPS_STOP_THRESHOLD && nv/(PetscReal)eps->nconv<1.3) {  /* reallocate */
+      eps->ncv = 1.3*eps->nconv;
+      PetscCall(EPSReallocateSolution(eps,eps->ncv));
+      PetscCall(BVResize(AV,eps->ncv,PETSC_TRUE));
+      PetscCall(BVResize(R,eps->ncv,PETSC_TRUE));
+      for (i=nv;i<eps->ncv;i++) eps->perm[i] = i;
+      PetscCall(DSReallocate(eps->ds,eps->ncv));
+    }
+
   }
 
   PetscCall(PetscFree6(rsd,orsd,oeigr,oeigi,itrsd,itrsdold));

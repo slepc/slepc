@@ -209,7 +209,8 @@ int main(int argc,char **argv)
       requires: double
       test:
          suffix: 6
-         args: -eps_threshold_absolute .15 -eps_target 0.01
+         args: -eps_threshold_absolute .15 -eps_target 0.01 -eps_type {{krylovschur subspace}}
+         filter: grep -v "Solution method"
       test:
          suffix: 6_rel_large
          args: -eps_threshold_relative .98 -eps_target 8
