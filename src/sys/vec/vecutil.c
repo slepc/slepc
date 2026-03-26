@@ -323,6 +323,6 @@ PetscErrorCode VecSetRandomNormal(Vec v,PetscRandom rctx,Vec w1,Vec w2)
 
   PetscCall(VecDestroy(&v1));
   PetscCall(VecDestroy(&v2));
-  if (!rctx) PetscCall(PetscRandomDestroy(&rand));
+  PetscCall(PetscRandomDestroy(&rand));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
