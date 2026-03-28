@@ -621,10 +621,10 @@ PetscErrorCode EPSGetEigenvector(EPS eps,PetscInt i,Vec Vr,Vec Vi)
 PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
 {
   PetscInt    nconv;
-  PetscBool   trivial;
+  PetscBool   trivial,lrepreduced=PETSC_FALSE;
   Mat         H;
   IS          is[2];
-  Vec         v;
+  Vec         v0,v1,z,z0,z1;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
@@ -636,27 +636,45 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
   PetscCall(EPS_GetActualConverged(eps,&nconv));
   PetscCheck(i<nconv,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_OUTOFRANGE,"The index can be nconv-1 at most, see EPSGetConverged()");
 
-  trivial = (eps->problem_type==EPS_HEP || eps->problem_type==EPS_GHEP || eps->problem_type==EPS_BSE)? PETSC_TRUE: PETSC_FALSE;
+  trivial = (eps->problem_type==EPS_HEP || eps->problem_type==EPS_GHEP || eps->problem_type==EPS_BSE || eps->problem_type==EPS_LREP)? PETSC_TRUE: PETSC_FALSE;
   if (!trivial) PetscCheck(eps->twosided,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONGSTATE,"Must request left vectors with EPSSetTwoSided");
 
   PetscCall(EPSComputeVectors(eps));
   if (trivial) {
     PetscCall(EPS_GetEigenvector(eps,eps->V,i,Wr,Wi));
-    if (eps->problem_type==EPS_BSE) {   /* change sign of bottom part of the vector */
-      PetscCall(STGetMatrix(eps->st,0,&H));
+    PetscCall(STGetMatrix(eps->st,0,&H));
+    if (eps->problem_type==EPS_LREP) PetscCall(SlepcCheckMatLREPReduced(H,&lrepreduced));
+    if (eps->problem_type==EPS_BSE || !lrepreduced) { /* change sign of bottom part of the vector */
       PetscCall(MatNestGetISs(H,is,NULL));
       if (Wr) {
-        PetscCall(VecGetSubVector(Wr,is[1],&v));
-        PetscCall(VecScale(v,-1.0));
-        PetscCall(VecRestoreSubVector(Wr,is[1],&v));
+        PetscCall(VecGetSubVector(Wr,is[1],&v1));
+        PetscCall(VecScale(v1,-1.0));
+        PetscCall(VecRestoreSubVector(Wr,is[1],&v1));
       }
 #if !defined(PETSC_USE_COMPLEX)
       if (Wi) {
-        PetscCall(VecGetSubVector(Wi,is[1],&v));
-        PetscCall(VecScale(v,-1.0));
-        PetscCall(VecRestoreSubVector(Wi,is[1],&v));
+        PetscCall(VecGetSubVector(Wi,is[1],&v1));
+        PetscCall(VecScale(v1,-1.0));
+        PetscCall(VecRestoreSubVector(Wi,is[1],&v1));
       }
 #endif
+    } else if (eps->problem_type==EPS_LREP) {   /* swap the two parts of the vector */
+      if (Wr) {
+        PetscCall(VecDuplicate(Wr,&z));
+        PetscCall(VecCopy(Wr,z));
+        PetscCall(MatNestGetISs(H,is,NULL));
+        PetscCall(VecGetSubVector(Wr,is[0],&v0));
+        PetscCall(VecGetSubVector(Wr,is[1],&v1));
+        PetscCall(VecGetSubVector(z,is[0],&z0));
+        PetscCall(VecGetSubVector(z,is[1],&z1));
+        PetscCall(VecCopy(z0,v1));
+        PetscCall(VecCopy(z1,v0));
+        PetscCall(VecRestoreSubVector(Wr,is[0],&v0));
+        PetscCall(VecRestoreSubVector(Wr,is[1],&v1));
+        PetscCall(VecRestoreSubVector(z,is[0],&z0));
+        PetscCall(VecRestoreSubVector(z,is[1],&z1));
+        PetscCall(VecDestroy(&z));
+      }
     }
   } else {
     PetscCall(EPS_GetEigenvector(eps,eps->W,i,Wr,Wi));
