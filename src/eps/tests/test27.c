@@ -122,8 +122,6 @@ int main(int argc,char **argv)
 
    testset:
       args: -eps_interval .17,1.3 -terse
-      filter: grep -v "requested"
-      output_file: output/test27_2.out
       test:
          suffix: 2
          args: -st_type filter -st_filter_degree 150 -st_filter_type {{filtlan chebyshev}} -eps_ncv 30
