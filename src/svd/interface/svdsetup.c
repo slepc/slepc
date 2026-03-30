@@ -66,7 +66,7 @@ PetscErrorCode SVDSetOperators(SVD svd,Mat A,Mat B)
   }
 
   PetscCall(PetscObjectReference((PetscObject)A));
-  if (B) PetscCall(PetscObjectReference((PetscObject)B));
+  PetscCall(PetscObjectReference((PetscObject)B));
   if (svd->state && !samesize) PetscCall(SVDReset(svd));
   else {
     PetscCall(MatDestroy(&svd->OP));
@@ -532,7 +532,7 @@ PetscErrorCode SVDAllocateSolution(SVD svd,PetscInt extra)
   /* allocate sigma */
   if (requested != oldsize || !svd->sigma) {
     PetscCall(PetscFree3(svd->sigma,svd->perm,svd->errest));
-    if (svd->sign) PetscCall(PetscFree(svd->sign));
+    PetscCall(PetscFree(svd->sign));
     PetscCall(PetscMalloc3(requested,&svd->sigma,requested,&svd->perm,requested,&svd->errest));
     if (svd->ishyperbolic) PetscCall(PetscMalloc1(requested,&svd->sign));
   }

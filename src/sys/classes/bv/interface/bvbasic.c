@@ -525,7 +525,7 @@ PetscErrorCode BVSetMatrix(BV bv,Mat B,PetscBool indef)
       PetscCheck(m==n,PetscObjectComm((PetscObject)bv),PETSC_ERR_ARG_SIZ,"Matrix must be square");
       PetscCheck(!bv->m || bv->n==n,PetscObjectComm((PetscObject)bv),PETSC_ERR_ARG_INCOMP,"Mismatching local dimension BV %" PetscInt_FMT ", Mat %" PetscInt_FMT,bv->n,n);
     }
-    if (B) PetscCall(PetscObjectReference((PetscObject)B));
+    PetscCall(PetscObjectReference((PetscObject)B));
     PetscCall(MatDestroy(&bv->matrix));
     bv->matrix = B;
     bv->indef  = indef;
@@ -1641,13 +1641,13 @@ static inline PetscErrorCode BVDuplicate_Private(BV V,BV W)
   W->orthog_ref   = V->orthog_ref;
   W->orthog_eta   = V->orthog_eta;
   W->orthog_block = V->orthog_block;
-  if (V->matrix) PetscCall(PetscObjectReference((PetscObject)V->matrix));
+  PetscCall(PetscObjectReference((PetscObject)V->matrix));
   W->matrix       = V->matrix;
   W->indef        = V->indef;
   W->vmm          = V->vmm;
   W->rrandom      = V->rrandom;
   W->deftol       = V->deftol;
-  if (V->rand) PetscCall(PetscObjectReference((PetscObject)V->rand));
+  PetscCall(PetscObjectReference((PetscObject)V->rand));
   W->rand         = V->rand;
   W->sfocalled    = V->sfocalled;
   PetscTryTypeMethod(V,duplicate,W);
@@ -2038,7 +2038,7 @@ static inline PetscErrorCode BVDuplicateNewLayout_Private(BV V,BV W)
   W->vmm          = V->vmm;
   W->rrandom      = V->rrandom;
   W->deftol       = V->deftol;
-  if (V->rand) PetscCall(PetscObjectReference((PetscObject)V->rand));
+  PetscCall(PetscObjectReference((PetscObject)V->rand));
   W->rand         = V->rand;
   W->sfocalled    = V->sfocalled;
   PetscTryTypeMethod(V,duplicate,W);

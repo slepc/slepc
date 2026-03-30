@@ -208,7 +208,7 @@ int main(int argc,char **argv)
     PetscCall(MatDestroy(&R));
   }
 
-  if (B) PetscCall(MatDestroy(&B));
+  PetscCall(MatDestroy(&B));
   PetscCall(MatDestroy(&M));
   PetscCall(BVDestroy(&X));
   PetscCall(BVDestroy(&Y));

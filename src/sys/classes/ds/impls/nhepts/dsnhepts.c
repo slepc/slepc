@@ -410,8 +410,8 @@ static PetscErrorCode DSDestroy_NHEPTS(DS ds)
   DS_NHEPTS      *ctx = (DS_NHEPTS*)ds->data;
 
   PetscFunctionBegin;
-  if (ctx->wr) PetscCall(PetscFree(ctx->wr));
-  if (ctx->wi) PetscCall(PetscFree(ctx->wi));
+  PetscCall(PetscFree(ctx->wr));
+  PetscCall(PetscFree(ctx->wi));
   PetscCall(PetscFree(ds->data));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

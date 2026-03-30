@@ -474,7 +474,7 @@ PetscErrorCode STSetPreconditionerMat(ST st,Mat mat)
   }
   STCheckNotSeized(st,1);
   PetscCheck(!mat || !st->Psplit,PetscObjectComm((PetscObject)st),PETSC_ERR_SUP,"Cannot call both STSetPreconditionerMat and STSetSplitPreconditioner");
-  if (mat) PetscCall(PetscObjectReference((PetscObject)mat));
+  PetscCall(PetscObjectReference((PetscObject)mat));
   PetscCall(MatDestroy(&st->Pmat));
   st->Pmat     = mat;
   st->Pmat_set = mat? PETSC_TRUE: PETSC_FALSE;

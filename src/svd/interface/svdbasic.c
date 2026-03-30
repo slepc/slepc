@@ -176,7 +176,7 @@ PetscErrorCode SVDDestroy(SVD *svd)
   PetscCall(SVDReset(*svd));
   PetscTryTypeMethod(*svd,destroy);
   if ((*svd)->sigma) PetscCall(PetscFree3((*svd)->sigma,(*svd)->perm,(*svd)->errest));
-  if ((*svd)->sign) PetscCall(PetscFree((*svd)->sign));
+  PetscCall(PetscFree((*svd)->sign));
   PetscCall(DSDestroy(&(*svd)->ds));
   PetscCall(PetscFree((*svd)->sc));
   /* just in case the initial vectors have not been used */

@@ -461,7 +461,7 @@ PetscErrorCode PEPCheckDefiniteQEP(PEP pep,PetscReal *xi,PetscReal *mu,PetscInt 
   if (check==1) *mu = mut;
   *definite = check;
   *hyperbolic = hyp;
-  if (M) PetscCall(MatDestroy(&M));
+  PetscCall(MatDestroy(&M));
   PetscCall(VecDestroy(&u));
   PetscCall(VecDestroy(&w));
   PetscCall(EPSDestroy(&eps));
@@ -512,7 +512,7 @@ PetscErrorCode PEPSetUp_STOAR_QSlice(PEP pep)
   sr->nleap = 0;
   sr->sPres = NULL;
 
-  if (pep->solvematcoeffs) PetscCall(PetscFree(pep->solvematcoeffs));
+  PetscCall(PetscFree(pep->solvematcoeffs));
   PetscCall(PetscMalloc1(pep->nmat,&pep->solvematcoeffs));
   if (!pep->st) PetscCall(PEPGetST(pep,&pep->st));
   PetscCall(STSetTransform(pep->st,PETSC_FALSE));

@@ -810,7 +810,7 @@ static PetscErrorCode EPSKrylovSchurSetSubintervals_KrylovSchur(EPS eps,PetscRea
   PetscFunctionBegin;
   PetscCheck(subint[0]==eps->inta && subint[ctx->npart]==eps->intb,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONG,"First and last values must match the endpoints of EPSSetInterval()");
   for (i=0;i<ctx->npart;i++) PetscCheck(subint[i]<=subint[i+1],PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONG,"Array must contain values in ascending order");
-  if (ctx->subintervals) PetscCall(PetscFree(ctx->subintervals));
+  PetscCall(PetscFree(ctx->subintervals));
   PetscCall(PetscMalloc1(ctx->npart+1,&ctx->subintervals));
   for (i=0;i<ctx->npart+1;i++) ctx->subintervals[i] = subint[i];
   ctx->subintset = PETSC_TRUE;
