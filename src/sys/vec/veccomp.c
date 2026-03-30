@@ -235,7 +235,7 @@ static PetscErrorCode VecCreate_Comp_Private(Vec v,Vec *x,PetscInt nx,PetscBool 
   }
 
   /* Allocate a new Vec_Comp */
-  if (v->data) PetscCall(PetscFree(v->data));
+  PetscCall(PetscFree(v->data));
   PetscCall(PetscNew(&s));
   PetscCall(PetscMemcpy(v->ops,&DvOps,sizeof(DvOps)));
   v->data        = (void*)s;

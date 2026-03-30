@@ -364,7 +364,7 @@ static PetscErrorCode DSPEPSetCoefficients_PEP(DS ds,PetscReal *pbc)
 
   PetscFunctionBegin;
   PetscCheck(ctx->d,PetscObjectComm((PetscObject)ds),PETSC_ERR_ARG_WRONGSTATE,"Must first specify the polynomial degree via DSPEPSetDegree()");
-  if (ctx->pbc) PetscCall(PetscFree(ctx->pbc));
+  PetscCall(PetscFree(ctx->pbc));
   PetscCall(PetscMalloc1(3*(ctx->d+1),&ctx->pbc));
   for (i=0;i<3*(ctx->d+1);i++) ctx->pbc[i] = pbc[i];
   ds->state = DS_STATE_RAW;
@@ -455,7 +455,7 @@ static PetscErrorCode DSDestroy_PEP(DS ds)
   DS_PEP         *ctx = (DS_PEP*)ds->data;
 
   PetscFunctionBegin;
-  if (ctx->pbc) PetscCall(PetscFree(ctx->pbc));
+  PetscCall(PetscFree(ctx->pbc));
   PetscCall(PetscFree(ds->data));
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSPEPSetDegree_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)ds,"DSPEPGetDegree_C",NULL));

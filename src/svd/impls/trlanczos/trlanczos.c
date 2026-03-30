@@ -562,7 +562,7 @@ static PetscErrorCode SVDSolve_TRLanczos(SVD svd)
 
   /* free working space */
   PetscCall(PetscFree(w));
-  if (swork) PetscCall(PetscFree(swork));
+  PetscCall(PetscFree(swork));
   PetscCall(DSTruncate(svd->ds,svd->nconv,PETSC_TRUE));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

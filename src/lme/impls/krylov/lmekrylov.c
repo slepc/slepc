@@ -152,8 +152,8 @@ static PetscErrorCode LMESolve_Krylov_Lyapunov_Vec(LME lme,Vec b,PetscBool fixed
   *totalits += its+1;
   PetscCall(MatDenseRestoreArray(H,&Harray));
   PetscCall(MatDestroy(&H));
-  if (L) PetscCall(PetscFree(L));
-  if (U) PetscCall(PetscFree(U));
+  PetscCall(PetscFree(L));
+  PetscCall(PetscFree(U));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
