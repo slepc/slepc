@@ -10,7 +10,9 @@
 
 static char help[] = "Eigenvalue problem with Bethe-Salpeter structure.\n\n"
   "The command line options are:\n"
-  "  -n <n>, where <n> = dimension of the blocks.\n\n";
+  "  -n <n>, where <n> = dimension of the blocks.\n"
+  "  -R <filename>, R matrix.\n"
+  "  -C <filename>, C matrix.\n\n";
 
 #include <slepceps.h>
 
@@ -27,6 +29,8 @@ static char help[] = "Eigenvalue problem with Bethe-Salpeter structure.\n\n"
         C = tridiag{b,d,b}
 
    where a,b,d are complex scalars, and c is real.
+
+   Alternatively, use -R and -C command-line options to load matrices from file.
 */
 
 int main(int argc,char **argv)
@@ -36,58 +40,85 @@ int main(int argc,char **argv)
   PetscScalar    a,b,c,d;
   PetscReal      lev;
   PetscInt       n=24,Istart,Iend,i,nconv;
-  PetscBool      terse,checkorthog,nest=PETSC_FALSE;
+  PetscBool      flg,terse,checkorthog,nest=PETSC_FALSE;
   Vec            t,*x,*y;
+  PetscViewer    viewer;
+  char           filename[PETSC_MAX_PATH_LEN];
 
   PetscFunctionBeginUser;
   PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
 
-  PetscCall(PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nBethe-Salpeter eigenproblem, n=%" PetscInt_FMT "\n\n",n));
-
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-               Compute the problem matrices R and C
+             Compute (or load) the problem matrices R and C
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+  PetscCall(PetscOptionsHasName(NULL,NULL,"-R",&flg));
+
+  if (flg) {
+
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nBethe-Salpeter eigenproblem stored in file\n\n"));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Reading %s matrices from a binary file...\n",PetscDefined(USE_COMPLEX)?"COMPLEX":"REAL"));
+
+    PetscCall(PetscOptionsGetString(NULL,NULL,"-R",filename,sizeof(filename),&flg));
+    PetscCall(PetscViewerBinaryOpen(PETSC_COMM_WORLD,filename,FILE_MODE_READ,&viewer));
+    PetscCall(MatCreate(PETSC_COMM_WORLD,&R));
+    PetscCall(MatSetFromOptions(R));
+    PetscCall(MatLoad(R,viewer));
+    PetscCall(PetscViewerDestroy(&viewer));
+
+    PetscCall(PetscOptionsGetString(NULL,NULL,"-C",filename,sizeof(filename),&flg));
+    PetscCheck(flg,PETSC_COMM_WORLD,PETSC_ERR_USER_INPUT,"Must indicate file for both R and C matrices");
+    PetscCall(PetscViewerBinaryOpen(PETSC_COMM_WORLD,filename,FILE_MODE_READ,&viewer));
+    PetscCall(MatCreate(PETSC_COMM_WORLD,&C));
+    PetscCall(MatSetFromOptions(C));
+    PetscCall(MatLoad(C,viewer));
+    PetscCall(PetscViewerDestroy(&viewer));
+
+  } else {
+
+    PetscCall(PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nBethe-Salpeter eigenproblem, n=%" PetscInt_FMT "\n\n",n));
+
 #if defined(PETSC_USE_COMPLEX)
-  a = PetscCMPLX(-0.1,0.2);
-  b = PetscCMPLX(1.0,0.5);
-  d = PetscCMPLX(2.0,0.2);
+    a = PetscCMPLX(-0.1,0.2);
+    b = PetscCMPLX(1.0,0.5);
+    d = PetscCMPLX(2.0,0.2);
 #else
-  a = -0.1;
-  b = 1.0;
-  d = 2.0;
+    a = -0.1;
+    b = 1.0;
+    d = 2.0;
 #endif
-  c = 4.5;
+    c = 4.5;
 
-  PetscCall(MatCreate(PETSC_COMM_WORLD,&R));
-  PetscCall(MatSetSizes(R,PETSC_DECIDE,PETSC_DECIDE,n,n));
-  PetscCall(MatSetFromOptions(R));
+    PetscCall(MatCreate(PETSC_COMM_WORLD,&R));
+    PetscCall(MatSetSizes(R,PETSC_DECIDE,PETSC_DECIDE,n,n));
+    PetscCall(MatSetFromOptions(R));
 
-  PetscCall(MatCreate(PETSC_COMM_WORLD,&C));
-  PetscCall(MatSetSizes(C,PETSC_DECIDE,PETSC_DECIDE,n,n));
-  PetscCall(MatSetFromOptions(C));
+    PetscCall(MatCreate(PETSC_COMM_WORLD,&C));
+    PetscCall(MatSetSizes(C,PETSC_DECIDE,PETSC_DECIDE,n,n));
+    PetscCall(MatSetFromOptions(C));
 
-  PetscCall(MatGetOwnershipRange(R,&Istart,&Iend));
-  for (i=Istart;i<Iend;i++) {
-    if (i>1) PetscCall(MatSetValue(R,i,i-2,a,INSERT_VALUES));
-    if (i>0) PetscCall(MatSetValue(R,i,i-1,b,INSERT_VALUES));
-    PetscCall(MatSetValue(R,i,i,c,INSERT_VALUES));
-    if (i<n-1) PetscCall(MatSetValue(R,i,i+1,PetscConj(b),INSERT_VALUES));
-    if (i<n-2) PetscCall(MatSetValue(R,i,i+2,PetscConj(a),INSERT_VALUES));
+    PetscCall(MatGetOwnershipRange(R,&Istart,&Iend));
+    for (i=Istart;i<Iend;i++) {
+      if (i>1) PetscCall(MatSetValue(R,i,i-2,a,INSERT_VALUES));
+      if (i>0) PetscCall(MatSetValue(R,i,i-1,b,INSERT_VALUES));
+      PetscCall(MatSetValue(R,i,i,c,INSERT_VALUES));
+      if (i<n-1) PetscCall(MatSetValue(R,i,i+1,PetscConj(b),INSERT_VALUES));
+      if (i<n-2) PetscCall(MatSetValue(R,i,i+2,PetscConj(a),INSERT_VALUES));
+    }
+
+    PetscCall(MatGetOwnershipRange(C,&Istart,&Iend));
+    for (i=Istart;i<Iend;i++) {
+      if (i>0) PetscCall(MatSetValue(C,i,i-1,b,INSERT_VALUES));
+      PetscCall(MatSetValue(C,i,i,d,INSERT_VALUES));
+      if (i<n-1) PetscCall(MatSetValue(C,i,i+1,b,INSERT_VALUES));
+    }
+
+    PetscCall(MatAssemblyBegin(R,MAT_FINAL_ASSEMBLY));
+    PetscCall(MatAssemblyBegin(C,MAT_FINAL_ASSEMBLY));
+    PetscCall(MatAssemblyEnd(R,MAT_FINAL_ASSEMBLY));
+    PetscCall(MatAssemblyEnd(C,MAT_FINAL_ASSEMBLY));
   }
-
-  PetscCall(MatGetOwnershipRange(C,&Istart,&Iend));
-  for (i=Istart;i<Iend;i++) {
-    if (i>0) PetscCall(MatSetValue(C,i,i-1,b,INSERT_VALUES));
-    PetscCall(MatSetValue(C,i,i,d,INSERT_VALUES));
-    if (i<n-1) PetscCall(MatSetValue(C,i,i+1,b,INSERT_VALUES));
-  }
-
-  PetscCall(MatAssemblyBegin(R,MAT_FINAL_ASSEMBLY));
-  PetscCall(MatAssemblyBegin(C,MAT_FINAL_ASSEMBLY));
-  PetscCall(MatAssemblyEnd(R,MAT_FINAL_ASSEMBLY));
-  PetscCall(MatAssemblyEnd(C,MAT_FINAL_ASSEMBLY));
 
   PetscCall(MatCreateBSE(R,C,&H));
 

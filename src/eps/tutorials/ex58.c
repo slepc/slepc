@@ -11,7 +11,9 @@
 static char help[] = "Linear Response eigenvalue problem.\n\n"
   "The command line options are:\n"
   "  -n <n>, where <n> = dimension of the blocks.\n"
-  "  -reduced <0/1>, to use the reduced form of the LREP.\n\n";
+  "  -reduced <0/1>, to use the reduced form of the LREP.\n"
+  "  -A <filename>, A matrix.\n"
+  "  -B <filename>, B matrix.\n\n";
 
 #include <slepceps.h>
 
@@ -27,6 +29,8 @@ static char help[] = "Linear Response eigenvalue problem.\n\n"
         B = tridiag{b,d,b}
 
    where a,b,c,d are real values.
+
+   Alternatively, use -A and -B command-line options to load matrices from file.
 */
 
 int main(int argc,char **argv)
@@ -36,54 +40,82 @@ int main(int argc,char **argv)
   PetscScalar    a,b,c,d;
   PetscReal      lev;
   PetscInt       n=24,Istart,Iend,i,nconv;
-  PetscBool      terse,checkorthog,nest=PETSC_FALSE,reduced=PETSC_FALSE;
+  PetscBool      flg,terse,checkorthog,nest=PETSC_FALSE,reduced=PETSC_FALSE;
   Vec            t,*x,*y;
+  PetscViewer    viewer;
+  char           filename[PETSC_MAX_PATH_LEN];
 
   PetscFunctionBeginUser;
   PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
   PetscCheck(!PetscDefined(USE_COMPLEX),PETSC_COMM_SELF,PETSC_ERR_SUP,"This example cannot be used with complex scalars");
 
-  PetscCall(PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL));
   PetscCall(PetscOptionsGetBool(NULL,NULL,"-reduced",&reduced,NULL));
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nLinear Response Eigenvalue Problem, n=%" PetscInt_FMT "%s\n\n",n,reduced?" (reduced)":""));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-               Compute the problem matrices A and B
+             Compute (or load) the problem matrices A and B
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-  a = -0.1;
-  b = 1.0;
-  c = 4.5;
-  d = 2.0;
+  PetscCall(PetscOptionsHasName(NULL,NULL,"-A",&flg));
 
-  PetscCall(MatCreate(PETSC_COMM_WORLD,&A));
-  PetscCall(MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,n,n));
-  PetscCall(MatSetFromOptions(A));
+  if (flg) {
 
-  PetscCall(MatCreate(PETSC_COMM_WORLD,&B));
-  PetscCall(MatSetSizes(B,PETSC_DECIDE,PETSC_DECIDE,n,n));
-  PetscCall(MatSetFromOptions(B));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nLinear Response Eigenvalue Problem stored in file%s\n\n",reduced?" (reduced)":""));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Reading REAL matrices from a binary file...\n"));
 
-  PetscCall(MatGetOwnershipRange(A,&Istart,&Iend));
-  for (i=Istart;i<Iend;i++) {
-    if (i>1) PetscCall(MatSetValue(A,i,i-2,a,INSERT_VALUES));
-    if (i>0) PetscCall(MatSetValue(A,i,i-1,b,INSERT_VALUES));
-    PetscCall(MatSetValue(A,i,i,c,INSERT_VALUES));
-    if (i<n-1) PetscCall(MatSetValue(A,i,i+1,b,INSERT_VALUES));
-    if (i<n-2) PetscCall(MatSetValue(A,i,i+2,a,INSERT_VALUES));
+    PetscCall(PetscOptionsGetString(NULL,NULL,"-A",filename,sizeof(filename),&flg));
+    PetscCall(PetscViewerBinaryOpen(PETSC_COMM_WORLD,filename,FILE_MODE_READ,&viewer));
+    PetscCall(MatCreate(PETSC_COMM_WORLD,&A));
+    PetscCall(MatSetFromOptions(A));
+    PetscCall(MatLoad(A,viewer));
+    PetscCall(PetscViewerDestroy(&viewer));
+
+    PetscCall(PetscOptionsGetString(NULL,NULL,"-B",filename,sizeof(filename),&flg));
+    PetscCheck(flg,PETSC_COMM_WORLD,PETSC_ERR_USER_INPUT,"Must indicate file for both A and B matrices");
+    PetscCall(PetscViewerBinaryOpen(PETSC_COMM_WORLD,filename,FILE_MODE_READ,&viewer));
+    PetscCall(MatCreate(PETSC_COMM_WORLD,&B));
+    PetscCall(MatSetFromOptions(B));
+    PetscCall(MatLoad(B,viewer));
+    PetscCall(PetscViewerDestroy(&viewer));
+
+  } else {
+
+    PetscCall(PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nLinear Response Eigenvalue Problem, n=%" PetscInt_FMT "%s\n\n",n,reduced?" (reduced)":""));
+
+    a = -0.1;
+    b = 1.0;
+    c = 4.5;
+    d = 2.0;
+
+    PetscCall(MatCreate(PETSC_COMM_WORLD,&A));
+    PetscCall(MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,n,n));
+    PetscCall(MatSetFromOptions(A));
+
+    PetscCall(MatCreate(PETSC_COMM_WORLD,&B));
+    PetscCall(MatSetSizes(B,PETSC_DECIDE,PETSC_DECIDE,n,n));
+    PetscCall(MatSetFromOptions(B));
+
+    PetscCall(MatGetOwnershipRange(A,&Istart,&Iend));
+    for (i=Istart;i<Iend;i++) {
+      if (i>1) PetscCall(MatSetValue(A,i,i-2,a,INSERT_VALUES));
+      if (i>0) PetscCall(MatSetValue(A,i,i-1,b,INSERT_VALUES));
+      PetscCall(MatSetValue(A,i,i,c,INSERT_VALUES));
+      if (i<n-1) PetscCall(MatSetValue(A,i,i+1,b,INSERT_VALUES));
+      if (i<n-2) PetscCall(MatSetValue(A,i,i+2,a,INSERT_VALUES));
+    }
+
+    PetscCall(MatGetOwnershipRange(B,&Istart,&Iend));
+    for (i=Istart;i<Iend;i++) {
+      if (i>0) PetscCall(MatSetValue(B,i,i-1,b,INSERT_VALUES));
+      PetscCall(MatSetValue(B,i,i,d,INSERT_VALUES));
+      if (i<n-1) PetscCall(MatSetValue(B,i,i+1,b,INSERT_VALUES));
+    }
+
+    PetscCall(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY));
+    PetscCall(MatAssemblyBegin(B,MAT_FINAL_ASSEMBLY));
+    PetscCall(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY));
+    PetscCall(MatAssemblyEnd(B,MAT_FINAL_ASSEMBLY));
   }
-
-  PetscCall(MatGetOwnershipRange(B,&Istart,&Iend));
-  for (i=Istart;i<Iend;i++) {
-    if (i>0) PetscCall(MatSetValue(B,i,i-1,b,INSERT_VALUES));
-    PetscCall(MatSetValue(B,i,i,d,INSERT_VALUES));
-    if (i<n-1) PetscCall(MatSetValue(B,i,i+1,b,INSERT_VALUES));
-  }
-
-  PetscCall(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY));
-  PetscCall(MatAssemblyBegin(B,MAT_FINAL_ASSEMBLY));
-  PetscCall(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY));
-  PetscCall(MatAssemblyEnd(B,MAT_FINAL_ASSEMBLY));
 
   if (reduced) {
 
