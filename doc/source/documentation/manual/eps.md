@@ -191,6 +191,7 @@ SLEPc is able to cope with different kinds of problems. Currently supported prob
   Generalized Hermitian indefinite         |`EPS_GHIEP`       |`-eps_gen_indefinite`
   Bethe-Salpeter                           |`EPS_BSE`         |`-eps_bse`
   Hamiltonian                              |`EPS_HAMILT`      |`-eps_hamiltonian`
+  Linear Response                          |`EPS_LREP`        |`-eps_lrep`
 
 :::
 
@@ -827,6 +828,7 @@ Unless otherwise stated, the structured eigenproblems discussed below are only s
 Check below the section [](#sec:structured-vectors), since the trivial approach may give vectors with disordered entries.
 :::
 
+{#sec:bse}
 #### Bethe-Salpeter
 
 One structured eigenproblem that has raised interest recently is related to the Bethe--Salpeter equation, which is relevant in many state-of-the-art computational physics codes. For instance, in the Yambo software {cite:p}`San19` it is used to evaluate optical properties of materials. It is commonly formulated as an eigenvalue problem with a block-structured matrix,
@@ -844,8 +846,9 @@ H = \begin{bmatrix}
 
 The helper function to generate the matrix $H$ of equation {math:numref}`eq:bse` from the blocks $R$ and $C$ is `MatCreateBSE()`, and the associated problem type is `EPS_BSE` (or `-eps_bse` from the command line). It is possible to select a few variants of the solver with the function `EPSKrylovSchurSetBSEType()`.
 
-Further details about the implementation of the SLEPc solvers for the BSE can be found in {cite:p}`Alv25`.
+Further details about the implementation of the SLEPc solvers for the BSE can be found in {cite:p}`Alv25`. See also the section on [](#sec:lrep) below.
 
+{#sec:hamilt}
 #### Hamiltonian
 
 The Hamiltonian structure is relevant in many applications, particularly in control theory. A (complex) Hamiltonian matrix has the block structure
@@ -864,6 +867,37 @@ where $A$, $B$ and $C$ are either real with $B=B^T$, $C=C^T$, or complex with $B
 :::{warning}
 The structure-preserving eigensolver for Hamiltonian eigenvalue problems should be considered experimental. Depending on the problem, it may become numerically unstable after some iterations, in which case the solver will abort, returning less eigenvalues than requested.
 :::
+
+{#sec:lrep}
+#### Linear Response
+
+The Linear Response Eigenvalue Problem (LREP) can be seen as a real version of the [](#sec:bse) eigenproblem, and appears in TDDFT simulations and many other computational physics applications. We can express the problem with two equivalent formulations. In the first one, the matrix is
+
+```{math}
+:label: eq:lrep1
+
+H_1 = \begin{bmatrix}
+         A & B \\
+        -B & -A
+    \end{bmatrix},
+```
+
+where both $A$ and $B$ are real symmetric. As in the BSE, the eigenvalues are real and come in pairs $\{\lambda,-\lambda\}$, and the eigenvalues of interest are those with the smallest magnitude. This problem can be addressed with SLEPc's functionality for the BSE, but we also provide specific solvers for the LREP.
+
+The second formulation (that we will call _reduced_) is with matrix
+
+```{math}
+:label: eq:lrep2
+
+H_2 = \begin{bmatrix}
+        0 & K \\
+        M & 0
+    \end{bmatrix},
+```
+
+where $K=A-B$ and $M=A+B$. Note that, in applications, generally it is required that at least one of $K$ or $M$ is positive definite. The two formulations are equivalent in the sense that it is possible to switch from one to the other via a similarity transformation, i.e, the eigenvalues of both matrices are the same. The advantage of the second formulation is that it can also be used for product eigenvalue problems, that is, when one is interested in computing eigenvalues of $KM$ or $MK$, with symmetric matrices not necessarily coming from a LREP.
+
+The helper function `MatCreateLREP()` can be used to generate the matrices $H_1$ or $H_2$ from the individual blocks. The problem type must be set to `EPS_LREP` (or `-eps_lrep` from the command line). Note that internally the SLEPc eigensolver will work with the reduced form, and it will carry out the transformation transparently if the first form is provided by the user.
 
 {#sec:structured-vectors}
 #### Extracting Eigenvectors of Structured Eigenproblems

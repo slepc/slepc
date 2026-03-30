@@ -45,7 +45,7 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
 {
   const char     *type=NULL,*extr=NULL,*bal=NULL;
   char           str[50];
-  PetscBool      isascii,isexternal,istrivial,isstruct=PETSC_FALSE,flg;
+  PetscBool      isascii,isexternal,istrivial,isstruct=PETSC_FALSE,reduced=PETSC_FALSE,flg;
   Mat            A;
 
   PetscFunctionBegin;
@@ -70,6 +70,7 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
         case EPS_GHIEP:  type = "generalized " SLEPC_STRING_HERMITIAN "-indefinite eigenvalue problem"; break;
         case EPS_BSE:    type = "structured Bethe-Salpeter eigenvalue problem"; break;
         case EPS_HAMILT: type = "structured Hamiltonian eigenvalue problem"; break;
+        case EPS_LREP:   type = "structured Linear Response eigenvalue problem"; break;
       }
     } else type = "not yet set";
     PetscCall(PetscViewerASCIIPrintf(viewer,"  problem type: %s\n",type));
@@ -80,6 +81,11 @@ PetscErrorCode EPSView(EPS eps,PetscViewer viewer)
       if (flg) PetscCall(PetscViewerASCIIPrintf(viewer,"  matrix A has a Bethe-Salpeter structure\n"));
       PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_HAMILT,&flg));
       if (flg) PetscCall(PetscViewerASCIIPrintf(viewer,"  matrix A has a Hamiltonian structure\n"));
+      PetscCall(SlepcCheckMatStruct(A,SLEPC_MAT_STRUCT_LREP,&flg));
+      if (flg) {
+        PetscCall(SlepcCheckMatLREPReduced(A,&reduced));
+        PetscCall(PetscViewerASCIIPrintf(viewer,"  matrix A has a%s Linear Response structure\n",reduced?" reduced":""));
+      }
     }
     if (eps->extraction) {
       switch (eps->extraction) {
