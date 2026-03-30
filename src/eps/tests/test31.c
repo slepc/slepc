@@ -134,7 +134,7 @@ int main(int argc,char **argv)
 
    test:
       suffix: 2
-      args: -modify -st_filter_range -0.5,8 -terse
+      args: -modify -st_filter_range -0.3,8 -terse
       requires: !single
 
    test:
@@ -145,14 +145,14 @@ int main(int argc,char **argv)
 
    test:
       suffix: 4
-      args: -terse -st_filter_type chebyshev -st_filter_damping {{none jackson}}
+      args: -terse -eps_ncv 18 -st_filter_type chebyshev -st_filter_damping {{fejer jackson}}
       filter: sed -e "s/0.161982,7.83797/0.162007,7.83897/" | sed -e "s/CHEBYSHEV/FILTLAN/" | grep -v Damping
       output_file: output/test31_1.out
       requires: !single
 
    test:
       suffix: 5
-      args: -modify -terse -st_filter_range -0.5,8 -st_filter_type chebyshev -st_filter_damping {{lanczos fejer}}
+      args: -modify -terse -st_filter_range -0.3,8 -st_filter_type chebyshev -st_filter_damping {{lanczos none}}
       filter: sed -e "s/CHEBYSHEV/FILTLAN/" | grep -v Damping
       output_file: output/test31_2.out
       requires: !single

@@ -291,7 +291,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
     PetscCall(DSGetDimensions(eps->ds,NULL,NULL,NULL,&t));
     PetscCall(BVNormColumn(U,nv,NORM_2,&u_norm));
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,u_norm,&k));
-    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,k);
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,eps->errest,k);
     if (!symmlost) PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
 

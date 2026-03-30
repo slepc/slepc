@@ -1,0 +1,13 @@
+
+2-D Laplacian Eigenproblem, N=100 (10x10 grid), neigs=5
+
+ Number of requested eigenvalues: 9
+ Found 9 eigenvalues, all of them computed up to the required tolerance:
+     0.39851, 0.39851, 0.63499, 0.77129, 0.77129, 1.00777, 1.00777, 1.25018,
+     1.25018
+
+ Solving again with eigenvectors as initial guesses
+ Found 9 eigenvalues, all of them computed up to the required tolerance:
+     0.39851, 0.39851, 0.63499, 0.77129, 0.77129, 1.00777, 1.00777, 1.25018,
+     1.25018
+

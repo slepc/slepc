@@ -599,8 +599,11 @@ S*/
 struct _n_EPSStoppingCtx {
   PetscReal firstev;    /* the (absolute) value of the first converged eigenvalue */
   PetscReal lastev;     /* the (absolute) value of the last converged eigenvalue */
+  PetscReal firstnc;    /* the (absolute) value of the first non-converged eigenvalue */
+  PetscReal errest;     /* the error estimate of the first non-converged eigenvalue */
   PetscReal thres;      /* threshold set with EPSSetThreshold() */
   PetscBool threlative; /* threshold is relative */
+  PetscInt  its;        /* iteration at which condition is met */
   EPSWhich  which;      /* which eigenvalues are being computed */
 };
 typedef struct _n_EPSStoppingCtx* EPSStoppingCtx;

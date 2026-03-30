@@ -311,15 +311,21 @@ static PetscErrorCode EPSErrorView_ASCII(EPS eps,EPSErrorType etype,PetscViewer 
   PetscReal      error;
   PetscScalar    kr,ki;
   PetscInt       i,j,nvals,nconv;
+  PetscBool      requestednev=PETSC_TRUE; /* user has specified nev */
 
   PetscFunctionBegin;
   PetscCall(EPS_GetActualConverged(eps,&nconv));
-  nvals = (eps->which==EPS_ALL || eps->stop==EPS_STOP_THRESHOLD)? nconv: eps->nev;
-  if (eps->which!=EPS_ALL && nconv<nvals) {
+  if (eps->which==EPS_ALL) {
+    requestednev = PETSC_FALSE;
+    if (eps->stop==EPS_STOP_THRESHOLD && eps->nev>0) requestednev = PETSC_TRUE;
+  } else if (eps->stop==EPS_STOP_THRESHOLD && eps->nev==0) requestednev = PETSC_FALSE;
+  nvals = requestednev? eps->nev: nconv;
+
+  if (requestednev && nconv<nvals) {
     PetscCall(PetscViewerASCIIPrintf(viewer," Problem: less than %" PetscInt_FMT " eigenvalues converged\n\n",eps->nev));
     PetscFunctionReturn(PETSC_SUCCESS);
   }
-  if (eps->which==EPS_ALL && !nvals) {
+  if (!requestednev && !nvals) {
     PetscCall(PetscViewerASCIIPrintf(viewer," No eigenvalues have been found\n\n"));
     PetscFunctionReturn(PETSC_SUCCESS);
   }
@@ -330,7 +336,7 @@ static PetscErrorCode EPSErrorView_ASCII(EPS eps,EPSErrorType etype,PetscViewer 
       PetscFunctionReturn(PETSC_SUCCESS);
     }
   }
-  if (eps->which==EPS_ALL || eps->stop==EPS_STOP_THRESHOLD) PetscCall(PetscViewerASCIIPrintf(viewer," Found %" PetscInt_FMT " eigenvalues, all of them computed up to the required tolerance:",nvals));
+  if (!requestednev) PetscCall(PetscViewerASCIIPrintf(viewer," Found %" PetscInt_FMT " eigenvalues, all of them computed up to the required tolerance:",nvals));
   else PetscCall(PetscViewerASCIIPrintf(viewer," All requested eigenvalues computed up to the required tolerance:"));
   for (i=0;i<=(nvals-1)/8;i++) {
     PetscCall(PetscViewerASCIIPrintf(viewer,"\n     "));

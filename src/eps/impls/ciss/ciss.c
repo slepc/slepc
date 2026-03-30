@@ -225,7 +225,6 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
   PetscFunctionBegin;
   EPSCheckNotStructured(eps);
   if (eps->ncv==PETSC_DETERMINE) {
-    if (eps->nev==0) eps->nev = 1;
     eps->ncv = ctx->L_max*ctx->M;
     if (eps->ncv>eps->n) {
       eps->ncv = eps->n;

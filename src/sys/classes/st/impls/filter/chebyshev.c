@@ -133,8 +133,8 @@ static PetscErrorCode Chebyshev_Compute_Coefficients(ST st)
   cheby->coeffs[0] = t1;
   for (i=0;i<degree;i++) {
     cheby->coeffs[i+1] = 2.0*(PetscSinReal((i+1)*acosa) - PetscSinReal((i+1)*acosb)) / ((i+1)*PETSC_PI);
-    t1 = t1 + cheby->coeffs[i+1]*PetscCosReal((i+1)*acosa);
-    t2 = t2 + cheby->coeffs[i+1]*PetscCosReal((i+1)*acosb);
+    t1 = t1 + cheby->damping_coeffs[i+1]*cheby->coeffs[i+1]*PetscCosReal((i+1)*acosa);
+    t2 = t2 + cheby->damping_coeffs[i+1]*cheby->coeffs[i+1]*PetscCosReal((i+1)*acosb);
   }
   if (s_inta == -1.0) s = 0.5/PetscAbs(t1);
   else if (s_intb == 1.0) s = 0.5/PetscMin(PetscAbs(t1),PetscAbs(t2));
@@ -188,8 +188,8 @@ static PetscErrorCode STComputeOperator_Filter_Chebyshev(ST st,Mat *G)
 
   PetscFunctionBegin;
   PetscCall(STSetWorkVecs(st,2));
-  PetscCall(Chebyshev_Compute_Coefficients(st));
   PetscCall(Chebyshev_Compute_Damping_Coefficients(st));
+  PetscCall(Chebyshev_Compute_Coefficients(st));
   /* create shell matrix*/
   PetscCall(MatDestroy(&ctx->T));
   PetscCall(MatDuplicate(st->A[0],MAT_COPY_VALUES,&ctx->T));
