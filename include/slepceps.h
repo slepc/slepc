@@ -604,6 +604,7 @@ struct _n_EPSStoppingCtx {
   PetscReal thres;      /* threshold set with EPSSetThreshold() */
   PetscBool threlative; /* threshold is relative */
   PetscInt  its;        /* iteration at which condition is met */
+  PetscInt  napprox;    /* number of available approximations */
   EPSWhich  which;      /* which eigenvalues are being computed */
 };
 typedef struct _n_EPSStoppingCtx* EPSStoppingCtx;

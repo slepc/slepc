@@ -331,6 +331,7 @@ PetscErrorCode EPSStoppingThreshold(EPS eps,PetscInt its,PetscInt max_it,PetscIn
 {
   PetscReal thres,firstev,lastev,firstnc,errest;
   PetscBool magnit,rel,isfilter;
+  PetscInt  napprox;
   EPSWhich  which;
 
   PetscFunctionBegin;
@@ -341,6 +342,7 @@ PetscErrorCode EPSStoppingThreshold(EPS eps,PetscInt its,PetscInt max_it,PetscIn
   errest  = ((EPSStoppingCtx)ctx)->errest;
   thres   = ((EPSStoppingCtx)ctx)->thres;
   rel     = ((EPSStoppingCtx)ctx)->threlative;
+  napprox = ((EPSStoppingCtx)ctx)->napprox;
   which   = ((EPSStoppingCtx)ctx)->which;
 
   PetscCall(PetscObjectTypeCompare((PetscObject)eps->st,STFILTER,&isfilter));
@@ -349,9 +351,10 @@ PetscErrorCode EPSStoppingThreshold(EPS eps,PetscInt its,PetscInt max_it,PetscIn
       ((EPSStoppingCtx)ctx)->threlative   should be PETSC_FALSE
       ((EPSStoppingCtx)ctx)->which        should be EPS_LARGEST_MAGNITUDE
     */
-    if (nconv && firstnc+errest<thres) {
+    if (nconv && (nconv==napprox || firstnc+errest<thres)) {
       if (its==((EPSStoppingCtx)ctx)->its+1) {
-        PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g (plus error estimate %g) is below the threshold %g\n",(double)firstnc,(double)errest,(double)thres));
+        if (nconv<napprox) PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: the eigenvalue magnitude %g (plus error estimate %g) is below the threshold %g\n",(double)firstnc,(double)errest,(double)thres));
+        else PetscCall(PetscInfo(eps,"Linear eigensolver finished successfully: all available eigenvalue approximations have converged\n"));
         *reason = EPS_CONVERGED_TOL;
       } else ((EPSStoppingCtx)ctx)->its = its;  /* wait until next iteration */
     } else if (nev && nconv >= nev) {

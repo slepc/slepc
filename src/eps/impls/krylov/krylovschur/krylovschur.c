@@ -288,7 +288,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Default(EPS eps)
 
     /* Check convergence */
     PetscCall(EPSKrylovConvergence(eps,PETSC_FALSE,eps->nconv,nv-eps->nconv,beta,0.0,gamma,&k));
-    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,eps->errest,k);
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,eps->errest,k,nv);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,k,eps->nev,&eps->reason,eps->stoppingctx));
     nconv = k;
 
