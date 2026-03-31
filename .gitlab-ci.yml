@@ -1012,7 +1012,7 @@ gnu-c-nocxx:
     PETSC_CONFIG_OPTS: --with-cxx=0 --COPTFLAGS='-g -O -fsanitize=address' --FOPTFLAGS='-g -O -fsanitize=address' FPPFLAGS=-fsecond-underscore
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-primme
 
-gnu-c-complex128:
+gnu-cxx-complex128:
   extends:
     - .stage-3
     - .linux_test
