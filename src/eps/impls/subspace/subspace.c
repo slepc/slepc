@@ -274,7 +274,7 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
     }
 
     PetscCall(EPSMonitor(eps,eps->its,eps->nconv,eps->eigr,eps->eigi,eps->errest,nv));
-    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,eps->errest,eps->nconv);
+    EPSSetCtxThreshold(eps,eps->eigr,eps->eigi,eps->errest,eps->nconv,nv);
     PetscCall((*eps->stopping)(eps,eps->its,eps->max_it,eps->nconv,eps->nev,&eps->reason,eps->stoppingctx));
     if (eps->reason != EPS_CONVERGED_ITERATING) break;
 
