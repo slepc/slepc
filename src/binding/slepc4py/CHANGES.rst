@@ -1,3 +1,9 @@
+Release 3.25
+------------
+
+- Update to SLEPc 3.25.
+
+
 Release 3.24
 ------------
 
