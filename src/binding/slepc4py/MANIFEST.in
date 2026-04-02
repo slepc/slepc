@@ -20,4 +20,5 @@ graft   docs/usrman
 graft   docs/apiref
 graft   docs/source
 prune   docs/source/_build
+prune   docs/source/reference
 exclude docs/source/*.inv
