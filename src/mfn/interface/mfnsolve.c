@@ -78,6 +78,7 @@ static PetscErrorCode MFNSolve_Private(MFN mfn,Vec b,Vec x)
    the viewer type and options. For instance, use `-mfn_view_mat binary:amatrix.bin`
    to save the matrix to a binary file, or `-mfn_view_solution :sol.m:ascii_matlab`
    to save the solution in a file that can be executed in Matlab.
+   See `PetscObjectViewFromOptions()` for more details.
 
    Level: beginner
 

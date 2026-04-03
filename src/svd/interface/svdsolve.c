@@ -115,6 +115,7 @@ PetscErrorCode SVDComputeVectors(SVD svd)
    to save the $A$ matrix to a binary file, `-svd_view_values draw` to draw the computed
    singular values graphically, or `-svd_error_relative :myerr.m:ascii_matlab` to save
    the errors in a file that can be executed in Matlab.
+   See `PetscObjectViewFromOptions()` for more details.
 
    Level: beginner
 
