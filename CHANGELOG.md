@@ -12,6 +12,9 @@
 
 ### Changed
 
+- When using polynomial filters (`STFILTER`), the stopping test now allows specifying
+  a number of eigenvalues (`nev`) if one does not really want to compute all the
+  eigenvalues lying in the interval.
 - A new argument "destroy" (a routine for destroying the context) has been added to
   `DSNEPSetComputeMatrixFunction()`.
 
