@@ -212,11 +212,18 @@ static PetscErrorCode SVDErrorView_ASCII(SVD svd,SVDErrorType etype,PetscViewer 
 {
   PetscReal      error,sigma;
   PetscInt       i,j,numsv;
+  PetscBool      requestednsv=PETSC_TRUE; /* user has specified nsv */
+  const char     *svstring = svd->isgeneralized?"generalized singular values":"singular values";
 
   PetscFunctionBegin;
-  numsv = svd->stop==SVD_STOP_THRESHOLD? svd->nconv: svd->nsv;
-  if (svd->nconv<numsv) {
-    PetscCall(PetscViewerASCIIPrintf(viewer," Problem: less than %" PetscInt_FMT " singular values converged\n\n",numsv));
+  if (svd->stop==SVD_STOP_THRESHOLD && svd->nsv==0) requestednsv = PETSC_FALSE;
+  numsv = requestednsv? svd->nsv: svd->nconv;
+  if (requestednsv && svd->nconv<numsv) {
+    PetscCall(PetscViewerASCIIPrintf(viewer," Problem: less than %" PetscInt_FMT " %s converged\n\n",numsv,svstring));
+    PetscFunctionReturn(PETSC_SUCCESS);
+  }
+  if (!requestednsv && !numsv) {
+    PetscCall(PetscViewerASCIIPrintf(viewer," No %s have been found\n\n",svstring));
     PetscFunctionReturn(PETSC_SUCCESS);
   }
   for (i=0;i<numsv;i++) {
@@ -226,7 +233,8 @@ static PetscErrorCode SVDErrorView_ASCII(SVD svd,SVDErrorType etype,PetscViewer 
       PetscFunctionReturn(PETSC_SUCCESS);
     }
   }
-  PetscCall(PetscViewerASCIIPrintf(viewer," All %s%ssingular values computed up to the required tolerance:",svd->stop==SVD_STOP_THRESHOLD?"":"requested ",svd->isgeneralized?"generalized ":""));
+  if (!requestednsv) PetscCall(PetscViewerASCIIPrintf(viewer," Found %" PetscInt_FMT " %s, all of them computed up to the required tolerance:",numsv,svstring));
+  else PetscCall(PetscViewerASCIIPrintf(viewer," All requested %s computed up to the required tolerance:",svstring));
   for (i=0;i<=(numsv-1)/8;i++) {
     PetscCall(PetscViewerASCIIPrintf(viewer,"\n     "));
     for (j=0;j<PetscMin(8,numsv-8*i);j++) {
