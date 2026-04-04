@@ -1,5 +1,14 @@
 # Changelog of SLEPc versions
 
+## [unreleased]
+
+### Changed
+
+- In the threshold stopping test, in both `EPS` and `SVD`, change the policy to
+  stop earlier. Now it will stop when the first non-converged value (plus the
+  error estimate) is below the threshold, rather than waiting for the first value
+  below the threshold to be fully converged.
+
 ## [3.25] - 2026-03-31
 
 ### Added

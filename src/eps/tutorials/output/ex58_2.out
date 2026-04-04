@@ -1,9 +1,9 @@
 
 Linear Response Eigenvalue Problem, n=90
 
- Found 16 eigenvalues, all of them computed up to the required tolerance:
+ Found 14 eigenvalues, all of them computed up to the required tolerance:
      2.30166, -2.30166, 2.30664, -2.30664, 2.31492, -2.31492, 2.32645, -2.32645, 
-     2.34119, -2.34119, 2.35908, -2.35908, 2.38004, -2.38004, 2.40398, -2.40398
+     2.34119, -2.34119, 2.35908, -2.35908, 2.38004, -2.38004
 
  Level of bi-orthogonality of eigenvectors < 100*eps
 
