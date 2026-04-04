@@ -309,7 +309,7 @@ gnu-lint:
             gcov --preserve-paths --long-file-names -fb $object_file 1>/dev/null
           fi
         done
-        gcovr --use-gcov-files --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-custom/.*' --exclude '.*/ftn-mod/.*' --print-summary
+        gcovr --use-gcov-files --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-mod/.*' --exclude-lines-by-pattern '^\s*SETERR.*' --exclude-throw-branches --exclude-unreachable-branches --decisions --print-summary
         deactivate
         zstd coverage-${CI_JOB_NAME}.json
       fi
