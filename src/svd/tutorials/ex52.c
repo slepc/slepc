@@ -239,7 +239,7 @@ int main(int argc,char **argv)
       test:
          suffix: 6
          filter: sed -e "s/27.29445, 27.29445/27.29445/"
-         args: -file ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -svd_threshold_relative 0.8
+         args: -file ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -svd_threshold_relative 0.8 -svd_ncv 20
          requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
       test:
          suffix: 6_complex

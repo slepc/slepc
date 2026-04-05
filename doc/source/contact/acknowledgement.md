@@ -8,7 +8,7 @@ The following people have contributed code to SLEPc:
 
   * F. Alvarruiz: restarted Lanczos for the GSVD, structured BSE and Hamiltonian solvers.
   * A. Lamas Davi&ntilde;a: CUDA code, new website and documentation.
-  * B. Mellado-Pinto: structured BSE solvers.
+  * B. Mellado-Pinto: structured BSE solvers, Chebyshev polynomial filters.
   * P. Jolivet: many fixes and suggestions.
   * Y. Maeda, T. Sakurai: CISS solvers.
   * M. Moldaschl, W. Gansterer: BDC subroutines.
