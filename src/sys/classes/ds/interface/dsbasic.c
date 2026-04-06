@@ -886,6 +886,8 @@ PetscErrorCode DSAllocate(DS ds,PetscInt ld)
 @*/
 PetscErrorCode DSReallocate(DS ds,PetscInt ld)
 {
+  PetscInt i;
+
   PetscFunctionBegin;
   PetscValidHeaderSpecific(ds,DS_CLASSID,1);
   PetscValidLogicalCollectiveInt(ds,ld,2);
@@ -894,6 +896,7 @@ PetscErrorCode DSReallocate(DS ds,PetscInt ld)
   PetscCheck(ld>ds->ld,PetscObjectComm((PetscObject)ds),PETSC_ERR_ARG_OUTOFRANGE,"New leading dimension %" PetscInt_FMT " must be larger than the previous one %" PetscInt_FMT,ld,ds->ld);
   PetscCall(PetscInfo(ds,"Reallocating memory with new leading dimension=%" PetscInt_FMT "\n",ld));
   PetscUseTypeMethod(ds,reallocate,ld);
+  for (i=ds->ld;i<ld;i++) ds->perm[i] = i;
   ds->ld = ld;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
