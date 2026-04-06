@@ -181,10 +181,10 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
   Mat            H,Q,S,T,B;
   BV             AV,R;
   PetscBool      indef;
-  PetscInt       i,k,ngrp,nogrp,*itrsd,*itrsdold;
+  PetscInt       i,k,ngrp,nogrp,*itrsd,*itrsdold,*p_itrsd,*p_itrsdold;
   PetscInt       nxtsrr,idsrr,idort,nxtort,nv,its;
-  PetscReal      arsd,oarsd,ctr,octr,ae,oae,*rsd,*orsd,tcond=1.0;
-  PetscScalar    *oeigr,*oeigi;
+  PetscReal      arsd,oarsd,ctr,octr,ae,oae,*rsd,*orsd,*p_rsd,*p_orsd,tcond=1.0;
+  PetscScalar    *oeigr,*oeigi,*p_oeigr,*p_oeigi;
   /* Parameters */
   PetscInt       init = 5;        /* Number of initial iterations */
   PetscReal      stpfac = 1.5;    /* Max num of iter before next SRR step */
@@ -325,6 +325,26 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
       PetscCall(BVResize(R,eps->ncv,PETSC_TRUE));
       for (i=nv;i<eps->ncv;i++) eps->perm[i] = i;
       PetscCall(DSReallocate(eps->ds,eps->ncv));
+      for (k=nv;k<eps->ncv;k++) {
+        PetscCall(BVSetRandomColumn(eps->V,k));
+        PetscCall(BVOrthonormalizeColumn(eps->V,k,PETSC_TRUE,NULL,NULL));
+      }
+      p_rsd      = rsd;
+      p_orsd     = orsd;
+      p_oeigr    = oeigr;
+      p_oeigi    = oeigi;
+      p_itrsd    = itrsd;
+      p_itrsdold = itrsdold;
+      PetscCall(PetscMalloc6(eps->ncv,&rsd,eps->ncv,&orsd,eps->ncv,&oeigr,eps->ncv,&oeigi,eps->ncv,&itrsd,eps->ncv,&itrsdold));
+      for (i=0;i<nv;i++) {
+        rsd[i]      = p_rsd[i];
+        orsd[i]     = p_orsd[i];
+        oeigr[i]    = p_oeigr[i];
+        oeigi[i]    = p_oeigi[i];
+        itrsd[i]    = p_itrsd[i];
+        itrsdold[i] = p_itrsdold[i];
+      }
+      PetscCall(PetscFree6(p_rsd,p_orsd,p_oeigr,p_oeigi,p_itrsd,p_itrsdold));
     }
 
   }
