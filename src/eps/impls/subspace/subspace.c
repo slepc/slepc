@@ -319,7 +319,7 @@ static PetscErrorCode EPSSolve_Subspace(EPS eps)
     } while (its<nxtsrr);
 
     if (eps->stop==EPS_STOP_THRESHOLD && nv/(PetscReal)eps->nconv<1.3) {  /* reallocate */
-      eps->ncv = 1.3*eps->nconv;
+      eps->ncv = 1.3*eps->nconv+1;
       PetscCall(EPSReallocateSolution(eps,eps->ncv));
       PetscCall(BVResize(AV,eps->ncv,PETSC_TRUE));
       PetscCall(BVResize(R,eps->ncv,PETSC_TRUE));
