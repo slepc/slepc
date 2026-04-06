@@ -364,8 +364,12 @@ S*/
 struct _n_SVDStoppingCtx {
   PetscReal firstsv;    /* the value of the first converged singular value */
   PetscReal lastsv;     /* the value of the last converged singular value */
+  PetscReal firstnc;    /* the value of the first non-converged singular value */
+  PetscReal errest;     /* the error estimate of the first non-converged singular value */
   PetscReal thres;      /* threshold set with SVDSetThreshold() */
   PetscBool threlative; /* threshold is relative */
+  PetscInt  its;        /* iteration at which condition is met */
+  PetscInt  napprox;    /* number of available approximations */
   SVDWhich  which;      /* which singular values are being computed */
 };
 typedef struct _n_SVDStoppingCtx* SVDStoppingCtx;

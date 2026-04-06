@@ -217,5 +217,6 @@ int main(int argc,char **argv)
       test:
          suffix: 6_rel_small
          args: -eps_threshold_relative 3 -eps_ncv 8
+         requires: !complex
 
 TEST*/

@@ -370,6 +370,7 @@ PetscErrorCode SVDSetUp(SVD svd)
     ctx->thres      = svd->thres;
     ctx->threlative = svd->threlative;
     ctx->which      = svd->which;
+    ctx->its        = -1;
     PetscCall(SVDSetStoppingTestFunction(svd,SVDStoppingThreshold,ctx,PetscCtxDestroyDefault));
   }
 

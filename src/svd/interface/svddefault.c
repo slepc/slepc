@@ -130,30 +130,51 @@ PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nc
 @*/
 PetscErrorCode SVDStoppingThreshold(SVD svd,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nsv,SVDConvergedReason *reason,void *ctx)
 {
-  PetscReal thres,firstsv,lastsv;
+  PetscReal thres,firstsv,firstnc,errest;
   PetscBool rel;
+  PetscInt  napprox;
   SVDWhich  which;
 
   PetscFunctionBegin;
   *reason = SVD_CONVERGED_ITERATING;
   firstsv = ((SVDStoppingCtx)ctx)->firstsv;
-  lastsv  = ((SVDStoppingCtx)ctx)->lastsv;
+  firstnc = ((SVDStoppingCtx)ctx)->firstnc;
+  errest  = ((SVDStoppingCtx)ctx)->errest;
   thres   = ((SVDStoppingCtx)ctx)->thres;
   rel     = ((SVDStoppingCtx)ctx)->threlative;
+  napprox = ((SVDStoppingCtx)ctx)->napprox;
   which   = ((SVDStoppingCtx)ctx)->which;
-  if (nconv && ((which==SVD_LARGEST && ((rel && lastsv<thres*firstsv) || (!rel && lastsv<thres))) || (which==SVD_SMALLEST && lastsv>thres))) {
-    if (which==SVD_SMALLEST) PetscCall(PetscInfo(svd,"Singular value solver finished successfully: singular value %g is above the threshold %g\n",(double)lastsv,(double)thres));
-    else if (!rel) PetscCall(PetscInfo(svd,"Singular value solver finished successfully: singular value %g is below the threshold %g\n",(double)lastsv,(double)thres));
-    else PetscCall(PetscInfo(svd,"Singular value solver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)lastsv,(double)firstsv,(double)thres));
+
+  if (!nconv) { /* no converged singular values yet */
+    if (its >= max_it) {
+      if (svd->conv == SVD_CONV_MAXIT) *reason = SVD_CONVERGED_MAXIT;
+      else {
+        PetscCall(PetscInfo(svd,"Singular value solver iteration reached maximum number of iterations (%" PetscInt_FMT ")\n",its));
+        *reason = SVD_DIVERGED_ITS;
+      }
+    }
+    PetscFunctionReturn(PETSC_SUCCESS);
+  }
+  if (nconv==napprox) { /* all approximations converged, very unusual */
+    PetscCall(PetscInfo(svd,"Singular value solver finished successfully: all available singular value approximations have converged\n"));
     *reason = SVD_CONVERGED_TOL;
+    PetscFunctionReturn(PETSC_SUCCESS);
+  }
+  if ((which==SVD_LARGEST && ((rel && firstnc+errest<thres*firstsv) || (!rel && firstnc+errest<thres))) || (which==SVD_SMALLEST && firstnc-errest>thres)) {
+    if (its==((SVDStoppingCtx)ctx)->its+1) {
+      if (which==SVD_SMALLEST) PetscCall(PetscInfo(svd,"Singular value solver finished successfully: the approximation %g (minus error estimate %g) is above the threshold %g\n",(double)firstnc,(double)errest,(double)thres));
+      else if (!rel) PetscCall(PetscInfo(svd,"Singular value solver finished successfully: the approximation %g (plus error estimate %g) is below the threshold %g\n",(double)firstnc,(double)errest,(double)thres));
+      else PetscCall(PetscInfo(svd,"Singular value solver finished successfully: the ratio %g/%g is below the threshold %g\n",(double)(firstnc+errest),(double)firstsv,(double)thres));
+      *reason = SVD_CONVERGED_TOL;
+    } else ((SVDStoppingCtx)ctx)->its = its;  /* wait until next iteration */
   } else if (nsv && nconv >= nsv) {
     PetscCall(PetscInfo(svd,"Singular value solver finished successfully: %" PetscInt_FMT " singular triplets converged at iteration %" PetscInt_FMT "\n",nconv,its));
     *reason = SVD_CONVERGED_TOL;
   } else if (its >= max_it) {
     if (svd->conv == SVD_CONV_MAXIT) *reason = SVD_CONVERGED_MAXIT;
     else {
-      *reason = SVD_DIVERGED_ITS;
       PetscCall(PetscInfo(svd,"Singular value solver iteration reached maximum number of iterations (%" PetscInt_FMT ")\n",its));
+      *reason = SVD_DIVERGED_ITS;
     }
   }
   PetscFunctionReturn(PETSC_SUCCESS);
