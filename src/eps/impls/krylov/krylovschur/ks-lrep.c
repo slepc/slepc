@@ -24,7 +24,7 @@
 #include <slepc/private/epsimpl.h>
 #include "krylovschur.h"
 
-static PetscErrorCode Orthog_Teng(Vec x,BV U,BV V,PetscInt j,PetscScalar *h,PetscScalar *c,PetscBool *breakdown)
+static PetscErrorCode Orthog_Teng(Vec x,BV U,BV V,PetscInt j,PetscScalar *h,PetscScalar *c)
 {
   PetscInt i;
 
@@ -42,7 +42,7 @@ static PetscErrorCode Orthog_Teng(Vec x,BV U,BV V,PetscInt j,PetscScalar *h,Pets
 
 /* Orthogonalize vector x against first j vectors in U and V
 v is column j-1 of V */
-static PetscErrorCode OrthogonalizeVector_Teng(Vec x,BV U,BV V,PetscInt j,Vec u,PetscReal *beta,PetscInt k,PetscScalar *h,PetscBool *breakdown)
+static PetscErrorCode OrthogonalizeVector_Teng(Vec x,BV U,BV V,PetscInt j,Vec u,PetscReal *beta,PetscInt k,PetscScalar *h)
 {
   PetscReal alpha;
   PetscInt  i,l;
@@ -60,7 +60,7 @@ static PetscErrorCode OrthogonalizeVector_Teng(Vec x,BV U,BV V,PetscInt j,Vec u,
   PetscCall(BVMultVec(V,-1.0,1.0,x,h+l));
 
   /* Full orthogonalization */
-  PetscCall(Orthog_Teng(x,U,V,j,h,h+2*j,breakdown));
+  PetscCall(Orthog_Teng(x,U,V,j,h,h+2*j));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -82,9 +82,14 @@ static PetscErrorCode EPSLREPLanczos_Teng(EPS eps,Mat K,Mat M,BV U,BV V,PetscRea
     PetscCall(BVGetColumn(V,0,&v));
     PetscCall(MatMult(M,v,u));
     PetscCall(VecDot(u,v,&gamma));
-    beta0 = PetscSqrtReal(PetscRealPart(gamma));  /* TODO check beta_0=0 */
-    PetscCall(VecScale(u,1.0/beta0));
-    PetscCall(VecScale(v,1.0/beta0));
+    beta0 = PetscSqrtReal(PetscRealPart(gamma));
+    if (beta0==0.0) {
+      if (breakdown) *breakdown = PETSC_TRUE;
+      *min = 1; m = 0;
+    } else {
+      PetscCall(VecScale(u,1.0/beta0));
+      PetscCall(VecScale(v,1.0/beta0));
+    }
     PetscCall(BVRestoreColumn(U,0,&u));
     PetscCall(BVRestoreColumn(V,0,&v));
   }
@@ -95,13 +100,18 @@ static PetscErrorCode EPSLREPLanczos_Teng(EPS eps,Mat K,Mat M,BV U,BV V,PetscRea
     PetscCall(BVGetColumn(V,j+1,&vh));
     PetscCall(BVGetColumn(U,j,&u));
     PetscCall(MatMult(K,u,vh));
-    PetscCall(OrthogonalizeVector_Teng(vh,U,V,j+1,u,beta,k,hwork,breakdown));
+    PetscCall(OrthogonalizeVector_Teng(vh,U,V,j+1,u,beta,k,hwork));
     alpha[j] = PetscRealPart(hwork[j]);
     PetscCall(MatMult(M,vh,uh));
     PetscCall(VecDot(uh,vh,&gamma));
-    beta[j] = PetscSqrtReal(PetscRealPart(gamma));  /* TODO check beta_j=0 */
-    PetscCall(VecScale(uh,1.0/beta[j]));
-    PetscCall(VecScale(vh,1.0/beta[j]));
+    beta[j] = PetscSqrtReal(PetscRealPart(gamma));
+    if (beta[j]==0.0) {
+      if (breakdown) *breakdown = PETSC_TRUE;
+      *min = j+1; m = j;
+    } else {
+      PetscCall(VecScale(uh,1.0/beta[j]));
+      PetscCall(VecScale(vh,1.0/beta[j]));
+    }
     PetscCall(BVRestoreColumn(U,j+1,&uh));
     PetscCall(BVRestoreColumn(V,j+1,&vh));
     PetscCall(BVRestoreColumn(U,j,&u));
