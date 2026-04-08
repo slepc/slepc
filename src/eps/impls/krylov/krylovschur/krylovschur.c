@@ -1445,8 +1445,8 @@ static PetscErrorCode EPSKrylovSchurSetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context, see `EPSKrylovSchurBSEType` for possible values
--  bse - the BSE method
++  eps - the linear eigensolver context
+-  bse - the BSE method, see `EPSKrylovSchurBSEType` for possible values
 
    Options Database Key:
 .  -eps_krylovschur_bse_type (shao|gruning|projectedbse) - sets the BSE type
@@ -1662,8 +1662,8 @@ static PetscErrorCode EPSSetDefaultST_KrylovSchur(EPS eps)
    - Inertia-based spectrum slicing to compute all eigenvalues in an interval,
      see {cite:p}`Cam12`.
    - Polynomial filter to compute eigenvalues in an interval via `STFILTER`.
-   - Indefinite Lanczos to solve `EPSGHIEP` problems.
-   - Structured variants for problem types such as `EPSBSE`.
+   - Indefinite Lanczos to solve `EPS_GHIEP` problems.
+   - Structured variants for problem types such as `EPS_BSE`.
    - A two-sided variant that also computes left eigenvectors.
    - Arbitrary selection of eigenvalues, see `EPSSetArbitrarySelection()`.
 
