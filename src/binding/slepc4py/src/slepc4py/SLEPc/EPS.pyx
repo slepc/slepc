@@ -2000,8 +2000,9 @@ cdef class EPS(Object):
         -------
         Scalar
             The computed eigenvalue. It will be a real variable in case
-            of a Hermitian or generalized Hermitian eigenproblem. Otherwise
-            it will be a complex variable (possibly with zero imaginary part).
+            of a Hermitian or generalized Hermitian eigenproblem, and in
+            some structured eigenvalue problems. Otherwise it will be a
+            complex variable (possibly with zero imaginary part).
 
         Notes
         -----
@@ -2018,7 +2019,7 @@ cdef class EPS(Object):
         cdef SlepcEPSProblemType ptype
         CHKERR( EPSGetEigenvalue(self.eps, i, &sval1, &sval2) )
         CHKERR( EPSGetProblemType(self.eps, &ptype) )
-        if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE:
+        if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE or ptype == EPS_LREP:
             return toReal(PetscRealPart(sval1))
         else:
             return toComplex(sval1, sval2)
@@ -2134,7 +2135,7 @@ cdef class EPS(Object):
         cdef SlepcEPSProblemType ptype
         CHKERR( EPSGetEigenpair(self.eps, i, &sval1, &sval2, vecr, veci) )
         CHKERR( EPSGetProblemType(self.eps, &ptype) )
-        if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE:
+        if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE or ptype == EPS_LREP:
             return toReal(PetscRealPart(sval1))
         else:
             return toComplex(sval1, sval2)
