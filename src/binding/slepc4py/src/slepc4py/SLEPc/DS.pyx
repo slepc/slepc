@@ -944,7 +944,7 @@ cdef class DS(Object):
         CHKERR( DSSolve(self.ds, eigr, eigi) )
         cdef object kr = array_s(n, eigr)
         cdef object ki = array_s(n, eigi)
-        if self.getType().upper() in ['HEP','GHEP','BSE','SVD','HSVD','GSVD']:
+        if self.getType().upper() in ['HEP','GHEP','SVD','HSVD','GSVD']:
             return kr.real.copy()
         else:
             return kr+1j*ki
