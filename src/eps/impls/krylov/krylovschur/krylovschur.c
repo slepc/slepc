@@ -1445,8 +1445,8 @@ static PetscErrorCode EPSKrylovSchurSetBSEType_KrylovSchur(EPS eps,EPSKrylovSchu
    Logically Collective
 
    Input Parameters:
-+  eps - the linear eigensolver context, see `EPSKrylovSchurBSEType` for possible values
--  bse - the BSE method
++  eps - the linear eigensolver context
+-  bse - the BSE method, see `EPSKrylovSchurBSEType` for possible values
 
    Options Database Key:
 .  -eps_krylovschur_bse_type (shao|gruning|projectedbse) - sets the BSE type
