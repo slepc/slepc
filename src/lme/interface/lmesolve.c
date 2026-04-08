@@ -41,6 +41,7 @@
    All the command-line options listed above admit an optional argument specifying
    the viewer type and options. For instance, use `-lme_view_mat_a binary:amatrix.bin`
    to save the $A$ matrix to a binary file.
+   See `PetscObjectViewFromOptions()` for more details.
 
    Level: beginner
 

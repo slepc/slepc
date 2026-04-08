@@ -685,6 +685,7 @@ static PetscErrorCode EPSValuesView_MATLAB(EPS eps,PetscViewer viewer)
    specifying the viewer type and options. For instance, use
    `-eps_view_values :evals.m:ascii_matlab` to save the values in a file
    that can be executed in Matlab.
+   See `PetscObjectViewFromOptions()` for more details.
 
    Level: intermediate
 
@@ -791,6 +792,7 @@ PetscErrorCode EPSValuesViewFromOptions(EPS eps)
    The command-line option listed above admits an optional argument
    specifying the viewer type and options. For instance, use
    `-eps_view_vectors binary:evecs.bin` to save the vectors in a binary file.
+   See `PetscObjectViewFromOptions()` for more details.
 
    Level: intermediate
 

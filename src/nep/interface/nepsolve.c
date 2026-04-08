@@ -74,6 +74,7 @@ PetscErrorCode NEPComputeVectors(NEP nep)
    to save the eigenvectors to a binary file, `-nep_view_values draw` to draw the computed
    eigenvalues graphically, or `-nep_error_relative :myerr.m:ascii_matlab` to save
    the errors in a file that can be executed in Matlab.
+   See `PetscObjectViewFromOptions()` for more details.
 
    Level: beginner
 
