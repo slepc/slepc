@@ -17,7 +17,10 @@
        [1] Z. Teng, R.-C. Li, "Convergence analysis of Lanczos-type methods for the
            linear response eigenvalue problem", J. Comput. Appl. Math. 247, 2013.
 
-       [2] F. Alvarruiz, B. Mellado-Pinto, J. E. Roman, "Restarted Lanczos methods
+       [2] H.-X. Zhong, H. Xu, "Weighted Golub-Kahan-Lanczos bidiagonalization
+           algorithms", Elec. Trans. Numer. Anal. 47, 2017.
+
+       [3] F. Alvarruiz, B. Mellado-Pinto, J. E. Roman, "Restarted Lanczos methods
            for the linear response eigenvalue problem", in preparation, 2026.
 
 */
@@ -169,6 +172,13 @@ static PetscErrorCode EPSComputeVectors_LREP_Teng(EPS eps)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode EPSComputeVectors_LREP_Zhong(EPS eps)
+{
+  PetscFunctionBegin;
+  SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Not implemented yet");
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 PetscErrorCode EPSSetUp_KrylovSchur_LREP(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
@@ -189,13 +199,25 @@ PetscErrorCode EPSSetUp_KrylovSchur_LREP(EPS eps)
   PetscCall(STSetStructured(eps->st,PETSC_FALSE));
 
   PetscCall(EPSAllocateSolution(eps,1));
-  /* Teng */
-  eps->ops->solve = EPSSolve_KrylovSchur_LREP_Teng;
-  eps->ops->computevectors = EPSComputeVectors_LREP_Teng;
-  PetscCall(DSSetType(eps->ds,DSHEP));
-  PetscCall(DSSetCompact(eps->ds,PETSC_TRUE));
-  PetscCall(DSSetExtraRow(eps->ds,PETSC_TRUE));
-  PetscCall(DSAllocate(eps->ds,eps->ncv+1));
+  switch (ctx->lrep) {
+    case EPS_KRYLOVSCHUR_LREP_TENG:
+      eps->ops->solve = EPSSolve_KrylovSchur_LREP_Teng;
+      eps->ops->computevectors = EPSComputeVectors_LREP_Teng;
+      PetscCall(DSSetType(eps->ds,DSHEP));
+      PetscCall(DSSetCompact(eps->ds,PETSC_TRUE));
+      PetscCall(DSSetExtraRow(eps->ds,PETSC_TRUE));
+      PetscCall(DSAllocate(eps->ds,eps->ncv+1));
+      break;
+    case EPS_KRYLOVSCHUR_LREP_ZHONG:
+      eps->ops->solve = EPSSolve_KrylovSchur_LREP_Zhong;
+      eps->ops->computevectors = EPSComputeVectors_LREP_Zhong;
+      PetscCall(DSSetType(eps->ds,DSHEP));
+      PetscCall(DSSetCompact(eps->ds,PETSC_TRUE));
+      PetscCall(DSSetExtraRow(eps->ds,PETSC_TRUE));
+      PetscCall(DSAllocate(eps->ds,eps->ncv+1));
+      break;
+    default: SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Unexpected error");
+  }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -322,5 +344,12 @@ PetscErrorCode EPSSolve_KrylovSchur_LREP_Teng(EPS eps)
     PetscCall(MatDestroy(&K));
     PetscCall(MatDestroy(&M));
   }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+PetscErrorCode EPSSolve_KrylovSchur_LREP_Zhong(EPS eps)
+{
+  PetscFunctionBegin;
+  SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Not implemented yet");
   PetscFunctionReturn(PETSC_SUCCESS);
 }

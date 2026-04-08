@@ -899,6 +899,8 @@ where $K=A-B$ and $M=A+B$. Note that, in applications, generally it is required 
 
 The helper function `MatCreateLREP()` can be used to generate the matrices $H_1$ or $H_2$ from the individual blocks. The problem type must be set to `EPS_LREP` (or `-eps_lrep` from the command line). Note that internally the SLEPc eigensolver will work with the reduced form, and it will carry out the transformation transparently if the first form is provided by the user.
 
+Further details about the implementation of the SLEPc solvers for the LREP can be found in {cite:p}`Alv26`.
+
 {#sec:structured-vectors}
 #### Extracting Eigenvectors of Structured Eigenproblems
 

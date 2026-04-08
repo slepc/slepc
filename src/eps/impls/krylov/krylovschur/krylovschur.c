@@ -1504,14 +1504,100 @@ PetscErrorCode EPSKrylovSchurGetBSEType(EPS eps,EPSKrylovSchurBSEType *bse)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+static PetscErrorCode EPSKrylovSchurSetLREPType_KrylovSchur(EPS eps,EPSKrylovSchurLREPType lrep)
+{
+  EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
+
+  PetscFunctionBegin;
+  switch (lrep) {
+    case EPS_KRYLOVSCHUR_LREP_TENG:
+    case EPS_KRYLOVSCHUR_LREP_ZHONG:
+      if (ctx->lrep != lrep) {
+        ctx->lrep = lrep;
+        eps->state = EPS_STATE_INITIAL;
+      }
+      break;
+    default:
+      SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_OUTOFRANGE,"Invalid LREP type");
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   EPSKrylovSchurSetLREPType - Sets the method to be used for LREP structured eigenproblems
+   in the Krylov-Schur solver.
+
+   Logically Collective
+
+   Input Parameters:
++  eps  - the linear eigensolver context
+-  lrep - the LREP method, see `EPSKrylovSchurLREPType` for possible values
+
+   Options Database Key:
+.  -eps_krylovschur_lrep_type (teng|zhong) - sets the LREP type
+
+   Notes:
+   This function is relevant only for `EPS_LREP` problem types, see section
+   on [](#sec:structured).
+
+   A detailed description of the methods can be found in {cite:p}`Alv26`.
+
+   Level: advanced
+
+.seealso: [](ch:eps), [](#sec:structured), `EPS_LREP`, `EPSKRYLOVSCHUR`, `EPSKrylovSchurGetLREPType()`, `EPSKrylovSchurLREPType`, `MatCreateLREP()`
+@*/
+PetscErrorCode EPSKrylovSchurSetLREPType(EPS eps,EPSKrylovSchurLREPType lrep)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
+  PetscValidLogicalCollectiveEnum(eps,lrep,2);
+  PetscTryMethod(eps,"EPSKrylovSchurSetLREPType_C",(EPS,EPSKrylovSchurLREPType),(eps,lrep));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode EPSKrylovSchurGetLREPType_KrylovSchur(EPS eps,EPSKrylovSchurLREPType *lrep)
+{
+  EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
+
+  PetscFunctionBegin;
+  *lrep = ctx->lrep;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*@
+   EPSKrylovSchurGetLREPType - Gets the method used for LREP structured eigenproblems
+   in the Krylov-Schur solver.
+
+   Not Collective
+
+   Input Parameter:
+.  eps - the linear eigensolver context
+
+   Output Parameter:
+.  lrep - the LREP method
+
+   Level: advanced
+
+.seealso: [](ch:eps), [](#sec:structured), `EPS_LREP`, `EPSKRYLOVSCHUR`, `EPSKrylovSchurSetLREPType()`, `EPSKrylovSchurLREPType`, `MatCreateLREP()`
+@*/
+PetscErrorCode EPSKrylovSchurGetLREPType(EPS eps,EPSKrylovSchurLREPType *lrep)
+{
+  PetscFunctionBegin;
+  PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
+  PetscAssertPointer(lrep,2);
+  PetscUseMethod(eps,"EPSKrylovSchurGetLREPType_C",(EPS,EPSKrylovSchurLREPType*),(eps,lrep));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 static PetscErrorCode EPSSetFromOptions_KrylovSchur(EPS eps,PetscOptionItems PetscOptionsObject)
 {
-  EPS_KRYLOVSCHUR       *ctx = (EPS_KRYLOVSCHUR*)eps->data;
-  PetscBool             flg,lock,b,f1,f2,f3,isfilt;
-  PetscReal             keep;
-  PetscInt              i,j,k;
-  KSP                   ksp;
-  EPSKrylovSchurBSEType bse;
+  EPS_KRYLOVSCHUR        *ctx = (EPS_KRYLOVSCHUR*)eps->data;
+  PetscBool              flg,lock,b,f1,f2,f3,isfilt;
+  PetscReal              keep;
+  PetscInt               i,j,k;
+  KSP                    ksp;
+  EPSKrylovSchurBSEType  bse;
+  EPSKrylovSchurLREPType lrep;
 
   PetscFunctionBegin;
   PetscOptionsHeadBegin(PetscOptionsObject,"EPS Krylov-Schur Options");
@@ -1539,6 +1625,9 @@ static PetscErrorCode EPSSetFromOptions_KrylovSchur(EPS eps,PetscOptionItems Pet
 
     PetscCall(PetscOptionsEnum("-eps_krylovschur_bse_type","Method for BSE structured eigenproblems","EPSKrylovSchurSetBSEType",EPSKrylovSchurBSETypes,(PetscEnum)ctx->bse,(PetscEnum*)&bse,&flg));
     if (flg) PetscCall(EPSKrylovSchurSetBSEType(eps,bse));
+
+    PetscCall(PetscOptionsEnum("-eps_krylovschur_lrep_type","Method for LREP structured eigenproblems","EPSKrylovSchurSetLREPType",EPSKrylovSchurLREPTypes,(PetscEnum)ctx->lrep,(PetscEnum*)&lrep,&flg));
+    if (flg) PetscCall(EPSKrylovSchurSetLREPType(eps,lrep));
 
   PetscOptionsHeadEnd();
 
@@ -1569,6 +1658,7 @@ static PetscErrorCode EPSView_KrylovSchur(EPS eps,PetscViewer viewer)
     PetscCall(PetscViewerASCIIPrintf(viewer,"  %d%% of basis vectors kept after restart\n",(int)(100*ctx->keep)));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  using the %slocking variant\n",ctx->lock?"":"non-"));
     if (eps->problem_type==EPS_BSE) PetscCall(PetscViewerASCIIPrintf(viewer,"  BSE method: %s\n",EPSKrylovSchurBSETypes[ctx->bse]));
+    else if (eps->problem_type==EPS_LREP) PetscCall(PetscViewerASCIIPrintf(viewer,"  LREP method: %s\n",EPSKrylovSchurLREPTypes[ctx->lrep]));
     if (eps->which==EPS_ALL) {
       PetscCall(PetscObjectTypeCompare((PetscObject)eps->st,STFILTER,&isfilt));
       if (isfilt) PetscCall(PetscViewerASCIIPrintf(viewer,"  using polynomial filtering%s\n",eps->nev?"":" to extract all eigenvalues in an interval"));
@@ -1624,6 +1714,8 @@ static PetscErrorCode EPSDestroy_KrylovSchur(EPS eps)
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurGetKSP_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurSetBSEType_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurGetBSEType_C",NULL));
+  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurSetLREPType_C",NULL));
+  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurGetLREPType_C",NULL));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -1721,5 +1813,7 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_KrylovSchur(EPS eps)
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurGetKSP_C",EPSKrylovSchurGetKSP_KrylovSchur));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurSetBSEType_C",EPSKrylovSchurSetBSEType_KrylovSchur));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurGetBSEType_C",EPSKrylovSchurGetBSEType_KrylovSchur));
+  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurSetLREPType_C",EPSKrylovSchurSetLREPType_KrylovSchur));
+  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSKrylovSchurGetLREPType_C",EPSKrylovSchurGetLREPType_KrylovSchur));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

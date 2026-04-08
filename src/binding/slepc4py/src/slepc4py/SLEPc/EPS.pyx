@@ -267,6 +267,20 @@ class EPSKrylovSchurBSEType(object):
     GRUNING      = EPS_KRYLOVSCHUR_BSE_GRUNING
     PROJECTEDBSE = EPS_KRYLOVSCHUR_BSE_PROJECTEDBSE
 
+class EPSKrylovSchurLREPType(object):
+    """
+    EPS Krylov-Schur method for LREP problems.
+
+    - `TENG`:  Lanczos method proposed by Teng and Li.
+    - `ZHONG`: Lanczos method proposed by Zhong and Xu.
+
+    See Also
+    --------
+    slepc.EPSKrylovSchurLREPType
+    """
+    TENG  = EPS_KRYLOVSCHUR_LREP_TENG
+    ZHONG = EPS_KRYLOVSCHUR_LREP_ZHONG
+
 class EPSLanczosReorthogType(object):
     """
     EPS Lanczos reorthogonalization type.
@@ -342,6 +356,7 @@ cdef class EPS(Object):
 
     PowerShiftType      = EPSPowerShiftType
     KrylovSchurBSEType  = EPSKrylovSchurBSEType
+    KrylovSchurLREPType = EPSKrylovSchurLREPType
     LanczosReorthogType = EPSLanczosReorthogType
     CISSQuadRule        = EPSCISSQuadRule
     CISSExtraction      = EPSCISSExtraction
@@ -2518,6 +2533,49 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetBSEType(self.eps, &val) )
         return val
 
+    def setKrylovSchurLREPType(self, lrep: KrylovSchurLREPType) -> None:
+        """
+        Set the Krylov-Schur variant used for LREP structured eigenproblems.
+
+        Logically collective.
+
+        Parameters
+        ----------
+        lrep
+            The LREP method.
+
+        Notes
+        -----
+        This call is only relevant if the type was set to
+        `EPS.Type.KRYLOVSCHUR` with `setType()` and the problem
+        type to `EPS.ProblemType.LREP` with `setProblemType()`.
+
+        See Also
+        --------
+        createMatLREP, getKrylovSchurLREPType, slepc.EPSKrylovSchurSetLREPType
+        """
+        cdef SlepcEPSKrylovSchurLREPType val = lrep
+        CHKERR( EPSKrylovSchurSetLREPType(self.eps, val) )
+
+    def getKrylovSchurLREPType(self) -> KrylovSchurLREPType:
+        """
+        Get the method used for LREP structured eigenproblems (Krylov-Schur).
+
+        Not collective.
+
+        Returns
+        -------
+        KrylovSchurLREPType
+            The LREP method.
+
+        See Also
+        --------
+        setKrylovSchurLREPType, slepc.EPSKrylovSchurGetLREPType
+        """
+        cdef SlepcEPSKrylovSchurLREPType val = EPS_KRYLOVSCHUR_LREP_TENG
+        CHKERR( EPSKrylovSchurGetLREPType(self.eps, &val) )
+        return val
+
     def setKrylovSchurRestart(self, keep: float) -> None:
         """
         Set the restart parameter for the Krylov-Schur method.
@@ -4377,6 +4435,7 @@ del EPSStop
 del EPSConvergedReason
 del EPSPowerShiftType
 del EPSKrylovSchurBSEType
+del EPSKrylovSchurLREPType
 del EPSLanczosReorthogType
 del EPSCISSQuadRule
 del EPSCISSExtraction

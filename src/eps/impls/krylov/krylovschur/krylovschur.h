@@ -28,6 +28,7 @@ SLEPC_INTERN PetscErrorCode EPSSetUp_KrylovSchur_Hamilt(EPS);
 SLEPC_INTERN PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS);
 SLEPC_INTERN PetscErrorCode EPSSetUp_KrylovSchur_LREP(EPS);
 SLEPC_INTERN PetscErrorCode EPSSolve_KrylovSchur_LREP_Teng(EPS);
+SLEPC_INTERN PetscErrorCode EPSSolve_KrylovSchur_LREP_Zhong(EPS);
 SLEPC_INTERN PetscErrorCode EPSGetArbitraryValues(EPS,PetscScalar*,PetscScalar*);
 SLEPC_INTERN PetscErrorCode EPSKrylovSchurGetChildEPS(EPS,EPS*);
 
@@ -104,6 +105,7 @@ typedef struct {
   Mat              *submata,*submatb;  /* seq matrices used in update of subcomm mats */
   /* the following are used only in filter */
   PetscBool        estimatedrange;     /* the filter range was not set by the user */
-  /* the following are used only for BSE problem type */
-  EPSKrylovSchurBSEType bse;           /* the BSE method */
+  /* the following are used only for BSE/LREP problem types */
+  EPSKrylovSchurBSEType  bse;          /* the BSE method */
+  EPSKrylovSchurLREPType lrep;         /* the LREP method */
 } EPS_KRYLOVSCHUR;
