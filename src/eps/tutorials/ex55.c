@@ -239,7 +239,7 @@ int main(int argc,char **argv)
          output_file: output/ex55_1_real_sinvert.out
 
    testset:
-      args: -n 90 -eps_threshold_absolute 2.5 -eps_ncv {{10 24}} -eps_krylovschur_bse_type {{shao gruning projectedbse}} -eps_tol 1e-14 -terse -checkorthog
+      args: -n 90 -eps_threshold_absolute 2.5 -eps_ncv {{10 22}} -eps_krylovschur_bse_type {{shao gruning projectedbse}} -eps_tol 1e-14 -terse -checkorthog
       test:
          suffix: 2
          requires: double complex

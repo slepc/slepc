@@ -500,7 +500,7 @@ static PetscErrorCode SVDSolve_TRLanczos(SVD svd)
 
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,1.0,&k));
-    SVDSetCtxThreshold(svd,svd->sigma,k);
+    SVDSetCtxThreshold(svd,svd->sigma,svd->errest,k,nv);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     /* update l */
@@ -677,7 +677,7 @@ static PetscErrorCode SVDSolve_TRLanczos_HSVD(SVD svd)
 
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,1.0,&k));
-    SVDSetCtxThreshold(svd,svd->sigma,k);
+    SVDSetCtxThreshold(svd,svd->sigma,svd->errest,k,nv);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     /* update l */
@@ -925,7 +925,7 @@ static PetscErrorCode SVDSolve_TRLanczosGSingle(SVD svd,BV U1,BV V)
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,normr,&k));
     PetscCall(SVDLanczosBackTransform(svd,nv,svd->sigma,sigma,NULL));
-    SVDSetCtxThreshold(svd,sigma,k);
+    SVDSetCtxThreshold(svd,sigma,svd->errest,k,nv);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     sigma0 = svd->which==SVD_LARGEST? svd->sigma[0] : 1.0/svd->sigma[0];
@@ -1209,7 +1209,7 @@ static PetscErrorCode SVDSolve_TRLanczosGUpper(SVD svd,BV U1,BV U2,BV V)
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,normr,&k));
     PetscCall(SVDLanczosBackTransform(svd,nv,svd->sigma,sigma,NULL));
-    SVDSetCtxThreshold(svd,sigma,k);
+    SVDSetCtxThreshold(svd,sigma,svd->errest,k,nv);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     sigma0 = svd->which==SVD_LARGEST? svd->sigma[0] : 1.0/svd->sigma[0];
@@ -1523,7 +1523,7 @@ static PetscErrorCode SVDSolve_TRLanczosGLower(SVD svd,BV U1,BV U2,BV V)
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,normr,&k));
     PetscCall(SVDLanczosBackTransform(svd,nv,svd->sigma,sigma,NULL));
-    SVDSetCtxThreshold(svd,sigma,k);
+    SVDSetCtxThreshold(svd,sigma,svd->errest,k,nv);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     sigma0 = inverted? 1.0/svd->sigma[0] : svd->sigma[0];

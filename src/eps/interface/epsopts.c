@@ -551,17 +551,17 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
    Notes:
    This function internally calls `EPSSetStoppingTest()` to set a special stopping
    test based on the threshold, where eigenvalues are computed in sequence until
-   one of the computed eigenvalues is below the threshold `thres` (in magnitude).
+   the next eigenvalue approximation is below the threshold `thres` (in magnitude).
    This is the interpretation in case of searching for largest eigenvalues in magnitude,
    see `EPSSetWhichEigenpairs()`.
 
    If the solver is configured to compute smallest magnitude eigenvalues, then the
    threshold must be interpreted in the opposite direction, i.e., the computation
-   will stop when one of the computed values is above the threshold (in magnitude).
+   will stop when the next eigenvalue approximation is above the threshold (in magnitude).
 
    The threshold can also be used when computing largest/smallest real eigenvalues
    (i.e, rightmost or leftmost), in which case the threshold is allowed to be
-   negative. The solver will stop when one of the computed eigenvalues is above
+   negative. The solver will stop when the next eigenvalue approximation is above
    or below the threshold (considering the real part of the eigenvalue). This mode
    is allowed only in problem types whose eigenvalues are always real (e.g., `EPS_HEP`).
 
@@ -577,9 +577,11 @@ PetscErrorCode EPSGetWhichEigenpairs(EPS eps,EPSWhich *which)
    implies that the wanted eigenvalues are the largest ones, and otherwise the
    solver assumes that smallest eigenvalues are being computed.
 
-   The test against the threshold is done for converged eigenvalues, which
-   implies that the final number of converged eigenvalues will be at least
-   one more than the actual number of values below/above the threshold.
+   When the next eigenvalue approximation does not satisfy the threshold criterion,
+   the solver will carry out an additional iteration/restart. This provides more
+   guarantees that eigenvalue multiplicity is resolved correctly. As a result,
+   sometimes the solver will return more converged eigenvalues than strictly
+   satisfying the criterion.
 
    Since the number of computed eigenvalues is not known a priori, the solver
    will need to reallocate the basis of vectors internally, to have enough room

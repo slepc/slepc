@@ -181,15 +181,22 @@ int main(int argc,char **argv)
          filter: sed -e 's/[0-9][0-9]$//'
 
    testset:
-      args: -svd_type {{trlanczos lanczos cross}} -terse
+      args: -svd_type {{trlanczos cross}} -terse
       filter: grep -v method
       test:
          suffix: 4
-         args: -file ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -svd_threshold_relative 0.9 -svd_ncv {{26 12}}
+         args: -file ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -svd_threshold_relative 0.9 -svd_ncv {{26 14}}
          requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
       test:
          suffix: 4_complex
          args: -file ${DATAFILESPATH}/matrices/complex/qc324.petsc -svd_threshold_relative 0.6 -svd_ncv {{18 10}}
          requires: double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
+
+   test:
+      suffix: 4_lanczos
+      filter: grep -v method
+      args: -file ${SLEPC_DIR}/share/slepc/datafiles/matrices/rdb200.petsc -svd_threshold_relative 0.9 -svd_type lanczos -svd_ncv 26 -terse
+      requires: double !complex !defined(PETSC_USE_64BIT_INDICES)
+      output_file: output/ex14_4.out
 
 TEST*/

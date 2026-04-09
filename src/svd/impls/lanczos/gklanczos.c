@@ -269,7 +269,7 @@ static PetscErrorCode SVDSolve_Lanczos(SVD svd)
 
     /* check convergence */
     PetscCall(SVDKrylovConvergence(svd,PETSC_FALSE,svd->nconv,nv-svd->nconv,1.0,&k));
-    SVDSetCtxThreshold(svd,svd->sigma,k);
+    SVDSetCtxThreshold(svd,svd->sigma,svd->errest,k,nv);
     PetscCall((*svd->stopping)(svd,svd->its,svd->max_it,k,svd->nsv,&svd->reason,svd->stoppingctx));
 
     /* compute restart vector */

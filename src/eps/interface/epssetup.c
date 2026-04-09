@@ -374,6 +374,7 @@ PetscErrorCode EPSSetUp(EPS eps)
     ctx->thres      = eps->thres;
     ctx->threlative = eps->threlative;
     ctx->which      = eps->which;
+    ctx->its        = -1;
     PetscCall(EPSSetStoppingTestFunction(eps,EPSStoppingThreshold,ctx,PetscCtxDestroyDefault));
   }
 

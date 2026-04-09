@@ -174,19 +174,21 @@ PetscErrorCode SVDGetTolerances(SVD svd,PetscReal *tol,PetscInt *maxits)
    Notes:
    This function internally calls `SVDSetStoppingTest()` to set a special stopping
    test based on the threshold, where singular values are computed in sequence
-   until one of the computed singular values is below the threshold `thres`.
+   until the next singular value approximation is below the threshold `thres`.
 
    If the solver is configured to compute smallest singular values, then the
    threshold must be interpreted in the opposite direction, i.e., the computation
-   will stop when one of the computed singular values is above the threshold.
+   will stop when the next singular value approximation is above the threshold.
 
    In the case of largest singular values, the threshold can be made relative
    with respect to the largest singular value (i.e., the matrix norm). Otherwise,
    the argument `rel` should be `PETSC_FALSE`.
 
-   The test against the threshold is done for converged singular values, which
-   implies that the final number of converged singular values will be at least
-   one more than the actual number of values below/above the threshold.
+   When the next singular value approximation does not satisfy the threshold criterion,
+   the solver will carry out an additional iteration/restart. This provides more
+   guarantees that singular value multiplicity is resolved correctly. As a result,
+   sometimes the solver will return more converged singular values than strictly
+   satisfying the criterion.
 
    Since the number of computed singular values is not known a priori, the solver
    will need to reallocate the basis of vectors internally, to have enough room
