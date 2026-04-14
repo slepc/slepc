@@ -93,7 +93,7 @@ static PetscErrorCode STApply_Shift_BSE_Dense(ST st,Vec x,Vec y)
   if (mctx->s==-1.0) PetscCall(VecScale(mdnC->lvec,-1.0));
   PetscCall(PetscLogEventBegin(MAT_MultAdd,R,mdnC->lvec,y1,y1));
   PetscCall(VecLockReadPush(mdnC->lvec));
-  PetscCall((*mdnR->A->ops->multadd)(mdnR->A,mdnC->lvec,y1,y1));
+  PetscUseTypeMethod(mdnR->A,multadd,mdnC->lvec,y1,y1);
   PetscCall(VecLockReadPop(mdnC->lvec));
   PetscCall(PetscLogEventEnd(MAT_MultAdd,R,mdnC->lvec,y1,y1));
   PetscCall(PetscObjectStateIncrease((PetscObject)y1));
