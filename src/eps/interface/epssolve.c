@@ -719,8 +719,8 @@ PetscErrorCode EPSGetErrorEstimate(EPS eps,PetscInt i,PetscReal *errest)
   if (nconv==eps->nconv) {
     *errest = eps->errest[eps->perm[i]];
   } else {
-    PetscCheck(eps->problem_type==EPS_BSE,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Problem type should be BSE");
-    /* BSE problem, even index is +lambda, odd index is -lambda, assume both have same error */
+    PetscCheck(eps->problem_type==EPS_BSE || eps->problem_type==EPS_LREP || eps->problem_type==EPS_HAMILT,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Wrong problem type");
+    /* even index is +lambda, odd index is -lambda, assume both have same error */
     *errest = eps->errest[eps->perm[i/2]];
   }
   PetscFunctionReturn(PETSC_SUCCESS);

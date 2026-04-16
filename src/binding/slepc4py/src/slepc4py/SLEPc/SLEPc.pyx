@@ -110,7 +110,7 @@ cdef extern from "Python.h":
      void Py_INCREF(object)
 
 cdef inline object toComplex(PetscScalar rvalue, PetscScalar ivalue):
-    return complex(toScalar(rvalue), toScalar(ivalue))
+    return toScalar(rvalue) + 1j * toScalar(ivalue)
 
 cdef inline PetscReal asComplexReal(object value) except? <PetscReal>-1.0:
     return <PetscReal>PyComplex_RealAsDouble(value)
