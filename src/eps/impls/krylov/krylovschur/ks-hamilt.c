@@ -27,7 +27,7 @@
 /* J-orthogonalize vector [x1;x2] against first j vectors in U and V (full orthogonalization)
    Coeffs c are updated, coeffs d are computed from scratch.
 */
-static PetscErrorCode Orthog_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscInt j,PetscScalar *c,PetscScalar *d,PetscScalar *w,PetscBool *breakdown)
+static PetscErrorCode Orthog_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscInt j,PetscScalar *c,PetscScalar *d,PetscScalar *w)
 {
   PetscInt i;
   Vec      Jx1,Jx2;
@@ -69,7 +69,7 @@ static PetscErrorCode Orthog_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscI
 }
 
 /* J-orthogonalize vector [x1;x2] against first j vectors in U and V (local+full orthogonalization)*/
-static PetscErrorCode OrthogonalizeVector_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscInt j,PetscReal *alpha,PetscReal *beta,PetscInt k,PetscScalar *h,PetscBool *breakdown)
+static PetscErrorCode OrthogonalizeVector_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1,BV V2,PetscInt j,PetscReal *alpha,PetscReal *beta,PetscInt k,PetscScalar *h)
 {
   PetscScalar p,p1,p2;
   Vec         v1,v2;
@@ -99,7 +99,7 @@ static PetscErrorCode OrthogonalizeVector_Hamilt(Vec x1,Vec x2,BV U1,BV U2,BV V1
   PetscCall(BVMultVec(U2,-1.0,1.0,x2,h+l));
 
   /* J-orthogonalize x (full orthogonalization) */
-  PetscCall(Orthog_Hamilt(x1,x2,U1,U2,V1,V2,j,h,h+j,h+2*j,breakdown));
+  PetscCall(Orthog_Hamilt(x1,x2,U1,U2,V1,V2,j,h,h+j,h+2*j));
   alpha[j-1] = PetscRealPart(h[j-1]);
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -165,7 +165,7 @@ static PetscErrorCode EPSHamiltonianKS(EPS eps,BV U,BV V,PetscReal *alpha,PetscR
     PetscCall(BVGetColumn(V1,0,&v1));
     PetscCall(BVGetColumn(V2,0,&v2));
     PetscCall(NormalizeVector_Hamilt(u1,u2,v1,v2,NULL,&omega[0],breakdown));
-    PetscCheck(!*breakdown,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Breakdown in Hamiltonian Krylov-Schur");
+    if (breakdown && *breakdown) { *M = 1; m = 0; }
     PetscCall(BVRestoreColumn(U1,0,&u1));
     PetscCall(BVRestoreColumn(U2,0,&u2));
     PetscCall(BVRestoreColumn(V1,0,&v1));
@@ -179,7 +179,7 @@ static PetscErrorCode EPSHamiltonianKS(EPS eps,BV U,BV V,PetscReal *alpha,PetscR
     PetscCall(BVRestoreColumn(V,j,&v));
     PetscCall(BVGetColumn(U1,j+1,&u1));
     PetscCall(BVGetColumn(U2,j+1,&u2));
-    PetscCall(OrthogonalizeVector_Hamilt(u1,u2,U1,U2,V1,V2,j+1,alpha,beta,k,hwork,breakdown));
+    PetscCall(OrthogonalizeVector_Hamilt(u1,u2,U1,U2,V1,V2,j+1,alpha,beta,k,hwork));
     PetscCall(BVGetColumn(V,j+1,&v));
     PetscCall(STApply(eps->st,u,v));
     PetscCall(BVRestoreColumn(U,j+1,&u));
@@ -187,6 +187,7 @@ static PetscErrorCode EPSHamiltonianKS(EPS eps,BV U,BV V,PetscReal *alpha,PetscR
     PetscCall(BVGetColumn(V1,j+1,&v1));
     PetscCall(BVGetColumn(V2,j+1,&v2));
     PetscCall(NormalizeVector_Hamilt(u1,u2,v1,v2,&beta[j],&omega[j+1],breakdown));
+    if (breakdown && *breakdown) { *M = j+1; m = j; }
 
     /* Update norm of asymmetry (sym) */
     if (j==k) {
@@ -207,7 +208,6 @@ static PetscErrorCode EPSHamiltonianKS(EPS eps,BV U,BV V,PetscReal *alpha,PetscR
     fro = SlepcAbs(fro,SlepcAbs(alpha[j],beta[j]));
     if (j>0) fro = SlepcAbs(fro,beta[j-1]);
 
-    PetscCheck(!*breakdown,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Breakdown in Hamiltonian Krylov-Schur");
     PetscCall(BVRestoreColumn(U1,j+1,&u1));
     PetscCall(BVRestoreColumn(U2,j+1,&u2));
     PetscCall(BVRestoreColumn(V1,j+1,&v1));
