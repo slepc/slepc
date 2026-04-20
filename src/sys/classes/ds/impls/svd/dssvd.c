@@ -400,7 +400,7 @@ static PetscErrorCode DSIntermediate_SVD(DS ds)
 static PetscErrorCode DSSolve_SVD_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   DS_SVD         *ctx = (DS_SVD*)ds->data;
-  PetscInt       i,j;
+  PetscInt       i,j,neig=PetscMin(ds->n,ctx->m);
   PetscBLASInt   n1,m1,info,l = 0,n = 0,m = 0,nm,ld,off,zero=0;
   PetscScalar    *A,*U,*V,*Vt;
   PetscReal      *d,*e;
@@ -440,27 +440,30 @@ static PetscErrorCode DSSolve_SVD_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
       V[i+j*ld] = PetscConj(Vt[j+i*ld]);  /* transpose VT returned by Lapack */
     }
   }
-  for (i=l;i<PetscMin(ds->n,ctx->m);i++) wr[i] = d[i];
+  for (i=l;i<neig;i++) wr[i] = d[i];
 
   /* create diagonal matrix as a result */
   if (ds->compact) PetscCall(PetscArrayzero(e,n-1));
   else {
     PetscCall(MatDenseGetArray(ds->omat[DS_MAT_A],&A));
     for (i=l;i<m;i++) PetscCall(PetscArrayzero(A+l+i*ld,n-l));
-    for (i=l;i<PetscMin(ds->n,ctx->m);i++) A[i+i*ld] = d[i];
+    for (i=l;i<neig;i++) A[i+i*ld] = d[i];
     PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_A],&A));
   }
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_U],&U));
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_V],&V));
   PetscCall(DSRestoreArrayReal(ds,DS_MAT_T,&d));
+
+  /* Set wi to zero */
+  if (wi) for (i=l;i<neig;i++) wi[i] = 0.0;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
 static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   DS_SVD         *ctx = (DS_SVD*)ds->data;
-  PetscInt       i,j;
-  PetscBLASInt   n1,m1,info,l = 0,n = 0,m = 0,nm,ld,off,lwork;
+  PetscInt       i,j,neig=PetscMin(ds->n,ctx->m);
+  PetscBLASInt   n1,m1,info,l = 0,n = 0,m = 0,ld,off,lwork;
   PetscScalar    *A,*U,*V,*W,qwork;
   PetscReal      *d,*e,*Ur,*Vr;
 
@@ -512,11 +515,10 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
     PetscCall(MatDenseGetArrayWrite(ds->omat[DS_MAT_W],&W));
     if (ds->compact) PetscCall(DSSwitchFormat_SVD(ds));
     for (i=0;i<l;i++) wr[i] = d[i];
-    nm = PetscMin(n,m);
-    PetscCall(DSAllocateWork_Private(ds,0,0,8*nm));
+    PetscCall(DSAllocateWork_Private(ds,0,0,8*neig));
     lwork = -1;
 #if defined(PETSC_USE_COMPLEX)
-    PetscCall(DSAllocateWork_Private(ds,0,5*nm*nm+7*nm,0));
+    PetscCall(DSAllocateWork_Private(ds,0,5*neig*neig+7*neig,0));
     PetscCallBLAS("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,&qwork,&lwork,ds->rwork,ds->iwork,&info));
 #else
     PetscCallBLAS("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,&qwork,&lwork,ds->iwork,&info));
@@ -535,7 +537,7 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
     }
     PetscCall(MatDenseRestoreArrayWrite(ds->omat[DS_MAT_W],&W));
   }
-  for (i=l;i<PetscMin(ds->n,ctx->m);i++) wr[i] = d[i];
+  for (i=l;i<neig;i++) wr[i] = d[i];
 
   /* create diagonal matrix as a result */
   if (ds->compact) PetscCall(PetscArrayzero(e,n-1));
@@ -547,6 +549,9 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseRestoreArrayWrite(ds->omat[DS_MAT_U],&U));
   PetscCall(MatDenseRestoreArrayWrite(ds->omat[DS_MAT_V],&V));
   PetscCall(DSRestoreArrayReal(ds,DS_MAT_T,&d));
+
+  /* Set wi to zero */
+  if (wi) for (i=l;i<neig;i++) wi[i] = 0.0;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
