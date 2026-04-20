@@ -70,10 +70,13 @@ static PetscErrorCode EPSLREPLanczos_Teng(EPS eps,Mat K,Mat M,BV U,BV V,PetscRea
   Vec            u,v,uh,vh;
   PetscReal      beta0;
   PetscScalar    *hwork,lhwork[100],gamma;
+  PetscBool      alloc=PETSC_FALSE;
 
   PetscFunctionBegin;
-  if (4*m > 100) PetscCall(PetscMalloc1(4*m,&hwork));
-  else hwork = lhwork;
+  if (4*m > 100) {
+    PetscCall(PetscMalloc1(4*m,&hwork));
+    alloc = PETSC_TRUE;
+  } else hwork = lhwork;
 
   /* Normalize initial vector */
   if (k==0) {
@@ -116,7 +119,7 @@ static PetscErrorCode EPSLREPLanczos_Teng(EPS eps,Mat K,Mat M,BV U,BV V,PetscRea
     PetscCall(BVRestoreColumn(V,j+1,&vh));
     PetscCall(BVRestoreColumn(U,j,&u));
   }
-  if (4*m > 100) PetscCall(PetscFree(hwork));
+  if (alloc) PetscCall(PetscFree(hwork));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

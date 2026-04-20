@@ -101,12 +101,15 @@ static PetscErrorCode EPSBSELanczos_Shao(EPS eps,BV U,BV V,PetscReal *alpha,Pets
   IS             is[2];
   PetscReal      nrm;
   PetscScalar    *hwork,lhwork[100],gamma;
+  PetscBool      alloc=PETSC_FALSE;
   PetscContainer container;
   SlepcMatStruct mctx;
 
   PetscFunctionBegin;
-  if (4*m > 100) PetscCall(PetscMalloc1(4*m,&hwork));
-  else hwork = lhwork;
+  if (4*m > 100) {
+    PetscCall(PetscMalloc1(4*m,&hwork));
+    alloc = PETSC_TRUE;
+  } else hwork = lhwork;
   PetscCall(STGetMatrix(eps->st,0,&H));
   PetscCall(MatNestGetISs(H,is,NULL));
   PetscCall(PetscObjectQuery((PetscObject)H,"SlepcMatStruct",(PetscObject*)&container));
@@ -171,7 +174,7 @@ static PetscErrorCode EPSBSELanczos_Shao(EPS eps,BV U,BV V,PetscReal *alpha,Pets
     PetscCall(BVRestoreColumn(U,j+1,&x));
     PetscCall(BVRestoreColumn(V,j+1,&y));
   }
-  if (4*m > 100) PetscCall(PetscFree(hwork));
+  if (alloc) PetscCall(PetscFree(hwork));
   PetscCall(VecDestroy(&w));
   PetscCall(VecDestroy(&f));
   PetscCall(VecDestroy(&g));
@@ -285,12 +288,15 @@ static PetscErrorCode EPSBSELanczos_Gruning(EPS eps,BV U,BV V,BV HU,BV HV,PetscR
   IS             is[2];
   PetscReal      nrm;
   PetscScalar    *hwork,lhwork[100],dot;
+  PetscBool      alloc=PETSC_FALSE;
   PetscContainer container;
   SlepcMatStruct mctx;
 
   PetscFunctionBegin;
-  if (4*m > 100) PetscCall(PetscMalloc1(4*m,&hwork));
-  else hwork = lhwork;
+  if (4*m > 100) {
+    PetscCall(PetscMalloc1(4*m,&hwork));
+    alloc = PETSC_TRUE;
+  } else hwork = lhwork;
   PetscCall(STGetMatrix(eps->st,0,&H));
   PetscCall(MatNestGetISs(H,is,NULL));
   PetscCall(PetscObjectQuery((PetscObject)H,"SlepcMatStruct",(PetscObject*)&container));
@@ -388,7 +394,7 @@ static PetscErrorCode EPSBSELanczos_Gruning(EPS eps,BV U,BV V,BV HU,BV HV,PetscR
     PetscCall(BVRestoreColumn(U,j+1,&v));
     PetscCall(BVRestoreColumn(HU,j+1,&y));
   }
-  if (4*m > 100) PetscCall(PetscFree(hwork));
+  if (alloc) PetscCall(PetscFree(hwork));
   PetscCall(VecDestroy(&w));
   PetscCall(VecDestroy(&f));
   PetscCall(VecDestroy(&g));
@@ -506,12 +512,15 @@ static PetscErrorCode EPSBSELanczos_ProjectedBSE(EPS eps,BV X,BV Y,Vec v,PetscRe
   IS             is[2];
   PetscReal      nrm;
   PetscScalar    *hwork,lhwork[100],gamma;
+  PetscBool      alloc=PETSC_FALSE;
   PetscContainer container;
   SlepcMatStruct mctx;
 
   PetscFunctionBegin;
-  if (4*m > 100) PetscCall(PetscMalloc1(4*m,&hwork));
-  else hwork = lhwork;
+  if (4*m > 100) {
+    PetscCall(PetscMalloc1(4*m,&hwork));
+    alloc = PETSC_TRUE;
+  } else hwork = lhwork;
   PetscCall(STGetMatrix(eps->st,0,&H));
   PetscCall(MatNestGetISs(H,is,NULL));
   PetscCall(PetscObjectQuery((PetscObject)H,"SlepcMatStruct",(PetscObject*)&container));
@@ -604,7 +613,7 @@ static PetscErrorCode EPSBSELanczos_ProjectedBSE(EPS eps,BV X,BV Y,Vec v,PetscRe
     PetscCall(BVRestoreColumn(X,j+1,&x));
     PetscCall(BVRestoreColumn(Y,j+1,&y));
   }
-  if (4*m > 100) PetscCall(PetscFree(hwork));
+  if (alloc) PetscCall(PetscFree(hwork));
   PetscCall(VecDestroy(&w));
   PetscCall(VecDestroy(&f));
   PetscCall(VecDestroy(&g));
