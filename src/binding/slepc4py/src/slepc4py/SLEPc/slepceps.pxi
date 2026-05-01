@@ -223,6 +223,11 @@ cdef extern from * nogil:
         EPS_KRYLOVSCHUR_BSE_PROJECTEDBSE
     PetscErrorCode EPSKrylovSchurSetBSEType(SlepcEPS,SlepcEPSKrylovSchurBSEType)
     PetscErrorCode EPSKrylovSchurGetBSEType(SlepcEPS,SlepcEPSKrylovSchurBSEType*)
+    ctypedef enum SlepcEPSKrylovSchurLREPType "EPSKrylovSchurLREPType":
+        EPS_KRYLOVSCHUR_LREP_TENG
+        EPS_KRYLOVSCHUR_LREP_ZHONG
+    PetscErrorCode EPSKrylovSchurSetLREPType(SlepcEPS,SlepcEPSKrylovSchurLREPType)
+    PetscErrorCode EPSKrylovSchurGetLREPType(SlepcEPS,SlepcEPSKrylovSchurLREPType*)
     PetscErrorCode EPSKrylovSchurSetRestart(SlepcEPS,PetscReal)
     PetscErrorCode EPSKrylovSchurGetRestart(SlepcEPS,PetscReal*)
     PetscErrorCode EPSKrylovSchurSetLocking(SlepcEPS,PetscBool)

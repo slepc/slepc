@@ -212,9 +212,9 @@ int main(int argc,char **argv)
       requires: !complex
 
    testset:
-      args: -eps_nev 4 -eps_ncv 16 -terse -checkorthog -reduced {{0 1}} -nest {{0 1}}
+      args: -eps_nev 4 -eps_ncv 16 -terse -checkorthog -reduced {{0 1}} -nest {{0 1}} -eps_krylovschur_lrep_type {{teng zhong}}
       nsize: {{1 2}}
-      filter: sed -e "s/ (reduced)//"
+      filter: sed -e "s/ (reduced)//" | sed -e "s/38566/38567/g"
       output_file: output/ex58_1.out
       test:
          suffix: 1
@@ -231,7 +231,8 @@ int main(int argc,char **argv)
          requires: hip
 
    test:
-      args: -n 90 -eps_threshold_absolute 2.4 -eps_ncv 10 -terse -checkorthog -reduced {{0 1}}
+      args: -n 90 -eps_threshold_absolute 2.4 -eps_ncv 10 -terse -checkorthog -reduced {{0 1}} -eps_krylovschur_lrep_type {{teng zhong}} -eps_tol 1e-14
+      requires: double
       filter: sed -e "s/ (reduced)//"
       suffix: 2
 

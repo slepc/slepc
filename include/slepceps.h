@@ -971,8 +971,29 @@ typedef enum { EPS_KRYLOVSCHUR_BSE_SHAO,
                EPS_KRYLOVSCHUR_BSE_PROJECTEDBSE } EPSKrylovSchurBSEType;
 SLEPC_EXTERN const char *EPSKrylovSchurBSETypes[];
 
+/*E
+   EPSKrylovSchurLREPType - The method to be used in the Krylov-Schur solver
+   for the case of LREP structured eigenproblems.
+
+   Values:
++  `EPS_KRYLOVSCHUR_LREP_TENG`  - a Lanczos method proposed by Teng and Li
+-  `EPS_KRYLOVSCHUR_LREP_ZHONG` - a Lanczos method proposed by Zhong and Xu
+
+   Note:
+   All variants are implemented in combination with a thick restart.
+
+   Level: advanced
+
+.seealso: [](ch:eps), `EPSKrylovSchurSetLREPType()`, `EPSKrylovSchurGetLREPType()`
+E*/
+typedef enum { EPS_KRYLOVSCHUR_LREP_TENG,
+               EPS_KRYLOVSCHUR_LREP_ZHONG } EPSKrylovSchurLREPType;
+SLEPC_EXTERN const char *EPSKrylovSchurLREPTypes[];
+
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurSetBSEType(EPS,EPSKrylovSchurBSEType);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetBSEType(EPS,EPSKrylovSchurBSEType*);
+SLEPC_EXTERN PetscErrorCode EPSKrylovSchurSetLREPType(EPS,EPSKrylovSchurLREPType);
+SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetLREPType(EPS,EPSKrylovSchurLREPType*);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurSetRestart(EPS,PetscReal);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurGetRestart(EPS,PetscReal*);
 SLEPC_EXTERN PetscErrorCode EPSKrylovSchurSetLocking(EPS,PetscBool);
