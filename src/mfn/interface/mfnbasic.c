@@ -293,9 +293,13 @@ PetscErrorCode MFNSetType(MFN mfn,MFNType type)
    Output Parameter:
 .  type - name of `MFN` method
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `MFNType` of `mfn` is changed.
+
    Level: intermediate
 
-.seealso: [](ch:mfn), `MFNSetType()`
+.seealso: [](ch:mfn), `MFNSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode MFNGetType(MFN mfn,MFNType *type)
 {

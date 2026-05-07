@@ -248,9 +248,13 @@ PetscErrorCode FNSetType(FN fn,FNType type)
    Output Parameter:
 .  type - name of the math function
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `FNType` of `fn` is changed.
+
    Level: intermediate
 
-.seealso: [](sec:fn), `FNSetType()`
+.seealso: [](sec:fn), `FNSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode FNGetType(FN fn,FNType *type)
 {
