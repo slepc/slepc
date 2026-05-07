@@ -9,6 +9,7 @@
 */
 
 #include <slepc/private/slepcimpl.h>           /*I "slepcsys.h" I*/
+#include <slepcconfiginfo.h>
 
 #if defined(SLEPC_HAVE_HPDDM)
 #include <petscksp.h>
@@ -73,6 +74,25 @@ PetscErrorCode SlepcGetVersionNumber(PetscInt *major,PetscInt *minor,PetscInt *s
   if (subminor) *subminor = SLEPC_VERSION_SUBMINOR;
   if (release)  *release  = SLEPC_VERSION_RELEASE;
   return PETSC_SUCCESS;
+}
+
+/*@C
+    SlepcGetConfiguration - Gets the SLEPc configuration information in a string.
+
+    Not Collective
+
+    Output Parameter:
+.   configuration - configuration string
+
+    Level: developer
+
+.seealso: `SlepcGetVersionNumber()`
+@*/
+PetscErrorCode SlepcGetConfiguration(const char *configuration[])
+{
+  PetscFunctionBegin;
+  *configuration = slepcconfigureoptions;
+  PetscFunctionReturn(PETSC_SUCCESS);
 }
 
 /*
