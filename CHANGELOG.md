@@ -2,6 +2,10 @@
 
 ## [unreleased]
 
+### Added
+
+- New function `SlepcGetConfiguration()`.
+
 ### Changed
 
 - In the threshold stopping test, in both `EPS` and `SVD`, change the policy to

@@ -302,6 +302,11 @@ if petsc.isinstall:
     globconf.write('SLEPC_DIR = '+slepc.dir+'\n')
     globconf.write('PETSC_ARCH = '+petsc.archname+'\n')
 
+# Write slepcconfiginfo.h
+log.write('slepcconfiginfo.h file in '+includedir)
+with slepc.CreateFile(includedir,'slepcconfiginfo.h') as slepcconfiginfo:
+  slepcconfiginfo.write('static const char *slepcconfigureoptions = "'+' '.join(sys.argv[1:])+'";\n')
+
 # Write Modules configuration file
 modulesdir = slepc.CreateDirTwo(confdir,'modules','slepc')
 log.write('Modules file in '+modulesdir)

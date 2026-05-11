@@ -172,6 +172,7 @@ def config(prefix):
     include = os.path.join(pdir, parch, 'include')
     for filename in (
         'slepcconf.h',
+        'slepcconfiginfo.h',
     ):
         filename = os.path.join(include, filename)
         with open(filename, 'r') as old_fh:
