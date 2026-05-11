@@ -75,9 +75,13 @@ PetscErrorCode STSetType(ST st,STType type)
    Output Parameter:
 .  type - name of the spectral transformation
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `STType` of `st` is changed.
+
    Level: intermediate
 
-.seealso: [](ch:st), `STSetType()`
+.seealso: [](ch:st), `STSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode STGetType(ST st,STType *type)
 {

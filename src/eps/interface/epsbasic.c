@@ -192,9 +192,13 @@ PetscErrorCode EPSSetType(EPS eps,EPSType type)
    Output Parameter:
 .  type - name of `EPS` method
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `EPSType` of `eps` is changed.
+
    Level: intermediate
 
-.seealso: [](ch:eps), `EPSSetType()`
+.seealso: [](ch:eps), `EPSSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode EPSGetType(EPS eps,EPSType *type)
 {

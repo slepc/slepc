@@ -251,9 +251,13 @@ PetscErrorCode SVDSetType(SVD svd,SVDType type)
    Output Parameter:
 .  type - name of `SVD` method
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `SVDType` of `svd` is changed.
+
    Level: intermediate
 
-.seealso: [](ch:svd), `SVDSetType()`
+.seealso: [](ch:svd), `SVDSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode SVDGetType(SVD svd,SVDType *type)
 {

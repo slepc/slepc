@@ -269,9 +269,13 @@ PetscErrorCode DSSetType(DS ds,DSType type)
    Output Parameter:
 .  type - name of the direct solver
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `DSType` of `ds` is changed.
+
    Level: intermediate
 
-.seealso: [](sec:ds), `DSSetType()`
+.seealso: [](sec:ds), `DSSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode DSGetType(DS ds,DSType *type)
 {

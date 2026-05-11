@@ -187,9 +187,13 @@ PetscErrorCode NEPSetType(NEP nep,NEPType type)
    Output Parameter:
 .  type - name of `NEP` method
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `NEPType` of `nep` is changed.
+
    Level: intermediate
 
-.seealso: [](ch:nep), `NEPSetType()`
+.seealso: [](ch:nep), `NEPSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode NEPGetType(NEP nep,NEPType *type)
 {
