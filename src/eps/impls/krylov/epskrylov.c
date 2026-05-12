@@ -159,16 +159,15 @@ PetscErrorCode EPSDelayedArnoldi1(EPS eps,PetscScalar *H,PetscInt ldh,PetscInt k
    in Krylov methods.
 
    Input Parameters:
-     eps   - the eigensolver; some error estimates are updated in eps->errest
+     eps    - the eigensolver; some error estimates are updated in eps->errest
      getall - whether all residuals must be computed
-     kini  - initial value of k (the loop variable)
-     nits  - number of iterations of the loop
-     V     - set of basis vectors (used only if trueresidual is activated)
-     nv    - number of vectors to process (dimension of Q, columns of V)
-     beta  - norm of f (the residual vector of the Arnoldi/Lanczos factorization)
-     corrf - correction factor for residual estimates (only in harmonic KS)
+     kini   - initial value of k (the loop variable)
+     nits   - number of iterations of the loop
+     beta   - norm of f (the residual vector of the Arnoldi/Lanczos factorization)
+     betat  - norm of the residual of the second Krylov relation in two-sided methods
+     corrf  - correction factor for residual estimates (only in harmonic KS)
 
-   Output Parameters:
+   Output Parameter:
      kout  - the first index where the convergence test failed
 */
 PetscErrorCode EPSKrylovConvergence(EPS eps,PetscBool getall,PetscInt kini,PetscInt nits,PetscReal beta,PetscReal betat,PetscReal corrf,PetscInt *kout)
