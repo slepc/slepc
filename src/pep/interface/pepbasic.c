@@ -187,9 +187,13 @@ PetscErrorCode PEPSetType(PEP pep,PEPType type)
    Output Parameter:
 .  type - name of `PEP` method
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `PEPType` of `pep` is changed.
+
    Level: intermediate
 
-.seealso: [](ch:pep), `PEPSetType()`
+.seealso: [](ch:pep), `PEPSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode PEPGetType(PEP pep,PEPType *type)
 {

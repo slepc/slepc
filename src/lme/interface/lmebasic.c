@@ -296,9 +296,13 @@ PetscErrorCode LMESetType(LME lme,LMEType type)
    Output Parameter:
 .  type - name of `LME` method
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `LMEType` of `lme` is changed.
+
    Level: intermediate
 
-.seealso: [](ch:lme), `LMESetType()`
+.seealso: [](ch:lme), `LMESetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode LMEGetType(LME lme,LMEType *type)
 {

@@ -74,9 +74,13 @@ PetscErrorCode BVSetType(BV bv,BVType type)
    Output Parameter:
 .  type - name of the type of basis vectors
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `BVType` of `bv` is changed.
+
    Level: intermediate
 
-.seealso: [](sec:bv), `BVSetType()`
+.seealso: [](sec:bv), `BVSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode BVGetType(BV bv,BVType *type)
 {

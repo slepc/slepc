@@ -234,9 +234,13 @@ PetscErrorCode RGSetType(RG rg,RGType type)
    Output Parameter:
 .  type - name of the region
 
+   Note:
+   `type` should not be retained for later use as it will be an invalid pointer
+   if the `RGType` of `rg` is changed.
+
    Level: beginner
 
-.seealso: [](sec:rg), `RGSetType()`
+.seealso: [](sec:rg), `RGSetType()`, `PetscObjectTypeCompare()`, `PetscObjectTypeCompareAny()`
 @*/
 PetscErrorCode RGGetType(RG rg,RGType *type)
 {
