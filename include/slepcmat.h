@@ -19,7 +19,6 @@
 
 SLEPC_EXTERN PetscErrorCode MatCreateTile(PetscScalar,Mat,PetscScalar,Mat,PetscScalar,Mat,PetscScalar,Mat,Mat*);
 SLEPC_EXTERN PetscErrorCode MatCreateVecsEmpty(Mat,Vec*,Vec*);
-SLEPC_EXTERN PetscErrorCode MatNormEstimate(Mat,Vec,Vec,PetscReal*);
 
 /* Matrices for structured eigenproblems */
 SLEPC_EXTERN PetscErrorCode MatCreateBSE(Mat,Mat,Mat*);
@@ -38,3 +37,4 @@ PETSC_DEPRECATED_FUNCTION(3, 6, 0, "MatCreateRedundantMatrix() followed by MatCo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 PETSC_DEPRECATED_FUNCTION(3, 8, 0, "MatCreateTile()", ) static inline PetscErrorCode SlepcMatTile(PetscScalar a,Mat A,PetscScalar b,Mat B,PetscScalar c,Mat C,PetscScalar d,Mat D,Mat *G) {return MatCreateTile(a,A,b,B,c,C,d,D,G);}
+PETSC_DEPRECATED_FUNCTION(3, 26, 0, "MatNormApproximate()", ) static inline PetscErrorCode MatNormEstimate(Mat A,Vec vrn,Vec w,PetscReal *nrm) {return MatNormApproximate(A,NORM_2,1,nrm);}

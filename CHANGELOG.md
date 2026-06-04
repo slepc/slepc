@@ -12,6 +12,7 @@
   stop earlier. Now it will stop when the first non-converged value (plus the
   error estimate) is below the threshold, rather than waiting for the first value
   below the threshold to be fully converged.
+- `MatNormEstimate()` has been deprecated in favor of `MatNormApproximate()` (from PETSc).
 
 ## [3.25] - 2026-03-31
 
