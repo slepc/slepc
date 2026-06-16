@@ -1313,11 +1313,12 @@ cdef class NEP(Object):
         --------
         solve, getConverged, setWhichEigenpairs, slepc.NEPGetEigenpair
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
         cdef PetscVec vecr = Vr.vec if Vr is not None else <PetscVec>NULL
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
-        CHKERR( NEPGetEigenpair(self.nep, i, &sval1, &sval2, vecr, veci) )
+        CHKERR( NEPGetEigenpair(self.nep, ival, &sval1, &sval2, vecr, veci) )
         return toComplex(sval1, sval2)
 
     def getLeftEigenvector(self, i: int, Vec Wr, Vec Wi=None) -> None:
@@ -1349,9 +1350,10 @@ cdef class NEP(Object):
         --------
         getEigenpair, getConverged, setTwoSided, slepc.NEPGetLeftEigenvector
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscVec vecr = Wr.vec if Wr is not None else <PetscVec>NULL
         cdef PetscVec veci = Wi.vec if Wi is not None else <PetscVec>NULL
-        CHKERR( NEPGetLeftEigenvector(self.nep, i, vecr, veci) )
+        CHKERR( NEPGetLeftEigenvector(self.nep, ival, vecr, veci) )
 
     def getErrorEstimate(self, i: int) -> float:
         """
@@ -1378,8 +1380,9 @@ cdef class NEP(Object):
         --------
         computeError, slepc.NEPGetErrorEstimate
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscReal rval = 0
-        CHKERR( NEPGetErrorEstimate(self.nep, i, &rval) )
+        CHKERR( NEPGetErrorEstimate(self.nep, ival, &rval) )
         return toReal(rval)
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
@@ -1419,10 +1422,11 @@ cdef class NEP(Object):
         --------
         getErrorEstimate, setTwoSided, slepc.NEPComputeError
         """
+        cdef PetscInt ival = asInt(i)
         cdef SlepcNEPErrorType et = NEP_ERROR_RELATIVE
         cdef PetscReal rval = 0
         if etype is not None: et = etype
-        CHKERR( NEPComputeError(self.nep, i, et, &rval) )
+        CHKERR( NEPComputeError(self.nep, ival, et, &rval) )
         return toReal(rval)
 
     def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:

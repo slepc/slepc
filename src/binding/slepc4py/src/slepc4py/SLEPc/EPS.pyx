@@ -2014,10 +2014,11 @@ cdef class EPS(Object):
         --------
         getConverged, setWhichEigenpairs, getEigenpair, slepc.EPSGetEigenvalue
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
         cdef SlepcEPSProblemType ptype
-        CHKERR( EPSGetEigenvalue(self.eps, i, &sval1, &sval2) )
+        CHKERR( EPSGetEigenvalue(self.eps, ival, &sval1, &sval2) )
         CHKERR( EPSGetProblemType(self.eps, &ptype) )
         if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE or ptype == EPS_LREP:
             return toReal(PetscRealPart(sval1))
@@ -2054,9 +2055,10 @@ cdef class EPS(Object):
         --------
         getConverged, setWhichEigenpairs, getEigenpair, slepc.EPSGetEigenvector
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscVec vecr = Vr.vec if Vr is not None else <PetscVec>NULL
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
-        CHKERR( EPSGetEigenvector(self.eps, i, vecr, veci) )
+        CHKERR( EPSGetEigenvector(self.eps, ival, vecr, veci) )
 
     def getLeftEigenvector(self, i: int, Vec Wr = None, Vec Wi = None) -> None:
         """
@@ -2086,9 +2088,10 @@ cdef class EPS(Object):
         --------
         getConverged, setWhichEigenpairs, getEigenpair, slepc.EPSGetLeftEigenvector
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscVec vecr = Wr.vec if Wr is not None else <PetscVec>NULL
         cdef PetscVec veci = Wi.vec if Wi is not None else <PetscVec>NULL
-        CHKERR( EPSGetLeftEigenvector(self.eps, i, vecr, veci) )
+        CHKERR( EPSGetLeftEigenvector(self.eps, ival, vecr, veci) )
 
     def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> Scalar:
         """
@@ -2128,12 +2131,13 @@ cdef class EPS(Object):
         --------
         solve, getConverged, setWhichEigenpairs, slepc.EPSGetEigenpair
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
         cdef PetscVec vecr = Vr.vec if Vr is not None else <PetscVec>NULL
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
         cdef SlepcEPSProblemType ptype
-        CHKERR( EPSGetEigenpair(self.eps, i, &sval1, &sval2, vecr, veci) )
+        CHKERR( EPSGetEigenpair(self.eps, ival, &sval1, &sval2, vecr, veci) )
         CHKERR( EPSGetProblemType(self.eps, &ptype) )
         if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE or ptype == EPS_LREP:
             return toReal(PetscRealPart(sval1))
@@ -2209,8 +2213,9 @@ cdef class EPS(Object):
         --------
         computeError, slepc.EPSGetErrorEstimate
         """
+        cdef PetscInt  ival = asInt(i)
         cdef PetscReal rval = 0
-        CHKERR( EPSGetErrorEstimate(self.eps, i, &rval) )
+        CHKERR( EPSGetErrorEstimate(self.eps, ival, &rval) )
         return toReal(rval)
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
@@ -2250,10 +2255,11 @@ cdef class EPS(Object):
         --------
         getErrorEstimate, setTwoSided, slepc.EPSComputeError
         """
+        cdef PetscInt ival = asInt(i)
         cdef SlepcEPSErrorType et = EPS_ERROR_RELATIVE
         cdef PetscReal rval = 0
         if etype is not None: et = etype
-        CHKERR( EPSComputeError(self.eps, i, et, &rval) )
+        CHKERR( EPSComputeError(self.eps, ival, et, &rval) )
         return toReal(rval)
 
     def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
@@ -2850,9 +2856,10 @@ cdef class EPS(Object):
         --------
         getKrylovSchurSubcommMats, slepc.EPSKrylovSchurGetSubcommPairs
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscScalar sval = 0
         cdef PetscVec vec = v.vec if v is not None else <PetscVec>NULL
-        CHKERR( EPSKrylovSchurGetSubcommPairs(self.eps, i, &sval, vec) )
+        CHKERR( EPSKrylovSchurGetSubcommPairs(self.eps, ival, &sval, vec) )
         return toScalar(sval)
 
     def getKrylovSchurSubcommMats(self) -> tuple[Mat, Mat] | tuple[Mat, None]:

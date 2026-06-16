@@ -1958,10 +1958,11 @@ cdef class BV(Object):
         --------
         norm, setMatrix, slepc.BVNormColumn
         """
+        cdef PetscInt ival = asInt(j)
         cdef PetscNormType ntype = PETSC_NORM_2
         if norm_type is not None: ntype = norm_type
         cdef PetscReal norm = 0
-        CHKERR( BVNormColumn(self.bv, j, ntype, &norm) )
+        CHKERR( BVNormColumn(self.bv, ival, ntype, &norm) )
         return toReal(norm)
 
     def norm(self, norm_type: NormType | None = None) -> float:

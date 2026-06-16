@@ -1298,8 +1298,9 @@ cdef class SVD(Object):
         --------
         getConverged, setWhichSingularTriplets, slepc.SVDGetSingularTriplet
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscReal rval = 0
-        CHKERR( SVDGetSingularTriplet(self.svd, i, &rval, NULL, NULL) )
+        CHKERR( SVDGetSingularTriplet(self.svd, ival, &rval, NULL, NULL) )
         return toReal(rval)
 
     def getVectors(self, i: int, Vec U, Vec V) -> None:
@@ -1328,8 +1329,9 @@ cdef class SVD(Object):
         --------
         getConverged, setWhichSingularTriplets, slepc.SVDGetSingularTriplet
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscReal dummy = 0
-        CHKERR( SVDGetSingularTriplet(self.svd, i, &dummy, U.vec, V.vec) )
+        CHKERR( SVDGetSingularTriplet(self.svd, ival, &dummy, U.vec, V.vec) )
 
     def getSingularTriplet(self, i: int, Vec U=None, Vec V=None) -> float:
         """
@@ -1366,10 +1368,11 @@ cdef class SVD(Object):
         --------
         getConverged, setWhichSingularTriplets, slepc.SVDGetSingularTriplet
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscReal rval = 0
         cdef PetscVec Uvec = U.vec if U is not None else <PetscVec>NULL
         cdef PetscVec Vvec = V.vec if V is not None else <PetscVec>NULL
-        CHKERR( SVDGetSingularTriplet(self.svd, i, &rval, Uvec, Vvec) )
+        CHKERR( SVDGetSingularTriplet(self.svd, ival, &rval, Uvec, Vvec) )
         return toReal(rval)
 
     #
@@ -1415,10 +1418,11 @@ cdef class SVD(Object):
         --------
         solve, slepc.SVDComputeError
         """
+        cdef PetscInt ival = asInt(i)
         cdef SlepcSVDErrorType et = SVD_ERROR_RELATIVE
         cdef PetscReal rval = 0
         if etype is not None: et = etype
-        CHKERR( SVDComputeError(self.svd, i, et, &rval) )
+        CHKERR( SVDComputeError(self.svd, ival, et, &rval) )
         return toReal(rval)
 
     def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
