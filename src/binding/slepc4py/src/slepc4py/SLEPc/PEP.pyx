@@ -1746,11 +1746,12 @@ cdef class PEP(Object):
         --------
         solve, getConverged, setWhichEigenpairs, slepc.PEPGetEigenpair
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
         cdef PetscVec vecr = Vr.vec if Vr is not None else <PetscVec>NULL
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
-        CHKERR( PEPGetEigenpair(self.pep, i, &sval1, &sval2, vecr, veci) )
+        CHKERR( PEPGetEigenpair(self.pep, ival, &sval1, &sval2, vecr, veci) )
         return toComplex(sval1, sval2)
 
     def getErrorEstimate(self, i: int) -> float:
@@ -1778,8 +1779,9 @@ cdef class PEP(Object):
         --------
         computeError, slepc.PEPGetErrorEstimate
         """
+        cdef PetscInt ival = asInt(i)
         cdef PetscReal rval = 0
-        CHKERR( PEPGetErrorEstimate(self.pep, i, &rval) )
+        CHKERR( PEPGetErrorEstimate(self.pep, ival, &rval) )
         return toReal(rval)
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
@@ -1814,10 +1816,11 @@ cdef class PEP(Object):
         --------
         getErrorEstimate, slepc.PEPComputeError
         """
+        cdef PetscInt ival = asInt(i)
         cdef SlepcPEPErrorType et = PEP_ERROR_BACKWARD
         cdef PetscReal rval = 0
         if etype is not None: et = etype
-        CHKERR( PEPComputeError(self.pep, i, et, &rval) )
+        CHKERR( PEPComputeError(self.pep, ival, et, &rval) )
         return toReal(rval)
 
     def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:

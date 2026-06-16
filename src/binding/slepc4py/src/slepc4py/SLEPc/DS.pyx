@@ -549,7 +549,7 @@ cdef class DS(Object):
         --------
         getBlockSize, slepc.DSSetBlockSize
         """
-        cdef PetscInt val = bs
+        cdef PetscInt val = asInt(bs)
         CHKERR( DSSetBlockSize(self.ds, val) )
 
     def getBlockSize(self) -> int:
@@ -586,7 +586,7 @@ cdef class DS(Object):
         --------
         getMethod, slepc.DSSetMethod
         """
-        cdef PetscInt val = meth
+        cdef PetscInt val = asInt(meth)
         CHKERR( DSSetMethod(self.ds, val) )
 
     def getMethod(self) -> int:
