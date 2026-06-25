@@ -180,7 +180,7 @@ static PetscErrorCode EV2x2(PetscScalar *M,PetscInt ld,PetscScalar *wr,PetscScal
 {
   PetscBLASInt   lwork=10,ld_;
   PetscScalar    work[10];
-  PetscBLASInt   two=2,info;
+  PetscBLASInt   two=2;
 #if defined(PETSC_USE_COMPLEX)
   PetscReal      rwork[6];
 #endif
@@ -189,11 +189,10 @@ static PetscErrorCode EV2x2(PetscScalar *M,PetscInt ld,PetscScalar *wr,PetscScal
   PetscCall(PetscBLASIntCast(ld,&ld_));
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
 #if !defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKgeev",LAPACKgeev_("N","V",&two,M,&ld_,wr,wi,NULL,&ld_,vec,&ld_,work,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKgeev",LAPACKgeev_("N","V",&two,M,&ld_,wr,wi,NULL,&ld_,vec,&ld_,work,&lwork,&info));
 #else
-  PetscCallBLAS("LAPACKgeev",LAPACKgeev_("N","V",&two,M,&ld_,wr,NULL,&ld_,vec,&ld_,work,&lwork,rwork,&info));
+  PetscCallLAPACKInfo("LAPACKgeev",LAPACKgeev_("N","V",&two,M,&ld_,wr,NULL,&ld_,vec,&ld_,work,&lwork,rwork,&info));
 #endif
-  SlepcCheckLapackInfo("geev",info);
   PetscCall(PetscFPTrapPop());
   PetscFunctionReturn(PETSC_SUCCESS);
 }

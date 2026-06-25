@@ -523,7 +523,7 @@ PetscErrorCode FNEvaluateDerivative(FN fn,PetscScalar x,PetscScalar *y)
 static PetscErrorCode FNEvaluateFunctionMat_Sym_Private(FN fn,const PetscScalar *As,PetscScalar *Bs,PetscInt m,PetscBool firstonly)
 {
   PetscInt       i,j;
-  PetscBLASInt   n,k,ld,lwork,info;
+  PetscBLASInt   n,k,ld,lwork;
   PetscScalar    *Q,*W,*work,adummy,a,x,y,one=1.0,zero=0.0;
   PetscReal      *eig,dummy;
 #if defined(PETSC_USE_COMPLEX)
@@ -538,11 +538,11 @@ static PetscErrorCode FNEvaluateFunctionMat_Sym_Private(FN fn,const PetscScalar 
   /* workspace query and memory allocation */
   lwork = -1;
 #if defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&n,&adummy,&ld,&dummy,&a,&lwork,&rdummy,&info));
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n,&adummy,&ld,&dummy,&a,&lwork,&rdummy,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
   PetscCall(PetscMalloc5(m,&eig,m*m,&Q,m*k,&W,lwork,&work,PetscMax(1,3*m-2),&rwork));
 #else
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&n,&adummy,&ld,&dummy,&a,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n,&adummy,&ld,&dummy,&a,&lwork,&info));
   PetscCall(PetscBLASIntCast((PetscInt)a,&lwork));
   PetscCall(PetscMalloc4(m,&eig,m*m,&Q,m*k,&W,lwork,&work));
 #endif
@@ -550,11 +550,10 @@ static PetscErrorCode FNEvaluateFunctionMat_Sym_Private(FN fn,const PetscScalar 
   /* compute eigendecomposition */
   for (j=0;j<n;j++) for (i=j;i<n;i++) Q[i+j*ld] = As[i+j*ld];
 #if defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&n,Q,&ld,eig,work,&lwork,rwork,&info));
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n,Q,&ld,eig,work,&lwork,rwork,&info));
 #else
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&n,Q,&ld,eig,work,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n,Q,&ld,eig,work,&lwork,&info));
 #endif
-  SlepcCheckLapackInfo("syev",info);
 
   /* W = f(Lambda)*Q' */
   for (i=0;i<n;i++) {

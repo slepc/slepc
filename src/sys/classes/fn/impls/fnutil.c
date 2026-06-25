@@ -22,7 +22,7 @@ static PetscErrorCode SlepcMatDenseSqrt(PetscBLASInt n,PetscScalar *T,PetscBLASI
 {
   PetscScalar  one=1.0,mone=-1.0;
   PetscReal    scal;
-  PetscBLASInt i,j,si,sj,r,ione=1,info;
+  PetscBLASInt i,j,si,sj,r,ione=1;
 #if !defined(PETSC_USE_COMPLEX)
   PetscReal    alpha,theta,mu,mu2;
 #endif
@@ -63,8 +63,7 @@ static PetscErrorCode SlepcMatDenseSqrt(PetscBLASInt n,PetscScalar *T,PetscBLASI
       /* solve Sylvester equation of order si x sj */
       r = j-i-si;
       if (r) PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&si,&sj,&r,&mone,T+i+(i+si)*ld,&ld,T+i+si+j*ld,&ld,&one,T+i+j*ld,&ld));
-      PetscCallBLAS("LAPACKtrsyl",LAPACKtrsyl_("N","N",&ione,&si,&sj,T+i+i*ld,&ld,T+j+j*ld,&ld,T+i+j*ld,&ld,&scal,&info));
-      SlepcCheckLapackInfo("trsyl",info);
+      PetscCallLAPACKInfo("LAPACKtrsyl",LAPACKtrsyl_("N","N",&ione,&si,&sj,T+i+i*ld,&ld,T+j+j*ld,&ld,T+i+j*ld,&ld,&scal,&info));
       PetscCheck(scal==1.0,PETSC_COMM_SELF,PETSC_ERR_SUP,"Current implementation cannot handle scale factor %g",(double)scal);
     }
     if (sj==2) j++;
@@ -81,7 +80,7 @@ static PetscErrorCode SlepcMatDenseSqrt(PetscBLASInt n,PetscScalar *T,PetscBLASI
  */
 PetscErrorCode FNSqrtmSchur(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASInt ld,PetscBool firstonly)
 {
-  PetscBLASInt   i,j,k,r,ione=1,sdim,lwork,*s,*p,info,bs=BLOCKSIZE;
+  PetscBLASInt   i,j,k,r,ione=1,sdim,lwork,*s,*p,bs=BLOCKSIZE;
   PetscScalar    *wr,*W,*Q,*work,one=1.0,zero=0.0,mone=-1.0;
   PetscInt       m,nblk;
   PetscReal      scal;
@@ -100,12 +99,11 @@ PetscErrorCode FNSqrtmSchur(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASInt ld,
   /* compute Schur decomposition A*Q = Q*T */
 #if !defined(PETSC_USE_COMPLEX)
   PetscCall(PetscMalloc7(m,&wr,m,&wi,m*k,&W,m*m,&Q,lwork,&work,nblk,&s,nblk,&p));
-  PetscCallBLAS("LAPACKgees",LAPACKgees_("V","N",NULL,&n,T,&ld,&sdim,wr,wi,Q,&ld,work,&lwork,NULL,&info));
+  PetscCallLAPACKInfo("LAPACKgees",LAPACKgees_("V","N",NULL,&n,T,&ld,&sdim,wr,wi,Q,&ld,work,&lwork,NULL,&info));
 #else
   PetscCall(PetscMalloc7(m,&wr,m,&rwork,m*k,&W,m*m,&Q,lwork,&work,nblk,&s,nblk,&p));
-  PetscCallBLAS("LAPACKgees",LAPACKgees_("V","N",NULL,&n,T,&ld,&sdim,wr,Q,&ld,work,&lwork,rwork,NULL,&info));
+  PetscCallLAPACKInfo("LAPACKgees",LAPACKgees_("V","N",NULL,&n,T,&ld,&sdim,wr,Q,&ld,work,&lwork,rwork,NULL,&info));
 #endif
-  SlepcCheckLapackInfo("gees",info);
 
   /* determine block sizes and positions, to avoid cutting 2x2 blocks */
   j = 0;
@@ -128,8 +126,7 @@ PetscErrorCode FNSqrtmSchur(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASInt ld,
       /* solve Sylvester equation for block (i,j) */
       r = p[j]-p[i]-s[i];
       if (r) PetscCallBLAS("BLASgemm",BLASgemm_("N","N",s+i,s+j,&r,&mone,T+p[i]+(p[i]+s[i])*ld,&ld,T+p[i]+s[i]+p[j]*ld,&ld,&one,T+p[i]+p[j]*ld,&ld));
-      PetscCallBLAS("LAPACKtrsyl",LAPACKtrsyl_("N","N",&ione,s+i,s+j,T+p[i]+p[i]*ld,&ld,T+p[j]+p[j]*ld,&ld,T+p[i]+p[j]*ld,&ld,&scal,&info));
-      SlepcCheckLapackInfo("trsyl",info);
+      PetscCallLAPACKInfo("LAPACKtrsyl",LAPACKtrsyl_("N","N",&ione,s+i,s+j,T+p[i]+p[i]*ld,&ld,T+p[j]+p[j]*ld,&ld,T+p[i]+p[j]*ld,&ld,&scal,&info));
       PetscCheck(scal==1.0,PETSC_COMM_SELF,PETSC_ERR_SUP,"Current implementation cannot handle scale factor %g",(double)scal);
     }
   }
@@ -161,7 +158,7 @@ PetscErrorCode FNSqrtmDenmanBeavers(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLA
   PetscScalar        *Told,*M=NULL,*invM,*work,work1,prod,alpha;
   PetscScalar        szero=0.0,sone=1.0,smone=-1.0,spfive=0.5,sp25=0.25;
   PetscReal          tol,Mres=0.0,detM,g,reldiff,fnormdiff,fnormT,rwork[1];
-  PetscBLASInt       N,i,it,*piv=NULL,info,query=-1,lwork;
+  PetscBLASInt       N,i,it,*piv=NULL,query=-1,lwork;
   const PetscBLASInt one=1;
   PetscBool          converged=PETSC_FALSE,scale;
   unsigned int       ftz;
@@ -173,7 +170,7 @@ PetscErrorCode FNSqrtmDenmanBeavers(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLA
   PetscCall(SlepcSetFlushToZero(&ftz));
 
   /* query work size */
-  PetscCallBLAS("LAPACKgetri",LAPACKgetri_(&n,M,&ld,piv,&work1,&query,&info));
+  PetscCallLAPACKInfo("LAPACKgetri",LAPACKgetri_(&n,M,&ld,piv,&work1,&query,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(work1),&lwork));
   PetscCall(PetscMalloc5(lwork,&work,n,&piv,n*n,&Told,n*n,&M,n*n,&invM));
   PetscCall(PetscArraycpy(M,T,n*n));
@@ -187,8 +184,7 @@ PetscErrorCode FNSqrtmDenmanBeavers(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLA
 
     if (scale) {  /* g = (abs(det(M)))^(-1/(2*n)) */
       PetscCall(PetscArraycpy(invM,M,n*n));
-      PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&n,&n,invM,&ld,piv,&info));
-      SlepcCheckLapackInfo("getrf",info);
+      PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&n,&n,invM,&ld,piv,&info));
       prod = invM[0];
       for (i=1;i<n;i++) prod *= invM[i+i*ld];
       detM = PetscAbsScalar(prod);
@@ -203,10 +199,8 @@ PetscErrorCode FNSqrtmDenmanBeavers(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLA
     PetscCall(PetscArraycpy(Told,T,n*n));
     PetscCall(PetscArraycpy(invM,M,n*n));
 
-    PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&n,&n,invM,&ld,piv,&info));
-    SlepcCheckLapackInfo("getrf",info);
-    PetscCallBLAS("LAPACKgetri",LAPACKgetri_(&n,invM,&ld,piv,work,&lwork,&info));
-    SlepcCheckLapackInfo("getri",info);
+    PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&n,&n,invM,&ld,piv,&info));
+    PetscCallLAPACKInfo("LAPACKgetri",LAPACKgetri_(&n,invM,&ld,piv,work,&lwork,&info));
     PetscCall(PetscLogFlops(2.0*n*n*n/3.0+4.0*n*n*n/3.0));
 
     for (i=0;i<n;i++) invM[i+i*ld] += 1.0;
@@ -252,7 +246,7 @@ PetscErrorCode FNSqrtmNewtonSchulz(FN fn,PetscBLASInt n,PetscScalar *A,PetscBLAS
   PetscScalar    *Y=A,*Yold,*Z,*Zold,*M;
   PetscScalar    szero=0.0,sone=1.0,smone=-1.0,spfive=0.5,sthree=3.0;
   PetscReal      sqrtnrm,tol,Yres=0.0,nrm,rwork[1],done=1.0;
-  PetscBLASInt   info,i,it,N,one=1,zero=0;
+  PetscBLASInt   i,it,N,one=1,zero=0;
   PetscBool      converged=PETSC_FALSE;
   unsigned int   ftz;
 
@@ -268,8 +262,7 @@ PetscErrorCode FNSqrtmNewtonSchulz(FN fn,PetscBLASInt n,PetscScalar *A,PetscBLAS
   for (i=0;i<n;i++) Z[i+i*ld] -= 1.0;
   nrm = LAPACKlange_("fro",&n,&n,Z,&n,rwork);
   sqrtnrm = PetscSqrtReal(nrm);
-  PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&nrm,&done,&N,&one,A,&N,&info));
-  SlepcCheckLapackInfo("lascl",info);
+  PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&nrm,&done,&N,&one,A,&N,&info));
   tol *= nrm;
   PetscCall(PetscInfo(fn,"||I-A||_F = %g, new tol: %g\n",(double)nrm,(double)tol));
   PetscCall(PetscLogFlops(2.0*n*n));
@@ -307,9 +300,8 @@ PetscErrorCode FNSqrtmNewtonSchulz(FN fn,PetscBLASInt n,PetscScalar *A,PetscBLAS
   /* undo scaling */
   if (inv) {
     PetscCall(PetscArraycpy(A,Z,N));
-    PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&sqrtnrm,&done,&N,&one,A,&N,&info));
-  } else PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&done,&sqrtnrm,&N,&one,A,&N,&info));
-  SlepcCheckLapackInfo("lascl",info);
+    PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&sqrtnrm,&done,&N,&one,A,&N,&info));
+  } else PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&done,&sqrtnrm,&N,&one,A,&N,&info));
 
   PetscCall(PetscFree4(Yold,Z,Zold,M));
   PetscCall(SlepcResetFlushToZero(&ftz));

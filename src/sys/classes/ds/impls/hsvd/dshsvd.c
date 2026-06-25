@@ -249,7 +249,7 @@ static PetscErrorCode DSSolve_HSVD_CROSS(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   DS_HSVD        *ctx = (DS_HSVD*)ds->data;
   PetscInt       i,j,k=ds->k,rwu=0,iwu=0,swu=0,nv;
-  PetscBLASInt   n1,n2,info,l=0,n=0,m=0,ld,off,one=1,*perm,*cmplx,incx=1,lwork;
+  PetscBLASInt   n1,n2,l=0,n=0,m=0,ld,off,one=1,*perm,*cmplx,incx=1,lwork;
   PetscScalar    *A,*U,*V,scal,*R,sone=1.0,szero=0.0;
   PetscReal      *d,*e,*dd,*ee,*Omega;
 
@@ -305,8 +305,7 @@ static PetscErrorCode DSSolve_HSVD_CROSS(DS ds,PetscScalar *wr,PetscScalar *wi)
     PetscCall(DSArrowTridiag(n2,dd+l,ee+l,V+off,ld));
 
     /* Solve the tridiagonal eigenproblem corresponding to T */
-    PetscCallBLAS("LAPACKsteqr",LAPACKsteqr_("V",&n1,dd+l,ee+l,V+off,&ld,ds->rwork+rwu,&info));
-    SlepcCheckLapackInfo("steqr",info);
+    PetscCallLAPACKInfo("LAPACKsteqr",LAPACKsteqr_("V",&n1,dd+l,ee+l,V+off,&ld,ds->rwork+rwu,&info));
     for (i=l;i<n;i++) wr[i] = PetscSqrtScalar(PetscAbs(dd[i]));
 
     /* Build left singular vectors: U=A*V*Sigma^-1 */
@@ -341,11 +340,10 @@ static PetscErrorCode DSSolve_HSVD_CROSS(DS ds,PetscScalar *wr,PetscScalar *wi)
     lwork = (n+6)*ld;
 #if defined(PETSC_USE_COMPLEX)
     rwu += ld;
-    PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&m,V,&ld,dd,ds->work,&lwork,ds->rwork+rwu,&info));
+    PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&m,V,&ld,dd,ds->work,&lwork,ds->rwork+rwu,&info));
 #else
-    PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&m,V,&ld,dd,ds->work,&lwork,&info));
+    PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&m,V,&ld,dd,ds->work,&lwork,&info));
 #endif
-    SlepcCheckLapackInfo("syev",info);
     for (i=l;i<PetscMin(n,m);i++) d[i] = PetscSqrtReal(PetscAbsReal(dd[i]));
 
     /* Build left singular vectors: U=A*V*Sigma^-1 */

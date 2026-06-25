@@ -54,7 +54,7 @@ static PetscErrorCode DSView_NHEPTS(DS ds,PetscViewer viewer)
 static PetscErrorCode DSVectors_NHEPTS_Eigen_Some(DS ds,PetscInt *k,PetscReal *rnorm,PetscBool left)
 {
   PetscInt          i;
-  PetscBLASInt      mm=1,mout,info,ld,n,*select,inc=1,cols=1,zero=0;
+  PetscBLASInt      mm=1,mout,ld,n,*select,inc=1,cols=1,zero=0;
   PetscScalar       sone=1.0,szero=0.0;
   PetscReal         norm,done=1.0;
   PetscBool         iscomplex = PETSC_FALSE;
@@ -78,12 +78,11 @@ static PetscErrorCode DSVectors_NHEPTS_Eigen_Some(DS ds,PetscInt *k,PetscReal *r
   mm = iscomplex? 2: 1;
   if (iscomplex) select[(*k)+1] = (PetscBLASInt)PETSC_TRUE;
   PetscCall(DSAllocateWork_Private(ds,3*ld,0,0));
-  PetscCallBLAS("LAPACKtrevc",LAPACKtrevc_("R","S",select,&n,(PetscScalar*)A,&ld,Y,&ld,Y,&ld,&mm,&mout,ds->work,&info));
+  PetscCallLAPACKInfo("LAPACKtrevc",LAPACKtrevc_("R","S",select,&n,(PetscScalar*)A,&ld,Y,&ld,Y,&ld,&mm,&mout,ds->work,&info));
 #else
   PetscCall(DSAllocateWork_Private(ds,2*ld,ld,0));
-  PetscCallBLAS("LAPACKtrevc",LAPACKtrevc_("R","S",select,&n,(PetscScalar*)A,&ld,Y,&ld,Y,&ld,&mm,&mout,ds->work,ds->rwork,&info));
+  PetscCallLAPACKInfo("LAPACKtrevc",LAPACKtrevc_("R","S",select,&n,(PetscScalar*)A,&ld,Y,&ld,Y,&ld,&mm,&mout,ds->work,ds->rwork,&info));
 #endif
-  SlepcCheckLapackInfo("trevc",info);
   PetscCheck(mout==mm,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Inconsistent arguments");
   PetscCall(MatDenseRestoreArrayRead(ds->omat[left?DS_MAT_B:DS_MAT_A],&A));
 
@@ -104,8 +103,7 @@ static PetscErrorCode DSVectors_NHEPTS_Eigen_Some(DS ds,PetscInt *k,PetscReal *r
       cols = 2;
     }
 #endif
-    PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,Y,&ld,&info));
-    SlepcCheckLapackInfo("lascl",info);
+    PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,Y,&ld,&info));
   }
 
   /* set output arguments */
@@ -121,7 +119,7 @@ static PetscErrorCode DSVectors_NHEPTS_Eigen_Some(DS ds,PetscInt *k,PetscReal *r
 static PetscErrorCode DSVectors_NHEPTS_Eigen_All(DS ds,PetscBool left)
 {
   PetscInt          i;
-  PetscBLASInt      n,ld,mout,info,inc=1,cols,zero=0;
+  PetscBLASInt      n,ld,mout,inc=1,cols,zero=0;
   PetscBool         iscomplex;
   PetscScalar       *X;
   const PetscScalar *A;
@@ -140,12 +138,11 @@ static PetscErrorCode DSVectors_NHEPTS_Eigen_All(DS ds,PetscBool left)
   } else back = "A";
 #if !defined(PETSC_USE_COMPLEX)
   PetscCall(DSAllocateWork_Private(ds,3*ld,0,0));
-  PetscCallBLAS("LAPACKtrevc",LAPACKtrevc_("R",back,NULL,&n,(PetscScalar*)A,&ld,X,&ld,X,&ld,&n,&mout,ds->work,&info));
+  PetscCallLAPACKInfo("LAPACKtrevc",LAPACKtrevc_("R",back,NULL,&n,(PetscScalar*)A,&ld,X,&ld,X,&ld,&n,&mout,ds->work,&info));
 #else
   PetscCall(DSAllocateWork_Private(ds,2*ld,ld,0));
-  PetscCallBLAS("LAPACKtrevc",LAPACKtrevc_("R",back,NULL,&n,(PetscScalar*)A,&ld,X,&ld,X,&ld,&n,&mout,ds->work,ds->rwork,&info));
+  PetscCallLAPACKInfo("LAPACKtrevc",LAPACKtrevc_("R",back,NULL,&n,(PetscScalar*)A,&ld,X,&ld,X,&ld,&n,&mout,ds->work,ds->rwork,&info));
 #endif
-  SlepcCheckLapackInfo("trevc",info);
 
   /* normalize eigenvectors */
   for (i=0;i<n;i++) {
@@ -158,8 +155,7 @@ static PetscErrorCode DSVectors_NHEPTS_Eigen_All(DS ds,PetscBool left)
       cols = 2;
     }
 #endif
-    PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,X+i*ld,&ld,&info));
-    SlepcCheckLapackInfo("lascl",info);
+    PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,X+i*ld,&ld,&info));
     if (iscomplex) i++;
   }
   PetscCall(MatDenseRestoreArrayRead(ds->omat[left?DS_MAT_B:DS_MAT_A],&A));

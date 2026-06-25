@@ -114,7 +114,7 @@ PetscErrorCode FNSqrtmSadeghi(FN fn,PetscBLASInt n,PetscScalar *A,PetscBLASInt l
   PetscScalar    szero=0.0,sone=1.0,smfive=-5.0,s1d16=1.0/16.0;
   PetscReal      tol,Mres=0.0,nrm,rwork[1],done=1.0;
   PetscInt       i,it;
-  PetscBLASInt   N,*piv=NULL,info,lwork=0,query=-1,one=1,zero=0;
+  PetscBLASInt   N,*piv=NULL,lwork=0,query=-1,one=1,zero=0;
   PetscBool      converged=PETSC_FALSE;
   unsigned int   ftz;
 
@@ -124,7 +124,7 @@ PetscErrorCode FNSqrtmSadeghi(FN fn,PetscBLASInt n,PetscScalar *A,PetscBLASInt l
   PetscCall(SlepcSetFlushToZero(&ftz));
 
   /* query work size */
-  PetscCallBLAS("LAPACKgetri",LAPACKgetri_(&n,A,&ld,piv,&work1,&query,&info));
+  PetscCallLAPACKInfo("LAPACKgetri",LAPACKgetri_(&n,A,&ld,piv,&work1,&query,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(work1),&lwork));
 
   PetscCall(PetscMalloc5(N,&M,N,&M2,N,&G,lwork,&work,n,&piv));
@@ -134,8 +134,7 @@ PetscErrorCode FNSqrtmSadeghi(FN fn,PetscBLASInt n,PetscScalar *A,PetscBLASInt l
   nrm = LAPACKlange_("fro",&n,&n,M,&n,rwork);
   if (nrm>1.0) {
     sqrtnrm = PetscSqrtReal(nrm);
-    PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&nrm,&done,&N,&one,M,&N,&info));
-    SlepcCheckLapackInfo("lascl",info);
+    PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&nrm,&done,&N,&one,M,&N,&info));
     tol *= nrm;
   }
   PetscCall(PetscInfo(fn,"||A||_F = %g, new tol: %g\n",(double)nrm,(double)tol));
@@ -159,10 +158,8 @@ PetscErrorCode FNSqrtmSadeghi(FN fn,PetscBLASInt n,PetscScalar *A,PetscBLASInt l
 
     /* M = M*inv(G*G) */
     PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&n,&n,&n,&sone,G,&ld,G,&ld,&szero,M2,&ld));
-    PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&n,&n,M2,&ld,piv,&info));
-    SlepcCheckLapackInfo("getrf",info);
-    PetscCallBLAS("LAPACKgetri",LAPACKgetri_(&n,M2,&ld,piv,work,&lwork,&info));
-    SlepcCheckLapackInfo("getri",info);
+    PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&n,&n,M2,&ld,piv,&info));
+    PetscCallLAPACKInfo("LAPACKgetri",LAPACKgetri_(&n,M2,&ld,piv,work,&lwork,&info));
 
     PetscCall(PetscArraycpy(G,M,N));
     PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&n,&n,&n,&sone,G,&ld,M2,&ld,&szero,M,&ld));

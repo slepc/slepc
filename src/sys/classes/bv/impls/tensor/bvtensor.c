@@ -369,7 +369,7 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
   PetscInt       i,j,k,n,lds=ctx->ld*ctx->d,deg=ctx->d,lock,cs1=V->k,rs1=ctx->U->k,rk=0,offu;
   PetscScalar    *S,*M,*Z,*pQ,*SS,*SS2,t,sone=1.0,zero=0.0,mone=-1.0,*p,*tau,*work,*qB,*sqB;
   PetscReal      *sg,tol,*rwork;
-  PetscBLASInt   ld_,cs1_,rs1_,cs1tdeg,n_,info,lw_,newc_,newctdeg,nnc_,nrow_,nnctdeg,lds_,rk_;
+  PetscBLASInt   ld_,cs1_,rs1_,cs1tdeg,n_,lw_,newc_,newctdeg,nnc_,nrow_,nnctdeg,lds_,rk_;
   Mat            Q,A;
 
   PetscFunctionBegin;
@@ -406,11 +406,10 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
     }
     PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
 #if !defined(PETSC_USE_COMPLEX)
-    PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&newctdeg,M,&nrow_,sg,pQ+offu,&rs1_,Z,&n_,work+nwu,&lw_,&info));
+    PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&newctdeg,M,&nrow_,sg,pQ+offu,&rs1_,Z,&n_,work+nwu,&lw_,&info));
 #else
-    PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&newctdeg,M,&nrow_,sg,pQ+offu,&rs1_,Z,&n_,work+nwu,&lw_,rwork+n,&info));
+    PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&newctdeg,M,&nrow_,sg,pQ+offu,&rs1_,Z,&n_,work+nwu,&lw_,rwork+n,&info));
 #endif
-    SlepcCheckLapackInfo("gesvd",info);
     PetscCall(PetscFPTrapPop());
     /* SVD has rank min(newc,nrow) */
     rk = PetscMin(newc,nrow);
@@ -444,11 +443,10 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
   }
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
 #if !defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&nnctdeg,M,&nrow_,sg,pQ+offu+newc*rs1,&rs1_,Z,&n_,work+nwu,&lw_,&info));
+  PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&nnctdeg,M,&nrow_,sg,pQ+offu+newc*rs1,&rs1_,Z,&n_,work+nwu,&lw_,&info));
 #else
-  PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&nnctdeg,M,&nrow_,sg,pQ+offu+newc*rs1,&rs1_,Z,&n_,work+nwu,&lw_,rwork+n,&info));
+  PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","S",&nrow_,&nnctdeg,M,&nrow_,sg,pQ+offu+newc*rs1,&rs1_,Z,&n_,work+nwu,&lw_,rwork+n,&info));
 #endif
-  SlepcCheckLapackInfo("gesvd",info);
   PetscCall(PetscFPTrapPop());
   tol = PetscMax(rs1,deg*cs1)*PETSC_MACHINE_EPSILON*sg[0];
   rk = 0;
@@ -482,13 +480,11 @@ static PetscErrorCode BVTensorCompress_Tensor(BV V,PetscInt newc)
   PetscCall(PetscBLASIntCast(rk,&rk_));
   PetscCall(PetscBLASIntCast(cs1-lock,&nnc_));
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-  PetscCallBLAS("LAPACKgeqrf",LAPACKgeqrf_(&nrow_,&rk_,pQ+offu,&rs1_,tau,work+nwu,&lw_,&info));
-  SlepcCheckLapackInfo("geqrf",info);
+  PetscCallLAPACKInfo("LAPACKgeqrf",LAPACKgeqrf_(&nrow_,&rk_,pQ+offu,&rs1_,tau,work+nwu,&lw_,&info));
   for (i=0;i<deg;i++) {
     PetscCallBLAS("BLAStrmm",BLAStrmm_("L","U","N","N",&rk_,&nnc_,&sone,pQ+offu,&rs1_,S+lock*lds+lock+i*ctx->ld,&lds_));
   }
-  PetscCallBLAS("LAPACKorgqr",LAPACKorgqr_(&nrow_,&rk_,&rk_,pQ+offu,&rs1_,tau,work+nwu,&lw_,&info));
-  SlepcCheckLapackInfo("orgqr",info);
+  PetscCallLAPACKInfo("LAPACKorgqr",LAPACKorgqr_(&nrow_,&rk_,&rk_,pQ+offu,&rs1_,tau,work+nwu,&lw_,&info));
   PetscCall(PetscFPTrapPop());
 
   /* update vectors U(:,idx) = U*Q(:,idx) */

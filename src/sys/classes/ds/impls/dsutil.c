@@ -22,7 +22,7 @@ PetscErrorCode DSSolve_NHEP_Private(DS ds,DSMatType mA,DSMatType mQ,PetscScalar 
 {
   PetscScalar    *work,*tau,*A,*Q;
   PetscInt       i,j;
-  PetscBLASInt   ilo,lwork,info,n,k,ld;
+  PetscBLASInt   ilo,lwork,n,k,ld;
 
   PetscFunctionBegin;
   PetscCall(MatDenseGetArray(ds->omat[mA],&A));
@@ -47,21 +47,19 @@ PetscErrorCode DSSolve_NHEP_Private(DS ds,DSMatType mA,DSMatType mQ,PetscScalar 
 
   /* reduce to upper Hessenberg form */
   if (ds->state<DS_STATE_INTERMEDIATE) {
-    PetscCallBLAS("LAPACKgehrd",LAPACKgehrd_(&n,&ilo,&n,A,&ld,tau,work,&lwork,&info));
-    SlepcCheckLapackInfo("gehrd",info);
+    PetscCallLAPACKInfo("LAPACKgehrd",LAPACKgehrd_(&n,&ilo,&n,A,&ld,tau,work,&lwork,&info));
     for (j=0;j<n-1;j++) {
       for (i=j+2;i<n;i++) {
         Q[i+j*ld] = A[i+j*ld];
         A[i+j*ld] = 0.0;
       }
     }
-    PetscCallBLAS("LAPACKorghr",LAPACKorghr_(&n,&ilo,&n,Q,&ld,tau,work,&lwork,&info));
-    SlepcCheckLapackInfo("orghr",info);
+    PetscCallLAPACKInfo("LAPACKorghr",LAPACKorghr_(&n,&ilo,&n,Q,&ld,tau,work,&lwork,&info));
   }
 
   /* compute the (real) Schur form */
 #if !defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKhseqr",LAPACKhseqr_("S","V",&n,&ilo,&n,A,&ld,wr,wi,Q,&ld,work,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKhseqr",LAPACKhseqr_("S","V",&n,&ilo,&n,A,&ld,wr,wi,Q,&ld,work,&lwork,&info));
   for (j=0;j<ds->l;j++) {
     if (j==n-1 || A[j+1+j*ld] == 0.0) {
       /* real eigenvalue */
@@ -77,10 +75,9 @@ PetscErrorCode DSSolve_NHEP_Private(DS ds,DSMatType mA,DSMatType mQ,PetscScalar 
     }
   }
 #else
-  PetscCallBLAS("LAPACKhseqr",LAPACKhseqr_("S","V",&n,&ilo,&n,A,&ld,wr,Q,&ld,work,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKhseqr",LAPACKhseqr_("S","V",&n,&ilo,&n,A,&ld,wr,Q,&ld,work,&lwork,&info));
   if (wi) for (i=ds->l;i<n;i++) wi[i] = 0.0;
 #endif
-  SlepcCheckLapackInfo("hseqr",info);
   PetscCall(MatDenseRestoreArray(ds->omat[mA],&A));
   PetscCall(MatDenseRestoreArray(ds->omat[mQ],&Q));
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -94,7 +91,7 @@ PetscErrorCode DSSort_NHEP_Total(DS ds,DSMatType mT,DSMatType mQ,PetscScalar *wr
 {
   PetscScalar    re,*T,*Q;
   PetscInt       i,j,pos,result;
-  PetscBLASInt   ifst,ilst,info,n,ld;
+  PetscBLASInt   ifst,ilst,n,ld;
 #if !defined(PETSC_USE_COMPLEX)
   PetscScalar    *work,im;
 #endif
@@ -142,11 +139,10 @@ PetscErrorCode DSSort_NHEP_Total(DS ds,DSMatType mT,DSMatType mQ,PetscScalar *wr
       PetscCall(PetscBLASIntCast(pos+1,&ifst));
       PetscCall(PetscBLASIntCast(i+1,&ilst));
 #if !defined(PETSC_USE_COMPLEX)
-      PetscCallBLAS("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,work,&info));
+      PetscCallLAPACKInfo("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,work,&info));
 #else
-      PetscCallBLAS("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,&info));
+      PetscCallLAPACKInfo("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,&info));
 #endif
-      SlepcCheckLapackInfo("trexc",info);
       /* recover original eigenvalues from T matrix */
       for (j=i;j<n;j++) {
         wr[j] = T[j+j*ld];
@@ -177,7 +173,7 @@ PetscErrorCode DSSort_NHEP_Total(DS ds,DSMatType mT,DSMatType mQ,PetscScalar *wr
 PetscErrorCode DSSortWithPermutation_NHEP_Private(DS ds,PetscInt *perm,DSMatType mT,DSMatType mQ,PetscScalar *wr,PetscScalar *wi)
 {
   PetscInt       i,j,pos,inc=1;
-  PetscBLASInt   ifst,ilst,info,n,ld;
+  PetscBLASInt   ifst,ilst,n,ld;
   PetscScalar    *T,*Q;
 #if !defined(PETSC_USE_COMPLEX)
   PetscScalar    *work;
@@ -205,11 +201,10 @@ PetscErrorCode DSSortWithPermutation_NHEP_Private(DS ds,PetscInt *perm,DSMatType
       PetscCall(PetscBLASIntCast(pos+1,&ifst));
       PetscCall(PetscBLASIntCast(i+1,&ilst));
 #if !defined(PETSC_USE_COMPLEX)
-      PetscCallBLAS("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,work,&info));
+      PetscCallLAPACKInfo("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,work,&info));
 #else
-      PetscCallBLAS("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,&info));
+      PetscCallLAPACKInfo("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,&info));
 #endif
-      SlepcCheckLapackInfo("trexc",info);
       for (j=i+1;j<n;j++) {
         if (perm[j]>=i && perm[j]<pos) perm[j]+=inc;
       }

@@ -139,7 +139,7 @@ static PetscErrorCode EPSLocalLanczos(EPS eps,PetscReal *alpha,PetscReal *beta,P
 static PetscErrorCode DenseTridiagonal(PetscInt n_,PetscReal *D,PetscReal *E,PetscReal *w,PetscScalar *V)
 {
   PetscReal      abstol = 0.0,vl,vu,*work;
-  PetscBLASInt   il,iu,m,*isuppz,n,lwork,*iwork,liwork,info;
+  PetscBLASInt   il,iu,m,*isuppz,n,lwork,*iwork,liwork;
   const char     *jobz;
 #if defined(PETSC_USE_COMPLEX)
   PetscInt       i,j;
@@ -159,12 +159,11 @@ static PetscErrorCode DenseTridiagonal(PetscInt n_,PetscReal *D,PetscReal *E,Pet
   PetscCall(PetscMalloc3(2*n,&isuppz,lwork,&work,liwork,&iwork));
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
 #if defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKstevr",LAPACKstevr_(jobz,"A",&n,D,E,&vl,&vu,&il,&iu,&abstol,&m,w,VV,&n,isuppz,work,&lwork,iwork,&liwork,&info));
+  PetscCallLAPACKInfo("LAPACKstevr",LAPACKstevr_(jobz,"A",&n,D,E,&vl,&vu,&il,&iu,&abstol,&m,w,VV,&n,isuppz,work,&lwork,iwork,&liwork,&info));
 #else
-  PetscCallBLAS("LAPACKstevr",LAPACKstevr_(jobz,"A",&n,D,E,&vl,&vu,&il,&iu,&abstol,&m,w,V,&n,isuppz,work,&lwork,iwork,&liwork,&info));
+  PetscCallLAPACKInfo("LAPACKstevr",LAPACKstevr_(jobz,"A",&n,D,E,&vl,&vu,&il,&iu,&abstol,&m,w,V,&n,isuppz,work,&lwork,iwork,&liwork,&info));
 #endif
   PetscCall(PetscFPTrapPop());
-  SlepcCheckLapackInfo("stevr",info);
 #if defined(PETSC_USE_COMPLEX)
   if (V) {
     for (i=0;i<n;i++)

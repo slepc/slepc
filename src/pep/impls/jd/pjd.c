@@ -278,7 +278,7 @@ static PetscErrorCode PEPJDUpdateTV(PEP pep,PetscInt low,PetscInt high,Vec *w)
 static PetscErrorCode PEPJDOrthogonalize(PetscInt row,PetscInt col,PetscScalar *X,PetscInt ldx,PetscInt *rk,PetscInt *P,PetscScalar *R,PetscInt ldr)
 {
   PetscInt       i,j,n,r;
-  PetscBLASInt   row_,col_,ldx_,*p,lwork,info,n_;
+  PetscBLASInt   row_,col_,ldx_,*p,lwork,n_;
   PetscScalar    *tau,*work;
   PetscReal      tol,*rwork;
 
@@ -296,11 +296,10 @@ static PetscErrorCode PEPJDOrthogonalize(PetscInt row,PetscInt col,PetscScalar *
 
   /* rank revealing QR */
 #if defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKgeqp3",LAPACKgeqp3_(&row_,&col_,X,&ldx_,p,tau,work,&lwork,rwork,&info));
+  PetscCallLAPACKInfo("LAPACKgeqp3",LAPACKgeqp3_(&row_,&col_,X,&ldx_,p,tau,work,&lwork,rwork,&info));
 #else
-  PetscCallBLAS("LAPACKgeqp3",LAPACKgeqp3_(&row_,&col_,X,&ldx_,p,tau,work,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKgeqp3",LAPACKgeqp3_(&row_,&col_,X,&ldx_,p,tau,work,&lwork,&info));
 #endif
-  SlepcCheckLapackInfo("geqp3",info);
   if (P) for (i=0;i<col;i++) P[i] = p[i]-1;
 
   /* rank computation */
@@ -319,8 +318,7 @@ static PetscErrorCode PEPJDOrthogonalize(PetscInt row,PetscInt col,PetscScalar *
        for (j=0;j<=i;j++) R[i*ldr+j] = X[i*ldx+j];
      }
   }
-  PetscCallBLAS("LAPACKorgqr",LAPACKorgqr_(&row_,&n_,&n_,X,&ldx_,tau,work,&lwork,&info));
-  SlepcCheckLapackInfo("orgqr",info);
+  PetscCallLAPACKInfo("LAPACKorgqr",LAPACKorgqr_(&row_,&n_,&n_,X,&ldx_,tau,work,&lwork,&info));
   PetscCall(PetscFPTrapPop());
   PetscCall(PetscFree4(p,tau,work,rwork));
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -853,7 +851,7 @@ static PetscErrorCode PEPJDUpdateExtendedPC(PEP pep,PetscScalar theta)
   PetscInt       i,j,k,n=pjd->nlock,ld=pjd->ld,deg=pep->nmat-1;
   PetscScalar    *M,*ps,*work,*U,*V,*S,*Sp,*Spp,snone=-1.0,sone=1.0,zero=0.0,*val;
   PetscReal      tol,maxeig=0.0,*sg,*rwork;
-  PetscBLASInt   n_,info,ld_,*p,lw_,rk=0;
+  PetscBLASInt   n_,ld_,*p,lw_,rk=0;
 
   PetscFunctionBegin;
   if (n) {
@@ -878,11 +876,10 @@ static PetscErrorCode PEPJDUpdateExtendedPC(PEP pep,PetscScalar theta)
       }
       lw_ = 10*n_;
 #if !defined(PETSC_USE_COMPLEX)
-      PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&n_,&n_,S,&n_,sg,U,&n_,V,&n_,work,&lw_,&info));
+      PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","S",&n_,&n_,S,&n_,sg,U,&n_,V,&n_,work,&lw_,&info));
 #else
-      PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&n_,&n_,S,&n_,sg,U,&n_,V,&n_,work,&lw_,rwork,&info));
+      PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","S",&n_,&n_,S,&n_,sg,U,&n_,V,&n_,work,&lw_,rwork,&info));
 #endif
-      SlepcCheckLapackInfo("gesvd",info);
       for (i=0;i<n;i++) maxeig = PetscMax(maxeig,sg[i]);
       tol = 10*PETSC_MACHINE_EPSILON*n*maxeig;
       for (j=0;j<n;j++) {
@@ -908,10 +905,8 @@ static PetscErrorCode PEPJDUpdateExtendedPC(PEP pep,PetscScalar theta)
       }
     }
     /* inverse */
-    PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&n_,&n_,M,&ld_,p,&info));
-    SlepcCheckLapackInfo("getrf",info);
-    PetscCallBLAS("LAPACKgetri",LAPACKgetri_(&n_,M,&ld_,p,work,&n_,&info));
-    SlepcCheckLapackInfo("getri",info);
+    PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&n_,&n_,M,&ld_,p,&info));
+    PetscCallLAPACKInfo("LAPACKgetri",LAPACKgetri_(&n_,M,&ld_,p,work,&n_,&info));
     PetscCall(PetscFPTrapPop());
     if (pjd->midx==1) PetscCall(PetscFree2(work,p));
     else PetscCall(PetscFree7(U,S,sg,work,rwork,p,val));
@@ -1046,7 +1041,7 @@ static PetscErrorCode PEPJDCreateShellPC(PEP pep,Vec *ww)
 static PetscErrorCode PEPJDEigenvectors(PEP pep)
 {
   PEP_JD         *pjd = (PEP_JD*)pep->data;
-  PetscBLASInt   ld,nconv,info,nc;
+  PetscBLASInt   ld,nconv,nc;
   PetscScalar    *Z;
   PetscReal      *wr;
   Mat            U;
@@ -1060,13 +1055,12 @@ static PetscErrorCode PEPJDEigenvectors(PEP pep)
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
 #if !defined(PETSC_USE_COMPLEX)
   PetscCall(PetscMalloc2(pep->nconv*pep->nconv,&Z,3*pep->ncv,&wr));
-  PetscCallBLAS("LAPACKtrevc",LAPACKtrevc_("R","A",NULL,&nconv,pjd->T,&ld,NULL,&nconv,Z,&nconv,&nconv,&nc,wr,&info));
+  PetscCallLAPACKInfo("LAPACKtrevc",LAPACKtrevc_("R","A",NULL,&nconv,pjd->T,&ld,NULL,&nconv,Z,&nconv,&nconv,&nc,wr,&info));
 #else
   PetscCall(PetscMalloc3(pep->nconv*pep->nconv,&Z,3*pep->ncv,&wr,2*pep->ncv,&w));
-  PetscCallBLAS("LAPACKtrevc",LAPACKtrevc_("R","A",NULL,&nconv,pjd->T,&ld,NULL,&nconv,Z,&nconv,&nconv,&nc,w,wr,&info));
+  PetscCallLAPACKInfo("LAPACKtrevc",LAPACKtrevc_("R","A",NULL,&nconv,pjd->T,&ld,NULL,&nconv,Z,&nconv,&nconv,&nc,w,wr,&info));
 #endif
   PetscCall(PetscFPTrapPop());
-  SlepcCheckLapackInfo("trevc",info);
   PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,nconv,nconv,Z,&U));
   PetscCall(BVSetActiveColumns(pjd->X,0,pep->nconv));
   PetscCall(BVMultInPlace(pjd->X,U,0,pep->nconv));
@@ -1087,7 +1081,7 @@ static PetscErrorCode PEPJDLockConverged(PEP pep,PetscInt *nv,PetscInt sz)
   Vec            v,x,w;
   PetscScalar    *R,*r,*pX,target[2];
   Mat            X;
-  PetscBLASInt   sz_,rk_,nv_,info;
+  PetscBLASInt   sz_,rk_,nv_;
   PetscMPIInt    np;
 
   PetscFunctionBegin;
@@ -1126,9 +1120,8 @@ static PetscErrorCode PEPJDLockConverged(PEP pep,PetscInt *nv,PetscInt sz)
   PetscCall(PetscBLASIntCast(sz,&sz_));
   PetscCall(PetscBLASIntCast(nvv,&nv_));
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-  PetscCallBLAS("LAPACKtrtri",LAPACKtrtri_("U","N",&rk_,R,&nv_,&info));
+  PetscCallLAPACKInfo("LAPACKtrtri",LAPACKtrtri_("U","N",&rk_,R,&nv_,&info));
   PetscCall(PetscFPTrapPop());
-  SlepcCheckLapackInfo("trtri",info);
   for (i=0;i<sz;i++) PetscCallBLAS("BLAStrmv",BLAStrmv_("U","C","N",&rk_,R,&nv_,r+i,&sz_));
   for (i=0;i<sz*rk;i++) r[i] = PetscConj(r[i])/PetscSqrtReal(np); /* revert */
   PetscCall(BVSetActiveColumns(pjd->V,0,nvv));

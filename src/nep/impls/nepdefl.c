@@ -395,7 +395,7 @@ static PetscErrorCode NEPDeflationComputeShellMat(NEP_EXT_OP extop,PetscScalar l
   Mat              F,Mshell,Mcomp;
   PetscBool        ini=PETSC_FALSE;
   PetscScalar      *hf,*hfj,*hfjp,sone=1.0,*hH,*hHprev,*pts,*B,*A,*Hj=extop->Hj,*basisv,zero=0.0;
-  PetscBLASInt     n_,info,szd_;
+  PetscBLASInt     n_,szd_;
   size_t           len;
 
   PetscFunctionBegin;
@@ -484,9 +484,8 @@ static PetscErrorCode NEPDeflationComputeShellMat(NEP_EXT_OP extop,PetscScalar l
         }
         PetscCall(PetscBLASIntCast(n,&n_));
         PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-        PetscCallBLAS("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,hfj,&n_,&info));
+        PetscCallLAPACKInfo("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,hfj,&n_,&info));
         PetscCall(PetscFPTrapPop());
-        SlepcCheckLapackInfo("trtri",info);
         PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,n,n,hfj,&F));
         PetscCall(BVMultInPlace(matctx->U,F,0,n));
         if (jacobian) {
@@ -546,7 +545,7 @@ PetscErrorCode NEPDeflationSolveSetUp(NEP_EXT_OP extop,PetscScalar lambda)
   Vec               u,tu;
   Mat               F;
   PetscScalar       snone=-1.0,sone=1.0;
-  PetscBLASInt      n_,szd_,ldh_,*p,info;
+  PetscBLASInt      n_,szd_,ldh_,*p;
   Mat               Mshell;
 
   PetscFunctionBegin;
@@ -583,10 +582,8 @@ PetscErrorCode NEPDeflationSolveSetUp(NEP_EXT_OP extop,PetscScalar lambda)
       PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&n_,&n_,&n_,&snone,matctx->A,&szd_,solve->work,&n_,&sone,solve->M,&szd_));
       PetscCall(PetscMalloc1(n,&p));
       PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-      PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&n_,&n_,solve->M,&szd_,p,&info));
-      SlepcCheckLapackInfo("getrf",info);
-      PetscCallBLAS("LAPACKgetri",LAPACKgetri_(&n_,solve->M,&szd_,p,solve->work,&n_,&info));
-      SlepcCheckLapackInfo("getri",info);
+      PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&n_,&n_,solve->M,&szd_,p,&info));
+      PetscCallLAPACKInfo("LAPACKgetri",LAPACKgetri_(&n_,solve->M,&szd_,p,solve->work,&n_,&info));
       PetscCall(PetscFPTrapPop());
       PetscCall(PetscFree(p));
     }

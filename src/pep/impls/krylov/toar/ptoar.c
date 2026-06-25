@@ -291,7 +291,7 @@ static PetscErrorCode PEPExtractInvariantPair(PEP pep,PetscScalar sigma,PetscInt
 {
   PetscInt       i,j,jj,ldh,lds,ldt,d=pep->nmat-1,idxcpy=0;
   PetscScalar    *H,*At,*Bt,*Hj,*Hp,*T,sone=1.0,g,a,*pM,*work;
-  PetscBLASInt   k_,sr_,lds_,ldh_,info,*p,lwork,ldt_;
+  PetscBLASInt   k_,sr_,lds_,ldh_,*p,lwork,ldt_;
   PetscBool      transf=PETSC_FALSE,flg;
   PetscReal      norm,maxnrm,*rwork;
   BV             *R,Y;
@@ -318,11 +318,9 @@ static PetscErrorCode PEPExtractInvariantPair(PEP pep,PetscScalar sigma,PetscInt
     for (i=0;i<k;i++) PetscCall(PetscArraycpy(T+k*i,H+i*ldh,k));
     if (flg) {
       PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-      PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&k_,&k_,T,&k_,p,&info));
-      SlepcCheckLapackInfo("getrf",info);
+      PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&k_,&k_,T,&k_,p,&info));
       PetscCall(PetscBLASIntCast(sr*k,&lwork));
-      PetscCallBLAS("LAPACKgetri",LAPACKgetri_(&k_,T,&k_,p,work,&lwork,&info));
-      SlepcCheckLapackInfo("getri",info);
+      PetscCallLAPACKInfo("LAPACKgetri",LAPACKgetri_(&k_,T,&k_,p,work,&lwork,&info));
       PetscCall(PetscFPTrapPop());
     }
     if (sigma!=0.0) for (i=0;i<k;i++) T[i+k*i] += sigma;
@@ -414,9 +412,8 @@ static PetscErrorCode PEPExtractInvariantPair(PEP pep,PetscScalar sigma,PetscInt
       PetscCallBLAS("BLASgemm",BLASgemm_("N","C",&k_,&k_,&k_,&sone,Hj,&k_,Hj,&k_,&sone,Bt,&k_));
     }
     PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-    PetscCallBLAS("LAPACKgesv",LAPACKgesv_(&k_,&sr_,Bt,&k_,p,At,&k_,&info));
+    PetscCallLAPACKInfo("LAPACKgesv",LAPACKgesv_(&k_,&sr_,Bt,&k_,p,At,&k_,&info));
     PetscCall(PetscFPTrapPop());
-    SlepcCheckLapackInfo("gesv",info);
     for (j=0;j<sr;j++) {
       for (i=0;i<k;i++) S[i*lds+j] = PetscConj(At[j*k+i]);
     }

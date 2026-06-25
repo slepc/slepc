@@ -55,7 +55,7 @@ static PetscErrorCode MatMult_FS(Mat M ,Vec x,Vec y)
   PEP_REFINE_MATSHELL *ctx;
   PetscInt            k,i;
   PetscScalar         *c;
-  PetscBLASInt        k_,one=1,info;
+  PetscBLASInt        k_,one=1;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(M,&ctx));
@@ -68,9 +68,8 @@ static PetscErrorCode MatMult_FS(Mat M ,Vec x,Vec y)
   PetscCall(BVDotVec(ctx->M3,ctx->t,c));
   for (i=0;i<k;i++) c[i] = PetscConj(c[i]);
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-  PetscCallBLAS("LAPACKgetrs",LAPACKgetrs_("N",&k_,&one,ctx->M4,&k_,ctx->pM4,c,&k_,&info));
+  PetscCallLAPACKInfo("LAPACKgetrs",LAPACKgetrs_("N",&k_,&one,ctx->M4,&k_,ctx->pM4,c,&k_,&info));
   PetscCall(PetscFPTrapPop());
-  SlepcCheckLapackInfo("getrs",info);
   PetscCall(BVMultVec(ctx->M2,-1.0,1.0,y,c));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -128,7 +127,7 @@ static PetscErrorCode NRefSysSetup_shell(PEP pep,PetscInt k,PetscScalar *fH,Pets
   const PetscScalar *m3,*m2;
   PetscInt          i,d,j,nmat=pep->nmat,lda=nmat*k,deg=nmat-1,nloc,ld2,ld3;
   PetscReal         *a=pep->pbc,*b=pep->pbc+nmat,*g=pep->pbc+2*nmat;
-  PetscBLASInt      k_,lda_,lds_,nloc_,ld2_,one=1,info;
+  PetscBLASInt      k_,lda_,lds_,nloc_,ld2_,one=1;
   Mat               *A=ctx->A,Mk,M1=ctx->M1,P;
   BV                V=ctx->V,M2=ctx->M2,M3=ctx->M3,W=ctx->W;
   MatStructure      str;
@@ -212,9 +211,8 @@ static PetscErrorCode NRefSysSetup_shell(PEP pep,PetscInt k,PetscScalar *fH,Pets
   PetscCall(VecGetArray(ctx->t,&v));
   for (i=0;i<nloc;i++) for (j=0;j<k;j++) T[j+i*k] = m3[i+j*ld3];
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-  PetscCallBLAS("LAPACKgesv",LAPACKgesv_(&k_,&nloc_,ctx->M4,&k_,ctx->pM4,T,&k_,&info));
+  PetscCallLAPACKInfo("LAPACKgesv",LAPACKgesv_(&k_,&nloc_,ctx->M4,&k_,ctx->pM4,T,&k_,&info));
   PetscCall(PetscFPTrapPop());
-  SlepcCheckLapackInfo("gesv",info);
   for (i=0;i<nloc;i++) v[i] = BLASdot_(&k_,m2+i,&ld2_,T+i*k,&one);
   PetscCall(VecRestoreArray(ctx->t,&v));
   PetscCall(BVRestoreArrayRead(ctx->M2,&m2));
@@ -228,7 +226,7 @@ static PetscErrorCode NRefSysSetup_shell(PEP pep,PetscInt k,PetscScalar *fH,Pets
 static PetscErrorCode NRefSysSolve_shell(KSP ksp,PetscInt nmat,Vec Rv,PetscScalar *Rh,PetscInt k,Vec dVi,PetscScalar *dHi)
 {
   PetscScalar         *t0;
-  PetscBLASInt        k_,one=1,info,lda_;
+  PetscBLASInt        k_,one=1,lda_;
   PetscInt            i,lda=nmat*k;
   Mat                 M;
   PEP_REFINE_MATSHELL *ctx;
@@ -241,16 +239,14 @@ static PetscErrorCode NRefSysSolve_shell(KSP ksp,PetscInt nmat,Vec Rv,PetscScala
   PetscCall(PetscBLASIntCast(lda,&lda_));
   PetscCall(PetscBLASIntCast(k,&k_));
   for (i=0;i<k;i++) t0[i] = Rh[i];
-  PetscCallBLAS("LAPACKgetrs",LAPACKgetrs_("N",&k_,&one,ctx->M4,&k_,ctx->pM4,t0,&k_,&info));
-  SlepcCheckLapackInfo("getrs",info);
+  PetscCallLAPACKInfo("LAPACKgetrs",LAPACKgetrs_("N",&k_,&one,ctx->M4,&k_,ctx->pM4,t0,&k_,&info));
   PetscCall(BVMultVec(ctx->M2,-1.0,1.0,Rv,t0));
   PetscCall(KSPSolve(ksp,Rv,dVi));
   PetscCall(VecConjugate(dVi));
   PetscCall(BVDotVec(ctx->M3,dVi,dHi));
   PetscCall(VecConjugate(dVi));
   for (i=0;i<k;i++) dHi[i] = Rh[i]-PetscConj(dHi[i]);
-  PetscCallBLAS("LAPACKgetrs",LAPACKgetrs_("N",&k_,&one,ctx->M4,&k_,ctx->pM4,dHi,&k_,&info));
-  SlepcCheckLapackInfo("getrs",info);
+  PetscCallLAPACKInfo("LAPACKgetrs",LAPACKgetrs_("N",&k_,&one,ctx->M4,&k_,ctx->pM4,dHi,&k_,&info));
   PetscCall(PetscFPTrapPop());
   PetscCall(PetscFree(t0));
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -897,7 +893,7 @@ static PetscErrorCode NRefOrthogStep(PEP pep,PetscInt k,PetscScalar *H,PetscInt 
 {
   PetscInt       j,nmat=pep->nmat,deg=nmat-1,lda=nmat*k,ldg;
   PetscScalar    *G,*tau,sone=1.0,zero=0.0,*work;
-  PetscBLASInt   lds_,k_,ldh_,info,ldg_,lda_;
+  PetscBLASInt   lds_,k_,ldh_,ldg_,lda_;
 
   PetscFunctionBegin;
   PetscCall(PetscMalloc3(k,&tau,k,&work,deg*k*k,&G));
@@ -915,9 +911,8 @@ static PetscErrorCode NRefOrthogStep(PEP pep,PetscInt k,PetscScalar *H,PetscInt 
   }
   /* Orthogonalize and update S */
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-  PetscCallBLAS("LAPACKgeqrf",LAPACKgeqrf_(&ldg_,&k_,G,&ldg_,tau,work,&k_,&info));
+  PetscCallLAPACKInfo("LAPACKgeqrf",LAPACKgeqrf_(&ldg_,&k_,G,&ldg_,tau,work,&k_,&info));
   PetscCall(PetscFPTrapPop());
-  SlepcCheckLapackInfo("geqrf",info);
   PetscCallBLAS("BLAStrsm",BLAStrsm_("R","U","N","N",&k_,&k_,&sone,G,&ldg_,S,&lds_));
 
   /* Update H */
@@ -931,7 +926,7 @@ static PetscErrorCode PEPNRefUpdateInvPair(PEP pep,PetscInt k,PetscScalar *H,Pet
 {
   PetscInt       i,j,nmat=pep->nmat,lda=nmat*k;
   PetscScalar    *tau,*array,*work;
-  PetscBLASInt   lds_,k_,lda_,ldh_,kdrs_,info,k2_;
+  PetscBLASInt   lds_,k_,lda_,ldh_,kdrs_,k2_;
   Mat            M0;
 
   PetscFunctionBegin;
@@ -952,15 +947,13 @@ static PetscErrorCode PEPNRefUpdateInvPair(PEP pep,PetscInt k,PetscScalar *H,Pet
     for (i=k;i<2*k;i++) dVS[i+j*2*k] = -dVS[i+j*2*k];
   }
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-  PetscCallBLAS("LAPACKgeqrf",LAPACKgeqrf_(&kdrs_,&k_,dVS,&k2_,tau,work,&k_,&info));
-  SlepcCheckLapackInfo("geqrf",info);
+  PetscCallLAPACKInfo("LAPACKgeqrf",LAPACKgeqrf_(&kdrs_,&k_,dVS,&k2_,tau,work,&k_,&info));
   /* Copy triangular matrix in S */
   for (j=0;j<k;j++) {
     for (i=0;i<=j;i++) S[i+j*lds] = dVS[i+j*2*k];
     for (i=j+1;i<k;i++) S[i+j*lds] = 0.0;
   }
-  PetscCallBLAS("LAPACKorgqr",LAPACKorgqr_(&k2_,&k_,&k_,dVS,&k2_,tau,work,&k_,&info));
-  SlepcCheckLapackInfo("orgqr",info);
+  PetscCallLAPACKInfo("LAPACKorgqr",LAPACKorgqr_(&k2_,&k_,&k_,dVS,&k2_,tau,work,&k_,&info));
   PetscCall(PetscFPTrapPop());
   PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,k,k,NULL,&M0));
   PetscCall(MatDenseGetArrayWrite(M0,&array));
@@ -1285,7 +1278,7 @@ PetscErrorCode PEPNewtonRefinement_TOAR(PEP pep,PetscScalar sigma,PetscInt *maxi
 {
   PetscScalar         *H,*work,*dH,*fH,*dVS;
   PetscInt            ldh,i,j,its=1,nmat=pep->nmat,nsubc=pep->npart,rds;
-  PetscBLASInt        k_,ld_,*p,info;
+  PetscBLASInt        k_,ld_,*p;
   BV                  dV;
   PetscBool           sinvert,flg;
   PEP_REFINE_EXPLICIT *matctx=NULL;
@@ -1310,10 +1303,8 @@ PetscErrorCode PEPNewtonRefinement_TOAR(PEP pep,PetscScalar sigma,PetscInt *maxi
       PetscCall(DSGetArray(pep->ds,DS_MAT_A,&H));
       PetscCall(PetscMalloc1(k,&p));
       PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-      PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&k_,&k_,H,&ld_,p,&info));
-      SlepcCheckLapackInfo("getrf",info);
-      PetscCallBLAS("LAPACKgetri",LAPACKgetri_(&k_,H,&ld_,p,work,&k_,&info));
-      SlepcCheckLapackInfo("getri",info);
+      PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&k_,&k_,H,&ld_,p,&info));
+      PetscCallLAPACKInfo("LAPACKgetri",LAPACKgetri_(&k_,H,&ld_,p,work,&k_,&info));
       PetscCall(PetscFPTrapPop());
       PetscCall(DSRestoreArray(pep->ds,DS_MAT_A,&H));
       pep->ops->backtransform = NULL;

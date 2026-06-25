@@ -17,7 +17,7 @@
 PetscErrorCode BDC_dlaed3m_(const char *jobz,const char *defl,PetscBLASInt k,PetscBLASInt n,
         PetscBLASInt n1,PetscReal *d,PetscReal *q,PetscBLASInt ldq,
         PetscReal rho,PetscReal *dlamda,PetscReal *q2,PetscBLASInt *indx,
-        PetscBLASInt *ctot,PetscReal *w,PetscReal *s,PetscBLASInt *info,
+        PetscBLASInt *ctot,PetscReal *w,PetscReal *s,PetscBLASInt *oinfo,
         PetscBLASInt jobz_len,PetscBLASInt defl_len)
 {
 /*  -- Routine written in LAPACK version 3.0 style -- */
@@ -152,14 +152,14 @@ PetscErrorCode BDC_dlaed3m_(const char *jobz,const char *defl,PetscBLASInt k,Pet
   PetscBLASInt i, j, n2, n12, ii, n23, iq2, i1, one=1;
 
   PetscFunctionBegin;
-  *info = 0;
+  *oinfo = 0;
 
-  if (k < 0) *info = -3;
-  else if (n < k) *info = -4;
-  else if (n1 < PetscMin(1,n) || n1 > PetscMax(1,n)) *info = -5;
-  else if (ldq < PetscMax(1,n)) *info = -8;
-  else if (rho < 0.) *info = -9;
-  PetscCheck(!*info,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Wrong argument %" PetscBLASInt_FMT " in DLAED3M",-(*info));
+  if (k < 0) *oinfo = -3;
+  else if (n < k) *oinfo = -4;
+  else if (n1 < PetscMin(1,n) || n1 > PetscMax(1,n)) *oinfo = -5;
+  else if (ldq < PetscMax(1,n)) *oinfo = -8;
+  else if (rho < 0.) *oinfo = -9;
+  PetscCheck(!*oinfo,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Wrong argument %" PetscBLASInt_FMT " in DLAED3M",-(*oinfo));
 
   /* Quick return if possible */
 
@@ -190,8 +190,7 @@ PetscErrorCode BDC_dlaed3m_(const char *jobz,const char *defl,PetscBLASInt k,Pet
 
     /* ....calling DLAED4 for eigenpair J.... */
 
-    PetscCallBLAS("LAPACKlaed4",LAPACKlaed4_(&k, &j, dlamda, w, &q[(j-1)*ldq], &rho, &d[j-1], info));
-    SlepcCheckLapackInfo("laed4",*info);
+    PetscCallLAPACKInfo("LAPACKlaed4",LAPACKlaed4_(&k, &j, dlamda, w, &q[(j-1)*ldq], &rho, &d[j-1], &info));
 
     if (j < k) {
 

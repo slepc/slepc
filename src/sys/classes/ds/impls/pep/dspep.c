@@ -97,7 +97,7 @@ static PetscErrorCode DSSolve_PEP_QZ(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscScalar       *A,*B,*W,*X,*U,*Y,*work,*beta,a;
   const PetscScalar *Ed,*Ei;
   PetscReal         *ca,*cb,*cg,norm,done=1.0;
-  PetscBLASInt      info,n,ld,ldd,nd,lwork,one=1,zero=0,cols;
+  PetscBLASInt      n,ld,ldd,nd,lwork,one=1,zero=0,cols;
   PetscBool         useggev3=(ds->method==1)?PETSC_TRUE:PETSC_FALSE;
 
   PetscFunctionBegin;
@@ -172,25 +172,24 @@ static PetscErrorCode DSSolve_PEP_QZ(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_U],&U));
   lwork = -1;
 #if defined(PETSC_USE_COMPLEX)
-  if (useggev3) PetscCallBLAS("LAPACKggev3",LAPACKggev3_("V","V",&nd,A,&ldd,B,&ldd,wr,NULL,U,&ldd,W,&ldd,&a,&lwork,NULL,&info));
-  else PetscCallBLAS("LAPACKggev",LAPACKggev_("V","V",&nd,A,&ldd,B,&ldd,wr,NULL,U,&ldd,W,&ldd,&a,&lwork,NULL,&info));
+  if (useggev3) PetscCallLAPACKInfo("LAPACKggev3",LAPACKggev3_("V","V",&nd,A,&ldd,B,&ldd,wr,NULL,U,&ldd,W,&ldd,&a,&lwork,NULL,&info));
+  else PetscCallLAPACKInfo("LAPACKggev",LAPACKggev_("V","V",&nd,A,&ldd,B,&ldd,wr,NULL,U,&ldd,W,&ldd,&a,&lwork,NULL,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
   PetscCall(DSAllocateWork_Private(ds,lwork+nd,8*nd,0));
   beta  = ds->work;
   work  = ds->work + nd;
-  if (useggev3) PetscCallBLAS("LAPACKggev3",LAPACKggev3_("V","V",&nd,A,&ldd,B,&ldd,wr,beta,U,&ldd,W,&ldd,work,&lwork,ds->rwork,&info));
-  else PetscCallBLAS("LAPACKggev",LAPACKggev_("V","V",&nd,A,&ldd,B,&ldd,wr,beta,U,&ldd,W,&ldd,work,&lwork,ds->rwork,&info));
+  if (useggev3) PetscCallLAPACKInfo("LAPACKggev3",LAPACKggev3_("V","V",&nd,A,&ldd,B,&ldd,wr,beta,U,&ldd,W,&ldd,work,&lwork,ds->rwork,&info));
+  else PetscCallLAPACKInfo("LAPACKggev",LAPACKggev_("V","V",&nd,A,&ldd,B,&ldd,wr,beta,U,&ldd,W,&ldd,work,&lwork,ds->rwork,&info));
 #else
-  if (useggev3) PetscCallBLAS("LAPACKggev3",LAPACKggev3_("V","V",&nd,A,&ldd,B,&ldd,wr,wi,NULL,U,&ldd,W,&ldd,&a,&lwork,&info));
-  else PetscCallBLAS("LAPACKggev",LAPACKggev_("V","V",&nd,A,&ldd,B,&ldd,wr,wi,NULL,U,&ldd,W,&ldd,&a,&lwork,&info));
+  if (useggev3) PetscCallLAPACKInfo("LAPACKggev3",LAPACKggev3_("V","V",&nd,A,&ldd,B,&ldd,wr,wi,NULL,U,&ldd,W,&ldd,&a,&lwork,&info));
+  else PetscCallLAPACKInfo("LAPACKggev",LAPACKggev_("V","V",&nd,A,&ldd,B,&ldd,wr,wi,NULL,U,&ldd,W,&ldd,&a,&lwork,&info));
   PetscCall(PetscBLASIntCast((PetscInt)a,&lwork));
   PetscCall(DSAllocateWork_Private(ds,lwork+nd,0,0));
   beta = ds->work;
   work = ds->work + nd;
-  if (useggev3) PetscCallBLAS("LAPACKggev3",LAPACKggev3_("V","V",&nd,A,&ldd,B,&ldd,wr,wi,beta,U,&ldd,W,&ldd,work,&lwork,&info));
-  else PetscCallBLAS("LAPACKggev",LAPACKggev_("V","V",&nd,A,&ldd,B,&ldd,wr,wi,beta,U,&ldd,W,&ldd,work,&lwork,&info));
+  if (useggev3) PetscCallLAPACKInfo("LAPACKggev3",LAPACKggev3_("V","V",&nd,A,&ldd,B,&ldd,wr,wi,beta,U,&ldd,W,&ldd,work,&lwork,&info));
+  else PetscCallLAPACKInfo("LAPACKggev",LAPACKggev_("V","V",&nd,A,&ldd,B,&ldd,wr,wi,beta,U,&ldd,W,&ldd,work,&lwork,&info));
 #endif
-  SlepcCheckLapackInfo(useggev3?"ggev3":"ggev",info);
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_A],&A));
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_B],&B));
 
@@ -224,14 +223,12 @@ static PetscErrorCode DSSolve_PEP_QZ(DS ds,PetscScalar *wr,PetscScalar *wi)
       cols = 2;
     }
 #endif
-    PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,X+j*ds->ld,&ld,&info));
-    SlepcCheckLapackInfo("lascl",info);
+    PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,X+j*ds->ld,&ld,&info));
     norm = BLASnrm2_(&n,Y+j*ds->ld,&one);
 #if !defined(PETSC_USE_COMPLEX)
     if (wi[j] != 0.0) norm = SlepcAbsEigenvalue(norm,BLASnrm2_(&n,Y+(j+1)*ds->ld,&one));
 #endif
-    PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,Y+j*ds->ld,&ld,&info));
-    SlepcCheckLapackInfo("lascl",info);
+    PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,Y+j*ds->ld,&ld,&info));
 #if !defined(PETSC_USE_COMPLEX)
     if (wi[j] != 0.0) j++;
 #endif
