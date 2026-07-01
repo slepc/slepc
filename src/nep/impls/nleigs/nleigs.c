@@ -530,7 +530,7 @@ static PetscErrorCode MatAXPY_Fun(Mat Y,PetscScalar a,Mat X,MatStructure str)
 {
   NEP_NLEIGS_MATSHELL *ctxY,*ctxX;
   PetscInt            i,j;
-  PetscBool           found;
+  PetscBool           found,has;
 
   PetscFunctionBeginUser;
   PetscCall(MatShellGetContext(Y,&ctxY));
@@ -545,7 +545,12 @@ static PetscErrorCode MatAXPY_Fun(Mat Y,PetscScalar a,Mat X,MatStructure str)
     }
     if (!found) {
       ctxY->coeff[ctxY->nmat] = a*ctxX->coeff[i];
-      ctxY->A[ctxY->nmat++] = ctxX->A[i];
+      ctxY->A[ctxY->nmat] = ctxX->A[i];
+      PetscCall(MatHasOperation(ctxX->A[i],MATOP_MULT_TRANSPOSE,&has));
+      if (!has) PetscCall(MatShellSetOperation(ctxY->A[ctxY->nmat],MATOP_MULT_TRANSPOSE,NULL));
+      PetscCall(MatHasOperation(ctxX->A[i],MATOP_GET_DIAGONAL,&has));
+      if (!has) PetscCall(MatShellSetOperation(ctxY->A[ctxY->nmat],MATOP_GET_DIAGONAL,NULL));
+      ctxY->nmat++;
       PetscCall(PetscObjectReference((PetscObject)ctxX->A[i]));
     }
   }
@@ -584,8 +589,10 @@ static PetscErrorCode NLEIGSMatToMatShellArray(Mat A,Mat *Ms,PetscInt maxnmat)
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)A),m,n,M,N,(void*)ctx,Ms));
   PetscCall(MatShellSetManageScalingShifts(*Ms));
   PetscCall(MatShellSetOperation(*Ms,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Fun));
+  PetscCall(MatHasOperation(A,MATOP_MULT_TRANSPOSE,&has));
+  if (has) PetscCall(MatShellSetOperation(*Ms,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Fun));
+  PetscCall(MatHasOperation(A,MATOP_GET_DIAGONAL,&has));
+  if (has) PetscCall(MatShellSetOperation(*Ms,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Fun));
   PetscCall(MatShellSetOperation(*Ms,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_Fun));
   PetscCall(MatShellSetOperation(*Ms,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Fun));
   PetscCall(MatShellSetOperation(*Ms,MATOP_AXPY,(PetscErrorCodeFn*)MatAXPY_Fun));
