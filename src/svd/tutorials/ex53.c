@@ -48,7 +48,7 @@ static char help[] = "Partial hyperbolic singular value decomposition (HSVD) of 
 */
 
 /* Timing */
-#ifdef TIMING
+#if defined(TIMING)
   static PetscReal tt_rotr,tt_rotc,tt_assmr=0.0,tt_assmc=0.0,tt_getr=0.0,tt_getc=0.0,tt_setvalr=0.0,tt_setvalc=0.0;
   #define time_now(t) t=MPI_Wtime();
   #define time_diff(tacum,t0,t,t1) {t=MPI_Wtime(); tacum += t-t0; t1=t;}
@@ -438,7 +438,7 @@ static PetscErrorCode RotateRows(XMat A,PetscInt i1,PetscInt i2,PetscReal c,Pets
   PetscBLASInt nc_,one=1;
   PetscScalar  *va1=NULL,*va2=NULL,*vaa1=NULL,*vaa2=NULL,*sworkx=swork;
   PetscBool    i1mine, i2mine;
-#ifdef TIMING
+#if defined(TIMING)
   PetscReal    t,t0;
 #endif
 
@@ -555,7 +555,7 @@ int main(int argc,char **argv)
   PetscBool   flg,flgp,flgq,flgn,terse,skiporth=PETSC_FALSE,progress=PETSC_FALSE;
   PetscRandom rand;
   MatInfo     Ainfo;
-#ifdef TIMING
+#if defined(TIMING)
   PetscReal   t,t0;
 #endif
 
@@ -655,7 +655,7 @@ int main(int argc,char **argv)
   PetscCall(MatGetInfo(A,MAT_GLOBAL_SUM,&Ainfo));
   PetscCall(PetscPrintf(MPI_COMM_WORLD," Matrix created. %" PetscInt_FMT " rotations applied. nnz=%.0f. Density: %.4g\n\n",nroth+nrotv,Ainfo.nz_used,(double)Ainfo.nz_used/(1.0*(P+Q)*N)));
 
-#ifdef TIMING
+#if defined(TIMING)
   PetscCall(PetscPrintf(MPI_COMM_WORLD,"#T rot-rows: %6.3f  get-rows: %6.3f  setval-rows: %6.3f  assm-rows: %.3f\n",tt_rotr,tt_getr,tt_setvalr,tt_assmr));
   PetscCall(PetscPrintf(MPI_COMM_WORLD,"#T rot cols: %6.3f  get-cols: %6.3f  setval-cols: %6.3f  assm-cols: %.3f\n",tt_rotc,tt_getc,tt_setvalc,tt_assmc));
 #endif
