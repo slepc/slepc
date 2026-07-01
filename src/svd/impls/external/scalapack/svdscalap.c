@@ -47,7 +47,7 @@ static PetscErrorCode SVDSolve_ScaLAPACK(SVD svd)
   Mat            A = ctx->As,Z,Q,QT,U,V;
   Mat_ScaLAPACK  *a = (Mat_ScaLAPACK*)A->data,*q,*z;
   PetscScalar    *work,minlwork;
-  PetscBLASInt   info,lwork=-1,one=1;
+  PetscBLASInt   lwork=-1,one=1;
   PetscInt       M,N,m,n,mn;
 #if defined(PETSC_USE_COMPLEX)
   PetscBLASInt   lrwork;
@@ -74,24 +74,20 @@ static PetscErrorCode SVDSolve_ScaLAPACK(SVD svd)
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
 #if !defined(PETSC_USE_COMPLEX)
   /* allocate workspace */
-  PetscCallBLAS("SCALAPACKgesvd",SCALAPACKgesvd_("V","V",&a->M,&a->N,a->loc,&one,&one,a->desc,svd->sigma,z->loc,&one,&one,z->desc,q->loc,&one,&one,q->desc,&minlwork,&lwork,&info));
-  PetscCheckScaLapackInfo("gesvd",info);
+  PetscCallScaLAPACKInfo("gesvd",SCALAPACKgesvd_("V","V",&a->M,&a->N,a->loc,&one,&one,a->desc,svd->sigma,z->loc,&one,&one,z->desc,q->loc,&one,&one,q->desc,&minlwork,&lwork,&info));
   PetscCall(PetscBLASIntCast((PetscInt)minlwork,&lwork));
   PetscCall(PetscMalloc1(lwork,&work));
   /* call computational routine */
-  PetscCallBLAS("SCALAPACKgesvd",SCALAPACKgesvd_("V","V",&a->M,&a->N,a->loc,&one,&one,a->desc,svd->sigma,z->loc,&one,&one,z->desc,q->loc,&one,&one,q->desc,work,&lwork,&info));
-  PetscCheckScaLapackInfo("gesvd",info);
+  PetscCallScaLAPACKInfo("gesvd",SCALAPACKgesvd_("V","V",&a->M,&a->N,a->loc,&one,&one,a->desc,svd->sigma,z->loc,&one,&one,z->desc,q->loc,&one,&one,q->desc,work,&lwork,&info));
   PetscCall(PetscFree(work));
 #else
   /* allocate workspace */
-  PetscCallBLAS("SCALAPACKgesvd",SCALAPACKgesvd_("V","V",&a->M,&a->N,a->loc,&one,&one,a->desc,svd->sigma,z->loc,&one,&one,z->desc,q->loc,&one,&one,q->desc,&minlwork,&lwork,&dummy,&info));
-  PetscCheckScaLapackInfo("gesvd",info);
+  PetscCallScaLAPACKInfo("gesvd",SCALAPACKgesvd_("V","V",&a->M,&a->N,a->loc,&one,&one,a->desc,svd->sigma,z->loc,&one,&one,z->desc,q->loc,&one,&one,q->desc,&minlwork,&lwork,&dummy,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(minlwork),&lwork));
   lrwork = 1+4*PetscMax(a->M,a->N);
   PetscCall(PetscMalloc2(lwork,&work,lrwork,&rwork));
   /* call computational routine */
-  PetscCallBLAS("SCALAPACKgesvd",SCALAPACKgesvd_("V","V",&a->M,&a->N,a->loc,&one,&one,a->desc,svd->sigma,z->loc,&one,&one,z->desc,q->loc,&one,&one,q->desc,work,&lwork,rwork,&info));
-  PetscCheckScaLapackInfo("gesvd",info);
+  PetscCallScaLAPACKInfo("gesvd",SCALAPACKgesvd_("V","V",&a->M,&a->N,a->loc,&one,&one,a->desc,svd->sigma,z->loc,&one,&one,z->desc,q->loc,&one,&one,q->desc,work,&lwork,rwork,&info));
   PetscCall(PetscFree2(work,rwork));
 #endif
   PetscCall(PetscFPTrapPop());
