@@ -62,7 +62,7 @@ static PetscErrorCode DSView_GNHEP(DS ds,PetscViewer viewer)
 static PetscErrorCode DSVectors_GNHEP_Eigen_Some(DS ds,PetscInt *k,PetscReal *rnorm,PetscBool left)
 {
   PetscInt       i;
-  PetscBLASInt   n,ld,mout,info,*select,mm,inc=1,cols=1,zero=0;
+  PetscBLASInt   n,ld,mout,*select,mm,inc=1,cols=1,zero=0;
   PetscScalar    *X,*Y,*XY,*Z,*Q,*A,*B,fone=1.0,fzero=0.0;
   PetscReal      norm,done=1.0;
   PetscBool      iscomplex = PETSC_FALSE;
@@ -100,15 +100,14 @@ static PetscErrorCode DSVectors_GNHEP_Eigen_Some(DS ds,PetscInt *k,PetscReal *rn
 #if defined(PETSC_USE_COMPLEX)
   mm = 1;
   PetscCall(DSAllocateWork_Private(ds,2*ld,2*ld,0));
-  PetscCallBLAS("LAPACKtgevc",LAPACKtgevc_(side,"S",select,&n,A,&ld,B,&ld,PetscSafePointerPlusOffset(Y,(*k)*ld),&ld,PetscSafePointerPlusOffset(X,(*k)*ld),&ld,&mm,&mout,ds->work,ds->rwork,&info));
+  PetscCallLAPACKInfo("LAPACKtgevc",LAPACKtgevc_(side,"S",select,&n,A,&ld,B,&ld,PetscSafePointerPlusOffset(Y,(*k)*ld),&ld,PetscSafePointerPlusOffset(X,(*k)*ld),&ld,&mm,&mout,ds->work,ds->rwork,&info));
 #else
   if ((*k)<n-1 && (A[ld*(*k)+(*k)+1] != 0.0 || B[ld*(*k)+(*k)+1] != 0.0)) iscomplex = PETSC_TRUE;
   mm = iscomplex? 2: 1;
   if (iscomplex) select[(*k)+1] = (PetscBLASInt)PETSC_TRUE;
   PetscCall(DSAllocateWork_Private(ds,6*ld,0,0));
-  PetscCallBLAS("LAPACKtgevc",LAPACKtgevc_(side,"S",select,&n,A,&ld,B,&ld,PetscSafePointerPlusOffset(Y,(*k)*ld),&ld,PetscSafePointerPlusOffset(X,(*k)*ld),&ld,&mm,&mout,ds->work,&info));
+  PetscCallLAPACKInfo("LAPACKtgevc",LAPACKtgevc_(side,"S",select,&n,A,&ld,B,&ld,PetscSafePointerPlusOffset(Y,(*k)*ld),&ld,PetscSafePointerPlusOffset(X,(*k)*ld),&ld,&mm,&mout,ds->work,&info));
 #endif
-  SlepcCheckLapackInfo("tgevc",info);
   PetscCheck(select[*k] && mout==mm,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Wrong arguments in call to Lapack xTGEVC");
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_A],&A));
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_B],&B));
@@ -123,8 +122,7 @@ static PetscErrorCode DSVectors_GNHEP_Eigen_Some(DS ds,PetscInt *k,PetscReal *rn
     cols = 2;
   }
 #endif
-  PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,XY+(*k)*ld,&ld,&info));
-  SlepcCheckLapackInfo("lascl",info);
+  PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,XY+(*k)*ld,&ld,&info));
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_Q],&Q));
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_Z],&Z));
 
@@ -141,7 +139,7 @@ static PetscErrorCode DSVectors_GNHEP_Eigen_Some(DS ds,PetscInt *k,PetscReal *rn
 static PetscErrorCode DSVectors_GNHEP_Eigen_All(DS ds,PetscBool left)
 {
   PetscInt       i;
-  PetscBLASInt   n,ld,mout,info,inc = 1;
+  PetscBLASInt   n,ld,mout,inc = 1;
   PetscBool      iscomplex;
   PetscScalar    *X,*Y,*XY,*Q,*Z,*A,*B,tmp;
   PetscReal      norm;
@@ -179,12 +177,11 @@ static PetscErrorCode DSVectors_GNHEP_Eigen_All(DS ds,PetscBool left)
   }
 #if defined(PETSC_USE_COMPLEX)
   PetscCall(DSAllocateWork_Private(ds,2*ld,2*ld,0));
-  PetscCallBLAS("LAPACKtgevc",LAPACKtgevc_(side,back,NULL,&n,A,&ld,B,&ld,Y,&ld,X,&ld,&n,&mout,ds->work,ds->rwork,&info));
+  PetscCallLAPACKInfo("LAPACKtgevc",LAPACKtgevc_(side,back,NULL,&n,A,&ld,B,&ld,Y,&ld,X,&ld,&n,&mout,ds->work,ds->rwork,&info));
 #else
   PetscCall(DSAllocateWork_Private(ds,6*ld,0,0));
-  PetscCallBLAS("LAPACKtgevc",LAPACKtgevc_(side,back,NULL,&n,A,&ld,B,&ld,Y,&ld,X,&ld,&n,&mout,ds->work,&info));
+  PetscCallLAPACKInfo("LAPACKtgevc",LAPACKtgevc_(side,back,NULL,&n,A,&ld,B,&ld,Y,&ld,X,&ld,&n,&mout,ds->work,&info));
 #endif
-  SlepcCheckLapackInfo("tgevc",info);
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_Q],&Q));
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_Z],&Z));
 
@@ -229,7 +226,7 @@ static PetscErrorCode DSVectors_GNHEP(DS ds,DSMatType mat,PetscInt *k,PetscReal 
 static PetscErrorCode DSSort_GNHEP_Arbitrary(DS ds,PetscScalar *wr,PetscScalar *wi,PetscScalar *rr,PetscScalar *ri,PetscInt *k)
 {
   PetscInt       i;
-  PetscBLASInt   info,n,ld,mout,lwork,liwork,*iwork,*selection,zero_=0,true_=1;
+  PetscBLASInt   n,ld,mout,lwork,liwork,*iwork,*selection,zero_=0,true_=1;
   PetscScalar    *S,*T,*Q,*Z,*work,*beta;
 
   PetscFunctionBegin;
@@ -258,11 +255,10 @@ static PetscErrorCode DSSort_GNHEP_Arbitrary(DS ds,PetscScalar *wr,PetscScalar *
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_Q],&Q));
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_Z],&Z));
 #if !defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKtgsen",LAPACKtgsen_(&zero_,&true_,&true_,selection,&n,S,&ld,T,&ld,wr,wi,beta,Z,&ld,Q,&ld,&mout,NULL,NULL,NULL,work,&lwork,iwork,&liwork,&info));
+  PetscCallLAPACKInfo("LAPACKtgsen",LAPACKtgsen_(&zero_,&true_,&true_,selection,&n,S,&ld,T,&ld,wr,wi,beta,Z,&ld,Q,&ld,&mout,NULL,NULL,NULL,work,&lwork,iwork,&liwork,&info));
 #else
-  PetscCallBLAS("LAPACKtgsen",LAPACKtgsen_(&zero_,&true_,&true_,selection,&n,S,&ld,T,&ld,wr,beta,Z,&ld,Q,&ld,&mout,NULL,NULL,NULL,work,&lwork,iwork,&liwork,&info));
+  PetscCallLAPACKInfo("LAPACKtgsen",LAPACKtgsen_(&zero_,&true_,&true_,selection,&n,S,&ld,T,&ld,wr,beta,Z,&ld,Q,&ld,&mout,NULL,NULL,NULL,work,&lwork,iwork,&liwork,&info));
 #endif
-  SlepcCheckLapackInfo("tgsen",info);
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_A],&S));
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_B],&T));
   PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_Q],&Q));
@@ -283,7 +279,7 @@ static PetscErrorCode DSSort_GNHEP_Total(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   PetscScalar    re;
   PetscInt       i,j,pos,result;
-  PetscBLASInt   ifst,ilst,info,n,ld,one=1;
+  PetscBLASInt   ifst,ilst,n,ld,one=1;
   PetscScalar    *S,*T,*Z,*Q;
 #if !defined(PETSC_USE_COMPLEX)
   PetscBLASInt   lwork;
@@ -300,8 +296,7 @@ static PetscErrorCode DSSort_GNHEP_Total(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_Z],&Z));
 #if !defined(PETSC_USE_COMPLEX)
   lwork = -1;
-  PetscCallBLAS("LAPACKtgexc",LAPACKtgexc_(&one,&one,&ld,NULL,&ld,NULL,&ld,NULL,&ld,NULL,&ld,&one,&one,&a,&lwork,&info));
-  SlepcCheckLapackInfo("tgexc",info);
+  PetscCallLAPACKInfo("LAPACKtgexc",LAPACKtgexc_(&one,&one,&ld,NULL,&ld,NULL,&ld,NULL,&ld,NULL,&ld,&one,&one,&a,&lwork,&info));
   safmin = LAPACKlamch_("S");
   PetscCall(PetscBLASIntCast((PetscInt)a,&lwork));
   PetscCall(DSAllocateWork_Private(ds,lwork,0,0));
@@ -341,11 +336,10 @@ static PetscErrorCode DSSort_GNHEP_Total(DS ds,PetscScalar *wr,PetscScalar *wi)
       PetscCall(PetscBLASIntCast(pos+1,&ifst));
       PetscCall(PetscBLASIntCast(i+1,&ilst));
 #if !defined(PETSC_USE_COMPLEX)
-      PetscCallBLAS("LAPACKtgexc",LAPACKtgexc_(&one,&one,&n,S,&ld,T,&ld,Z,&ld,Q,&ld,&ifst,&ilst,work,&lwork,&info));
+      PetscCallLAPACKInfo("LAPACKtgexc",LAPACKtgexc_(&one,&one,&n,S,&ld,T,&ld,Z,&ld,Q,&ld,&ifst,&ilst,work,&lwork,&info));
 #else
-      PetscCallBLAS("LAPACKtgexc",LAPACKtgexc_(&one,&one,&n,S,&ld,T,&ld,Z,&ld,Q,&ld,&ifst,&ilst,&info));
+      PetscCallLAPACKInfo("LAPACKtgexc",LAPACKtgexc_(&one,&one,&n,S,&ld,T,&ld,Z,&ld,Q,&ld,&ifst,&ilst,&info));
 #endif
-      SlepcCheckLapackInfo("tgexc",info);
       /* recover original eigenvalues from T and S matrices */
       for (j=i;j<n;j++) {
 #if !defined(PETSC_USE_COMPLEX)
@@ -499,7 +493,7 @@ static PetscErrorCode DSSolve_GNHEP(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   PetscScalar    *work,*beta,a;
   PetscInt       i;
-  PetscBLASInt   lwork,info,n,ld,iaux;
+  PetscBLASInt   lwork,n,ld,iaux;
   PetscScalar    *A,*B,*Z,*Q;
   PetscBool      usegges3=(ds->method==1)?PETSC_TRUE:PETSC_FALSE;
 
@@ -515,27 +509,26 @@ static PetscErrorCode DSSolve_GNHEP(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_Q],&Q));
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_Z],&Z));
 #if !defined(PETSC_USE_COMPLEX)
-  if (usegges3) PetscCallBLAS("LAPACKgges3",LAPACKgges3_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,wi,NULL,Z,&ld,Q,&ld,&a,&lwork,NULL,&info));
-  else PetscCallBLAS("LAPACKgges",LAPACKgges_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,wi,NULL,Z,&ld,Q,&ld,&a,&lwork,NULL,&info));
+  if (usegges3) PetscCallLAPACKInfo("LAPACKgges3",LAPACKgges3_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,wi,NULL,Z,&ld,Q,&ld,&a,&lwork,NULL,&info));
+  else PetscCallLAPACKInfo("LAPACKgges",LAPACKgges_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,wi,NULL,Z,&ld,Q,&ld,&a,&lwork,NULL,&info));
   PetscCall(PetscBLASIntCast((PetscInt)a,&lwork));
   PetscCall(DSAllocateWork_Private(ds,lwork+ld,0,0));
   beta = ds->work;
   work = beta+ds->n;
   PetscCall(PetscBLASIntCast(ds->lwork-ds->n,&lwork));
-  if (usegges3) PetscCallBLAS("LAPACKgges3",LAPACKgges3_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,wi,beta,Z,&ld,Q,&ld,work,&lwork,NULL,&info));
-  else PetscCallBLAS("LAPACKgges",LAPACKgges_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,wi,beta,Z,&ld,Q,&ld,work,&lwork,NULL,&info));
+  if (usegges3) PetscCallLAPACKInfo("LAPACKgges3",LAPACKgges3_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,wi,beta,Z,&ld,Q,&ld,work,&lwork,NULL,&info));
+  else PetscCallLAPACKInfo("LAPACKgges",LAPACKgges_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,wi,beta,Z,&ld,Q,&ld,work,&lwork,NULL,&info));
 #else
-  if (usegges3) PetscCallBLAS("LAPACKgges3",LAPACKgges3_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,NULL,Z,&ld,Q,&ld,&a,&lwork,NULL,NULL,&info));
-  else PetscCallBLAS("LAPACKgges",LAPACKgges_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,NULL,Z,&ld,Q,&ld,&a,&lwork,NULL,NULL,&info));
+  if (usegges3) PetscCallLAPACKInfo("LAPACKgges3",LAPACKgges3_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,NULL,Z,&ld,Q,&ld,&a,&lwork,NULL,NULL,&info));
+  else PetscCallLAPACKInfo("LAPACKgges",LAPACKgges_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,NULL,Z,&ld,Q,&ld,&a,&lwork,NULL,NULL,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
   PetscCall(DSAllocateWork_Private(ds,lwork+ld,8*ld,0));
   beta = ds->work;
   work = beta+ds->n;
   PetscCall(PetscBLASIntCast(ds->lwork-ds->n,&lwork));
-  if (usegges3) PetscCallBLAS("LAPACKgges3",LAPACKgges3_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,beta,Z,&ld,Q,&ld,work,&lwork,ds->rwork,NULL,&info));
-  else PetscCallBLAS("LAPACKgges",LAPACKgges_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,beta,Z,&ld,Q,&ld,work,&lwork,ds->rwork,NULL,&info));
+  if (usegges3) PetscCallLAPACKInfo("LAPACKgges3",LAPACKgges3_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,beta,Z,&ld,Q,&ld,work,&lwork,ds->rwork,NULL,&info));
+  else PetscCallLAPACKInfo("LAPACKgges",LAPACKgges_("V","V","N",NULL,&n,A,&ld,B,&ld,&iaux,wr,beta,Z,&ld,Q,&ld,work,&lwork,ds->rwork,NULL,&info));
 #endif
-  SlepcCheckLapackInfo(usegges3?"gges3":"gges",info);
   for (i=0;i<n;i++) {
     if (beta[i]==0.0) wr[i] = (PetscRealPart(wr[i])>0.0)? PETSC_MAX_REAL: PETSC_MIN_REAL;
     else wr[i] /= beta[i];

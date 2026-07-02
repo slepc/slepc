@@ -66,7 +66,7 @@ static PetscErrorCode EPSSolve_ScaLAPACK(EPS eps)
   Mat_ScaLAPACK  *a = (Mat_ScaLAPACK*)A->data,*b,*q;
   PetscReal      rdummy=0.0,abstol=0.0,*gap=NULL,orfac=-1.0,*w = eps->errest;  /* used to store real eigenvalues */
   PetscScalar    *work,minlwork[3];
-  PetscBLASInt   i,m,info,idummy=0,lwork=-1,liwork=-1,minliwork,*iwork,*ifail=NULL,*iclustr=NULL,one=1;
+  PetscBLASInt   i,m,idummy=0,lwork=-1,liwork=-1,minliwork,*iwork,*ifail=NULL,*iclustr=NULL,one=1;
 #if defined(PETSC_USE_COMPLEX)
   PetscReal      *rwork,minlrwork[3];
   PetscBLASInt   lrwork=-1;
@@ -83,27 +83,23 @@ static PetscErrorCode EPSSolve_ScaLAPACK(EPS eps)
     PetscCall(PetscMalloc3(a->grid->nprow*a->grid->npcol,&gap,a->N,&ifail,2*a->grid->nprow*a->grid->npcol,&iclustr));
 #if !defined(PETSC_USE_COMPLEX)
     /* allocate workspace */
-    PetscCallBLAS("SCALAPACKsygvx",SCALAPACKsygvx_(&one,"V","A","L",&a->N,a->loc,&one,&one,a->desc,b->loc,&one,&one,b->desc,&rdummy,&rdummy,&idummy,&idummy,&abstol,&m,&idummy,w,&orfac,q->loc,&one,&one,q->desc,minlwork,&lwork,&minliwork,&liwork,ifail,iclustr,gap,&info));
-    PetscCheckScaLapackInfo("sygvx",info);
+    PetscCallScaLAPACKInfo("sygvx",SCALAPACKsygvx_(&one,"V","A","L",&a->N,a->loc,&one,&one,a->desc,b->loc,&one,&one,b->desc,&rdummy,&rdummy,&idummy,&idummy,&abstol,&m,&idummy,w,&orfac,q->loc,&one,&one,q->desc,minlwork,&lwork,&minliwork,&liwork,ifail,iclustr,gap,&info));
     PetscCall(PetscBLASIntCast((PetscInt)minlwork[0],&lwork));
     liwork = minliwork;
     /* call computational routine */
     PetscCall(PetscMalloc2(lwork,&work,liwork,&iwork));
-    PetscCallBLAS("SCALAPACKsygvx",SCALAPACKsygvx_(&one,"V","A","L",&a->N,a->loc,&one,&one,a->desc,b->loc,&one,&one,b->desc,&rdummy,&rdummy,&idummy,&idummy,&abstol,&m,&idummy,w,&orfac,q->loc,&one,&one,q->desc,work,&lwork,iwork,&liwork,ifail,iclustr,gap,&info));
-    PetscCheckScaLapackInfo("sygvx",info);
+    PetscCallScaLAPACKInfo("sygvx",SCALAPACKsygvx_(&one,"V","A","L",&a->N,a->loc,&one,&one,a->desc,b->loc,&one,&one,b->desc,&rdummy,&rdummy,&idummy,&idummy,&abstol,&m,&idummy,w,&orfac,q->loc,&one,&one,q->desc,work,&lwork,iwork,&liwork,ifail,iclustr,gap,&info));
     PetscCall(PetscFree2(work,iwork));
 #else
     /* allocate workspace */
-    PetscCallBLAS("SCALAPACKsygvx",SCALAPACKsygvx_(&one,"V","A","L",&a->N,a->loc,&one,&one,a->desc,b->loc,&one,&one,b->desc,&rdummy,&rdummy,&idummy,&idummy,&abstol,&m,&idummy,w,&orfac,q->loc,&one,&one,q->desc,minlwork,&lwork,minlrwork,&lrwork,&minliwork,&liwork,ifail,iclustr,gap,&info));
-    PetscCheckScaLapackInfo("sygvx",info);
+    PetscCallScaLAPACKInfo("sygvx",SCALAPACKsygvx_(&one,"V","A","L",&a->N,a->loc,&one,&one,a->desc,b->loc,&one,&one,b->desc,&rdummy,&rdummy,&idummy,&idummy,&abstol,&m,&idummy,w,&orfac,q->loc,&one,&one,q->desc,minlwork,&lwork,minlrwork,&lrwork,&minliwork,&liwork,ifail,iclustr,gap,&info));
     PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(minlwork[0]),&lwork));
     PetscCall(PetscBLASIntCast((PetscInt)minlrwork[0],&lrwork));
     lrwork += a->N*a->N;
     liwork = minliwork;
     /* call computational routine */
     PetscCall(PetscMalloc3(lwork,&work,lrwork,&rwork,liwork,&iwork));
-    PetscCallBLAS("SCALAPACKsygvx",SCALAPACKsygvx_(&one,"V","A","L",&a->N,a->loc,&one,&one,a->desc,b->loc,&one,&one,b->desc,&rdummy,&rdummy,&idummy,&idummy,&abstol,&m,&idummy,w,&orfac,q->loc,&one,&one,q->desc,work,&lwork,rwork,&lrwork,iwork,&liwork,ifail,iclustr,gap,&info));
-    PetscCheckScaLapackInfo("sygvx",info);
+    PetscCallScaLAPACKInfo("sygvx",SCALAPACKsygvx_(&one,"V","A","L",&a->N,a->loc,&one,&one,a->desc,b->loc,&one,&one,b->desc,&rdummy,&rdummy,&idummy,&idummy,&abstol,&m,&idummy,w,&orfac,q->loc,&one,&one,q->desc,work,&lwork,rwork,&lrwork,iwork,&liwork,ifail,iclustr,gap,&info));
     PetscCall(PetscFree3(work,rwork,iwork));
 #endif
     PetscCall(PetscFree3(gap,ifail,iclustr));
@@ -112,24 +108,20 @@ static PetscErrorCode EPSSolve_ScaLAPACK(EPS eps)
 
 #if !defined(PETSC_USE_COMPLEX)
     /* allocate workspace */
-    PetscCallBLAS("SCALAPACKsyev",SCALAPACKsyev_("V","L",&a->N,a->loc,&one,&one,a->desc,w,q->loc,&one,&one,q->desc,minlwork,&lwork,&info));
-    PetscCheckScaLapackInfo("syev",info);
+    PetscCallScaLAPACKInfo("syev",SCALAPACKsyev_("V","L",&a->N,a->loc,&one,&one,a->desc,w,q->loc,&one,&one,q->desc,minlwork,&lwork,&info));
     PetscCall(PetscBLASIntCast((PetscInt)minlwork[0],&lwork));
     PetscCall(PetscMalloc1(lwork,&work));
     /* call computational routine */
-    PetscCallBLAS("SCALAPACKsyev",SCALAPACKsyev_("V","L",&a->N,a->loc,&one,&one,a->desc,w,q->loc,&one,&one,q->desc,work,&lwork,&info));
-    PetscCheckScaLapackInfo("syev",info);
+    PetscCallScaLAPACKInfo("syev",SCALAPACKsyev_("V","L",&a->N,a->loc,&one,&one,a->desc,w,q->loc,&one,&one,q->desc,work,&lwork,&info));
     PetscCall(PetscFree(work));
 #else
     /* allocate workspace */
-    PetscCallBLAS("SCALAPACKsyev",SCALAPACKsyev_("V","L",&a->N,a->loc,&one,&one,a->desc,w,q->loc,&one,&one,q->desc,minlwork,&lwork,minlrwork,&lrwork,&info));
-    PetscCheckScaLapackInfo("syev",info);
+    PetscCallScaLAPACKInfo("syev",SCALAPACKsyev_("V","L",&a->N,a->loc,&one,&one,a->desc,w,q->loc,&one,&one,q->desc,minlwork,&lwork,minlrwork,&lrwork,&info));
     PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(minlwork[0]),&lwork));
     lrwork = 4*a->N;  /* PetscCall(PetscBLASIntCast((PetscInt)minlrwork[0],&lrwork)); */
     PetscCall(PetscMalloc2(lwork,&work,lrwork,&rwork));
     /* call computational routine */
-    PetscCallBLAS("SCALAPACKsyev",SCALAPACKsyev_("V","L",&a->N,a->loc,&one,&one,a->desc,w,q->loc,&one,&one,q->desc,work,&lwork,rwork,&lrwork,&info));
-    PetscCheckScaLapackInfo("syev",info);
+    PetscCallScaLAPACKInfo("syev",SCALAPACKsyev_("V","L",&a->N,a->loc,&one,&one,a->desc,w,q->loc,&one,&one,q->desc,work,&lwork,rwork,&lrwork,&info));
     PetscCall(PetscFree2(work,rwork));
 #endif
 

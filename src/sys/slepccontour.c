@@ -209,7 +209,7 @@ PetscErrorCode SlepcCISS_isGhost(Mat X,PetscInt n,PetscReal *sigma,PetscReal thr
 PetscErrorCode SlepcCISS_BH_SVD(PetscScalar *H,PetscInt ml,PetscReal delta,PetscReal *sigma,PetscInt *rank)
 {
   PetscInt       i;
-  PetscBLASInt   m,n,lda,ldu,ldvt,lwork,info;
+  PetscBLASInt   m,n,lda,ldu,ldvt,lwork;
   PetscScalar    *work;
 #if defined(PETSC_USE_COMPLEX)
   PetscReal      *rwork;
@@ -224,11 +224,10 @@ PetscErrorCode SlepcCISS_BH_SVD(PetscScalar *H,PetscInt ml,PetscReal delta,Petsc
   n = m; lda = m; ldu = m; ldvt = m; lwork = 5*m;
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
 #if defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("N","N",&m,&n,H,&lda,sigma,NULL,&ldu,NULL,&ldvt,work,&lwork,rwork,&info));
+  PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("N","N",&m,&n,H,&lda,sigma,NULL,&ldu,NULL,&ldvt,work,&lwork,rwork,&info));
 #else
-  PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("N","N",&m,&n,H,&lda,sigma,NULL,&ldu,NULL,&ldvt,work,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("N","N",&m,&n,H,&lda,sigma,NULL,&ldu,NULL,&ldvt,work,&lwork,&info));
 #endif
-  SlepcCheckLapackInfo("gesvd",info);
   PetscCall(PetscFPTrapPop());
   (*rank) = 0;
   for (i=0;i<ml;i++) {

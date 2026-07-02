@@ -19,7 +19,7 @@ PetscErrorCode BDC_dsbtdc_(const char *jobz,const char *jobacc,PetscBLASInt n,
         PetscBLASInt l2d,PetscReal *e,PetscBLASInt l1e,PetscBLASInt l2e,PetscReal tol,
         PetscReal tau1,PetscReal tau2,PetscReal *ev,PetscReal *z,PetscBLASInt ldz,
         PetscReal *work,PetscBLASInt lwork,PetscBLASInt *iwork,PetscBLASInt liwork,
-        PetscReal *mingap,PetscBLASInt *mingapi,PetscBLASInt *info,
+        PetscReal *mingap,PetscBLASInt *mingapi,PetscBLASInt *oinfo,
         PetscBLASInt jobz_len,PetscBLASInt jobacc_len)
 {
 /*  -- Routine written in LAPACK Version 3.0 style -- */
@@ -267,13 +267,13 @@ PetscErrorCode BDC_dsbtdc_(const char *jobz,const char *jobacc,PetscBLASInt n,
   /* Determine machine epsilon. */
   eps = LAPACKlamch_("Epsilon");
 
-  *info = 0;
+  *oinfo = 0;
 
-  if (*(unsigned char *)jobz != 'N' && *(unsigned char *)jobz != 'D') *info = -1;
-  else if (*(unsigned char *)jobacc != 'A' && *(unsigned char *)jobacc != 'M') *info = -2;
-  else if (n < 1) *info = -3;
-  else if (nblks < 1 || nblks > n) *info = -4;
-  if (*info == 0) {
+  if (*(unsigned char *)jobz != 'N' && *(unsigned char *)jobz != 'D') *oinfo = -1;
+  else if (*(unsigned char *)jobacc != 'A' && *(unsigned char *)jobacc != 'M') *oinfo = -2;
+  else if (n < 1) *oinfo = -3;
+  else if (nblks < 1 || nblks > n) *oinfo = -4;
+  if (*oinfo == 0) {
     for (k = 0; k < nblks; ++k) {
       ksk = ksizes[k];
       ksum += ksk;
@@ -283,26 +283,26 @@ PetscErrorCode BDC_dsbtdc_(const char *jobz,const char *jobacc,PetscBLASInt n,
     if (nblks == 1) lwmin = 2*n*n + n*6 + 1;
     else lwmin = n*n + n*3;
     liwmin = n * 5 + nblks * 5 - 4;
-    if (ksum != n || kchk == 1) *info = -5;
-    else if (l1d < PetscMax(3,kmax)) *info = -7;
-    else if (l2d < PetscMax(3,kmax)) *info = -8;
-    else if (l1e < PetscMax(3,2*kmax+1)) *info = -10;
-    else if (l2e < PetscMax(3,2*kmax+1)) *info = -11;
-    else if (*(unsigned char *)jobacc == 'A' && tol > TOLMAX) *info = -12;
-    else if (*(unsigned char *)jobacc == 'M' && tau1 > TOLMAX/2) *info = -13;
-    else if (*(unsigned char *)jobacc == 'M' && tau2 > TOLMAX/2) *info = -14;
-    else if (ldz < PetscMax(1,n)) *info = -17;
-    else if (lwork < lwmin) *info = -19;
-    else if (liwork < liwmin) *info = -21;
+    if (ksum != n || kchk == 1) *oinfo = -5;
+    else if (l1d < PetscMax(3,kmax)) *oinfo = -7;
+    else if (l2d < PetscMax(3,kmax)) *oinfo = -8;
+    else if (l1e < PetscMax(3,2*kmax+1)) *oinfo = -10;
+    else if (l2e < PetscMax(3,2*kmax+1)) *oinfo = -11;
+    else if (*(unsigned char *)jobacc == 'A' && tol > TOLMAX) *oinfo = -12;
+    else if (*(unsigned char *)jobacc == 'M' && tau1 > TOLMAX/2) *oinfo = -13;
+    else if (*(unsigned char *)jobacc == 'M' && tau2 > TOLMAX/2) *oinfo = -14;
+    else if (ldz < PetscMax(1,n)) *oinfo = -17;
+    else if (lwork < lwmin) *oinfo = -19;
+    else if (liwork < liwmin) *oinfo = -21;
   }
 
-  PetscCheck(!*info,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Wrong argument %" PetscBLASInt_FMT " in DSBTDC",-(*info));
+  PetscCheck(!*oinfo,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Wrong argument %" PetscBLASInt_FMT " in DSBTDC",-(*oinfo));
 
   /* Quick return if possible */
 
   if (n == 1) {
     ev[0] = d[0]; z[0] = 1.;
-    *info = -101;
+    *oinfo = -101;
     PetscFunctionReturn(PETSC_SUCCESS);
   }
 
@@ -315,9 +315,8 @@ PetscErrorCode BDC_dsbtdc_(const char *jobz,const char *jobacc,PetscBLASInt n,
         z[i + j*ldz] = d[i + j*l1d];
       }
     }
-    PetscCallBLAS("LAPACKsyevd",LAPACKsyevd_("V", "L", &n, z, &ldz, ev, work, &lwork, iwork, &liwork, info));
-    SlepcCheckLapackInfo("syevd",*info);
-    *info = -102;
+    PetscCallLAPACKInfo("LAPACKsyevd",LAPACKsyevd_("V", "L", &n, z, &ldz, ev, work, &lwork, iwork, &liwork, &info));
+    *oinfo = -102;
     PetscFunctionReturn(PETSC_SUCCESS);
   }
 
@@ -372,10 +371,9 @@ PetscErrorCode BDC_dsbtdc_(const char *jobz,const char *jobacc,PetscBLASInt n,
     /* storing V^T + 5*N/2 workspace =  N**2/2 + 3*N. */
 
     i1 = lwork - iwspc;
-    PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("O", "S", &kskp1, &ksk,
+    PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("O", "S", &kskp1, &ksk,
             &e[k*l1e*l2e], &l1e, &work[isvals],
-            &work[iu], &ldu, &work[ivt], &ldvt, &work[iwspc], &i1, info));
-    SlepcCheckLapackInfo("gesvd",*info);
+            &work[iu], &ldu, &work[ivt], &ldvt, &work[iwspc], &i1, &info));
 
     /* Note that after the return from DGESVD U is stored in */
     /* E(*,*,K), and V^{\top} is stored in WORK(IVT, IVT+1, ....) */
@@ -461,7 +459,7 @@ L8:
 
   if (emax == 0. && dmax == 0.) {
     for (i = 0; i < n; ++i) ev[i] = 0.;
-    *info = -100;
+    *oinfo = -100;
     PetscFunctionReturn(PETSC_SUCCESS);
   }
 
@@ -550,10 +548,9 @@ L20:
       spneed = 2*nk*nk + nk * 6 + 1;
       PetscCheck(spneed<=lwork,PETSC_COMM_SELF,PETSC_ERR_MEM,"dsbtdc: not enough workspace for DSYEVD, info = %" PetscBLASInt_FMT,lwork - 200 - spneed);
 
-      PetscCallBLAS("LAPACKsyevd",LAPACKsyevd_("V", "L", &nk,
+      PetscCallLAPACKInfo("LAPACKsyevd",LAPACKsyevd_("V", "L", &nk,
                     &z[np + np*ldz], &ldz, &ev[np],
-                    work, &lwork, &iwork[nblks-1], &liwork, info));
-      SlepcCheckLapackInfo("syevd",*info);
+                    work, &lwork, &iwork[nblks-1], &liwork, &info));
       start = iend + 1;
       np += nk;
 
@@ -589,9 +586,8 @@ L20:
       nk += ksk;
 
       /* scale the diagonal block */
-      PetscCallBLAS("LAPACKlascl",LAPACKlascl_("L", &zero, &zero,
-                    &anorm, &done, &ksk, &ksk, &d[k*l2d*l1d], &l1d, info));
-      SlepcCheckLapackInfo("lascl",*info);
+      PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("L", &zero, &zero,
+                    &anorm, &done, &ksk, &ksk, &d[k*l2d*l1d], &l1d, &info));
 
       /* scale the (approximated) off-diagonal block by dividing its */
       /* singular values */
@@ -610,16 +606,15 @@ L20:
 
     PetscCall(BDC_dibtdc_(jobz, nk, nrblks, &ksizes[start], &d[start*l1d*l2d], l1d, l2d,
                 &e[start*l2e*l1e], &iwork[start], l1e, l2e, tau2, &ev[np],
-                &z[np + np*ldz], ldz, work, lwork, &iwork[nblks-1], liwork, info, 1));
-    PetscCheck(!*info,PETSC_COMM_SELF,PETSC_ERR_LIB,"dsbtdc: Error in DIBTDC, info = %" PetscBLASInt_FMT,*info);
+                &z[np + np*ldz], ldz, work, lwork, &iwork[nblks-1], liwork, oinfo, 1));
+    PetscCheck(!*oinfo,PETSC_COMM_SELF,PETSC_ERR_LIB,"dsbtdc: Error in DIBTDC, oinfo = %" PetscBLASInt_FMT,*oinfo);
 
 /* ************************************************************************** */
 
     /* Scale back the computed eigenvalues. */
 
-    PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G", &zero, &zero, &done,
-            &anorm, &nk, &one, &ev[np], &nk, info));
-    SlepcCheckLapackInfo("lascl",*info);
+    PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G", &zero, &zero, &done,
+            &anorm, &nk, &one, &ev[np], &nk, &info));
 
     start = iend + 1;
     np += nk;
@@ -673,6 +668,6 @@ L20:
   /* check whether the minimum gap between eigenvalue approximations */
   /* may indicate severe inaccuracies in the eigenvector approximations */
 
-  if (*mingap <= tol / 10) *info = -103;
+  if (*mingap <= tol / 10) *oinfo = -103;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

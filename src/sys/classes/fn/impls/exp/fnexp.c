@@ -32,7 +32,7 @@ static PetscErrorCode FNEvaluateDerivative_Exp(FN fn,PetscScalar x,PetscScalar *
 
 static PetscErrorCode FNEvaluateFunctionMat_Exp_Pade(FN fn,Mat A,Mat B)
 {
-  PetscBLASInt      n=0,ld,ld2,*ipiv,info,inc=1;
+  PetscBLASInt      n=0,ld,ld2,*ipiv,inc=1;
   PetscInt          m,j,k,sexp;
   PetscBool         odd;
   const PetscInt    p=MAX_PADE;
@@ -95,8 +95,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_Pade(FN fn,Mat A,Mat B)
     PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&n,&n,&n,&one,Q,&ld,As,&ld,&zero,W,&ld));
     SlepcSwap(Q,W,aux);
     PetscCallBLAS("BLASaxpy",BLASaxpy_(&ld2,&mone,P,&inc,Q,&inc));
-    PetscCallBLAS("LAPACKgesv",LAPACKgesv_(&n,&n,Q,&ld,ipiv,P,&ld,&info));
-    SlepcCheckLapackInfo("gesv",info);
+    PetscCallLAPACKInfo("LAPACKgesv",LAPACKgesv_(&n,&n,Q,&ld,ipiv,P,&ld,&info));
     PetscCallBLAS("BLASscal",BLASscal_(&ld2,&two,P,&inc));
     for (j=0;j<n;j++) P[j+j*ld] += 1.0;
     PetscCallBLAS("BLASscal",BLASscal_(&ld2,&mone,P,&inc));
@@ -104,8 +103,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_Pade(FN fn,Mat A,Mat B)
     PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&n,&n,&n,&one,P,&ld,As,&ld,&zero,W,&ld));
     SlepcSwap(P,W,aux);
     PetscCallBLAS("BLASaxpy",BLASaxpy_(&ld2,&mone,P,&inc,Q,&inc));
-    PetscCallBLAS("LAPACKgesv",LAPACKgesv_(&n,&n,Q,&ld,ipiv,P,&ld,&info));
-    SlepcCheckLapackInfo("gesv",info);
+    PetscCallLAPACKInfo("LAPACKgesv",LAPACKgesv_(&n,&n,Q,&ld,ipiv,P,&ld,&info));
     PetscCallBLAS("BLASscal",BLASscal_(&ld2,&two,P,&inc));
     for (j=0;j<n;j++) P[j+j*ld] += 1.0;
   /*}*/
@@ -414,7 +412,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
   SETERRQ(PETSC_COMM_SELF,PETSC_ERR_SUP,"This function requires C99 or C++ complex support");
 #else
   PetscInt          i,j,n_,s,k,m,mod;
-  PetscBLASInt      n=0,n2=0,irsize=0,rsizediv2,ipsize=0,iremainsize=0,info,*piv,minlen,lwork=0,one=1;
+  PetscBLASInt      n=0,n2=0,irsize=0,rsizediv2,ipsize=0,iremainsize=0,*piv,minlen,lwork=0,one=1;
   PetscReal         nrm,shift=0.0;
 #if defined(PETSC_USE_COMPLEX)
   PetscReal         *rwork=NULL;
@@ -442,22 +440,19 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
     PetscCall(PetscArraycpy(sMaux,Aa,n2));
     /* estimate rightmost eigenvalue and shift A with it */
 #if !defined(PETSC_USE_COMPLEX)
-    PetscCallBLAS("LAPACKgeev",LAPACKgeev_("N","N",&n,sMaux,&n,wr,wi,NULL,&n,NULL,&n,&work1,&query,&info));
-    SlepcCheckLapackInfo("geev",info);
+    PetscCallLAPACKInfo("LAPACKgeev",LAPACKgeev_("N","N",&n,sMaux,&n,wr,wi,NULL,&n,NULL,&n,&work1,&query,&info));
     PetscCall(PetscBLASIntCast((PetscInt)work1,&lwork));
     PetscCall(PetscMalloc1(lwork,&work));
-    PetscCallBLAS("LAPACKgeev",LAPACKgeev_("N","N",&n,sMaux,&n,wr,wi,NULL,&n,NULL,&n,work,&lwork,&info));
+    PetscCallLAPACKInfo("LAPACKgeev",LAPACKgeev_("N","N",&n,sMaux,&n,wr,wi,NULL,&n,NULL,&n,work,&lwork,&info));
     PetscCall(PetscFree(work));
 #else
     PetscCall(PetscArraycpy(Maux,Aa,n2));
-    PetscCallBLAS("LAPACKgeev",LAPACKgeev_("N","N",&n,Maux,&n,wr,NULL,&n,NULL,&n,&work1,&query,rwork,&info));
-    SlepcCheckLapackInfo("geev",info);
+    PetscCallLAPACKInfo("LAPACKgeev",LAPACKgeev_("N","N",&n,Maux,&n,wr,NULL,&n,NULL,&n,&work1,&query,rwork,&info));
     PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(work1),&lwork));
     PetscCall(PetscMalloc2(2*n,&rwork,lwork,&work));
-    PetscCallBLAS("LAPACKgeev",LAPACKgeev_("N","N",&n,Maux,&n,wr,NULL,&n,NULL,&n,work,&lwork,rwork,&info));
+    PetscCallLAPACKInfo("LAPACKgeev",LAPACKgeev_("N","N",&n,Maux,&n,wr,NULL,&n,NULL,&n,work,&lwork,rwork,&info));
     PetscCall(PetscFree2(rwork,work));
 #endif
-    SlepcCheckLapackInfo("geev",info);
     PetscCall(PetscLogFlops(25.0*n*n*n+(n*n*n)/3.0+1.0*n*n*n));
 
     shift = PetscRealPart(wr[0]);
@@ -536,8 +531,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
           Maux[j+j*n] -= p[2*i];
           RR[j+j*n] = r[2*i];
         }
-        PetscCallBLAS("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,Maux,&n,piv,RR,&n,&info));
-        SlepcCheckLapackInfo("gesv",info);
+        PetscCallLAPACKInfo("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,Maux,&n,piv,RR,&n,&info));
         for (j=0;j<n2;j++) {
           expmA[j] += RR[j] + PetscConj(RR[j]);
         }
@@ -553,8 +547,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
           Maux[j+j*n] -= p[ipsize-1];
           RR[j+j*n] = r[irsize-1];
         }
-        PetscCallBLAS("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,Maux,&n,piv,RR,&n,&info));
-        SlepcCheckLapackInfo("gesv",info);
+        PetscCallLAPACKInfo("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,Maux,&n,piv,RR,&n,&info));
         for (j=0;j<n2;j++) {
           expmA[j] += RR[j];
         }
@@ -568,8 +561,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
           Maux[j+j*n] -= p[i];
           RR[j+j*n] = r[i];
         }
-        PetscCallBLAS("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,Maux,&n,piv,RR,&n,&info));
-        SlepcCheckLapackInfo("gesv",info);
+        PetscCallLAPACKInfo("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,Maux,&n,piv,RR,&n,&info));
         for (j=0;j<n2;j++) {
           expmA[j] += RR[j];
         }
@@ -621,8 +613,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
       for (j=0;j<n;j++) {
         RR[j+j*n] -= rootq[i];
       }
-      PetscCallBLAS("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,RR,&n,piv,expmA,&n,&info));
-      SlepcCheckLapackInfo("gesv",info);
+      PetscCallLAPACKInfo("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,RR,&n,piv,expmA,&n,&info));
       /* loop(n) + gemm + loop(n) + gesv */
       PetscCall(SlepcLogFlopsComplex(1.0*n+(2.0*n*n*n)+1.0*n+(2.0*n*n*n/3.0+2.0*n*n*n)));
     }
@@ -640,8 +631,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
     for (i=minlen;i<ipsize;i++) {
       PetscCall(PetscArraycpy(RR,As,n2));
       for (j=0;j<n;j++) RR[j+j*n] -= rootq[i];
-      PetscCallBLAS("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,RR,&n,piv,expmA,&n,&info));
-      SlepcCheckLapackInfo("gesv",info);
+      PetscCallLAPACKInfo("LAPACKCOMPLEXgesv",LAPACKCOMPLEXgesv_(&n,&n,RR,&n,piv,expmA,&n,&info));
       PetscCall(SlepcLogFlopsComplex(1.0*n+(2.0*n*n*n/3.0+2.0*n*n*n)));
     }
     PetscCallBLAS("BLASCOMPLEXscal",BLASCOMPLEXscal_(&n2,&mult,expmA,&one));
@@ -796,7 +786,7 @@ done:
  */
 PetscErrorCode FNEvaluateFunctionMat_Exp_Higham(FN fn,Mat A,Mat B)
 {
-  PetscBLASInt      n_=0,n2,*ipiv,info,one=1;
+  PetscBLASInt      n_=0,n2,*ipiv,one=1;
   PetscInt          n,m,j,s;
   PetscScalar       scale,smone=-1.0,sone=1.0,stwo=2.0,szero=0.0;
   PetscScalar       *Ba,*Apowers[5],*Q,*P,*W,*work,*aux;
@@ -912,8 +902,7 @@ PetscErrorCode FNEvaluateFunctionMat_Exp_Higham(FN fn,Mat A,Mat B)
     default: SETERRQ(PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Wrong value of m %" PetscInt_FMT,m);
   }
   PetscCallBLAS("BLASaxpy",BLASaxpy_(&n2,&smone,P,&one,Q,&one));
-  PetscCallBLAS("LAPACKgesv",LAPACKgesv_(&n_,&n_,Q,&n_,ipiv,P,&n_,&info));
-  SlepcCheckLapackInfo("gesv",info);
+  PetscCallLAPACKInfo("LAPACKgesv",LAPACKgesv_(&n_,&n_,Q,&n_,ipiv,P,&n_,&info));
   PetscCallBLAS("BLASscal",BLASscal_(&n2,&stwo,P,&one));
   for (j=0;j<n;j++) P[j+j*n] += 1.0;
   PetscCall(PetscLogFlops(2.0*n*n*n/3.0+4.0*n*n));

@@ -20,7 +20,7 @@ PetscErrorCode PEPExtractVectors_TOAR(PEP pep)
   PetscInt          i,j,nq,deg=pep->nmat-1,lds,idxcpy=0,ldds,k,ld;
   PetscScalar       *X,*er,*ei,*SS,*vals,*ivals,sone=1.0,szero=0.0,*yi,*yr,*tr,*ti,alpha,*pS0;
   const PetscScalar *S;
-  PetscBLASInt      k_,nq_,lds_,one=1,ldds_,cols,info,zero=0;
+  PetscBLASInt      k_,nq_,lds_,one=1,ldds_,cols,zero=0;
   PetscBool         flg;
   PetscReal         norm,max,t,factor=1.0,done=1.0;
   Vec               xr,xi,w[4];
@@ -146,8 +146,7 @@ PetscErrorCode PEPExtractVectors_TOAR(PEP pep)
           }
         }
         cols = yi? 2: 1;
-        PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&t,&done,&nq_,&cols,SS+i*nq,&nq_,&info));
-        SlepcCheckLapackInfo("lascl",info);
+        PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&t,&done,&nq_,&cols,SS+i*nq,&nq_,&info));
         if (yi) i++;
       }
       PetscCall(PetscFree2(tr,ti));

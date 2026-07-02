@@ -96,7 +96,7 @@ static PetscErrorCode DSSort_GHEP(DS ds,PetscScalar *wr,PetscScalar *wi,PetscSca
 static PetscErrorCode DSSolve_GHEP(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   PetscScalar    *work,*A,*B,*Q;
-  PetscBLASInt   itype = 1,*iwork,info,n1,liwork,ld,lrwork=0,lwork;
+  PetscBLASInt   itype = 1,*iwork,n1,liwork,ld,lrwork=0,lwork;
   PetscInt       off,i;
 #if defined(PETSC_USE_COMPLEX)
   PetscReal      *rwork,*rr;
@@ -123,12 +123,11 @@ static PetscErrorCode DSSolve_GHEP(DS ds,PetscScalar *wr,PetscScalar *wi)
   rr = ds->rwork;
   rwork = ds->rwork+n1;
   PetscCall(PetscBLASIntCast(ds->lrwork-n1,&lrwork));
-  PetscCallBLAS("LAPACKsygvd",LAPACKsygvd_(&itype,"V","U",&n1,A+off,&ld,B+off,&ld,rr,work,&lwork,rwork,&lrwork,iwork,&liwork,&info));
+  PetscCallLAPACKInfo("LAPACKsygvd",LAPACKsygvd_(&itype,"V","U",&n1,A+off,&ld,B+off,&ld,rr,work,&lwork,rwork,&lrwork,iwork,&liwork,&info));
   for (i=0;i<n1;i++) wr[ds->l+i] = rr[i];
 #else
-  PetscCallBLAS("LAPACKsygvd",LAPACKsygvd_(&itype,"V","U",&n1,A+off,&ld,B+off,&ld,wr+ds->l,work,&lwork,iwork,&liwork,&info));
+  PetscCallLAPACKInfo("LAPACKsygvd",LAPACKsygvd_(&itype,"V","U",&n1,A+off,&ld,B+off,&ld,wr+ds->l,work,&lwork,iwork,&liwork,&info));
 #endif
-  SlepcCheckLapackInfo("sygvd",info);
   PetscCall(PetscArrayzero(Q+ds->l*ld,n1*ld));
   for (i=ds->l;i<ds->n;i++) PetscCall(PetscArraycpy(Q+ds->l+i*ld,A+ds->l+i*ld,n1));
   PetscCall(PetscArrayzero(B+ds->l*ld,n1*ld));

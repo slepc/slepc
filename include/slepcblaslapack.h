@@ -17,7 +17,7 @@
 
 /* MANSEC = Sys */
 
-/* Macro to check nonzero info after LAPACK call */
+/* Macro to check nonzero info after LAPACK call; DEPRECATED, use PetscCallLAPACKInfo */
 #define SlepcCheckLapackInfo(routine,info) \
   do { \
     PetscCheck(!info,PETSC_COMM_SELF,PETSC_ERR_LIB,"Error in LAPACK subroutine %s: info=%" PetscBLASInt_FMT,routine,info); \

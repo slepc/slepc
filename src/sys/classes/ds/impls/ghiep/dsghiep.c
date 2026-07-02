@@ -467,7 +467,7 @@ static PetscErrorCode DSUpdateExtraRow_GHIEP(DS ds)
 PetscErrorCode DSGHIEPInverseIteration(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   PetscInt          i,off;
-  PetscBLASInt      *select,*infoC,ld,n1,mout,info;
+  PetscBLASInt      *select,*infoC,ld,n1,mout;
   const PetscScalar *A,*B;
   PetscScalar       *H,*X;
   PetscReal         *s,*d,*e;
@@ -517,9 +517,9 @@ PetscErrorCode DSGHIEPInverseIteration(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_X],&X));
   for (i=0;i<n1;i++) select[i] = 1;
 #if !defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKhsein",LAPACKhsein_("R","N","N",select,&n1,H+off,&ld,wr+ds->l,wi+ds->l,NULL,&ld,X+off,&ld,&n1,&mout,ds->work,NULL,infoC,&info));
+  PetscCallLAPACKInfo("LAPACKhsein",LAPACKhsein_("R","N","N",select,&n1,H+off,&ld,wr+ds->l,wi+ds->l,NULL,&ld,X+off,&ld,&n1,&mout,ds->work,NULL,infoC,&info));
 #else
-  PetscCallBLAS("LAPACKhsein",LAPACKhsein_("R","N","N",select,&n1,H+off,&ld,wr+ds->l,NULL,&ld,X+off,&ld,&n1,&mout,ds->work,ds->rwork,NULL,infoC,&info));
+  PetscCallLAPACKInfo("LAPACKhsein",LAPACKhsein_("R","N","N",select,&n1,H+off,&ld,wr+ds->l,NULL,&ld,X+off,&ld,&n1,&mout,ds->work,ds->rwork,NULL,infoC,&info));
 
   /* Separate real and imaginary part of complex eigenvectors */
   for (j=ds->l;j<ds->n;j++) {
@@ -532,7 +532,6 @@ PetscErrorCode DSGHIEPInverseIteration(DS ds,PetscScalar *wr,PetscScalar *wi)
     }
   }
 #endif
-  SlepcCheckLapackInfo("hsein",info);
   PetscCall(MatDenseRestoreArrayRead(ds->omat[DS_MAT_A],&A));
   PetscCall(MatDenseRestoreArrayRead(ds->omat[DS_MAT_B],&B));
   PetscCall(MatDenseRestoreArrayWrite(ds->omat[DS_MAT_W],&H));
@@ -673,7 +672,7 @@ PetscErrorCode DSGHIEPRealBlocks(DS ds)
 static PetscErrorCode DSSolve_GHIEP_QR_II(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   PetscInt          i,off;
-  PetscBLASInt      n1,ld,one=1,info,lwork;
+  PetscBLASInt      n1,ld,one=1,lwork;
   const PetscScalar *A,*B;
   PetscScalar       *H,*Q;
   PetscReal         *d,*e,*s;
@@ -755,9 +754,9 @@ static PetscErrorCode DSSolve_GHIEP_QR_II(DS ds,PetscScalar *wr,PetscScalar *wi)
   }
 
 #if !defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKhseqr",LAPACKhseqr_("E","N",&n1,&one,&n1,H+off,&ld,wr+ds->l,wi+ds->l,NULL,&ld,ds->work,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKhseqr",LAPACKhseqr_("E","N",&n1,&one,&n1,H+off,&ld,wr+ds->l,wi+ds->l,NULL,&ld,ds->work,&lwork,&info));
 #else
-  PetscCallBLAS("LAPACKhseqr",LAPACKhseqr_("E","N",&n1,&one,&n1,H+off,&ld,wr+ds->l,NULL,&ld,ds->work,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKhseqr",LAPACKhseqr_("E","N",&n1,&one,&n1,H+off,&ld,wr+ds->l,NULL,&ld,ds->work,&lwork,&info));
   for (i=ds->l;i<ds->n;i++) if (PetscAbsReal(PetscImaginaryPart(wr[i]))<10*PETSC_MACHINE_EPSILON) wr[i] = PetscRealPart(wr[i]);
   /* Sort to have consecutive conjugate pairs */
   for (i=ds->l;i<ds->n;i++) {
@@ -774,7 +773,6 @@ static PetscErrorCode DSSolve_GHIEP_QR_II(DS ds,PetscScalar *wr,PetscScalar *wi)
     }
   }
 #endif
-  SlepcCheckLapackInfo("hseqr",info);
   PetscCall(MatDenseRestoreArrayWrite(ds->omat[DS_MAT_W],&H));
   PetscCall(MatDenseRestoreArrayRead(ds->omat[DS_MAT_A],&A));
   PetscCall(MatDenseRestoreArrayRead(ds->omat[DS_MAT_B],&B));
@@ -797,7 +795,7 @@ static PetscErrorCode DSSolve_GHIEP_QR_II(DS ds,PetscScalar *wr,PetscScalar *wi)
 static PetscErrorCode DSSolve_GHIEP_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   PetscInt          i,j,off,nwu=0,n,lw,lwr,nwru=0;
-  PetscBLASInt      n_,ld,info,lwork,ilo,ihi;
+  PetscBLASInt      n_,ld,lwork,ilo,ihi;
   const PetscScalar *A,*B;
   PetscScalar       *H,*Q,*X;
   PetscReal         *d,*s,*scale,nrm,*rcde,*rcdv;
@@ -879,9 +877,9 @@ static PetscErrorCode DSSolve_GHIEP_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(DSAllocateMat_Private(ds,DS_MAT_X));
   PetscCall(MatDenseGetArrayWrite(ds->omat[DS_MAT_X],&X));
 #if !defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKgeevx",LAPACKgeevx_("B","N","V","N",&n_,H,&n_,wr+ds->l,wi+ds->l,NULL,&ld,X+off,&ld,&ilo,&ihi,scale,&nrm,rcde,rcdv,ds->work+nwu,&lwork,NULL,&info));
+  PetscCallLAPACKInfo("LAPACKgeevx",LAPACKgeevx_("B","N","V","N",&n_,H,&n_,wr+ds->l,wi+ds->l,NULL,&ld,X+off,&ld,&ilo,&ihi,scale,&nrm,rcde,rcdv,ds->work+nwu,&lwork,NULL,&info));
 #else
-  PetscCallBLAS("LAPACKgeevx",LAPACKgeevx_("B","N","V","N",&n_,H,&n_,wr+ds->l,NULL,&ld,X+off,&ld,&ilo,&ihi,scale,&nrm,rcde,rcdv,ds->work+nwu,&lwork,ds->rwork+nwru,&info));
+  PetscCallLAPACKInfo("LAPACKgeevx",LAPACKgeevx_("B","N","V","N",&n_,H,&n_,wr+ds->l,NULL,&ld,X+off,&ld,&ilo,&ihi,scale,&nrm,rcde,rcdv,ds->work+nwu,&lwork,ds->rwork+nwru,&info));
 
   /* Sort to have consecutive conjugate pairs
      Separate real and imaginary part of complex eigenvectors*/
@@ -916,7 +914,6 @@ static PetscErrorCode DSSolve_GHIEP_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
     }
   }
 #endif
-  SlepcCheckLapackInfo("geevx",info);
   PetscCall(MatDenseRestoreArrayWrite(ds->omat[DS_MAT_X],&X));
   PetscCall(MatDenseRestoreArrayRead(ds->omat[DS_MAT_A],&A));
   PetscCall(MatDenseRestoreArrayRead(ds->omat[DS_MAT_B],&B));

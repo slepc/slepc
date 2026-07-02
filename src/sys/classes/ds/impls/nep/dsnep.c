@@ -159,7 +159,7 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   PetscScalar    *A,*B,*W,*X,*work,*alpha,*beta,a;
   PetscScalar    sigma,lambda,mu,re,re2,sone=1.0,szero=0.0;
-  PetscBLASInt   info,n,ld,lwork,one=1,zero=0;
+  PetscBLASInt   n,ld,lwork,one=1,zero=0;
   PetscInt       it,pos,j,maxit=100,result;
   PetscReal      norm,tol,done=1.0;
 #if !defined(PETSC_USE_COMPLEX)
@@ -180,14 +180,14 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
   /* workspace query and memory allocation */
   lwork = -1;
 #if defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,NULL,NULL,NULL,&ld,W,&ld,&a,&lwork,NULL,&info));
+  PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,NULL,NULL,NULL,&ld,W,&ld,&a,&lwork,NULL,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
   PetscCall(DSAllocateWork_Private(ds,lwork+2*ds->n,8*ds->n,0));
   alpha = ds->work;
   beta  = ds->work + ds->n;
   work  = ds->work + 2*ds->n;
 #else
-  PetscCallBLAS("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,NULL,NULL,NULL,NULL,&ld,W,&ld,&a,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,NULL,NULL,NULL,NULL,&ld,W,&ld,&a,&lwork,&info));
   PetscCall(PetscBLASIntCast((PetscInt)a,&lwork));
   PetscCall(DSAllocateWork_Private(ds,lwork+3*ds->n,0,0));
   alpha  = ds->work;
@@ -214,11 +214,10 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
 
     /* compute eigenvalue correction mu and eigenvector u */
 #if defined(PETSC_USE_COMPLEX)
-    PetscCallBLAS("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,alpha,beta,NULL,&ld,W,&ld,work,&lwork,ds->rwork,&info));
+    PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,alpha,beta,NULL,&ld,W,&ld,work,&lwork,ds->rwork,&info));
 #else
-    PetscCallBLAS("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,alpha,alphai,beta,NULL,&ld,W,&ld,work,&lwork,&info));
+    PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,alpha,alphai,beta,NULL,&ld,W,&ld,work,&lwork,&info));
 #endif
-    SlepcCheckLapackInfo(LAPGEEV,info);
 
     /* find smallest eigenvalue */
     j = 0;
@@ -254,8 +253,7 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
     mu = alpha[pos]/beta[pos];
     PetscCall(PetscArraycpy(X,W+pos*ld,n));
     norm = BLASnrm2_(&n,X,&one);
-    PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&one,X,&n,&info));
-    SlepcCheckLapackInfo("lascl",info);
+    PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&one,X,&n,&info));
 
     /* correct eigenvalue approximation */
     lambda = lambda - mu;
@@ -285,7 +283,7 @@ static PetscErrorCode DSNEPNewtonRefine(DS ds,PetscInt k,PetscScalar *wr)
   PetscReal      norm;
   PetscInt       i,j,ii,nwu=0,*p,jstart=0,jend=k;
   const PetscInt *range;
-  PetscBLASInt   n,*perm,info,ld,one=1,n1;
+  PetscBLASInt   n,*perm,ld,one=1,n1;
   PetscMPIInt    len,size,root;
   PetscLayout    map;
 
@@ -328,10 +326,8 @@ static PetscErrorCode DSNEPNewtonRefine(DS ds,PetscInt k,PetscScalar *wr)
           PetscCallBLAS("BLASgemv",BLASgemv_("N",&n,&n,&sone,W,&ld,X+ld*j,&one,&szero,U+n*(n+1),&one));
           PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_W],&W));
           /* solve system  */
-          PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&n1,&n1,U,&n1,perm,&info));
-          SlepcCheckLapackInfo("getrf",info);
-          PetscCallBLAS("LAPACKgetrs",LAPACKgetrs_("N",&n1,&one,U,&n1,perm,R,&n1,&info));
-          SlepcCheckLapackInfo("getrs",info);
+          PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&n1,&n1,U,&n1,perm,&info));
+          PetscCallLAPACKInfo("LAPACKgetrs",LAPACKgetrs_("N",&n1,&one,U,&n1,perm,R,&n1,&info));
           wr[j] -= R[n];
           for (i=0;i<n;i++) X[j*ld+i] -= R[i];
           /* normalization */
@@ -367,7 +363,7 @@ PetscErrorCode DSSolve_NEP_Contour(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscScalar    *alpha,*beta,*Q,*Z,*X,*U,*V,*W,*work,*Rc,*R,*w,*z,*zn,*S;
   PetscScalar    sone=1.0,szero=0.0,center,a;
   PetscReal      *rwork,norm,radius,vscale,rgscale,*sigma;
-  PetscBLASInt   info,n,*perm,p,pp,ld,lwork,k_,rk_,colA,rowA,one=1;
+  PetscBLASInt   n,*perm,p,pp,ld,lwork,k_,rk_,colA,rowA,one=1;
   PetscInt       mid,lds,nnod=ctx->nnod,k,i,ii,jj,j,s,off,rk,nwu=0,nw,lrwork,*inside,kstart=0,kend=nnod;
   PetscMPIInt    len;
   PetscBool      isellipse;
@@ -404,7 +400,7 @@ PetscErrorCode DSSolve_NEP_Contour(DS ds,PetscScalar *wr,PetscScalar *wi)
 
   /* workspace query and memory allocation */
   lwork = -1;
-  PetscCallBLAS("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&rowA,Q,&rowA,Z,&rowA,NULL,NULL,NULL,&ld,V,&rowA,&a,&lwork,NULL,&info));
+  PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&rowA,Q,&rowA,Z,&rowA,NULL,NULL,NULL,&ld,V,&rowA,&a,&lwork,NULL,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
   PetscCall(DSAllocateWork_Private(ds,lwork+nw,lrwork,n+1));
 
@@ -439,10 +435,8 @@ PetscErrorCode DSSolve_NEP_Contour(DS ds,PetscScalar *wr,PetscScalar *wi)
 
     /* LU factorization */
     PetscCall(MatDenseGetArray(ds->omat[DS_MAT_W],&W));
-    PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&n,&n,W,&ld,perm,&info));
-    SlepcCheckLapackInfo("getrf",info);
-    PetscCallBLAS("LAPACKgetrs",LAPACKgetrs_("N",&n,&p,W,&ld,perm,R,&n,&info));
-    SlepcCheckLapackInfo("getrs",info);
+    PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&n,&n,W,&ld,perm,&info));
+    PetscCallLAPACKInfo("LAPACKgetrs",LAPACKgetrs_("N",&n,&p,W,&ld,perm,R,&n,&info));
     PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_W],&W));
 
     /* Moments computation */
@@ -472,8 +466,7 @@ PetscErrorCode DSSolve_NEP_Contour(DS ds,PetscScalar *wr,PetscScalar *wi)
           for (i=0;i<n;i++) Q[off+j*rowA+i] = S[((jj+ii)*n+j)*n+i];
       }
     }
-    PetscCallBLAS("LAPACKgesvd",LAPACKgesvd_("S","S",&rowA,&colA,Q,&rowA,sigma,U,&rowA,V,&colA,work,&lwork,rwork,&info));
-    SlepcCheckLapackInfo("gesvd",info);
+    PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","S",&rowA,&colA,Q,&rowA,sigma,U,&rowA,V,&colA,work,&lwork,rwork,&info));
 
     rk = colA;
     for (i=1;i<colA;i++) if (sigma[i]/sigma[0]<PETSC_MACHINE_EPSILON*1e4) {rk = i; break;}
@@ -493,8 +486,7 @@ PetscErrorCode DSSolve_NEP_Contour(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCallBLAS("BLASgemm",BLASgemm_("C","N",&rk_,&rk_,&rowA,&sone,U,&rowA,Z,&rowA,&szero,Q,&rk_));
   PetscCall(PetscArrayzero(Z,n*mid*n*mid));
   for (j=0;j<rk;j++) Z[j+j*rk_] = sigma[j];
-  PetscCallBLAS("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&rk_,Q,&rk_,Z,&rk_,alpha,beta,NULL,&ld,V,&rk_,work,&lwork,rwork,&info));
-  SlepcCheckLapackInfo(LAPGEEV,info);
+  PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&rk_,Q,&rk_,Z,&rk_,alpha,beta,NULL,&ld,V,&rk_,work,&lwork,rwork,&info));
   for (i=0;i<rk;i++) wr[i] = (center+alpha[i]*radius/beta[i])*rgscale;
   PetscCall(PetscMalloc1(rk,&inside));
   PetscCall(RGCheckInside(ctx->rg,rk,wr,wi,inside));

@@ -338,7 +338,7 @@ static PetscErrorCode DSIntermediate_SVD(DS ds)
 {
   DS_SVD        *ctx = (DS_SVD*)ds->data;
   PetscInt      i,j;
-  PetscBLASInt  n1 = 0,n2,m2,lwork,info,l = 0,n = 0,m = 0,nm,ld,off;
+  PetscBLASInt  n1 = 0,n2,m2,lwork,l = 0,n = 0,m = 0,nm,ld,off;
   PetscScalar   *A,*U,*V,*W,*work,*tauq,*taup;
   PetscReal     *d,*e;
 
@@ -378,12 +378,9 @@ static PetscErrorCode DSIntermediate_SVD(DS ds)
       W    = ds->work+2*nm;
       work = ds->work+2*nm+ld*ld;
       for (j=0;j<m;j++) PetscCall(PetscArraycpy(W+j*ld,A+j*ld,n));
-      PetscCallBLAS("LAPACKgebrd",LAPACKgebrd_(&n2,&m2,W+off,&ld,d+l,e+l,tauq,taup,work,&lwork,&info));
-      SlepcCheckLapackInfo("gebrd",info);
-      PetscCallBLAS("LAPACKormbr",LAPACKormbr_("Q","L","N",&n2,&n2,&m2,W+off,&ld,tauq,U+off,&ld,work,&lwork,&info));
-      SlepcCheckLapackInfo("ormbr",info);
-      PetscCallBLAS("LAPACKormbr",LAPACKormbr_("P","R","N",&m2,&m2,&n2,W+off,&ld,taup,V+off,&ld,work,&lwork,&info));
-      SlepcCheckLapackInfo("ormbr",info);
+      PetscCallLAPACKInfo("LAPACKgebrd",LAPACKgebrd_(&n2,&m2,W+off,&ld,d+l,e+l,tauq,taup,work,&lwork,&info));
+      PetscCallLAPACKInfo("LAPACKormbr",LAPACKormbr_("Q","L","N",&n2,&n2,&m2,W+off,&ld,tauq,U+off,&ld,work,&lwork,&info));
+      PetscCallLAPACKInfo("LAPACKormbr",LAPACKormbr_("P","R","N",&m2,&m2,&n2,W+off,&ld,taup,V+off,&ld,work,&lwork,&info));
     } else {
       /* copy bidiagonal to d,e */
       for (i=l;i<nm;i++)   d[i] = PetscRealPart(A[i+i*ld]);
@@ -401,7 +398,7 @@ static PetscErrorCode DSSolve_SVD_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   DS_SVD         *ctx = (DS_SVD*)ds->data;
   PetscInt       i,j,neig=PetscMin(ds->n,ctx->m);
-  PetscBLASInt   n1,m1,info,l = 0,n = 0,m = 0,nm,ld,off,zero=0;
+  PetscBLASInt   n1,m1,l = 0,n = 0,m = 0,nm,ld,off,zero=0;
   PetscScalar    *A,*U,*V,*Vt;
   PetscReal      *d,*e;
 
@@ -433,8 +430,7 @@ static PetscErrorCode DSSolve_SVD_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
       Vt[i+j*ld] = PetscConj(V[j+i*ld]);  /* Lapack expects transposed VT */
     }
   }
-  PetscCallBLAS("LAPACKbdsqr",LAPACKbdsqr_(n>=m?"U":"L",&nm,&m1,&n1,&zero,d+l,e+l,Vt+off,&ld,U+off,&ld,NULL,&ld,ds->rwork,&info));
-  SlepcCheckLapackInfo("bdsqr",info);
+  PetscCallLAPACKInfo("LAPACKbdsqr",LAPACKbdsqr_(n>=m?"U":"L",&nm,&m1,&n1,&zero,d+l,e+l,Vt+off,&ld,U+off,&ld,NULL,&ld,ds->rwork,&info));
   for (i=l;i<m;i++) {
     for (j=l;j<m;j++) {
       V[i+j*ld] = PetscConj(Vt[j+i*ld]);  /* transpose VT returned by Lapack */
@@ -463,7 +459,7 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   DS_SVD         *ctx = (DS_SVD*)ds->data;
   PetscInt       i,j,neig=PetscMin(ds->n,ctx->m);
-  PetscBLASInt   n1,m1,info,l = 0,n = 0,m = 0,ld,off,lwork;
+  PetscBLASInt   n1,m1,l = 0,n = 0,m = 0,ld,off,lwork;
   PetscScalar    *A,*U,*V,*W,qwork;
   PetscReal      *d,*e,*Ur,*Vr;
 
@@ -499,8 +495,7 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
     Ur = U;
     Vr = ds->rwork+3*n1*n1+4*n1;
 #endif
-    PetscCallBLAS("LAPACKbdsdc",LAPACKbdsdc_("U","I",&n1,d+l,e+l,Ur+off,&ld,Vr+off,&ld,NULL,NULL,ds->rwork,ds->iwork,&info));
-    SlepcCheckLapackInfo("bdsdc",info);
+    PetscCallLAPACKInfo("LAPACKbdsdc",LAPACKbdsdc_("U","I",&n1,d+l,e+l,Ur+off,&ld,Vr+off,&ld,NULL,NULL,ds->rwork,ds->iwork,&info));
     for (i=l;i<n;i++) {
       for (j=l;j<n;j++) {
 #if defined(PETSC_USE_COMPLEX)
@@ -519,19 +514,17 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
     lwork = -1;
 #if defined(PETSC_USE_COMPLEX)
     PetscCall(DSAllocateWork_Private(ds,0,5*neig*neig+7*neig,0));
-    PetscCallBLAS("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,&qwork,&lwork,ds->rwork,ds->iwork,&info));
+    PetscCallLAPACKInfo("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,&qwork,&lwork,ds->rwork,ds->iwork,&info));
 #else
-    PetscCallBLAS("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,&qwork,&lwork,ds->iwork,&info));
+    PetscCallLAPACKInfo("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,&qwork,&lwork,ds->iwork,&info));
 #endif
-    SlepcCheckLapackInfo("gesdd",info);
     PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(qwork),&lwork));
     PetscCall(DSAllocateWork_Private(ds,lwork,0,0));
 #if defined(PETSC_USE_COMPLEX)
-    PetscCallBLAS("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,ds->work,&lwork,ds->rwork,ds->iwork,&info));
+    PetscCallLAPACKInfo("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,ds->work,&lwork,ds->rwork,ds->iwork,&info));
 #else
-    PetscCallBLAS("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,ds->work,&lwork,ds->iwork,&info));
+    PetscCallLAPACKInfo("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,ds->work,&lwork,ds->iwork,&info));
 #endif
-    SlepcCheckLapackInfo("gesdd",info);
     for (i=l;i<m;i++) {
       for (j=l;j<m;j++) V[i+j*ld] = PetscConj(W[j+i*ld]);  /* transpose VT returned by Lapack */
     }

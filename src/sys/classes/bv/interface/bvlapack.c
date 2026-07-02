@@ -87,7 +87,7 @@ PetscErrorCode BVNorm_LAPACK_Private(BV bv,PetscInt m_,PetscInt n_,const PetscSc
 */
 PetscErrorCode BVNormalize_LAPACK_Private(BV bv,PetscInt m_,PetscInt n_,const PetscScalar *A,PetscInt lda_,PetscScalar *eigi,PetscBool mpi)
 {
-  PetscBLASInt   m,lda,j,k,info,zero=0;
+  PetscBLASInt   m,lda,j,k,zero=0;
   PetscMPIInt    len;
   PetscReal      *norms,*rwork=NULL,*rwork2=NULL,done=1.0;
 
@@ -118,8 +118,7 @@ PetscErrorCode BVNormalize_LAPACK_Private(BV bv,PetscInt m_,PetscInt n_,const Pe
 #if !defined(PETSC_USE_COMPLEX)
     if (eigi && eigi[j] != 0.0) k = 2;
 #endif
-    PetscCallBLAS("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,norms+j,&done,&m,&k,(PetscScalar*)(A+j*lda_),&lda,&info));
-    SlepcCheckLapackInfo("lascl",info);
+    PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,norms+j,&done,&m,&k,(PetscScalar*)(A+j*lda_),&lda,&info));
     if (k==2) j++;
   }
   PetscCall(PetscLogFlops(3.0*m*n_));
@@ -172,20 +171,18 @@ PetscErrorCode BVMatCholInv_LAPACK_Private(BV bv,Mat R,Mat S)
       PetscCall(PetscArraycpy(pR+i*ld+l,pS+i*lds+l,n));
       pR[i+i*ld] += 50.0*PETSC_MACHINE_EPSILON;
     }
-    PetscCallBLAS("LAPACKpotrf",LAPACKpotrf_("U",&n_,pR+l*ld+l,&ld_,&info));
-    SlepcCheckLapackInfo("potrf",info);
+    PetscCallLAPACKInfo("LAPACKpotrf",LAPACKpotrf_("U",&n_,pR+l*ld+l,&ld_,&info));
     PetscCall(PetscLogFlops((1.0*n*n*n)/3.0));
   }
 
   /* compute S = inv(R) */
   if (S==R) {
-    PetscCallBLAS("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,pR+l*ld+l,&ld_,&info));
+    PetscCallLAPACKInfo("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,pR+l*ld+l,&ld_,&info));
   } else {
     PetscCall(PetscArrayzero(pS+l*lds,(k-l)*k));
     for (i=l;i<k;i++) PetscCall(PetscArraycpy(pS+i*lds+l,pR+i*ld+l,n));
-    PetscCallBLAS("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,pS+l*lds+l,&lds_,&info));
+    PetscCallLAPACKInfo("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,pS+l*lds+l,&lds_,&info));
   }
-  SlepcCheckLapackInfo("trtri",info);
   PetscCall(PetscFPTrapPop());
   PetscCall(PetscLogFlops(0.33*n*n*n));
 
@@ -207,7 +204,7 @@ PetscErrorCode BVMatTriInv_LAPACK_Private(BV bv,Mat R,Mat S)
 {
   PetscInt       i,k,l,n,m,ld,lds;
   PetscScalar    *pR,*pS;
-  PetscBLASInt   info,n_,m_ = 0,ld_,lds_;
+  PetscBLASInt   n_,m_ = 0,ld_,lds_;
 
   PetscFunctionBegin;
   l = bv->l;
@@ -234,13 +231,12 @@ PetscErrorCode BVMatTriInv_LAPACK_Private(BV bv,Mat R,Mat S)
   /* compute S = inv(R) */
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
   if (S==R) {
-    PetscCallBLAS("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,pR+l*ld+l,&ld_,&info));
+    PetscCallLAPACKInfo("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,pR+l*ld+l,&ld_,&info));
   } else {
     PetscCall(PetscArrayzero(pS+l*lds,(k-l)*k));
     for (i=l;i<k;i++) PetscCall(PetscArraycpy(pS+i*lds+l,pR+i*ld+l,n));
-    PetscCallBLAS("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,pS+l*lds+l,&lds_,&info));
+    PetscCallLAPACKInfo("LAPACKtrtri",LAPACKtrtri_("U","N",&n_,pS+l*lds+l,&lds_,&info));
   }
-  SlepcCheckLapackInfo("trtri",info);
   PetscCall(PetscFPTrapPop());
   PetscCall(PetscLogFlops(0.33*n*n*n));
 
@@ -261,7 +257,7 @@ PetscErrorCode BVMatSVQB_LAPACK_Private(BV bv,Mat R,Mat S)
   PetscInt       i,j,k,l,n,m,ld,lds;
   PetscScalar    *pR,*pS,*D,*work,a;
   PetscReal      *eig,dummy;
-  PetscBLASInt   info,lwork,n_,m_ = 0,ld_,lds_;
+  PetscBLASInt   lwork,n_,m_ = 0,ld_,lds_;
 #if defined(PETSC_USE_COMPLEX)
   PetscReal      *rwork,rdummy;
 #endif
@@ -291,11 +287,11 @@ PetscErrorCode BVMatSVQB_LAPACK_Private(BV bv,Mat R,Mat S)
   /* workspace query and memory allocation */
   lwork = -1;
 #if defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS,&lds_,&dummy,&a,&lwork,&rdummy,&info));
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS,&lds_,&dummy,&a,&lwork,&rdummy,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
   PetscCall(PetscMalloc4(n,&eig,n,&D,lwork,&work,PetscMax(1,3*n-2),&rwork));
 #else
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS,&lds_,&dummy,&a,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS,&lds_,&dummy,&a,&lwork,&info));
   PetscCall(PetscBLASIntCast((PetscInt)a,&lwork));
   PetscCall(PetscMalloc3(n,&eig,n,&D,lwork,&work));
 #endif
@@ -307,11 +303,10 @@ PetscErrorCode BVMatSVQB_LAPACK_Private(BV bv,Mat R,Mat S)
 
   /* compute eigendecomposition */
 #if defined(PETSC_USE_COMPLEX)
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS+l*lds+l,&lds_,eig,work,&lwork,rwork,&info));
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS+l*lds+l,&lds_,eig,work,&lwork,rwork,&info));
 #else
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS+l*lds+l,&lds_,eig,work,&lwork,&info));
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS+l*lds+l,&lds_,eig,work,&lwork,&info));
 #endif
-  SlepcCheckLapackInfo("syev",info);
 
   if (S!=R) {   /* R = U' */
     for (i=l;i<k;i++) for (j=l;j<k;j++) pR[i+j*ld] = pS[j+i*lds];
@@ -345,7 +340,7 @@ PetscErrorCode BVMatSVQB_LAPACK_Private(BV bv,Mat R,Mat S)
 PetscErrorCode BVOrthogonalize_LAPACK_TSQR(BV bv,PetscInt m_,PetscInt n_,PetscScalar *Q,PetscInt ldq_,PetscScalar *R,PetscInt ldr)
 {
   PetscInt       level,plevel,nlevels,lda,worklen;
-  PetscBLASInt   m,n,ldq,i,j,k,l,nb,sz,lwork,info;
+  PetscBLASInt   m,n,ldq,i,j,k,l,nb,sz,lwork;
   PetscScalar    *tau,*work,*A=NULL,*QQ=NULL,*Qhalf,*C=NULL,one=1.0,zero=0.0;
   PetscMPIInt    rank,size,count,stride,powtwo,s = 0;
   MPI_Datatype   tmat;
@@ -375,8 +370,7 @@ PetscErrorCode BVOrthogonalize_LAPACK_TSQR(BV bv,PetscInt m_,PetscInt n_,PetscSc
   }
 
   /* Compute QR */
-  PetscCallBLAS("LAPACKgeqrf",LAPACKgeqrf_(&m,&n,Q,&ldq,tau,work,&lwork,&info));
-  SlepcCheckLapackInfo("geqrf",info);
+  PetscCallLAPACKInfo("LAPACKgeqrf",LAPACKgeqrf_(&m,&n,Q,&ldq,tau,work,&lwork,&info));
 
   /* Extract R */
   if (R || nlevels) {
@@ -393,8 +387,7 @@ PetscErrorCode BVOrthogonalize_LAPACK_TSQR(BV bv,PetscInt m_,PetscInt n_,PetscSc
   }
 
   /* Compute orthogonal matrix in Q */
-  PetscCallBLAS("LAPACKorgqr",LAPACKorgqr_(&m,&k,&k,Q,&ldq,tau,work,&lwork,&info));
-  SlepcCheckLapackInfo("orgqr",info);
+  PetscCallLAPACKInfo("LAPACKorgqr",LAPACKorgqr_(&m,&k,&k,Q,&ldq,tau,work,&lwork,&info));
 
   if (nlevels) {
 
@@ -425,11 +418,9 @@ PetscErrorCode BVOrthogonalize_LAPACK_TSQR(BV bv,PetscInt m_,PetscInt n_,PetscSc
       }
       /* Compute QR and build orthogonal matrix */
       if (level<nlevels || (level==nlevels && s<size)) {
-        PetscCallBLAS("LAPACKgeqrf",LAPACKgeqrf_(&l,&n,A,&l,tau,work,&lwork,&info));
-        SlepcCheckLapackInfo("geqrf",info);
+        PetscCallLAPACKInfo("LAPACKgeqrf",LAPACKgeqrf_(&l,&n,A,&l,tau,work,&lwork,&info));
         PetscCall(PetscArraycpy(QQ+(level-1)*n*lda,A,n*lda));
-        PetscCallBLAS("LAPACKorgqr",LAPACKorgqr_(&l,&n,&n,QQ+(level-1)*n*lda,&l,tau,work,&lwork,&info));
-        SlepcCheckLapackInfo("orgqr",info);
+        PetscCallLAPACKInfo("LAPACKorgqr",LAPACKorgqr_(&l,&n,&n,QQ+(level-1)*n*lda,&l,tau,work,&lwork,&info));
         for (j=0;j<n;j++) {
           for (i=j+1;i<n;i++) A[i+j*lda] = 0.0;
         }
@@ -508,7 +499,7 @@ SLEPC_EXTERN void MPIAPI SlepcGivensPacked(void *in,void *inout,PetscMPIInt *len
 PetscErrorCode BVOrthogonalize_LAPACK_TSQR_OnlyR(BV bv,PetscInt m_,PetscInt n_,PetscScalar *Q,PetscInt ldq_,PetscScalar *R,PetscInt ldr)
 {
   PetscInt       worklen;
-  PetscBLASInt   m,n,ldq,i,j,s,nb,lwork,info;
+  PetscBLASInt   m,n,ldq,i,j,s,nb,lwork;
   PetscScalar    *tau,*work,*A=NULL,*R1=NULL,*R2=NULL;
   PetscMPIInt    size,count;
   MPI_Datatype   tmat;
@@ -532,8 +523,7 @@ PetscErrorCode BVOrthogonalize_LAPACK_TSQR_OnlyR(BV bv,PetscInt m_,PetscInt n_,P
   PetscCall(PetscArraycpy(A,Q,ldq*n));
 
   /* Compute QR */
-  PetscCallBLAS("LAPACKgeqrf",LAPACKgeqrf_(&m,&n,A,&ldq,tau,work,&lwork,&info));
-  SlepcCheckLapackInfo("geqrf",info);
+  PetscCallLAPACKInfo("LAPACKgeqrf",LAPACKgeqrf_(&m,&n,A,&ldq,tau,work,&lwork,&info));
 
   if (size==1) {
     /* Extract R */

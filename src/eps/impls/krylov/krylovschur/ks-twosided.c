@@ -30,7 +30,7 @@ static PetscErrorCode EPSTwoSidedRQUpdate1(EPS eps,Mat M,PetscInt nv,PetscReal b
   const PetscScalar *pM;
   Vec               u;
   PetscInt          ld,ncv=eps->ncv,i,l,nnv;
-  PetscBLASInt      info,n_,ncv_,*p,one=1;
+  PetscBLASInt      n_,ncv_,*p,one=1;
 
   PetscFunctionBegin;
   PetscCall(DSGetLeadingDimension(eps->ds,&ld));
@@ -47,11 +47,9 @@ static PetscErrorCode EPSTwoSidedRQUpdate1(EPS eps,Mat M,PetscInt nv,PetscReal b
   PetscCall(PetscBLASIntCast(nv,&n_));
   PetscCall(PetscBLASIntCast(ncv,&ncv_));
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-  PetscCallBLAS("LAPACKgetrf",LAPACKgetrf_(&n_,&n_,A,&ncv_,p,&info));
-  SlepcCheckLapackInfo("getrf",info);
+  PetscCallLAPACKInfo("LAPACKgetrf",LAPACKgetrf_(&n_,&n_,A,&ncv_,p,&info));
   PetscCall(PetscLogFlops(2.0*n_*n_*n_/3.0));
-  PetscCallBLAS("LAPACKgetrs",LAPACKgetrs_("N",&n_,&one,A,&ncv_,p,w,&ncv_,&info));
-  SlepcCheckLapackInfo("getrs",info);
+  PetscCallLAPACKInfo("LAPACKgetrs",LAPACKgetrs_("N",&n_,&one,A,&ncv_,p,w,&ncv_,&info));
   PetscCall(PetscLogFlops(2.0*n_*n_-n_));
   PetscCall(BVMultColumn(eps->V,-1.0,1.0,nv,w));
   PetscCall(DSGetArray(eps->ds,DS_MAT_A,&S));
@@ -60,7 +58,7 @@ static PetscErrorCode EPSTwoSidedRQUpdate1(EPS eps,Mat M,PetscInt nv,PetscReal b
   PetscCall(BVGetColumn(eps->W,nv,&u));
   PetscCall(BVDotVec(eps->V,u,w));
   PetscCall(BVRestoreColumn(eps->W,nv,&u));
-  PetscCallBLAS("LAPACKgetrs",LAPACKgetrs_("C",&n_,&one,A,&ncv_,p,w,&ncv_,&info));
+  PetscCallLAPACKInfo("LAPACKgetrs",LAPACKgetrs_("C",&n_,&one,A,&ncv_,p,w,&ncv_,&info));
   PetscCall(PetscFPTrapPop());
   PetscCall(BVMultColumn(eps->W,-1.0,1.0,nv,w));
   PetscCall(DSGetArray(eps->ds,DS_MAT_B,&T));

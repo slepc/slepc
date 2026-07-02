@@ -166,7 +166,7 @@ PetscErrorCode BDC_dibtdc_(const char *jobz,PetscBLASInt n,PetscBLASInt nblks,
         PetscReal *e,PetscBLASInt *rank,PetscBLASInt l1e,PetscBLASInt l2e,
         PetscReal tol,PetscReal *ev,PetscReal *z,PetscBLASInt ldz,PetscReal *work,
         PetscBLASInt lwork,PetscBLASInt *iwork,PetscBLASInt liwork,
-        PetscBLASInt *info,PetscBLASInt jobz_len)
+        PetscBLASInt *oinfo,PetscBLASInt jobz_len)
 {
 /*  -- Routine written in LAPACK Version 3.0 style -- */
 /* *************************************************** */
@@ -318,12 +318,12 @@ PetscErrorCode BDC_dibtdc_(const char *jobz,PetscBLASInt n,PetscBLASInt nblks,
   PetscReal      rho, done=1.0, dmone=-1.0;
 
   PetscFunctionBegin;
-  *info = 0;
+  *oinfo = 0;
 
-  if (*(unsigned char *)jobz != 'N' && *(unsigned char *)jobz != 'D') *info = -1;
-  else if (n < 2) *info = -2;
-  else if (nblks < 2 || nblks > n) *info = -3;
-  if (*info == 0) {
+  if (*(unsigned char *)jobz != 'N' && *(unsigned char *)jobz != 'D') *oinfo = -1;
+  else if (n < 2) *oinfo = -2;
+  else if (nblks < 2 || nblks > n) *oinfo = -3;
+  if (*oinfo == 0) {
     ksum = 0;
     kmax = 0;
     kchk = 0;
@@ -335,23 +335,23 @@ PetscErrorCode BDC_dibtdc_(const char *jobz,PetscBLASInt n,PetscBLASInt nblks,
     }
     lwmin = n*n + n * 3;
     liwmin = PetscMax(n * 5,kmax * 5 + 3) + 4*nblks - 4;
-    if (ksum != n || kchk == 1) *info = -4;
-    else if (l1d < PetscMax(3,kmax)) *info = -6;
-    else if (l2d < PetscMax(3,kmax)) *info = -7;
-    else if (l1e < PetscMax(3,2*kmax + 1)) *info = -10;
-    else if (l2e < PetscMax(3,2*kmax + 1)) *info = -11;
-    else if (tol > .1) *info = -12;
-    else if (ldz < PetscMax(1,n)) *info = -15;
-    else if (lwork < lwmin) *info = -17;
-    else if (liwork < liwmin) *info = -19;
+    if (ksum != n || kchk == 1) *oinfo = -4;
+    else if (l1d < PetscMax(3,kmax)) *oinfo = -6;
+    else if (l2d < PetscMax(3,kmax)) *oinfo = -7;
+    else if (l1e < PetscMax(3,2*kmax + 1)) *oinfo = -10;
+    else if (l2e < PetscMax(3,2*kmax + 1)) *oinfo = -11;
+    else if (tol > .1) *oinfo = -12;
+    else if (ldz < PetscMax(1,n)) *oinfo = -15;
+    else if (lwork < lwmin) *oinfo = -17;
+    else if (liwork < liwmin) *oinfo = -19;
   }
-  if (*info == 0) {
+  if (*oinfo == 0) {
     for (k = 0; k < nblks-1; ++k) {
-      if (rank[k] > PetscMin(ksizes[k],ksizes[k+1]) || rank[k] < 1) *info = -9;
+      if (rank[k] > PetscMin(ksizes[k],ksizes[k+1]) || rank[k] < 1) *oinfo = -9;
     }
   }
 
-  PetscCheck(!*info,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Wrong argument %" PetscBLASInt_FMT " in DIBTDC",-(*info));
+  PetscCheck(!*oinfo,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"Wrong argument %" PetscBLASInt_FMT " in DIBTDC",-(*oinfo));
 
 /* **************************************************************************** */
 
@@ -397,8 +397,8 @@ L200:
     /* chosen such that it yields the best balanced merging operation */
     /* among all the rank modifications with minimum rank. */
 
-    PetscCall(cutlr_(start, size, blks, &ksizes[start-1], &rank[start-1], &cut, &lsum, &lblks, info));
-    PetscCheck(!*info,PETSC_COMM_SELF,PETSC_ERR_PLIB,"dibtdc: Error in cutlr, info = %" PetscBLASInt_FMT,*info);
+    PetscCall(cutlr_(start, size, blks, &ksizes[start-1], &rank[start-1], &cut, &lsum, &lblks, oinfo));
+    PetscCheck(!*oinfo,PETSC_COMM_SELF,PETSC_ERR_PLIB,"dibtdc: Error in cutlr, oinfo = %" PetscBLASInt_FMT,*oinfo);
 
   } else {
     cut = 1;
@@ -571,8 +571,7 @@ L200:
 
   /* eigenanalysis of block 1 (using DSYEVD) */
 
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V", "L", &ksk, z, &ldz, ev, work, &lwork, info));
-  SlepcCheckLapackInfo("syev",*info);
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V", "L", &ksk, z, &ldz, ev, work, &lwork, &info));
 
   /* EV(1:) contains the eigenvalues in ascending order */
   /* (they are returned this way by DSYEVD) */
@@ -642,9 +641,8 @@ L200:
 
       /* eigenanalysis of block K (using dsyevd) */
 
-      PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V", "L", &ksk, &z[np+np*ldz],
-                     &ldz, &ev[np], work, &lwork, info));
-      SlepcCheckLapackInfo("syev",*info);
+      PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V", "L", &ksk, &z[np+np*ldz],
+                     &ldz, &ev[np], work, &lwork, &info));
 
       /* EV(NPP1:) contains the eigenvalues in ascending order */
       /* (they are returned this way by DSYEVD) */
@@ -698,8 +696,7 @@ L200:
 
   /* eigenanalysis of block NBLKS (using dsyevd) */
 
-  PetscCallBLAS("LAPACKsyev",LAPACKsyev_("V", "L", &ksk, &z[np+np*ldz], &ldz, &ev[np], work, &lwork, info));
-  SlepcCheckLapackInfo("syev",*info);
+  PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V", "L", &ksk, &z[np+np*ldz], &ldz, &ev[np], work, &lwork, &info));
 
   /* EV(NPP1:) contains the eigenvalues in ascending order */
   /* (they are returned this way by DSYEVD) */
@@ -738,8 +735,8 @@ L200:
       PetscCall(BDC_dmerg2_(jobz, j+1, matsiz, &ev[np-1], &z[np-1+(np-1)*ldz],
                     ldz, &iwork[np-1], &rho, &e[(j + (kbrk-1)*l2e)*l1e],
                     ksizes[kbrk], &e[(rank[kbrk-1]+j+1 + (kbrk-1)*l2e)*l1e],
-                    ksizes[kbrk-1], mat1, work, lwork, &iwork[n], tol, info, 1));
-      PetscCheck(!*info,PETSC_COMM_SELF,PETSC_ERR_PLIB,"dibtdc: Error in dmerg2, info = %" PetscBLASInt_FMT,*info);
+                    ksizes[kbrk-1], mat1, work, lwork, &iwork[n], tol, oinfo, 1));
+      PetscCheck(!*oinfo,PETSC_COMM_SELF,PETSC_ERR_PLIB,"dibtdc: Error in dmerg2, oinfo = %" PetscBLASInt_FMT,*oinfo);
     }
 
     /* at this point all RANK(KBRK) rank-one modifications corresponding */
