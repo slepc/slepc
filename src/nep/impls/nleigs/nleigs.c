@@ -528,7 +528,7 @@ static PetscErrorCode MatAXPY_Fun(Mat Y,PetscScalar a,Mat X,MatStructure str)
 {
   NEP_NLEIGS_MATSHELL *ctxY,*ctxX;
   PetscInt            i,j;
-  PetscBool           found;
+  PetscBool           found,has;
 
   PetscFunctionBeginUser;
   PetscCall(MatShellGetContext(Y,&ctxY));
@@ -543,7 +543,12 @@ static PetscErrorCode MatAXPY_Fun(Mat Y,PetscScalar a,Mat X,MatStructure str)
     }
     if (!found) {
       ctxY->coeff[ctxY->nmat] = a*ctxX->coeff[i];
-      ctxY->A[ctxY->nmat++] = ctxX->A[i];
+      ctxY->A[ctxY->nmat] = ctxX->A[i];
+      PetscCall(MatHasOperation(ctxX->A[i],MATOP_MULT_TRANSPOSE,&has));
+      if (!has) PetscCall(MatShellSetOperation(ctxY->A[ctxY->nmat],MATOP_MULT_TRANSPOSE,NULL));
+      PetscCall(MatHasOperation(ctxX->A[i],MATOP_GET_DIAGONAL,&has));
+      if (!has) PetscCall(MatShellSetOperation(ctxY->A[ctxY->nmat],MATOP_GET_DIAGONAL,NULL));
+      ctxY->nmat++;
       PetscCall(PetscObjectReference((PetscObject)ctxX->A[i]));
     }
   }
@@ -582,8 +587,10 @@ static PetscErrorCode NLEIGSMatToMatShellArray(Mat A,Mat *Ms,PetscInt maxnmat)
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)A),m,n,M,N,(void*)ctx,Ms));
   PetscCall(MatShellSetManageScalingShifts(*Ms));
   PetscCall(MatShellSetOperation(*Ms,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Fun));
-  PetscCall(MatShellSetOperation(*Ms,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Fun));
+  PetscCall(MatHasOperation(A,MATOP_MULT_TRANSPOSE,&has));
+  if (has) PetscCall(MatShellSetOperation(*Ms,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Fun));
+  PetscCall(MatHasOperation(A,MATOP_GET_DIAGONAL,&has));
+  if (has) PetscCall(MatShellSetOperation(*Ms,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Fun));
   PetscCall(MatShellSetOperation(*Ms,MATOP_DUPLICATE,(PetscErrorCodeFn*)MatDuplicate_Fun));
   PetscCall(MatShellSetOperation(*Ms,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_Fun));
   PetscCall(MatShellSetOperation(*Ms,MATOP_AXPY,(PetscErrorCodeFn*)MatAXPY_Fun));
@@ -732,9 +739,8 @@ static PetscErrorCode NEPNLEIGSDividedDifferences_callback(NEP nep)
   PetscReal      norm0,norm;
   PetscScalar    *s=ctx->s,*beta=ctx->beta,*b,*coeffs;
   Mat            *D=ctx->D,*DP,T,P;
-  PetscBool      shell,has,vec=PETSC_FALSE,precond=(nep->function_pre!=nep->function)?PETSC_TRUE:PETSC_FALSE;
+  PetscBool      shell,has,precond=(nep->function_pre!=nep->function)?PETSC_TRUE:PETSC_FALSE;
   PetscRandom    rand=NULL;
-  Vec            w[2];
 
   PetscFunctionBegin;
   PetscCall(PetscMalloc2(ctx->ddmaxit+1,&b,ctx->ddmaxit+1,&coeffs));
@@ -749,15 +755,7 @@ static PetscErrorCode NEPNLEIGSDividedDifferences_callback(NEP nep)
   if (beta[0]!=1.0) PetscCall(MatScale(D[0],1.0/beta[0]));
   PetscCall(MatHasOperation(D[0],MATOP_NORM,&has));
   if (has) PetscCall(MatNorm(D[0],NORM_FROBENIUS,&norm0));
-  else {
-    PetscCall(MatCreateVecs(D[0],NULL,&w[0]));
-    PetscCall(VecDuplicate(w[0],&w[1]));
-    PetscCall(VecDuplicate(w[0],&ctx->vrn));
-    PetscCall(VecSetRandomNormal(ctx->vrn,rand,w[0],w[1]));
-    PetscCall(VecNormalize(ctx->vrn,NULL));
-    vec = PETSC_TRUE;
-    PetscCall(MatNormEstimate(D[0],ctx->vrn,w[0],&norm0));
-  }
+  else PetscCall(MatNormApproximate(D[0],NORM_2,1,&norm0));
   if (precond) {
     PetscCall(PetscMalloc1(ctx->ddmaxit,&DP));
     PetscCall(MatDuplicate(P,MAT_COPY_VALUES,&DP[0]));
@@ -772,17 +770,7 @@ static PetscErrorCode NEPNLEIGSDividedDifferences_callback(NEP nep)
     PetscCall(MatScale(D[k],1.0/b[k]));
     PetscCall(MatHasOperation(D[k],MATOP_NORM,&has));
     if (has) PetscCall(MatNorm(D[k],NORM_FROBENIUS,&norm));
-    else {
-      if (!vec) {
-        PetscCall(MatCreateVecs(D[k],NULL,&w[0]));
-        PetscCall(VecDuplicate(w[0],&w[1]));
-        PetscCall(VecDuplicate(w[0],&ctx->vrn));
-        PetscCall(VecSetRandomNormal(ctx->vrn,rand,w[0],w[1]));
-        PetscCall(VecNormalize(ctx->vrn,NULL));
-        vec = PETSC_TRUE;
-      }
-      PetscCall(MatNormEstimate(D[k],ctx->vrn,w[0],&norm));
-    }
+    else PetscCall(MatNormApproximate(D[k],NORM_2,1,&norm));
     if (precond) {
       PetscCall(MatDuplicate(P,MAT_COPY_VALUES,&DP[k]));
       for (j=0;j<k;j++) PetscCall(MatAXPY(DP[k],-b[j],DP[j],nep->mstrp));
@@ -809,10 +797,6 @@ static PetscErrorCode NEPNLEIGSDividedDifferences_callback(NEP nep)
     PetscCall(MatDestroy(&T));
   }
   PetscCall(PetscFree2(b,coeffs));
-  if (vec) {
-    PetscCall(VecDestroy(&w[0]));
-    PetscCall(VecDestroy(&w[1]));
-  }
   if (precond) {
     PetscCall(MatDestroy(&P));
     PetscCall(MatDestroyMatrices(ctx->nmat,&DP));
