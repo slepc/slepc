@@ -25,10 +25,8 @@ help:
 
 .PHONY: help makefile
 
-.PHONY: clean
-clean:
-	-@${RM} -rf ${BUILDDIR}/*
-	-@${RM} -rf source/_static
+.PHONY: cleanmanpages
+cleanmanpages:
 	-@${RM} -rf source/manualpages/DS
 	-@${RM} -rf source/manualpages/PEP
 	-@${RM} -rf source/manualpages/LME
@@ -41,6 +39,11 @@ clean:
 	-@${RM} -rf source/manualpages/Sys
 	-@${RM} -rf source/manualpages/RG
 	-@${RM} -rf source/manualpages/ST
+
+.PHONY: clean
+clean: cleanmanpages
+	-@${RM} -rf ${BUILDDIR}/*
+	-@${RM} -rf source/_static
 	-@${RM} -rf logo-upv
 	-@${RM} -rf .venv-sphinx
 	-@${RM} -f source/petsc_objects.inv
