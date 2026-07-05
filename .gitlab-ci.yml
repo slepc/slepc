@@ -1288,6 +1288,7 @@ docs-deploy:
     - echo -e "section_end:`date +%s`:build_petsc\r\e[0K"
     - echo -e "section_start:`date +%s`:build_slepc\r\e[0KSLEPc configure and make"
     - cd $SLEPC_DIR
+    - git clean ${GIT_CLEAN_FLAGS}
     - git checkout origin/main;
     - ${PYTHON} ./configure ${SLEPC_CONFIG_OPTS}
     - make CFLAGS="${MAKE_CFLAGS}" CXXFLAGS="${MAKE_CXXFLAGS}" FFLAGS="${MAKE_FFLAGS}" CUDAFLAGS="${MAKE_CUDAFLAGS}" HIPFLAGS="${MAKE_HIPFLAGS}"
