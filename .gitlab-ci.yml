@@ -1274,7 +1274,7 @@ docs-deploy:
     - cd doc
     - mkdir ../public || true
     - (make website BUILDDIR="../build/release" && mv ../build/release/html ../public/release) || (printf "Sphinx documentation build failed (warnings count as errors)\n" && false)
-    - make alldocclean
+    - make cleanmanpages
     - echo -e "section_end:`date +%s`:build_slepc_docs\r\e[0K"
     # build main
     - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
