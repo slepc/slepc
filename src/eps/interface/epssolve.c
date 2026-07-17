@@ -321,7 +321,6 @@ PetscErrorCode EPSGetConvergedReason(EPS eps,EPSConvergedReason *reason)
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
   PetscAssertPointer(reason,2);
-  EPSCheckSolved(eps,1);
   *reason = eps->reason;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

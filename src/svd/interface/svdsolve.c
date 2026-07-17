@@ -253,7 +253,6 @@ PetscErrorCode SVDGetConvergedReason(SVD svd,SVDConvergedReason *reason)
   PetscFunctionBegin;
   PetscValidHeaderSpecific(svd,SVD_CLASSID,1);
   PetscAssertPointer(reason,2);
-  SVDCheckSolved(svd,1);
   *reason = svd->reason;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
