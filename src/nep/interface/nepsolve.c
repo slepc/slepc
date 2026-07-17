@@ -455,7 +455,6 @@ PetscErrorCode NEPGetConvergedReason(NEP nep,NEPConvergedReason *reason)
   PetscFunctionBegin;
   PetscValidHeaderSpecific(nep,NEP_CLASSID,1);
   PetscAssertPointer(reason,2);
-  NEPCheckSolved(nep,1);
   *reason = nep->reason;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

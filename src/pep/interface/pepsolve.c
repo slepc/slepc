@@ -266,7 +266,6 @@ PetscErrorCode PEPGetConvergedReason(PEP pep,PEPConvergedReason *reason)
   PetscFunctionBegin;
   PetscValidHeaderSpecific(pep,PEP_CLASSID,1);
   PetscAssertPointer(reason,2);
-  PEPCheckSolved(pep,1);
   *reason = pep->reason;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
