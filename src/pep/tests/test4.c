@@ -84,7 +84,7 @@ int main(int argc,char **argv)
 
   PetscCall(EPSCreate(PETSC_COMM_WORLD,&eps));
   PetscCall(EPSSetWhichEigenpairs(eps,EPS_TARGET_MAGNITUDE));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(EPSSetTarget(eps,0.01*PETSC_i));
 #endif
   PetscCall(EPSGetST(eps,&st));

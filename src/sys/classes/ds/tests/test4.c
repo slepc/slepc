@@ -81,7 +81,7 @@ int main(int argc,char **argv)
   /* Print eigenvalues */
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Computed eigenvalues =\n"));
   for (i=0;i<n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(wr[i]);
     im = PetscImaginaryPart(wr[i]);
 #else
@@ -101,7 +101,7 @@ int main(int argc,char **argv)
   rnorm = 0.0;
   PetscCall(DSGetArray(ds,DS_MAT_X,&X));
   for (i=0;i<n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     aux = PetscAbsScalar(X[i+j*ld]);
 #else
     if (PetscAbs(wi[j])==0.0) aux = PetscAbsScalar(X[i+j*ld]);

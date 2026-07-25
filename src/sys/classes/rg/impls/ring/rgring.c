@@ -56,7 +56,7 @@ static PetscErrorCode RGRingSetParameters_Ring(RG rg,PetscScalar center,PetscRea
     PetscCheck(end_ang<=1.0,PetscObjectComm((PetscObject)rg),PETSC_ERR_ARG_OUTOFRANGE,"The left-hand side angle argument must be <= 1.0");
     ctx->end_ang = end_ang;
   }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCheck(ctx->start_ang+ctx->end_ang==1.0,PetscObjectComm((PetscObject)rg),PETSC_ERR_ARG_WRONG,"In real scalars the region must be symmetric wrt real axis");
 #endif
   if (width == (PetscReal)PETSC_DETERMINE) {
@@ -258,7 +258,7 @@ static PetscErrorCode RGComputeContour_Ring(RG rg,PetscInt n,PetscScalar *cr,Pet
   for (i=0;i<n;i++) {
     if (i < n2) {
       theta = ((ctx->end_ang-start_ang)*i/n2 + start_ang)*2.0*PETSC_PI;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       cr[i] = ctx->center + (ctx->radius+ctx->width/2.0)*PetscCMPLX(PetscCosReal(theta),ctx->vscale*PetscSinReal(theta));
 #else
       if (cr) cr[i] = ctx->center + (ctx->radius+ctx->width/2.0)*PetscCosReal(theta);
@@ -266,7 +266,7 @@ static PetscErrorCode RGComputeContour_Ring(RG rg,PetscInt n,PetscScalar *cr,Pet
 #endif
     } else {
       theta = ((ctx->end_ang-start_ang)*(n-i)/n2 + start_ang)*2.0*PETSC_PI;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       cr[i] = ctx->center + (ctx->radius-ctx->width/2.0)*PetscCMPLX(PetscCosReal(theta),ctx->vscale*PetscSinReal(theta));
 #else
       if (cr) cr[i] = ctx->center + (ctx->radius-ctx->width/2.0)*PetscCosReal(theta);
@@ -299,7 +299,7 @@ static PetscErrorCode RGComputeQuadrature_Ring(RG rg,RGQuadRule quad,PetscInt n,
 
   PetscFunctionBegin;
   if (quad == RG_QUADRULE_CHEBYSHEV) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscReal theta;
     for (i=0;i<n;i++) {
       theta = PETSC_PI*(i+0.5)/n;
@@ -334,7 +334,7 @@ static PetscErrorCode RGCheckInside_Ring(RG rg,PetscReal px,PetscReal py,PetscIn
 
   PetscFunctionBegin;
   /* outer ellipse */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   dx = (px-PetscRealPart(ctx->center))/(ctx->radius+ctx->width/2.0);
   dy = (py-PetscImaginaryPart(ctx->center))/(ctx->radius+ctx->width/2.0);
 #else
@@ -344,7 +344,7 @@ static PetscErrorCode RGCheckInside_Ring(RG rg,PetscReal px,PetscReal py,PetscIn
   r = 1.0-dx*dx-(dy*dy)/(ctx->vscale*ctx->vscale);
   *inside = PetscSign(r);
   /* inner ellipse */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   dx = (px-PetscRealPart(ctx->center))/(ctx->radius-ctx->width/2.0);
   dy = (py-PetscImaginaryPart(ctx->center))/(ctx->radius-ctx->width/2.0);
 #else
@@ -354,7 +354,7 @@ static PetscErrorCode RGCheckInside_Ring(RG rg,PetscReal px,PetscReal py,PetscIn
   r = -1.0+dx*dx+(dy*dy)/(ctx->vscale*ctx->vscale);
   *inside *= PetscSign(r);
   if (*inside == 1) {  /* check angles */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     dx = (px-PetscRealPart(ctx->center));
     dy = (py-PetscImaginaryPart(ctx->center));
 #else

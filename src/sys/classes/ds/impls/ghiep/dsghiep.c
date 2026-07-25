@@ -163,7 +163,7 @@ static PetscErrorCode DSVectors_GHIEP_Eigen_Some(DS ds,PetscInt *idx,PetscReal *
   const PetscScalar *A,*B,*Q;
   PetscInt          k;
   PetscBLASInt      two=2,n_,ld,one=1;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscBLASInt      four=4;
 #endif
 
@@ -208,7 +208,7 @@ static PetscErrorCode DSVectors_GHIEP_Eigen_Some(DS ds,PetscInt *idx,PetscReal *
     PetscCheck(scal1>=ep,PETSC_COMM_SELF,PETSC_ERR_FP,"Nearly infinite eigenvalue");
     wr1 /= scal1;
     wi  /= scal1;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (SlepcAbs(s1*d1-wr1,wi)<SlepcAbs(s2*d2-wr1,wi)) {
       Y[0] = wr1-s2*d2; Y[1] = s2*e; Y[2] = wi; Y[3] = 0.0;
     } else {
@@ -329,7 +329,7 @@ PetscErrorCode DSGHIEPComplexEigs(DS ds,PetscInt n0,PetscInt n1,PetscScalar *wr,
     else e = 0.0;
     if (e==0.0) { /* real eigenvalue */
       wr[k] = (ds->compact)?T[k]/D[k]:A[k+k*ld]/B[k+k*ld];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       wi[k] = 0.0 ;
 #endif
     } else { /* diagonal block */
@@ -353,11 +353,11 @@ PetscErrorCode DSGHIEPComplexEigs(DS ds,PetscInt n0,PetscInt n1,PetscScalar *wr,
       if (wi1==0.0) { /* Real eigenvalues */
         PetscCheck(scal2>=ep,PETSC_COMM_SELF,PETSC_ERR_FP,"Nearly infinite eigenvalue");
         wr[k] = wr1/scal1; wr[k+1] = wr2/scal2;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         wi[k] = wi[k+1] = 0.0;
 #endif
       } else { /* Complex eigenvalues */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         wr[k]   = wr1/scal1;
         wr[k+1] = wr[k];
         wi[k]   = wi1/scal1;
@@ -370,7 +370,7 @@ PetscErrorCode DSGHIEPComplexEigs(DS ds,PetscInt n0,PetscInt n1,PetscScalar *wr,
       k++;
     }
   }
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (wi) {
     for (k=n0;k<n1;k++) wi[k] = 0.0;
   }
@@ -388,7 +388,7 @@ static PetscErrorCode DSSort_GHIEP(DS ds,PetscScalar *wr,PetscScalar *wi,PetscSc
   PetscReal      *d,*e,*s;
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscAssertPointer(wi,3);
 #endif
   n = ds->n;
@@ -405,7 +405,7 @@ static PetscErrorCode DSSort_GHIEP(DS ds,PetscScalar *wr,PetscScalar *wi,PetscSc
   if (!ds->compact) PetscCall(DSSwitchFormat_GHIEP(ds,PETSC_TRUE));
   PetscCall(PetscArraycpy(ds->work,wr,n));
   for (i=ds->l;i<n;i++) wr[i] = *(ds->work+perm[i]);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscArraycpy(ds->work,wi,n));
   for (i=ds->l;i<n;i++) wi[i] = *(ds->work+perm[i]);
 #endif
@@ -471,7 +471,7 @@ PetscErrorCode DSGHIEPInverseIteration(DS ds,PetscScalar *wr,PetscScalar *wi)
   const PetscScalar *A,*B;
   PetscScalar       *H,*X;
   PetscReal         *s,*d,*e;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscInt          j;
 #endif
 
@@ -516,7 +516,7 @@ PetscErrorCode DSGHIEPInverseIteration(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(DSAllocateMat_Private(ds,DS_MAT_X));
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_X],&X));
   for (i=0;i<n1;i++) select[i] = 1;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKhsein",LAPACKhsein_("R","N","N",select,&n1,H+off,&ld,wr+ds->l,wi+ds->l,NULL,&ld,X+off,&ld,&n1,&mout,ds->work,NULL,infoC,&info));
 #else
   PetscCallLAPACKInfo("LAPACKhsein",LAPACKhsein_("R","N","N",select,&n1,H+off,&ld,wr+ds->l,NULL,&ld,X+off,&ld,&n1,&mout,ds->work,ds->rwork,NULL,infoC,&info));
@@ -676,12 +676,12 @@ static PetscErrorCode DSSolve_GHIEP_QR_II(DS ds,PetscScalar *wr,PetscScalar *wi)
   const PetscScalar *A,*B;
   PetscScalar       *H,*Q;
   PetscReal         *d,*e,*s;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscInt          j;
 #endif
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscAssertPointer(wi,3);
 #endif
   PetscCall(PetscBLASIntCast(ds->n-ds->l,&n1));
@@ -692,7 +692,7 @@ static PetscErrorCode DSSolve_GHIEP_QR_II(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(DSGetArrayReal(ds,DS_MAT_T,&d));
   PetscCall(DSGetArrayReal(ds,DS_MAT_D,&s));
   e = d + ld;
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
   /* Check signature */
   for (i=0;i<ds->n;i++) {
     PetscReal de = (ds->compact)?s[i]:PetscRealPart(B[i*ld+i]);
@@ -753,7 +753,7 @@ static PetscErrorCode DSSolve_GHIEP_QR_II(DS ds,PetscScalar *wr,PetscScalar *wi)
     H[ds->n-1+(ds->n-1)*ld] = A[ds->n-1+(ds->n-1)*ld]*s[ds->n-1];
   }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKhseqr",LAPACKhseqr_("E","N",&n1,&one,&n1,H+off,&ld,wr+ds->l,wi+ds->l,NULL,&ld,ds->work,&lwork,&info));
 #else
   PetscCallLAPACKInfo("LAPACKhseqr",LAPACKhseqr_("E","N",&n1,&one,&n1,H+off,&ld,wr+ds->l,NULL,&ld,ds->work,&lwork,&info));
@@ -784,7 +784,7 @@ static PetscErrorCode DSSolve_GHIEP_QR_II(DS ds,PetscScalar *wr,PetscScalar *wi)
 
   /* Recover eigenvalues from diagonal */
   PetscCall(DSGHIEPComplexEigs(ds,0,ds->l,wr,wi));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (wi) {
     for (i=ds->l;i<ds->n;i++) wi[i] = 0.0;
   }
@@ -799,12 +799,12 @@ static PetscErrorCode DSSolve_GHIEP_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
   const PetscScalar *A,*B;
   PetscScalar       *H,*Q,*X;
   PetscReal         *d,*s,*scale,nrm,*rcde,*rcdv;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscInt          k;
 #endif
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscAssertPointer(wi,3);
 #endif
   n = ds->n-ds->l;
@@ -815,7 +815,7 @@ static PetscErrorCode DSSolve_GHIEP_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseGetArrayRead(ds->omat[DS_MAT_B],&B));
   PetscCall(DSGetArrayReal(ds,DS_MAT_T,&d));
   PetscCall(DSGetArrayReal(ds,DS_MAT_D,&s));
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
   /* Check signature */
   for (i=0;i<ds->n;i++) {
     PetscReal de = (ds->compact)?s[i]:PetscRealPart(B[i*ld+i]);
@@ -876,7 +876,7 @@ static PetscErrorCode DSSolve_GHIEP_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(PetscBLASIntCast(lw-nwu,&lwork));
   PetscCall(DSAllocateMat_Private(ds,DS_MAT_X));
   PetscCall(MatDenseGetArrayWrite(ds->omat[DS_MAT_X],&X));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKgeevx",LAPACKgeevx_("B","N","V","N",&n_,H,&n_,wr+ds->l,wi+ds->l,NULL,&ld,X+off,&ld,&ilo,&ihi,scale,&nrm,rcde,rcdv,ds->work+nwu,&lwork,NULL,&info));
 #else
   PetscCallLAPACKInfo("LAPACKgeevx",LAPACKgeevx_("B","N","V","N",&n_,H,&n_,wr+ds->l,NULL,&ld,X+off,&ld,&ilo,&ihi,scale,&nrm,rcde,rcdv,ds->work+nwu,&lwork,ds->rwork+nwru,&info));
@@ -925,7 +925,7 @@ static PetscErrorCode DSSolve_GHIEP_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
 
   /* Recover eigenvalues from diagonal */
   PetscCall(DSGHIEPComplexEigs(ds,0,ds->l,wr,wi));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (wi) {
     for (i=ds->l;i<ds->n;i++) wi[i] = 0.0;
   }
@@ -957,7 +957,7 @@ static PetscErrorCode DSTruncate_GHIEP(DS ds,PetscInt n,PetscBool trim)
   if (ds->compact) {
     PetscCall(DSGetArrayReal(ds,DS_MAT_T,&T));
     PetscCall(DSGetArrayReal(ds,DS_MAT_D,&omega));
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
     /* make sure diagonal 2x2 block is not broken */
     PetscCheck(ds->state<DS_STATE_CONDENSED || n==0 || n==ds->n || T[n-1+ld]==0.0,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"The given size would break a 2x2 block, call DSGetTruncateSize() first");
 #endif
@@ -998,7 +998,7 @@ static PetscErrorCode DSTruncate_GHIEP(DS ds,PetscInt n,PetscBool trim)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
 static PetscErrorCode DSSynchronize_GHIEP(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
   PetscScalar    *A,*B,*Q;
@@ -1037,7 +1037,7 @@ static PetscErrorCode DSSynchronize_GHIEP(DS ds,PetscScalar eigr[],PetscScalar e
     }
     if (ds->state>DS_STATE_RAW) PetscCallMPI(MPI_Pack(Q+l*ld,ldn,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
     if (eigr) PetscCallMPI(MPI_Pack(eigr+l,n,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi) PetscCallMPI(MPI_Pack(eigi+l,n,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
 #endif
   }
@@ -1052,7 +1052,7 @@ static PetscErrorCode DSSynchronize_GHIEP(DS ds,PetscScalar eigr[],PetscScalar e
     }
     if (ds->state>DS_STATE_RAW) PetscCallMPI(MPI_Unpack(ds->work,size,&off,Q+l*ld,ldn,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
     if (eigr) PetscCallMPI(MPI_Unpack(ds->work,size,&off,eigr+l,n,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi) PetscCallMPI(MPI_Unpack(ds->work,size,&off,eigi+l,n,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
 #endif
   }
@@ -1120,7 +1120,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_GHIEP(DS ds)
   ds->ops->solve[1]        = DSSolve_GHIEP_HZ;
   ds->ops->solve[2]        = DSSolve_GHIEP_QR;
   ds->ops->sort            = DSSort_GHIEP;
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
   ds->ops->synchronize     = DSSynchronize_GHIEP;
 #endif
   ds->ops->gettruncatesize = DSGetTruncateSize_GHIEP;

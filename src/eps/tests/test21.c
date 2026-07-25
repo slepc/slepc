@@ -96,7 +96,7 @@ int main(int argc,char **argv)
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
   PetscCall(PetscOptionsGetString(NULL,NULL,"-checkfile",filename,sizeof(filename),&checkfile));
   if (checkfile) {
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
     PetscComplex *eigs,eval;
 
     PetscCall(EPSGetConverged(eps,&nconv));
@@ -106,7 +106,7 @@ int main(int argc,char **argv)
     PetscCall(PetscViewerDestroy(&viewer));
     for (i=0;i<nconv;i++) {
       PetscCall(EPSGetEigenpair(eps,i,&kr,&ki,NULL,NULL));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       eval = kr;
 #else
       eval = PetscCMPLX(kr,ki);

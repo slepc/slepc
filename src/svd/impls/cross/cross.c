@@ -115,7 +115,7 @@ static PetscErrorCode SVDCrossGetProductMat(SVD svd,Mat A,Mat AT,Mat *C)
       PetscCall(MatProductCreate(AT,B,NULL,C));
       PetscCall(MatProductSetType(*C,MATPRODUCT_AB));
     } else {  /* implicit transpose */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       SETERRQ(PetscObjectComm((PetscObject)svd),PETSC_ERR_SUP,"Must use explicit transpose with complex scalars");
 #else
       if (!svd->swapped) {

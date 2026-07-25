@@ -11,9 +11,9 @@
 #include <petsc/private/ftnimpl.h>
 #include <slepcds.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define dspepgetcoefficients_    DSPEPGETCOEFFICIENTS
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define dspepgetcoefficients_    dspepgetcoefficients
 #endif
 

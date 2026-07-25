@@ -11,10 +11,10 @@
 #include <petsc/private/ftnimpl.h>
 #include <slepceps.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define epskrylovschurgetsubintervals_    EPSKRYLOVSCHURGETSUBINTERVALS
 #define epskrylovschurgetinertias_        EPSKRYLOVSCHURGETINERTIAS
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define epskrylovschurgetsubintervals_    epskrylovschurgetsubintervals
 #define epskrylovschurgetinertias_        epskrylovschurgetinertias
 #endif

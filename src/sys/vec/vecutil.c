@@ -29,13 +29,13 @@
 @*/
 PetscErrorCode VecNormalizeComplex(Vec xr,Vec xi,PetscBool iscomplex,PetscReal *norm)
 {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscReal      normr,normi,alpha;
 #endif
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(xr,VEC_CLASSID,1);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (iscomplex) {
     PetscValidHeaderSpecific(xi,VEC_CLASSID,2);
     PetscCall(VecNormBegin(xr,NORM_2,&normr));
@@ -89,7 +89,7 @@ static PetscErrorCode VecCheckOrthogonality_Private(Vec V[],PetscInt nv,Vec W[],
           else *lev = PetscMax(*lev,PetscAbsScalar(vals[j]-PetscRealConstant(1.0)));
         }
       } else {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         PetscCall(PetscViewerASCIIPrintf(viewer," %12g  ",(double)vals[j]));
 #else
         PetscCall(PetscViewerASCIIPrintf(viewer," %12g%+12gi ",(double)PetscRealPart(vals[j]),(double)PetscImaginaryPart(vals[j])));
@@ -237,12 +237,12 @@ PetscErrorCode VecDuplicateEmpty(Vec v,Vec *newv)
     PetscCall(VecGetSize(v,&N));
     PetscCall(VecGetBlockSize(v,&bs));
     if (cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
       if (mpi) PetscCall(VecCreateMPICUDAWithArray(PetscObjectComm((PetscObject)v),bs,nloc,N,NULL,newv));
       else PetscCall(VecCreateSeqCUDAWithArray(PetscObjectComm((PetscObject)v),bs,N,NULL,newv));
 #endif
     } else if (hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
       if (mpi) PetscCall(VecCreateMPIHIPWithArray(PetscObjectComm((PetscObject)v),bs,nloc,N,NULL,newv));
       else PetscCall(VecCreateSeqHIPWithArray(PetscObjectComm((PetscObject)v),bs,N,NULL,newv));
 #endif
@@ -311,7 +311,7 @@ PetscErrorCode VecSetRandomNormal(Vec v,PetscRandom rctx,Vec w1,Vec w2)
   PetscCall(VecGetArrayRead(w1,&x));
   PetscCall(VecGetArrayRead(w2,&y));
   for (i=0;i<n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     z[i] = PetscCMPLX(PetscSqrtReal(-2.0*PetscLogReal(PetscRealPart(x[i])))*PetscCosReal(2.0*PETSC_PI*PetscRealPart(y[i])),PetscSqrtReal(-2.0*PetscLogReal(PetscImaginaryPart(x[i])))*PetscCosReal(2.0*PETSC_PI*PetscImaginaryPart(y[i])));
 #else
     z[i] = PetscSqrtReal(-2.0*PetscLogReal(x[i]))*PetscCosReal(2.0*PETSC_PI*y[i]);

@@ -1342,7 +1342,7 @@ PetscErrorCode PEPNewtonRefinement_TOAR(PEP pep,PetscScalar sigma,PetscInt *maxi
   PetscCall(NRefOrthogStep(pep,k,H,ldh,fH,S,lds));
   /* check if H is in Schur form */
   for (i=0;i<k-1;i++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCheck(H[i+1+i*ldh]==0.0,PetscObjectComm((PetscObject)pep),PETSC_ERR_SUP,"Iterative Refinement requires the complex Schur form of the projected matrix");
 #else
     PetscCheck(H[i+1+i*ldh]==0.0,PetscObjectComm((PetscObject)pep),PETSC_ERR_SUP,"Iterative Refinement requires an upper triangular projected matrix");

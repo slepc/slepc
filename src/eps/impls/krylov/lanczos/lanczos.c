@@ -141,7 +141,7 @@ static PetscErrorCode DenseTridiagonal(PetscInt n_,PetscReal *D,PetscReal *E,Pet
   PetscReal      abstol = 0.0,vl,vu,*work;
   PetscBLASInt   il,iu,m,*isuppz,n,lwork,*iwork,liwork;
   const char     *jobz;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscInt       i,j;
   PetscReal      *VV=NULL;
 #endif
@@ -152,19 +152,19 @@ static PetscErrorCode DenseTridiagonal(PetscInt n_,PetscReal *D,PetscReal *E,Pet
   PetscCall(PetscBLASIntCast(10*n_,&liwork));
   if (V) {
     jobz = "V";
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(PetscMalloc1(n*n,&VV));
 #endif
   } else jobz = "N";
   PetscCall(PetscMalloc3(2*n,&isuppz,lwork,&work,liwork,&iwork));
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKstevr",LAPACKstevr_(jobz,"A",&n,D,E,&vl,&vu,&il,&iu,&abstol,&m,w,VV,&n,isuppz,work,&lwork,iwork,&liwork,&info));
 #else
   PetscCallLAPACKInfo("LAPACKstevr",LAPACKstevr_(jobz,"A",&n,D,E,&vl,&vu,&il,&iu,&abstol,&m,w,V,&n,isuppz,work,&lwork,iwork,&liwork,&info));
 #endif
   PetscCall(PetscFPTrapPop());
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (V) {
     for (i=0;i<n;i++)
       for (j=0;j<n;j++)

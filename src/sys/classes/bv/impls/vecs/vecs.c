@@ -265,7 +265,7 @@ static PetscErrorCode BVNormalize_Vecs(BV bv,PetscScalar *eigi)
 
   PetscFunctionBegin;
   for (i=bv->l;i<bv->k;i++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi && eigi[i] != 0.0) {
       PetscCall(VecNormalizeComplex(ctx->V[bv->nc+i],ctx->V[bv->nc+i+1],PETSC_TRUE,NULL));
       i++;

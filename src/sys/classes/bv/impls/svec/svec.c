@@ -440,7 +440,7 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Svec(BV bv)
     lsplit = parent->lsplit;
     vpar = ((BV_SVEC*)parent->data)->v;
     if (bv->cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
       PetscCall(VecCUDAGetArrayRead(vpar,&array));
       if (bv->issplit>0) ptr = (bv->issplit==1)? array: array+lsplit*bv->ld;
       else ptr = (bv->issplit==1)? array: array-lsplit;
@@ -450,7 +450,7 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Svec(BV bv)
       PetscCall(VecCUDAPlaceArray(ctx->v,ptr));
 #endif
     } else if (bv->hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
       PetscCall(VecHIPGetArrayRead(vpar,&array));
       if (bv->issplit>0) ptr = (bv->issplit==1)? array: array+lsplit*bv->ld;
       else ptr = (bv->issplit==1)? array: array-lsplit;
@@ -497,7 +497,7 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Svec(BV bv)
   PetscCall(BVCreateVecEmpty(bv,&bv->cv[1]));
 
   if (bv->cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
     bv->ops->mult             = BVMult_Svec_CUDA;
     bv->ops->multvec          = BVMultVec_Svec_CUDA;
     bv->ops->multinplace      = BVMultInPlace_Svec_CUDA;
@@ -521,7 +521,7 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Svec(BV bv)
     bv->ops->restoremat       = BVRestoreMat_Svec_CUDA;
 #endif
   } else if (bv->hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
     bv->ops->mult             = BVMult_Svec_HIP;
     bv->ops->multvec          = BVMultVec_Svec_HIP;
     bv->ops->multinplace      = BVMultInPlace_Svec_HIP;

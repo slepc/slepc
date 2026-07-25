@@ -23,13 +23,13 @@ static PetscErrorCode SlepcMatDenseSqrt(PetscBLASInt n,PetscScalar *T,PetscBLASI
   PetscScalar  one=1.0,mone=-1.0;
   PetscReal    scal;
   PetscBLASInt i,j,si,sj,r,ione=1;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscReal    alpha,theta,mu,mu2;
 #endif
 
   PetscFunctionBegin;
   for (j=0;j<n;j++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     sj = 1;
     T[j+j*ld] = PetscSqrtScalar(T[j+j*ld]);
 #else
@@ -54,7 +54,7 @@ static PetscErrorCode SlepcMatDenseSqrt(PetscBLASInt n,PetscScalar *T,PetscBLASI
     }
 #endif
     for (i=j-1;i>=0;i--) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       si = 1;
 #else
       si = (i==0 || T[i+(i-1)*ld] == 0.0)? 1: 2;
@@ -84,7 +84,7 @@ PetscErrorCode FNSqrtmSchur(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASInt ld,
   PetscScalar    *wr,*W,*Q,*work,one=1.0,zero=0.0,mone=-1.0;
   PetscInt       m,nblk;
   PetscReal      scal;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      *rwork;
 #else
   PetscReal      *wi;
@@ -97,7 +97,7 @@ PetscErrorCode FNSqrtmSchur(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASInt ld,
   k     = firstonly? 1: n;
 
   /* compute Schur decomposition A*Q = Q*T */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc7(m,&wr,m,&wi,m*k,&W,m*m,&Q,lwork,&work,nblk,&s,nblk,&p));
   PetscCallLAPACKInfo("LAPACKgees",LAPACKgees_("V","N",NULL,&n,T,&ld,&sdim,wr,wi,Q,&ld,work,&lwork,NULL,&info));
 #else
@@ -110,7 +110,7 @@ PetscErrorCode FNSqrtmSchur(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASInt ld,
   p[j] = 0;
   do {
     s[j] = PetscMin(bs,n-p[j]);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (p[j]+s[j]!=n && T[p[j]+s[j]+(p[j]+s[j]-1)*ld]!=0.0) s[j]++;
 #endif
     if (p[j]+s[j]==n) break;
@@ -138,7 +138,7 @@ PetscErrorCode FNSqrtmSchur(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASInt ld,
   /* flop count: Schur decomposition, triangular square root, and backtransform */
   PetscCall(PetscLogFlops(25.0*n*n*n+n*n*n/3.0+4.0*n*n*k));
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree7(wr,wi,W,Q,work,s,p));
 #else
   PetscCall(PetscFree7(wr,rwork,W,Q,work,s,p));
@@ -308,7 +308,7 @@ PetscErrorCode FNSqrtmNewtonSchulz(FN fn,PetscBLASInt n,PetscScalar *A,PetscBLAS
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
 #include "../src/sys/classes/fn/impls/cuda/fnutilcuda.h"
 #include <slepccupmblas.h>
 
@@ -403,7 +403,7 @@ PetscErrorCode FNSqrtmNewtonSchulz_CUDA(FN fn,PetscBLASInt n,PetscScalar *d_A,Pe
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_MAGMA)
+#if PetscDefined(HAVE_MAGMA)
 #include <slepcmagma.h>
 
 /*
@@ -615,7 +615,7 @@ PetscErrorCode SlepcNormAm(PetscBLASInt n,PetscScalar *A,PetscInt m,PetscScalar 
   } else {
     for (i=0;i<n;i++)
       for (j=0;j<n;j++)
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         if (PetscRealPart(A[i+j*n])<0.0 || PetscImaginaryPart(A[i+j*n])!=0.0) { isrealpos = PETSC_FALSE; break; }
 #else
         if (A[i+j*n]<0.0) { isrealpos = PETSC_FALSE; break; }

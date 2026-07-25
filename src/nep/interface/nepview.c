@@ -337,7 +337,7 @@ static PetscErrorCode NEPErrorView_DETAIL(NEP nep,NEPErrorType etype,PetscViewer
   for (i=0;i<nep->nconv;i++) {
     PetscCall(NEPGetEigenpair(nep,i,&kr,&ki,NULL,NULL));
     PetscCall(NEPComputeError(nep,i,etype,&error));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(kr);
     im = PetscImaginaryPart(kr);
 #else
@@ -493,7 +493,7 @@ static PetscErrorCode NEPValuesView_DRAW(NEP nep,PetscViewer viewer)
   PetscCall(PetscDrawSPCreate(draw,1,&drawsp));
   for (i=0;i<nep->nconv;i++) {
     k = nep->perm[i];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(nep->eigr[k]);
     im = PetscImaginaryPart(nep->eigr[k]);
 #else
@@ -510,17 +510,17 @@ static PetscErrorCode NEPValuesView_DRAW(NEP nep,PetscViewer viewer)
 
 static PetscErrorCode NEPValuesView_BINARY(NEP nep,PetscViewer viewer)
 {
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
   PetscInt       i,k;
   PetscComplex   *ev;
 #endif
 
   PetscFunctionBegin;
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
   PetscCall(PetscMalloc1(nep->nconv,&ev));
   for (i=0;i<nep->nconv;i++) {
     k = nep->perm[i];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     ev[i] = nep->eigr[k];
 #else
     ev[i] = PetscCMPLX(nep->eigr[k],nep->eigi[k]);
@@ -532,7 +532,7 @@ static PetscErrorCode NEPValuesView_BINARY(NEP nep,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
 static PetscErrorCode NEPValuesView_HDF5(NEP nep,PetscViewer viewer)
 {
   PetscInt       i,k,n,N;
@@ -559,7 +559,7 @@ static PetscErrorCode NEPValuesView_HDF5(NEP nep,PetscViewer viewer)
   PetscCall(VecAssemblyBegin(v));
   PetscCall(VecAssemblyEnd(v));
   PetscCall(VecView(v,viewer));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* in real scalars write the imaginary part as a separate vector */
   PetscCall(PetscSNPrintf(vname,sizeof(vname),"eigi_%s",ename));
   PetscCall(PetscObjectSetName((PetscObject)v,vname));
@@ -605,7 +605,7 @@ static PetscErrorCode NEPValuesView_MATLAB(NEP nep,PetscViewer viewer)
   PetscCall(PetscViewerASCIIPrintf(viewer,"Lambda_%s = [\n",name));
   for (i=0;i<nep->nconv;i++) {
     k = nep->perm[i];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(nep->eigr[k]);
     im = PetscImaginaryPart(nep->eigr[k]);
 #else
@@ -646,7 +646,7 @@ PetscErrorCode NEPValuesView(NEP nep,PetscViewer viewer)
 {
   PetscBool         isascii,isdraw,isbinary;
   PetscViewerFormat format;
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   PetscBool         ishdf5;
 #endif
 
@@ -658,13 +658,13 @@ PetscErrorCode NEPValuesView(NEP nep,PetscViewer viewer)
   NEPCheckSolved(nep,1);
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERDRAW,&isdraw));
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERBINARY,&isbinary));
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERHDF5,&ishdf5));
 #endif
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERASCII,&isascii));
   if (isdraw) PetscCall(NEPValuesView_DRAW(nep,viewer));
   else if (isbinary) PetscCall(NEPValuesView_BINARY(nep,viewer));
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   else if (ishdf5) PetscCall(NEPValuesView_HDF5(nep,viewer));
 #endif
   else if (isascii) {
@@ -763,7 +763,7 @@ PetscErrorCode NEPVectorsView(NEP nep,PetscViewer viewer)
   if (nep->nconv) {
     PetscCall(NEPComputeVectors(nep));
     PetscCall(BVCreateVec(nep->V,&xr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(BVCreateVec(nep->V,&xi));
 #endif
     for (i=0;i<nep->nconv;i++) {
@@ -776,7 +776,7 @@ PetscErrorCode NEPVectorsView(NEP nep,PetscViewer viewer)
       }
     }
     PetscCall(VecDestroy(&xr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(VecDestroy(&xi));
 #endif
   }

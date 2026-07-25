@@ -127,7 +127,7 @@ static inline PetscErrorCode BV_SafeSqrt(BV bv,PetscScalar alpha,PetscReal *res)
   absal = PetscAbsScalar(alpha);
   realp = PetscRealPart(alpha);
   if (PetscUnlikely(absal<PETSC_MACHINE_EPSILON)) PetscCall(PetscInfo(bv,"Zero norm %g, either the vector is zero or a semi-inner product is being used\n",(double)absal));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCheck(PetscAbsReal(PetscImaginaryPart(alpha))<bv->deftol || PetscAbsReal(PetscImaginaryPart(alpha))/absal<10*bv->deftol,PetscObjectComm((PetscObject)bv),PETSC_ERR_USER_INPUT,"The inner product is not well defined: nonzero imaginary part %g",(double)PetscImaginaryPart(alpha));
 #endif
   if (PetscUnlikely(bv->indef)) {
@@ -191,13 +191,13 @@ static inline PetscErrorCode BV_AllocateSignature(BV bv)
   PetscFunctionBegin;
   if (bv->indef && !bv->omega) {
     if (bv->cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
       PetscCall(VecCreateSeqCUDA(PETSC_COMM_SELF,bv->nc+bv->m,&bv->omega));
 #else
       SETERRQ(PetscObjectComm((PetscObject)bv),PETSC_ERR_PLIB,"Something wrong happened");
 #endif
     } else if (bv->hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
       PetscCall(VecCreateSeqHIP(PETSC_COMM_SELF,bv->nc+bv->m,&bv->omega));
 #else
       SETERRQ(PetscObjectComm((PetscObject)bv),PETSC_ERR_PLIB,"Something wrong happened");
@@ -237,7 +237,7 @@ static inline PetscErrorCode BV_SetMatrixDiagonal(BV bv,Vec vomega,Mat M)
 /*
     Macros to test valid BV arguments
 */
-#if !defined(PETSC_USE_DEBUG)
+#if !PetscDefined(USE_DEBUG)
 
 #define BVCheckSizes(h,arg) do {(void)(h);} while (0)
 #define BVCheckOp(h,arg,op) do {(void)(h);} while (0)
@@ -421,7 +421,7 @@ static inline PetscErrorCode BV_StoreCoefficients_Default(BV bv,PetscInt j,Petsc
 static inline PetscErrorCode BV_GetEigenvector(BV V,PetscInt k,PetscScalar eigi,Vec Vr,Vec Vi)
 {
   PetscFunctionBegin;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   (void)eigi;
   if (Vr) PetscCall(BVCopyVec(V,k,Vr));
   if (Vi) PetscCall(VecSet(Vi,0.0));
@@ -483,7 +483,7 @@ static inline PetscErrorCode BV_SetDefaultLD(BV bv,PetscInt nloc)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
 /*
    BV_MatDenseCUDAGetArrayRead - if Q is MATSEQDENSE it will allocate memory on the
    GPU and copy the contents; otherwise, calls MatDenseCUDAGetArrayRead()
@@ -554,7 +554,7 @@ SLEPC_INTERN PetscErrorCode BV_StoreCoefficients_CUDA(BV,PetscInt,PetscScalar*,P
 #define BV_SquareRoot(a,b,c,d)        ((a)->cuda?BV_SquareRoot_CUDA:BV_SquareRoot_Default)((a),(b),(c),(d))
 #define BV_StoreCoefficients(a,b,c,d) ((a)->cuda?BV_StoreCoefficients_CUDA:BV_StoreCoefficients_Default)((a),(b),(c),(d))
 
-#elif defined(PETSC_HAVE_HIP)
+#elif PetscDefined(HAVE_HIP)
 #include <petscdevice_cupm.h>
 /*
    BV_MatDenseHIPGetArrayRead - if Q is MATSEQDENSE it will allocate memory on the

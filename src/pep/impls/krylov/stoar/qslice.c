@@ -249,7 +249,7 @@ static PetscErrorCode PEPQSliceCheckEigenvalueType(PEP pep,PetscReal shift,Petsc
     PetscCall(PEPSetWhichEigenpairs(pep2,PEP_TARGET_MAGNITUDE));
     PetscCall(PEPGetRG(pep2,&pep2->rg));
     PetscCall(RGSetType(pep2->rg,RGINTERVAL));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(RGIntervalSetEndpoints(pep2->rg,pep->inta,pep->intb,-PETSC_SQRT_MACHINE_EPSILON,PETSC_SQRT_MACHINE_EPSILON));
 #else
     PetscCall(RGIntervalSetEndpoints(pep2->rg,pep->inta,pep->intb,0.0,0.0));
@@ -492,7 +492,7 @@ PetscErrorCode PEPSetUp_STOAR_QSlice(PEP pep)
   PetscCheck(pep->intb<PETSC_MAX_REAL || pep->inta>PETSC_MIN_REAL,PetscObjectComm((PetscObject)pep),PETSC_ERR_ARG_WRONG,"The defined computational interval should have at least one of their sides bounded");
   PEPCheckUnsupportedCondition(pep,PEP_FEATURE_STOPPING,PETSC_TRUE," (with spectrum slicing)");
   if (pep->tol==(PetscReal)PETSC_DETERMINE) {
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
     pep->tol = SLEPC_DEFAULT_TOL;
 #else
     /* use tighter tolerance */
@@ -793,7 +793,7 @@ static PetscErrorCode PEPStoreEigenpairs(PEP pep)
     /* Back-transform */
     PetscCall(STBackTransform(pep->st,nconv,pep->eigr,pep->eigi));
     for (i=0;i<nconv;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       if (PetscImaginaryPart(pep->eigr[i])) pep->eigr[i] = sr->int0-sr->dir;
 #else
       if (pep->eigi[i]) pep->eigr[i] = sr->int0-sr->dir;

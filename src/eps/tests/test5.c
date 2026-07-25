@@ -34,21 +34,21 @@ int main(int argc,char **argv)
   PetscCall(PetscOptionsHasName(NULL,NULL,"-symm",&symm));
   PetscCall(PetscOptionsHasName(NULL,NULL,"-herm",&flg));
   if (flg) symm=PETSC_TRUE;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   prefix = symm? "hpd": "nh";
   scalar = "complex";
 #else
   prefix = symm? "spd": "ns";
   scalar = "real";
 #endif
-#if defined(PETSC_USE_64BIT_INDICES)
+#if PetscDefined(USE_64BIT_INDICES)
   ints   = "int64";
 #else
   ints   = "int32";
 #endif
-#if defined(PETSC_USE_REAL_DOUBLE)
+#if PetscDefined(USE_REAL_DOUBLE)
   floats = "float64";
-#elif defined(PETSC_USE_REAL_SINGLE)
+#elif PetscDefined(USE_REAL_SINGLE)
   floats = "float32";
 #endif
 

@@ -68,7 +68,7 @@ int main(int argc,char **argv)
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
   PetscCall(PetscNew(&ctx));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   ctx->a = PetscCMPLX(-0.1,0.2);
   ctx->b = PetscCMPLX(1.0,0.5);
   ctx->d = PetscCMPLX(2.0,0.2);

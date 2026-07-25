@@ -122,7 +122,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_Pade(FN fn,Mat A,Mat B)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
 /*
  * Set scaling factor (s) and Pade degree (k,m)
  */
@@ -382,7 +382,7 @@ static PetscErrorCode getcoeffsproduct(PetscInt k,PetscInt m,PetscComplex *p,Pet
 }
 #endif /* PETSC_HAVE_COMPLEX */
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 static PetscErrorCode getisreal(PetscInt n,PetscComplex *a,PetscBool *result)
 {
   PetscInt i;
@@ -407,14 +407,14 @@ static PetscErrorCode getisreal(PetscInt n,PetscComplex *a,PetscBool *result)
  */
 static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,Mat B)
 {
-#if !defined(PETSC_HAVE_COMPLEX)
+#if !PetscDefined(HAVE_COMPLEX)
   PetscFunctionBegin;
   SETERRQ(PETSC_COMM_SELF,PETSC_ERR_SUP,"This function requires C99 or C++ complex support");
 #else
   PetscInt          i,j,n_,s,k,m,mod;
   PetscBLASInt      n=0,n2=0,irsize=0,rsizediv2,ipsize=0,iremainsize=0,*piv,minlen,lwork=0,one=1;
   PetscReal         nrm,shift=0.0;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal         *rwork=NULL;
 #endif
   PetscComplex      *As,*RR,*RR2,*expmA,*expmA2,*Maux,*Maux2,rsize,*r,psize,*p,remainsize,*remainterm,*rootp,*rootq,mult=0.0,scale,cone=1.0,czero=0.0,*aux;
@@ -439,7 +439,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
     PetscCall(PetscMalloc2(n,&wr,n,&wi));
     PetscCall(PetscArraycpy(sMaux,Aa,n2));
     /* estimate rightmost eigenvalue and shift A with it */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCallLAPACKInfo("LAPACKgeev",LAPACKgeev_("N","N",&n,sMaux,&n,wr,wi,NULL,&n,NULL,&n,&work1,&query,&info));
     PetscCall(PetscBLASIntCast((PetscInt)work1,&lwork));
     PetscCall(PetscMalloc1(lwork,&work));
@@ -467,7 +467,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
     for (i=0;i<n;i++) sMaux[i+i*n] -= shift;
     PetscCall(PetscLogFlops(1.0*n));
   }
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscArraycpy(Maux,Aa,n2));
   if (shift) {
     for (i=0;i<n;i++) Maux[i+i*n] -= shift;
@@ -496,7 +496,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
   PetscCall(PetscMalloc4(n2,&expmA,n2,&As,n2,&RR,n,&piv));
   expmA2 = expmA; RR2 = RR;
   /* scale matrix */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   for (i=0;i<n2;i++) {
     As[i] = sMaux[i];
   }
@@ -517,7 +517,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
     PetscCall(getcoeffs(k,m,r,p,remainterm,PETSC_FALSE));
 
     PetscCall(PetscArrayzero(expmA,n2));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     isreal = PETSC_TRUE;
 #else
     PetscCall(getisreal(n2,Maux,&isreal));
@@ -639,7 +639,7 @@ static PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa(FN fn,Mat A,M
     PetscCall(PetscFree2(rootp,rootq));
   }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   for (i=0;i<n2;i++) {
     Ba2[i] = PetscRealPartComplex(expmA[i]);
   }
@@ -921,7 +921,7 @@ PetscErrorCode FNEvaluateFunctionMat_Exp_Higham(FN fn,Mat A,Mat B)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
 #include "../src/sys/classes/fn/impls/cuda/fnutilcuda.h"
 #include <slepccupmblas.h>
 
@@ -1074,7 +1074,7 @@ PetscErrorCode FNEvaluateFunctionMat_Exp_Pade_CUDA(FN fn,Mat A,Mat B)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_MAGMA)
+#if PetscDefined(HAVE_MAGMA)
 #include <slepcmagma.h>
 
 PetscErrorCode FNEvaluateFunctionMat_Exp_Pade_CUDAm(FN fn,Mat A,Mat B)
@@ -1381,7 +1381,7 @@ PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa_CUDAm(FN fn,Mat A,Ma
   PetscInt          i,j,n_,s,k,m,mod;
   PetscBLASInt      n=0,n2=0,irsize=0,rsizediv2,ipsize=0,iremainsize=0,query=-1,*piv,minlen,lwork=0,one=1;
   PetscReal         nrm,shift=0.0,rone=1.0,rzero=0.0;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal         *rwork=NULL;
 #endif
   PetscComplex      *d_As,*d_RR,*d_RR2,*d_expmA,*d_expmA2,*d_Maux,*d_Maux2,rsize,*r,psize,*p,remainsize,*remainterm,*rootp,*rootq,mult=0.0,scale,cone=1.0,czero=0.0,*aux;
@@ -1421,7 +1421,7 @@ PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa_CUDAm(FN fn,Mat A,Ma
     PetscCall(MatDenseGetArrayRead(A,&Aa));
     PetscCall(PetscArraycpy(Maux,Aa,n2));
     PetscCall(MatDenseRestoreArrayRead(A,&Aa));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCallMAGMA(magma_xgeev,MagmaNoVec,MagmaNoVec,n,Maux,n,wr,wi,NULL,n,NULL,n,&work1,query);
     PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(work1),&lwork));
     PetscCall(PetscMalloc1(lwork,&work));
@@ -1449,7 +1449,7 @@ PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa_CUDAm(FN fn,Mat A,Ma
     PetscCall(shift_diagonal(n,d_sMaux,n,-shift));
     PetscCall(PetscLogGpuFlops(1.0*n));
   }
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallCUDA(cudaMemcpy(d_Maux,d_Aa,sizeof(PetscScalar)*n2,cudaMemcpyDeviceToDevice));
   if (shift) {
     PetscCall(shift_diagonal(n,d_Maux,n,-shift));
@@ -1484,7 +1484,7 @@ PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa_CUDAm(FN fn,Mat A,Ma
   d_expmA2 = d_expmA; d_RR2 = d_RR;
   PetscCall(PetscMalloc1(n,&piv));
   /* scale matrix */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(copy_array2D_S2C(n,n,d_As,n,d_sMaux,n));
 #else
   PetscCallCUDA(cudaMemcpy(d_As,d_sMaux,sizeof(PetscScalar)*n2,cudaMemcpyDeviceToDevice));
@@ -1503,7 +1503,7 @@ PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa_CUDAm(FN fn,Mat A,Ma
     PetscCall(getcoeffs(k,m,r,p,remainterm,PETSC_FALSE));
 
     PetscCallCUDA(cudaMemset(d_expmA,0,sizeof(PetscComplex)*n2));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     isreal = PETSC_TRUE;
 #else
     PetscCall(getisreal_array2D(n,n,d_Maux,n,d_isreal));
@@ -1603,7 +1603,7 @@ PetscErrorCode FNEvaluateFunctionMat_Exp_GuettelNakatsukasa_CUDAm(FN fn,Mat A,Ma
     PetscCall(PetscFree2(rootp,rootq));
   }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(copy_array2D_C2S(n,n,d_Ba2,n,d_expmA,n));
 #else
   PetscCallCUDA(cudaMemcpy(d_Ba2,d_expmA,sizeof(PetscScalar)*n2,cudaMemcpyDeviceToDevice));
@@ -1696,9 +1696,9 @@ SLEPC_EXTERN PetscErrorCode FNCreate_Exp(FN fn)
   fn->ops->evaluatefunctionmat[1] = FNEvaluateFunctionMat_Exp_Pade;
   fn->ops->evaluatefunctionmat[2] = FNEvaluateFunctionMat_Exp_GuettelNakatsukasa; /* product form */
   fn->ops->evaluatefunctionmat[3] = FNEvaluateFunctionMat_Exp_GuettelNakatsukasa; /* partial fraction */
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
   fn->ops->evaluatefunctionmatcuda[1] = FNEvaluateFunctionMat_Exp_Pade_CUDA;
-#if defined(PETSC_HAVE_MAGMA)
+#if PetscDefined(HAVE_MAGMA)
   fn->ops->evaluatefunctionmatcuda[0] = FNEvaluateFunctionMat_Exp_Higham_CUDAm;
   fn->ops->evaluatefunctionmatcuda[1] = FNEvaluateFunctionMat_Exp_Pade_CUDAm;
   fn->ops->evaluatefunctionmatcuda[2] = FNEvaluateFunctionMat_Exp_GuettelNakatsukasa_CUDAm; /* product form */

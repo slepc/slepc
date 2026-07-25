@@ -45,7 +45,7 @@ static PetscErrorCode Orthog_Shao(Vec x,BV U,BV V,PetscInt j,PetscScalar *h,Pets
   PetscCall(BVSetActiveColumns(U,0,j));
   PetscCall(BVSetActiveColumns(V,0,j));
   /* c = real(V^* x) ; c2 = imag(U^* x)*1i */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(BVDotVecBegin(V,x,c));
   PetscCall(BVDotVecBegin(U,x,c+j));
   PetscCall(BVDotVecEnd(V,x,c));
@@ -53,7 +53,7 @@ static PetscErrorCode Orthog_Shao(Vec x,BV U,BV V,PetscInt j,PetscScalar *h,Pets
 #else
   PetscCall(BVDotVec(V,x,c));
 #endif
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   for (i=0; i<j; i++) {
     c[i] = PetscRealPart(c[i]);
     c[j+i] = PetscCMPLX(0.0,PetscImaginaryPart(c[j+i]));
@@ -61,7 +61,7 @@ static PetscErrorCode Orthog_Shao(Vec x,BV U,BV V,PetscInt j,PetscScalar *h,Pets
 #endif
   /* x = x-U*c-V*c2 */
   PetscCall(BVMultVec(U,-1.0,1.0,x,c));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(BVMultVec(V,-1.0,1.0,x,c+j));
 #endif
   /* accumulate orthog coeffs into h */
@@ -223,7 +223,7 @@ static PetscErrorCode Orthog_Gruning(Vec x,BV U,BV V,BV HU,BV HV,PetscInt j,Pets
   PetscCall(BVSetActiveColumns(HU,0,j));
   PetscCall(BVSetActiveColumns(V,0,j));
   PetscCall(BVSetActiveColumns(HV,0,j));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(BVDotVecBegin(HU,x,c));
   PetscCall(BVDotVecBegin(HV,x,c+j));
   PetscCall(BVDotVecEnd(HU,x,c));
@@ -233,7 +233,7 @@ static PetscErrorCode Orthog_Gruning(Vec x,BV U,BV V,BV HU,BV HV,PetscInt j,Pets
 #endif
   for (i=0; i<j; i++) {
     /* c1 = 2*real(HU^* x) ; c2 = 2*imag(HV^* x)*1i */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     c[i] = PetscRealPart(c[i]);
     c[j+i] = PetscCMPLX(0.0,PetscImaginaryPart(c[j+i]));
 #else
@@ -241,7 +241,7 @@ static PetscErrorCode Orthog_Gruning(Vec x,BV U,BV V,BV HU,BV HV,PetscInt j,Pets
 #endif
   }
   /* x = x-U*c1-V*c2 */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(BVMultVec(U,-2.0,1.0,x,c));
   PetscCall(BVMultVec(V,-2.0,1.0,x,c+j));
 #else

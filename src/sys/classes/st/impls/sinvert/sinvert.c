@@ -48,12 +48,12 @@ static PetscErrorCode STApply_Sinvert_BSE(ST st,Vec x,Vec y)
 static PetscErrorCode STBackTransform_Sinvert(ST st,PetscInt n,PetscScalar *eigr,PetscScalar *eigi)
 {
   PetscInt    j;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar t;
 #endif
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   for (j=0;j<n;j++) {
     if (eigi[j] == 0) eigr[j] = 1.0 / eigr[j] + st->sigma;
     else {

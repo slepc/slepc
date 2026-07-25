@@ -75,7 +75,7 @@ struct _p_DS {
 /*
     Macros to test valid DS arguments
 */
-#if !defined(PETSC_USE_DEBUG)
+#if !PetscDefined(USE_DEBUG)
 
 #define DSCheckAlloc(h,arg) do {(void)(h);} while (0)
 #define DSCheckSolved(h,arg) do {(void)(h);} while (0)

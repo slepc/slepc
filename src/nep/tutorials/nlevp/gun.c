@@ -48,7 +48,7 @@ int main(int argc,char **argv)
   PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
 
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"GUN problem\n\n"));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   SETERRQ(PETSC_COMM_WORLD,PETSC_ERR_SUP,"This example requires complex scalars!");
 #endif
 

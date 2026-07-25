@@ -379,13 +379,13 @@ PetscErrorCode BVResize(BV bv,PetscInt m,PetscBool copy)
   PetscCall(PetscFree2(bv->h,bv->c));
   if (bv->omega) {
     if (bv->cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
       PetscCall(VecCreateSeqCUDA(PETSC_COMM_SELF,m,&v));
 #else
       SETERRQ(PetscObjectComm((PetscObject)bv),PETSC_ERR_PLIB,"Something wrong happened");
 #endif
     } else if (bv->hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
       PetscCall(VecCreateSeqHIP(PETSC_COMM_SELF,m,&v));
 #else
       SETERRQ(PetscObjectComm((PetscObject)bv),PETSC_ERR_PLIB,"Something wrong happened");
@@ -1401,12 +1401,12 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
     PetscCall(PetscLayoutGetSize(bv->map,&N));
     PetscCall(PetscLayoutGetBlockSize(bv->map,&bs));
     if (cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
       if (mpi) PetscCall(VecCreateMPICUDAWithArray(PetscObjectComm((PetscObject)bv),bs,nloc,N,NULL,v));
       else PetscCall(VecCreateSeqCUDAWithArray(PetscObjectComm((PetscObject)bv),bs,N,NULL,v));
 #endif
     } else if (hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
       if (mpi) PetscCall(VecCreateMPIHIPWithArray(PetscObjectComm((PetscObject)bv),bs,nloc,N,NULL,v));
       else PetscCall(VecCreateSeqHIPWithArray(PetscObjectComm((PetscObject)bv),bs,N,NULL,v));
 #endif

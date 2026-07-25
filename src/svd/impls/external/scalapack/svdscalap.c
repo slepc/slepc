@@ -49,7 +49,7 @@ static PetscErrorCode SVDSolve_ScaLAPACK(SVD svd)
   PetscScalar    *work,minlwork;
   PetscBLASInt   lwork=-1,one=1;
   PetscInt       M,N,m,n,mn;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscBLASInt   lrwork;
   PetscReal      *rwork,dummy;
 #endif
@@ -72,7 +72,7 @@ static PetscErrorCode SVDSolve_ScaLAPACK(SVD svd)
   q = (Mat_ScaLAPACK*)QT->data;
 
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* allocate workspace */
   PetscCallScaLAPACKInfo("gesvd",SCALAPACKgesvd_("V","V",&a->M,&a->N,a->loc,&one,&one,a->desc,svd->sigma,z->loc,&one,&one,z->desc,q->loc,&one,&one,q->desc,&minlwork,&lwork,&info));
   PetscCall(PetscBLASIntCast((PetscInt)minlwork,&lwork));

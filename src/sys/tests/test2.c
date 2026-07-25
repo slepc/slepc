@@ -14,8 +14,8 @@ static char help[] = "Tests functions intended to be used from a debugger.\n\n";
 
 int main(int argc,char **argv)
 {
-#if defined(PETSC_USE_DEBUG)
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_DEBUG)
+#if PetscDefined(USE_COMPLEX)
   PetscScalar Xr[]={1.0,-0.5,0.625,1.25,-0.125,-5.5};
 #else
   PetscScalar Xr[]={1.0,-0.5,0.625,1.25,-0.125,-5.5},Xi[]={0.0,0.0,0.0,0.0,0.0,0.0};
@@ -25,8 +25,8 @@ int main(int argc,char **argv)
   PetscFunctionBeginUser;
   PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
 
-#if defined(PETSC_USE_DEBUG)
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_DEBUG)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(SlepcDebugViewMatrix(2,3,Xr,NULL,2,"M",NULL));
 #else
   PetscCall(SlepcDebugViewMatrix(2,3,Xr,Xi,2,"M",NULL));

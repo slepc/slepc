@@ -27,7 +27,7 @@ int main(int argc,char **argv)
   PetscInt       N,n=10,m,Istart,Iend,II,nev,i,j,*inertias,ns;
   PetscReal      inta,intb,*shifts;
   PetscBool      flag,show=PETSC_FALSE,terse;
-#if defined(PETSC_HAVE_MUMPS) && !defined(PETSC_USE_COMPLEX)
+#if PetscDefined(HAVE_MUMPS) && !PetscDefined(USE_COMPLEX)
   Mat            F;
 #endif
 
@@ -113,7 +113,7 @@ int main(int argc,char **argv)
      Note that in complex scalars we cannot use MUMPS for spectrum slicing,
      because MatGetInertia() is not available in that case.
   */
-#if defined(PETSC_HAVE_MUMPS) && !defined(PETSC_USE_COMPLEX)
+#if PetscDefined(HAVE_MUMPS) && !PetscDefined(USE_COMPLEX)
   PetscCall(EPSKrylovSchurSetDetectZeros(eps,PETSC_TRUE));  /* enforce zero detection */
   PetscCall(PCFactorSetMatSolverType(pc,MATSOLVERMUMPS));
   PetscCall(PCFactorSetUpMatSolverType(pc));

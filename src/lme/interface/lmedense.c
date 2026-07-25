@@ -32,7 +32,7 @@ PetscErrorCode LMEDenseRankSVD(LME lme,PetscInt n,PetscScalar *A,PetscInt lda,Pe
   PetscCall(PetscBLASIntCast(ldu,&ldu_));
   lw_ = 10*n_;
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","O",&n_,&n_,A,&lda_,sg,U,&ldu_,NULL,&n_,work,&lw_,&info));
 #else
   PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","O",&n_,&n_,A,&lda_,sg,U,&ldu_,NULL,&n_,work,&lw_,rwork,&info));
@@ -50,7 +50,7 @@ PetscErrorCode LMEDenseRankSVD(LME lme,PetscInt n,PetscScalar *A,PetscInt lda,Pe
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_INFO)
+#if PetscDefined(USE_INFO)
 /*
    LyapunovCholResidual - compute the residual norm ||A*U'*U+U'*U*A'+B*B'||
 */
@@ -137,7 +137,7 @@ static PetscErrorCode HessLyapunovChol_SLICOT(PetscInt m,PetscScalar *H,PetscInt
 
   /* compute the real Schur form of W */
   PetscCallLAPACKInfo("LAPACKgees",LAPACKgees_("V","N",NULL,&n,W,&n,&sdim,wr,wi,Q,&n,work,&lwork,NULL,&info));
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
   for (i=0;i<m;i++) PetscCheck(PetscRealPart(wr[i])<0.0,PETSC_COMM_SELF,PETSC_ERR_USER_INPUT,"Eigenvalue with non-negative real part, the coefficient matrix is not stable");
 #endif
 
@@ -213,7 +213,7 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
   PetscInt       i,j;
   PetscReal      scal;
   PetscScalar    *Q,*C,*W,*Z,*wr,*work,zero=0.0,done=1.0,dmone=-1.0;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    *wi;
 #endif
 
@@ -226,7 +226,7 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
   C = U;
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc6(m*m,&Q,m*m,&W,m*k,&Z,m,&wr,m,&wi,lwork,&work));
 #else
   PetscCall(PetscMalloc5(m*m,&Q,m*m,&W,m*k,&Z,m,&wr,lwork,&work));
@@ -238,12 +238,12 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
   }
 
   /* compute the (real) Schur form of W */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKhseqr",LAPACKhseqr_("S","I",&n,&ilo,&n,W,&n,wr,wi,Q,&n,work,&lwork,&info));
 #else
   PetscCallLAPACKInfo("LAPACKhseqr",LAPACKhseqr_("S","I",&n,&ilo,&n,W,&n,wr,Q,&n,work,&lwork,&info));
 #endif
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
   for (i=0;i<m;i++) PetscCheck(PetscRealPart(wr[i])<0.0,PETSC_COMM_SELF,PETSC_ERR_USER_INPUT,"Eigenvalue with non-negative real part %g, the coefficient matrix is not stable",(double)PetscRealPart(wr[i]));
 #endif
 
@@ -269,7 +269,7 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
   PetscCall(CholeskyFactor(m,C,ldu));
 
   PetscCall(PetscFPTrapPop());
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree6(Q,W,Z,wr,wi,work));
 #else
   PetscCall(PetscFree5(Q,W,Z,wr,work));
@@ -313,7 +313,7 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
 @*/
 PetscErrorCode LMEDenseHessLyapunovChol(LME lme,PetscInt m,PetscScalar H[],PetscInt ldh,PetscInt k,PetscScalar B[],PetscInt ldb,PetscScalar U[],PetscInt ldu,PetscReal *res)
 {
-#if defined(PETSC_USE_INFO)
+#if PetscDefined(USE_INFO)
   PetscReal      error;
 #endif
 
@@ -335,7 +335,7 @@ PetscErrorCode LMEDenseHessLyapunovChol(LME lme,PetscInt m,PetscScalar H[],Petsc
   PetscCall(HessLyapunovChol_LAPACK(m,H,ldh,k,B,ldb,U,ldu,res));
 #endif
 
-#if defined(PETSC_USE_INFO)
+#if PetscDefined(USE_INFO)
   if (PetscLogPrintInfo) {
     PetscCall(LyapunovCholResidual(m,H,ldh,k,B,ldb,U,ldu,&error));
     PetscCall(PetscInfo(lme,"Residual norm of dense Lyapunov equation = %g\n",(double)error));
@@ -396,7 +396,7 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
   PetscInt       i,j;
   PetscReal      scal;
   PetscScalar    *Q,*W,*Z,*wr,*work,zero=0.0,done=1.0,dmone=-1.0;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      *rwork;
 #else
   PetscScalar    *wi;
@@ -409,7 +409,7 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
   PetscCall(PetscBLASIntCast(6*m,&lwork));
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc6(m*m,&Q,m*m,&W,m*m,&Z,m,&wr,m,&wi,lwork,&work));
 #else
   PetscCall(PetscMalloc6(m*m,&Q,m*m,&W,m*m,&Z,m,&wr,lwork,&work,m,&rwork));
@@ -421,7 +421,7 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
   }
 
   /* compute the (real) Schur form of W */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKgees",LAPACKgees_("V","N",NULL,&n,W,&n,&sdim,wr,wi,Q,&n,work,&lwork,NULL,&info));
 #else
   PetscCallLAPACKInfo("LAPACKgees",LAPACKgees_("V","N",NULL,&n,W,&n,&sdim,wr,Q,&n,work,&lwork,rwork,NULL,&info));
@@ -440,7 +440,7 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
   PetscCallBLAS("BLASgemm",BLASgemm_("N","C",&n,&n,&n,&done,W,&n,Q,&n,&zero,X,&lx));
 
   PetscCall(PetscFPTrapPop());
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree6(Q,W,Z,wr,wi,work));
 #else
   PetscCall(PetscFree6(Q,W,Z,wr,work,rwork));
@@ -478,7 +478,7 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
 @*/
 PetscErrorCode LMEDenseLyapunov(LME lme,PetscInt m,PetscScalar A[],PetscInt lda,PetscScalar B[],PetscInt ldb,PetscScalar X[],PetscInt ldx)
 {
-#if defined(PETSC_USE_INFO)
+#if PetscDefined(USE_INFO)
   PetscReal      error;
 #endif
 
@@ -498,7 +498,7 @@ PetscErrorCode LMEDenseLyapunov(LME lme,PetscInt m,PetscScalar A[],PetscInt lda,
   PetscCall(Lyapunov_LAPACK(m,A,lda,B,ldb,X,ldx));
 #endif
 
-#if defined(PETSC_USE_INFO)
+#if PetscDefined(USE_INFO)
   if (PetscLogPrintInfo) {
     PetscCall(LyapunovResidual(m,A,lda,B,ldb,X,ldx,&error));
     PetscCall(PetscInfo(lme,"Residual norm of dense Lyapunov equation = %g\n",(double)error));

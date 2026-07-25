@@ -82,7 +82,7 @@ PetscErrorCode LMEInitializePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_DYNAMIC_LIBRARIES)
+#if PetscDefined(HAVE_DYNAMIC_LIBRARIES)
 /*
   PetscDLLibraryRegister - This function is called when the dynamic library
   it is in is opened.

@@ -10,7 +10,7 @@
 module slepcsysdef
   use petscsysdef
   use petscmatdef
-#include <../src/sys/ftn-mod/slepcsys.h>
+#include <../src/sys/ftn-mod/slepcsys.h90>
 end module slepcsysdef
 
 module slepcsys

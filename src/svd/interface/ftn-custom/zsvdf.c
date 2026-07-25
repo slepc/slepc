@@ -11,7 +11,7 @@
 #include <petsc/private/ftnimpl.h>
 #include <slepcsvd.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define svdmonitorset_                    SVDMONITORSET
 #define svdmonitorall_                    SVDMONITORALL
 #define svdmonitorfirst_                  SVDMONITORFIRST
@@ -26,7 +26,7 @@
 #define svdstoppingbasic_                 SVDSTOPPINGBASIC
 #define svdstoppingthreshold_             SVDSTOPPINGTHRESHOLD
 #define svdsetstoppingtestfunction_       SVDSETSTOPPINGTESTFUNCTION
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define svdmonitorset_                    svdmonitorset
 #define svdmonitorall_                    svdmonitorall
 #define svdmonitorfirst_                  svdmonitorfirst

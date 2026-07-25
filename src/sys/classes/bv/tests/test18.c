@@ -22,7 +22,7 @@ int main(int argc,char **argv)
   PetscBool      verbose;
   PetscReal      norm,error;
   PetscScalar    alpha;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    *eigi;
   PetscRandom    rand;
   PetscReal      normr,normi;
@@ -122,7 +122,7 @@ int main(int argc,char **argv)
   if (error<100*PETSC_MACHINE_EPSILON) PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Deviation from B-normalized vectors < 100*eps\n"));
   else PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Deviation from B-normalized vectors: %g\n",(double)norm));
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* fill imaginary parts */
   PetscCall(PetscCalloc1(k,&eigi));
   PetscCall(PetscRandomCreate(PETSC_COMM_WORLD,&rand));

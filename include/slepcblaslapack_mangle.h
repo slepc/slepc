@@ -41,7 +41,7 @@
 #define LAPACKlamrg_ PETSCBLASREAL(lamrg,LAMRG)
 #endif
 #if !defined(SLEPC_MISSING_LAPACK_ORGHR)
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 #define LAPACKorghr_ PETSCBLAS(orghr,ORGHR)
 #else
 #define LAPACKorghr_ PETSCBLAS(unghr,UNGHR)
@@ -79,7 +79,7 @@
 #define LAPACKlamc3_ PETSCBLASREAL(lamc3,LAMC3)
 
 /* subroutines with different name in real/complex */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 #if !defined(SLEPC_MISSING_LAPACK_ORGTR)
 #define LAPACKorgtr_ PETSCBLAS(orgtr,ORGTR)
 #endif
@@ -153,7 +153,7 @@
 #define LAPACKgebrd_ PETSCBLAS(gebrd,GEBRD)
 #endif
 
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
 /* complex subroutines to be called with scalar-type=real */
 #define BLASCOMPLEXgemm_   PETSCBLASCOMPLEX(gemm,GEMM)
 #define BLASCOMPLEXscal_   PETSCBLASCOMPLEX(scal,SCAL)

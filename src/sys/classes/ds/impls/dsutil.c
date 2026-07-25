@@ -58,7 +58,7 @@ PetscErrorCode DSSolve_NHEP_Private(DS ds,DSMatType mA,DSMatType mQ,PetscScalar 
   }
 
   /* compute the (real) Schur form */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKhseqr",LAPACKhseqr_("S","V",&n,&ilo,&n,A,&ld,wr,wi,Q,&ld,work,&lwork,&info));
   for (j=0;j<ds->l;j++) {
     if (j==n-1 || A[j+1+j*ld] == 0.0) {
@@ -92,7 +92,7 @@ PetscErrorCode DSSort_NHEP_Total(DS ds,DSMatType mT,DSMatType mQ,PetscScalar *wr
   PetscScalar    re,*T,*Q;
   PetscInt       i,j,pos,result;
   PetscBLASInt   ifst,ilst,n,ld;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    *work,im;
 #endif
 
@@ -101,36 +101,36 @@ PetscErrorCode DSSort_NHEP_Total(DS ds,DSMatType mT,DSMatType mQ,PetscScalar *wr
   PetscCall(MatDenseGetArray(ds->omat[mQ],&Q));
   PetscCall(PetscBLASIntCast(ds->n,&n));
   PetscCall(PetscBLASIntCast(ds->ld,&ld));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(DSAllocateWork_Private(ds,ld,0,0));
   work = ds->work;
 #endif
   /* selection sort */
   for (i=ds->l;i<n-1;i++) {
     re = wr[i];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     im = wi[i];
 #endif
     pos = 0;
     j=i+1; /* j points to the next eigenvalue */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (im != 0) j=i+2;
 #endif
     /* find minimum eigenvalue */
     for (;j<n;j++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       PetscCall(SlepcSCCompare(ds->sc,re,im,wr[j],wi[j],&result));
 #else
       PetscCall(SlepcSCCompare(ds->sc,re,0.0,wr[j],0.0,&result));
 #endif
       if (result > 0) {
         re = wr[j];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         im = wi[j];
 #endif
         pos = j;
       }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       if (wi[j] != 0) j++;
 #endif
     }
@@ -138,7 +138,7 @@ PetscErrorCode DSSort_NHEP_Total(DS ds,DSMatType mT,DSMatType mQ,PetscScalar *wr
       /* interchange blocks */
       PetscCall(PetscBLASIntCast(pos+1,&ifst));
       PetscCall(PetscBLASIntCast(i+1,&ilst));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       PetscCallLAPACKInfo("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,work,&info));
 #else
       PetscCallLAPACKInfo("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,&info));
@@ -146,7 +146,7 @@ PetscErrorCode DSSort_NHEP_Total(DS ds,DSMatType mT,DSMatType mQ,PetscScalar *wr
       /* recover original eigenvalues from T matrix */
       for (j=i;j<n;j++) {
         wr[j] = T[j+j*ld];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         if (j<n-1 && T[j+1+j*ld] != 0.0) {
           /* complex conjugate eigenvalue */
           wi[j] = PetscSqrtReal(PetscAbsReal(T[j+1+j*ld]))*PetscSqrtReal(PetscAbsReal(T[j+(j+1)*ld]));
@@ -157,7 +157,7 @@ PetscErrorCode DSSort_NHEP_Total(DS ds,DSMatType mT,DSMatType mQ,PetscScalar *wr
 #endif
       }
     }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (wi[i] != 0) i++;
 #endif
   }
@@ -175,7 +175,7 @@ PetscErrorCode DSSortWithPermutation_NHEP_Private(DS ds,PetscInt *perm,DSMatType
   PetscInt       i,j,pos,inc=1;
   PetscBLASInt   ifst,ilst,n,ld;
   PetscScalar    *T,*Q;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    *work;
 #endif
 
@@ -184,23 +184,23 @@ PetscErrorCode DSSortWithPermutation_NHEP_Private(DS ds,PetscInt *perm,DSMatType
   PetscCall(MatDenseGetArray(ds->omat[mQ],&Q));
   PetscCall(PetscBLASIntCast(ds->n,&n));
   PetscCall(PetscBLASIntCast(ds->ld,&ld));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(DSAllocateWork_Private(ds,ld,0,0));
   work = ds->work;
 #endif
   for (i=ds->l;i<n-1;i++) {
     pos = perm[i];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     inc = (pos<n-1 && T[pos+1+pos*ld] != 0.0)? 2: 1;
 #endif
     if (pos!=i) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       PetscCheck((T[pos+(pos-1)*ld]==0.0 || perm[i+1]==pos-1) && (pos==n-1 || (T[pos+1+pos*ld]==0.0 || perm[i+1]==pos+1)),PETSC_COMM_SELF,PETSC_ERR_FP,"Invalid permutation due to a 2x2 block at position %" PetscInt_FMT,pos);
 #endif
       /* interchange blocks */
       PetscCall(PetscBLASIntCast(pos+1,&ifst));
       PetscCall(PetscBLASIntCast(i+1,&ilst));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       PetscCallLAPACKInfo("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,work,&info));
 #else
       PetscCallLAPACKInfo("LAPACKtrexc",LAPACKtrexc_("V",&n,T,&ld,Q,&ld,&ifst,&ilst,&info));
@@ -216,7 +216,7 @@ PetscErrorCode DSSortWithPermutation_NHEP_Private(DS ds,PetscInt *perm,DSMatType
   /* recover original eigenvalues from T matrix */
   for (j=ds->l;j<n;j++) {
     wr[j] = T[j+j*ld];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (j<n-1 && T[j+1+j*ld] != 0.0) {
       /* complex conjugate eigenvalue */
       wi[j] = PetscSqrtReal(PetscAbsReal(T[j+1+j*ld]))*PetscSqrtReal(PetscAbsReal(T[j+(j+1)*ld]));

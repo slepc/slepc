@@ -23,7 +23,7 @@ typedef struct {
 
 static PetscErrorCode RGComputeBoundingBox_Polygon(RG,PetscReal*,PetscReal*,PetscReal*,PetscReal*);
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 static PetscBool CheckSymmetry(PetscInt n,PetscScalar *vr,PetscScalar *vi)
 {
   PetscInt i,j,k;
@@ -54,23 +54,23 @@ static PetscErrorCode RGPolygonSetVertices_Polygon(RG rg,PetscInt n,PetscScalar 
   PetscFunctionBegin;
   PetscCheck(n>2,PetscObjectComm((PetscObject)rg),PETSC_ERR_ARG_OUTOFRANGE,"At least 3 vertices required, you provided %" PetscInt_FMT,n);
   PetscCheck(n<=VERTMAX,PetscObjectComm((PetscObject)rg),PETSC_ERR_ARG_OUTOFRANGE,"Too many points, maximum allowed is %d",VERTMAX);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCheck(CheckSymmetry(n,vr,vi),PetscObjectComm((PetscObject)rg),PETSC_ERR_ARG_WRONG,"In real scalars the region must be symmetric wrt real axis");
 #endif
   if (ctx->n) {
     PetscCall(PetscFree(ctx->vr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(PetscFree(ctx->vi));
 #endif
   }
   ctx->n = n;
   PetscCall(PetscMalloc1(n,&ctx->vr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc1(n,&ctx->vi));
 #endif
   for (i=0;i<n;i++) {
     ctx->vr[i] = vr[i];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     ctx->vi[i] = vi[i];
 #endif
   }
@@ -113,7 +113,7 @@ PetscErrorCode RGPolygonSetVertices(RG rg,PetscInt n,PetscScalar vr[],PetscScala
   PetscValidHeaderSpecific(rg,RG_CLASSID,1);
   PetscValidLogicalCollectiveInt(rg,n,2);
   PetscAssertPointer(vr,3);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscAssertPointer(vi,4);
 #endif
   PetscTryMethod(rg,"RGPolygonSetVertices_C",(RG,PetscInt,PetscScalar*,PetscScalar*),(rg,n,vr,vi));
@@ -134,7 +134,7 @@ static PetscErrorCode RGPolygonGetVertices_Polygon(RG rg,PetscInt *n,PetscScalar
       for (i=0;i<ctx->n;i++) (*vr)[i] = ctx->vr[i];
     }
   }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (vi) {
     if (!ctx->n) *vi = NULL;
     else {
@@ -194,7 +194,7 @@ static PetscErrorCode RGView_Polygon(RG rg,PetscViewer viewer)
     PetscCall(PetscViewerASCIIPrintf(viewer,"  vertices: "));
     PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
     for (i=0;i<ctx->n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       PetscCall(SlepcSNPrintfScalar(str,sizeof(str),ctx->vr[i],PETSC_FALSE));
 #else
       if (ctx->vi[i]!=0.0) PetscCall(PetscSNPrintf(str,sizeof(str),"%g%+gi",(double)ctx->vr[i],(double)ctx->vi[i]));
@@ -226,7 +226,7 @@ static PetscErrorCode RGView_Polygon(RG rg,PetscViewer viewer)
     PetscCall(PetscDrawAxisDraw(axis));
     PetscCall(PetscDrawAxisDestroy(&axis));
     for (i=0;i<ctx->n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       x0 = PetscRealPart(ctx->vr[i]); y0 = PetscImaginaryPart(ctx->vr[i]);
       if (i<ctx->n-1) {
         x1 = PetscRealPart(ctx->vr[i+1]); y1 = PetscImaginaryPart(ctx->vr[i+1]);
@@ -266,7 +266,7 @@ static PetscErrorCode RGComputeContour_Polygon(RG rg,PetscInt n,PetscScalar *ucr
   PetscInt       k=1,idx=ctx->n-1,i;
   PetscBool      ini=PETSC_FALSE;
   PetscScalar    incr,*cr=ucr,*ci=uci;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    inci;
 #endif
 
@@ -278,46 +278,46 @@ static PetscErrorCode RGComputeContour_Polygon(RG rg,PetscInt n,PetscScalar *ucr
   if (!ucr) PetscCall(PetscMalloc1(n,&cr));
   if (!uci) PetscCall(PetscMalloc1(n,&ci));
   cr[0] = ctx->vr[0];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   ci[0] = ctx->vi[0];
 #endif
   incr = ctx->vr[ctx->n-1]-ctx->vr[0];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   inci = ctx->vi[ctx->n-1]-ctx->vi[0];
 #endif
   d = SlepcAbsEigenvalue(incr,inci);
   incr /= d;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   inci /= d;
 #endif
   while (k<n) {
     if (ini) {
       incr = ctx->vr[idx]-ctx->vr[idx+1];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       inci = ctx->vi[idx]-ctx->vi[idx+1];
 #endif
       d = SlepcAbsEigenvalue(incr,inci);
       incr /= d;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       inci /= d;
 #endif
       if (rem+d>h) {
         cr[k] = ctx->vr[idx+1]+incr*(h-rem);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         ci[k] = ctx->vi[idx+1]+inci*(h-rem);
 #endif
         k++;
         ini = PETSC_FALSE;
       } else {rem += d; idx--;}
     } else {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       rem = SlepcAbsEigenvalue(ctx->vr[idx]-cr[k-1],ctx->vi[idx]-ci[k-1]);
 #else
       rem = PetscAbsScalar(ctx->vr[idx]-cr[k-1]);
 #endif
       if (rem>h) {
         cr[k] = cr[k-1]+incr*h;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         ci[k] = ci[k-1]+inci*h;
 #endif
         k++;
@@ -340,7 +340,7 @@ static PetscErrorCode RGComputeBoundingBox_Polygon(RG rg,PetscReal *a,PetscReal 
   if (c) *c =  PETSC_MAX_REAL;
   if (d) *d = -PETSC_MAX_REAL;
   for (i=0;i<ctx->n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     if (a) *a = PetscMin(*a,PetscRealPart(ctx->vr[i]));
     if (b) *b = PetscMax(*b,PetscRealPart(ctx->vr[i]));
     if (c) *c = PetscMin(*c,PetscImaginaryPart(ctx->vr[i]));
@@ -364,7 +364,7 @@ static PetscErrorCode RGCheckInside_Polygon(RG rg,PetscReal px,PetscReal py,Pets
 
   PetscFunctionBegin;
   for (i=0;i<ctx->n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     x[i] = PetscRealPart(ctx->vr[i])-px;
     y[i] = PetscImaginaryPart(ctx->vr[i])-py;
 #else
@@ -398,7 +398,7 @@ static PetscErrorCode RGSetFromOptions_Polygon(RG rg,PetscOptionItems PetscOptio
   PetscScalar    array[VERTMAX];
   PetscInt       i,k;
   PetscBool      flg,flgi=PETSC_FALSE;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    arrayi[VERTMAX];
   PetscInt       ki;
 #else
@@ -411,7 +411,7 @@ static PetscErrorCode RGSetFromOptions_Polygon(RG rg,PetscOptionItems PetscOptio
     k = VERTMAX;
     for (i=0;i<k;i++) array[i] = 0;
     PetscCall(PetscOptionsScalarArray("-rg_polygon_vertices","Vertices of polygon","RGPolygonSetVertices",array,&k,&flg));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     ki = VERTMAX;
     for (i=0;i<ki;i++) arrayi[i] = 0;
     PetscCall(PetscOptionsScalarArray("-rg_polygon_verticesi","Vertices of polygon (imaginary part)","RGPolygonSetVertices",arrayi,&ki,&flgi));
@@ -430,7 +430,7 @@ static PetscErrorCode RGDestroy_Polygon(RG rg)
   PetscFunctionBegin;
   if (ctx->n) {
     PetscCall(PetscFree(ctx->vr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(PetscFree(ctx->vi));
 #endif
   }

@@ -14,7 +14,7 @@ static char help[] = "Test ST with shell matrices.\n\n";
 
 static PetscErrorCode MatMult_Shell(Mat S,Vec x,Vec y);
 static PetscErrorCode MatMultTranspose_Shell(Mat S,Vec x,Vec y);
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 static PetscErrorCode MatMultHermitianTranspose_Shell(Mat S,Vec x,Vec y);
 #endif
 static PetscErrorCode MatGetDiagonal_Shell(Mat S,Vec diag);
@@ -31,7 +31,7 @@ static PetscErrorCode MyShellMatCreate(Mat *A,Mat *M)
   PetscCall(MatCreateShell(comm,PETSC_DECIDE,PETSC_DECIDE,n,n,A,M));
   PetscCall(MatShellSetOperation(*M,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Shell));
   PetscCall(MatShellSetOperation(*M,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Shell));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(MatShellSetOperation(*M,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultHermitianTranspose_Shell));
 #endif
   PetscCall(MatShellSetOperation(*M,MATOP_GET_DIAGONAL,(PetscErrorCodeFn*)MatGetDiagonal_Shell));
@@ -161,7 +161,7 @@ static PetscErrorCode MatMultTranspose_Shell(Mat S,Vec x,Vec y)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 static PetscErrorCode MatMultHermitianTranspose_Shell(Mat S,Vec x,Vec y)
 {
   Mat               *A;

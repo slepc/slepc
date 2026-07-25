@@ -44,7 +44,7 @@ static PetscErrorCode eigenCompare (PetscScalar ar,PetscScalar ai,PetscScalar br
   PetscReal abs1, abs2, tol=1e-12, r_ar, r_ai, r_br, r_bi;
 
   PetscFunctionBegin;
-  #if defined(PETSC_USE_COMPLEX)
+  #if PetscDefined(USE_COMPLEX)
     r_ar = PetscRealPart(ar);
     r_ai = PetscImaginaryPart(ar);
     r_br = PetscRealPart(br);

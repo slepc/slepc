@@ -79,7 +79,7 @@ int main(int argc,char **argv)
     PetscCall(PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nBethe-Salpeter eigenproblem, n=%" PetscInt_FMT "\n\n",n));
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     a = PetscCMPLX(-0.1,0.2);
     b = PetscCMPLX(1.0,0.5);
     d = PetscCMPLX(2.0,0.2);

@@ -211,19 +211,19 @@ PetscErrorCode SlepcCISS_BH_SVD(PetscScalar *H,PetscInt ml,PetscReal delta,Petsc
   PetscInt       i;
   PetscBLASInt   m,n,lda,ldu,ldvt,lwork;
   PetscScalar    *work;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      *rwork;
 #endif
 
   PetscFunctionBegin;
   PetscCall(PetscMalloc1(5*ml,&work));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc1(5*ml,&rwork));
 #endif
   PetscCall(PetscBLASIntCast(ml,&m));
   n = m; lda = m; ldu = m; ldvt = m; lwork = 5*m;
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("N","N",&m,&n,H,&lda,sigma,NULL,&ldu,NULL,&ldvt,work,&lwork,rwork,&info));
 #else
   PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("N","N",&m,&n,H,&lda,sigma,NULL,&ldu,NULL,&ldvt,work,&lwork,&info));
@@ -234,7 +234,7 @@ PetscErrorCode SlepcCISS_BH_SVD(PetscScalar *H,PetscInt ml,PetscReal delta,Petsc
     if (sigma[i]/PetscMax(sigma[0],1.0)>delta) (*rank)++;
   }
   PetscCall(PetscFree(work));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree(rwork));
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);

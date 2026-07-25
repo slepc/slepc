@@ -137,7 +137,7 @@ PetscErrorCode DSViewMat(DS ds,PetscViewer viewer,DSMatType m)
   PetscInt          i,j,rows,cols;
   const PetscScalar *M=NULL,*v;
   PetscViewerFormat format;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscBool         allreal = PETSC_TRUE;
   const PetscReal   *vr;
 #endif
@@ -154,7 +154,7 @@ PetscErrorCode DSViewMat(DS ds,PetscViewer viewer,DSMatType m)
   PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
   PetscCall(DSMatGetSize(ds,m,&rows,&cols));
   PetscCall(MatDenseGetArrayRead(ds->omat[m],&M));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   /* determine if matrix has all real values */
   if (m!=DS_MAT_T && m!=DS_MAT_D) {
     /* determine if matrix has all real values */
@@ -172,11 +172,11 @@ PetscErrorCode DSViewMat(DS ds,PetscViewer viewer,DSMatType m)
 
   for (i=0;i<rows;i++) {
     v = M+i;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     vr = (const PetscReal*)M+i;   /* handle compact storage, 2nd column is in imaginary part of 1st column */
 #endif
     for (j=0;j<cols;j++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       if (m!=DS_MAT_T && m!=DS_MAT_D) {
         if (allreal) PetscCall(PetscViewerASCIIPrintf(viewer,"%18.16e ",(double)PetscRealPart(*v)));
         else PetscCall(PetscViewerASCIIPrintf(viewer,"%18.16e%+18.16ei ",(double)PetscRealPart(*v),(double)PetscImaginaryPart(*v)));
@@ -185,7 +185,7 @@ PetscErrorCode DSViewMat(DS ds,PetscViewer viewer,DSMatType m)
       PetscCall(PetscViewerASCIIPrintf(viewer,"%18.16e ",(double)*v));
 #endif
       v += ds->ld;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       if (m==DS_MAT_T) vr += ds->ld;
 #endif
     }
@@ -208,7 +208,7 @@ PetscErrorCode DSSortEigenvalues_Private(DS ds,PetscScalar *wr,PetscScalar *wi,P
   n = ds->t;   /* sort only first t pairs if truncated */
   /* insertion sort */
   i=ds->l+1;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (wi && wi[perm[i-1]]!=0.0) i++; /* initial value is complex */
 #else
   if (isghiep && PetscImaginaryPart(wr[perm[i-1]])!=0.0) i++;
@@ -218,7 +218,7 @@ PetscErrorCode DSSortEigenvalues_Private(DS ds,PetscScalar *wr,PetscScalar *wi,P
     if (wi) im = wi[perm[i]];
     else im = 0.0;
     tmp1 = perm[i];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (im!=0.0) { d = 2; tmp2 = perm[i+1]; }
     else d = 1;
 #else
@@ -232,7 +232,7 @@ PetscErrorCode DSSortEigenvalues_Private(DS ds,PetscScalar *wr,PetscScalar *wi,P
     while (result<0 && j>=ds->l) {
       perm[j+d] = perm[j];
       j--;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       if (wi && wi[perm[j+1]]!=0)
 #else
       if (isghiep && PetscImaginaryPart(wr[perm[j+1]])!=0)

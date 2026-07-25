@@ -26,11 +26,11 @@ typedef struct {
    Definition of routines from the ARPACK package
 */
 
-#if defined(PETSC_HAVE_MPIUNI) || defined(PETSC_HAVE_MSMPI)
+#if PetscDefined(HAVE_MPIUNI) || PetscDefined(HAVE_MSMPI)
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
 
 #if defined(SLEPC_ARPACK_HAVE_UNDERSCORE)
 #define SLEPC_ARPACK(lcase,ucase) c##lcase##_
@@ -54,7 +54,7 @@ typedef struct {
 
 #else
 
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
 
 #if defined(SLEPC_ARPACK_HAVE_UNDERSCORE)
 #define SLEPC_ARPACK(lcase,ucase) s##lcase##_
@@ -80,9 +80,9 @@ typedef struct {
 
 #else  /* not MPIUNI */
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
 
 #if defined(SLEPC_ARPACK_HAVE_UNDERSCORE)
 #define SLEPC_ARPACK(lcase,ucase) pc##lcase##_
@@ -106,7 +106,7 @@ typedef struct {
 
 #else
 
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
 
 #if defined(SLEPC_ARPACK_HAVE_UNDERSCORE)
 #define SLEPC_ARPACK(lcase,ucase) ps##lcase##_
@@ -132,11 +132,11 @@ typedef struct {
 
 #endif
 
-#if defined(PETSC_HAVE_MPIUNI) || defined(PETSC_HAVE_MSMPI)
+#if PetscDefined(HAVE_MPIUNI) || PetscDefined(HAVE_MSMPI)
 
 #define COMM_ARG
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 
 #define ARPACKnaupd_(comm,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) SLEPC_ARPACK(naupd,NAUPD) ((a),(b),(c),(d),(e),(f),(g),(h),(i),(j),(k),(l),(m),(n),(o),(p),1,2)
 #define ARPACKneupd_(comm,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y) SLEPC_ARPACK(neupd,NEUPD) ((a),(b),(c),(d),(e),(f),(g),(h),(i),(j),(k),(l),(m),(n),(o),(p),(q),(r),(s),(t),(u),(v),(w),(x),(y),1,1,2)
@@ -154,7 +154,7 @@ typedef struct {
 
 #define COMM_ARG MPI_Fint*,
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 
 #define ARPACKnaupd_(comm,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) SLEPC_ARPACK(naupd,NAUPD) ((comm),(a),(b),(c),(d),(e),(f),(g),(h),(i),(j),(k),(l),(m),(n),(o),(p),1,2)
 #define ARPACKneupd_(comm,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y) SLEPC_ARPACK(neupd,NEUPD) ((comm),(a),(b),(c),(d),(e),(f),(g),(h),(i),(j),(k),(l),(m),(n),(o),(p),(q),(r),(s),(t),(u),(v),(w),(x),(y),1,1,2)
@@ -173,7 +173,7 @@ typedef struct {
 SLEPC_EXTERN void   SLEPC_ARPACK(saupd,SAUPD)(COMM_ARG PetscInt*,char*,PetscInt*,const char*,PetscInt*,PetscReal*,PetscScalar*,PetscInt*,PetscScalar*,PetscInt*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscInt*,PetscInt*,int,int);
 SLEPC_EXTERN void   SLEPC_ARPACK(seupd,SEUPD)(COMM_ARG PetscInt*,char*,PetscInt*,PetscReal*,PetscReal*,PetscInt*,PetscReal*,char*,PetscInt*,const char*,PetscInt*,PetscReal*,PetscScalar*,PetscInt*,PetscScalar*,PetscInt*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscInt*,PetscInt*,int,int,int);
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 SLEPC_EXTERN void   SLEPC_ARPACK(naupd,NAUPD)(COMM_ARG PetscInt*,char*,PetscInt*,const char*,PetscInt*,PetscReal*,PetscScalar*,PetscInt*,PetscScalar*,PetscInt*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscInt*,PetscInt*,int,int);
 SLEPC_EXTERN void   SLEPC_ARPACK(neupd,NEUPD)(COMM_ARG PetscInt*,char*,PetscInt*,PetscReal*,PetscReal*,PetscReal*,PetscInt*,PetscReal*,PetscReal*,PetscReal*,char*,PetscInt*,const char*,PetscInt*,PetscReal*,PetscScalar*,PetscInt*,PetscScalar*,PetscInt*,PetscInt*,PetscInt*,PetscScalar*,PetscScalar*,PetscInt*,PetscInt*,int,int,int);
 #else

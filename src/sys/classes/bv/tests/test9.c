@@ -84,7 +84,7 @@ int main(int argc,char **argv)
     PetscCall(VecSet(v,0.0));
     for (i=0;i<4;i++) {
       if (i+j<n) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         alpha = PetscCMPLX((PetscReal)(3*i+j-2),(PetscReal)(2*i));
 #else
         alpha = (PetscReal)(3*i+j-2);
@@ -117,7 +117,7 @@ int main(int argc,char **argv)
   /* Fill Y entries */
   for (j=0;j<ky+1;j++) {
     PetscCall(BVGetColumn(Y,j,&v));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     alpha = PetscCMPLX((PetscReal)(j+1)/4.0,-(PetscReal)j);
 #else
     alpha = (PetscReal)(j+1)/4.0;

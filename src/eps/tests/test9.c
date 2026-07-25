@@ -31,7 +31,7 @@ PetscErrorCode CheckNormalizedVectors(EPS eps)
   Mat            A;
   Vec            xr,xi;
   PetscReal      error=0.0,normr;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscReal      normi;
 #endif
 
@@ -42,7 +42,7 @@ PetscErrorCode CheckNormalizedVectors(EPS eps)
     PetscCall(MatCreateVecs(A,&xr,&xi));
     for (i=0;i<nconv;i++) {
       PetscCall(EPSGetEigenvector(eps,i,xr,xi));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       PetscCall(VecNorm(xr,NORM_2,&normr));
       error = PetscMax(error,PetscAbsReal(normr-PetscRealConstant(1.0)));
 #else

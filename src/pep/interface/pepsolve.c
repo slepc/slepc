@@ -130,7 +130,7 @@ PetscErrorCode PEPSolve(PEP pep)
     if (flg) PetscTryTypeMethod(pep,backtransform);
   }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* reorder conjugate eigenvalues (positive imaginary first) */
   for (i=0;i<pep->nconv-1;i++) {
     if (pep->eigi[i] != 0) {
@@ -325,7 +325,7 @@ PetscErrorCode PEPGetEigenpair(PEP pep,PetscInt i,PetscScalar *eigr,PetscScalar 
   k = pep->perm[i];
 
   /* eigenvalue */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (eigr) *eigr = pep->eigr[k];
   if (eigi) *eigi = 0;
 #else
@@ -386,7 +386,7 @@ PetscErrorCode PEPComputeResidualNorm_Private(PEP pep,PetscScalar kr,PetscScalar
   PetscInt       i,nmat=pep->nmat;
   PetscScalar    t[20],*vals=t,*ivals=NULL;
   Vec            u,w;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   Vec            ui,wi;
   PetscReal      ni;
   PetscBool      imag;
@@ -396,18 +396,18 @@ PetscErrorCode PEPComputeResidualNorm_Private(PEP pep,PetscScalar kr,PetscScalar
   PetscFunctionBegin;
   u = z[0]; w = z[1];
   PetscCall(VecSet(u,0.0));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   ui = z[2]; wi = z[3];
   ivals = it;
 #endif
   if (nmat>20) {
     PetscCall(PetscMalloc1(nmat,&vals));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(PetscMalloc1(nmat,&ivals));
 #endif
   }
   PetscCall(PEPEvaluateBasis(pep,kr,ki,vals,ivals));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (ki == 0 || PetscAbsScalar(ki) < PetscAbsScalar(kr*PETSC_MACHINE_EPSILON))
     imag = PETSC_FALSE;
   else {
@@ -420,7 +420,7 @@ PetscErrorCode PEPComputeResidualNorm_Private(PEP pep,PetscScalar kr,PetscScalar
       PetscCall(MatMult(A[i],xr,w));
       PetscCall(VecAXPY(u,vals[i],w));
     }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (imag) {
       if (ivals[i]!=0 || vals[i]!=0) {
         PetscCall(MatMult(A[i],xi,wi));
@@ -435,7 +435,7 @@ PetscErrorCode PEPComputeResidualNorm_Private(PEP pep,PetscScalar kr,PetscScalar
 #endif
   }
   PetscCall(VecNorm(u,NORM_2,norm));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (imag) {
     PetscCall(VecNorm(ui,NORM_2,&ni));
     *norm = SlepcAbsEigenvalue(*norm,ni);
@@ -443,7 +443,7 @@ PetscErrorCode PEPComputeResidualNorm_Private(PEP pep,PetscScalar kr,PetscScalar
 #endif
   if (nmat>20) {
     PetscCall(PetscFree(vals));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(PetscFree(ivals));
 #endif
   }
@@ -488,7 +488,7 @@ PetscErrorCode PEPComputeError(PEP pep,PetscInt i,PEPErrorType type,PetscReal *e
   PEPCheckSolved(pep,1);
 
   /* allocate work vectors */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PEPSetWorkVecs(pep,3));
   xi   = NULL;
   w[2] = NULL;

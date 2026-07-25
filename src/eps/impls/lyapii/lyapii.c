@@ -46,7 +46,7 @@ typedef struct {
   Mat      S;        /* the matrix from which the implicit operator is built */
   PetscInt n;        /* the size of matrix S, the operator is nxn */
   LME      lme;      /* dummy LME object */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   Mat      A,B,F;
   Vec      w;
 #endif
@@ -116,7 +116,7 @@ static PetscErrorCode MatDestroy_EPSLyapIIOperator(Mat M)
 static PetscErrorCode MatMult_EigOperator(Mat M,Vec x,Vec y)
 {
   EPS_EIG_MATSHELL  *matctx;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscInt          n,lds;
   PetscScalar       *Y,*C,zero=0.0,done=1.0,dtwo=2.0;
   const PetscScalar *S,*X;
@@ -126,7 +126,7 @@ static PetscErrorCode MatMult_EigOperator(Mat M,Vec x,Vec y)
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(M,&matctx));
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(MatMult(matctx->B,x,matctx->w));
   PetscCall(MatSolve(matctx->F,matctx->w,y));
 #else
@@ -161,7 +161,7 @@ static PetscErrorCode MatDestroy_EigOperator(Mat M)
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(M,&matctx));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(MatDestroy(&matctx->A));
   PetscCall(MatDestroy(&matctx->B));
   PetscCall(MatDestroy(&matctx->F));
@@ -181,14 +181,14 @@ static PetscErrorCode EV2x2(PetscScalar *M,PetscInt ld,PetscScalar *wr,PetscScal
   PetscBLASInt   lwork=10,ld_;
   PetscScalar    work[10];
   PetscBLASInt   two=2;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      rwork[6];
 #endif
 
   PetscFunctionBegin;
   PetscCall(PetscBLASIntCast(ld,&ld_));
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKgeev",LAPACKgeev_("N","V",&two,M,&ld_,wr,wi,NULL,&ld_,vec,&ld_,work,&lwork,&info));
 #else
   PetscCallLAPACKInfo("LAPACKgeev",LAPACKgeev_("N","V",&two,M,&ld_,wr,NULL,&ld_,vec,&ld_,work,&lwork,rwork,&info));
@@ -241,7 +241,7 @@ static PetscErrorCode LyapIIBuildEigenMat(LME lme,Mat S,Mat *Op,Vec *v0)
   PetscInt          n,m;
   PetscBool         create=PETSC_FALSE;
   EPS_EIG_MATSHELL  *matctx;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscScalar       theta,*aa,*bb;
   const PetscScalar *ss;
   PetscInt          i,j,f,c,off,ld,lds;
@@ -259,7 +259,7 @@ static PetscErrorCode LyapIIBuildEigenMat(LME lme,Mat S,Mat *Op,Vec *v0)
     PetscCall(MatDestroy(Op));
     PetscCall(VecDestroy(v0));
     PetscCall(PetscNew(&matctx));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,n*n,n*n,NULL,&matctx->A));
     PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,n*n,n*n,NULL,&matctx->B));
     PetscCall(MatCreateVecs(matctx->A,NULL,&matctx->w));
@@ -272,11 +272,11 @@ static PetscErrorCode LyapIIBuildEigenMat(LME lme,Mat S,Mat *Op,Vec *v0)
     PetscCall(MatCreateVecs(*Op,NULL,v0));
   } else {
     PetscCall(MatShellGetContext(*Op,&matctx));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(MatZeroEntries(matctx->A));
 #endif
   }
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(MatDenseGetArray(matctx->A,&aa));
   PetscCall(MatDenseGetArray(matctx->B,&bb));
   PetscCall(MatDenseGetArrayRead(S,&ss));
@@ -457,7 +457,7 @@ static PetscErrorCode EPSSolve_LyapII(EPS eps)
       PetscCall(BVSetActiveColumns(V,0,rk));
       PetscCall(BVMultInPlace(V,X,0,rk));
       PetscCall(MatDestroy(&X));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       norm = eigr[0]*eigr[0]+eigi[0]*eigi[0];
       er = eigr[0]/norm; ei = -eigi[0]/norm;
 #else
@@ -479,7 +479,7 @@ static PetscErrorCode EPSSolve_LyapII(EPS eps)
     if (eps->errest[eps->nconv]<eps->tol) {
       k++;
       if (rk==2) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         eps->eigr[eps->nconv+k] = eigr[0]; eps->eigi[eps->nconv+k] = -eigi[0];
 #else
         eps->eigr[eps->nconv+k] = PetscConj(eps->eigr[eps->nconv]);

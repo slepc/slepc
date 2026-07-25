@@ -74,7 +74,7 @@ int main(int argc,char **argv)
   rnorm = 0.0;
   PetscCall(DSGetArray(ds,DS_MAT_X,&X));
   for (i=0;i<n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     aux = PetscAbsScalar(X[i+j*ld]);
 #else
     aux = SlepcAbsEigenvalue(X[i+j*ld],X[i+(j+1)*ld]);

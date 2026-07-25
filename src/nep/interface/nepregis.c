@@ -14,7 +14,7 @@ SLEPC_EXTERN PetscErrorCode NEPCreate_RII(NEP);
 SLEPC_EXTERN PetscErrorCode NEPCreate_SLP(NEP);
 SLEPC_EXTERN PetscErrorCode NEPCreate_NArnoldi(NEP);
 SLEPC_EXTERN PetscErrorCode NEPCreate_Interpol(NEP);
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 SLEPC_EXTERN PetscErrorCode NEPCreate_CISS(NEP);
 #endif
 SLEPC_EXTERN PetscErrorCode NEPCreate_NLEIGS(NEP);
@@ -37,7 +37,7 @@ PetscErrorCode NEPRegisterAll(void)
   PetscCall(NEPRegister(NEPSLP,NEPCreate_SLP));
   PetscCall(NEPRegister(NEPNARNOLDI,NEPCreate_NArnoldi));
   PetscCall(NEPRegister(NEPINTERPOL,NEPCreate_Interpol));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(NEPRegister(NEPCISS,NEPCreate_CISS));
 #endif
   PetscCall(NEPRegister(NEPNLEIGS,NEPCreate_NLEIGS));

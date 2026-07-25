@@ -83,7 +83,7 @@ int main(int argc,char **argv)
 
   PetscCall(RGCreate(PETSC_COMM_WORLD,&rg));
   PetscCall(RGSetType(rg,RGINTERVAL));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(RGIntervalSetEndpoints(rg,-47.0,-35.0,-0.001,0.001));
 #else
   PetscCall(RGIntervalSetEndpoints(rg,-47.0,-35.0,-0.0,0.0));

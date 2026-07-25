@@ -24,7 +24,7 @@ int main(int argc,char **argv)
   PetscBool      verbose;
   RG             rg;
   DSMatType      mat[3]={DS_MAT_E0,DS_MAT_E1,DS_MAT_E2};
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscBool      flg;
 #else
   PetscScalar    auxi;
@@ -40,7 +40,7 @@ int main(int argc,char **argv)
   /* Create DS object and set options */
   PetscCall(DSCreate(PETSC_COMM_WORLD,&ds));
   PetscCall(DSSetType(ds,DSNEP));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(DSSetMethod(ds,1));  /* contour integral */
 #endif
   PetscCall(DSNEPGetRG(ds,&rg));
@@ -53,7 +53,7 @@ int main(int argc,char **argv)
 
   /* Print current options */
   PetscCall(DSGetMethod(ds,&meth));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCheck(meth==1,PETSC_COMM_WORLD,PETSC_ERR_USER_INPUT,"This example requires ds_method=1");
   PetscCall(RGIsTrivial(rg,&flg));
   PetscCheck(!flg,PETSC_COMM_WORLD,PETSC_ERR_USER_INPUT,"Must at least set the radius of the ellipse");
@@ -146,7 +146,7 @@ int main(int argc,char **argv)
   PetscCall(DSGetArray(ds,DS_MAT_X,&X));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Computed eigenvalues =\n"));
   for (i=0;i<nev;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(wr[i]);
     im = PetscImaginaryPart(wr[i]);
 #else
@@ -164,12 +164,12 @@ int main(int argc,char **argv)
     nrm = 0.0;
     for (k=0;k<n;k++) {
       auxr = 0.0;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       auxi = 0.0;
 #endif
       for (j=0;j<n;j++) {
         auxr += W[k+j*ld]*X[i*ld+j];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         if (PetscAbs(wi[j])!=0.0) auxi += W[k+j*ld]*X[(i+1)*ld+j];
 #endif
       }

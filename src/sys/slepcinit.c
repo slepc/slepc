@@ -136,7 +136,7 @@ PetscBool SlepcBeganPetsc       = PETSC_FALSE;
 PetscBool SlepcInitializeCalled = PETSC_FALSE;
 PetscBool SlepcFinalizeCalled   = PETSC_FALSE;
 
-#if defined(PETSC_HAVE_DYNAMIC_LIBRARIES) && defined(PETSC_USE_SHARED_LIBRARIES)
+#if PetscDefined(HAVE_DYNAMIC_LIBRARIES) && PetscDefined(USE_SHARED_LIBRARIES)
 static PetscErrorCode SlepcLoadDynamicLibrary(const char *name,PetscBool *found)
 {
   char           libs[PETSC_MAX_PATH_LEN],dlib[PETSC_MAX_PATH_LEN];
@@ -154,7 +154,7 @@ static PetscErrorCode SlepcLoadDynamicLibrary(const char *name,PetscBool *found)
 }
 #endif
 
-#if defined(PETSC_USE_SINGLE_LIBRARY) && !(defined(PETSC_HAVE_DYNAMIC_LIBRARIES) && defined(PETSC_USE_SHARED_LIBRARIES))
+#if PetscDefined(USE_SINGLE_LIBRARY) && !(PetscDefined(HAVE_DYNAMIC_LIBRARIES) && PetscDefined(USE_SHARED_LIBRARIES))
 SLEPC_EXTERN PetscErrorCode STInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode DSInitializePackage(void);
 SLEPC_EXTERN PetscErrorCode FNInitializePackage(void);
@@ -177,16 +177,16 @@ PetscErrorCode SlepcInitialize_DynamicLibraries(void)
   PetscBool      preload = PETSC_FALSE;
 
   PetscFunctionBegin;
-#if defined(PETSC_HAVE_THREADSAFETY)
+#if PetscDefined(HAVE_THREADSAFETY)
   /* These must be all initialized here because it is not safe for individual threads to call these initialize routines */
   preload = PETSC_TRUE;
 #endif
 
   PetscCall(PetscOptionsGetBool(NULL,NULL,"-library_preload",&preload,NULL));
   if (preload) {
-#if defined(PETSC_HAVE_DYNAMIC_LIBRARIES) && defined(PETSC_USE_SHARED_LIBRARIES)
+#if PetscDefined(HAVE_DYNAMIC_LIBRARIES) && PetscDefined(USE_SHARED_LIBRARIES)
     PetscBool found;
-#if defined(PETSC_USE_SINGLE_LIBRARY)
+#if PetscDefined(USE_SINGLE_LIBRARY)
     PetscCall(SlepcLoadDynamicLibrary("",&found));
     PetscCheck(found,PETSC_COMM_SELF,PETSC_ERR_FILE_OPEN,"Unable to locate SLEPc dynamic library. You cannot move the dynamic libraries!");
 #else
@@ -205,8 +205,8 @@ PetscErrorCode SlepcInitialize_DynamicLibraries(void)
     PetscCall(SlepcLoadDynamicLibrary("lme",&found));
     PetscCheck(found,PETSC_COMM_SELF,PETSC_ERR_FILE_OPEN,"Unable to locate SLEPc LME dynamic library. You cannot move the dynamic libraries!");
 #endif
-#else /* defined(PETSC_HAVE_DYNAMIC_LIBRARIES) && defined(PETSC_USE_SHARED_LIBRARIES) */
-#if defined(PETSC_USE_SINGLE_LIBRARY)
+#else /* PetscDefined(HAVE_DYNAMIC_LIBRARIES) && PetscDefined(USE_SHARED_LIBRARIES) */
+#if PetscDefined(USE_SINGLE_LIBRARY)
   PetscCall(STInitializePackage());
   PetscCall(DSInitializePackage());
   PetscCall(FNInitializePackage());
@@ -221,7 +221,7 @@ PetscErrorCode SlepcInitialize_DynamicLibraries(void)
 #else
   SETERRQ(PETSC_COMM_WORLD,PETSC_ERR_SUP,"Cannot use -library_preload with multiple static SLEPc libraries");
 #endif
-#endif /* defined(PETSC_HAVE_DYNAMIC_LIBRARIES) && defined(PETSC_USE_SHARED_LIBRARIES) */
+#endif /* PetscDefined(HAVE_DYNAMIC_LIBRARIES) && PetscDefined(USE_SHARED_LIBRARIES) */
   }
 
 #if defined(SLEPC_HAVE_HPDDM)

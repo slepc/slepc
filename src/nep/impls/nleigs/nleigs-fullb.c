@@ -332,7 +332,7 @@ static PetscErrorCode NEPNLEIGSExtract_None(NEP nep,EPS eps)
   d = ctx->nmat-1;
   PetscCall(EPSGetOperators(eps,&A,NULL));
   PetscCall(MatCreateVecs(A,&xxr,NULL));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(VecDuplicate(xxr,&xxi));
 #endif
   w = nep->work[0];
@@ -375,7 +375,7 @@ static PetscErrorCode NEPNLEIGSExtract_None(NEP nep,EPS eps)
     PetscCall(PetscFree(b));
   }
   PetscCall(VecDestroy(&xxr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(VecDestroy(&xxi));
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -396,7 +396,7 @@ PetscErrorCode NEPSolve_NLEIGS_FullBasis(NEP nep)
   /* recover eigenvalues */
   for (i=0;i<nep->nconv;i++) {
     PetscCall(EPSGetEigenpair(ctx->eps,i,&nep->eigr[i],&eigi,NULL,NULL));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCheck(eigi==0.0,PetscObjectComm((PetscObject)nep),PETSC_ERR_SUP,"Complex value requires complex arithmetic");
 #endif
   }

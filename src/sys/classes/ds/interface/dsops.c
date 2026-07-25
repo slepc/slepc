@@ -330,12 +330,12 @@ PetscErrorCode DSMatIsHermitian(DS ds,DSMatType t,PetscBool *flg)
 
 PetscErrorCode DSGetTruncateSize_Default(DS ds,PetscInt l,PetscInt n,PetscInt *k)
 {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar val;
 #endif
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(MatGetValue(ds->omat[DS_MAT_A],l+(*k),l+(*k)-1,&val));
   if (val != 0.0) {
     if (l+(*k)<n-1) (*k)++;
@@ -651,7 +651,7 @@ PetscErrorCode DSRestoreArray(DS ds,DSMatType m,PetscScalar *a[])
 @*/
 PetscErrorCode DSGetArrayReal(DS ds,DSMatType m,PetscReal *a[])
 {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscScalar *as;
 #endif
 
@@ -660,7 +660,7 @@ PetscErrorCode DSGetArrayReal(DS ds,DSMatType m,PetscReal *a[])
   DSCheckAlloc(ds,1);
   DSCheckValidMatReal(ds,m,2);
   PetscAssertPointer(a,3);
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(MatDenseGetArray(ds->omat[m],&as));
   *a = (PetscReal*)as;
 #else
@@ -685,7 +685,7 @@ PetscErrorCode DSGetArrayReal(DS ds,DSMatType m,PetscReal *a[])
 @*/
 PetscErrorCode DSRestoreArrayReal(DS ds,DSMatType m,PetscReal *a[])
 {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscScalar *as;
 #endif
 
@@ -694,7 +694,7 @@ PetscErrorCode DSRestoreArrayReal(DS ds,DSMatType m,PetscReal *a[])
   DSCheckAlloc(ds,1);
   DSCheckValidMatReal(ds,m,2);
   PetscAssertPointer(a,3);
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(MatDenseRestoreArray(ds->omat[m],&as));
   *a = NULL;
 #else

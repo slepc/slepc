@@ -38,7 +38,7 @@ int main(int argc,char **argv)
                         Load the matrix from file
        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
     PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nEigenproblem stored in file.\n\n"));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(PetscPrintf(PETSC_COMM_WORLD," Reading COMPLEX matrix from a binary file...\n"));
 #else
     PetscCall(PetscPrintf(PETSC_COMM_WORLD," Reading REAL matrix from a binary file...\n"));

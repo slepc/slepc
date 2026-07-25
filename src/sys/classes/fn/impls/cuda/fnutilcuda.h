@@ -15,7 +15,7 @@
 
 #include <slepc/private/slepcimpl.h>
 
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
 #include <slepccupmblas.h>
 
 SLEPC_INTERN __host__ PetscErrorCode set_diagonal(PetscInt,PetscScalar*,PetscInt,PetscScalar);

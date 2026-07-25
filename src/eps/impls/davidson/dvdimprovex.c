@@ -55,7 +55,7 @@ static PetscErrorCode dvd_improvex_apply_proj(dvdDashboard *d,Vec *V,PetscInt cV
   PetscInt       i,ldh,k,l;
   PetscScalar    *h;
   PetscBLASInt   cV_,n,ld;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscInt       j;
 #endif
 
@@ -70,7 +70,7 @@ static PetscErrorCode dvd_improvex_apply_proj(dvdDashboard *d,Vec *V,PetscInt cV
   PetscCall(BVSetActiveColumns(data->U,0,k));
   for (i=0;i<cV;i++) {
     PetscCall(BVDotVec(data->U,V[i],&h[ldh*i]));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     for (j=0; j<k; j++) h[ldh*i+j] = PetscConj(h[ldh*i+j]);
 #endif
   }
@@ -103,7 +103,7 @@ static PetscErrorCode dvd_improvex_applytrans_proj(dvdDashboard *d,Vec *V,PetscI
   PetscInt       i,ldh,k,l;
   PetscScalar    *h;
   PetscBLASInt   cV_,n,ld;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscInt       j;
 #endif
 
@@ -118,7 +118,7 @@ static PetscErrorCode dvd_improvex_applytrans_proj(dvdDashboard *d,Vec *V,PetscI
   PetscCall(BVSetActiveColumns(data->KZ,0,k));
   for (i=0;i<cV;i++) {
     PetscCall(BVDotVec(data->KZ,V[i],&h[ldh*i]));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     for (j=0;j<k;j++) h[ldh*i+j] = PetscConj(h[ldh*i+j]);
 #endif
   }
@@ -186,7 +186,7 @@ static inline PetscErrorCode dvd_aux_matmult(dvdImprovex_jd *data,const Vec *x,c
 
   PetscCall(SlepcVecPoolGetVecs(data->d->auxV,2,&auxV));
   for (i=0;i<n;i++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (PetscUnlikely(data->d->eigi[data->r_s+i] != 0.0)) {
       if (data->d->B) {
         PetscCall(MatMult(data->d->B,x[i],auxV[0]));
@@ -228,7 +228,7 @@ static inline PetscErrorCode dvd_aux_matmulttrans(dvdImprovex_jd *data,const Vec
 
   PetscCall(SlepcVecPoolGetVecs(data->d->auxV,2,&auxV));
   for (i=0;i<n;i++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (data->d->eigi[data->r_s+i] != 0.0) {
       if (data->d->B) {
         PetscCall(MatMultTranspose(data->d->B,x[i],auxV[0]));
@@ -603,7 +603,7 @@ static PetscErrorCode dvd_improvex_jd_gen(dvdDashboard *d,PetscInt r_s,PetscInt 
 
   for (i=0;i<n;i+=s) {
     /* If the selected eigenvalue is complex, but the arithmetic is real... */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (d->eigi[r_s+i] != 0.0) {
       if (i+2 <= max_size_D) s=2;
       else break;
@@ -645,7 +645,7 @@ static PetscErrorCode dvd_improvex_jd_gen(dvdDashboard *d,PetscInt r_s,PetscInt 
     }
 
     /* Test the odd situation of solving Ax=b with A=I */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     odd_situation = (data->ksp && data->theta[0] == 1. && data->theta[1] == 0. && data->thetai[0] == 0. && d->B == NULL)? PETSC_TRUE: PETSC_FALSE;
 #else
     odd_situation = (data->ksp && data->theta[0] == 1. && data->theta[1] == 0. && d->B == NULL)? PETSC_TRUE: PETSC_FALSE;
@@ -709,7 +709,7 @@ PetscErrorCode dvd_improvex_jd(dvdDashboard *d,dvdBlackboard *b,KSP ksp,PetscInt
 
   /* If the arithmetic is real and the problem is not Hermitian, then
      the block size is incremented in one */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (!DVD_IS(d->sEP,DVD_EP_HERMITIAN)) {
     max_bs++;
     b->max_size_P = PetscMax(b->max_size_P,2);
@@ -740,7 +740,7 @@ PetscErrorCode dvd_improvex_jd(dvdDashboard *d,dvdBlackboard *b,KSP ksp,PetscInt
     data->ksp = useGD? NULL: ksp;
     data->d = d;
     d->improveX = dvd_improvex_jd_gen;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (!DVD_IS(d->sEP,DVD_EP_HERMITIAN)) data->ksp_max_size = 2;
     else
 #endif
@@ -757,7 +757,7 @@ PetscErrorCode dvd_improvex_jd(dvdDashboard *d,dvdBlackboard *b,KSP ksp,PetscInt
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 static inline PetscErrorCode dvd_complex_rayleigh_quotient(Vec ur,Vec ui,Vec Axr,Vec Axi,Vec Bxr,Vec Bxi,PetscScalar *eigr,PetscScalar *eigi)
 {
   PetscScalar    rAr,iAr,rAi,iAi,rBr,iBr,rBi,iBi,b0,b2,b4,b6,b7;
@@ -800,7 +800,7 @@ static inline PetscErrorCode dvd_compute_n_rr(PetscInt i_s,PetscInt n,PetscScala
 
   PetscFunctionBegin;
   for (i=0; i<n; i++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi[i_s+i] != 0.0) {
       PetscScalar eigr0=0.0,eigi0=0.0;
       PetscCall(dvd_complex_rayleigh_quotient(u[i],u[i+1],Ax[i],Ax[i+1],Bx[i],Bx[i+1],&eigr0,&eigi0));
@@ -866,7 +866,7 @@ static PetscErrorCode dvd_improvex_jd_proj_uv_KZX(dvdDashboard *d,PetscInt i_s,P
   PetscCall(dvd_compute_n_rr(i_s,n,d->eigr,d->eigi,v,Ax,Bx));
 
   for (i=0;i<n;i++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (d->eigi[i_s+i] != 0.0) {
       /* [r_i r_i+1 kr_i kr_i+1]*= [ theta_2i'    0            1        0
                                        0         theta_2i'     0        1
@@ -936,18 +936,18 @@ static PetscErrorCode dvd_improvex_jd_lit_const_0(dvdDashboard *d,PetscInt i,Pet
   if (d->nR[i] < data->fix*a) {
     theta[0] = d->eigr[i];
     theta[1] = 1.0;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     *thetai = d->eigi[i];
 #endif
   } else {
     theta[0] = d->target[0];
     theta[1] = d->target[1];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     *thetai = 0.0;
 #endif
 }
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (thetai) *thetai = 0.0;
 #endif
   *maxits = data->maxits;
@@ -995,7 +995,7 @@ PetscErrorCode dvd_improvex_compute_X(dvdDashboard *d,PetscInt i_s,PetscInt i_e,
   if (d->correctXnorm) {
     for (i=0;i<n;i++) PetscCall(VecNormBegin(u[i],NORM_2,&d->nX[i_s+i]));
     for (i=0;i<n;i++) PetscCall(VecNormEnd(u[i],NORM_2,&d->nX[i_s+i]));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     for (i=0;i<n;i++) {
       if (d->eigi[i_s+i] != 0.0) {
         d->nX[i_s+i] = d->nX[i_s+i+1] = PetscSqrtScalar(d->nX[i_s+i]*d->nX[i_s+i]+d->nX[i_s+i+1]*d->nX[i_s+i+1]);

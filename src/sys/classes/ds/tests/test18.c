@@ -81,7 +81,7 @@ int main(int argc,char **argv)
   /* Print eigenvalues */
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Computed eigenvalues =\n"));
   for (i=0;i<n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(wr[i]);
     im = PetscImaginaryPart(wr[i]);
 #else
@@ -97,7 +97,7 @@ int main(int argc,char **argv)
   PetscCallMPI(MPI_Comm_size(PETSC_COMM_WORLD,&size));
   if (size>1) {
     PetscCall(CheckArray(wr,"wr",n));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(CheckArray(wi,"wi",n));
 #endif
     PetscCall(DSGetArray(ds,DS_MAT_A,&A));

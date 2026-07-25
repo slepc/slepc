@@ -54,7 +54,7 @@ int main(int argc,char **argv)
 
   PetscFunctionBeginUser;
   PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
   PetscCall(PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nBrusselator wave model with matrix exponential, n=%" PetscInt_FMT "\n\n",n));
 
@@ -179,12 +179,12 @@ int main(int argc,char **argv)
 */
 PetscErrorCode STBackTransform_Exp(ST st,PetscInt n,PetscScalar *eigr,PetscScalar *eigi)
 {
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
   PetscInt       j;
   MFN            mfn;
   FN             fn;
   PetscScalar    tau,eta;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscComplex   theta,lambda;
 #endif
 
@@ -193,7 +193,7 @@ PetscErrorCode STBackTransform_Exp(ST st,PetscInt n,PetscScalar *eigr,PetscScala
   PetscCall(MFNGetFN(mfn,&fn));
   PetscCall(FNGetScale(fn,&tau,&eta));
   for (j=0;j<n;j++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     eigr[j] = PetscLogComplex(eigr[j]/eta)/tau;
 #else
     theta   = PetscCMPLX(eigr[j],eigi[j])/eta;

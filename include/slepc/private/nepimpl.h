@@ -146,7 +146,7 @@ struct _p_NEP {
 /*
     Macros to test valid NEP arguments
 */
-#if !defined(PETSC_USE_DEBUG)
+#if !PetscDefined(USE_DEBUG)
 
 #define NEPCheckProblem(h,arg) do {(void)(h);} while (0)
 #define NEPCheckCallback(h,arg) do {(void)(h);} while (0)

@@ -11,7 +11,7 @@
 #include <petsc/private/ftnimpl.h>
 #include <slepceps.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define epsmonitorset_                    EPSMONITORSET
 #define epsmonitorall_                    EPSMONITORALL
 #define epsmonitorfirst_                  EPSMONITORFIRST
@@ -26,7 +26,7 @@
 #define epssetstoppingtestfunction_       EPSSETSTOPPINGTESTFUNCTION
 #define epsseteigenvaluecomparison_       EPSSETEIGENVALUECOMPARISON
 #define epssetarbitraryselection_         EPSSETARBITRARYSELECTION
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define epsmonitorset_                    epsmonitorset
 #define epsmonitorall_                    epsmonitorall
 #define epsmonitorfirst_                  epsmonitorfirst

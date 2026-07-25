@@ -96,7 +96,7 @@ int main(int argc,char **argv)
   /* Print eigenvalues */
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Computed eigenvalues =\n"));
   for (i=0;i<d*n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(wr[i]);
     im = PetscImaginaryPart(wr[i]);
 #else

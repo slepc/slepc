@@ -507,7 +507,7 @@ SLEPC_EXTERN PetscErrorCode FNCreate_Rational(FN fn)
   fn->ops->evaluatederivative        = FNEvaluateDerivative_Rational;
   fn->ops->evaluatefunctionmat[0]    = FNEvaluateFunctionMat_Rational;
   fn->ops->evaluatefunctionmatvec[0] = FNEvaluateFunctionMatVec_Rational;
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
   fn->ops->evaluatefunctionmatcuda[0]    = FNEvaluateFunctionMat_Rational;
   fn->ops->evaluatefunctionmatveccuda[0] = FNEvaluateFunctionMatVec_Rational;
 #endif

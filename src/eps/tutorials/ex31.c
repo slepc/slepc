@@ -643,7 +643,7 @@ int main(int argc,char **argv)
         /* Compute the relative error associated to each eigenpair */
         PetscCall(EPSComputeError(eps,i,EPS_ERROR_RELATIVE,&error));
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         re = PetscRealPart(kr);
         im = PetscImaginaryPart(kr);
 #else

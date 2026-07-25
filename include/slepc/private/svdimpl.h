@@ -123,7 +123,7 @@ struct _p_SVD {
 /*
     Macros to test valid SVD arguments
 */
-#if !defined(PETSC_USE_DEBUG)
+#if !PetscDefined(USE_DEBUG)
 
 #define SVDCheckSolved(h,arg) do {(void)(h);} while (0)
 

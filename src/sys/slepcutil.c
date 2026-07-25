@@ -87,12 +87,12 @@ PetscErrorCode SlepcBasisDestroy_Private(PetscInt *m,Vec **W)
 @*/
 PetscErrorCode SlepcSNPrintfScalar(char str[],size_t len,PetscScalar val,PetscBool exp)
 {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      re,im;
 #endif
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (exp) PetscCall(PetscSNPrintf(str,len,"%+g",(double)val));
   else PetscCall(PetscSNPrintf(str,len,"%g",(double)val));
 #else
@@ -162,7 +162,7 @@ PetscErrorCode SlepcHasExternalPackage(const char pkg[], PetscBool *has)
      s: name of Matlab variable
      filename: optionally write output to a file
  */
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
 PetscErrorCode SlepcDebugViewMatrix(PetscInt nrows,PetscInt ncols,PetscScalar *Xr,PetscScalar *Xi,PetscInt ldx,const char *s,const char *filename)
 {
   PetscInt       i,j;
@@ -174,7 +174,7 @@ PetscErrorCode SlepcDebugViewMatrix(PetscInt nrows,PetscInt ncols,PetscScalar *X
   PetscCall(PetscViewerASCIIPrintf(viewer,"%s = [\n",s));
   for (i=0;i<nrows;i++) {
     for (j=0;j<ncols;j++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       PetscCall(PetscViewerASCIIPrintf(viewer,"%.18g+%.18gi ",(double)PetscRealPart(Xr[i+j*ldx]),(double)PetscImaginaryPart(Xr[i+j*ldx])));
 #else
       if (Xi) PetscCall(PetscViewerASCIIPrintf(viewer,"%.18g+%.18gi ",(double)Xr[i+j*ldx],(double)Xi[i+j*ldx]));
@@ -192,7 +192,7 @@ PetscErrorCode SlepcDebugViewMatrix(PetscInt nrows,PetscInt ncols,PetscScalar *X
 /*
    SlepcDebugSetMatlabStdout - sets Matlab format in stdout, to be used from within a debugger.
  */
-#if defined(PETSC_USE_DEBUG) && !defined(PETSC_CLANG_STATIC_ANALYZER)
+#if PetscDefined(USE_DEBUG) && !PetscDefined(CLANG_STATIC_ANALYZER)
 PETSC_UNUSED PetscErrorCode SlepcDebugSetMatlabStdout(void)
 {
   PetscViewer    viewer;

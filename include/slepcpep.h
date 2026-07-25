@@ -810,7 +810,7 @@ typedef enum { PEP_CISS_EXTRACTION_RITZ,
                PEP_CISS_EXTRACTION_CAA    } PEPCISSExtraction;
 SLEPC_EXTERN const char *PEPCISSExtractions[];
 
-#if defined(PETSC_USE_COMPLEX) || defined(PETSC_CLANG_STATIC_ANALYZER)
+#if PetscDefined(USE_COMPLEX) || PetscDefined(CLANG_STATIC_ANALYZER)
 SLEPC_EXTERN PetscErrorCode PEPCISSSetExtraction(PEP,PEPCISSExtraction);
 SLEPC_EXTERN PetscErrorCode PEPCISSGetExtraction(PEP,PEPCISSExtraction*);
 SLEPC_EXTERN PetscErrorCode PEPCISSSetSizes(PEP,PetscInt,PetscInt,PetscInt,PetscInt,PetscInt,PetscBool);

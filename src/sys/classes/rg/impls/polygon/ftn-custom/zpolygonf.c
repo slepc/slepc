@@ -11,10 +11,10 @@
 #include <petsc/private/ftnimpl.h>
 #include <slepcrg.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define rgpolygongetvertices0_ RGPOLYGONGETVERTICES0
 #define rgpolygongetvertices1_ RGPOLYGONGETVERTICES1
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define rgpolygongetvertices0_ rgpolygongetvertices0
 #define rgpolygongetvertices1_ rgpolygongetvertices1
 #endif

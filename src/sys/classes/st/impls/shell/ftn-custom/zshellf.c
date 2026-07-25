@@ -11,12 +11,12 @@
 #include <petsc/private/ftnimpl.h>
 #include <slepcst.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define stshellsetapply_                   STSHELLSETAPPLY
 #define stshellsetapplytranspose_          STSHELLSETAPPLYTRANSPOSE
 #define stshellsetapplyhermitiantranspose_ STSHELLSETAPPLYHERMITIANTRANSPOSE
 #define stshellsetbacktransform_           STSHELLSETBACKTRANSFORM
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define stshellsetapply_                   stshellsetapply
 #define stshellsetapplytranspose_          stshellsetapplytranspose
 #define stshellsetapplyhermitiantranspose_ stshellsetapplyhermitiantranspose

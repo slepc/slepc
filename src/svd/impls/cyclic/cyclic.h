@@ -26,11 +26,11 @@ typedef struct {
   Vec       wx2,wy2;        /* workspace vectors used if misaligned=true */
 } SVD_CYCLIC_SHELL;
 
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
 SLEPC_INTERN PetscErrorCode MatMult_Cyclic_CUDA(Mat,Vec,Vec);
 SLEPC_INTERN PetscErrorCode MatMult_ECross_CUDA(Mat,Vec,Vec);
 #endif
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
 SLEPC_INTERN PetscErrorCode MatMult_Cyclic_HIP(Mat,Vec,Vec);
 SLEPC_INTERN PetscErrorCode MatMult_ECross_HIP(Mat,Vec,Vec);
 #endif

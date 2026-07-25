@@ -148,7 +148,7 @@ static PetscErrorCode rescale_eig(EPS eps,PetscInt nv)
   PetscInt       i;
   PetscScalar    center;
   PetscReal      radius,a,b,c,d,rgscale;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      start_ang,end_ang,vscale,theta;
 #endif
   PetscBool      isring,isellipse,isinterval;
@@ -162,7 +162,7 @@ static PetscErrorCode rescale_eig(EPS eps,PetscInt nv)
     PetscCall(RGIntervalGetEndpoints(eps->rg,NULL,NULL,&c,&d));
     if (c==d) {
       for (i=0;i<nv;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         eps->eigr[i] = PetscRealPart(eps->eigr[i]);
 #else
         eps->eigi[i] = 0;
@@ -180,7 +180,7 @@ static PetscErrorCode rescale_eig(EPS eps,PetscInt nv)
         for (i=0;i<nv;i++) {
           if (c==d) eps->eigr[i] = ((eps->eigr[i]+1.0)*(b-a)/2.0+a)*rgscale;
           if (a==b) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
             eps->eigr[i] = ((eps->eigr[i]+1.0)*(d-c)/2.0+c)*rgscale*PETSC_i;
 #else
             SETERRQ(PETSC_COMM_SELF,PETSC_ERR_SUP,"Integration points on a vertical line require complex arithmetic");
@@ -193,7 +193,7 @@ static PetscErrorCode rescale_eig(EPS eps,PetscInt nv)
         for (i=0;i<nv;i++) eps->eigr[i] = center + radius*eps->eigr[i];
       }
     } else if (isring) {  /* only supported in complex scalars */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       PetscCall(RGRingGetParameters(eps->rg,&center,&radius,&vscale,&start_ang,&end_ang,NULL));
       if (ctx->quad == EPS_CISS_QUADRULE_CHEBYSHEV) {
         for (i=0;i<nv;i++) {
@@ -265,12 +265,12 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
     ctx->rgid = id; ctx->rgstate = state;
   }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCheck(!isring,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Ring region only supported for complex scalars");
 #endif
   if (isinterval) {
     PetscCall(RGIntervalGetEndpoints(eps->rg,NULL,NULL,&c,&d));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCheck(c==d && c==0.0,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"In real scalars, endpoints of the imaginary axis must be both zero");
 #endif
     if (!ctx->quad && c==d) ctx->quad = EPS_CISS_QUADRULE_CHEBYSHEV;
@@ -343,7 +343,7 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
   }
   PetscCall(DSAllocate(eps->ds,eps->ncv));
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(EPSSetWorkVecs(eps,3));
   if (!eps->ishermitian) PetscCall(PetscInfo(eps,"Warning: complex eigenvalues are not calculated exactly without --with-scalar-type=complex in PETSc\n"));
 #else
@@ -384,7 +384,7 @@ static PetscErrorCode EPSSolve_CISS(EPS eps)
   PetscBool        *fl1;
   Vec              si,si1=NULL,w[3];
   PetscRandom      rand;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscBool        isellipse;
   PetscReal        est_eig,eta;
 #else
@@ -393,7 +393,7 @@ static PetscErrorCode EPSSolve_CISS(EPS eps)
 
   PetscFunctionBegin;
   w[0] = eps->work[0];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   w[1] = NULL;
 #else
   w[1] = eps->work[2];
@@ -428,7 +428,7 @@ static PetscErrorCode EPSSolve_CISS(EPS eps)
 
   if (contour->pA) PetscCall(BVScatter(ctx->V,ctx->pV,contour->scatterin,contour->xdup));
   PetscCall(EPSCISSSolve(eps,J,V,0,ctx->L));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscObjectTypeCompare((PetscObject)eps->rg,RGELLIPSE,&isellipse));
   if (isellipse) {
     PetscCall(BVTraceQuadrature(ctx->Y,ctx->V,ctx->L,ctx->L,ctx->weight,contour->scatterin,contour->subcomm,contour->npoints,ctx->useconj,&est_eig));
@@ -570,13 +570,13 @@ static PetscErrorCode EPSSolve_CISS(EPS eps)
       max_error = 0.0;
       for (i=0;i<eps->nconv;i++) {
         PetscCall(BVGetColumn(ctx->S,i,&si));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         if (eps->eigi[i]!=0.0) PetscCall(BVGetColumn(ctx->S,i+1,&si1));
 #endif
         PetscCall(EPSComputeResidualNorm_Private(eps,PETSC_FALSE,eps->eigr[i],eps->eigi[i],si,si1,w,&error));
         if (ctx->extraction == EPS_CISS_EXTRACTION_HANKEL) {  /* vector is not normalized */
           PetscCall(VecNorm(si,NORM_2,&norm));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
           if (eps->eigi[i]!=0.0) {
             PetscCall(VecNorm(si1,NORM_2,&normi));
             norm = SlepcAbsEigenvalue(norm,normi);
@@ -586,7 +586,7 @@ static PetscErrorCode EPSSolve_CISS(EPS eps)
         }
         PetscCall((*eps->converged)(eps,eps->eigr[i],eps->eigi[i],error,&error,eps->convergedctx));
         PetscCall(BVRestoreColumn(ctx->S,i,&si));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         if (eps->eigi[i]!=0.0) {
           PetscCall(BVRestoreColumn(ctx->S,i+1,&si1));
           i++;

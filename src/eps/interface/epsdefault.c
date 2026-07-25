@@ -156,7 +156,7 @@ PetscErrorCode EPSComputeVectors_Schur(EPS eps)
     PetscCall(EPSComputeVectors_Twosided(eps));
     /* normalize */
     PetscCall(BVNormalize(eps->W,eps->eigi));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     for (i=0;i<eps->nconv-1;i++) {
       if (eps->eigi[i] != 0.0) {
         if (eps->eigi[i] > 0.0) PetscCall(BVScaleColumn(eps->W,i+1,-1.0));
@@ -400,7 +400,7 @@ PetscErrorCode EPSComputeRitzVector(EPS eps,PetscScalar *Zr,PetscScalar *Zi,BV V
 {
   PetscInt       l,k;
   PetscReal      norm;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   Vec            z;
 #endif
 
@@ -420,7 +420,7 @@ PetscErrorCode EPSComputeRitzVector(EPS eps,PetscScalar *Zr,PetscScalar *Zi,BV V
   }
   /* fix eigenvector if balancing is used */
   if (!eps->ishermitian && eps->balance!=EPS_BALANCE_NONE && eps->D) PetscCall(VecPointwiseDivide(x,x,eps->D));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* compute imaginary part of eigenvector */
   if (Zi) {
     PetscCall(BVMultVec(V,1.0,0.0,y,Zi));
@@ -439,7 +439,7 @@ PetscErrorCode EPSComputeRitzVector(EPS eps,PetscScalar *Zr,PetscScalar *Zi,BV V
 
   /* normalize eigenvectors (when using balancing) */
   if (eps->balance!=EPS_BALANCE_NONE && eps->D) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (Zi) PetscCall(VecNormalizeComplex(x,y,PETSC_TRUE,NULL));
     else
 #endif

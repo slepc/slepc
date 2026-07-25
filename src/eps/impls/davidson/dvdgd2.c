@@ -90,7 +90,7 @@ static PetscErrorCode dvd_improvex_gd2_gen(dvdDashboard *d,PetscInt r_s,PetscInt
   PetscCall(DSRestoreArray(d->eps->ds,DS_MAT_X,&pX));
 
   for (i=0;i<n;i+=s) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (d->eigi[r_s+i] != 0.0 && i+2<=n) {
        /* [Ax_i Ax_i+1 Bx_i Bx_i+1]*= [   1        0
                                           0        1
@@ -155,7 +155,7 @@ static PetscErrorCode dvd_improvex_gd2_gen(dvdDashboard *d,PetscInt r_s,PetscInt
       PetscCall(BVRestoreColumn(d->eps->V,kv+i,&v));
     }
     *size_D = 2*n;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (d->eigi[r_s] != 0.0) {
       s = 4;
     } else
@@ -185,7 +185,7 @@ PetscErrorCode dvd_improvex_gd2(dvdDashboard *d,dvdBlackboard *b,KSP ksp,PetscIn
   /* Setting configuration constrains */
   /* If the arithmetic is real and the problem is not Hermitian, then
      the block size is incremented in one */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (!DVD_IS(d->sEP, DVD_EP_HERMITIAN)) {
     max_bs++;
     b->max_size_P = PetscMax(b->max_size_P,2);

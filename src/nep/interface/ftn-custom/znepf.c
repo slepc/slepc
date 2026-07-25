@@ -11,7 +11,7 @@
 #include <petsc/private/ftnimpl.h>
 #include <slepcnep.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define nepmonitorset_                    NEPMONITORSET
 #define nepmonitorall_                    NEPMONITORALL
 #define nepmonitorfirst_                  NEPMONITORFIRST
@@ -26,7 +26,7 @@
 #define nepgetfunction_                   NEPGETFUNCTION
 #define nepsetjacobian_                   NEPSETJACOBIAN
 #define nepgetjacobian_                   NEPGETJACOBIAN
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define nepmonitorset_                    nepmonitorset
 #define nepmonitorall_                    nepmonitorall
 #define nepmonitorfirst_                  nepmonitorfirst
@@ -69,7 +69,7 @@ static struct {
   PetscFortranCallbackId comparison;
   PetscFortranCallbackId function;
   PetscFortranCallbackId jacobian;
-#if defined(PETSC_HAVE_F90_2PTR_ARG)
+#if PetscDefined(HAVE_F90_2PTR_ARG)
   PetscFortranCallbackId function_pgiptr;
   PetscFortranCallbackId jacobian_pgiptr;
 #endif
@@ -117,7 +117,7 @@ static PetscErrorCode oureigenvaluecomparison(PetscScalar ar,PetscScalar ai,Pets
 
 static PetscErrorCode ournepfunction(NEP nep,PetscScalar lambda,Mat T,Mat P,void *ctx)
 {
-#if defined(PETSC_HAVE_F90_2PTR_ARG)
+#if PetscDefined(HAVE_F90_2PTR_ARG)
   void *ptr;
   PetscCall(PetscObjectGetFortranCallback((PetscObject)nep,PETSC_FORTRAN_CALLBACK_CLASS,_cb.function_pgiptr,NULL,&ptr));
 #endif
@@ -126,7 +126,7 @@ static PetscErrorCode ournepfunction(NEP nep,PetscScalar lambda,Mat T,Mat P,void
 
 static PetscErrorCode ournepjacobian(NEP nep,PetscScalar lambda,Mat J,void *ctx)
 {
-#if defined(PETSC_HAVE_F90_2PTR_ARG)
+#if PetscDefined(HAVE_F90_2PTR_ARG)
   void *ptr;
   PetscCall(PetscObjectGetFortranCallback((PetscObject)nep,PETSC_FORTRAN_CALLBACK_CLASS,_cb.jacobian_pgiptr,NULL,&ptr));
 #endif
@@ -193,7 +193,7 @@ SLEPC_EXTERN void nepseteigenvaluecomparison_(NEP *nep,void (*func)(PetscScalar*
 SLEPC_EXTERN void nepsetfunction_(NEP *nep,Mat *A,Mat *B,void (*func)(NEP*,PetscScalar*,Mat*,Mat*,void*,PetscErrorCode*),void *ctx,PetscErrorCode *ierr PETSC_F90_2PTR_PROTO(ptr))
 {
   *ierr = PetscObjectSetFortranCallback((PetscObject)*nep,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.function,(PetscFortranCallbackFn*)func,ctx);if (*ierr) return;
-#if defined(PETSC_HAVE_F90_2PTR_ARG)
+#if PetscDefined(HAVE_F90_2PTR_ARG)
   *ierr = PetscObjectSetFortranCallback((PetscObject)*nep,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.function_pgiptr,NULL,ptr);if (*ierr) return;
 #endif
   *ierr = NEPSetFunction(*nep,*A,*B,ournepfunction,NULL);
@@ -212,7 +212,7 @@ SLEPC_EXTERN void nepgetfunction_(NEP *nep,Mat *A,Mat *B,void *func,void **ctx,P
 SLEPC_EXTERN void nepsetjacobian_(NEP *nep,Mat *J,void (*func)(NEP*,PetscScalar*,Mat*,void*,PetscErrorCode*),void *ctx,PetscErrorCode *ierr PETSC_F90_2PTR_PROTO(ptr))
 {
   *ierr = PetscObjectSetFortranCallback((PetscObject)*nep,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.jacobian,(PetscFortranCallbackFn*)func,ctx);if (*ierr) return;
-#if defined(PETSC_HAVE_F90_2PTR_ARG)
+#if PetscDefined(HAVE_F90_2PTR_ARG)
   *ierr = PetscObjectSetFortranCallback((PetscObject)*nep,PETSC_FORTRAN_CALLBACK_CLASS,&_cb.jacobian_pgiptr,NULL,ptr);if (*ierr) return;
 #endif
   *ierr = NEPSetJacobian(*nep,*J,ournepjacobian,NULL);

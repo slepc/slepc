@@ -150,7 +150,7 @@ int main(int argc,char **argv)
       PetscCall(EPSGetEigenpair(eps,i,NULL,NULL,x,NULL));
       PetscCall(RayleighQuotient(A,x,&lambda));
       PetscCall(ComputeResidualNorm(A,lambda,x,&error[i]));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       evals[i] = PetscRealPart(lambda);
 #else
       evals[i] = lambda;

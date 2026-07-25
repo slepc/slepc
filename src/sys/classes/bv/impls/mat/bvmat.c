@@ -420,14 +420,14 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Mat(BV bv)
     lsplit = parent->lsplit;
     Apar = ((BV_MAT*)parent->data)->A;
     if (bv->cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
       PetscCall(MatDenseCUDAGetArray(Apar,&array));
       if (bv->issplit>0) ptr = (bv->issplit==1)? array: array+lsplit*bv->ld;
       else ptr = (bv->issplit==1)? array: array-lsplit;
       PetscCall(MatDenseCUDARestoreArray(Apar,&array));
 #endif
     } else if (bv->hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
       PetscCall(MatDenseHIPGetArray(Apar,&array));
       if (bv->issplit>0) ptr = (bv->issplit==1)? array: array+lsplit*bv->ld;
       else ptr = (bv->issplit==1)? array: array-lsplit;
@@ -456,7 +456,7 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Mat(BV bv)
   PetscCall(BVCreateVecEmpty(bv,&bv->cv[1]));
 
   if (bv->cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
     bv->ops->mult             = BVMult_Mat_CUDA;
     bv->ops->multvec          = BVMultVec_Mat_CUDA;
     bv->ops->multinplace      = BVMultInPlace_Mat_CUDA;
@@ -479,7 +479,7 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Mat(BV bv)
     bv->ops->restoremat       = BVRestoreMat_Mat_CUDA;
 #endif
   } else if (bv->hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
     bv->ops->mult             = BVMult_Mat_HIP;
     bv->ops->multvec          = BVMultVec_Mat_HIP;
     bv->ops->multinplace      = BVMultInPlace_Mat_HIP;

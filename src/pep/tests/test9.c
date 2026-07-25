@@ -30,7 +30,7 @@ PetscErrorCode MyEigenSort(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscSca
   PetscReal rea,reb;
 
   PetscFunctionBeginUser;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   rea = PetscRealPart(ar); reb = PetscRealPart(br);
 #else
   rea = ar; reb = br;

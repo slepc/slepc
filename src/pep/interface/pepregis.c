@@ -15,7 +15,7 @@ SLEPC_EXTERN PetscErrorCode PEPCreate_QArnoldi(PEP);
 SLEPC_EXTERN PetscErrorCode PEPCreate_TOAR(PEP);
 SLEPC_EXTERN PetscErrorCode PEPCreate_STOAR(PEP);
 SLEPC_EXTERN PetscErrorCode PEPCreate_JD(PEP);
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 SLEPC_EXTERN PetscErrorCode PEPCreate_CISS(PEP);
 #endif
 
@@ -38,7 +38,7 @@ PetscErrorCode PEPRegisterAll(void)
   PetscCall(PEPRegister(PEPTOAR,PEPCreate_TOAR));
   PetscCall(PEPRegister(PEPSTOAR,PEPCreate_STOAR));
   PetscCall(PEPRegister(PEPJD,PEPCreate_JD));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PEPRegister(PEPCISS,PEPCreate_CISS));
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);

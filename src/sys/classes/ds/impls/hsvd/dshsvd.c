@@ -338,7 +338,7 @@ static PetscErrorCode DSSolve_HSVD_CROSS(DS ds,PetscScalar *wr,PetscScalar *wi)
 
     /* compute eigenvalues */
     lwork = (n+6)*ld;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     rwu += ld;
     PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&m,V,&ld,dd,ds->work,&lwork,ds->rwork+rwu,&info));
 #else
@@ -387,7 +387,7 @@ static PetscErrorCode DSSolve_HSVD_CROSS(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
 static PetscErrorCode DSSynchronize_HSVD(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
   PetscInt       ld=ds->ld,l=ds->l,k=0,kr=0;
@@ -730,7 +730,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_HSVD(DS ds)
   ds->ops->update         = DSUpdateExtraRow_HSVD;
   ds->ops->destroy        = DSDestroy_HSVD;
   ds->ops->matgetsize     = DSMatGetSize_HSVD;
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
   ds->ops->synchronize    = DSSynchronize_HSVD;
 #endif
   ds->ops->setcompact     = DSSetCompact_HSVD;

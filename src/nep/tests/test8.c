@@ -104,7 +104,7 @@ int main(int argc,char **argv)
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
   PetscCall(PetscOptionsGetString(NULL,NULL,"-checkfile",filename,sizeof(filename),&checkfile));
   if (checkfile) {
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
     PetscComplex *eigs,eval;
     PetscCall(PetscMalloc1(nconv,&eigs));
     PetscCall(PetscViewerBinaryOpen(PETSC_COMM_WORLD,filename,FILE_MODE_READ,&viewer));
@@ -112,7 +112,7 @@ int main(int argc,char **argv)
     PetscCall(PetscViewerDestroy(&viewer));
     for (i=0;i<nconv;i++) {
       PetscCall(NEPGetEigenpair(nep,i,&kr,&ki,NULL,NULL));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       eval = kr;
 #else
       eval = PetscCMPLX(kr,ki);

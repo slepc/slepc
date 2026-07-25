@@ -30,7 +30,7 @@ static PetscErrorCode RGIntervalSetEndpoints_Interval(RG rg,PetscReal a,PetscRea
   PetscCheck(a<=b,PetscObjectComm((PetscObject)rg),PETSC_ERR_ARG_WRONG,"Badly defined interval, must be a<b");
   PetscCheck(c!=d || !c,PetscObjectComm((PetscObject)rg),PETSC_ERR_ARG_WRONG,"Badly defined interval, endpoints must be distinct (or both zero)");
   PetscCheck(c<=d,PetscObjectComm((PetscObject)rg),PETSC_ERR_ARG_WRONG,"Badly defined interval, must be c<d");
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCheck(c==-d,PetscObjectComm((PetscObject)rg),PETSC_ERR_ARG_WRONG,"In real scalars the region must be symmetric wrt real axis");
 #endif
   ctx->a = a;
@@ -180,7 +180,7 @@ static PetscErrorCode RGComputeContour_Interval(RG rg,PetscInt n,PetscScalar *cr
     if (ctx->a==ctx->b) {hv = (ctx->d-ctx->c)/(n-1); hh = 0.0;}
     else {hh = (ctx->b-ctx->a)/(n-1); hv = 0.0;}
     for (i=0;i<n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       cr[i] = PetscCMPLX(ctx->a+hh*i,ctx->c+hv*i);
 #else
       if (cr) cr[i] = ctx->a+hh*i;
@@ -202,7 +202,7 @@ static PetscErrorCode RGComputeContour_Interval(RG rg,PetscInt n,PetscScalar *cr
     k0 = Nv-k1;
 
     for (i=k1;i<Nv;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       cr[i-k1]   = PetscCMPLX(ctx->b,ctx->c+i*hv);
       cr[i-k1+N] = PetscCMPLX(ctx->a,ctx->d-i*hv);
 #else
@@ -211,7 +211,7 @@ static PetscErrorCode RGComputeContour_Interval(RG rg,PetscInt n,PetscScalar *cr
 #endif
     }
     for (i=0;i<Nh;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       cr[i+k0]   = PetscCMPLX(ctx->b-i*hh,ctx->d);
       cr[i+k0+N] = PetscCMPLX(ctx->a+i*hh,ctx->c);
 #else
@@ -220,7 +220,7 @@ static PetscErrorCode RGComputeContour_Interval(RG rg,PetscInt n,PetscScalar *cr
 #endif
     }
     for (i=0;i<k1;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       cr[i+k0+Nh]   = PetscCMPLX(ctx->a,ctx->d-i*hv);
       cr[i+k0+Nh+N] = PetscCMPLX(ctx->b,ctx->c+i*hv);
 #else
@@ -260,7 +260,7 @@ static PetscErrorCode RGComputeQuadrature_Interval(RG rg,RGQuadRule quad,PetscIn
       w[i]  = PetscCosReal((n-1)*theta)/n;
       if (ctx->c==ctx->d) z[i] = ((zn[i]+1.0)*(ctx->b-ctx->a)/2.0+ctx->a)*rg->sfactor;
       else if (ctx->a==ctx->b) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         z[i] = ((zn[i]+1.0)*(ctx->d-ctx->c)/2.0+ctx->c)*rg->sfactor*PETSC_i;
 #else
         SETERRQ(PETSC_COMM_SELF,PETSC_ERR_SUP,"Integration points on a vertical line require complex arithmetic");
@@ -268,7 +268,7 @@ static PetscErrorCode RGComputeQuadrature_Interval(RG rg,RGQuadRule quad,PetscIn
       }
     }
   } else {  /* RG_QUADRULE_TRAPEZOIDAL */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     center = PetscCMPLX(ctx->b+ctx->a,ctx->d+ctx->c)*rg->sfactor/2.0;
 #else
     center = (ctx->b+ctx->a)*rg->sfactor/2.0;

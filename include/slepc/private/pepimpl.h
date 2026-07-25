@@ -140,7 +140,7 @@ struct _p_PEP {
 /*
     Macros to test valid PEP arguments
 */
-#if !defined(PETSC_USE_DEBUG)
+#if !PetscDefined(USE_DEBUG)
 
 #define PEPCheckSolved(h,arg) do {(void)(h);} while (0)
 

@@ -45,7 +45,7 @@ PetscErrorCode SlepcSCCompare(SlepcSC sc,PetscScalar ar,PetscScalar ai,PetscScal
 
   PetscFunctionBegin;
   PetscAssertPointer(res,6);
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
   PetscCheck(sc->comparison,PETSC_COMM_SELF,PETSC_ERR_USER,"Undefined comparison function");
 #endif
   re[0] = ar; re[1] = br;
@@ -73,7 +73,7 @@ static PetscErrorCode SlepcSortEigenvalues_Private(SlepcSC sc,PetscInt n,PetscSc
     re = eigr[perm[i]];
     im = eigi[perm[i]];
     j = i+1;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (im!=0 && (re!=0 || !flg)) {
       /* complex eigenvalue */
       i--;
@@ -83,14 +83,14 @@ static PetscErrorCode SlepcSortEigenvalues_Private(SlepcSC sc,PetscInt n,PetscSc
     while (j<n) {
       PetscCall(SlepcSCCompare(sc,re,im,eigr[perm[j]],eigi[perm[j]],&result));
       if (result<=0) break;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       /* keep together every complex conjugated eigenpair */
       if (!im || (!re && flg)) {
         if (eigi[perm[j]] == 0.0 || (flg && eigr[perm[j]] == 0.0)) {
 #endif
           tmp = perm[j-1]; perm[j-1] = perm[j]; perm[j] = tmp;
           j++;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         } else {
           tmp = perm[j-1]; perm[j-1] = perm[j]; perm[j] = perm[j+1]; perm[j+1] = tmp;
           j+=2;
@@ -255,7 +255,7 @@ PetscErrorCode SlepcCompareLargestImaginary(PetscScalar ar,PetscScalar ai,PetscS
   PetscReal a,b;
 
   PetscFunctionBegin;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   a = PetscImaginaryPart(ar);
   b = PetscImaginaryPart(br);
 #else
@@ -279,7 +279,7 @@ PetscErrorCode SlepcCompareSmallestImaginary(PetscScalar ar,PetscScalar ai,Petsc
   PetscReal a,b;
 
   PetscFunctionBegin;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   a = PetscImaginaryPart(ar);
   b = PetscImaginaryPart(br);
 #else
@@ -329,13 +329,13 @@ PetscErrorCode SlepcCompareTargetReal(PetscScalar ar,PetscScalar ai,PetscScalar 
 
 PetscErrorCode SlepcCompareTargetImaginary(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal   a,b;
   PetscScalar *target = (PetscScalar*)ctx;
 #endif
 
   PetscFunctionBegin;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   a = PetscAbsReal(PetscImaginaryPart(ar-(*target)));
   b = PetscAbsReal(PetscImaginaryPart(br-(*target)));
   if (a>b) *result = 1;

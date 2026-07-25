@@ -24,39 +24,39 @@
   } while (0)
 
 /* LAPACK return type: we assume slange, etc. behave in the same way as snrm2 */
-#if defined(PETSC_USE_REAL_SINGLE) && defined(PETSC_BLASLAPACK_SNRM2_RETURNS_DOUBLE)
+#if PetscDefined(USE_REAL_SINGLE) && PetscDefined(BLASLAPACK_SNRM2_RETURNS_DOUBLE)
 #define SlepcLRT double
 #else
 #define SlepcLRT PetscReal
 #endif
 
 /* Special macro for srot, csrot, drot, zdrot (BLASMIXEDrot_) */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 # define PETSC_BLASLAPACK_MIXEDPREFIX_ PETSC_BLASLAPACK_PREFIX_
 #else
-# if defined(PETSC_BLASLAPACK_CAPS)
-#  if defined(PETSC_USE_REAL_SINGLE)
+# if PetscDefined(BLASLAPACK_CAPS)
+#  if PetscDefined(USE_REAL_SINGLE)
 #   define PETSC_BLASLAPACK_MIXEDPREFIX_ CS
-#  elif defined(PETSC_USE_REAL_DOUBLE)
+#  elif PetscDefined(USE_REAL_DOUBLE)
 #   define PETSC_BLASLAPACK_MIXEDPREFIX_ ZD
-#  elif defined(PETSC_USE_REAL___FLOAT128)
+#  elif PetscDefined(USE_REAL___FLOAT128)
 #   define PETSC_BLASLAPACK_MIXEDPREFIX_ WQ
 #  else
 #   define PETSC_BLASLAPACK_MIXEDPREFIX_ KH
 #  endif
 # else
-#  if defined(PETSC_USE_REAL_SINGLE)
+#  if PetscDefined(USE_REAL_SINGLE)
 #   define PETSC_BLASLAPACK_MIXEDPREFIX_ cs
-#  elif defined(PETSC_USE_REAL_DOUBLE)
+#  elif PetscDefined(USE_REAL_DOUBLE)
 #   define PETSC_BLASLAPACK_MIXEDPREFIX_ zd
-#  elif defined(PETSC_USE_REAL___FLOAT128)
+#  elif PetscDefined(USE_REAL___FLOAT128)
 #   define PETSC_BLASLAPACK_MIXEDPREFIX_ wq
 #  else
 #   define PETSC_BLASLAPACK_MIXEDPREFIX_ kh
 #  endif
 # endif
 #endif
-#if defined(PETSC_BLASLAPACK_CAPS)
+#if PetscDefined(BLASLAPACK_CAPS)
 #  define PETSCBLASMIXED(x,X) PETSC_PASTE3(PETSC_BLASLAPACK_MIXEDPREFIX_, X, PETSC_BLASLAPACK_SUFFIX_)
 #else
 #  define PETSCBLASMIXED(x,X) PETSC_PASTE3(PETSC_BLASLAPACK_MIXEDPREFIX_, x, PETSC_BLASLAPACK_SUFFIX_)
@@ -119,7 +119,7 @@ BLAS_EXTERN void     LAPACKorghr_(const PetscBLASInt*,const PetscBLASInt*,const 
 #else
 #define LAPACKorghr_(a,b,c,d,e,f,g,h,i) PetscMissingLapack("ORGHR",a,b,c,d,e,f,g,h,i);
 #endif
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 #if !defined(SLEPC_MISSING_LAPACK_TGEXC)
 BLAS_EXTERN void     LAPACKtgexc_(const PetscBLASInt*,const PetscBLASInt*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscBLASInt*,PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscBLASInt*);
 #else
@@ -192,7 +192,7 @@ BLAS_EXTERN void     LAPACKsytrd_(const char*,const PetscBLASInt*,PetscScalar*,c
 #else
 #define LAPACKsytrd_(a,b,c,d,e,f,g,h,i,j) PetscMissingLapack("SYTRD",a,b,c,d,e,f,g,h,i,j);
 #endif
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 BLAS_EXTERN void     LAPACKsyevd_(const char*,const char*,PetscBLASInt*,PetscScalar*,PetscBLASInt*,PetscScalar*,PetscScalar*,PetscBLASInt*,PetscBLASInt*,PetscBLASInt*,PetscBLASInt*);
 BLAS_EXTERN void     LAPACKsygvd_(PetscBLASInt*,const char*,const char*,PetscBLASInt*,PetscScalar*,PetscBLASInt*,PetscScalar*,PetscBLASInt*,PetscScalar*,PetscScalar*,PetscBLASInt*,PetscBLASInt*,PetscBLASInt*,PetscBLASInt*);
 #else
@@ -201,7 +201,7 @@ BLAS_EXTERN void     LAPACKsygvd_(PetscBLASInt*,const char*,const char*,PetscBLA
 #endif
 
 /* subroutines with different signature in real/complex */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 BLAS_EXTERN void     LAPACKggev_(const char*,const char*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscScalar*,PetscScalar*,PetscScalar*,PetscScalar*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscBLASInt*);
 #if !defined(SLEPC_MISSING_LAPACK_GGEV3)
 BLAS_EXTERN void     LAPACKggev3_(const char*,const char*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscScalar*,PetscScalar*,PetscScalar*,PetscScalar*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscScalar*,const PetscBLASInt*,PetscBLASInt*);
@@ -313,7 +313,7 @@ BLAS_EXTERN void     LAPACKlascl_(const char*,const PetscBLASInt*,const PetscBLA
 #endif
 #endif
 
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
 /* complex subroutines to be called with scalar-type=real */
 BLAS_EXTERN void BLASCOMPLEXgemm_(const char*,const char*,const PetscBLASInt*,const PetscBLASInt*,const PetscBLASInt*,const PetscComplex*,const PetscComplex*,const PetscBLASInt*,const PetscComplex*,const PetscBLASInt*,const PetscComplex*,PetscComplex*,const PetscBLASInt*);
 BLAS_EXTERN void BLASCOMPLEXscal_(const PetscBLASInt*,const PetscComplex*,PetscComplex*,const PetscBLASInt*);

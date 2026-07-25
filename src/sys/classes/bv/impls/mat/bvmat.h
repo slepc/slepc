@@ -15,7 +15,7 @@ typedef struct {
   PetscBool mpi;    /* true if either VECMPI, VECMPICUDA, or VECMPIHIP */
 } BV_MAT;
 
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
 SLEPC_INTERN PetscErrorCode BVMult_Mat_CUDA(BV,PetscScalar,PetscScalar,BV,Mat);
 SLEPC_INTERN PetscErrorCode BVMultVec_Mat_CUDA(BV,PetscScalar,PetscScalar,Vec,PetscScalar*);
 SLEPC_INTERN PetscErrorCode BVMultInPlace_Mat_CUDA(BV,Mat,PetscInt,PetscInt);
@@ -39,7 +39,7 @@ SLEPC_INTERN PetscErrorCode BVGetMat_Mat_CUDA(BV,Mat*);
 SLEPC_INTERN PetscErrorCode BVRestoreMat_Mat_CUDA(BV,Mat*);
 #endif
 
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
 SLEPC_INTERN PetscErrorCode BVMult_Mat_HIP(BV,PetscScalar,PetscScalar,BV,Mat);
 SLEPC_INTERN PetscErrorCode BVMultVec_Mat_HIP(BV,PetscScalar,PetscScalar,Vec,PetscScalar*);
 SLEPC_INTERN PetscErrorCode BVMultInPlace_Mat_HIP(BV,Mat,PetscInt,PetscInt);

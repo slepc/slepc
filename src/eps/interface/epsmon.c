@@ -148,7 +148,7 @@ static inline PetscErrorCode EPSMonitorPrintEval(EPS eps,PetscViewer viewer,Pets
   PetscFunctionBegin;
   if (eps->problem_type==EPS_HEP || eps->problem_type==EPS_GHEP || eps->problem_type==EPS_BSE) PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)PetscRealPart(er)));
   else {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(er),(double)PetscImaginaryPart(er)));
 #else
     PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)er));

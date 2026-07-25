@@ -1,7 +1,7 @@
 #if !defined(SLEPC4PY_CUSTOM_H)
 #define SLEPC4PY_CUSTOM_H
 
-#if !defined(PETSC_ERR_PYTHON)
+#if !PetscDefined(ERR_PYTHON)
 #define PETSC_ERR_PYTHON ((PetscErrorCode)(-1))
 #endif
 

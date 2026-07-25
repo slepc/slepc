@@ -167,7 +167,7 @@ int main(int argc,char **argv)
       PetscCall(NEPComputeError(nep,i,NEP_ERROR_RELATIVE,&norm));
       PetscCall(CheckSolution(lambda,x,&error,&ctx));
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       re = PetscRealPart(lambda);
       im = PetscImaginaryPart(lambda);
 #else

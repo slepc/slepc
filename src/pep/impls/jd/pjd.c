@@ -152,7 +152,7 @@ static PetscErrorCode PEPSetUp_JD(PEP pep)
   PetscCall(BVGetRandomContext(pep->V,&rand));  /* make sure the random context is available when duplicating */
   PetscCall(PEPSetWorkVecs(pep,5));
   pjd->ld = pep->nev;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   pjd->ld++;
 #endif
   PetscCall(PetscMalloc2(pep->nmat,&pjd->TV,pep->nmat,&pjd->AX));
@@ -295,7 +295,7 @@ static PetscErrorCode PEPJDOrthogonalize(PetscInt row,PetscInt col,PetscScalar *
   p[0] = 1;
 
   /* rank revealing QR */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKgeqp3",LAPACKgeqp3_(&row_,&col_,X,&ldx_,p,tau,work,&lwork,rwork,&info));
 #else
   PetscCallLAPACKInfo("LAPACKgeqp3",LAPACKgeqp3_(&row_,&col_,X,&ldx_,p,tau,work,&lwork,&info));
@@ -401,7 +401,7 @@ static PetscErrorCode PCShellApply_PEPJD(PC pc,Vec x,Vec y)
   PEP_JD_PCSHELL *ctx;
   PetscInt       sz;
   const Vec      *xs,*ys;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    rx,xr,xx;
 #endif
 
@@ -411,14 +411,14 @@ static PetscErrorCode PCShellApply_PEPJD(PC pc,Vec x,Vec y)
   PetscCall(VecCompGetSubVecs(y,NULL,&ys));
   /* y = B\x apply extended PC */
   PetscCall(PEPJDExtendedPCApply(pc,xs[0],ys[0]));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (sz==2) PetscCall(PEPJDExtendedPCApply(pc,xs[1],ys[1]));
 #endif
 
   /* Compute eta = u'*y / u'*Bp */
   PetscCall(VecDot(ys[0],ctx->u[0],&rr));
   eta  = -rr*ctx->gamma[0];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (sz==2) {
     PetscCall(VecDot(ys[0],ctx->u[1],&xr));
     PetscCall(VecDot(ys[1],ctx->u[0],&rx));
@@ -430,7 +430,7 @@ static PetscErrorCode PCShellApply_PEPJD(PC pc,Vec x,Vec y)
 
   /* y = y - eta*Bp */
   PetscCall(VecAXPY(ys[0],eta,ctx->Bp[0]));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (sz==2) {
     PetscCall(VecAXPY(ys[1],eta,ctx->Bp[1]));
     eta = -ctx->gamma[1]*(rr+xx)+ctx->gamma[0]*(-xr+rx);
@@ -526,7 +526,7 @@ static PetscErrorCode PEPJDComputeResidual(PEP pep,PetscBool derivative,PetscInt
   PetscScalar    *dval,*dvali,*array1,*array2,*x2=NULL,*y2,*qj=NULL,*tt=NULL,*xx=NULL,*xxi=NULL,sone=1.0;
   PetscInt       i,j,nconv,nloc;
   PetscBLASInt   n,ld,one=1;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   Vec            tui=NULL,tpi=NULL;
   PetscScalar    *x2i=NULL,*qji=NULL,*qq,*y2i,*arrayi1,*arrayi2;
 #endif
@@ -542,7 +542,7 @@ static PetscErrorCode PEPJDComputeResidual(PEP pep,PetscBool derivative,PetscInt
     PetscCall(VecGetArray(u[0],&array1));
     for (i=0;i<nconv;i++) x2[i] = array1[nloc+i]*PetscSqrtReal(np);
     PetscCall(VecRestoreArray(u[0],&array1));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) {
       x2i = x2+nconv;
       PetscCall(VecGetArray(u[1],&arrayi1));
@@ -560,7 +560,7 @@ static PetscErrorCode PEPJDComputeResidual(PEP pep,PetscBool derivative,PetscInt
   PetscCall(VecGetArray(p[0],&array2));
   PetscCall(VecPlaceArray(tp,array2));
   PetscCall(VecSet(tp,0.0));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (sz==2) {
     tui = work[3];
     tpi = work[4];
@@ -576,7 +576,7 @@ static PetscErrorCode PEPJDComputeResidual(PEP pep,PetscBool derivative,PetscInt
   for (i=derivative?1:0;i<pep->nmat;i++) {
     PetscCall(MatMult(pep->A[i],tu,w));
     PetscCall(VecAXPY(tp,dval[i],w));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) {
       PetscCall(VecAXPY(tpi,dvali[i],w));
       PetscCall(MatMult(pep->A[i],tui,w));
@@ -587,7 +587,7 @@ static PetscErrorCode PEPJDComputeResidual(PEP pep,PetscBool derivative,PetscInt
   }
   if (nconv) {
     for (i=0;i<pep->nmat;i++) PetscCall(PEPJDEvaluateHatBasis(pep,nconv,pjd->T,pep->ncv,dval,x2,i,i>1?qj+(i-2)*nconv:NULL,i>0?qj+(i-1)*nconv:NULL,qj+i*nconv));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) {
       qji = qj+nconv*pep->nmat;
       qq = qji+nconv*pep->nmat;
@@ -607,7 +607,7 @@ static PetscErrorCode PEPJDComputeResidual(PEP pep,PetscBool derivative,PetscInt
     PetscCall(BVSetActiveColumns(pjd->X,0,nconv));
     PetscCall(BVDotVec(pjd->X,tu,xx));
     xxi = xx+nconv;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) PetscCall(BVDotVec(pjd->X,tui,xxi));
 #endif
     if (sz==1) PetscCall(PetscArrayzero(xxi,nconv));
@@ -622,7 +622,7 @@ static PetscErrorCode PEPJDComputeResidual(PEP pep,PetscBool derivative,PetscInt
         PetscCallBLAS("BLASgemv",BLASgemv_("C",&n,&n,&sone,pjd->Tj+j*ld*ld,&ld,tt,&one,&sone,y2,&one));
       }
       for (i=0;i<nconv;i++) array2[nloc+i] /= PetscSqrtReal(np);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       if (sz==2) {
         y2i = arrayi2+nloc;
         PetscCall(PetscArrayzero(y2i,nconv));
@@ -637,7 +637,7 @@ static PetscErrorCode PEPJDComputeResidual(PEP pep,PetscBool derivative,PetscInt
     }
     PetscCall(PetscMPIIntCast(nconv,&count));
     PetscCallMPI(MPI_Bcast(array2+nloc,count,MPIU_SCALAR,np-1,PetscObjectComm((PetscObject)pep)));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) PetscCallMPI(MPI_Bcast(arrayi2+nloc,count,MPIU_SCALAR,np-1,PetscObjectComm((PetscObject)pep)));
 #endif
   }
@@ -647,7 +647,7 @@ static PetscErrorCode PEPJDComputeResidual(PEP pep,PetscBool derivative,PetscInt
   PetscCall(VecRestoreArray(u[0],&array1));
   PetscCall(VecResetArray(tp));
   PetscCall(VecRestoreArray(p[0],&array2));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (sz==2) {
     PetscCall(VecResetArray(tui));
     PetscCall(VecRestoreArray(u[1],&arrayi1));
@@ -701,7 +701,7 @@ static PetscErrorCode MatMult_PEPJD(Mat P,Vec x,Vec y)
   PetscScalar     *array1,*array2,*x2=NULL,*y2,*tt=NULL,*xx=NULL,*xxi,theta[2],sone=1.0,*qj,*val,*vali=NULL;
   PetscBLASInt    n,ld,one=1;
   PetscMPIInt     np;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   Vec             txi=NULL,tyi=NULL;
   PetscScalar     *x2i=NULL,*qji=NULL,*qq,*y2i,*arrayi1,*arrayi2;
 #endif
@@ -724,7 +724,7 @@ static PetscErrorCode MatMult_PEPJD(Mat P,Vec x,Vec y)
     PetscCall(VecGetArray(xs[0],&array1));
     for (i=0;i<nconv;i++) x2[i] = array1[nloc+i]* PetscSqrtReal(np);
     PetscCall(VecRestoreArray(xs[0],&array1));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) {
       x2i = x2+nconv;
       PetscCall(VecGetArray(xs[1],&arrayi1));
@@ -741,7 +741,7 @@ static PetscErrorCode MatMult_PEPJD(Mat P,Vec x,Vec y)
   PetscCall(VecGetArray(ys[0],&array2));
   PetscCall(VecPlaceArray(ty,array2));
   PetscCall(MatMult(matctx->Pr,tx,ty));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (sz==2) {
     txi = matctx->work[2];
     tyi = matctx->work[3];
@@ -761,7 +761,7 @@ static PetscErrorCode MatMult_PEPJD(Mat P,Vec x,Vec y)
   if (nconv>0) {
     PetscCall(PEPEvaluateBasis(matctx->pep,theta[0],theta[1],val,vali));
     for (i=0;i<nmat;i++) PetscCall(PEPJDEvaluateHatBasis(matctx->pep,nconv,pjd->T,ncv,val,x2,i,i>1?qj+(i-2)*nconv:NULL,i>0?qj+(i-1)*nconv:NULL,qj+i*nconv));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) {
       qji = qj+nconv*nmat;
       qq = qji+nconv*nmat;
@@ -781,7 +781,7 @@ static PetscErrorCode MatMult_PEPJD(Mat P,Vec x,Vec y)
     PetscCall(BVSetActiveColumns(pjd->X,0,nconv));
     PetscCall(BVDotVec(pjd->X,tx,xx));
     xxi = xx+nconv;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) PetscCall(BVDotVec(pjd->X,txi,xxi));
 #endif
     if (sz==1) PetscCall(PetscArrayzero(xxi,nconv));
@@ -794,7 +794,7 @@ static PetscErrorCode MatMult_PEPJD(Mat P,Vec x,Vec y)
       PetscCallBLAS("BLASgemv",BLASgemv_("N",&n,&n,&sone,pjd->XpX,&ld,qj+j*nconv,&one,&sone,tt,&one));
       PetscCallBLAS("BLASgemv",BLASgemv_("C",&n,&n,&sone,pjd->Tj+j*ld*ld,&ld,tt,&one,&sone,y2,&one));
     }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) {
       y2i = arrayi2+nloc;
       PetscCall(PetscArrayzero(y2i,nconv));
@@ -813,7 +813,7 @@ static PetscErrorCode MatMult_PEPJD(Mat P,Vec x,Vec y)
   PetscCall(VecRestoreArray(xs[0],&array1));
   PetscCall(VecResetArray(ty));
   PetscCall(VecRestoreArray(ys[0],&array2));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (sz==2) {
     PetscCall(VecResetArray(txi));
     PetscCall(VecRestoreArray(xs[1],&arrayi1));
@@ -834,7 +834,7 @@ static PetscErrorCode MatCreateVecs_PEPJD(Mat A,Vec *right,Vec *left)
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(A,&matctx));
   pjd   = (PEP_JD*)matctx->pep->data;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   kspsf = 2;
 #endif
   for (i=0;i<kspsf;i++) PetscCall(BVCreateVec(pjd->V,v+i));
@@ -875,7 +875,7 @@ static PetscErrorCode PEPJDUpdateExtendedPC(PEP pep,PetscScalar theta)
         S[n*j+j] += theta;
       }
       lw_ = 10*n_;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","S",&n_,&n_,S,&n_,sg,U,&n_,V,&n_,work,&lw_,&info));
 #else
       PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("S","S",&n_,&n_,S,&n_,sg,U,&n_,V,&n_,work,&lw_,rwork,&info));
@@ -947,7 +947,7 @@ static PetscErrorCode PEPJDMatSetUp(PEP pep,PetscInt sz,PetscScalar *theta)
       } else Pr = matctx->Pr;
     }
     matctx->theta[0] = theta[0];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (sz==2) {
       if (!matctx->Pi) PetscCall(MatDuplicate(pep->A[0],MAT_COPY_VALUES,&matctx->Pi));
       else PetscCall(MatCopy(pep->A[1],matctx->Pi,str));
@@ -983,7 +983,7 @@ static PetscErrorCode PEPJDCreateShellPC(PEP pep,Vec *ww)
   /* Create the reference vector */
   PetscCall(BVGetColumn(pjd->V,0,&v[0]));
   v[1] = v[0];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   kspsf = 2;
 #endif
   PetscCall(VecCreateCompWithVecs(v,kspsf,NULL,&pjd->vtempl));
@@ -1014,7 +1014,7 @@ static PetscErrorCode PEPJDCreateShellPC(PEP pep,Vec *ww)
   PetscCall(PEPJDMatSetUp(pep,1,target));
   Pr = matctx->Pr;
   pcctx->PPr = NULL;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (!pjd->reusepc) {
     PetscCall(MatDuplicate(matctx->Pr,MAT_COPY_VALUES,&pcctx->PPr));
     Pr = pcctx->PPr;
@@ -1045,7 +1045,7 @@ static PetscErrorCode PEPJDEigenvectors(PEP pep)
   PetscScalar    *Z;
   PetscReal      *wr;
   Mat            U;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscScalar    *w;
 #endif
 
@@ -1053,7 +1053,7 @@ static PetscErrorCode PEPJDEigenvectors(PEP pep)
   PetscCall(PetscBLASIntCast(pep->ncv,&ld));
   PetscCall(PetscBLASIntCast(pep->nconv,&nconv));
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc2(pep->nconv*pep->nconv,&Z,3*pep->ncv,&wr));
   PetscCallLAPACKInfo("LAPACKtrevc",LAPACKtrevc_("R","A",NULL,&nconv,pjd->T,&ld,NULL,&nconv,Z,&nconv,&nconv,&nc,wr,&info));
 #else
@@ -1066,7 +1066,7 @@ static PetscErrorCode PEPJDEigenvectors(PEP pep)
   PetscCall(BVMultInPlace(pjd->X,U,0,pep->nconv));
   PetscCall(BVNormalize(pjd->X,pep->eigi));
   PetscCall(MatDestroy(&U));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree2(Z,wr));
 #else
   PetscCall(PetscFree3(Z,wr,w));
@@ -1161,7 +1161,7 @@ static PetscErrorCode PEPJDSystemSetUp(PEP pep,PetscInt sz,PetscScalar *theta,Ve
 {
   PEP_JD         *pjd = (PEP_JD*)pep->data;
   PEP_JD_PCSHELL *pcctx;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    s[2];
 #endif
 
@@ -1173,7 +1173,7 @@ static PetscErrorCode PEPJDSystemSetUp(PEP pep,PetscInt sz,PetscScalar *theta,Ve
   PetscCall(PEPJDComputeResidual(pep,PETSC_TRUE,sz,u,theta,p,ww));
   PetscCall(PEPJDExtendedPCApply(pjd->pcshell,p[0],pcctx->Bp[0]));
   PetscCall(VecDot(pcctx->Bp[0],u[0],pcctx->gamma));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (sz==2) {
     PetscCall(PEPJDExtendedPCApply(pjd->pcshell,p[1],pcctx->Bp[1]));
     PetscCall(VecDot(pcctx->Bp[0],u[1],pcctx->gamma+1));
@@ -1203,7 +1203,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
   KSP             ksp;
   PEP_JD_PCSHELL  *pcctx;
   PEP_JD_MATSHELL *matctx;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscReal       norm1;
 #endif
 
@@ -1216,7 +1216,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
   pjd->nlock = 0;
   PetscCall(STGetKSP(pep->st,&ksp));
   PetscCall(KSPGetTolerances(ksp,&rtol,&abstol,&dtol,&maxits));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   kspsf = 2;
 #endif
   PetscCall(PEPJDProcessInitialSpace(pep,ww));
@@ -1230,7 +1230,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
   PetscCall(BVCreateVec(pjd->V,&u[0]));
   PetscCall(VecDuplicate(u[0],&p[0]));
   PetscCall(VecDuplicate(u[0],&r[0]));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(VecDuplicate(u[0],&u[1]));
   PetscCall(VecDuplicate(u[0],&p[1]));
   PetscCall(VecDuplicate(u[0],&r[1]));
@@ -1260,7 +1260,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
     idx = 0;
     do {
       ritz[0] = pep->eigr[idx];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       ritz[1] = pep->eigi[idx];
       sz = (ritz[1]==0.0)?1:2;
 #endif
@@ -1268,14 +1268,14 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
       PetscCall(DSGetArray(pep->ds,DS_MAT_X,&pX));
       PetscCall(BVSetActiveColumns(pjd->V,0,nv));
       PetscCall(BVMultVec(pjd->V,1.0,0.0,u[0],pX+idx*ld));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       if (sz==2) PetscCall(BVMultVec(pjd->V,1.0,0.0,u[1],pX+(idx+1)*ld));
 #endif
       PetscCall(DSRestoreArray(pep->ds,DS_MAT_X,&pX));
       PetscCall(PEPJDComputeResidual(pep,PETSC_FALSE,sz,u,ritz,r,ww));
       /* Check convergence */
       PetscCall(VecNorm(r[0],NORM_2,&norm));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       if (sz==2) {
         PetscCall(VecNorm(r[1],NORM_2,&norm1));
         norm = SlepcAbs(norm,norm1);
@@ -1302,7 +1302,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
           pjd->T[(pep->ncv+1)*pep->nconv] = ritz[0];
           eig[pep->nconv] = ritz[0];
           idx++;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
           if (sz==2) {
             PetscCall(BVGetColumn(pjd->X,pep->nconv+1,&v[0]));
             PetscCall(PEPJDCopyToExtendedVec(pep,v[0],pjd->T+pep->ncv*(pep->nconv+1),pjd->ld-1,0,u[1],PETSC_TRUE));
@@ -1386,7 +1386,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
           off = 0;
           PetscCall(BVScaleColumn(pjd->V,nv,1.0/norm));
         }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         if (sz==2) {
           PetscCall(VecGetArray(t[1],&array));
           PetscCallMPI(MPI_Bcast(array+nloc,count,MPIU_SCALAR,np-1,PetscObjectComm((PetscObject)pep)));
@@ -1417,7 +1417,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
       }
       for (k=0;k<nvc;k++) {
         eig[pep->nconv-idx+k] = pep->eigr[k];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         eigi[pep->nconv-idx+k] = pep->eigi[k];
 #endif
       }
@@ -1435,7 +1435,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
   PetscCall(VecDestroy(&u[0]));
   PetscCall(VecDestroy(&r[0]));
   PetscCall(VecDestroy(&p[0]));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(VecDestroy(&u[1]));
   PetscCall(VecDestroy(&r[1]));
   PetscCall(VecDestroy(&p[1]));
