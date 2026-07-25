@@ -128,7 +128,7 @@ int main(int argc,char **argv)
      Note that in complex scalars we cannot use MUMPS for spectrum slicing,
      because MatGetInertia() is not available in that case.
   */
-#if defined(PETSC_HAVE_MUMPS) && !defined(PETSC_USE_COMPLEX)
+#if PetscDefined(HAVE_MUMPS) && !PetscDefined(USE_COMPLEX)
   PetscCall(PCFactorSetMatSolverType(pc,MATSOLVERMUMPS));
   /*
      Add several MUMPS options (see ex43.c for a better way of setting them in program):
@@ -359,7 +359,7 @@ static PetscErrorCode PEPResidualNorm(Mat *A,PetscScalar kr,PetscScalar ki,Vec x
   PetscInt       i,nmat=3;
   PetscScalar    vals[3];
   Vec            u,w;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   Vec            ui,wi;
   PetscReal      ni;
   PetscBool      imag;
@@ -369,13 +369,13 @@ static PetscErrorCode PEPResidualNorm(Mat *A,PetscScalar kr,PetscScalar ki,Vec x
   PetscFunctionBegin;
   u = z[0]; w = z[1];
   PetscCall(VecSet(u,0.0));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   ui = z[2]; wi = z[3];
 #endif
   vals[0] = 1.0;
   vals[1] = kr;
   vals[2] = kr*kr-ki*ki;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   ivals[0] = 0.0;
   ivals[1] = ki;
   ivals[2] = 2.0*kr*ki;
@@ -391,7 +391,7 @@ static PetscErrorCode PEPResidualNorm(Mat *A,PetscScalar kr,PetscScalar ki,Vec x
       PetscCall(MatMult(A[i],xr,w));
       PetscCall(VecAXPY(u,vals[i],w));
     }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (imag) {
       if (ivals[i]!=0 || vals[i]!=0) {
         PetscCall(MatMult(A[i],xi,wi));
@@ -406,7 +406,7 @@ static PetscErrorCode PEPResidualNorm(Mat *A,PetscScalar kr,PetscScalar ki,Vec x
 #endif
   }
   PetscCall(VecNorm(u,NORM_2,norm));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (imag) {
     PetscCall(VecNorm(ui,NORM_2,&ni));
     *norm = SlepcAbsEigenvalue(*norm,ni);
@@ -447,7 +447,7 @@ PetscErrorCode QEPDefiniteCheckError(Mat *A,PEP pep,PetscBool hyperbolic,PetscRe
     PetscCall(QEPDefiniteTransformMap(hyperbolic,xi,mu,1,&er,PETSC_TRUE));
     PetscCall(PEPResidualNorm(A,er,0.0,vr,vi,w,&error));
     error /= SlepcAbsEigenvalue(er,0.0);
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(er);
     im = PetscImaginaryPart(ei);
 #else

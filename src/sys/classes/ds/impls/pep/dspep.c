@@ -171,7 +171,7 @@ static PetscErrorCode DSSolve_PEP_QZ(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_W],&W));
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_U],&U));
   lwork = -1;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (useggev3) PetscCallLAPACKInfo("LAPACKggev3",LAPACKggev3_("V","V",&nd,A,&ldd,B,&ldd,wr,NULL,U,&ldd,W,&ldd,&a,&lwork,NULL,&info));
   else PetscCallLAPACKInfo("LAPACKggev",LAPACKggev_("V","V",&nd,A,&ldd,B,&ldd,wr,NULL,U,&ldd,W,&ldd,&a,&lwork,NULL,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
@@ -197,7 +197,7 @@ static PetscErrorCode DSSolve_PEP_QZ(DS ds,PetscScalar *wr,PetscScalar *wi)
   for (i=0;i<nd;i++) {
     if (beta[i]==0.0) wr[i] = (PetscRealPart(wr[i])>0.0)? PETSC_MAX_REAL: PETSC_MIN_REAL;
     else wr[i] /= beta[i];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (beta[i]==0.0) wi[i] = 0.0;
     else wi[i] /= beta[i];
 #else
@@ -217,7 +217,7 @@ static PetscErrorCode DSSolve_PEP_QZ(DS ds,PetscScalar *wr,PetscScalar *wi)
   for (j=0;j<nd;j++) {
     cols = 1;
     norm = BLASnrm2_(&n,X+j*ds->ld,&one);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (wi[j] != 0.0) {
       norm = SlepcAbsEigenvalue(norm,BLASnrm2_(&n,X+(j+1)*ds->ld,&one));
       cols = 2;
@@ -225,11 +225,11 @@ static PetscErrorCode DSSolve_PEP_QZ(DS ds,PetscScalar *wr,PetscScalar *wi)
 #endif
     PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,X+j*ds->ld,&ld,&info));
     norm = BLASnrm2_(&n,Y+j*ds->ld,&one);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (wi[j] != 0.0) norm = SlepcAbsEigenvalue(norm,BLASnrm2_(&n,Y+(j+1)*ds->ld,&one));
 #endif
     PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,&norm,&done,&n,&cols,Y+j*ds->ld,&ld,&info));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (wi[j] != 0.0) j++;
 #endif
   }
@@ -238,7 +238,7 @@ static PetscErrorCode DSSolve_PEP_QZ(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
 static PetscErrorCode DSSynchronize_PEP(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
   DS_PEP         *ctx = (DS_PEP*)ds->data;
@@ -265,7 +265,7 @@ static PetscErrorCode DSSynchronize_PEP(DS ds,PetscScalar eigr[],PetscScalar eig
       PetscCallMPI(MPI_Pack(Y,ldnd,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
     }
     if (eigr) PetscCallMPI(MPI_Pack(eigr,dn,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi) PetscCallMPI(MPI_Pack(eigi,dn,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
 #endif
   }
@@ -276,7 +276,7 @@ static PetscErrorCode DSSynchronize_PEP(DS ds,PetscScalar eigr[],PetscScalar eig
       PetscCallMPI(MPI_Unpack(ds->work,size,&off,Y,ldnd,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
     }
     if (eigr) PetscCallMPI(MPI_Unpack(ds->work,size,&off,eigr,dn,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi) PetscCallMPI(MPI_Unpack(ds->work,size,&off,eigi,dn,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
 #endif
   }
@@ -523,7 +523,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_PEP(DS ds)
   ds->ops->solve[1]      = DSSolve_PEP_QZ;
 #endif
   ds->ops->sort          = DSSort_PEP;
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
   ds->ops->synchronize   = DSSynchronize_PEP;
 #endif
   ds->ops->destroy       = DSDestroy_PEP;

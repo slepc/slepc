@@ -14,13 +14,13 @@
 #include <slepc/private/slepcimpl.h>
 #include <petsc/private/ftnimpl.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define petscinitializef_             PETSCINITIALIZEF
 #define petscfinalize_                PETSCFINALIZE
 #define slepcinitializef_             SLEPCINITIALIZEF
 #define slepcfinalize_                SLEPCFINALIZE
 #define slepcinitializefortran_       SLEPCINITIALIZEFORTRAN
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define petscinitializef_             petscinitializef
 #define petscfinalize_                petscfinalize
 #define slepcinitializef_             slepcinitializef

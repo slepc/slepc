@@ -514,7 +514,7 @@ PetscErrorCode NEPGetEigenpair(NEP nep,PetscInt i,PetscScalar *eigr,PetscScalar 
   k = nep->perm[i];
 
   /* eigenvalue */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (eigr) *eigr = nep->eigr[k];
   if (eigi) *eigi = 0;
 #else
@@ -678,7 +678,7 @@ PetscErrorCode NEPComputeError(NEP nep,PetscInt i,NEPErrorType type,PetscReal *e
   NEPCheckSolved(nep,1);
 
   /* allocate work vectors */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   nwork = 2;
 #else
   nwork = 3;
@@ -689,13 +689,13 @@ PetscErrorCode NEPComputeError(NEP nep,PetscInt i,NEPErrorType type,PetscReal *e
   }
   PetscCall(NEPSetWorkVecs(nep,nwork));
   xr = nep->work[issplit+1];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   xi = nep->work[issplit+2];
 #endif
 
   /* compute residual norms */
   PetscCall(NEPGetEigenpair(nep,i,&kr,&ki,xr,xi));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCheck(ki==0.0,PetscObjectComm((PetscObject)nep),PETSC_ERR_SUP,"Not implemented for complex eigenvalues with real scalars");
 #endif
   PetscCall(NEPComputeResidualNorm_Private(nep,PETSC_FALSE,kr,xr,nep->work,error));

@@ -7,7 +7,7 @@
 
 #include <interpreter.h>
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 SLEPC_INTERN BlopexInt PETSC_dpotrf_interface(char*,BlopexInt*,double*,BlopexInt*,BlopexInt*);
 SLEPC_INTERN BlopexInt PETSC_dsygv_interface(BlopexInt*,char*,char*,BlopexInt*,double*,BlopexInt*,double*,BlopexInt*,double*,double*,BlopexInt*,BlopexInt*);
 #else

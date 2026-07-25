@@ -183,7 +183,7 @@ PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar e
     PetscCall(PetscViewerASCIIAddTab(viewer,((PetscObject)nep)->tablevel));
     PetscCall(PetscViewerASCIIPrintf(viewer,"%3" PetscInt_FMT " NEP nconv=%" PetscInt_FMT " first unconverged value (error)",its,nconv));
     PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(eigr[nconv]),(double)PetscImaginaryPart(eigr[nconv])));
 #else
     PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)eigr[nconv]));
@@ -238,7 +238,7 @@ PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eig
   PetscCall(PetscViewerASCIIPrintf(viewer,"%3" PetscInt_FMT " NEP nconv=%" PetscInt_FMT " Values (Errors)",its,nconv));
   PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
   for (i=0;i<nest;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(eigr[i]),(double)PetscImaginaryPart(eigr[i])));
 #else
     PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)eigr[i]));
@@ -299,7 +299,7 @@ PetscErrorCode NEPMonitorConverged(NEP nep,PetscInt its,PetscInt nconv,PetscScal
     for (i=*oldnconv;i<nconv;i++) {
       PetscCall(PetscViewerASCIIPrintf(viewer,"%3" PetscInt_FMT " NEP converged value (error) #%" PetscInt_FMT,its,i));
       PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(eigr[i]),(double)PetscImaginaryPart(eigr[i])));
 #else
       PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)eigr[i]));

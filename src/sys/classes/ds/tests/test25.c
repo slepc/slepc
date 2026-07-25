@@ -27,7 +27,7 @@ int main(int argc,char **argv)
   PetscBool      verbose,isnep=PETSC_FALSE;
   RG             rg;
   DSMatType      mat[5]={DS_MAT_E0,DS_MAT_E1,DS_MAT_E2,DS_MAT_E3,DS_MAT_E4};
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    *yi,*ri,alphai=0.0,t;
 #endif
 
@@ -182,14 +182,14 @@ int main(int argc,char **argv)
 
   /* Print computed eigenvalues */
   PetscCall(PetscMalloc2(ld,&y,ld,&r));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc2(ld,&yi,ld,&ri));
 #endif
   PetscCall(DSVectors(ds,DS_MAT_X,NULL,NULL));
   PetscCall(DSGetArray(ds,DS_MAT_X,&X));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Computed eigenvalues in the region: %" PetscInt_FMT "\n",nev));
   for (i=0;i<nev;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(wr[inside[i]]);
     im = PetscImaginaryPart(wr[inside[i]]);
 #else
@@ -197,7 +197,7 @@ int main(int argc,char **argv)
     im = wi[inside[i]];
 #endif
     PetscCall(PetscArrayzero(r,n));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(PetscArrayzero(ri,n));
 #endif
     /* Residual */
@@ -208,7 +208,7 @@ int main(int argc,char **argv)
         y[ii] = 0.0;
         for (jj=0;jj<n;jj++) y[ii] += A[jj*ld+ii]*X[inside[i]*ld+jj];
       }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       for (ii=0;ii<n;ii++) {
         yi[ii] = 0.0;
         for (jj=0;jj<n;jj++) yi[ii] += A[jj*ld+ii]*X[inside[i+1]*ld+jj];
@@ -217,12 +217,12 @@ int main(int argc,char **argv)
       PetscCall(DSRestoreArray(ds,mat[k],&A));
       if (isnep) PetscCall(FNEvaluateFunction(f[k],wr[inside[i]],&alpha));
       for (ii=0;ii<n;ii++) r[ii] += alpha*y[ii];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       for (ii=0;ii<n;ii++) r[ii]  -= alphai*yi[ii];
       for (ii=0;ii<n;ii++) ri[ii] += alpha*yi[ii]+alphai*y[ii];
 #endif
       if (!isnep) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         alpha *= wr[inside[i]];
 #else
         t      = alpha;
@@ -233,7 +233,7 @@ int main(int argc,char **argv)
     }
     nrm = 0.0;
     for (k=0;k<n;k++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       nrm += r[k]*r[k]+ri[k]*ri[k];
 #else
       nrm += PetscRealPart(r[k]*PetscConj(r[k]));
@@ -243,7 +243,7 @@ int main(int argc,char **argv)
     if (nrm/SlepcAbsEigenvalue(wr[inside[i]],wi[inside[i]])>tol) PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Warning: the residual norm of the %" PetscInt_FMT "-th computed eigenpair %g\n",i,(double)nrm));
     if (PetscAbs(im)<1e-10) PetscCall(PetscViewerASCIIPrintf(viewer,"  %.5f\n",(double)re));
     else PetscCall(PetscViewerASCIIPrintf(viewer,"  %.5f%+.5fi\n",(double)re,(double)im));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (im!=0.0) i++;
     if (PetscAbs(im)<1e-10) PetscCall(PetscViewerASCIIPrintf(viewer,"  %.5f\n",(double)re));
     else PetscCall(PetscViewerASCIIPrintf(viewer,"  %.5f%+.5fi\n",(double)re,(double)-im));
@@ -252,7 +252,7 @@ int main(int argc,char **argv)
   PetscCall(DSRestoreArray(ds,DS_MAT_X,&X));
   PetscCall(PetscFree3(wr,wi,inside));
   PetscCall(PetscFree2(y,r));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree2(yi,ri));
 #endif
   if (isnep) {

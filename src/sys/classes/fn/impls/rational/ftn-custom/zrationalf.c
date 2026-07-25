@@ -11,12 +11,12 @@
 #include <petsc/private/ftnimpl.h>
 #include <slepcfn.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define fnrationalgetnumerator0_    FNRATIONALGETNUMERATOR0
 #define fnrationalgetnumerator1_    FNRATIONALGETNUMERATOR1
 #define fnrationalgetdenominator0_  FNRATIONALGETDENOMINATOR0
 #define fnrationalgetdenominator1_  FNRATIONALGETDENOMINATOR1
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define fnrationalgetnumerator0_    fnrationalgetnumerator0
 #define fnrationalgetnumerator1_    fnrationalgetnumerator1
 #define fnrationalgetdenominator0_  fnrationalgetdenominator0

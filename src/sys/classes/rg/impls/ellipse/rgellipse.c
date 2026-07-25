@@ -180,7 +180,7 @@ static PetscErrorCode RGComputeContour_Ellipse(RG rg,PetscInt n,PetscScalar *cr,
   PetscFunctionBegin;
   for (i=0;i<n;i++) {
     theta = 2.0*PETSC_PI*(i+0.5)/n;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     cr[i] = ctx->center + ctx->radius*PetscCMPLX(PetscCosReal(theta),ctx->vscale*PetscSinReal(theta));
 #else
     if (cr) cr[i] = ctx->center + ctx->radius*PetscCosReal(theta);
@@ -210,7 +210,7 @@ static PetscErrorCode RGComputeQuadrature_Ellipse(RG rg,RGQuadRule quad,PetscInt
 
   PetscFunctionBegin;
   for (i=0;i<n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     theta = 2.0*PETSC_PI*(i+0.5)/n;
     zn[i] = PetscCMPLX(PetscCosReal(theta),ctx->vscale*PetscSinReal(theta));
     w[i]  = (PetscCMPLX(ctx->vscale*PetscCosReal(theta),PetscSinReal(theta)))*ctx->radius*rg->sfactor/n;
@@ -230,7 +230,7 @@ static PetscErrorCode RGCheckInside_Ellipse(RG rg,PetscReal px,PetscReal py,Pets
   PetscReal  dx,dy,r;
 
   PetscFunctionBegin;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   dx = (px-PetscRealPart(ctx->center))/ctx->radius;
   dy = (py-PetscImaginaryPart(ctx->center))/ctx->radius;
 #else

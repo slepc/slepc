@@ -640,7 +640,7 @@ typedef enum { NEP_CISS_EXTRACTION_RITZ,
                NEP_CISS_EXTRACTION_CAA    } NEPCISSExtraction;
 SLEPC_EXTERN const char *NEPCISSExtractions[];
 
-#if defined(PETSC_USE_COMPLEX) || defined(PETSC_CLANG_STATIC_ANALYZER)
+#if PetscDefined(USE_COMPLEX) || PetscDefined(CLANG_STATIC_ANALYZER)
 SLEPC_EXTERN PetscErrorCode NEPCISSSetExtraction(NEP,NEPCISSExtraction);
 SLEPC_EXTERN PetscErrorCode NEPCISSGetExtraction(NEP,NEPCISSExtraction*);
 SLEPC_EXTERN PetscErrorCode NEPCISSSetSizes(NEP,PetscInt,PetscInt,PetscInt,PetscInt,PetscInt,PetscBool);

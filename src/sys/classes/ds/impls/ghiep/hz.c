@@ -291,7 +291,7 @@ PetscErrorCode DSSolve_GHIEP_HZ(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscReal         *d,*e,*s;
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscAssertPointer(wi,3);
 #endif
   PetscCall(PetscBLASIntCast(ds->ld,&ld));
@@ -300,7 +300,7 @@ PetscErrorCode DSSolve_GHIEP_HZ(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(DSGetArrayReal(ds,DS_MAT_T,&d));
   PetscCall(DSGetArrayReal(ds,DS_MAT_D,&s));
   e = d + ld;
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
   /* Check signature */
   PetscCall(MatDenseGetArrayRead(ds->omat[DS_MAT_B],&B));
   for (i=0;i<ds->n;i++) {
@@ -345,7 +345,7 @@ PetscErrorCode DSSolve_GHIEP_HZ(DS ds,PetscScalar *wr,PetscScalar *wi)
 
   /* Recover eigenvalues from diagonal */
   PetscCall(DSGHIEPComplexEigs(ds,0,ds->n,wr,wi));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (wi) {
     for (i=ds->l;i<ds->n;i++) wi[i] = 0.0;
   }

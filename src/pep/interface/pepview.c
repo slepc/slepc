@@ -345,7 +345,7 @@ static PetscErrorCode PEPErrorView_DETAIL(PEP pep,PEPErrorType etype,PetscViewer
   for (i=0;i<pep->nconv;i++) {
     PetscCall(PEPGetEigenpair(pep,i,&kr,&ki,NULL,NULL));
     PetscCall(PEPComputeError(pep,i,etype,&error));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(kr);
     im = PetscImaginaryPart(kr);
 #else
@@ -501,7 +501,7 @@ static PetscErrorCode PEPValuesView_DRAW(PEP pep,PetscViewer viewer)
   PetscCall(PetscDrawSPCreate(draw,1,&drawsp));
   for (i=0;i<pep->nconv;i++) {
     k = pep->perm[i];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(pep->eigr[k]);
     im = PetscImaginaryPart(pep->eigr[k]);
 #else
@@ -518,17 +518,17 @@ static PetscErrorCode PEPValuesView_DRAW(PEP pep,PetscViewer viewer)
 
 static PetscErrorCode PEPValuesView_BINARY(PEP pep,PetscViewer viewer)
 {
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
   PetscInt       i,k;
   PetscComplex   *ev;
 #endif
 
   PetscFunctionBegin;
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
   PetscCall(PetscMalloc1(pep->nconv,&ev));
   for (i=0;i<pep->nconv;i++) {
     k = pep->perm[i];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     ev[i] = pep->eigr[k];
 #else
     ev[i] = PetscCMPLX(pep->eigr[k],pep->eigi[k]);
@@ -540,7 +540,7 @@ static PetscErrorCode PEPValuesView_BINARY(PEP pep,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
 static PetscErrorCode PEPValuesView_HDF5(PEP pep,PetscViewer viewer)
 {
   PetscInt       i,k,n,N;
@@ -567,7 +567,7 @@ static PetscErrorCode PEPValuesView_HDF5(PEP pep,PetscViewer viewer)
   PetscCall(VecAssemblyBegin(v));
   PetscCall(VecAssemblyEnd(v));
   PetscCall(VecView(v,viewer));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* in real scalars write the imaginary part as a separate vector */
   PetscCall(PetscSNPrintf(vname,sizeof(vname),"eigi_%s",ename));
   PetscCall(PetscObjectSetName((PetscObject)v,vname));
@@ -613,7 +613,7 @@ static PetscErrorCode PEPValuesView_MATLAB(PEP pep,PetscViewer viewer)
   PetscCall(PetscViewerASCIIPrintf(viewer,"Lambda_%s = [\n",name));
   for (i=0;i<pep->nconv;i++) {
     k = pep->perm[i];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(pep->eigr[k]);
     im = PetscImaginaryPart(pep->eigr[k]);
 #else
@@ -654,7 +654,7 @@ PetscErrorCode PEPValuesView(PEP pep,PetscViewer viewer)
 {
   PetscBool         isascii,isdraw,isbinary;
   PetscViewerFormat format;
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   PetscBool         ishdf5;
 #endif
 
@@ -666,13 +666,13 @@ PetscErrorCode PEPValuesView(PEP pep,PetscViewer viewer)
   PEPCheckSolved(pep,1);
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERDRAW,&isdraw));
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERBINARY,&isbinary));
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERHDF5,&ishdf5));
 #endif
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERASCII,&isascii));
   if (isdraw) PetscCall(PEPValuesView_DRAW(pep,viewer));
   else if (isbinary) PetscCall(PEPValuesView_BINARY(pep,viewer));
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   else if (ishdf5) PetscCall(PEPValuesView_HDF5(pep,viewer));
 #endif
   else if (isascii) {
@@ -767,7 +767,7 @@ PetscErrorCode PEPVectorsView(PEP pep,PetscViewer viewer)
   if (pep->nconv) {
     PetscCall(PEPComputeVectors(pep));
     PetscCall(BVCreateVec(pep->V,&xr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(BVCreateVec(pep->V,&xi));
 #endif
     for (i=0;i<pep->nconv;i++) {
@@ -776,7 +776,7 @@ PetscErrorCode PEPVectorsView(PEP pep,PetscViewer viewer)
       PetscCall(SlepcViewEigenvector(viewer,xr,xi,"X",i,(PetscObject)pep));
     }
     PetscCall(VecDestroy(&xr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(VecDestroy(&xi));
 #endif
   }

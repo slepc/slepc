@@ -35,7 +35,7 @@ static PetscErrorCode EPSSetUp_ARPACK(EPS eps)
   EPSCheckIgnored(eps,EPS_FEATURE_EXTRACTION);
 
   ncv = eps->ncv;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree(ar->rwork));
   PetscCall(PetscMalloc1(ncv,&ar->rwork));
   ar->lworkl = 3*ncv*ncv+5*ncv;
@@ -69,21 +69,21 @@ static PetscErrorCode EPSSolve_ARPACK(EPS eps)
   char           bmat[1],howmny[] = "A";
   const char     *which;
   PetscInt       n,ld,iparam[11],ipntr[14],ido,info,nev,ncv,rvec;
-#if !defined(PETSC_HAVE_MPIUNI) && !defined(PETSC_HAVE_MSMPI)
+#if !PetscDefined(HAVE_MPIUNI) && !PetscDefined(HAVE_MSMPI)
   MPI_Fint       fcomm;
 #endif
   PetscScalar    sigmar,*pV,*resid;
   Vec            x,y,w = eps->work[0];
   Mat            A;
   PetscBool      isSinv,isShift;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    sigmai = 0.0;
 #endif
 
   PetscFunctionBegin;
   nev = eps->nev;
   ncv = eps->ncv;
-#if !defined(PETSC_HAVE_MPIUNI) && !defined(PETSC_HAVE_MSMPI)
+#if !PetscDefined(HAVE_MPIUNI) && !PetscDefined(HAVE_MSMPI)
   fcomm = MPI_Comm_c2f(PetscObjectComm((PetscObject)eps));
 #endif
   n = eps->nloc;
@@ -133,7 +133,7 @@ static PetscErrorCode EPSSolve_ARPACK(EPS eps)
     bmat[0] = 'I';
   }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (eps->ishermitian) {
     switch (eps->which) {
       case EPS_TARGET_MAGNITUDE:
@@ -158,13 +158,13 @@ static PetscErrorCode EPSSolve_ARPACK(EPS eps)
       case EPS_SMALLEST_IMAGINARY: which = "SI"; break;
       default: SETERRQ(PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_WRONG,"Wrong value of eps->which");
     }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   }
 #endif
 
   do {
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eps->ishermitian) {
       PetscCallExternalVoid("ARPACKsaupd",ARPACKsaupd_(&fcomm,&ido,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
     } else {
@@ -221,7 +221,7 @@ static PetscErrorCode EPSSolve_ARPACK(EPS eps)
   rvec = PETSC_TRUE;
 
   if (eps->nconv > 0) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eps->ishermitian) {
       PetscCallExternalVoid("ARPACKseupd",ARPACKseupd_(&fcomm,&rvec,howmny,ar->select,eps->eigr,pV,&ld,&sigmar,bmat,&n,which,&nev,&eps->tol,resid,&ncv,pV,&ld,iparam,ipntr,ar->workd,ar->workl,&ar->lworkl,&info));
     } else {
@@ -262,7 +262,7 @@ static PetscErrorCode EPSReset_ARPACK(EPS eps)
   PetscCall(PetscFree(ar->workl));
   PetscCall(PetscFree(ar->select));
   PetscCall(PetscFree(ar->workd));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree(ar->rwork));
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);

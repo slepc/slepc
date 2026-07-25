@@ -375,7 +375,7 @@ static PetscErrorCode EPSErrorView_DETAIL(EPS eps,EPSErrorType etype,PetscViewer
   for (i=0;i<nconv;i++) {
     PetscCall(EPSGetEigenvalue(eps,i,&kr,&ki));
     PetscCall(EPSComputeError(eps,i,etype,&error));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(kr);
     im = PetscImaginaryPart(kr);
 #else
@@ -534,7 +534,7 @@ static PetscErrorCode EPSValuesView_DRAW(EPS eps,PetscViewer viewer)
   PetscCall(EPS_GetActualConverged(eps,&nconv));
   for (i=0;i<nconv;i++) {
     PetscCall(EPSGetEigenvalue(eps,i,&kr,&ki));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(kr);
     im = PetscImaginaryPart(kr);
 #else
@@ -552,18 +552,18 @@ static PetscErrorCode EPSValuesView_DRAW(EPS eps,PetscViewer viewer)
 static PetscErrorCode EPSValuesView_BINARY(EPS eps,PetscViewer viewer)
 {
   PetscScalar    kr,ki;
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
   PetscInt       i,nconv;
   PetscComplex   *ev;
 #endif
 
   PetscFunctionBegin;
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
   PetscCall(EPS_GetActualConverged(eps,&nconv));
   PetscCall(PetscMalloc1(nconv,&ev));
   for (i=0;i<nconv;i++) {
     PetscCall(EPSGetEigenvalue(eps,i,&kr,&ki));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     ev[i] = kr;
 #else
     ev[i] = PetscCMPLX(kr,ki);
@@ -575,7 +575,7 @@ static PetscErrorCode EPSValuesView_BINARY(EPS eps,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
 static PetscErrorCode EPSValuesView_HDF5(EPS eps,PetscViewer viewer)
 {
   PetscInt       i,n,N,nconv;
@@ -604,7 +604,7 @@ static PetscErrorCode EPSValuesView_HDF5(EPS eps,PetscViewer viewer)
   PetscCall(VecAssemblyBegin(v));
   PetscCall(VecAssemblyEnd(v));
   PetscCall(VecView(v,viewer));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* in real scalars write the imaginary part as a separate vector */
   PetscCall(PetscSNPrintf(vname,sizeof(vname),"eigi_%s",ename));
   PetscCall(PetscObjectSetName((PetscObject)v,vname));
@@ -654,7 +654,7 @@ static PetscErrorCode EPSValuesView_MATLAB(EPS eps,PetscViewer viewer)
   PetscCall(EPS_GetActualConverged(eps,&nconv));
   for (i=0;i<nconv;i++) {
     PetscCall(EPSGetEigenvalue(eps,i,&kr,&ki));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(kr);
     im = PetscImaginaryPart(kr);
 #else
@@ -695,7 +695,7 @@ PetscErrorCode EPSValuesView(EPS eps,PetscViewer viewer)
 {
   PetscBool         isascii,isdraw,isbinary;
   PetscViewerFormat format;
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   PetscBool         ishdf5;
 #endif
 
@@ -707,13 +707,13 @@ PetscErrorCode EPSValuesView(EPS eps,PetscViewer viewer)
   EPSCheckSolved(eps,1);
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERDRAW,&isdraw));
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERBINARY,&isbinary));
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERHDF5,&ishdf5));
 #endif
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERASCII,&isascii));
   if (isdraw) PetscCall(EPSValuesView_DRAW(eps,viewer));
   else if (isbinary) PetscCall(EPSValuesView_BINARY(eps,viewer));
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   else if (ishdf5) PetscCall(EPSValuesView_HDF5(eps,viewer));
 #endif
   else if (isascii) {
@@ -812,7 +812,7 @@ PetscErrorCode EPSVectorsView(EPS eps,PetscViewer viewer)
   PetscCall(EPS_GetActualConverged(eps,&nconv));
   if (nconv) {
     PetscCall(BVCreateVec(eps->V,&xr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(BVCreateVec(eps->V,&xi));
 #endif
     for (i=0;i<nconv;i++) {
@@ -824,7 +824,7 @@ PetscErrorCode EPSVectorsView(EPS eps,PetscViewer viewer)
       }
     }
     PetscCall(VecDestroy(&xr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(VecDestroy(&xi));
 #endif
   }

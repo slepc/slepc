@@ -346,7 +346,7 @@ SLEPC_EXTERN PetscErrorCode FNCreate_Combine(FN fn)
   fn->ops->evaluatederivative        = FNEvaluateDerivative_Combine;
   fn->ops->evaluatefunctionmat[0]    = FNEvaluateFunctionMat_Combine;
   fn->ops->evaluatefunctionmatvec[0] = FNEvaluateFunctionMatVec_Combine;
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
   fn->ops->evaluatefunctionmatcuda[0]    = FNEvaluateFunctionMat_Combine;
   fn->ops->evaluatefunctionmatveccuda[0] = FNEvaluateFunctionMatVec_Combine;
 #endif

@@ -69,7 +69,7 @@ int main(int argc,char **argv)
   PetscCall(NEPSetType(nep,NEPNLEIGS));
   PetscCall(NEPGetRG(nep,&rg));
   PetscCall(RGSetType(rg,RGINTERVAL));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(RGIntervalSetEndpoints(rg,2.0,400.0,-0.001,0.001));
 #else
   PetscCall(RGIntervalSetEndpoints(rg,2.0,400.0,0,0));

@@ -58,7 +58,7 @@ static PetscErrorCode SVDSolve_KSVD(SVD svd)
   PetscBLASInt   info,lwork=-1,*iwork,liwork=-1,minliwork,one=1;
   PetscInt       M,N,m,n,mn;
   const char     *eigen;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscBLASInt   lrwork;
   PetscReal      *rwork,dummy;
 #endif

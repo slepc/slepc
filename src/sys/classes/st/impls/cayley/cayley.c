@@ -84,12 +84,12 @@ static PetscErrorCode STBackTransform_Cayley(ST st,PetscInt n,PetscScalar *eigr,
 {
   ST_CAYLEY   *ctx = (ST_CAYLEY*)st->data;
   PetscInt    j;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar t,i,r;
 #endif
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   for (j=0;j<n;j++) {
     if (eigi[j] == 0.0) eigr[j] = (ctx->nu + eigr[j] * st->sigma) / (eigr[j] - 1.0);
     else {

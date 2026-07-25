@@ -176,7 +176,7 @@ PetscErrorCode EPSSolve(EPS eps)
   /* Map eigenvalues back to the original problem if appropriate */
   PetscCall(EPSComputeValues(eps));
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* Reorder conjugate eigenvalues (positive imaginary first) */
   for (i=0;i<eps->nconv-1;i++) {
     if (eps->eigi[i] != 0 && (eps->problem_type!=EPS_HAMILT || eps->eigr[i]!=0)) {
@@ -469,7 +469,7 @@ PetscErrorCode EPSGetEigenpair(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar 
 PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar *eigi)
 {
   PetscInt  k,nconv;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscInt  k2, iquad;
 #endif
 
@@ -481,7 +481,7 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
   PetscCheck(i<nconv,PetscObjectComm((PetscObject)eps),PETSC_ERR_ARG_OUTOFRANGE,"The index can be nconv-1 at most, see EPSGetConverged()");
   if (nconv==eps->nconv) {
     k = eps->perm[i];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     if (eigr) *eigr = eps->eigr[k];
     if (eigi) *eigi = 0;
 #else
@@ -493,7 +493,7 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
     if (eps->problem_type==EPS_BSE || eps->problem_type==EPS_LREP) {
       /* BSE problem, even index is +lambda, odd index is -lambda */
       k = eps->perm[i/2];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       if (eigr) *eigr = (i%2)? -eps->eigr[k]: eps->eigr[k];
       if (eigi) *eigi = 0;
 #else
@@ -503,7 +503,7 @@ PetscErrorCode EPSGetEigenvalue(EPS eps,PetscInt i,PetscScalar *eigr,PetscScalar
     } else if (eps->problem_type==EPS_HAMILT) {
       /* Hamiltonian eigenproblem */
       k = eps->perm[i/2];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       if (eigr) *eigr = (i%2)? -eps->eigr[k]: eps->eigr[k];
       if (eigi) *eigi = 0;
 #else
@@ -652,7 +652,7 @@ PetscErrorCode EPSGetLeftEigenvector(EPS eps,PetscInt i,Vec Wr,Vec Wi)
         PetscCall(VecScale(v1,-1.0));
         PetscCall(VecRestoreSubVector(Wr,is[1],&v1));
       }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       if (Wi) {
         PetscCall(VecGetSubVector(Wi,is[1],&v1));
         PetscCall(VecScale(v1,-1.0));
@@ -742,7 +742,7 @@ PetscErrorCode EPSComputeResidualNorm_Private(EPS eps,PetscBool trans,PetscScala
   Mat            A,B;
   Vec            u,w;
   PetscScalar    alpha;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   Vec            v;
   PetscReal      ni,nr;
 #endif
@@ -754,7 +754,7 @@ PetscErrorCode EPSComputeResidualNorm_Private(EPS eps,PetscBool trans,PetscScala
   PetscCall(STGetMatrix(eps->st,0,&A));
   if (nmat>1) PetscCall(STGetMatrix(eps->st,1,&B));
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   v = z[1];
   if (ki == 0 || PetscAbsScalar(ki) < PetscAbsScalar(kr*PETSC_MACHINE_EPSILON)) {
 #endif
@@ -766,7 +766,7 @@ PetscErrorCode EPSComputeResidualNorm_Private(EPS eps,PetscBool trans,PetscScala
       PetscCall(VecAXPY(u,alpha,w));                        /* u=A*x-k*B*x */
     }
     PetscCall(VecNorm(u,NORM_2,norm));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   } else {
     PetscCall((*matmult)(A,xr,u));                          /* u=A*xr */
     if (SlepcAbsEigenvalue(kr,ki) > PETSC_MACHINE_EPSILON) {
@@ -833,7 +833,7 @@ PetscErrorCode EPSComputeError(EPS eps,PetscInt i,EPSErrorType type,PetscReal *e
   EPSCheckSolved(eps,1);
 
   /* allocate work vectors */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(EPSSetWorkVecs(eps,3));
   xi   = NULL;
   w[1] = NULL;

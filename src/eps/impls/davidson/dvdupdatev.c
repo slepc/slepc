@@ -85,14 +85,14 @@ static PetscErrorCode dvd_updateV_conv_gen(dvdDashboard *d)
   PetscInt        npreconv,cMT,cMTX,lV,kV,nV;
   Mat             Z,Z0,Q,Q0;
   PetscBool       t;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscInt        i;
 #endif
 
   PetscFunctionBegin;
   npreconv = d->npreconv;
   /* Constrains the converged pairs to nev */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* Tries to maintain together conjugate eigenpairs */
   for (i=0; (i + (d->eigi[i]!=0.0?1:0) < npreconv) && (d->nconv + i < d->nev); i+= (d->eigi[i]!=0.0?2:1));
   npreconv = i;
@@ -133,7 +133,7 @@ static PetscErrorCode dvd_updateV_conv_gen(dvdDashboard *d)
 
   /* Lock the converged pairs */
   d->eigr+= npreconv;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (d->eigi) d->eigi+= npreconv;
 #endif
   d->nconv+= npreconv;
@@ -233,7 +233,7 @@ static PetscErrorCode dvd_updateV_testConv(dvdDashboard *d,PetscInt s,PetscInt p
   PetscFunctionBegin;
   if (nConv) *nConv = s;
   for (i=s,conv=PETSC_TRUE;(conv || data->allResiduals) && (i < e);i+=b) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     b = d->eigi[i]!=0.0?2:1;
 #else
     b = 1;
@@ -250,7 +250,7 @@ static PetscErrorCode dvd_updateV_testConv(dvdDashboard *d,PetscInt s,PetscInt p
   }
   pre = PetscMax(pre,i);
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* Enforce converged conjugate complex eigenpairs */
   if (nConv) {
     for (j=0;j<*nConv;j++) if (d->eigi[j] != 0.0) j++;
@@ -282,7 +282,7 @@ static PetscErrorCode dvd_updateV_update_gen(dvdDashboard *d)
   if (size_D == 0) PetscFunctionReturn(PETSC_SUCCESS);
 
   /* Get the residual of all pairs */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   s = (d->eigi[0]!=0.0)? 2: 1;
 #else
   s = 1;
@@ -359,13 +359,13 @@ static PetscErrorCode dvd_updateV_extrapol(dvdDashboard *d)
 PetscErrorCode dvd_managementV_basic(dvdDashboard *d,dvdBlackboard *b,PetscInt bs,PetscInt mpd,PetscInt min_size_V,PetscInt plusk,PetscBool harm,PetscBool allResiduals)
 {
   dvdManagV_basic *data;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscBool       her_probl,std_probl;
 #endif
 
   PetscFunctionBegin;
   /* Setting configuration constrains */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* if the last converged eigenvalue is complex its conjugate pair is also
      converged */
   her_probl = DVD_IS(d->sEP,DVD_EP_HERMITIAN)? PETSC_TRUE: PETSC_FALSE;

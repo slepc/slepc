@@ -15,7 +15,7 @@
 
 /* MANSEC = Sys */
 
-#if defined(PETSC_HAVE_MAGMA)
+#if PetscDefined(HAVE_MAGMA)
 
 #include <magma_v2.h>
 
@@ -30,8 +30,8 @@ SLEPC_EXTERN PetscErrorCode SlepcMagmaInit(void);
   } while (0)
 #define CHKERRMAGMA(...) PetscCall(__VA_ARGS__)
 
-#if defined(PETSC_USE_COMPLEX)
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_COMPLEX)
+#if PetscDefined(USE_REAL_SINGLE)
 #define magma_xgeev(a,b,c,d,e,f,g,h,i,j,k,l,m,n) magma_cgeev((a),(b),(c),(magmaFloatComplex*)(d),(e),(magmaFloatComplex*)(f),(magmaFloatComplex*)(g),(h),(magmaFloatComplex*)(i),(j),(magmaFloatComplex*)(k),(l),(m),(n))
 #define magma_xgesv_gpu(a,b,c,d,e,f,g,h)         magma_cgesv_gpu((a),(b),(magmaFloatComplex_ptr)(c),(d),(e),(magmaFloatComplex_ptr)(f),(g),(h))
 #define magma_xgetrf_gpu(a,b,c,d,e,f)   magma_cgetrf_gpu((a),(b),(magmaFloatComplex_ptr)(c),(d),(e),(f))
@@ -45,7 +45,7 @@ SLEPC_EXTERN PetscErrorCode SlepcMagmaInit(void);
 #define magma_get_xgetri_nb             magma_get_zgetri_nb
 #endif
 #else
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
 #define magma_xgeev                     magma_sgeev
 #define magma_xgesv_gpu                 magma_sgesv_gpu
 #define magma_xgetrf_gpu                magma_sgetrf_gpu
@@ -60,7 +60,7 @@ SLEPC_EXTERN PetscErrorCode SlepcMagmaInit(void);
 #endif
 #endif
 
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
 #define magma_Cgesv_gpu(a,b,c,d,e,f,g,h)         magma_cgesv_gpu((a),(b),(magmaFloatComplex_ptr)(c),(d),(e),(magmaFloatComplex_ptr)(f),(g),(h))
 #else
 #define magma_Cgesv_gpu(a,b,c,d,e,f,g,h)         magma_zgesv_gpu((a),(b),(magmaDoubleComplex_ptr)(c),(d),(e),(magmaDoubleComplex_ptr)(f),(g),(h))

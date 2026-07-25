@@ -147,7 +147,7 @@ static PetscErrorCode dvd_harm_transf(dvdHarmonic *dvdh,PetscScalar t)
   }
 
   /* Check the transformation does not change the sign of the imaginary part */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (dvdh->Pb*dvdh->Wa - dvdh->Wb*dvdh->Pa < 0.0) {
     dvdh->Pa *= -1.0;
     dvdh->Pb *= -1.0;
@@ -257,13 +257,13 @@ PetscErrorCode dvd_harm_updateproj(dvdDashboard *d)
 static PetscErrorCode dvd_harm_backtrans(dvdHarmonic *data,PetscScalar *ar,PetscScalar *ai)
 {
   PetscScalar xr;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar xi, k;
 #endif
 
   PetscFunctionBegin;
   xr = *ar;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   xi = *ai;
   if (PetscUnlikely(xi != 0.0)) {
     k = (data->Pa - data->Wa*xr)*(data->Pa - data->Wa*xr) + data->Wa*data->Wa*xi*xi;

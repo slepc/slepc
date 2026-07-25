@@ -24,7 +24,7 @@
 PetscErrorCode BVMult_BLAS_Private(BV bv,PetscInt m_,PetscInt n_,PetscInt k_,PetscScalar alpha,const PetscScalar *A,PetscInt lda_,const PetscScalar *B,PetscInt ldb_,PetscScalar beta,PetscScalar *C,PetscInt ldc_)
 {
   PetscBLASInt   m,n,k,lda,ldb,ldc;
-#if defined(PETSC_HAVE_FBLASLAPACK) || defined(PETSC_HAVE_F2CBLASLAPACK)
+#if PetscDefined(HAVE_FBLASLAPACK) || PetscDefined(HAVE_F2CBLASLAPACK)
   PetscBLASInt   l,bs=BLOCKSIZE;
 #endif
 
@@ -35,7 +35,7 @@ PetscErrorCode BVMult_BLAS_Private(BV bv,PetscInt m_,PetscInt n_,PetscInt k_,Pet
   PetscCall(PetscBLASIntCast(lda_,&lda));
   PetscCall(PetscBLASIntCast(ldb_,&ldb));
   PetscCall(PetscBLASIntCast(ldc_,&ldc));
-#if defined(PETSC_HAVE_FBLASLAPACK) || defined(PETSC_HAVE_F2CBLASLAPACK)
+#if PetscDefined(HAVE_FBLASLAPACK) || PetscDefined(HAVE_F2CBLASLAPACK)
   l = m % bs;
   if (l) PetscCallBLAS("BLASgemm",BLASgemm_("N","N",&l,&n,&k,&alpha,(PetscScalar*)A,&lda,(PetscScalar*)B,&ldb,&beta,C,&ldc));
   for (;l<m;l+=bs) {

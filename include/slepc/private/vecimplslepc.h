@@ -15,7 +15,7 @@
 
 /* SUBMANSEC = Sys */
 
-#if !defined(PETSC_USE_DEBUG)
+#if !PetscDefined(USE_DEBUG)
 
 #define SlepcValidVecComp(y,arg) do {(void)(y);} while (0)
 #define SlepcValidVecsComp(y,n,arg) do {(void)(y);} while (0)

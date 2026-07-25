@@ -38,7 +38,7 @@
 #define SLEPC_INTERN extern SLEPC_VISIBILITY_INTERNAL
 #endif
 
-#if defined(PETSC_USE_SINGLE_LIBRARY)
+#if PetscDefined(USE_SINGLE_LIBRARY)
   #define SLEPC_SINGLE_LIBRARY_VISIBILITY_INTERNAL SLEPC_VISIBILITY_INTERNAL
   #define SLEPC_SINGLE_LIBRARY_INTERN              SLEPC_INTERN
 #else
@@ -97,13 +97,13 @@ SLEPC_EXTERN PetscErrorCode SlepcSNPrintfScalar(char[],size_t,PetscScalar,PetscB
 SLEPC_EXTERN PetscBool SlepcInitializeCalled;
 SLEPC_EXTERN PetscBool SlepcFinalizeCalled;
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 #define SlepcLogFlopsComplex(a) PetscLogFlops((a))
 #else
 #define SlepcLogFlopsComplex(a) PetscLogFlops((4.0*a))
 #endif
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 #define SlepcLogGpuFlopsComplex(a) PetscLogGpuFlops((a))
 #else
 #define SlepcLogGpuFlopsComplex(a) PetscLogGpuFlops((4.0*a))
@@ -112,6 +112,6 @@ SLEPC_EXTERN PetscBool SlepcFinalizeCalled;
 /*
     Developer routines to be used with a debugger
 */
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
 SLEPC_EXTERN PetscErrorCode SlepcDebugViewMatrix(PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscInt,const char*,const char*);
 #endif

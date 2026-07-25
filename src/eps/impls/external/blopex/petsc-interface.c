@@ -11,7 +11,7 @@
 #include <fortran_matrix.h>
 #include "petsc-interface.h"
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 BlopexInt PETSC_dpotrf_interface (char *uplo,BlopexInt *n,double *a,BlopexInt * lda,BlopexInt *info)
 {
   PetscBLASInt n_,lda_,info_;
@@ -143,7 +143,7 @@ int PETSCSetupInterpreter(mv_InterfaceInterpreter *i)
   i->SetRandomVectors = mv_TempMultiVectorSetRandom;
   i->Eval = mv_TempMultiVectorEval;
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   i->MultiInnerProd = mv_TempMultiVectorByMultiVector_complex;
   i->MultiInnerProdDiag = mv_TempMultiVectorByMultiVectorDiag_complex;
   i->MultiVecMat = mv_TempMultiVectorByMatrix_complex;

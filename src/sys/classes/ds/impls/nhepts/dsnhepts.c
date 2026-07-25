@@ -27,7 +27,7 @@ static PetscErrorCode DSAllocate_NHEPTS(DS ds,PetscInt ld)
   PetscCall(PetscFree(ds->perm));
   PetscCall(PetscMalloc1(ld,&ds->perm));
   PetscCall(PetscMalloc1(ld,&ctx->wr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc1(ld,&ctx->wi));
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -73,7 +73,7 @@ static PetscErrorCode DSVectors_NHEPTS_Eigen_Some(DS ds,PetscInt *k,PetscReal *r
   PetscCall(MatDenseGetArray(ds->omat[left?DS_MAT_Y:DS_MAT_X],&X));
   Y = X+(*k)*ld;
   select[*k] = (PetscBLASInt)PETSC_TRUE;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if ((*k)<n-1 && A[(*k)+1+(*k)*ld]!=0.0) iscomplex = PETSC_TRUE;
   mm = iscomplex? 2: 1;
   if (iscomplex) select[(*k)+1] = (PetscBLASInt)PETSC_TRUE;
@@ -91,13 +91,13 @@ static PetscErrorCode DSVectors_NHEPTS_Eigen_Some(DS ds,PetscInt *k,PetscReal *r
     PetscCall(MatDenseGetArrayRead(ds->omat[left?DS_MAT_Z:DS_MAT_Q],&Q));
     PetscCall(PetscArraycpy(ds->work,Y,mout*ld));
     PetscCallBLAS("BLASgemv",BLASgemv_("N",&n,&n,&sone,Q,&ld,ds->work,&inc,&szero,Y,&inc));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (iscomplex) PetscCallBLAS("BLASgemv",BLASgemv_("N",&n,&n,&sone,Q,&ld,ds->work+ld,&inc,&szero,Y+ld,&inc));
 #endif
     PetscCall(MatDenseRestoreArrayRead(ds->omat[left?DS_MAT_Z:DS_MAT_Q],&Q));
     cols = 1;
     norm = BLASnrm2_(&n,Y,&inc);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (iscomplex) {
       norm = SlepcAbsEigenvalue(norm,BLASnrm2_(&n,Y+ld,&inc));
       cols = 2;
@@ -136,7 +136,7 @@ static PetscErrorCode DSVectors_NHEPTS_Eigen_All(DS ds,PetscBool left)
     back = "B";
     PetscCall(MatCopy(ds->omat[left?DS_MAT_Z:DS_MAT_Q],ds->omat[left?DS_MAT_Y:DS_MAT_X],SAME_NONZERO_PATTERN));
   } else back = "A";
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(DSAllocateWork_Private(ds,3*ld,0,0));
   PetscCallLAPACKInfo("LAPACKtrevc",LAPACKtrevc_("R",back,NULL,&n,(PetscScalar*)A,&ld,X,&ld,X,&ld,&n,&mout,ds->work,&info));
 #else
@@ -149,7 +149,7 @@ static PetscErrorCode DSVectors_NHEPTS_Eigen_All(DS ds,PetscBool left)
     iscomplex = (i<n-1 && A[i+1+i*ld]!=0.0)? PETSC_TRUE: PETSC_FALSE;
     cols = 1;
     norm = BLASnrm2_(&n,X+i*ld,&inc);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (iscomplex) {
       norm = SlepcAbsEigenvalue(norm,BLASnrm2_(&n,X+(i+1)*ld,&inc));
       cols = 2;
@@ -191,7 +191,7 @@ static PetscErrorCode DSSort_NHEPTS(DS ds,PetscScalar *wr,PetscScalar *wi,PetscS
   DS_NHEPTS      *ctx = (DS_NHEPTS*)ds->data;
   PetscInt       i,j,cont,id=0,*p,*idx,*idx2;
   PetscReal      s,t;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   Mat            A,U;
 #endif
 
@@ -199,7 +199,7 @@ static PetscErrorCode DSSort_NHEPTS(DS ds,PetscScalar *wr,PetscScalar *wi,PetscS
   PetscCheck(!rr || wr==rr,PetscObjectComm((PetscObject)ds),PETSC_ERR_SUP,"Not implemented yet");
   PetscCall(PetscMalloc3(ds->ld,&idx,ds->ld,&idx2,ds->ld,&p));
   PetscCall(DSSort_NHEP_Total(ds,DS_MAT_A,DS_MAT_Q,wr,wi));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(DSGetMat(ds,DS_MAT_B,&A));
   PetscCall(MatConjugate(A));
   PetscCall(DSRestoreMat(ds,DS_MAT_B,&A));
@@ -225,7 +225,7 @@ static PetscErrorCode DSSort_NHEPTS(DS ds,PetscScalar *wr,PetscScalar *wi,PetscS
     for (i=0;i<ds->n;i++) if (p[i]==-1) p[i] = i;
     PetscCall(DSSortWithPermutation_NHEP_Private(ds,p,DS_MAT_B,DS_MAT_Z,ctx->wr,ctx->wi));
   }
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(DSGetMat(ds,DS_MAT_B,&A));
   PetscCall(MatConjugate(A));
   PetscCall(DSRestoreMat(ds,DS_MAT_B,&A));
@@ -273,7 +273,7 @@ static PetscErrorCode DSSolve_NHEPTS(DS ds,PetscScalar *wr,PetscScalar *wi)
   DS_NHEPTS      *ctx = (DS_NHEPTS*)ds->data;
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscAssertPointer(wi,3);
 #endif
   PetscCall(DSSolve_NHEP_Private(ds,DS_MAT_A,DS_MAT_Q,wr,wi));
@@ -281,7 +281,7 @@ static PetscErrorCode DSSolve_NHEPTS(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
 static PetscErrorCode DSSynchronize_NHEPTS(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
   PetscInt       ld=ds->ld,l=ds->l,k;
@@ -315,7 +315,7 @@ static PetscErrorCode DSSynchronize_NHEPTS(DS ds,PetscScalar eigr[],PetscScalar 
       PetscCallMPI(MPI_Pack(Z+l*ld,ldn,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
     }
     if (eigr) PetscCallMPI(MPI_Pack(eigr+l,n,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi) PetscCallMPI(MPI_Pack(eigi+l,n,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
 #endif
     if (ctx->wr) PetscCallMPI(MPI_Pack(ctx->wr+l,n,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
@@ -330,7 +330,7 @@ static PetscErrorCode DSSynchronize_NHEPTS(DS ds,PetscScalar eigr[],PetscScalar 
       PetscCallMPI(MPI_Unpack(ds->work,size,&off,Z+l*ld,ldn,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
     }
     if (eigr) PetscCallMPI(MPI_Unpack(ds->work,size,&off,eigr+l,n,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi) PetscCallMPI(MPI_Unpack(ds->work,size,&off,eigi+l,n,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
 #endif
     if (ctx->wr) PetscCallMPI(MPI_Unpack(ds->work,size,&off,ctx->wr+l,n,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
@@ -348,12 +348,12 @@ static PetscErrorCode DSSynchronize_NHEPTS(DS ds,PetscScalar eigr[],PetscScalar 
 
 static PetscErrorCode DSGetTruncateSize_NHEPTS(DS ds,PetscInt l,PetscInt n,PetscInt *k)
 {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   const PetscScalar *A,*B;
 #endif
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(MatDenseGetArrayRead(ds->omat[DS_MAT_A],&A));
   PetscCall(MatDenseGetArrayRead(ds->omat[DS_MAT_B],&B));
   if (A[l+(*k)+(l+(*k)-1)*ds->ld] != 0.0 || B[l+(*k)+(l+(*k)-1)*ds->ld] != 0.0) {
@@ -374,7 +374,7 @@ static PetscErrorCode DSTruncate_NHEPTS(DS ds,PetscInt n,PetscBool trim)
   PetscFunctionBegin;
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_A],&A));
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_B],&B));
-#if defined(PETSC_USE_DEBUG)
+#if PetscDefined(USE_DEBUG)
   /* make sure diagonal 2x2 block is not broken */
   PetscCheck(ds->state<DS_STATE_CONDENSED || n==0 || n==ds->n || A[n+(n-1)*ld]==0.0 || B[n+(n-1)*ld]==0.0,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONG,"The given size would break a 2x2 block, call DSGetTruncateSize() first");
 #endif
@@ -466,7 +466,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_NHEPTS(DS ds)
   ds->ops->vectors         = DSVectors_NHEPTS;
   ds->ops->solve[0]        = DSSolve_NHEPTS;
   ds->ops->sort            = DSSort_NHEPTS;
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
   ds->ops->synchronize     = DSSynchronize_NHEPTS;
 #endif
   ds->ops->gettruncatesize = DSGetTruncateSize_NHEPTS;

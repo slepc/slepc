@@ -423,13 +423,13 @@ PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar ar[],PetscScalar ai[],
   PetscValidHeaderSpecific(rg,RG_CLASSID,1);
   PetscValidType(rg,1);
   PetscAssertPointer(ar,3);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscAssertPointer(ai,4);
 #endif
   PetscAssertPointer(inside,5);
 
   for (i=0;i<n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     px = PetscRealPart(ar[i]);
     py = PetscImaginaryPart(ar[i]);
 #else
@@ -504,7 +504,7 @@ PetscErrorCode RGIsAxisymmetric(RG rg,PetscBool vertical,PetscBool *symm)
 @*/
 PetscErrorCode RGCanUseConjugates(RG rg,PetscBool realmats,PetscBool *useconj)
 {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      c,d;
   PetscBool      isaxisymm;
 #endif
@@ -514,7 +514,7 @@ PetscErrorCode RGCanUseConjugates(RG rg,PetscBool realmats,PetscBool *useconj)
   PetscValidType(rg,1);
   PetscAssertPointer(useconj,3);
   *useconj = PETSC_FALSE;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   if (realmats) {
     PetscCall(RGIsAxisymmetric(rg,PETSC_FALSE,&isaxisymm));
     if (isaxisymm) {
@@ -556,7 +556,7 @@ PetscErrorCode RGComputeContour(RG rg,PetscInt n,PetscScalar cr[],PetscScalar ci
   PetscFunctionBegin;
   PetscValidHeaderSpecific(rg,RG_CLASSID,1);
   PetscValidType(rg,1);
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscAssertPointer(cr,3);
 #else
   PetscCheck(cr || ci,PetscObjectComm((PetscObject)rg),PETSC_ERR_SUP,"cr and ci cannot be NULL simultaneously");

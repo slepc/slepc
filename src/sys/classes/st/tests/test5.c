@@ -38,7 +38,7 @@ int main (int argc,char **argv)
   PetscCall(MatSetFromOptions(A));
 
   PetscCall(MatGetOwnershipRange(A,&Istart,&Iend));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   val1 = test_compl? PetscCMPLX(1.0,-0.2): 1.0;
   val2 = test_compl? PetscCMPLX(-1.0,0.4): -1.0;
 #else
@@ -57,7 +57,7 @@ int main (int argc,char **argv)
   PetscCall(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY));
   PetscCall(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY));
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   val1 = test_compl? PetscCMPLX(-0.5,0.01): -0.5;
 #else
   val1 = -0.5;

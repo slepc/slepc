@@ -62,13 +62,13 @@ PetscErrorCode PEPEvaluateBasis(PEP pep,PetscScalar sigma,PetscScalar isigma,Pet
   if (ivals) for (k=0;k<nmat;k++) ivals[k] = 0.0;
   vals[0] = 1.0;
   vals[1] = (sigma-b[0])/a[0];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (ivals) ivals[1] = isigma/a[0];
 #endif
   for (k=2;k<nmat;k++) {
     vals[k] = ((sigma-b[k-1])*vals[k-1]-g[k-1]*vals[k-2])/a[k-1];
     if (ivals) vals[k] -= isigma*ivals[k-1]/a[k-1];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (ivals) ivals[k] = ((sigma-b[k-1])*ivals[k-1]+isigma*vals[k-1]-g[k-1]*ivals[k-2])/a[k-1];
 #endif
   }
@@ -91,14 +91,14 @@ PetscErrorCode PEPEvaluateBasisDerivative(PEP pep,PetscScalar sigma,PetscScalar 
   }
   vals[0] = 0.0;
   vals[1] = vals[1]/a[0];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (ivals) ivals[1] = ivals[1]/a[0];
 #endif
   for (k=2;k<nmat;k++) {
     vals[k] += (sigma-b[k-1])*vals[k-1]-g[k-1]*vals[k-2];
     if (ivals) vals[k] -= isigma*ivals[k-1];
     vals[k] /= a[k-1];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (ivals) {
       ivals[k] += (sigma-b[k-1])*ivals[k-1]+isigma*vals[k-1]-g[k-1]*ivals[k-2];
       ivals[k] /= a[k-1];

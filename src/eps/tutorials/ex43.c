@@ -21,7 +21,7 @@ static char help[] = "Generalized eigenproblem, illustrates setting MUMPS option
 int main(int argc,char **argv)
 {
   Mat            A,B;
-#if defined(PETSC_HAVE_MUMPS)
+#if PetscDefined(HAVE_MUMPS)
   Mat            K;
 #endif
   EPS            eps;
@@ -99,7 +99,7 @@ int main(int argc,char **argv)
   /*
      Set MUMPS options if available
   */
-#if defined(PETSC_HAVE_MUMPS)
+#if PetscDefined(HAVE_MUMPS)
   PetscCall(PCFactorSetMatSolverType(pc,MATSOLVERMUMPS));
   /* the next line is required to force the creation of the ST operator and its passing to KSP */
   PetscCall(STGetOperator(st,NULL));

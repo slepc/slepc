@@ -121,7 +121,7 @@ int main(int argc,char **argv)
 
   /* Create matrices */
   if (matcuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
     PetscCall(MatCreateSeqDenseCUDA(PETSC_COMM_SELF,n,n,NULL,&A));
 #endif
   } else PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,n,n,NULL,&A));

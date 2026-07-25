@@ -667,7 +667,7 @@ PetscErrorCode BVAllocateWork_Private(BV bv,PetscInt s)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_DEBUG) && !defined(PETSC_CLANG_STATIC_ANALYZER)
+#if PetscDefined(USE_DEBUG) && !PetscDefined(CLANG_STATIC_ANALYZER)
 /*
    SlepcDebugBVView - partially view a BV object, to be used from within a debugger.
 

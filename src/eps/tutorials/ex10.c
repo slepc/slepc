@@ -26,7 +26,7 @@ PetscErrorCode STCreate_User(SampleShellST**);
 PetscErrorCode STSetUp_User(SampleShellST*,ST);
 PetscErrorCode STApply_User(ST,Vec,Vec);
 PetscErrorCode STApplyTranspose_User(ST,Vec,Vec);
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 PetscErrorCode STApplyHermitianTranspose_User(ST,Vec,Vec);
 #endif
 PetscErrorCode STBackTransform_User(ST,PetscInt,PetscScalar*,PetscScalar*);
@@ -110,7 +110,7 @@ int main (int argc,char **argv)
     PetscCall(STShellSetApplyTranspose(st,STApplyTranspose_User));
 
     /* (Optional) Set the user-defined routine for applying the conjugate-transposed operator */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     if (set_ht) PetscCall(STShellSetApplyHermitianTranspose(st,STApplyHermitianTranspose_User));
 #endif
 
@@ -254,7 +254,7 @@ PetscErrorCode STApplyTranspose_User(ST st,Vec x,Vec y)
   PetscCall(KSPSolveTranspose(shell->ksp,x,y));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 /* ------------------------------------------------------------------- */
 /*
    STApplyHermitianTranspose_User - This is not required unless using a two-sided

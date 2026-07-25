@@ -31,13 +31,13 @@ PetscErrorCode NEPNLEIGSBackTransform(PetscObject ob,PetscInt n,PetscScalar *val
 {
   NEP         nep;
   PetscInt    j;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar t;
 #endif
 
   PetscFunctionBegin;
   nep = (NEP)ob;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   for (j=0;j<n;j++) {
     if (vali[j] == 0) valr[j] = 1.0 / valr[j] + nep->target;
     else {
@@ -60,7 +60,7 @@ static PetscErrorCode NEPNLEIGSAuxiliarPRootFinder(PetscInt deg,PetscScalar *pol
   PetscScalar    *C;
   PetscBLASInt   n_,lwork;
   PetscInt       i;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      *rwork=NULL;
 #endif
   PetscScalar    *work;
@@ -79,7 +79,7 @@ static PetscErrorCode NEPNLEIGSAuxiliarPRootFinder(PetscInt deg,PetscScalar *pol
     PetscCall(PetscBLASIntCast(3*deg,&lwork));
 
     PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(PetscMalloc1(lwork,&work));
     PetscCallBLAS("LAPACKgeev",LAPACKgeev_("N","N",&n_,C,&n_,wr,wi,NULL,&n_,NULL,&n_,work,&lwork,&info));
     if (info) *avail = PETSC_FALSE;
@@ -134,7 +134,7 @@ static PetscErrorCode NEPNLEIGSFNSingularities(FN f,PetscInt *nisol,PetscScalar 
         PetscCall(PetscCalloc1(nq-1,isol));
         *nisol = 0;
         for (i=0;i<nq-1;i++)
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
           if (wi[i]==0)
 #endif
             (*isol)[(*nisol)++] = wr[i];
@@ -204,7 +204,7 @@ static PetscErrorCode NEPNLEIGSAAAComputation(NEP nep,PetscInt ndpt,PetscScalar 
   PetscReal      *S,norm,err,*R;
   PetscInt       i,k,j,idx=0,cont;
   PetscBLASInt   n_,m_,lda_,lwork,one=1;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      *rwork;
 #endif
 
@@ -212,7 +212,7 @@ static PetscErrorCode NEPNLEIGSAAAComputation(NEP nep,PetscInt ndpt,PetscScalar 
   PetscCall(PetscBLASIntCast(8*ndpt,&lwork));
   PetscCall(PetscMalloc5(ndpt,&R,ndpt,&z,ndpt,&f,ndpt*ndpt,&C,ndpt,&ww));
   PetscCall(PetscMalloc6(ndpt*ndpt,&A,ndpt,&S,ndpt*ndpt,&VT,lwork,&work,ndpt,&D,ndpt,&N));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc1(8*ndpt,&rwork));
 #endif
   PetscCall(PetscFPTrapPush(PETSC_FP_TRAP_OFF));
@@ -244,7 +244,7 @@ static PetscErrorCode NEPNLEIGSAAAComputation(NEP nep,PetscInt ndpt,PetscScalar 
     }
     PetscCall(PetscBLASIntCast(cont,&m_));
     PetscCall(PetscBLASIntCast(k+1,&n_));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("N","A",&m_,&n_,A,&lda_,S,NULL,&lda_,VT,&lda_,work,&lwork,rwork,&info));
 #else
     PetscCallLAPACKInfo("LAPACKgesvd",LAPACKgesvd_("N","A",&m_,&n_,A,&lda_,S,NULL,&lda_,VT,&lda_,work,&lwork,&info));
@@ -274,7 +274,7 @@ static PetscErrorCode NEPNLEIGSAAAComputation(NEP nep,PetscInt ndpt,PetscScalar 
   }
   C[0] = 0.0; C[k+1+(k+1)*ndpt] = 1.0;
   n_++;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","N",&n_,A,&lda_,C,&lda_,D,N,NULL,&lda_,NULL,&lda_,work,&lwork,rwork,&info));
 #else
   PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","N",&n_,A,&lda_,C,&lda_,D,VT,N,NULL,&lda_,NULL,&lda_,work,&lwork,&info));
@@ -287,7 +287,7 @@ static PetscErrorCode NEPNLEIGSAAAComputation(NEP nep,PetscInt ndpt,PetscScalar 
   PetscCall(PetscFPTrapPop());
   PetscCall(PetscFree5(R,z,f,C,ww));
   PetscCall(PetscFree6(A,S,VT,work,D,N));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree(rwork));
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -348,7 +348,7 @@ static PetscErrorCode NEPNLEIGSLejaBagbyPoints(NEP nep)
   PetscScalar    *ds,*dsi,*dxi,*nrs,*nrxi,*s=ctx->s,*xi=ctx->xi,*beta=ctx->beta;
   PetscReal      maxnrs,minnrxi;
   PetscBool      rational;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscReal      a,b,h;
 #endif
 
@@ -358,7 +358,7 @@ static PetscErrorCode NEPNLEIGSLejaBagbyPoints(NEP nep)
 
   /* Discretize the target region boundary */
   PetscCall(RGComputeContour(nep->rg,ndpt,ds,dsi));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   for (i=0;i<ndpt;i++) if (dsi[i]!=0.0) break;
   if (i<ndpt) {
     PetscCheck(nep->problem_type==NEP_RATIONAL,PetscObjectComm((PetscObject)nep),PETSC_ERR_SUP,"NLEIGS with real arithmetic requires the target set to be included in the real axis");

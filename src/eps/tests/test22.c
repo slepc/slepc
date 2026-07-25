@@ -144,7 +144,7 @@ int main(int argc,char **argv)
         PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\n     "));
         for (j=0;j<PetscMin(8,nev-8*i);j++) {
           PetscCall(EPSGetEigenpair(eps,8*i+j,&kr,&ki,NULL,NULL));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
           re = PetscRealPart(kr);
           im = PetscImaginaryPart(kr);
 #else

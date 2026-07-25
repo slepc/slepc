@@ -275,7 +275,7 @@ static PetscErrorCode MatMultTranspose_STOperator(Mat Op,Vec x,Vec y)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 static PetscErrorCode MatMultHermitianTranspose_STOperator(Mat Op,Vec x,Vec y)
 {
   ST             st;
@@ -336,7 +336,7 @@ PetscErrorCode STGetOperator_Private(ST st,Mat *Op)
     PetscCall(MatCreateShell(PetscObjectComm((PetscObject)st),m,n,M,N,st,&st->Op));
     PetscCall(MatShellSetOperation(st->Op,MATOP_MULT,(PetscErrorCodeFn*)MatMult_STOperator));
     PetscCall(MatShellSetOperation(st->Op,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_STOperator));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(MatShellSetOperation(st->Op,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultHermitianTranspose_STOperator));
 #else
     PetscCall(MatShellSetOperation(st->Op,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_STOperator));

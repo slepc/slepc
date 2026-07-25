@@ -234,7 +234,7 @@ static inline PetscErrorCode STMatIsSymmetricKnown(ST st,PetscBool *symm,PetscBo
     if (!set || !flg) { *symm = PETSC_FALSE; break; }
   }
   if (sbaij) *symm = PETSC_TRUE;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   /* check if user has set the hermitian flag */
   *herm = PETSC_TRUE;
   for (i=0;i<st->nmat;i++) {

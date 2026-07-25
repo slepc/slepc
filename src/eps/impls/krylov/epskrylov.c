@@ -185,7 +185,7 @@ PetscErrorCode EPSKrylovConvergence(EPS eps,PetscBool getall,PetscInt kini,Petsc
     PetscCall(BVCreateVec(eps->V,&y));
     PetscCall(BVCreateVec(eps->V,&w[0]));
     PetscCall(BVCreateVec(eps->V,&w[2]));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(BVCreateVec(eps->V,&w[1]));
 #else
     w[1] = NULL;
@@ -245,7 +245,7 @@ PetscErrorCode EPSKrylovConvergence(EPS eps,PetscBool getall,PetscInt kini,Petsc
     PetscCall(VecDestroy(&y));
     PetscCall(VecDestroy(&w[0]));
     PetscCall(VecDestroy(&w[2]));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCall(VecDestroy(&w[1]));
 #endif
   }

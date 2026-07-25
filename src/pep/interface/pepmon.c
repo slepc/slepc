@@ -207,7 +207,7 @@ PetscErrorCode PEPMonitorFirst(PEP pep,PetscInt its,PetscInt nconv,PetscScalar e
     PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
     er = eigr[nconv]; ei = eigi[nconv];
     PetscCall(PEPMonitorGetTrueEig(pep,&er,&ei));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(er),(double)PetscImaginaryPart(er)));
 #else
     PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)er));
@@ -265,7 +265,7 @@ PetscErrorCode PEPMonitorAll(PEP pep,PetscInt its,PetscInt nconv,PetscScalar eig
   for (i=0;i<nest;i++) {
     er = eigr[i]; ei = eigi[i];
     PetscCall(PEPMonitorGetTrueEig(pep,&er,&ei));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(er),(double)PetscImaginaryPart(er)));
 #else
     PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)er));
@@ -329,7 +329,7 @@ PetscErrorCode PEPMonitorConverged(PEP pep,PetscInt its,PetscInt nconv,PetscScal
       PetscCall(PetscViewerASCIIUseTabs(viewer,PETSC_FALSE));
       er = eigr[i]; ei = eigi[i];
       PetscCall(PEPMonitorGetTrueEig(pep,&er,&ei));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       PetscCall(PetscViewerASCIIPrintf(viewer," %g%+gi",(double)PetscRealPart(er),(double)PetscImaginaryPart(er)));
 #else
       PetscCall(PetscViewerASCIIPrintf(viewer," %g",(double)er));

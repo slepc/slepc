@@ -90,7 +90,7 @@ struct _p_ST {
 /*
     Macros to test valid ST arguments
 */
-#if !defined(PETSC_USE_DEBUG)
+#if !PetscDefined(USE_DEBUG)
 
 #define STCheckMatrices(h,arg) do {(void)(h);} while (0)
 #define STCheckNotSeized(h,arg) do {(void)(h);} while (0)

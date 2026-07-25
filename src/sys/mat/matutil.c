@@ -333,12 +333,12 @@ PetscErrorCode MatCreateVecsEmpty(Mat mat,Vec *right,Vec *left)
     PetscCall(MatGetBlockSizes(mat,&rbs,&cbs));
     if (right) {
       if (cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
         if (size>1) PetscCall(VecCreateMPICUDAWithArray(PetscObjectComm((PetscObject)mat),cbs,nloc,N,NULL,right));
         else PetscCall(VecCreateSeqCUDAWithArray(PetscObjectComm((PetscObject)mat),cbs,N,NULL,right));
 #endif
       } else if (hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
         if (size>1) PetscCall(VecCreateMPIHIPWithArray(PetscObjectComm((PetscObject)mat),cbs,nloc,N,NULL,right));
         else PetscCall(VecCreateSeqHIPWithArray(PetscObjectComm((PetscObject)mat),cbs,N,NULL,right));
 #endif
@@ -349,12 +349,12 @@ PetscErrorCode MatCreateVecsEmpty(Mat mat,Vec *right,Vec *left)
     }
     if (left) {
       if (cuda) {
-#if defined(PETSC_HAVE_CUDA)
+#if PetscDefined(HAVE_CUDA)
         if (size>1) PetscCall(VecCreateMPICUDAWithArray(PetscObjectComm((PetscObject)mat),rbs,mloc,M,NULL,left));
         else PetscCall(VecCreateSeqCUDAWithArray(PetscObjectComm((PetscObject)mat),rbs,M,NULL,left));
 #endif
       } else if (hip) {
-#if defined(PETSC_HAVE_HIP)
+#if PetscDefined(HAVE_HIP)
         if (size>1) PetscCall(VecCreateMPIHIPWithArray(PetscObjectComm((PetscObject)mat),rbs,mloc,M,NULL,left));
         else PetscCall(VecCreateSeqHIPWithArray(PetscObjectComm((PetscObject)mat),rbs,M,NULL,left));
 #endif

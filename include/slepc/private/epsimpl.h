@@ -155,7 +155,7 @@ struct _p_EPS {
 /*
     Macros to test valid EPS arguments
 */
-#if !defined(PETSC_USE_DEBUG)
+#if !PetscDefined(USE_DEBUG)
 
 #define EPSCheckSolved(h,arg) do {(void)(h);} while (0)
 
@@ -411,7 +411,7 @@ static inline PetscErrorCode EPS_GetEigenvector_BSE(EPS eps,BV V,PetscInt i,Vec 
       PetscCall(VecRestoreSubVector(Vr,is[0],&v0));
       PetscCall(VecRestoreSubVector(Vr,is[1],&v1));
     }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (Vi) {
       PetscCall(BV_GetEigenvector(V,k,eps->eigi[k],NULL,w));
       PetscCall(VecScale(w,-1.0));
@@ -436,7 +436,7 @@ static inline PetscErrorCode EPS_GetEigenvector_BSE(EPS eps,BV V,PetscInt i,Vec 
 
 static inline PetscErrorCode EPS_GetEigenvector_HAMILT(EPS eps,BV V,PetscInt i,Vec Vr,Vec Vi)
 {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscInt  k;
   Vec       w;
   PetscInt  k0,k1,k2,iquad;
@@ -444,7 +444,7 @@ static inline PetscErrorCode EPS_GetEigenvector_HAMILT(EPS eps,BV V,PetscInt i,V
 #endif
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   k = eps->perm[i/2];
   if (eps->eigi[k]==0.0) { /* real eigenvalue */
     if (Vr) {

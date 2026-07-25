@@ -393,7 +393,7 @@ static inline PetscErrorCode BVSetRandomNormalColumn_Private(BV bv,PetscInt k,Ve
       PetscCall(PetscRandomGetValue(bv->rand,&s));
       PetscCall(PetscRandomGetValue(bv->rand,&t));
       if (i>=low && i<high) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         px[i-low] = PetscCMPLX(PetscSqrtReal(-2.0*PetscLogReal(PetscRealPart(s)))*PetscCosReal(2.0*PETSC_PI*PetscRealPart(t)),PetscSqrtReal(-2.0*PetscLogReal(PetscImaginaryPart(s)))*PetscCosReal(2.0*PETSC_PI*PetscImaginaryPart(t)));
 #else
         px[i-low] = PetscSqrtReal(-2.0*PetscLogReal(s))*PetscCosReal(2.0*PETSC_PI*t);

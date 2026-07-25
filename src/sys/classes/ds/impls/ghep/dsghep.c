@@ -98,7 +98,7 @@ static PetscErrorCode DSSolve_GHEP(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscScalar    *work,*A,*B,*Q;
   PetscBLASInt   itype = 1,*iwork,n1,liwork,ld,lrwork=0,lwork;
   PetscInt       off,i;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      *rwork,*rr;
 #endif
 
@@ -106,7 +106,7 @@ static PetscErrorCode DSSolve_GHEP(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(PetscBLASIntCast(ds->n-ds->l,&n1));
   PetscCall(PetscBLASIntCast(ds->ld,&ld));
   PetscCall(PetscBLASIntCast(5*ds->n+3,&liwork));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscBLASIntCast(ds->n*ds->n+2*ds->n,&lwork));
   PetscCall(PetscBLASIntCast(2*ds->n*ds->n+5*ds->n+1+n1,&lrwork));
 #else
@@ -119,7 +119,7 @@ static PetscErrorCode DSSolve_GHEP(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_A],&A));
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_B],&B));
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_Q],&Q));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   rr = ds->rwork;
   rwork = ds->rwork+n1;
   PetscCall(PetscBLASIntCast(ds->lrwork-n1,&lrwork));
@@ -143,7 +143,7 @@ static PetscErrorCode DSSolve_GHEP(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
 static PetscErrorCode DSSynchronize_GHEP(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
   PetscScalar    *A,*B,*Q;
@@ -221,7 +221,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_GHEP(DS ds)
   ds->ops->vectors       = DSVectors_GHEP;
   ds->ops->solve[0]      = DSSolve_GHEP;
   ds->ops->sort          = DSSort_GHEP;
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
   ds->ops->synchronize   = DSSynchronize_GHEP;
 #endif
   ds->ops->hermitian     = DSHermitian_GHEP;

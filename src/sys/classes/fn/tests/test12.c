@@ -31,7 +31,7 @@ int main(int argc,char **argv)
   /* Create function object */
   PetscCall(FNCreate(PETSC_COMM_WORLD,&fn));
   PetscCall(FNSetType(fn,FNEXP));   /* default to exponential */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   alpha = PetscCMPLX(0.3,0.8);
   beta  = PetscCMPLX(1.1,-0.1);
 #else
@@ -52,7 +52,7 @@ int main(int argc,char **argv)
   for (i=0;i<n;i++) As[i+i*n]=2.0;
   for (j=1;j<3;j++) {
     for (i=0;i<n-j;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       As[i+(i+j)*n]=PetscCMPLX(1.0,0.1); As[(i+j)+i*n]=PetscCMPLX(1.0,-0.1);
 #else
       As[i+(i+j)*n]=0.5; As[(i+j)+i*n]=0.5;

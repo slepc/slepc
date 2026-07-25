@@ -24,7 +24,7 @@ int main(int argc,char **argv)
   PetscBool      verbose;
   RG             rg;
   DSMatType      mat[3]={DS_MAT_E0,DS_MAT_E1,DS_MAT_E2};
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar    auxi;
 #endif
 
@@ -136,7 +136,7 @@ int main(int argc,char **argv)
   PetscCall(DSGetArray(ds,DS_MAT_X,&X));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Computed eigenvalues =\n"));
   for (i=0;i<nev;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(wr[i]);
     im = PetscImaginaryPart(wr[i]);
 #else
@@ -154,12 +154,12 @@ int main(int argc,char **argv)
     nrm = 0.0;
     for (k=0;k<n;k++) {
       auxr = 0.0;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       auxi = 0.0;
 #endif
       for (j=0;j<n;j++) {
         auxr += W[k+j*ld]*X[i*ld+j];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         if (PetscAbs(wi[j])!=0.0) auxi += W[k+j*ld]*X[(i+1)*ld+j];
 #endif
       }

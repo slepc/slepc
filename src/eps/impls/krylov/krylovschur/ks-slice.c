@@ -296,7 +296,7 @@ PetscErrorCode EPSSetUp_KrylovSchur_Slice(EPS eps)
     EPSCheckUnsupportedCondition(eps,EPS_FEATURE_ARBITRARY | EPS_FEATURE_REGION | EPS_FEATURE_STOPPING,PETSC_TRUE," with spectrum slicing");
     EPSCheckIgnoredCondition(eps,EPS_FEATURE_BALANCE,PETSC_TRUE," with spectrum slicing");
     if (eps->tol==(PetscReal)PETSC_DETERMINE) {
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
       eps->tol = SLEPC_DEFAULT_TOL;
 #else
       /* use tighter tolerance */

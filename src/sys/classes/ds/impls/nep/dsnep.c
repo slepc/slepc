@@ -89,7 +89,7 @@ static PetscErrorCode DSView_NEP(DS ds,PetscViewer viewer)
   PetscCall(PetscViewerGetFormat(viewer,&format));
   if (format == PETSC_VIEWER_ASCII_INFO || format == PETSC_VIEWER_ASCII_INFO_DETAIL) {
     if (ds->method<nmeth) PetscCall(PetscViewerASCIIPrintf(viewer,"solving the problem with: %s\n",methodname[ds->method]));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     if (ds->method==1) {  /* contour integral method */
       PetscCall(PetscViewerASCIIPrintf(viewer,"number of integration points: %" PetscInt_FMT "\n",ctx->nnod));
       PetscCall(PetscViewerASCIIPrintf(viewer,"maximum minimality index: %" PetscInt_FMT "\n",ctx->max_mid));
@@ -162,7 +162,7 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscBLASInt   n,ld,lwork,one=1,zero=0;
   PetscInt       it,pos,j,maxit=100,result;
   PetscReal      norm,tol,done=1.0;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscReal      *alphai,im,im2;
 #endif
 
@@ -179,7 +179,7 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
 
   /* workspace query and memory allocation */
   lwork = -1;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,NULL,NULL,NULL,&ld,W,&ld,&a,&lwork,NULL,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
   PetscCall(DSAllocateWork_Private(ds,lwork+2*ds->n,8*ds->n,0));
@@ -213,7 +213,7 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
     PetscCall(DSNEPComputeMatrix(ds,lambda,PETSC_TRUE,DS_MAT_B));
 
     /* compute eigenvalue correction mu and eigenvector u */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,alpha,beta,NULL,&ld,W,&ld,work,&lwork,ds->rwork,&info));
 #else
     PetscCallLAPACKInfo("LAPACK" LAPGEEV,LAPACKggevalt_("N","V",&n,A,&ld,B,&ld,alpha,alphai,beta,NULL,&ld,W,&ld,work,&lwork,&info));
@@ -223,7 +223,7 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
     j = 0;
     if (beta[j]==0.0) re = (PetscRealPart(alpha[j])>0.0)? PETSC_MAX_REAL: PETSC_MIN_REAL;
     else re = alpha[j]/beta[j];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (beta[j]==0.0) im = (alphai[j]>0.0)? PETSC_MAX_REAL: PETSC_MIN_REAL;
     else im = alphai[j]/beta[j];
 #endif
@@ -231,7 +231,7 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
     for (j=1;j<n;j++) {
       if (beta[j]==0.0) re2 = (PetscRealPart(alpha[j])>0.0)? PETSC_MAX_REAL: PETSC_MIN_REAL;
       else re2 = alpha[j]/beta[j];
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       if (beta[j]==0.0) im2 = (alphai[j]>0.0)? PETSC_MAX_REAL: PETSC_MIN_REAL;
       else im2 = alphai[j]/beta[j];
       PetscCall(SlepcCompareSmallestMagnitude(re,im,re2,im2,&result,NULL));
@@ -240,14 +240,14 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
 #endif
       if (result > 0) {
         re = re2;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         im = im2;
 #endif
         pos = j;
       }
     }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     PetscCheck(im==0.0,PETSC_COMM_SELF,PETSC_ERR_SUP,"DSNEP found a complex eigenvalue; try rerunning with complex scalars");
 #endif
     mu = alpha[pos]/beta[pos];
@@ -270,7 +270,7 @@ static PetscErrorCode DSSolve_NEP_SLP(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 /*
   Newton refinement for eigenpairs computed with contour integral.
   k  - number of eigenpairs to refine
@@ -524,7 +524,7 @@ PetscErrorCode DSSolve_NEP_Contour(DS ds,PetscScalar *wr,PetscScalar *wi)
 }
 #endif
 
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
 static PetscErrorCode DSSynchronize_NEP(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
   DS_NEP         *ctx = (DS_NEP*)ds->data;
@@ -553,7 +553,7 @@ static PetscErrorCode DSSynchronize_NEP(DS ds,PetscScalar eigr[],PetscScalar eig
   if (!rank) {
     if (ds->state>=DS_STATE_CONDENSED) PetscCallMPI(MPI_Pack(X,n2,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
     if (eigr) PetscCallMPI(MPI_Pack(eigr,n,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi) PetscCallMPI(MPI_Pack(eigi,n,MPIU_SCALAR,ds->work,size,&off,PetscObjectComm((PetscObject)ds)));
 #endif
   }
@@ -561,7 +561,7 @@ static PetscErrorCode DSSynchronize_NEP(DS ds,PetscScalar eigr[],PetscScalar eig
   if (rank) {
     if (ds->state>=DS_STATE_CONDENSED) PetscCallMPI(MPI_Unpack(ds->work,size,&off,X,n2,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
     if (eigr) PetscCallMPI(MPI_Unpack(ds->work,size,&off,eigr,n,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi) PetscCallMPI(MPI_Unpack(ds->work,size,&off,eigi,n,MPIU_SCALAR,PetscObjectComm((PetscObject)ds)));
 #endif
   }
@@ -1181,7 +1181,7 @@ static PetscErrorCode DSSetFromOptions_NEP(DS ds,PetscOptionItems PetscOptionsOb
 {
   PetscInt       k;
   PetscBool      flg;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      r;
   PetscBool      flg1;
   DS_NEP         *ctx = (DS_NEP*)ds->data;
@@ -1199,7 +1199,7 @@ static PetscErrorCode DSSetFromOptions_NEP(DS ds,PetscOptionItems PetscOptionsOb
     PetscCall(PetscOptionsInt("-ds_nep_sampling_size","Number of sampling columns","DSNEPSetSamplingSize",0,&k,&flg));
     if (flg) PetscCall(DSNEPSetSamplingSize(ds,k));
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     r = ctx->rtol;
     PetscCall(PetscOptionsReal("-ds_nep_refine_tol","Refinement tolerance","DSNEPSetRefine",ctx->rtol,&r,&flg1));
     k = ctx->Nit;
@@ -1306,11 +1306,11 @@ SLEPC_EXTERN PetscErrorCode DSCreate_NEP(DS ds)
   ds->ops->view           = DSView_NEP;
   ds->ops->vectors        = DSVectors_NEP;
   ds->ops->solve[0]       = DSSolve_NEP_SLP;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   ds->ops->solve[1]       = DSSolve_NEP_Contour;
 #endif
   ds->ops->sort           = DSSort_NEP;
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
   ds->ops->synchronize    = DSSynchronize_NEP;
 #endif
   ds->ops->destroy        = DSDestroy_NEP;

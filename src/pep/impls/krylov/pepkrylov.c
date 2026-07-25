@@ -68,7 +68,7 @@ PetscErrorCode PEPExtractVectors_TOAR(PEP pep)
           if (max < norm) { max = norm; idxcpy = j; }
         }
         PetscCallBLAS("BLASgemv",BLASgemv_("N",&nq_,&k_,&sone,S+idxcpy*ld,&lds_,X+i*ldds,&one,&szero,SS+i*nq,&one));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         if (PetscRealPart(ei[i])!=0.0) {
           i++;
           PetscCallBLAS("BLASgemv",BLASgemv_("N",&nq_,&k_,&sone,S+idxcpy*ld,&lds_,X+i*ldds,&one,&szero,SS+i*nq,&one));
@@ -80,7 +80,7 @@ PetscErrorCode PEPExtractVectors_TOAR(PEP pep)
       PetscCall(VecDuplicate(pep->work[0],&xr));
       PetscCall(VecDuplicate(pep->work[0],&w[0]));
       PetscCall(VecDuplicate(pep->work[0],&w[1]));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       PetscCall(VecDuplicate(pep->work[0],&w[2]));
       PetscCall(VecDuplicate(pep->work[0],&w[3]));
       PetscCall(VecDuplicate(pep->work[0],&xi));
@@ -92,7 +92,7 @@ PetscErrorCode PEPExtractVectors_TOAR(PEP pep)
         for (j=0;j<deg;j++) {
           PetscCallBLAS("BLASgemv",BLASgemv_("N",&nq_,&k_,&sone,S+j*ld,&lds_,X+i*ldds,&one,&szero,SS+i*nq,&one));
           PetscCall(BVMultVec(pep->V,1.0,0.0,xr,SS+i*nq));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
           PetscCallBLAS("BLASgemv",BLASgemv_("N",&nq_,&k_,&sone,S+j*ld,&lds_,X+(i+1)*ldds,&one,&szero,SS+i*nq,&one));
           PetscCall(BVMultVec(pep->V,1.0,0.0,xi,SS+i*nq));
 #endif
@@ -100,7 +100,7 @@ PetscErrorCode PEPExtractVectors_TOAR(PEP pep)
           if (norm>max) { max = norm; idxcpy=j; }
         }
         PetscCallBLAS("BLASgemv",BLASgemv_("N",&nq_,&k_,&sone,S+idxcpy*ld,&lds_,X+i*ldds,&one,&szero,SS+i*nq,&one));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         if (PetscRealPart(ei[i])!=0.0) {
           i++;
           PetscCallBLAS("BLASgemv",BLASgemv_("N",&nq_,&k_,&sone,S+idxcpy*ld,&lds_,X+i*ldds,&one,&szero,SS+i*nq,&one));
@@ -110,7 +110,7 @@ PetscErrorCode PEPExtractVectors_TOAR(PEP pep)
       PetscCall(VecDestroy(&xr));
       PetscCall(VecDestroy(&w[0]));
       PetscCall(VecDestroy(&w[1]));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       PetscCall(VecDestroy(&w[2]));
       PetscCall(VecDestroy(&w[3]));
       PetscCall(VecDestroy(&xi));
@@ -122,12 +122,12 @@ PetscErrorCode PEPExtractVectors_TOAR(PEP pep)
         t = 0.0;
         PetscCall(PEPEvaluateBasis(pep,er[i],ei[i],vals,ivals));
         yr = X+i*ldds; yi = NULL;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         if (ei[i]!=0.0) { yr = tr; yi = ti; }
 #endif
         for (j=0;j<deg;j++) {
           alpha = PetscConj(vals[j]);
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
           if (ei[i]!=0.0) {
             PetscCall(PetscArrayzero(tr,k));
             PetscCallBLAS("BLASaxpy",BLASaxpy_(&k_,&vals[j],X+i*ldds,&one,tr,&one));

@@ -313,7 +313,7 @@ static PetscErrorCode dvd_calcpairs_apply_arbitrary(dvdDashboard *d,PetscInt r_s
   PetscInt       i,k,ld;
   PetscScalar    *pX;
   Vec            *X,xr,xi;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscInt       N=1;
 #else
   PetscInt       N=2,j;
@@ -337,7 +337,7 @@ static PetscErrorCode dvd_calcpairs_apply_arbitrary(dvdDashboard *d,PetscInt r_s
     PetscCall(DSGetArray(d->eps->ds,DS_MAT_X,&pX));
     PetscCall(dvd_improvex_compute_X(d,i,k+1,X,pX,ld));
     PetscCall(DSRestoreArray(d->eps->ds,DS_MAT_X,&pX));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (d->nX[i] != 1.0) {
       for (j=i;j<k+1;j++) PetscCall(VecScale(X[j-i],1.0/d->nX[i]));
     }
@@ -350,7 +350,7 @@ static PetscErrorCode dvd_calcpairs_apply_arbitrary(dvdDashboard *d,PetscInt r_s
     if (d->nX[i] != 1.0) PetscCall(VecScale(xr,1.0/d->nX[i]));
 #endif
     PetscCall(d->eps->arbitrary(rr[i-r_s],ri[i-r_s],xr,xi,&rr[i-r_s],&ri[i-r_s],d->eps->arbitraryctx));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (i != k) {
       rr[i+1-r_s] = rr[i-r_s];
       ri[i+1-r_s] = ri[i-r_s];
@@ -384,7 +384,7 @@ static PetscErrorCode dvd_calcpairs_selectPairs(dvdDashboard *d,PetscInt n)
   k = n;
   PetscCall(DSSort(d->eps->ds,d->eigr,d->eigi,rr,ri,&k));
   /* Put the best pair at the beginning. Useful to check its residual */
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (n != 1 && (n != 2 || d->eigi[0] == 0.0))
 #else
   if (n != 1)

@@ -11,7 +11,7 @@
 #include <petsc/private/ftnimpl.h>
 #include <slepcpep.h>
 
-#if defined(PETSC_HAVE_FORTRAN_CAPS)
+#if PetscDefined(HAVE_FORTRAN_CAPS)
 #define pepmonitorset_                    PEPMONITORSET
 #define pepmonitorall_                    PEPMONITORALL
 #define pepmonitorfirst_                  PEPMONITORFIRST
@@ -22,7 +22,7 @@
 #define pepsetconvergencetestfunction_    PEPSETCONVERGENCETESTFUNCTION
 #define pepsetstoppingtestfunction_       PEPSETSTOPPINGTESTFUNCTION
 #define pepseteigenvaluecomparison_       PEPSETEIGENVALUECOMPARISON
-#elif !defined(PETSC_HAVE_FORTRAN_UNDERSCORE)
+#elif !PetscDefined(HAVE_FORTRAN_UNDERSCORE)
 #define pepmonitorset_                    pepmonitorset
 #define pepmonitorall_                    pepmonitorall
 #define pepmonitorfirst_                  pepmonitorfirst

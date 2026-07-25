@@ -44,7 +44,7 @@ int main(int argc,char **argv)
   PetscCall(PetscOptionsGetString(NULL,NULL,"-f1",filename,sizeof(filename),&flg));
   PetscCheck(flg,PETSC_COMM_WORLD,PETSC_ERR_USER_INPUT,"Must indicate a file name for matrix A with the -f1 option");
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscPrintf(PETSC_COMM_WORLD," Reading COMPLEX matrices from binary files...\n"));
 #else
   PetscCall(PetscPrintf(PETSC_COMM_WORLD," Reading REAL matrices from binary files...\n"));
@@ -133,7 +133,7 @@ int main(int argc,char **argv)
       PetscCall(ComputeResidualNorm(A,B,PETSC_FALSE,kr[i],ki[i],xr[i],xi[i],z,&nrmr));
       if (twosided) PetscCall(ComputeResidualNorm(A,B,PETSC_TRUE,kr[i],ki[i],yr[i],yi[i],z,&nrml));
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       re = PetscRealPart(kr[i]);
       im = PetscImaginaryPart(kr[i]);
 #else
@@ -184,7 +184,7 @@ PetscErrorCode ComputeResidualNorm(Mat A,Mat B,PetscBool trans,PetscScalar kr,Pe
 {
   Vec            u,w=NULL;
   PetscScalar    alpha;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   Vec            v;
   PetscReal      ni,nr;
 #endif
@@ -194,7 +194,7 @@ PetscErrorCode ComputeResidualNorm(Mat A,Mat B,PetscBool trans,PetscScalar kr,Pe
   u = z[0];
   if (B) w = z[2];
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   v = z[1];
   if (ki == 0 || PetscAbsScalar(ki) < PetscAbsScalar(kr*PETSC_MACHINE_EPSILON)) {
 #endif
@@ -206,7 +206,7 @@ PetscErrorCode ComputeResidualNorm(Mat A,Mat B,PetscBool trans,PetscScalar kr,Pe
       PetscCall(VecAXPY(u,alpha,w));                        /* u=A*x-k*B*x */
     }
     PetscCall(VecNorm(u,NORM_2,norm));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   } else {
     PetscCall((*matmult)(A,xr,u));                          /* u=A*xr */
     if (SlepcAbsEigenvalue(kr,ki) > PETSC_MACHINE_EPSILON) {
@@ -248,7 +248,7 @@ PetscErrorCode CheckBiorthogonality(Vec *V,Vec *W,PetscScalar *ki,PetscInt n,Mat
   PetscScalar    val1;
   PetscBool      wcmplx;
   Vec            wr;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   Vec            wi;
   PetscScalar    val2,dotr,doti;
 #endif
@@ -256,14 +256,14 @@ PetscErrorCode CheckBiorthogonality(Vec *V,Vec *W,PetscScalar *ki,PetscInt n,Mat
   PetscFunctionBegin;
   if (n<=0) PetscFunctionReturn(PETSC_SUCCESS);
   PetscCall(VecDuplicate(V[0],&wr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(VecDuplicate(V[0],&wi));
 #endif
   *lev = 0.0;
   for (i=0;i<n;i++) {
     wcmplx = PETSC_FALSE;
     PetscCall(MatMult(B,W[i],wr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (ki[i] != 0.0) {
       PetscCall(MatMult(B,W[i+1],wi));
       wcmplx = PETSC_TRUE;
@@ -272,7 +272,7 @@ PetscErrorCode CheckBiorthogonality(Vec *V,Vec *W,PetscScalar *ki,PetscInt n,Mat
     for (j=0;j<n;j++) {
       if (j==i || (wcmplx && j==i+1)) continue;
       PetscCall(VecDot(wr,V[j],&val1));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
       dotr = val1;
       if (ki[j] != 0.0) {  /* V complex */
         if (wcmplx) {
@@ -297,7 +297,7 @@ PetscErrorCode CheckBiorthogonality(Vec *V,Vec *W,PetscScalar *ki,PetscInt n,Mat
     if (wcmplx) i++;
   }
   PetscCall(VecDestroy(&wr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(VecDestroy(&wi));
 #endif
   PetscFunctionReturn(PETSC_SUCCESS);

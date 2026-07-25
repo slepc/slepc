@@ -473,7 +473,7 @@ PetscErrorCode PEPSetWhichEigenpairs(PEP pep,PEPWhich which)
     case PEP_SMALLEST_IMAGINARY:
     case PEP_TARGET_MAGNITUDE:
     case PEP_TARGET_REAL:
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     case PEP_TARGET_IMAGINARY:
 #endif
     case PEP_ALL:
@@ -483,7 +483,7 @@ PetscErrorCode PEPSetWhichEigenpairs(PEP pep,PEPWhich which)
         pep->which = which;
       }
       break;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     case PEP_TARGET_IMAGINARY:
       SETERRQ(PetscObjectComm((PetscObject)pep),PETSC_ERR_SUP,"PEP_TARGET_IMAGINARY can be used only with complex scalars");
 #endif

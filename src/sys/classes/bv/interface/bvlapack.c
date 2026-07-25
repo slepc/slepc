@@ -115,7 +115,7 @@ PetscErrorCode BVNormalize_LAPACK_Private(BV bv,PetscInt m_,PetscInt n_,const Pe
   /* scale columns */
   for (j=0;j<n_;j++) {
     k = 1;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (eigi && eigi[j] != 0.0) k = 2;
 #endif
     PetscCallLAPACKInfo("LAPACKlascl",LAPACKlascl_("G",&zero,&zero,norms+j,&done,&m,&k,(PetscScalar*)(A+j*lda_),&lda,&info));
@@ -258,7 +258,7 @@ PetscErrorCode BVMatSVQB_LAPACK_Private(BV bv,Mat R,Mat S)
   PetscScalar    *pR,*pS,*D,*work,a;
   PetscReal      *eig,dummy;
   PetscBLASInt   lwork,n_,m_ = 0,ld_,lds_;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      *rwork,rdummy;
 #endif
 
@@ -286,7 +286,7 @@ PetscErrorCode BVMatSVQB_LAPACK_Private(BV bv,Mat R,Mat S)
 
   /* workspace query and memory allocation */
   lwork = -1;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS,&lds_,&dummy,&a,&lwork,&rdummy,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
   PetscCall(PetscMalloc4(n,&eig,n,&D,lwork,&work,PetscMax(1,3*n-2),&rwork));
@@ -302,7 +302,7 @@ PetscErrorCode BVMatSVQB_LAPACK_Private(BV bv,Mat R,Mat S)
   for (j=l;j<k;j++) for (i=l;i<k;i++) pS[i+j*lds] *= D[j-l];
 
   /* compute eigendecomposition */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS+l*lds+l,&lds_,eig,work,&lwork,rwork,&info));
 #else
   PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n_,pS+l*lds+l,&lds_,eig,work,&lwork,&info));
@@ -321,7 +321,7 @@ PetscErrorCode BVMatSVQB_LAPACK_Private(BV bv,Mat R,Mat S)
     for (j=l;j<k;j++) for (i=l;i<k;i++) pR[i+j*ld] /= D[j-l];
   }
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree4(eig,D,work,rwork));
 #else
   PetscCall(PetscFree3(eig,D,work));

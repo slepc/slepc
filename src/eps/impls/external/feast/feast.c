@@ -12,14 +12,14 @@
 */
 
 #include <petscsys.h>
-#if defined(PETSC_HAVE_MKL_INTEL_ILP64)
+#if PetscDefined(HAVE_MKL_INTEL_ILP64)
 #define MKL_ILP64
 #endif
 #include <mkl.h>
 #include <slepc/private/epsimpl.h>        /*I "slepceps.h" I*/
 
-#if defined(PETSC_USE_COMPLEX)
-#  if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_COMPLEX)
+#  if PetscDefined(USE_REAL_SINGLE)
 #    define FEAST_RCI cfeast_hrci
 #    define SCALAR_CAST (MKL_Complex8*)
 #  else
@@ -27,7 +27,7 @@
 #    define SCALAR_CAST (MKL_Complex16*)
 #  endif
 #else
-#  if defined(PETSC_USE_REAL_SINGLE)
+#  if PetscDefined(USE_REAL_SINGLE)
 #    define FEAST_RCI sfeast_srci
 #  else
 #    define FEAST_RCI dfeast_srci
@@ -38,7 +38,7 @@
 typedef struct {
   PetscInt      npoints;          /* number of contour points */
   PetscScalar   *work1,*Aq,*Bq;   /* workspace */
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
   MKL_Complex8  *work2;
 #else
   MKL_Complex16 *work2;
@@ -87,14 +87,14 @@ static PetscErrorCode EPSSolve_FEAST(EPS eps)
   PetscScalar    *pV,*pz,*X=NULL;
   Vec            x,y,w=eps->work[0],z=eps->work[1];
   Mat            A,B;
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
   MKL_Complex8   Ze;
 #else
   MKL_Complex16  Ze;
 #endif
 
   PetscFunctionBegin;
-#if !defined(PETSC_HAVE_64BIT_BLAS_INDICES)
+#if !PetscDefined(HAVE_64BIT_BLAS_INDICES)
   PetscCall(PetscBLASIntCast(eps->ncv,&ncv));
   PetscCall(PetscBLASIntCast(eps->nloc,&n));
 #else
@@ -106,12 +106,12 @@ static PetscErrorCode EPSSolve_FEAST(EPS eps)
   feastinit(fpm);
   fpm[0] = (eps->numbermonitors>0)? 1: 0;   /* runtime comments */
   fpm[1] = (MKL_INT)ctx->npoints;           /* contour points */
-#if !defined(PETSC_USE_REAL_SINGLE)
+#if !PetscDefined(USE_REAL_SINGLE)
   fpm[2] = -PetscLog10Real(eps->tol);       /* tolerance for trace */
 #endif
   fpm[3] = (MKL_INT)eps->max_it;            /* refinement loops */
   fpm[5] = 1;                               /* second stopping criterion */
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
   fpm[6] = -PetscLog10Real(eps->tol);       /* tolerance for trace */
 #endif
 
@@ -142,7 +142,7 @@ static PetscErrorCode EPSSolve_FEAST(EPS eps)
       /* linear solve (A-sigma*B)\work2, overwrite work2 */
       for (k=0;k<ncv;k++) {
         PetscCall(VecGetArray(z,&pz));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         for (i=0;i<eps->nloc;i++) pz[i] = PetscCMPLX(ctx->work2[eps->nloc*k+i].real,ctx->work2[eps->nloc*k+i].imag);
 #else
         for (i=0;i<eps->nloc;i++) pz[i] = ctx->work2[eps->nloc*k+i].real;
@@ -151,7 +151,7 @@ static PetscErrorCode EPSSolve_FEAST(EPS eps)
         if (ijob == 11) PetscCall(STMatSolve(eps->st,z,w));
         else PetscCall(STMatSolveHermitianTranspose(eps->st,z,w));
         PetscCall(VecGetArray(w,&pz));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         for (i=0;i<eps->nloc;i++) {
           ctx->work2[eps->nloc*k+i].real = PetscRealPart(pz[i]);
           ctx->work2[eps->nloc*k+i].imag = PetscImaginaryPart(pz[i]);

@@ -239,7 +239,7 @@ static PetscErrorCode SVDSetUp_TRLanczos(SVD svd)
       PetscCall(MatZCreateContext(svd,&zdata));
       PetscCall(MatCreateShell(PetscObjectComm((PetscObject)svd),m+p,n,PETSC_DECIDE,PETSC_DECIDE,zdata,&lanczos->Z));
       PetscCall(MatShellSetOperation(lanczos->Z,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Z));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       PetscCall(MatShellSetOperation(lanczos->Z,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Z));
 #else
       PetscCall(MatShellSetOperation(lanczos->Z,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Z));

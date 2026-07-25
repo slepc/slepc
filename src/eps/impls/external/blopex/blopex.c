@@ -161,7 +161,7 @@ static PetscErrorCode EPSSetUp_BLOPEX(EPS eps)
   PetscCall(EPSAllocateSolution(eps,0));
   if (!blopex->w) PetscCall(BVCreateVec(eps->V,&blopex->w));
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   blopex->blap_fn.zpotrf = PETSC_zpotrf_interface;
   blopex->blap_fn.zhegv = PETSC_zsygv_interface;
 #else
@@ -179,7 +179,7 @@ static PetscErrorCode EPSSolve_BLOPEX(EPS eps)
   int               i,j,info,its,nconv;
   double            *residhist=NULL;
   mv_MultiVectorPtr eigenvectors,constraints;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   komplex           *lambda=NULL,*lambdahist=NULL;
 #else
   double            *lambda=NULL,*lambdahist=NULL;
@@ -208,7 +208,7 @@ static PetscErrorCode EPSSolve_BLOPEX(EPS eps)
     PetscCall(BVSetActiveColumns(eps->V,eps->nconv,eps->nconv+blopex->bs));
     eigenvectors = mv_MultiVectorCreateFromSampleVector(&blopex->ii,blopex->bs,eps->V);
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     info = lobpcg_solve_complex(eigenvectors,blopex,OperatorAMultiVector,
           eps->isgeneralized?blopex:NULL,eps->isgeneralized?OperatorBMultiVector:NULL,
           blopex,Precond_FnMultiVector,constraints,
@@ -226,7 +226,7 @@ static PetscErrorCode EPSSolve_BLOPEX(EPS eps)
     mv_MultiVectorDestroy(eigenvectors);
 
     for (j=0;j<blopex->bs;j++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       eps->eigr[eps->nconv+j] = PetscCMPLX(lambda[j].real,lambda[j].imag);
 #else
       eps->eigr[eps->nconv+j] = lambda[j];
@@ -237,7 +237,7 @@ static PetscErrorCode EPSSolve_BLOPEX(EPS eps)
       for (i=0;i<its;i++) {
         nconv = 0;
         for (j=0;j<blopex->bs;j++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
           eigr[eps->nconv+j] = PetscCMPLX(lambdahist[j+i*blopex->bs].real,lambdahist[j+i*blopex->bs].imag);
 #else
           eigr[eps->nconv+j] = lambdahist[j+i*blopex->bs];

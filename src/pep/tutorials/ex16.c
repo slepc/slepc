@@ -141,7 +141,7 @@ int main(int argc,char **argv)
         PetscCall(PEPGetEigenpair(pep,i,&kr,&ki,xr,xi));
         /* compute the relative error associated to each eigenpair */
         PetscCall(PEPComputeError(pep,i,PEP_ERROR_BACKWARD,&error));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         re = PetscRealPart(kr);
         im = PetscImaginaryPart(kr);
 #else

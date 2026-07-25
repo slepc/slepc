@@ -26,7 +26,7 @@ int main(int argc,char **argv)
   if (!flag) m=n;
   N = n*m;
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nHermitian Eigenproblem, N=%" PetscInt_FMT " (%" PetscInt_FMT "x%" PetscInt_FMT " grid)\n\n",N,n,m));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   SETERRQ(PETSC_COMM_WORLD,PETSC_ERR_SUP,"This example requires complex scalars!");
 #endif
 

@@ -136,7 +136,7 @@ int main(int argc,char **argv)
       PetscCall(ComputeResidualNorm(A,PETSC_FALSE,kr[i],ki[i],xr[i],xi[i],t,&nrmr));
       if (twosided) PetscCall(ComputeResidualNorm(A,PETSC_TRUE,kr[i],ki[i],yr[i],yi[i],t,&nrml));
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       re = PetscRealPart(kr[i]);
       im = PetscImaginaryPart(kr[i]);
 #else
@@ -238,19 +238,19 @@ PetscErrorCode MatMarkovModel(PetscInt m,Mat A)
 */
 PetscErrorCode ComputeResidualNorm(Mat A,PetscBool trans,PetscScalar kr,PetscScalar ki,Vec xr,Vec xi,Vec u,PetscReal *norm)
 {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscReal      ni,nr;
 #endif
   PetscErrorCode (*matmult)(Mat,Vec,Vec) = trans? MatMultTranspose: MatMult;
 
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   if (ki == 0 || PetscAbsScalar(ki) < PetscAbsScalar(kr*PETSC_MACHINE_EPSILON)) {
 #endif
     PetscCall((*matmult)(A,xr,u));
     if (PetscAbsScalar(kr) > PETSC_MACHINE_EPSILON) PetscCall(VecAXPY(u,-kr,xr));
     PetscCall(VecNorm(u,NORM_2,norm));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   } else {
     PetscCall((*matmult)(A,xr,u));
     if (SlepcAbsEigenvalue(kr,ki) > PETSC_MACHINE_EPSILON) {

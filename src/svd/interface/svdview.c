@@ -443,7 +443,7 @@ static PetscErrorCode SVDValuesView_BINARY(SVD svd,PetscViewer viewer)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
 static PetscErrorCode SVDValuesView_HDF5(SVD svd,PetscViewer viewer)
 {
   PetscInt       i,k,n,N;
@@ -526,7 +526,7 @@ PetscErrorCode SVDValuesView(SVD svd,PetscViewer viewer)
 {
   PetscBool         isascii,isdraw,isbinary;
   PetscViewerFormat format;
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   PetscBool         ishdf5;
 #endif
 
@@ -538,13 +538,13 @@ PetscErrorCode SVDValuesView(SVD svd,PetscViewer viewer)
   SVDCheckSolved(svd,1);
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERDRAW,&isdraw));
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERBINARY,&isbinary));
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERHDF5,&ishdf5));
 #endif
   PetscCall(PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERASCII,&isascii));
   if (isdraw) PetscCall(SVDValuesView_DRAW(svd,viewer));
   else if (isbinary) PetscCall(SVDValuesView_BINARY(svd,viewer));
-#if defined(PETSC_HAVE_HDF5)
+#if PetscDefined(HAVE_HDF5)
   else if (ishdf5) PetscCall(SVDValuesView_HDF5(svd,viewer));
 #endif
   else if (isascii) {

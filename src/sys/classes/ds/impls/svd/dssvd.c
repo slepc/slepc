@@ -486,7 +486,7 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
   if (ds->state>DS_STATE_RAW) {
     /* solve bidiagonal SVD problem */
     for (i=0;i<l;i++) wr[i] = d[i];
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(DSAllocateWork_Private(ds,0,3*n1*n1+4*n1+2*ld*ld,8*n1));
     Ur = ds->rwork+3*n1*n1+4*n1;
     Vr = ds->rwork+3*n1*n1+4*n1+ld*ld;
@@ -498,7 +498,7 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
     PetscCallLAPACKInfo("LAPACKbdsdc",LAPACKbdsdc_("U","I",&n1,d+l,e+l,Ur+off,&ld,Vr+off,&ld,NULL,NULL,ds->rwork,ds->iwork,&info));
     for (i=l;i<n;i++) {
       for (j=l;j<n;j++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
         U[i+j*ld] = Ur[i+j*ld];
 #endif
         V[i+j*ld] = PetscConj(Vr[j+i*ld]);  /* transpose VT returned by Lapack */
@@ -512,7 +512,7 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
     for (i=0;i<l;i++) wr[i] = d[i];
     PetscCall(DSAllocateWork_Private(ds,0,0,8*neig));
     lwork = -1;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCall(DSAllocateWork_Private(ds,0,5*neig*neig+7*neig,0));
     PetscCallLAPACKInfo("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,&qwork,&lwork,ds->rwork,ds->iwork,&info));
 #else
@@ -520,7 +520,7 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
 #endif
     PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(qwork),&lwork));
     PetscCall(DSAllocateWork_Private(ds,lwork,0,0));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     PetscCallLAPACKInfo("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,ds->work,&lwork,ds->rwork,ds->iwork,&info));
 #else
     PetscCallLAPACKInfo("LAPACKgesdd",LAPACKgesdd_("A",&n1,&m1,A+off,&ld,d+l,U+off,&ld,W+off,&ld,ds->work,&lwork,ds->iwork,&info));
@@ -548,7 +548,7 @@ static PetscErrorCode DSSolve_SVD_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
 static PetscErrorCode DSSynchronize_SVD(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
   PetscInt       ld=ds->ld,l=ds->l,k=0,kr=0;
@@ -793,7 +793,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_SVD(DS ds)
   ds->ops->update        = DSUpdateExtraRow_SVD;
   ds->ops->destroy       = DSDestroy_SVD;
   ds->ops->matgetsize    = DSMatGetSize_SVD;
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
   ds->ops->synchronize   = DSSynchronize_SVD;
 #endif
   ds->ops->setcompact    = DSSetCompact_SVD;

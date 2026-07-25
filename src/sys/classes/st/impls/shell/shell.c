@@ -156,7 +156,7 @@ static PetscErrorCode STApplyTranspose_Shell(ST st,Vec x,Vec y)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 static PetscErrorCode STApplyHermitianTranspose_Shell(ST st,Vec x,Vec y)
 {
   ST_SHELL         *shell = (ST_SHELL*)st->data;
@@ -284,7 +284,7 @@ PetscErrorCode STShellSetApplyTranspose(ST st,STShellApplyTransposeFn *applytran
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 static PetscErrorCode STShellSetApplyHermitianTranspose_Shell(ST st,STShellApplyHermitianTransposeFn *applyhermtrans)
 {
   ST_SHELL *shell = (ST_SHELL*)st->data;
@@ -382,7 +382,7 @@ SLEPC_EXTERN PetscErrorCode STCreate_Shell(ST st)
 
   st->ops->apply           = STApply_Shell;
   st->ops->applytrans      = STApplyTranspose_Shell;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   st->ops->applyhermtrans  = STApplyHermitianTranspose_Shell;
 #else
   st->ops->applyhermtrans  = STApplyTranspose_Shell;
@@ -395,7 +395,7 @@ SLEPC_EXTERN PetscErrorCode STCreate_Shell(ST st)
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetDestroy_C",STShellSetDestroy_Shell));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetApply_C",STShellSetApply_Shell));
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetApplyTranspose_C",STShellSetApplyTranspose_Shell));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetApplyHermitianTranspose_C",STShellSetApplyHermitianTranspose_Shell));
 #else
   PetscCall(PetscObjectComposeFunction((PetscObject)st,"STShellSetApplyHermitianTranspose_C",STShellSetApplyTranspose_Shell));

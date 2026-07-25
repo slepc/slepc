@@ -86,7 +86,7 @@ static PetscErrorCode MatMultTranspose_Shell(Mat A,Vec x,Vec y)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 static PetscErrorCode MatMultHermitianTranspose_Shell(Mat A,Vec x,Vec y)
 {
   ST_MATSHELL    *ctx;
@@ -182,7 +182,7 @@ PetscErrorCode STMatShellCreate(ST st,PetscScalar alpha,PetscInt nmat,PetscInt *
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)st),m,n,M,N,(void*)ctx,mat));
   PetscCall(MatShellSetOperation(*mat,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Shell));
   PetscCall(MatShellSetOperation(*mat,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Shell));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(MatShellSetOperation(*mat,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultHermitianTranspose_Shell));
 #else
   PetscCall(MatShellSetOperation(*mat,MATOP_MULT_HERMITIAN_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Shell));

@@ -178,7 +178,7 @@ static PetscErrorCode NEPSolve_Interpol(NEP nep)
   PetscCall(PEPGetConvergedReason(ctx->pep,(PEPConvergedReason*)&nep->reason));
   PetscCall(BVSetActiveColumns(nep->V,0,nep->nconv));
   PetscCall(BVCreateVec(nep->V,&vr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(VecDuplicate(vr,&vi));
 #endif
   s = 2.0/(b-a);
@@ -188,7 +188,7 @@ static PetscErrorCode NEPSolve_Interpol(NEP nep)
     nep->eigr[i] += (a+b)/2.0;
     nep->eigi[i] /= s;
     PetscCall(BVInsertVec(nep->V,i,vr));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     if (nep->eigi[i]!=0.0) PetscCall(BVInsertVec(nep->V,++i,vi));
 #endif
   }

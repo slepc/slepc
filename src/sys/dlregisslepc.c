@@ -14,9 +14,9 @@
 #include <slepcbv.h>
 #include <slepcrg.h>
 
-#if defined(PETSC_HAVE_DYNAMIC_LIBRARIES)
+#if PetscDefined(HAVE_DYNAMIC_LIBRARIES)
 
-#if defined(PETSC_USE_SINGLE_LIBRARY)
+#if PetscDefined(USE_SINGLE_LIBRARY)
 SLEPC_EXTERN PetscErrorCode PetscDLLibraryRegister_slepceps(void);
 SLEPC_EXTERN PetscErrorCode PetscDLLibraryRegister_slepcnep(void);
 SLEPC_EXTERN PetscErrorCode PetscDLLibraryRegister_slepcpep(void);
@@ -31,7 +31,7 @@ SLEPC_EXTERN PetscErrorCode PetscDLLibraryRegister_slepclme(void);
 
   This one registers all the basic objects ST, FN, DS, BV, RG.
  */
-#if defined(PETSC_USE_SINGLE_LIBRARY)
+#if PetscDefined(USE_SINGLE_LIBRARY)
 SLEPC_EXTERN PetscErrorCode PetscDLLibraryRegister_slepc(void)
 #else
 SLEPC_EXTERN PetscErrorCode PetscDLLibraryRegister_slepcsys(void)
@@ -44,7 +44,7 @@ SLEPC_EXTERN PetscErrorCode PetscDLLibraryRegister_slepcsys(void)
   PetscCall(BVInitializePackage());
   PetscCall(RGInitializePackage());
 
-#if defined(PETSC_USE_SINGLE_LIBRARY)
+#if PetscDefined(USE_SINGLE_LIBRARY)
   PetscCall(PetscDLLibraryRegister_slepceps());
   PetscCall(PetscDLLibraryRegister_slepcnep());
   PetscCall(PetscDLLibraryRegister_slepcpep());

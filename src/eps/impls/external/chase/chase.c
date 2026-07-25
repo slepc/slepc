@@ -14,25 +14,25 @@
 #include <slepc/private/epsimpl.h>    /*I "slepceps.h" I*/
 #include <petsc/private/petscscalapack.h>
 
-#if !defined(PETSC_USE_COMPLEX)
-#if defined(PETSC_USE_REAL_SINGLE)
+#if !PetscDefined(USE_COMPLEX)
+#if PetscDefined(USE_REAL_SINGLE)
 /* s */
 #define CHASEchase_init_blockcyclic pschase_init_blockcyclic_
 #define CHASEchase                  pschase_
 #define CHASEchase_finalize         pschase_finalize_
-#elif defined(PETSC_USE_REAL_DOUBLE)
+#elif PetscDefined(USE_REAL_DOUBLE)
 /* d */
 #define CHASEchase_init_blockcyclic pdchase_init_blockcyclic_
 #define CHASEchase                  pdchase_
 #define CHASEchase_finalize         pdchase_finalize_
 #endif
 #else
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
 /* c */
 #define CHASEchase_init_blockcyclic pcchase_init_blockcyclic_
 #define CHASEchase                  pcchase_
 #define CHASEchase_finalize         pcchase_finalize_
-#elif defined(PETSC_USE_REAL_DOUBLE)
+#elif PetscDefined(USE_REAL_DOUBLE)
 /* z */
 #define CHASEchase_init_blockcyclic pzchase_init_blockcyclic_
 #define CHASEchase                  pzchase_

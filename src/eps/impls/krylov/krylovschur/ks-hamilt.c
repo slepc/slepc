@@ -340,7 +340,7 @@ PetscErrorCode EPSSolve_KrylovSchur_Hamilt(EPS eps)
     }
     eps->nconv = k;
     for (i=0;i<nv;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       eig = PetscSqrtScalar(eps->eigr[i]);
 #else
       eig = PetscSqrtComplex(PetscCMPLX(eps->eigr[i],eps->eigi[i]));

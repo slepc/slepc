@@ -164,7 +164,7 @@ static PetscErrorCode EPSSubspaceResidualNorms(BV R,BV V,Mat T,PetscInt l,PetscI
   PetscCall(BVMult(R,-1.0,1.0,V,T));
   for (i=l;i<m;i++) PetscCall(BVNormColumnBegin(R,i,NORM_2,rsd+i));
   for (i=l;i<m;i++) PetscCall(BVNormColumnEnd(R,i,NORM_2,rsd+i));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   for (i=l;i<m-1;i++) {
     if (eigi[i]!=0.0) {
       rsd[i]   = SlepcAbs(rsd[i],rsd[i+1]);

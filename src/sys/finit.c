@@ -30,7 +30,7 @@
 @*/
 PetscErrorCode SlepcInitializeFortran(void)
 {
-#if defined(PETSC_USE_FORTRAN_BINDINGS)
+#if PetscDefined(USE_FORTRAN_BINDINGS)
   PetscCall(PetscInitializeFortran());
 #endif
   return PETSC_SUCCESS;

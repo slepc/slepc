@@ -17,7 +17,7 @@
 static PetscErrorCode FNEvaluateFunction_Log(FN fn,PetscScalar x,PetscScalar *y)
 {
   PetscFunctionBegin;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCheck(x>=0.0,PETSC_COMM_SELF,PETSC_ERR_ARG_OUTOFRANGE,"Function not defined in the requested value");
 #endif
   *y = PetscLogScalar(x);
@@ -28,7 +28,7 @@ static PetscErrorCode FNEvaluateDerivative_Log(FN fn,PetscScalar x,PetscScalar *
 {
   PetscFunctionBegin;
   PetscCheck(x!=0.0,PETSC_COMM_SELF,PETSC_ERR_ARG_OUTOFRANGE,"Derivative not defined in the requested value");
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCheck(x>0.0,PETSC_COMM_SELF,PETSC_ERR_ARG_OUTOFRANGE,"Derivative not defined in the requested value");
 #endif
   *y = 1.0/x;
@@ -47,7 +47,7 @@ static PetscErrorCode qtri_struct(PetscBLASInt n,PetscScalar *T,PetscBLASInt ld,
   PetscBLASInt j;
 
   PetscFunctionBegin;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   for (j=0;j<n-1;j++) structure[j] = 1;
 #else
   if (n==1) PetscFunctionReturn(PETSC_SUCCESS);
@@ -100,10 +100,10 @@ static PetscErrorCode FNlogm_params(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLA
     for (i=1;i<n;i++) inrm = PetscMax(inrm,SlepcAbsEigenvalue(wr[i]-PetscRealConstant(1.0),wi[i]));
     if (inrm < xvals[mmax-1]) break;
     for (i=0;i<n;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
       wr[i] = PetscSqrtScalar(wr[i]);
 #else
-#if defined(PETSC_HAVE_COMPLEX)
+#if PetscDefined(HAVE_COMPLEX)
       PetscComplex z = PetscSqrtComplex(PetscCMPLX(wr[i],wi[i]));
       wr[i] = PetscRealPartComplex(z);
       wi[i] = PetscImaginaryPartComplex(z);
@@ -183,7 +183,7 @@ static PetscErrorCode FNlogm_params(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLA
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 /*
    Computes a^(1/2^s) - 1 accurately, avoiding subtractive cancellation
 */
@@ -221,7 +221,7 @@ static PetscScalar sqrt_obo(PetscScalar a,PetscInt s)
 static PetscErrorCode sqrtm_tbt(PetscScalar *T)
 {
   PetscScalar t11,t12,t21,t22,r11,r22;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscScalar mu;
 #endif
 
@@ -230,7 +230,7 @@ static PetscErrorCode sqrtm_tbt(PetscScalar *T)
   if (t21 != 0.0) {
     /* Compute square root of 2x2 quasitriangular block */
     /* The algorithm assumes the special structure of real Schur form */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     SETERRQ(PETSC_COMM_SELF,PETSC_ERR_PLIB,"Should not reach this line in complex scalars");
 #else
     mu = PetscSqrtReal(-t21*t12);
@@ -252,7 +252,7 @@ static PetscErrorCode sqrtm_tbt(PetscScalar *T)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
 /*
    Unwinding number of z
 */
@@ -287,7 +287,7 @@ static PetscScalar powerm2by2(PetscScalar A11,PetscScalar A22,PetscScalar A12,Pe
     loga1 = PetscLogScalar(a1);
     loga2 = PetscLogScalar(a2);
     w = PetscAtanhScalar((a2-a1)/(a2+a1));
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     w += PETSC_i*PETSC_PI*unwinding(loga2-loga1);
 #endif
     dd = 2.0*PetscExpScalar((loga1+loga2)*p/2.0)*PetscSinhScalar(p*w)/(a2-a1);
@@ -303,14 +303,14 @@ static PetscErrorCode recompute_diag_blocks_sqrt(PetscBLASInt n,PetscScalar *Tro
 {
   PetscScalar    A[4],P[4],M[4],Z0[4],det;
   PetscInt       i,j;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscInt       last_block=0;
   PetscScalar    a;
 #endif
 
   PetscFunctionBegin;
   for (j=0;j<n-1;j++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     switch (blockStruct[j]) {
       case 0: /* Not start of a block */
         if (last_block != 0) {
@@ -364,11 +364,11 @@ static PetscErrorCode recompute_diag_blocks_sqrt(PetscBLASInt n,PetscScalar *Tro
         if (T[j+1+j*ld]==0.0 && PetscRealPart(T[j+j*ld])>=0.0 && PetscRealPart(T[j+1+(j+1)*ld])>=0.0) {
           Troot[j+(j+1)*ld] = powerm2by2(T[j+j*ld],T[j+1+(j+1)*ld],T[j+(j+1)*ld],1.0/PetscPowInt(2,s));
         }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     }
 #endif
   }
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* If last diagonal entry is not in a block it will have been missed */
   if (blockStruct[n-2] == 0) {
     a = T[n-1+(n-1)*ld];
@@ -389,7 +389,7 @@ static PetscErrorCode gauss_legendre(PetscBLASInt n,PetscScalar *x,PetscScalar *
   PetscScalar    v,a,*work;
   PetscReal      *eig,dummy;
   PetscBLASInt   k,ld=n,lwork;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      *rwork,rdummy;
 #endif
 
@@ -403,7 +403,7 @@ static PetscErrorCode gauss_legendre(PetscBLASInt n,PetscScalar *x,PetscScalar *
 
   /* workspace query and memory allocation */
   lwork = -1;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n,Q,&ld,&dummy,&a,&lwork,&rdummy,&info));
   PetscCall(PetscBLASIntCast((PetscInt)PetscRealPart(a),&lwork));
   PetscCall(PetscMalloc3(n,&eig,lwork,&work,PetscMax(1,3*n-2),&rwork));
@@ -414,7 +414,7 @@ static PetscErrorCode gauss_legendre(PetscBLASInt n,PetscScalar *x,PetscScalar *
 #endif
 
   /* compute eigendecomposition */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n,Q,&ld,eig,work,&lwork,rwork,&info));
 #else
   PetscCallLAPACKInfo("LAPACKsyev",LAPACKsyev_("V","L",&n,Q,&ld,eig,work,&lwork,&info));
@@ -424,7 +424,7 @@ static PetscErrorCode gauss_legendre(PetscBLASInt n,PetscScalar *x,PetscScalar *
     x[k] = eig[k];
     w[k] = 2.0*Q[k*n]*Q[k*n];
   }
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree3(eig,work,rwork));
 #else
   PetscCall(PetscFree2(eig,work));
@@ -473,14 +473,14 @@ static PetscErrorCode recompute_diag_blocks_log(PetscBLASInt n,PetscScalar *L,Pe
 {
   PetscScalar a1,a2,a12,loga1,loga2,z,dd;
   PetscInt    j;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscInt    last_block=0;
   PetscScalar f,t;
 #endif
 
   PetscFunctionBegin;
   for (j=0;j<n-1;j++) {
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
     switch (blockStruct[j]) {
       case 0: /* Not start of a block */
         if (last_block != 0) {
@@ -510,14 +510,14 @@ static PetscErrorCode recompute_diag_blocks_log(PetscBLASInt n,PetscScalar *L,Pe
         } else {  /* Close eigenvalues */
           z = (a2-a1)/(a2+a1);
           dd = 2.0*PetscAtanhScalar(z);
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
           dd += 2.0*PETSC_i*PETSC_PI*unwinding(loga2-loga1);
 #endif
           dd /= (a2-a1);
           a12 = T[j+(j+1)*ld]*dd;
         }
         L[j+(j+1)*ld] = a12;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
         break;
       case 2: /* Start of quasi-tri block */
         last_block = 2;
@@ -543,7 +543,7 @@ static PetscErrorCode FNLogmPade(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASIn
   PetscBLASInt   k,sdim,lwork;
   PetscScalar    *wr,*wi=NULL,*W,*Q,*Troot,*L,*work,one=1.0,zero=0.0,alpha;
   PetscInt       i,j,s=0,m=0,*blockformat;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscReal      *rwork;
 #endif
 
@@ -553,7 +553,7 @@ static PetscErrorCode FNLogmPade(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASIn
 
   /* compute Schur decomposition A*Q = Q*T */
   PetscCall(PetscCalloc7(n,&wr,n*k,&W,n*n,&Q,n*n,&Troot,n*n,&L,lwork,&work,n-1,&blockformat));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscMalloc1(n,&wi));
   PetscCallLAPACKInfo("LAPACKgees",LAPACKgees_("V","N",NULL,&n,T,&ld,&sdim,wr,wi,Q,&ld,work,&lwork,NULL,&info));
 #else
@@ -561,7 +561,7 @@ static PetscErrorCode FNLogmPade(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASIn
   PetscCallLAPACKInfo("LAPACKgees",LAPACKgees_("V","N",NULL,&n,T,&ld,&sdim,wr,Q,&ld,work,&lwork,rwork,NULL,&info));
 #endif
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   /* check for negative real eigenvalues */
   for (i=0;i<n;i++) {
     PetscCheck(wr[i]>=0.0 || wi[i]!=0.0,PETSC_COMM_SELF,PETSC_ERR_SUP,"Matrix has negative real eigenvalue; rerun with complex scalars");
@@ -595,7 +595,7 @@ static PetscErrorCode FNLogmPade(FN fn,PetscBLASInt n,PetscScalar *T,PetscBLASIn
   PetscCall(PetscLogFlops(25.0*n*n*n+4.0*n*n*k));
 
   PetscCall(PetscFree7(wr,W,Q,Troot,L,work,blockformat));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(PetscFree(wi));
 #else
   PetscCall(PetscFree(rwork));

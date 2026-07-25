@@ -20,7 +20,7 @@ PetscErrorCode CheckPoint(RG rg,PetscReal re,PetscReal im)
   PetscScalar    ar,ai;
 
   PetscFunctionBeginUser;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   ar = PetscCMPLX(re,im);
 #else
   ar = re; ai = im;
@@ -66,7 +66,7 @@ int main(int argc,char **argv)
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Contour points: "));
   PetscCall(RGComputeContour(rg,NPOINTS,cr,ci));
   for (i=0;i<NPOINTS;i++) {
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
     re = PetscRealPart(cr[i]);
     im = PetscImaginaryPart(cr[i]);
 #else

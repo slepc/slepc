@@ -87,7 +87,7 @@ PetscErrorCode EPSSetDefaultST_NoFactor(EPS eps)
 static PetscErrorCode EPSCheckCompatibleST(EPS eps)
 {
   PetscBool      precond,shift,sinvert,cayley,lyapii;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscScalar    sigma;
 #endif
 
@@ -105,7 +105,7 @@ static PetscErrorCode EPSCheckCompatibleST(EPS eps)
   PetscCheck(precond || shift || !eps->extraction || eps->extraction==EPS_RITZ,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Cannot use a spectral transformation combined with harmonic extraction");
 
   /* real shifts in Hermitian problems */
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(STGetShift(eps->st,&sigma));
   PetscCheck(!eps->ishermitian || PetscImaginaryPart(sigma)==0.0,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Hermitian problems are not compatible with complex shifts");
 #endif

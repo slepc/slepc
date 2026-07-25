@@ -111,7 +111,7 @@ PetscErrorCode VecDestroy_Comp(Vec v)
   PetscInt       i;
 
   PetscFunctionBegin;
-#if defined(PETSC_USE_LOG)
+#if PetscDefined(USE_LOG)
   PetscCall(PetscLogObjectState((PetscObject)v,"Length=%" PetscInt_FMT,v->map->n));
 #endif
   for (i=0;i<vs->nx;i++) PetscCall(VecDestroy(&vs->x[i]));

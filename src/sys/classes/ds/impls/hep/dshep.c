@@ -429,7 +429,7 @@ static PetscErrorCode DSSolve_HEP_MRRR(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscBLASInt   n1 = 0,n2 = 0,n3,lrwork,liwork,l = 0,n = 0,m = 0,ld,off,il,iu,*isuppz;
   PetscScalar    *A,*Q,*W=NULL,one=1.0,zero=0.0;
   PetscReal      *d,*e,abstol=0.0,vl,vu;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscInt       j;
   PetscReal      *Qr,*ritz;
 #endif
@@ -459,13 +459,13 @@ static PetscErrorCode DSSolve_HEP_MRRR(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_Q],&Q));
   lrwork = 20*ld;
   liwork = 10*ld;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscCall(DSAllocateWork_Private(ds,0,lrwork+ld+ld*ld,liwork+2*ld));
 #else
   PetscCall(DSAllocateWork_Private(ds,0,lrwork+ld,liwork+2*ld));
 #endif
   isuppz = ds->iwork+liwork;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   ritz = ds->rwork+lrwork;
   Qr   = ds->rwork+lrwork+ld;
   PetscCallLAPACKInfo("LAPACKstevr",LAPACKstevr_("V","A",&n3,d+l,e+l,&vl,&vu,&il,&iu,&abstol,&m,ritz+l,Qr+off,&ld,isuppz,ds->rwork,&lrwork,ds->iwork,&liwork,&info));
@@ -473,7 +473,7 @@ static PetscErrorCode DSSolve_HEP_MRRR(DS ds,PetscScalar *wr,PetscScalar *wi)
 #else
   PetscCallLAPACKInfo("LAPACKstevr",LAPACKstevr_("V","A",&n3,d+l,e+l,&vl,&vu,&il,&iu,&abstol,&m,wr+l,Q+off,&ld,isuppz,ds->rwork,&lrwork,ds->iwork,&liwork,&info));
 #endif
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   for (i=l;i<n;i++)
     for (j=l;j<n;j++)
       Q[i+j*ld] = Qr[i+j*ld];
@@ -515,7 +515,7 @@ static PetscErrorCode DSSolve_HEP_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscBLASInt   n1,l = 0,ld,off,lrwork,liwork;
   PetscScalar    *Q,*A;
   PetscReal      *d,*e;
-#if defined(PETSC_USE_COMPLEX)
+#if PetscDefined(USE_COMPLEX)
   PetscBLASInt   lwork;
   PetscInt       j;
 #endif
@@ -538,7 +538,7 @@ static PetscErrorCode DSSolve_HEP_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
   lrwork = 5*n1*n1+3*n1+1;
   liwork = 5*n1*n1+6*n1+6;
   PetscCall(MatDenseGetArray(ds->omat[DS_MAT_Q],&Q));
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   PetscCall(DSAllocateWork_Private(ds,0,lrwork,liwork));
   PetscCallLAPACKInfo("LAPACKstedc",LAPACKstedc_("V",&n1,d+l,e+l,Q+off,&ld,ds->rwork,&lrwork,ds->iwork,&liwork,&info));
 #else
@@ -567,7 +567,7 @@ static PetscErrorCode DSSolve_HEP_DC(DS ds,PetscScalar *wr,PetscScalar *wi)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 static PetscErrorCode DSSolve_HEP_BDC(DS ds,PetscScalar *wr,PetscScalar *wi)
 {
   PetscBLASInt   i,j,k,m,n = 0,info,nblks,bs = 0,ld = 0,lde,lrwork,liwork,*ksizes,*iwork,mingapi;
@@ -664,7 +664,7 @@ static PetscErrorCode DSTruncate_HEP(DS ds,PetscInt n,PetscBool trim)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
 static PetscErrorCode DSSynchronize_HEP(DS ds,PetscScalar eigr[],PetscScalar eigi[])
 {
   PetscInt       ld=ds->ld,l=ds->l,k=0,kr=0;
@@ -869,7 +869,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_HEP(DS ds)
   ds->ops->solve[0]      = DSSolve_HEP_QR;
   ds->ops->solve[1]      = DSSolve_HEP_MRRR;
   ds->ops->solve[2]      = DSSolve_HEP_DC;
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
   ds->ops->solve[3]      = DSSolve_HEP_BDC;
 #endif
   ds->ops->sort          = DSSort_HEP;
@@ -878,7 +878,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_HEP(DS ds)
   ds->ops->cond          = DSCond_HEP;
   ds->ops->transrks      = DSTranslateRKS_HEP;
   ds->ops->hermitian     = DSHermitian_HEP;
-#if !defined(PETSC_HAVE_MPIUNI)
+#if !PetscDefined(HAVE_MPIUNI)
   ds->ops->synchronize   = DSSynchronize_HEP;
 #endif
   ds->ops->setcompact    = DSSetCompact_HEP;

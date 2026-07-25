@@ -15,14 +15,14 @@
 
 #include <primme.h>
 
-#if defined(PETSC_USE_COMPLEX)
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_COMPLEX)
+#if PetscDefined(USE_REAL_SINGLE)
 #define PRIMME_DRIVER cprimme_svds
 #else
 #define PRIMME_DRIVER zprimme_svds
 #endif
 #else
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
 #define PRIMME_DRIVER sprimme_svds
 #else
 #define PRIMME_DRIVER dprimme_svds

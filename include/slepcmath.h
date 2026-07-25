@@ -19,13 +19,13 @@
 /*
     Default tolerance for the different solvers, depending on the precision
 */
-#if defined(PETSC_USE_REAL_SINGLE)
+#if PetscDefined(USE_REAL_SINGLE)
 #  define SLEPC_DEFAULT_TOL   1e-5
-#elif defined(PETSC_USE_REAL_DOUBLE)
+#elif PetscDefined(USE_REAL_DOUBLE)
 #  define SLEPC_DEFAULT_TOL   1e-8
-#elif defined(PETSC_USE_REAL___FLOAT128)
+#elif PetscDefined(USE_REAL___FLOAT128)
 #  define SLEPC_DEFAULT_TOL   1e-16
-#elif defined(PETSC_USE_REAL___FP16)
+#elif PetscDefined(USE_REAL___FP16)
 #  define SLEPC_DEFAULT_TOL   1e-2
 #endif
 
@@ -89,7 +89,7 @@ static inline PetscReal SlepcAbs(PetscReal x,PetscReal y)
 
 .seealso: `PetscAbsScalar()`
 M*/
-#if !defined(PETSC_USE_COMPLEX)
+#if !PetscDefined(USE_COMPLEX)
 #define SlepcAbsEigenvalue(x,y) SlepcAbs(x,y)
 #else
 #define SlepcAbsEigenvalue(x,y) PetscAbsScalar(x)
@@ -101,7 +101,7 @@ M*/
 static inline PetscErrorCode SlepcSetFlushToZero(unsigned int *state)
 {
   PetscFunctionBegin;
-#if defined(PETSC_HAVE_XMMINTRIN_H) && defined(_MM_FLUSH_ZERO_ON) && defined(__SSE__)
+#if PetscDefined(HAVE_XMMINTRIN_H) && defined(_MM_FLUSH_ZERO_ON) && defined(__SSE__)
   *state = _MM_GET_FLUSH_ZERO_MODE();
   _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 #else
@@ -116,7 +116,7 @@ static inline PetscErrorCode SlepcSetFlushToZero(unsigned int *state)
 static inline PetscErrorCode SlepcResetFlushToZero(unsigned int *state)
 {
   PetscFunctionBegin;
-#if defined(PETSC_HAVE_XMMINTRIN_H) && defined(_MM_FLUSH_ZERO_MASK) && defined(__SSE__)
+#if PetscDefined(HAVE_XMMINTRIN_H) && defined(_MM_FLUSH_ZERO_MASK) && defined(__SSE__)
   _MM_SET_FLUSH_ZERO_MODE(*state & _MM_FLUSH_ZERO_MASK);
 #else
   *state = 0;
