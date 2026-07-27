@@ -1,0 +1,12 @@
+--- DKS SNES SCF ---
+Current parameters: n=5, k=3, alpha=0.5, rtol=1e-08, maxit=100
+
+Starting SCF iterations...
+--> CONVERGENCE REACHED in 8 iterations (Reason: CONVERGED_FNORM_RELATIVE).
+
+--- Eigenvalues (5 found) ---
+Eigenvalue[0] =   1.364211
+Eigenvalue[1] =   1.921853
+Eigenvalue[2] =   2.931103
+Eigenvalue[3] =   3.957515
+Eigenvalue[4] =   4.864808
