@@ -1,0 +1,7 @@
+--- DGP SNES SCF ---
+Current parameters: n=3, beta=2., symm=True, rtol=1e-08, maxit=100
+
+Starting SCF iterations...
+--> CONVERGENCE REACHED in 23 iterations (Reason: CONVERGED_FNORM_RELATIVE).
+
+Eigenvalue found =   0.879940
