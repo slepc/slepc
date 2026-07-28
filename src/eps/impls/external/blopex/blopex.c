@@ -190,11 +190,13 @@ static PetscErrorCode EPSSolve_BLOPEX(EPS eps)
   PetscCall(PetscMalloc1(blopex->bs,&lambda));
   if (eps->numbermonitors>0) PetscCall(PetscMalloc4(blopex->bs*(eps->max_it+1),&lambdahist,eps->ncv,&eigr,blopex->bs*(eps->max_it+1),&residhist,eps->ncv,&errest));
 
-  /* Complete the initial basis with random vectors */
-  for (i=0;i<eps->nini;i++) {  /* in case the initial vectors were also set with VecSetRandom */
-    PetscCall(BVSetRandomColumn(eps->V,eps->nini));
+  if (eps->nini<eps->ncv) {
+    /* Complete the initial basis with random vectors */
+    for (i=0;i<eps->nini;i++) {  /* in case the initial vectors were also set with VecSetRandom */
+      PetscCall(BVSetRandomColumn(eps->V,eps->nini));
+    }
+    for (i=eps->nini;i<eps->ncv;i++) PetscCall(BVSetRandomColumn(eps->V,i));
   }
-  for (i=eps->nini;i<eps->ncv;i++) PetscCall(BVSetRandomColumn(eps->V,i));
 
   while (eps->reason == EPS_CONVERGED_ITERATING) {
 
