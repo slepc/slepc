@@ -19,7 +19,7 @@ static PetscBool STPackageInitialized = PETSC_FALSE;
 
 const char *STMatModes[] = {"COPY","INPLACE","SHELL","STMatMode","ST_MATMODE_",NULL};
 
-/*@C
+/*@
    STFinalizePackage - This function destroys everything in the SLEPc interface
    to the `ST` package. It is called from `SlepcFinalize()`.
 
@@ -36,7 +36,7 @@ PetscErrorCode STFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    STInitializePackage - This function initializes everything in the `ST` package.
    It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
    on the first call to `STCreate()` when using shared or static libraries.
@@ -1095,7 +1095,7 @@ PetscErrorCode STViewFromOptions(ST st,PetscObject obj,const char name[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    STRegister - Adds a method to the spectral transformation package.
 
    Not Collective

@@ -26,7 +26,7 @@ PetscErrorCode NEPMonitor(NEP nep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorSet - Sets an ADDITIONAL function to be called at every
    iteration to monitor the error estimates for each requested eigenpair.
 
@@ -119,7 +119,7 @@ PetscErrorCode NEPMonitorCancel(NEP nep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPGetMonitorContext - Gets the monitor context, as set by
    `NEPMonitorSet()` for the FIRST monitor only.
 
@@ -143,7 +143,7 @@ PetscErrorCode NEPGetMonitorContext(NEP nep,PetscCtxRt ctx)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorFirst - Print the first unconverged approximate value and
    error estimate at each iteration of the nonlinear eigensolver.
 
@@ -197,7 +197,7 @@ PetscErrorCode NEPMonitorFirst(NEP nep,PetscInt its,PetscInt nconv,PetscScalar e
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorAll - Print the current approximate values and
    error estimates at each iteration of the nonlinear eigensolver.
 
@@ -253,7 +253,7 @@ PetscErrorCode NEPMonitorAll(NEP nep,PetscInt its,PetscInt nconv,PetscScalar eig
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorConverged - Print the approximate values and
    error estimates as they converge.
 
@@ -315,7 +315,7 @@ PetscErrorCode NEPMonitorConverged(NEP nep,PetscInt its,PetscInt nconv,PetscScal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorConvergedCreate - Creates the context for the convergence history monitor.
 
    Collective
@@ -344,7 +344,7 @@ PetscErrorCode NEPMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat fo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorFirstDrawLG - Plots the error estimate of the first unconverged
    approximation at each iteration of the nonlinear eigensolver.
 
@@ -403,7 +403,7 @@ PetscErrorCode NEPMonitorFirstDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscSc
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorFirstDrawLGCreate - Creates the plotter for the first error estimate.
 
    Collective
@@ -429,7 +429,7 @@ PetscErrorCode NEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorAllDrawLG - Plots the error estimate of all unconverged
    approximations at each iteration of the nonlinear eigensolver.
 
@@ -491,7 +491,7 @@ PetscErrorCode NEPMonitorAllDrawLG(NEP nep,PetscInt its,PetscInt nconv,PetscScal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorAllDrawLGCreate - Creates the plotter for all the error estimates.
 
    Collective
@@ -517,7 +517,7 @@ PetscErrorCode NEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorConvergedDrawLG - Plots the number of converged eigenvalues
    at each iteration of the nonlinear eigensolver.
 
@@ -573,7 +573,7 @@ PetscErrorCode NEPMonitorConvergedDrawLG(NEP nep,PetscInt its,PetscInt nconv,Pet
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorConvergedDrawLGCreate - Creates the plotter for the convergence history.
 
    Collective

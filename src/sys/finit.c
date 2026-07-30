@@ -10,7 +10,7 @@
 
 #include <slepc/private/slepcimpl.h>           /*I "slepcsys.h" I*/
 
-/*@C
+/*@
    SlepcInitializeFortran - Routine that should be called from C after
    the call to `SlepcInitialize()` if one is using a C main program
    that calls Fortran routines that in turn call SLEPc routines.

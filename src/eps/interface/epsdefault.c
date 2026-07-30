@@ -255,7 +255,7 @@ PetscErrorCode EPSConvergedNorm(EPS eps,PetscScalar eigr,PetscScalar eigi,PetscR
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSStoppingBasic - Default routine to determine whether the outer eigensolver
    iteration must be stopped.
 
@@ -297,7 +297,7 @@ PetscErrorCode EPSStoppingBasic(EPS eps,PetscInt its,PetscInt max_it,PetscInt nc
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSStoppingThreshold - Routine to determine whether the outer eigenvalue solver
    iteration must be stopped, according to some threshold for the computed values.
 

@@ -869,7 +869,7 @@ static PetscErrorCode EPSKrylovSchurGetSubintervals_KrylovSchur(EPS eps,PetscRea
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSKrylovSchurGetSubintervals - Returns the points that delimit the
    subintervals used in spectrum slicing with several partitions.
 
@@ -958,7 +958,7 @@ static PetscErrorCode EPSKrylovSchurGetInertias_KrylovSchur(EPS eps,PetscInt *n,
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSKrylovSchurGetInertias - Gets the values of the shifts and their
    corresponding inertias in case of doing spectrum slicing for a
    computational interval.

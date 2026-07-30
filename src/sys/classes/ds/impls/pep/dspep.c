@@ -416,7 +416,7 @@ static PetscErrorCode DSPEPGetCoefficients_PEP(DS ds,PetscReal *pbc[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSPEPGetCoefficients - Returns the polynomial basis coefficients for a `DSPEP`.
 
    Not Collective

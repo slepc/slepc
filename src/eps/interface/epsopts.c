@@ -15,7 +15,7 @@
 #include <slepc/private/epsimpl.h>   /*I "slepceps.h" I*/
 #include <petscdraw.h>
 
-/*@C
+/*@
    EPSMonitorSetFromOptions - Sets a monitor function and viewer appropriate for the type
    indicated by the user.
 
@@ -641,7 +641,7 @@ PetscErrorCode EPSGetThreshold(EPS eps,PetscReal *thres,PetscBool *rel)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSSetEigenvalueComparison - Specifies the eigenvalue comparison function
    when `EPSSetWhichEigenpairs()` is set to `EPS_WHICH_USER`.
 
@@ -666,7 +666,7 @@ PetscErrorCode EPSSetEigenvalueComparison(EPS eps,SlepcEigenvalueComparisonFn *f
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSSetArbitrarySelection - Specifies a function intended to look for
    eigenvalues according to an arbitrary selection criterion. This criterion
    can be based on a computation involving the current eigenvector approximation.
@@ -713,7 +713,7 @@ PetscErrorCode EPSSetArbitrarySelection(EPS eps,SlepcArbitrarySelectionFn *func,
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSSetArbitrarySelectionContextDestroy - Set a context destroy function for the
    context used in the arbitrary selection.
 
@@ -735,7 +735,7 @@ PetscErrorCode EPSSetArbitrarySelectionContextDestroy(EPS eps,PetscCtxDestroyFn 
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSSetConvergenceTestFunction - Sets a function to compute the error estimate
    used in the convergence test.
 
@@ -842,7 +842,7 @@ PetscErrorCode EPSGetConvergenceTest(EPS eps,EPSConv *conv)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSSetStoppingTestFunction - Sets a function to decide when to stop the outer
    iteration of the eigensolver.
 

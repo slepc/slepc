@@ -29,7 +29,7 @@ SLEPC_EXTERN PetscErrorCode SVDCreate_Elemental(SVD);
 SLEPC_EXTERN PetscErrorCode SVDCreate_PRIMME(SVD);
 #endif
 
-/*@C
+/*@
    SVDRegisterAll - Registers all the singular value solvers in the `SVD` package.
 
    Not Collective
@@ -64,7 +64,7 @@ PetscErrorCode SVDRegisterAll(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
   SVDMonitorRegisterAll - Registers all the monitors in the `SVD` package.
 
   Not Collective

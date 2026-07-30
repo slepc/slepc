@@ -15,7 +15,7 @@
 #include <slepc/private/nepimpl.h>       /*I "slepcnep.h" I*/
 #include <petscdraw.h>
 
-/*@C
+/*@
    NEPMonitorSetFromOptions - Sets a monitor function and viewer appropriate for the type
    indicated by the user.
 
@@ -487,7 +487,7 @@ PetscErrorCode NEPGetWhichEigenpairs(NEP nep,NEPWhich *which)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPSetEigenvalueComparison - Specifies the eigenvalue comparison function
    when `NEPSetWhichEigenpairs()` is set to `NEP_WHICH_USER`.
 
@@ -636,7 +636,7 @@ PetscErrorCode NEPGetTwoSided(NEP nep,PetscBool *twosided)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPSetConvergenceTestFunction - Sets a function to compute the error estimate
    used in the convergence test.
 
@@ -743,7 +743,7 @@ PetscErrorCode NEPGetConvergenceTest(NEP nep,NEPConv *conv)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPSetStoppingTestFunction - Sets a function to decide when to stop the outer
    iteration of the eigensolver.
 

@@ -15,7 +15,7 @@ SLEPC_EXTERN PetscErrorCode RGCreate_Ellipse(RG);
 SLEPC_EXTERN PetscErrorCode RGCreate_Ring(RG);
 SLEPC_EXTERN PetscErrorCode RGCreate_Polygon(RG);
 
-/*@C
+/*@
    RGRegisterAll - Registers all of the regions in the `RG` package.
 
    Not Collective

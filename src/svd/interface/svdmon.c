@@ -26,7 +26,7 @@ PetscErrorCode SVDMonitor(SVD svd,PetscInt it,PetscInt nconv,PetscReal *sigma,Pe
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorSet - Sets an ADDITIONAL function to be called at every
    iteration to monitor the error estimates for each requested singular triplet.
 
@@ -120,7 +120,7 @@ PetscErrorCode SVDMonitorCancel(SVD svd)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDGetMonitorContext - Gets the monitor context, as set by
    `SVDMonitorSet()` for the FIRST monitor only.
 
@@ -144,7 +144,7 @@ PetscErrorCode SVDGetMonitorContext(SVD svd,PetscCtxRt ctx)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorFirst - Print the first unconverged approximate value and
    error estimate at each iteration of the singular value solver.
 
@@ -191,7 +191,7 @@ PetscErrorCode SVDMonitorFirst(SVD svd,PetscInt its,PetscInt nconv,PetscReal sig
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorAll - Print the current approximate values and
    error estimates at each iteration of the singular value solver.
 
@@ -238,7 +238,7 @@ PetscErrorCode SVDMonitorAll(SVD svd,PetscInt its,PetscInt nconv,PetscReal sigma
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorConverged - Print the approximate values and
    error estimates as they converge.
 
@@ -293,7 +293,7 @@ PetscErrorCode SVDMonitorConverged(SVD svd,PetscInt its,PetscInt nconv,PetscReal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorConvergedCreate - Creates the context for the convergence history monitor.
 
    Collective
@@ -322,7 +322,7 @@ PetscErrorCode SVDMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat fo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorFirstDrawLG - Plots the error estimate of the first unconverged
    approximation at each iteration of the singular value solver.
 
@@ -380,7 +380,7 @@ PetscErrorCode SVDMonitorFirstDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscRe
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorFirstDrawLGCreate - Creates the plotter for the first error estimate.
 
    Collective
@@ -406,7 +406,7 @@ PetscErrorCode SVDMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorAllDrawLG - Plots the error estimate of all unconverged
    approximations at each iteration of the singular value solver.
 
@@ -467,7 +467,7 @@ PetscErrorCode SVDMonitorAllDrawLG(SVD svd,PetscInt its,PetscInt nconv,PetscReal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorAllDrawLGCreate - Creates the plotter for all the error estimates.
 
    Collective
@@ -493,7 +493,7 @@ PetscErrorCode SVDMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorConvergedDrawLG - Plots the number of converged eigenvalues
    at each iteration of the singular value solver.
 
@@ -548,7 +548,7 @@ PetscErrorCode SVDMonitorConvergedDrawLG(SVD svd,PetscInt its,PetscInt nconv,Pet
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorConvergedDrawLGCreate - Creates the plotter for the convergence history.
 
    Collective
@@ -578,7 +578,7 @@ PetscErrorCode SVDMonitorConvergedDrawLGCreate(PetscViewer viewer,PetscViewerFor
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorConditioning - Print the condition number at each iteration of the singular
    value solver.
 

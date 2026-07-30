@@ -15,7 +15,7 @@ static PetscBool MFNPackageInitialized = PETSC_FALSE;
 const char *const MFNConvergedReasons_Shifted[] = {"DIVERGED_BREAKDOWN","DIVERGED_ITS","CONVERGED_ITERATING","CONVERGED_TOL","CONVERGED_ITS","MFNConvergedReason","MFN_",NULL};
 const char *const*MFNConvergedReasons = MFNConvergedReasons_Shifted + 2;
 
-/*@C
+/*@
   MFNFinalizePackage - This function destroys everything in the SLEPc interface
   to the `MFN` package. It is called from `SlepcFinalize()`.
 
@@ -36,7 +36,7 @@ PetscErrorCode MFNFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    MFNInitializePackage - This function initializes everything in the `MFN` package.
    It is called from `PetscDLLibraryRegister_slepcmfn()` when using dynamic libraries, and
    on the first call to `MFNCreate()` when using shared or static libraries.

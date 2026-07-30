@@ -15,7 +15,7 @@
 #include <slepc/private/lmeimpl.h>   /*I "slepclme.h" I*/
 #include <petscdraw.h>
 
-/*@C
+/*@
    LMEMonitorSetFromOptions - Sets a monitor function and viewer appropriate for the type
    indicated by the user.
 

@@ -17,7 +17,7 @@ SLEPC_EXTERN PetscErrorCode STCreate_Cayley(ST);
 SLEPC_EXTERN PetscErrorCode STCreate_Precond(ST);
 SLEPC_EXTERN PetscErrorCode STCreate_Filter(ST);
 
-/*@C
+/*@
    STRegisterAll - Registers all of the spectral transformations in the `ST` package.
 
    Not Collective

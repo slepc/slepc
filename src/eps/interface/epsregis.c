@@ -50,7 +50,7 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_EVSL(EPS);
 SLEPC_EXTERN PetscErrorCode EPSCreate_ChASE(EPS);
 #endif
 
-/*@C
+/*@
   EPSRegisterAll - Registers all the eigenvalue solvers in the `EPS` package.
 
   Not Collective
@@ -106,7 +106,7 @@ PetscErrorCode EPSRegisterAll(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
   EPSMonitorRegisterAll - Registers all the monitors in the `EPS` package.
 
   Not Collective

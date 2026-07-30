@@ -19,7 +19,7 @@ SLEPC_EXTERN PetscErrorCode PEPCreate_JD(PEP);
 SLEPC_EXTERN PetscErrorCode PEPCreate_CISS(PEP);
 #endif
 
-/*@C
+/*@
    PEPRegisterAll - Registers all the solvers in the `PEP` package.
 
    Not Collective
@@ -44,7 +44,7 @@ PetscErrorCode PEPRegisterAll(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
   PEPMonitorRegisterAll - Registers all the monitors in the `PEP` package.
 
   Not Collective

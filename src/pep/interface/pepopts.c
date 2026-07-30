@@ -15,7 +15,7 @@
 #include <slepc/private/pepimpl.h>       /*I "slepcpep.h" I*/
 #include <petscdraw.h>
 
-/*@C
+/*@
    PEPMonitorSetFromOptions - Sets a monitor function and viewer appropriate for the type
    indicated by the user.
 
@@ -518,7 +518,7 @@ PetscErrorCode PEPGetWhichEigenpairs(PEP pep,PEPWhich *which)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPSetEigenvalueComparison - Specifies the eigenvalue comparison function
    when `PEPSetWhichEigenpairs()` is set to `PEP_WHICH_USER`.
 
@@ -724,7 +724,7 @@ PetscErrorCode PEPGetTrackAll(PEP pep,PetscBool *trackall)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPSetConvergenceTestFunction - Sets a function to compute the error estimate
    used in the convergence test.
 
@@ -831,7 +831,7 @@ PetscErrorCode PEPGetConvergenceTest(PEP pep,PEPConv *conv)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPSetStoppingTestFunction - Sets a function to decide when to stop the outer
    iteration of the eigensolver.
 

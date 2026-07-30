@@ -15,7 +15,7 @@
 #include <slepc/private/mfnimpl.h>   /*I "slepcmfn.h" I*/
 #include <petscdraw.h>
 
-/*@C
+/*@
    MFNMonitorSetFromOptions - Sets a monitor function and viewer appropriate for the type
    indicated by the user.
 

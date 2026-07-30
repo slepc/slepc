@@ -68,7 +68,7 @@ PetscErrorCode SlepcBasisDestroy_Private(PetscInt *m,Vec **W)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SlepcSNPrintfScalar - Prints a `PetscScalar` variable to a string of
    given length.
 

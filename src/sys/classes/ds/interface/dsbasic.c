@@ -24,7 +24,7 @@ const char *DSParallelTypes[] = {"REDUNDANT","SYNCHRONIZED","DISTRIBUTED","DSPar
 const char *DSMatName[DS_NUM_MAT] = {"A","B","C","T","D","Q","Z","X","Y","U","V","W","E0","E1","E2","E3","E4","E5","E6","E7","E8","E9"};
 DSMatType  DSMatExtra[DS_NUM_EXTRA] = {DS_MAT_E0,DS_MAT_E1,DS_MAT_E2,DS_MAT_E3,DS_MAT_E4,DS_MAT_E5,DS_MAT_E6,DS_MAT_E7,DS_MAT_E8,DS_MAT_E9};
 
-/*@C
+/*@
    DSFinalizePackage - This function destroys everything in the SLEPc interface
    to the `DS` package. It is called from `SlepcFinalize()`.
 
@@ -41,7 +41,7 @@ PetscErrorCode DSFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSInitializePackage - This function initializes everything in the `DS` package.
    It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
    on the first call to `DSCreate()` when using shared or static libraries.
@@ -657,7 +657,7 @@ PetscErrorCode DSGetBlockSize(DS ds,PetscInt *bs)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSSetSlepcSC - Sets the sorting criterion context.
 
    Logically Collective
@@ -684,7 +684,7 @@ PetscErrorCode DSSetSlepcSC(DS ds,SlepcSC sc)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSGetSlepcSC - Gets the sorting criterion context.
 
    Not Collective
@@ -966,7 +966,7 @@ PetscErrorCode DSDestroy(DS *ds)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSRegister - Adds a direct solver to the `DS` package.
 
    Not Collective
@@ -1003,7 +1003,7 @@ SLEPC_EXTERN PetscErrorCode DSCreate_GSVD(DS);
 SLEPC_EXTERN PetscErrorCode DSCreate_PEP(DS);
 SLEPC_EXTERN PetscErrorCode DSCreate_NEP(DS);
 
-/*@C
+/*@
    DSRegisterAll - Registers all of the direct solvers in the `DS` package.
 
    Not Collective
