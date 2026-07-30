@@ -23,7 +23,7 @@ const char *const*PEPConvergedReasons = PEPConvergedReasons_Shifted + 4;
 const char *PEPJDProjectionTypes[] = {"HARMONIC","ORTHOGONAL","PEPJDProjection","PEP_JD_PROJECTION_",NULL};
 const char *PEPCISSExtractions[] = {"RITZ","HANKEL","CAA","PEPCISSExtraction","PEP_CISS_EXTRACTION_",NULL};
 
-/*@C
+/*@
   PEPFinalizePackage - This function destroys everything in the SLEPc interface
   to the `PEP` package. It is called from `SlepcFinalize()`.
 
@@ -44,7 +44,7 @@ PetscErrorCode PEPFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPInitializePackage - This function initializes everything in the `PEP` package.
    It is called from `PetscDLLibraryRegister_slepcpep()` when using dynamic libraries, and
    on the first call to `PEPCreate()` when using shared or static libraries.

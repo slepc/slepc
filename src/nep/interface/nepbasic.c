@@ -204,7 +204,7 @@ PetscErrorCode NEPGetType(NEP nep,NEPType *type)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPRegister - Adds a method to the nonlinear eigenproblem solver package.
 
    Not Collective
@@ -239,7 +239,7 @@ PetscErrorCode NEPRegister(const char *name,PetscErrorCode (*function)(NEP))
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPMonitorRegister - Registers a `NEP` monitor routine that may be accessed with
    `NEPMonitorSetFromOptions()`.
 
@@ -659,7 +659,7 @@ PetscErrorCode NEPGetTarget(NEP nep,PetscScalar* target)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPSetFunction - Sets the function to compute the nonlinear Function $T(\lambda)$
    as well as the location to store the matrix.
 
@@ -708,7 +708,7 @@ PetscErrorCode NEPSetFunction(NEP nep,Mat F,Mat P,NEPFunctionFn *fun,PetscCtx ct
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPGetFunction - Returns the Function matrix and optionally the user
    provided context for evaluating the Function.
 
@@ -739,7 +739,7 @@ PetscErrorCode NEPGetFunction(NEP nep,Mat *F,Mat *P,NEPFunctionFn **fun,PetscCtx
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPSetJacobian - Sets the function to compute the Jacobian $T'(\lambda)$ as well
    as the location to store the matrix.
 
@@ -780,7 +780,7 @@ PetscErrorCode NEPSetJacobian(NEP nep,Mat J,NEPJacobianFn *jac,PetscCtx ctx)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPGetJacobian - Returns the Jacobian matrix and optionally the user
    provided routine and context for evaluating the Jacobian.
 

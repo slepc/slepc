@@ -209,7 +209,7 @@ PetscErrorCode EPSGetType(EPS eps,EPSType *type)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSRegister - Adds a method to the eigenproblem solver package.
 
    Not Collective
@@ -244,7 +244,7 @@ PetscErrorCode EPSRegister(const char *name,PetscErrorCode (*function)(EPS))
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSMonitorRegister - Registers an `EPS` monitor routine that may be accessed with
    `EPSMonitorSetFromOptions()`.
 

@@ -26,7 +26,7 @@ PetscErrorCode LMEMonitor(LME lme,PetscInt it,PetscReal errest)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    LMEMonitorSet - Sets an ADDITIONAL function to be called at every
    iteration to monitor convergence.
 
@@ -112,7 +112,7 @@ PetscErrorCode LMEMonitorCancel(LME lme)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    LMEGetMonitorContext - Gets the monitor context, as set by
    `LMEMonitorSet()` for the FIRST monitor only.
 
@@ -136,7 +136,7 @@ PetscErrorCode LMEGetMonitorContext(LME lme,PetscCtxRt ctx)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    LMEMonitorDefault - Print the error estimate of the current approximation at each
    iteration of the linear matrix equation solver.
 
@@ -175,7 +175,7 @@ PetscErrorCode LMEMonitorDefault(LME lme,PetscInt its,PetscReal errest,PetscView
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    LMEMonitorDefaultDrawLG - Plots the error estimate of the current approximation at each
    iteration of the linear matrix equation solver.
 
@@ -228,7 +228,7 @@ PetscErrorCode LMEMonitorDefaultDrawLG(LME lme,PetscInt its,PetscReal errest,Pet
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    LMEMonitorDefaultDrawLGCreate - Creates the plotter for the error estimate.
 
    Collective

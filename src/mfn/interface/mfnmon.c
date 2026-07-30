@@ -26,7 +26,7 @@ PetscErrorCode MFNMonitor(MFN mfn,PetscInt it,PetscReal errest)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    MFNMonitorSet - Sets an ADDITIONAL function to be called at every
    iteration to monitor convergence.
 
@@ -112,7 +112,7 @@ PetscErrorCode MFNMonitorCancel(MFN mfn)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    MFNGetMonitorContext - Gets the monitor context, as set by
    `MFNMonitorSet()` for the FIRST monitor only.
 
@@ -136,7 +136,7 @@ PetscErrorCode MFNGetMonitorContext(MFN mfn,PetscCtxRt ctx)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    MFNMonitorDefault - Print the error estimate of the current approximation at each
    iteration of the matrix function solver.
 
@@ -171,7 +171,7 @@ PetscErrorCode MFNMonitorDefault(MFN mfn,PetscInt its,PetscReal errest,PetscView
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    MFNMonitorDefaultDrawLG - Plots the error estimate of the current approximation at each
    iteration of the matrix function solver.
 
@@ -224,7 +224,7 @@ PetscErrorCode MFNMonitorDefaultDrawLG(MFN mfn,PetscInt its,PetscReal errest,Pet
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    MFNMonitorDefaultDrawLGCreate - Creates the plotter for the error estimate.
 
    Collective

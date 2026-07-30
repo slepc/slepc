@@ -12,7 +12,7 @@
 
 SLEPC_EXTERN PetscErrorCode LMECreate_Krylov(LME);
 
-/*@C
+/*@
   LMERegisterAll - Registers all the matrix functions in the `LME` package.
 
   Not Collective
@@ -30,7 +30,7 @@ PetscErrorCode LMERegisterAll(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
   LMEMonitorRegisterAll - Registers all the monitors in the `LME `package.
 
   Not Collective

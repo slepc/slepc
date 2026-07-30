@@ -279,7 +279,7 @@ static PetscErrorCode HessLyapunovChol_LAPACK(PetscInt m,PetscScalar *H,PetscInt
 
 #endif /* SLEPC_HAVE_SLICOT */
 
-/*@C
+/*@
    LMEDenseHessLyapunovChol - Computes the Cholesky factor of the solution of a
    dense Lyapunov equation with an upper Hessenberg coefficient matrix.
 
@@ -450,7 +450,7 @@ static PetscErrorCode Lyapunov_LAPACK(PetscInt m,PetscScalar *A,PetscInt lda,Pet
 
 #endif /* SLEPC_HAVE_SLICOT */
 
-/*@C
+/*@
    LMEDenseLyapunov - Computes the solution of a dense continuous-time Lyapunov
    equation.
 

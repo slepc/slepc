@@ -569,7 +569,7 @@ PetscErrorCode DSRestoreMatAndColumn(DS ds,DSMatType m,PetscInt col,Mat *A,Vec *
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSGetArray - Returns a pointer to the internal array of one of the
    matrices. You MUST call `DSRestoreArray()` when you no longer
    need to access the array.
@@ -601,7 +601,7 @@ PetscErrorCode DSGetArray(DS ds,DSMatType m,PetscScalar *a[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSRestoreArray - Restores the matrix after `DSGetArray()` was called.
 
    Not Collective
@@ -627,7 +627,7 @@ PetscErrorCode DSRestoreArray(DS ds,DSMatType m,PetscScalar *a[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSGetArrayReal - Returns a real pointer to the internal array of $T$ or $D$.
    You MUST call `DSRestoreArrayReal()` when you no longer need to access the array.
 
@@ -669,7 +669,7 @@ PetscErrorCode DSGetArrayReal(DS ds,DSMatType m,PetscReal *a[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSRestoreArrayReal - Restores the matrix after `DSGetArrayReal()` was called.
 
    Not Collective

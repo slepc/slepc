@@ -16,7 +16,7 @@ const char *LMEProblemTypes[] = {"LYAPUNOV","SYLVESTER","GEN_LYAPUNOV","GEN_SYLV
 const char *const LMEConvergedReasons_Shifted[] = {"DIVERGED_BREAKDOWN","DIVERGED_ITS","CONVERGED_ITERATING","CONVERGED_TOL","LMEConvergedReason","LME_",NULL};
 const char *const*LMEConvergedReasons = LMEConvergedReasons_Shifted + 2;
 
-/*@C
+/*@
   LMEFinalizePackage - This function destroys everything in the SLEPc interface
   to the `LME` package. It is called from `SlepcFinalize()`.
 
@@ -37,7 +37,7 @@ PetscErrorCode LMEFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    LMEInitializePackage - This function initializes everything in the `LME` package.
    It is called from `PetscDLLibraryRegister_slepclme()` when using dynamic libraries, and
    on the first call to `LMECreate()` when using shared or static libraries.

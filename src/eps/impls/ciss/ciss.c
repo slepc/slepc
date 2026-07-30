@@ -1257,7 +1257,7 @@ static PetscErrorCode EPSCISSGetKSPs_CISS(EPS eps,PetscInt *nsolve,KSP **ksp)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSCISSGetKSPs - Retrieve the array of linear solver objects associated with
    the CISS solver.
 

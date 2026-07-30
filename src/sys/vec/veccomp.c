@@ -400,7 +400,7 @@ static PetscErrorCode VecCompGetSubVecs_Comp(Vec win,PetscInt *n,const Vec **x)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    VecCompGetSubVecs - Returns the entire array of vectors defining a
    compound vector.
 

@@ -623,7 +623,7 @@ static PetscErrorCode PEPSTOARGetInertias_STOAR(PEP pep,PetscInt *n,PetscReal *s
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPSTOARGetInertias - Gets the values of the shifts and their
    corresponding inertias in case of doing spectrum slicing for a
    computational interval.

@@ -22,7 +22,7 @@ static PetscBool  FNPackageInitialized = PETSC_FALSE;
 
 const char *FNParallelTypes[] = {"REDUNDANT","SYNCHRONIZED","FNParallelType","FN_PARALLEL_",NULL};
 
-/*@C
+/*@
    FNFinalizePackage - This function destroys everything in the SLEPc interface
    to the `FN` package. It is called from `SlepcFinalize()`.
 
@@ -39,7 +39,7 @@ PetscErrorCode FNFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    FNInitializePackage - This function initializes everything in the `FN` package.
    It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
    on the first call to `FNCreate()` when using shared or static libraries.
@@ -1047,7 +1047,7 @@ PetscErrorCode FNDestroy(FN *fn)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    FNRegister - Adds a mathematical function to the `FN` package.
 
    Not Collective

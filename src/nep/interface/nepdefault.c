@@ -138,7 +138,7 @@ PetscErrorCode NEPConvergedNorm(NEP nep,PetscScalar eigr,PetscScalar eigi,PetscR
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPStoppingBasic - Default routine to determine whether the outer eigensolver
    iteration must be stopped.
 

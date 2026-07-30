@@ -19,7 +19,7 @@ const char *NEPCISSExtractions[] = {"RITZ","HANKEL","CAA","NEPCISSExtraction","N
 const char *const NEPConvergedReasons_Shifted[] = {"DIVERGED_SUBSPACE_EXHAUSTED","DIVERGED_LINEAR_SOLVE","","DIVERGED_BREAKDOWN","DIVERGED_ITS","CONVERGED_ITERATING","CONVERGED_TOL","CONVERGED_USER","NEPConvergedReason","NEP_",NULL};
 const char *const*NEPConvergedReasons = NEPConvergedReasons_Shifted + 5;
 
-/*@C
+/*@
   NEPFinalizePackage - This function destroys everything in the SLEPc interface
   to the `NEP` package. It is called from `SlepcFinalize()`.
 
@@ -40,7 +40,7 @@ PetscErrorCode NEPFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPInitializePackage - This function initializes everything in the `NEP` package.
    It is called from `PetscDLLibraryRegister_slepcnep()` when using dynamic libraries, and
    on the first call to `NEPCreate()` when using shared or static libraries.

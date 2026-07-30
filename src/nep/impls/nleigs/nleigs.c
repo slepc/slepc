@@ -1279,7 +1279,7 @@ static PetscErrorCode NEPNLEIGSSetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGS
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPNLEIGSSetSingularitiesFunction - Sets a user-defined callback function
    to compute a discretization of the singularity set (the values where
    $T(\cdot)$ is not analytic).
@@ -1323,7 +1323,7 @@ static PetscErrorCode NEPNLEIGSGetSingularitiesFunction_NLEIGS(NEP nep,NEPNLEIGS
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPNLEIGSGetSingularitiesFunction - Returns the callback function and optionally the user
    provided context for computing a discretization of the singularity set.
 
@@ -1667,7 +1667,7 @@ static PetscErrorCode NEPNLEIGSGetRKShifts_NLEIGS(NEP nep,PetscInt *ns,PetscScal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPNLEIGSGetRKShifts - Gets the list of shifts used in the Rational
    Krylov method.
 
@@ -1730,7 +1730,7 @@ static PetscErrorCode NEPNLEIGSGetKSPs_NLEIGS(NEP nep,PetscInt *nsolve,KSP **ksp
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    NEPNLEIGSGetKSPs - Retrieve the array of linear solver objects associated with
    the nonlinear eigenvalue solver.
 

@@ -1200,7 +1200,7 @@ PetscErrorCode BVRestoreColumn(BV bv,PetscInt j,Vec *v)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    BVGetArray - Returns a pointer to a contiguous array that contains this
    process' portion of the `BV` data.
 
@@ -1241,7 +1241,7 @@ PetscErrorCode BVGetArray(BV bv,PetscScalar **a)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    BVRestoreArray - Restore the `BV` object after `BVGetArray()` has been called.
 
    Logically Collective
@@ -1270,7 +1270,7 @@ PetscErrorCode BVRestoreArray(BV bv,PetscScalar **a)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    BVGetArrayRead - Returns a read-only pointer to a contiguous array that
    contains this processor's portion of the `BV` data.
 
@@ -1305,7 +1305,7 @@ PetscErrorCode BVGetArrayRead(BV bv,const PetscScalar **a)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    BVRestoreArrayRead - Restore the `BV` object after `BVGetArrayRead()` has
    been called.
 

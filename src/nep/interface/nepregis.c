@@ -19,7 +19,7 @@ SLEPC_EXTERN PetscErrorCode NEPCreate_CISS(NEP);
 #endif
 SLEPC_EXTERN PetscErrorCode NEPCreate_NLEIGS(NEP);
 
-/*@C
+/*@
    NEPRegisterAll - Registers all the solvers in the `NEP` package.
 
    Not Collective
@@ -44,7 +44,7 @@ PetscErrorCode NEPRegisterAll(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
   NEPMonitorRegisterAll - Registers all the monitors in the `NEP` package.
 
   Not Collective

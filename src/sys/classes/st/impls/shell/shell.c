@@ -32,7 +32,7 @@ static PetscErrorCode STShellGetContext_Shell(ST st,PetscCtxRt ctx)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    STShellGetContext - Returns the user-provided context associated with an `STSHELL`.
 
    Not Collective
@@ -101,7 +101,7 @@ static PetscErrorCode STShellSetDestroy_Shell(ST st,STShellDestroyFn *destroy)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    STShellSetDestroy - Set a context destroy function for the `STSHELL` context.
 
    Logically Collective
@@ -231,7 +231,7 @@ static PetscErrorCode STShellSetApply_Shell(ST st,STShellApplyFn *apply)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    STShellSetApply - Sets routine to use as the application of the
    operator to a vector in the user-defined spectral transformation.
 
@@ -262,7 +262,7 @@ static PetscErrorCode STShellSetApplyTranspose_Shell(ST st,STShellApplyTranspose
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    STShellSetApplyTranspose - Sets routine to use as the application of the
    transposed operator to a vector in the user-defined spectral transformation.
 
@@ -295,7 +295,7 @@ static PetscErrorCode STShellSetApplyHermitianTranspose_Shell(ST st,STShellApply
 }
 #endif
 
-/*@C
+/*@
    STShellSetApplyHermitianTranspose - Sets routine to use as the application of the
    conjugate-transposed operator to a vector in the user-defined spectral transformation.
 
@@ -330,7 +330,7 @@ static PetscErrorCode STShellSetBackTransform_Shell(ST st,STShellBackTransformFn
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    STShellSetBackTransform - Sets the routine to be called after the
    eigensolution process has finished in order to transform back the
    computed eigenvalues.

@@ -18,7 +18,7 @@ PetscBool         RGRegisterAllCalled = PETSC_FALSE;
 PetscClassId      RG_CLASSID = 0;
 static PetscBool  RGPackageInitialized = PETSC_FALSE;
 
-/*@C
+/*@
    RGFinalizePackage - This function destroys everything in the SLEPc interface
    to the `RG` package. It is called from `SlepcFinalize()`.
 
@@ -35,7 +35,7 @@ PetscErrorCode RGFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    RGInitializePackage - This function initializes everything in the `RG` package.
    It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
    on the first call to `RGCreate()` when using shared or static libraries.
@@ -836,7 +836,7 @@ PetscErrorCode RGDestroy(RG *rg)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    RGRegister - Adds a region to the `RG` package.
 
    Not Collective

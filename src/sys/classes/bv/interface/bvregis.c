@@ -16,7 +16,7 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Svec(BV);
 SLEPC_EXTERN PetscErrorCode BVCreate_Mat(BV);
 SLEPC_EXTERN PetscErrorCode BVCreate_Tensor(BV);
 
-/*@C
+/*@
    BVRegisterAll - Registers all of the storage variants in the `BV` package.
 
    Not Collective

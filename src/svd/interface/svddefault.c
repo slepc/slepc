@@ -53,7 +53,7 @@ PetscErrorCode SVDConvergedMaxIt(SVD svd,PetscReal sigma,PetscReal res,PetscReal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDStoppingBasic - Default routine to determine whether the outer singular value
    solver iteration must be stopped.
 
@@ -98,7 +98,7 @@ PetscErrorCode SVDStoppingBasic(SVD svd,PetscInt its,PetscInt max_it,PetscInt nc
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDStoppingThreshold - Routine to determine whether the outer singular value
    solver iteration must be stopped, according to some threshold for the computed values.
 

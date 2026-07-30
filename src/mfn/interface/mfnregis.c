@@ -13,7 +13,7 @@
 SLEPC_EXTERN PetscErrorCode MFNCreate_Krylov(MFN);
 SLEPC_EXTERN PetscErrorCode MFNCreate_Expokit(MFN);
 
-/*@C
+/*@
   MFNRegisterAll - Registers all the matrix functions in the `MFN` package.
 
   Not Collective
@@ -32,7 +32,7 @@ PetscErrorCode MFNRegisterAll(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
   MFNMonitorRegisterAll - Registers all the monitors in the `MFN` package.
 
   Not Collective

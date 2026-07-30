@@ -1031,7 +1031,7 @@ static PetscErrorCode DSNEPSetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSNEPSetComputeMatrixFunction - Sets a user-provided subroutine to compute
    the matrices $T(\lambda)$ or $T'(\lambda)$.
 
@@ -1071,7 +1071,7 @@ static PetscErrorCode DSNEPGetComputeMatrixFunction_NEP(DS ds,DSNEPMatrixFunctio
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    DSNEPGetComputeMatrixFunction - Returns the user-provided callback function
    set in `DSNEPSetComputeMatrixFunction()`.
 

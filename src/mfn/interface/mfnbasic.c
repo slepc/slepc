@@ -310,7 +310,7 @@ PetscErrorCode MFNGetType(MFN mfn,MFNType *type)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    MFNRegister - Adds a method to the matrix function solver package.
 
    Not Collective
@@ -345,7 +345,7 @@ PetscErrorCode MFNRegister(const char *name,PetscErrorCode (*function)(MFN))
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    MFNMonitorRegister - Registers an `MFN` monitor routine that may be accessed with
    `MFNMonitorSetFromOptions()`.
 

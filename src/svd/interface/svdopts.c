@@ -415,7 +415,7 @@ PetscErrorCode SVDGetWhichSingularTriplets(SVD svd,SVDWhich *which)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDSetConvergenceTestFunction - Sets a function to compute the error estimate
    used in the convergence test.
 
@@ -528,7 +528,7 @@ PetscErrorCode SVDGetConvergenceTest(SVD svd,SVDConv *conv)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDSetStoppingTestFunction - Sets a function to decide when to stop the outer
    iteration of the singular value solver.
 
@@ -631,7 +631,7 @@ PetscErrorCode SVDGetStoppingTest(SVD svd,SVDStop *stop)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorSetFromOptions - Sets a monitor function and viewer appropriate for the type
    indicated by the user.
 

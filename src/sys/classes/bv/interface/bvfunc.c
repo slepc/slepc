@@ -24,7 +24,7 @@ const char *BVOrthogBlockTypes[] = {"GS","CHOL","TSQR","TSQRCHOL","SVQB","BVOrth
 const char *BVMatMultTypes[] = {"VECS","MAT","MAT_SAVE","BVMatMultType","BV_MATMULT_",NULL};
 const char *BVSVDMethods[] = {"REFINE","QR","QR_CAA","BVSVDMethod","BV_SVD_METHOD_",NULL};
 
-/*@C
+/*@
    BVFinalizePackage - This function destroys everything in the SLEPc interface
    to the `BV` package. It is called from `SlepcFinalize()`.
 
@@ -43,7 +43,7 @@ PetscErrorCode BVFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    BVInitializePackage - This function initializes everything in the `BV` package.
    It is called from `PetscDLLibraryRegister_slepc()` when using dynamic libraries, and
    on the first call to `BVCreate()` when using shared or static libraries.
@@ -631,7 +631,7 @@ PetscErrorCode BVViewFromOptions(BV bv,PetscObject obj,const char name[])
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    BVRegister - Adds a new storage format to the `BV` package.
 
    Not Collective

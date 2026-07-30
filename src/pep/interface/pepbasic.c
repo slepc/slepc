@@ -204,7 +204,7 @@ PetscErrorCode PEPGetType(PEP pep,PEPType *type)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPRegister - Adds a method to the polynomial eigenproblem solver package.
 
    Not Collective
@@ -239,7 +239,7 @@ PetscErrorCode PEPRegister(const char *name,PetscErrorCode (*function)(PEP))
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorRegister - Registers a `PEP` monitor routine that may be accessed with
    `PEPMonitorSetFromOptions()`.
 

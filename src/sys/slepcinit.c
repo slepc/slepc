@@ -17,7 +17,7 @@ SLEPC_EXTERN PetscErrorCode KSPCreate_HPDDM(KSP);
 SLEPC_EXTERN PetscErrorCode PCCreate_HPDDM(PC);
 #endif
 
-/*@C
+/*@
     SlepcGetVersion - Gets the SLEPc version information in a string.
 
     Not Collective
@@ -76,7 +76,7 @@ PetscErrorCode SlepcGetVersionNumber(PetscInt *major,PetscInt *minor,PetscInt *s
   return PETSC_SUCCESS;
 }
 
-/*@C
+/*@
     SlepcGetConfiguration - Gets the SLEPc configuration information in a string.
 
     Not Collective
@@ -254,7 +254,7 @@ PetscErrorCode SlepcCitationsInitialize(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SlepcInitialize - Initializes the SLEPc library. `SlepcInitialize()` calls
    `PetscInitialize()` if it has not been called yet, so this function should
    always be called near the beginning of your program.
@@ -316,7 +316,7 @@ PetscErrorCode SlepcInitialize(int *argc,char ***args,const char file[],const ch
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SlepcFinalize - Checks for options to be called at the conclusion
    of the SLEPc program and calls `PetscFinalize()`.
 
@@ -345,7 +345,7 @@ PetscErrorCode SlepcFinalize(void)
   return PETSC_SUCCESS;
 }
 
-/*@C
+/*@
    SlepcInitializeNoArguments - Calls `SlepcInitialize()` from C/C++ without
    the command line arguments.
 
@@ -401,7 +401,7 @@ PetscErrorCode SlepcFinalized(PetscBool *isFinalized)
 
 PETSC_EXTERN PetscBool PetscBeganMPI;
 
-/*@C
+/*@
    SlepcInitializeNoPointers - Calls `SlepcInitialize()` from C/C++ without the pointers
    to `argc` and `args`.
 

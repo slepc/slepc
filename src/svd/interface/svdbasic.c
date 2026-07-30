@@ -268,7 +268,7 @@ PetscErrorCode SVDGetType(SVD svd,SVDType *type)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDRegister - Adds a method to the singular value solver package.
 
    Not Collective
@@ -303,7 +303,7 @@ PetscErrorCode SVDRegister(const char *name,PetscErrorCode (*function)(SVD))
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDMonitorRegister - Registers an `SVD` monitor routine that may be accessed with
    `SVDMonitorSetFromOptions()`.
 

@@ -20,7 +20,7 @@ const char *SVDKSVDPolarMethods[] = {"","QDWH","ZOLOPD","SVDKSVDPolarMethod","SV
 const char *const SVDConvergedReasons_Shifted[] = {"","DIVERGED_SYMMETRY_LOST","DIVERGED_BREAKDOWN","DIVERGED_ITS","CONVERGED_ITERATING","CONVERGED_TOL","CONVERGED_USER","CONVERGED_MAXIT","SVDConvergedReason","SVD_",NULL};
 const char *const*SVDConvergedReasons = SVDConvergedReasons_Shifted + 4;
 
-/*@C
+/*@
   SVDFinalizePackage - This function destroys everything in the SLEPc interface
   to the `SVD` package. It is called from `SlepcFinalize()`.
 
@@ -41,7 +41,7 @@ PetscErrorCode SVDFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    SVDInitializePackage - This function initializes everything in the `SVD` package.
    It is called from `PetscDLLibraryRegister_slepcsvd()` when using dynamic libraries, and
    on the first call to `SVDCreate()` when using shared or static libraries.

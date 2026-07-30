@@ -26,7 +26,7 @@ const char *EPSEVSLDampings[] = {"NONE","JACKSON","SIGMA","EPSEVSLDamping","EPS_
 const char *const EPSConvergedReasons_Shifted[] = {"","DIVERGED_SYMMETRY_LOST","DIVERGED_BREAKDOWN","DIVERGED_ITS","CONVERGED_ITERATING","CONVERGED_TOL","CONVERGED_USER","EPSConvergedReason","EPS_",NULL};
 const char *const*EPSConvergedReasons = EPSConvergedReasons_Shifted + 4;
 
-/*@C
+/*@
   EPSFinalizePackage - This function destroys everything in the SLEPc interface
   to the `EPS` package. It is called from `SlepcFinalize()`.
 
@@ -47,7 +47,7 @@ PetscErrorCode EPSFinalizePackage(void)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    EPSInitializePackage - This function initializes everything in the `EPS` package.
    It is called from `PetscDLLibraryRegister_slepceps()` when using dynamic libraries, and
    on the first call to `EPSCreate()` when using shared or static libraries.

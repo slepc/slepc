@@ -112,7 +112,7 @@ PetscErrorCode PEPConvergedAbsolute(PEP pep,PetscScalar eigr,PetscScalar eigi,Pe
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPStoppingBasic - Default routine to determine whether the outer eigensolver
    iteration must be stopped.
 

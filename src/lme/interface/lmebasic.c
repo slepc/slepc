@@ -313,7 +313,7 @@ PetscErrorCode LMEGetType(LME lme,LMEType *type)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    LMERegister - Adds a method to the linear matrix equation solver package.
 
    Not Collective
@@ -348,7 +348,7 @@ PetscErrorCode LMERegister(const char *name,PetscErrorCode (*function)(LME))
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    LMEMonitorRegister - Registers an `LME` monitor routine that may be accessed with
    `LMEMonitorSetFromOptions()`.
 

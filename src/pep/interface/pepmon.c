@@ -26,7 +26,7 @@ PetscErrorCode PEPMonitor(PEP pep,PetscInt it,PetscInt nconv,PetscScalar *eigr,P
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorSet - Sets an ADDITIONAL function to be called at every
    iteration to monitor the error estimates for each requested eigenpair.
 
@@ -119,7 +119,7 @@ PetscErrorCode PEPMonitorCancel(PEP pep)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPGetMonitorContext - Gets the monitor context, as set by
    `PEPMonitorSet()` for the FIRST monitor only.
 
@@ -164,7 +164,7 @@ static PetscErrorCode PEPMonitorGetTrueEig(PEP pep,PetscScalar *er,PetscScalar *
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorFirst - Print the first unconverged approximate value and
    error estimate at each iteration of the polynomial eigensolver.
 
@@ -221,7 +221,7 @@ PetscErrorCode PEPMonitorFirst(PEP pep,PetscInt its,PetscInt nconv,PetscScalar e
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorAll - Print the current approximate values and
    error estimates at each iteration of the polynomial eigensolver.
 
@@ -280,7 +280,7 @@ PetscErrorCode PEPMonitorAll(PEP pep,PetscInt its,PetscInt nconv,PetscScalar eig
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorConverged - Print the approximate values and
    error estimates as they converge.
 
@@ -345,7 +345,7 @@ PetscErrorCode PEPMonitorConverged(PEP pep,PetscInt its,PetscInt nconv,PetscScal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorConvergedCreate - Creates the context for the convergence history monitor.
 
    Collective
@@ -374,7 +374,7 @@ PetscErrorCode PEPMonitorConvergedCreate(PetscViewer viewer,PetscViewerFormat fo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorFirstDrawLG - Plots the error estimate of the first unconverged
    approximation at each iteration of the polynomial eigensolver.
 
@@ -433,7 +433,7 @@ PetscErrorCode PEPMonitorFirstDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscSc
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorFirstDrawLGCreate - Creates the plotter for the first error estimate.
 
    Collective
@@ -459,7 +459,7 @@ PetscErrorCode PEPMonitorFirstDrawLGCreate(PetscViewer viewer,PetscViewerFormat 
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorAllDrawLG - Plots the error estimate of all unconverged
    approximations at each iteration of the polynomial eigensolver.
 
@@ -521,7 +521,7 @@ PetscErrorCode PEPMonitorAllDrawLG(PEP pep,PetscInt its,PetscInt nconv,PetscScal
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorAllDrawLGCreate - Creates the plotter for all the error estimates.
 
    Collective
@@ -547,7 +547,7 @@ PetscErrorCode PEPMonitorAllDrawLGCreate(PetscViewer viewer,PetscViewerFormat fo
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorConvergedDrawLG - Plots the number of converged eigenvalues
    at each iteration of the polynomial eigensolver.
 
@@ -603,7 +603,7 @@ PetscErrorCode PEPMonitorConvergedDrawLG(PEP pep,PetscInt its,PetscInt nconv,Pet
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*@C
+/*@
    PEPMonitorConvergedDrawLGCreate - Creates the plotter for the convergence history.
 
    Collective
