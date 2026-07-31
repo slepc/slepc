@@ -1400,20 +1400,8 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
     PetscCall(PetscLayoutGetLocalSize(bv->map,&nloc));
     PetscCall(PetscLayoutGetSize(bv->map,&N));
     PetscCall(PetscLayoutGetBlockSize(bv->map,&bs));
-    if (cuda) {
-#if PetscDefined(HAVE_CUDA)
-      if (mpi) PetscCall(VecCreateMPICUDAWithArray(PetscObjectComm((PetscObject)bv),bs,nloc,N,NULL,v));
-      else PetscCall(VecCreateSeqCUDAWithArray(PetscObjectComm((PetscObject)bv),bs,N,NULL,v));
-#endif
-    } else if (hip) {
-#if PetscDefined(HAVE_HIP)
-      if (mpi) PetscCall(VecCreateMPIHIPWithArray(PetscObjectComm((PetscObject)bv),bs,nloc,N,NULL,v));
-      else PetscCall(VecCreateSeqHIPWithArray(PetscObjectComm((PetscObject)bv),bs,N,NULL,v));
-#endif
-    } else {
-      if (mpi) PetscCall(VecCreateMPIWithArray(PetscObjectComm((PetscObject)bv),bs,nloc,N,NULL,v));
-      else PetscCall(VecCreateSeqWithArray(PetscObjectComm((PetscObject)bv),bs,N,NULL,v));
-    }
+    if (mpi) PetscCall(VecCreateMPIWithArrayAndMemType(PetscObjectComm((PetscObject)bv),cuda?PETSC_MEMTYPE_CUDA:(hip?PETSC_MEMTYPE_HIP:PETSC_MEMTYPE_HOST),bs,nloc,N,NULL,v));
+    else PetscCall(VecCreateSeqWithArrayAndMemType(PetscObjectComm((PetscObject)bv),cuda?PETSC_MEMTYPE_CUDA:(hip?PETSC_MEMTYPE_HIP:PETSC_MEMTYPE_HOST),bs,N,NULL,v));
   } else PetscCall(BVCreateVec(bv,v)); /* standard duplicate, with internal array */
   PetscFunctionReturn(PETSC_SUCCESS);
 }
