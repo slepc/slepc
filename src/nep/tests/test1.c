@@ -245,7 +245,7 @@ PetscErrorCode FormJacobian(NEP nep,PetscScalar lambda,Mat jac,void *ctx)
 
    testset:
       args: -nep_type {{rii slp}} -nep_target 21 -terse -nep_view_vectors ::ascii_info
-      filter: sed -e "s/\(0x[0-9a-fA-F]*\)/objectid/" | sed -e "s/[+-]0\.0*i//g"
+      filter: sed -e "s/\(0x[0-9a-fA-F]*\)/objectid/" -e "s/_[0-9a-fA-F]\{8,\}_/_objectid_/" -e "s/[+-]0\.0*i//g"
       test:
          suffix: 1_real
          requires: !single !complex
@@ -268,7 +268,7 @@ PetscErrorCode FormJacobian(NEP nep,PetscScalar lambda,Mat jac,void *ctx)
 
    testset:
       args: -nep_type slp -nep_two_sided -nep_target 21 -terse -nep_view_vectors ::ascii_info
-      filter: sed -e "s/\(0x[0-9a-fA-F]*\)/objectid/"
+      filter: sed -e "s/\(0x[0-9a-fA-F]*\)/objectid/" -e "s/_[0-9a-fA-F]\{8,\}_/_objectid_/"
       test:
          suffix: 3_real
          requires: !single !complex
