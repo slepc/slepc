@@ -12,6 +12,12 @@ TESTSRCDIR ?= $(dir $(mkfile_path))src
 -include $(SLEPC_DIR)/$(PETSC_ARCH)/lib/slepc/conf/slepcvariables
 -include $(SLEPC_DIR)/lib/slepc/conf/slepc_variables
 
+# Tests spell data file paths with ${wSLEPC_DIR}, resolved from the environment of the
+# generated run script. It is the counterpart of PETSc's wPETSC_DIR and differs from
+# SLEPC_DIR only on Windows. Fall back for a build tree configured before it existed.
+wSLEPC_DIR ?= $(SLEPC_DIR)
+export wSLEPC_DIR
+
 TESTDIR ?= ./$(PETSC_ARCH)/tests
 MODDIR := $(SLEPC_DIR)/$(PETSC_ARCH)/include
 TESTLOGTAPFILE ?= $(TESTDIR)/test_$(PETSC_ARCH)_tap.log

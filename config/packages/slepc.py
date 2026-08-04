@@ -8,7 +8,7 @@
 #  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #
 
-import argdb, os, sys, package
+import argdb, os, subprocess, sys, package
 
 class SLEPc(package.Package):
 
@@ -39,10 +39,28 @@ class SLEPc(package.Package):
     if self.prefixdir:
       self.prefixdir = os.path.realpath(os.path.normpath(self.prefixdir))
 
+  def WindowsDir(self,petsc):
+    '''Native form of SLEPC_DIR, the counterpart of PETSc's wPETSC_DIR.
+
+       On Windows, the test harness hands arguments to native binaries through the
+       MSYS/Cygwin layer, which converts only the first element of a comma-separated
+       path list. Tests that pass several paths in a single argument must therefore
+       spell them in native form. Everywhere else this is just SLEPC_DIR.
+    '''
+    wpetscdir = getattr(petsc,'wpetsc_dir','')
+    if not wpetscdir or wpetscdir == petsc.dir.replace('\\','/'):
+      return self.dir
+    try:
+      return subprocess.check_output(['cygpath','-m',self.dir],universal_newlines=True).strip()
+    except Exception:
+      self.log.write('Could not run cygpath, setting wSLEPC_DIR to SLEPC_DIR')
+      return self.dir
+
   def Process(self,slepcconf,slepcvars,slepcrules,slepc,petsc,archdir=''):
     slepcvars.write('include '+petsc.petscvariables+'\n')
     slepcvars.write('SLEPC_CONFIGURE_OPTIONS = '+' '.join(sys.argv[1:])+'\n')
     slepcvars.write('SLEPC_INSTALLDIR = '+slepc.prefixdir+'\n')
+    slepcvars.write('wSLEPC_DIR = '+slepc.WindowsDir(petsc)+'\n')
     if petsc.isinstall:
       slepcvars.write('INSTALLED_PETSC = 1\n')
     if slepc.datadir:
