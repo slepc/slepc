@@ -280,7 +280,7 @@ PetscErrorCode MyEigenSort(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscSca
 
    testset:
       args: -eps_nev 4 -eps_two_sided -eps_view_vectors ::ascii_info -eps_view_values
-      filter: sed -e "s/\(0x[0-9a-fA-F]*\)/objectid/"
+      filter: sed -e "s/\(0x[0-9a-fA-F]*\)/objectid/" -e "s/_[0-9a-fA-F]\{8,\}_/_objectid_/"
       test:
          suffix: 7_real
          requires: !single !complex
