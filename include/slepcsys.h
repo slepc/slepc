@@ -8,77 +8,22 @@
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 /*
-   This include file contains definitions of system functions. It is included
-   by all other SLEPc include files.
+   This include file contains definitions of system functions
 */
 
 #pragma once
 
-#include <petscsys.h>
+#include <slepcsystypes.h>
+
+#include <slepcmath.h>   /* definition of basic math functions */
+#include <slepcsc.h>     /* definition of sorting criteria */
+#include <slepcvec.h>    /* utilities related to Vec, extend functionality in PETSc */
+#include <slepcmat.h>    /* utilities related to Mat, extend functionality in PETSc */
 
 /* SUBMANSEC = Sys */
 
-#if defined(slepc_EXPORTS)
-#define SLEPC_VISIBILITY_PUBLIC PETSC_DLLEXPORT
-#else
-#define SLEPC_VISIBILITY_PUBLIC PETSC_DLLIMPORT
-#endif
-#define SLEPC_VISIBILITY_INTERNAL PETSC_VISIBILITY_INTERNAL
-
 /*
-    Functions tagged with SLEPC_EXTERN in the header files are
-  always defined as extern "C" when compiled with C++ so they may be
-  used from C and are always visible in the shared libraries
-*/
-#if defined(__cplusplus)
-#define SLEPC_EXTERN extern "C" SLEPC_VISIBILITY_PUBLIC
-#define SLEPC_INTERN extern "C" SLEPC_VISIBILITY_INTERNAL
-#else
-#define SLEPC_EXTERN extern SLEPC_VISIBILITY_PUBLIC
-#define SLEPC_INTERN extern SLEPC_VISIBILITY_INTERNAL
-#endif
-
-#if PetscDefined(USE_SINGLE_LIBRARY)
-  #define SLEPC_SINGLE_LIBRARY_VISIBILITY_INTERNAL SLEPC_VISIBILITY_INTERNAL
-  #define SLEPC_SINGLE_LIBRARY_INTERN              SLEPC_INTERN
-#else
-  #define SLEPC_SINGLE_LIBRARY_VISIBILITY_INTERNAL SLEPC_VISIBILITY_PUBLIC
-  #define SLEPC_SINGLE_LIBRARY_INTERN              SLEPC_EXTERN
-#endif
-
-/* ========================================================================== */
-/*
-   slepcconf.h is created by the configure script and placed in ${PETSC_ARCH}/include.
-   It contains macro definitions set at configure time.
-*/
-#include <slepcconf.h>
-/*
-    slepcversion.h contains version info
-*/
-#include <slepcversion.h>
-#define SLEPC_AUTHOR_INFO "       The SLEPc Team\n    slepc-maint@upv.es\n https://slepc.upv.es\n"
-
-/* ========================================================================== */
-/*
-   The PETSc include files.
-*/
-#include <petscmat.h>
-/*
-    slepcmath.h contains definition of basic math functions
-*/
-#include <slepcmath.h>
-/*
-    slepcsc.h contains definition of sorting criterion
-*/
-#include <slepcsc.h>
-/*
-    slepcmat.h, slepcvec.h contain utilities related to Mat and Vec, extend functionality in PETSc
-*/
-#include <slepcmat.h>
-#include <slepcvec.h>
-
-/*
-    Initialization of SLEPc and other system routines
+   Initialization of SLEPc and other system routines
 */
 SLEPC_EXTERN PetscErrorCode SlepcInitialize(int*,char***,const char[],const char[]);
 SLEPC_EXTERN PetscErrorCode SlepcInitializeNoPointers(int,char**,const char[],const char[]);

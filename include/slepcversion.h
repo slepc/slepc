@@ -11,6 +11,8 @@
 #if !defined(SLEPCVERSION_H)
 #define SLEPCVERSION_H
 
+#include <slepcconf.h>
+
 /* MANSEC = Sys */
 
 #define SLEPC_VERSION_RELEASE    0
