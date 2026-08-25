@@ -2,9 +2,9 @@
 
 import os, sys
 
-if sys.version_info < (3,4):
+if sys.version_info < (3,6):
   print('*******************************************************************************')
-  print('*           Python version 3.4+ is required to run ./configure                *')
+  print('*           Python version 3.6+ is required to run ./configure                *')
   print('*******************************************************************************')
   sys.exit(4)
 
