@@ -17,8 +17,8 @@ class HPDDM(package.Package):
     package.Package.__init__(self,argdb,log)
     self.packagename    = 'hpddm'
     self.downloadable   = True
-    self.gitcommit      = 'ce8f7bfc81d4f818b1869d5cd42a7210d7ad6dba'
-    self.version        = '2.4.0'
+    self.gitcommit      = '2f610bae0cdbb9ab3e59258dd49cf833b16df076' # stefanozampini/remove-pcdiagscale aug-29-2026
+    # self.version        = '2.4.0'
     obj = self.version if hasattr(self,'version') else self.gitcommit
     self.url            = 'https://github.com/hpddm/hpddm/archive/'+('v'+obj if hasattr(self,'version') else obj)+'.tar.gz'
     self.archive        = 'hpddm-'+obj+'.tar.gz'
