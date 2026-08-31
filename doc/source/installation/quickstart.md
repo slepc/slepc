@@ -16,6 +16,10 @@ $ tar xzf slepc-{{env.config.release}}.tar.gz
 
 This will create a directory and unpack the software there.
 
+:::{note}
+Skip this step if you are using a `git` repository.
+:::
+
   2. Set the environment variable `SLEPC_DIR` to the full path of the SLEPc home directory, for example,
 
 ```{parsed-literal}
