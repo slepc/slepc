@@ -651,6 +651,14 @@ SLEPC_EXTERN PetscErrorCode NEPCISSSetRefinement(NEP,PetscInt,PetscInt);
 SLEPC_EXTERN PetscErrorCode NEPCISSGetRefinement(NEP,PetscInt*,PetscInt*);
 SLEPC_EXTERN PetscErrorCode NEPCISSGetKSPs(NEP,PetscInt*,KSP*[]);
 #else
+/*MC
+   SlepcNEPCISSUnavailable - Auxiliary macro to indicate that some NEP CISS functions
+   are not available in real scalars.
+
+   Level: developer
+
+.seealso: `NEPCISS`
+M*/
 #define SlepcNEPCISSUnavailable(nep) do { \
     PetscFunctionBegin; \
     SETERRQ(PetscObjectComm((PetscObject)nep),PETSC_ERR_SUP,"%s() not available with real scalars",PETSC_FUNCTION_NAME); \

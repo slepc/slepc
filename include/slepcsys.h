@@ -97,12 +97,52 @@ SLEPC_EXTERN PetscErrorCode SlepcSNPrintfScalar(char[],size_t,PetscScalar,PetscB
 SLEPC_EXTERN PetscBool SlepcInitializeCalled;
 SLEPC_EXTERN PetscBool SlepcFinalizeCalled;
 
+/*MC
+   SlepcLogFlopsComplex - Log how many flops are performed in a calculation.
+
+   Synopsis:
+   #include <slepcsys.h>
+   PetscReal SlepcLogFlopsComplex(PetscLogDouble n)
+
+   Not Collective
+
+   Input parameter:
+.  n - the number of flops
+
+   Note:
+   Like `PetscLogFlops()` but will log correctly in the case of real scalar computations
+   that explicitly use complex arithmetic.
+
+   Level: developer
+
+.seealso: `PetscLogFlops()`
+M*/
 #if PetscDefined(USE_COMPLEX)
 #define SlepcLogFlopsComplex(a) PetscLogFlops((a))
 #else
 #define SlepcLogFlopsComplex(a) PetscLogFlops((4.0*a))
 #endif
 
+/*MC
+   SlepcLogGpuFlopsComplex - Log how many flops are performed in a calculation on the device.
+
+   Synopsis:
+   #include <slepcsys.h>
+   PetscReal SlepcLogGpuFlopsComplex(PetscLogDouble n)
+
+   Not Collective
+
+   Input parameter:
+.  n - the number of flops
+
+   Note:
+   Like `PetscLogGpuFlops()` but will log correctly in the case of real scalar computations
+   that explicitly use complex arithmetic.
+
+   Level: developer
+
+.seealso: `PetscLogGpuFlops()`
+M*/
 #if PetscDefined(USE_COMPLEX)
 #define SlepcLogGpuFlopsComplex(a) PetscLogGpuFlops((a))
 #else
@@ -113,5 +153,5 @@ SLEPC_EXTERN PetscBool SlepcFinalizeCalled;
     Developer routines to be used with a debugger
 */
 #if PetscDefined(USE_DEBUG)
-SLEPC_EXTERN PetscErrorCode SlepcDebugViewMatrix(PetscInt,PetscInt,PetscScalar*,PetscScalar*,PetscInt,const char*,const char*);
+SLEPC_EXTERN PetscErrorCode SlepcDebugViewMatrix(PetscInt,PetscInt,PetscScalar[],PetscScalar[],PetscInt,const char[],const char[]);
 #endif

@@ -35,6 +35,16 @@ static void slepc_magma_init(void PETSC_UNUSED *unused, magma_int_t *ierr)
   return;
 }
 
+/*@
+   SlepcMagmaInit - A helper function to cleanly initialize MAGMA from within SLEPc
+   when needed.
+
+   Logically Collective
+
+   Level: developer
+
+.seealso: `SlepcInitialize()`
+@*/
 PetscErrorCode SlepcMagmaInit(void)
 {
   PetscFunctionBegin;

@@ -68,7 +68,8 @@ static inline PetscReal SlepcAbs(PetscReal x,PetscReal y)
    its real and imaginary parts.
 
    Synopsis:
-   PetscReal SlepcAbsEigenvalue(PetscScalar x,PetscScalar y)
+   #include <slepcmath.h>
+   PetscReal SlepcAbsEigenvalue(PetscScalar x, PetscScalar y)
 
    Not Collective
 
@@ -95,9 +96,18 @@ M*/
 #define SlepcAbsEigenvalue(x,y) PetscAbsScalar(x)
 #endif
 
-/*
+/*@
    SlepcSetFlushToZero - Set the FTZ flag in floating-point arithmetic.
-*/
+
+   Logically Collective
+
+   Output Parameter:
+.  state - the value before setting the flag
+
+   Level: developer
+
+.seealso: `SlepcResetFlushToZero()`
+@*/
 static inline PetscErrorCode SlepcSetFlushToZero(unsigned int *state)
 {
   PetscFunctionBegin;
@@ -110,9 +120,18 @@ static inline PetscErrorCode SlepcSetFlushToZero(unsigned int *state)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*
+/*@
    SlepcResetFlushToZero - Reset the FTZ flag in floating-point arithmetic.
-*/
+
+   Logically Collective
+
+   Input Parameter:
+.  state - the value to be restored
+
+   Level: developer
+
+.seealso: `SlepcResetFlushToZero()`
+@*/
 static inline PetscErrorCode SlepcResetFlushToZero(unsigned int *state)
 {
   PetscFunctionBegin;
