@@ -152,18 +152,26 @@ PetscErrorCode SlepcHasExternalPackage(const char pkg[], PetscBool *has)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*
-   SlepcDebugViewMatrix - prints an array as a matrix, to be used from within a debugger.
-   Output can be pasted to Matlab.
-
-     nrows, ncols: size of printed matrix
-     Xr, Xi: array to be printed (Xi not referenced in complex scalars)
-     ldx: leading dimension
-     s: name of Matlab variable
-     filename: optionally write output to a file
- */
 #if PetscDefined(USE_DEBUG)
-PetscErrorCode SlepcDebugViewMatrix(PetscInt nrows,PetscInt ncols,PetscScalar *Xr,PetscScalar *Xi,PetscInt ldx,const char *s,const char *filename)
+/*@
+   SlepcDebugViewMatrix - Print an array as a Matlab matrix, to be used from within a debugger.
+
+   Logically Collective
+
+   Input Parameters:
++  nrows    - number of rows of printed matrix
+.  ncols    - number of columns of printed matrix
+.  Xr       - real part of array to be printed
+.  Xi       - imaginary part of array to be printed (not referenced in complex scalars)
+.  ldx      - leading dimension
+.  s        - name of Matlab variable
+-  filename - optional name of a file to write the output, can be `NULL`
+
+   Level: developer
+
+.seealso: `SlepcInitialize()`
+@*/
+PetscErrorCode SlepcDebugViewMatrix(PetscInt nrows,PetscInt ncols,PetscScalar Xr[],PetscScalar Xi[],PetscInt ldx,const char s[],const char filename[])
 {
   PetscInt       i,j;
   PetscViewer    viewer;

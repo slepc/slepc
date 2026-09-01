@@ -596,6 +596,7 @@ M*/
 
 .seealso: [](ch:eps), `EPSSetStoppingTestFunction()`
 S*/
+typedef struct _n_EPSStoppingCtx* EPSStoppingCtx;
 struct _n_EPSStoppingCtx {
   PetscReal firstev;    /* the (absolute) value of the first converged eigenvalue */
   PetscReal lastev;     /* the (absolute) value of the last converged eigenvalue */
@@ -607,7 +608,6 @@ struct _n_EPSStoppingCtx {
   PetscInt  napprox;    /* number of available approximations */
   EPSWhich  which;      /* which eigenvalues are being computed */
 };
-typedef struct _n_EPSStoppingCtx* EPSStoppingCtx;
 
 SLEPC_EXTERN PetscErrorCode EPSCreate(MPI_Comm,EPS*);
 SLEPC_EXTERN PetscErrorCode EPSDestroy(EPS*);

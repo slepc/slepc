@@ -198,6 +198,29 @@ PetscErrorCode SlepcMap_ST(PetscObject obj,PetscInt n,PetscScalar *eigr,PetscSca
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@
+   SlepcCompareLargestMagnitude - An eigenvalue comparison function used to sort with respect
+   to largest magnitude.
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, not used here
+
+   Output Parameter:
+.  result - result of comparison
+
+   Note:
+   The result is 1 if $|\lambda_1|<|\lambda_2|$.
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareLargestMagnitude(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
   PetscReal a,b;
@@ -211,6 +234,29 @@ PetscErrorCode SlepcCompareLargestMagnitude(PetscScalar ar,PetscScalar ai,PetscS
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@
+   SlepcCompareSmallestMagnitude - An eigenvalue comparison function used to sort with respect
+   to smallest magnitude.
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, not used here
+
+   Output Parameter:
+.  result - result of comparison
+
+   Note:
+   The result is 1 if $|\lambda_1|>|\lambda_2|$.
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareSmallestMagnitude(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
   PetscReal a,b;
@@ -224,6 +270,29 @@ PetscErrorCode SlepcCompareSmallestMagnitude(PetscScalar ar,PetscScalar ai,Petsc
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@
+   SlepcCompareLargestReal - An eigenvalue comparison function used to sort with respect
+   to largest real part.
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, not used here
+
+   Output Parameter:
+.  result - result of comparison
+
+   Note:
+   The result is 1 if $\mathrm{Re}(\lambda_1)<\mathrm{Re}(\lambda_2)$.
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareLargestReal(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
   PetscReal a,b;
@@ -237,6 +306,29 @@ PetscErrorCode SlepcCompareLargestReal(PetscScalar ar,PetscScalar ai,PetscScalar
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@
+   SlepcCompareSmallestReal - An eigenvalue comparison function used to sort with respect
+   to smallest real part.
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, not used here
+
+   Output Parameter:
+.  result - result of comparison
+
+   Note:
+   The result is 1 if $\mathrm{Re}(\lambda_1)>\mathrm{Re}(\lambda_2)$.
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareSmallestReal(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
   PetscReal a,b;
@@ -250,6 +342,31 @@ PetscErrorCode SlepcCompareSmallestReal(PetscScalar ar,PetscScalar ai,PetscScala
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@
+   SlepcCompareLargestImaginary - An eigenvalue comparison function used to sort with respect
+   to largest imaginary real part.
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, not used here
+
+   Output Parameter:
+.  result - result of comparison
+
+   Note:
+   In complex scalars, the result is 1 if $\mathrm{Im}(\lambda_1)<\mathrm{Im}(\lambda_2)$.
+   In real scalars, the result is 1 if $|\mathrm{Im}(\lambda_1)|<|\mathrm{Im}(\lambda_2)|$.
+   If the two values are equal, then $|\lambda_1|<|\lambda_2|$ is used to break the tie.
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareLargestImaginary(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
   PetscReal a,b;
@@ -274,6 +391,31 @@ PetscErrorCode SlepcCompareLargestImaginary(PetscScalar ar,PetscScalar ai,PetscS
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@
+   SlepcCompareSmallestImaginary - An eigenvalue comparison function used to sort with respect
+   to smallest imaginary real part.
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, not used here
+
+   Output Parameter:
+.  result - result of comparison
+
+   Notes:
+   In complex scalars, the result is 1 if $\mathrm{Im}(\lambda_1)>\mathrm{Im}(\lambda_2)$.
+   In real scalars, the result is 1 if $|\mathrm{Im}(\lambda_1)|>|\mathrm{Im}(\lambda_2)|$.
+   If the two values are equal, then $|\lambda_1|<|\lambda_2|$ is used to break the tie.
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareSmallestImaginary(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
   PetscReal a,b;
@@ -298,6 +440,29 @@ PetscErrorCode SlepcCompareSmallestImaginary(PetscScalar ar,PetscScalar ai,Petsc
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@
+   SlepcCompareTargetMagnitude - An eigenvalue comparison function used to sort with respect
+   to a target (in magnitude).
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, contains the target value (a `PetscScalar`)
+
+   Output Parameter:
+.  result - result of comparison
+
+   Note:
+   The result is 1 if $|\lambda_1-\tau|<|\lambda_2-\tau|$ where $\tau$ is the target.
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareTargetMagnitude(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
   PetscReal   a,b;
@@ -313,6 +478,30 @@ PetscErrorCode SlepcCompareTargetMagnitude(PetscScalar ar,PetscScalar ai,PetscSc
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@
+   SlepcCompareTargetReal - An eigenvalue comparison function used to sort with respect
+   to a target (along the real axis).
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, contains the target value (a `PetscScalar`)
+
+   Output Parameter:
+.  result - result of comparison
+
+   Note:
+   The result is 1 if $\mathrm{Re}(\lambda_1-\tau)<\mathrm{Re}(\lambda_2-\tau)$ where
+   $\tau$ is the target.
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareTargetReal(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
   PetscReal   a,b;
@@ -327,6 +516,32 @@ PetscErrorCode SlepcCompareTargetReal(PetscScalar ar,PetscScalar ai,PetscScalar 
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*@
+   SlepcCompareTargetImaginary - An eigenvalue comparison function used to sort with respect
+   to a target (along the imaginary axis).
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, contains the target value (a `PetscScalar`)
+
+   Output Parameter:
+.  result - result of comparison
+
+   Notes:
+   In complex scalars, the result is 1 if $\mathrm{Im}(\lambda_1-\tau)<\mathrm{Im}(\lambda_2-\tau)$
+   where $\tau$ is the target.
+   In real scalars, the result is always zero because sorting with respect to target is
+   not supported (the target is always real in this case).
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareTargetImaginary(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
 #if PetscDefined(USE_COMPLEX)
@@ -347,10 +562,32 @@ PetscErrorCode SlepcCompareTargetImaginary(PetscScalar ar,PetscScalar ai,PetscSc
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-/*
-   Used in the SVD for computing smallest singular values
-   from the cyclic matrix.
-*/
+/*@
+   SlepcCompareSmallestPosReal - An eigenvalue comparison function used to sort according
+   to the smallest positive real part.
+
+   Logically Collective
+
+   Input Parameters:
++  ar  - real part of the 1st eigenvalue
+.  ai  - imaginary part of the 1st eigenvalue
+.  br  - real part of the 2nd eigenvalue
+.  bi  - imaginary part of the 2nd eigenvalue
+-  ctx - user-defined context, not used here
+
+   Output Parameter:
+.  result - result of comparison
+
+   Note:
+   This sorting criterion is used in the SVD for computing smallest singular values
+   from the cyclic matrix. In that case, the computed values come in pairs $\pm\lambda$.
+   If the two values to compare have the same sign, the preferred one is the one with
+   smallest magnitude. Otherwise, the prefered one is the rightmost (positive sign).
+
+   Level: developer
+
+.seealso: `SlepcEigenvalueComparisonFn`, `SlepcSCCompare()`, `SlepcSC`
+@*/
 PetscErrorCode SlepcCompareSmallestPosReal(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscScalar bi,PetscInt *result,PetscCtx ctx)
 {
   PetscReal a,b;
