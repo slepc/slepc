@@ -361,6 +361,7 @@ M*/
 
 .seealso: [](ch:svd), `SVDSetStoppingTestFunction()`
 S*/
+typedef struct _n_SVDStoppingCtx* SVDStoppingCtx;
 struct _n_SVDStoppingCtx {
   PetscReal firstsv;    /* the value of the first converged singular value */
   PetscReal lastsv;     /* the value of the last converged singular value */
@@ -372,7 +373,6 @@ struct _n_SVDStoppingCtx {
   PetscInt  napprox;    /* number of available approximations */
   SVDWhich  which;      /* which singular values are being computed */
 };
-typedef struct _n_SVDStoppingCtx* SVDStoppingCtx;
 
 SLEPC_EXTERN PetscErrorCode SVDCreate(MPI_Comm,SVD*);
 SLEPC_EXTERN PetscErrorCode SVDSetBV(SVD,BV,BV);

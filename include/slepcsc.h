@@ -103,6 +103,7 @@ PETSC_EXTERN_TYPEDEF typedef PetscErrorCode SlepcArbitrarySelectionFn(PetscScala
 
 .seealso: `SlepcEigenvalueComparisonFn`, `SlepcSortEigenvalues()`, `SlepcSCCompare()`
 S*/
+typedef struct _n_SlepcSC* SlepcSC;
 struct _n_SlepcSC {
   /* map values before sorting, typically a call to STBackTransform (mapctx=ST) */
   PetscErrorCode (*map)(PetscObject,PetscInt,PetscScalar*,PetscScalar*);
@@ -113,7 +114,6 @@ struct _n_SlepcSC {
   /* optional region for filtering */
   RG             rg;
 };
-typedef struct _n_SlepcSC* SlepcSC;
 
 SLEPC_EXTERN PetscErrorCode SlepcSCCompare(SlepcSC,PetscScalar,PetscScalar,PetscScalar,PetscScalar,PetscInt*);
 SLEPC_EXTERN PetscErrorCode SlepcSortEigenvalues(SlepcSC,PetscInt,PetscScalar[],PetscScalar[],PetscInt[]);
