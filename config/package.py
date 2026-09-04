@@ -14,7 +14,7 @@ from urllib.request import urlretrieve
 from urllib import parse as urlparse_local
 import subprocess
 import socket
-from shutil import which  # just to break compatibility with python2
+import shlex
 
 # Fix parsing for nonstandard schemes
 urlparse_local.uses_netloc.extend(['bk', 'ssh', 'svn'])
@@ -242,25 +242,22 @@ class Package:
       self.log.write('Downloading '+url+' to '+localFile)
 
       if os.path.exists(localFile):
-        os.remove(localFile)
+        self.removeTarget(localFile)
+
+      from urllib.request import Request, urlopen
+      sav_timeout = socket.getdefaulttimeout()
+      socket.setdefaulttimeout(30)
       try:
-        sav_timeout = socket.getdefaulttimeout()
-        socket.setdefaulttimeout(30)
-        urlretrieve(url, localFile)
-        socket.setdefaulttimeout(sav_timeout)
+        req = Request(url)
+        req.headers['User-Agent'] = 'SlepcConfigure'
+        with open(localFile, 'wb') as f:
+          f.write(urlopen(req).read())
       except Exception as e:
-        socket.setdefaulttimeout(sav_timeout)
-        failureMessage = '''\
-Unable to download package %s from: %s
-* If URL specified manually - perhaps there is a typo?
-* If your network is disconnected - please reconnect and rerun ./configure
-* Or perhaps you have a firewall blocking the download
-* You can run with --with-packages-download-dir=/adirectory and ./configure will instruct you what packages to download manually
-* or you can download the above URL manually, to /yourselectedlocation/%s
-  and use the configure option:
-  --download-%s=/yourselectedlocation/%s
-''' % (self.packagename.upper(), url, filename, self.packagename, filename)
+        self.removeTarget(localFile)
+        failureMessage = self.getDownloadFailureMessage(self.packagename.upper(), url, filename)
         self.log.Exit(failureMessage)
+      finally:
+        socket.setdefaulttimeout(sav_timeout)
 
     # Uncompress tarball
     extractdir = os.path.join(externdir,self.GetDirectoryName())
@@ -285,27 +282,28 @@ Downloaded package %s from: %s is not a tarball.
       tf = tarfile.open(localFile)
     except tarfile.ReadError as e:
       self.log.Exit(str(e)+'\n'+failureMessage)
+    if not tf: self.log.Exit(failureMessage)
+    #git puts 'pax_global_header' as the first entry and some tar utils process this as a file
+    firstname = tf.getnames()[0]
+    if firstname == 'pax_global_header':
+      firstmember = tf.getmembers()[1]
     else:
-      if not tf: self.log.Exit(failureMessage)
-      with tf:
-        #git puts 'pax_global_header' as the first entry and some tar utils process this as a file
-        firstname = tf.getnames()[0]
-        if firstname == 'pax_global_header':
-          firstmember = tf.getmembers()[1]
-        else:
-          firstmember = tf.getmembers()[0]
-        # some tarfiles list packagename/ but some list packagename/filename in the first entry
-        if firstmember.isdir():
-          dirname = firstmember.name
-        else:
-          dirname = os.path.dirname(firstmember.name)
-        tf.extractall(path=externdir)
+      firstmember = tf.getmembers()[0]
+    # some tarfiles list packagename/ but some list packagename/filename in the first entry
+    if firstmember.isdir():
+      dirname = firstmember.name
+    else:
+      dirname = os.path.dirname(firstmember.name)
+    # Python 3.14 defaults to filter='data', which rejects absolute symlinks and strips permissions
+    if hasattr(tarfile, 'tar_filter'): tf.extraction_filter = tarfile.tar_filter
+    tf.extractall(path=externdir)
 
     # fix file permissions for the untared tarballs
     try:
       # check if 'dirname' is set'
       if dirname:
-        (result,output) = self.RunCommand('cd '+externdir+'; chmod -R a+r '+dirname+'; find '+dirname+r' -type d -name "*" -exec chmod a+rx {} \;')
+        quoted = shlex.quote(dirname)
+        (result,output) = self.RunCommand('chmod -R a+r '+quoted+';find  '+quoted + r' -type d -name "*" -exec chmod a+rx {} \;')
         if dirname != self.GetDirectoryName():
           self.log.write('The directory name '+dirname+' is different from the expected one, renaming to '+self.GetDirectoryName())
           os.rename(os.path.join(externdir,dirname),os.path.join(externdir,self.GetDirectoryName()))
@@ -511,3 +509,24 @@ Downloaded package %s from: %s is not a tarball.
           self.log.write('Found '+os.path.join(d,file))
           return d
     return '/usr/include'
+
+  @staticmethod
+  def removeTarget(t):
+    if os.path.islink(t) or os.path.isfile(t):
+      os.unlink(t) # same as os.remove(t)
+    elif os.path.isdir(t):
+      shutil.rmtree(t)
+
+  @staticmethod
+  def getDownloadFailureMessage(package, url, filename=None):
+    slashFilename = '/'+filename if filename else ''
+    return '''\
+Unable to download package %s from: %s
+* If URL specified manually - perhaps there is a typo?
+* If your network is disconnected - please reconnect and rerun ./configure
+* Or perhaps you have a firewall blocking the download
+* You can run with --with-packages-download-dir=/adirectory and ./configure will instruct you what packages to download manually
+* or you can download the above URL manually, to /yourselectedlocation%s
+  and use the configure option:
+  --download-%s=/yourselectedlocation%s
+    ''' % (package.upper(), url, slashFilename, package, slashFilename)
