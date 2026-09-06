@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXOPTS    ?= -T -E -W -j 4
+SPHINXOPTS    ?= -T -E -W -j auto
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     := source
 PETSC_ARCH    ?= arch-doc
@@ -120,7 +120,7 @@ latexpdf: webstatic logo_upv
 	@python3 -m venv .venv-sphinx && \
 	. .venv-sphinx/bin/activate && \
 	python3 -m pip install -r requirements.txt && \
-	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" -T -E -j 4 $(O) && \
+	$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" -T -E -j auto $(O) && \
 	if [ ! -d $(SOURCEDIR)/_static/manual ]; then \
 		mkdir $(SOURCEDIR)/_static/manual ;\
 	fi && \
