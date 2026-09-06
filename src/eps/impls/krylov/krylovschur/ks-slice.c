@@ -1221,7 +1221,6 @@ PetscErrorCode EPSSolve_KrylovSchur_Slice(EPS eps)
   EPS_KRYLOVSCHUR  *ctx=(EPS_KRYLOVSCHUR*)eps->data;
   EPS_SR           sr=ctx->sr;
   Mat              A,B=NULL;
-  MatState         Astate,Bstate;
   PetscBool        Asame,Bsame;
 
   PetscFunctionBegin;
@@ -1250,12 +1249,9 @@ PetscErrorCode EPSSolve_KrylovSchur_Slice(EPS eps)
     }
     /* Check that the user did not modify subcomm matrices */
     PetscCall(EPSGetOperators(eps,&A,&B));
-    PetscCall(MatGetState(A,&Astate));
-    PetscCall(MatStateCompare(Astate,ctx->Astate,&Asame));
-    if (B) {
-      PetscCall(MatGetState(B,&Bstate));
-      PetscCall(MatStateCompare(Bstate,ctx->Bstate,&Bsame));
-    } else Bsame = PETSC_TRUE;
+    PetscCall(MatStateCompareUpdate(A,&ctx->Astate,&Asame));
+    if (B) PetscCall(MatStateCompareUpdate(B,&ctx->Bstate,&Bsame));
+    else Bsame = PETSC_TRUE;
     PetscCheck(Asame && Bsame,PETSC_COMM_SELF,PETSC_ERR_ARG_WRONGSTATE,"Subcomm matrices have been modified by user");
     /* Only with eigenvalues present in the interval ...*/
     if (sr->numEigs==0) {

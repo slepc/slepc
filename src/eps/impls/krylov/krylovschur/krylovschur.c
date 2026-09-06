@@ -1274,7 +1274,6 @@ PetscErrorCode EPSKrylovSchurGetChildEPS(EPS eps,EPS *childeps)
   EPS_KRYLOVSCHUR  *ctx=(EPS_KRYLOVSCHUR*)eps->data,*ctx_local;
   Mat              A,B=NULL,Ar=NULL,Br=NULL;
   PetscMPIInt      rank;
-  MatState         Astate,Bstate;
   PetscBool        Asame,Bsame;
   STType           sttype;
   PetscInt         nmat;
@@ -1307,21 +1306,16 @@ PetscErrorCode EPSKrylovSchurGetChildEPS(EPS eps,EPS *childeps)
       }
     } else {
       PetscCall(PetscSubcommGetChild(ctx->subc,&child));
-      PetscCall(MatGetState(A,&Astate));
-      PetscCall(MatStateCompare(Astate,ctx->Astate,&Asame));
-      if (B) {
-        PetscCall(MatGetState(B,&Bstate));
-        PetscCall(MatStateCompare(Bstate,ctx->Bstate,&Bsame));
-      } else Bsame = PETSC_TRUE;
+      PetscCall(MatStateCompareUpdate(A,&ctx->Astate,&Asame));
+      if (B) PetscCall(MatStateCompareUpdate(B,&ctx->Bstate,&Bsame));
+      else Bsame = PETSC_TRUE;
       if (!Asame || !Bsame) {
         PetscCall(STGetNumMatrices(ctx->eps->st,&nmat));
         if (nmat) PetscCall(EPSGetOperators(ctx->eps,&Ar,&Br));
         PetscCall(MatCreateRedundantMatrix(A,0,child,MAT_INITIAL_MATRIX,&Ar));
-        PetscCall(MatGetState(A,&ctx->Astate));
         PetscCall(MatPropagateSymmetryOptions(A,Ar));
         if (B) {
           PetscCall(MatCreateRedundantMatrix(B,0,child,MAT_INITIAL_MATRIX,&Br));
-          PetscCall(MatGetState(B,&ctx->Bstate));
           PetscCall(MatPropagateSymmetryOptions(B,Br));
         }
         PetscCall(EPSSetOperators(ctx->eps,Ar,Br));
