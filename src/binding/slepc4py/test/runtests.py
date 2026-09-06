@@ -2,6 +2,7 @@ import os
 import sys
 import optparse
 import unittest
+import time
 
 __unittest = True
 
@@ -109,6 +110,15 @@ def getoptionparser():
         default=True,
         help='Do not use PETSc memory debugging',
     )
+    parser.add_option(
+        '-t',
+        '--timings',
+        type='int',
+        dest='timings',
+        default=0,
+        help='report the TIMINGS slowest tests',
+    )
+
     return parser
 
 
@@ -132,7 +142,7 @@ def getbuilddir():
 def getprocessorinfo():
     try:
         name = os.uname()[1]
-    except:
+    except Exception:
         import platform
 
         name = platform.uname()[1]
@@ -143,21 +153,18 @@ def getprocessorinfo():
 
 
 def getlibraryinfo(name):
-    modname = '%s4py.%s' % (name.lower(), name)
+    modname = f'{name.lower()}4py.{name}'
     module = __import__(modname, fromlist=[name])
     (major, minor, micro), devel = module.Sys.getVersion(devel=True)
     r = not devel
-    if r:
-        release = 'release'
-    else:
-        release = 'development'
+    release = 'release' if r else 'development'
     arch = module.__arch__
-    return "%s %d.%d.%d %s (conf: '%s')" % (name, major, minor, micro, release, arch)
+    return f"{name} {major}.{minor}.{micro} {release} (conf: '{arch}')"
 
 
 def getpythoninfo():
     x, y, z = sys.version_info[:3]
-    return 'Python %d.%d.%d (%s)' % (x, y, z, sys.executable)
+    return f'Python {x}.{y}.{z} ({sys.executable})'
 
 
 def getpackageinfo(pkg):
@@ -168,13 +175,15 @@ def getpackageinfo(pkg):
     name = pkg.__name__
     version = pkg.__version__
     path = pkg.__path__[0]
-    return '%s %s (%s)' % (name, version, path)
+    return f'{name} {version} ({path})'
 
 
 def setup_python(options):
     rootdir = os.path.dirname(os.path.dirname(__file__))
-    builddir = os.path.join(rootdir, getbuilddir())
-    if options.builddir and os.path.exists(builddir):
+    builddir = getbuilddir()
+    if builddir is not None:
+        builddir = os.path.join(rootdir, builddir)
+    if options.builddir and builddir is not None and os.path.exists(builddir):
         sys.path.insert(0, builddir)
     if options.path:
         path = options.path[:]
@@ -184,24 +193,22 @@ def setup_python(options):
 
 
 def setup_unittest(options):
-    from unittest import TestSuite
-
     try:
         from unittest.runner import _WritelnDecorator
     except ImportError:
         from unittest import _WritelnDecorator
-    #
+
     writeln_orig = _WritelnDecorator.writeln
 
     def writeln(self, message=''):
         try:
             self.stream.flush()
-        except:
+        except Exception:
             pass
         writeln_orig(self, message)
         try:
             self.stream.flush()
-        except:
+        except Exception:
             pass
 
     _WritelnDecorator.writeln = writeln
@@ -220,14 +227,14 @@ def import_package(options, pkgname):
 
 def print_banner(options):
     r, n = getprocessorinfo()
-    prefix = '[%d@%s]' % (r, n)
+    prefix = f'[{r}@{n}]'
 
     def writeln(message='', endl='\n'):
         if message is None:
             return
         from petsc4py.PETSc import Sys
 
-        message = '%s %s' % (prefix, message)
+        message = f'{prefix} {message}'
         Sys.syncPrint(message, endl=endl, flush=True)
 
     if options.verbose:
@@ -235,7 +242,7 @@ def print_banner(options):
         writeln(getpackageinfo('numpy'))
         for entry in components:
             writeln(getlibraryinfo(entry))
-            writeln(getpackageinfo('%s4py' % entry.lower()))
+            writeln(getpackageinfo(f'{entry.lower()}4py'))
 
 
 def load_tests(options, args):
@@ -252,7 +259,7 @@ def load_tests(options, args):
     testloader = unittest.TestLoader()
     if options.patterns:
         testloader.testNamePatterns = [  # novermin
-            ('*%s*' % p) if ('*' not in p) else p for p in options.patterns
+            (f'*{p}*') if ('*' not in p) else p for p in options.patterns
         ]
     include = exclude = None
     if options.include:
@@ -277,11 +284,47 @@ def load_tests(options, args):
     return testsuite
 
 
+class PETScTestResult(unittest.TextTestResult):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.timings = []
+        self.names = []
+
+    def startTest(self, test):
+        self._tic = time.perf_counter()
+        super().startTest(test)
+
+    def addSuccess(self, test):
+        elapsed = time.perf_counter() - self._tic
+        self.timings.append(elapsed)
+        self.names.append(self.getDescription(test))
+        super().addSuccess(test)
+
+    def getTimings(self):
+        return self.names, self.timings
+
+
 def run_tests(options, testsuite, runner=None):
     if runner is None:
-        runner = unittest.TextTestRunner(verbosity=options.verbose)
+        resultclass = (
+            PETScTestResult if options.timings > 0 else unittest.TextTestResult
+        )
+        runner = unittest.TextTestRunner(
+            verbosity=options.verbose, resultclass=resultclass
+        )
         runner.failfast = options.failfast
     result = runner.run(testsuite)
+    if hasattr(result, 'getTimings') and options.timings > 0:
+        from petsc4py.PETSc import Sys
+        import numpy as np
+
+        Sys.Print(f'\n{options.timings} slowest tests\n')
+        names, timings = result.getTimings()
+        sorti = np.argsort(timings)[::-1]
+        for i in range(min(options.timings, len(sorti))):
+            n = names[sorti[i]]
+            t = timings[sorti[i]]
+            Sys.Print(n, t)
     return result.wasSuccessful()
 
 
@@ -294,7 +337,7 @@ def shutdown(success):
 
 
 def main(args=None):
-    pkgname = '%s4py' % components[-1].lower()
+    pkgname = f'{components[-1].lower()}4py'
     parser = getoptionparser()
     (options, args) = parser.parse_args(args)
     setup_python(options)
