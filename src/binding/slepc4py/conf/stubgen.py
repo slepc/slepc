@@ -88,8 +88,9 @@ def visit_function(function):
     return f'def {sig}: ...'
 
 
-incompatible_overrides = [
-]
+incompatible_overrides = []
+
+
 def visit_method(method, clas_name=None):
     sig = signature(method)
     stub = f'def {sig}: ...'

@@ -37,11 +37,13 @@ def getPathArchSLEPc(arch=None):
     """
     import os
     import sys
+
     PETSc = sys.modules.get('petsc4py.PETSc')
     arch = getattr(PETSc, '__arch__', arch)
     path = os.path.dirname(__file__)
-    rcvar, rcfile  =  'PETSC_ARCH', 'slepc.cfg'
+    rcvar, rcfile = 'PETSC_ARCH', 'slepc.cfg'
     path, arch = getPathArch(path, arch, rcvar, rcfile)
     return (path, arch)
+
 
 # -----------------------------------------------------------------------------

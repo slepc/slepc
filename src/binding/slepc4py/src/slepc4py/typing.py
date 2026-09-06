@@ -92,13 +92,17 @@ LayoutSizeSpec = int | tuple[int, int]
 EPSStoppingFunction = Callable[[EPS, int, int, int, int], EPS.ConvergedReason]
 """`EPS` stopping test callback."""
 
-EPSArbitraryFunction = Callable[[Scalar, Scalar, Vec, Vec, Scalar, Scalar], [Scalar, Scalar]]
+EPSArbitraryFunction = Callable[
+    [Scalar, Scalar, Vec, Vec, Scalar, Scalar], [Scalar, Scalar]
+]
 """`EPS` arbitrary selection callback."""
 
 EPSEigenvalueComparison = Callable[[Scalar, Scalar, Scalar, Scalar], int]
 """`EPS` eigenvalue comparison callback."""
 
-EPSMonitorFunction = Callable[[EPS, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
+EPSMonitorFunction = Callable[
+    [EPS, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None
+]
 """`EPS` monitor callback."""
 
 # --- PEP ---
@@ -109,7 +113,9 @@ PEPStoppingFunction = Callable[[PEP, int, int, int, int], PEP.ConvergedReason]
 PEPEigenvalueComparison = Callable[[Scalar, Scalar, Scalar, Scalar], int]
 """:py:class:`PEP <slepc4py.SLEPc.NEP>` eigenvalue comparison callback."""
 
-PEPMonitorFunction = Callable[[PEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
+PEPMonitorFunction = Callable[
+    [PEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None
+]
 """:py:class:`PEP <slepc4py.SLEPc.PEP>` monitor callback."""
 
 # --- NEP ---
@@ -120,7 +126,9 @@ NEPStoppingFunction = Callable[[NEP, int, int, int, int], NEP.ConvergedReason]
 NEPEigenvalueComparison = Callable[[Scalar, Scalar, Scalar, Scalar], int]
 """:py:class:`NEP <slepc4py.SLEPc.NEP>` eigenvalue comparison callback."""
 
-NEPMonitorFunction = Callable[[NEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None]
+NEPMonitorFunction = Callable[
+    [NEP, int, int, ArrayScalar, ArrayScalar, ArrayReal, int], None
+]
 """:py:class:`NEP <slepc4py.SLEPc.NEP>` monitor callback."""
 
 NEPFunction = Callable[[NEP, Scalar, Mat, Mat], None]

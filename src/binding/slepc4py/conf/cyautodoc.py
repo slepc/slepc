@@ -25,6 +25,7 @@ class ExpressionWriter(BaseExpressionWriter):
         self.put(']')
 
     if hasattr(BaseExpressionWriter, 'emit_string'):
+
         def visit_UnicodeNode(self, node):
             self.emit_string(node, '')
 

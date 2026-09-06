@@ -10,8 +10,10 @@ Usage::
 
 """
 
+
 def help(args=None):
     import sys
+
     # program name
     try:
         prog = sys.argv[0]
@@ -28,8 +30,10 @@ def help(args=None):
         args.append('-help')
     # initialization
     import slepc4py
+
     slepc4py.init([prog] + args)
     from slepc4py import SLEPc
+
     # and finally ...
     COMM = SLEPc.COMM_SELF
     if 'eps' in args:
@@ -87,6 +91,7 @@ def help(args=None):
         ds.setFromOptions()
         ds.destroy()
         del ds
+
 
 if __name__ == '__main__':
     help()

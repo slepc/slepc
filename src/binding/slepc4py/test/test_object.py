@@ -4,15 +4,17 @@ import unittest
 
 # --------------------------------------------------------------------
 
-class BaseTestObject(object):
 
+class BaseTestObject(object):
     CLASS, FACTORY = None, 'create'
     TARGS, KARGS = (), {}
     BUILD = None
+
     def setUp(self):
         self.obj = self.CLASS()
-        getattr(self.obj,self.FACTORY)(*self.TARGS, **self.KARGS)
-        if not self.obj: self.obj.create()
+        getattr(self.obj, self.FACTORY)(*self.TARGS, **self.KARGS)
+        if not self.obj:
+            self.obj.create()
 
     def tearDown(self):
         self.obj = None
@@ -23,7 +25,7 @@ class BaseTestObject(object):
         typeobj = self.CLASS
         if isinstance(self.obj, PETSc.DMDA):
             typeobj = PETSc.DM
-        self.assertTrue(type_reg[classid] is typeobj )
+        self.assertTrue(type_reg[classid] is typeobj)
 
     def testLogClass(self):
         name = self.CLASS.__name__
@@ -63,7 +65,7 @@ class BaseTestObject(object):
 
     def testName(self):
         oldname = self.obj.getName()
-        newname = '%s-%s' %(oldname, oldname)
+        newname = '%s-%s' % (oldname, oldname)
         self.obj.setName(newname)
         self.assertEqual(self.obj.getName(), newname)
         self.obj.setName(oldname)
@@ -91,7 +93,7 @@ class BaseTestObject(object):
         self.assertTrue(self.obj.handle)
         self.assertTrue(self.obj.fortran)
         h, f = self.obj.handle, self.obj.fortran
-        if (h>0 and f>0) or (h<0 and f<0):
+        if (h > 0 and f > 0) or (h < 0 and f < 0):
             self.assertEqual(h, f)
         self.obj.destroy()
         self.assertFalse(self.obj.handle)
@@ -110,27 +112,29 @@ class BaseTestObject(object):
         myobj.destroy()
 
     def testProperties(self):
-        self.assertEqual(self.obj.getClassId(),   self.obj.classid)
+        self.assertEqual(self.obj.getClassId(), self.obj.classid)
         self.assertEqual(self.obj.getClassName(), self.obj.klass)
-        self.assertEqual(self.obj.getType(),      self.obj.type)
-        self.assertEqual(self.obj.getName(),      self.obj.name)
-        self.assertEqual(self.obj.getComm(),      self.obj.comm)
-        self.assertEqual(self.obj.getRefCount(),  self.obj.refcount)
+        self.assertEqual(self.obj.getType(), self.obj.type)
+        self.assertEqual(self.obj.getName(), self.obj.name)
+        self.assertEqual(self.obj.getComm(), self.obj.comm)
+        self.assertEqual(self.obj.getRefCount(), self.obj.refcount)
 
     def testShallowCopy(self):
         import copy
+
         rc = self.obj.getRefCount()
         obj = copy.copy(self.obj)
         self.assertTrue(obj is not self.obj)
         self.assertTrue(obj == self.obj)
         self.assertTrue(type(obj) is type(self.obj))
-        self.assertEqual(obj.getRefCount(), rc+1)
+        self.assertEqual(obj.getRefCount(), rc + 1)
         del obj
         self.assertEqual(self.obj.getRefCount(), rc)
 
     def testDeepCopy(self):
         self.obj.setFromOptions()
         import copy
+
         rc = self.obj.getRefCount()
         try:
             obj = copy.deepcopy(self.obj)
@@ -143,32 +147,44 @@ class BaseTestObject(object):
         self.assertEqual(obj.getRefCount(), 1)
         del obj
 
+
 # --------------------------------------------------------------------
+
 
 class TestObjectST(BaseTestObject, unittest.TestCase):
     CLASS = SLEPc.ST
 
+
 class TestObjectBV(BaseTestObject, unittest.TestCase):
     CLASS = SLEPc.BV
-    def testDeepCopy(self): pass
+
+    def testDeepCopy(self):
+        pass
+
 
 class TestObjectEPS(BaseTestObject, unittest.TestCase):
     CLASS = SLEPc.EPS
 
+
 class TestObjectSVD(BaseTestObject, unittest.TestCase):
     CLASS = SLEPc.SVD
+
 
 class TestObjectPEP(BaseTestObject, unittest.TestCase):
     CLASS = SLEPc.PEP
 
+
 class TestObjectNEP(BaseTestObject, unittest.TestCase):
     CLASS = SLEPc.NEP
+
 
 class TestObjectMFN(BaseTestObject, unittest.TestCase):
     CLASS = SLEPc.MFN
 
+
 class TestObjectLME(BaseTestObject, unittest.TestCase):
     CLASS = SLEPc.LME
+
 
 # --------------------------------------------------------------------
 

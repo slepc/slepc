@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(topdir, 'conf'))
 
 pyver = sys.version_info[:2]
 if pyver < (3, 6):
-    raise RuntimeError("Python version 3.6 or higher is required")
+    raise RuntimeError('Python version 3.6 or higher is required')
 
 PNAME = 'SLEPc'
 EMAIL = 'slepc-maint@upv.es'
@@ -29,15 +29,18 @@ PLIST = [PNAME, 'PETSc']
 
 py_limited_api = (3, 10)
 
+
 def F(string):
     return string.format(
         Name=PNAME,
         name=PNAME.lower(),
-        pyname=PNAME.lower()+'4py',
+        pyname=PNAME.lower() + '4py',
     )
+
 
 def get_name():
     return F('{pyname}')
+
 
 def get_version():
     try:
@@ -51,17 +54,20 @@ def get_version():
     get_version.result = version
     return version
 
+
 def description():
     return F('{Name} for Python')
+
 
 def long_description():
     with open(os.path.join(topdir, 'DESCRIPTION.rst')) as f:
         return f.read()
 
-url      = F('https://gitlab.com/{name}/{name}')
+
+url = F('https://gitlab.com/{name}/{name}')
 pypiroot = F('https://pypi.io/packages/source')
 pypislug = F('{pyname}')[0] + F('/{pyname}')
-tarball  = F('{pyname}-%s.tar.gz' % get_version())
+tarball = F('{pyname}-%s.tar.gz' % get_version())
 download = '/'.join([pypiroot, pypislug, tarball])
 
 classifiers = """
@@ -93,20 +99,20 @@ FreeBSD
 """.strip().split('\n')
 
 metadata = {
-    'name'             : get_name(),
-    'version'          : get_version(),
-    'description'      : description(),
-    'long_description' : long_description(),
-    'url'              : url,
-    'download_url'     : download,
-    'classifiers'      : classifiers,
-    'keywords'         : keywords + PLIST,
-    'license'          : 'BSD-2-Clause',
-    'platforms'        : platforms,
-    'author'           : 'Lisandro Dalcin',
-    'author_email'     : 'dalcinl@gmail.com',
-    'maintainer'       : F('{Name} Team'),
-    'maintainer_email' : EMAIL,
+    'name': get_name(),
+    'version': get_version(),
+    'description': description(),
+    'long_description': long_description(),
+    'url': url,
+    'download_url': download,
+    'classifiers': classifiers,
+    'keywords': keywords + PLIST,
+    'license': 'BSD-2-Clause',
+    'platforms': platforms,
+    'author': 'Lisandro Dalcin',
+    'author_email': 'dalcinl@gmail.com',
+    'maintainer': F('{Name} Team'),
+    'maintainer_email': EMAIL,
 }
 metadata.update(
     {
@@ -118,25 +124,28 @@ metadata_extra = {
     'long_description_content_type': 'text/x-rst',
 }
 
+
 def get_build_pysabi():
-    abi = os.environ.get("SLEPC4PY_BUILD_PYSABI", "").lower()
-    if abi and sys.implementation.name == "cpython":
-        if abi in {"false", "no", "off", "n", "0"}:
+    abi = os.environ.get('SLEPC4PY_BUILD_PYSABI', '').lower()
+    if abi and sys.implementation.name == 'cpython':
+        if abi in {'false', 'no', 'off', 'n', '0'}:
             return None
-        if abi in {"true", "yes", "on", "y", "1"} | {"abi3"}:
+        if abi in {'true', 'yes', 'on', 'y', '1'} | {'abi3'}:
             return py_limited_api
-        if abi.startswith("cp"):
+        if abi.startswith('cp'):
             abi = abi[2:]
-        if "." in abi:
-            x, y = abi.split(".")
+        if '.' in abi:
+            x, y = abi.split('.')
         else:
             x, y = abi[0], abi[1:]
         return (int(x), int(y))
     return None
 
+
 # --------------------------------------------------------------------
 # Extension modules
 # --------------------------------------------------------------------
+
 
 def sources():
     src = {
@@ -152,10 +161,12 @@ def sources():
     }
     return [src]
 
+
 def extensions():
     from os import walk
     from glob import glob
     from os.path import join
+
     #
     depends = []
     glob_join = lambda *args: glob(join(*args))
@@ -163,8 +174,8 @@ def extensions():
         depends += glob_join(pth, '*.h')
         depends += glob_join(pth, '*.c')
     for pkg in map(str.lower, reversed(PLIST)):
-        if (pkg.upper()+'_DIR') in os.environ:
-            pd = os.environ[pkg.upper()+'_DIR']
+        if (pkg.upper() + '_DIR') in os.environ:
+            pd = os.environ[pkg.upper() + '_DIR']
             pa = os.environ.get('PETSC_ARCH', '')
             depends += glob_join(pd, 'include', '*.h')
             depends += glob_join(pd, 'include', pkg, 'private', '*.h')
@@ -177,6 +188,7 @@ def extensions():
     else:
         try:
             import numpy
+
             numpy_includes = [numpy.get_include()]
         except ImportError:
             numpy_includes = []
@@ -184,6 +196,7 @@ def extensions():
     if F('{pyname}') != 'petsc4py':
         try:
             import petsc4py
+
             petsc4py_includes = [petsc4py.get_include()]
         except ImportError:
             petsc4py_includes = []
@@ -206,16 +219,18 @@ def extensions():
     }
     return [ext]
 
+
 # --------------------------------------------------------------------
 # Setup
 # --------------------------------------------------------------------
+
 
 def get_release():
     suffix = os.path.join('src', 'binding', F('{pyname}'))
     if not topdir.endswith(os.path.join(os.path.sep, suffix)):
         return True
     release = 1
-    rootdir = os.path.abspath(os.path.join(topdir, *[os.path.pardir]*3))
+    rootdir = os.path.abspath(os.path.join(topdir, *[os.path.pardir] * 3))
     version_h = os.path.join(rootdir, 'include', F('{name}version.h'))
     release_macro = '%s_VERSION_RELEASE' % F('{name}').upper()
     version_re = re.compile(r'#define\s+%s\s+([-]*\d+)' % release_macro)
@@ -224,12 +239,14 @@ def get_release():
             release = int(version_re.search(f.read()).groups()[0])
     return bool(release)
 
+
 def requires(pkgname, major, minor, release=True):
     minor = minor + int(not release)
     devel = '' if release else '.dev0'
     vmin = f'{major}.{minor}{devel}'
-    vmax = f'{major}.{minor+1}'
+    vmax = f'{major}.{minor + 1}'
     return f'{pkgname}>={vmin},<{vmax}'
+
 
 def run_setup():
     is_sdist = 'sdist' in sys.argv
@@ -273,11 +290,11 @@ def run_setup():
     #
     sabi = get_build_pysabi()
     if sabi and setuptools:
-        api_tag = "cp{}{}".format(*sabi)
-        options = {"bdist_wheel": {"py_limited_api": api_tag}}
-        setup_args["options"] = options
-        api_ver = "0x{:02X}{:02X}0000".format(*sabi)
-        defines = [("Py_LIMITED_API", api_ver)]
+        api_tag = 'cp{}{}'.format(*sabi)
+        options = {'bdist_wheel': {'py_limited_api': api_tag}}
+        setup_args['options'] = options
+        api_ver = '0x{:02X}{:02X}0000'.format(*sabi)
+        defines = [('Py_LIMITED_API', api_ver)]
         for ext in ext_modules:
             ext.define_macros.extend(defines)
             ext.py_limited_api = True
@@ -287,7 +304,7 @@ def run_setup():
             F('{pyname}'),
             F('{pyname}.lib'),
         ],
-        package_dir={'' : 'src'},
+        package_dir={'': 'src'},
         package_data={
             F('{pyname}'): [
                 F('{Name}.pxd'),
@@ -307,10 +324,13 @@ def run_setup():
         **setup_args,
     )
 
+
 # --------------------------------------------------------------------
+
 
 def main():
     run_setup()
+
 
 if __name__ == '__main__':
     main()

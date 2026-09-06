@@ -153,6 +153,7 @@ intersphinx_mapping = {
 
 intersphinx_resolve_self = 'slepc'
 
+
 def _mangle_petsc_intersphinx():
     """Preprocess the keys in PETSc's intersphinx inventory.
 
@@ -186,6 +187,7 @@ def _mangle_petsc_intersphinx():
         new_inventory_filename, sphobjinv.compress(inventory.data_file(contract=True))
     )
     intersphinx_mapping['petsc'] = (doc_url, new_inventory_filename)
+
 
 def _mangle_slepc_intersphinx():
     """Preprocess the keys in SLEPc's intersphinx inventory.
@@ -406,35 +408,39 @@ slepc4py demos
 
 
 html_static_path = ['_static']
-html_css_files = [ # relative to the html_static_path
-                  'css/slepc.css',
-                  ]
+html_css_files = [  # relative to the html_static_path
+    'css/slepc.css',
+]
 _process_demos(
-                'ex1.py',
-                'ex2.py',
-                'ex3.py',
-                'ex4.py',
-                'ex5.py',
-                'ex6.py',
-                'ex7.py',
-                'ex8.py',
-                'ex9.py',
-                'ex10.py',
-                'ex11.py',
-                'ex12.py',
-                'ex13.py',
-                'ex14.py',
-                )
+    'ex1.py',
+    'ex2.py',
+    'ex3.py',
+    'ex4.py',
+    'ex5.py',
+    'ex6.py',
+    'ex7.py',
+    'ex8.py',
+    'ex9.py',
+    'ex10.py',
+    'ex11.py',
+    'ex12.py',
+    'ex13.py',
+    'ex14.py',
+)
 
 
 def setup(app):
 
     if 'PETSC_DIR' not in os.environ:
-        print('\nUnable to build the documentation, PETSC_DIR environment variable is not set')
+        print(
+            '\nUnable to build the documentation, PETSC_DIR environment variable is not set'
+        )
         print('\nPlease configure PETSc and SLEPc before building the documentation')
         raise Exception('PETSC_DIR not set')
     if 'PETSC_ARCH' not in os.environ:
-        print('\nUnable to build the documentation, PETSC_ARCH environment variable is not set')
+        print(
+            '\nUnable to build the documentation, PETSC_ARCH environment variable is not set'
+        )
         print('\nPlease configure PETSc and SLEPc before building the documentation')
         raise Exception('PETSC_ARCH not set')
     else:
@@ -443,15 +449,13 @@ def setup(app):
         app.petsc_dir = os.path.abspath(os.environ['PETSC_DIR'])
         app.petsc_arch = os.environ['PETSC_ARCH']
 
-    sys.path.insert(0, os.path.abspath(app.petsc_dir
-                                       +'/'
-                                       +os.environ['PETSC_ARCH']
-                                       +'/lib'))
+    sys.path.insert(
+        0, os.path.abspath(app.petsc_dir + '/' + os.environ['PETSC_ARCH'] + '/lib')
+    )
 
-    sys.path.insert(0, os.path.abspath(app.slepc_dir
-                                       +'/'
-                                       +os.environ['PETSC_ARCH']
-                                       +'/lib'))
+    sys.path.insert(
+        0, os.path.abspath(app.slepc_dir + '/' + os.environ['PETSC_ARCH'] + '/lib')
+    )
     print(sys.path)
 
     _setup_mpi4py_typing()
@@ -463,7 +467,7 @@ def setup(app):
     try:
         from slepc4py import SLEPc
     except ImportError as e:
-        print('ImportError: slepc4py '+str(e))
+        print('ImportError: slepc4py ' + str(e))
         autodoc_mock_imports.append('SLEPc')
         return
 
@@ -516,7 +520,7 @@ html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
     'navigation_with_keys': True,
     'footer_end': ['theme-version', 'last-updated'],
-    'header_links_before_dropdown': 10, # before "more"
+    'header_links_before_dropdown': 10,  # before "more"
 }
 git_describe_version = (
     subprocess.check_output(['git', 'describe', '--always']).strip().decode('utf-8')  # noqa: S603, S607
