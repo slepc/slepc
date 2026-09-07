@@ -99,8 +99,7 @@ typedef struct {
   PetscSubcomm     subc;               /* context for subcommunicators */
   MPI_Comm         commrank;           /* group processes with same rank in subcommunicators */
   PetscBool        commset;            /* flag indicating that commrank was created */
-  PetscObjectState Astate,Bstate;      /* state of subcommunicator matrices */
-  PetscObjectId    Aid,Bid;            /* Id of subcommunicator matrices */
+  MatState         Astate,Bstate;      /* state of subcommunicator matrices */
   IS               isrow,iscol;        /* index sets used in update of subcomm mats */
   Mat              *submata,*submatb;  /* seq matrices used in update of subcomm mats */
   /* the following are used only in filter */
