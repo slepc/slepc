@@ -87,4 +87,12 @@ def get_config():
     parser = ConfigParser()
     parser.optionxform = str
     parser.read_file(stream, filename)
-    return dict(parser.items('slepc'))
+    conf = dict(parser.items('slepc'))
+    if not os.path.isdir(conf.get('SLEPC_DIR', '')):
+        # a wheel records the SLEPC_DIR of the machine it was built on
+        try:
+            import slepc
+        except ImportError:
+            return conf
+        conf['SLEPC_DIR'] = slepc.get_slepc_dir()
+    return conf
