@@ -552,7 +552,7 @@ PetscErrorCode NEPDeflationSolveSetUp(NEP_EXT_OP extop,PetscScalar lambda)
   solve = extop->solve;
   if (lambda!=solve->theta || n!=solve->n) {
     PetscCall(NEPDeflationComputeShellMat(extop,lambda,PETSC_FALSE,solve->sincf?NULL:&solve->T));
-    Mshell = (solve->sincf)?extop->MF:solve->T;
+    Mshell = solve->sincf?extop->MF:solve->T;
     PetscCall(MatShellGetContext(Mshell,&matctx));
     PetscCall(NEP_KSPSetOperators(solve->ksp,matctx->T,matctx->P));
     if (!extop->ref && n) {

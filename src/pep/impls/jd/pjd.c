@@ -1220,7 +1220,7 @@ static PetscErrorCode PEPSolve_JD(PEP pep)
   kspsf = 2;
 #endif
   PetscCall(PEPJDProcessInitialSpace(pep,ww));
-  nv = (pep->nini)?pep->nini:1;
+  nv = pep->nini?pep->nini:1;
 
   /* Replace preconditioner with one containing projectors */
   PetscCall(PEPJDCreateShellPC(pep,ww));

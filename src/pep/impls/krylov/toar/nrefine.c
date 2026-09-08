@@ -142,7 +142,7 @@ static PetscErrorCode NRefSysSetup_shell(PEP pep,PetscInt k,PetscScalar *fH,Pets
   for (d=2;d<nmat;d++) {
     for (j=0;j<k;j++) {
       for (i=0;i<k;i++) {
-        DHii[d*k+i+j*lda] = ((h-b[d-1])*DHii[(d-1)*k+i+j*lda]+fH[(d-1)*k+i+j*lda]-g[d-1]*DHii[(d-2)*k+i+j*lda])/(a[d-1]);
+        DHii[d*k+i+j*lda] = ((h-b[d-1])*DHii[(d-1)*k+i+j*lda]+fH[(d-1)*k+i+j*lda]-g[d-1]*DHii[(d-2)*k+i+j*lda])/a[d-1];
       }
     }
   }
@@ -1009,7 +1009,7 @@ static PetscErrorCode PEPNRefSetUp(PEP pep,PetscInt k,PetscScalar *H,PetscInt ld
       E = matctx->E;
       PetscCall(STGetMatStructure(pep->st,&str));
       PetscCall(MatDuplicate(A[0],MAT_COPY_VALUES,&E[0]));
-      j = (matctx->subc)?matctx->subc->color:0;
+      j = matctx->subc?matctx->subc->color:0;
       PetscCall(PEPEvaluateBasis(pep,H[j+j*ldh],0,coef,NULL));
       for (j=1;j<nmat;j++) PetscCall(MatAXPY(E[0],coef[j],A[j],str));
       PetscCall(MatCreateDense(comm,PETSC_DECIDE,PETSC_DECIDE,k,k,NULL,&E[1]));
@@ -1099,7 +1099,7 @@ static PetscErrorCode PEPNRefSetUp(PEP pep,PetscInt k,PetscScalar *H,PetscInt ld
       }
       PetscCall(STGetMatStructure(pep->st,&str));
       PetscCall(MatDuplicate(A[0],MAT_COPY_VALUES,&matctx->M1));
-      j = (matctx->subc)?matctx->subc->color:0;
+      j = matctx->subc?matctx->subc->color:0;
       PetscCall(PEPEvaluateBasis(pep,H[j+j*ldh],0,coef,NULL));
       for (j=1;j<nmat;j++) PetscCall(MatAXPY(matctx->M1,coef[j],A[j],str));
       PetscCall(BVDuplicateResize(matctx->V,PetscMax(k,pep->nmat),&matctx->W));

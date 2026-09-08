@@ -2346,7 +2346,7 @@ static PetscErrorCode SVDView_TRLanczos(SVD svd,PetscViewer viewer)
     PetscCall(PetscViewerASCIIPrintf(viewer,"  %d%% of basis vectors kept after restart\n",(int)(100*lanczos->keep)));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  using the %slocking variant\n",lanczos->lock?"":"non-"));
     if (svd->isgeneralized) {
-      const char *bidiag="";
+      const char *bidiag = NULL;
 
       switch (lanczos->bidiag) {
         case SVD_TRLANCZOS_GBIDIAG_SINGLE: bidiag = "single"; break;

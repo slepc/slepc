@@ -324,7 +324,7 @@ PetscErrorCode NEPNewtonRefinementSimple(NEP nep,PetscInt *maxits,PetscReal tol,
   PetscFunctionBegin;
   PetscCall(PetscLogEventBegin(NEP_Refine,nep,0,0,0));
   PetscCall(NEPSimpleNRefSetUp(nep,&ctx));
-  its = (maxits)?*maxits:NREF_MAXIT;
+  its = maxits?*maxits:NREF_MAXIT;
   if (!nep->refineksp) PetscCall(NEPRefineGetKSP(nep,&nep->refineksp));
   if (nep->npart==1) PetscCall(BVGetColumn(nep->V,0,&v));
   else v = ctx->v;

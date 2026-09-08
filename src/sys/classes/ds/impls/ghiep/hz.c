@@ -304,7 +304,7 @@ PetscErrorCode DSSolve_GHIEP_HZ(DS ds,PetscScalar *wr,PetscScalar *wi)
   /* Check signature */
   PetscCall(MatDenseGetArrayRead(ds->omat[DS_MAT_B],&B));
   for (i=0;i<ds->n;i++) {
-    PetscReal de = (ds->compact)?s[i]:PetscRealPart(B[i*ld+i]);
+    PetscReal de = ds->compact? s[i]: PetscRealPart(B[i*ld+i]);
     PetscCheck(de==1.0 || de==-1.0,PETSC_COMM_SELF,PETSC_ERR_PLIB,"Diagonal elements of the signature matrix must be 1 or -1");
   }
   PetscCall(MatDenseRestoreArrayRead(ds->omat[DS_MAT_B],&B));

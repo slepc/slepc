@@ -591,7 +591,7 @@ static PetscErrorCode PEPSolve_TOAR(PEP pep)
     PetscCall(STScaleShift(pep->st,pep->sfactor));
   } else {
     PetscCall(STScaleShift(pep->st,sinv?1.0/pep->sfactor:pep->sfactor));
-    pep->target = (sinv)?pep->target/pep->sfactor:pep->target*pep->sfactor;
+    pep->target = sinv?pep->target/pep->sfactor:pep->target*pep->sfactor;
   }
   if (pep->sfactor!=1.0) PetscCall(RGPopScale(pep->rg));
 

@@ -312,7 +312,7 @@ static PetscErrorCode DSTruncate_GSVD(DS ds,PetscInt n,PetscBool trim)
       for (i=0;i<=m;i++) U[i+n*ld] = U[i+m*ld];
       PetscCall(MatDenseRestoreArray(ds->omat[DS_MAT_U],&U));
     }
-    ds->k   = (ds->extrarow)? n: 0;
+    ds->k   = ds->extrarow? n: 0;
     ds->t   = ds->n;   /* truncated length equal to previous dimension */
     ctx->tm = ctx->m;  /* must also keep the previous dimension of X */
     ctx->tp = ctx->p;  /* must also keep the previous dimension of V */

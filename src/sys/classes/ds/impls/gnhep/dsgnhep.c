@@ -633,7 +633,7 @@ static PetscErrorCode DSTruncate_GNHEP(DS ds,PetscInt n,PetscBool trim)
       for (i=l;i<n;i++) B[n+i*ld] = B[ds->n+i*ld];
       for (i=l;i<ds->n;i++) B[ds->n+i*ld] = 0.0;
     }
-    ds->k = (ds->extrarow)? n: 0;
+    ds->k = ds->extrarow? n: 0;
     ds->t = ds->n;   /* truncated length equal to previous dimension */
     ds->n = n;
   }

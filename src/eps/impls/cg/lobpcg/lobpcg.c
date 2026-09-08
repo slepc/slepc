@@ -175,7 +175,7 @@ static PetscErrorCode EPSSolve_LOBPCG(EPS eps)
     }
 
     /* 7. Compute residuals */
-    ini = (ctx->lock)? nconv: 0;
+    ini = ctx->lock? nconv: 0;
     PetscCall(BVCopy(AX,R));
     if (B) PetscCall(BVMatMult(X,B,BX));
     for (j=ini;j<ctx->bs;j++) {
@@ -281,7 +281,7 @@ static PetscErrorCode EPSSolve_LOBPCG(EPS eps)
       continue;   /* skip the rest of the iteration */
     }
 
-    ini = (ctx->lock)? nconv: 0;
+    ini = ctx->lock? nconv: 0;
     if (ctx->lock) {
       PetscCall(BVSetActiveColumns(R,nconv,ctx->bs));
       PetscCall(BVSetActiveColumns(P,nconv,ctx->bs));

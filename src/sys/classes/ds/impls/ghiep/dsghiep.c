@@ -177,7 +177,7 @@ static PetscErrorCode DSVectors_GHIEP_Eigen_Some(DS ds,PetscInt *idx,PetscReal *
   k = *idx;
   PetscCall(PetscBLASIntCast(ds->n,&n_));
   PetscCall(PetscBLASIntCast(ds->ld,&ld));
-  if (k < ds->n-1) e = (ds->compact)?T[k+ld]:PetscRealPart(A[(k+1)+ld*k]);
+  if (k < ds->n-1) e = ds->compact?T[k+ld]:PetscRealPart(A[(k+1)+ld*k]);
   else e = 0.0;
   if (e == 0.0) { /* Real */
     if (ds->state>=DS_STATE_CONDENSED) PetscCall(PetscArraycpy(X+k*ld,Q+k*ld,ld));
@@ -278,7 +278,7 @@ static PetscErrorCode DSVectors_GHIEP(DS ds,DSMatType mat,PetscInt *k,PetscReal 
         PetscCall(MatDenseGetArray(ds->omat[mat],&Z));
         PetscCall(DSGetArrayReal(ds,DS_MAT_T,&T));
         for (i=0; i<ds->n; i++) {
-          e = (ds->compact)?T[i+ds->ld]:PetscRealPart(A[(i+1)+ds->ld*i]);
+          e = ds->compact?T[i+ds->ld]:PetscRealPart(A[(i+1)+ds->ld*i]);
           if (e == 0.0) { /* real */
             if (ds->state >= DS_STATE_CONDENSED) PetscCall(PetscArraycpy(Z+i*ds->ld,Q+i*ds->ld,ds->ld));
             else {
@@ -325,10 +325,10 @@ PetscErrorCode DSGHIEPComplexEigs(DS ds,PetscInt n0,PetscInt n1,PetscScalar *wr,
   PetscCall(DSGetArrayReal(ds,DS_MAT_T,&T));
   PetscCall(DSGetArrayReal(ds,DS_MAT_D,&D));
   for (k=n0;k<n1;k++) {
-    if (k < n1-1) e = (ds->compact)?T[ld+k]:PetscRealPart(A[(k+1)+ld*k]);
+    if (k < n1-1) e = ds->compact?T[ld+k]:PetscRealPart(A[(k+1)+ld*k]);
     else e = 0.0;
     if (e==0.0) { /* real eigenvalue */
-      wr[k] = (ds->compact)?T[k]/D[k]:A[k+k*ld]/B[k+k*ld];
+      wr[k] = ds->compact?T[k]/D[k]:A[k+k*ld]/B[k+k*ld];
 #if !PetscDefined(USE_COMPLEX)
       wi[k] = 0.0 ;
 #endif
@@ -565,7 +565,7 @@ PetscErrorCode DSGHIEPRealBlocks(DS ds)
   PetscCall(DSGetArrayReal(ds,DS_MAT_D,&D));
   PetscCall(DSAllocateWork_Private(ds,2*m,0,0));
   for (i=ds->l;i<ds->n-1;i++) {
-    e = (ds->compact)?T[ld+i]:PetscRealPart(A[(i+1)+ld*i]);
+    e = ds->compact?T[ld+i]:PetscRealPart(A[(i+1)+ld*i]);
     if (e != 0.0) { /* 2x2 block */
       if (ds->compact) {
         s1 = D[i];
@@ -695,7 +695,7 @@ static PetscErrorCode DSSolve_GHIEP_QR_II(DS ds,PetscScalar *wr,PetscScalar *wi)
 #if PetscDefined(USE_DEBUG)
   /* Check signature */
   for (i=0;i<ds->n;i++) {
-    PetscReal de = (ds->compact)?s[i]:PetscRealPart(B[i*ld+i]);
+    PetscReal de = ds->compact? s[i]: PetscRealPart(B[i*ld+i]);
     PetscCheck(de==1.0 || de==-1.0,PETSC_COMM_SELF,PETSC_ERR_PLIB,"Diagonal elements of the signature matrix must be 1 or -1");
   }
 #endif
@@ -818,7 +818,7 @@ static PetscErrorCode DSSolve_GHIEP_QR(DS ds,PetscScalar *wr,PetscScalar *wi)
 #if PetscDefined(USE_DEBUG)
   /* Check signature */
   for (i=0;i<ds->n;i++) {
-    PetscReal de = (ds->compact)?s[i]:PetscRealPart(B[i*ld+i]);
+    PetscReal de = ds->compact? s[i]: PetscRealPart(B[i*ld+i]);
     PetscCheck(de==1.0 || de==-1.0,PETSC_COMM_SELF,PETSC_ERR_PLIB,"Diagonal elements of the signature matrix must be 1 or -1");
   }
 #endif
@@ -987,7 +987,7 @@ static PetscErrorCode DSTruncate_GHIEP(DS ds,PetscInt n,PetscBool trim)
       b[n] = b[ds->n];
       omega[n] = omega[ds->n];
     }
-    ds->k = (ds->extrarow)? n: 0;
+    ds->k = ds->extrarow? n: 0;
     ds->t = ds->n;   /* truncated length equal to previous dimension */
     ds->n = n;
   }

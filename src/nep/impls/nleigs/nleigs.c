@@ -830,7 +830,7 @@ static PetscErrorCode NEPNLEIGSKrylovConvergence(NEP nep,PetscBool getall,PetscI
     }
     newk = k;
     PetscCall(DSVectors(nep->ds,DS_MAT_X,&newk,&resnorm));
-    tt = (ctx->nshifts)?SlepcAbsEigenvalue(betak-nep->eigr[k]*betah,nep->eigi[k]*betah):betah;
+    tt = ctx->nshifts?SlepcAbsEigenvalue(betak-nep->eigr[k]*betah,nep->eigi[k]*betah):betah;
     resnorm *=  PetscAbsReal(tt);
     /* error estimate */
     PetscCall((*nep->converged)(nep,nep->eigr[k],nep->eigi[k],resnorm,&nep->errest[k],nep->convergedctx));
@@ -945,7 +945,7 @@ static PetscErrorCode NEPTOARExtendBasis(NEP nep,PetscInt idxrktg,PetscScalar *S
   PetscCall(BVRestoreColumn(W,deg-2,&w));
   for (k=deg-2;k>0;k--) {
     PetscCheck(PetscAbsScalar(s[k-1]-sigma)>100*PETSC_MACHINE_EPSILON,PETSC_COMM_SELF,PETSC_ERR_CONV_FAILED,"Breakdown in NLEIGS");
-    for (j=0;j<nv;j++) r[(k-1)*lr+j] = (S[(k-1)*ls+j]+(beta[k]/xi[k-1])*S[k*ls+j]-beta[k]*(1.0-sigma/xi[k-1])*r[(k)*lr+j])/(s[k-1]-sigma);
+    for (j=0;j<nv;j++) r[(k-1)*lr+j] = (S[(k-1)*ls+j]+(beta[k]/xi[k-1])*S[k*ls+j]-beta[k]*(1.0-sigma/xi[k-1])*r[k*lr+j])/(s[k-1]-sigma);
     PetscCall(BVGetColumn(W,k-1,&w));
     PetscCall(BVMultVec(V,1.0,0.0,w,r+(k-1)*lr));
     PetscCall(BVRestoreColumn(W,k-1,&w));
