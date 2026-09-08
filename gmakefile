@@ -93,7 +93,7 @@ endif
 
 concatlang = $(foreach lang, $(langs), $(srcs-$(1).$(lang):%.$(lang)=$(OBJDIR)/%.o))
 srcs.o := $(foreach pkg, $(pkgs), $(call concatlang,$(pkg)))
-srcs.tidy := $(foreach pkg, $(pkgs), $(srcs-$(pkg).c:%.c=$(OBJDIR)/%.tidy))
+srcs.tidy := $(filter-out $(OBJDIR)/ftn/%, $(foreach pkg, $(pkgs), $(srcs-$(pkg).c:%.c=$(OBJDIR)/%.tidy)))
 concatlangsrc = $(foreach lang, $(langs), $(srcs-$(1).$(lang)))
 csrc := $(foreach pkg, $(pkgs),  $(srcs-$(pkg).c))
 showcsrc:
@@ -233,9 +233,12 @@ else
 endif
 	-@$(GFORTRAN_DEP_CLEANUP)
 
-# Only works with ./configure --with-mpi=0 since clang-tidy cannot find MPI include files (love MPI compiler wrappers, the worse thing to come from MPI)
-$(OBJDIR)/%.tidy : %.c | $$(@D)/.DIR
-	@clang-tidy --checks='clang-diagnostic-*,-clang-analyzer-*,-clang-analyzer-security.insecureAPI.rand,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,clang-analyzer-deadcode.DeadStores,bugprone-too-small-loop-variable'  $(abspath $<) -- ${CCPPFLAGS}
+$(OBJDIR)/%.tidy : %.c | $$(@D)/.DIR clang-tidy-ready-to-use
+	@clang-tidy ${PETSC_CLANG_TIDY_FIX} $(abspath $<) -- -std=gnu23 ${CCPPFLAGS}
+
+clang-tidy-ready-to-use:
+	@grep -q MPIUNI ${PETSC_DIR}/${PETSC_ARCH}/include/petscconf.h || { echo "PETSc must be configured with --with-mpi=0 to use clang-tidy"; exit 1; }
+	@clang-tidy -h >/dev/null 2>&1 || { echo >&2 "clang-tidy is not installed or in your path. You may need to install llvm."; exit 1; }
 
 clang-tidy: $(srcs.tidy)
 
@@ -255,7 +258,7 @@ $(OBJDIR)/src/svd/ftn-mod/slepcsvdmod.o   : $(OBJDIR)/src/eps/ftn-mod/slepcepsmo
 # all sources should get recompiled when slepcvariables changes (i.e when configure is rerun or when slepcvariables is manually edited.)
 $(srcs.o) : $(slepcvariables)
 
-.PHONY: clean all print clang-tidy
+.PHONY: clean all print clang-tidy clang-tidy-ready-to-use
 
 clean:
 	${RM} -r $(OBJDIR) $(LIBDIR)/libslepc* $(MODDIR)/slepc*.mod $(MPIUNI_MOD) $(generated)
