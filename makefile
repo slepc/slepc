@@ -407,3 +407,7 @@ abitest:
 	-@echo "         Branch             = "`git rev-parse --abbrev-ref HEAD`
 	-@echo "========================================================================================="
 	-@$(PYTHON) ${SLEPC_DIR}/lib/slepc/bin/maint/abicheck.py -old_dir ${SLEPC_DIR_ABI_OLD} -old_arch ${PETSC_ARCH_ABI_OLD} -old_petsc_dir ${PETSC_DIR_ABI_OLD} -new_dir ${SLEPC_DIR} -new_arch ${PETSC_ARCH} -new_petsc_dir ${PETSC_DIR} -report_format html
+
+# redirects for gmakefile targets from older version of gmake
+% :
+	+@$(OMAKE) -f gmakefile --no-print-directory $@
