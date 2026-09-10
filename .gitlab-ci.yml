@@ -909,7 +909,7 @@ nvidia-c-nompi:
   tags:
     - compiler:nvidia, name:hapy
   variables:
-    LOAD_MODULES: nvhpc-nompi
+    LOAD_MODULES: nvhpc-nompi/25.3
     PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme=/var/local/downloads/primme-3.2.tar.gz --download-arpack
     TEST_OPTS: -j4 -l12
