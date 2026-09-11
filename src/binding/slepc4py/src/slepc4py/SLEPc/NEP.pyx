@@ -1676,7 +1676,8 @@ cdef class NEP(Object):
         cdef SlepcFN  *Fs = NULL
         cdef Py_ssize_t i = 0, n = len(A)
         cdef PetscMatStructure mstr = matstructure(structure)
-        assert n == len(f)
+        if n != len(f):
+            raise ValueError("mismatching number of matrices and functions")
         cdef tmp1 = allocate(<size_t>n*sizeof(PetscMat),<void**>&As)
         cdef tmp2 = allocate(<size_t>n*sizeof(SlepcFN),<void**>&Fs)
         for i in range(n):

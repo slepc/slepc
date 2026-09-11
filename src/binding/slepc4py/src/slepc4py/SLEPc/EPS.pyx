@@ -3072,7 +3072,8 @@ cdef class EPS(Object):
         cdef Py_ssize_t i = 0, n = len(subint)
         cdef PetscInt nparts = 0
         CHKERR( EPSKrylovSchurGetPartitions(self.eps, &nparts) )
-        assert n >= nparts
+        if n < nparts:
+            raise ValueError("not enough subintervals")
         cdef tmp = allocate(<size_t>n*sizeof(PetscReal),<void**>&subintarray)
         for i in range(n): subintarray[i] = asReal(subint[i])
         CHKERR( EPSKrylovSchurSetSubintervals(self.eps, subintarray) )

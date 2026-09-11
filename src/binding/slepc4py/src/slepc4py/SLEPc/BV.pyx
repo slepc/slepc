@@ -1892,7 +1892,8 @@ cdef class BV(Object):
         cdef tmp = iarray_s(q, &nq, &qval)
         cdef PetscInt l=0, k=0
         CHKERR( BVGetActiveColumns(self.bv, &l, &k) )
-        assert nq == k-l
+        if nq != k-l:
+            raise ValueError("wrong number of coefficients")
         CHKERR( BVMultColumn(self.bv, sval1, sval2, ival, qval) )
 
     def multVec(self, delta: Scalar, gamma: Scalar, Vec y, q: Sequence[Scalar]) -> None:
@@ -1923,7 +1924,8 @@ cdef class BV(Object):
         cdef tmp = iarray_s(q, &nq, &qval)
         cdef PetscInt l=0, k=0
         CHKERR( BVGetActiveColumns(self.bv, &l, &k) )
-        assert nq == k-l
+        if nq != k-l:
+            raise ValueError("wrong number of coefficients")
         CHKERR( BVMultVec(self.bv, sval1, sval2, y.vec, qval) )
 
     def normColumn(self, j: int, norm_type: NormType | None = None) -> float:
