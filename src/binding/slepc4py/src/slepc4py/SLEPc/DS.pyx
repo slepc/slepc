@@ -608,7 +608,7 @@ cdef class DS(Object):
         CHKERR( DSGetMethod(self.ds, &val) )
         return val
 
-    def setCompact(self, comp: bool) -> None:
+    def setCompact(self, comp: bool = True) -> None:
         """
         Set the compact flag for storage of matrices.
 
@@ -655,7 +655,7 @@ cdef class DS(Object):
         CHKERR( DSGetCompact(self.ds, &val) )
         return toBool(val)
 
-    def setExtraRow(self, ext: bool) -> None:
+    def setExtraRow(self, ext: bool = True) -> None:
         """
         Set a flag to indicate that the matrix has one extra row.
 
@@ -702,7 +702,7 @@ cdef class DS(Object):
         CHKERR( DSGetExtraRow(self.ds, &val) )
         return toBool(val)
 
-    def setRefined(self, ref: bool) -> None:
+    def setRefined(self, ref: bool = True) -> None:
         """
         Set a flag to indicate that refined vectors must be computed.
 

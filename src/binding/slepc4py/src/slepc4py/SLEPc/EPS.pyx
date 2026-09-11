@@ -1118,7 +1118,7 @@ cdef class EPS(Object):
         CHKERR( EPSGetTwoSided(self.eps, &tval) )
         return toBool(tval)
 
-    def setTwoSided(self, twosided: bool) -> None:
+    def setTwoSided(self, twosided: bool = True) -> None:
         """
         Set to use a two-sided variant that also computes left eigenvectors.
 
@@ -1249,7 +1249,7 @@ cdef class EPS(Object):
         CHKERR( EPSGetTrueResidual(self.eps, &tval) )
         return toBool(tval)
 
-    def setTrueResidual(self, trueres: bool) -> None:
+    def setTrueResidual(self, trueres: bool = True) -> None:
         """
         Set if the solver must compute the true residual explicitly or not.
 
@@ -1286,7 +1286,7 @@ cdef class EPS(Object):
         CHKERR( EPSGetTrackAll(self.eps, &tval) )
         return toBool(tval)
 
-    def setTrackAll(self, trackall: bool) -> None:
+    def setTrackAll(self, trackall: bool = True) -> None:
         """
         Set if the solver must compute the residual of all approximate eigenpairs.
 
@@ -2404,7 +2404,7 @@ cdef class EPS(Object):
         CHKERR( EPSPowerGetShiftType(self.eps, &val) )
         return val
 
-    def setArnoldiDelayed(self, delayed: bool) -> None:
+    def setArnoldiDelayed(self, delayed: bool = True) -> None:
         """
         Set (toggle) delayed reorthogonalization in the Arnoldi iteration.
 
@@ -2625,7 +2625,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetRestart(self.eps, &val) )
         return toReal(val)
 
-    def setKrylovSchurLocking(self, lock: bool) -> None:
+    def setKrylovSchurLocking(self, lock: bool = True) -> None:
         """
         Set (toggle) locking/non-locking variants of the Krylov-Schur method.
 
@@ -2723,7 +2723,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetPartitions(self.eps, &val) )
         return toInt(val)
 
-    def setKrylovSchurDetectZeros(self, detect: bool) -> None:
+    def setKrylovSchurDetectZeros(self, detect: bool = True) -> None:
         """
         Set the flag that enforces zero detection in spectrum slicing.
 
@@ -3379,7 +3379,7 @@ cdef class EPS(Object):
         CHKERR( EPSGDGetInitialSize(self.eps, &ival) )
         return toInt(ival)
 
-    def setGDBOrth(self, borth: bool) -> None:
+    def setGDBOrth(self, borth: bool = True) -> None:
         """
         Set the orthogonalization that will be used in the search subspace.
 
@@ -3422,7 +3422,7 @@ cdef class EPS(Object):
         CHKERR( EPSGDGetBOrth(self.eps, &tval) )
         return toBool(tval)
 
-    def setGDDoubleExpansion(self, doubleexp: bool) -> None:
+    def setGDDoubleExpansion(self, doubleexp: bool = True) -> None:
         """
         Set that the search subspace is expanded with double expansion.
 
@@ -3693,7 +3693,7 @@ cdef class EPS(Object):
         CHKERR( EPSJDGetFix(self.eps, &val) )
         return toReal(val)
 
-    def setJDConstCorrectionTol(self, constant: bool) -> None:
+    def setJDConstCorrectionTol(self, constant: bool = True) -> None:
         """
         Deactivate the dynamic stopping criterion.
 
@@ -3738,7 +3738,7 @@ cdef class EPS(Object):
         CHKERR( EPSJDGetConstCorrectionTol(self.eps, &tval) )
         return toBool(tval)
 
-    def setJDBOrth(self, borth: bool) -> None:
+    def setJDBOrth(self, borth: bool = True) -> None:
         """
         Set the orthogonalization that will be used in the search subspace.
 
@@ -3906,7 +3906,7 @@ cdef class EPS(Object):
         CHKERR( EPSLOBPCGGetRestart(self.eps, &val) )
         return toReal(val)
 
-    def setLOBPCGLocking(self, lock: bool) -> None:
+    def setLOBPCGLocking(self, lock: bool = True) -> None:
         """
         Toggle between locking and non-locking (LOBPCG method).
 
@@ -4257,7 +4257,7 @@ cdef class EPS(Object):
         CHKERR( EPSCISSGetRefinement(self.eps, &ival1, &ival2) )
         return (toInt(ival1), toInt(ival2))
 
-    def setCISSUseST(self, usest: bool) -> None:
+    def setCISSUseST(self, usest: bool = True) -> None:
         """
         Set a flag indicating that the CISS solver will use the `ST` object.
 

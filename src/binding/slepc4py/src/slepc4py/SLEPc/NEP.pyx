@@ -774,7 +774,7 @@ cdef class NEP(Object):
         CHKERR( NEPGetTrackAll(self.nep, &tval) )
         return toBool(tval)
 
-    def setTrackAll(self, trackall: bool) -> None:
+    def setTrackAll(self, trackall: bool = True) -> None:
         """
         Set if the solver must compute the residual of all approximate eigenpairs.
 
@@ -1805,7 +1805,7 @@ cdef class NEP(Object):
         CHKERR( NEPGetTwoSided(self.nep, &tval) )
         return toBool(tval)
 
-    def setTwoSided(self, twosided: bool) -> None:
+    def setTwoSided(self, twosided: bool = True) -> None:
         """
         Set the solver to use a two-sided variant.
 
@@ -1919,7 +1919,7 @@ cdef class NEP(Object):
         CHKERR( NEPRIIGetLagPreconditioner(self.nep, &ival) )
         return toInt(ival)
 
-    def setRIIConstCorrectionTol(self, cct: bool) -> None:
+    def setRIIConstCorrectionTol(self, cct: bool = True) -> None:
         """
         Set a flag to keep the tolerance used in the linear solver constant.
 
@@ -2004,7 +2004,7 @@ cdef class NEP(Object):
         CHKERR( NEPRIIGetMaximumIterations(self.nep, &ival) )
         return toInt(ival)
 
-    def setRIIHermitian(self, herm: bool) -> None:
+    def setRIIHermitian(self, herm: bool = True) -> None:
         """
         Set a flag to use the Hermitian version of the solver.
 
@@ -2513,7 +2513,7 @@ cdef class NEP(Object):
         CHKERR( NEPNLEIGSGetRestart(self.nep, &val) )
         return toReal(val)
 
-    def setNLEIGSLocking(self, lock: bool) -> None:
+    def setNLEIGSLocking(self, lock: bool = True) -> None:
         """
         Toggle between locking and non-locking variants of the NLEIGS method.
 
