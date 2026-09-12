@@ -282,7 +282,8 @@ cdef class LME(Object):
         --------
         setCoefficients, slepc.LMEGetCoefficients
         """
-        cdef PetscMat Amat, Bmat, Dmat, Emat
+        cdef PetscMat Amat = <PetscMat>NULL, Bmat = <PetscMat>NULL
+        cdef PetscMat Dmat = <PetscMat>NULL, Emat = <PetscMat>NULL
         cdef Mat A = Mat(), B = None, D = None, E = None
         CHKERR( LMEGetCoefficients(self.lme, &Amat, &Bmat, &Dmat, &Emat) )
         A.mat = Amat

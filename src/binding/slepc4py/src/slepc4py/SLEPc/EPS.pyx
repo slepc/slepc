@@ -2032,7 +2032,7 @@ cdef class EPS(Object):
         cdef PetscInt ival = asInt(i)
         cdef PetscScalar sval1 = 0
         cdef PetscScalar sval2 = 0
-        cdef SlepcEPSProblemType ptype
+        cdef SlepcEPSProblemType ptype = EPS_HEP
         CHKERR( EPSGetEigenvalue(self.eps, ival, &sval1, &sval2) )
         CHKERR( EPSGetProblemType(self.eps, &ptype) )
         if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE or ptype == EPS_LREP:
@@ -2151,7 +2151,7 @@ cdef class EPS(Object):
         cdef PetscScalar sval2 = 0
         cdef PetscVec vecr = Vr.vec if Vr is not None else <PetscVec>NULL
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
-        cdef SlepcEPSProblemType ptype
+        cdef SlepcEPSProblemType ptype = EPS_HEP
         CHKERR( EPSGetEigenpair(self.eps, ival, &sval1, &sval2, vecr, veci) )
         CHKERR( EPSGetProblemType(self.eps, &ptype) )
         if ptype == EPS_HEP or ptype == EPS_GHEP or ptype == EPS_BSE or ptype == EPS_LREP:
@@ -4326,7 +4326,7 @@ cdef class EPS(Object):
         --------
         setCISSSizes, slepc.EPSCISSGetKSPs
         """
-        cdef PetscInt i = 0, n = 0
+        cdef PetscInt n = 0
         cdef PetscKSP *p = NULL
         CHKERR( EPSCISSGetKSPs(self.eps, &n, &p) )
         return [ref_KSP(p[i]) for i from 0 <= i <n]

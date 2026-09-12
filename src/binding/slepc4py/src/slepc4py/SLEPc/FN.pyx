@@ -623,7 +623,7 @@ cdef class FN(Object):
         """
         cdef PetscInt na = 0
         cdef PetscScalar *a = NULL
-        cdef object tmp1 = iarray_s(alpha, &na, &a)
+        alpha = iarray_s(alpha, &na, &a)
         CHKERR( FNRationalSetNumerator(self.fn, na, a) )
 
     def getRationalNumerator(self) -> ArrayScalar:
@@ -668,7 +668,7 @@ cdef class FN(Object):
         """
         cdef PetscInt na = 0
         cdef PetscScalar *a = NULL
-        cdef object tmp1 = iarray_s(alpha, &na, &a)
+        alpha = iarray_s(alpha, &na, &a)
         CHKERR( FNRationalSetDenominator(self.fn, na, a) )
 
     def getRationalDenominator(self) -> ArrayScalar:
@@ -745,7 +745,7 @@ cdef class FN(Object):
         --------
         setCombineChildren, slepc.FNCombineGetChildren
         """
-        cdef SlepcFNCombineType comb
+        cdef SlepcFNCombineType comb = FN_COMBINE_ADD
         cdef FN f1 = FN()
         cdef FN f2 = FN()
         CHKERR( FNCombineGetChildren(self.fn, &comb, &f1.fn, &f2.fn) )

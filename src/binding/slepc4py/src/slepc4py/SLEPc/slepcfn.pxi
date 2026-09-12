@@ -184,7 +184,7 @@ cdef FN fn_rdiv(FN self, other):
 # composition
 
 cdef FN fn_matmul(FN self, other):
-    cdef FN fn, comb
+    cdef FN comb
     cdef MPI_Comm comm = def_Comm(None, PetscObjectComm(<PetscObject>self.fn))
     if isinstance(other, FN):
         comb = type(self)()

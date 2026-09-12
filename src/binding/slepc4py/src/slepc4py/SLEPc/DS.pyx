@@ -863,7 +863,7 @@ cdef class DS(Object):
         slepc.DSGetArray
 
         """
-        cdef PetscInt m=0, n=0, lda=0, k=0, l=0
+        cdef PetscInt m=0, n=0, lda=0
         cdef PetscScalar *data = NULL
         CHKERR(DSMatGetSize(self.ds, matname, &m, &n))
         CHKERR(DSGetLeadingDimension(self.ds, &lda))
@@ -1170,7 +1170,7 @@ cdef class DS(Object):
         """
         cdef PetscInt na = 0
         cdef PetscReal *a = NULL
-        cdef object tmp1 = iarray_r(pbc, &na, &a)
+        pbc = iarray_r(pbc, &na, &a)
         CHKERR( DSPEPSetCoefficients(self.ds, a) )
 
     def getPEPCoefficients(self) -> ArrayReal:

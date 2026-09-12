@@ -1415,7 +1415,7 @@ cdef class BV(Object):
         """
         cdef Vec v = Vec()
         cdef PetscInt ival = asInt(j)
-        CHKERR( BVGetColumn(self.bv, j, &v.vec) )
+        CHKERR( BVGetColumn(self.bv, ival, &v.vec) )
         CHKERR( PetscINCREF(v.obj) )
         return v
 
@@ -1889,8 +1889,8 @@ cdef class BV(Object):
         cdef PetscInt ival = asInt(j)
         cdef PetscInt nq = 0
         cdef PetscScalar* qval = NULL
-        cdef tmp = iarray_s(q, &nq, &qval)
         cdef PetscInt l=0, k=0
+        q = iarray_s(q, &nq, &qval)
         CHKERR( BVGetActiveColumns(self.bv, &l, &k) )
         if nq != k-l:
             raise ValueError("wrong number of coefficients")
@@ -1921,8 +1921,8 @@ cdef class BV(Object):
         cdef PetscScalar sval2 = asScalar(gamma)
         cdef PetscInt nq = 0
         cdef PetscScalar* qval = NULL
-        cdef tmp = iarray_s(q, &nq, &qval)
         cdef PetscInt l=0, k=0
+        q = iarray_s(q, &nq, &qval)
         CHKERR( BVGetActiveColumns(self.bv, &l, &k) )
         if nq != k-l:
             raise ValueError("wrong number of coefficients")

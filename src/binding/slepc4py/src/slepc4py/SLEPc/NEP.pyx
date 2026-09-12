@@ -1709,7 +1709,7 @@ cdef class NEP(Object):
         cdef PetscMat mat = NULL
         cdef SlepcFN  fn  = NULL
         cdef PetscInt i=0, n=0
-        cdef PetscMatStructure mstr
+        cdef PetscMatStructure mstr = MAT_DIFFERENT_NONZERO_PATTERN
         CHKERR( NEPGetSplitOperatorInfo(self.nep, &n, &mstr) )
         cdef object matrices = []
         cdef object functions = []
@@ -1774,7 +1774,7 @@ cdef class NEP(Object):
         cdef Mat P
         cdef PetscMat mat = NULL
         cdef PetscInt i=0, n=0
-        cdef PetscMatStructure mstr
+        cdef PetscMatStructure mstr = MAT_DIFFERENT_NONZERO_PATTERN
         CHKERR( NEPGetSplitPreconditionerInfo(self.nep, &n, &mstr) )
         cdef object matrices = []
         for i in range(n):
@@ -2721,7 +2721,7 @@ cdef class NEP(Object):
         """
         cdef PetscInt na = 0
         cdef PetscScalar *a = NULL
-        cdef object tmp1 = iarray_s(shifts, &na, &a)
+        shifts = iarray_s(shifts, &na, &a)
         CHKERR( NEPNLEIGSSetRKShifts(self.nep, na, a) )
 
     def getNLEIGSRKShifts(self) -> ArrayScalar:
@@ -2769,7 +2769,7 @@ cdef class NEP(Object):
         --------
         setNLEIGSRKShifts, slepc.NEPNLEIGSGetKSPs
         """
-        cdef PetscInt i = 0, n = 0
+        cdef PetscInt n = 0
         cdef PetscKSP *p = NULL
         CHKERR( NEPNLEIGSGetKSPs(self.nep, &n, &p) )
         return [ref_KSP(p[i]) for i from 0 <= i <n]
@@ -3013,7 +3013,7 @@ cdef class NEP(Object):
         --------
         setCISSSizes, slepc.NEPCISSGetKSPs
         """
-        cdef PetscInt i = 0, n = 0
+        cdef PetscInt n = 0
         cdef PetscKSP *p = NULL
         CHKERR( NEPCISSGetKSPs(self.nep, &n, &p) )
         return [ref_KSP(p[i]) for i from 0 <= i <n]

@@ -561,7 +561,7 @@ cdef class ST(Object):
         --------
         setMatStructure, slepc.STGetMatStructure
         """
-        cdef PetscMatStructure val
+        cdef PetscMatStructure val = MAT_DIFFERENT_NONZERO_PATTERN
         CHKERR( STGetMatStructure(self.st, &val) )
         return val
 
@@ -731,7 +731,7 @@ Structure | None = None) -> None:
         slepc.STGetSplitPreconditionerInfo, slepc.STGetSplitPreconditionerTerm
         """
         cdef PetscInt k=0,n=0
-        cdef PetscMatStructure cstructure
+        cdef PetscMatStructure cstructure = MAT_DIFFERENT_NONZERO_PATTERN
         cdef PetscMat mat = NULL
         CHKERR( STGetSplitPreconditionerInfo(self.st, &n, &cstructure) )
         cdef object operators = []

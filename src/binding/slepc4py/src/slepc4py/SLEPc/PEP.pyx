@@ -2948,7 +2948,7 @@ cdef class PEP(Object):
         --------
         setCISSSizes, slepc.PEPCISSGetKSPs
         """
-        cdef PetscInt i = 0, n = 0
+        cdef PetscInt n = 0
         cdef PetscKSP *p = NULL
         CHKERR( PEPCISSGetKSPs(self.pep, &n, &p) )
         return [ref_KSP(p[i]) for i from 0 <= i <n]

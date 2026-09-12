@@ -415,7 +415,7 @@ cdef class RG(Object):
         --------
         computeBoundingBox, setScale, slepc.RGComputeContour
         """
-        cdef PetscInt k = asInt(n), i = 0
+        cdef PetscInt k = asInt(n)
         cdef PetscScalar *cr = NULL, *ci = NULL
         cdef tmp1 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&cr)
         cdef tmp2
@@ -529,7 +529,7 @@ cdef class RG(Object):
         computeContour, slepc.RGComputeQuadrature
         """
         cdef SlepcRGQuadRule val = quad
-        cdef PetscInt k = asInt(n), i = 0
+        cdef PetscInt k = asInt(n)
         cdef PetscScalar *z = NULL, *zn = NULL, *w = NULL
         cdef tmp1 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&z)
         cdef tmp2 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&zn)

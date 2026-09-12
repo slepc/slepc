@@ -252,7 +252,7 @@ cdef PetscErrorCode NEP_Function(
     cdef Mat Amat = ref_Mat(A)
     cdef Mat Bmat = ref_Mat(B)
     (function, args, kargs) = Nep.get_attr('__function__')
-    retv = function(Nep, toScalar(mu), Amat, Bmat, *args, **kargs)
+    function(Nep, toScalar(mu), Amat, Bmat, *args, **kargs)
     cdef PetscMat Atmp = NULL, Btmp = NULL
     Atmp = A; A = Amat.mat; Amat.mat = Atmp
     Btmp = B; B = Bmat.mat; Bmat.mat = Btmp
@@ -269,7 +269,7 @@ cdef PetscErrorCode NEP_Jacobian(
     cdef NEP Nep  = ref_NEP(nep)
     cdef Mat Jmat = ref_Mat(J)
     (jacobian, args, kargs) = Nep.get_attr('__jacobian__')
-    retv = jacobian(Nep, toScalar(mu), Jmat, *args, **kargs)
+    jacobian(Nep, toScalar(mu), Jmat, *args, **kargs)
     cdef PetscMat Jtmp = NULL
     Jtmp = J; J = Jmat.mat; Jmat.mat = Jtmp
     return PETSC_SUCCESS

@@ -34,6 +34,8 @@ cdef EPSMonitorFunction
 cdef PEPStoppingFunction
 cdef PEPEigenvalueComparison
 cdef PEPMonitorFunction
+cdef NEPFunction
+cdef NEPJacobian
 cdef NEPStoppingFunction
 cdef NEPEigenvalueComparison
 cdef NEPMonitorFunction
