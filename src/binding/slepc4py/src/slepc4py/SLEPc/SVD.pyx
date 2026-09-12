@@ -1049,13 +1049,13 @@ cdef class SVD(Object):
         elif isinstance(spaceright, Vec): spaceright = [spaceright]
         cdef PetscVec *isr = NULL
         cdef Py_ssize_t nr = len(spaceright)
-        cdef tmp1 = allocate(<size_t>nr*sizeof(PetscVec),<void**>&isr)
+        cdef unused1 = allocate(<size_t>nr*sizeof(PetscVec),<void**>&isr)
         for i in range(nr): isr[i] = (<Vec?>spaceright[i]).vec
         if spaceleft is None: spaceright = []
         elif isinstance(spaceleft, Vec): spaceleft = [spaceleft]
         cdef PetscVec *isl = NULL
         cdef Py_ssize_t nl = len(spaceleft)
-        cdef tmp2 = allocate(<size_t>nl*sizeof(PetscVec),<void**>&isl)
+        cdef unused2 = allocate(<size_t>nl*sizeof(PetscVec),<void**>&isl)
         for i in range(nl): isl[i] = (<Vec?>spaceleft[i]).vec
         CHKERR( SVDSetInitialSpaces(self.svd, <PetscInt>nr, isr, <PetscInt>nl, isl) )
 

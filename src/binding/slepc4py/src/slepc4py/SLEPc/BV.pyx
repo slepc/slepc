@@ -1041,7 +1041,7 @@ cdef class BV(Object):
         cdef PetscInt ival = asInt(s)
         cdef PetscVec *ws = NULL
         cdef Py_ssize_t i = 0, ns = len(W)
-        cdef tmp = allocate(<size_t>ns*sizeof(PetscVec),<void**>&ws)
+        cdef unused = allocate(<size_t>ns*sizeof(PetscVec),<void**>&ws)
         for i in range(ns): ws[i] = (<Vec?>W[i]).vec
         cdef PetscInt m = <PetscInt>ns
         cdef PetscBool tval = PETSC_TRUE if orth else PETSC_FALSE
@@ -1092,7 +1092,7 @@ cdef class BV(Object):
         if isinstance(C, Vec): C = [C]
         cdef PetscVec *cs = NULL
         cdef Py_ssize_t i = 0, nc = len(C)
-        cdef tmp = allocate(<size_t>nc*sizeof(PetscVec),<void**>&cs)
+        cdef unused = allocate(<size_t>nc*sizeof(PetscVec),<void**>&cs)
         for i in range(nc): cs[i] = (<Vec?>C[i]).vec
         cdef PetscInt m = <PetscInt>nc
         CHKERR( BVInsertConstraints(self.bv, &m, cs) )
@@ -1333,7 +1333,7 @@ cdef class BV(Object):
         """
         l, k = self.getActiveColumns()
         cdef PetscScalar* mval = NULL
-        cdef tmp = allocate(<size_t>(k - l)*sizeof(PetscScalar), <void**>&mval)
+        cdef unused = allocate(<size_t>(k - l)*sizeof(PetscScalar), <void**>&mval)
 
         CHKERR( BVDotVec(self.bv, v.vec, mval) )
 
@@ -1373,7 +1373,7 @@ cdef class BV(Object):
         cdef PetscInt ival = asInt(j)
         l, k = self.getActiveColumns()
         cdef PetscScalar* mval = NULL
-        cdef tmp = allocate(<size_t>(k - l)*sizeof(PetscScalar), <void**>&mval)
+        cdef unused = allocate(<size_t>(k - l)*sizeof(PetscScalar), <void**>&mval)
 
         CHKERR( BVDotColumn(self.bv, ival, mval) )
 

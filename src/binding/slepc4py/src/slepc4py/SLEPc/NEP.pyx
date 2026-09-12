@@ -1020,7 +1020,7 @@ cdef class NEP(Object):
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
         cdef Py_ssize_t i = 0, ns = len(space)
-        cdef tmp = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
+        cdef unused = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
         for i in range(ns): vs[i] = (<Vec?>space[i]).vec
         CHKERR( NEPSetInitialSpace(self.nep, <PetscInt>ns, vs) )
 
@@ -1678,8 +1678,8 @@ cdef class NEP(Object):
         cdef PetscMatStructure mstr = matstructure(structure)
         if n != len(f):
             raise ValueError("mismatching number of matrices and functions")
-        cdef tmp1 = allocate(<size_t>n*sizeof(PetscMat),<void**>&As)
-        cdef tmp2 = allocate(<size_t>n*sizeof(SlepcFN),<void**>&Fs)
+        cdef unused1 = allocate(<size_t>n*sizeof(PetscMat),<void**>&As)
+        cdef unused2 = allocate(<size_t>n*sizeof(SlepcFN),<void**>&Fs)
         for i in range(n):
             As[i] = (<Mat?>A[i]).mat
             Fs[i] = (<FN?>f[i]).fn
@@ -1749,7 +1749,7 @@ cdef class NEP(Object):
         cdef PetscMat *Ps = NULL
         cdef Py_ssize_t i = 0, n = len(P)
         cdef PetscMatStructure mstr = matstructure(structure)
-        cdef tmp1 = allocate(<size_t>n*sizeof(PetscMat),<void**>&Ps)
+        cdef unused = allocate(<size_t>n*sizeof(PetscMat),<void**>&Ps)
         for i in range(n):
             Ps[i] = (<Mat?>P[i]).mat
         CHKERR( NEPSetSplitPreconditioner(self.nep, <PetscInt>n, Ps, mstr) )

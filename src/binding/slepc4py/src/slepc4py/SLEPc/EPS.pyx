@@ -1622,7 +1622,7 @@ cdef class EPS(Object):
         if isinstance(space, Vec): space = [space]
         cdef PetscVec* vs = NULL
         cdef Py_ssize_t i = 0, ns = len(space)
-        cdef tmp = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
+        cdef unused = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
         for i in range(ns): vs[i] = (<Vec?>space[i]).vec
         CHKERR( EPSSetDeflationSpace(self.eps, <PetscInt>ns, vs) )
 
@@ -1662,7 +1662,7 @@ cdef class EPS(Object):
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
         cdef Py_ssize_t i = 0, ns = len(space)
-        cdef tmp = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
+        cdef unused = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
         for i in range(ns): vs[i] = (<Vec?>space[i]).vec
         CHKERR( EPSSetInitialSpace(self.eps, <PetscInt>ns, vs) )
 
@@ -1692,7 +1692,7 @@ cdef class EPS(Object):
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
         cdef Py_ssize_t i = 0, ns = len(space)
-        cdef tmp = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
+        cdef unused = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
         for i in range(ns): vs[i] = (<Vec?>space[i]).vec
         CHKERR( EPSSetLeftInitialSpace(self.eps, <PetscInt>ns, vs) )
 
@@ -2193,7 +2193,7 @@ cdef class EPS(Object):
         CHKERR( EPSGetOperators(self.eps, &A, NULL) )
         CHKERR( MatCreateVecs(A, &v, NULL) )
         cdef Vec V = None
-        cdef object tmp = allocate(<size_t>ncv*sizeof(PetscVec),<void**>&isp)
+        cdef unused = allocate(<size_t>ncv*sizeof(PetscVec),<void**>&isp)
         for i in range(ncv):
             if i == 0: isp[0] = v
             if i >= 1: CHKERR( VecDuplicate(v, &isp[i]) )
@@ -3074,7 +3074,7 @@ cdef class EPS(Object):
         CHKERR( EPSKrylovSchurGetPartitions(self.eps, &nparts) )
         if n < nparts:
             raise ValueError("not enough subintervals")
-        cdef tmp = allocate(<size_t>n*sizeof(PetscReal),<void**>&subintarray)
+        cdef unused = allocate(<size_t>n*sizeof(PetscReal),<void**>&subintarray)
         for i in range(n): subintarray[i] = asReal(subint[i])
         CHKERR( EPSKrylovSchurSetSubintervals(self.eps, subintarray) )
 

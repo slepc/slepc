@@ -939,8 +939,8 @@ cdef class DS(Object):
         n = self.getDimensions()[0]
         cdef PetscScalar *eigr = NULL
         cdef PetscScalar *eigi = NULL
-        cdef tmpr = allocate(<size_t>n*sizeof(PetscScalar), <void**>&eigr)
-        cdef tmpi = allocate(<size_t>n*sizeof(PetscScalar), <void**>&eigi)
+        cdef unusedr = allocate(<size_t>n*sizeof(PetscScalar), <void**>&eigr)
+        cdef unusedi = allocate(<size_t>n*sizeof(PetscScalar), <void**>&eigi)
         CHKERR( DSSolve(self.ds, eigr, eigi) )
         cdef object kr = array_s(n, eigr)
         cdef object ki = array_s(n, eigi)

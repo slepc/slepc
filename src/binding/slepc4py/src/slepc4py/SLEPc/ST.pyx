@@ -479,7 +479,7 @@ cdef class ST(Object):
         operators = tuple(operators)
         cdef PetscMat *mats = NULL
         cdef Py_ssize_t k=0, n = len(operators)
-        cdef tmp = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
+        cdef unused = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
         CHKERR( STSetMatrices(self.st, <PetscInt>n, mats) )
 
@@ -709,7 +709,7 @@ Structure | None = None) -> None:
         cdef PetscMatStructure cstructure = matstructure(structure)
         cdef PetscMat *mats = NULL
         cdef Py_ssize_t k=0, n = len(operators)
-        cdef tmp = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
+        cdef unused = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
         CHKERR( STSetSplitPreconditioner(self.st, <PetscInt>n, mats, cstructure) )
 

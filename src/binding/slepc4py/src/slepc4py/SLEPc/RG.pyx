@@ -379,16 +379,16 @@ cdef class RG(Object):
         cdef Py_ssize_t i = 0, n = len(a)
         cdef PetscScalar *ar = NULL, *ai = NULL
         cdef PetscInt *inside = NULL
-        cdef tmp1 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&ar)
-        cdef tmp2
+        cdef unused1 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&ar)
+        cdef unused2
         if sizeof(PetscScalar) == sizeof(PetscReal):
-            tmp2 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&ai)
+            unused2 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&ai)
             for i in range(n):
                 ar[i] = asComplexReal(a[i])
                 ai[i] = asComplexImag(a[i])
         else:
             for i in range(n): ar[i] = asScalar(a[i])
-        cdef tmp3 = allocate(<size_t>n*sizeof(PetscInt),<void**>&inside)
+        cdef unused3 = allocate(<size_t>n*sizeof(PetscInt),<void**>&inside)
         CHKERR( RGCheckInside(self.rg, <PetscInt>n, ar, ai, inside) )
         return array_i(<PetscInt>n, inside)
 
@@ -417,10 +417,10 @@ cdef class RG(Object):
         """
         cdef PetscInt k = asInt(n)
         cdef PetscScalar *cr = NULL, *ci = NULL
-        cdef tmp1 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&cr)
-        cdef tmp2
+        cdef unused1 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&cr)
+        cdef unused2
         if sizeof(PetscScalar) == sizeof(PetscReal):
-            tmp2 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&ci)
+            unused2 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&ci)
         CHKERR( RGComputeContour(self.rg, k, cr, ci) )
         if sizeof(PetscScalar) == sizeof(PetscReal):
             return [toComplex(cr[i],ci[i]) for i from 0 <= i <k]
@@ -531,9 +531,9 @@ cdef class RG(Object):
         cdef SlepcRGQuadRule val = quad
         cdef PetscInt k = asInt(n)
         cdef PetscScalar *z = NULL, *zn = NULL, *w = NULL
-        cdef tmp1 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&z)
-        cdef tmp2 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&zn)
-        cdef tmp3 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&w)
+        cdef unused1 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&z)
+        cdef unused2 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&zn)
+        cdef unused3 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&w)
         CHKERR( RGComputeQuadrature(self.rg, val, k, z, zn, w) )
         return (array_s(k, z), array_s(k, zn), array_s(k, w))
 
@@ -676,10 +676,10 @@ cdef class RG(Object):
         """
         cdef Py_ssize_t i = 0, n = len(v)
         cdef PetscScalar *vr = NULL, *vi = NULL
-        cdef tmp1 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&vr)
-        cdef tmp2
+        cdef unused1 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&vr)
+        cdef unused2
         if sizeof(PetscScalar) == sizeof(PetscReal):
-            tmp2 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&vi)
+            unused2 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&vi)
             for i in range(n):
                 vr[i] = asComplexReal(v[i])
                 vi[i] = asComplexImag(v[i])

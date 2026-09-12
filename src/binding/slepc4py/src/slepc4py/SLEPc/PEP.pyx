@@ -1411,7 +1411,7 @@ cdef class PEP(Object):
         operators = tuple(operators)
         cdef PetscMat *mats = NULL
         cdef Py_ssize_t k=0, n = len(operators)
-        cdef tmp = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
+        cdef unused = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
         CHKERR( PEPSetOperators(self.pep, <PetscInt>n, mats) )
 
@@ -1450,7 +1450,7 @@ cdef class PEP(Object):
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
         cdef Py_ssize_t i = 0, ns = len(space)
-        cdef tmp = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
+        cdef unused = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
         for i in range(ns): vs[i] = (<Vec?>space[i]).vec
         CHKERR( PEPSetInitialSpace(self.pep, <PetscInt>ns, vs) )
 
