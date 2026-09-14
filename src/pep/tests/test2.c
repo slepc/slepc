@@ -366,4 +366,18 @@ int main(int argc,char **argv)
          suffix: 15_hip_linear_gd
          args: -pep_type linear -pep_linear_eps_type gd -pep_linear_explicitmatrix
 
+   testset:
+      args: -pep_nev 4 -initv -mat_type aijkokkos
+      output_file: output/test2_1.out
+      requires: hip kokkos_kernels !single
+      test:
+         suffix: 15_kokkos
+         args: -pep_type {{toar linear}}
+      test:
+         suffix: 15_kokkos_qarnoldi
+         args: -pep_type qarnoldi -bv_orthog_refine never
+      test:
+         suffix: 15_kokkos_linear_gd
+         args: -pep_type linear -pep_linear_eps_type gd -pep_linear_explicitmatrix
+
 TEST*/

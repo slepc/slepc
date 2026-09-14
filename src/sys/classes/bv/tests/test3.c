@@ -127,6 +127,10 @@ int main(int argc,char **argv)
          args: -bv_type {{svec mat}} -mat_type aijhipsparse
          requires: hip
       test:
+         suffix: 1_kokkos
+         args: -bv_type mat -mat_type aijkokkos
+         requires: hip kokkos_kernels
+      test:
          suffix: 2
          nsize: 2
          args: -bv_type {{vecs contiguous svec mat}shared output}

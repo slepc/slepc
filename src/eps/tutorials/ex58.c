@@ -229,6 +229,10 @@ int main(int argc,char **argv)
          suffix: 1_hip
          args: -mat_type aijhipsparse
          requires: hip
+      test:
+         suffix: 1_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels
 
    test:
       args: -n 90 -eps_threshold_absolute 2.4 -eps_ncv 10 -terse -checkorthog -reduced {{0 1}} -eps_krylovschur_lrep_type {{teng zhong}} -eps_tol 1e-14

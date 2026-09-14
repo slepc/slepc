@@ -195,6 +195,10 @@ int main(int argc,char **argv)
          args: -eps_type {{krylovschur subspace}} -st_type filter -st_filter_degree 200 -mat_type aijhipsparse -st_filter_type {{filtlan chebyshev}}
          requires: hip
       test:
+         suffix: 4_filter_kokkos
+         args: -eps_type {{krylovschur subspace}} -st_type filter -st_filter_degree 200 -mat_type aijkokkos -st_filter_type {{filtlan chebyshev}}
+         requires: hip kokkos_kernels
+      test:
          suffix: 4_evsl
          args: -eps_type evsl
          requires: evsl

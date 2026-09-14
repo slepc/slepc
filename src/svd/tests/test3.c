@@ -289,4 +289,40 @@ int main(int argc,char **argv)
          suffix: 6_hip_randomized
          args: -svd_type randomized
 
+   testset:
+      args: -svd_nsv 4 -mat_type aijkokkos
+      requires: hip kokkos_kernels
+      output_file: output/test3_1.out
+      filter: sed -e "s/22176/22175/" | sed -e "s/21798/21797/" | sed -e "s/16826/16825/" | sed -e "s/15129/15128/"
+      test:
+         suffix: 6_kokkos_lanczos
+         args: -svd_type lanczos
+      test:
+         suffix: 6_kokkos_lanczos_one
+         args: -svd_type lanczos -svd_lanczos_oneside
+      test:
+         suffix: 6_kokkos_trlanczos
+         args: -svd_type trlanczos
+      test:
+         suffix: 6_kokkos_trlanczos_one
+         args: -svd_type trlanczos -svd_trlanczos_oneside
+      test:
+         suffix: 6_kokkos_trlanczos_one_mgs
+         args: -svd_type trlanczos -svd_trlanczos_oneside -bv_orthog_type mgs
+      test:
+         suffix: 6_kokkos_trlanczos_one_always
+         args: -svd_type trlanczos -svd_trlanczos_oneside -bv_orthog_refine always
+      test:
+         suffix: 6_kokkos_cross
+         args: -svd_type cross
+      test:
+         suffix: 6_kokkos_cyclic
+         args: -svd_type cyclic
+      test:
+         suffix: 6_kokkos_cyclic_exp
+         args: -svd_type cyclic -svd_cyclic_explicitmatrix
+      test:
+         suffix: 6_kokkos_randomized
+         args: -svd_type randomized
+
 TEST*/

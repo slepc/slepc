@@ -165,4 +165,19 @@ int main(int argc,char **argv)
          args: -svd_type trlanczos -svd_trlanczos_gbidiag {{single lower}} -svd_trlanczos_ksp_rtol 1e-10
          requires: double
 
+   testset:
+      args: -svd_nsv 3 -mat_type aijkokkos
+      requires: hip kokkos_kernels !single
+      output_file: output/test16_1.out
+      test:
+         suffix: 2_kokkos_cross
+         args: -svd_type cross -svd_cross_explicitmatrix {{0 1}}
+      test:
+         suffix: 2_kokkos_cyclic
+         args: -svd_type cyclic -svd_cyclic_explicitmatrix {{0 1}}
+      test:
+         suffix: 2_kokkos_trlanczos
+         args: -svd_type trlanczos -svd_trlanczos_gbidiag {{single lower}} -svd_trlanczos_ksp_rtol 1e-10
+         requires: double
+
 TEST*/

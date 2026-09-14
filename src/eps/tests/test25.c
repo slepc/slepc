@@ -116,6 +116,11 @@ int main(int argc,char **argv)
          suffix: 1_hip
          args: -mat_type aijhipsparse -st_pc_factor_mat_solver_type hipsparse
          requires: hip double !complex !defined(PETSC_USE_64BIT_INDICES)
+      test:
+         suffix: 1_kokkos
+         TODO: CISS crashes with kokkos
+         args: -mat_type aijkokkos -st_pc_factor_mat_solver_type kokkos
+         requires: hip kokkos_kernels double !complex !defined(PETSC_USE_64BIT_INDICES)
 
    testset:
       args: -f1 ${DATAFILESPATH}/matrices/complex/qc324.petsc -rg_type ellipse -rg_ellipse_center 1-0.09i -rg_ellipse_radius 0.15 -rg_ellipse_vscale 0.1
@@ -131,5 +136,10 @@ int main(int argc,char **argv)
          suffix: 2_hip
          args: -mat_type aijhipsparse -st_pc_factor_mat_solver_type hipsparse
          requires: hip double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
+      test:
+         suffix: 2_kokkos
+         TODO: CISS crashes with kokkos
+         args: -mat_type aijkokkos -st_pc_factor_mat_solver_type kokkos
+         requires: hip kokkos_kernels double complex datafilespath !defined(PETSC_USE_64BIT_INDICES)
 
 TEST*/
