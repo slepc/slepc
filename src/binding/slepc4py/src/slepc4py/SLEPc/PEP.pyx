@@ -1014,7 +1014,7 @@ cdef class PEP(Object):
         CHKERR( PEPGetTrackAll(self.pep, &tval) )
         return toBool(tval)
 
-    def setTrackAll(self, trackall: bool) -> None:
+    def setTrackAll(self, trackall: bool = True) -> None:
         """
         Set flag to compute the residual of all approximate eigenpairs.
 
@@ -1975,7 +1975,7 @@ cdef class PEP(Object):
         CHKERR( PEPLinearGetLinearization(self.pep, &a, &b) )
         return (asReal(a), asReal(b))
 
-    def setLinearExplicitMatrix(self, flag: bool) -> None:
+    def setLinearExplicitMatrix(self, flag: bool = True) -> None:
         """
         Set flag to explicitly build the matrices for the linearization.
 
@@ -2059,7 +2059,7 @@ cdef class PEP(Object):
         CHKERR( PEPQArnoldiGetRestart(self.pep, &val) )
         return toReal(val)
 
-    def setQArnoldiLocking(self, lock: bool) -> None:
+    def setQArnoldiLocking(self, lock: bool = True) -> None:
         """
         Toggle between locking and non-locking variants of the Q-Arnoldi method.
 
@@ -2150,7 +2150,7 @@ cdef class PEP(Object):
         CHKERR( PEPTOARGetRestart(self.pep, &val) )
         return toReal(val)
 
-    def setTOARLocking(self, lock: bool) -> None:
+    def setTOARLocking(self, lock: bool = True) -> None:
         """
         Toggle between locking and non-locking variants of the TOAR method.
 
@@ -2239,7 +2239,7 @@ cdef class PEP(Object):
         CHKERR( PEPSTOARGetLinearization(self.pep, &a, &b) )
         return (asReal(a), asReal(b))
 
-    def setSTOARLocking(self, lock: bool) -> None:
+    def setSTOARLocking(self, lock: bool = True) -> None:
         """
         Toggle between locking and non-locking variants of the STOAR method.
 
@@ -2283,7 +2283,7 @@ cdef class PEP(Object):
         CHKERR( PEPSTOARGetLocking(self.pep, &tval) )
         return toBool(tval)
 
-    def setSTOARDetectZeros(self, detect: bool) -> None:
+    def setSTOARDetectZeros(self, detect: bool = True) -> None:
         """
         Set flag to enforce detection of zeros during the factorizations.
 
@@ -2444,7 +2444,7 @@ cdef class PEP(Object):
             CHKERR( PetscFree(inertiasarray) )
         return (shifts, inertias)
 
-    def setSTOARCheckEigenvalueType(self, flag: bool) -> None:
+    def setSTOARCheckEigenvalueType(self, flag: bool = True) -> None:
         """
         Set flag to check if all eigenvalues have the same definite type.
 
@@ -2585,7 +2585,7 @@ cdef class PEP(Object):
         CHKERR( PEPJDGetFix(self.pep, &val) )
         return toReal(val)
 
-    def setJDReusePreconditioner(self, flag: bool) -> None:
+    def setJDReusePreconditioner(self, flag: bool = True) -> None:
         """
         Set a flag indicating whether the preconditioner must be reused or not.
 

@@ -494,7 +494,7 @@ cdef class SVD(Object):
         CHKERR( SVDGetImplicitTranspose(self.svd, &val) )
         return toBool(val)
 
-    def setImplicitTranspose(self, mode: bool) -> None:
+    def setImplicitTranspose(self, mode: bool = True) -> None:
         """
         Set how to handle the transpose of the associated matrix.
 
@@ -729,7 +729,7 @@ cdef class SVD(Object):
         CHKERR( SVDGetTrackAll(self.svd, &tval) )
         return toBool(tval)
 
-    def setTrackAll(self, trackall: bool) -> None:
+    def setTrackAll(self, trackall: bool = True) -> None:
         """
         Set flag to compute the residual of all singular triplets.
 
@@ -1845,7 +1845,7 @@ cdef class SVD(Object):
         CHKERR( SVDTRLanczosGetRestart(self.svd, &val) )
         return toReal(val)
 
-    def setTRLanczosLocking(self, lock: bool) -> None:
+    def setTRLanczosLocking(self, lock: bool = True) -> None:
         """
         Toggle between locking and non-locking variants of TRLanczos.
 
