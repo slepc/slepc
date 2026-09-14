@@ -233,6 +233,19 @@ int main(int argc,char **argv)
          args: -mathip
 
    test:
+      args: -bv_type mat -vec_type kokkos -verbose
+      suffix: 1_mat_kokkos
+      requires: kokkos_kernels !cuda !hip
+      output_file: output/test1_1_bv_type-mat.out
+      filter: sed -e "s/-0[.]/0./g" | sed -e "s/ (Kokkos)//"
+
+   test:
+      args: -bv_type mat -vec_type kokkos
+      suffix: 1_mat_kokkos_np2
+      nsize: 2
+      requires: kokkos_kernels !cuda !hip
+
+   test:
       args: -bv_type {{vecs contiguous svec mat}separate output} -verbose -testlda
       suffix: 2
       filter: sed -e 's/-0[.]/0./g'

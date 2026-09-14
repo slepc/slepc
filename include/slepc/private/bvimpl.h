@@ -106,6 +106,7 @@ struct _p_BV {
   Mat                Aget;         /* matrix returned for BVGetMat() */
   PetscBool          cuda;         /* true if NVIDIA GPU must be used */
   PetscBool          hip;          /* true if AMD GPU must be used */
+  PetscBool          kokkos;       /* true if Kokkos vectors are being used */
   PetscBool          sfocalled;    /* setfromoptions has been called */
   PetscScalar        *work;
   PetscInt           lwork;
@@ -529,6 +530,41 @@ static inline PetscErrorCode BV_MatDenseCUDARestoreArrayRead(PETSC_UNUSED BV bv,
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+/*
+   BV_VecPlaceArray - allows the user to replace the device array in a vector with a
+   device array provided by the caller, calling the accessor that corresponds to the
+   vector type being used by the BV object
+*/
+static inline PetscErrorCode BV_VecPlaceArray(PETSC_UNUSED BV bv,Vec v,PetscScalar *a)
+{
+  PetscFunctionBegin;
+#if PetscDefined(HAVE_KOKKOS_KERNELS)
+  if (bv->kokkos) {
+    PetscCall(VecKokkosPlaceArray(v,a));
+    PetscFunctionReturn(PETSC_SUCCESS);
+  }
+#endif
+  PetscCall(VecCUDAPlaceArray(v,a));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+   BV_VecResetArray - resets the device array in a vector to the one it had before the
+   call to BV_VecPlaceArray()
+*/
+static inline PetscErrorCode BV_VecResetArray(PETSC_UNUSED BV bv,Vec v)
+{
+  PetscFunctionBegin;
+#if PetscDefined(HAVE_KOKKOS_KERNELS)
+  if (bv->kokkos) {
+    PetscCall(VecKokkosResetArray(v));
+    PetscFunctionReturn(PETSC_SUCCESS);
+  }
+#endif
+  PetscCall(VecCUDAResetArray(v));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 SLEPC_INTERN PetscErrorCode BVMult_BLAS_CUDA(BV,PetscInt,PetscInt,PetscInt,PetscScalar,const PetscScalar*,PetscInt,const PetscScalar*,PetscInt,PetscScalar,PetscScalar*,PetscInt);
 SLEPC_INTERN PetscErrorCode BVMultVec_BLAS_CUDA(BV,PetscInt,PetscInt,PetscScalar,const PetscScalar*,PetscInt,const PetscScalar*,PetscScalar,PetscScalar*);
 SLEPC_INTERN PetscErrorCode BVMultInPlace_BLAS_CUDA(BV,PetscInt,PetscInt,PetscInt,PetscInt,PetscScalar*,PetscInt,const PetscScalar*,PetscInt,PetscBool);
@@ -598,6 +634,41 @@ static inline PetscErrorCode BV_MatDenseHIPRestoreArrayRead(PETSC_UNUSED BV bv,M
     PetscCallHIP(hipFree((void*)*d_q));
     *d_q = NULL;
   }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+   BV_VecPlaceArray - allows the user to replace the device array in a vector with a
+   device array provided by the caller, calling the accessor that corresponds to the
+   vector type being used by the BV object
+*/
+static inline PetscErrorCode BV_VecPlaceArray(PETSC_UNUSED BV bv,Vec v,PetscScalar *a)
+{
+  PetscFunctionBegin;
+#if PetscDefined(HAVE_KOKKOS_KERNELS)
+  if (bv->kokkos) {
+    PetscCall(VecKokkosPlaceArray(v,a));
+    PetscFunctionReturn(PETSC_SUCCESS);
+  }
+#endif
+  PetscCall(VecHIPPlaceArray(v,a));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+   BV_VecResetArray - resets the device array in a vector to the one it had before the
+   call to BV_VecPlaceArray()
+*/
+static inline PetscErrorCode BV_VecResetArray(PETSC_UNUSED BV bv,Vec v)
+{
+  PetscFunctionBegin;
+#if PetscDefined(HAVE_KOKKOS_KERNELS)
+  if (bv->kokkos) {
+    PetscCall(VecKokkosResetArray(v));
+    PetscFunctionReturn(PETSC_SUCCESS);
+  }
+#endif
+  PetscCall(VecHIPResetArray(v));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
