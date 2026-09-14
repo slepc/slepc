@@ -145,6 +145,7 @@ cdef extern from "<string.h>"  nogil:
 
 # -----------------------------------------------------------------------------
 
+include "typing.pxi"
 include "slepcmpi.pxi"
 include "slepcsys.pxi"
 include "slepcutil.pxi"
