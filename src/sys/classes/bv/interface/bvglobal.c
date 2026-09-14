@@ -159,7 +159,7 @@ PetscErrorCode BVDotVec(BV X,Vec y,PetscScalar m[])
   BVCheckSizes(X,1);
   BVCheckOp(X,1,dotvec);
   PetscValidType(y,2);
-  PetscCheckSameTypeAndComm(X,1,y,2);
+  PetscCheckSameComm(X,1,y,2);
 
   PetscCall(VecGetLocalSize(y,&n));
   PetscCheck(X->n==n,PetscObjectComm((PetscObject)X),PETSC_ERR_ARG_INCOMP,"Mismatching local dimension X %" PetscInt_FMT ", y %" PetscInt_FMT,X->n,n);
@@ -197,7 +197,7 @@ PetscErrorCode BVDotVecBegin(BV X,Vec y,PetscScalar *m)
   PetscValidType(X,1);
   BVCheckSizes(X,1);
   PetscValidType(y,2);
-  PetscCheckSameTypeAndComm(X,1,y,2);
+  PetscCheckSameComm(X,1,y,2);
 
   PetscCall(VecGetLocalSize(y,&n));
   PetscCheck(X->n==n,PetscObjectComm((PetscObject)X),PETSC_ERR_ARG_INCOMP,"Mismatching local dimension X %" PetscInt_FMT ", y %" PetscInt_FMT,X->n,n);
@@ -590,7 +590,7 @@ PetscErrorCode BVNormVecBegin(BV bv,Vec v,NormType type,PetscReal *val)
   PetscValidType(bv,1);
   BVCheckSizes(bv,1);
   PetscValidType(v,2);
-  PetscCheckSameTypeAndComm(bv,1,v,2);
+  PetscCheckSameComm(bv,1,v,2);
 
   PetscCheck(type!=NORM_1_AND_2 || bv->matrix,PetscObjectComm((PetscObject)bv),PETSC_ERR_SUP,"Requested norm not available");
 

@@ -220,9 +220,9 @@ PetscErrorCode MatCreateTile(PetscScalar a,Mat A,PetscScalar b,Mat B,PetscScalar
   PetscValidHeaderSpecific(B,MAT_CLASSID,4);
   PetscValidHeaderSpecific(C,MAT_CLASSID,6);
   PetscValidHeaderSpecific(D,MAT_CLASSID,8);
-  PetscCheckSameTypeAndComm(A,2,B,4);
-  PetscCheckSameTypeAndComm(A,2,C,6);
-  PetscCheckSameTypeAndComm(A,2,D,8);
+  PetscCheckSameComm(A,2,B,4);
+  PetscCheckSameComm(A,2,C,6);
+  PetscCheckSameComm(A,2,D,8);
   PetscValidLogicalCollectiveScalar(A,a,1);
   PetscValidLogicalCollectiveScalar(A,b,3);
   PetscValidLogicalCollectiveScalar(A,c,5);
