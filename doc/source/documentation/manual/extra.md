@@ -74,7 +74,7 @@ In the case of `SVD`, both $A$ and $A^*$ are required to solve the problem. So w
 
 Support for graphics processing unit (GPU) computing is included in SLEPc. This is related to section [](#sec:supported) because GPU support in PETSc is based on using special types of {external:doc}`Mat` and {external:doc}`Vec`. GPU support in SLEPc has been tested in all solver classes and most solvers should work, although the performance gain to be expected depends on the particular algorithm. Regarding PETSc, all iterative linear solvers are prepared to run on the GPU, but this is not the case for direct solvers and preconditioners. The user must not expect a spectacular performance boost, but in general moderate gains can be achieved by running the eigensolver on the GPU instead of the CPU (in some cases a 10-fold improvement).
 
-SLEPc currently provides support for NVIDIA GPUs using CUDA[^cuda] as well as AMD GPUs using HIP and ROCm[^rocm].
+SLEPc currently provides support for NVIDIA GPUs using CUDA[^cuda] as well as AMD GPUs using HIP and ROCm[^rocm]. GPUs can also be used indirectly via Kokkos, see below.
 
 CUDA provides a C/C++ compiler with CUDA extensions as well as the cuBLAS and cuSPARSE libraries that implement dense and sparse linear algebra operations. For instance, to configure PETSc with GPU support in single precision arithmetic use the following options:
 
@@ -101,6 +101,14 @@ Then the equivalent vector and matrix types are {external:doc}`VECHIP` and {exte
 ```{code} console
 $ ./program -vec_type hip -mat_type aijhipsparse
 ```
+
+An alternative is to enable Kokkos and Kokkos Kernels during configuration of PETSc, and use {external:doc}`VECKOKKOS` and {external:doc}`MATAIJKOKKOS`, or in the command line with
+
+```{code} console
+$ ./program -vec_type kokkos -mat_type aijkokkos
+```
+
+This will select the CUDA or HIP backends, if enabled during configuration of PETSc, or use the CPU otherwise.
 
 {#sec:shell}
 ## Extending SLEPc
