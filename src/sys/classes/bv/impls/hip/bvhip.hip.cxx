@@ -213,7 +213,7 @@ PetscErrorCode BVDotVec_BLAS_HIP(BV bv,PetscInt n_,PetscInt k_,const PetscScalar
   PetscCall(PetscHipBLASIntCast(n_,&n));
   PetscCall(PetscHipBLASIntCast(k_,&k));
   PetscCall(PetscHipBLASIntCast(lda_,&lda));
-  if (!y) PetscCall(VecHIPGetArrayWrite(bv->buffer,&d_work));
+  if (!y) PetscCall(VecGetArrayWriteAndMemType(bv->buffer,&d_work,NULL));
   else PetscCallHIP(hipMalloc((void**)&d_work,k*sizeof(PetscScalar)));
   if (mpi) {
     PetscCall(BVAllocateWork_Private(bv,k));
@@ -241,7 +241,7 @@ PetscErrorCode BVDotVec_BLAS_HIP(BV bv,PetscInt n_,PetscInt k_,const PetscScalar
         PetscCallHIP(hipMemcpy(d_work,yy,k*sizeof(PetscScalar),hipMemcpyHostToDevice));
         PetscCall(PetscLogCpuToGpu(k*sizeof(PetscScalar)));
       }
-      PetscCall(VecHIPRestoreArrayWrite(bv->buffer,&d_work));
+      PetscCall(VecRestoreArrayWriteAndMemType(bv->buffer,&d_work));
     } else {  /* case 3: user-provided array y, reduce on CPU */
       PetscCallHIP(hipFree(d_work));
       PetscCallMPI(MPIU_Allreduce(bv->work,y,len,MPIU_SCALAR,MPIU_SUM,PetscObjectComm((PetscObject)bv)));
@@ -252,7 +252,7 @@ PetscErrorCode BVDotVec_BLAS_HIP(BV bv,PetscInt n_,PetscInt k_,const PetscScalar
       PetscCallHIPBLAS(hipblasXgemv(hipblashandle,HIPBLAS_OP_C,n,k,&sone,d_A,lda,d_x,one,&szero,d_work,one));
       PetscCall(PetscLogGpuTimeEnd());
     }
-    if (!y) PetscCall(VecHIPRestoreArrayWrite(bv->buffer,&d_work));
+    if (!y) PetscCall(VecRestoreArrayWriteAndMemType(bv->buffer,&d_work));
     else {
       PetscCallHIP(hipMemcpy(y,d_work,k*sizeof(PetscScalar),hipMemcpyDeviceToHost));
       PetscCall(PetscLogGpuToCpu(k*sizeof(PetscScalar)));
@@ -347,12 +347,12 @@ PetscErrorCode BV_CleanCoefficients_HIP(BV bv,PetscInt j,PetscScalar *h)
 
   PetscFunctionBegin;
   if (!h) {
-    PetscCall(VecHIPGetArray(bv->buffer,&d_a));
+    PetscCall(VecGetArrayAndMemType(bv->buffer,&d_a,NULL));
     PetscCall(PetscLogGpuTimeBegin());
     d_hh = d_a + j*(bv->nc+bv->m);
     PetscCallHIP(hipMemset(d_hh,0,(bv->nc+j)*sizeof(PetscScalar)));
     PetscCall(PetscLogGpuTimeEnd());
-    PetscCall(VecHIPRestoreArray(bv->buffer,&d_a));
+    PetscCall(VecRestoreArrayAndMemType(bv->buffer,&d_a));
   } else { /* cpu memory */
     for (i=0;i<bv->nc+j;i++) h[i] = 0.0;
   }
@@ -373,14 +373,14 @@ PetscErrorCode BV_AddCoefficients_HIP(BV bv,PetscInt j,PetscScalar *h,PetscScala
   PetscFunctionBegin;
   if (!h) {
     PetscCall(PetscHIPBLASGetHandle(&hipblashandle));
-    PetscCall(VecHIPGetArray(bv->buffer,&d_c));
+    PetscCall(VecGetArrayAndMemType(bv->buffer,&d_c,NULL));
     d_h = d_c + j*(bv->nc+bv->m);
     PetscCall(PetscHipBLASIntCast(bv->nc+j,&idx));
     PetscCall(PetscLogGpuTimeBegin());
     PetscCallHIPBLAS(hipblasXaxpy(hipblashandle,idx,&sone,d_c,one,d_h,one));
     PetscCall(PetscLogGpuTimeEnd());
     PetscCall(PetscLogGpuFlops(1.0*(bv->nc+j)));
-    PetscCall(VecHIPRestoreArray(bv->buffer,&d_c));
+    PetscCall(VecRestoreArrayAndMemType(bv->buffer,&d_c));
   } else { /* cpu memory */
     for (i=0;i<bv->nc+j;i++) h[i] += c[i];
     PetscCall(PetscLogFlops(1.0*(bv->nc+j)));
@@ -398,13 +398,13 @@ PetscErrorCode BV_SetValue_HIP(BV bv,PetscInt j,PetscInt k,PetscScalar *h,PetscS
 
   PetscFunctionBegin;
   if (!h) {
-    PetscCall(VecHIPGetArray(bv->buffer,&a));
+    PetscCall(VecGetArrayAndMemType(bv->buffer,&a,NULL));
     PetscCall(PetscLogGpuTimeBegin());
     d_h = a + k*(bv->nc+bv->m) + bv->nc+j;
     PetscCallHIP(hipMemcpy(d_h,&value,sizeof(PetscScalar),hipMemcpyHostToDevice));
     PetscCall(PetscLogCpuToGpu(sizeof(PetscScalar)));
     PetscCall(PetscLogGpuTimeEnd());
-    PetscCall(VecHIPRestoreArray(bv->buffer,&a));
+    PetscCall(VecRestoreArrayAndMemType(bv->buffer,&a));
   } else { /* cpu memory */
     h[bv->nc+j] = value;
   }
@@ -426,14 +426,14 @@ PetscErrorCode BV_SquareSum_HIP(BV bv,PetscInt j,PetscScalar *h,PetscReal *sum)
   PetscFunctionBegin;
   if (!h) {
     PetscCall(PetscHIPBLASGetHandle(&hipblashandle));
-    PetscCall(VecHIPGetArrayRead(bv->buffer,&d_h));
+    PetscCall(VecGetArrayReadAndMemType(bv->buffer,&d_h,NULL));
     PetscCall(PetscHipBLASIntCast(bv->nc+j,&idx));
     PetscCall(PetscLogGpuTimeBegin());
     PetscCallHIPBLAS(hipblasXdot(hipblashandle,idx,d_h,one,d_h,one,&dot));
     PetscCall(PetscLogGpuTimeEnd());
     PetscCall(PetscLogGpuFlops(2.0*(bv->nc+j)));
     *sum = PetscRealPart(dot);
-    PetscCall(VecHIPRestoreArrayRead(bv->buffer,&d_h));
+    PetscCall(VecRestoreArrayReadAndMemType(bv->buffer,&d_h));
   } else { /* cpu memory */
     *sum = 0.0;
     for (i=0;i<bv->nc+j;i++) *sum += PetscRealPart(h[i]*PetscConj(h[i]));
@@ -475,8 +475,8 @@ PetscErrorCode BV_ApplySignature_HIP(BV bv,PetscInt j,PetscScalar *h,PetscBool i
   PetscFunctionBegin;
   if (!(bv->nc+j)) PetscFunctionReturn(PETSC_SUCCESS);
   if (!h) {
-    PetscCall(VecHIPGetArray(bv->buffer,&d_h));
-    PetscCall(VecHIPGetArrayRead(bv->omega,&d_omega));
+    PetscCall(VecGetArrayAndMemType(bv->buffer,&d_h,NULL));
+    PetscCall(VecGetArrayReadAndMemType(bv->omega,&d_omega,NULL));
     PetscCall(SlepcKernelSetGrid1D(bv->nc+j,&blocks3d,&threads3d,&xcount));
     PetscCall(PetscLogGpuTimeBegin());
     if (inverse) {
@@ -487,8 +487,8 @@ PetscErrorCode BV_ApplySignature_HIP(BV bv,PetscInt j,PetscScalar *h,PetscBool i
     PetscCallHIP(hipGetLastError());
     PetscCall(PetscLogGpuTimeEnd());
     PetscCall(PetscLogGpuFlops(1.0*(bv->nc+j)));
-    PetscCall(VecHIPRestoreArrayRead(bv->omega,&d_omega));
-    PetscCall(VecHIPRestoreArray(bv->buffer,&d_h));
+    PetscCall(VecRestoreArrayReadAndMemType(bv->omega,&d_omega));
+    PetscCall(VecRestoreArrayAndMemType(bv->buffer,&d_h));
   } else {
     PetscCall(VecGetArrayRead(bv->omega,&omega));
     if (inverse) for (i=0;i<bv->nc+j;i++) h[i] /= PetscRealPart(omega[i]);
@@ -510,13 +510,13 @@ PetscErrorCode BV_SquareRoot_HIP(BV bv,PetscInt j,PetscScalar *h,PetscReal *beta
 
   PetscFunctionBegin;
   if (!h) {
-    PetscCall(VecHIPGetArrayRead(bv->buffer,&d_h));
+    PetscCall(VecGetArrayReadAndMemType(bv->buffer,&d_h,NULL));
     PetscCall(PetscLogGpuTimeBegin());
     PetscCallHIP(hipMemcpy(&hh,d_h+bv->nc+j,sizeof(PetscScalar),hipMemcpyDeviceToHost));
     PetscCall(PetscLogGpuToCpu(sizeof(PetscScalar)));
     PetscCall(PetscLogGpuTimeEnd());
     PetscCall(BV_SafeSqrt(bv,hh,beta));
-    PetscCall(VecHIPRestoreArrayRead(bv->buffer,&d_h));
+    PetscCall(VecRestoreArrayReadAndMemType(bv->buffer,&d_h));
   } else PetscCall(BV_SafeSqrt(bv,h[bv->nc+j],beta));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -532,13 +532,13 @@ PetscErrorCode BV_StoreCoefficients_HIP(BV bv,PetscInt j,PetscScalar *h,PetscSca
 
   PetscFunctionBegin;
   if (!h) {
-    PetscCall(VecHIPGetArrayRead(bv->buffer,&d_a));
+    PetscCall(VecGetArrayReadAndMemType(bv->buffer,&d_a,NULL));
     PetscCall(PetscLogGpuTimeBegin());
     d_h = d_a + j*(bv->nc+bv->m)+bv->nc;
     PetscCallHIP(hipMemcpy(dest-bv->l,d_h,(j-bv->l)*sizeof(PetscScalar),hipMemcpyDeviceToHost));
     PetscCall(PetscLogGpuToCpu((j-bv->l)*sizeof(PetscScalar)));
     PetscCall(PetscLogGpuTimeEnd());
-    PetscCall(VecHIPRestoreArrayRead(bv->buffer,&d_a));
+    PetscCall(VecRestoreArrayReadAndMemType(bv->buffer,&d_a));
   } else {
     for (i=bv->l;i<j;i++) dest[i-bv->l] = h[bv->nc+i];
   }

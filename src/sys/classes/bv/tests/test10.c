@@ -127,5 +127,9 @@ int main(int argc,char **argv)
          suffix: 1_hip
          args: -bv_type {{svec mat}} -vec_type hip
          requires: hip
+      test:
+         suffix: 1_kokkos
+         args: -bv_type mat -vec_type kokkos
+         requires: hip kokkos_kernels
 
 TEST*/

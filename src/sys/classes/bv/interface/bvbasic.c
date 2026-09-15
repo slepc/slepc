@@ -1384,7 +1384,7 @@ PetscErrorCode BVCreateVec(BV bv,Vec *v)
 @*/
 PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
 {
-  PetscBool  standard,cuda,hip,mpi;
+  PetscBool  standard,cuda,hip,kokkos,mpi;
   PetscInt   N,nloc,bs;
 
   PetscFunctionBegin;
@@ -1395,6 +1395,7 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
   PetscCall(PetscStrcmpAny(bv->vtype,&standard,VECSEQ,VECMPI,""));
   PetscCall(PetscStrcmpAny(bv->vtype,&cuda,VECSEQCUDA,VECMPICUDA,""));
   PetscCall(PetscStrcmpAny(bv->vtype,&hip,VECSEQHIP,VECMPIHIP,""));
+  PetscCall(PetscStrcmpAny(bv->vtype,&kokkos,VECSEQKOKKOS,VECMPIKOKKOS,""));
   if (standard || cuda || hip) {
     PetscCall(PetscStrcmpAny(bv->vtype,&mpi,VECMPI,VECMPICUDA,VECMPIHIP,""));
     PetscCall(PetscLayoutGetLocalSize(bv->map,&nloc));
@@ -1402,6 +1403,17 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
     PetscCall(PetscLayoutGetBlockSize(bv->map,&bs));
     if (mpi) PetscCall(VecCreateMPIWithArrayAndMemType(PetscObjectComm((PetscObject)bv),cuda?PETSC_MEMTYPE_CUDA:(hip?PETSC_MEMTYPE_HIP:PETSC_MEMTYPE_HOST),bs,nloc,N,NULL,v));
     else PetscCall(VecCreateSeqWithArrayAndMemType(PetscObjectComm((PetscObject)bv),cuda?PETSC_MEMTYPE_CUDA:(hip?PETSC_MEMTYPE_HIP:PETSC_MEMTYPE_HOST),bs,N,NULL,v));
+  } else if (kokkos) {
+#if PetscDefined(HAVE_KOKKOS_KERNELS)
+    PetscCall(PetscStrcmp(bv->vtype,VECMPIKOKKOS,&mpi));
+    PetscCall(PetscLayoutGetLocalSize(bv->map,&nloc));
+    PetscCall(PetscLayoutGetSize(bv->map,&N));
+    PetscCall(PetscLayoutGetBlockSize(bv->map,&bs));
+    if (mpi) PetscCall(VecCreateMPIKokkosWithArray(PetscObjectComm((PetscObject)bv),bs,nloc,N,NULL,v));
+    else PetscCall(VecCreateSeqKokkosWithArray(PetscObjectComm((PetscObject)bv),bs,N,NULL,v));
+#else
+    SETERRQ(PetscObjectComm((PetscObject)bv),PETSC_ERR_PLIB,"Something wrong happened");
+#endif
   } else PetscCall(BVCreateVec(bv,v)); /* standard duplicate, with internal array */
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -1425,16 +1437,20 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
 @*/
 PetscErrorCode BVSetVecType(BV bv,VecType vtype)
 {
-  PetscBool   std;
+  PetscBool   std,kokkos;
   PetscMPIInt size;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(bv,BV_CLASSID,1);
   PetscCall(PetscFree(bv->vtype));
   PetscCall(PetscStrcmp(vtype,VECSTANDARD,&std));
+  PetscCall(PetscStrcmp(vtype,VECKOKKOS,&kokkos));
   if (std) {
     PetscCallMPI(MPI_Comm_size(PetscObjectComm((PetscObject)bv),&size));
     PetscCall(PetscStrallocpy((size==1)?VECSEQ:VECMPI,(char**)&bv->vtype));
+  } else if (kokkos) {
+    PetscCallMPI(MPI_Comm_size(PetscObjectComm((PetscObject)bv),&size));
+    PetscCall(PetscStrallocpy((size==1)?VECSEQKOKKOS:VECMPIKOKKOS,(char**)&bv->vtype));
   } else PetscCall(PetscStrallocpy(vtype,(char**)&bv->vtype));
   PetscFunctionReturn(PETSC_SUCCESS);
 }

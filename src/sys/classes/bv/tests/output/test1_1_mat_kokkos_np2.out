@@ -1,0 +1,12 @@
+Test BV with 5 columns of dimension 10.
+BV Object: X 2 MPI processes
+  type: mat
+  5 columns of global length 10 (Kokkos)
+  vector orthogonalization method: classical Gram-Schmidt
+  orthogonalization refinement: if needed (eta: 0.7071)
+  block orthogonalization method: GS
+  doing matmult as a single matrix-matrix product
+2-Norm of X[0] = 16.7332
+Frobenius Norm of X = 87.1436
+First row of X =
+-4. -8. -8. 0. 0. 

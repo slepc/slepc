@@ -215,6 +215,16 @@ int main(int argc,char **argv)
          args: -mat_type aijhipsparse
          requires: hip !complex
          output_file: output/ex55_1_real.out
+      test:
+         suffix: 1_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels complex
+         output_file: output/ex55_1.out
+      test:
+         suffix: 1_real_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels !complex
+         output_file: output/ex55_1_real.out
 
    testset:
       args: -eps_nev 4 -eps_ncv 16 -eps_krylovschur_bse_type {{shao gruning projectedbse}} -st_type sinvert -terse

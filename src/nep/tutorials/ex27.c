@@ -261,6 +261,10 @@ PetscErrorCode ComputeSingularities(NEP nep,PetscInt *maxnp,PetscScalar *xi,void
          suffix: 5_hip
          args: -mat_type aijhipsparse
          requires: hip
+      test:
+         suffix: 5_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels
 
    testset:
       args: -split 0 -nep_nev 3 -terse
@@ -282,6 +286,10 @@ PetscErrorCode ComputeSingularities(NEP nep,PetscInt *maxnp,PetscScalar *xi,void
          suffix: 6_hip
          args: -mat_type aijhipsparse
          requires: hip !single
+      test:
+         suffix: 6_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels !single
 
    testset:
       args: -split 0 -nep_type ciss -nep_ciss_extraction {{ritz hankel caa}} -rg_type ellipse -rg_ellipse_center 8 -rg_ellipse_radius .7 -nep_ciss_moments 4 -rg_ellipse_vscale 0.1 -terse

@@ -201,6 +201,11 @@ int main(int argc,char **argv)
          suffix: 1_ciss_hip
          args: -mat_type aijhipsparse -st_pc_factor_mat_solver_type hipsparse
          requires: hip
+      test:
+         suffix: 1_ciss_kokkos
+         TODO: CISS crashes with kokkos
+         args: -mat_type aijkokkos -st_pc_factor_mat_solver_type kokkos
+         requires: hip kokkos_kernels
 
    testset:
       requires: !single

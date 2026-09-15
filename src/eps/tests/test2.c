@@ -172,5 +172,9 @@ int main(int argc,char **argv)
          suffix: 4_hip
          requires: hip
          args: -mat_type aijhipsparse
+      test:
+         suffix: 4_kokkos
+         requires: hip kokkos_kernels
+         args: -mat_type aijkokkos
 
 TEST*/

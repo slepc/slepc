@@ -4,6 +4,8 @@
 
 ### Added
 
+- Support for Kokkos vector types in `BVMAT`. Now eigensolves with `-mat_type aijkokkos`
+  work instead of aborting.
 - New function `SlepcGetConfiguration()`.
 
 ### Changed

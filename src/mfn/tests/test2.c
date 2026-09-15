@@ -125,6 +125,10 @@ int main(int argc,char **argv)
          suffix: 1_hip
          args: -mat_type aijhipsparse
          requires: hip
+      test:
+         suffix: 1_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels
 
    test:
       suffix: 3

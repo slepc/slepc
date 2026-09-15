@@ -121,5 +121,9 @@ int main(int argc,char **argv)
          suffix: 2_hip
          args: -eps_type subspace -mat_type aijhipsparse
          requires: hip
+      test:
+         suffix: 2_kokkos
+         args: -eps_type subspace -mat_type aijkokkos
+         requires: hip kokkos_kernels
 
 TEST*/

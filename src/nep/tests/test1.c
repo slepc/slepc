@@ -265,6 +265,10 @@ PetscErrorCode FormJacobian(NEP nep,PetscScalar lambda,Mat jac,void *ctx)
          suffix: 2_hip
          args: -mat_type aijhipsparse
          requires: hip !single
+      test:
+         suffix: 2_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels !single
 
    testset:
       args: -nep_type slp -nep_two_sided -nep_target 21 -terse -nep_view_vectors ::ascii_info

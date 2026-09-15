@@ -406,10 +406,17 @@ SLEPC_EXTERN PetscErrorCode BVCreate_Mat(BV bv)
 
   PetscCall(PetscStrcmpAny(bv->vtype,&bv->cuda,VECSEQCUDA,VECMPICUDA,""));
   PetscCall(PetscStrcmpAny(bv->vtype,&bv->hip,VECSEQHIP,VECMPIHIP,""));
-  PetscCall(PetscStrcmpAny(bv->vtype,&ctx->mpi,VECMPI,VECMPICUDA,VECMPIHIP,""));
+  PetscCall(PetscStrcmpAny(bv->vtype,&bv->kokkos,VECSEQKOKKOS,VECMPIKOKKOS,""));
+  if (bv->kokkos) {
+    /* mirror the backend dispatch done by MatCreateDenseFromVecType(), so that the appropriate operations are installed */
+    PetscCheck(!PetscDefined(HAVE_MACRO_KOKKOS_ENABLE_SYCL),PetscObjectComm((PetscObject)bv),PETSC_ERR_SUP,"BVMAT does not support the SYCL backend of Kokkos");
+    if (PetscDefined(HAVE_MACRO_KOKKOS_ENABLE_CUDA)) bv->cuda = PETSC_TRUE;
+    else if (PetscDefined(HAVE_MACRO_KOKKOS_ENABLE_HIP)) bv->hip = PETSC_TRUE;
+  }
+  PetscCall(PetscStrcmpAny(bv->vtype,&ctx->mpi,VECMPI,VECMPICUDA,VECMPIHIP,VECMPIKOKKOS,""));
 
   PetscCall(PetscStrcmp(bv->vtype,VECSEQ,&seq));
-  PetscCheck(seq || ctx->mpi || bv->cuda || bv->hip,PetscObjectComm((PetscObject)bv),PETSC_ERR_SUP,"BVMAT does not support the requested vector type: %s",bv->vtype);
+  PetscCheck(seq || ctx->mpi || bv->cuda || bv->hip || bv->kokkos,PetscObjectComm((PetscObject)bv),PETSC_ERR_SUP,"BVMAT does not support the requested vector type: %s",bv->vtype);
 
   PetscCall(PetscLayoutGetLocalSize(bv->map,&nloc));
   PetscCall(BV_SetDefaultLD(bv,nloc));

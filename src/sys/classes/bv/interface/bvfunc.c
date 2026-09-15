@@ -567,7 +567,7 @@ PetscErrorCode BVView(BV bv,PetscViewer viewer)
     PetscCall(PetscObjectPrintClassNamePrefixType((PetscObject)bv,viewer));
     PetscCall(PetscViewerGetFormat(viewer,&format));
     if (format == PETSC_VIEWER_ASCII_INFO || format == PETSC_VIEWER_ASCII_INFO_DETAIL) {
-      PetscCall(PetscViewerASCIIPrintf(viewer,"  %" PetscInt_FMT " columns of global length %" PetscInt_FMT "%s\n",bv->m,bv->N,bv->cuda?" (CUDA)":bv->hip?" (HIP)":""));
+      PetscCall(PetscViewerASCIIPrintf(viewer,"  %" PetscInt_FMT " columns of global length %" PetscInt_FMT "%s\n",bv->m,bv->N,bv->kokkos?" (Kokkos)":bv->cuda?" (CUDA)":bv->hip?" (HIP)":""));
       if (bv->nc>0) PetscCall(PetscViewerASCIIPrintf(viewer,"  number of constraints: %" PetscInt_FMT "\n",bv->nc));
       PetscCall(PetscViewerASCIIPrintf(viewer,"  vector orthogonalization method: %s Gram-Schmidt\n",orthname[bv->orthog_type]));
       switch (bv->orthog_ref) {

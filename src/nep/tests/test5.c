@@ -186,6 +186,10 @@ int main(int argc,char **argv)
          args: -mat_type aijhipsparse
          requires: hip
       test:
+         suffix: 2_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels
+      test:
          suffix: 3
          args: -nep_view_values draw
          requires: x

@@ -114,6 +114,10 @@ int main(int argc,char **argv)
          suffix: 1_hip
          args: -mat_type aijhipsparse
          requires: hip
+      test:
+         suffix: 1_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels
 
    testset:
       args: -file ${DATAFILESPATH}/matrices/complex/qc324.petsc -mfn_type {{krylov expokit}}
@@ -129,5 +133,9 @@ int main(int argc,char **argv)
          suffix: 2_hip
          args: -mat_type aijhipsparse
          requires: hip
+      test:
+         suffix: 2_kokkos
+         args: -mat_type aijkokkos
+         requires: hip kokkos_kernels
 
 TEST*/

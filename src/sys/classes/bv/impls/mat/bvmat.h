@@ -12,7 +12,7 @@
 
 typedef struct {
   Mat       A;
-  PetscBool mpi;    /* true if either VECMPI, VECMPICUDA, or VECMPIHIP */
+  PetscBool mpi;    /* true if either VECMPI, VECMPICUDA, VECMPIHIP, or VECMPIKOKKOS */
 } BV_MAT;
 
 #if PetscDefined(HAVE_CUDA)
