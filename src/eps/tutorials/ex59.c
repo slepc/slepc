@@ -26,21 +26,26 @@ static char help[] = "1-D discrete Kohn-Sham model solved as a Nonlinear Eigenva
 
 /*
   Context structure to store the necessary data regarding the discrete Kohn-Sham (DKS) problem
-  as well as the objects needed for the self-consistent field (SCF) iteration.
+  as well as the objects needed for the nonlinear iteration.
 */
 typedef struct {
   // DKS context
+
+  // Inputs
   PetscInt  n;       // Spatial mesh size
   PetscInt  k;       // Number of eigenvectors to compute
   PetscReal alpha;   // Parameter controlling the nonlinearity
-  Mat       L;       // 1D discrete Laplacian matrix
-  KSP       ksp;     // Linear solver (to apply L^-1)
 
+  // Constants
+  Mat       L;       // 1D discrete Laplacian matrix
+
+  // Working vectors and base solvers
+  KSP       ksp;     // Linear solver (to apply L^-1)
   Vec       rho;     // Vector to store the electronic density
   Vec       z;       // Intermediate vector to store the result z = L^-1 * rho
   Vec       xr;      // Temporary vector to extract eigenvectors during each iteration
 
-  // SCF context
+  // Nonlinear iteration context
   EPS       eps;     // Solver for each H
   Mat       H;       // Hamiltonian matrix
   BV        X;       // Block of eigenvectors
@@ -60,7 +65,7 @@ typedef struct {
     alpha   - Parameter controlling the nonlinearity
     ctx_out - Output pointer where the created context will be stored
 */
-PetscErrorCode DKSCreate(MPI_Comm comm,PetscInt n,PetscInt k,PetscReal alpha,DKSContext **ctx_out)
+PetscErrorCode DKSCreateContext(MPI_Comm comm,PetscInt n,PetscInt k,PetscReal alpha,DKSContext **ctx_out)
 {
   DKSContext *ctx;
   PetscInt   Istart,Iend,i;
@@ -105,7 +110,7 @@ PetscErrorCode DKSCreate(MPI_Comm comm,PetscInt n,PetscInt k,PetscReal alpha,DKS
 }
 
 /*
-  Configure the SLEPc objects necessary for the SCF iteration.
+  Configure the SLEPc objects necessary for the nonlinear iteration.
 
   This function prepares the Hamiltonian matrix by cloning the structure of the Laplacian,
   initializes the basis vectors (BV) block for the eigenvectors, and configures the eigenvalue
@@ -115,7 +120,7 @@ PetscErrorCode DKSCreate(MPI_Comm comm,PetscInt n,PetscInt k,PetscReal alpha,DKS
     ctx - Pointer to the previously initialized DKS context
     tol - Desired tolerance for the internal eigenvalue solver
 */
-PetscErrorCode DKSSetupSCF(DKSContext *ctx,PetscReal tol)
+PetscErrorCode DKSSetUpIterationWorkspace(DKSContext *ctx,PetscReal tol)
 {
   MPI_Comm comm;
 
@@ -147,7 +152,7 @@ PetscErrorCode DKSSetupSCF(DKSContext *ctx,PetscReal tol)
   Generate the initial guess X0 using the exact eigenvectors of the 1D Laplacian.
 
   This function fills the vector block X with the initial guess, which greatly
-  improves the convergence of the SCF loop.
+  improves the convergence of the nonlinear iteration loop.
 
   Formula used: vv = [1:n]'/(n+1)*pi; X0 = sin(vv * [1:k])*sqrt(2/(n+1));
 
@@ -186,16 +191,17 @@ PetscErrorCode DKSGenerateInitialGuess(DKSContext *ctx)
 }
 
 /*
-  Calculate the electronic density from the eigenvectors.
+  Compute the eigenvector-dependent term from the eigenvectors.
 
-  This function computes the density rho(X) as the sum of the squares of the
-  components of each eigenvector. The formula used is: rho(X) = diag(X * X').
+  In the context of the Kohn-Sham model, this function computes the electronic
+  density rho(X) as the sum of the squares of the components of each eigenvector.
+  The formula used is: rho(X) = diag(X * X').
 
   Arguments:
     ctx     - Pointer to the initialized DKS context
-    rho_out - Pre-created vector where the computed density will be stored
+    rho_out - Pre-created vector where the computed term will be stored
 */
-PetscErrorCode DKSCalculateDensity(DKSContext *ctx,Vec rho_out)
+PetscErrorCode DKSComputeEigvecDependentTerm(DKSContext *ctx,Vec rho_out)
 {
   PetscInt          i,j,n_loc;
   Vec               col;
@@ -223,7 +229,7 @@ PetscErrorCode DKSCalculateDensity(DKSContext *ctx,Vec rho_out)
 }
 
 /*
-  Build the Hamiltonian from an input density.
+  Build the Hamiltonian from an input eigenvector-dependent term.
 
   This function solves the linear system L * z = rho_in using the configured
   KSP solver. Then, it assembles the updated Hamiltonian matrix stored in the context
@@ -231,7 +237,7 @@ PetscErrorCode DKSCalculateDensity(DKSContext *ctx,Vec rho_out)
 
   Arguments:
     ctx    - Pointer to the initialized DKS context (ctx->H and ctx->z are updated)
-    rho_in - Vector with the proposed input electronic density
+    rho_in - Vector with the proposed input eigenvector-dependent term
 */
 PetscErrorCode DKSBuildHamiltonian(DKSContext *ctx,Vec rho_in)
 {
@@ -249,17 +255,17 @@ PetscErrorCode DKSBuildHamiltonian(DKSContext *ctx,Vec rho_in)
 /*
   Evaluation function (Callback) for the SNES nonlinear solver.
 
-  In each SNES iteration, this function receives a proposed density (rho_in),
-  builds the Hamiltonian, solves the eigenvalue equation, computes the
-  resulting density, and returns the residual F = rho_out - rho_in.
+  In each SNES iteration, this function receives a proposed eigenvector-dependent
+  term (rho_in), builds the Hamiltonian, solves the eigenvalue equation, computes the
+  resulting term, and returns the residual F = rho_out - rho_in.
 
   Arguments:
     snes     - The nonlinear solver context
-    rho_in   - Input electronic density proposed by SNES
+    rho_in   - Input state (eigenvector-dependent term) proposed by SNES
     F        - Vector where the computed residual will be stored
     ctx_void - Pointer to the user's DKS context (DKSContext)
 */
-PetscErrorCode DKSIterationSCF(SNES snes,Vec rho_in,Vec F,void *ctx_void)
+PetscErrorCode DKSNonlinearIteration(SNES snes,Vec rho_in,Vec F,void *ctx_void)
 {
   DKSContext *ctx=(DKSContext*)ctx_void;
   PetscInt   j,nconv;
@@ -299,11 +305,11 @@ PetscErrorCode DKSIterationSCF(SNES snes,Vec rho_in,Vec F,void *ctx_void)
     PetscCall(BVRestoreColumn(ctx->X,j,&col));             // Restores the column
   }
 
-  /* 4. Calculate the new density generated by these electrons */
+  /* 4. Compute the new eigenvector-dependent term */
   // We use ctx->rho as a temporary work vector to store rho_out
-  PetscCall(DKSCalculateDensity(ctx,ctx->rho));
+  PetscCall(DKSComputeEigvecDependentTerm(ctx,ctx->rho));
 
-  /* 5. Calculate the nonlinear residual: F = rho_out - rho_in */
+  /* 5. Calculate the nonlinear residual: F = rho_in - rho_out */
   PetscCall(VecWAXPY(F,-1.0,ctx->rho,rho_in));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -317,7 +323,7 @@ PetscErrorCode DKSIterationSCF(SNES snes,Vec rho_in,Vec F,void *ctx_void)
   Arguments:
     ctx - Pointer to the DKS context (set to NULL upon completion)
 */
-PetscErrorCode DKSDestroy(DKSContext **ctx)
+PetscErrorCode DKSDestroyContext(DKSContext **ctx)
 {
   PetscFunctionBeginUser;
   if (!*ctx) PetscFunctionReturn(PETSC_SUCCESS);
@@ -343,7 +349,7 @@ int main(int argc,char **argv)
   DKSContext          *ctx;
   Vec                 H_diag,rho_guess;
   PetscScalar         diagonal_sum,kr;
-  PetscInt            n=5,k=3,maxit=100,its;
+  PetscInt            n=5,k=3,maxit=100,its,i;
   PetscInt            nconv;
   PetscReal           alpha=0.5,rtol=SLEPC_DEFAULT_TOL,stol=1e-12;
   SNES                snes;
@@ -355,7 +361,7 @@ int main(int argc,char **argv)
   PetscFunctionBeginUser;
   PetscCall(SlepcInitialize(&argc,&argv,NULL,help));
 
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"--- DKS SNES SCF ---\n"));
+  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"--- DKS SNES NEPv ---\n"));
 
   /* 1. Read options from the command line (if provided by the user) */
   PetscCall(PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL));
@@ -363,10 +369,10 @@ int main(int argc,char **argv)
   PetscCall(PetscOptionsGetReal(NULL,NULL,"-alpha",&alpha,NULL));
 
   /* 2. Initialization of the DKS context */
-  PetscCall(DKSCreate(PETSC_COMM_WORLD,n,k,alpha,&ctx));
+  PetscCall(DKSCreateContext(PETSC_COMM_WORLD,n,k,alpha,&ctx));
 
-  /* 3. Configure general objects for the SCF (Matrices, EPS, eigenvectors) */
-  PetscCall(DKSSetupSCF(ctx,rtol*0.1));
+  /* 3. Configure general objects for the nonlinear iteration (Matrices, EPS, eigenvectors) */
+  PetscCall(DKSSetUpIterationWorkspace(ctx,rtol*0.1));
 
   /* 4. Generate the initial guess for the eigenvectors and their density */
   PetscCall(DKSGenerateInitialGuess(ctx));
@@ -374,14 +380,14 @@ int main(int argc,char **argv)
   /* 5. Calculate the initial density (rho_guess) from X0 */
   // Since SNES works with densities, the density is extracted from our X0
   PetscCall(VecDuplicate(ctx->rho,&rho_guess));
-  PetscCall(DKSCalculateDensity(ctx,rho_guess));
+  PetscCall(DKSComputeEigvecDependentTerm(ctx,rho_guess));
 
   /* 6. Prepare the residual vector F by cloning the structure of rho */
   PetscCall(VecDuplicate(ctx->rho,&F));
 
   /* 7. Create and set up the nonlinear solver engine (SNES) */
   PetscCall(SNESCreate(PETSC_COMM_WORLD,&snes));
-  PetscCall(SNESSetFunction(snes,F,DKSIterationSCF,ctx));
+  PetscCall(SNESSetFunction(snes,F,DKSNonlinearIteration,ctx));
   PetscCall(SNESSetTolerances(snes,PETSC_DETERMINE,rtol,stol,maxit,PETSC_DETERMINE));
 
   // Default -> NRICHARDSON with step lambda = 1.0 to simulate basic SCF
@@ -395,8 +401,8 @@ int main(int argc,char **argv)
   PetscCall(SNESGetTolerances(snes,NULL,&rtol,NULL,&maxit,NULL));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Current parameters: n=%" PetscInt_FMT ", k=%" PetscInt_FMT ", alpha=%g, rtol=%g, maxit=%" PetscInt_FMT "\n",n,k,(double)alpha,(double)rtol,maxit));
 
-  /* 8. SCF Loop */
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nStarting SCF iterations...\n"));
+  /* 8. Nonlinear iteration loop */
+  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nStarting nonlinear iterations...\n"));
   PetscCall(SNESSolve(snes,NULL,rho_guess));
 
   PetscCall(SNESGetConvergedReason(snes,&reason));
@@ -411,7 +417,7 @@ int main(int argc,char **argv)
     PetscCall(EPSGetConverged(ctx->eps,&nconv));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\n--- Eigenvalues (%" PetscInt_FMT " found) ---\n",nconv));
 
-    for (PetscInt i=0;i<nconv;i++) {
+    for (i=0;i<nconv;i++) {
       PetscCall(EPSGetEigenvalue(ctx->eps,i,&kr,NULL));
       PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Eigenvalue[%" PetscInt_FMT "] = %10.6f\n",i,(double)PetscRealPart(kr)));
     }
@@ -431,14 +437,14 @@ int main(int argc,char **argv)
     }
 
   } else {
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD,"--> ERROR: SCF did not converge (Reason: %s)\n",SNESConvergedReasons[reason]));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD,"--> ERROR: SNES did not converge (Reason: %s)\n",SNESConvergedReasons[reason]));
   }
 
   /* 10. Clean up memory */
   PetscCall(VecDestroy(&F));
   PetscCall(VecDestroy(&rho_guess));
   PetscCall(SNESDestroy(&snes));
-  PetscCall(DKSDestroy(&ctx));
+  PetscCall(DKSDestroyContext(&ctx));
 
   PetscCall(SlepcFinalize());
   return 0;
