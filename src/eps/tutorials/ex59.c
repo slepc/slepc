@@ -43,6 +43,7 @@ typedef struct {
   EPS       eps;     // Solver for each H
   Mat       H;       // Hamiltonian matrix
   BV        X;       // Block of eigenvectors
+  Vec       *initial_space;     // Array of vectors to store the EPS initial space
 } DKSContext;
 
 /*
@@ -134,6 +135,7 @@ PetscErrorCode DKSSetupSCF(DKSContext *ctx,PetscReal tol)
   PetscCall(EPSSetDimensions(ctx->eps,ctx->k,PETSC_DECIDE,PETSC_DECIDE));
   PetscCall(EPSSetTolerances(ctx->eps,tol,PETSC_DECIDE));
   PetscCall(EPSSetFromOptions(ctx->eps));
+  PetscCall(VecDuplicateVecs(ctx->rho,ctx->k,&ctx->initial_space));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -268,6 +270,17 @@ PetscErrorCode DKSIterationSCF(SNES snes,Vec rho_in,Vec F,void *ctx_void)
   /* 2. Solve with the current H */
   // Pass our newly built H matrix to SLEPc
   PetscCall(EPSSetOperators(ctx->eps,ctx->H,NULL));
+
+  // Extract the eigenvectors from the previous iteration to use as the initial space
+  for (j=0; j<ctx->k; j++) {
+    PetscCall(BVGetColumn(ctx->X,j,&col));
+    PetscCall(VecCopy(col,ctx->initial_space[j]));
+    PetscCall(BVRestoreColumn(ctx->X,j,&col));
+  }
+
+  // Inject the initial space into the EPS
+  PetscCall(EPSSetInitialSpace(ctx->eps,ctx->k,ctx->initial_space));
+
   PetscCall(EPSSolve(ctx->eps));
 
   // (Safety check: verify that SLEPc has not failed internally)
@@ -318,6 +331,7 @@ PetscErrorCode DKSDestroy(DKSContext **ctx)
   PetscCall(MatDestroy(&(*ctx)->H));
   PetscCall(BVDestroy(&(*ctx)->X));
   PetscCall(EPSDestroy(&(*ctx)->eps));
+  PetscCall(VecDestroyVecs((*ctx)->k, &(*ctx)->initial_space));
 
   PetscCall(PetscFree(*ctx));
   PetscFunctionReturn(PETSC_SUCCESS);

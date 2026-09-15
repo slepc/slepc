@@ -273,8 +273,9 @@ PetscErrorCode DGPIterationSCF(SNES snes,Vec rho_in,Vec F,void *ctx_void)
   /* 1. Build the physics (Hamiltonian) with the guess proposed by SNES */
   PetscCall(DGPBuildHamiltonian(ctx,rho_in));
 
-  /* 2. Solve the eigenvalue problem with the current H */
+  /* 2. Solve the eigenvalue problem with the current H, using the previous state as initial guess */
   PetscCall(EPSSetOperators(ctx->eps,ctx->H,NULL));
+  PetscCall(EPSSetInitialSpace(ctx->eps,1,&ctx->x));
   PetscCall(EPSSolve(ctx->eps));
 
   // Safety check: verify that SLEPc found the ground state
