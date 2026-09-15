@@ -94,6 +94,8 @@ PetscErrorCode DGPCreate(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,
   ctx->h=2.0*ctx->L/(ctx->N+1.0);
   ctx->omega=0.85;
   h2=ctx->h*ctx->h;
+  // Scaling factor for h^2 * (-omega * 1i * L_z) with L_z = (x or y)/(2h)
+  alpha = -h2*ctx->omega/(2.0*ctx->h)*PETSC_i;
 
   // 1. Create A0
   PetscCall(MatCreate(comm,&ctx->A0));
@@ -104,7 +106,7 @@ PetscErrorCode DGPCreate(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,
   PetscCall(MatGetOwnershipRange(ctx->A0,&Istart,&Iend));
 
   for (II=Istart;II<Iend;II++) {
-    i=II/ctx->N; j=II-i*ctx->N;
+    i=II/ctx->N; j=II%ctx->N;
 
     // Potential for mesh point with coordinates (x,y)
     x=-ctx->L+(j+1)*ctx->h;
@@ -112,7 +114,6 @@ PetscErrorCode DGPCreate(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,
     if (ctx->symm) V=0.5*(x*x+y*y);
     else V=0.5*(x*x+100.0*y*y);
 
-    alpha = -h2*ctx->omega/(2.0*ctx->h)*PETSC_i;
     PetscCall(MatSetValue(ctx->A0,II,II,0.5*4.0+h2*V,INSERT_VALUES));
     if (i>0) PetscCall(MatSetValue(ctx->A0,II,II-ctx->N,-0.5+alpha*x,INSERT_VALUES));
     if (i<ctx->N-1) PetscCall(MatSetValue(ctx->A0,II,II+ctx->N,-0.5-alpha*x,INSERT_VALUES));
@@ -218,8 +219,7 @@ PetscErrorCode DGPCalculateDensity(DGPContext *ctx,Vec rho_out)
 
   for (i=0;i<n_loc;i++) {
     /* Compute the squared magnitude: rho = Real^2 + Imag^2 */
-    PetscReal mod=PetscAbsScalar(x_local[i]);
-    rho_local[i]=mod*mod;
+    rho_local[i]=PetscRealPart(x_local[i])*PetscRealPart(x_local[i])+PetscImaginaryPart(x_local[i])*PetscImaginaryPart(x_local[i]);
   }
 
   PetscCall(VecRestoreArrayRead(ctx->x,&x_local));
@@ -280,7 +280,7 @@ PetscErrorCode DGPIterationSCF(SNES snes,Vec rho_in,Vec F,void *ctx_void)
 
   // Safety check: verify that SLEPc found the ground state
   PetscCall(EPSGetConverged(ctx->eps,&nconv));
-  if (nconv<1) PetscCall(PetscPrintf(comm,"Warning: SLEPc did not find the ground state in this iteration.\n"));
+  PetscCheck(nconv>=1,comm,PETSC_ERR_NOT_CONVERGED,"SLEPc did not find the ground state in this SNES iteration");
 
   /* 3. Extract the new eigenvector and store it directly in ctx->x */
   PetscCall(EPSGetEigenvector(ctx->eps,0,ctx->x,NULL));
@@ -409,7 +409,6 @@ int main(int argc,char **argv)
     }
 
   } else {
-    PetscCall(SNESGetConvergedReason(snes,&reason));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD,"--> ERROR: The SCF did not converge (Reason: %s)\n",SNESConvergedReasons[reason]));
   }
 
