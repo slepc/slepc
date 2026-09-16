@@ -26,7 +26,7 @@ static char help[] = "2-D discrete Gross-Pitaevskii model solved as a Nonlinear 
 
 /*
   Context structure to store the necessary data regarding the discrete Gross-Pitaevskii (DGP) problem
-  as well as the objects needed for the self-consistent field (SCF) iteration.
+  as well as the objects needed for the nonlinear iteration loop.
 */
 typedef struct {
   // DGP context
@@ -46,7 +46,7 @@ typedef struct {
   Vec       z;       // Intermediate vector to store the result z = beta * rho
   Mat       A0;      // Base linear Hamiltonian
 
-  // SCF context
+  // Nonlinear iteration context
   EPS       eps;     // Solver for each H
   Mat       H;       // Hamiltonian
   Vec       x;       // Eigenvector
@@ -72,7 +72,7 @@ typedef struct {
     symm    - Defines the shape of the magnetic trap (True = symmetric, False = asymmetric)
     ctx_out - Pointer to the memory address where the created context will be stored
 */
-PetscErrorCode DGPCreate(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,DGPContext **ctx_out)
+PetscErrorCode DGPCreateContext(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,DGPContext **ctx_out)
 {
   DGPContext  *ctx;
 
@@ -94,6 +94,8 @@ PetscErrorCode DGPCreate(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,
   ctx->h=2.0*ctx->L/(ctx->N+1.0);
   ctx->omega=0.85;
   h2=ctx->h*ctx->h;
+  // Scaling factor for h^2 * (-omega * 1i * L_z) with L_z = (x or y)/(2h)
+  alpha = -h2*ctx->omega/(2.0*ctx->h)*PETSC_i;
 
   // 1. Create A0
   PetscCall(MatCreate(comm,&ctx->A0));
@@ -104,7 +106,7 @@ PetscErrorCode DGPCreate(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,
   PetscCall(MatGetOwnershipRange(ctx->A0,&Istart,&Iend));
 
   for (II=Istart;II<Iend;II++) {
-    i=II/ctx->N; j=II-i*ctx->N;
+    i=II/ctx->N; j=II%ctx->N;
 
     // Potential for mesh point with coordinates (x,y)
     x=-ctx->L+(j+1)*ctx->h;
@@ -112,8 +114,10 @@ PetscErrorCode DGPCreate(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,
     if (ctx->symm) V=0.5*(x*x+y*y);
     else V=0.5*(x*x+100.0*y*y);
 
-    alpha = -h2*ctx->omega/(2.0*ctx->h)*PETSC_i;
+    // Diagonal: h^2*(-0.5*L + V - omega*1i*L_z) with L_diag = -4/h^2 and L_z_diag = 0
     PetscCall(MatSetValue(ctx->A0,II,II,0.5*4.0+h2*V,INSERT_VALUES));
+
+    // Off-diagonal: h^2*(-0.5*L + V - omega*1i*L_z) with L_offdiag = 1/h^2, V_offdiag = 0, and L_z_offdiag = +/- (x or y)/(2h)
     if (i>0) PetscCall(MatSetValue(ctx->A0,II,II-ctx->N,-0.5+alpha*x,INSERT_VALUES));
     if (i<ctx->N-1) PetscCall(MatSetValue(ctx->A0,II,II+ctx->N,-0.5-alpha*x,INSERT_VALUES));
     if (j>0) PetscCall(MatSetValue(ctx->A0,II,II-1,-0.5-alpha*y,INSERT_VALUES));
@@ -131,7 +135,7 @@ PetscErrorCode DGPCreate(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,
 }
 
 /*
-  Configure the SLEPc objects necessary for the SCF iteration.
+  Configure the SLEPc objects necessary for the nonlinear iteration.
 
   This function prepares the Hamiltonian matrix by cloning the structure of A0,
   initializes the vector to store the condensate state, and configures the eigenvalue
@@ -141,7 +145,7 @@ PetscErrorCode DGPCreate(MPI_Comm comm,PetscInt N,PetscReal beta,PetscBool symm,
     ctx - Pointer to the previously initialized DGP context
     tol - Desired tolerance for the internal eigenvalue solver
 */
-PetscErrorCode DGPSetupSCF(DGPContext *ctx,PetscReal tol)
+PetscErrorCode DGPSetUpIterationWorkspace(DGPContext *ctx,PetscReal tol)
 {
   MPI_Comm comm;
 
@@ -168,7 +172,7 @@ PetscErrorCode DGPSetupSCF(DGPContext *ctx,PetscReal tol)
 
   This function solves the eigenvalue problem (A0 * x = E * x) and fills
   the vector x with the lowest energy eigenvector obtained. This
-  initial guess improves the convergence of the SCF loop.
+  initial guess improves the convergence of the nonlinear iteration loop.
 
   Arguments:
     ctx - Pointer to the previously initialized DGP context
@@ -194,16 +198,17 @@ PetscErrorCode DGPGenerateInitialGuess(DGPContext *ctx)
 }
 
 /*
-  Compute the condensate density from the ground-state eigenvector.
+  Compute the eigenvector-dependent term from the ground-state eigenvector.
 
-  This function computes the density rho(x) as the squared magnitude
-  of the components of the eigenvector X0. The formula used is: rho(x) = |x|.^2.
+  In the context of the Gross-Pitaevskii model, this function computes the condensate
+  density rho(x) as the squared magnitude of the components of the eigenvector X0.
+  The formula used is: rho(x) = |x|.^2.
 
   Arguments:
     ctx     - Pointer to the initialized DGP context
-    rho_out - Pre-created vector where the computed density will be stored
+    rho_out - Pre-created vector where the computed term will be stored
 */
-PetscErrorCode DGPCalculateDensity(DGPContext *ctx,Vec rho_out)
+PetscErrorCode DGPComputeEigvecDependentTerm(DGPContext *ctx,Vec rho_out)
 {
   PetscInt          i,n_loc;
   const PetscScalar *x_local;
@@ -218,8 +223,7 @@ PetscErrorCode DGPCalculateDensity(DGPContext *ctx,Vec rho_out)
 
   for (i=0;i<n_loc;i++) {
     /* Compute the squared magnitude: rho = Real^2 + Imag^2 */
-    PetscReal mod=PetscAbsScalar(x_local[i]);
-    rho_local[i]=mod*mod;
+    rho_local[i]=PetscRealPart(x_local[i])*PetscRealPart(x_local[i])+PetscImaginaryPart(x_local[i])*PetscImaginaryPart(x_local[i]);
   }
 
   PetscCall(VecRestoreArrayRead(ctx->x,&x_local));
@@ -228,14 +232,14 @@ PetscErrorCode DGPCalculateDensity(DGPContext *ctx,Vec rho_out)
 }
 
 /*
-  Build the Hamiltonian from an input density.
+  Build the Hamiltonian from an input eigenvector-dependent term.
 
   This function assembles the updated Hamiltonian matrix stored in the context
   using the formula: H = A0 + beta * Diag(rho_in).
 
   Arguments:
     ctx    - Pointer to the initialized DGP context (ctx->H is updated)
-    rho_in - Vector with the input density
+    rho_in - Vector with the proposed input eigenvector-dependent term
 */
 PetscErrorCode DGPBuildHamiltonian(DGPContext *ctx,Vec rho_in)
 {
@@ -252,17 +256,17 @@ PetscErrorCode DGPBuildHamiltonian(DGPContext *ctx,Vec rho_in)
 /*
   Evaluation function (Callback) for the SNES nonlinear solver in DGP.
 
-  In each SNES iteration, this function receives a proposed density (rho_in),
-  builds the Hamiltonian, solves the eigenvalue equation, computes the
-  resulting density, and returns the residual F = rho_out - rho_in.
+  In each SNES iteration, this function receives a proposed eigenvector-dependent
+  term (rho_in), builds the Hamiltonian, solves the eigenvalue equation, computes the
+  resulting term, and returns the residual F = rho_out - rho_in.
 
   Arguments:
     snes     - The nonlinear solver context
-    rho_in   - Condensate density proposed by SNES
+    rho_in   - Input state (eigenvector-dependent term) proposed by SNES
     F        - Vector where the computed residual will be stored
     ctx_void - Pointer to the user's DGP context (DGPContext)
 */
-PetscErrorCode DGPIterationSCF(SNES snes,Vec rho_in,Vec F,void *ctx_void)
+PetscErrorCode DGPNonlinearIteration(SNES snes,Vec rho_in,Vec F,void *ctx_void)
 {
   DGPContext *ctx=(DGPContext*)ctx_void;
   PetscInt   nconv;
@@ -273,22 +277,23 @@ PetscErrorCode DGPIterationSCF(SNES snes,Vec rho_in,Vec F,void *ctx_void)
   /* 1. Build the physics (Hamiltonian) with the guess proposed by SNES */
   PetscCall(DGPBuildHamiltonian(ctx,rho_in));
 
-  /* 2. Solve the eigenvalue problem with the current H */
+  /* 2. Solve the eigenvalue problem with the current H, using the previous state as initial guess */
   PetscCall(EPSSetOperators(ctx->eps,ctx->H,NULL));
+  PetscCall(EPSSetInitialSpace(ctx->eps,1,&ctx->x));
   PetscCall(EPSSolve(ctx->eps));
 
   // Safety check: verify that SLEPc found the ground state
   PetscCall(EPSGetConverged(ctx->eps,&nconv));
-  if (nconv<1) PetscCall(PetscPrintf(comm,"Warning: SLEPc did not find the ground state in this iteration.\n"));
+  PetscCheck(nconv>=1,comm,PETSC_ERR_NOT_CONVERGED,"SLEPc did not find the ground state in this SNES iteration");
 
   /* 3. Extract the new eigenvector and store it directly in ctx->x */
   PetscCall(EPSGetEigenvector(ctx->eps,0,ctx->x,NULL));
 
-  /* 4. Compute the new density (rho_out) generated by this eigenvector */
+  /* 4. Compute the new eigenvector-dependent term (rho_out) generated by this eigenvector */
   // Store the result in ctx->rho
-  PetscCall(DGPCalculateDensity(ctx,ctx->rho));
+  PetscCall(DGPComputeEigvecDependentTerm(ctx,ctx->rho));
 
-  /* 5. Calculate the nonlinear residual: F = rho_out - rho_in */
+  /* 5. Calculate the nonlinear residual: F = rho_in - rho_out */
   PetscCall(VecWAXPY(F,-1.0,ctx->rho,rho_in));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -302,7 +307,7 @@ PetscErrorCode DGPIterationSCF(SNES snes,Vec rho_in,Vec F,void *ctx_void)
   Arguments:
     ctx - Pointer to the DGP context (set to NULL upon completion)
 */
-PetscErrorCode DGPDestroy(DGPContext **ctx)
+PetscErrorCode DGPDestroyContext(DGPContext **ctx)
 {
   PetscFunctionBeginUser;
   if (!*ctx) PetscFunctionReturn(PETSC_SUCCESS);
@@ -338,7 +343,7 @@ int main(int argc,char **argv)
 
   PetscCheck(PetscDefined(USE_COMPLEX),PETSC_COMM_WORLD,PETSC_ERR_SUP,"This example requires complex scalars");
 
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"--- DGP SNES SCF ---\n"));
+  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"--- DGP SNES NEPv ---\n"));
 
   /* 1. Read DGP-specific command line options */
   PetscCall(PetscOptionsGetInt(NULL,NULL,"-n",&n,NULL));
@@ -346,24 +351,24 @@ int main(int argc,char **argv)
   PetscCall(PetscOptionsGetBool(NULL,NULL,"-symm",&symm,NULL));
 
   /* 2. Initialization of the DGP context and base linear Hamiltonian A0 */
-  PetscCall(DGPCreate(PETSC_COMM_WORLD,n,beta,symm,&ctx));
+  PetscCall(DGPCreateContext(PETSC_COMM_WORLD,n,beta,symm,&ctx));
 
-  /* 3. Configure objects for the SCF (H matrix, EPS, Vec x) */
-  PetscCall(DGPSetupSCF(ctx,rtol*0.1));
+  /* 3. Configure objects for the nonlinear iteration (H matrix, EPS, Vec x) */
+  PetscCall(DGPSetUpIterationWorkspace(ctx,rtol*0.1));
 
   /* 4. Generate the initial guess by solving the linear problem A0 */
   PetscCall(DGPGenerateInitialGuess(ctx));
 
   /* 5. Prepare the initial density (rho_guess) from the linear ground state */
   PetscCall(VecDuplicate(ctx->rho,&rho_guess));
-  PetscCall(DGPCalculateDensity(ctx,rho_guess));
+  PetscCall(DGPComputeEigvecDependentTerm(ctx,rho_guess));
 
   /* 6. Prepare the residual vector F by cloning rho */
   PetscCall(VecDuplicate(ctx->rho,&F));
 
   /* 7. Configure the nonlinear solver engine (SNES) with the DGP callback */
   PetscCall(SNESCreate(PETSC_COMM_WORLD,&snes));
-  PetscCall(SNESSetFunction(snes,F,DGPIterationSCF,ctx));
+  PetscCall(SNESSetFunction(snes,F,DGPNonlinearIteration,ctx));
   PetscCall(SNESSetTolerances(snes,PETSC_DETERMINE,rtol,stol,maxit,PETSC_DETERMINE));
 
   // Default -> NRICHARDSON with step lambda = 1.0 to simulate basic SCF
@@ -377,8 +382,8 @@ int main(int argc,char **argv)
   PetscCall(SNESGetTolerances(snes,NULL,&rtol,NULL,&maxit,NULL));
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Current parameters: n=%" PetscInt_FMT ", beta=%g, symm=%s, rtol=%g, maxit=%" PetscInt_FMT "\n",n,(double)beta,symm ? "True" : "False",(double)rtol,maxit));
 
-  /* 8. SCF loop */
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nStarting SCF iterations...\n"));
+  /* 8. Nonlinear iteration loop */
+  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nStarting nonlinear iterations...\n"));
   PetscCall(SNESSolve(snes,NULL,rho_guess));
 
   PetscCall(SNESGetConvergedReason(snes,&reason));
@@ -408,15 +413,14 @@ int main(int argc,char **argv)
     }
 
   } else {
-    PetscCall(SNESGetConvergedReason(snes,&reason));
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD,"--> ERROR: The SCF did not converge (Reason: %s)\n",SNESConvergedReasons[reason]));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD,"--> ERROR: SNES did not converge (Reason: %s)\n",SNESConvergedReasons[reason]));
   }
 
   /* 10. Clean up memory */
   PetscCall(VecDestroy(&F));
   PetscCall(VecDestroy(&rho_guess));
   PetscCall(SNESDestroy(&snes));
-  PetscCall(DGPDestroy(&ctx));
+  PetscCall(DGPDestroyContext(&ctx));
 
   PetscCall(SlepcFinalize());
   return 0;
