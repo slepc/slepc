@@ -352,6 +352,10 @@ latex_elements = {
         ''',
 }
 
+def _parallel_operation_allowed(operation):
+    """Read sources serially while allowing supported builders to write in parallel."""
+    return operation == 'write'
+
 def setup(app):
 
 #    print('-----------------------------8<--------------------------------')
@@ -363,6 +367,7 @@ def setup(app):
 #    print('app.fresh_env_used: {}'.format(app.fresh_env_used))
 #    print('-----------------------------8<--------------------------------')
 
+    app.is_parallel_allowed = _parallel_operation_allowed
     if 'PETSC_DIR' not in os.environ:
         print('\nUnable to build the documentation, PETSC_DIR environment variable is not set')
         print('\nPlease configure PETSc and SLEPc before building the documentation')
