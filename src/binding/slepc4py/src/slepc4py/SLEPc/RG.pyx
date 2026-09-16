@@ -597,7 +597,7 @@ cdef class RG(Object):
         return (toScalar(sval), toReal(val1), toReal(val2))
 
     def setIntervalEndpoints(self, a: float, b: float, c: float, d: float) -> None:
-        """
+        r"""
         Set the parameters defining the interval region.
 
         Logically collective.
@@ -724,7 +724,7 @@ cdef class RG(Object):
         end_ang: float,
         width: float,
     ) -> None:
-        """
+        r"""
         Set the parameters defining the ring region.
 
         Logically collective.

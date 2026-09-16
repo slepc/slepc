@@ -2175,7 +2175,7 @@ cdef class EPS(Object):
             return toComplex(sval1, sval2)
 
     def getInvariantSubspace(self) -> list[Vec]:
-        """
+        r"""
         Get an orthonormal basis of the computed invariant subspace.
 
         Collective.
@@ -2249,7 +2249,7 @@ cdef class EPS(Object):
         return toReal(rval)
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
-        """
+        r"""
         Compute the error associated with the i-th computed eigenpair.
 
         Collective.
@@ -2988,7 +2988,7 @@ cdef class EPS(Object):
         structure: petsc4py.PETSc.Mat.Structure | None = None,
         globalup: bool = False,
     ) -> None:
-        """
+        r"""
         Update the eigenproblem matrices stored internally in the communicator.
 
         Collective.

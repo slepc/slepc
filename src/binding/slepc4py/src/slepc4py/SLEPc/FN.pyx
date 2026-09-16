@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class FNType(object):
-    """
+    r"""
     FN type.
 
     - `COMBINE`: A math function defined by combining two functions.

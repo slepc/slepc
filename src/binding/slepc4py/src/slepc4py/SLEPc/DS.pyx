@@ -707,7 +707,7 @@ cdef class DS(Object):
         return toBool(val)
 
     def setRefined(self, ref: bool = True) -> None:
-        """
+        r"""
         Set a flag to indicate that refined vectors must be computed.
 
         Logically collective.

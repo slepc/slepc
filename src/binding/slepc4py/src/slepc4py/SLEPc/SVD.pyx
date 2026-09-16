@@ -1386,7 +1386,7 @@ cdef class SVD(Object):
     #
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
-        """
+        r"""
         Compute the error associated with the i-th singular triplet.
 
         Collective.
@@ -1543,7 +1543,7 @@ cdef class SVD(Object):
         return eps
 
     def setCrossExplicitMatrix(self, flag: bool = True) -> None:
-        """
+        r"""
         Set if the eigensolver operator :math:`A^*A` must be computed.
 
         Logically collective.
@@ -1626,7 +1626,7 @@ cdef class SVD(Object):
         return eps
 
     def setCyclicExplicitMatrix(self, flag: bool = True) -> None:
-        """
+        r"""
         Set if the eigensolver operator :math:`H(A)` must be computed explicitly.
 
         Logically collective.
@@ -1655,7 +1655,7 @@ cdef class SVD(Object):
         CHKERR(SVDCyclicSetExplicitMatrix(self.svd, tval))
 
     def getCyclicExplicitMatrix(self) -> bool:
-        """
+        r"""
         Get the flag indicating if :math:`H(A)` is built explicitly.
 
         Not collective.

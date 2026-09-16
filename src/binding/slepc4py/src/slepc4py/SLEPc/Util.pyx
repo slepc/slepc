@@ -7,7 +7,7 @@ cdef class Util:
 
     @classmethod
     def createMatBSE(cls, Mat R: petsc4py.PETSc.Mat, Mat C: petsc4py.PETSc.Mat) -> petsc4py.PETSc.Mat:
-        """
+        r"""
         Create a matrix that can be used to define a BSE type problem.
 
         Collective.
@@ -37,7 +37,7 @@ cdef class Util:
 
     @classmethod
     def createMatHamiltonian(cls, Mat A: petsc4py.PETSc.Mat, Mat B: petsc4py.PETSc.Mat, Mat C: petsc4py.PETSc.Mat) -> petsc4py.PETSc.Mat:
-        """
+        r"""
         Create matrix to be used for a structured Hamiltonian eigenproblem.
 
         Collective.
@@ -66,7 +66,7 @@ cdef class Util:
 
     @classmethod
     def createMatLREP(cls, Mat AK: petsc4py.PETSc.Mat, Mat BM: petsc4py.PETSc.Mat, red: bool = False) -> petsc4py.PETSc.Mat:
-        """
+        r"""
         Create a matrix that can be used to define a LREP type problem.
 
         Collective.

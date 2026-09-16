@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class BVType(object):
-    """
+    r"""
     BV type.
 
     - `MAT`: A `BV` stored as a dense `petsc.Mat`.
@@ -1260,7 +1260,7 @@ cdef class BV(Object):
         CHKERR(BVCopyColumn(self.bv, ival1, ival2))
 
     def setDefiniteTolerance(self, deftol: float) -> None:
-        """
+        r"""
         Set the tolerance to be used when checking a definite inner product.
 
         Logically collective.
@@ -1813,7 +1813,7 @@ cdef class BV(Object):
         CHKERR(BVMatMultHermitianTransposeColumn(self.bv, A.mat, ival))
 
     def mult(self, delta: Scalar, gamma: Scalar, BV X, Mat Q or None: Mat | None) -> None:
-        """
+        r"""
         Compute :math:`Y = \gamma Y + \delta X Q`.
 
         Logically collective.
@@ -1867,7 +1867,7 @@ cdef class BV(Object):
         CHKERR(BVMultInPlace(self.bv, Q.mat, ival1, ival2))
 
     def multColumn(self, delta: Scalar, gamma: Scalar, j: int, q: Sequence[Scalar]) -> None:
-        """
+        r"""
         Compute :math:`y = \gamma y + \delta X q`.
 
         Logically collective.
@@ -1903,7 +1903,7 @@ cdef class BV(Object):
         CHKERR(BVMultColumn(self.bv, sval1, sval2, ival, qval))
 
     def multVec(self, delta: Scalar, gamma: Scalar, Vec y, q: Sequence[Scalar]) -> None:
-        """
+        r"""
         Compute :math:`y = \gamma y + \delta X q`.
 
         Logically collective.
@@ -1935,7 +1935,7 @@ cdef class BV(Object):
         CHKERR(BVMultVec(self.bv, sval1, sval2, y.vec, qval))
 
     def normColumn(self, j: int, norm_type: NormType | None = None) -> float:
-        """
+        r"""
         Compute the vector norm of a selected column.
 
         Collective.

@@ -24,7 +24,7 @@ class STType(object):
 
 
 class STMatMode(object):
-    """
+    r"""
     ST matrix mode.
 
     - `COPY`:    A working copy of the matrix is created.
@@ -389,7 +389,7 @@ cdef class ST(Object):
         return toBool(sval)
 
     def setMatMode(self, mode: MatMode) -> None:
-        """
+        r"""
         Set a flag related to management of transformed matrices.
 
         Logically collective.
@@ -607,7 +607,7 @@ cdef class ST(Object):
         return ksp
 
     def setPreconditionerMat(self, Mat P = None) -> None:
-        """
+        r"""
         Set the matrix to be used to build the preconditioner.
 
         Collective.
@@ -675,7 +675,7 @@ cdef class ST(Object):
         operators: list[petsc4py.PETSc.Mat],
         structure: petsc4py.PETSc.Mat.Structure | None = None
     ) -> None:
-        """
+        r"""
         Set the matrices to be used to build the preconditioner.
 
         Collective.
@@ -763,7 +763,7 @@ cdef class ST(Object):
         CHKERR(STSetUp(self.st))
 
     def apply(self, Vec x, Vec y) -> None:
-        """
+        r"""
         Apply the spectral transformation operator to a vector.
 
         Collective.
@@ -786,7 +786,7 @@ cdef class ST(Object):
         CHKERR(STApply(self.st, x.vec, y.vec))
 
     def applyTranspose(self, Vec x, Vec y) -> None:
-        """
+        r"""
         Apply the transpose of the operator to a vector.
 
         Collective.
@@ -809,7 +809,7 @@ cdef class ST(Object):
         CHKERR(STApplyTranspose(self.st, x.vec, y.vec))
 
     def applyHermitianTranspose(self, Vec x, Vec y) -> None:
-        """
+        r"""
         Apply the Hermitian-transpose of the operator to a vector.
 
         Collective.
@@ -832,7 +832,7 @@ cdef class ST(Object):
         CHKERR(STApplyHermitianTranspose(self.st, x.vec, y.vec))
 
     def applyMat(self, Mat X, Mat Y) -> None:
-        """
+        r"""
         Apply the spectral transformation operator to a matrix.
 
         Collective.
@@ -923,7 +923,7 @@ cdef class ST(Object):
     #
 
     def setCayleyAntishift(self, mu: Scalar) -> None:
-        """
+        r"""
         Set the value of the anti-shift for the Cayley spectral transformation.
 
         Logically collective.

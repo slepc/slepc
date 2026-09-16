@@ -536,7 +536,7 @@ cdef class PEP(Object):
         return val
 
     def setBasis(self, basis: Basis) -> None:
-        """
+        r"""
         Set the type of polynomial basis used.
 
         Logically collective.
@@ -1399,7 +1399,7 @@ cdef class PEP(Object):
         return tuple(operators)
 
     def setOperators(self, operators: list[Mat]) -> None:
-        """
+        r"""
         Set the matrices associated with the eigenvalue problem.
 
         Collective.
@@ -1799,7 +1799,7 @@ cdef class PEP(Object):
         return toReal(rval)
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
-        """
+        r"""
         Compute the error associated with the i-th computed eigenpair.
 
         Collective.

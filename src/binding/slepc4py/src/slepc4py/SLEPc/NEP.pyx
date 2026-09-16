@@ -204,7 +204,7 @@ class NEPCISSExtraction(object):
 
 cdef class NEP(Object):
 
-    """
+    r"""
     Nonlinear Eigenvalue Problem Solver.
 
     The Nonlinear Eigenvalue Problem (`NEP`) solver is the object provided
@@ -1396,7 +1396,7 @@ cdef class NEP(Object):
         return toReal(rval)
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
-        """
+        r"""
         Compute the error associated with the i-th computed eigenpair.
 
         Collective.
@@ -1519,7 +1519,7 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
+        r"""
         Set the function to compute the nonlinear Function :math:`T(\lambda)`.
 
         Collective.
@@ -1552,7 +1552,7 @@ cdef class NEP(Object):
             CHKERR(NEPSetFunction(self.nep, Fmat, Pmat, NULL, NULL))
 
     def getFunction(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat, NEPFunction]:
-        """
+        r"""
         Get the function to compute the nonlinear Function :math:`T(\lambda)`.
 
         Collective.
@@ -1588,7 +1588,7 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
+        r"""
         Set the function to compute the Jacobian :math:`T'(\lambda)`.
 
         Collective.
@@ -1618,7 +1618,7 @@ cdef class NEP(Object):
             CHKERR(NEPSetJacobian(self.nep, Jmat, NULL, NULL))
 
     def getJacobian(self) -> tuple[petsc4py.PETSc.Mat, NEPJacobian]:
-        """
+        r"""
         Get the function to compute the Jacobian :math:`T'(\lambda)` and J.
 
         Collective.
@@ -1649,7 +1649,7 @@ cdef class NEP(Object):
         f: FN | list[FN],
         structure: petsc4py.PETSc.Mat.Structure | None = None,
     ) -> None:
-        """
+        r"""
         Set the operator of the nonlinear eigenvalue problem in split form.
 
         Collective.
@@ -1853,7 +1853,7 @@ cdef class NEP(Object):
         Vec r,
         RG rg = None,
     ) -> None:
-        """
+        r"""
         Apply the resolvent :math:`T^{-1}(z)` to a given vector.
 
         Collective.
@@ -2015,7 +2015,7 @@ cdef class NEP(Object):
         return toInt(ival)
 
     def setRIIHermitian(self, herm: bool = True) -> None:
-        """
+        r"""
         Set a flag to use the Hermitian version of the solver.
 
         Logically collective.
@@ -2619,7 +2619,7 @@ cdef class NEP(Object):
         return (toReal(rval), toInt(ival))
 
     def setNLEIGSFullBasis(self, fullbasis: bool = True) -> None:
-        """
+        r"""
         Set TOAR-basis (default) or full-basis variants of the NLEIGS method.
 
         Logically collective.
