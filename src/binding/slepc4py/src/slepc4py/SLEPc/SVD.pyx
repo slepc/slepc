@@ -36,6 +36,7 @@ class SVDType(object):
     ELEMENTAL  = S_(SVDELEMENTAL)
     PRIMME     = S_(SVDPRIMME)
 
+
 class SVDProblemType(object):
     """
     SVD problem type.
@@ -51,6 +52,7 @@ class SVDProblemType(object):
     STANDARD    = SVD_STANDARD
     GENERALIZED = SVD_GENERALIZED
     HYPERBOLIC  = SVD_HYPERBOLIC
+
 
 class SVDErrorType(object):
     """
@@ -68,6 +70,7 @@ class SVDErrorType(object):
     RELATIVE = SVD_ERROR_RELATIVE
     NORM     = SVD_ERROR_NORM
 
+
 class SVDWhich(object):
     """
     SVD desired part of spectrum.
@@ -81,6 +84,7 @@ class SVDWhich(object):
     """
     LARGEST  = SVD_LARGEST
     SMALLEST = SVD_SMALLEST
+
 
 class SVDConv(object):
     """
@@ -102,6 +106,7 @@ class SVDConv(object):
     MAXIT = SVD_CONV_MAXIT
     USER  = SVD_CONV_USER
 
+
 class SVDStop(object):
     """
     SVD stopping test.
@@ -117,6 +122,7 @@ class SVDStop(object):
     BASIC     = SVD_STOP_BASIC
     USER      = SVD_STOP_USER
     THRESHOLD = SVD_STOP_THRESHOLD
+
 
 class SVDConvergedReason(object):
     """
@@ -145,6 +151,7 @@ class SVDConvergedReason(object):
     CONVERGED_ITERATING    = SVD_CONVERGED_ITERATING
     ITERATING              = SVD_CONVERGED_ITERATING
 
+
 class SVDTRLanczosGBidiag(object):
     """
     SVD TRLanczos bidiagonalization choices for the GSVD case.
@@ -164,6 +171,7 @@ class SVDTRLanczosGBidiag(object):
     LOWER  = SVD_TRLANCZOS_GBIDIAG_LOWER
 
 # -----------------------------------------------------------------------------
+
 
 cdef class SVD(Object):
 
@@ -209,7 +217,7 @@ cdef class SVD(Object):
         slepc.SVDView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( SVDView(self.svd, vwr) )
+        CHKERR(SVDView(self.svd, vwr))
 
     def destroy(self) -> Self:
         """
@@ -221,7 +229,7 @@ cdef class SVD(Object):
         --------
         slepc.SVDDestroy
         """
-        CHKERR( SVDDestroy(&self.svd) )
+        CHKERR(SVDDestroy(&self.svd))
         self.svd = NULL
         return self
 
@@ -235,7 +243,7 @@ cdef class SVD(Object):
         --------
         slepc.SVDReset
         """
-        CHKERR( SVDReset(self.svd) )
+        CHKERR(SVDReset(self.svd))
 
     def create(self, comm: Comm | None = None) -> Self:
         """
@@ -254,8 +262,8 @@ cdef class SVD(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcSVD newsvd = NULL
-        CHKERR( SVDCreate(ccomm, &newsvd) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.svd = newsvd
+        CHKERR(SVDCreate(ccomm, &newsvd))
+        CHKERR(SlepcCLEAR(self.obj)); self.svd = newsvd
         return self
 
     def setType(self, svd_type: Type | str) -> None:
@@ -283,7 +291,7 @@ cdef class SVD(Object):
         """
         cdef SlepcSVDType cval = NULL
         svd_type = str2bytes(svd_type, &cval)
-        CHKERR( SVDSetType(self.svd, cval) )
+        CHKERR(SVDSetType(self.svd, cval))
 
     def getType(self) -> str:
         """
@@ -301,7 +309,7 @@ cdef class SVD(Object):
         setType, slepc.SVDGetType
         """
         cdef SlepcSVDType svd_type = NULL
-        CHKERR( SVDGetType(self.svd, &svd_type) )
+        CHKERR(SVDGetType(self.svd, &svd_type))
         return bytes2str(svd_type)
 
     def getOptionsPrefix(self) -> str:
@@ -320,7 +328,7 @@ cdef class SVD(Object):
         setOptionsPrefix, appendOptionsPrefix, slepc.SVDGetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( SVDGetOptionsPrefix(self.svd, &prefix) )
+        CHKERR(SVDGetOptionsPrefix(self.svd, &prefix))
         return bytes2str(prefix)
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -352,7 +360,7 @@ cdef class SVD(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( SVDSetOptionsPrefix(self.svd, cval) )
+        CHKERR(SVDSetOptionsPrefix(self.svd, cval))
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
@@ -371,7 +379,7 @@ cdef class SVD(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( SVDAppendOptionsPrefix(self.svd, cval) )
+        CHKERR(SVDAppendOptionsPrefix(self.svd, cval))
 
     def setFromOptions(self) -> None:
         """
@@ -390,7 +398,7 @@ cdef class SVD(Object):
         --------
         setOptionsPrefix, slepc.SVDSetFromOptions
         """
-        CHKERR( SVDSetFromOptions(self.svd) )
+        CHKERR(SVDSetFromOptions(self.svd))
 
     def getProblemType(self) -> ProblemType:
         """
@@ -408,7 +416,7 @@ cdef class SVD(Object):
         setProblemType, slepc.SVDGetProblemType
         """
         cdef SlepcSVDProblemType val = SVD_STANDARD
-        CHKERR( SVDGetProblemType(self.svd, &val) )
+        CHKERR(SVDGetProblemType(self.svd, &val))
         return val
 
     def setProblemType(self, problem_type: ProblemType) -> None:
@@ -433,7 +441,7 @@ cdef class SVD(Object):
         setOperators, setSignature, getProblemType, slepc.SVDSetProblemType
         """
         cdef SlepcSVDProblemType val = problem_type
-        CHKERR( SVDSetProblemType(self.svd, val) )
+        CHKERR(SVDSetProblemType(self.svd, val))
 
     def isGeneralized(self) -> bool:
         """
@@ -451,7 +459,7 @@ cdef class SVD(Object):
         setProblemType, isHyperbolic, slepc.SVDIsGeneralized
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDIsGeneralized(self.svd, &tval) )
+        CHKERR(SVDIsGeneralized(self.svd, &tval))
         return toBool(tval)
 
     def isHyperbolic(self) -> bool:
@@ -470,7 +478,7 @@ cdef class SVD(Object):
         setProblemType, isGeneralized, slepc.SVDIsHyperbolic
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDIsHyperbolic(self.svd, &tval) )
+        CHKERR(SVDIsHyperbolic(self.svd, &tval))
         return toBool(tval)
 
     #
@@ -491,7 +499,7 @@ cdef class SVD(Object):
         setImplicitTranspose, slepc.SVDGetImplicitTranspose
         """
         cdef PetscBool val = PETSC_FALSE
-        CHKERR( SVDGetImplicitTranspose(self.svd, &val) )
+        CHKERR(SVDGetImplicitTranspose(self.svd, &val))
         return toBool(val)
 
     def setImplicitTranspose(self, mode: bool = True) -> None:
@@ -519,7 +527,7 @@ cdef class SVD(Object):
         getImplicitTranspose, slepc.SVDSetImplicitTranspose
         """
         cdef PetscBool val = asBool(mode)
-        CHKERR( SVDSetImplicitTranspose(self.svd, val) )
+        CHKERR(SVDSetImplicitTranspose(self.svd, val))
 
     def getWhichSingularTriplets(self) -> Which:
         """
@@ -537,7 +545,7 @@ cdef class SVD(Object):
         setWhichSingularTriplets, slepc.SVDGetWhichSingularTriplets
         """
         cdef SlepcSVDWhich val = SVD_LARGEST
-        CHKERR( SVDGetWhichSingularTriplets(self.svd, &val) )
+        CHKERR(SVDGetWhichSingularTriplets(self.svd, &val))
         return val
 
     def setWhichSingularTriplets(self, which: Which) -> None:
@@ -556,7 +564,7 @@ cdef class SVD(Object):
         getWhichSingularTriplets, slepc.SVDSetWhichSingularTriplets
         """
         cdef SlepcSVDWhich val = which
-        CHKERR( SVDSetWhichSingularTriplets(self.svd, val) )
+        CHKERR(SVDSetWhichSingularTriplets(self.svd, val))
 
     def getThreshold(self) -> tuple[float, bool]:
         """
@@ -577,7 +585,7 @@ cdef class SVD(Object):
         """
         cdef PetscReal rval = 0
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDGetThreshold(self.svd, &rval, &tval) )
+        CHKERR(SVDGetThreshold(self.svd, &rval, &tval))
         return (toReal(rval), toBool(tval))
 
     def setThreshold(self, thres: float, rel: bool = False) -> None:
@@ -613,7 +621,7 @@ cdef class SVD(Object):
         """
         cdef PetscReal rval = asReal(thres)
         cdef PetscBool tval = asBool(rel)
-        CHKERR( SVDSetThreshold(self.svd, rval, tval) )
+        CHKERR(SVDSetThreshold(self.svd, rval, tval))
 
     def getTolerances(self) -> tuple[float, int]:
         """
@@ -637,7 +645,7 @@ cdef class SVD(Object):
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
-        CHKERR( SVDGetTolerances(self.svd, &rval, &ival) )
+        CHKERR(SVDGetTolerances(self.svd, &rval, &ival))
         return (toReal(rval), toInt(ival))
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
@@ -669,7 +677,7 @@ cdef class SVD(Object):
         cdef PetscInt  ival = PETSC_CURRENT
         if tol    is not None: rval = asReal(tol)
         if max_it is not None: ival = asInt(max_it)
-        CHKERR( SVDSetTolerances(self.svd, rval, ival) )
+        CHKERR(SVDSetTolerances(self.svd, rval, ival))
 
     def getConvergenceTest(self) -> Conv:
         """
@@ -688,7 +696,7 @@ cdef class SVD(Object):
         setConvergenceTest, slepc.SVDGetConvergenceTest
         """
         cdef SlepcSVDConv conv = SVD_CONV_REL
-        CHKERR( SVDGetConvergenceTest(self.svd, &conv) )
+        CHKERR(SVDGetConvergenceTest(self.svd, &conv))
         return conv
 
     def setConvergenceTest(self, conv: Conv) -> None:
@@ -708,7 +716,7 @@ cdef class SVD(Object):
         getConvergenceTest, slepc.SVDSetConvergenceTest
         """
         cdef SlepcSVDConv tconv = conv
-        CHKERR( SVDSetConvergenceTest(self.svd, tconv) )
+        CHKERR(SVDSetConvergenceTest(self.svd, tconv))
 
     def getTrackAll(self) -> bool:
         """
@@ -726,7 +734,7 @@ cdef class SVD(Object):
         setTrackAll, slepc.SVDGetTrackAll
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDGetTrackAll(self.svd, &tval) )
+        CHKERR(SVDGetTrackAll(self.svd, &tval))
         return toBool(tval)
 
     def setTrackAll(self, trackall: bool = True) -> None:
@@ -748,7 +756,7 @@ cdef class SVD(Object):
         getTrackAll, slepc.SVDSetTrackAll
         """
         cdef PetscBool tval = asBool(trackall)
-        CHKERR( SVDSetTrackAll(self.svd, tval) )
+        CHKERR(SVDSetTrackAll(self.svd, tval))
 
     def getDimensions(self) -> tuple[int, int, int]:
         """
@@ -772,7 +780,7 @@ cdef class SVD(Object):
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
         cdef PetscInt ival3 = 0
-        CHKERR( SVDGetDimensions(self.svd, &ival1, &ival2, &ival3) )
+        CHKERR(SVDGetDimensions(self.svd, &ival1, &ival2, &ival3))
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
     def setDimensions(
@@ -824,7 +832,7 @@ cdef class SVD(Object):
         if nsv is not None: ival1 = asInt(nsv)
         if ncv is not None: ival2 = asInt(ncv)
         if mpd is not None: ival3 = asInt(mpd)
-        CHKERR( SVDSetDimensions(self.svd, ival1, ival2, ival3) )
+        CHKERR(SVDSetDimensions(self.svd, ival1, ival2, ival3))
 
     def getBV(self) -> tuple[BV, BV]:
         """
@@ -845,12 +853,12 @@ cdef class SVD(Object):
         """
         cdef BV V = BV()
         cdef BV U = BV()
-        CHKERR( SVDGetBV(self.svd, &V.bv, &U.bv) )
-        CHKERR( PetscINCREF(V.obj) )
-        CHKERR( PetscINCREF(U.obj) )
-        return (V,U)
+        CHKERR(SVDGetBV(self.svd, &V.bv, &U.bv))
+        CHKERR(PetscINCREF(V.obj))
+        CHKERR(PetscINCREF(U.obj))
+        return (V, U)
 
-    def setBV(self, BV V,BV U=None) -> None:
+    def setBV(self, BV V, BV U=None) -> None:
         """
         Set basis vectors objects associated to the SVD solver.
 
@@ -869,7 +877,7 @@ cdef class SVD(Object):
         """
         cdef SlepcBV VBV = V.bv
         cdef SlepcBV UBV = U.bv if U is not None else <SlepcBV>NULL
-        CHKERR( SVDSetBV(self.svd, VBV, UBV) )
+        CHKERR(SVDSetBV(self.svd, VBV, UBV))
 
     def getDS(self) -> DS:
         """
@@ -887,8 +895,8 @@ cdef class SVD(Object):
         setDS, slepc.SVDGetDS
         """
         cdef DS ds = DS()
-        CHKERR( SVDGetDS(self.svd, &ds.ds) )
-        CHKERR( PetscINCREF(ds.obj) )
+        CHKERR(SVDGetDS(self.svd, &ds.ds))
+        CHKERR(PetscINCREF(ds.obj))
         return ds
 
     def setDS(self, DS ds) -> None:
@@ -906,7 +914,7 @@ cdef class SVD(Object):
         --------
         getDS, slepc.SVDSetDS
         """
-        CHKERR( SVDSetDS(self.svd, ds.ds) )
+        CHKERR(SVDSetDS(self.svd, ds.ds))
 
     def getOperators(self) -> tuple[Mat, Mat] | tuple[Mat, None]:
         """
@@ -927,10 +935,10 @@ cdef class SVD(Object):
         """
         cdef Mat A = Mat()
         cdef Mat B = Mat()
-        CHKERR( SVDGetOperators(self.svd, &A.mat, &B.mat) )
-        CHKERR( PetscINCREF(A.obj) )
+        CHKERR(SVDGetOperators(self.svd, &A.mat, &B.mat))
+        CHKERR(PetscINCREF(A.obj))
         if B.mat:
-            CHKERR( PetscINCREF(B.obj) )
+            CHKERR(PetscINCREF(B.obj))
             return (A, B)
         else:
             return (A, None)
@@ -953,7 +961,7 @@ cdef class SVD(Object):
         getOperators, slepc.SVDSetOperators
         """
         cdef PetscMat Bmat = B.mat if B is not None else <PetscMat>NULL
-        CHKERR( SVDSetOperators(self.svd, A.mat, Bmat) )
+        CHKERR(SVDSetOperators(self.svd, A.mat, Bmat))
 
     def getSignature(self, Vec omega = None) -> Vec:
         """
@@ -979,9 +987,9 @@ cdef class SVD(Object):
         if omega is None:
             omega = Vec()
         if omega.vec == NULL:
-            CHKERR( SVDGetOperators(self.svd, &A, <PetscMat*>NULL) )
-            CHKERR( MatCreateVecs(A, <PetscVec*>NULL, &omega.vec) )
-        CHKERR( SVDGetSignature(self.svd, omega.vec) )
+            CHKERR(SVDGetOperators(self.svd, &A, <PetscMat*>NULL))
+            CHKERR(MatCreateVecs(A, <PetscVec*>NULL, &omega.vec))
+        CHKERR(SVDGetSignature(self.svd, omega.vec))
         return omega
 
     def setSignature(self, Vec omega=None) -> None:
@@ -1000,7 +1008,7 @@ cdef class SVD(Object):
         getSignature, slepc.SVDSetSignature
         """
         cdef PetscVec Ovec = omega.vec if omega is not None else <PetscVec>NULL
-        CHKERR( SVDSetSignature(self.svd, Ovec) )
+        CHKERR(SVDSetSignature(self.svd, Ovec))
 
     #
 
@@ -1049,15 +1057,15 @@ cdef class SVD(Object):
         elif isinstance(spaceright, Vec): spaceright = [spaceright]
         cdef PetscVec *isr = NULL
         cdef Py_ssize_t nr = len(spaceright)
-        cdef unused1 = allocate(<size_t>nr*sizeof(PetscVec),<void**>&isr)
+        cdef unused1 = allocate(<size_t>nr*sizeof(PetscVec), <void**>&isr)
         for i in range(nr): isr[i] = (<Vec?>spaceright[i]).vec
         if spaceleft is None: spaceright = []
         elif isinstance(spaceleft, Vec): spaceleft = [spaceleft]
         cdef PetscVec *isl = NULL
         cdef Py_ssize_t nl = len(spaceleft)
-        cdef unused2 = allocate(<size_t>nl*sizeof(PetscVec),<void**>&isl)
+        cdef unused2 = allocate(<size_t>nl*sizeof(PetscVec), <void**>&isl)
         for i in range(nl): isl[i] = (<Vec?>spaceleft[i]).vec
-        CHKERR( SVDSetInitialSpaces(self.svd, <PetscInt>nr, isr, <PetscInt>nl, isl) )
+        CHKERR(SVDSetInitialSpaces(self.svd, <PetscInt>nr, isr, <PetscInt>nl, isl))
 
     #
 
@@ -1080,10 +1088,10 @@ cdef class SVD(Object):
             if args is None: args = ()
             if kargs is None: kargs = {}
             self.set_attr('__stopping__', (stopping, args, kargs))
-            CHKERR( SVDSetStoppingTestFunction(self.svd, SVD_Stopping, NULL, NULL) )
+            CHKERR(SVDSetStoppingTestFunction(self.svd, SVD_Stopping, NULL, NULL))
         else:
             self.set_attr('__stopping__', None)
-            CHKERR( SVDSetStoppingTestFunction(self.svd, SVDStoppingBasic, NULL, NULL) )
+            CHKERR(SVDSetStoppingTestFunction(self.svd, SVDStoppingBasic, NULL, NULL))
 
     def getStoppingTest(self) -> SVDStoppingFunction:
         """
@@ -1124,7 +1132,7 @@ cdef class SVD(Object):
         if monitorlist is None:
             monitorlist = []
             self.set_attr('__monitor__', monitorlist)
-            CHKERR( SVDMonitorSet(self.svd, SVD_Monitor, NULL, NULL) )
+            CHKERR(SVDMonitorSet(self.svd, SVD_Monitor, NULL, NULL))
         if args is None: args = ()
         if kargs is None: kargs = {}
         monitorlist.append((monitor, args, kargs))
@@ -1156,7 +1164,7 @@ cdef class SVD(Object):
         --------
         slepc.SVDMonitorCancel
         """
-        CHKERR( SVDMonitorCancel(self.svd) )
+        CHKERR(SVDMonitorCancel(self.svd))
         self.set_attr('__monitor__', None)
 
     #
@@ -1180,7 +1188,7 @@ cdef class SVD(Object):
         --------
         solve, slepc.SVDSetUp
         """
-        CHKERR( SVDSetUp(self.svd) )
+        CHKERR(SVDSetUp(self.svd))
 
     def solve(self) -> None:
         """
@@ -1202,7 +1210,7 @@ cdef class SVD(Object):
         --------
         setUp, setOperators, getConverged, getConvergedReason, slepc.SVDSolve
         """
-        CHKERR( SVDSolve(self.svd) )
+        CHKERR(SVDSolve(self.svd))
 
     def getIterationNumber(self) -> int:
         """
@@ -1223,7 +1231,7 @@ cdef class SVD(Object):
         getConvergedReason, setTolerances, slepc.SVDGetIterationNumber
         """
         cdef PetscInt ival = 0
-        CHKERR( SVDGetIterationNumber(self.svd, &ival) )
+        CHKERR(SVDGetIterationNumber(self.svd, &ival))
         return toInt(ival)
 
     def getConvergedReason(self) -> ConvergedReason:
@@ -1242,7 +1250,7 @@ cdef class SVD(Object):
         setTolerances, solve, slepc.SVDGetConvergedReason
         """
         cdef SlepcSVDConvergedReason val = SVD_CONVERGED_ITERATING
-        CHKERR( SVDGetConvergedReason(self.svd, &val) )
+        CHKERR(SVDGetConvergedReason(self.svd, &val))
         return val
 
     def getConverged(self) -> int:
@@ -1268,7 +1276,7 @@ cdef class SVD(Object):
         setDimensions, solve, getValue, slepc.SVDGetConverged
         """
         cdef PetscInt ival = 0
-        CHKERR( SVDGetConverged(self.svd, &ival) )
+        CHKERR(SVDGetConverged(self.svd, &ival))
         return toInt(ival)
 
     def getValue(self, i: int) -> float:
@@ -1300,7 +1308,7 @@ cdef class SVD(Object):
         """
         cdef PetscInt ival = asInt(i)
         cdef PetscReal rval = 0
-        CHKERR( SVDGetSingularTriplet(self.svd, ival, &rval, NULL, NULL) )
+        CHKERR(SVDGetSingularTriplet(self.svd, ival, &rval, NULL, NULL))
         return toReal(rval)
 
     def getVectors(self, i: int, Vec U, Vec V) -> None:
@@ -1331,7 +1339,7 @@ cdef class SVD(Object):
         """
         cdef PetscInt ival = asInt(i)
         cdef PetscReal dummy = 0
-        CHKERR( SVDGetSingularTriplet(self.svd, ival, &dummy, U.vec, V.vec) )
+        CHKERR(SVDGetSingularTriplet(self.svd, ival, &dummy, U.vec, V.vec))
 
     def getSingularTriplet(self, i: int, Vec U=None, Vec V=None) -> float:
         """
@@ -1372,7 +1380,7 @@ cdef class SVD(Object):
         cdef PetscReal rval = 0
         cdef PetscVec Uvec = U.vec if U is not None else <PetscVec>NULL
         cdef PetscVec Vvec = V.vec if V is not None else <PetscVec>NULL
-        CHKERR( SVDGetSingularTriplet(self.svd, ival, &rval, Uvec, Vvec) )
+        CHKERR(SVDGetSingularTriplet(self.svd, ival, &rval, Uvec, Vvec))
         return toReal(rval)
 
     #
@@ -1422,7 +1430,7 @@ cdef class SVD(Object):
         cdef SlepcSVDErrorType et = SVD_ERROR_RELATIVE
         cdef PetscReal rval = 0
         if etype is not None: et = etype
-        CHKERR( SVDComputeError(self.svd, ival, et, &rval) )
+        CHKERR(SVDComputeError(self.svd, ival, et, &rval))
         return toReal(rval)
 
     def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
@@ -1455,7 +1463,7 @@ cdef class SVD(Object):
         cdef SlepcSVDErrorType et = SVD_ERROR_RELATIVE
         if etype is not None: et = etype
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( SVDErrorView(self.svd, et, vwr) )
+        CHKERR(SVDErrorView(self.svd, et, vwr))
 
     def valuesView(self, viewer: Viewer | None = None) -> None:
         """
@@ -1474,7 +1482,7 @@ cdef class SVD(Object):
         solve, vectorsView, errorView, slepc.SVDValuesView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( SVDValuesView(self.svd, vwr) )
+        CHKERR(SVDValuesView(self.svd, vwr))
 
     def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
@@ -1493,7 +1501,7 @@ cdef class SVD(Object):
         solve, valuesView, errorView, slepc.SVDVectorsView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( SVDVectorsView(self.svd, vwr) )
+        CHKERR(SVDVectorsView(self.svd, vwr))
 
     #
 
@@ -1512,7 +1520,7 @@ cdef class SVD(Object):
         --------
         getCrossEPS, slepc.SVDCrossSetEPS
         """
-        CHKERR( SVDCrossSetEPS(self.svd, eps.eps) )
+        CHKERR(SVDCrossSetEPS(self.svd, eps.eps))
 
     def getCrossEPS(self) -> EPS:
         """
@@ -1530,8 +1538,8 @@ cdef class SVD(Object):
         setCrossEPS, slepc.SVDCrossGetEPS
         """
         cdef EPS eps = EPS()
-        CHKERR( SVDCrossGetEPS(self.svd, &eps.eps) )
-        CHKERR( PetscINCREF(eps.obj) )
+        CHKERR(SVDCrossGetEPS(self.svd, &eps.eps))
+        CHKERR(PetscINCREF(eps.obj))
         return eps
 
     def setCrossExplicitMatrix(self, flag: bool = True) -> None:
@@ -1559,7 +1567,7 @@ cdef class SVD(Object):
         getCrossExplicitMatrix, slepc.SVDCrossSetExplicitMatrix
         """
         cdef PetscBool tval = asBool(flag)
-        CHKERR( SVDCrossSetExplicitMatrix(self.svd, tval) )
+        CHKERR(SVDCrossSetExplicitMatrix(self.svd, tval))
 
     def getCrossExplicitMatrix(self) -> bool:
         """
@@ -1577,7 +1585,7 @@ cdef class SVD(Object):
         setCrossExplicitMatrix, slepc.SVDCrossGetExplicitMatrix
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDCrossGetExplicitMatrix(self.svd, &tval) )
+        CHKERR(SVDCrossGetExplicitMatrix(self.svd, &tval))
         return toBool(tval)
 
     def setCyclicEPS(self, EPS eps) -> None:
@@ -1595,7 +1603,7 @@ cdef class SVD(Object):
         --------
         getCyclicEPS, slepc.SVDCyclicSetEPS
         """
-        CHKERR( SVDCyclicSetEPS(self.svd, eps.eps) )
+        CHKERR(SVDCyclicSetEPS(self.svd, eps.eps))
 
     def getCyclicEPS(self) -> EPS:
         """
@@ -1613,8 +1621,8 @@ cdef class SVD(Object):
         setCyclicEPS, slepc.SVDCyclicGetEPS
         """
         cdef EPS eps = EPS()
-        CHKERR( SVDCyclicGetEPS(self.svd, &eps.eps) )
-        CHKERR( PetscINCREF(eps.obj) )
+        CHKERR(SVDCyclicGetEPS(self.svd, &eps.eps))
+        CHKERR(PetscINCREF(eps.obj))
         return eps
 
     def setCyclicExplicitMatrix(self, flag: bool = True) -> None:
@@ -1644,7 +1652,7 @@ cdef class SVD(Object):
         getCyclicExplicitMatrix, slepc.SVDCyclicSetExplicitMatrix
         """
         cdef PetscBool tval = asBool(flag)
-        CHKERR( SVDCyclicSetExplicitMatrix(self.svd, tval) )
+        CHKERR(SVDCyclicSetExplicitMatrix(self.svd, tval))
 
     def getCyclicExplicitMatrix(self) -> bool:
         """
@@ -1665,7 +1673,7 @@ cdef class SVD(Object):
         setCyclicExplicitMatrix, slepc.SVDCyclicGetExplicitMatrix
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDCyclicGetExplicitMatrix(self.svd, &tval) )
+        CHKERR(SVDCyclicGetExplicitMatrix(self.svd, &tval))
         return toBool(tval)
 
     def setLanczosOneSide(self, flag: bool = True) -> None:
@@ -1692,7 +1700,7 @@ cdef class SVD(Object):
         getLanczosOneSide, slepc.SVDLanczosSetOneSide
         """
         cdef PetscBool tval = asBool(flag)
-        CHKERR( SVDLanczosSetOneSide(self.svd, tval) )
+        CHKERR(SVDLanczosSetOneSide(self.svd, tval))
 
     def getLanczosOneSide(self) -> bool:
         """
@@ -1710,7 +1718,7 @@ cdef class SVD(Object):
         setLanczosOneSide, slepc.SVDLanczosGetOneSide
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDLanczosGetOneSide(self.svd, &tval) )
+        CHKERR(SVDLanczosGetOneSide(self.svd, &tval))
         return toBool(tval)
 
     def setTRLanczosOneSide(self, flag: bool = True) -> None:
@@ -1739,7 +1747,7 @@ cdef class SVD(Object):
         getTRLanczosOneSide, slepc.SVDLanczosSetOneSide
         """
         cdef PetscBool tval = asBool(flag)
-        CHKERR( SVDLanczosSetOneSide(self.svd, tval) )
+        CHKERR(SVDLanczosSetOneSide(self.svd, tval))
 
     def getTRLanczosOneSide(self) -> bool:
         """
@@ -1760,7 +1768,7 @@ cdef class SVD(Object):
         setTRLanczosOneSide, slepc.SVDLanczosGetOneSide
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDTRLanczosGetOneSide(self.svd, &tval) )
+        CHKERR(SVDTRLanczosGetOneSide(self.svd, &tval))
         return toBool(tval)
 
     def setTRLanczosGBidiag(self, bidiag: TRLanczosGBidiag) -> None:
@@ -1779,7 +1787,7 @@ cdef class SVD(Object):
         getTRLanczosGBidiag, slepc.SVDTRLanczosSetGBidiag
         """
         cdef SlepcSVDTRLanczosGBidiag val = bidiag
-        CHKERR( SVDTRLanczosSetGBidiag(self.svd, val) )
+        CHKERR(SVDTRLanczosSetGBidiag(self.svd, val))
 
     def getTRLanczosGBidiag(self) -> TRLanczosGBidiag:
         """
@@ -1797,7 +1805,7 @@ cdef class SVD(Object):
         setTRLanczosGBidiag, slepc.SVDTRLanczosGetGBidiag
         """
         cdef SlepcSVDTRLanczosGBidiag val = SVD_TRLANCZOS_GBIDIAG_LOWER
-        CHKERR( SVDTRLanczosGetGBidiag(self.svd, &val) )
+        CHKERR(SVDTRLanczosGetGBidiag(self.svd, &val))
         return val
 
     def setTRLanczosRestart(self, keep: float) -> None:
@@ -1824,7 +1832,7 @@ cdef class SVD(Object):
         getTRLanczosRestart, slepc.SVDTRLanczosSetRestart
         """
         cdef PetscReal val = asReal(keep)
-        CHKERR( SVDTRLanczosSetRestart(self.svd, val) )
+        CHKERR(SVDTRLanczosSetRestart(self.svd, val))
 
     def getTRLanczosRestart(self) -> float:
         """
@@ -1842,7 +1850,7 @@ cdef class SVD(Object):
         setTRLanczosRestart, slepc.SVDTRLanczosGetRestart
         """
         cdef PetscReal val = 0
-        CHKERR( SVDTRLanczosGetRestart(self.svd, &val) )
+        CHKERR(SVDTRLanczosGetRestart(self.svd, &val))
         return toReal(val)
 
     def setTRLanczosLocking(self, lock: bool = True) -> None:
@@ -1868,7 +1876,7 @@ cdef class SVD(Object):
         getTRLanczosLocking, slepc.SVDTRLanczosSetLocking
         """
         cdef PetscBool val = asBool(lock)
-        CHKERR( SVDTRLanczosSetLocking(self.svd, val) )
+        CHKERR(SVDTRLanczosSetLocking(self.svd, val))
 
     def getTRLanczosLocking(self) -> bool:
         """
@@ -1886,7 +1894,7 @@ cdef class SVD(Object):
         setTRLanczosLocking, slepc.SVDTRLanczosGetLocking
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDTRLanczosGetLocking(self.svd, &tval) )
+        CHKERR(SVDTRLanczosGetLocking(self.svd, &tval))
         return toBool(tval)
 
     def setTRLanczosKSP(self, KSP ksp) -> None:
@@ -1904,7 +1912,7 @@ cdef class SVD(Object):
         --------
         getTRLanczosKSP, slepc.SVDTRLanczosSetKSP
         """
-        CHKERR( SVDTRLanczosSetKSP(self.svd, ksp.ksp) )
+        CHKERR(SVDTRLanczosSetKSP(self.svd, ksp.ksp))
 
     def getTRLanczosKSP(self) -> KSP:
         """
@@ -1922,8 +1930,8 @@ cdef class SVD(Object):
         setTRLanczosKSP, slepc.SVDTRLanczosGetKSP
         """
         cdef KSP ksp = KSP()
-        CHKERR( SVDTRLanczosGetKSP(self.svd, &ksp.ksp) )
-        CHKERR( PetscINCREF(ksp.obj) )
+        CHKERR(SVDTRLanczosGetKSP(self.svd, &ksp.ksp))
+        CHKERR(PetscINCREF(ksp.obj))
         return ksp
 
     def setTRLanczosExplicitMatrix(self, flag: bool = True) -> None:
@@ -1947,7 +1955,7 @@ cdef class SVD(Object):
         getTRLanczosExplicitMatrix, slepc.SVDTRLanczosSetExplicitMatrix
         """
         cdef PetscBool tval = asBool(flag)
-        CHKERR( SVDTRLanczosSetExplicitMatrix(self.svd, tval) )
+        CHKERR(SVDTRLanczosSetExplicitMatrix(self.svd, tval))
 
     def getTRLanczosExplicitMatrix(self) -> bool:
         """
@@ -1965,7 +1973,7 @@ cdef class SVD(Object):
         setTRLanczosExplicitMatrix, slepc.SVDTRLanczosGetExplicitMatrix
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( SVDTRLanczosGetExplicitMatrix(self.svd, &tval) )
+        CHKERR(SVDTRLanczosGetExplicitMatrix(self.svd, &tval))
         return toBool(tval)
 
     setOperator = setOperators  # backward compatibility
@@ -1976,6 +1984,7 @@ cdef class SVD(Object):
         """The type of the eigenvalue problem."""
         def __get__(self) -> SVDProblemType:
             return self.getProblemType()
+
         def __set__(self, value):
             self.setProblemType(value)
 
@@ -1983,6 +1992,7 @@ cdef class SVD(Object):
         """How to handle the transpose of the matrix."""
         def __get__(self) -> bool:
             return self.getTransposeMode()
+
         def __set__(self, value):
             self.setTransposeMode(value)
 
@@ -1990,6 +2000,7 @@ cdef class SVD(Object):
         """The portion of the spectrum to be sought."""
         def __get__(self) -> SVDWhich:
             return self.getWhichSingularTriplets()
+
         def __set__(self, value):
             self.setWhichSingularTriplets(value)
 
@@ -1997,6 +2008,7 @@ cdef class SVD(Object):
         """The tolerance."""
         def __get__(self) -> float:
             return self.getTolerances()[0]
+
         def __set__(self, value):
             self.setTolerances(tol=value)
 
@@ -2004,6 +2016,7 @@ cdef class SVD(Object):
         """The maximum iteration count."""
         def __get__(self) -> int:
             return self.getTolerances()[1]
+
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
@@ -2011,6 +2024,7 @@ cdef class SVD(Object):
         """Compute the residual norm of all approximate eigenpairs."""
         def __get__(self) -> bool:
             return self.getTrackAll()
+
         def __set__(self, value):
             self.setTrackAll(value)
 
@@ -2018,6 +2032,7 @@ cdef class SVD(Object):
         """The direct solver (`DS`) object associated."""
         def __get__(self) -> DS:
             return self.getDS()
+
         def __set__(self, value):
             self.setDS(value)
 

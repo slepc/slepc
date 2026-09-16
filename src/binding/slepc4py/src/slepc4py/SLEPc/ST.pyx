@@ -22,6 +22,7 @@ class STType(object):
     FILTER  = S_(STFILTER)
     SHELL   = S_(STSHELL)
 
+
 class STMatMode(object):
     """
     ST matrix mode.
@@ -39,6 +40,7 @@ class STMatMode(object):
     INPLACE = ST_MATMODE_INPLACE
     SHELL   = ST_MATMODE_SHELL
 
+
 class STFilterType(object):
     """
     ST filter type.
@@ -52,6 +54,7 @@ class STFilterType(object):
     """
     FILTLAN   = ST_FILTER_FILTLAN
     CHEBYSHEV = ST_FILTER_CHEBYSHEV
+
 
 class STFilterDamping(object):
     """
@@ -72,6 +75,7 @@ class STFilterDamping(object):
     FEJER   = ST_FILTER_DAMPING_FEJER
 
 # -----------------------------------------------------------------------------
+
 
 cdef class ST(Object):
 
@@ -114,7 +118,7 @@ cdef class ST(Object):
         slepc.STView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( STView(self.st, vwr) )
+        CHKERR(STView(self.st, vwr))
 
     def destroy(self) -> Self:
         """
@@ -126,7 +130,7 @@ cdef class ST(Object):
         --------
         slepc.STDestroy
         """
-        CHKERR( STDestroy(&self.st) )
+        CHKERR(STDestroy(&self.st))
         self.st = NULL
         return self
 
@@ -140,7 +144,7 @@ cdef class ST(Object):
         --------
         slepc.STReset
         """
-        CHKERR( STReset(self.st) )
+        CHKERR(STReset(self.st))
 
     def create(self, comm: Comm | None = None) -> Self:
         """
@@ -159,8 +163,8 @@ cdef class ST(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcST newst = NULL
-        CHKERR( STCreate(ccomm, &newst) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.st = newst
+        CHKERR(STCreate(ccomm, &newst))
+        CHKERR(SlepcCLEAR(self.obj)); self.st = newst
         return self
 
     def setType(self, st_type: Type | str) -> None:
@@ -188,7 +192,7 @@ cdef class ST(Object):
         """
         cdef SlepcSTType cval = NULL
         st_type = str2bytes(st_type, &cval)
-        CHKERR( STSetType(self.st, cval) )
+        CHKERR(STSetType(self.st, cval))
 
     def getType(self) -> str:
         """
@@ -206,7 +210,7 @@ cdef class ST(Object):
         setType, slepc.STGetType
         """
         cdef SlepcSTType st_type = NULL
-        CHKERR( STGetType(self.st, &st_type) )
+        CHKERR(STGetType(self.st, &st_type))
         return bytes2str(st_type)
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -232,7 +236,7 @@ cdef class ST(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( STSetOptionsPrefix(self.st, cval) )
+        CHKERR(STSetOptionsPrefix(self.st, cval))
 
     def getOptionsPrefix(self) -> str:
         """
@@ -250,7 +254,7 @@ cdef class ST(Object):
         setOptionsPrefix, appendOptionsPrefix, slepc.STGetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( STGetOptionsPrefix(self.st, &prefix) )
+        CHKERR(STGetOptionsPrefix(self.st, &prefix))
         return bytes2str(prefix)
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -270,7 +274,7 @@ cdef class ST(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( STAppendOptionsPrefix(self.st, cval) )
+        CHKERR(STAppendOptionsPrefix(self.st, cval))
 
     def setFromOptions(self) -> None:
         """
@@ -289,7 +293,7 @@ cdef class ST(Object):
         --------
         setOptionsPrefix, slepc.STSetFromOptions
         """
-        CHKERR( STSetFromOptions(self.st) )
+        CHKERR(STSetFromOptions(self.st))
 
     #
 
@@ -318,7 +322,7 @@ cdef class ST(Object):
         getShift, slepc.STSetShift
         """
         cdef PetscScalar sval = asScalar(shift)
-        CHKERR( STSetShift(self.st, sval) )
+        CHKERR(STSetShift(self.st, sval))
 
     def getShift(self) -> Scalar:
         """
@@ -336,7 +340,7 @@ cdef class ST(Object):
         setShift, slepc.STGetShift
         """
         cdef PetscScalar sval = 0
-        CHKERR( STGetShift(self.st, &sval) )
+        CHKERR(STGetShift(self.st, &sval))
         return toScalar(sval)
 
     def setTransform(self, flag: bool = True) -> None:
@@ -359,7 +363,7 @@ cdef class ST(Object):
         getTransform, slepc.STSetTransform
         """
         cdef PetscBool sval = asBool(flag)
-        CHKERR( STSetTransform(self.st, sval) )
+        CHKERR(STSetTransform(self.st, sval))
 
     def getTransform(self) -> bool:
         """
@@ -381,7 +385,7 @@ cdef class ST(Object):
         setTransform, slepc.STGetTransform
         """
         cdef PetscBool sval = PETSC_FALSE
-        CHKERR( STGetTransform(self.st, &sval) )
+        CHKERR(STGetTransform(self.st, &sval))
         return toBool(sval)
 
     def setMatMode(self, mode: MatMode) -> None:
@@ -425,7 +429,7 @@ cdef class ST(Object):
         setMatrices, setMatStructure, getMatMode, slepc.STSetMatMode
         """
         cdef SlepcSTMatMode val = mode
-        CHKERR( STSetMatMode(self.st, val) )
+        CHKERR(STSetMatMode(self.st, val))
 
     def getMatMode(self) -> MatMode:
         """
@@ -446,7 +450,7 @@ cdef class ST(Object):
         setMatMode, slepc.STGetMatMode
         """
         cdef SlepcSTMatMode val = ST_MATMODE_INPLACE
-        CHKERR( STGetMatMode(self.st, &val) )
+        CHKERR(STGetMatMode(self.st, &val))
         return val
 
     def setMatrices(self, operators: list[Mat]) -> None:
@@ -479,9 +483,9 @@ cdef class ST(Object):
         operators = tuple(operators)
         cdef PetscMat *mats = NULL
         cdef Py_ssize_t k=0, n = len(operators)
-        cdef unused = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
+        cdef unused = allocate(<size_t>n*sizeof(PetscMat), <void**>&mats)
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
-        CHKERR( STSetMatrices(self.st, <PetscInt>n, mats) )
+        CHKERR(STSetMatrices(self.st, <PetscInt>n, mats))
 
     def getMatrices(self) -> list[Mat]:
         """
@@ -501,11 +505,11 @@ cdef class ST(Object):
         cdef Mat A
         cdef PetscMat mat = NULL
         cdef PetscInt k=0, n=0
-        CHKERR( STGetNumMatrices(self.st, &n) )
+        CHKERR(STGetNumMatrices(self.st, &n))
         cdef object operators = []
         for k from 0 <= k < n:
-            CHKERR( STGetMatrix(self.st, k, &mat) )
-            A = Mat(); A.mat = mat; CHKERR( PetscINCREF(A.obj) )
+            CHKERR(STGetMatrix(self.st, k, &mat))
+            A = Mat(); A.mat = mat; CHKERR(PetscINCREF(A.obj))
             operators.append(A)
         return tuple(operators)
 
@@ -540,7 +544,7 @@ cdef class ST(Object):
         getMatStructure, setMatrices, slepc.STSetMatStructure
         """
         cdef PetscMatStructure val = matstructure(structure)
-        CHKERR( STSetMatStructure(self.st, val) )
+        CHKERR(STSetMatStructure(self.st, val))
 
     def getMatStructure(self) -> petsc4py.PETSc.Mat.Structure:
         """
@@ -562,7 +566,7 @@ cdef class ST(Object):
         setMatStructure, slepc.STGetMatStructure
         """
         cdef PetscMatStructure val = MAT_DIFFERENT_NONZERO_PATTERN
-        CHKERR( STGetMatStructure(self.st, &val) )
+        CHKERR(STGetMatStructure(self.st, &val))
         return val
 
     def setKSP(self, KSP ksp) -> None:
@@ -580,7 +584,7 @@ cdef class ST(Object):
         --------
         getKSP, slepc.STSetKSP
         """
-        CHKERR( STSetKSP(self.st, ksp.ksp) )
+        CHKERR(STSetKSP(self.st, ksp.ksp))
 
     def getKSP(self) -> KSP:
         """
@@ -598,8 +602,8 @@ cdef class ST(Object):
         setKSP, slepc.STGetKSP
         """
         cdef KSP ksp = KSP()
-        CHKERR( STGetKSP(self.st, &ksp.ksp) )
-        CHKERR( PetscINCREF(ksp.obj) )
+        CHKERR(STGetKSP(self.st, &ksp.ksp))
+        CHKERR(PetscINCREF(ksp.obj))
         return ksp
 
     def setPreconditionerMat(self, Mat P = None) -> None:
@@ -644,7 +648,7 @@ cdef class ST(Object):
         getPreconditionerMat, slepc.STSetPreconditionerMat
         """
         cdef PetscMat Pmat = P.mat if P is not None else <PetscMat>NULL
-        CHKERR( STSetPreconditionerMat(self.st, Pmat) )
+        CHKERR(STSetPreconditionerMat(self.st, Pmat))
 
     def getPreconditionerMat(self) -> Mat:
         """
@@ -662,12 +666,15 @@ cdef class ST(Object):
         setPreconditionerMat, slepc.STGetPreconditionerMat
         """
         cdef Mat P = Mat()
-        CHKERR( STGetPreconditionerMat(self.st, &P.mat) )
-        CHKERR( PetscINCREF(P.obj) )
+        CHKERR(STGetPreconditionerMat(self.st, &P.mat))
+        CHKERR(PetscINCREF(P.obj))
         return P
 
-    def setSplitPreconditioner(self, operators: list[petsc4py.PETSc.Mat], structure: petsc4py.PETSc.Mat.
-Structure | None = None) -> None:
+    def setSplitPreconditioner(
+        self,
+        operators: list[petsc4py.PETSc.Mat],
+        structure: petsc4py.PETSc.Mat.Structure | None = None
+    ) -> None:
         """
         Set the matrices to be used to build the preconditioner.
 
@@ -709,9 +716,9 @@ Structure | None = None) -> None:
         cdef PetscMatStructure cstructure = matstructure(structure)
         cdef PetscMat *mats = NULL
         cdef Py_ssize_t k=0, n = len(operators)
-        cdef unused = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
+        cdef unused = allocate(<size_t>n*sizeof(PetscMat), <void**>&mats)
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
-        CHKERR( STSetSplitPreconditioner(self.st, <PetscInt>n, mats, cstructure) )
+        CHKERR(STSetSplitPreconditioner(self.st, <PetscInt>n, mats, cstructure))
 
     def getSplitPreconditioner(self) -> tuple[list[petsc4py.PETSc.Mat], petsc4py.PETSc.Mat.Structure]:
         """
@@ -730,14 +737,14 @@ Structure | None = None) -> None:
         --------
         slepc.STGetSplitPreconditionerInfo, slepc.STGetSplitPreconditionerTerm
         """
-        cdef PetscInt k=0,n=0
+        cdef PetscInt k=0, n=0
         cdef PetscMatStructure cstructure = MAT_DIFFERENT_NONZERO_PATTERN
         cdef PetscMat mat = NULL
-        CHKERR( STGetSplitPreconditionerInfo(self.st, &n, &cstructure) )
+        CHKERR(STGetSplitPreconditionerInfo(self.st, &n, &cstructure))
         cdef object operators = []
         for k from 0 <= k < n:
-            CHKERR( STGetSplitPreconditionerTerm(self.st, k, &mat) )
-            A = Mat(); A.mat = mat; CHKERR( PetscINCREF(A.obj) )
+            CHKERR(STGetSplitPreconditionerTerm(self.st, k, &mat))
+            A = Mat(); A.mat = mat; CHKERR(PetscINCREF(A.obj))
             operators.append(A)
         return tuple(operators, cstructure)
 
@@ -753,7 +760,7 @@ Structure | None = None) -> None:
         --------
         apply, slepc.STSetUp
         """
-        CHKERR( STSetUp(self.st) )
+        CHKERR(STSetUp(self.st))
 
     def apply(self, Vec x, Vec y) -> None:
         """
@@ -776,7 +783,7 @@ Structure | None = None) -> None:
         --------
         applyTranspose, applyHermitianTranspose, applyMat, slepc.STApply
         """
-        CHKERR( STApply(self.st, x.vec, y.vec) )
+        CHKERR(STApply(self.st, x.vec, y.vec))
 
     def applyTranspose(self, Vec x, Vec y) -> None:
         """
@@ -799,7 +806,7 @@ Structure | None = None) -> None:
         --------
         apply, applyHermitianTranspose, slepc.STApplyTranspose
         """
-        CHKERR( STApplyTranspose(self.st, x.vec, y.vec) )
+        CHKERR(STApplyTranspose(self.st, x.vec, y.vec))
 
     def applyHermitianTranspose(self, Vec x, Vec y) -> None:
         """
@@ -822,7 +829,7 @@ Structure | None = None) -> None:
         --------
         apply, applyTranspose, slepc.STApplyHermitianTranspose
         """
-        CHKERR( STApplyHermitianTranspose(self.st, x.vec, y.vec) )
+        CHKERR(STApplyHermitianTranspose(self.st, x.vec, y.vec))
 
     def applyMat(self, Mat X, Mat Y) -> None:
         """
@@ -845,7 +852,7 @@ Structure | None = None) -> None:
         --------
         apply, slepc.STApplyMat
         """
-        CHKERR( STApplyMat(self.st, X.mat, Y.mat) )
+        CHKERR(STApplyMat(self.st, X.mat, Y.mat))
 
     def getOperator(self) -> Mat:
         """
@@ -891,8 +898,8 @@ Structure | None = None) -> None:
         apply, setMatrices, setShift, restoreOperator, slepc.STGetOperator
         """
         cdef Mat op = Mat()
-        CHKERR( STGetOperator(self.st, &op.mat) )
-        CHKERR( PetscINCREF(op.obj) )
+        CHKERR(STGetOperator(self.st, &op.mat))
+        CHKERR(PetscINCREF(op.obj))
         return op
 
     def restoreOperator(self, Mat op) -> None:
@@ -910,8 +917,8 @@ Structure | None = None) -> None:
         --------
         getOperator, slepc.STRestoreOperator
         """
-        CHKERR( PetscObjectDereference(<PetscObject>op.mat) )
-        CHKERR( STRestoreOperator(self.st, &op.mat) )
+        CHKERR(PetscObjectDereference(<PetscObject>op.mat))
+        CHKERR(STRestoreOperator(self.st, &op.mat))
 
     #
 
@@ -937,7 +944,7 @@ Structure | None = None) -> None:
         setShift, getCayleyAntishift, slepc.STCayleySetAntishift
         """
         cdef PetscScalar sval = asScalar(mu)
-        CHKERR( STCayleySetAntishift(self.st, sval) )
+        CHKERR(STCayleySetAntishift(self.st, sval))
 
     def getCayleyAntishift(self) -> Scalar:
         """
@@ -955,7 +962,7 @@ Structure | None = None) -> None:
         setCayleyAntishift, slepc.STCayleyGetAntishift
         """
         cdef PetscScalar sval = 0
-        CHKERR( STCayleyGetAntishift(self.st, &sval) )
+        CHKERR(STCayleyGetAntishift(self.st, &sval))
         return toScalar(sval)
 
     def setFilterType(self, filter_type: FilterType) -> None:
@@ -974,7 +981,7 @@ Structure | None = None) -> None:
         getFilterType, slepc.STFilterSetType
         """
         cdef SlepcSTFilterType val = filter_type
-        CHKERR( STFilterSetType(self.st, val) )
+        CHKERR(STFilterSetType(self.st, val))
 
     def getFilterType(self) -> FilterType:
         """
@@ -992,7 +999,7 @@ Structure | None = None) -> None:
         setFilterType, slepc.STFilterGetType
         """
         cdef SlepcSTFilterType val = ST_FILTER_FILTLAN
-        CHKERR( STFilterGetType(self.st, &val) )
+        CHKERR(STFilterGetType(self.st, &val))
         return val
 
     def setFilterInterval(self, inta: float, intb: float) -> None:
@@ -1026,7 +1033,7 @@ Structure | None = None) -> None:
         """
         cdef PetscReal rval1 = asReal(inta)
         cdef PetscReal rval2 = asReal(intb)
-        CHKERR( STFilterSetInterval(self.st, rval1, rval2) )
+        CHKERR(STFilterSetInterval(self.st, rval1, rval2))
 
     def getFilterInterval(self) -> tuple[float, float]:
         """
@@ -1047,7 +1054,7 @@ Structure | None = None) -> None:
         """
         cdef PetscReal inta = 0
         cdef PetscReal intb = 0
-        CHKERR( STFilterGetInterval(self.st, &inta, &intb) )
+        CHKERR(STFilterGetInterval(self.st, &inta, &intb))
         return (toReal(inta), toReal(intb))
 
     def setFilterRange(self, left: float, right: float) -> None:
@@ -1078,7 +1085,7 @@ Structure | None = None) -> None:
         """
         cdef PetscReal rval1 = asReal(left)
         cdef PetscReal rval2 = asReal(right)
-        CHKERR( STFilterSetRange(self.st, rval1, rval2) )
+        CHKERR(STFilterSetRange(self.st, rval1, rval2))
 
     def getFilterRange(self) -> tuple[float, float]:
         """
@@ -1099,7 +1106,7 @@ Structure | None = None) -> None:
         """
         cdef PetscReal left = 0
         cdef PetscReal right = 0
-        CHKERR( STFilterGetRange(self.st, &left, &right) )
+        CHKERR(STFilterGetRange(self.st, &left, &right))
         return (toReal(left), toReal(right))
 
     def setFilterDegree(self, deg: int) -> None:
@@ -1118,7 +1125,7 @@ Structure | None = None) -> None:
         getFilterDegree, slepc.STFilterSetDegree
         """
         cdef PetscInt val = asInt(deg)
-        CHKERR( STFilterSetDegree(self.st, val) )
+        CHKERR(STFilterSetDegree(self.st, val))
 
     def getFilterDegree(self) -> int:
         """
@@ -1136,7 +1143,7 @@ Structure | None = None) -> None:
         setFilterDegree, slepc.STFilterGetDegree
         """
         cdef PetscInt val = 0
-        CHKERR( STFilterGetDegree(self.st, &val) )
+        CHKERR(STFilterGetDegree(self.st, &val))
         return toInt(val)
 
     def setFilterDamping(self, damping: FilterDamping) -> None:
@@ -1159,7 +1166,7 @@ Structure | None = None) -> None:
         getFilterDamping, slepc.STFilterSetDamping
         """
         cdef SlepcSTFilterDamping val = damping
-        CHKERR( STFilterSetDamping(self.st, val) )
+        CHKERR(STFilterSetDamping(self.st, val))
 
     def getFilterDamping(self) -> FilterDamping:
         """
@@ -1177,7 +1184,7 @@ Structure | None = None) -> None:
         setFilterDamping, slepc.STFilterGetDamping
         """
         cdef SlepcSTFilterDamping val = ST_FILTER_DAMPING_NONE
-        CHKERR( STFilterGetDamping(self.st, &val) )
+        CHKERR(STFilterGetDamping(self.st, &val))
         return val
 
     #
@@ -1186,6 +1193,7 @@ Structure | None = None) -> None:
         """Value of the shift."""
         def __get__(self) -> float:
             return self.getShift()
+
         def __set__(self, value):
             self.setShift(value)
 
@@ -1193,6 +1201,7 @@ Structure | None = None) -> None:
         """If the transformed matrices are computed."""
         def __get__(self) -> bool:
             return self.getTransform()
+
         def __set__(self, value):
             self.setTransform(value)
 
@@ -1200,6 +1209,7 @@ Structure | None = None) -> None:
         """How the transformed matrices are being stored in the ST."""
         def __get__(self) -> STMatMode:
             return self.getMatMode()
+
         def __set__(self, value):
             self.setMatMode(value)
 
@@ -1207,6 +1217,7 @@ Structure | None = None) -> None:
         """Relation of the sparsity pattern of all ST matrices."""
         def __get__(self) -> MatStructure:
             return self.getMatStructure()
+
         def __set__(self, value):
             self.setMatStructure(value)
 
@@ -1214,6 +1225,7 @@ Structure | None = None) -> None:
         """KSP object associated with the spectral transformation."""
         def __get__(self) -> KSP:
             return self.getKSP()
+
         def __set__(self, value):
             self.setKSP(value)
 

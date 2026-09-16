@@ -32,7 +32,7 @@ cdef class Util:
         slepc.MatCreateBSE
         """
         cdef Mat H = Mat()
-        CHKERR( MatCreateBSE(R.mat, C.mat, &H.mat) )
+        CHKERR(MatCreateBSE(R.mat, C.mat, &H.mat))
         return H
 
     @classmethod
@@ -61,7 +61,7 @@ cdef class Util:
         slepc.MatCreateHamiltonian
         """
         cdef Mat H = Mat()
-        CHKERR( MatCreateHamiltonian(A.mat, B.mat, C.mat, &H.mat) )
+        CHKERR(MatCreateHamiltonian(A.mat, B.mat, C.mat, &H.mat))
         return H
 
     @classmethod
@@ -95,7 +95,7 @@ cdef class Util:
         """
         cdef Mat H = Mat()
         cdef PetscBool tval = asBool(red)
-        CHKERR( MatCreateLREP(AK.mat, BM.mat, tval, &H.mat) )
+        CHKERR(MatCreateLREP(AK.mat, BM.mat, tval, &H.mat))
         return H
 
 # -----------------------------------------------------------------------------

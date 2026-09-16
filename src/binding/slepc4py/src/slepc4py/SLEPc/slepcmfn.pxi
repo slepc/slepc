@@ -13,51 +13,51 @@ cdef extern from * nogil:
 
     ctypedef PetscErrorCode (*SlepcMFNCtxDel)(void*)
     ctypedef PetscErrorCode (*SlepcMFNMonitorFunction)(SlepcMFN,
-                                            PetscInt,
-                                            PetscReal,
-                                            void*) except PETSC_ERR_PYTHON
+                                                       PetscInt,
+                                                       PetscReal,
+                                                       void*) except PETSC_ERR_PYTHON
 
-    PetscErrorCode MFNCreate(MPI_Comm,SlepcMFN*)
+    PetscErrorCode MFNCreate(MPI_Comm, SlepcMFN*)
     PetscErrorCode MFNDestroy(SlepcMFN*)
     PetscErrorCode MFNReset(SlepcMFN)
-    PetscErrorCode MFNView(SlepcMFN,PetscViewer)
+    PetscErrorCode MFNView(SlepcMFN, PetscViewer)
 
-    PetscErrorCode MFNSetType(SlepcMFN,SlepcMFNType)
-    PetscErrorCode MFNGetType(SlepcMFN,SlepcMFNType*)
-    PetscErrorCode MFNSetOperator(SlepcMFN,PetscMat)
-    PetscErrorCode MFNGetOperator(SlepcMFN,PetscMat*)
-    PetscErrorCode MFNSetOptionsPrefix(SlepcMFN,char*)
-    PetscErrorCode MFNGetOptionsPrefix(SlepcMFN,char*[])
+    PetscErrorCode MFNSetType(SlepcMFN, SlepcMFNType)
+    PetscErrorCode MFNGetType(SlepcMFN, SlepcMFNType*)
+    PetscErrorCode MFNSetOperator(SlepcMFN, PetscMat)
+    PetscErrorCode MFNGetOperator(SlepcMFN, PetscMat*)
+    PetscErrorCode MFNSetOptionsPrefix(SlepcMFN, char*)
+    PetscErrorCode MFNGetOptionsPrefix(SlepcMFN, char*[])
     PetscErrorCode MFNSetFromOptions(SlepcMFN)
-    PetscErrorCode MFNAppendOptionsPrefix(SlepcMFN,char*)
+    PetscErrorCode MFNAppendOptionsPrefix(SlepcMFN, char*)
     PetscErrorCode MFNSetUp(SlepcMFN)
-    PetscErrorCode MFNSolve(SlepcMFN,PetscVec,PetscVec)
-    PetscErrorCode MFNSolveTranspose(SlepcMFN,PetscVec,PetscVec)
+    PetscErrorCode MFNSolve(SlepcMFN, PetscVec, PetscVec)
+    PetscErrorCode MFNSolveTranspose(SlepcMFN, PetscVec, PetscVec)
 
-    PetscErrorCode MFNSetBV(SlepcMFN,SlepcBV)
-    PetscErrorCode MFNGetBV(SlepcMFN,SlepcBV*)
-    PetscErrorCode MFNSetFN(SlepcMFN,SlepcFN)
-    PetscErrorCode MFNGetFN(SlepcMFN,SlepcFN*)
-    PetscErrorCode MFNSetTolerances(SlepcMFN,PetscReal,PetscInt)
-    PetscErrorCode MFNGetTolerances(SlepcMFN,PetscReal*,PetscInt*)
-    PetscErrorCode MFNSetDimensions(SlepcMFN,PetscInt)
-    PetscErrorCode MFNGetDimensions(SlepcMFN,PetscInt*)
+    PetscErrorCode MFNSetBV(SlepcMFN, SlepcBV)
+    PetscErrorCode MFNGetBV(SlepcMFN, SlepcBV*)
+    PetscErrorCode MFNSetFN(SlepcMFN, SlepcFN)
+    PetscErrorCode MFNGetFN(SlepcMFN, SlepcFN*)
+    PetscErrorCode MFNSetTolerances(SlepcMFN, PetscReal, PetscInt)
+    PetscErrorCode MFNGetTolerances(SlepcMFN, PetscReal*, PetscInt*)
+    PetscErrorCode MFNSetDimensions(SlepcMFN, PetscInt)
+    PetscErrorCode MFNGetDimensions(SlepcMFN, PetscInt*)
 
-    PetscErrorCode MFNSetErrorIfNotConverged(SlepcMFN,PetscBool)
-    PetscErrorCode MFNGetErrorIfNotConverged(SlepcMFN,PetscBool*)
+    PetscErrorCode MFNSetErrorIfNotConverged(SlepcMFN, PetscBool)
+    PetscErrorCode MFNGetErrorIfNotConverged(SlepcMFN, PetscBool*)
 
-    PetscErrorCode MFNMonitorSet(SlepcMFN,SlepcMFNMonitorFunction,void*,SlepcMFNCtxDel)
+    PetscErrorCode MFNMonitorSet(SlepcMFN, SlepcMFNMonitorFunction, void*, SlepcMFNCtxDel)
     PetscErrorCode MFNMonitorCancel(SlepcMFN)
-    PetscErrorCode MFNGetIterationNumber(SlepcMFN,PetscInt*)
+    PetscErrorCode MFNGetIterationNumber(SlepcMFN, PetscInt*)
 
-    PetscErrorCode MFNGetConvergedReason(SlepcMFN,SlepcMFNConvergedReason*)
+    PetscErrorCode MFNGetConvergedReason(SlepcMFN, SlepcMFNConvergedReason*)
 
 # -----------------------------------------------------------------------------
 
 cdef inline MFN ref_MFN(SlepcMFN mfn):
     cdef MFN ob = <MFN> MFN()
     ob.mfn = mfn
-    CHKERR( PetscINCREF(ob.obj) )
+    CHKERR(PetscINCREF(ob.obj))
     return ob
 
 # -----------------------------------------------------------------------------

@@ -24,6 +24,7 @@ class FNType(object):
     SQRT     = S_(FNSQRT)
     INVSQRT  = S_(FNINVSQRT)
 
+
 class FNCombineType(object):
     """
     FN type of combination of child functions.
@@ -42,6 +43,7 @@ class FNCombineType(object):
     DIVIDE   = FN_COMBINE_DIVIDE
     COMPOSE  = FN_COMBINE_COMPOSE
 
+
 class FNParallelType(object):
     """
     FN parallel types.
@@ -57,6 +59,7 @@ class FNParallelType(object):
     SYNCHRONIZED = FN_PARALLEL_SYNCHRONIZED
 
 # -----------------------------------------------------------------------------
+
 
 cdef class FN(Object):
 
@@ -163,7 +166,7 @@ cdef class FN(Object):
         slepc.FNView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( FNView(self.fn, vwr) )
+        CHKERR(FNView(self.fn, vwr))
 
     def destroy(self) -> Self:
         """
@@ -175,7 +178,7 @@ cdef class FN(Object):
         --------
         slepc.FNDestroy
         """
-        CHKERR( FNDestroy(&self.fn) )
+        CHKERR(FNDestroy(&self.fn))
         self.fn = NULL
         return self
 
@@ -196,8 +199,8 @@ cdef class FN(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcFN newfn = NULL
-        CHKERR( FNCreate(ccomm, &newfn) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.fn = newfn
+        CHKERR(FNCreate(ccomm, &newfn))
+        CHKERR(SlepcCLEAR(self.obj)); self.fn = newfn
         return self
 
     def setType(self, fn_type: Type | str) -> None:
@@ -217,7 +220,7 @@ cdef class FN(Object):
         """
         cdef SlepcFNType cval = NULL
         fn_type = str2bytes(fn_type, &cval)
-        CHKERR( FNSetType(self.fn, cval) )
+        CHKERR(FNSetType(self.fn, cval))
 
     def getType(self) -> str:
         """
@@ -235,7 +238,7 @@ cdef class FN(Object):
         setType, slepc.FNGetType
         """
         cdef SlepcFNType fn_type = NULL
-        CHKERR( FNGetType(self.fn, &fn_type) )
+        CHKERR(FNGetType(self.fn, &fn_type))
         return bytes2str(fn_type)
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -261,7 +264,7 @@ cdef class FN(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( FNSetOptionsPrefix(self.fn, cval) )
+        CHKERR(FNSetOptionsPrefix(self.fn, cval))
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
@@ -280,7 +283,7 @@ cdef class FN(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( FNAppendOptionsPrefix(self.fn, cval) )
+        CHKERR(FNAppendOptionsPrefix(self.fn, cval))
 
     def getOptionsPrefix(self) -> str:
         """
@@ -298,7 +301,7 @@ cdef class FN(Object):
         setOptionsPrefix, appendOptionsPrefix, slepc.FNGetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( FNGetOptionsPrefix(self.fn, &prefix) )
+        CHKERR(FNGetOptionsPrefix(self.fn, &prefix))
         return bytes2str(prefix)
 
     def setFromOptions(self) -> None:
@@ -316,7 +319,7 @@ cdef class FN(Object):
         --------
         setOptionsPrefix, slepc.FNSetFromOptions
         """
-        CHKERR( FNSetFromOptions(self.fn) )
+        CHKERR(FNSetFromOptions(self.fn))
 
     def duplicate(self, comm: Comm | None = None) -> FN:
         """
@@ -344,7 +347,7 @@ cdef class FN(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, PetscObjectComm(<PetscObject>self.fn))
         cdef FN fn = type(self)()
-        CHKERR( FNDuplicate(self.fn, ccomm, &fn.fn) )
+        CHKERR(FNDuplicate(self.fn, ccomm, &fn.fn))
         return fn
 
     #
@@ -376,7 +379,7 @@ cdef class FN(Object):
         """
         cdef PetscScalar sval = 0
         cdef PetscScalar sarg = asScalar(x)
-        CHKERR( FNEvaluateFunction(self.fn, sarg, &sval) )
+        CHKERR(FNEvaluateFunction(self.fn, sarg, &sval))
         return toScalar(sval)
 
     def evaluateDerivative(self, x: Scalar) -> Scalar:
@@ -406,7 +409,7 @@ cdef class FN(Object):
         """
         cdef PetscScalar sval = 0
         cdef PetscScalar sarg = asScalar(x)
-        CHKERR( FNEvaluateDerivative(self.fn, sarg, &sval) )
+        CHKERR(FNEvaluateDerivative(self.fn, sarg, &sval))
         return toScalar(sval)
 
     def evaluateFunctionMat(self, Mat A, Mat B: Mat | None = None) -> Mat:
@@ -437,7 +440,7 @@ cdef class FN(Object):
         evaluateFunction, evaluateFunctionMatVec, slepc.FNEvaluateFunctionMat
         """
         if B is None: B = A.duplicate()
-        CHKERR( FNEvaluateFunctionMat(self.fn, A.mat, B.mat) )
+        CHKERR(FNEvaluateFunctionMat(self.fn, A.mat, B.mat))
         return B
 
     def evaluateFunctionMatVec(self, Mat A, Vec v: Vec | None = None) -> Vec:
@@ -467,7 +470,7 @@ cdef class FN(Object):
         evaluateFunctionMat, slepc.FNEvaluateFunctionMatVec
         """
         if v is None: v = A.createVecs('left')
-        CHKERR( FNEvaluateFunctionMatVec(self.fn, A.mat, v.vec) )
+        CHKERR(FNEvaluateFunctionMatVec(self.fn, A.mat, v.vec))
         return v
 
     def setScale(self, alpha: Scalar | None = None, beta: Scalar | None = None) -> None:
@@ -491,7 +494,7 @@ cdef class FN(Object):
         cdef PetscScalar bval = 1.0
         if alpha is not None: aval = asScalar(alpha)
         if beta  is not None: bval = asScalar(beta)
-        CHKERR( FNSetScale(self.fn, aval, bval) )
+        CHKERR(FNSetScale(self.fn, aval, bval))
 
     def getScale(self) -> tuple[Scalar, Scalar]:
         """
@@ -511,7 +514,7 @@ cdef class FN(Object):
         setScale, slepc.FNGetScale
         """
         cdef PetscScalar aval = 0, bval = 0
-        CHKERR( FNGetScale(self.fn, &aval, &bval) )
+        CHKERR(FNGetScale(self.fn, &aval, &bval))
         return (toScalar(aval), toScalar(bval))
 
     def setMethod(self, meth: int) -> None:
@@ -541,7 +544,7 @@ cdef class FN(Object):
         getMethod, slepc.FNSetMethod
         """
         cdef PetscInt val = asInt(meth)
-        CHKERR( FNSetMethod(self.fn, val) )
+        CHKERR(FNSetMethod(self.fn, val))
 
     def getMethod(self) -> int:
         """
@@ -559,7 +562,7 @@ cdef class FN(Object):
         setMethod, slepc.FNGetMethod
         """
         cdef PetscInt val = 0
-        CHKERR( FNGetMethod(self.fn, &val) )
+        CHKERR(FNGetMethod(self.fn, &val))
         return toInt(val)
 
     def setParallel(self, pmode: ParallelType) -> None:
@@ -583,7 +586,7 @@ cdef class FN(Object):
         evaluateFunctionMat, getParallel, slepc.FNSetParallel
         """
         cdef SlepcFNParallelType val = pmode
-        CHKERR( FNSetParallel(self.fn, val) )
+        CHKERR(FNSetParallel(self.fn, val))
 
     def getParallel(self) -> ParallelType:
         """
@@ -601,7 +604,7 @@ cdef class FN(Object):
         setParallel, slepc.FNGetParallel
         """
         cdef SlepcFNParallelType val = FN_PARALLEL_REDUNDANT
-        CHKERR( FNGetParallel(self.fn, &val) )
+        CHKERR(FNGetParallel(self.fn, &val))
         return val
 
     #
@@ -624,7 +627,7 @@ cdef class FN(Object):
         cdef PetscInt na = 0
         cdef PetscScalar *a = NULL
         alpha = iarray_s(alpha, &na, &a)
-        CHKERR( FNRationalSetNumerator(self.fn, na, a) )
+        CHKERR(FNRationalSetNumerator(self.fn, na, a))
 
     def getRationalNumerator(self) -> ArrayScalar:
         """
@@ -643,12 +646,12 @@ cdef class FN(Object):
         """
         cdef PetscInt np = 0
         cdef PetscScalar *coeff = NULL
-        CHKERR( FNRationalGetNumerator(self.fn, &np, &coeff) )
+        CHKERR(FNRationalGetNumerator(self.fn, &np, &coeff))
         cdef object ocoeff = None
         try:
             ocoeff = array_s(np, coeff)
         finally:
-            CHKERR( PetscFree(coeff) )
+            CHKERR(PetscFree(coeff))
         return ocoeff
 
     def setRationalDenominator(self, alpha: Sequence[Scalar]) -> None:
@@ -669,7 +672,7 @@ cdef class FN(Object):
         cdef PetscInt na = 0
         cdef PetscScalar *a = NULL
         alpha = iarray_s(alpha, &na, &a)
-        CHKERR( FNRationalSetDenominator(self.fn, na, a) )
+        CHKERR(FNRationalSetDenominator(self.fn, na, a))
 
     def getRationalDenominator(self) -> ArrayScalar:
         """
@@ -688,12 +691,12 @@ cdef class FN(Object):
         """
         cdef PetscInt np = 0
         cdef PetscScalar *coeff = NULL
-        CHKERR( FNRationalGetDenominator(self.fn, &np, &coeff) )
+        CHKERR(FNRationalGetDenominator(self.fn, &np, &coeff))
         cdef object ocoeff = None
         try:
             ocoeff = array_s(np, coeff)
         finally:
-            CHKERR( PetscFree(coeff) )
+            CHKERR(PetscFree(coeff))
         return ocoeff
 
     def setCombineChildren(self, comb: CombineType, FN f1, FN f2) -> None:
@@ -720,7 +723,7 @@ cdef class FN(Object):
         getCombineChildren, slepc.FNCombineSetChildren
         """
         cdef SlepcFNCombineType val = comb
-        CHKERR( FNCombineSetChildren(self.fn, val, f1.fn, f2.fn) )
+        CHKERR(FNCombineSetChildren(self.fn, val, f1.fn, f2.fn))
 
     def getCombineChildren(self) -> tuple[CombineType, FN, FN]:
         """
@@ -748,9 +751,9 @@ cdef class FN(Object):
         cdef SlepcFNCombineType comb = FN_COMBINE_ADD
         cdef FN f1 = FN()
         cdef FN f2 = FN()
-        CHKERR( FNCombineGetChildren(self.fn, &comb, &f1.fn, &f2.fn) )
-        CHKERR( PetscINCREF(f1.obj) )
-        CHKERR( PetscINCREF(f2.obj) )
+        CHKERR(FNCombineGetChildren(self.fn, &comb, &f1.fn, &f2.fn))
+        CHKERR(PetscINCREF(f1.obj))
+        CHKERR(PetscINCREF(f2.obj))
         return (comb, f1, f2)
 
     def setPhiIndex(self, k: int) -> None:
@@ -773,7 +776,7 @@ cdef class FN(Object):
         getPhiIndex, slepc.FNPhiSetIndex
         """
         cdef PetscInt val = asInt(k)
-        CHKERR( FNPhiSetIndex(self.fn, val) )
+        CHKERR(FNPhiSetIndex(self.fn, val))
 
     def getPhiIndex(self) -> int:
         """
@@ -791,7 +794,7 @@ cdef class FN(Object):
         setPhiIndex, slepc.FNPhiGetIndex
         """
         cdef PetscInt val = 0
-        CHKERR( FNPhiGetIndex(self.fn, &val) )
+        CHKERR(FNPhiGetIndex(self.fn, &val))
         return toInt(val)
 
     #
@@ -800,6 +803,7 @@ cdef class FN(Object):
         """The method to be used to evaluate functions of matrices."""
         def __get__(self) -> int:
             return self.getMethod()
+
         def __set__(self, value):
             self.setMethod(value)
 
@@ -807,6 +811,7 @@ cdef class FN(Object):
         """The mode of operation in parallel runs."""
         def __get__(self) -> FNParallelType:
             return self.getParallel()
+
         def __set__(self, value):
             self.setParallel(value)
 

@@ -60,183 +60,183 @@ cdef extern from * nogil:
         NEP_CONVERGED_ITERATING
 
     ctypedef PetscErrorCode (*SlepcNEPFunction)(SlepcNEP,
-                                     PetscScalar,
-                                     PetscMat,
-                                     PetscMat,
-                                     void*) except PETSC_ERR_PYTHON
+                                                PetscScalar,
+                                                PetscMat,
+                                                PetscMat,
+                                                void*) except PETSC_ERR_PYTHON
 
     ctypedef PetscErrorCode (*SlepcNEPJacobian)(SlepcNEP,
-                                     PetscScalar,
-                                     PetscMat,
-                                     void*) except PETSC_ERR_PYTHON
+                                                PetscScalar,
+                                                PetscMat,
+                                                void*) except PETSC_ERR_PYTHON
 
     ctypedef PetscErrorCode (*SlepcNEPCtxDel)(void*)
     ctypedef PetscErrorCode (*SlepcNEPStoppingFunction)(SlepcNEP,
-                                             PetscInt,
-                                             PetscInt,
-                                             PetscInt,
-                                             PetscInt,
-                                             SlepcNEPConvergedReason*,
-                                             void*) except PETSC_ERR_PYTHON
+                                                        PetscInt,
+                                                        PetscInt,
+                                                        PetscInt,
+                                                        PetscInt,
+                                                        SlepcNEPConvergedReason*,
+                                                        void*) except PETSC_ERR_PYTHON
     ctypedef PetscErrorCode (*SlepcNEPMonitorFunction)(SlepcNEP,
-                                            PetscInt,
-                                            PetscInt,
-                                            PetscScalar*,
-                                            PetscScalar*,
-                                            PetscReal*,
-                                            PetscInt,
-                                            void*) except PETSC_ERR_PYTHON
+                                                       PetscInt,
+                                                       PetscInt,
+                                                       PetscScalar*,
+                                                       PetscScalar*,
+                                                       PetscReal*,
+                                                       PetscInt,
+                                                       void*) except PETSC_ERR_PYTHON
     ctypedef PetscErrorCode (*SlepcNEPComparisonFunction)(PetscScalar,
-                                               PetscScalar,
-                                               PetscScalar,
-                                               PetscScalar,
-                                               PetscInt*,
-                                               void*) except PETSC_ERR_PYTHON
+                                                          PetscScalar,
+                                                          PetscScalar,
+                                                          PetscScalar,
+                                                          PetscInt*,
+                                                          void*) except PETSC_ERR_PYTHON
 
-    PetscErrorCode NEPCreate(MPI_Comm,SlepcNEP*)
+    PetscErrorCode NEPCreate(MPI_Comm, SlepcNEP*)
     PetscErrorCode NEPDestroy(SlepcNEP*)
     PetscErrorCode NEPReset(SlepcNEP)
-    PetscErrorCode NEPView(SlepcNEP,PetscViewer)
+    PetscErrorCode NEPView(SlepcNEP, PetscViewer)
 
-    PetscErrorCode NEPSetType(SlepcNEP,SlepcNEPType)
-    PetscErrorCode NEPGetType(SlepcNEP,SlepcNEPType*)
-    PetscErrorCode NEPSetTarget(SlepcNEP,PetscScalar)
-    PetscErrorCode NEPGetTarget(SlepcNEP,PetscScalar*)
-    PetscErrorCode NEPSetOptionsPrefix(SlepcNEP,char*)
-    PetscErrorCode NEPGetOptionsPrefix(SlepcNEP,char*[])
+    PetscErrorCode NEPSetType(SlepcNEP, SlepcNEPType)
+    PetscErrorCode NEPGetType(SlepcNEP, SlepcNEPType*)
+    PetscErrorCode NEPSetTarget(SlepcNEP, PetscScalar)
+    PetscErrorCode NEPGetTarget(SlepcNEP, PetscScalar*)
+    PetscErrorCode NEPSetOptionsPrefix(SlepcNEP, char*)
+    PetscErrorCode NEPGetOptionsPrefix(SlepcNEP, char*[])
     PetscErrorCode NEPSetFromOptions(SlepcNEP)
-    PetscErrorCode NEPAppendOptionsPrefix(SlepcNEP,char*)
+    PetscErrorCode NEPAppendOptionsPrefix(SlepcNEP, char*)
     PetscErrorCode NEPSetUp(SlepcNEP)
     PetscErrorCode NEPSolve(SlepcNEP)
 
-    PetscErrorCode NEPSetFunction(SlepcNEP,PetscMat,PetscMat,SlepcNEPFunction,void*)
-    PetscErrorCode NEPGetFunction(SlepcNEP,PetscMat*,PetscMat*,SlepcNEPFunction*,void**)
-    PetscErrorCode NEPSetJacobian(SlepcNEP,PetscMat,SlepcNEPJacobian,void*)
-    PetscErrorCode NEPGetJacobian(SlepcNEP,PetscMat*,SlepcNEPJacobian*,void**)
-    PetscErrorCode NEPSetSplitOperator(SlepcNEP,PetscInt,PetscMat[],SlepcFN[],PetscMatStructure)
-    PetscErrorCode NEPGetSplitOperatorTerm(SlepcNEP,PetscInt,PetscMat*,SlepcFN*)
-    PetscErrorCode NEPGetSplitOperatorInfo(SlepcNEP,PetscInt*,PetscMatStructure*)
-    PetscErrorCode NEPSetSplitPreconditioner(SlepcNEP,PetscInt,PetscMat[],PetscMatStructure)
-    PetscErrorCode NEPGetSplitPreconditionerTerm(SlepcNEP,PetscInt,PetscMat*)
-    PetscErrorCode NEPGetSplitPreconditionerInfo(SlepcNEP,PetscInt*,PetscMatStructure*)
+    PetscErrorCode NEPSetFunction(SlepcNEP, PetscMat, PetscMat, SlepcNEPFunction, void*)
+    PetscErrorCode NEPGetFunction(SlepcNEP, PetscMat*, PetscMat*, SlepcNEPFunction*, void**)
+    PetscErrorCode NEPSetJacobian(SlepcNEP, PetscMat, SlepcNEPJacobian, void*)
+    PetscErrorCode NEPGetJacobian(SlepcNEP, PetscMat*, SlepcNEPJacobian*, void**)
+    PetscErrorCode NEPSetSplitOperator(SlepcNEP, PetscInt, PetscMat[], SlepcFN[], PetscMatStructure)
+    PetscErrorCode NEPGetSplitOperatorTerm(SlepcNEP, PetscInt, PetscMat*, SlepcFN*)
+    PetscErrorCode NEPGetSplitOperatorInfo(SlepcNEP, PetscInt*, PetscMatStructure*)
+    PetscErrorCode NEPSetSplitPreconditioner(SlepcNEP, PetscInt, PetscMat[], PetscMatStructure)
+    PetscErrorCode NEPGetSplitPreconditionerTerm(SlepcNEP, PetscInt, PetscMat*)
+    PetscErrorCode NEPGetSplitPreconditionerInfo(SlepcNEP, PetscInt*, PetscMatStructure*)
 
-    PetscErrorCode NEPSetBV(SlepcNEP,SlepcBV)
-    PetscErrorCode NEPGetBV(SlepcNEP,SlepcBV*)
-    PetscErrorCode NEPSetRG(SlepcNEP,SlepcRG)
-    PetscErrorCode NEPGetRG(SlepcNEP,SlepcRG*)
-    PetscErrorCode NEPSetDS(SlepcNEP,SlepcDS)
-    PetscErrorCode NEPGetDS(SlepcNEP,SlepcDS*)
-    PetscErrorCode NEPSetTolerances(SlepcNEP,PetscReal,PetscInt)
-    PetscErrorCode NEPGetTolerances(SlepcNEP,PetscReal*,PetscInt*)
+    PetscErrorCode NEPSetBV(SlepcNEP, SlepcBV)
+    PetscErrorCode NEPGetBV(SlepcNEP, SlepcBV*)
+    PetscErrorCode NEPSetRG(SlepcNEP, SlepcRG)
+    PetscErrorCode NEPGetRG(SlepcNEP, SlepcRG*)
+    PetscErrorCode NEPSetDS(SlepcNEP, SlepcDS)
+    PetscErrorCode NEPGetDS(SlepcNEP, SlepcDS*)
+    PetscErrorCode NEPSetTolerances(SlepcNEP, PetscReal, PetscInt)
+    PetscErrorCode NEPGetTolerances(SlepcNEP, PetscReal*, PetscInt*)
 
-    PetscErrorCode NEPSetTwoSided(SlepcNEP,PetscBool)
-    PetscErrorCode NEPGetTwoSided(SlepcNEP,PetscBool*)
-    PetscErrorCode NEPApplyResolvent(SlepcNEP,SlepcRG,PetscScalar,PetscVec,PetscVec)
+    PetscErrorCode NEPSetTwoSided(SlepcNEP, PetscBool)
+    PetscErrorCode NEPGetTwoSided(SlepcNEP, PetscBool*)
+    PetscErrorCode NEPApplyResolvent(SlepcNEP, SlepcRG, PetscScalar, PetscVec, PetscVec)
 
-    PetscErrorCode NEPSetTrackAll(SlepcNEP,PetscBool)
-    PetscErrorCode NEPGetTrackAll(SlepcNEP,PetscBool*)
+    PetscErrorCode NEPSetTrackAll(SlepcNEP, PetscBool)
+    PetscErrorCode NEPGetTrackAll(SlepcNEP, PetscBool*)
 
-    PetscErrorCode NEPSetDimensions(SlepcNEP,PetscInt,PetscInt,PetscInt)
-    PetscErrorCode NEPGetDimensions(SlepcNEP,PetscInt*,PetscInt*,PetscInt*)
+    PetscErrorCode NEPSetDimensions(SlepcNEP, PetscInt, PetscInt, PetscInt)
+    PetscErrorCode NEPGetDimensions(SlepcNEP, PetscInt*, PetscInt*, PetscInt*)
 
-    PetscErrorCode NEPGetConverged(SlepcNEP,PetscInt*)
-    PetscErrorCode NEPGetEigenpair(SlepcNEP,PetscInt,PetscScalar*,PetscScalar*,PetscVec,PetscVec)
-    PetscErrorCode NEPGetLeftEigenvector(SlepcNEP,PetscInt,PetscVec,PetscVec)
-    PetscErrorCode NEPComputeError(SlepcNEP,PetscInt,SlepcNEPErrorType,PetscReal*)
-    PetscErrorCode NEPErrorView(SlepcNEP,SlepcNEPErrorType,PetscViewer)
-    PetscErrorCode NEPValuesView(SlepcNEP,PetscViewer)
-    PetscErrorCode NEPVectorsView(SlepcNEP,PetscViewer)
-    PetscErrorCode NEPGetErrorEstimate(SlepcNEP,PetscInt,PetscReal*)
+    PetscErrorCode NEPGetConverged(SlepcNEP, PetscInt*)
+    PetscErrorCode NEPGetEigenpair(SlepcNEP, PetscInt, PetscScalar*, PetscScalar*, PetscVec, PetscVec)
+    PetscErrorCode NEPGetLeftEigenvector(SlepcNEP, PetscInt, PetscVec, PetscVec)
+    PetscErrorCode NEPComputeError(SlepcNEP, PetscInt, SlepcNEPErrorType, PetscReal*)
+    PetscErrorCode NEPErrorView(SlepcNEP, SlepcNEPErrorType, PetscViewer)
+    PetscErrorCode NEPValuesView(SlepcNEP, PetscViewer)
+    PetscErrorCode NEPVectorsView(SlepcNEP, PetscViewer)
+    PetscErrorCode NEPGetErrorEstimate(SlepcNEP, PetscInt, PetscReal*)
 
-    PetscErrorCode NEPMonitorSet(SlepcNEP,SlepcNEPMonitorFunction,void*,SlepcNEPCtxDel)
+    PetscErrorCode NEPMonitorSet(SlepcNEP, SlepcNEPMonitorFunction, void*, SlepcNEPCtxDel)
     PetscErrorCode NEPMonitorCancel(SlepcNEP)
-    PetscErrorCode NEPGetIterationNumber(SlepcNEP,PetscInt*)
+    PetscErrorCode NEPGetIterationNumber(SlepcNEP, PetscInt*)
 
-    PetscErrorCode NEPSetInitialSpace(SlepcNEP,PetscInt,PetscVec*)
-    PetscErrorCode NEPSetProblemType(SlepcNEP,SlepcNEPProblemType)
-    PetscErrorCode NEPGetProblemType(SlepcNEP,SlepcNEPProblemType*)
-    PetscErrorCode NEPSetWhichEigenpairs(SlepcNEP,SlepcNEPWhich)
-    PetscErrorCode NEPGetWhichEigenpairs(SlepcNEP,SlepcNEPWhich*)
+    PetscErrorCode NEPSetInitialSpace(SlepcNEP, PetscInt, PetscVec*)
+    PetscErrorCode NEPSetProblemType(SlepcNEP, SlepcNEPProblemType)
+    PetscErrorCode NEPGetProblemType(SlepcNEP, SlepcNEPProblemType*)
+    PetscErrorCode NEPSetWhichEigenpairs(SlepcNEP, SlepcNEPWhich)
+    PetscErrorCode NEPGetWhichEigenpairs(SlepcNEP, SlepcNEPWhich*)
 
-    PetscErrorCode NEPSetRefine(SlepcNEP,SlepcNEPRefine,PetscInt,PetscReal,PetscInt,SlepcNEPRefineScheme)
-    PetscErrorCode NEPGetRefine(SlepcNEP,SlepcNEPRefine*,PetscInt*,PetscReal*,PetscInt*,SlepcNEPRefineScheme*)
-    PetscErrorCode NEPRefineGetKSP(SlepcNEP,PetscKSP*)
+    PetscErrorCode NEPSetRefine(SlepcNEP, SlepcNEPRefine, PetscInt, PetscReal, PetscInt, SlepcNEPRefineScheme)
+    PetscErrorCode NEPGetRefine(SlepcNEP, SlepcNEPRefine*, PetscInt*, PetscReal*, PetscInt*, SlepcNEPRefineScheme*)
+    PetscErrorCode NEPRefineGetKSP(SlepcNEP, PetscKSP*)
 
-    PetscErrorCode NEPGetConvergedReason(SlepcNEP,SlepcNEPConvergedReason*)
-    PetscErrorCode NEPSetConvergenceTest(SlepcNEP,SlepcNEPConv)
-    PetscErrorCode NEPGetConvergenceTest(SlepcNEP,SlepcNEPConv*)
+    PetscErrorCode NEPGetConvergedReason(SlepcNEP, SlepcNEPConvergedReason*)
+    PetscErrorCode NEPSetConvergenceTest(SlepcNEP, SlepcNEPConv)
+    PetscErrorCode NEPGetConvergenceTest(SlepcNEP, SlepcNEPConv*)
 
-    PetscErrorCode NEPSetStoppingTestFunction(SlepcNEP,SlepcNEPStoppingFunction,void*,SlepcNEPCtxDel)
-    PetscErrorCode NEPStoppingBasic(SlepcNEP,PetscInt,PetscInt,PetscInt,PetscInt,SlepcNEPConvergedReason*,void*) except PETSC_ERR_PYTHON
-    PetscErrorCode NEPSetEigenvalueComparison(SlepcNEP,SlepcNEPComparisonFunction,void*);
+    PetscErrorCode NEPSetStoppingTestFunction(SlepcNEP, SlepcNEPStoppingFunction, void*, SlepcNEPCtxDel)
+    PetscErrorCode NEPStoppingBasic(SlepcNEP, PetscInt, PetscInt, PetscInt, PetscInt, SlepcNEPConvergedReason*, void*) except PETSC_ERR_PYTHON
+    PetscErrorCode NEPSetEigenvalueComparison(SlepcNEP, SlepcNEPComparisonFunction, void*)
 
-    PetscErrorCode NEPRIISetLagPreconditioner(SlepcNEP,PetscInt)
-    PetscErrorCode NEPRIIGetLagPreconditioner(SlepcNEP,PetscInt*)
-    PetscErrorCode NEPRIISetConstCorrectionTol(SlepcNEP,PetscBool)
-    PetscErrorCode NEPRIIGetConstCorrectionTol(SlepcNEP,PetscBool*)
-    PetscErrorCode NEPRIISetMaximumIterations(SlepcNEP,PetscInt)
-    PetscErrorCode NEPRIIGetMaximumIterations(SlepcNEP,PetscInt*)
-    PetscErrorCode NEPRIISetHermitian(SlepcNEP,PetscBool)
-    PetscErrorCode NEPRIIGetHermitian(SlepcNEP,PetscBool*)
-    PetscErrorCode NEPRIISetDeflationThreshold(SlepcNEP,PetscReal)
-    PetscErrorCode NEPRIIGetDeflationThreshold(SlepcNEP,PetscReal*)
-    PetscErrorCode NEPRIISetKSP(SlepcNEP,PetscKSP)
-    PetscErrorCode NEPRIIGetKSP(SlepcNEP,PetscKSP*)
+    PetscErrorCode NEPRIISetLagPreconditioner(SlepcNEP, PetscInt)
+    PetscErrorCode NEPRIIGetLagPreconditioner(SlepcNEP, PetscInt*)
+    PetscErrorCode NEPRIISetConstCorrectionTol(SlepcNEP, PetscBool)
+    PetscErrorCode NEPRIIGetConstCorrectionTol(SlepcNEP, PetscBool*)
+    PetscErrorCode NEPRIISetMaximumIterations(SlepcNEP, PetscInt)
+    PetscErrorCode NEPRIIGetMaximumIterations(SlepcNEP, PetscInt*)
+    PetscErrorCode NEPRIISetHermitian(SlepcNEP, PetscBool)
+    PetscErrorCode NEPRIIGetHermitian(SlepcNEP, PetscBool*)
+    PetscErrorCode NEPRIISetDeflationThreshold(SlepcNEP, PetscReal)
+    PetscErrorCode NEPRIIGetDeflationThreshold(SlepcNEP, PetscReal*)
+    PetscErrorCode NEPRIISetKSP(SlepcNEP, PetscKSP)
+    PetscErrorCode NEPRIIGetKSP(SlepcNEP, PetscKSP*)
 
-    PetscErrorCode NEPSLPSetDeflationThreshold(SlepcNEP,PetscReal)
-    PetscErrorCode NEPSLPGetDeflationThreshold(SlepcNEP,PetscReal*)
-    PetscErrorCode NEPSLPSetEPS(SlepcNEP,SlepcEPS)
-    PetscErrorCode NEPSLPGetEPS(SlepcNEP,SlepcEPS*)
-    PetscErrorCode NEPSLPSetEPSLeft(SlepcNEP,SlepcEPS)
-    PetscErrorCode NEPSLPGetEPSLeft(SlepcNEP,SlepcEPS*)
-    PetscErrorCode NEPSLPSetKSP(SlepcNEP,PetscKSP)
-    PetscErrorCode NEPSLPGetKSP(SlepcNEP,PetscKSP*)
+    PetscErrorCode NEPSLPSetDeflationThreshold(SlepcNEP, PetscReal)
+    PetscErrorCode NEPSLPGetDeflationThreshold(SlepcNEP, PetscReal*)
+    PetscErrorCode NEPSLPSetEPS(SlepcNEP, SlepcEPS)
+    PetscErrorCode NEPSLPGetEPS(SlepcNEP, SlepcEPS*)
+    PetscErrorCode NEPSLPSetEPSLeft(SlepcNEP, SlepcEPS)
+    PetscErrorCode NEPSLPGetEPSLeft(SlepcNEP, SlepcEPS*)
+    PetscErrorCode NEPSLPSetKSP(SlepcNEP, PetscKSP)
+    PetscErrorCode NEPSLPGetKSP(SlepcNEP, PetscKSP*)
 
-    PetscErrorCode NEPNArnoldiSetKSP(SlepcNEP,PetscKSP)
-    PetscErrorCode NEPNArnoldiGetKSP(SlepcNEP,PetscKSP*)
-    PetscErrorCode NEPNArnoldiSetLagPreconditioner(SlepcNEP,PetscInt)
-    PetscErrorCode NEPNArnoldiGetLagPreconditioner(SlepcNEP,PetscInt*)
+    PetscErrorCode NEPNArnoldiSetKSP(SlepcNEP, PetscKSP)
+    PetscErrorCode NEPNArnoldiGetKSP(SlepcNEP, PetscKSP*)
+    PetscErrorCode NEPNArnoldiSetLagPreconditioner(SlepcNEP, PetscInt)
+    PetscErrorCode NEPNArnoldiGetLagPreconditioner(SlepcNEP, PetscInt*)
 
-    PetscErrorCode NEPInterpolSetPEP(SlepcNEP,SlepcPEP)
-    PetscErrorCode NEPInterpolGetPEP(SlepcNEP,SlepcPEP*)
-    PetscErrorCode NEPInterpolSetInterpolation(SlepcNEP,PetscReal,PetscInt)
-    PetscErrorCode NEPInterpolGetInterpolation(SlepcNEP,PetscReal*,PetscInt*)
+    PetscErrorCode NEPInterpolSetPEP(SlepcNEP, SlepcPEP)
+    PetscErrorCode NEPInterpolGetPEP(SlepcNEP, SlepcPEP*)
+    PetscErrorCode NEPInterpolSetInterpolation(SlepcNEP, PetscReal, PetscInt)
+    PetscErrorCode NEPInterpolGetInterpolation(SlepcNEP, PetscReal*, PetscInt*)
 
-    PetscErrorCode NEPNLEIGSSetRestart(SlepcNEP,PetscReal)
-    PetscErrorCode NEPNLEIGSGetRestart(SlepcNEP,PetscReal*)
-    PetscErrorCode NEPNLEIGSSetLocking(SlepcNEP,PetscBool)
-    PetscErrorCode NEPNLEIGSGetLocking(SlepcNEP,PetscBool*)
-    PetscErrorCode NEPNLEIGSSetInterpolation(SlepcNEP,PetscReal,PetscInt)
-    PetscErrorCode NEPNLEIGSGetInterpolation(SlepcNEP,PetscReal*,PetscInt*)
-    PetscErrorCode NEPNLEIGSSetRKShifts(SlepcNEP,PetscInt,PetscScalar[])
-    PetscErrorCode NEPNLEIGSGetRKShifts(SlepcNEP,PetscInt*,PetscScalar*[])
-    PetscErrorCode NEPNLEIGSGetKSPs(SlepcNEP,PetscInt*,PetscKSP**)
-    PetscErrorCode NEPNLEIGSSetFullBasis(SlepcNEP,PetscBool)
-    PetscErrorCode NEPNLEIGSGetFullBasis(SlepcNEP,PetscBool*)
-    PetscErrorCode NEPNLEIGSSetEPS(SlepcNEP,SlepcEPS)
-    PetscErrorCode NEPNLEIGSGetEPS(SlepcNEP,SlepcEPS*)
+    PetscErrorCode NEPNLEIGSSetRestart(SlepcNEP, PetscReal)
+    PetscErrorCode NEPNLEIGSGetRestart(SlepcNEP, PetscReal*)
+    PetscErrorCode NEPNLEIGSSetLocking(SlepcNEP, PetscBool)
+    PetscErrorCode NEPNLEIGSGetLocking(SlepcNEP, PetscBool*)
+    PetscErrorCode NEPNLEIGSSetInterpolation(SlepcNEP, PetscReal, PetscInt)
+    PetscErrorCode NEPNLEIGSGetInterpolation(SlepcNEP, PetscReal*, PetscInt*)
+    PetscErrorCode NEPNLEIGSSetRKShifts(SlepcNEP, PetscInt, PetscScalar[])
+    PetscErrorCode NEPNLEIGSGetRKShifts(SlepcNEP, PetscInt*, PetscScalar*[])
+    PetscErrorCode NEPNLEIGSGetKSPs(SlepcNEP, PetscInt*, PetscKSP**)
+    PetscErrorCode NEPNLEIGSSetFullBasis(SlepcNEP, PetscBool)
+    PetscErrorCode NEPNLEIGSGetFullBasis(SlepcNEP, PetscBool*)
+    PetscErrorCode NEPNLEIGSSetEPS(SlepcNEP, SlepcEPS)
+    PetscErrorCode NEPNLEIGSGetEPS(SlepcNEP, SlepcEPS*)
 
     ctypedef enum SlepcNEPCISSExtraction "NEPCISSExtraction":
         NEP_CISS_EXTRACTION_RITZ
         NEP_CISS_EXTRACTION_HANKEL
         NEP_CISS_EXTRACTION_CAA
 
-    PetscErrorCode NEPCISSSetExtraction(SlepcNEP,SlepcNEPCISSExtraction)
-    PetscErrorCode NEPCISSGetExtraction(SlepcNEP,SlepcNEPCISSExtraction*)
-    PetscErrorCode NEPCISSSetSizes(SlepcNEP,PetscInt,PetscInt,PetscInt,PetscInt,PetscInt,PetscBool)
-    PetscErrorCode NEPCISSGetSizes(SlepcNEP,PetscInt*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,PetscBool*)
-    PetscErrorCode NEPCISSSetThreshold(SlepcNEP,PetscReal,PetscReal)
-    PetscErrorCode NEPCISSGetThreshold(SlepcNEP,PetscReal*,PetscReal*)
-    PetscErrorCode NEPCISSSetRefinement(SlepcNEP,PetscInt,PetscInt)
-    PetscErrorCode NEPCISSGetRefinement(SlepcNEP,PetscInt*,PetscInt*)
-    PetscErrorCode NEPCISSGetKSPs(SlepcNEP,PetscInt*,PetscKSP**)
+    PetscErrorCode NEPCISSSetExtraction(SlepcNEP, SlepcNEPCISSExtraction)
+    PetscErrorCode NEPCISSGetExtraction(SlepcNEP, SlepcNEPCISSExtraction*)
+    PetscErrorCode NEPCISSSetSizes(SlepcNEP, PetscInt, PetscInt, PetscInt, PetscInt, PetscInt, PetscBool)
+    PetscErrorCode NEPCISSGetSizes(SlepcNEP, PetscInt*, PetscInt*, PetscInt*, PetscInt*, PetscInt*, PetscBool*)
+    PetscErrorCode NEPCISSSetThreshold(SlepcNEP, PetscReal, PetscReal)
+    PetscErrorCode NEPCISSGetThreshold(SlepcNEP, PetscReal*, PetscReal*)
+    PetscErrorCode NEPCISSSetRefinement(SlepcNEP, PetscInt, PetscInt)
+    PetscErrorCode NEPCISSGetRefinement(SlepcNEP, PetscInt*, PetscInt*)
+    PetscErrorCode NEPCISSGetKSPs(SlepcNEP, PetscInt*, PetscKSP**)
 
 # -----------------------------------------------------------------------------
 
 cdef inline NEP ref_NEP(SlepcNEP nep):
     cdef NEP ob = <NEP> NEP()
     ob.nep = nep
-    CHKERR( PetscINCREF(ob.obj) )
+    CHKERR(PetscINCREF(ob.obj))
     return ob
 
 # -----------------------------------------------------------------------------
@@ -246,7 +246,7 @@ cdef PetscErrorCode NEP_Function(
     PetscScalar mu,
     PetscMat    A,
     PetscMat    B,
-    void*       ctx,
+    void        *ctx,
     ) except PETSC_ERR_PYTHON with gil:
     cdef NEP Nep  = ref_NEP(nep)
     cdef Mat Amat = ref_Mat(A)
@@ -264,7 +264,7 @@ cdef PetscErrorCode NEP_Jacobian(
     SlepcNEP    nep,
     PetscScalar mu,
     PetscMat    J,
-    void*       ctx,
+    void        *ctx,
     ) except PETSC_ERR_PYTHON with gil:
     cdef NEP Nep  = ref_NEP(nep)
     cdef Mat Jmat = ref_Mat(J)
@@ -301,7 +301,7 @@ cdef PetscErrorCode NEP_Comparison(
     PetscScalar  ai,
     PetscScalar  br,
     PetscScalar  bi,
-    PetscInt*    res,
+    PetscInt     *res,
     void         *ctx,
     ) except PETSC_ERR_PYTHON with gil:
     (comparison, args, kargs) = <object>ctx

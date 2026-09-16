@@ -33,6 +33,7 @@ class DSType(object):
     PEP     = S_(DSPEP)
     NEP     = S_(DSNEP)
 
+
 class DSStateType(object):
     """
     DS state types.
@@ -50,6 +51,7 @@ class DSStateType(object):
     INTERMEDIATE = DS_STATE_INTERMEDIATE
     CONDENSED    = DS_STATE_CONDENSED
     TRUNCATED    = DS_STATE_TRUNCATED
+
 
 class DSMatType(object):
     """
@@ -85,6 +87,7 @@ class DSMatType(object):
     V  = DS_MAT_V
     W  = DS_MAT_W
 
+
 class DSParallelType(object):
     """
     Indicates the parallel mode that the direct solver will use.
@@ -103,6 +106,7 @@ class DSParallelType(object):
     DISTRIBUTED  = DS_PARALLEL_DISTRIBUTED
 
 # -----------------------------------------------------------------------------
+
 
 cdef class DS(Object):
 
@@ -141,7 +145,7 @@ cdef class DS(Object):
         slepc.DSView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( DSView(self.ds, vwr) )
+        CHKERR(DSView(self.ds, vwr))
 
     def destroy(self) -> Self:
         """
@@ -153,7 +157,7 @@ cdef class DS(Object):
         --------
         slepc.DSDestroy
         """
-        CHKERR( DSDestroy(&self.ds) )
+        CHKERR(DSDestroy(&self.ds))
         self.ds = NULL
         return self
 
@@ -167,7 +171,7 @@ cdef class DS(Object):
         --------
         allocate, slepc.DSReset
         """
-        CHKERR( DSReset(self.ds) )
+        CHKERR(DSReset(self.ds))
 
     def create(self, comm: Comm | None = None) -> Self:
         """
@@ -186,8 +190,8 @@ cdef class DS(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcDS newds = NULL
-        CHKERR( DSCreate(ccomm, &newds) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.ds = newds
+        CHKERR(DSCreate(ccomm, &newds))
+        CHKERR(SlepcCLEAR(self.obj)); self.ds = newds
         return self
 
     def setType(self, ds_type: Type | str) -> None:
@@ -207,7 +211,7 @@ cdef class DS(Object):
         """
         cdef SlepcDSType cval = NULL
         ds_type = str2bytes(ds_type, &cval)
-        CHKERR( DSSetType(self.ds, cval) )
+        CHKERR(DSSetType(self.ds, cval))
 
     def getType(self) -> str:
         """
@@ -225,7 +229,7 @@ cdef class DS(Object):
         setType, slepc.DSGetType
         """
         cdef SlepcDSType ds_type = NULL
-        CHKERR( DSGetType(self.ds, &ds_type) )
+        CHKERR(DSGetType(self.ds, &ds_type))
         return bytes2str(ds_type)
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -251,7 +255,7 @@ cdef class DS(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( DSSetOptionsPrefix(self.ds, cval) )
+        CHKERR(DSSetOptionsPrefix(self.ds, cval))
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
@@ -270,7 +274,7 @@ cdef class DS(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( DSAppendOptionsPrefix(self.ds, cval) )
+        CHKERR(DSAppendOptionsPrefix(self.ds, cval))
 
     def getOptionsPrefix(self) -> str:
         """
@@ -288,7 +292,7 @@ cdef class DS(Object):
         appendOptionsPrefix, setOptionsPrefix, slepc.DSSetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( DSGetOptionsPrefix(self.ds, &prefix) )
+        CHKERR(DSGetOptionsPrefix(self.ds, &prefix))
         return bytes2str(prefix)
 
     def setFromOptions(self) -> None:
@@ -306,7 +310,7 @@ cdef class DS(Object):
         --------
         setOptionsPrefix, slepc.DSSetFromOptions
         """
-        CHKERR( DSSetFromOptions(self.ds) )
+        CHKERR(DSSetFromOptions(self.ds))
 
     def duplicate(self) -> DS:
         """
@@ -330,7 +334,7 @@ cdef class DS(Object):
         create, allocate, slepc.DSDuplicate
         """
         cdef DS ds = type(self)()
-        CHKERR( DSDuplicate(self.ds, &ds.ds) )
+        CHKERR(DSDuplicate(self.ds, &ds.ds))
         return ds
 
     #
@@ -357,7 +361,7 @@ cdef class DS(Object):
         getLeadingDimension, setDimensions, setExtraRow, reset, slepc.DSAllocate
         """
         cdef PetscInt val = asInt(ld)
-        CHKERR( DSAllocate(self.ds, val) )
+        CHKERR(DSAllocate(self.ds, val))
 
     def getLeadingDimension(self) -> int:
         """
@@ -375,7 +379,7 @@ cdef class DS(Object):
         allocate, setDimensions, slepc.DSGetLeadingDimension
         """
         cdef PetscInt val = 0
-        CHKERR( DSGetLeadingDimension(self.ds, &val) )
+        CHKERR(DSGetLeadingDimension(self.ds, &val))
         return toInt(val)
 
     def setState(self, state: StateType) -> None:
@@ -408,7 +412,7 @@ cdef class DS(Object):
         getState, solve, truncate, slepc.DSSetState
         """
         cdef SlepcDSStateType val = state
-        CHKERR( DSSetState(self.ds, val) )
+        CHKERR(DSSetState(self.ds, val))
 
     def getState(self) -> StateType:
         """
@@ -426,7 +430,7 @@ cdef class DS(Object):
         setState, slepc.DSGetState
         """
         cdef SlepcDSStateType val = DS_STATE_RAW
-        CHKERR( DSGetState(self.ds, &val) )
+        CHKERR(DSGetState(self.ds, &val))
         return val
 
     def setParallel(self, pmode: ParallelType) -> None:
@@ -445,7 +449,7 @@ cdef class DS(Object):
         getParallel, slepc.DSSetParallel
         """
         cdef SlepcDSParallelType val = pmode
-        CHKERR( DSSetParallel(self.ds, val) )
+        CHKERR(DSSetParallel(self.ds, val))
 
     def getParallel(self) -> ParallelType:
         """
@@ -463,7 +467,7 @@ cdef class DS(Object):
         setParallel, slepc.DSGetParallel
         """
         cdef SlepcDSParallelType val = DS_PARALLEL_REDUNDANT
-        CHKERR( DSGetParallel(self.ds, &val) )
+        CHKERR(DSGetParallel(self.ds, &val))
         return val
 
     def setDimensions(self, n: int | None = None, l: int | None = None, k: int | None = None) -> None:
@@ -499,7 +503,7 @@ cdef class DS(Object):
         if n is not None: ival1 = asInt(n)
         if l is not None: ival2 = asInt(l)
         if k is not None: ival3 = asInt(k)
-        CHKERR( DSSetDimensions(self.ds, ival1, ival2, ival3) )
+        CHKERR(DSSetDimensions(self.ds, ival1, ival2, ival3))
 
     def getDimensions(self) -> tuple[int, int, int, int]:
         """
@@ -531,7 +535,7 @@ cdef class DS(Object):
         cdef PetscInt ival2 = 0
         cdef PetscInt ival3 = 0
         cdef PetscInt ival4 = 0
-        CHKERR( DSGetDimensions(self.ds, &ival1, &ival2, &ival3, &ival4) )
+        CHKERR(DSGetDimensions(self.ds, &ival1, &ival2, &ival3, &ival4))
         return (toInt(ival1), toInt(ival2), toInt(ival3), toInt(ival4))
 
     def setBlockSize(self, bs: int) -> None:
@@ -550,7 +554,7 @@ cdef class DS(Object):
         getBlockSize, slepc.DSSetBlockSize
         """
         cdef PetscInt val = asInt(bs)
-        CHKERR( DSSetBlockSize(self.ds, val) )
+        CHKERR(DSSetBlockSize(self.ds, val))
 
     def getBlockSize(self) -> int:
         """
@@ -568,7 +572,7 @@ cdef class DS(Object):
         setBlockSize, slepc.DSGetBlockSize
         """
         cdef PetscInt val = 0
-        CHKERR( DSGetBlockSize(self.ds, &val) )
+        CHKERR(DSGetBlockSize(self.ds, &val))
         return val
 
     def setMethod(self, meth: int) -> None:
@@ -587,7 +591,7 @@ cdef class DS(Object):
         getMethod, slepc.DSSetMethod
         """
         cdef PetscInt val = asInt(meth)
-        CHKERR( DSSetMethod(self.ds, val) )
+        CHKERR(DSSetMethod(self.ds, val))
 
     def getMethod(self) -> int:
         """
@@ -605,7 +609,7 @@ cdef class DS(Object):
         setMethod, slepc.DSGetMethod
         """
         cdef PetscInt val = 0
-        CHKERR( DSGetMethod(self.ds, &val) )
+        CHKERR(DSGetMethod(self.ds, &val))
         return val
 
     def setCompact(self, comp: bool = True) -> None:
@@ -634,7 +638,7 @@ cdef class DS(Object):
         getCompact, slepc.DSSetCompact
         """
         cdef PetscBool val = asBool(comp)
-        CHKERR( DSSetCompact(self.ds, val) )
+        CHKERR(DSSetCompact(self.ds, val))
 
     def getCompact(self) -> bool:
         """
@@ -652,7 +656,7 @@ cdef class DS(Object):
         setCompact, slepc.DSGetCompact
         """
         cdef PetscBool val = PETSC_FALSE
-        CHKERR( DSGetCompact(self.ds, &val) )
+        CHKERR(DSGetCompact(self.ds, &val))
         return toBool(val)
 
     def setExtraRow(self, ext: bool = True) -> None:
@@ -681,7 +685,7 @@ cdef class DS(Object):
         getExtraRow, solve, allocate, slepc.DSSetExtraRow
         """
         cdef PetscBool val = asBool(ext)
-        CHKERR( DSSetExtraRow(self.ds, val) )
+        CHKERR(DSSetExtraRow(self.ds, val))
 
     def getExtraRow(self) -> bool:
         """
@@ -699,7 +703,7 @@ cdef class DS(Object):
         setExtraRow, slepc.DSGetExtraRow
         """
         cdef PetscBool val = PETSC_FALSE
-        CHKERR( DSGetExtraRow(self.ds, &val) )
+        CHKERR(DSGetExtraRow(self.ds, &val))
         return toBool(val)
 
     def setRefined(self, ref: bool = True) -> None:
@@ -729,7 +733,7 @@ cdef class DS(Object):
         getRefined, vectors, setExtraRow, slepc.DSSetRefined
         """
         cdef PetscBool val = asBool(ref)
-        CHKERR( DSSetRefined(self.ds, val) )
+        CHKERR(DSSetRefined(self.ds, val))
 
     def getRefined(self) -> bool:
         """
@@ -747,7 +751,7 @@ cdef class DS(Object):
         setRefined, slepc.DSGetRefined
         """
         cdef PetscBool val = PETSC_FALSE
-        CHKERR( DSGetRefined(self.ds, &val) )
+        CHKERR(DSGetRefined(self.ds, &val))
         return toBool(val)
 
     def truncate(self, n: int, trim: bool = False) -> None:
@@ -769,7 +773,7 @@ cdef class DS(Object):
         """
         cdef PetscInt val = asInt(n)
         cdef PetscBool flg = asBool(trim)
-        CHKERR( DSTruncate(self.ds, val, flg) )
+        CHKERR(DSTruncate(self.ds, val, flg))
 
     def updateExtraRow(self) -> None:
         """
@@ -784,7 +788,7 @@ cdef class DS(Object):
         --------
         slepc.DSUpdateExtraRow
         """
-        CHKERR( DSUpdateExtraRow(self.ds) )
+        CHKERR(DSUpdateExtraRow(self.ds))
 
     def getMat(self, matname: MatType) -> Mat:
         """
@@ -817,8 +821,8 @@ cdef class DS(Object):
         """
         cdef SlepcDSMatType mname = matname
         cdef Mat mat = Mat()
-        CHKERR( DSGetMat(self.ds, mname, &mat.mat) )
-        CHKERR( PetscINCREF(mat.obj) )
+        CHKERR(DSGetMat(self.ds, mname, &mat.mat))
+        CHKERR(PetscINCREF(mat.obj))
         return mat
 
     def restoreMat(self, matname: MatType, Mat mat: petsc4py.PETSc.Mat) -> None:
@@ -839,8 +843,8 @@ cdef class DS(Object):
         getMat, slepc.DSRestoreMat
         """
         cdef SlepcDSMatType mname = matname
-        CHKERR( PetscObjectDereference(<PetscObject>mat.mat) )
-        CHKERR( DSRestoreMat(self.ds, mname, &mat.mat) )
+        CHKERR(PetscObjectDereference(<PetscObject>mat.mat))
+        CHKERR(DSRestoreMat(self.ds, mname, &mat.mat))
 
     def getArray(self, matname: MatType) -> ArrayScalar:
         """
@@ -898,7 +902,7 @@ cdef class DS(Object):
         slepc.DSSetIdentity
         """
         cdef SlepcDSMatType mname = matname
-        CHKERR( DSSetIdentity(self.ds, mname) )
+        CHKERR(DSSetIdentity(self.ds, mname))
 
     #
 
@@ -918,7 +922,7 @@ cdef class DS(Object):
         slepc.DSCond
         """
         cdef PetscReal rval = 0
-        CHKERR( DSCond(self.ds, &rval) )
+        CHKERR(DSCond(self.ds, &rval))
         return toReal(rval)
 
     def solve(self) -> ArrayScalar:
@@ -941,10 +945,10 @@ cdef class DS(Object):
         cdef PetscScalar *eigi = NULL
         cdef unusedr = allocate(<size_t>n*sizeof(PetscScalar), <void**>&eigr)
         cdef unusedi = allocate(<size_t>n*sizeof(PetscScalar), <void**>&eigi)
-        CHKERR( DSSolve(self.ds, eigr, eigi) )
+        CHKERR(DSSolve(self.ds, eigr, eigi))
         cdef object kr = array_s(n, eigr)
         cdef object ki = array_s(n, eigi)
-        if self.getType().upper() in ['HEP','GHEP','SVD','HSVD','GSVD']:
+        if self.getType().upper() in ['HEP', 'GHEP', 'SVD', 'HSVD', 'GSVD']:
             return kr.real.copy()
         else:
             return kr+1j*ki
@@ -965,7 +969,7 @@ cdef class DS(Object):
         slepc.DSVectors
         """
         cdef SlepcDSMatType mname = matname
-        CHKERR( DSVectors(self.ds, mname, NULL, NULL) )
+        CHKERR(DSVectors(self.ds, mname, NULL, NULL))
 
     #
 
@@ -990,7 +994,7 @@ cdef class DS(Object):
         setDimensions, getSVDDimensions, slepc.DSSVDSetDimensions
         """
         cdef PetscInt val = asInt(m)
-        CHKERR( DSSVDSetDimensions(self.ds, val) )
+        CHKERR(DSSVDSetDimensions(self.ds, val))
 
     def getSVDDimensions(self) -> int:
         """
@@ -1008,7 +1012,7 @@ cdef class DS(Object):
         setSVDDimensions, slepc.DSSVDGetDimensions
         """
         cdef PetscInt val = 0
-        CHKERR( DSSVDGetDimensions(self.ds, &val) )
+        CHKERR(DSSVDGetDimensions(self.ds, &val))
         return toInt(val)
 
     def setHSVDDimensions(self, m: int) -> None:
@@ -1032,7 +1036,7 @@ cdef class DS(Object):
         setDimensions, getHSVDDimensions, slepc.DSHSVDSetDimensions
         """
         cdef PetscInt val = asInt(m)
-        CHKERR( DSHSVDSetDimensions(self.ds, val) )
+        CHKERR(DSHSVDSetDimensions(self.ds, val))
 
     def getHSVDDimensions(self) -> int:
         """
@@ -1050,7 +1054,7 @@ cdef class DS(Object):
         setHSVDDimensions, slepc.DSHSVDGetDimensions
         """
         cdef PetscInt val = 0
-        CHKERR( DSHSVDGetDimensions(self.ds, &val) )
+        CHKERR(DSHSVDGetDimensions(self.ds, &val))
         return toInt(val)
 
     def setGSVDDimensions(self, m: int, p: int) -> None:
@@ -1077,7 +1081,7 @@ cdef class DS(Object):
         """
         cdef PetscInt val1 = asInt(m)
         cdef PetscInt val2 = asInt(p)
-        CHKERR( DSGSVDSetDimensions(self.ds, val1, val2) )
+        CHKERR(DSGSVDSetDimensions(self.ds, val1, val2))
 
     def getGSVDDimensions(self) -> tuple[int, int]:
         """
@@ -1098,7 +1102,7 @@ cdef class DS(Object):
         """
         cdef PetscInt val1 = 0
         cdef PetscInt val2 = 0
-        CHKERR( DSGSVDGetDimensions(self.ds, &val1, &val2) )
+        CHKERR(DSGSVDGetDimensions(self.ds, &val1, &val2))
         return (toInt(val1), toInt(val2))
 
     def setPEPDegree(self, deg: int) -> None:
@@ -1117,7 +1121,7 @@ cdef class DS(Object):
         getPEPDegree, slepc.DSPEPSetDegree
         """
         cdef PetscInt val = asInt(deg)
-        CHKERR( DSPEPSetDegree(self.ds, val) )
+        CHKERR(DSPEPSetDegree(self.ds, val))
 
     def getPEPDegree(self) -> int:
         """
@@ -1135,7 +1139,7 @@ cdef class DS(Object):
         setPEPDegree, slepc.DSPEPGetDegree
         """
         cdef PetscInt val = 0
-        CHKERR( DSPEPGetDegree(self.ds, &val) )
+        CHKERR(DSPEPGetDegree(self.ds, &val))
         return toInt(val)
 
     def setPEPCoefficients(self, pbc: Sequence[float]) -> None:
@@ -1171,7 +1175,7 @@ cdef class DS(Object):
         cdef PetscInt na = 0
         cdef PetscReal *a = NULL
         pbc = iarray_r(pbc, &na, &a)
-        CHKERR( DSPEPSetCoefficients(self.ds, a) )
+        CHKERR(DSPEPSetCoefficients(self.ds, a))
 
     def getPEPCoefficients(self) -> ArrayReal:
         """
@@ -1190,13 +1194,13 @@ cdef class DS(Object):
         """
         cdef PetscInt np = 0
         cdef PetscReal *coeff = NULL
-        CHKERR( DSPEPGetDegree(self.ds, &np) )
-        CHKERR( DSPEPGetCoefficients(self.ds, &coeff) )
+        CHKERR(DSPEPGetDegree(self.ds, &np))
+        CHKERR(DSPEPGetCoefficients(self.ds, &coeff))
         cdef object ocoeff = None
         try:
             ocoeff = array_r(3*(np+1), coeff)
         finally:
-            CHKERR( PetscFree(coeff) )
+            CHKERR(PetscFree(coeff))
         return ocoeff
 
     #
@@ -1205,6 +1209,7 @@ cdef class DS(Object):
         """The state of the DS object."""
         def __get__(self) -> DSStateType:
             return self.getState()
+
         def __set__(self, value):
             self.setState(value)
 
@@ -1212,6 +1217,7 @@ cdef class DS(Object):
         """The mode of operation in parallel runs."""
         def __get__(self) -> DSParallelType:
             return self.getParallel()
+
         def __set__(self, value):
             self.setParallel(value)
 
@@ -1219,6 +1225,7 @@ cdef class DS(Object):
         """The block size."""
         def __get__(self) -> int:
             return self.getBlockSize()
+
         def __set__(self, value):
             self.setBlockSize(value)
 
@@ -1226,6 +1233,7 @@ cdef class DS(Object):
         """The method to be used to solve the problem."""
         def __get__(self) -> int:
             return self.getMethod()
+
         def __set__(self, value):
             self.setMethod(value)
 
@@ -1233,6 +1241,7 @@ cdef class DS(Object):
         """Compact storage of matrices."""
         def __get__(self) -> bool:
             return self.getCompact()
+
         def __set__(self, value):
             self.setCompact(value)
 
@@ -1240,6 +1249,7 @@ cdef class DS(Object):
         """If the matrix has one extra row."""
         def __get__(self) -> bool:
             return self.getExtraRow()
+
         def __set__(self, value):
             self.setExtraRow(value)
 
@@ -1247,6 +1257,7 @@ cdef class DS(Object):
         """If refined vectors must be computed."""
         def __get__(self) -> bool:
             return self.getRefined()
+
         def __set__(self, value):
             self.setRefined(value)
 

@@ -19,60 +19,60 @@ cdef extern from * nogil:
 
     ctypedef PetscErrorCode (*SlepcLMECtxDel)(void*)
     ctypedef PetscErrorCode (*SlepcLMEMonitorFunction)(SlepcLME,
-                                            PetscInt,
-                                            PetscReal,
-                                            void*) except PETSC_ERR_PYTHON
+                                                       PetscInt,
+                                                       PetscReal,
+                                                       void*) except PETSC_ERR_PYTHON
 
-    PetscErrorCode LMECreate(MPI_Comm,SlepcLME*)
+    PetscErrorCode LMECreate(MPI_Comm, SlepcLME*)
     PetscErrorCode LMEDestroy(SlepcLME*)
     PetscErrorCode LMEReset(SlepcLME)
-    PetscErrorCode LMEView(SlepcLME,PetscViewer)
+    PetscErrorCode LMEView(SlepcLME, PetscViewer)
 
-    PetscErrorCode LMESetType(SlepcLME,SlepcLMEType)
-    PetscErrorCode LMEGetType(SlepcLME,SlepcLMEType*)
-    PetscErrorCode LMESetProblemType(SlepcLME,SlepcLMEProblemType)
-    PetscErrorCode LMEGetProblemType(SlepcLME,SlepcLMEProblemType*)
+    PetscErrorCode LMESetType(SlepcLME, SlepcLMEType)
+    PetscErrorCode LMEGetType(SlepcLME, SlepcLMEType*)
+    PetscErrorCode LMESetProblemType(SlepcLME, SlepcLMEProblemType)
+    PetscErrorCode LMEGetProblemType(SlepcLME, SlepcLMEProblemType*)
 
-    PetscErrorCode LMESetCoefficients(SlepcLME,PetscMat,PetscMat,PetscMat,PetscMat)
-    PetscErrorCode LMEGetCoefficients(SlepcLME,PetscMat*,PetscMat*,PetscMat*,PetscMat*)
-    PetscErrorCode LMESetRHS(SlepcLME,PetscMat)
-    PetscErrorCode LMEGetRHS(SlepcLME,PetscMat*)
-    PetscErrorCode LMESetSolution(SlepcLME,PetscMat)
-    PetscErrorCode LMEGetSolution(SlepcLME,PetscMat*)
-    PetscErrorCode LMEGetErrorEstimate(SlepcLME,PetscReal*)
-    PetscErrorCode LMEComputeError(SlepcLME,PetscReal*)
+    PetscErrorCode LMESetCoefficients(SlepcLME, PetscMat, PetscMat, PetscMat, PetscMat)
+    PetscErrorCode LMEGetCoefficients(SlepcLME, PetscMat*, PetscMat*, PetscMat*, PetscMat*)
+    PetscErrorCode LMESetRHS(SlepcLME, PetscMat)
+    PetscErrorCode LMEGetRHS(SlepcLME, PetscMat*)
+    PetscErrorCode LMESetSolution(SlepcLME, PetscMat)
+    PetscErrorCode LMEGetSolution(SlepcLME, PetscMat*)
+    PetscErrorCode LMEGetErrorEstimate(SlepcLME, PetscReal*)
+    PetscErrorCode LMEComputeError(SlepcLME, PetscReal*)
 
-    PetscErrorCode LMESetOptionsPrefix(SlepcLME,char*)
-    PetscErrorCode LMEGetOptionsPrefix(SlepcLME,char*[])
+    PetscErrorCode LMESetOptionsPrefix(SlepcLME, char*)
+    PetscErrorCode LMEGetOptionsPrefix(SlepcLME, char*[])
     PetscErrorCode LMESetFromOptions(SlepcLME)
-    PetscErrorCode LMEAppendOptionsPrefix(SlepcLME,char*)
+    PetscErrorCode LMEAppendOptionsPrefix(SlepcLME, char*)
     PetscErrorCode LMESetUp(SlepcLME)
     PetscErrorCode LMESolve(SlepcLME)
 
-    PetscErrorCode LMESetBV(SlepcLME,SlepcBV)
-    PetscErrorCode LMEGetBV(SlepcLME,SlepcBV*)
-    PetscErrorCode LMESetFN(SlepcLME,SlepcFN)
-    PetscErrorCode LMEGetFN(SlepcLME,SlepcFN*)
-    PetscErrorCode LMESetTolerances(SlepcLME,PetscReal,PetscInt)
-    PetscErrorCode LMEGetTolerances(SlepcLME,PetscReal*,PetscInt*)
-    PetscErrorCode LMESetDimensions(SlepcLME,PetscInt)
-    PetscErrorCode LMEGetDimensions(SlepcLME,PetscInt*)
+    PetscErrorCode LMESetBV(SlepcLME, SlepcBV)
+    PetscErrorCode LMEGetBV(SlepcLME, SlepcBV*)
+    PetscErrorCode LMESetFN(SlepcLME, SlepcFN)
+    PetscErrorCode LMEGetFN(SlepcLME, SlepcFN*)
+    PetscErrorCode LMESetTolerances(SlepcLME, PetscReal, PetscInt)
+    PetscErrorCode LMEGetTolerances(SlepcLME, PetscReal*, PetscInt*)
+    PetscErrorCode LMESetDimensions(SlepcLME, PetscInt)
+    PetscErrorCode LMEGetDimensions(SlepcLME, PetscInt*)
 
-    PetscErrorCode LMESetErrorIfNotConverged(SlepcLME,PetscBool)
-    PetscErrorCode LMEGetErrorIfNotConverged(SlepcLME,PetscBool*)
+    PetscErrorCode LMESetErrorIfNotConverged(SlepcLME, PetscBool)
+    PetscErrorCode LMEGetErrorIfNotConverged(SlepcLME, PetscBool*)
 
-    PetscErrorCode LMEMonitorSet(SlepcLME,SlepcLMEMonitorFunction,void*,SlepcLMECtxDel)
+    PetscErrorCode LMEMonitorSet(SlepcLME, SlepcLMEMonitorFunction, void*, SlepcLMECtxDel)
     PetscErrorCode LMEMonitorCancel(SlepcLME)
-    PetscErrorCode LMEGetIterationNumber(SlepcLME,PetscInt*)
+    PetscErrorCode LMEGetIterationNumber(SlepcLME, PetscInt*)
 
-    PetscErrorCode LMEGetConvergedReason(SlepcLME,SlepcLMEConvergedReason*)
+    PetscErrorCode LMEGetConvergedReason(SlepcLME, SlepcLMEConvergedReason*)
 
 # -----------------------------------------------------------------------------
 
 cdef inline LME ref_LME(SlepcLME lme):
     cdef LME ob = <LME> LME()
     ob.lme = lme
-    CHKERR( PetscINCREF(ob.obj) )
+    CHKERR(PetscINCREF(ob.obj))
     return ob
 
 # -----------------------------------------------------------------------------

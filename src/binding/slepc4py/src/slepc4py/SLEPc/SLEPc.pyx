@@ -22,37 +22,35 @@ cdef extern from * nogil:
 
 # -----------------------------------------------------------------------------
 
-from petsc4py.PETSc import COMM_NULL
 from petsc4py.PETSc import COMM_SELF
-from petsc4py.PETSc import COMM_WORLD
 
 # -----------------------------------------------------------------------------
 
 from petsc4py.PETSc cimport MPI_Comm
-from petsc4py.PETSc cimport PetscErrorCode, PetscErrorType
+from petsc4py.PETSc cimport PetscErrorCode
 from petsc4py.PETSc cimport PETSC_SUCCESS, PETSC_ERR_PYTHON
 from petsc4py.PETSc cimport CHKERR
 from petsc4py.PETSc cimport PetscObject, PetscViewer
 from petsc4py.PETSc cimport PetscRandom
 from petsc4py.PETSc cimport PetscVec, PetscMat
-from petsc4py.PETSc cimport PetscKSP, PetscPC
+from petsc4py.PETSc cimport PetscKSP
 
 from petsc4py.PETSc cimport Comm
 from petsc4py.PETSc cimport Object, Viewer
 from petsc4py.PETSc cimport Random
 from petsc4py.PETSc cimport Vec, Mat
-from petsc4py.PETSc cimport KSP, PC
+from petsc4py.PETSc cimport KSP
 
 # -----------------------------------------------------------------------------
 
 cdef inline object bytes2str(const char p[]):
-     if p == NULL:
-         return None
-     cdef bytes s = <char*>p
-     if isinstance(s, str):
-         return s
-     else:
-         return s.decode()
+    if p == NULL:
+        return None
+    cdef bytes s = <char*>p
+    if isinstance(s, str):
+        return s
+    else:
+        return s.decode()
 
 cdef inline object str2bytes(object s, const char *p[]):
     if s is None:
@@ -64,9 +62,9 @@ cdef inline object str2bytes(object s, const char *p[]):
     return s
 
 cdef inline object S_(const char p[]):
-     if p == NULL: return None
-     cdef object s = <char*>p
-     return s if isinstance(s, str) else s.decode()
+    if p == NULL: return None
+    cdef object s = <char*>p
+    return s if isinstance(s, str) else s.decode()
 
 include "allocate.pxi"
 
@@ -105,9 +103,9 @@ cdef inline PetscScalar asScalar(object value) except? <PetscScalar>-1.0:
     return PyPetscScalar_AsPetscScalar(value)
 
 cdef extern from "Python.h":
-     double PyComplex_RealAsDouble(object)
-     double PyComplex_ImagAsDouble(object)
-     void Py_INCREF(object)
+    double PyComplex_RealAsDouble(object)
+    double PyComplex_ImagAsDouble(object)
+    void Py_INCREF(object)
 
 cdef inline object toComplex(PetscScalar rvalue, PetscScalar ivalue):
     return toScalar(rvalue) + 1j * toScalar(ivalue)
@@ -139,8 +137,8 @@ ComplexType = PyArray_TypeObjectFromType(NPY_PETSC_COMPLEX)
 # -----------------------------------------------------------------------------
 
 cdef extern from "<string.h>"  nogil:
-    void* memset(void*,int,size_t)
-    void* memcpy(void*,void*,size_t)
+    void* memset(void*, int, size_t)
+    void* memcpy(void*, void*, size_t)
     char* strdup(char*)
 
 # -----------------------------------------------------------------------------
@@ -194,7 +192,7 @@ include "CAPI.pyx"
 
 cdef extern from "Python.h":
     int Py_AtExit(void (*)() noexcept nogil)
-    void PySys_WriteStderr(char*,...)
+    void PySys_WriteStderr(char*, ...)
 
 cdef extern from "<stdio.h>" nogil:
     ctypedef struct FILE
@@ -205,7 +203,7 @@ cdef int initialize(object args) except PETSC_ERR_PYTHON:
     if (<int>SlepcInitializeCalled): return 1
     if (<int>SlepcFinalizeCalled):   return 0
     # initialize SLEPC
-    CHKERR( SlepcInitialize(NULL, NULL, NULL, NULL) )
+    CHKERR(SlepcInitialize(NULL, NULL, NULL, NULL))
     # register finalization function
     if Py_AtExit(finalize) < 0:
         PySys_WriteStderr(b"warning: could not register %s with Py_AtExit()",
@@ -231,7 +229,7 @@ cdef extern from * nogil:
 
 cdef PetscErrorCode register() except PETSC_ERR_PYTHON:
     # make sure all SLEPc packages are initialized
-    CHKERR( SlepcInitializePackageAll() )
+    CHKERR(SlepcInitializePackageAll())
     # register Python types
     PyPetscType_Register(SLEPC_ST_CLASSID,  ST)
     PyPetscType_Register(SLEPC_BV_CLASSID,  BV)
@@ -260,9 +258,11 @@ cdef void finalize() noexcept nogil:
 
 # -----------------------------------------------------------------------------
 
+
 def _initialize(args=None):
     cdef int ready = initialize(args)
     if ready: register()
+
 
 def _finalize():
     finalize()

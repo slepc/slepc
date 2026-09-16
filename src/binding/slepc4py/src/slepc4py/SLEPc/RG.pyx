@@ -18,6 +18,7 @@ class RGType(object):
     ELLIPSE    = S_(RGELLIPSE)
     RING       = S_(RGRING)
 
+
 class RGQuadRule(object):
     """
     RG quadrature rule for contour integral methods.
@@ -33,6 +34,7 @@ class RGQuadRule(object):
     CHEBYSHEV   = EPS_CISS_QUADRULE_CHEBYSHEV
 
 # -----------------------------------------------------------------------------
+
 
 cdef class RG(Object):
 
@@ -68,7 +70,7 @@ cdef class RG(Object):
         slepc.RGView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( RGView(self.rg, vwr) )
+        CHKERR(RGView(self.rg, vwr))
 
     def destroy(self) -> Self:
         """
@@ -80,7 +82,7 @@ cdef class RG(Object):
         --------
         slepc.RGDestroy
         """
-        CHKERR( RGDestroy(&self.rg) )
+        CHKERR(RGDestroy(&self.rg))
         self.rg = NULL
         return self
 
@@ -101,8 +103,8 @@ cdef class RG(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcRG newrg = NULL
-        CHKERR( RGCreate(ccomm, &newrg) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.rg = newrg
+        CHKERR(RGCreate(ccomm, &newrg))
+        CHKERR(SlepcCLEAR(self.obj)); self.rg = newrg
         return self
 
     def setType(self, rg_type: Type | str) -> None:
@@ -122,7 +124,7 @@ cdef class RG(Object):
         """
         cdef SlepcRGType cval = NULL
         rg_type = str2bytes(rg_type, &cval)
-        CHKERR( RGSetType(self.rg, cval) )
+        CHKERR(RGSetType(self.rg, cval))
 
     def getType(self) -> str:
         """
@@ -140,7 +142,7 @@ cdef class RG(Object):
         setType, slepc.RGGetType
         """
         cdef SlepcRGType rg_type = NULL
-        CHKERR( RGGetType(self.rg, &rg_type) )
+        CHKERR(RGGetType(self.rg, &rg_type))
         return bytes2str(rg_type)
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -166,7 +168,7 @@ cdef class RG(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( RGSetOptionsPrefix(self.rg, cval) )
+        CHKERR(RGSetOptionsPrefix(self.rg, cval))
 
     def getOptionsPrefix(self) -> str:
         """
@@ -184,7 +186,7 @@ cdef class RG(Object):
         setOptionsPrefix, appendOptionsPrefix, slepc.RGGetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( RGGetOptionsPrefix(self.rg, &prefix) )
+        CHKERR(RGGetOptionsPrefix(self.rg, &prefix))
         return bytes2str(prefix)
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -204,7 +206,7 @@ cdef class RG(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( RGAppendOptionsPrefix(self.rg, cval) )
+        CHKERR(RGAppendOptionsPrefix(self.rg, cval))
 
     def setFromOptions(self) -> None:
         """
@@ -221,7 +223,7 @@ cdef class RG(Object):
         --------
         setOptionsPrefix, slepc.RGSetFromOptions
         """
-        CHKERR( RGSetFromOptions(self.rg) )
+        CHKERR(RGSetFromOptions(self.rg))
 
     #
 
@@ -243,7 +245,7 @@ cdef class RG(Object):
         checkInside, slepc.RGIsTrivial
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( RGIsTrivial(self.rg, &tval) )
+        CHKERR(RGIsTrivial(self.rg, &tval))
         return toBool(tval)
 
     def isAxisymmetric(self, vertical: bool = False) -> bool:
@@ -271,7 +273,7 @@ cdef class RG(Object):
         """
         cdef PetscBool val = asBool(vertical)
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( RGIsAxisymmetric(self.rg, val, &tval) )
+        CHKERR(RGIsAxisymmetric(self.rg, val, &tval))
         return toBool(tval)
 
     def getComplement(self) -> bool:
@@ -290,7 +292,7 @@ cdef class RG(Object):
         setComplement, slepc.RGGetComplement
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( RGGetComplement(self.rg, &tval) )
+        CHKERR(RGGetComplement(self.rg, &tval))
         return toBool(tval)
 
     def setComplement(self, comp: bool = True) -> None:
@@ -309,7 +311,7 @@ cdef class RG(Object):
         getComplement, slepc.RGSetComplement
         """
         cdef PetscBool tval = asBool(comp)
-        CHKERR( RGSetComplement(self.rg, tval) )
+        CHKERR(RGSetComplement(self.rg, tval))
 
     def setScale(self, sfactor: float = None) -> None:
         """
@@ -331,7 +333,7 @@ cdef class RG(Object):
         """
         cdef PetscReal rval = 1.0
         if sfactor is not None: rval = asReal(sfactor)
-        CHKERR( RGSetScale(self.rg, rval) )
+        CHKERR(RGSetScale(self.rg, rval))
 
     def getScale(self) -> float:
         """
@@ -349,7 +351,7 @@ cdef class RG(Object):
         setScale, slepc.RGGetScale
         """
         cdef PetscReal rval = 0
-        CHKERR( RGGetScale(self.rg, &rval) )
+        CHKERR(RGGetScale(self.rg, &rval))
         return toReal(rval)
 
     def checkInside(self, a: Sequence[complex]) -> ArrayInt:
@@ -379,17 +381,17 @@ cdef class RG(Object):
         cdef Py_ssize_t i = 0, n = len(a)
         cdef PetscScalar *ar = NULL, *ai = NULL
         cdef PetscInt *inside = NULL
-        cdef unused1 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&ar)
+        cdef unused1 = allocate(<size_t>n*sizeof(PetscScalar), <void**>&ar)
         cdef unused2
         if sizeof(PetscScalar) == sizeof(PetscReal):
-            unused2 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&ai)
+            unused2 = allocate(<size_t>n*sizeof(PetscScalar), <void**>&ai)
             for i in range(n):
                 ar[i] = asComplexReal(a[i])
                 ai[i] = asComplexImag(a[i])
         else:
             for i in range(n): ar[i] = asScalar(a[i])
-        cdef unused3 = allocate(<size_t>n*sizeof(PetscInt),<void**>&inside)
-        CHKERR( RGCheckInside(self.rg, <PetscInt>n, ar, ai, inside) )
+        cdef unused3 = allocate(<size_t>n*sizeof(PetscInt), <void**>&inside)
+        CHKERR(RGCheckInside(self.rg, <PetscInt>n, ar, ai, inside))
         return array_i(<PetscInt>n, inside)
 
     def computeContour(self, n: int) -> list[complex]:
@@ -417,13 +419,13 @@ cdef class RG(Object):
         """
         cdef PetscInt k = asInt(n)
         cdef PetscScalar *cr = NULL, *ci = NULL
-        cdef unused1 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&cr)
+        cdef unused1 = allocate(<size_t>k*sizeof(PetscScalar), <void**>&cr)
         cdef unused2
         if sizeof(PetscScalar) == sizeof(PetscReal):
-            unused2 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&ci)
-        CHKERR( RGComputeContour(self.rg, k, cr, ci) )
+            unused2 = allocate(<size_t>k*sizeof(PetscScalar), <void**>&ci)
+        CHKERR(RGComputeContour(self.rg, k, cr, ci))
         if sizeof(PetscScalar) == sizeof(PetscReal):
-            return [toComplex(cr[i],ci[i]) for i from 0 <= i <k]
+            return [toComplex(cr[i], ci[i]) for i from 0 <= i <k]
         else:
             return [toScalar(cr[i]) for i from 0 <= i <k]
 
@@ -452,7 +454,7 @@ cdef class RG(Object):
         computeContour, setScale, slepc.RGComputeBoundingBox
         """
         cdef PetscReal a = 0, b = 0, c = 0, d = 0
-        CHKERR( RGComputeBoundingBox(self.rg, &a, &b, &c, &d) )
+        CHKERR(RGComputeBoundingBox(self.rg, &a, &b, &c, &d))
         return (toReal(a), toReal(b), toReal(c), toReal(d))
 
     def canUseConjugates(self, realmats: bool = True) -> bool:
@@ -488,7 +490,7 @@ cdef class RG(Object):
         """
         cdef PetscBool bval = asBool(realmats)
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( RGCanUseConjugates(self.rg, bval, &tval) )
+        CHKERR(RGCanUseConjugates(self.rg, bval, &tval))
         return toBool(tval)
 
     def computeQuadrature(self, quad: QuadRule, n: int) -> tuple[ArrayScalar, ArrayScalar, ArrayScalar]:
@@ -531,10 +533,10 @@ cdef class RG(Object):
         cdef SlepcRGQuadRule val = quad
         cdef PetscInt k = asInt(n)
         cdef PetscScalar *z = NULL, *zn = NULL, *w = NULL
-        cdef unused1 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&z)
-        cdef unused2 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&zn)
-        cdef unused3 = allocate(<size_t>k*sizeof(PetscScalar),<void**>&w)
-        CHKERR( RGComputeQuadrature(self.rg, val, k, z, zn, w) )
+        cdef unused1 = allocate(<size_t>k*sizeof(PetscScalar), <void**>&z)
+        cdef unused2 = allocate(<size_t>k*sizeof(PetscScalar), <void**>&zn)
+        cdef unused3 = allocate(<size_t>k*sizeof(PetscScalar), <void**>&w)
+        CHKERR(RGComputeQuadrature(self.rg, val, k, z, zn, w))
         return (array_s(k, z), array_s(k, zn), array_s(k, w))
 
     #
@@ -567,7 +569,7 @@ cdef class RG(Object):
         cdef PetscReal val1 = asReal(radius)
         cdef PetscReal val2 = 1.0
         if vscale is not None: val2 = asReal(vscale)
-        CHKERR( RGEllipseSetParameters(self.rg, sval, val1, val2) )
+        CHKERR(RGEllipseSetParameters(self.rg, sval, val1, val2))
 
     def getEllipseParameters(self) -> tuple[Scalar, float, float]:
         """
@@ -591,7 +593,7 @@ cdef class RG(Object):
         cdef PetscScalar sval = 0
         cdef PetscReal val1 = 0
         cdef PetscReal val2 = 0
-        CHKERR( RGEllipseGetParameters(self.rg, &sval, &val1, &val2) )
+        CHKERR(RGEllipseGetParameters(self.rg, &sval, &val1, &val2))
         return (toScalar(sval), toReal(val1), toReal(val2))
 
     def setIntervalEndpoints(self, a: float, b: float, c: float, d: float) -> None:
@@ -629,7 +631,7 @@ cdef class RG(Object):
         cdef PetscReal vb = asReal(b)
         cdef PetscReal vc = asReal(c)
         cdef PetscReal vd = asReal(d)
-        CHKERR( RGIntervalSetEndpoints(self.rg, va, vb, vc, vd) )
+        CHKERR(RGIntervalSetEndpoints(self.rg, va, vb, vc, vd))
 
     def getIntervalEndpoints(self) -> tuple[float, float, float, float]:
         """
@@ -656,7 +658,7 @@ cdef class RG(Object):
         cdef PetscReal vb = 0
         cdef PetscReal vc = 0
         cdef PetscReal vd = 0
-        CHKERR( RGIntervalGetEndpoints(self.rg, &va, &vb, &vc, &vd) )
+        CHKERR(RGIntervalGetEndpoints(self.rg, &va, &vb, &vc, &vd))
         return (toReal(va), toReal(vb), toReal(vc), toReal(vd))
 
     def setPolygonVertices(self, v: Sequence[float] | Sequence[Scalar]) -> None:
@@ -676,16 +678,16 @@ cdef class RG(Object):
         """
         cdef Py_ssize_t i = 0, n = len(v)
         cdef PetscScalar *vr = NULL, *vi = NULL
-        cdef unused1 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&vr)
+        cdef unused1 = allocate(<size_t>n*sizeof(PetscScalar), <void**>&vr)
         cdef unused2
         if sizeof(PetscScalar) == sizeof(PetscReal):
-            unused2 = allocate(<size_t>n*sizeof(PetscScalar),<void**>&vi)
+            unused2 = allocate(<size_t>n*sizeof(PetscScalar), <void**>&vi)
             for i in range(n):
                 vr[i] = asComplexReal(v[i])
                 vi[i] = asComplexImag(v[i])
         else:
             for i in range(n): vr[i] = asScalar(v[i])
-        CHKERR( RGPolygonSetVertices(self.rg, <PetscInt>n, vr, vi) )
+        CHKERR(RGPolygonSetVertices(self.rg, <PetscInt>n, vr, vi))
 
     def getPolygonVertices(self) -> ArrayComplex:
         """
@@ -704,13 +706,13 @@ cdef class RG(Object):
         """
         cdef PetscInt n = 0
         cdef PetscScalar *vr = NULL, *vi = NULL
-        CHKERR( RGPolygonGetVertices(self.rg, &n, &vr, &vi) )
+        CHKERR(RGPolygonGetVertices(self.rg, &n, &vr, &vi))
         if sizeof(PetscScalar) == sizeof(PetscReal):
-            v = [toComplex(vr[i],vi[i]) for i from 0 <= i <n]
-            CHKERR( PetscFree(vi) )
+            v = [toComplex(vr[i], vi[i]) for i from 0 <= i <n]
+            CHKERR(PetscFree(vi))
         else:
             v = [toScalar(vr[i]) for i from 0 <= i <n]
-        CHKERR( PetscFree(vr) )
+        CHKERR(PetscFree(vr))
         return v
 
     def setRingParameters(
@@ -770,7 +772,7 @@ cdef class RG(Object):
         cdef PetscReal val3 = asReal(start_ang)
         cdef PetscReal val4 = asReal(end_ang)
         cdef PetscReal val5 = asReal(width)
-        CHKERR( RGRingSetParameters(self.rg, sval, val1, val2, val3, val4, val5) )
+        CHKERR(RGRingSetParameters(self.rg, sval, val1, val2, val3, val4, val5))
 
     def getRingParameters(self) -> tuple[Scalar, float, float, float, float, float]:
         """
@@ -803,7 +805,7 @@ cdef class RG(Object):
         cdef PetscReal val3 = 0
         cdef PetscReal val4 = 0
         cdef PetscReal val5 = 0
-        CHKERR( RGRingGetParameters(self.rg, &sval, &val1, &val2, &val3, &val4, &val5) )
+        CHKERR(RGRingGetParameters(self.rg, &sval, &val1, &val2, &val3, &val4, &val5))
         return (toScalar(sval), toReal(val1), toReal(val2), toReal(val3), toReal(val4), toReal(val5))
 
     #
@@ -812,6 +814,7 @@ cdef class RG(Object):
         """If the region is the complement of the specified one."""
         def __get__(self) -> bool:
             return self.getComplement()
+
         def __set__(self, value):
             self.setComplement(value)
 
@@ -819,6 +822,7 @@ cdef class RG(Object):
         """The scaling factor to be used."""
         def __get__(self) -> float:
             return self.getScale()
+
         def __set__(self, value):
             self.setScale(value)
 
