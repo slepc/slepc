@@ -1,5 +1,6 @@
 import os
 import sys
+import enum
 import inspect
 import textwrap
 from sphinx.util import logging
@@ -114,7 +115,7 @@ def docstring(obj, fail=True):
 
     # warnings for docstrings that are not compliant
     if len(summary) > 79:
-        logger.warning(f'Summary for {obj} too long.')
+        logger.warning(f'Summary for {obj} exceeds 79 char limit.')
     if docbody:
         if not summary.endswith('.'):
             logger.warning(f'Summary for {obj} does not end with period.')
@@ -122,7 +123,9 @@ def docstring(obj, fail=True):
         lines = docbody.split('\n')
         for i, line in enumerate(lines):
             if len(line) > 79:
-                logger.warning(f'Line {i} for documentation of {obj} too long.')
+                logger.warning(
+                    f'Line {i} for documentation of {obj} exceeds 79 char limit.'
+                )
         if not cl:
             init = (
                 'Collective.',
@@ -163,6 +166,13 @@ def visit_data(constant):
     init = f"_def({typename}, '{name}')"
     doc = f'#: {kind} ``{name}`` of type :class:`{typename}`'
     return f'{name}: {typename} = {init}  {doc}\n'
+
+
+def visit_enum(member):
+    name, value = member
+    typename = type(value).__name__
+    doc = f'#: Enum member ``{name}`` of ``{typename}``'
+    return f'{name} = {value.value}  {doc}\n'
 
 
 def visit_function(function):
@@ -228,6 +238,8 @@ def visit_class(cls, outer=None, done=None):
         '__enum2str',  # FIXME refactor implementation
         '_traceback_',  # FIXME maybe refactor?
     }
+    if isinstance(cls, type) and issubclass(cls, enum.Enum):
+        skip.update(set(cls.__dict__) - set(cls.__members__))
     special = {
         '__len__': '__len__(self) -> int',
         '__bool__': '__bool__(self) -> bool',
@@ -325,7 +337,10 @@ def visit_class(cls, outer=None, done=None):
 
         if is_constant(attr):
             done.add(name)
-            lines.add = visit_data((name, attr))
+            if isinstance(attr, enum.Enum):
+                lines.add = visit_enum((name, attr))
+            else:
+                lines.add = visit_data((name, attr))
             continue
 
     leftovers = [name for name in keys if name not in done and name not in skip]
@@ -445,12 +460,22 @@ def visit_module(module, done=None):
 IMPORTS = """
 from __future__ import annotations
 import sys
+from enum import IntEnum
 from typing import (
     Any,
     Union,
+    Literal,
     Optional,
+    NoReturn,
+    Final,
+)
+from typing import (
     Callable,
+    Hashable,
+    Iterable,
+    Iterator,
     Sequence,
+    Mapping,
 )
 if sys.version_info >= (3, 11):
     from typing import Self
