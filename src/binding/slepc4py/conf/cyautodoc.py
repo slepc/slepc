@@ -40,7 +40,7 @@ class EmbedSignature(CythonTransform):
         self.class_name = None
         self.class_node = None
 
-    def _select_format(self, embed, clinic):
+    def _select_format(self, embed, _clinic):
         return embed
 
     def _fmt_expr(self, node):
@@ -63,7 +63,7 @@ class EmbedSignature(CythonTransform):
                 annotation = None
             else:
                 annotation = arg.type.declaration_code('', for_display=1)
-                if arg.default and arg.default.is_none:
+                if arg.or_none or (arg.default and arg.default.is_none):
                     annotation += ' | None'
         if arg.annotation:
             annotation = self._fmt_annotation(arg.annotation)
@@ -148,12 +148,11 @@ class EmbedSignature(CythonTransform):
         if ret_doc:
             docfmt = self._select_format('%s -> %s', '%s -> (%s)')
             func_doc = docfmt % (func_doc, ret_doc)
-        else:
-            if not func_doc.startswith('_') and not func_name.startswith('_'):
-                error(
-                    node.pos,
-                    f'cyautodoc._fmt_signature: missing return type for {func_doc}',
-                )
+        elif not func_doc.startswith('_') and not func_name.startswith('_'):
+            error(
+                node.pos,
+                f'cyautodoc._fmt_signature: missing return type for {func_doc}',
+            )
         return func_doc
 
     def _fmt_relative_position(self, pos):
@@ -302,7 +301,7 @@ try:
 except Exception as exc:
     import logging
 
-    logging.Logger(__name__).exception(exc)
+    logging.getLogger(__name__).exception(exc)
 
 # Monkeypatch Nodes.raise_utility_code
 try:
@@ -321,4 +320,4 @@ try:
 except Exception as exc:
     import logging
 
-    logging.Logger(__name__).exception(exc)
+    logging.getLogger(__name__).exception(exc)

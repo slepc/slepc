@@ -1,10 +1,8 @@
 # -----------------------------------------------------------------------------
 
-"""
-SLEPc for Python
-================
+"""The SLEPc for Python package.
 
-This package is an interface to SLEPc_ libraries.
+This package is an interface to SLEPc libraries.
 
 SLEPc_ (the Scalable Library for Eigenvalue Problem Computations) is a
 software library for the solution of large scale sparse eigenvalue
@@ -27,8 +25,7 @@ __credits__ = 'SLEPc Team <slepc-maint@upv.es>'
 
 
 def init(args=None, arch=None, comm=None):
-    """
-    Initialize SLEPc.
+    """Initialize SLEPc.
 
     Parameters
     ----------
@@ -43,6 +40,7 @@ def init(args=None, arch=None, comm=None):
     -----
     This function should be called only once, typically at the very
     beginning of the bootstrap script of an application.
+
     """
     import slepc4py.lib
 
@@ -57,14 +55,13 @@ def init(args=None, arch=None, comm=None):
 
 
 def get_include():
-    """
-    Return the directory in the package that contains header files.
+    """Return the directory in the package that contains header files.
 
     Extension modules that need to compile against slepc4py should use
     this function to locate the appropriate include directory.
 
-    Example
-    -------
+    Examples
+    --------
     Using Python distutils or NumPy distutils::
 
       import petscc4py, slepc4py
@@ -72,6 +69,7 @@ def get_include():
                 include_dirs=[...,
                               petsc4py.get_include(),
                               slepc4py.get_include(),])
+
     """
     from os.path import dirname, join
 

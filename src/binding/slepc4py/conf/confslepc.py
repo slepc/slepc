@@ -37,9 +37,11 @@ class SlepcConfig(PetscConfig):
         if dest_dir is None:
             dest_dir = os.environ.get('DESTDIR')
         if not slepc_dir:
-            raise DistutilsError('SLEPc not found')
+            msg = 'SLEPc not found'
+            raise DistutilsError(msg)
         if not os.path.isdir(slepc_dir):
-            raise DistutilsError('invalid SLEPC_DIR')
+            msg = 'invalid SLEPC_DIR'
+            raise DistutilsError(msg)
         self.sversion = self._get_slepc_version(slepc_dir)
         self._get_slepc_config(petsc_dir, slepc_dir)
         self.SLEPC_DIR = self['SLEPC_DIR']
@@ -57,7 +59,7 @@ class SlepcConfig(PetscConfig):
             'release': re.compile(r'#define\s+SLEPC_VERSION_RELEASE\s+(-*\d+)'),
         }
         slepcversion_h = os.path.join(slepc_dir, 'include', 'slepcversion.h')
-        with open(slepcversion_h, 'rt') as f:
+        with open(slepcversion_h) as f:
             data = f.read()
         major = int(version_re['major'].search(data).groups()[0])
         minor = int(version_re['minor'].search(data).groups()[0])
@@ -84,9 +86,9 @@ class SlepcConfig(PetscConfig):
             from cStringIO import StringIO
         except ImportError:
             from io import StringIO
-        confstr = 'PETSC_DIR  = %s\n' % PETSC_DIR
-        confstr += 'PETSC_ARCH = %s\n' % PETSC_ARCH
-        confstr = 'SLEPC_DIR  = %s\n' % SLEPC_DIR
+        confstr = f'PETSC_DIR  = {PETSC_DIR}\n'
+        confstr += f'PETSC_ARCH = {PETSC_ARCH}\n'
+        confstr += f'SLEPC_DIR  = {SLEPC_DIR}\n'
         confstr += contents
         slepc_confdict = makefile(StringIO(confstr))
         self.configdict['SLEPC_DIR'] = SLEPC_DIR
@@ -147,8 +149,8 @@ class SlepcConfig(PetscConfig):
         version = '.'.join([str(i) for i in self.sversion[0]])
         release = ('development', 'release')[self.sversion[1]]
         version_info = version + ' ' + release
-        log.info('SLEPC_DIR:    %s' % self.SLEPC_DIR)
-        log.info('version:      %s' % version_info)
+        log.info(f'SLEPC_DIR:    {self.SLEPC_DIR}')
+        log.info(f'version:      {version_info}')
         PetscConfig.log_info(self)
 
 
@@ -176,7 +178,7 @@ class config(_config):
         if self.slepc_dir is None:
             return
         log.info('-' * 70)
-        log.info('SLEPC_DIR:   %s' % self.slepc_dir)
+        log.info(f'SLEPC_DIR:   {self.slepc_dir}')
         _config.run(self)
 
     # @staticmethod
@@ -195,7 +197,7 @@ class config(_config):
         slepc_dir = os.path.expanduser(slepc_dir)
         slepc_dir = os.path.abspath(slepc_dir)
         if not os.path.isdir(slepc_dir):
-            log.warn('invalid SLEPC_DIR:  %s' % slepc_dir)
+            log.warn(f'invalid SLEPC_DIR: {slepc_dir}')
             return None
         return slepc_dir
 
@@ -262,7 +264,7 @@ class build_ext(_build_ext):
         env.pop('PETSC_ARCH', None)
 
         stubgen = Path(__file__).parent / 'stubgen.py'
-        rc = subprocess.call([sys.executable, stubgen], env=env)  # noqa S603
+        rc = subprocess.call([sys.executable, stubgen], env=env)  # noqa: S603
         if rc != 0:
             log.warn('Stubs could not be generated.')
             return
@@ -278,16 +280,7 @@ class build_ext(_build_ext):
         for arch in arch_list:
             conf = self.get_config_arch(arch)
             DESTDIR = conf.SLEPC_DESTDIR  # all archs will have same value
-        template = (
-            '\n'.join(
-                [
-                    'SLEPC_DIR  = %(SLEPC_DIR)s',
-                    'PETSC_DIR  = %(PETSC_DIR)s',
-                    'PETSC_ARCH = %(PETSC_ARCH)s',
-                ]
-            )
-            + '\n'
-        )
+        template = 'SLEPC_DIR  = %(SLEPC_DIR)s\nPETSC_DIR  = %(PETSC_DIR)s\nPETSC_ARCH = %(PETSC_ARCH)s'
         variables = {
             'SLEPC_DIR': strip_prefix(DESTDIR, self.slepc_dir),
             'PETSC_DIR': self.petsc_dir,

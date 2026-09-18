@@ -55,7 +55,7 @@ def get_doc_branch():
         if os.path.exists(version_h) and os.path.isfile(version_h):
             release_macro = f'{rootname.upper()}_VERSION_RELEASE'
             version_re = re.compile(rf'#define\s+{release_macro}\s+([-]*\d+)')
-            with open(version_h, 'r') as f:
+            with open(version_h) as f:
                 release = int(version_re.search(f.read()).groups()[0])
     return 'release' if release else 'main'
 
@@ -264,8 +264,6 @@ def _setup_autodoc(app):
     from sphinx.util import inspect
     from sphinx.util import typing
 
-    #
-
     def stringify_annotation(annotation, *p, **kw):
         qualname = getattr(annotation, '__qualname__', '')
         module = getattr(annotation, '__module__', '')
@@ -288,8 +286,6 @@ def _setup_autodoc(app):
         autodoc.stringify_typehint = stringify_annotation
 
     inspect.TypeAliasForwardRef.__repr__ = lambda self: self.name
-
-    #
 
     class ClassDocumenterMixin:
         def __init__(self, *args, **kwargs):
@@ -381,7 +377,7 @@ def _process_demos(*demos):
             os.mkdir(demo_dir)
         except FileExistsError:
             pass
-        with open(demo_src, 'r') as infile:
+        with open(demo_src) as infile:
             with open(
                 os.path.join(os.path.join('demo', os.path.splitext(demo)[0] + '.rst')),
                 'w',
@@ -436,18 +432,19 @@ def setup(app):
             '\nUnable to build the documentation, PETSC_DIR environment variable is not set'
         )
         print('\nPlease configure PETSc and SLEPc before building the documentation')
-        raise Exception('PETSC_DIR not set')
+        msg = 'PETSC_DIR not set'
+        raise Exception(msg)
     if 'PETSC_ARCH' not in os.environ:
         print(
             '\nUnable to build the documentation, PETSC_ARCH environment variable is not set'
         )
         print('\nPlease configure PETSc and SLEPc before building the documentation')
-        raise Exception('PETSC_ARCH not set')
-    else:
-        # We know where we are, don't we?
-        app.slepc_dir = os.path.abspath('../../../')
-        app.petsc_dir = os.path.abspath(os.environ['PETSC_DIR'])
-        app.petsc_arch = os.environ['PETSC_ARCH']
+        msg = 'PETSC_ARCH not set'
+        raise Exception(msg)
+    # We know where we are, don't we?
+    app.slepc_dir = os.path.abspath('../../../')
+    app.petsc_dir = os.path.abspath(os.environ['PETSC_DIR'])
+    app.petsc_arch = os.environ['PETSC_ARCH']
 
     sys.path.insert(
         0, os.path.abspath(app.petsc_dir + '/' + os.environ['PETSC_ARCH'] + '/lib')
@@ -481,7 +478,7 @@ def setup(app):
     here = os.path.abspath(os.path.dirname(__file__))
     outdir = os.path.join(here, apidoc.OUTDIR)
     source = os.path.join(outdir, f'{name}.py')
-    print('source: {}'.format(source))
+    print(f'source: {source}')
     getmtime = os.path.getmtime
     generate = (
         not os.path.exists(source)
@@ -523,7 +520,7 @@ html_theme_options = {
     'header_links_before_dropdown': 10,  # before "more"
 }
 git_describe_version = (
-    subprocess.check_output(['git', 'describe', '--always']).strip().decode('utf-8')  # noqa: S603, S607
+    subprocess.check_output(['git', 'describe', '--always']).strip().decode('utf-8')  # noqa: S607
 )
 html_last_updated_fmt = r'%Y-%m-%dT%H:%M:%S%z (' + git_describe_version + ')'
 

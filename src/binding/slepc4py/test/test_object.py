@@ -5,7 +5,7 @@ import unittest
 # --------------------------------------------------------------------
 
 
-class BaseTestObject(object):
+class BaseTestObject:
     CLASS, FACTORY = None, 'create'
     TARGS, KARGS = (), {}
     BUILD = None
@@ -65,7 +65,7 @@ class BaseTestObject(object):
 
     def testName(self):
         oldname = self.obj.getName()
-        newname = '%s-%s' % (oldname, oldname)
+        newname = f'{oldname}-{oldname}'
         self.obj.setName(newname)
         self.assertEqual(self.obj.getName(), newname)
         self.obj.setName(oldname)

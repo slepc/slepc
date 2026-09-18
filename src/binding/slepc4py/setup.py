@@ -17,7 +17,8 @@ sys.path.insert(0, os.path.join(topdir, 'conf'))
 
 pyver = sys.version_info[:2]
 if pyver < (3, 6):
-    raise RuntimeError('Python version 3.6 or higher is required')
+    msg = 'Python version 3.6 or higher is required'
+    raise RuntimeError(msg)
 
 PNAME = 'SLEPc'
 EMAIL = 'slepc-maint@upv.es'
@@ -67,8 +68,8 @@ def long_description():
 url = F('https://gitlab.com/{name}/{name}')
 pypiroot = F('https://pypi.io/packages/source')
 pypislug = F('{pyname}')[0] + F('/{pyname}')
-tarball = F('{pyname}-%s.tar.gz' % get_version())
-download = '/'.join([pypiroot, pypislug, tarball])
+tarball = F(f'{{pyname}}-{get_version()}.tar.gz')
+download = f'{pypiroot}/{pypislug}/{tarball}'
 
 classifiers = """
 Operating System :: POSIX
@@ -167,10 +168,9 @@ def extensions():
     from glob import glob
     from os.path import join
 
-    #
     depends = []
     glob_join = lambda *args: glob(join(*args))
-    for pth, dirs, files in walk('src'):
+    for pth, _, _ in walk('src'):
         depends += glob_join(pth, '*.h')
         depends += glob_join(pth, '*.c')
     for pkg in map(str.lower, reversed(PLIST)):
@@ -179,17 +179,17 @@ def extensions():
             pa = os.environ.get('PETSC_ARCH', '')
             depends += glob_join(pd, 'include', '*.h')
             depends += glob_join(pd, 'include', pkg, 'private', '*.h')
-            depends += glob_join(pd, pa, 'include', '%sconf.h' % pkg)
-    #
+            depends += glob_join(pd, pa, 'include', f'{pkg}conf.h')
+
     include_dirs = []
     numpy_include = os.environ.get('NUMPY_INCLUDE')
     if numpy_include is not None:
         numpy_includes = [numpy_include]
     else:
         try:
-            import numpy
+            import numpy as np
 
-            numpy_includes = [numpy.get_include()]
+            numpy_includes = [np.get_include()]
         except ImportError:
             numpy_includes = []
     include_dirs.extend(numpy_includes)
@@ -201,7 +201,7 @@ def extensions():
         except ImportError:
             petsc4py_includes = []
         include_dirs.extend(petsc4py_includes)
-    #
+
     ext = {
         'name': F('{pyname}.lib.{Name}'),
         'sources': [F('src/{pyname}/{Name}.c')],
@@ -232,10 +232,10 @@ def get_release():
     release = 1
     rootdir = os.path.abspath(os.path.join(topdir, *[os.path.pardir] * 3))
     version_h = os.path.join(rootdir, 'include', F('{name}version.h'))
-    release_macro = '%s_VERSION_RELEASE' % F('{name}').upper()
-    version_re = re.compile(r'#define\s+%s\s+([-]*\d+)' % release_macro)
+    release_macro = '{}_VERSION_RELEASE'.format(F('{name}').upper())
+    version_re = re.compile(rf'#define\s+{release_macro}\s+([-]*\d+)')
     if os.path.exists(version_h) and os.path.isfile(version_h):
-        with open(version_h, 'r') as f:
+        with open(version_h) as f:
             release = int(version_re.search(f.read()).groups()[0])
     return bool(release)
 
@@ -255,7 +255,7 @@ def run_setup():
     x, y = tuple(map(int, vstr))
     release = get_release()
     if not release:
-        setup_args['version'] = '%d.%d.0.dev0' % (x, y + 1)
+        setup_args['version'] = f'{x}.{y + 1}.0.dev0'
     if setuptools:
         warnings.filterwarnings(
             'ignore', message=r'.*fetch_build_eggs', module='setuptools'
@@ -264,9 +264,9 @@ def run_setup():
         numpy_pin = 'numpy'
         if not is_sdist:
             try:
-                import numpy
+                import numpy as np
 
-                major = int(numpy.__version__.partition('.')[0])
+                major = int(np.__version__.partition('.')[0])
                 numpy_pin = 'numpy>=1.19' if major >= 2 else 'numpy<2'
             except ImportError:
                 pass
@@ -283,11 +283,11 @@ def run_setup():
             setup_args['setup_requires'] += [package]
             setup_args['install_requires'] += [package]
         setup_args.update(metadata_extra)
-    #
+
     conf = __import__(F('conf{name}'))
     cython_sources = [src for src in sources()]  # noqa: C416
     ext_modules = [conf.Extension(**ext) for ext in extensions()]
-    #
+
     sabi = get_build_pysabi()
     if sabi and setuptools:
         api_tag = 'cp{}{}'.format(*sabi)
@@ -298,7 +298,7 @@ def run_setup():
         for ext in ext_modules:
             ext.define_macros.extend(defines)
             ext.py_limited_api = True
-    #
+
     conf.setup(
         packages=[
             F('{pyname}'),

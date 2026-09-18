@@ -1,3 +1,5 @@
+"""The SLEPc module."""
+
 ARCH = None
 from slepc4py.lib import ImportSLEPc  # noqa: E402
 from slepc4py.lib import ImportPETSc  # noqa: E402

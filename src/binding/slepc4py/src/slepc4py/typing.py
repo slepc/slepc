@@ -1,12 +1,7 @@
 """Typing support."""
 
 from __future__ import annotations  # novermin
-from typing import (  # novermin
-    Callable,
-    Sequence,
-    Literal,
-    TypeAlias,
-)
+from collections.abc import Callable
 from numpy.typing import (
     NDArray,
 )
@@ -14,14 +9,8 @@ import numpy as np
 from petsc4py.PETSc import (
     Vec,
     Mat,
-    KSP,
 )
 from .SLEPc import (
-    BV,
-    DS,
-    FN,
-    RG,
-    ST,
     EPS,
     PEP,
     NEP,

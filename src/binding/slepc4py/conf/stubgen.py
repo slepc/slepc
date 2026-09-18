@@ -211,9 +211,8 @@ def visit_class(cls, outer=None, done=None):
         if name in cls.__dict__:
             done.add(name)
 
-    if '__hash__' in cls.__dict__:
-        if cls.__hash__ is None:
-            done.add('__hash__')
+    if '__hash__' in cls.__dict__ and cls.__hash__ is None:
+        done.add('__hash__')
 
     dct = cls.__dict__
     keys = list(dct.keys())
@@ -227,10 +226,9 @@ def visit_class(cls, outer=None, done=None):
                 continue
             if name in done:
                 continue
-            if dunder(name):
-                if name not in special and name not in override:
-                    done.add(name)
-                    continue
+            if dunder(name) and name not in special and name not in override:
+                done.add(name)
+                continue
             yield name
 
     for name in members(keys):
@@ -263,7 +261,7 @@ def visit_class(cls, outer=None, done=None):
                 elif is_staticmethod(obj):
                     lines.add = '@staticmethod'
                 lines.add = visit_method(attr, qualname)
-            elif True:
+            else:
                 lines.add = f'{name} = {attr.__name__}'
             continue
 
@@ -287,7 +285,8 @@ def visit_class(cls, outer=None, done=None):
 
     leftovers = [name for name in keys if name not in done and name not in skip]
     if leftovers:
-        raise RuntimeError(f'leftovers: {leftovers}')
+        msg = f'leftovers: {leftovers}'
+        raise RuntimeError(msg)
 
     if len(lines) == start:
         lines.add = '...'
@@ -381,7 +380,8 @@ def visit_module(module, done=None):
 
     leftovers = [name for name in keys if name not in done and name not in skip]
     if leftovers:
-        raise RuntimeError(f'leftovers: {leftovers}')
+        msg = f'leftovers: {leftovers}'
+        raise RuntimeError(msg)
     return lines
 
 
@@ -636,7 +636,7 @@ TYPING = """
 """
 
 
-def visit_slepc4py_SLEPc(done=None):
+def visit_slepc4py_SLEPc():
     from slepc4py import SLEPc as module
 
     lines = Lines()

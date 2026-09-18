@@ -1,5 +1,4 @@
-"""
-Command line access to the SLEPc Options Database.
+"""Command line access to the SLEPc Options Database.
 
 This module provides command line access to SLEPc Options
 Database. It outputs a listing of the many SLEPc options
@@ -11,7 +10,8 @@ Usage::
 """
 
 
-def help(args=None):
+def help(args=None):  # noqa: A001
+    """Print help for various SLEPc objects."""
     import sys
 
     # program name
