@@ -29,9 +29,9 @@ Alternatively, the following downloads correspond to the latest available releas
 
 Description                                               |  File                                                                          |  MD5 checksum
 ---                                                       |  ---                                                                           |  ---
-SLEPc distribution file (source code only)                |  {{'**[slepc-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc-{}.tar.gz)**'.format(env.config.release,env.config.release)}} | 35dd9da264c56eade2837e5b61af260c
-SLEPc distribution file (source code with documentation)  |  {{'**[slepc-with-docs-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc-with-docs-{}.tar.gz)**'.format(env.config.release,env.config.release)}} | 9bc84df0fb2637bdef5c3534d9cb7725
-slepc4py distribution file (enables separate install)     |  {{'**[slepc4py-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc4py-{}.tar.gz)**'.format(env.config.release,env.config.release)}}               | e8723e4e3ca54969282438cc945ddd18
+SLEPc distribution file (source code only)                |  {{'**[slepc-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc-{}.tar.gz)**'.format(env.config.release,env.config.release)}} | a500b304c4ec1ea0a4caaaab5eaa5320
+SLEPc distribution file (source code with documentation)  |  {{'**[slepc-with-docs-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc-with-docs-{}.tar.gz)**'.format(env.config.release,env.config.release)}} | 8f672a3185cb785b01a38f1e05d1d9d6
+slepc4py distribution file (enables separate install)     |  {{'**[slepc4py-{}.tar.gz](https://slepc.upv.es/download/distrib/slepc4py-{}.tar.gz)**'.format(env.config.release,env.config.release)}}               | efda24c85da9e846301b7a19b8f85a19
 
 There are no separate patch files, the current fixes are included in the tar file. Patches are documented at: [slepc-{{env.config.version}} changelog](https://gitlab.com/slepc/slepc/-/commits/release)
 
