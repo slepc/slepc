@@ -10,17 +10,15 @@
 
 # Initialization is similar to previous examples.
 
-try:
-    range = xrange
-except:
-    pass
-
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
 from petsc4py import PETSc
 from slepc4py import SLEPc
+
+Print = PETSc.Sys.Print
 
 # This example takes two command-line arguments, the matrix size ``n``
 # and the ``mu`` parameter.
@@ -29,9 +27,7 @@ opts = PETSc.Options()
 n = opts.getInt('n', 30)
 mu = opts.getReal('mu', 1e-6)
 
-PETSc.Sys.Print(
-    'Lauchli singular value decomposition, (%d x %d) mu=%g\n' % (n + 1, n, mu)
-)
+Print(f'Lauchli singular value decomposition, ({n + 1} x {n}) mu={mu}\n')
 
 # Create the matrix and fill its nonzero entries. Every MPI process will
 # insert its locally owned part only.
@@ -69,26 +65,24 @@ S.solve()
 # solution, showing the list of singular values and the corresponding
 # residual errors.
 
-Print = PETSc.Sys.Print
-
 Print('******************************')
 Print('*** SLEPc Solution Results ***')
 Print('******************************\n')
 
 svd_type = S.getType()
-Print('Solution method: %s' % svd_type)
+Print(f'Solution method: {svd_type}')
 
 its = S.getIterationNumber()
-Print('Number of iterations of the method: %d' % its)
+Print(f'Number of iterations of the method: {its}')
 
-nsv, ncv, mpd = S.getDimensions()
-Print('Number of requested singular values: %d' % nsv)
+nsv, _ncv, _mpd = S.getDimensions()
+Print(f'Number of requested singular values: {nsv}')
 
 tol, maxit = S.getTolerances()
-Print('Stopping condition: tol=%.4g, maxit=%d' % (tol, maxit))
+Print(f'Stopping condition: tol={tol:.4g}, maxit={maxit}')
 
 nconv = S.getConverged()
-Print('Number of converged approximate singular triplets %d' % nconv)
+Print(f'Number of converged approximate singular triplets {nconv}')
 
 if nconv > 0:
     v, u = A.createVecs()
@@ -98,5 +92,5 @@ if nconv > 0:
     for i in range(nconv):
         sigma = S.getSingularTriplet(i, u, v)
         error = S.computeError(i)
-        Print('   %6f     %12g' % (sigma, error))
+        Print(f'   {sigma:6f}     {error:12g}')
     Print()

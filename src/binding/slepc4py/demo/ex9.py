@@ -11,12 +11,8 @@
 
 # Initialization is similar to previous examples.
 
-try:
-    range = xrange
-except:
-    pass
-
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
@@ -40,22 +36,22 @@ def Laplacian2D(m, n):
     offdx = -1.0 * hy / hx
     offdy = -1.0 * hx / hy
     Istart, Iend = A.getOwnershipRange()
-    for I in range(Istart, Iend):
-        A[I, I] = diagv
-        i = I // n  # map row number to
-        j = I - i * n  # grid coordinates
-        if i > 0:
-            J = I - n
-            A[I, J] = offdx
-        if i < m - 1:
-            J = I + n
-            A[I, J] = offdx
-        if j > 0:
-            J = I - 1
-            A[I, J] = offdy
-        if j < n - 1:
-            J = I + 1
-            A[I, J] = offdy
+    for i in range(Istart, Iend):
+        A[i, i] = diagv
+        gi = i // n  # map row number to
+        gj = i - gi * n  # grid coordinates
+        if gi > 0:
+            j = i - n
+            A[i, j] = offdx
+        if gi < m - 1:
+            j = i + n
+            A[i, j] = offdx
+        if gj > 0:
+            j = i - 1
+            A[i, j] = offdy
+        if gj < n - 1:
+            j = i + 1
+            A[i, j] = offdy
     A.assemble()
     return A
 
@@ -71,8 +67,8 @@ def QuasiDiagonal(N):
     B.setFromOptions()
     # Fill matrix
     Istart, Iend = B.getOwnershipRange()
-    for I in range(Istart, Iend):
-        B[I, I] = 2.0
+    for i in range(Istart, Iend):
+        B[i, i] = 2.0
     if Istart == 0:
         B[0, 0] = 6.0
         B[0, 1] = -1.0
@@ -123,15 +119,15 @@ def solve_eigensystem(A, B, problem_type=SLEPc.EPS.ProblemType.GHEP):
 
     Print('')
     its = E.getIterationNumber()
-    Print('Number of iterations of the method: %i' % its)
+    Print(f'Number of iterations of the method: {its}')
     sol_type = E.getType()
-    Print('Solution method: %s' % sol_type)
-    nev, ncv, mpd = E.getDimensions()
-    Print('Number of requested eigenvalues: %i' % nev)
+    Print(f'Solution method: {sol_type}')
+    nev, _ncv, _mpd = E.getDimensions()
+    Print(f'Number of requested eigenvalues: {nev}')
     tol, maxit = E.getTolerances()
-    Print('Stopping condition: tol=%.4g, maxit=%d' % (tol, maxit))
+    Print(f'Stopping condition: tol={tol:.4g}, maxit={maxit}')
     nconv = E.getConverged()
-    Print('Number of converged eigenpairs: %d' % nconv)
+    Print(f'Number of converged eigenpairs: {nconv}')
     if nconv > 0:
         Print('')
         Print('        k          ||Ax-kx||/||kx|| ')
@@ -140,9 +136,9 @@ def solve_eigensystem(A, B, problem_type=SLEPc.EPS.ProblemType.GHEP):
             k = E.getEigenpair(i, xr, xi)
             error = E.computeError(i)
             if k.imag != 0.0:
-                Print(' %9f%+9f j  %12g' % (k.real, k.imag, error))
+                Print(f' {k.real:9f}{k.imag:+9f} j  {error:12g}')
             else:
-                Print(' %12f       %12g' % (k.real, error))
+                Print(f' {k.real:12f}       {error:12g}')
         Print('')
 
 
@@ -155,7 +151,7 @@ def main():
     N = opts.getInt('N', 10)
     m = opts.getInt('m', N)
     n = opts.getInt('n', m)
-    Print('Symmetric-definite Eigenproblem, N=%d (%dx%d grid)' % (m * n, m, n))
+    Print(f'Symmetric-definite Eigenproblem, N={m * n} ({m}x{n} grid)')
     A = Laplacian2D(m, n)
     B = QuasiDiagonal(m * n)
     solve_eigensystem(A, B)

@@ -16,13 +16,13 @@
 
 # Initialization is similar to previous examples.
 
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
 from petsc4py import PETSc
 from slepc4py import SLEPc
-import numpy
 
 # The matrix size ``n`` can be specified at the command line.
 

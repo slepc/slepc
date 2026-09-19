@@ -101,7 +101,6 @@
 # Initialization by importing slepc4py, petsc4py, numpy and scipy.
 
 import sys
-
 import slepc4py
 
 slepc4py.init(sys.argv)  # isort:skip
@@ -123,7 +122,7 @@ Print = PETSc.Sys.Print
 
 if not np.issubdtype(PETSc.ScalarType, np.complexfloating):
     Print('Demo should only be executed with complex PETSc scalars')
-    exit(0)
+    sys.exit(0)
 
 # Long function that defines the nonlinear eigenproblem and solves it.
 
@@ -238,18 +237,18 @@ def solve(n):
     nep.solve()
 
     its = nep.getIterationNumber()
-    Print('Number of iterations of the method: %i' % its)
+    Print(f'Number of iterations of the method: {its}')
     sol_type = nep.getType()
-    Print('Solution method: %s' % sol_type)
-    nev, ncv, mpd = nep.getDimensions()
+    Print(f'Solution method: {sol_type}')
+    _nev, ncv, _mpd = nep.getDimensions()
     Print('')
-    Print('Subspace dimension: %i' % ncv)
-    tol, maxit = nep.getTolerances()
-    Print('Stopping condition: tol=%.4g' % tol)
+    Print(f'Subspace dimension: {ncv}')
+    tol, _maxit = nep.getTolerances()
+    Print(f'Stopping condition: tol={tol:.4g}')
     Print('')
 
     nconv = nep.getConverged()
-    Print('Number of converged eigenpairs %d' % nconv)
+    Print(f'Number of converged eigenpairs {nconv}')
 
     x = A.createVecs('right')
 
@@ -278,11 +277,11 @@ def solve(n):
                     eigenvalue_error_term, np.complex128(lam), rtol=1e-11
                 )
                 rel_err = abs(lam - expected_lam) / abs(expected_lam)
-                rel_err = '%6g' % rel_err
+                rel_err = f'{rel_err:6g}'
             else:
                 rel_err = 'scipy not installed'
 
-            Print(' %9f%+9f j %12g   %s' % (lam.real, lam.imag, error, rel_err))
+            Print(f' {lam.real:9f}{lam.imag:+9f} j {error:12g}   {rel_err}')
 
             evals.append(lam)
             modes.append(x.getArray().copy())
@@ -301,7 +300,7 @@ def main():
     n = opts.getInt('n', 256)
     Print(f'n={n}')
 
-    evals, rg_params, ka, gt = solve(n)
+    evals, rg_params, _ka, _gt = solve(n)
 
     if not opts.getBool('ploteigs', True) or PETSc.COMM_WORLD.getRank():
         return
@@ -310,9 +309,9 @@ def main():
         import matplotlib.pyplot as plt
         from matplotlib.patches import Ellipse
     except ImportError:
-        print('plot is not shown, because matplotlib is not installed')
+        Print('plot is not shown, because matplotlib is not installed')
     else:
-        fig, ax = plt.subplots()
+        _fig, ax = plt.subplots()
         ax.plot(evals.real, evals.imag, 'x')
 
         height = 2 * rg_params[1] * rg_params[2]

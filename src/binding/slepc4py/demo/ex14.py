@@ -10,7 +10,8 @@
 
 # Initialization is similar to previous examples.
 
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
@@ -32,22 +33,22 @@ def Laplacian2D(m, n, sigma):
     A.setFromOptions()
     # Fill matrix
     Istart, Iend = A.getOwnershipRange()
-    for I in range(Istart, Iend):
-        A[I, I] = -4.0 - sigma
-        i = I // n  # map row number to
-        j = I - i * n  # grid coordinates
-        if i > 0:
-            J = I - n
-            A[I, J] = 1.0
-        if i < m - 1:
-            J = I + n
-            A[I, J] = 1.0
-        if j > 0:
-            J = I - 1
-            A[I, J] = 1.0
-        if j < n - 1:
-            J = I + 1
-            A[I, J] = 1.0
+    for i in range(Istart, Iend):
+        A[i, i] = -4.0 - sigma
+        gi = i // n  # map row number to
+        gj = i - gi * n  # grid coordinates
+        if gi > 0:
+            j = i - n
+            A[i, j] = 1.0
+        if gi < m - 1:
+            j = i + n
+            A[i, j] = 1.0
+        if gj > 0:
+            j = i - 1
+            A[i, j] = 1.0
+        if gj < n - 1:
+            j = i + 1
+            A[i, j] = 1.0
     A.assemble()
     return A
 
@@ -128,7 +129,7 @@ if __name__ == '__main__':
             v[i - rstart, 0] = 1.0
         if i == 0:
             v[i - rstart, 1] = -2.0
-        if i == 1 or i == 2:
+        if i in {1, 2}:
             v[i - rstart, 1] = -1.0
     C1.assemble()
     C = PETSc.Mat().createLRC(None, C1, None, None)

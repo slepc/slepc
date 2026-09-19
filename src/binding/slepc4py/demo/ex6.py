@@ -16,7 +16,8 @@
 
 # Initialization is similar to previous examples.
 
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
@@ -32,7 +33,7 @@ Print = PETSc.Sys.Print
 
 def build_matrix(m):
     N = m * (m + 1) / 2
-    Print('Markov y=exp(t*A)*e_1, N=%d (m=%d)' % (N, m))
+    Print(f'Markov y=exp(t*A)*e_1, N={N} (m={m})')
     A = PETSc.Mat().create()
     A.setSizes([N, N])
     A.setFromOptions()
@@ -93,15 +94,15 @@ def solve_exp(t, A, b, x):
     M.solve(b, x)
 
     its = M.getIterationNumber()
-    Print('Number of iterations of the method: %i' % its)
+    Print(f'Number of iterations of the method: {its}')
     sol_type = M.getType()
-    Print('Solution method: %s' % sol_type)
+    Print(f'Solution method: {sol_type}')
     ncv = M.getDimensions()
     Print('')
-    Print('Subspace dimension: %i' % ncv)
+    Print(f'Subspace dimension: {ncv}')
     tol, maxit = M.getTolerances()
-    Print('Stopping condition: tol=%.4g, maxit=%d' % (tol, maxit))
-    Print('Computed vector at time t=%.4g has norm %g' % (t.real, x.norm()))
+    Print(f'Stopping condition: tol={tol:.4g}, maxit={maxit}')
+    Print(f'Computed vector at time t={t.real:.4g} has norm {x.norm():g}')
     Print('')
 
 

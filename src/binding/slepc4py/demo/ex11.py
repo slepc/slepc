@@ -10,12 +10,8 @@
 
 # Initialization is similar to previous examples.
 
-try:
-    range = xrange
-except:
-    pass
-
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
@@ -39,22 +35,22 @@ def construct_operator(m, n):
     offdx = -1.0 * hy / hx
     offdy = -1.0 * hx / hy
     Istart, Iend = A.getOwnershipRange()
-    for I in range(Istart, Iend):
-        A[I, I] = diagv
-        i = I // n  # map row number to
-        j = I - i * n  # grid coordinates
-        if i > 0:
-            J = I - n
-            A[I, J] = offdx
-        if i < m - 1:
-            J = I + n
-            A[I, J] = offdx
-        if j > 0:
-            J = I - 1
-            A[I, J] = offdy
-        if j < n - 1:
-            J = I + 1
-            A[I, J] = offdy
+    for i in range(Istart, Iend):
+        A[i, i] = diagv
+        gi = i // n  # map row number to
+        gj = i - gi * n  # grid coordinates
+        if gi > 0:
+            j = i - n
+            A[i, j] = offdx
+        if gi < m - 1:
+            j = i + n
+            A[i, j] = offdx
+        if gj > 0:
+            j = i - 1
+            A[i, j] = offdy
+        if gj < n - 1:
+            j = i + 1
+            A[i, j] = offdy
     A.assemble()
     return A
 
@@ -74,7 +70,7 @@ def main():
     m = opts.getInt('m', 32)
     Print(
         '2-D Laplacian Eigenproblem solved with contour integral, '
-        'N=%d (%dx%d grid)\n' % (m * n, m, n)
+        f'N={m * n} ({m}x{n} grid)\n'
     )
     A = construct_operator(m, n)
 

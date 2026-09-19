@@ -23,7 +23,8 @@
 
 # Initialization is similar to previous examples.
 
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
@@ -51,13 +52,13 @@ Print = PETSc.Sys.Print
 #   solution satisfies the PDE.
 
 
-class MyPDE(object):
+class MyPDE:
     def __init__(self, kappa, h):
         self.kappa = kappa
         self.h = h
 
     def formFunction(self, nep, mu, F, B):
-        n, m = F.getSize()
+        n, _ = F.getSize()
         Istart, Iend = F.getOwnershipRange()
         i1 = Istart
         if Istart == 0:
@@ -90,7 +91,7 @@ class MyPDE(object):
         return PETSc.Mat.Structure.SAME_NONZERO_PATTERN
 
     def formJacobian(self, nep, mu, J):
-        n, m = J.getSize()
+        n, _ = J.getSize()
         Istart, Iend = J.getOwnershipRange()
         i1 = Istart
         if Istart == 0:
@@ -121,7 +122,6 @@ class MyPDE(object):
     def checkSolution(self, mu, y):
         nu = sqrt(mu)
         u = y.duplicate()
-        n = u.getSize()
         Istart, Iend = J.getOwnershipRange()
         h = self.h
         for i in range(Istart, Iend):
@@ -196,18 +196,18 @@ nep.solve()
 # ``checkSolution``.
 
 its = nep.getIterationNumber()
-Print('Number of iterations of the method: %i' % its)
+Print(f'Number of iterations of the method: {its}')
 sol_type = nep.getType()
-Print('Solution method: %s' % sol_type)
-nev, ncv, mpd = nep.getDimensions()
+Print(f'Solution method: {sol_type}')
+_nev, ncv, _mpd = nep.getDimensions()
 Print('')
-Print('Subspace dimension: %i' % ncv)
+Print(f'Subspace dimension: {ncv}')
 tol, maxit = nep.getTolerances()
-Print('Stopping condition: tol=%.4g' % tol)
+Print(f'Stopping condition: tol={tol:.4g}')
 Print('')
 
 nconv = nep.getConverged()
-Print('Number of converged eigenpairs %d' % nconv)
+Print(f'Number of converged eigenpairs {nconv}')
 
 if nconv > 0:
     Print()
@@ -219,7 +219,7 @@ if nconv > 0:
         res = nep.computeError(i)
         error = pde.checkSolution(k.real, x)
         if k.imag != 0.0:
-            Print(' %9f%+9f j %12g     %12g' % (k.real, k.imag, res, error))
+            Print(f' {k.real:9f}{k.imag:+9f} j {res:12g}     {error:12g}')
         else:
-            Print(' %12f       %12g     %12g' % (k.real, res, error))
+            Print(f' {k.real:12f}       {res:12g}     {error:12g}')
     Print()

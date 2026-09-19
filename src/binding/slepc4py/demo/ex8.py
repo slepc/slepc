@@ -32,7 +32,8 @@
 # Initialization is similar to previous examples. In this case we also
 # need to import some math symbols.
 
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
@@ -126,18 +127,18 @@ nep.solve()
 # eigenvalue and the residual norm.
 
 its = nep.getIterationNumber()
-Print('Number of iterations of the method: %i' % its)
+Print(f'Number of iterations of the method: {its}')
 sol_type = nep.getType()
-Print('Solution method: %s' % sol_type)
-nev, ncv, mpd = nep.getDimensions()
+Print(f'Solution method: {sol_type}')
+_nev, ncv, _mpd = nep.getDimensions()
 Print('')
-Print('Subspace dimension: %i' % ncv)
+Print(f'Subspace dimension: {ncv}')
 tol, maxit = nep.getTolerances()
-Print('Stopping condition: tol=%.4g' % tol)
+Print(f'Stopping condition: tol={tol:.4g}')
 Print('')
 
 nconv = nep.getConverged()
-Print('Number of converged eigenpairs %d' % nconv)
+Print(f'Number of converged eigenpairs {nconv}')
 
 if nconv > 0:
     x = Id.createVecs('right')
@@ -149,7 +150,7 @@ if nconv > 0:
         k = nep.getEigenpair(i, x)
         res = nep.computeError(i)
         if k.imag != 0.0:
-            Print(' %9f%+9f j %12g' % (k.real, k.imag, res))
+            Print(f' {k.real:9f}{k.imag:+9f} j {res:12g}')
         else:
-            Print(' %12f       %12g' % (k.real, res))
+            Print(f' {k.real:12f}       {res:12g}')
     Print()

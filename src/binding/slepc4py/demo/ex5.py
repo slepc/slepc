@@ -14,7 +14,8 @@
 
 # Initialization is similar to previous examples.
 
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
@@ -30,30 +31,30 @@ Print = PETSc.Sys.Print
 
 
 def construct_operators(m, n):
-    Print('Quadratic Eigenproblem, N=%d (%dx%d grid)' % (m * n, m, n))
+    Print(f'Quadratic Eigenproblem, N={m * n} ({m}x{n} grid)')
     # K is the 2-D Laplacian
     K = PETSc.Mat().create()
     K.setSizes([n * m, n * m])
     K.setFromOptions()
     Istart, Iend = K.getOwnershipRange()
-    for I in range(Istart, Iend):
+    for i in range(Istart, Iend):
         v = -1.0
-        i = I // n
-        j = I - i * n
-        if i > 0:
-            J = I - n
-            K[I, J] = v
-        if i < m - 1:
-            J = I + n
-            K[I, J] = v
-        if j > 0:
-            J = I - 1
-            K[I, J] = v
-        if j < n - 1:
-            J = I + 1
-            K[I, J] = v
+        gi = i // n
+        gj = i - gi * n
+        if gi > 0:
+            j = i - n
+            K[i, j] = v
+        if gi < m - 1:
+            j = i + n
+            K[i, j] = v
+        if gj > 0:
+            j = i - 1
+            K[i, j] = v
+        if gj < n - 1:
+            j = i + 1
+            K[i, j] = v
         v = 4.0
-        K[I, I] = v
+        K[i, i] = v
     K.assemble()
     # C is the zero matrix
     C = PETSc.Mat().create()
@@ -84,16 +85,16 @@ def solve_eigensystem(M, C, K):
     xr, xi = K.createVecs()
 
     its = Q.getIterationNumber()
-    Print('Number of iterations of the method: %i' % its)
+    Print(f'Number of iterations of the method: {its}')
     sol_type = Q.getType()
-    Print('Solution method: %s' % sol_type)
-    nev, ncv, mpd = Q.getDimensions()
+    Print(f'Solution method: {sol_type}')
+    nev, _ncv, _mpd = Q.getDimensions()
     Print('')
-    Print('Number of requested eigenvalues: %i' % nev)
+    Print(f'Number of requested eigenvalues: {nev}')
     tol, maxit = Q.getTolerances()
-    Print('Stopping condition: tol=%.4g, maxit=%d' % (tol, maxit))
+    Print(f'Stopping condition: tol={tol:.4g}, maxit={maxit}')
     nconv = Q.getConverged()
-    Print('Number of converged approximate eigenpairs: %d' % nconv)
+    Print(f'Number of converged approximate eigenpairs: {nconv}')
     if nconv > 0:
         Print('')
         Print('          k           ||(k^2M+Ck+K)x||/||kx|| ')
@@ -102,9 +103,9 @@ def solve_eigensystem(M, C, K):
             k = Q.getEigenpair(i, xr, xi)
             error = Q.computeError(i)
             if k.imag != 0.0:
-                Print('%9f%+9f j    %12g' % (k.real, k.imag, error))
+                Print(f'{k.real:9f}{k.imag:+9f} j    {error:12g}')
             else:
-                Print('%12f         %12g' % (k.real, error))
+                Print(f'{k.real:12f}         {error:12g}')
     Print('')
 
 

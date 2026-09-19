@@ -9,7 +9,8 @@
 
 # Initialization is similar to previous examples.
 
-import sys, slepc4py
+import sys
+import slepc4py
 
 slepc4py.init(sys.argv)
 
@@ -22,9 +23,11 @@ import numpy as np
 # should implement a parallel matrix-vector operation ourselves, which
 # is not done in this example.
 
-assert PETSc.COMM_WORLD.getSize() == 1
-
 Print = PETSc.Sys.Print
+
+if PETSc.COMM_WORLD.getSize() > 1:
+    Print('Demo should only be executed with one MPI process')
+    sys.exit(0)
 
 # This function computes the matrix-vector product f = L*x where the
 # Laplacian L is not built explicitly, and the vectors x,f are viewed
@@ -54,7 +57,7 @@ def laplace2d(U, x, f):
 # operation, that simply calls the ``laplace2d`` function above.
 
 
-class Laplacian2D(object):
+class Laplacian2D:
     def __init__(self, m, n):
         self.m, self.n = m, n
         scalar = PETSc.ScalarType
@@ -75,8 +78,7 @@ class Laplacian2D(object):
 def construct_operator(m, n):
     # Create shell matrix
     context = Laplacian2D(m, n)
-    A = PETSc.Mat().createPython([m * n, m * n], context)
-    return A
+    return PETSc.Mat().createPython([m * n, m * n], context)
 
 
 # This function receives the matrix and the problem type, then solves the
@@ -102,15 +104,15 @@ def solve_eigensystem(A, problem_type=SLEPc.EPS.ProblemType.HEP):
     E.solve()
     Print('')
     its = E.getIterationNumber()
-    Print('Number of iterations of the method: %i' % its)
+    Print(f'Number of iterations of the method:{its}')
     sol_type = E.getType()
-    Print('Solution method: %s' % sol_type)
-    nev, ncv, mpd = E.getDimensions()
-    Print('Number of requested eigenvalues: %i' % nev)
+    Print(f'Solution method: {sol_type}')
+    nev, _ncv, _mpd = E.getDimensions()
+    Print(f'Number of requested eigenvalues: {nev}')
     tol, maxit = E.getTolerances()
-    Print('Stopping condition: tol=%.4g, maxit=%d' % (tol, maxit))
+    Print(f'Stopping condition: tol={tol:.4g}, maxit={maxit}')
     nconv = E.getConverged()
-    Print('Number of converged eigenpairs: %d' % nconv)
+    Print(f'Number of converged eigenpairs: {nconv}')
     if nconv > 0:
         Print('')
         Print('        k          ||Ax-kx||/||kx|| ')
@@ -119,9 +121,9 @@ def solve_eigensystem(A, problem_type=SLEPc.EPS.ProblemType.HEP):
             k = E.getEigenpair(i, xr, xi)
             error = E.computeError(i)
             if k.imag != 0.0:
-                Print(' %9f%+9f j  %12g' % (k.real, k.imag, error))
+                Print(f' {k.real:9f}{k.imag:+9f} j  {error:12g}')
             else:
-                Print(' %12f       %12g' % (k.real, error))
+                Print(f' {k.real:12f}       {error:12g}')
         Print('')
 
 
@@ -134,7 +136,7 @@ def main():
     N = opts.getInt('N', 32)
     m = opts.getInt('m', N)
     n = opts.getInt('n', m)
-    Print('Symmetric Eigenproblem (matrix-free), N=%d (%dx%d grid)' % (m * n, m, n))
+    Print(f'Symmetric Eigenproblem (sparse matrix), N={m * n} ({m}x{n} grid)')
     A = construct_operator(m, n)
     solve_eigensystem(A)
 
