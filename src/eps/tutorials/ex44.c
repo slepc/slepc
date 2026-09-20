@@ -144,6 +144,10 @@ int main(int argc,char **argv)
       test:
          suffix: 2
          args: -eps_lyapii_ranks 8,20 -options_left no
+      test:
+         suffix: 1_kokkos
+         args: -mat_type aijkokkos
+         requires: kokkos_kernels
 
    test:
       suffix: 3
