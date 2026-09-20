@@ -31,8 +31,7 @@ n = opts.getInt('n', 30)
 
 # Create the matrix ``tridiag([-1 0 -1])``.
 
-A = PETSc.Mat()
-A.create()
+A = PETSc.Mat().create()
 A.setSizes([n, n])
 A.setFromOptions()
 rstart, rend = A.getOwnershipRange()
@@ -46,8 +45,7 @@ A.assemble()
 # Configure the linear eigensolver initially to compute leftmost
 # eigenvalues.
 
-E = SLEPc.EPS()
-E.create()
+E = SLEPc.EPS().create()
 E.setOperators(A)
 E.setProblemType(SLEPc.EPS.ProblemType.HEP)
 E.setWhichEigenpairs(SLEPc.EPS.Which.SMALLEST_REAL)

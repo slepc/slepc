@@ -32,8 +32,7 @@ Print(f'Lauchli singular value decomposition, ({n + 1} x {n}) mu={mu}\n')
 # Create the matrix and fill its nonzero entries. Every MPI process will
 # insert its locally owned part only.
 
-A = PETSc.Mat()
-A.create()
+A = PETSc.Mat().create()
 A.setSizes([n + 1, n])
 A.setFromOptions()
 
@@ -52,8 +51,7 @@ A.assemble()
 # examples. In this case, we select the thick-restart Lanczos
 # bidiagonalization method.
 
-S = SLEPc.SVD()
-S.create()
+S = SLEPc.SVD().create()
 
 S.setOperator(A)
 S.setType(S.Type.TRLANCZOS)

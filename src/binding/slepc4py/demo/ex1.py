@@ -19,8 +19,7 @@ import slepc4py
 slepc4py.init(sys.argv)
 
 # Next, we have to import the relevant modules. Normally, both PETSc and SLEPc
-# modules have to be imported in all slepc4py programs. It may be useful to
-# import NumPy as well:
+# modules have to be imported in all slepc4py programs.
 
 from petsc4py import PETSc
 from slepc4py import SLEPc
@@ -40,8 +39,7 @@ n = opts.getInt('n', 30)
 # -1 in off-diagonal positions. See petsc4py documentation for details about
 # matrix objects:
 
-A = PETSc.Mat()
-A.create()
+A = PETSc.Mat().create()
 A.setSizes([n, n])
 A.setFromOptions()
 
@@ -63,8 +61,7 @@ A.assemble()
 
 # The solver object is created in a similar way as other objects in petsc4py:
 
-E = SLEPc.EPS()
-E.create()
+E = SLEPc.EPS().create()
 
 # Once the object is created, the eigenvalue problem must be specified. At
 # least one matrix must be provided. The problem type must be indicated as
