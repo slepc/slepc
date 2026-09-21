@@ -155,6 +155,9 @@ check_build:
 	+@if [ "`grep -E '^#define PETSC_HAVE_HIP 1' ${PETSC_DIR}/${PETSC_ARCH}/include/petscconf.h 2>/dev/null`" = "#define PETSC_HAVE_HIP 1" ] || [ "`grep -E '^#define PETSC_HAVE_HIP 1' ${PETSC_DIR}/include/petscconf.h 2>/dev/null`" = "#define PETSC_HAVE_HIP 1" ]; then \
            cd src/eps/tests >/dev/null; ${RUN_TEST} testtest10_hip; \
          fi
+	+@if [ "`grep -E '^#define PETSC_HAVE_KOKKOS 1' ${PETSC_DIR}/${PETSC_ARCH}/include/petscconf.h 2>/dev/null`" = "#define PETSC_HAVE_KOKKOS 1" ] || [ "`grep -E '^#define PETSC_HAVE_KOKKOS 1' ${PETSC_DIR}/include/petscconf.h 2>/dev/null`" = "#define PETSC_HAVE_KOKKOS 1" ]; then \
+           cd src/eps/tests >/dev/null; ${RUN_TEST} testtest10_kokkos; \
+         fi
 	+@if [ "`grep -E '^#define SLEPC_HAVE_BLOPEX 1' ${SLEPC_DIR}/${PETSC_ARCH}/include/slepcconf.h`" = "#define SLEPC_HAVE_BLOPEX 1" ]; then \
            cd src/eps/tests >/dev/null; ${RUN_TEST} testtest5_blopex; \
          fi

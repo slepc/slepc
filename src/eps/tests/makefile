@@ -89,3 +89,15 @@ testtest10_hip: test10.PETSc
           touch ../../../check_error; \
         fi; \
         ${RM} test10_1.tmp test10_1.dtmp
+
+testtest10_kokkos: test10.PETSc
+	-${QUIET}${MPIEXEC} -n 1 ${MPIEXEC_TAIL} ./test10 -eps_nev 4 -eps_ncv 14 -m 12 -eps_largest_magnitude -mat_type aijkokkos | ${SED} -e 's/54988/54989/' | ${SED} -e "s/35009/35008/" > test10_1.tmp 2>&1
+	-${QUIET}${DIFF} output/test10_1_ks_cuda.out test10_1.tmp > test10_1.dtmp 2>&1
+	-@if [ ! -s test10_1.dtmp ]; then \
+          echo "C/C++ example src/eps/tests/test10 run successfully with Kokkos"; \
+        else \
+          echo "Possible error running C/C++ src/eps/tests/test10 with Kokkos"; \
+          cat test10_1.tmp; \
+          touch ../../../check_error; \
+        fi; \
+        ${RM} test10_1.tmp test10_1.dtmp
