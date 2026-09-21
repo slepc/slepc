@@ -314,6 +314,7 @@ static PetscErrorCode EPSSolve_LyapII(EPS eps)
   EPS_LYAPII          *ctx = (EPS_LYAPII*)eps->data;
   PetscInt            i,ldds,rk,nloc,mloc,nv,idx,k;
   Vec                 v,w,z=eps->work[0],v0=NULL;
+  VecType             vtype;
   Mat                 S,C,Ux[2],Y,Y1,R,U,W,X,Op=NULL;
   BV                  V;
   BVOrthogType        type;
@@ -335,6 +336,9 @@ static PetscErrorCode EPSSolve_LyapII(EPS eps)
   matctx->Q = eps->V;
   PetscCall(MatShellSetOperation(S,MATOP_MULT,(PetscErrorCodeFn*)MatMult_EPSLyapIIOperator));
   PetscCall(MatShellSetOperation(S,MATOP_DESTROY,(PetscErrorCodeFn*)MatDestroy_EPSLyapIIOperator));
+  /* make sure the shell matrix generates a vector of the same type as the problem matrices */
+  PetscCall(MatGetVecType(matctx->S,&vtype));
+  PetscCall(MatShellSetVecType(S,vtype));
   PetscCall(LMESetCoefficients(ctx->lme,S,NULL,NULL,NULL));
 
   /* Right-hand side */
