@@ -156,6 +156,11 @@ int main(int argc,char **argv)
          args: -rg_type ellipse -rg_ellipse_center 1.175 -rg_ellipse_radius 0.075 -eps_ciss_partitions 2 -eps_ciss_ksp_type hpddm
          requires: hpddm
       test:
+         suffix: ciss_2_kokkos
+         nsize: 2
+         args: -rg_type ellipse -rg_ellipse_center 1.175 -rg_ellipse_radius 0.075 -mat_type aijkokkos -st_pc_type redundant
+         requires: complex kokkos_kernels
+      test:
          suffix: feast
          args: -eps_type feast -eps_interval 1.1,1.25 -eps_ncv 64 -options_left 0
          requires: feast
