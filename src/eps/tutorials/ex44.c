@@ -145,6 +145,15 @@ int main(int argc,char **argv)
          suffix: 2
          args: -eps_lyapii_ranks 8,20 -options_left no
       test:
+         suffix: 1_cuda
+         args: -mat_type aijcusparse
+         requires: cuda
+      test:
+         suffix: 1_hip
+         TODO: hipSPARSE errorcode 3 (HIPSPARSE_STATUS_INVALID_VALUE)
+         args: -mat_type aijhipsparse
+         requires: hip
+      test:
          suffix: 1_kokkos
          args: -mat_type aijkokkos
          requires: kokkos_kernels
