@@ -1437,21 +1437,22 @@ PetscErrorCode BVCreateVecEmpty(BV bv,Vec *v)
 @*/
 PetscErrorCode BVSetVecType(BV bv,VecType vtype)
 {
-  PetscBool   std,kokkos;
+  PetscBool   std,cuda,hip,kokkos;
   PetscMPIInt size;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(bv,BV_CLASSID,1);
   PetscCall(PetscFree(bv->vtype));
+  PetscCallMPI(MPI_Comm_size(PetscObjectComm((PetscObject)bv),&size));
   PetscCall(PetscStrcmp(vtype,VECSTANDARD,&std));
+  PetscCall(PetscStrcmp(vtype,VECCUDA,&cuda));
+  PetscCall(PetscStrcmp(vtype,VECHIP,&hip));
   PetscCall(PetscStrcmp(vtype,VECKOKKOS,&kokkos));
-  if (std) {
-    PetscCallMPI(MPI_Comm_size(PetscObjectComm((PetscObject)bv),&size));
-    PetscCall(PetscStrallocpy((size==1)?VECSEQ:VECMPI,(char**)&bv->vtype));
-  } else if (kokkos) {
-    PetscCallMPI(MPI_Comm_size(PetscObjectComm((PetscObject)bv),&size));
-    PetscCall(PetscStrallocpy((size==1)?VECSEQKOKKOS:VECMPIKOKKOS,(char**)&bv->vtype));
-  } else PetscCall(PetscStrallocpy(vtype,(char**)&bv->vtype));
+  if (std) PetscCall(PetscStrallocpy((size==1)?VECSEQ:VECMPI,(char**)&bv->vtype));
+  else if (cuda) PetscCall(PetscStrallocpy((size==1)?VECSEQCUDA:VECMPICUDA,(char**)&bv->vtype));
+  else if (hip) PetscCall(PetscStrallocpy((size==1)?VECSEQHIP:VECMPIHIP,(char**)&bv->vtype));
+  else if (kokkos) PetscCall(PetscStrallocpy((size==1)?VECSEQKOKKOS:VECMPIKOKKOS,(char**)&bv->vtype));
+  else PetscCall(PetscStrallocpy(vtype,(char**)&bv->vtype));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
