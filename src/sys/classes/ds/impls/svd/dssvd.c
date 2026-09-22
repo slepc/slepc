@@ -244,7 +244,7 @@ static PetscErrorCode DSTruncate_SVD(DS ds,PetscInt n,PetscBool trim)
       for (i=l;i<n;i++) A[i+n*ld] = A[i+ctx->m*ld];
       for (i=l;i<ds->n;i++) A[i+ctx->m*ld] = 0.0;
     }
-    ds->k  = (ds->extrarow)? n: 0;
+    ds->k  = ds->extrarow? n: 0;
     ds->t  = ds->n;   /* truncated length equal to previous dimension */
     ctx->t = ctx->m;  /* must also keep the previous dimension of V */
     ds->n  = n;

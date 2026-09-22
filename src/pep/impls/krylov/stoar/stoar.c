@@ -98,7 +98,7 @@ PetscErrorCode PEPSTOARSetUpInnerMatrix(PEP pep,Mat *B)
     pB[0] = Bs[0]; pB[3] = Bs[2];
   }
   if (ctx->beta) {
-    i = (ctx->alpha)?1:0;
+    i = ctx->alpha?1:0;
     ctxMat[0]->scal[1] = 0.0;
     ctxMat[0]->A[i] = D[1]; ctxMat[0]->scal[i] = -ctx->beta*pep->sfactor;
     ctxMat[1]->A[0] = D[2]; ctxMat[1]->scal[0] = -ctx->beta*pep->sfactor*pep->sfactor; ctxMat[1]->scal[1] = 0.0;
@@ -463,7 +463,7 @@ PetscErrorCode PEPSolve_STOAR(PEP pep)
     PetscCall(STScaleShift(pep->st,pep->sfactor));
   } else {
     PetscCall(STScaleShift(pep->st,sinv?1.0/pep->sfactor:pep->sfactor));
-    pep->target = (sinv)?pep->target/pep->sfactor:pep->target*pep->sfactor;
+    pep->target = sinv?pep->target/pep->sfactor:pep->target*pep->sfactor;
   }
   if (pep->sfactor!=1.0) PetscCall(RGPopScale(pep->rg));
 

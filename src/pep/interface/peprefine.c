@@ -339,7 +339,7 @@ PetscErrorCode PEPNewtonRefinementSimple(PEP pep,PetscInt *maxits,PetscReal tol,
   PetscFunctionBegin;
   PetscCall(PetscLogEventBegin(PEP_Refine,pep,0,0,0));
   PetscCall(PEPSimpleNRefSetUp(pep,&ctx));
-  its = (maxits)?*maxits:NREF_MAXIT;
+  its = maxits?*maxits:NREF_MAXIT;
   if (!pep->refineksp) PetscCall(PEPRefineGetKSP(pep,&pep->refineksp));
   if (pep->npart==1) PetscCall(BVGetColumn(pep->V,0,&v));
   else v = ctx->v;

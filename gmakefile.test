@@ -465,7 +465,7 @@ help-nontest:
 	-@echo "   clean - delete libraries and Fortran module files (used in $$""SLEPC_DIR)"
 	-@echo "   lint_slepc - run lint on the source code, including its embedded documentation"
 	-@echo "           delete compiled examples, .o and related files (used in tutorials or test directories)"
-	-@echo "   clang-tidy - run clang-tidy on the SLEPc C code"
+	-@echo "   clang-tidy [PETSC_CLANG_TIDY_FIX=--fix] - run clang-tidy on the SLEPc C code"
 	-@echo "   fortranbindings - regenerate Fortran stubs/interface definitions, needed after git pulls or source code changes"
 	-@echo "   deletefortranbindings - delete the generated Fortran stubs/interface definitions"
 	-@echo "   checkbadSource - check the source code for violations of coding standards"

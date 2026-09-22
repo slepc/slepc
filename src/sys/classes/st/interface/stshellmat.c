@@ -54,7 +54,7 @@ static PetscErrorCode MatMult_Shell(Mat A,Vec x,Vec y)
     for (i=1;i<ctx->nmat;i++) {
       PetscCall(MatMult(st->A[ctx->matIdx[i]],x,ctx->z));
       t *= ctx->alpha;
-      c = (ctx->coeffs)?t*ctx->coeffs[i]:t;
+      c = ctx->coeffs?t*ctx->coeffs[i]:t;
       PetscCall(VecAXPY(y,c,ctx->z));
     }
     if (ctx->nmat==1) PetscCall(VecAXPY(y,ctx->alpha,x)); /* y = (A + alpha*I) x */
@@ -78,7 +78,7 @@ static PetscErrorCode MatMultTranspose_Shell(Mat A,Vec x,Vec y)
     for (i=1;i<ctx->nmat;i++) {
       PetscCall(MatMultTranspose(st->A[ctx->matIdx[i]],x,ctx->z));
       t *= ctx->alpha;
-      c = (ctx->coeffs)?t*ctx->coeffs[i]:t;
+      c = ctx->coeffs?t*ctx->coeffs[i]:t;
       PetscCall(VecAXPY(y,c,ctx->z));
     }
     if (ctx->nmat==1) PetscCall(VecAXPY(y,ctx->alpha,x)); /* y = (A + alpha*I) x */
@@ -132,7 +132,7 @@ static PetscErrorCode MatGetDiagonal_Shell(Mat A,Vec diag)
       for (i=1;i<ctx->nmat;i++) {
         PetscCall(MatGetDiagonal(st->A[ctx->matIdx[i]],diagb));
         t *= ctx->alpha;
-        c = (ctx->coeffs)?t*ctx->coeffs[i]:t;
+        c = ctx->coeffs?t*ctx->coeffs[i]:t;
         PetscCall(VecAYPX(diag,c,diagb));
       }
       PetscCall(VecDestroy(&diagb));

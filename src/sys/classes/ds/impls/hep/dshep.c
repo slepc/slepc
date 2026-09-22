@@ -656,7 +656,7 @@ static PetscErrorCode DSTruncate_HEP(DS ds,PetscInt n,PetscBool trim)
       for (i=l;i<n;i++) A[n+i*ld] = A[ds->n+i*ld];
       for (i=l;i<ds->n;i++) A[ds->n+i*ld] = 0.0;
     }
-    ds->k = (ds->extrarow)? n: 0;
+    ds->k = ds->extrarow? n: 0;
     ds->t = ds->n;   /* truncated length equal to previous dimension */
     ds->n = n;
   }

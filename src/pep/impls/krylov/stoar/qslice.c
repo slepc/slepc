@@ -563,7 +563,7 @@ PetscErrorCode PEPSetUp_STOAR_QSlice(PEP pep)
   }
 
   /* number of eigenvalues in interval */
-  sr->numEigs = (sr->dir)*(sr->inertia1 - sr->inertia0);
+  sr->numEigs = sr->dir*(sr->inertia1 - sr->inertia0);
   PetscCall(PetscInfo(pep,"QSlice setup: allocating for %" PetscInt_FMT " eigenvalues in [%g,%g]\n",sr->numEigs,(double)pep->inta,(double)pep->intb));
   if (sr->numEigs) {
     PetscCall(PEPQSliceAllocateSolution(pep));
@@ -814,7 +814,7 @@ static PetscErrorCode PEPStoreEigenpairs(PEP pep)
     for (i=0;i<nconv;i++) {
       lambda = PetscRealPart(pep->eigr[pep->perm[i]]);
       err = pep->errest[pep->perm[i]];
-      if (sr->dir*(lambda - sPres->ext[0]) > 0 && (sr->dir)*(sPres->ext[1] - lambda) > 0) {/* Valid value */
+      if (sr->dir*(lambda - sPres->ext[0]) > 0 && sr->dir*(sPres->ext[1] - lambda) > 0) {/* Valid value */
         PetscCheck(sr->indexEig+count-ndef<sr->numEigs,PetscObjectComm((PetscObject)pep),PETSC_ERR_PLIB,"Unexpected error in Spectrum Slicing");
         PetscCall(PEPQSliceCheckEigenvalueType(pep,lambda,PetscRealPart(omega[pep->perm[i]]),PETSC_FALSE));
         eigr[count] = lambda;
@@ -949,7 +949,7 @@ static PetscErrorCode PEPLookForDeflation(PEP pep)
   sr = ctx->sr;
   sPres = sr->sPres;
 
-  if (sPres->neighb[0]) ini = (sr->dir)*(sPres->neighb[0]->inertia - sr->inertia0);
+  if (sPres->neighb[0]) ini = sr->dir*(sPres->neighb[0]->inertia - sr->inertia0);
   else ini = 0;
   fin = sr->indexEig;
   /* Selection of ends for searching new values */
@@ -970,14 +970,14 @@ static PetscErrorCode PEPLookForDeflation(PEP pep)
   }
   /* The number of values on each side are found */
   if (sPres->neighb[0]) {
-    sPres->nsch[0] = (sr->dir)*(sPres->inertia - sPres->neighb[0]->inertia)-count0;
+    sPres->nsch[0] = sr->dir*(sPres->inertia - sPres->neighb[0]->inertia)-count0;
     PetscCheck(sPres->nsch[0]>=0,PetscObjectComm((PetscObject)pep),PETSC_ERR_PLIB,"Mismatch between number of values found and information from inertia");
   } else sPres->nsch[0] = 0;
 
   if (sPres->neighb[1]) {
-    sPres->nsch[1] = (sr->dir)*(sPres->neighb[1]->inertia - sPres->inertia) - count1;
+    sPres->nsch[1] = sr->dir*(sPres->neighb[1]->inertia - sPres->inertia) - count1;
     PetscCheck(sPres->nsch[1]>=0,PetscObjectComm((PetscObject)pep),PETSC_ERR_PLIB,"Mismatch between number of values found and information from inertia");
-  } else sPres->nsch[1] = (sr->dir)*(sr->inertia1 - sPres->inertia);
+  } else sPres->nsch[1] = sr->dir*(sr->inertia1 - sPres->inertia);
 
   /* Completing vector of indexes for deflation */
   for (i=0;i<count0;i++) sr->idxDef0[i] = sr->perm[ini+i];
