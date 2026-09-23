@@ -91,7 +91,7 @@ static inline PetscReal SlepcAbs(PetscReal x,PetscReal y)
 .seealso: `PetscAbsScalar()`
 M*/
 #if !PetscDefined(USE_COMPLEX)
-#define SlepcAbsEigenvalue(x,y) SlepcAbs(x,y)
+#define SlepcAbsEigenvalue(x,y) SlepcAbs((x),(y))
 #else
 #define SlepcAbsEigenvalue(x,y) PetscAbsScalar(x)
 #endif

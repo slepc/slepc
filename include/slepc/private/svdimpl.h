@@ -186,11 +186,11 @@ struct _p_SVD {
 */
 #define SVDSetCtxThreshold(svd,sigma,err_est,k,n) \
   do { \
-    if ((svd)->stop==SVD_STOP_THRESHOLD && k) { \
+    if ((svd)->stop==SVD_STOP_THRESHOLD && (k)) { \
       PetscReal __krn=0.0; \
       ((SVDStoppingCtx)(svd)->stoppingctx)->firstsv = (sigma)[0]; \
-      ((SVDStoppingCtx)(svd)->stoppingctx)->lastsv  = (sigma)[k-1]; \
-      if (n>k) __krn=(sigma)[k]; \
+      ((SVDStoppingCtx)(svd)->stoppingctx)->lastsv  = (sigma)[(k)-1]; \
+      if (n>(k)) __krn=(sigma)[k]; \
       ((SVDStoppingCtx)(svd)->stoppingctx)->firstnc = __krn; \
       ((SVDStoppingCtx)(svd)->stoppingctx)->errest  = (err_est)[k]; \
       ((SVDStoppingCtx)(svd)->stoppingctx)->napprox = n; \

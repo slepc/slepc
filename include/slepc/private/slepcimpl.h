@@ -18,7 +18,7 @@
 SLEPC_INTERN PetscBool SlepcBeganPetsc;
 
 /* SlepcSwap - swap two variables a,b of the same type using a temporary variable t */
-#define SlepcSwap(a,b,t) do {t=a;a=b;b=t;} while (0)
+#define SlepcSwap(a,b,t) do {(t)=(a);(a)=(b);(b)=(t);} while (0)
 
 /*MC
     SlepcHeaderCreate - Creates a SLEPc object
@@ -43,9 +43,9 @@ SLEPC_INTERN PetscBool SlepcBeganPetsc;
 M*/
 #define SlepcHeaderCreate(h,classid,class_name,descr,mansec,comm,destroy,view) \
     ((PetscErrorCode)((!SlepcInitializeCalled && \
-                       PetscError(comm,__LINE__,PETSC_FUNCTION_NAME,__FILE__,PETSC_ERR_ORDER,PETSC_ERROR_INITIAL, \
+                      PetscError(comm,__LINE__,PETSC_FUNCTION_NAME,__FILE__,PETSC_ERR_ORDER,PETSC_ERROR_INITIAL, \
                                   "Must call SlepcInitialize instead of PetscInitialize to use SLEPc classes")) || \
-                      PetscHeaderCreate(h,classid,class_name,descr,mansec,comm,destroy,view)))
+                      PetscHeaderCreate((h),(classid),(class_name),(descr),(mansec),(comm),(destroy),(view))))
 
 /* context for structured eigenproblem matrices created via MatCreateXXX */
 struct _n_SlepcMatStruct {

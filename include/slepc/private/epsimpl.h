@@ -286,11 +286,11 @@ struct _p_EPS {
 */
 #define EPSSetCtxThreshold(eps,eigr,eigi,err_est,k,n) \
   do { \
-    if ((eps)->stop==EPS_STOP_THRESHOLD && k) { \
-      PetscScalar __kr=(eigr)[k-1],__ki=(eigi)[k-1],__krn=0.0,__kin=0.0,__kr0=(eigr)[0],__ki0=(eigi)[0]; \
+    if ((eps)->stop==EPS_STOP_THRESHOLD && (k)) { \
+      PetscScalar __kr=(eigr)[(k)-1],__ki=(eigi)[(k)-1],__krn=0.0,__kin=0.0,__kr0=(eigr)[0],__ki0=(eigi)[0]; \
       PetscCall(STBackTransform((eps)->st,1,&__kr,&__ki)); \
       PetscCall(STBackTransform((eps)->st,1,&__kr0,&__ki0)); \
-      if (n>k) { \
+      if ((n)>(k)) { \
         __krn=(eigr)[k];__kin=(eigi)[k]; \
         PetscCall(STBackTransform((eps)->st,1,&__krn,&__kin)); \
       } \
@@ -304,7 +304,7 @@ struct _p_EPS {
         ((EPSStoppingCtx)(eps)->stoppingctx)->firstnc = PetscRealPart(__krn); \
       } \
       ((EPSStoppingCtx)(eps)->stoppingctx)->errest  = (err_est)[k]; \
-      ((EPSStoppingCtx)(eps)->stoppingctx)->napprox = n; \
+      ((EPSStoppingCtx)(eps)->stoppingctx)->napprox = (n); \
     } \
   } while (0)
 
