@@ -149,7 +149,7 @@ def docstring(obj, fail=True):
         linkbody = f'{section}\n{linkbody}'
         docbody = f'{docbody}\n\n{linkbody}' if docbody else linkbody
 
-    doc = f'"""{summary}\n\n{docbody}\n\n"""' if docbody else f'"""{summary}"""'
+    doc = f'r"""{summary}\n\n{docbody}\n\n"""' if docbody else f'r"""{summary}"""'
     return textwrap.indent(doc, Lines.INDENT)
 
 
@@ -198,7 +198,7 @@ def visit_property(prop, name=None):
     name = name or prop.fget.__name__
     rtype = sig.rsplit('->', 1)[-1].strip()
     sig = f'{name}(self) -> {rtype}'
-    doc = f'"""{prop.__doc__}"""'
+    doc = f'r"""{prop.__doc__}"""'
     doc = textwrap.indent(doc, Lines.INDENT)
     body = Lines.INDENT + '...'
     return f'@property\ndef {sig}:\n{doc}\n{body}\n'
@@ -552,7 +552,7 @@ def visit_slepc4py_SLEPc():
     from slepc4py import SLEPc
 
     lines = Lines()
-    lines.add = f'"""{SLEPc.__doc__}"""'
+    lines.add = f'r"""{SLEPc.__doc__}"""'
     lines.add = IMPORTS
     lines.add = ''
     lines.add = HELPERS
