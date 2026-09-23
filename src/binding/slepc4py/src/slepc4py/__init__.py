@@ -1,10 +1,8 @@
 # -----------------------------------------------------------------------------
 
-"""
-SLEPc for Python
-================
+"""The SLEPc for Python package.
 
-This package is an interface to SLEPc_ libraries.
+This package is an interface to SLEPc libraries.
 
 SLEPc_ (the Scalable Library for Eigenvalue Problem Computations) is a
 software library for the solution of large scale sparse eigenvalue
@@ -19,15 +17,15 @@ for the computation of the action of a matrix function on a vector.
 .. _PETSc: https://petsc.org
 """
 
-__author__  = 'Lisandro Dalcin'
+__author__ = 'Lisandro Dalcin'
 __version__ = '3.25.2'
 __credits__ = 'SLEPc Team <slepc-maint@upv.es>'
 
 # -----------------------------------------------------------------------------
 
+
 def init(args=None, arch=None, comm=None):
-    """
-    Initialize SLEPc.
+    """Initialize SLEPc.
 
     Parameters
     ----------
@@ -42,25 +40,28 @@ def init(args=None, arch=None, comm=None):
     -----
     This function should be called only once, typically at the very
     beginning of the bootstrap script of an application.
+
     """
     import slepc4py.lib
+
     SLEPc = slepc4py.lib.ImportSLEPc(arch)
     PETSc = slepc4py.lib.ImportPETSc(arch)
-    args  = slepc4py.lib.getInitArgs(args)
+    args = slepc4py.lib.getInitArgs(args)
     PETSc._initialize(args, comm)
     SLEPc._initialize(args)
 
+
 # -----------------------------------------------------------------------------
 
+
 def get_include():
-    """
-    Return the directory in the package that contains header files.
+    """Return the directory in the package that contains header files.
 
     Extension modules that need to compile against slepc4py should use
     this function to locate the appropriate include directory.
 
-    Example
-    -------
+    Examples
+    --------
     Using Python distutils or NumPy distutils::
 
       import petscc4py, slepc4py
@@ -68,11 +69,15 @@ def get_include():
                 include_dirs=[...,
                               petsc4py.get_include(),
                               slepc4py.get_include(),])
+
     """
     from os.path import dirname, join
+
     return join(dirname(__file__), 'include')
 
+
 # -----------------------------------------------------------------------------
+
 
 def get_config():
     """Return a dictionary with information about SLEPc."""
@@ -80,6 +85,7 @@ def get_config():
 
     from io import StringIO
     from configparser import ConfigParser
+
     pgkdir = os.path.dirname(__file__)
     filename = os.path.join(pgkdir, 'lib', 'slepc.cfg')
     with open(filename) as fp:

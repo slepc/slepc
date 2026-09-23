@@ -1,4 +1,5 @@
 import os
+import enum
 import inspect
 import textwrap
 
@@ -83,13 +84,26 @@ def visit_constant(constant):
     return f'{name}: Final[{type(value).__name__}] = ...'
 
 
+def visit_enum(member):
+    name, value = member
+    return f'{name} = {value.value}'
+
+
 def visit_function(function):
     sig = signature(function)
     return f'def {sig}: ...'
 
 
 incompatible_overrides = [
+    'DMDA.create',
+    'DMStag.create',
+    'DMSwarm.getField',
+    'DMSwarm.setType',
+    'ViewerHDF5.create',
+    'SF.compose',
 ]
+
+
 def visit_method(method, clas_name=None):
     sig = signature(method)
     stub = f'def {sig}: ...'
@@ -140,6 +154,8 @@ def visit_class(cls, outer=None, done=None):
         '__ge__',
         '__gt__',
     }
+    if isinstance(cls, type) and issubclass(cls, enum.Enum):
+        skip.update(set(cls.__dict__) - set(cls.__members__))
     special = {
         '__len__': '__len__(self) -> int',
         '__bool__': '__bool__(self) -> bool',
@@ -195,9 +211,8 @@ def visit_class(cls, outer=None, done=None):
         if name in cls.__dict__:
             done.add(name)
 
-    if '__hash__' in cls.__dict__:
-        if cls.__hash__ is None:
-            done.add('__hash__')
+    if '__hash__' in cls.__dict__ and cls.__hash__ is None:
+        done.add('__hash__')
 
     dct = cls.__dict__
     keys = list(dct.keys())
@@ -211,10 +226,9 @@ def visit_class(cls, outer=None, done=None):
                 continue
             if name in done:
                 continue
-            if dunder(name):
-                if name not in special and name not in override:
-                    done.add(name)
-                    continue
+            if dunder(name) and name not in special and name not in override:
+                done.add(name)
+                continue
             yield name
 
     for name in members(keys):
@@ -247,7 +261,7 @@ def visit_class(cls, outer=None, done=None):
                 elif is_staticmethod(obj):
                     lines.add = '@staticmethod'
                 lines.add = visit_method(attr, qualname)
-            elif True:
+            else:
                 lines.add = f'{name} = {attr.__name__}'
             continue
 
@@ -263,12 +277,16 @@ def visit_class(cls, outer=None, done=None):
 
         if is_constant(attr):
             done.add(name)
-            lines.add = visit_constant((name, attr))
+            if isinstance(attr, enum.Enum):
+                lines.add = visit_enum((name, attr))
+            else:
+                lines.add = visit_constant((name, attr))
             continue
 
     leftovers = [name for name in keys if name not in done and name not in skip]
     if leftovers:
-        raise RuntimeError(f'leftovers: {leftovers}')
+        msg = f'leftovers: {leftovers}'
+        raise RuntimeError(msg)
 
     if len(lines) == start:
         lines.add = '...'
@@ -362,7 +380,8 @@ def visit_module(module, done=None):
 
     leftovers = [name for name in keys if name not in done and name not in skip]
     if leftovers:
-        raise RuntimeError(f'leftovers: {leftovers}')
+        msg = f'leftovers: {leftovers}'
+        raise RuntimeError(msg)
     return lines
 
 
@@ -440,7 +459,8 @@ from petsc4py.typing import (
     DimsSpec,
     KSPConvergenceTestFunction,
     KSPMonitorFunction,
-    KSPOperatorsFunction,
+    KSPCreateOperatorsFunction,
+    KSPComputeOperatorsFunction,
     KSPPostSolveFunction,
     KSPPreSolveFunction,
     KSPRHSFunction,
@@ -448,10 +468,13 @@ from petsc4py.typing import (
     MatAssemblySpec,
     MatBlockSizeSpec,
     MatNullFunction,
+    MatHtoolKernelFunction,
     MatSizeSpec,
     NNZSpec,
     NormTypeSpec,
+    OptionValueSpec,
     PetscOptionsHandlerFunction,
+    PCHPDDMAssembleAuxiliaryMatFunction,
     ScatterModeSpec,
     SNESMonitorFunction,
     SNESObjFunction,
@@ -522,11 +545,88 @@ ScalarType: numpy.dtype = ...
 """
 
 OVERRIDE = {
+    'Sys': {
+        'getVersion': """
+            @classmethod
+            @overload
+            def getVersion(cls, devel: Literal[False] = False, date: Literal[False] = False, author: Literal[False] = False) -> tuple[int, int, int]: ...
+            @classmethod
+            @overload
+            def getVersion(cls, devel: bool = False, date: bool = False, author: bool = False) -> tuple[int, int, int] | tuple[tuple[int, int, int] | bool | str | tuple[str, ...], ...]: ...
+        """,
+    },
     'Error': {
         '__init__': 'def __init__(self, ierr: int = 0) -> None: ...',
     },
     'Options': {
+        '__contains__': 'def __contains__(self, item: str) -> bool: ...',
+        '__delitem__': 'def __delitem__(self, item: str) -> None: ...',
         '__init__': 'def __init__(self, prefix: str | None = None) -> None: ...',
+        '__getitem__': 'def __getitem__(self, item: str) -> str: ...',
+        '__setitem__': 'def __setitem__(self, item: str, value: OptionValueSpec) -> None: ...',
+    },
+    'Vec': {
+        '__enter__': 'def __enter__(self) -> ArrayScalar: ...',
+        '__exit__': 'def __exit__(self, *exc: Any) -> None: ...',
+    },
+    'IS': {
+        '__enter__': 'def __enter__(self) -> ArrayInt: ...',
+        '__exit__': 'def __exit__(self, *exc: Any) -> None: ...',
+    },
+    'LogStage': {
+        '__enter__': 'def __enter__(self) -> Self: ...',
+        '__exit__': 'def __exit__(self, *exc: Any) -> None: ...',
+    },
+    'LogEvent': {
+        '__enter__': 'def __enter__(self) -> Self: ...',
+        '__exit__': 'def __exit__(self, *exc: Any) -> None: ...',
+    },
+    '_Vec_buffer': {
+        '__enter__': 'def __enter__(self) -> ArrayScalar: ...',
+        '__exit__': 'def __exit__(self, *exc: Any) -> None: ...',
+    },
+    '_IS_buffer': {
+        '__enter__': 'def __enter__(self) -> ArrayInt: ...',
+        '__exit__': 'def __exit__(self, *exc: Any) -> None: ...',
+    },
+    '_Vec_LocalForm': {
+        '__enter__': 'def __enter__(self) -> Vec: ...',
+        '__exit__': 'def __exit__(self, *exc: Any) -> None: ...',
+    },
+    '_DMDA_Vec_array': {
+        '__enter__': 'def __enter__(self) -> Self: ...',
+        '__exit__': 'def __exit__(self, *exc: Any) -> None: ...',
+    },
+    '_DMComposite_access': {
+        '__enter__': 'def __enter__(self) -> tuple[Vec, ...]: ...',
+        '__exit__': 'def __exit__(self, *exc: Any) -> None: ...',
+    },
+    'LGMap': {
+        '__call__': 'def __call__(self, indices: Sequence[int], result: ArrayInt | None = None) -> ArrayInt: ...',
+    },
+    'Scatter': {
+        '__call__': 'def __call__(self, x: Vec, y: Vec, addv: InsertModeSpec = None, mode: ScatterModeSpec = None) -> None: ...',
+    },
+    'KSP': {
+        '__call__': 'def __call__(self, b: Vec, x: Vec | None = None) -> Vec: ...',
+    },
+    'Mat': {
+        '__call__': 'def __call__(self, x: Vec, y: Vec | None = None) -> Vec: ...',
+    },
+    'PC': {
+        '__call__': 'def __call__(self, x: Vec, y: Vec | None = None) -> Vec: ...',
+    },
+    'NullSpace': {
+        '__call__': 'def __call__(self, vec: Vec) -> None: ...',
+    },
+    'Viewer': {
+        '__call__': 'def __call__(self, obj: Object) -> None: ...',
+    },
+    'Random': {
+        '__call__': 'def __call__(self) -> Scalar: ...',
+    },
+    'MatPartitioning': {
+        '__call__': 'def __call__(self) -> IS: ...',
     },
     '__pyx_capi__': '__pyx_capi__: Final[dict[str, Any]] = ...',
     '__type_registry__': '__type_registry__: Final[dict[int, type[Object]]] = ...',
@@ -536,7 +636,7 @@ TYPING = """
 """
 
 
-def visit_slepc4py_SLEPc(done=None):
+def visit_slepc4py_SLEPc():
     from slepc4py import SLEPc as module
 
     lines = Lines()

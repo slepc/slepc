@@ -39,103 +39,124 @@
 # Initialization is similar to previous examples, but importing some
 # additional modules.
 
-try: range = xrange
-except: pass
+import sys
+import slepc4py
 
-import sys, slepc4py
 slepc4py.init(sys.argv)
 
 from petsc4py import PETSc
 from slepc4py import SLEPc
-import numpy
+import numpy as np
 
 import random
 import math
 
+Print = PETSc.Sys.Print
+
+if PETSc.COMM_WORLD.getSize() > 1:
+    Print('Demo should only be executed with one MPI process')
+    sys.exit(0)
+
 # This function builds the discrete Laplacian operator in 1 dimension
 # with homogeneous Dirichlet boundary conditions.
 
+
 def construct_operator(m):
     # Create matrix for 1D Laplacian operator
-    A = PETSc.Mat().create(PETSc.COMM_SELF)
+    A = PETSc.Mat().create()
     A.setSizes([m, m])
     A.setFromOptions()
     # Fill matrix
-    hx = 1.0/(m-1) # x grid spacing
-    diagv = 2.0/hx
-    offdx = -1.0/hx
+    hx = 1.0 / (m - 1)  # x grid spacing
+    diagv = 2.0 / hx
+    offdx = -1.0 / hx
     Istart, Iend = A.getOwnershipRange()
     for i in range(Istart, Iend):
         if i != 0 and i != (m - 1):
             A[i, i] = diagv
-            if i > 1: A[i, i - 1] = offdx
-            if i < m - 2: A[i, i + 1] = offdx
+            if i > 1:
+                A[i, i - 1] = offdx
+            if i < m - 2:
+                A[i, i + 1] = offdx
         else:
-            A[i, i] = 1.
+            A[i, i] = 1.0
 
     A.assemble()
 
     return A
 
+
 # Set bell-shape function as the solution of the Laplacian problem in
 # 1 dimension with homogeneous Dirichlet boundary conditions and
 # compute the associated discrete RHS.
 
+
 def set_problem_rhs(m):
     # Create 1D mass matrix operator
-    M = PETSc.Mat().create(PETSc.COMM_SELF)
+    M = PETSc.Mat().create()
     M.setSizes([m, m])
     M.setFromOptions()
     # Fill matrix
-    hx = 1.0/(m-1) # x grid spacing
-    diagv = hx/3
-    offdx = hx/6
+    hx = 1.0 / (m - 1)  # x grid spacing
+    diagv = hx / 3
+    offdx = hx / 6
     Istart, Iend = M.getOwnershipRange()
     for i in range(Istart, Iend):
         if i != 0 and i != (m - 1):
-            M[i, i] = 2*diagv
+            M[i, i] = 2 * diagv
         else:
             M[i, i] = diagv
-        if i > 1: M[i, i - 1] = offdx
-        if i < m - 2: M[i, i + 1] = offdx
+        if i > 1:
+            M[i, i - 1] = offdx
+        if i < m - 2:
+            M[i, i + 1] = offdx
 
     M.assemble()
 
     x_0 = 0.3
     x_f = 0.7
-    mu = x_0 + (x_f - x_0)*random.random()
+    mu = x_0 + (x_f - x_0) * random.random()
     sigma = 0.1**2
     uex, f = M.createVecs()
     for j in range(Istart, Iend):
-        value = 2/sigma * math.exp(-(hx*j - mu)**2/sigma) * (1 - 2/sigma * (hx*j - mu)**2 )
+        value = (
+            2
+            / sigma
+            * math.exp(-((hx * j - mu) ** 2) / sigma)
+            * (1 - 2 / sigma * (hx * j - mu) ** 2)
+        )
         f.setValue(j, value)
-        value = math.exp(-(hx*j - mu)**2/sigma)
+        value = math.exp(-((hx * j - mu) ** 2) / sigma)
         uex.setValue(j, value)
     f.assemble()
     uex.assemble()
 
     RHS = f.duplicate()
     M.mult(f, RHS)
-    RHS.setValue(0, 0.)
-    RHS.setValue(m-1, 0.)
+    RHS.setValue(0, 0.0)
+    RHS.setValue(m - 1, 0.0)
     RHS.assemble()
 
     return RHS, uex
 
+
 # Solve 1D Laplace problem with FEM.
+
 
 def solve_laplace_problem(A, RHS):
     u = A.createVecs('right')
-    r, c = A.getOrdering("natural")
+    r, c = A.getOrdering('natural')
     A.factorILU(r, c)
     A.solve(RHS, u)
     A.setUnfactored()
     return u
 
+
 # Solve 1D Laplace problem with POD (dense matrix).
 
+
 def solve_laplace_problem_pod(A, RHS, u):
-    ksp = PETSc.KSP().create(PETSc.COMM_SELF)
+    ksp = PETSc.KSP().create()
     ksp.setOperators(A)
     ksp.setType('preonly')
     pc = ksp.getPC()
@@ -146,6 +167,7 @@ def solve_laplace_problem_pod(A, RHS, u):
 
     return u
 
+
 # Set ``N`` solution of the 1D Laplace problem as columns of a matrix
 # (snapshot matrix).
 #
@@ -153,51 +175,55 @@ def solve_laplace_problem_pod(A, RHS, u):
 # some analytical solution:
 # :math:`z(x) = \exp(-(x - \mu)^2 / \sigma)`.
 
+
 def construct_snapshot_matrix(A, N, m):
-    snapshots = PETSc.Mat().create(PETSc.COMM_SELF)
+    snapshots = PETSc.Mat().create()
     snapshots.setSizes([m, N])
-    snapshots.setType('seqdense')
+    snapshots.setType('dense')
 
     Istart, Iend = snapshots.getOwnershipRange()
-    hx = 1.0/(m - 1)
+    hx = 1.0 / (m - 1)
     x_0 = 0.3
     x_f = 0.7
     sigma = 0.1**2
     for i in range(N):
-        mu = x_0 + (x_f - x_0)*random.random()
+        mu = x_0 + (x_f - x_0) * random.random()
         for j in range(Istart, Iend):
-            value = math.exp(-(hx*j - mu)**2/sigma)
+            value = math.exp(-((hx * j - mu) ** 2) / sigma)
             snapshots.setValue(j, i, value)
     snapshots.assemble()
 
     return snapshots
 
+
 # Solve the eigenvalue problem: the eigenvectors of this problem form the
 # POD basis.
 
-def solve_eigenproblem(snapshots, N):
-    print('Solving POD basis eigenproblem using eigensolver...')
 
-    Es = SLEPc.EPS()
-    Es.create(PETSc.COMM_SELF)
+def solve_eigenproblem(snapshots, N):
+    Print('Solving POD basis eigenproblem using eigensolver...')
+
+    Es = SLEPc.EPS().create()
     Es.setDimensions(N)
     Es.setProblemType(SLEPc.EPS.ProblemType.NHEP)
-    Es.setTolerances(1.0e-8, 500);
+    Es.setTolerances(1.0e-8, 500)
     Es.setKrylovSchurRestart(0.6)
     Es.setWhichEigenpairs(SLEPc.EPS.Which.LARGEST_REAL)
     Es.setOperators(snapshots)
     Es.setFromOptions()
 
     Es.solve()
-    print('Solved POD basis eigenproblem.')
+    Print('Solved POD basis eigenproblem.')
     return Es
 
+
 # Function to project :math:`S^TS` eigenvectors to :math:`S` eigenvectors.
+
 
 def project_STS_eigenvectors_to_S_eigenvectors(bvEs, S):
     sizes = S.getSizes()[0]
     N = bvEs.getActiveColumns()[1]
-    bv = SLEPc.BV().create(PETSc.COMM_SELF)
+    bv = SLEPc.BV().create()
     bv.setSizes(sizes, N)
     bv.setActiveColumns(0, N)
     bv.setFromOptions()
@@ -211,30 +237,35 @@ def project_STS_eigenvectors_to_S_eigenvectors(bvEs, S):
 
     return bv
 
+
 # Function to project the reduced space to the full space.
+
 
 def project_reduced_to_full_space(alpha, bv):
     uu = bv.getColumn(0)
     uPOD = uu.duplicate()
-    bv.restoreColumn(0,uu)
+    bv.restoreColumn(0, uu)
 
     scatter, Wr = PETSc.Scatter.toAll(alpha)
     scatter.begin(alpha, Wr, PETSc.InsertMode.INSERT, PETSc.ScatterMode.FORWARD)
     scatter.end(alpha, Wr, PETSc.InsertMode.INSERT, PETSc.ScatterMode.FORWARD)
     PODcoeff = Wr.getArray(readonly=1)
 
-    bv.multVec(1., 0., uPOD, PODcoeff)
+    bv.multVec(1.0, 0.0, uPOD, PODcoeff)
 
     return uPOD
 
+
 # The main function realizes the full procedure.
+
 
 def main():
     problem_dim = 200
     num_snapshots = 30
     num_pod_basis_functions = 8
 
-    assert(num_pod_basis_functions <= num_snapshots)
+    if num_pod_basis_functions > num_snapshots:
+        raise Exception('Should have num_pod_basis_functions <= num_snapshots')
 
     A = construct_operator(problem_dim)
     S = construct_snapshot_matrix(A, num_snapshots, problem_dim)
@@ -245,7 +276,7 @@ def main():
 
     Es = solve_eigenproblem(STS, num_pod_basis_functions)
     nconv = Es.getConverged()
-    print('Number of converged eigenvalues: %i' % nconv)
+    Print(f'Number of converged eigenvalues: {nconv}')
     Es.view()
 
     # get the EPS solution in a BV object
@@ -257,22 +288,23 @@ def main():
     # rescale the eigenvectors
     for i in range(num_pod_basis_functions):
         ll = Es.getEigenvalue(i)
-        print('Eigenvalue '+str(i)+': '+str(ll.real))
-        bv.scaleColumn(i,1.0/math.sqrt(ll.real))
+        Print(f'Eigenvalue {i}: {ll.real}')
+        bv.scaleColumn(i, 1.0 / math.sqrt(ll.real))
 
-    print('--------------------------------')
+    Print('--------------------------------')
     # Verify that the active columns of bv form an orthonormal subspace, i.e. that X^H*X = Id
-    print('Check that bv.dot(bv) is close to the identity matrix')
+    Print('Check that bv.dot(bv) is close to the identity matrix')
     XtX = bv.dot(bv)
     XtX.view()
     XtX_array = XtX.getDenseArray()
-    n,m = XtX_array.shape
-    assert numpy.allclose(XtX_array, numpy.eye(n, m))
-    print('--------------------------------')
-    print('Solve the problem with POD')
+    n, m = XtX_array.shape
+    if not np.allclose(XtX_array, np.eye(n, m)):
+        raise Exception('Failed comparison')
+    Print('--------------------------------')
+    Print('Solve the problem with POD')
 
     # Project the linear operator A
-    Ared = bv.matProject(A,bv)
+    Ared = bv.matProject(A, bv)
 
     # Set the RHS and the exact solution
     RHS, uex = set_problem_rhs(problem_dim)
@@ -282,18 +314,19 @@ def main():
 
     # Solve the problem with POD
     alpha = Ared.createVecs('right')
-    alpha = solve_laplace_problem_pod(Ared,RHSred,alpha)
+    alpha = solve_laplace_problem_pod(Ared, RHSred, alpha)
 
     # Project the POD solution back to the FE space
     uPOD = project_reduced_to_full_space(alpha, bv)
 
     # Compute the L2 and Linf norm of the error
     error = uex.copy()
-    error.axpy(-1,uPOD)
+    error.axpy(-1, uPOD)
     errorL2 = math.sqrt(error.dot(error).real)
-    print('The L2-norm of the error is: '+str(errorL2))
+    Print(f'The L2-norm of the error is: {errorL2}')
 
-    print("NORMAL END")
+    Print('NORMAL END')
+
 
 if __name__ == '__main__':
     main()

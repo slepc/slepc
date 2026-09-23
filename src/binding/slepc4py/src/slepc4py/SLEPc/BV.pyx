@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 
 class BVType(object):
-    """
+    r"""
     BV type.
 
     - `MAT`: A `BV` stored as a dense `petsc.Mat`.
@@ -22,6 +22,7 @@ class BVType(object):
     CONTIGUOUS = S_(BVCONTIGUOUS)
     TENSOR     = S_(BVTENSOR)
 
+
 class BVOrthogType(object):
     """
     BV orthogonalization types.
@@ -35,6 +36,7 @@ class BVOrthogType(object):
     """
     CGS = BV_ORTHOG_CGS
     MGS = BV_ORTHOG_MGS
+
 
 class BVOrthogRefineType(object):
     """
@@ -51,6 +53,7 @@ class BVOrthogRefineType(object):
     IFNEEDED = BV_ORTHOG_REFINE_IFNEEDED
     NEVER    = BV_ORTHOG_REFINE_NEVER
     ALWAYS   = BV_ORTHOG_REFINE_ALWAYS
+
 
 class BVOrthogBlockType(object):
     """
@@ -72,6 +75,7 @@ class BVOrthogBlockType(object):
     TSQRCHOL = BV_ORTHOG_BLOCK_TSQRCHOL
     SVQB     = BV_ORTHOG_BLOCK_SVQB
 
+
 class BVMatMultType(object):
     """
     BV mat-mult types.
@@ -85,6 +89,7 @@ class BVMatMultType(object):
     """
     VECS     = BV_MATMULT_VECS
     MAT      = BV_MATMULT_MAT
+
 
 class BVSVDMethod(object):
     """
@@ -105,6 +110,7 @@ class BVSVDMethod(object):
     QR_CAA   = BV_SVD_METHOD_QR_CAA
 
 # -----------------------------------------------------------------------------
+
 
 cdef class BV(Object):
 
@@ -206,7 +212,7 @@ cdef class BV(Object):
         slepc.BVView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( BVView(self.bv, vwr) )
+        CHKERR(BVView(self.bv, vwr))
 
     def destroy(self) -> Self:
         """
@@ -218,7 +224,7 @@ cdef class BV(Object):
         --------
         slepc.BVDestroy
         """
-        CHKERR( BVDestroy(&self.bv) )
+        CHKERR(BVDestroy(&self.bv))
         self.bv = NULL
         return self
 
@@ -240,8 +246,8 @@ cdef class BV(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcBV newbv = NULL
-        CHKERR( BVCreate(ccomm, &newbv) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.bv = newbv
+        CHKERR(BVCreate(ccomm, &newbv))
+        CHKERR(SlepcCLEAR(self.obj)); self.bv = newbv
         return self
 
     def createFromMat(self, Mat A) -> Self:
@@ -268,8 +274,8 @@ cdef class BV(Object):
         create, createMat, slepc.BVCreateFromMat
         """
         cdef SlepcBV newbv = NULL
-        CHKERR( BVCreateFromMat(A.mat, &newbv) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.bv = newbv
+        CHKERR(BVCreateFromMat(A.mat, &newbv))
+        CHKERR(SlepcCLEAR(self.obj)); self.bv = newbv
         return self
 
     def createMat(self) -> Mat:
@@ -293,7 +299,7 @@ cdef class BV(Object):
         createFromMat, createVec, getMat, slepc.BVCreateMat
         """
         cdef Mat mat = Mat()
-        CHKERR( BVCreateMat(self.bv, &mat.mat) )
+        CHKERR(BVCreateMat(self.bv, &mat.mat))
         return mat
 
     def duplicate(self) -> BV:
@@ -317,7 +323,7 @@ cdef class BV(Object):
         duplicateResize, slepc.BVDuplicate
         """
         cdef BV bv = type(self)()
-        CHKERR( BVDuplicate(self.bv, &bv.bv) )
+        CHKERR(BVDuplicate(self.bv, &bv.bv))
         return bv
 
     def duplicateResize(self, m: int) -> BV:
@@ -348,7 +354,7 @@ cdef class BV(Object):
         """
         cdef BV bv = type(self)()
         cdef PetscInt ival = asInt(m)
-        CHKERR( BVDuplicateResize(self.bv, ival, &bv.bv) )
+        CHKERR(BVDuplicateResize(self.bv, ival, &bv.bv))
         return bv
 
     def copy(self, BV result=None) -> BV:
@@ -381,8 +387,8 @@ cdef class BV(Object):
         if result is None:
             result = type(self)()
         if result.bv == NULL:
-            CHKERR( BVDuplicate(self.bv, &result.bv) )
-        CHKERR( BVCopy(self.bv, result.bv) )
+            CHKERR(BVDuplicate(self.bv, &result.bv))
+        CHKERR(BVCopy(self.bv, result.bv))
         return result
 
     def setType(self, bv_type: Type | str) -> None:
@@ -402,7 +408,7 @@ cdef class BV(Object):
         """
         cdef SlepcBVType cval = NULL
         bv_type = str2bytes(bv_type, &cval)
-        CHKERR( BVSetType(self.bv, cval) )
+        CHKERR(BVSetType(self.bv, cval))
 
     def getType(self) -> str:
         """
@@ -420,7 +426,7 @@ cdef class BV(Object):
         setType, slepc.BVGetType
         """
         cdef SlepcBVType bv_type = NULL
-        CHKERR( BVGetType(self.bv, &bv_type) )
+        CHKERR(BVGetType(self.bv, &bv_type))
         return bytes2str(bv_type)
 
     def setSizes(self, sizes: LayoutSizeSpec, m: int) -> None:
@@ -449,7 +455,7 @@ cdef class BV(Object):
         cdef PetscInt n=0, N=0
         cdef PetscInt ival = asInt(m)
         BV_Sizes(sizes, &n, &N)
-        CHKERR( BVSetSizes(self.bv, n, N, ival) )
+        CHKERR(BVSetSizes(self.bv, n, N, ival))
 
     def setSizesFromVec(self, Vec w, m: int) -> None:
         """
@@ -472,7 +478,7 @@ cdef class BV(Object):
         setSizes, getSizes, slepc.BVSetSizesFromVec
         """
         cdef PetscInt ival = asInt(m)
-        CHKERR( BVSetSizesFromVec(self.bv, w.vec, ival) )
+        CHKERR(BVSetSizesFromVec(self.bv, w.vec, ival))
 
     def getSizes(self) -> tuple[LayoutSizeSpec, int]:
         """
@@ -492,7 +498,7 @@ cdef class BV(Object):
         setSizes, setSizesFromVec, slepc.BVGetSizes
         """
         cdef PetscInt n=0, N=0, m=0
-        CHKERR( BVGetSizes(self.bv, &n, &N, &m) )
+        CHKERR(BVGetSizes(self.bv, &n, &N, &m))
         return ((toInt(n), toInt(N)), toInt(m))
 
     def setLeadingDimension(self, ld: int) -> None:
@@ -515,7 +521,7 @@ cdef class BV(Object):
         getLeadingDimension, slepc.BVSetLeadingDimension
         """
         cdef PetscInt val = asInt(ld)
-        CHKERR( BVSetLeadingDimension(self.bv, val) )
+        CHKERR(BVSetLeadingDimension(self.bv, val))
 
     def getLeadingDimension(self) -> int:
         """
@@ -540,7 +546,7 @@ cdef class BV(Object):
         setLeadingDimension, slepc.BVGetLeadingDimension
         """
         cdef PetscInt val = 0
-        CHKERR( BVGetLeadingDimension(self.bv, &val) )
+        CHKERR(BVGetLeadingDimension(self.bv, &val))
         return toInt(val)
 
     def getArray(self, readonly: bool = False) -> ArrayScalar:
@@ -613,7 +619,7 @@ cdef class BV(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( BVSetOptionsPrefix(self.bv, cval) )
+        CHKERR(BVSetOptionsPrefix(self.bv, cval))
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
@@ -632,7 +638,7 @@ cdef class BV(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( BVAppendOptionsPrefix(self.bv, cval) )
+        CHKERR(BVAppendOptionsPrefix(self.bv, cval))
 
     def getOptionsPrefix(self) -> str:
         """
@@ -650,7 +656,7 @@ cdef class BV(Object):
         setOptionsPrefix, appendOptionsPrefix, slepc.BVGetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( BVGetOptionsPrefix(self.bv, &prefix) )
+        CHKERR(BVGetOptionsPrefix(self.bv, &prefix))
         return bytes2str(prefix)
 
     def setFromOptions(self) -> None:
@@ -668,7 +674,7 @@ cdef class BV(Object):
         --------
         setOptionsPrefix, slepc.BVSetFromOptions
         """
-        CHKERR( BVSetFromOptions(self.bv) )
+        CHKERR(BVSetFromOptions(self.bv))
 
     #
 
@@ -698,7 +704,7 @@ cdef class BV(Object):
         cdef SlepcBVOrthogRefineType val2 = BV_ORTHOG_REFINE_IFNEEDED
         cdef SlepcBVOrthogBlockType val3 = BV_ORTHOG_BLOCK_GS
         cdef PetscReal rval = PETSC_DEFAULT
-        CHKERR( BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3) )
+        CHKERR(BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3))
         return (val1, val2, toReal(rval), val3)
 
     def setOrthogonalization(
@@ -750,12 +756,12 @@ cdef class BV(Object):
         cdef SlepcBVOrthogRefineType val2 = BV_ORTHOG_REFINE_IFNEEDED
         cdef SlepcBVOrthogBlockType val3 = BV_ORTHOG_BLOCK_GS
         cdef PetscReal rval = PETSC_CURRENT
-        CHKERR( BVGetOrthogonalization(self.bv, &val1, &val2, NULL, &val3) )
+        CHKERR(BVGetOrthogonalization(self.bv, &val1, &val2, NULL, &val3))
         if otype  is not None: val1 = otype
         if refine is not None: val2 = refine
         if block  is not None: val3 = block
         if eta    is not None: rval = asReal(eta)
-        CHKERR( BVSetOrthogonalization(self.bv, val1, val2, rval, val3) )
+        CHKERR(BVSetOrthogonalization(self.bv, val1, val2, rval, val3))
 
     def getMatMultMethod(self) -> MatMultType:
         """
@@ -773,7 +779,7 @@ cdef class BV(Object):
         matMult, setMatMultMethod, slepc.BVGetMatMultMethod
         """
         cdef SlepcBVMatMultType val = BV_MATMULT_MAT
-        CHKERR( BVGetMatMultMethod(self.bv, &val) )
+        CHKERR(BVGetMatMultMethod(self.bv, &val))
         return val
 
     def setMatMultMethod(self, method: MatMultType) -> None:
@@ -792,7 +798,7 @@ cdef class BV(Object):
         matMult, getMatMultMethod, slepc.BVSetMatMultMethod
         """
         cdef SlepcBVMatMultType val = method
-        CHKERR( BVSetMatMultMethod(self.bv, val) )
+        CHKERR(BVSetMatMultMethod(self.bv, val))
 
     #
 
@@ -815,9 +821,9 @@ cdef class BV(Object):
         """
         cdef Mat B = Mat()
         cdef PetscBool indef = PETSC_FALSE
-        CHKERR( BVGetMatrix(self.bv, &B.mat, &indef) )
+        CHKERR(BVGetMatrix(self.bv, &B.mat, &indef))
         if B.mat:
-            CHKERR( PetscINCREF(B.obj) )
+            CHKERR(PetscINCREF(B.obj))
             return (B, toBool(indef))
         else:
             return (None, False)
@@ -858,7 +864,7 @@ cdef class BV(Object):
         """
         cdef PetscMat m = <PetscMat>NULL if B is None else B.mat
         cdef PetscBool tval = PETSC_TRUE if indef else PETSC_FALSE
-        CHKERR( BVSetMatrix(self.bv, m, tval) )
+        CHKERR(BVSetMatrix(self.bv, m, tval))
 
     def applyMatrix(self, Vec x, Vec y) -> None:
         """
@@ -882,7 +888,7 @@ cdef class BV(Object):
         --------
         setMatrix, slepc.BVApplyMatrix
         """
-        CHKERR( BVApplyMatrix(self.bv, x.vec, y.vec) )
+        CHKERR(BVApplyMatrix(self.bv, x.vec, y.vec))
 
     def setActiveColumns(self, l: int, k: int) -> None:
         """
@@ -919,7 +925,7 @@ cdef class BV(Object):
         """
         cdef PetscInt ival1 = asInt(l)
         cdef PetscInt ival2 = asInt(k)
-        CHKERR( BVSetActiveColumns(self.bv, ival1, ival2) )
+        CHKERR(BVSetActiveColumns(self.bv, ival1, ival2))
 
     def getActiveColumns(self) -> tuple[int, int]:
         """
@@ -939,7 +945,7 @@ cdef class BV(Object):
         setActiveColumns, slepc.BVGetActiveColumns
         """
         cdef PetscInt l=0, k=0
-        CHKERR( BVGetActiveColumns(self.bv, &l, &k) )
+        CHKERR(BVGetActiveColumns(self.bv, &l, &k))
         return (toInt(l), toInt(k))
 
     def scaleColumn(self, j: int, alpha: Scalar) -> None:
@@ -961,7 +967,7 @@ cdef class BV(Object):
         """
         cdef PetscInt ival = asInt(j)
         cdef PetscScalar sval = asScalar(alpha)
-        CHKERR( BVScaleColumn(self.bv, ival, sval) )
+        CHKERR(BVScaleColumn(self.bv, ival, sval))
 
     def scale(self, alpha: Scalar) -> None:
         """
@@ -983,7 +989,7 @@ cdef class BV(Object):
         scaleColumn, setActiveColumns, slepc.BVScale
         """
         cdef PetscScalar sval = asScalar(alpha)
-        CHKERR( BVScale(self.bv, sval) )
+        CHKERR(BVScale(self.bv, sval))
 
     def insertVec(self, j: int, Vec w) -> None:
         """
@@ -1003,7 +1009,7 @@ cdef class BV(Object):
         insertVecs, slepc.BVInsertVec
         """
         cdef PetscInt ival = asInt(j)
-        CHKERR( BVInsertVec(self.bv, ival, w.vec) )
+        CHKERR(BVInsertVec(self.bv, ival, w.vec))
 
     def insertVecs(self, s: int, W: Vec | list[Vec], orth: bool = False) -> int:
         """
@@ -1041,11 +1047,11 @@ cdef class BV(Object):
         cdef PetscInt ival = asInt(s)
         cdef PetscVec *ws = NULL
         cdef Py_ssize_t i = 0, ns = len(W)
-        cdef tmp = allocate(<size_t>ns*sizeof(PetscVec),<void**>&ws)
+        cdef unused = allocate(<size_t>ns*sizeof(PetscVec), <void**>&ws)
         for i in range(ns): ws[i] = (<Vec?>W[i]).vec
         cdef PetscInt m = <PetscInt>ns
         cdef PetscBool tval = PETSC_TRUE if orth else PETSC_FALSE
-        CHKERR( BVInsertVecs(self.bv, ival, &m, ws, tval) )
+        CHKERR(BVInsertVecs(self.bv, ival, &m, ws, tval))
         return toInt(m)
 
     def insertConstraints(self, C: Vec | list[Vec]) -> int:
@@ -1092,10 +1098,10 @@ cdef class BV(Object):
         if isinstance(C, Vec): C = [C]
         cdef PetscVec *cs = NULL
         cdef Py_ssize_t i = 0, nc = len(C)
-        cdef tmp = allocate(<size_t>nc*sizeof(PetscVec),<void**>&cs)
+        cdef unused = allocate(<size_t>nc*sizeof(PetscVec), <void**>&cs)
         for i in range(nc): cs[i] = (<Vec?>C[i]).vec
         cdef PetscInt m = <PetscInt>nc
-        CHKERR( BVInsertConstraints(self.bv, &m, cs) )
+        CHKERR(BVInsertConstraints(self.bv, &m, cs))
         return toInt(m)
 
     def setNumConstraints(self, nc: int) -> None:
@@ -1123,7 +1129,7 @@ cdef class BV(Object):
         insertConstraints, getNumConstraints, slepc.BVSetNumConstraints
         """
         cdef PetscInt val = asInt(nc)
-        CHKERR( BVSetNumConstraints(self.bv, val) )
+        CHKERR(BVSetNumConstraints(self.bv, val))
 
     def getNumConstraints(self) -> int:
         """
@@ -1141,7 +1147,7 @@ cdef class BV(Object):
         insertConstraints, setNumConstraints, slepc.BVGetNumConstraints
         """
         cdef PetscInt val = 0
-        CHKERR( BVGetNumConstraints(self.bv, &val) )
+        CHKERR(BVGetNumConstraints(self.bv, &val))
         return toInt(val)
 
     def createVec(self) -> Vec:
@@ -1160,7 +1166,7 @@ cdef class BV(Object):
         createMat, setVecType, slepc.BVCreateVec
         """
         cdef Vec v = Vec()
-        CHKERR( BVCreateVec(self.bv, &v.vec) )
+        CHKERR(BVCreateVec(self.bv, &v.vec))
         return v
 
     def setVecType(self, vec_type: petsc4py.PETSc.Vec.Type | str) -> None:
@@ -1186,7 +1192,7 @@ cdef class BV(Object):
         """
         cdef PetscVecType cval = NULL
         vec_type = str2bytes(vec_type, &cval)
-        CHKERR( BVSetVecType(self.bv, cval) )
+        CHKERR(BVSetVecType(self.bv, cval))
 
     def getVecType(self) -> str:
         """
@@ -1204,7 +1210,7 @@ cdef class BV(Object):
         createVec, setVecType, slepc.BVGetVecType
         """
         cdef PetscVecType cval = NULL
-        CHKERR( BVGetVecType(self.bv, &cval) )
+        CHKERR(BVGetVecType(self.bv, &cval))
         return bytes2str(cval)
 
     def copyVec(self, j: int, Vec v) -> None:
@@ -1230,7 +1236,7 @@ cdef class BV(Object):
         copy, copyColumn, slepc.BVCopyVec
         """
         cdef PetscInt ival = asInt(j)
-        CHKERR( BVCopyVec(self.bv, ival, v.vec) )
+        CHKERR(BVCopyVec(self.bv, ival, v.vec))
 
     def copyColumn(self, j: int, i: int) -> None:
         """
@@ -1251,10 +1257,10 @@ cdef class BV(Object):
         """
         cdef PetscInt ival1 = asInt(j)
         cdef PetscInt ival2 = asInt(i)
-        CHKERR( BVCopyColumn(self.bv, ival1, ival2) )
+        CHKERR(BVCopyColumn(self.bv, ival1, ival2))
 
     def setDefiniteTolerance(self, deftol: float) -> None:
-        """
+        r"""
         Set the tolerance to be used when checking a definite inner product.
 
         Logically collective.
@@ -1280,7 +1286,7 @@ cdef class BV(Object):
         setMatrix, getDefiniteTolerance, slepc.BVSetDefiniteTolerance
         """
         cdef PetscReal val = asReal(deftol)
-        CHKERR( BVSetDefiniteTolerance(self.bv, val) )
+        CHKERR(BVSetDefiniteTolerance(self.bv, val))
 
     def getDefiniteTolerance(self) -> float:
         """
@@ -1298,7 +1304,7 @@ cdef class BV(Object):
         setDefiniteTolerance, slepc.BVGetDefiniteTolerance
         """
         cdef PetscReal val = 0
-        CHKERR( BVGetDefiniteTolerance(self.bv, &val) )
+        CHKERR(BVGetDefiniteTolerance(self.bv, &val))
         return toReal(val)
 
     def dotVec(self, Vec v) -> ArrayScalar:
@@ -1333,9 +1339,9 @@ cdef class BV(Object):
         """
         l, k = self.getActiveColumns()
         cdef PetscScalar* mval = NULL
-        cdef tmp = allocate(<size_t>(k - l)*sizeof(PetscScalar), <void**>&mval)
+        cdef unused = allocate(<size_t>(k - l)*sizeof(PetscScalar), <void**>&mval)
 
-        CHKERR( BVDotVec(self.bv, v.vec, mval) )
+        CHKERR(BVDotVec(self.bv, v.vec, mval))
 
         cdef object m = None
         m = array_s(k - l, mval)
@@ -1373,9 +1379,9 @@ cdef class BV(Object):
         cdef PetscInt ival = asInt(j)
         l, k = self.getActiveColumns()
         cdef PetscScalar* mval = NULL
-        cdef tmp = allocate(<size_t>(k - l)*sizeof(PetscScalar), <void**>&mval)
+        cdef unused = allocate(<size_t>(k - l)*sizeof(PetscScalar), <void**>&mval)
 
-        CHKERR( BVDotColumn(self.bv, ival, mval) )
+        CHKERR(BVDotColumn(self.bv, ival, mval))
 
         cdef object m = None
         m = array_s(k - l, mval)
@@ -1415,8 +1421,8 @@ cdef class BV(Object):
         """
         cdef Vec v = Vec()
         cdef PetscInt ival = asInt(j)
-        CHKERR( BVGetColumn(self.bv, j, &v.vec) )
-        CHKERR( PetscINCREF(v.obj) )
+        CHKERR(BVGetColumn(self.bv, ival, &v.vec))
+        CHKERR(PetscINCREF(v.obj))
         return v
 
     def restoreColumn(self, j: int, Vec v) -> None:
@@ -1441,8 +1447,8 @@ cdef class BV(Object):
         getColumn, slepc.BVRestoreColumn
         """
         cdef PetscInt ival = asInt(j)
-        CHKERR( PetscObjectDereference(<PetscObject>v.vec) )
-        CHKERR( BVRestoreColumn(self.bv, ival, &v.vec) )
+        CHKERR(PetscObjectDereference(<PetscObject>v.vec))
+        CHKERR(BVRestoreColumn(self.bv, ival, &v.vec))
 
     def getMat(self) -> Mat:
         """
@@ -1469,8 +1475,8 @@ cdef class BV(Object):
         restoreMat, createMat, getArray, slepc.BVGetMat
         """
         cdef Mat A = Mat()
-        CHKERR( BVGetMat(self.bv, &A.mat) )
-        CHKERR( PetscINCREF(A.obj) )
+        CHKERR(BVGetMat(self.bv, &A.mat))
+        CHKERR(PetscINCREF(A.obj))
         return A
 
     def restoreMat(self, Mat A) -> None:
@@ -1494,8 +1500,8 @@ cdef class BV(Object):
         --------
         getMat, slepc.BVRestoreMat
         """
-        CHKERR( PetscObjectDereference(<PetscObject>A.mat) )
-        CHKERR( BVRestoreMat(self.bv, &A.mat) )
+        CHKERR(PetscObjectDereference(<PetscObject>A.mat))
+        CHKERR(BVRestoreMat(self.bv, &A.mat))
 
     def dot(self, BV Y) -> Mat:
         """
@@ -1540,10 +1546,10 @@ cdef class BV(Object):
         """
         cdef BV X = self
         cdef PetscInt ky=0, kx=0
-        CHKERR( BVGetActiveColumns(Y.bv, NULL, &ky) )
-        CHKERR( BVGetActiveColumns(X.bv, NULL, &kx) )
+        CHKERR(BVGetActiveColumns(Y.bv, NULL, &ky))
+        CHKERR(BVGetActiveColumns(X.bv, NULL, &kx))
         cdef Mat M = Mat().createDense((ky, kx), comm=COMM_SELF).setUp()
-        CHKERR( BVDot(X.bv, Y.bv, M.mat) )
+        CHKERR(BVDot(X.bv, Y.bv, M.mat))
         return M
 
     def matProject(self, Mat A: Mat | None, BV Y) -> Mat:
@@ -1588,11 +1594,11 @@ cdef class BV(Object):
         """
         cdef BV X = self
         cdef PetscInt  kx=0, ky=0
-        CHKERR( BVGetActiveColumns(X.bv, NULL, &kx) )
-        CHKERR( BVGetActiveColumns(Y.bv, NULL, &ky) )
+        CHKERR(BVGetActiveColumns(X.bv, NULL, &kx))
+        CHKERR(BVGetActiveColumns(Y.bv, NULL, &ky))
         cdef PetscMat Amat = <PetscMat>NULL if A is None else A.mat
         cdef Mat M = Mat().createDense((ky, kx), comm=COMM_SELF).setUp()
-        CHKERR( BVMatProject(X.bv, Amat, Y.bv, M.mat) )
+        CHKERR(BVMatProject(X.bv, Amat, Y.bv, M.mat))
         return M
 
     def matMult(self, Mat A, BV Y=None) -> BV:
@@ -1632,16 +1638,16 @@ cdef class BV(Object):
         cdef PetscReal rval = PETSC_DEFAULT
         if Y is None: Y = BV()
         if Y.bv == NULL:
-            CHKERR( BVGetType(self.bv, &bv_type) )
-            CHKERR( MatGetLocalSize(A.mat, &n, NULL) )
-            CHKERR( MatGetSize(A.mat, &N, NULL) )
-            CHKERR( BVGetSizes(self.bv, NULL, NULL, &m) )
-            CHKERR( BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3) )
-            CHKERR( BVCreate(comm, &Y.bv) )
-            CHKERR( BVSetType(Y.bv, bv_type) )
-            CHKERR( BVSetSizes(Y.bv, n, N, m) )
-            CHKERR( BVSetOrthogonalization(Y.bv, val1, val2, rval, val3) )
-        CHKERR( BVMatMult(self.bv, A.mat, Y.bv) )
+            CHKERR(BVGetType(self.bv, &bv_type))
+            CHKERR(MatGetLocalSize(A.mat, &n, NULL))
+            CHKERR(MatGetSize(A.mat, &N, NULL))
+            CHKERR(BVGetSizes(self.bv, NULL, NULL, &m))
+            CHKERR(BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3))
+            CHKERR(BVCreate(comm, &Y.bv))
+            CHKERR(BVSetType(Y.bv, bv_type))
+            CHKERR(BVSetSizes(Y.bv, n, N, m))
+            CHKERR(BVSetOrthogonalization(Y.bv, val1, val2, rval, val3))
+        CHKERR(BVMatMult(self.bv, A.mat, Y.bv))
         return Y
 
     def matMultTranspose(self, Mat A, BV Y=None) -> BV:
@@ -1680,16 +1686,16 @@ cdef class BV(Object):
         cdef PetscReal rval = PETSC_DEFAULT
         if Y is None: Y = BV()
         if Y.bv == NULL:
-            CHKERR( BVGetType(self.bv, &bv_type) )
-            CHKERR( MatGetLocalSize(A.mat, NULL, &n) )
-            CHKERR( MatGetSize(A.mat, NULL, &N) )
-            CHKERR( BVGetSizes(self.bv, NULL, NULL, &m) )
-            CHKERR( BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3) )
-            CHKERR( BVCreate(comm, &Y.bv) )
-            CHKERR( BVSetType(Y.bv, bv_type) )
-            CHKERR( BVSetSizes(Y.bv, n, N, m) )
-            CHKERR( BVSetOrthogonalization(Y.bv, val1, val2, rval, val3) )
-        CHKERR( BVMatMultTranspose(self.bv, A.mat, Y.bv) )
+            CHKERR(BVGetType(self.bv, &bv_type))
+            CHKERR(MatGetLocalSize(A.mat, NULL, &n))
+            CHKERR(MatGetSize(A.mat, NULL, &N))
+            CHKERR(BVGetSizes(self.bv, NULL, NULL, &m))
+            CHKERR(BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3))
+            CHKERR(BVCreate(comm, &Y.bv))
+            CHKERR(BVSetType(Y.bv, bv_type))
+            CHKERR(BVSetSizes(Y.bv, n, N, m))
+            CHKERR(BVSetOrthogonalization(Y.bv, val1, val2, rval, val3))
+        CHKERR(BVMatMultTranspose(self.bv, A.mat, Y.bv))
         return Y
 
     def matMultHermitianTranspose(self, Mat A, BV Y=None) -> BV:
@@ -1728,16 +1734,16 @@ cdef class BV(Object):
         cdef PetscReal rval = PETSC_DEFAULT
         if Y is None: Y = BV()
         if Y.bv == NULL:
-            CHKERR( BVGetType(self.bv, &bv_type) )
-            CHKERR( MatGetLocalSize(A.mat, NULL, &n) )
-            CHKERR( MatGetSize(A.mat, NULL, &N) )
-            CHKERR( BVGetSizes(self.bv, NULL, NULL, &m) )
-            CHKERR( BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3) )
-            CHKERR( BVCreate(comm, &Y.bv) )
-            CHKERR( BVSetType(Y.bv, bv_type) )
-            CHKERR( BVSetSizes(Y.bv, n, N, m) )
-            CHKERR( BVSetOrthogonalization(Y.bv, val1, val2, rval, val3) )
-        CHKERR( BVMatMultHermitianTranspose(self.bv, A.mat, Y.bv) )
+            CHKERR(BVGetType(self.bv, &bv_type))
+            CHKERR(MatGetLocalSize(A.mat, NULL, &n))
+            CHKERR(MatGetSize(A.mat, NULL, &N))
+            CHKERR(BVGetSizes(self.bv, NULL, NULL, &m))
+            CHKERR(BVGetOrthogonalization(self.bv, &val1, &val2, &rval, &val3))
+            CHKERR(BVCreate(comm, &Y.bv))
+            CHKERR(BVSetType(Y.bv, bv_type))
+            CHKERR(BVSetSizes(Y.bv, n, N, m))
+            CHKERR(BVSetOrthogonalization(Y.bv, val1, val2, rval, val3))
+        CHKERR(BVMatMultHermitianTranspose(self.bv, A.mat, Y.bv))
         return Y
 
     def matMultColumn(self, Mat A, j: int) -> None:
@@ -1760,7 +1766,7 @@ cdef class BV(Object):
         matMult, slepc.BVMatMultColumn
         """
         cdef PetscInt ival = asInt(j)
-        CHKERR( BVMatMultColumn(self.bv, A.mat, ival) )
+        CHKERR(BVMatMultColumn(self.bv, A.mat, ival))
 
     def matMultTransposeColumn(self, Mat A, j: int) -> None:
         """
@@ -1782,7 +1788,7 @@ cdef class BV(Object):
         matMultColumn, slepc.BVMatMultTransposeColumn
         """
         cdef PetscInt ival = asInt(j)
-        CHKERR( BVMatMultTransposeColumn(self.bv, A.mat, ival) )
+        CHKERR(BVMatMultTransposeColumn(self.bv, A.mat, ival))
 
     def matMultHermitianTransposeColumn(self, Mat A, j: int) -> None:
         """
@@ -1804,10 +1810,10 @@ cdef class BV(Object):
         matMultColumn, slepc.BVMatMultHermitianTransposeColumn
         """
         cdef PetscInt ival = asInt(j)
-        CHKERR( BVMatMultHermitianTransposeColumn(self.bv, A.mat, ival) )
+        CHKERR(BVMatMultHermitianTransposeColumn(self.bv, A.mat, ival))
 
     def mult(self, delta: Scalar, gamma: Scalar, BV X, Mat Q or None: Mat | None) -> None:
-        """
+        r"""
         Compute :math:`Y = \gamma Y + \delta X Q`.
 
         Logically collective.
@@ -1835,7 +1841,7 @@ cdef class BV(Object):
         cdef PetscScalar sval1 = asScalar(delta)
         cdef PetscScalar sval2 = asScalar(gamma)
         cdef PetscMat Qmat = <PetscMat>NULL if Q is None else Q.mat
-        CHKERR( BVMult(self.bv, sval1, sval2, X.bv, Qmat) )
+        CHKERR(BVMult(self.bv, sval1, sval2, X.bv, Qmat))
 
     def multInPlace(self, Mat Q, s: int, e: int) -> None:
         """
@@ -1858,10 +1864,10 @@ cdef class BV(Object):
         """
         cdef PetscInt ival1 = asInt(s)
         cdef PetscInt ival2 = asInt(e)
-        CHKERR( BVMultInPlace(self.bv, Q.mat, ival1, ival2) )
+        CHKERR(BVMultInPlace(self.bv, Q.mat, ival1, ival2))
 
     def multColumn(self, delta: Scalar, gamma: Scalar, j: int, q: Sequence[Scalar]) -> None:
-        """
+        r"""
         Compute :math:`y = \gamma y + \delta X q`.
 
         Logically collective.
@@ -1889,15 +1895,15 @@ cdef class BV(Object):
         cdef PetscInt ival = asInt(j)
         cdef PetscInt nq = 0
         cdef PetscScalar* qval = NULL
-        cdef tmp = iarray_s(q, &nq, &qval)
         cdef PetscInt l=0, k=0
-        CHKERR( BVGetActiveColumns(self.bv, &l, &k) )
+        q = iarray_s(q, &nq, &qval)
+        CHKERR(BVGetActiveColumns(self.bv, &l, &k))
         if nq != k-l:
             raise ValueError("wrong number of coefficients")
-        CHKERR( BVMultColumn(self.bv, sval1, sval2, ival, qval) )
+        CHKERR(BVMultColumn(self.bv, sval1, sval2, ival, qval))
 
     def multVec(self, delta: Scalar, gamma: Scalar, Vec y, q: Sequence[Scalar]) -> None:
-        """
+        r"""
         Compute :math:`y = \gamma y + \delta X q`.
 
         Logically collective.
@@ -1921,15 +1927,15 @@ cdef class BV(Object):
         cdef PetscScalar sval2 = asScalar(gamma)
         cdef PetscInt nq = 0
         cdef PetscScalar* qval = NULL
-        cdef tmp = iarray_s(q, &nq, &qval)
         cdef PetscInt l=0, k=0
-        CHKERR( BVGetActiveColumns(self.bv, &l, &k) )
+        q = iarray_s(q, &nq, &qval)
+        CHKERR(BVGetActiveColumns(self.bv, &l, &k))
         if nq != k-l:
             raise ValueError("wrong number of coefficients")
-        CHKERR( BVMultVec(self.bv, sval1, sval2, y.vec, qval) )
+        CHKERR(BVMultVec(self.bv, sval1, sval2, y.vec, qval))
 
     def normColumn(self, j: int, norm_type: NormType | None = None) -> float:
-        """
+        r"""
         Compute the vector norm of a selected column.
 
         Collective.
@@ -1964,7 +1970,7 @@ cdef class BV(Object):
         cdef PetscNormType ntype = PETSC_NORM_2
         if norm_type is not None: ntype = norm_type
         cdef PetscReal norm = 0
-        CHKERR( BVNormColumn(self.bv, ival, ntype, &norm) )
+        CHKERR(BVNormColumn(self.bv, ival, ntype, &norm))
         return toReal(norm)
 
     def norm(self, norm_type: NormType | None = None) -> float:
@@ -1999,7 +2005,7 @@ cdef class BV(Object):
         cdef PetscNormType ntype = PETSC_NORM_FROBENIUS
         if norm_type is not None: ntype = norm_type
         cdef PetscReal norm = 0
-        CHKERR( BVNorm(self.bv, ntype, &norm) )
+        CHKERR(BVNorm(self.bv, ntype, &norm))
         return toReal(norm)
 
     def resize(self, m: int, copy: bool = True) -> None:
@@ -2026,7 +2032,7 @@ cdef class BV(Object):
         """
         cdef PetscInt ival = asInt(m)
         cdef PetscBool tval = PETSC_TRUE if copy else PETSC_FALSE
-        CHKERR( BVResize(self.bv, ival, tval) )
+        CHKERR(BVResize(self.bv, ival, tval))
 
     def setRandom(self) -> None:
         """
@@ -2042,7 +2048,7 @@ cdef class BV(Object):
         --------
         setRandomContext, setRandomColumn, setRandomNormal, slepc.BVSetRandom
         """
-        CHKERR( BVSetRandom(self.bv) )
+        CHKERR(BVSetRandom(self.bv))
 
     def setRandomNormal(self) -> None:
         """
@@ -2058,7 +2064,7 @@ cdef class BV(Object):
         --------
         setRandomContext, setRandom, setRandomSign, slepc.BVSetRandomNormal
         """
-        CHKERR( BVSetRandomNormal(self.bv) )
+        CHKERR(BVSetRandomNormal(self.bv))
 
     def setRandomSign(self) -> None:
         """
@@ -2074,7 +2080,7 @@ cdef class BV(Object):
         --------
         setRandomContext, setRandom, setRandomNormal, slepc.BVSetRandomSign
         """
-        CHKERR( BVSetRandomSign(self.bv) )
+        CHKERR(BVSetRandomSign(self.bv))
 
     def setRandomColumn(self, j: int) -> None:
         """
@@ -2092,7 +2098,7 @@ cdef class BV(Object):
         setRandomContext, setRandom, setRandomNormal, slepc.BVSetRandomColumn
         """
         cdef PetscInt ival = asInt(j)
-        CHKERR( BVSetRandomColumn(self.bv, ival) )
+        CHKERR(BVSetRandomColumn(self.bv, ival))
 
     def setRandomCond(self, condn: float) -> None:
         """
@@ -2112,7 +2118,7 @@ cdef class BV(Object):
         setRandomContext, setRandomSign, setRandomNormal, slepc.BVSetRandomCond
         """
         cdef PetscReal rval = asReal(condn)
-        CHKERR( BVSetRandomCond(self.bv, rval) )
+        CHKERR(BVSetRandomCond(self.bv, rval))
 
     def setRandomContext(self, Random rnd) -> None:
         """
@@ -2131,7 +2137,7 @@ cdef class BV(Object):
         --------
         getRandomContext, setRandom, setRandomColumn, slepc.BVSetRandomContext
         """
-        CHKERR( BVSetRandomContext(self.bv, rnd.rnd) )
+        CHKERR(BVSetRandomContext(self.bv, rnd.rnd))
 
     def getRandomContext(self) -> Random:
         """
@@ -2149,8 +2155,8 @@ cdef class BV(Object):
         setRandomContext, slepc.BVGetRandomContext
         """
         cdef Random rnd = Random()
-        CHKERR( BVGetRandomContext(self.bv, &rnd.rnd) )
-        CHKERR( PetscINCREF(rnd.obj) )
+        CHKERR(BVGetRandomContext(self.bv, &rnd.rnd))
+        CHKERR(PetscINCREF(rnd.obj))
         return rnd
 
     def orthogonalizeVec(self, Vec v) -> tuple[float, bool]:
@@ -2186,7 +2192,7 @@ cdef class BV(Object):
         """
         cdef PetscReal norm = 0
         cdef PetscBool ldep = PETSC_FALSE
-        CHKERR( BVOrthogonalizeVec(self.bv, v.vec, NULL, &norm, &ldep) )
+        CHKERR(BVOrthogonalizeVec(self.bv, v.vec, NULL, &norm, &ldep))
         return (toReal(norm), toBool(ldep))
 
     def orthogonalizeColumn(self, j: int) -> tuple[float, bool]:
@@ -2224,7 +2230,7 @@ cdef class BV(Object):
         cdef PetscInt ival = asInt(j)
         cdef PetscReal norm = 0
         cdef PetscBool ldep = PETSC_FALSE
-        CHKERR( BVOrthogonalizeColumn(self.bv, ival, NULL, &norm, &ldep) )
+        CHKERR(BVOrthogonalizeColumn(self.bv, ival, NULL, &norm, &ldep))
         return (toReal(norm), toBool(ldep))
 
     def orthonormalizeColumn(self, j: int, replace: bool = False) -> tuple[float, bool]:
@@ -2260,7 +2266,7 @@ cdef class BV(Object):
         if replace is not None: bval = asBool(replace)
         cdef PetscReal norm = 0
         cdef PetscBool ldep = PETSC_FALSE
-        CHKERR( BVOrthonormalizeColumn(self.bv, ival, bval, &norm, &ldep) )
+        CHKERR(BVOrthonormalizeColumn(self.bv, ival, bval, &norm, &ldep))
         return (toReal(norm), toBool(ldep))
 
     def orthogonalize(self, Mat R=None, **kargs: Any) -> None:
@@ -2286,7 +2292,7 @@ cdef class BV(Object):
         """
         if kargs: self.setOrthogonalization(**kargs)
         cdef PetscMat Rmat = <PetscMat>NULL if R is None else R.mat
-        CHKERR( BVOrthogonalize(self.bv, Rmat) )
+        CHKERR(BVOrthogonalize(self.bv, Rmat))
 
     #
 

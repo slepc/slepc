@@ -1,5 +1,6 @@
 import os
 import sys
+import enum
 import inspect
 import textwrap
 from sphinx.util import logging
@@ -114,7 +115,7 @@ def docstring(obj, fail=True):
 
     # warnings for docstrings that are not compliant
     if len(summary) > 79:
-        logger.warning(f'Summary for {obj} too long.')
+        logger.warning(f'Summary for {obj} exceeds 79 char limit.')
     if docbody:
         if not summary.endswith('.'):
             logger.warning(f'Summary for {obj} does not end with period.')
@@ -122,7 +123,9 @@ def docstring(obj, fail=True):
         lines = docbody.split('\n')
         for i, line in enumerate(lines):
             if len(line) > 79:
-                logger.warning(f'Line {i} for documentation of {obj} too long.')
+                logger.warning(
+                    f'Line {i} for documentation of {obj} exceeds 79 char limit.'
+                )
         if not cl:
             init = (
                 'Collective.',
@@ -144,15 +147,9 @@ def docstring(obj, fail=True):
         section = '\n'
         linkbody = f':sources:`{linktxt} {link} <{linkloc}>`'
         linkbody = f'{section}\n{linkbody}'
-        if docbody:
-            docbody = f'{docbody}\n\n{linkbody}'
-        else:
-            docbody = linkbody
+        docbody = f'{docbody}\n\n{linkbody}' if docbody else linkbody
 
-    if docbody:
-        doc = f'"""{summary}\n\n{docbody}\n\n"""'
-    else:
-        doc = f'"""{summary}"""'
+    doc = f'r"""{summary}\n\n{docbody}\n\n"""' if docbody else f'r"""{summary}"""'
     return textwrap.indent(doc, Lines.INDENT)
 
 
@@ -163,6 +160,13 @@ def visit_data(constant):
     init = f"_def({typename}, '{name}')"
     doc = f'#: {kind} ``{name}`` of type :class:`{typename}`'
     return f'{name}: {typename} = {init}  {doc}\n'
+
+
+def visit_enum(member):
+    name, value = member
+    typename = type(value).__name__
+    doc = f'#: Enum member ``{name}`` of ``{typename}``'
+    return f'{name} = {value.value}  {doc}\n'
 
 
 def visit_function(function):
@@ -194,7 +198,7 @@ def visit_property(prop, name=None):
     name = name or prop.fget.__name__
     rtype = sig.rsplit('->', 1)[-1].strip()
     sig = f'{name}(self) -> {rtype}'
-    doc = f'"""{prop.__doc__}"""'
+    doc = f'r"""{prop.__doc__}"""'
     doc = textwrap.indent(doc, Lines.INDENT)
     body = Lines.INDENT + '...'
     return f'@property\ndef {sig}:\n{doc}\n{body}\n'
@@ -228,6 +232,8 @@ def visit_class(cls, outer=None, done=None):
         '__enum2str',  # FIXME refactor implementation
         '_traceback_',  # FIXME maybe refactor?
     }
+    if isinstance(cls, type) and issubclass(cls, enum.Enum):
+        skip.update(set(cls.__dict__) - set(cls.__members__))
     special = {
         '__len__': '__len__(self) -> int',
         '__bool__': '__bool__(self) -> bool',
@@ -275,10 +281,9 @@ def visit_class(cls, outer=None, done=None):
                 continue
             if name in done:
                 continue
-            if dunder(name):
-                if name not in special and name not in override:
-                    done.add(name)
-                    continue
+            if dunder(name) and name not in special and name not in override:
+                done.add(name)
+                continue
             yield name
 
     for name in members(keys):
@@ -325,12 +330,16 @@ def visit_class(cls, outer=None, done=None):
 
         if is_constant(attr):
             done.add(name)
-            lines.add = visit_data((name, attr))
+            if isinstance(attr, enum.Enum):
+                lines.add = visit_enum((name, attr))
+            else:
+                lines.add = visit_data((name, attr))
             continue
 
     leftovers = [name for name in keys if name not in done and name not in skip]
     if leftovers:
-        raise RuntimeError(f'leftovers: {leftovers}')
+        msg = f'leftovers: {leftovers}'
+        raise RuntimeError(msg)
 
     lines.level -= 1
     return lines
@@ -438,19 +447,30 @@ def visit_module(module, done=None):
 
     leftovers = [name for name in keys if name not in done and name not in skip]
     if leftovers:
-        raise RuntimeError(f'leftovers: {leftovers}')
+        msg = f'leftovers: {leftovers}'
+        raise RuntimeError(msg)
     return lines
 
 
 IMPORTS = """
 from __future__ import annotations
 import sys
+from enum import IntEnum
 from typing import (
     Any,
     Union,
+    Literal,
     Optional,
+    NoReturn,
+    Final,
+)
+from typing import (
     Callable,
+    Hashable,
+    Iterable,
+    Iterator,
     Sequence,
+    Mapping,
 )
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -528,11 +548,11 @@ from .typing import *
 """
 
 
-def visit_slepc4py_SLEPc(done=None):
+def visit_slepc4py_SLEPc():
     from slepc4py import SLEPc
 
     lines = Lines()
-    lines.add = f'"""{SLEPc.__doc__}"""'
+    lines.add = f'r"""{SLEPc.__doc__}"""'
     lines.add = IMPORTS
     lines.add = ''
     lines.add = HELPERS
@@ -570,7 +590,8 @@ _sys_modules = {}
 def replace_module(module):
     name = module.__name__
     if name in _sys_modules:
-        raise RuntimeError(f'{name} in modules')
+        msg = f'{name} in modules'
+        raise RuntimeError(msg)
     _sys_modules[name] = sys.modules[name]
     sys.modules[name] = module
     return _sys_modules[name]
@@ -579,7 +600,8 @@ def replace_module(module):
 def restore_module(module):
     name = module.__name__
     if name not in _sys_modules:
-        raise RuntimeError(f'{name} not in modules')
+        msg = f'{name} not in modules'
+        raise RuntimeError(msg)
     sys.modules[name] = _sys_modules[name]
     del _sys_modules[name]
 
@@ -590,7 +612,7 @@ def annotate(dest, source):
     except AttributeError:
         pass
     if isinstance(dest, type):
-        for name in dest.__dict__.keys():
+        for name in dest.__dict__:
             if hasattr(source, name):
                 obj = getattr(dest, name)
                 annotate(obj, getattr(source, name))

@@ -82,165 +82,165 @@ cdef extern from * nogil:
 
     ctypedef PetscErrorCode (*SlepcPEPCtxDel)(void*)
     ctypedef PetscErrorCode (*SlepcPEPStoppingFunction)(SlepcPEP,
-                                             PetscInt,
-                                             PetscInt,
-                                             PetscInt,
-                                             PetscInt,
-                                             SlepcPEPConvergedReason*,
-                                             void*) except PETSC_ERR_PYTHON
+                                                        PetscInt,
+                                                        PetscInt,
+                                                        PetscInt,
+                                                        PetscInt,
+                                                        SlepcPEPConvergedReason*,
+                                                        void*) except PETSC_ERR_PYTHON
     ctypedef PetscErrorCode (*SlepcPEPMonitorFunction)(SlepcPEP,
-                                            PetscInt,
-                                            PetscInt,
-                                            PetscScalar*,
-                                            PetscScalar*,
-                                            PetscReal*,
-                                            PetscInt,
-                                            void*) except PETSC_ERR_PYTHON
+                                                       PetscInt,
+                                                       PetscInt,
+                                                       PetscScalar*,
+                                                       PetscScalar*,
+                                                       PetscReal*,
+                                                       PetscInt,
+                                                       void*) except PETSC_ERR_PYTHON
     ctypedef PetscErrorCode (*SlepcPEPComparisonFunction)(PetscScalar,
-                                               PetscScalar,
-                                               PetscScalar,
-                                               PetscScalar,
-                                               PetscInt*,
-                                               void*) except PETSC_ERR_PYTHON
+                                                          PetscScalar,
+                                                          PetscScalar,
+                                                          PetscScalar,
+                                                          PetscInt*,
+                                                          void*) except PETSC_ERR_PYTHON
 
-    PetscErrorCode PEPCreate(MPI_Comm,SlepcPEP*)
+    PetscErrorCode PEPCreate(MPI_Comm, SlepcPEP*)
     PetscErrorCode PEPDestroy(SlepcPEP*)
     PetscErrorCode PEPReset(SlepcPEP)
-    PetscErrorCode PEPView(SlepcPEP,PetscViewer)
+    PetscErrorCode PEPView(SlepcPEP, PetscViewer)
 
-    PetscErrorCode PEPSetType(SlepcPEP,SlepcPEPType)
-    PetscErrorCode PEPGetType(SlepcPEP,SlepcPEPType*)
-    PetscErrorCode PEPSetBasis(SlepcPEP,SlepcPEPBasis)
-    PetscErrorCode PEPGetBasis(SlepcPEP,SlepcPEPBasis*)
-    PetscErrorCode PEPSetProblemType(SlepcPEP,SlepcPEPProblemType)
-    PetscErrorCode PEPGetProblemType(SlepcPEP,SlepcPEPProblemType*)
-    PetscErrorCode PEPSetOperators(SlepcPEP,PetscInt,PetscMat*)
-    PetscErrorCode PEPGetOperators(SlepcPEP,PetscInt,PetscMat*)
-    PetscErrorCode PEPGetNumMatrices(SlepcPEP,PetscInt*)
-    PetscErrorCode PEPSetOptionsPrefix(SlepcPEP,char*)
-    PetscErrorCode PEPGetOptionsPrefix(SlepcPEP,char*[])
+    PetscErrorCode PEPSetType(SlepcPEP, SlepcPEPType)
+    PetscErrorCode PEPGetType(SlepcPEP, SlepcPEPType*)
+    PetscErrorCode PEPSetBasis(SlepcPEP, SlepcPEPBasis)
+    PetscErrorCode PEPGetBasis(SlepcPEP, SlepcPEPBasis*)
+    PetscErrorCode PEPSetProblemType(SlepcPEP, SlepcPEPProblemType)
+    PetscErrorCode PEPGetProblemType(SlepcPEP, SlepcPEPProblemType*)
+    PetscErrorCode PEPSetOperators(SlepcPEP, PetscInt, PetscMat*)
+    PetscErrorCode PEPGetOperators(SlepcPEP, PetscInt, PetscMat*)
+    PetscErrorCode PEPGetNumMatrices(SlepcPEP, PetscInt*)
+    PetscErrorCode PEPSetOptionsPrefix(SlepcPEP, char*)
+    PetscErrorCode PEPGetOptionsPrefix(SlepcPEP, char*[])
     PetscErrorCode PEPSetFromOptions(SlepcPEP)
-    PetscErrorCode PEPAppendOptionsPrefix(SlepcPEP,char*)
+    PetscErrorCode PEPAppendOptionsPrefix(SlepcPEP, char*)
     PetscErrorCode PEPSetUp(SlepcPEP)
     PetscErrorCode PEPSolve(SlepcPEP)
 
-    PetscErrorCode PEPSetBV(SlepcPEP,SlepcBV)
-    PetscErrorCode PEPGetBV(SlepcPEP,SlepcBV*)
-    PetscErrorCode PEPSetDS(SlepcPEP,SlepcDS)
-    PetscErrorCode PEPGetDS(SlepcPEP,SlepcDS*)
-    PetscErrorCode PEPSetST(SlepcPEP,SlepcST)
-    PetscErrorCode PEPGetST(SlepcPEP,SlepcST*)
-    PetscErrorCode PEPSetRG(SlepcPEP,SlepcRG)
-    PetscErrorCode PEPGetRG(SlepcPEP,SlepcRG*)
+    PetscErrorCode PEPSetBV(SlepcPEP, SlepcBV)
+    PetscErrorCode PEPGetBV(SlepcPEP, SlepcBV*)
+    PetscErrorCode PEPSetDS(SlepcPEP, SlepcDS)
+    PetscErrorCode PEPGetDS(SlepcPEP, SlepcDS*)
+    PetscErrorCode PEPSetST(SlepcPEP, SlepcST)
+    PetscErrorCode PEPGetST(SlepcPEP, SlepcST*)
+    PetscErrorCode PEPSetRG(SlepcPEP, SlepcRG)
+    PetscErrorCode PEPGetRG(SlepcPEP, SlepcRG*)
 
-    PetscErrorCode PEPSetTrackAll(SlepcPEP,PetscBool)
-    PetscErrorCode PEPGetTrackAll(SlepcPEP,PetscBool*)
+    PetscErrorCode PEPSetTrackAll(SlepcPEP, PetscBool)
+    PetscErrorCode PEPGetTrackAll(SlepcPEP, PetscBool*)
 
-    PetscErrorCode PEPSetTolerances(SlepcPEP,PetscReal,PetscInt)
-    PetscErrorCode PEPGetTolerances(SlepcPEP,PetscReal*,PetscInt*)
-    PetscErrorCode PEPSetDimensions(SlepcPEP,PetscInt,PetscInt,PetscInt)
-    PetscErrorCode PEPGetDimensions(SlepcPEP,PetscInt*,PetscInt*,PetscInt*)
-    PetscErrorCode PEPSetScale(SlepcPEP,SlepcPEPScale,PetscReal,PetscVec,PetscVec,PetscInt,PetscReal)
-    PetscErrorCode PEPGetScale(SlepcPEP,SlepcPEPScale*,PetscReal*,PetscVec*,PetscVec*,PetscInt*,PetscReal*)
+    PetscErrorCode PEPSetTolerances(SlepcPEP, PetscReal, PetscInt)
+    PetscErrorCode PEPGetTolerances(SlepcPEP, PetscReal*, PetscInt*)
+    PetscErrorCode PEPSetDimensions(SlepcPEP, PetscInt, PetscInt, PetscInt)
+    PetscErrorCode PEPGetDimensions(SlepcPEP, PetscInt*, PetscInt*, PetscInt*)
+    PetscErrorCode PEPSetScale(SlepcPEP, SlepcPEPScale, PetscReal, PetscVec, PetscVec, PetscInt, PetscReal)
+    PetscErrorCode PEPGetScale(SlepcPEP, SlepcPEPScale*, PetscReal*, PetscVec*, PetscVec*, PetscInt*, PetscReal*)
 
-    PetscErrorCode PEPGetConverged(SlepcPEP,PetscInt*)
-    PetscErrorCode PEPGetEigenpair(SlepcPEP,PetscInt,PetscScalar*,PetscScalar*,PetscVec,PetscVec)
-    PetscErrorCode PEPComputeError(SlepcPEP,PetscInt,SlepcPEPErrorType,PetscReal*)
-    PetscErrorCode PEPErrorView(SlepcPEP,SlepcPEPErrorType,PetscViewer)
-    PetscErrorCode PEPValuesView(SlepcPEP,PetscViewer)
-    PetscErrorCode PEPVectorsView(SlepcPEP,PetscViewer)
-    PetscErrorCode PEPGetErrorEstimate(SlepcPEP,PetscInt,PetscReal*)
+    PetscErrorCode PEPGetConverged(SlepcPEP, PetscInt*)
+    PetscErrorCode PEPGetEigenpair(SlepcPEP, PetscInt, PetscScalar*, PetscScalar*, PetscVec, PetscVec)
+    PetscErrorCode PEPComputeError(SlepcPEP, PetscInt, SlepcPEPErrorType, PetscReal*)
+    PetscErrorCode PEPErrorView(SlepcPEP, SlepcPEPErrorType, PetscViewer)
+    PetscErrorCode PEPValuesView(SlepcPEP, PetscViewer)
+    PetscErrorCode PEPVectorsView(SlepcPEP, PetscViewer)
+    PetscErrorCode PEPGetErrorEstimate(SlepcPEP, PetscInt, PetscReal*)
 
-    PetscErrorCode PEPSetStoppingTestFunction(SlepcPEP,SlepcPEPStoppingFunction,void*,SlepcPEPCtxDel)
-    PetscErrorCode PEPStoppingBasic(SlepcPEP,PetscInt,PetscInt,PetscInt,PetscInt,SlepcPEPConvergedReason*,void*) except PETSC_ERR_PYTHON
-    PetscErrorCode PEPSetEigenvalueComparison(SlepcPEP,SlepcPEPComparisonFunction,void*);
+    PetscErrorCode PEPSetStoppingTestFunction(SlepcPEP, SlepcPEPStoppingFunction, void*, SlepcPEPCtxDel)
+    PetscErrorCode PEPStoppingBasic(SlepcPEP, PetscInt, PetscInt, PetscInt, PetscInt, SlepcPEPConvergedReason*, void*) except PETSC_ERR_PYTHON
+    PetscErrorCode PEPSetEigenvalueComparison(SlepcPEP, SlepcPEPComparisonFunction, void*)
 
-    PetscErrorCode PEPSetConvergenceTest(SlepcPEP,SlepcPEPConv)
-    PetscErrorCode PEPGetConvergenceTest(SlepcPEP,SlepcPEPConv*)
-    PetscErrorCode PEPSetRefine(SlepcPEP,SlepcPEPRefine,PetscInt,PetscReal,PetscInt,SlepcPEPRefineScheme)
-    PetscErrorCode PEPGetRefine(SlepcPEP,SlepcPEPRefine*,PetscInt*,PetscReal*,PetscInt*,SlepcPEPRefineScheme*)
-    PetscErrorCode PEPRefineGetKSP(SlepcPEP,PetscKSP*)
-    PetscErrorCode PEPSetExtract(SlepcPEP,SlepcPEPExtract);
-    PetscErrorCode PEPGetExtract(SlepcPEP,SlepcPEPExtract*)
+    PetscErrorCode PEPSetConvergenceTest(SlepcPEP, SlepcPEPConv)
+    PetscErrorCode PEPGetConvergenceTest(SlepcPEP, SlepcPEPConv*)
+    PetscErrorCode PEPSetRefine(SlepcPEP, SlepcPEPRefine, PetscInt, PetscReal, PetscInt, SlepcPEPRefineScheme)
+    PetscErrorCode PEPGetRefine(SlepcPEP, SlepcPEPRefine*, PetscInt*, PetscReal*, PetscInt*, SlepcPEPRefineScheme*)
+    PetscErrorCode PEPRefineGetKSP(SlepcPEP, PetscKSP*)
+    PetscErrorCode PEPSetExtract(SlepcPEP, SlepcPEPExtract)
+    PetscErrorCode PEPGetExtract(SlepcPEP, SlepcPEPExtract*)
 
-    PetscErrorCode PEPMonitorSet(SlepcPEP,SlepcPEPMonitorFunction,void*,SlepcPEPCtxDel)
+    PetscErrorCode PEPMonitorSet(SlepcPEP, SlepcPEPMonitorFunction, void*, SlepcPEPCtxDel)
     PetscErrorCode PEPMonitorCancel(SlepcPEP)
-    PetscErrorCode PEPGetIterationNumber(SlepcPEP,PetscInt*)
+    PetscErrorCode PEPGetIterationNumber(SlepcPEP, PetscInt*)
 
-    PetscErrorCode PEPSetInitialSpace(SlepcPEP,PetscInt,PetscVec*)
-    PetscErrorCode PEPSetWhichEigenpairs(SlepcPEP,SlepcPEPWhich)
-    PetscErrorCode PEPGetWhichEigenpairs(SlepcPEP,SlepcPEPWhich*)
-    PetscErrorCode PEPSetTarget(SlepcPEP,PetscScalar)
-    PetscErrorCode PEPGetTarget(SlepcPEP,PetscScalar*)
-    PetscErrorCode PEPSetInterval(SlepcPEP,PetscReal,PetscReal)
-    PetscErrorCode PEPGetInterval(SlepcPEP,PetscReal*,PetscReal*)
-    PetscErrorCode PEPGetConvergedReason(SlepcPEP,SlepcPEPConvergedReason*)
+    PetscErrorCode PEPSetInitialSpace(SlepcPEP, PetscInt, PetscVec*)
+    PetscErrorCode PEPSetWhichEigenpairs(SlepcPEP, SlepcPEPWhich)
+    PetscErrorCode PEPGetWhichEigenpairs(SlepcPEP, SlepcPEPWhich*)
+    PetscErrorCode PEPSetTarget(SlepcPEP, PetscScalar)
+    PetscErrorCode PEPGetTarget(SlepcPEP, PetscScalar*)
+    PetscErrorCode PEPSetInterval(SlepcPEP, PetscReal, PetscReal)
+    PetscErrorCode PEPGetInterval(SlepcPEP, PetscReal*, PetscReal*)
+    PetscErrorCode PEPGetConvergedReason(SlepcPEP, SlepcPEPConvergedReason*)
 
-    PetscErrorCode PEPLinearSetLinearization(SlepcPEP,PetscReal,PetscReal)
-    PetscErrorCode PEPLinearGetLinearization(SlepcPEP,PetscReal*,PetscReal*)
-    PetscErrorCode PEPLinearSetExplicitMatrix(SlepcPEP,PetscBool)
-    PetscErrorCode PEPLinearGetExplicitMatrix(SlepcPEP,PetscBool*)
-    PetscErrorCode PEPLinearSetEPS(SlepcPEP,SlepcEPS)
-    PetscErrorCode PEPLinearGetEPS(SlepcPEP,SlepcEPS*)
+    PetscErrorCode PEPLinearSetLinearization(SlepcPEP, PetscReal, PetscReal)
+    PetscErrorCode PEPLinearGetLinearization(SlepcPEP, PetscReal*, PetscReal*)
+    PetscErrorCode PEPLinearSetExplicitMatrix(SlepcPEP, PetscBool)
+    PetscErrorCode PEPLinearGetExplicitMatrix(SlepcPEP, PetscBool*)
+    PetscErrorCode PEPLinearSetEPS(SlepcPEP, SlepcEPS)
+    PetscErrorCode PEPLinearGetEPS(SlepcPEP, SlepcEPS*)
 
-    PetscErrorCode PEPQArnoldiSetRestart(SlepcPEP,PetscReal)
-    PetscErrorCode PEPQArnoldiGetRestart(SlepcPEP,PetscReal*)
-    PetscErrorCode PEPQArnoldiSetLocking(SlepcPEP,PetscBool)
-    PetscErrorCode PEPQArnoldiGetLocking(SlepcPEP,PetscBool*)
+    PetscErrorCode PEPQArnoldiSetRestart(SlepcPEP, PetscReal)
+    PetscErrorCode PEPQArnoldiGetRestart(SlepcPEP, PetscReal*)
+    PetscErrorCode PEPQArnoldiSetLocking(SlepcPEP, PetscBool)
+    PetscErrorCode PEPQArnoldiGetLocking(SlepcPEP, PetscBool*)
 
-    PetscErrorCode PEPTOARSetRestart(SlepcPEP,PetscReal)
-    PetscErrorCode PEPTOARGetRestart(SlepcPEP,PetscReal*)
-    PetscErrorCode PEPTOARSetLocking(SlepcPEP,PetscBool)
-    PetscErrorCode PEPTOARGetLocking(SlepcPEP,PetscBool*)
+    PetscErrorCode PEPTOARSetRestart(SlepcPEP, PetscReal)
+    PetscErrorCode PEPTOARGetRestart(SlepcPEP, PetscReal*)
+    PetscErrorCode PEPTOARSetLocking(SlepcPEP, PetscBool)
+    PetscErrorCode PEPTOARGetLocking(SlepcPEP, PetscBool*)
 
-    PetscErrorCode PEPSTOARSetLinearization(SlepcPEP,PetscReal,PetscReal)
-    PetscErrorCode PEPSTOARGetLinearization(SlepcPEP,PetscReal*,PetscReal*)
-    PetscErrorCode PEPSTOARSetLocking(SlepcPEP,PetscBool)
-    PetscErrorCode PEPSTOARGetLocking(SlepcPEP,PetscBool*)
-    PetscErrorCode PEPSTOARSetDetectZeros(SlepcPEP,PetscBool)
-    PetscErrorCode PEPSTOARGetDetectZeros(SlepcPEP,PetscBool*)
-    PetscErrorCode PEPSTOARSetDimensions(SlepcPEP,PetscInt,PetscInt,PetscInt)
-    PetscErrorCode PEPSTOARGetDimensions(SlepcPEP,PetscInt*,PetscInt*,PetscInt*)
-    PetscErrorCode PEPSTOARGetInertias(SlepcPEP,PetscInt*,PetscReal**,PetscInt**)
-    PetscErrorCode PEPSTOARSetCheckEigenvalueType(SlepcPEP,PetscBool)
-    PetscErrorCode PEPSTOARGetCheckEigenvalueType(SlepcPEP,PetscBool*)
+    PetscErrorCode PEPSTOARSetLinearization(SlepcPEP, PetscReal, PetscReal)
+    PetscErrorCode PEPSTOARGetLinearization(SlepcPEP, PetscReal*, PetscReal*)
+    PetscErrorCode PEPSTOARSetLocking(SlepcPEP, PetscBool)
+    PetscErrorCode PEPSTOARGetLocking(SlepcPEP, PetscBool*)
+    PetscErrorCode PEPSTOARSetDetectZeros(SlepcPEP, PetscBool)
+    PetscErrorCode PEPSTOARGetDetectZeros(SlepcPEP, PetscBool*)
+    PetscErrorCode PEPSTOARSetDimensions(SlepcPEP, PetscInt, PetscInt, PetscInt)
+    PetscErrorCode PEPSTOARGetDimensions(SlepcPEP, PetscInt*, PetscInt*, PetscInt*)
+    PetscErrorCode PEPSTOARGetInertias(SlepcPEP, PetscInt*, PetscReal**, PetscInt**)
+    PetscErrorCode PEPSTOARSetCheckEigenvalueType(SlepcPEP, PetscBool)
+    PetscErrorCode PEPSTOARGetCheckEigenvalueType(SlepcPEP, PetscBool*)
 
     ctypedef enum SlepcPEPJDProjection "PEPJDProjection":
         PEP_JD_PROJECTION_HARMONIC
         PEP_JD_PROJECTION_ORTHOGONAL
 
-    PetscErrorCode PEPJDSetRestart(SlepcPEP,PetscReal)
-    PetscErrorCode PEPJDGetRestart(SlepcPEP,PetscReal*)
-    PetscErrorCode PEPJDSetFix(SlepcPEP,PetscReal)
-    PetscErrorCode PEPJDGetFix(SlepcPEP,PetscReal*)
-    PetscErrorCode PEPJDSetReusePreconditioner(SlepcPEP,PetscBool)
-    PetscErrorCode PEPJDGetReusePreconditioner(SlepcPEP,PetscBool*)
-    PetscErrorCode PEPJDSetMinimalityIndex(SlepcPEP,PetscInt)
-    PetscErrorCode PEPJDGetMinimalityIndex(SlepcPEP,PetscInt*)
-    PetscErrorCode PEPJDSetProjection(SlepcPEP,SlepcPEPJDProjection)
-    PetscErrorCode PEPJDGetProjection(SlepcPEP,SlepcPEPJDProjection*)
+    PetscErrorCode PEPJDSetRestart(SlepcPEP, PetscReal)
+    PetscErrorCode PEPJDGetRestart(SlepcPEP, PetscReal*)
+    PetscErrorCode PEPJDSetFix(SlepcPEP, PetscReal)
+    PetscErrorCode PEPJDGetFix(SlepcPEP, PetscReal*)
+    PetscErrorCode PEPJDSetReusePreconditioner(SlepcPEP, PetscBool)
+    PetscErrorCode PEPJDGetReusePreconditioner(SlepcPEP, PetscBool*)
+    PetscErrorCode PEPJDSetMinimalityIndex(SlepcPEP, PetscInt)
+    PetscErrorCode PEPJDGetMinimalityIndex(SlepcPEP, PetscInt*)
+    PetscErrorCode PEPJDSetProjection(SlepcPEP, SlepcPEPJDProjection)
+    PetscErrorCode PEPJDGetProjection(SlepcPEP, SlepcPEPJDProjection*)
 
     ctypedef enum SlepcPEPCISSExtraction "PEPCISSExtraction":
         PEP_CISS_EXTRACTION_RITZ
         PEP_CISS_EXTRACTION_HANKEL
         PEP_CISS_EXTRACTION_CAA
 
-    PetscErrorCode PEPCISSSetExtraction(SlepcPEP,SlepcPEPCISSExtraction)
-    PetscErrorCode PEPCISSGetExtraction(SlepcPEP,SlepcPEPCISSExtraction*)
-    PetscErrorCode PEPCISSSetSizes(SlepcPEP,PetscInt,PetscInt,PetscInt,PetscInt,PetscInt,PetscBool)
-    PetscErrorCode PEPCISSGetSizes(SlepcPEP,PetscInt*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,PetscBool*)
-    PetscErrorCode PEPCISSSetThreshold(SlepcPEP,PetscReal,PetscReal)
-    PetscErrorCode PEPCISSGetThreshold(SlepcPEP,PetscReal*,PetscReal*)
-    PetscErrorCode PEPCISSSetRefinement(SlepcPEP,PetscInt,PetscInt)
-    PetscErrorCode PEPCISSGetRefinement(SlepcPEP,PetscInt*,PetscInt*)
-    PetscErrorCode PEPCISSGetKSPs(SlepcPEP,PetscInt*,PetscKSP**)
+    PetscErrorCode PEPCISSSetExtraction(SlepcPEP, SlepcPEPCISSExtraction)
+    PetscErrorCode PEPCISSGetExtraction(SlepcPEP, SlepcPEPCISSExtraction*)
+    PetscErrorCode PEPCISSSetSizes(SlepcPEP, PetscInt, PetscInt, PetscInt, PetscInt, PetscInt, PetscBool)
+    PetscErrorCode PEPCISSGetSizes(SlepcPEP, PetscInt*, PetscInt*, PetscInt*, PetscInt*, PetscInt*, PetscBool*)
+    PetscErrorCode PEPCISSSetThreshold(SlepcPEP, PetscReal, PetscReal)
+    PetscErrorCode PEPCISSGetThreshold(SlepcPEP, PetscReal*, PetscReal*)
+    PetscErrorCode PEPCISSSetRefinement(SlepcPEP, PetscInt, PetscInt)
+    PetscErrorCode PEPCISSGetRefinement(SlepcPEP, PetscInt*, PetscInt*)
+    PetscErrorCode PEPCISSGetKSPs(SlepcPEP, PetscInt*, PetscKSP**)
 
 # -----------------------------------------------------------------------------
 
 cdef inline PEP ref_PEP(SlepcPEP pep):
     cdef PEP ob = <PEP> PEP()
     ob.pep = pep
-    CHKERR( PetscINCREF(ob.obj) )
+    CHKERR(PetscINCREF(ob.obj))
     return ob
 
 # -----------------------------------------------------------------------------
@@ -270,7 +270,7 @@ cdef PetscErrorCode PEP_Comparison(
     PetscScalar  ai,
     PetscScalar  br,
     PetscScalar  bi,
-    PetscInt*    res,
+    PetscInt     *res,
     void         *ctx,
     ) except PETSC_ERR_PYTHON with gil:
     (comparison, args, kargs) = <object>ctx

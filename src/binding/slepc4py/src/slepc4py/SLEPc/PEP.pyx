@@ -22,6 +22,7 @@ class PEPType(object):
     JD       = S_(PEPJD)
     CISS     = S_(PEPCISS)
 
+
 class PEPProblemType(object):
     """
     PEP problem type.
@@ -41,6 +42,7 @@ class PEPProblemType(object):
     HERMITIAN  = PEP_HERMITIAN
     HYPERBOLIC = PEP_HYPERBOLIC
     GYROSCOPIC = PEP_GYROSCOPIC
+
 
 class PEPWhich(object):
     """
@@ -74,6 +76,7 @@ class PEPWhich(object):
     ALL                = PEP_ALL
     USER               = PEP_WHICH_USER
 
+
 class PEPBasis(object):
     """
     PEP basis type for the representation of the polynomial.
@@ -96,6 +99,7 @@ class PEPBasis(object):
     LAGUERRE   = PEP_BASIS_LAGUERRE
     HERMITE    = PEP_BASIS_HERMITE
 
+
 class PEPScale(object):
     """
     PEP scaling strategy.
@@ -114,6 +118,7 @@ class PEPScale(object):
     DIAGONAL = PEP_SCALE_DIAGONAL
     BOTH     = PEP_SCALE_BOTH
 
+
 class PEPRefine(object):
     """
     PEP refinement strategy.
@@ -130,6 +135,7 @@ class PEPRefine(object):
     SIMPLE   = PEP_REFINE_SIMPLE
     MULTIPLE = PEP_REFINE_MULTIPLE
 
+
 class PEPRefineScheme(object):
     """
     PEP scheme for solving linear systems during iterative refinement.
@@ -145,6 +151,7 @@ class PEPRefineScheme(object):
     SCHUR    = PEP_REFINE_SCHEME_SCHUR
     MBE      = PEP_REFINE_SCHEME_MBE
     EXPLICIT = PEP_REFINE_SCHEME_EXPLICIT
+
 
 class PEPExtract(object):
     """
@@ -167,6 +174,7 @@ class PEPExtract(object):
     RESIDUAL   = PEP_EXTRACT_RESIDUAL
     STRUCTURED = PEP_EXTRACT_STRUCTURED
 
+
 class PEPErrorType(object):
     """
     PEP error type to assess accuracy of computed solutions.
@@ -182,6 +190,7 @@ class PEPErrorType(object):
     ABSOLUTE = PEP_ERROR_ABSOLUTE
     RELATIVE = PEP_ERROR_RELATIVE
     BACKWARD = PEP_ERROR_BACKWARD
+
 
 class PEPConv(object):
     """
@@ -201,6 +210,7 @@ class PEPConv(object):
     NORM = PEP_CONV_NORM
     USER = PEP_CONV_USER
 
+
 class PEPStop(object):
     """
     PEP stopping test.
@@ -214,6 +224,7 @@ class PEPStop(object):
     """
     BASIC = PEP_STOP_BASIC
     USER  = PEP_STOP_USER
+
 
 class PEPConvergedReason(object):
     """
@@ -238,6 +249,7 @@ class PEPConvergedReason(object):
     CONVERGED_ITERATING    = PEP_CONVERGED_ITERATING
     ITERATING              = PEP_CONVERGED_ITERATING
 
+
 class PEPJDProjection(object):
     """
     PEP type of projection to be used in the Jacobi-Davidson solver.
@@ -251,6 +263,7 @@ class PEPJDProjection(object):
     """
     HARMONIC   = PEP_JD_PROJECTION_HARMONIC
     ORTHOGONAL = PEP_JD_PROJECTION_ORTHOGONAL
+
 
 class PEPCISSExtraction(object):
     """
@@ -269,6 +282,7 @@ class PEPCISSExtraction(object):
     CAA    = PEP_CISS_EXTRACTION_CAA
 
 # -----------------------------------------------------------------------------
+
 
 cdef class PEP(Object):
 
@@ -319,7 +333,7 @@ cdef class PEP(Object):
         slepc.PEPView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( PEPView(self.pep, vwr) )
+        CHKERR(PEPView(self.pep, vwr))
 
     def destroy(self) -> Self:
         """
@@ -331,7 +345,7 @@ cdef class PEP(Object):
         --------
         slepc.PEPDestroy
         """
-        CHKERR( PEPDestroy(&self.pep) )
+        CHKERR(PEPDestroy(&self.pep))
         self.pep = NULL
         return self
 
@@ -345,7 +359,7 @@ cdef class PEP(Object):
         --------
         slepc.PEPReset
         """
-        CHKERR( PEPReset(self.pep) )
+        CHKERR(PEPReset(self.pep))
 
     def create(self, comm: Comm | None = None) -> Self:
         """
@@ -364,8 +378,8 @@ cdef class PEP(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcPEP newpep = NULL
-        CHKERR( PEPCreate(ccomm, &newpep) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.pep = newpep
+        CHKERR(PEPCreate(ccomm, &newpep))
+        CHKERR(SlepcCLEAR(self.obj)); self.pep = newpep
         return self
 
     def setType(self, pep_type: Type | str) -> None:
@@ -393,7 +407,7 @@ cdef class PEP(Object):
         """
         cdef SlepcPEPType cval = NULL
         pep_type = str2bytes(pep_type, &cval)
-        CHKERR( PEPSetType(self.pep, cval) )
+        CHKERR(PEPSetType(self.pep, cval))
 
     def getType(self) -> str:
         """
@@ -411,7 +425,7 @@ cdef class PEP(Object):
         setType, slepc.PEPGetType
         """
         cdef SlepcPEPType pep_type = NULL
-        CHKERR( PEPGetType(self.pep, &pep_type) )
+        CHKERR(PEPGetType(self.pep, &pep_type))
         return bytes2str(pep_type)
 
     def getOptionsPrefix(self) -> str:
@@ -430,7 +444,7 @@ cdef class PEP(Object):
         setOptionsPrefix, appendOptionsPrefix, slepc.PEPGetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( PEPGetOptionsPrefix(self.pep, &prefix) )
+        CHKERR(PEPGetOptionsPrefix(self.pep, &prefix))
         return bytes2str(prefix)
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -462,7 +476,7 @@ cdef class PEP(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( PEPSetOptionsPrefix(self.pep, cval) )
+        CHKERR(PEPSetOptionsPrefix(self.pep, cval))
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
@@ -481,7 +495,7 @@ cdef class PEP(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( PEPAppendOptionsPrefix(self.pep, cval) )
+        CHKERR(PEPAppendOptionsPrefix(self.pep, cval))
 
     def setFromOptions(self) -> None:
         """
@@ -500,7 +514,7 @@ cdef class PEP(Object):
         --------
         setOptionsPrefix, slepc.PEPSetFromOptions
         """
-        CHKERR( PEPSetFromOptions(self.pep) )
+        CHKERR(PEPSetFromOptions(self.pep))
 
     def getBasis(self) -> Basis:
         """
@@ -518,11 +532,11 @@ cdef class PEP(Object):
         setBasis, slepc.PEPGetBasis
         """
         cdef SlepcPEPBasis val = PEP_BASIS_MONOMIAL
-        CHKERR( PEPGetBasis(self.pep, &val) )
+        CHKERR(PEPGetBasis(self.pep, &val))
         return val
 
     def setBasis(self, basis: Basis) -> None:
-        """
+        r"""
         Set the type of polynomial basis used.
 
         Logically collective.
@@ -548,7 +562,7 @@ cdef class PEP(Object):
         getBasis, setOperators, slepc.PEPSetBasis
         """
         cdef SlepcPEPBasis val = basis
-        CHKERR( PEPSetBasis(self.pep, val) )
+        CHKERR(PEPSetBasis(self.pep, val))
 
     def getProblemType(self) -> ProblemType:
         """
@@ -566,7 +580,7 @@ cdef class PEP(Object):
         setProblemType, slepc.PEPGetProblemType
         """
         cdef SlepcPEPProblemType val = PEP_GENERAL
-        CHKERR( PEPGetProblemType(self.pep, &val) )
+        CHKERR(PEPGetProblemType(self.pep, &val))
         return val
 
     def setProblemType(self, problem_type: ProblemType) -> None:
@@ -597,7 +611,7 @@ cdef class PEP(Object):
         setOperators, setType, getProblemType, slepc.PEPSetProblemType
         """
         cdef SlepcPEPProblemType val = problem_type
-        CHKERR( PEPSetProblemType(self.pep, val) )
+        CHKERR(PEPSetProblemType(self.pep, val))
 
     def getWhichEigenpairs(self) -> Which:
         """
@@ -615,7 +629,7 @@ cdef class PEP(Object):
         setWhichEigenpairs, slepc.PEPGetWhichEigenpairs
         """
         cdef SlepcPEPWhich val = PEP_LARGEST_MAGNITUDE
-        CHKERR( PEPGetWhichEigenpairs(self.pep, &val) )
+        CHKERR(PEPGetWhichEigenpairs(self.pep, &val))
         return val
 
     def setWhichEigenpairs(self, which: Which) -> None:
@@ -653,7 +667,7 @@ cdef class PEP(Object):
         getWhichEigenpairs, setTarget, setInterval, slepc.PEPSetWhichEigenpairs
         """
         cdef SlepcPEPWhich val = which
-        CHKERR( PEPSetWhichEigenpairs(self.pep, val) )
+        CHKERR(PEPSetWhichEigenpairs(self.pep, val))
 
     def getTarget(self) -> Scalar:
         """
@@ -675,7 +689,7 @@ cdef class PEP(Object):
         setTarget, slepc.PEPGetTarget
         """
         cdef PetscScalar sval = 0
-        CHKERR( PEPGetTarget(self.pep, &sval) )
+        CHKERR(PEPGetTarget(self.pep, &sval))
         return toScalar(sval)
 
     def setTarget(self, target: Scalar) -> None:
@@ -703,7 +717,7 @@ cdef class PEP(Object):
         getTarget, setWhichEigenpairs, slepc.PEPSetTarget
         """
         cdef PetscScalar sval = asScalar(target)
-        CHKERR( PEPSetTarget(self.pep, sval) )
+        CHKERR(PEPSetTarget(self.pep, sval))
 
     def getTolerances(self) -> tuple[float, int]:
         """
@@ -727,7 +741,7 @@ cdef class PEP(Object):
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
-        CHKERR( PEPGetTolerances(self.pep, &rval, &ival) )
+        CHKERR(PEPGetTolerances(self.pep, &rval, &ival))
         return (toReal(rval), toInt(ival))
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
@@ -759,7 +773,7 @@ cdef class PEP(Object):
         cdef PetscInt  ival = PETSC_CURRENT
         if tol    is not None: rval = asReal(tol)
         if max_it is not None: ival = asInt(max_it)
-        CHKERR( PEPSetTolerances(self.pep, rval, ival) )
+        CHKERR(PEPSetTolerances(self.pep, rval, ival))
 
     def getInterval(self) -> tuple[float, float]:
         """
@@ -784,7 +798,7 @@ cdef class PEP(Object):
         """
         cdef PetscReal inta = 0
         cdef PetscReal intb = 0
-        CHKERR( PEPGetInterval(self.pep, &inta, &intb) )
+        CHKERR(PEPGetInterval(self.pep, &inta, &intb))
         return (toReal(inta), toReal(intb))
 
     def setInterval(self, inta: float, intb: float) -> None:
@@ -815,7 +829,7 @@ cdef class PEP(Object):
         """
         cdef PetscReal rval1 = asReal(inta)
         cdef PetscReal rval2 = asReal(intb)
-        CHKERR( PEPSetInterval(self.pep, rval1, rval2) )
+        CHKERR(PEPSetInterval(self.pep, rval1, rval2))
 
     def getConvergenceTest(self) -> Conv:
         """
@@ -834,7 +848,7 @@ cdef class PEP(Object):
         setConvergenceTest, slepc.PEPGetConvergenceTest
         """
         cdef SlepcPEPConv conv = PEP_CONV_REL
-        CHKERR( PEPGetConvergenceTest(self.pep, &conv) )
+        CHKERR(PEPGetConvergenceTest(self.pep, &conv))
         return conv
 
     def setConvergenceTest(self, conv: Conv) -> None:
@@ -854,7 +868,7 @@ cdef class PEP(Object):
         getConvergenceTest, slepc.PEPSetConvergenceTest
         """
         cdef SlepcPEPConv tconv = conv
-        CHKERR( PEPSetConvergenceTest(self.pep, tconv) )
+        CHKERR(PEPSetConvergenceTest(self.pep, tconv))
 
     def getRefine(self) -> tuple[Refine, int, float, int, RefineScheme]:
         """
@@ -884,7 +898,7 @@ cdef class PEP(Object):
         cdef PetscReal tol = PETSC_DEFAULT
         cdef PetscInt its = PETSC_DEFAULT
         cdef SlepcPEPRefineScheme scheme = PEP_REFINE_SCHEME_MBE
-        CHKERR( PEPGetRefine(self.pep, &ref, &npart, &tol, &its, &scheme) )
+        CHKERR(PEPGetRefine(self.pep, &ref, &npart, &tol, &its, &scheme))
         return (ref, toInt(npart), toReal(tol), toInt(its), scheme)
 
     def setRefine(
@@ -929,7 +943,7 @@ cdef class PEP(Object):
         if tol is not None: ttol = asReal(tol)
         if its is not None: tits = asInt(its)
         if scheme is not None: tscheme = scheme
-        CHKERR( PEPSetRefine(self.pep, tref, tnpart, ttol, tits, tscheme) )
+        CHKERR(PEPSetRefine(self.pep, tref, tnpart, ttol, tits, tscheme))
 
     def getRefineKSP(self) -> KSP:
         """
@@ -947,8 +961,8 @@ cdef class PEP(Object):
         setRefine, slepc.PEPRefineGetKSP
         """
         cdef KSP ksp = KSP()
-        CHKERR( PEPRefineGetKSP(self.pep, &ksp.ksp) )
-        CHKERR( PetscINCREF(ksp.obj) )
+        CHKERR(PEPRefineGetKSP(self.pep, &ksp.ksp))
+        CHKERR(PetscINCREF(ksp.obj))
         return ksp
 
     def setExtract(self, extract: Extract) -> None:
@@ -974,7 +988,7 @@ cdef class PEP(Object):
         getExtract, slepc.PEPSetExtract
         """
         cdef SlepcPEPExtract val = extract
-        CHKERR( PEPSetExtract(self.pep, val) )
+        CHKERR(PEPSetExtract(self.pep, val))
 
     def getExtract(self) -> Extract:
         """
@@ -992,7 +1006,7 @@ cdef class PEP(Object):
         setExtract, slepc.PEPGetExtract
         """
         cdef SlepcPEPExtract val = PEP_EXTRACT_NONE
-        CHKERR( PEPGetExtract(self.pep, &val) )
+        CHKERR(PEPGetExtract(self.pep, &val))
         return val
 
     def getTrackAll(self) -> bool:
@@ -1011,7 +1025,7 @@ cdef class PEP(Object):
         setTrackAll, slepc.PEPGetTrackAll
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( PEPGetTrackAll(self.pep, &tval) )
+        CHKERR(PEPGetTrackAll(self.pep, &tval))
         return toBool(tval)
 
     def setTrackAll(self, trackall: bool = True) -> None:
@@ -1033,7 +1047,7 @@ cdef class PEP(Object):
         getTrackAll, slepc.PEPSetTrackAll
         """
         cdef PetscBool tval = trackall
-        CHKERR( PEPSetTrackAll(self.pep, tval) )
+        CHKERR(PEPSetTrackAll(self.pep, tval))
 
     def getDimensions(self) -> tuple[int, int, int]:
         """
@@ -1057,7 +1071,7 @@ cdef class PEP(Object):
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
         cdef PetscInt ival3 = 0
-        CHKERR( PEPGetDimensions(self.pep, &ival1, &ival2, &ival3) )
+        CHKERR(PEPGetDimensions(self.pep, &ival1, &ival2, &ival3))
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
     def setDimensions(
@@ -1109,7 +1123,7 @@ cdef class PEP(Object):
         if nev is not None: ival1 = asInt(nev)
         if ncv is not None: ival2 = asInt(ncv)
         if mpd is not None: ival3 = asInt(mpd)
-        CHKERR( PEPSetDimensions(self.pep, ival1, ival2, ival3) )
+        CHKERR(PEPSetDimensions(self.pep, ival1, ival2, ival3))
 
     def getST(self) -> ST:
         """
@@ -1127,8 +1141,8 @@ cdef class PEP(Object):
         setST, slepc.PEPGetST
         """
         cdef ST st = ST()
-        CHKERR( PEPGetST(self.pep, &st.st) )
-        CHKERR( PetscINCREF(st.obj) )
+        CHKERR(PEPGetST(self.pep, &st.st))
+        CHKERR(PetscINCREF(st.obj))
         return st
 
     def setST(self, ST st) -> None:
@@ -1146,7 +1160,7 @@ cdef class PEP(Object):
         --------
         getST, slepc.PEPSetST
         """
-        CHKERR( PEPSetST(self.pep, st.st) )
+        CHKERR(PEPSetST(self.pep, st.st))
 
     def getScale(
         self,
@@ -1186,19 +1200,19 @@ cdef class PEP(Object):
         cdef PetscReal lbda = 0
         cdef PetscVec vecl = NULL
         cdef PetscVec vecr = NULL
-        CHKERR( PEPGetScale(self.pep, &scale, &alpha, &vecl, &vecr, &its, &lbda) )
+        CHKERR(PEPGetScale(self.pep, &scale, &alpha, &vecl, &vecr, &its, &lbda))
         if Dl.vec != NULL:
             if vecl != NULL:
-                CHKERR( VecCopy(vecl, Dl.vec) )
+                CHKERR(VecCopy(vecl, Dl.vec))
             else:
-                CHKERR( VecSet(Dl.vec, 1.0) )
+                CHKERR(VecSet(Dl.vec, 1.0))
         if Dr.vec != NULL:
             if vecr != NULL:
-                CHKERR( VecCopy(vecr, Dr.vec) )
+                CHKERR(VecCopy(vecr, Dr.vec))
             else:
-                CHKERR( VecSet(Dr.vec, 1.0) )
-        CHKERR( VecDestroy(&vecl) )
-        CHKERR( VecDestroy(&vecr) )
+                CHKERR(VecSet(Dr.vec, 1.0))
+        CHKERR(VecDestroy(&vecl))
+        CHKERR(VecDestroy(&vecr))
         return (scale, toReal(alpha), toInt(its), toReal(lbda))
 
     def setScale(
@@ -1245,7 +1259,7 @@ cdef class PEP(Object):
         if Dr is not None:    vecr = Dr.vec
         if its is not None:   ival = asInt(its)
         if lbda is not None:  rval2 = asReal(lbda)
-        CHKERR( PEPSetScale(self.pep, senum, rval1, vecl, vecr, ival, rval2) )
+        CHKERR(PEPSetScale(self.pep, senum, rval1, vecl, vecr, ival, rval2))
 
     def getBV(self) -> BV:
         """
@@ -1263,8 +1277,8 @@ cdef class PEP(Object):
         setBV, slepc.PEPGetBV
         """
         cdef BV bv = BV()
-        CHKERR( PEPGetBV(self.pep, &bv.bv) )
-        CHKERR( PetscINCREF(bv.obj) )
+        CHKERR(PEPGetBV(self.pep, &bv.bv))
+        CHKERR(PetscINCREF(bv.obj))
         return bv
 
     def setBV(self, BV bv) -> None:
@@ -1282,7 +1296,7 @@ cdef class PEP(Object):
         --------
         getBV, slepc.PEPSetBV
         """
-        CHKERR( PEPSetBV(self.pep, bv.bv) )
+        CHKERR(PEPSetBV(self.pep, bv.bv))
 
     def getRG(self) -> RG:
         """
@@ -1300,8 +1314,8 @@ cdef class PEP(Object):
         setRG, slepc.PEPGetRG
         """
         cdef RG rg = RG()
-        CHKERR( PEPGetRG(self.pep, &rg.rg) )
-        CHKERR( PetscINCREF(rg.obj) )
+        CHKERR(PEPGetRG(self.pep, &rg.rg))
+        CHKERR(PetscINCREF(rg.obj))
         return rg
 
     def setRG(self, RG rg) -> None:
@@ -1319,7 +1333,7 @@ cdef class PEP(Object):
         --------
         getRG, slepc.PEPSetRG
         """
-        CHKERR( PEPSetRG(self.pep, rg.rg) )
+        CHKERR(PEPSetRG(self.pep, rg.rg))
 
     def getDS(self) -> DS:
         """
@@ -1337,8 +1351,8 @@ cdef class PEP(Object):
         setDS, slepc.PEPGetDS
         """
         cdef DS ds = DS()
-        CHKERR( PEPGetDS(self.pep, &ds.ds) )
-        CHKERR( PetscINCREF(ds.obj) )
+        CHKERR(PEPGetDS(self.pep, &ds.ds))
+        CHKERR(PetscINCREF(ds.obj))
         return ds
 
     def setDS(self, DS ds) -> None:
@@ -1356,7 +1370,7 @@ cdef class PEP(Object):
         --------
         getDS, slepc.PEPSetDS
         """
-        CHKERR( PEPSetDS(self.pep, ds.ds) )
+        CHKERR(PEPSetDS(self.pep, ds.ds))
 
     def getOperators(self) -> list[Mat]:
         """
@@ -1376,16 +1390,16 @@ cdef class PEP(Object):
         cdef Mat A
         cdef PetscMat mat = NULL
         cdef PetscInt k=0, n=0
-        CHKERR( PEPGetNumMatrices(self.pep, &n) )
+        CHKERR(PEPGetNumMatrices(self.pep, &n))
         cdef object operators = []
         for k from 0 <= k < n:
-            CHKERR( PEPGetOperators(self.pep, k, &mat) )
-            A = Mat(); A.mat = mat; CHKERR( PetscINCREF(A.obj) )
+            CHKERR(PEPGetOperators(self.pep, k, &mat))
+            A = Mat(); A.mat = mat; CHKERR(PetscINCREF(A.obj))
             operators.append(A)
         return tuple(operators)
 
     def setOperators(self, operators: list[Mat]) -> None:
-        """
+        r"""
         Set the matrices associated with the eigenvalue problem.
 
         Collective.
@@ -1411,9 +1425,9 @@ cdef class PEP(Object):
         operators = tuple(operators)
         cdef PetscMat *mats = NULL
         cdef Py_ssize_t k=0, n = len(operators)
-        cdef tmp = allocate(<size_t>n*sizeof(PetscMat),<void**>&mats)
+        cdef unused = allocate(<size_t>n*sizeof(PetscMat), <void**>&mats)
         for k from 0 <= k < n: mats[k] = (<Mat?>operators[k]).mat
-        CHKERR( PEPSetOperators(self.pep, <PetscInt>n, mats) )
+        CHKERR(PEPSetOperators(self.pep, <PetscInt>n, mats))
 
     #
 
@@ -1450,9 +1464,9 @@ cdef class PEP(Object):
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
         cdef Py_ssize_t i = 0, ns = len(space)
-        cdef tmp = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
+        cdef unused = allocate(<size_t>ns*sizeof(PetscVec), <void**>&vs)
         for i in range(ns): vs[i] = (<Vec?>space[i]).vec
-        CHKERR( PEPSetInitialSpace(self.pep, <PetscInt>ns, vs) )
+        CHKERR(PEPSetInitialSpace(self.pep, <PetscInt>ns, vs))
 
     #
 
@@ -1475,10 +1489,10 @@ cdef class PEP(Object):
             if args is None: args = ()
             if kargs is None: kargs = {}
             self.set_attr('__stopping__', (stopping, args, kargs))
-            CHKERR( PEPSetStoppingTestFunction(self.pep, PEP_Stopping, NULL, NULL) )
+            CHKERR(PEPSetStoppingTestFunction(self.pep, PEP_Stopping, NULL, NULL))
         else:
             self.set_attr('__stopping__', None)
-            CHKERR( PEPSetStoppingTestFunction(self.pep, PEPStoppingBasic, NULL, NULL) )
+            CHKERR(PEPSetStoppingTestFunction(self.pep, PEPStoppingBasic, NULL, NULL))
 
     def getStoppingTest(self) -> PEPStoppingFunction:
         """
@@ -1522,10 +1536,10 @@ cdef class PEP(Object):
             if kargs is None: kargs = {}
             self.set_attr('__comparison__', (comparison, args, kargs))
             ctx = self.get_attr('__comparison__')
-            CHKERR( PEPSetEigenvalueComparison(self.pep, PEP_Comparison, <void*>ctx) )
+            CHKERR(PEPSetEigenvalueComparison(self.pep, PEP_Comparison, <void*>ctx))
         else:
             self.set_attr('__comparison__', None)
-            CHKERR( PEPSetEigenvalueComparison(self.pep, NULL, NULL) )
+            CHKERR(PEPSetEigenvalueComparison(self.pep, NULL, NULL))
 
     def getEigenvalueComparison(self) -> PEPEigenvalueComparison:
         """
@@ -1564,7 +1578,7 @@ cdef class PEP(Object):
         if monitorlist is None:
             monitorlist = []
             self.set_attr('__monitor__', monitorlist)
-            CHKERR( PEPMonitorSet(self.pep, PEP_Monitor, NULL, NULL) )
+            CHKERR(PEPMonitorSet(self.pep, PEP_Monitor, NULL, NULL))
         if args is None: args = ()
         if kargs is None: kargs = {}
         monitorlist.append((monitor, args, kargs))
@@ -1596,7 +1610,7 @@ cdef class PEP(Object):
         --------
         slepc.PEPMonitorCancel
         """
-        CHKERR( PEPMonitorCancel(self.pep) )
+        CHKERR(PEPMonitorCancel(self.pep))
         self.set_attr('__monitor__', None)
 
     #
@@ -1621,7 +1635,7 @@ cdef class PEP(Object):
         --------
         solve, slepc.PEPSetUp
         """
-        CHKERR( PEPSetUp(self.pep) )
+        CHKERR(PEPSetUp(self.pep))
 
     def solve(self) -> None:
         """
@@ -1643,7 +1657,7 @@ cdef class PEP(Object):
         --------
         setUp, setOperators, getConverged, getConvergedReason, slepc.PEPSolve
         """
-        CHKERR( PEPSolve(self.pep) )
+        CHKERR(PEPSolve(self.pep))
 
     def getIterationNumber(self) -> int:
         """
@@ -1664,7 +1678,7 @@ cdef class PEP(Object):
         getConvergedReason, setTolerances, slepc.PEPGetIterationNumber
         """
         cdef PetscInt ival = 0
-        CHKERR( PEPGetIterationNumber(self.pep, &ival) )
+        CHKERR(PEPGetIterationNumber(self.pep, &ival))
         return toInt(ival)
 
     def getConvergedReason(self) -> ConvergedReason:
@@ -1683,7 +1697,7 @@ cdef class PEP(Object):
         setTolerances, solve, slepc.PEPGetConvergedReason
         """
         cdef SlepcPEPConvergedReason val = PEP_CONVERGED_ITERATING
-        CHKERR( PEPGetConvergedReason(self.pep, &val) )
+        CHKERR(PEPGetConvergedReason(self.pep, &val))
         return val
 
     def getConverged(self) -> int:
@@ -1709,7 +1723,7 @@ cdef class PEP(Object):
         setDimensions, solve, getEigenpair, slepc.PEPGetConverged
         """
         cdef PetscInt ival = 0
-        CHKERR( PEPGetConverged(self.pep, &ival) )
+        CHKERR(PEPGetConverged(self.pep, &ival))
         return toInt(ival)
 
     def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> complex:
@@ -1751,7 +1765,7 @@ cdef class PEP(Object):
         cdef PetscScalar sval2 = 0
         cdef PetscVec vecr = Vr.vec if Vr is not None else <PetscVec>NULL
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
-        CHKERR( PEPGetEigenpair(self.pep, ival, &sval1, &sval2, vecr, veci) )
+        CHKERR(PEPGetEigenpair(self.pep, ival, &sval1, &sval2, vecr, veci))
         return toComplex(sval1, sval2)
 
     def getErrorEstimate(self, i: int) -> float:
@@ -1781,11 +1795,11 @@ cdef class PEP(Object):
         """
         cdef PetscInt ival = asInt(i)
         cdef PetscReal rval = 0
-        CHKERR( PEPGetErrorEstimate(self.pep, ival, &rval) )
+        CHKERR(PEPGetErrorEstimate(self.pep, ival, &rval))
         return toReal(rval)
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
-        """
+        r"""
         Compute the error associated with the i-th computed eigenpair.
 
         Collective.
@@ -1820,7 +1834,7 @@ cdef class PEP(Object):
         cdef SlepcPEPErrorType et = PEP_ERROR_BACKWARD
         cdef PetscReal rval = 0
         if etype is not None: et = etype
-        CHKERR( PEPComputeError(self.pep, ival, et, &rval) )
+        CHKERR(PEPComputeError(self.pep, ival, et, &rval))
         return toReal(rval)
 
     def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
@@ -1853,7 +1867,7 @@ cdef class PEP(Object):
         cdef SlepcPEPErrorType et = PEP_ERROR_RELATIVE
         if etype is not None: et = etype
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( PEPErrorView(self.pep, et, vwr) )
+        CHKERR(PEPErrorView(self.pep, et, vwr))
 
     def valuesView(self, viewer: Viewer | None = None) -> None:
         """
@@ -1872,7 +1886,7 @@ cdef class PEP(Object):
         solve, vectorsView, errorView, slepc.PEPValuesView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( PEPValuesView(self.pep, vwr) )
+        CHKERR(PEPValuesView(self.pep, vwr))
 
     def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
@@ -1891,7 +1905,7 @@ cdef class PEP(Object):
         solve, valuesView, errorView, slepc.PEPVectorsView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( PEPVectorsView(self.pep, vwr) )
+        CHKERR(PEPVectorsView(self.pep, vwr))
 
     #
 
@@ -1910,7 +1924,7 @@ cdef class PEP(Object):
         --------
         getLinearEPS, slepc.PEPLinearSetEPS
         """
-        CHKERR( PEPLinearSetEPS(self.pep, eps.eps) )
+        CHKERR(PEPLinearSetEPS(self.pep, eps.eps))
 
     def getLinearEPS(self) -> EPS:
         """
@@ -1928,8 +1942,8 @@ cdef class PEP(Object):
         setLinearEPS, slepc.PEPLinearGetEPS
         """
         cdef EPS eps = EPS()
-        CHKERR( PEPLinearGetEPS(self.pep, &eps.eps) )
-        CHKERR( PetscINCREF(eps.obj) )
+        CHKERR(PEPLinearGetEPS(self.pep, &eps.eps))
+        CHKERR(PetscINCREF(eps.obj))
         return eps
 
     def setLinearLinearization(self, alpha: float = 1.0, beta: float = 0.0) -> None:
@@ -1951,7 +1965,7 @@ cdef class PEP(Object):
         """
         cdef PetscReal a = asReal(alpha)
         cdef PetscReal b = asReal(beta)
-        CHKERR( PEPLinearSetLinearization(self.pep, a, b) )
+        CHKERR(PEPLinearSetLinearization(self.pep, a, b))
 
     def getLinearLinearization(self) -> tuple[float, float]:
         """
@@ -1972,7 +1986,7 @@ cdef class PEP(Object):
         """
         cdef PetscReal a = 0.0
         cdef PetscReal b = 0.0
-        CHKERR( PEPLinearGetLinearization(self.pep, &a, &b) )
+        CHKERR(PEPLinearGetLinearization(self.pep, &a, &b))
         return (asReal(a), asReal(b))
 
     def setLinearExplicitMatrix(self, flag: bool = True) -> None:
@@ -1991,7 +2005,7 @@ cdef class PEP(Object):
         getLinearExplicitMatrix, slepc.PEPLinearSetExplicitMatrix
         """
         cdef PetscBool sval = asBool(flag)
-        CHKERR( PEPLinearSetExplicitMatrix(self.pep, sval) )
+        CHKERR(PEPLinearSetExplicitMatrix(self.pep, sval))
 
     def getLinearExplicitMatrix(self) -> bool:
         """
@@ -2009,7 +2023,7 @@ cdef class PEP(Object):
         getLinearExplicitMatrix, slepc.PEPLinearSetExplicitMatrix
         """
         cdef PetscBool sval = PETSC_FALSE
-        CHKERR( PEPLinearGetExplicitMatrix(self.pep, &sval) )
+        CHKERR(PEPLinearGetExplicitMatrix(self.pep, &sval))
         return toBool(sval)
 
     #
@@ -2038,7 +2052,7 @@ cdef class PEP(Object):
         getQArnoldiRestart, slepc.PEPQArnoldiSetRestart
         """
         cdef PetscReal val = asReal(keep)
-        CHKERR( PEPQArnoldiSetRestart(self.pep, val) )
+        CHKERR(PEPQArnoldiSetRestart(self.pep, val))
 
     def getQArnoldiRestart(self) -> float:
         """
@@ -2056,7 +2070,7 @@ cdef class PEP(Object):
         setQArnoldiRestart, slepc.PEPQArnoldiGetRestart
         """
         cdef PetscReal val = 0
-        CHKERR( PEPQArnoldiGetRestart(self.pep, &val) )
+        CHKERR(PEPQArnoldiGetRestart(self.pep, &val))
         return toReal(val)
 
     def setQArnoldiLocking(self, lock: bool = True) -> None:
@@ -2082,7 +2096,7 @@ cdef class PEP(Object):
         getQArnoldiLocking, slepc.PEPQArnoldiSetLocking
         """
         cdef PetscBool val = asBool(lock)
-        CHKERR( PEPQArnoldiSetLocking(self.pep, val) )
+        CHKERR(PEPQArnoldiSetLocking(self.pep, val))
 
     def getQArnoldiLocking(self) -> bool:
         """
@@ -2100,7 +2114,7 @@ cdef class PEP(Object):
         setQArnoldiLocking, slepc.PEPQArnoldiGetLocking
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( PEPQArnoldiGetLocking(self.pep, &tval) )
+        CHKERR(PEPQArnoldiGetLocking(self.pep, &tval))
         return toBool(tval)
 
     #
@@ -2129,7 +2143,7 @@ cdef class PEP(Object):
         getTOARRestart, slepc.PEPTOARSetRestart
         """
         cdef PetscReal val = asReal(keep)
-        CHKERR( PEPTOARSetRestart(self.pep, val) )
+        CHKERR(PEPTOARSetRestart(self.pep, val))
 
     def getTOARRestart(self) -> float:
         """
@@ -2147,7 +2161,7 @@ cdef class PEP(Object):
         setTOARRestart, slepc.PEPTOARGetRestart
         """
         cdef PetscReal val = 0
-        CHKERR( PEPTOARGetRestart(self.pep, &val) )
+        CHKERR(PEPTOARGetRestart(self.pep, &val))
         return toReal(val)
 
     def setTOARLocking(self, lock: bool = True) -> None:
@@ -2173,7 +2187,7 @@ cdef class PEP(Object):
         getTOARLocking, slepc.PEPTOARSetLocking
         """
         cdef PetscBool val = asBool(lock)
-        CHKERR( PEPTOARSetLocking(self.pep, val) )
+        CHKERR(PEPTOARSetLocking(self.pep, val))
 
     def getTOARLocking(self) -> bool:
         """
@@ -2191,7 +2205,7 @@ cdef class PEP(Object):
         setTOARLocking, slepc.PEPTOARGetLocking
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( PEPTOARGetLocking(self.pep, &tval) )
+        CHKERR(PEPTOARGetLocking(self.pep, &tval))
         return toBool(tval)
 
     #
@@ -2215,7 +2229,7 @@ cdef class PEP(Object):
         """
         cdef PetscReal a = asReal(alpha)
         cdef PetscReal b = asReal(beta)
-        CHKERR( PEPSTOARSetLinearization(self.pep, a, b) )
+        CHKERR(PEPSTOARSetLinearization(self.pep, a, b))
 
     def getSTOARLinearization(self) -> tuple[float, float]:
         """
@@ -2236,7 +2250,7 @@ cdef class PEP(Object):
         """
         cdef PetscReal a = 0.0
         cdef PetscReal b = 0.0
-        CHKERR( PEPSTOARGetLinearization(self.pep, &a, &b) )
+        CHKERR(PEPSTOARGetLinearization(self.pep, &a, &b))
         return (asReal(a), asReal(b))
 
     def setSTOARLocking(self, lock: bool = True) -> None:
@@ -2262,7 +2276,7 @@ cdef class PEP(Object):
         getSTOARLocking, slepc.PEPSTOARSetLocking
         """
         cdef PetscBool val = asBool(lock)
-        CHKERR( PEPSTOARSetLocking(self.pep, val) )
+        CHKERR(PEPSTOARSetLocking(self.pep, val))
 
     def getSTOARLocking(self) -> bool:
         """
@@ -2280,7 +2294,7 @@ cdef class PEP(Object):
         setSTOARLocking, slepc.PEPSTOARGetLocking
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( PEPSTOARGetLocking(self.pep, &tval) )
+        CHKERR(PEPSTOARGetLocking(self.pep, &tval))
         return toBool(tval)
 
     def setSTOARDetectZeros(self, detect: bool = True) -> None:
@@ -2314,7 +2328,7 @@ cdef class PEP(Object):
         setInterval, getSTOARDetectZeros, slepc.PEPSTOARSetDetectZeros
         """
         cdef PetscBool val = asBool(detect)
-        CHKERR( PEPSTOARSetDetectZeros(self.pep, val) )
+        CHKERR(PEPSTOARSetDetectZeros(self.pep, val))
 
     def getSTOARDetectZeros(self) -> bool:
         """
@@ -2332,7 +2346,7 @@ cdef class PEP(Object):
         setSTOARDetectZeros, slepc.PEPSTOARGetDetectZeros
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( PEPSTOARGetDetectZeros(self.pep, &tval) )
+        CHKERR(PEPSTOARGetDetectZeros(self.pep, &tval))
         return toBool(tval)
 
     def setSTOARDimensions(
@@ -2373,7 +2387,7 @@ cdef class PEP(Object):
         if nev is not None: ival1 = asInt(nev)
         if ncv is not None: ival2 = asInt(ncv)
         if mpd is not None: ival3 = asInt(mpd)
-        CHKERR( PEPSTOARSetDimensions(self.pep, ival1, ival2, ival3) )
+        CHKERR(PEPSTOARSetDimensions(self.pep, ival1, ival2, ival3))
 
     def getSTOARDimensions(self) -> tuple[int, int, int]:
         """
@@ -2397,7 +2411,7 @@ cdef class PEP(Object):
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
         cdef PetscInt ival3 = 0
-        CHKERR( PEPSTOARGetDimensions(self.pep, &ival1, &ival2, &ival3) )
+        CHKERR(PEPSTOARGetDimensions(self.pep, &ival1, &ival2, &ival3))
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
     def getSTOARInertias(self) -> tuple[ArrayReal, ArrayInt]:
@@ -2440,8 +2454,8 @@ cdef class PEP(Object):
             shifts = array_r(n, shiftsarray)
             inertias = array_i(n, inertiasarray)
         finally:
-            CHKERR( PetscFree(shiftsarray) )
-            CHKERR( PetscFree(inertiasarray) )
+            CHKERR(PetscFree(shiftsarray))
+            CHKERR(PetscFree(inertiasarray))
         return (shifts, inertias)
 
     def setSTOARCheckEigenvalueType(self, flag: bool = True) -> None:
@@ -2474,7 +2488,7 @@ cdef class PEP(Object):
         getSTOARCheckEigenvalueType, slepc.PEPSTOARSetCheckEigenvalueType
         """
         cdef PetscBool sval = asBool(flag)
-        CHKERR( PEPSTOARSetCheckEigenvalueType(self.pep, sval) )
+        CHKERR(PEPSTOARSetCheckEigenvalueType(self.pep, sval))
 
     def getSTOARCheckEigenvalueType(self) -> bool:
         """
@@ -2492,7 +2506,7 @@ cdef class PEP(Object):
         setSTOARCheckEigenvalueType, slepc.PEPSTOARGetCheckEigenvalueType
         """
         cdef PetscBool sval = PETSC_FALSE
-        CHKERR( PEPSTOARGetCheckEigenvalueType(self.pep, &sval) )
+        CHKERR(PEPSTOARGetCheckEigenvalueType(self.pep, &sval))
         return toBool(sval)
 
     #
@@ -2521,7 +2535,7 @@ cdef class PEP(Object):
         getJDRestart, slepc.PEPJDSetRestart
         """
         cdef PetscReal val = asReal(keep)
-        CHKERR( PEPJDSetRestart(self.pep, val) )
+        CHKERR(PEPJDSetRestart(self.pep, val))
 
     def getJDRestart(self) -> float:
         """
@@ -2539,7 +2553,7 @@ cdef class PEP(Object):
         setJDRestart, slepc.PEPJDGetRestart
         """
         cdef PetscReal val = 0
-        CHKERR( PEPJDGetRestart(self.pep, &val) )
+        CHKERR(PEPJDGetRestart(self.pep, &val))
         return toReal(val)
 
     def setJDFix(self, fix: float) -> None:
@@ -2564,7 +2578,7 @@ cdef class PEP(Object):
         getJDFix, slepc.PEPJDSetFix
         """
         cdef PetscReal val = asReal(fix)
-        CHKERR( PEPJDSetFix(self.pep, val) )
+        CHKERR(PEPJDSetFix(self.pep, val))
 
     def getJDFix(self) -> float:
         """
@@ -2582,7 +2596,7 @@ cdef class PEP(Object):
         setJDFix, slepc.PEPJDGetFix
         """
         cdef PetscReal val = 0
-        CHKERR( PEPJDGetFix(self.pep, &val) )
+        CHKERR(PEPJDGetFix(self.pep, &val))
         return toReal(val)
 
     def setJDReusePreconditioner(self, flag: bool = True) -> None:
@@ -2608,7 +2622,7 @@ cdef class PEP(Object):
         setJDFix, getJDReusePreconditioner, slepc.PEPJDSetReusePreconditioner
         """
         cdef PetscBool bval = asBool(flag)
-        CHKERR( PEPJDSetReusePreconditioner(self.pep, bval) )
+        CHKERR(PEPJDSetReusePreconditioner(self.pep, bval))
 
     def getJDReusePreconditioner(self) -> bool:
         """
@@ -2626,7 +2640,7 @@ cdef class PEP(Object):
         setJDReusePreconditioner, slepc.PEPJDGetReusePreconditioner
         """
         cdef PetscBool bval = PETSC_FALSE
-        CHKERR( PEPJDGetReusePreconditioner(self.pep, &bval) )
+        CHKERR(PEPJDGetReusePreconditioner(self.pep, &bval))
         return toBool(bval)
 
     def setJDMinimalityIndex(self, flag: int) -> None:
@@ -2651,7 +2665,7 @@ cdef class PEP(Object):
         getJDMinimalityIndex, slepc.PEPJDSetMinimalityIndex
         """
         cdef PetscInt ival = asInt(flag)
-        CHKERR( PEPJDSetMinimalityIndex(self.pep, ival) )
+        CHKERR(PEPJDSetMinimalityIndex(self.pep, ival))
 
     def getJDMinimalityIndex(self) -> int:
         """
@@ -2669,7 +2683,7 @@ cdef class PEP(Object):
         setJDMinimalityIndex, slepc.PEPJDGetMinimalityIndex
         """
         cdef PetscInt ival = 1
-        CHKERR( PEPJDGetMinimalityIndex(self.pep, &ival) )
+        CHKERR(PEPJDGetMinimalityIndex(self.pep, &ival))
         return toInt(ival)
 
     def setJDProjection(self, proj: JDProjection) -> None:
@@ -2688,7 +2702,7 @@ cdef class PEP(Object):
         getJDProjection, slepc.PEPJDSetProjection
         """
         cdef SlepcPEPJDProjection val = proj
-        CHKERR( PEPJDSetProjection(self.pep, val) )
+        CHKERR(PEPJDSetProjection(self.pep, val))
 
     def getJDProjection(self) -> JDProjection:
         """
@@ -2706,7 +2720,7 @@ cdef class PEP(Object):
         setJDProjection, slepc.PEPJDGetProjection
         """
         cdef SlepcPEPJDProjection val = PEP_JD_PROJECTION_HARMONIC
-        CHKERR( PEPJDGetProjection(self.pep, &val) )
+        CHKERR(PEPJDGetProjection(self.pep, &val))
         return val
 
     #
@@ -2727,7 +2741,7 @@ cdef class PEP(Object):
         getCISSExtraction, slepc.PEPCISSSetExtraction
         """
         cdef SlepcPEPCISSExtraction val = extraction
-        CHKERR( PEPCISSSetExtraction(self.pep, val) )
+        CHKERR(PEPCISSSetExtraction(self.pep, val))
 
     def getCISSExtraction(self) -> CISSExtraction:
         """
@@ -2745,7 +2759,7 @@ cdef class PEP(Object):
         setCISSExtraction, slepc.PEPCISSGetExtraction
         """
         cdef SlepcPEPCISSExtraction val = PEP_CISS_EXTRACTION_RITZ
-        CHKERR( PEPCISSGetExtraction(self.pep, &val) )
+        CHKERR(PEPCISSGetExtraction(self.pep, &val))
         return val
 
     def setCISSSizes(
@@ -2800,7 +2814,7 @@ cdef class PEP(Object):
         if ms    is not None: ival3 = asInt(ms)
         if npart is not None: ival4 = asInt(npart)
         if bsmax is not None: ival5 = asInt(bsmax)
-        CHKERR( PEPCISSSetSizes(self.pep, ival1, ival2, ival3, ival4, ival5, bval) )
+        CHKERR(PEPCISSSetSizes(self.pep, ival1, ival2, ival3, ival4, ival5, bval))
 
     def getCISSSizes(self) -> tuple[int, int, int, int, int, bool]:
         """
@@ -2833,7 +2847,7 @@ cdef class PEP(Object):
         cdef PetscInt  ival4 = 0
         cdef PetscInt  ival5 = 0
         cdef PetscBool bval  = PETSC_FALSE
-        CHKERR( PEPCISSGetSizes(self.pep, &ival1, &ival2, &ival3, &ival4, &ival5, &bval) )
+        CHKERR(PEPCISSGetSizes(self.pep, &ival1, &ival2, &ival3, &ival4, &ival5, &bval))
         return (toInt(ival1), toInt(ival2), toInt(ival3), toInt(ival4), toInt(ival5), toBool(bval))
 
     def setCISSThreshold(self, delta: float | None = None, spur: float | None = None) -> None:
@@ -2857,7 +2871,7 @@ cdef class PEP(Object):
         cdef PetscReal rval2 = PETSC_CURRENT
         if delta is not None: rval1 = asReal(delta)
         if spur  is not None: rval2 = asReal(spur)
-        CHKERR( PEPCISSSetThreshold(self.pep, rval1, rval2) )
+        CHKERR(PEPCISSSetThreshold(self.pep, rval1, rval2))
 
     def getCISSThreshold(self) -> tuple[float, float]:
         """
@@ -2878,7 +2892,7 @@ cdef class PEP(Object):
         """
         cdef PetscReal delta = 0
         cdef PetscReal spur  = 0
-        CHKERR( PEPCISSGetThreshold(self.pep, &delta, &spur) )
+        CHKERR(PEPCISSGetThreshold(self.pep, &delta, &spur))
         return (toReal(delta), toReal(spur))
 
     def setCISSRefinement(self, inner: int | None = None, blsize: int | None = None) -> None:
@@ -2902,7 +2916,7 @@ cdef class PEP(Object):
         cdef PetscInt ival2 = PETSC_CURRENT
         if inner  is not None: ival1 = asInt(inner)
         if blsize is not None: ival2 = asInt(blsize)
-        CHKERR( PEPCISSSetRefinement(self.pep, ival1, ival2) )
+        CHKERR(PEPCISSSetRefinement(self.pep, ival1, ival2))
 
     def getCISSRefinement(self) -> tuple[int, int]:
         """
@@ -2923,7 +2937,7 @@ cdef class PEP(Object):
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
-        CHKERR( PEPCISSGetRefinement(self.pep, &ival1, &ival2) )
+        CHKERR(PEPCISSGetRefinement(self.pep, &ival1, &ival2))
         return (toInt(ival1), toInt(ival2))
 
     def getCISSKSPs(self) -> list[KSP]:
@@ -2948,9 +2962,9 @@ cdef class PEP(Object):
         --------
         setCISSSizes, slepc.PEPCISSGetKSPs
         """
-        cdef PetscInt i = 0, n = 0
+        cdef PetscInt n = 0
         cdef PetscKSP *p = NULL
-        CHKERR( PEPCISSGetKSPs(self.pep, &n, &p) )
+        CHKERR(PEPCISSGetKSPs(self.pep, &n, &p))
         return [ref_KSP(p[i]) for i from 0 <= i <n]
 
     #
@@ -2959,6 +2973,7 @@ cdef class PEP(Object):
         """The type of the eigenvalue problem."""
         def __get__(self) -> PEPProblemType:
             return self.getProblemType()
+
         def __set__(self, value):
             self.setProblemType(value)
 
@@ -2966,6 +2981,7 @@ cdef class PEP(Object):
         """The portion of the spectrum to be sought."""
         def __get__(self) -> PEPWhich:
             return self.getWhichEigenpairs()
+
         def __set__(self, value):
             self.setWhichEigenpairs(value)
 
@@ -2973,6 +2989,7 @@ cdef class PEP(Object):
         """The value of the target."""
         def __get__(self) -> float:
             return self.getTarget()
+
         def __set__(self, value):
             self.setTarget(value)
 
@@ -2980,6 +2997,7 @@ cdef class PEP(Object):
         """The type of extraction technique to be employed."""
         def __get__(self) -> PEPExtract:
             return self.getExtract()
+
         def __set__(self, value):
             self.setExtract(value)
 
@@ -2987,6 +3005,7 @@ cdef class PEP(Object):
         """The tolerance."""
         def __get__(self) -> float:
             return self.getTolerances()[0]
+
         def __set__(self, value):
             self.setTolerances(tol=value)
 
@@ -2994,6 +3013,7 @@ cdef class PEP(Object):
         """The maximum iteration count."""
         def __get__(self) -> int:
             return self.getTolerances()[1]
+
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
@@ -3001,6 +3021,7 @@ cdef class PEP(Object):
         """Compute the residual norm of all approximate eigenpairs."""
         def __get__(self) -> bool:
             return self.getTrackAll()
+
         def __set__(self, value):
             self.setTrackAll(value)
 
@@ -3008,6 +3029,7 @@ cdef class PEP(Object):
         """The spectral transformation (`ST`) object associated."""
         def __get__(self) -> ST:
             return self.getST()
+
         def __set__(self, value):
             self.setST(value)
 
@@ -3015,6 +3037,7 @@ cdef class PEP(Object):
         """The basis vectors (`BV`) object associated."""
         def __get__(self) -> BV:
             return self.getBV()
+
         def __set__(self, value):
             self.setBV(value)
 
@@ -3022,6 +3045,7 @@ cdef class PEP(Object):
         """The region (`RG`) object associated."""
         def __get__(self) -> RG:
             return self.getRG()
+
         def __set__(self, value):
             self.setRG(value)
 
@@ -3029,6 +3053,7 @@ cdef class PEP(Object):
         """The direct solver (`DS`) object associated."""
         def __get__(self) -> DS:
             return self.getDS()
+
         def __set__(self, value):
             self.setDS(value)
 

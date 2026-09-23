@@ -14,6 +14,7 @@ class MFNType(object):
     KRYLOV   = S_(MFNKRYLOV)
     EXPOKIT  = S_(MFNEXPOKIT)
 
+
 class MFNConvergedReason(object):
     """
     MFN convergence reasons.
@@ -35,6 +36,7 @@ class MFNConvergedReason(object):
     ITERATING           = MFN_CONVERGED_ITERATING
 
 # -----------------------------------------------------------------------------
+
 
 cdef class MFN(Object):
 
@@ -71,7 +73,7 @@ cdef class MFN(Object):
         slepc.MFNView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( MFNView(self.mfn, vwr) )
+        CHKERR(MFNView(self.mfn, vwr))
 
     def destroy(self) -> Self:
         """
@@ -83,7 +85,7 @@ cdef class MFN(Object):
         --------
         slepc.MFNDestroy
         """
-        CHKERR( MFNDestroy(&self.mfn) )
+        CHKERR(MFNDestroy(&self.mfn))
         self.mfn = NULL
         return self
 
@@ -97,7 +99,7 @@ cdef class MFN(Object):
         --------
         slepc.MFNReset
         """
-        CHKERR( MFNReset(self.mfn) )
+        CHKERR(MFNReset(self.mfn))
 
     def create(self, comm: Comm | None = None) -> Self:
         """
@@ -116,8 +118,8 @@ cdef class MFN(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcMFN newmfn = NULL
-        CHKERR( MFNCreate(ccomm, &newmfn) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.mfn = newmfn
+        CHKERR(MFNCreate(ccomm, &newmfn))
+        CHKERR(SlepcCLEAR(self.obj)); self.mfn = newmfn
         return self
 
     def setType(self, mfn_type: Type | str) -> None:
@@ -145,7 +147,7 @@ cdef class MFN(Object):
         """
         cdef SlepcMFNType cval = NULL
         mfn_type = str2bytes(mfn_type, &cval)
-        CHKERR( MFNSetType(self.mfn, cval) )
+        CHKERR(MFNSetType(self.mfn, cval))
 
     def getType(self) -> str:
         """
@@ -163,7 +165,7 @@ cdef class MFN(Object):
         setType, slepc.MFNGetType
         """
         cdef SlepcMFNType mfn_type = NULL
-        CHKERR( MFNGetType(self.mfn, &mfn_type) )
+        CHKERR(MFNGetType(self.mfn, &mfn_type))
         return bytes2str(mfn_type)
 
     def getOptionsPrefix(self) -> str:
@@ -182,7 +184,7 @@ cdef class MFN(Object):
         setOptionsPrefix, appendOptionsPrefix, slepc.MFNGetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( MFNGetOptionsPrefix(self.mfn, &prefix) )
+        CHKERR(MFNGetOptionsPrefix(self.mfn, &prefix))
         return bytes2str(prefix)
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -214,7 +216,7 @@ cdef class MFN(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( MFNSetOptionsPrefix(self.mfn, cval) )
+        CHKERR(MFNSetOptionsPrefix(self.mfn, cval))
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
@@ -233,7 +235,7 @@ cdef class MFN(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( MFNAppendOptionsPrefix(self.mfn, cval) )
+        CHKERR(MFNAppendOptionsPrefix(self.mfn, cval))
 
     def setFromOptions(self) -> None:
         """
@@ -252,7 +254,7 @@ cdef class MFN(Object):
         --------
         setOptionsPrefix, slepc.MFNSetFromOptions
         """
-        CHKERR( MFNSetFromOptions(self.mfn) )
+        CHKERR(MFNSetFromOptions(self.mfn))
 
     def getTolerances(self) -> tuple[float, int]:
         """
@@ -273,7 +275,7 @@ cdef class MFN(Object):
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
-        CHKERR( MFNGetTolerances(self.mfn, &rval, &ival) )
+        CHKERR(MFNGetTolerances(self.mfn, &rval, &ival))
         return (toReal(rval), toInt(ival))
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
@@ -300,7 +302,7 @@ cdef class MFN(Object):
         cdef PetscInt  ival = PETSC_CURRENT
         if tol    is not None: rval = asReal(tol)
         if max_it is not None: ival = asInt(max_it)
-        CHKERR( MFNSetTolerances(self.mfn, rval, ival) )
+        CHKERR(MFNSetTolerances(self.mfn, rval, ival))
 
     def getDimensions(self) -> int:
         """
@@ -318,7 +320,7 @@ cdef class MFN(Object):
         setDimensions, slepc.MFNGetDimensions
         """
         cdef PetscInt ival = 0
-        CHKERR( MFNGetDimensions(self.mfn, &ival) )
+        CHKERR(MFNGetDimensions(self.mfn, &ival))
         return toInt(ival)
 
     def setDimensions(self, ncv: int) -> None:
@@ -337,7 +339,7 @@ cdef class MFN(Object):
         getDimensions, slepc.MFNSetDimensions
         """
         cdef PetscInt ival = asInt(ncv)
-        CHKERR( MFNSetDimensions(self.mfn, ival) )
+        CHKERR(MFNSetDimensions(self.mfn, ival))
 
     def getFN(self) -> FN:
         """
@@ -355,8 +357,8 @@ cdef class MFN(Object):
         setFN, slepc.MFNGetFN
         """
         cdef FN fn = FN()
-        CHKERR( MFNGetFN(self.mfn, &fn.fn) )
-        CHKERR( PetscINCREF(fn.obj) )
+        CHKERR(MFNGetFN(self.mfn, &fn.fn))
+        CHKERR(PetscINCREF(fn.obj))
         return fn
 
     def setFN(self, FN fn) -> None:
@@ -374,7 +376,7 @@ cdef class MFN(Object):
         --------
         getFN, slepc.MFNSetFN
         """
-        CHKERR( MFNSetFN(self.mfn, fn.fn) )
+        CHKERR(MFNSetFN(self.mfn, fn.fn))
 
     def getBV(self) -> BV:
         """
@@ -392,8 +394,8 @@ cdef class MFN(Object):
         setBV, slepc.MFNGetBV
         """
         cdef BV bv = BV()
-        CHKERR( MFNGetBV(self.mfn, &bv.bv) )
-        CHKERR( PetscINCREF(bv.obj) )
+        CHKERR(MFNGetBV(self.mfn, &bv.bv))
+        CHKERR(PetscINCREF(bv.obj))
         return bv
 
     def setBV(self, BV bv) -> None:
@@ -411,7 +413,7 @@ cdef class MFN(Object):
         --------
         getBV, slepc.MFNSetBV
         """
-        CHKERR( MFNSetBV(self.mfn, bv.bv) )
+        CHKERR(MFNSetBV(self.mfn, bv.bv))
 
     def getOperator(self) -> Mat:
         """
@@ -429,8 +431,8 @@ cdef class MFN(Object):
         setOperator, slepc.MFNGetOperator
         """
         cdef Mat A = Mat()
-        CHKERR( MFNGetOperator(self.mfn, &A.mat) )
-        CHKERR( PetscINCREF(A.obj) )
+        CHKERR(MFNGetOperator(self.mfn, &A.mat))
+        CHKERR(PetscINCREF(A.obj))
         return A
 
     def setOperator(self, Mat A) -> None:
@@ -453,7 +455,7 @@ cdef class MFN(Object):
         --------
         getOperator, slepc.MFNSetOperator
         """
-        CHKERR( MFNSetOperator(self.mfn, A.mat) )
+        CHKERR(MFNSetOperator(self.mfn, A.mat))
 
     #
 
@@ -477,7 +479,7 @@ cdef class MFN(Object):
         if monitorlist is None:
             monitorlist = []
             self.set_attr('__monitor__', monitorlist)
-            CHKERR( MFNMonitorSet(self.mfn, MFN_Monitor, NULL, NULL) )
+            CHKERR(MFNMonitorSet(self.mfn, MFN_Monitor, NULL, NULL))
         if args is None: args = ()
         if kargs is None: kargs = {}
         monitorlist.append((monitor, args, kargs))
@@ -505,7 +507,7 @@ cdef class MFN(Object):
         --------
         slepc.MFNMonitorCancel
         """
-        CHKERR( MFNMonitorCancel(self.mfn) )
+        CHKERR(MFNMonitorCancel(self.mfn))
         self.set_attr('__monitor__', None)
 
     #
@@ -523,7 +525,7 @@ cdef class MFN(Object):
         --------
         solve, slepc.MFNSetUp
         """
-        CHKERR( MFNSetUp(self.mfn) )
+        CHKERR(MFNSetUp(self.mfn))
 
     def solve(self, Vec b, Vec x) -> None:
         """
@@ -551,7 +553,7 @@ cdef class MFN(Object):
         --------
         setOperator, getFN, solveTranspose, slepc.MFNSolve
         """
-        CHKERR( MFNSolve(self.mfn, b.vec, x.vec) )
+        CHKERR(MFNSolve(self.mfn, b.vec, x.vec))
 
     def solveTranspose(self, Vec b, Vec x) -> None:
         """
@@ -579,7 +581,7 @@ cdef class MFN(Object):
         --------
         setOperator, getFN, solve, slepc.MFNSolveTranspose
         """
-        CHKERR( MFNSolveTranspose(self.mfn, b.vec, x.vec) )
+        CHKERR(MFNSolveTranspose(self.mfn, b.vec, x.vec))
 
     def getIterationNumber(self) -> int:
         """
@@ -601,7 +603,7 @@ cdef class MFN(Object):
         getConvergedReason, slepc.MFNGetIterationNumber
         """
         cdef PetscInt ival = 0
-        CHKERR( MFNGetIterationNumber(self.mfn, &ival) )
+        CHKERR(MFNGetIterationNumber(self.mfn, &ival))
         return toInt(ival)
 
     def getConvergedReason(self) -> ConvergedReason:
@@ -620,7 +622,7 @@ cdef class MFN(Object):
         setTolerances, solve, setErrorIfNotConverged, slepc.MFNGetConvergedReason
         """
         cdef SlepcMFNConvergedReason val = MFN_CONVERGED_ITERATING
-        CHKERR( MFNGetConvergedReason(self.mfn, &val) )
+        CHKERR(MFNGetConvergedReason(self.mfn, &val))
         return val
 
     def setErrorIfNotConverged(self, flg: bool = True) -> None:
@@ -645,7 +647,7 @@ cdef class MFN(Object):
         getConvergedReason, solve, slepc.MFNSetErrorIfNotConverged
         """
         cdef PetscBool tval = flg
-        CHKERR( MFNSetErrorIfNotConverged(self.mfn, tval) )
+        CHKERR(MFNSetErrorIfNotConverged(self.mfn, tval))
 
     def getErrorIfNotConverged(self) -> bool:
         """
@@ -666,7 +668,7 @@ cdef class MFN(Object):
         setErrorIfNotConverged, slepc.MFNGetErrorIfNotConverged
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( MFNGetErrorIfNotConverged(self.mfn, &tval) )
+        CHKERR(MFNGetErrorIfNotConverged(self.mfn, &tval))
         return toBool(tval)
 
     #
@@ -675,6 +677,7 @@ cdef class MFN(Object):
         """The tolerance count used by the MFN convergence tests."""
         def __get__(self) -> float:
             return self.getTolerances()[0]
+
         def __set__(self, value):
             self.setTolerances(tol=value)
 
@@ -682,6 +685,7 @@ cdef class MFN(Object):
         """The maximum iteration count used by the MFN convergence tests."""
         def __get__(self) -> int:
             return self.getTolerances()[1]
+
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
@@ -689,6 +693,7 @@ cdef class MFN(Object):
         """The math function (`FN`) object associated to the MFN object."""
         def __get__(self) -> FN:
             return self.getFN()
+
         def __set__(self, value):
             self.setBV(value)
 
@@ -696,6 +701,7 @@ cdef class MFN(Object):
         """The basis vectors (`BV`) object associated to the MFN object."""
         def __get__(self) -> BV:
             return self.getFN()
+
         def __set__(self, value):
             self.setBV(value)
 

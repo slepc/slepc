@@ -14,7 +14,9 @@
 
 # Initialization is similar to previous examples.
 
-import sys, slepc4py
+import sys
+import slepc4py
+
 slepc4py.init(sys.argv)
 
 from petsc4py import PETSc
@@ -27,38 +29,48 @@ Print = PETSc.Sys.Print
 # and the other matrix is set to zero (which means that this problem
 # could have been solved as a linear eigenproblem).
 
-def construct_operators(m,n):
-    Print("Quadratic Eigenproblem, N=%d (%dx%d grid)"% (m*n, m, n))
+
+def construct_operators(m, n):
+    Print(f'Quadratic Eigenproblem, N={m * n} ({m}x{n} grid)')
     # K is the 2-D Laplacian
     K = PETSc.Mat().create()
-    K.setSizes([n*m, n*m])
+    K.setSizes([n * m, n * m])
     K.setFromOptions()
     Istart, Iend = K.getOwnershipRange()
-    for I in range(Istart,Iend):
-        v = -1.0; i = I//n; j = I-i*n;
-        if i>0:
-            J=I-n; K[I,J] = v
-        if i<m-1:
-            J=I+n; K[I,J] = v
-        if j>0:
-            J=I-1; K[I,J] = v
-        if j<n-1:
-            J=I+1; K[I,J] = v
-        v=4.0; K[I,I] = v
+    for i in range(Istart, Iend):
+        v = -1.0
+        gi = i // n
+        gj = i - gi * n
+        if gi > 0:
+            j = i - n
+            K[i, j] = v
+        if gi < m - 1:
+            j = i + n
+            K[i, j] = v
+        if gj > 0:
+            j = i - 1
+            K[i, j] = v
+        if gj < n - 1:
+            j = i + 1
+            K[i, j] = v
+        v = 4.0
+        K[i, i] = v
     K.assemble()
     # C is the zero matrix
     C = PETSc.Mat().create()
-    C.setSizes([n*m, n*m])
+    C.setSizes([n * m, n * m])
     C.setFromOptions()
     C.assemble()
     # M is the identity matrix
-    M = PETSc.Mat().createConstantDiagonal([n*m, n*m], 1.0)
+    M = PETSc.Mat().createConstantDiagonal([n * m, n * m], 1.0)
 
     return M, C, K
+
 
 # The polynomial eigenvalue solver is similar to the linear eigensolver
 # used in previous examples. The main difference is that we must provide
 # a list of matrices, from lowest to highest degree.
+
 
 def solve_eigensystem(M, C, K):
     # Setup the eigensolver
@@ -73,28 +85,29 @@ def solve_eigensystem(M, C, K):
     xr, xi = K.createVecs()
 
     its = Q.getIterationNumber()
-    Print("Number of iterations of the method: %i" % its)
+    Print(f'Number of iterations of the method: {its}')
     sol_type = Q.getType()
-    Print("Solution method: %s" % sol_type)
-    nev, ncv, mpd = Q.getDimensions()
-    Print("")
-    Print("Number of requested eigenvalues: %i" % nev)
+    Print(f'Solution method: {sol_type}')
+    nev, _ncv, _mpd = Q.getDimensions()
+    Print('')
+    Print(f'Number of requested eigenvalues: {nev}')
     tol, maxit = Q.getTolerances()
-    Print("Stopping condition: tol=%.4g, maxit=%d" % (tol, maxit))
+    Print(f'Stopping condition: tol={tol:.4g}, maxit={maxit}')
     nconv = Q.getConverged()
-    Print("Number of converged approximate eigenpairs: %d" % nconv)
+    Print(f'Number of converged approximate eigenpairs: {nconv}')
     if nconv > 0:
-        Print("")
-        Print("          k           ||(k^2M+Ck+K)x||/||kx|| ")
-        Print("-------------------- -------------------------")
+        Print('')
+        Print('          k           ||(k^2M+Ck+K)x||/||kx|| ')
+        Print('-------------------- -------------------------')
         for i in range(nconv):
             k = Q.getEigenpair(i, xr, xi)
             error = Q.computeError(i)
             if k.imag != 0.0:
-                Print("%9f%+9f j    %12g" % (k.real, k.imag, error))
+                Print(f'{k.real:9f}{k.imag:+9f} j    {error:12g}')
             else:
-                Print("%12f         %12g" % (k.real, error))
-    Print("")
+                Print(f'{k.real:12f}         {error:12g}')
+    Print('')
+
 
 # The main program simply processes two user-defined command-line options
 # (the dimensions of the mesh) and calls the other two functions.
@@ -103,6 +116,6 @@ if __name__ == '__main__':
     opts = PETSc.Options()
     m = opts.getInt('m', 32)
     n = opts.getInt('n', m)
-    M, C, K = construct_operators(m,n)
+    M, C, K = construct_operators(m, n)
     solve_eigensystem(M, C, K)
     M = C = K = None

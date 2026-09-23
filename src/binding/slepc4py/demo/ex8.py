@@ -32,7 +32,9 @@
 # Initialization is similar to previous examples. In this case we also
 # need to import some math symbols.
 
-import sys, slepc4py
+import sys
+import slepc4py
+
 slepc4py.init(sys.argv)
 
 from petsc4py import PETSc
@@ -49,7 +51,7 @@ opts = PETSc.Options()
 n = opts.getInt('n', 128)
 tau = opts.getReal('tau', 0.001)
 a = 20
-h = pi/(n+1)
+h = pi / (n + 1)
 
 # Next we have to set up the solver. In this case, we are going to
 # represent the nonlinear problem in split form, i.e., as a sum of
@@ -69,16 +71,16 @@ A = PETSc.Mat().create()
 A.setSizes([n, n])
 A.setFromOptions()
 rstart, rend = A.getOwnershipRange()
-vd = -2.0/(h*h)+a
-vo = 1.0/(h*h)
+vd = -2.0 / (h * h) + a
+vo = 1.0 / (h * h)
 if rstart == 0:
-  A[0, :2] = [vd, vo]
-  rstart += 1
+    A[0, :2] = [vd, vo]
+    rstart += 1
 if rend == n:
-  A[n-1, -2:] = [vo, vd]
-  rend -= 1
+    A[n - 1, -2:] = [vo, vd]
+    rend -= 1
 for i in range(rstart, rend):
-  A[i, i-1:i+2] = [vo, vd, vo]
+    A[i, i - 1 : i + 2] = [vo, vd, vo]
 A.assemble()
 
 # The third term includes a diagonal matrix :math:`B = \operatorname{diag}(b(x_i))`.
@@ -88,8 +90,8 @@ B.setSizes([n, n])
 B.setFromOptions()
 rstart, rend = B.getOwnershipRange()
 for i in range(rstart, rend):
-  xi = (i+1)*h
-  B[i, i] = -4.1+xi*(1.0-exp(xi-pi));
+    xi = (i + 1) * h
+    B[i, i] = -4.1 + xi * (1.0 - exp(xi - pi))
 B.assemble()
 B.setOption(PETSc.Mat.Option.HERMITIAN, True)
 
@@ -125,30 +127,30 @@ nep.solve()
 # eigenvalue and the residual norm.
 
 its = nep.getIterationNumber()
-Print("Number of iterations of the method: %i" % its)
+Print(f'Number of iterations of the method: {its}')
 sol_type = nep.getType()
-Print("Solution method: %s" % sol_type)
-nev, ncv, mpd = nep.getDimensions()
-Print("")
-Print("Subspace dimension: %i" % ncv)
+Print(f'Solution method: {sol_type}')
+_nev, ncv, _mpd = nep.getDimensions()
+Print('')
+Print(f'Subspace dimension: {ncv}')
 tol, maxit = nep.getTolerances()
-Print("Stopping condition: tol=%.4g" % tol)
-Print("")
+Print(f'Stopping condition: tol={tol:.4g}')
+Print('')
 
 nconv = nep.getConverged()
-Print( "Number of converged eigenpairs %d" % nconv )
+Print(f'Number of converged eigenpairs {nconv}')
 
 if nconv > 0:
-  x = Id.createVecs('right')
-  x.set(1.0)
-  Print()
-  Print("        k              ||T(k)x||")
-  Print("----------------- ------------------")
-  for i in range(nconv):
-    k = nep.getEigenpair(i, x)
-    res = nep.computeError(i)
-    if k.imag != 0.0:
-      Print( " %9f%+9f j %12g" % (k.real, k.imag, res) )
-    else:
-      Print( " %12f       %12g" % (k.real, res) )
-  Print()
+    x = Id.createVecs('right')
+    x.set(1.0)
+    Print()
+    Print('        k              ||T(k)x||')
+    Print('----------------- ------------------')
+    for i in range(nconv):
+        k = nep.getEigenpair(i, x)
+        res = nep.computeError(i)
+        if k.imag != 0.0:
+            Print(f' {k.real:9f}{k.imag:+9f} j {res:12g}')
+        else:
+            Print(f' {k.real:12f}       {res:12g}')
+    Print()

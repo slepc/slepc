@@ -22,6 +22,7 @@ class NEPType(object):
     CISS     = S_(NEPCISS)
     INTERPOL = S_(NEPINTERPOL)
 
+
 class NEPProblemType(object):
     """
     NEP problem type.
@@ -35,6 +36,7 @@ class NEPProblemType(object):
     """
     GENERAL  = NEP_GENERAL
     RATIONAL = NEP_RATIONAL
+
 
 class NEPErrorType(object):
     """
@@ -51,6 +53,7 @@ class NEPErrorType(object):
     ABSOLUTE = NEP_ERROR_ABSOLUTE
     RELATIVE = NEP_ERROR_RELATIVE
     BACKWARD = NEP_ERROR_BACKWARD
+
 
 class NEPWhich(object):
     """
@@ -84,6 +87,7 @@ class NEPWhich(object):
     ALL                = NEP_ALL
     USER               = NEP_WHICH_USER
 
+
 class NEPConvergedReason(object):
     """
     NEP convergence reasons.
@@ -110,6 +114,7 @@ class NEPConvergedReason(object):
     CONVERGED_ITERATING         = NEP_CONVERGED_ITERATING
     ITERATING                   = NEP_CONVERGED_ITERATING
 
+
 class NEPRefine(object):
     """
     NEP refinement strategy.
@@ -126,6 +131,7 @@ class NEPRefine(object):
     SIMPLE   = NEP_REFINE_SIMPLE
     MULTIPLE = NEP_REFINE_MULTIPLE
 
+
 class NEPRefineScheme(object):
     """
     NEP scheme for solving linear systems during iterative refinement.
@@ -141,6 +147,7 @@ class NEPRefineScheme(object):
     SCHUR    = NEP_REFINE_SCHEME_SCHUR
     MBE      = NEP_REFINE_SCHEME_MBE
     EXPLICIT = NEP_REFINE_SCHEME_EXPLICIT
+
 
 class NEPConv(object):
     """
@@ -160,6 +167,7 @@ class NEPConv(object):
     NORM = NEP_CONV_NORM
     USER = NEP_CONV_USER
 
+
 class NEPStop(object):
     """
     NEP stopping test.
@@ -173,6 +181,7 @@ class NEPStop(object):
     """
     BASIC = NEP_STOP_BASIC
     USER  = NEP_STOP_USER
+
 
 class NEPCISSExtraction(object):
     """
@@ -192,9 +201,10 @@ class NEPCISSExtraction(object):
 
 # -----------------------------------------------------------------------------
 
+
 cdef class NEP(Object):
 
-    """
+    r"""
     Nonlinear Eigenvalue Problem Solver.
 
     The Nonlinear Eigenvalue Problem (`NEP`) solver is the object provided
@@ -237,7 +247,7 @@ cdef class NEP(Object):
         slepc.NEPView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( NEPView(self.nep, vwr) )
+        CHKERR(NEPView(self.nep, vwr))
 
     def destroy(self) -> Self:
         """
@@ -249,7 +259,7 @@ cdef class NEP(Object):
         --------
         slepc.NEPDestroy
         """
-        CHKERR( NEPDestroy(&self.nep) )
+        CHKERR(NEPDestroy(&self.nep))
         self.nep = NULL
         return self
 
@@ -263,7 +273,7 @@ cdef class NEP(Object):
         --------
         slepc.NEPReset
         """
-        CHKERR( NEPReset(self.nep) )
+        CHKERR(NEPReset(self.nep))
 
     def create(self, comm: Comm | None = None) -> Self:
         """
@@ -282,8 +292,8 @@ cdef class NEP(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcNEP newnep = NULL
-        CHKERR( NEPCreate(ccomm, &newnep) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.nep = newnep
+        CHKERR(NEPCreate(ccomm, &newnep))
+        CHKERR(SlepcCLEAR(self.obj)); self.nep = newnep
         return self
 
     def setType(self, nep_type: Type | str) -> None:
@@ -311,7 +321,7 @@ cdef class NEP(Object):
         """
         cdef SlepcNEPType cval = NULL
         nep_type = str2bytes(nep_type, &cval)
-        CHKERR( NEPSetType(self.nep, cval) )
+        CHKERR(NEPSetType(self.nep, cval))
 
     def getType(self) -> str:
         """
@@ -329,7 +339,7 @@ cdef class NEP(Object):
         setType, slepc.NEPGetType
         """
         cdef SlepcNEPType nep_type = NULL
-        CHKERR( NEPGetType(self.nep, &nep_type) )
+        CHKERR(NEPGetType(self.nep, &nep_type))
         return bytes2str(nep_type)
 
     def getOptionsPrefix(self) -> str:
@@ -348,7 +358,7 @@ cdef class NEP(Object):
         setOptionsPrefix, appendOptionsPrefix, slepc.NEPGetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( NEPGetOptionsPrefix(self.nep, &prefix) )
+        CHKERR(NEPGetOptionsPrefix(self.nep, &prefix))
         return bytes2str(prefix)
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -380,7 +390,7 @@ cdef class NEP(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( NEPSetOptionsPrefix(self.nep, cval) )
+        CHKERR(NEPSetOptionsPrefix(self.nep, cval))
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
@@ -399,7 +409,7 @@ cdef class NEP(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( NEPAppendOptionsPrefix(self.nep, cval) )
+        CHKERR(NEPAppendOptionsPrefix(self.nep, cval))
 
     def setFromOptions(self) -> None:
         """
@@ -418,7 +428,7 @@ cdef class NEP(Object):
         --------
         setOptionsPrefix, slepc.NEPSetFromOptions
         """
-        CHKERR( NEPSetFromOptions(self.nep) )
+        CHKERR(NEPSetFromOptions(self.nep))
 
     def getProblemType(self) -> ProblemType:
         """
@@ -436,7 +446,7 @@ cdef class NEP(Object):
         setProblemType, slepc.NEPGetProblemType
         """
         cdef SlepcNEPProblemType val = NEP_GENERAL
-        CHKERR( NEPGetProblemType(self.nep, &val) )
+        CHKERR(NEPGetProblemType(self.nep, &val))
         return val
 
     def setProblemType(self, problem_type: ProblemType) -> None:
@@ -462,7 +472,7 @@ cdef class NEP(Object):
         getProblemType, slepc.NEPSetProblemType
         """
         cdef SlepcNEPProblemType val = problem_type
-        CHKERR( NEPSetProblemType(self.nep, val) )
+        CHKERR(NEPSetProblemType(self.nep, val))
 
     def getWhichEigenpairs(self) -> Which:
         """
@@ -480,7 +490,7 @@ cdef class NEP(Object):
         setWhichEigenpairs, slepc.NEPGetWhichEigenpairs
         """
         cdef SlepcNEPWhich val = NEP_LARGEST_MAGNITUDE
-        CHKERR( NEPGetWhichEigenpairs(self.nep, &val) )
+        CHKERR(NEPGetWhichEigenpairs(self.nep, &val))
         return val
 
     def setWhichEigenpairs(self, which: Which) -> None:
@@ -516,7 +526,7 @@ cdef class NEP(Object):
         getWhichEigenpairs, setTarget, slepc.PEPSetWhichEigenpairs
         """
         cdef SlepcNEPWhich val = which
-        CHKERR( NEPSetWhichEigenpairs(self.nep, val) )
+        CHKERR(NEPSetWhichEigenpairs(self.nep, val))
 
     def getTarget(self) -> Scalar:
         """
@@ -538,7 +548,7 @@ cdef class NEP(Object):
         setTarget, slepc.NEPGetTarget
         """
         cdef PetscScalar sval = 0
-        CHKERR( NEPGetTarget(self.nep, &sval) )
+        CHKERR(NEPGetTarget(self.nep, &sval))
         return toScalar(sval)
 
     def setTarget(self, target: Scalar) -> None:
@@ -566,7 +576,7 @@ cdef class NEP(Object):
         getTarget, setWhichEigenpairs, slepc.NEPSetTarget
         """
         cdef PetscScalar sval = asScalar(target)
-        CHKERR( NEPSetTarget(self.nep, sval) )
+        CHKERR(NEPSetTarget(self.nep, sval))
 
     def getTolerances(self) -> tuple[float, int]:
         """
@@ -590,7 +600,7 @@ cdef class NEP(Object):
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
-        CHKERR( NEPGetTolerances(self.nep, &rval, &ival) )
+        CHKERR(NEPGetTolerances(self.nep, &rval, &ival))
         return (toReal(rval), toInt(ival))
 
     def setTolerances(self, tol: float | None = None, maxit: int | None = None) -> None:
@@ -619,7 +629,7 @@ cdef class NEP(Object):
         cdef PetscInt  ival = PETSC_CURRENT
         if tol   is not None: rval = asReal(tol)
         if maxit is not None: ival = asInt(maxit)
-        CHKERR( NEPSetTolerances(self.nep, rval, ival) )
+        CHKERR(NEPSetTolerances(self.nep, rval, ival))
 
     def getConvergenceTest(self) -> Conv:
         """
@@ -638,7 +648,7 @@ cdef class NEP(Object):
         setConvergenceTest, slepc.NEPGetConvergenceTest
         """
         cdef SlepcNEPConv conv = NEP_CONV_REL
-        CHKERR( NEPGetConvergenceTest(self.nep, &conv) )
+        CHKERR(NEPGetConvergenceTest(self.nep, &conv))
         return conv
 
     def setConvergenceTest(self, conv: Conv) -> None:
@@ -658,7 +668,7 @@ cdef class NEP(Object):
         getConvergenceTest, slepc.NEPSetConvergenceTest
         """
         cdef SlepcNEPConv tconv = conv
-        CHKERR( NEPSetConvergenceTest(self.nep, tconv) )
+        CHKERR(NEPSetConvergenceTest(self.nep, tconv))
 
     def getRefine(self) -> tuple[Refine, int, float, int, RefineScheme]:
         """
@@ -688,7 +698,7 @@ cdef class NEP(Object):
         cdef PetscReal tol = PETSC_DEFAULT
         cdef PetscInt its = PETSC_DEFAULT
         cdef SlepcNEPRefineScheme scheme = NEP_REFINE_SCHEME_MBE
-        CHKERR( NEPGetRefine(self.nep, &ref, &npart, &tol, &its, &scheme) )
+        CHKERR(NEPGetRefine(self.nep, &ref, &npart, &tol, &its, &scheme))
         return (ref, toInt(npart), toReal(tol), toInt(its), scheme)
 
     def setRefine(
@@ -733,7 +743,7 @@ cdef class NEP(Object):
         if tol is not None: ttol = asReal(tol)
         if its is not None: tits = asInt(its)
         if scheme is not None: tscheme = scheme
-        CHKERR( NEPSetRefine(self.nep, tref, tnpart, ttol, tits, tscheme) )
+        CHKERR(NEPSetRefine(self.nep, tref, tnpart, ttol, tits, tscheme))
 
     def getRefineKSP(self) -> KSP:
         """
@@ -751,8 +761,8 @@ cdef class NEP(Object):
         setRefine, slepc.NEPRefineGetKSP
         """
         cdef KSP ksp = KSP()
-        CHKERR( NEPRefineGetKSP(self.nep, &ksp.ksp) )
-        CHKERR( PetscINCREF(ksp.obj) )
+        CHKERR(NEPRefineGetKSP(self.nep, &ksp.ksp))
+        CHKERR(PetscINCREF(ksp.obj))
         return ksp
 
     def getTrackAll(self) -> bool:
@@ -771,7 +781,7 @@ cdef class NEP(Object):
         setTrackAll, slepc.NEPGetTrackAll
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( NEPGetTrackAll(self.nep, &tval) )
+        CHKERR(NEPGetTrackAll(self.nep, &tval))
         return toBool(tval)
 
     def setTrackAll(self, trackall: bool = True) -> None:
@@ -790,7 +800,7 @@ cdef class NEP(Object):
         getTrackAll, slepc.NEPSetTrackAll
         """
         cdef PetscBool tval = trackall
-        CHKERR( NEPSetTrackAll(self.nep, tval) )
+        CHKERR(NEPSetTrackAll(self.nep, tval))
 
     def getDimensions(self) -> tuple[int, int, int]:
         """
@@ -817,7 +827,7 @@ cdef class NEP(Object):
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
         cdef PetscInt ival3 = 0
-        CHKERR( NEPGetDimensions(self.nep, &ival1, &ival2, &ival3) )
+        CHKERR(NEPGetDimensions(self.nep, &ival1, &ival2, &ival3))
         return (toInt(ival1), toInt(ival2), toInt(ival3))
 
     def setDimensions(
@@ -872,7 +882,7 @@ cdef class NEP(Object):
         if nev is not None: ival1 = asInt(nev)
         if ncv is not None: ival2 = asInt(ncv)
         if mpd is not None: ival3 = asInt(mpd)
-        CHKERR( NEPSetDimensions(self.nep, ival1, ival2, ival3) )
+        CHKERR(NEPSetDimensions(self.nep, ival1, ival2, ival3))
 
     def getBV(self) -> BV:
         """
@@ -890,8 +900,8 @@ cdef class NEP(Object):
         setBV, slepc.NEPGetBV
         """
         cdef BV bv = BV()
-        CHKERR( NEPGetBV(self.nep, &bv.bv) )
-        CHKERR( PetscINCREF(bv.obj) )
+        CHKERR(NEPGetBV(self.nep, &bv.bv))
+        CHKERR(PetscINCREF(bv.obj))
         return bv
 
     def setBV(self, BV bv) -> None:
@@ -909,7 +919,7 @@ cdef class NEP(Object):
         --------
         getBV, slepc.NEPSetBV
         """
-        CHKERR( NEPSetBV(self.nep, bv.bv) )
+        CHKERR(NEPSetBV(self.nep, bv.bv))
 
     def getRG(self) -> RG:
         """
@@ -927,8 +937,8 @@ cdef class NEP(Object):
         setRG, slepc.NEPGetRG
         """
         cdef RG rg = RG()
-        CHKERR( NEPGetRG(self.nep, &rg.rg) )
-        CHKERR( PetscINCREF(rg.obj) )
+        CHKERR(NEPGetRG(self.nep, &rg.rg))
+        CHKERR(PetscINCREF(rg.obj))
         return rg
 
     def setRG(self, RG rg) -> None:
@@ -946,7 +956,7 @@ cdef class NEP(Object):
         --------
         getRG, slepc.NEPSetRG
         """
-        CHKERR( NEPSetRG(self.nep, rg.rg) )
+        CHKERR(NEPSetRG(self.nep, rg.rg))
 
     def getDS(self) -> DS:
         """
@@ -964,8 +974,8 @@ cdef class NEP(Object):
         setDS, slepc.NEPGetDS
         """
         cdef DS ds = DS()
-        CHKERR( NEPGetDS(self.nep, &ds.ds) )
-        CHKERR( PetscINCREF(ds.obj) )
+        CHKERR(NEPGetDS(self.nep, &ds.ds))
+        CHKERR(PetscINCREF(ds.obj))
         return ds
 
     def setDS(self, DS ds) -> None:
@@ -983,7 +993,7 @@ cdef class NEP(Object):
         --------
         getDS, slepc.NEPSetDS
         """
-        CHKERR( NEPSetDS(self.nep, ds.ds) )
+        CHKERR(NEPSetDS(self.nep, ds.ds))
 
     #
 
@@ -1020,9 +1030,9 @@ cdef class NEP(Object):
         if isinstance(space, Vec): space = [space]
         cdef PetscVec *vs = NULL
         cdef Py_ssize_t i = 0, ns = len(space)
-        cdef tmp = allocate(<size_t>ns*sizeof(PetscVec),<void**>&vs)
+        cdef unused = allocate(<size_t>ns*sizeof(PetscVec), <void**>&vs)
         for i in range(ns): vs[i] = (<Vec?>space[i]).vec
-        CHKERR( NEPSetInitialSpace(self.nep, <PetscInt>ns, vs) )
+        CHKERR(NEPSetInitialSpace(self.nep, <PetscInt>ns, vs))
 
     #
 
@@ -1045,10 +1055,10 @@ cdef class NEP(Object):
             if args is None: args = ()
             if kargs is None: kargs = {}
             self.set_attr('__stopping__', (stopping, args, kargs))
-            CHKERR( NEPSetStoppingTestFunction(self.nep, NEP_Stopping, NULL, NULL) )
+            CHKERR(NEPSetStoppingTestFunction(self.nep, NEP_Stopping, NULL, NULL))
         else:
             self.set_attr('__stopping__', None)
-            CHKERR( NEPSetStoppingTestFunction(self.nep, NEPStoppingBasic, NULL, NULL) )
+            CHKERR(NEPSetStoppingTestFunction(self.nep, NEPStoppingBasic, NULL, NULL))
 
     def getStoppingTest(self) -> NEPStoppingFunction:
         """
@@ -1092,10 +1102,10 @@ cdef class NEP(Object):
             if kargs is None: kargs = {}
             self.set_attr('__comparison__', (comparison, args, kargs))
             ctx = self.get_attr('__comparison__')
-            CHKERR( NEPSetEigenvalueComparison(self.nep, NEP_Comparison, <void*>ctx) )
+            CHKERR(NEPSetEigenvalueComparison(self.nep, NEP_Comparison, <void*>ctx))
         else:
             self.set_attr('__comparison__', None)
-            CHKERR( NEPSetEigenvalueComparison(self.nep, NULL, NULL) )
+            CHKERR(NEPSetEigenvalueComparison(self.nep, NULL, NULL))
 
     def getEigenvalueComparison(self) -> NEPEigenvalueComparison:
         """
@@ -1134,7 +1144,7 @@ cdef class NEP(Object):
         if monitorlist is None:
             monitorlist = []
             self.set_attr('__monitor__', monitorlist)
-            CHKERR( NEPMonitorSet(self.nep, NEP_Monitor, NULL, NULL) )
+            CHKERR(NEPMonitorSet(self.nep, NEP_Monitor, NULL, NULL))
         if args is None: args = ()
         if kargs is None: kargs = {}
         monitorlist.append((monitor, args, kargs))
@@ -1166,7 +1176,7 @@ cdef class NEP(Object):
         --------
         slepc.NEPMonitorCancel
         """
-        CHKERR( NEPMonitorCancel(self.nep) )
+        CHKERR(NEPMonitorCancel(self.nep))
         self.set_attr('__monitor__', None)
 
     #
@@ -1190,7 +1200,7 @@ cdef class NEP(Object):
         --------
         solve, slepc.NEPSetUp
         """
-        CHKERR( NEPSetUp(self.nep) )
+        CHKERR(NEPSetUp(self.nep))
 
     def solve(self) -> None:
         """
@@ -1210,7 +1220,7 @@ cdef class NEP(Object):
         --------
         setUp, getConverged, getConvergedReason, slepc.NEPSolve
         """
-        CHKERR( NEPSolve(self.nep) )
+        CHKERR(NEPSolve(self.nep))
 
     def getIterationNumber(self) -> int:
         """
@@ -1231,7 +1241,7 @@ cdef class NEP(Object):
         getConvergedReason, setTolerances, slepc.NEPGetIterationNumber
         """
         cdef PetscInt ival = 0
-        CHKERR( NEPGetIterationNumber(self.nep, &ival) )
+        CHKERR(NEPGetIterationNumber(self.nep, &ival))
         return toInt(ival)
 
     def getConvergedReason(self) -> ConvergedReason:
@@ -1250,7 +1260,7 @@ cdef class NEP(Object):
         setTolerances, solve, slepc.NEPGetConvergedReason
         """
         cdef SlepcNEPConvergedReason val = NEP_CONVERGED_ITERATING
-        CHKERR( NEPGetConvergedReason(self.nep, &val) )
+        CHKERR(NEPGetConvergedReason(self.nep, &val))
         return val
 
     def getConverged(self) -> int:
@@ -1276,7 +1286,7 @@ cdef class NEP(Object):
         setDimensions, solve, getEigenpair, slepc.NEPGetConverged
         """
         cdef PetscInt ival = 0
-        CHKERR( NEPGetConverged(self.nep, &ival) )
+        CHKERR(NEPGetConverged(self.nep, &ival))
         return toInt(ival)
 
     def getEigenpair(self, i: int, Vec Vr = None, Vec Vi = None) -> None:
@@ -1318,7 +1328,7 @@ cdef class NEP(Object):
         cdef PetscScalar sval2 = 0
         cdef PetscVec vecr = Vr.vec if Vr is not None else <PetscVec>NULL
         cdef PetscVec veci = Vi.vec if Vi is not None else <PetscVec>NULL
-        CHKERR( NEPGetEigenpair(self.nep, ival, &sval1, &sval2, vecr, veci) )
+        CHKERR(NEPGetEigenpair(self.nep, ival, &sval1, &sval2, vecr, veci))
         return toComplex(sval1, sval2)
 
     def getLeftEigenvector(self, i: int, Vec Wr, Vec Wi=None) -> None:
@@ -1353,7 +1363,7 @@ cdef class NEP(Object):
         cdef PetscInt ival = asInt(i)
         cdef PetscVec vecr = Wr.vec if Wr is not None else <PetscVec>NULL
         cdef PetscVec veci = Wi.vec if Wi is not None else <PetscVec>NULL
-        CHKERR( NEPGetLeftEigenvector(self.nep, ival, vecr, veci) )
+        CHKERR(NEPGetLeftEigenvector(self.nep, ival, vecr, veci))
 
     def getErrorEstimate(self, i: int) -> float:
         """
@@ -1382,11 +1392,11 @@ cdef class NEP(Object):
         """
         cdef PetscInt ival = asInt(i)
         cdef PetscReal rval = 0
-        CHKERR( NEPGetErrorEstimate(self.nep, ival, &rval) )
+        CHKERR(NEPGetErrorEstimate(self.nep, ival, &rval))
         return toReal(rval)
 
     def computeError(self, i: int, etype: ErrorType | None = None) -> float:
-        """
+        r"""
         Compute the error associated with the i-th computed eigenpair.
 
         Collective.
@@ -1426,7 +1436,7 @@ cdef class NEP(Object):
         cdef SlepcNEPErrorType et = NEP_ERROR_RELATIVE
         cdef PetscReal rval = 0
         if etype is not None: et = etype
-        CHKERR( NEPComputeError(self.nep, ival, et, &rval) )
+        CHKERR(NEPComputeError(self.nep, ival, et, &rval))
         return toReal(rval)
 
     def errorView(self, etype: ErrorType | None = None, viewer: petsc4py.PETSc.Viewer | None = None) -> None:
@@ -1459,7 +1469,7 @@ cdef class NEP(Object):
         cdef SlepcNEPErrorType et = NEP_ERROR_RELATIVE
         if etype is not None: et = etype
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( NEPErrorView(self.nep, et, vwr) )
+        CHKERR(NEPErrorView(self.nep, et, vwr))
 
     def valuesView(self, viewer: Viewer | None = None) -> None:
         """
@@ -1478,7 +1488,7 @@ cdef class NEP(Object):
         solve, vectorsView, errorView, slepc.NEPValuesView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( NEPValuesView(self.nep, vwr) )
+        CHKERR(NEPValuesView(self.nep, vwr))
 
     def vectorsView(self, viewer: Viewer | None = None) -> None:
         """
@@ -1497,7 +1507,7 @@ cdef class NEP(Object):
         solve, valuesView, errorView, slepc.NEPVectorsView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( NEPVectorsView(self.nep, vwr) )
+        CHKERR(NEPVectorsView(self.nep, vwr))
 
     #
 
@@ -1509,7 +1519,7 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
+        r"""
         Set the function to compute the nonlinear Function :math:`T(\lambda)`.
 
         Collective.
@@ -1537,12 +1547,12 @@ cdef class NEP(Object):
             if kargs is None: kargs = {}
             context = (function, args, kargs)
             self.set_attr('__function__', context)
-            CHKERR( NEPSetFunction(self.nep, Fmat, Pmat, NEP_Function, <void*>context) )
+            CHKERR(NEPSetFunction(self.nep, Fmat, Pmat, NEP_Function, <void*>context))
         else:
-            CHKERR( NEPSetFunction(self.nep, Fmat, Pmat, NULL, NULL) )
+            CHKERR(NEPSetFunction(self.nep, Fmat, Pmat, NULL, NULL))
 
     def getFunction(self) -> tuple[petsc4py.PETSc.Mat, petsc4py.PETSc.Mat, NEPFunction]:
-        """
+        r"""
         Get the function to compute the nonlinear Function :math:`T(\lambda)`.
 
         Collective.
@@ -1565,9 +1575,9 @@ cdef class NEP(Object):
         """
         cdef Mat F = Mat()
         cdef Mat P = Mat()
-        CHKERR( NEPGetFunction(self.nep, &F.mat, &P.mat, NULL, NULL) )
-        CHKERR( PetscINCREF(F.obj) )
-        CHKERR( PetscINCREF(P.obj) )
+        CHKERR(NEPGetFunction(self.nep, &F.mat, &P.mat, NULL, NULL))
+        CHKERR(PetscINCREF(F.obj))
+        CHKERR(PetscINCREF(P.obj))
         cdef object function = self.get_attr('__function__')
         return (F, P, function)
 
@@ -1578,7 +1588,7 @@ cdef class NEP(Object):
         args: tuple[Any, ...] | None = None,
         kargs: dict[str, Any] | None = None,
     ) -> None:
-        """
+        r"""
         Set the function to compute the Jacobian :math:`T'(\lambda)`.
 
         Collective.
@@ -1603,12 +1613,12 @@ cdef class NEP(Object):
             if kargs is None: kargs = {}
             context = (jacobian, args, kargs)
             self.set_attr('__jacobian__', context)
-            CHKERR( NEPSetJacobian(self.nep, Jmat, NEP_Jacobian, <void*>context) )
+            CHKERR(NEPSetJacobian(self.nep, Jmat, NEP_Jacobian, <void*>context))
         else:
-            CHKERR( NEPSetJacobian(self.nep, Jmat, NULL, NULL) )
+            CHKERR(NEPSetJacobian(self.nep, Jmat, NULL, NULL))
 
     def getJacobian(self) -> tuple[petsc4py.PETSc.Mat, NEPJacobian]:
-        """
+        r"""
         Get the function to compute the Jacobian :math:`T'(\lambda)` and J.
 
         Collective.
@@ -1628,8 +1638,8 @@ cdef class NEP(Object):
         setJacobian, slepc.NEPGetJacobian
         """
         cdef Mat J = Mat()
-        CHKERR( NEPGetJacobian(self.nep, &J.mat, NULL, NULL) )
-        CHKERR( PetscINCREF(J.obj) )
+        CHKERR(NEPGetJacobian(self.nep, &J.mat, NULL, NULL))
+        CHKERR(PetscINCREF(J.obj))
         cdef object jacobian = self.get_attr('__jacobian__')
         return (J, jacobian)
 
@@ -1639,7 +1649,7 @@ cdef class NEP(Object):
         f: FN | list[FN],
         structure: petsc4py.PETSc.Mat.Structure | None = None,
     ) -> None:
-        """
+        r"""
         Set the operator of the nonlinear eigenvalue problem in split form.
 
         Collective.
@@ -1678,12 +1688,12 @@ cdef class NEP(Object):
         cdef PetscMatStructure mstr = matstructure(structure)
         if n != len(f):
             raise ValueError("mismatching number of matrices and functions")
-        cdef tmp1 = allocate(<size_t>n*sizeof(PetscMat),<void**>&As)
-        cdef tmp2 = allocate(<size_t>n*sizeof(SlepcFN),<void**>&Fs)
+        cdef unused1 = allocate(<size_t>n*sizeof(PetscMat), <void**>&As)
+        cdef unused2 = allocate(<size_t>n*sizeof(SlepcFN), <void**>&Fs)
         for i in range(n):
             As[i] = (<Mat?>A[i]).mat
             Fs[i] = (<FN?>f[i]).fn
-        CHKERR( NEPSetSplitOperator(self.nep, <PetscInt>n, As, Fs, mstr) )
+        CHKERR(NEPSetSplitOperator(self.nep, <PetscInt>n, As, Fs, mstr))
 
     def getSplitOperator(self) -> tuple[list[petsc4py.PETSc.Mat], list[FN], petsc4py.PETSc.Mat.Structure]:
         """
@@ -1709,14 +1719,14 @@ cdef class NEP(Object):
         cdef PetscMat mat = NULL
         cdef SlepcFN  fn  = NULL
         cdef PetscInt i=0, n=0
-        cdef PetscMatStructure mstr
-        CHKERR( NEPGetSplitOperatorInfo(self.nep, &n, &mstr) )
+        cdef PetscMatStructure mstr = MAT_DIFFERENT_NONZERO_PATTERN
+        CHKERR(NEPGetSplitOperatorInfo(self.nep, &n, &mstr))
         cdef object matrices = []
         cdef object functions = []
         for i in range(n):
-            CHKERR( NEPGetSplitOperatorTerm(self.nep, i, &mat, &fn) )
-            A = Mat(); A.mat = mat; CHKERR( PetscINCREF(A.obj) )
-            f = FN();  f.fn = fn;   CHKERR( PetscINCREF(f.obj) )
+            CHKERR(NEPGetSplitOperatorTerm(self.nep, i, &mat, &fn))
+            A = Mat(); A.mat = mat; CHKERR(PetscINCREF(A.obj))
+            f = FN();  f.fn = fn;   CHKERR(PetscINCREF(f.obj))
             matrices.append(A)
             functions.append(f)
         return (matrices, functions, mstr)
@@ -1749,10 +1759,10 @@ cdef class NEP(Object):
         cdef PetscMat *Ps = NULL
         cdef Py_ssize_t i = 0, n = len(P)
         cdef PetscMatStructure mstr = matstructure(structure)
-        cdef tmp1 = allocate(<size_t>n*sizeof(PetscMat),<void**>&Ps)
+        cdef unused = allocate(<size_t>n*sizeof(PetscMat), <void**>&Ps)
         for i in range(n):
             Ps[i] = (<Mat?>P[i]).mat
-        CHKERR( NEPSetSplitPreconditioner(self.nep, <PetscInt>n, Ps, mstr) )
+        CHKERR(NEPSetSplitPreconditioner(self.nep, <PetscInt>n, Ps, mstr))
 
     def getSplitPreconditioner(self) -> tuple[list[petsc4py.PETSc.Mat], petsc4py.PETSc.Mat.Structure]:
         """
@@ -1774,12 +1784,12 @@ cdef class NEP(Object):
         cdef Mat P
         cdef PetscMat mat = NULL
         cdef PetscInt i=0, n=0
-        cdef PetscMatStructure mstr
-        CHKERR( NEPGetSplitPreconditionerInfo(self.nep, &n, &mstr) )
+        cdef PetscMatStructure mstr = MAT_DIFFERENT_NONZERO_PATTERN
+        CHKERR(NEPGetSplitPreconditionerInfo(self.nep, &n, &mstr))
         cdef object matrices = []
         for i in range(n):
-            CHKERR( NEPGetSplitPreconditionerTerm(self.nep, i, &mat) )
-            P = Mat(); P.mat = mat; CHKERR( PetscINCREF(P.obj) )
+            CHKERR(NEPGetSplitPreconditionerTerm(self.nep, i, &mat))
+            P = Mat(); P.mat = mat; CHKERR(PetscINCREF(P.obj))
             matrices.append(P)
         return (matrices, mstr)
 
@@ -1802,7 +1812,7 @@ cdef class NEP(Object):
         setTwoSided, slepc.NEPGetTwoSided
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( NEPGetTwoSided(self.nep, &tval) )
+        CHKERR(NEPGetTwoSided(self.nep, &tval))
         return toBool(tval)
 
     def setTwoSided(self, twosided: bool = True) -> None:
@@ -1834,7 +1844,7 @@ cdef class NEP(Object):
         getTwoSided, getLeftEigenvector, slepc.NEPSetTwoSided
         """
         cdef PetscBool tval = asBool(twosided)
-        CHKERR( NEPSetTwoSided(self.nep, tval) )
+        CHKERR(NEPSetTwoSided(self.nep, tval))
 
     def applyResolvent(
         self,
@@ -1843,7 +1853,7 @@ cdef class NEP(Object):
         Vec r,
         RG rg = None,
     ) -> None:
-        """
+        r"""
         Apply the resolvent :math:`T^{-1}(z)` to a given vector.
 
         Collective.
@@ -1876,7 +1886,7 @@ cdef class NEP(Object):
         """
         cdef PetscScalar sval = asScalar(omega)
         cdef SlepcRG region = rg.rg if rg is not None else <SlepcRG>NULL
-        CHKERR( NEPApplyResolvent(self.nep, region, sval, v.vec, r.vec) )
+        CHKERR(NEPApplyResolvent(self.nep, region, sval, v.vec, r.vec))
 
     #
 
@@ -1898,7 +1908,7 @@ cdef class NEP(Object):
         getRIILagPreconditioner, slepc.NEPRIISetLagPreconditioner
         """
         cdef PetscInt ival = asInt(lag)
-        CHKERR( NEPRIISetLagPreconditioner(self.nep, ival) )
+        CHKERR(NEPRIISetLagPreconditioner(self.nep, ival))
 
     def getRIILagPreconditioner(self) -> int:
         """
@@ -1916,7 +1926,7 @@ cdef class NEP(Object):
         setRIILagPreconditioner, slepc.NEPRIIGetLagPreconditioner
         """
         cdef PetscInt ival = 0
-        CHKERR( NEPRIIGetLagPreconditioner(self.nep, &ival) )
+        CHKERR(NEPRIIGetLagPreconditioner(self.nep, &ival))
         return toInt(ival)
 
     def setRIIConstCorrectionTol(self, cct: bool = True) -> None:
@@ -1942,7 +1952,7 @@ cdef class NEP(Object):
         getRIIConstCorrectionTol, slepc.NEPRIISetConstCorrectionTol
         """
         cdef PetscBool val = asBool(cct)
-        CHKERR( NEPRIISetConstCorrectionTol(self.nep, val) )
+        CHKERR(NEPRIISetConstCorrectionTol(self.nep, val))
 
     def getRIIConstCorrectionTol(self) -> bool:
         """
@@ -1961,7 +1971,7 @@ cdef class NEP(Object):
         setRIIConstCorrectionTol, slepc.NEPRIIGetConstCorrectionTol
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( NEPRIIGetConstCorrectionTol(self.nep, &tval) )
+        CHKERR(NEPRIIGetConstCorrectionTol(self.nep, &tval))
         return toBool(tval)
 
     def setRIIMaximumIterations(self, its: int) -> None:
@@ -1983,7 +1993,7 @@ cdef class NEP(Object):
         getRIIMaximumIterations, slepc.NEPRIISetMaximumIterations
         """
         cdef PetscInt ival = asInt(its)
-        CHKERR( NEPRIISetMaximumIterations(self.nep, ival) )
+        CHKERR(NEPRIISetMaximumIterations(self.nep, ival))
 
     def getRIIMaximumIterations(self) -> int:
         """
@@ -2001,11 +2011,11 @@ cdef class NEP(Object):
         setRIIMaximumIterations, slepc.NEPRIIGetMaximumIterations
         """
         cdef PetscInt ival = 0
-        CHKERR( NEPRIIGetMaximumIterations(self.nep, &ival) )
+        CHKERR(NEPRIIGetMaximumIterations(self.nep, &ival))
         return toInt(ival)
 
     def setRIIHermitian(self, herm: bool = True) -> None:
-        """
+        r"""
         Set a flag to use the Hermitian version of the solver.
 
         Logically collective.
@@ -2031,7 +2041,7 @@ cdef class NEP(Object):
         getRIIHermitian, slepc.NEPRIISetHermitian
         """
         cdef PetscBool val = asBool(herm)
-        CHKERR( NEPRIISetHermitian(self.nep, val) )
+        CHKERR(NEPRIISetHermitian(self.nep, val))
 
     def getRIIHermitian(self) -> bool:
         """
@@ -2049,7 +2059,7 @@ cdef class NEP(Object):
         setRIIHermitian, slepc.NEPRIIGetHermitian
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( NEPRIIGetHermitian(self.nep, &tval) )
+        CHKERR(NEPRIIGetHermitian(self.nep, &tval))
         return toBool(tval)
 
     def setRIIDeflationThreshold(self, deftol: float) -> None:
@@ -2081,7 +2091,7 @@ cdef class NEP(Object):
         getRIIDeflationThreshold, slepc.NEPRIISetDeflationThreshold
         """
         cdef PetscReal val = asReal(deftol)
-        CHKERR( NEPRIISetDeflationThreshold(self.nep, val) )
+        CHKERR(NEPRIISetDeflationThreshold(self.nep, val))
 
     def getRIIDeflationThreshold(self) -> float:
         """
@@ -2099,7 +2109,7 @@ cdef class NEP(Object):
         setRIIDeflationThreshold, slepc.NEPRIIGetDeflationThreshold
         """
         cdef PetscReal rval = 0.0
-        CHKERR( NEPRIIGetDeflationThreshold(self.nep, &rval) )
+        CHKERR(NEPRIIGetDeflationThreshold(self.nep, &rval))
         return toReal(rval)
 
     def setRIIKSP(self, KSP ksp) -> None:
@@ -2117,7 +2127,7 @@ cdef class NEP(Object):
         --------
         getRIIKSP, slepc.NEPRIISetKSP
         """
-        CHKERR( NEPRIISetKSP(self.nep, ksp.ksp) )
+        CHKERR(NEPRIISetKSP(self.nep, ksp.ksp))
 
     def getRIIKSP(self) -> KSP:
         """
@@ -2135,8 +2145,8 @@ cdef class NEP(Object):
         setRIIKSP, slepc.NEPRIIGetKSP
         """
         cdef KSP ksp = KSP()
-        CHKERR( NEPRIIGetKSP(self.nep, &ksp.ksp) )
-        CHKERR( PetscINCREF(ksp.obj) )
+        CHKERR(NEPRIIGetKSP(self.nep, &ksp.ksp))
+        CHKERR(PetscINCREF(ksp.obj))
         return ksp
 
     #
@@ -2167,7 +2177,7 @@ cdef class NEP(Object):
         getSLPDeflationThreshold, slepc.NEPSLPSetDeflationThreshold
         """
         cdef PetscReal val = asReal(deftol)
-        CHKERR( NEPSLPSetDeflationThreshold(self.nep, val) )
+        CHKERR(NEPSLPSetDeflationThreshold(self.nep, val))
 
     def getSLPDeflationThreshold(self) -> float:
         """
@@ -2185,7 +2195,7 @@ cdef class NEP(Object):
         setSLPDeflationThreshold, slepc.NEPSLPGetDeflationThreshold
         """
         cdef PetscReal rval = 0.0
-        CHKERR( NEPSLPGetDeflationThreshold(self.nep, &rval) )
+        CHKERR(NEPSLPGetDeflationThreshold(self.nep, &rval))
         return toReal(rval)
 
     def setSLPEPS(self, EPS eps) -> None:
@@ -2203,7 +2213,7 @@ cdef class NEP(Object):
         --------
         getSLPEPS, slepc.NEPSLPSetEPS
         """
-        CHKERR( NEPSLPSetEPS(self.nep, eps.eps) )
+        CHKERR(NEPSLPSetEPS(self.nep, eps.eps))
 
     def getSLPEPS(self) -> EPS:
         """
@@ -2221,8 +2231,8 @@ cdef class NEP(Object):
         setSLPEPS, slepc.NEPSLPGetEPS
         """
         cdef EPS eps = EPS()
-        CHKERR( NEPSLPGetEPS(self.nep, &eps.eps) )
-        CHKERR( PetscINCREF(eps.obj) )
+        CHKERR(NEPSLPGetEPS(self.nep, &eps.eps))
+        CHKERR(PetscINCREF(eps.obj))
         return eps
 
     def setSLPEPSLeft(self, EPS eps) -> None:
@@ -2242,7 +2252,7 @@ cdef class NEP(Object):
         --------
         setTwoSided, setSLPEPS, getSLPEPSLeft, slepc.NEPSLPSetEPSLeft
         """
-        CHKERR( NEPSLPSetEPSLeft(self.nep, eps.eps) )
+        CHKERR(NEPSLPSetEPSLeft(self.nep, eps.eps))
 
     def getSLPEPSLeft(self) -> EPS:
         """
@@ -2260,8 +2270,8 @@ cdef class NEP(Object):
         setSLPEPSLeft, slepc.NEPSLPGetEPSLeft
         """
         cdef EPS eps = EPS()
-        CHKERR( NEPSLPGetEPSLeft(self.nep, &eps.eps) )
-        CHKERR( PetscINCREF(eps.obj) )
+        CHKERR(NEPSLPGetEPSLeft(self.nep, &eps.eps))
+        CHKERR(PetscINCREF(eps.obj))
         return eps
 
     def setSLPKSP(self, KSP ksp) -> None:
@@ -2279,7 +2289,7 @@ cdef class NEP(Object):
         --------
         getSLPKSP, slepc.NEPSLPSetKSP
         """
-        CHKERR( NEPSLPSetKSP(self.nep, ksp.ksp) )
+        CHKERR(NEPSLPSetKSP(self.nep, ksp.ksp))
 
     def getSLPKSP(self) -> KSP:
         """
@@ -2297,8 +2307,8 @@ cdef class NEP(Object):
         setSLPKSP, slepc.NEPSLPGetKSP
         """
         cdef KSP ksp = KSP()
-        CHKERR( NEPSLPGetKSP(self.nep, &ksp.ksp) )
-        CHKERR( PetscINCREF(ksp.obj) )
+        CHKERR(NEPSLPGetKSP(self.nep, &ksp.ksp))
+        CHKERR(PetscINCREF(ksp.obj))
         return ksp
 
     #
@@ -2318,7 +2328,7 @@ cdef class NEP(Object):
         --------
         getNArnoldiKSP, slepc.NEPNArnoldiSetKSP
         """
-        CHKERR( NEPNArnoldiSetKSP(self.nep, ksp.ksp) )
+        CHKERR(NEPNArnoldiSetKSP(self.nep, ksp.ksp))
 
     def getNArnoldiKSP(self) -> KSP:
         """
@@ -2336,8 +2346,8 @@ cdef class NEP(Object):
         setNArnoldiKSP, slepc.NEPNArnoldiGetKSP
         """
         cdef KSP ksp = KSP()
-        CHKERR( NEPNArnoldiGetKSP(self.nep, &ksp.ksp) )
-        CHKERR( PetscINCREF(ksp.obj) )
+        CHKERR(NEPNArnoldiGetKSP(self.nep, &ksp.ksp))
+        CHKERR(PetscINCREF(ksp.obj))
         return ksp
 
     def setNArnoldiLagPreconditioner(self, lag: int) -> None:
@@ -2363,7 +2373,7 @@ cdef class NEP(Object):
         getNArnoldiLagPreconditioner, slepc.NEPNArnoldiSetLagPreconditioner
         """
         cdef PetscInt ival = asInt(lag)
-        CHKERR( NEPNArnoldiSetLagPreconditioner(self.nep, ival) )
+        CHKERR(NEPNArnoldiSetLagPreconditioner(self.nep, ival))
 
     def getNArnoldiLagPreconditioner(self) -> int:
         """
@@ -2381,7 +2391,7 @@ cdef class NEP(Object):
         setNArnoldiLagPreconditioner, slepc.NEPNArnoldiGetLagPreconditioner
         """
         cdef PetscInt ival = 0
-        CHKERR( NEPNArnoldiGetLagPreconditioner(self.nep, &ival) )
+        CHKERR(NEPNArnoldiGetLagPreconditioner(self.nep, &ival))
         return toInt(ival)
 
     #
@@ -2401,7 +2411,7 @@ cdef class NEP(Object):
         --------
         getInterpolPEP, slepc.NEPInterpolSetPEP
         """
-        CHKERR( NEPInterpolSetPEP(self.nep, pep.pep) )
+        CHKERR(NEPInterpolSetPEP(self.nep, pep.pep))
 
     def getInterpolPEP(self) -> PEP:
         """
@@ -2419,8 +2429,8 @@ cdef class NEP(Object):
         setInterpolPEP, slepc.NEPInterpolGetPEP
         """
         cdef PEP pep = PEP()
-        CHKERR( NEPInterpolGetPEP(self.nep, &pep.pep) )
-        CHKERR( PetscINCREF(pep.obj) )
+        CHKERR(NEPInterpolGetPEP(self.nep, &pep.pep))
+        CHKERR(PetscINCREF(pep.obj))
         return pep
 
     def setInterpolInterpolation(self, tol: float | None = None, deg: int | None = None) -> None:
@@ -2444,7 +2454,7 @@ cdef class NEP(Object):
         cdef PetscInt  ival = PETSC_CURRENT
         if tol is not None: rval = asReal(tol)
         if deg is not None: ival = asInt(deg)
-        CHKERR( NEPInterpolSetInterpolation(self.nep, rval, ival) )
+        CHKERR(NEPInterpolSetInterpolation(self.nep, rval, ival))
 
     def getInterpolInterpolation(self) -> tuple[float, int]:
         """
@@ -2465,7 +2475,7 @@ cdef class NEP(Object):
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
-        CHKERR( NEPInterpolGetInterpolation(self.nep, &rval, &ival) )
+        CHKERR(NEPInterpolGetInterpolation(self.nep, &rval, &ival))
         return (toReal(rval), toInt(ival))
 
     #
@@ -2492,7 +2502,7 @@ cdef class NEP(Object):
         getNLEIGSRestart, slepc.NEPNLEIGSSetRestart
         """
         cdef PetscReal val = asReal(keep)
-        CHKERR( NEPNLEIGSSetRestart(self.nep, val) )
+        CHKERR(NEPNLEIGSSetRestart(self.nep, val))
 
     def getNLEIGSRestart(self) -> float:
         """
@@ -2510,7 +2520,7 @@ cdef class NEP(Object):
         setNLEIGSRestart, slepc.NEPNLEIGSGetRestart
         """
         cdef PetscReal val = 0
-        CHKERR( NEPNLEIGSGetRestart(self.nep, &val) )
+        CHKERR(NEPNLEIGSGetRestart(self.nep, &val))
         return toReal(val)
 
     def setNLEIGSLocking(self, lock: bool = True) -> None:
@@ -2536,7 +2546,7 @@ cdef class NEP(Object):
         getNLEIGSLocking, slepc.NEPNLEIGSSetLocking
         """
         cdef PetscBool val = asBool(lock)
-        CHKERR( NEPNLEIGSSetLocking(self.nep, val) )
+        CHKERR(NEPNLEIGSSetLocking(self.nep, val))
 
     def getNLEIGSLocking(self) -> bool:
         """
@@ -2554,7 +2564,7 @@ cdef class NEP(Object):
         setNLEIGSLocking, slepc.NEPNLEIGSGetLocking
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( NEPNLEIGSGetLocking(self.nep, &tval) )
+        CHKERR(NEPNLEIGSGetLocking(self.nep, &tval))
         return toBool(tval)
 
     def setNLEIGSInterpolation(self, tol: float | None = None, deg: int | None = None) -> None:
@@ -2581,7 +2591,7 @@ cdef class NEP(Object):
         cdef PetscInt  ival = PETSC_CURRENT
         if tol is not None: rval = asReal(tol)
         if deg is not None: ival = asInt(deg)
-        CHKERR( NEPNLEIGSSetInterpolation(self.nep, rval, ival) )
+        CHKERR(NEPNLEIGSSetInterpolation(self.nep, rval, ival))
 
     def getNLEIGSInterpolation(self) -> tuple[float, int]:
         """
@@ -2605,11 +2615,11 @@ cdef class NEP(Object):
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
-        CHKERR( NEPNLEIGSGetInterpolation(self.nep, &rval, &ival) )
+        CHKERR(NEPNLEIGSGetInterpolation(self.nep, &rval, &ival))
         return (toReal(rval), toInt(ival))
 
     def setNLEIGSFullBasis(self, fullbasis: bool = True) -> None:
-        """
+        r"""
         Set TOAR-basis (default) or full-basis variants of the NLEIGS method.
 
         Logically collective.
@@ -2639,7 +2649,7 @@ cdef class NEP(Object):
         setTwoSided, getNLEIGSFullBasis, getNLEIGSEPS, slepc.NEPNLEIGSSetFullBasis
         """
         cdef PetscBool val = asBool(fullbasis)
-        CHKERR( NEPNLEIGSSetFullBasis(self.nep, val) )
+        CHKERR(NEPNLEIGSSetFullBasis(self.nep, val))
 
     def getNLEIGSFullBasis(self) -> bool:
         """
@@ -2657,7 +2667,7 @@ cdef class NEP(Object):
         setNLEIGSFullBasis, slepc.NEPNLEIGSGetFullBasis
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( NEPNLEIGSGetFullBasis(self.nep, &tval) )
+        CHKERR(NEPNLEIGSGetFullBasis(self.nep, &tval))
         return toBool(tval)
 
     def setNLEIGSEPS(self, EPS eps) -> None:
@@ -2675,7 +2685,7 @@ cdef class NEP(Object):
         --------
         getNLEIGSEPS, slepc.NEPNLEIGSSetEPS
         """
-        CHKERR( NEPNLEIGSSetEPS(self.nep, eps.eps) )
+        CHKERR(NEPNLEIGSSetEPS(self.nep, eps.eps))
 
     def getNLEIGSEPS(self) -> EPS:
         """
@@ -2693,8 +2703,8 @@ cdef class NEP(Object):
         setNLEIGSEPS, slepc.NEPNLEIGSGetEPS
         """
         cdef EPS eps = EPS()
-        CHKERR( NEPNLEIGSGetEPS(self.nep, &eps.eps) )
-        CHKERR( PetscINCREF(eps.obj) )
+        CHKERR(NEPNLEIGSGetEPS(self.nep, &eps.eps))
+        CHKERR(PetscINCREF(eps.obj))
         return eps
 
     def setNLEIGSRKShifts(self, shifts: Sequence[Scalar]) -> None:
@@ -2721,8 +2731,8 @@ cdef class NEP(Object):
         """
         cdef PetscInt na = 0
         cdef PetscScalar *a = NULL
-        cdef object tmp1 = iarray_s(shifts, &na, &a)
-        CHKERR( NEPNLEIGSSetRKShifts(self.nep, na, a) )
+        shifts = iarray_s(shifts, &na, &a)
+        CHKERR(NEPNLEIGSSetRKShifts(self.nep, na, a))
 
     def getNLEIGSRKShifts(self) -> ArrayScalar:
         """
@@ -2741,12 +2751,12 @@ cdef class NEP(Object):
         """
         cdef PetscInt np = 0
         cdef PetscScalar *coeff = NULL
-        CHKERR( NEPNLEIGSGetRKShifts(self.nep, &np, &coeff) )
+        CHKERR(NEPNLEIGSGetRKShifts(self.nep, &np, &coeff))
         cdef object ocoeff = None
         try:
             ocoeff = array_s(np, coeff)
         finally:
-            CHKERR( PetscFree(coeff) )
+            CHKERR(PetscFree(coeff))
         return ocoeff
 
     def getNLEIGSKSPs(self) -> list[KSP]:
@@ -2769,9 +2779,9 @@ cdef class NEP(Object):
         --------
         setNLEIGSRKShifts, slepc.NEPNLEIGSGetKSPs
         """
-        cdef PetscInt i = 0, n = 0
+        cdef PetscInt n = 0
         cdef PetscKSP *p = NULL
-        CHKERR( NEPNLEIGSGetKSPs(self.nep, &n, &p) )
+        CHKERR(NEPNLEIGSGetKSPs(self.nep, &n, &p))
         return [ref_KSP(p[i]) for i from 0 <= i <n]
 
     #
@@ -2792,7 +2802,7 @@ cdef class NEP(Object):
         getCISSExtraction, slepc.NEPCISSSetExtraction
         """
         cdef SlepcNEPCISSExtraction val = extraction
-        CHKERR( NEPCISSSetExtraction(self.nep, val) )
+        CHKERR(NEPCISSSetExtraction(self.nep, val))
 
     def getCISSExtraction(self) -> CISSExtraction:
         """
@@ -2810,7 +2820,7 @@ cdef class NEP(Object):
         setCISSExtraction, slepc.NEPCISSGetExtraction
         """
         cdef SlepcNEPCISSExtraction val = NEP_CISS_EXTRACTION_RITZ
-        CHKERR( NEPCISSGetExtraction(self.nep, &val) )
+        CHKERR(NEPCISSGetExtraction(self.nep, &val))
         return val
 
     def setCISSSizes(
@@ -2865,7 +2875,7 @@ cdef class NEP(Object):
         if ms    is not None: ival3 = asInt(ms)
         if npart is not None: ival4 = asInt(npart)
         if bsmax is not None: ival5 = asInt(bsmax)
-        CHKERR( NEPCISSSetSizes(self.nep, ival1, ival2, ival3, ival4, ival5, bval) )
+        CHKERR(NEPCISSSetSizes(self.nep, ival1, ival2, ival3, ival4, ival5, bval))
 
     def getCISSSizes(self) -> tuple[int, int, int, int, int, bool]:
         """
@@ -2898,7 +2908,7 @@ cdef class NEP(Object):
         cdef PetscInt  ival4 = 0
         cdef PetscInt  ival5 = 0
         cdef PetscBool bval  = PETSC_FALSE
-        CHKERR( NEPCISSGetSizes(self.nep, &ival1, &ival2, &ival3, &ival4, &ival5, &bval) )
+        CHKERR(NEPCISSGetSizes(self.nep, &ival1, &ival2, &ival3, &ival4, &ival5, &bval))
         return (toInt(ival1), toInt(ival2), toInt(ival3), toInt(ival4), toInt(ival5), toBool(bval))
 
     def setCISSThreshold(self, delta: float | None = None, spur: float | None = None) -> None:
@@ -2922,7 +2932,7 @@ cdef class NEP(Object):
         cdef PetscReal rval2 = PETSC_CURRENT
         if delta is not None: rval1 = asReal(delta)
         if spur  is not None: rval2 = asReal(spur)
-        CHKERR( NEPCISSSetThreshold(self.nep, rval1, rval2) )
+        CHKERR(NEPCISSSetThreshold(self.nep, rval1, rval2))
 
     def getCISSThreshold(self) -> tuple[float, float]:
         """
@@ -2943,7 +2953,7 @@ cdef class NEP(Object):
         """
         cdef PetscReal delta = 0
         cdef PetscReal spur  = 0
-        CHKERR( NEPCISSGetThreshold(self.nep, &delta, &spur) )
+        CHKERR(NEPCISSGetThreshold(self.nep, &delta, &spur))
         return (toReal(delta), toReal(spur))
 
     def setCISSRefinement(self, inner: int | None = None, blsize: int | None = None) -> None:
@@ -2967,7 +2977,7 @@ cdef class NEP(Object):
         cdef PetscInt ival2 = PETSC_CURRENT
         if inner  is not None: ival1 = asInt(inner)
         if blsize is not None: ival2 = asInt(blsize)
-        CHKERR( NEPCISSSetRefinement(self.nep, ival1, ival2) )
+        CHKERR(NEPCISSSetRefinement(self.nep, ival1, ival2))
 
     def getCISSRefinement(self) -> tuple[int, int]:
         """
@@ -2988,7 +2998,7 @@ cdef class NEP(Object):
         """
         cdef PetscInt ival1 = 0
         cdef PetscInt ival2 = 0
-        CHKERR( NEPCISSGetRefinement(self.nep, &ival1, &ival2) )
+        CHKERR(NEPCISSGetRefinement(self.nep, &ival1, &ival2))
         return (toInt(ival1), toInt(ival2))
 
     def getCISSKSPs(self) -> list[KSP]:
@@ -3013,15 +3023,16 @@ cdef class NEP(Object):
         --------
         setCISSSizes, slepc.NEPCISSGetKSPs
         """
-        cdef PetscInt i = 0, n = 0
+        cdef PetscInt n = 0
         cdef PetscKSP *p = NULL
-        CHKERR( NEPCISSGetKSPs(self.nep, &n, &p) )
+        CHKERR(NEPCISSGetKSPs(self.nep, &n, &p))
         return [ref_KSP(p[i]) for i from 0 <= i <n]
 
     property problem_type:
         """The problem type from the NEP object."""
         def __get__(self) -> NEPProblemType:
             return self.getProblemType()
+
         def __set__(self, value):
             self.setProblemType(value)
 
@@ -3029,6 +3040,7 @@ cdef class NEP(Object):
         """The portion of the spectrum to be sought."""
         def __get__(self) -> NEPWhich:
             return self.getWhichEigenpairs()
+
         def __set__(self, value):
             self.setWhichEigenpairs(value)
 
@@ -3036,6 +3048,7 @@ cdef class NEP(Object):
         """The value of the target."""
         def __get__(self) -> float:
             return self.getTarget()
+
         def __set__(self, value):
             self.setTarget(value)
 
@@ -3043,6 +3056,7 @@ cdef class NEP(Object):
         """The tolerance used by the NEP convergence tests."""
         def __get__(self) -> float:
             return self.getTolerances()[0]
+
         def __set__(self, value):
             self.setTolerances(tol=value)
 
@@ -3050,6 +3064,7 @@ cdef class NEP(Object):
         """The maximum iteration count used by the NEP convergence tests."""
         def __get__(self) -> int:
             return self.getTolerances()[1]
+
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
@@ -3057,6 +3072,7 @@ cdef class NEP(Object):
         """Compute the residual of all approximate eigenpairs."""
         def __get__(self) -> bool:
             return self.getTrackAll()
+
         def __set__(self, value):
             self.setTrackAll(value)
 
@@ -3064,6 +3080,7 @@ cdef class NEP(Object):
         """The basis vectors (`BV`) object associated."""
         def __get__(self) -> BV:
             return self.getBV()
+
         def __set__(self, value):
             self.setBV(value)
 
@@ -3071,6 +3088,7 @@ cdef class NEP(Object):
         """The region (`RG`) object associated."""
         def __get__(self) -> RG:
             return self.getRG()
+
         def __set__(self, value):
             self.setRG(value)
 
@@ -3078,6 +3096,7 @@ cdef class NEP(Object):
         """The direct solver (`DS`) object associated."""
         def __get__(self) -> DS:
             return self.getDS()
+
         def __set__(self, value):
             self.setDS(value)
 

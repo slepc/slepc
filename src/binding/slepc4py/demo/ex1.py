@@ -13,16 +13,16 @@
 # following lines must be executed by the main script prior to any petsc4py or
 # slepc4py calls:
 
-import sys, slepc4py
+import sys
+import slepc4py
+
 slepc4py.init(sys.argv)
 
 # Next, we have to import the relevant modules. Normally, both PETSc and SLEPc
-# modules have to be imported in all slepc4py programs. It may be useful to
-# import NumPy as well:
+# modules have to be imported in all slepc4py programs.
 
 from petsc4py import PETSc
 from slepc4py import SLEPc
-import numpy
 
 # At this point, we can use any petsc4py and slepc4py operations. For instance,
 # the following lines allow the user to specify an integer command-line
@@ -39,7 +39,7 @@ n = opts.getInt('n', 30)
 # -1 in off-diagonal positions. See petsc4py documentation for details about
 # matrix objects:
 
-A = PETSc.Mat(); A.create()
+A = PETSc.Mat().create()
 A.setSizes([n, n])
 A.setFromOptions()
 
@@ -47,21 +47,21 @@ rstart, rend = A.getOwnershipRange()
 
 # first row
 if rstart == 0:
-  A[0, :2] = [2, -1]
-  rstart += 1
+    A[0, :2] = [2, -1]
+    rstart += 1
 # last row
 if rend == n:
-  A[n-1, -2:] = [-1, 2]
-  rend -= 1
+    A[n - 1, -2:] = [-1, 2]
+    rend -= 1
 # other rows
 for i in range(rstart, rend):
-  A[i, i-1:i+2] = [-1, 2, -1]
+    A[i, i - 1 : i + 2] = [-1, 2, -1]
 
 A.assemble()
 
 # The solver object is created in a similar way as other objects in petsc4py:
 
-E = SLEPc.EPS(); E.create()
+E = SLEPc.EPS().create()
 
 # Once the object is created, the eigenvalue problem must be specified. At
 # least one matrix must be provided. The problem type must be indicated as
@@ -75,8 +75,13 @@ E.setOperators(A)
 E.setProblemType(SLEPc.EPS.ProblemType.HEP)
 
 history = []
+
+
 def monitor(eps, its, nconv, eig, err):
-    if nconv<len(err): history.append(err[nconv])
+    if nconv < len(err):
+        history.append(err[nconv])
+
+
 E.setMonitor(monitor)
 
 E.setFromOptions()
@@ -92,28 +97,28 @@ E.solve()
 Print = PETSc.Sys.Print
 
 Print()
-Print("******************************")
-Print("*** SLEPc Solution Results ***")
-Print("******************************")
+Print('******************************')
+Print('*** SLEPc Solution Results ***')
+Print('******************************')
 Print()
 
 its = E.getIterationNumber()
-Print( "Number of iterations of the method: %d" % its )
+Print(f'Number of iterations of the method: {its}')
 
 eps_type = E.getType()
-Print( "Solution method: %s" % eps_type )
+Print(f'Solution method: {eps_type}')
 
 nev, ncv, mpd = E.getDimensions()
-Print( "Number of requested eigenvalues: %d" % nev )
+Print(f'Number of requested eigenvalues: {nev}')
 
 tol, maxit = E.getTolerances()
-Print( "Stopping condition: tol=%.4g, maxit=%d" % (tol, maxit) )
+Print(f'Stopping condition: tol={tol:.4g}, maxit={maxit}')
 
 # For retrieving the solution, it is necessary to find out how many eigenpairs
 # have converged to the requested precision:
 
 nconv = E.getConverged()
-Print( "Number of converged eigenpairs %d" % nconv )
+Print(f'Number of converged eigenpairs {nconv}')
 
 # For each of the ``nconv`` eigenpairs, we can retrieve the eigenvalue ``k``,
 # and the eigenvector, which is represented by means of two petsc4py vectors
@@ -124,17 +129,16 @@ Print( "Number of converged eigenpairs %d" % nconv )
 # in order to make sure that the computed solution is indeed correct:
 
 if nconv > 0:
-  # Create the results vectors
-  v, _ = A.createVecs()
-  #
-  Print()
-  Print("        k          ||Ax-kx||/||kx|| ")
-  Print("----------------- ------------------")
-  for i in range(nconv):
-    k = E.getEigenpair(i, v)
-    error = E.computeError(i)
-    Print( " %12f       %12g" % (k, error) )
-  Print()
+    # Create the results vectors
+    v, _ = A.createVecs()
+    Print()
+    Print('        k          ||Ax-kx||/||kx|| ')
+    Print('----------------- ------------------')
+    for i in range(nconv):
+        k = E.getEigenpair(i, v)
+        error = E.computeError(i)
+        Print(f'     {k:.6f}        {error:.6g}')
+    Print()
 
 #
 # Example of command-line usage

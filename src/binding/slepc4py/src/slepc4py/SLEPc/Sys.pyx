@@ -41,8 +41,8 @@ cdef class Sys:
         """
         cdef char cversion[256]
         cdef PetscInt major=0, minor=0, micro=0, release=0
-        CHKERR( SlepcGetVersion(cversion, sizeof(cversion)) )
-        CHKERR( SlepcGetVersionNumber(&major, &minor, &micro, &release) )
+        CHKERR(SlepcGetVersion(cversion, sizeof(cversion)))
+        CHKERR(SlepcGetVersionNumber(&major, &minor, &micro, &release))
         out = version = (toInt(major), toInt(minor), toInt(micro))
         if devel or date or author:
             out = [version]
@@ -134,7 +134,7 @@ cdef class Sys:
         cdef const char *cpackage = NULL
         package = str2bytes(package, &cpackage)
         cdef PetscBool has = PETSC_FALSE
-        CHKERR( SlepcHasExternalPackage(cpackage, &has) )
+        CHKERR(SlepcHasExternalPackage(cpackage, &has))
         return toBool(has)
 
 # -----------------------------------------------------------------------------

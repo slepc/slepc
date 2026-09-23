@@ -51,25 +51,28 @@ uninstall:
 
 # ----
 
-.PHONY: lint ruff-lint cython-lint stubtest
+.PHONY: lint ruff-lint cython-lint ruff-format stubtest
 CYTHONLINT_SRC = src demo
 CYTHONLINT_OPTS =
-RUFF_SRC = .
-RUFF_OPTS = check
+RUFF_SRC = conf demo docs src test setup.py
 
 cython-lint:
 	conf/cythonize.sh -Wextra -Werror
 	cython-lint ${CYTHONLINT_OPTS} ${CYTHONLINT_SRC}
 
 ruff-lint:
-	ruff ${RUFF_OPTS} ${RUFF_SRC}
+	ruff check ${RUFF_SRC}
+	ruff format --diff ${RUFF_SRC}
+
+ruff-format:
+	ruff format ${RUFF_SRC}
 
 lint:
-#	${RM} -r slepc4py-lint-env
+	${RM} -r slepc4py-lint-env
 	${PYTHON} -m venv ../../../doc/.venv-sphinx
-	. ../../../doc/.venv-sphinx/bin/activate && python3 -m pip install -r ../../../doc/requirements.txt
+	. ../../../doc/.venv-sphinx/bin/activate && python3 -m pip install -r conf/requirements-lint.txt
 	. ../../../doc/.venv-sphinx/bin/activate && ${MAKE} cython-lint
-#	. ../../../doc/.venv-sphinx/bin/activate && ${MAKE} ruff-lint
+	. ../../../doc/.venv-sphinx/bin/activate && ${MAKE} ruff-lint
 
 stubgen:
 	python -m pip install .

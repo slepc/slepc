@@ -12,6 +12,7 @@ class LMEType(object):
     """
     KRYLOV   = S_(LMEKRYLOV)
 
+
 class LMEConvergedReason(object):
     """
     LME convergence reasons.
@@ -31,6 +32,7 @@ class LMEConvergedReason(object):
     CONVERGED_ITERATING = LME_CONVERGED_ITERATING
     ITERATING           = LME_CONVERGED_ITERATING
 
+
 class LMEProblemType(object):
     """
     LME problem type.
@@ -46,14 +48,15 @@ class LMEProblemType(object):
     --------
     slepc.LMEProblemType
     """
-    LYAPUNOV        =  LME_LYAPUNOV
-    SYLVESTER       =  LME_SYLVESTER
-    GEN_LYAPUNOV    =  LME_GEN_LYAPUNOV
-    GEN_SYLVESTER   =  LME_GEN_SYLVESTER
-    DT_LYAPUNOV     =  LME_DT_LYAPUNOV
-    STEIN           =  LME_STEIN
+    LYAPUNOV      = LME_LYAPUNOV
+    SYLVESTER     = LME_SYLVESTER
+    GEN_LYAPUNOV  = LME_GEN_LYAPUNOV
+    GEN_SYLVESTER = LME_GEN_SYLVESTER
+    DT_LYAPUNOV   = LME_DT_LYAPUNOV
+    STEIN         = LME_STEIN
 
 # -----------------------------------------------------------------------------
+
 
 cdef class LME(Object):
 
@@ -90,7 +93,7 @@ cdef class LME(Object):
         slepc.LMEView
         """
         cdef PetscViewer vwr = def_Viewer(viewer)
-        CHKERR( LMEView(self.lme, vwr) )
+        CHKERR(LMEView(self.lme, vwr))
 
     def destroy(self) -> Self:
         """
@@ -102,7 +105,7 @@ cdef class LME(Object):
         --------
         slepc.LMEDestroy
         """
-        CHKERR( LMEDestroy(&self.lme) )
+        CHKERR(LMEDestroy(&self.lme))
         self.lme = NULL
         return self
 
@@ -116,7 +119,7 @@ cdef class LME(Object):
         --------
         slepc.LMEReset
         """
-        CHKERR( LMEReset(self.lme) )
+        CHKERR(LMEReset(self.lme))
 
     def create(self, comm: Comm | None = None) -> Self:
         """
@@ -135,8 +138,8 @@ cdef class LME(Object):
         """
         cdef MPI_Comm ccomm = def_Comm(comm, SLEPC_COMM_DEFAULT())
         cdef SlepcLME newlme = NULL
-        CHKERR( LMECreate(ccomm, &newlme) )
-        CHKERR( SlepcCLEAR(self.obj) ); self.lme = newlme
+        CHKERR(LMECreate(ccomm, &newlme))
+        CHKERR(SlepcCLEAR(self.obj)); self.lme = newlme
         return self
 
     def setType(self, lme_type: Type | str) -> None:
@@ -164,7 +167,7 @@ cdef class LME(Object):
         """
         cdef SlepcLMEType cval = NULL
         lme_type = str2bytes(lme_type, &cval)
-        CHKERR( LMESetType(self.lme, cval) )
+        CHKERR(LMESetType(self.lme, cval))
 
     def getType(self) -> str:
         """
@@ -182,7 +185,7 @@ cdef class LME(Object):
         setType, slepc.LMEGetType
         """
         cdef SlepcLMEType lme_type = NULL
-        CHKERR( LMEGetType(self.lme, &lme_type) )
+        CHKERR(LMEGetType(self.lme, &lme_type))
         return bytes2str(lme_type)
 
     def setProblemType(self, lme_problem_type: ProblemType | str) -> None:
@@ -201,7 +204,7 @@ cdef class LME(Object):
         getProblemType, slepc.LMESetProblemType
         """
         cdef SlepcLMEProblemType val = lme_problem_type
-        CHKERR( LMESetProblemType(self.lme, val) )
+        CHKERR(LMESetProblemType(self.lme, val))
 
     def getProblemType(self) -> ProblemType:
         """
@@ -219,7 +222,7 @@ cdef class LME(Object):
         setProblemType, slepc.LMEGetProblemType
         """
         cdef SlepcLMEProblemType val = LME_LYAPUNOV
-        CHKERR( LMEGetProblemType(self.lme, &val))
+        CHKERR(LMEGetProblemType(self.lme, &val))
         return val
 
     def setCoefficients(self, Mat A, Mat B = None, Mat D = None, Mat E = None) -> None:
@@ -259,7 +262,7 @@ cdef class LME(Object):
         cdef PetscMat Bmat = B.mat if B is not None else <PetscMat>NULL
         cdef PetscMat Dmat = D.mat if D is not None else <PetscMat>NULL
         cdef PetscMat Emat = E.mat if E is not None else <PetscMat>NULL
-        CHKERR( LMESetCoefficients(self.lme, Amat, Bmat, Dmat, Emat))
+        CHKERR(LMESetCoefficients(self.lme, Amat, Bmat, Dmat, Emat))
 
     def getCoefficients(self) -> tuple[Mat, Mat | None, Mat | None, Mat | None]:
         """
@@ -282,17 +285,18 @@ cdef class LME(Object):
         --------
         setCoefficients, slepc.LMEGetCoefficients
         """
-        cdef PetscMat Amat, Bmat, Dmat, Emat
+        cdef PetscMat Amat = <PetscMat>NULL, Bmat = <PetscMat>NULL
+        cdef PetscMat Dmat = <PetscMat>NULL, Emat = <PetscMat>NULL
         cdef Mat A = Mat(), B = None, D = None, E = None
-        CHKERR( LMEGetCoefficients(self.lme, &Amat, &Bmat, &Dmat, &Emat) )
+        CHKERR(LMEGetCoefficients(self.lme, &Amat, &Bmat, &Dmat, &Emat))
         A.mat = Amat
-        CHKERR( PetscINCREF(A.obj) )
+        CHKERR(PetscINCREF(A.obj))
         if Bmat:
-            B = Mat(); B.mat = Bmat; CHKERR( PetscINCREF(B.obj) )
+            B = Mat(); B.mat = Bmat; CHKERR(PetscINCREF(B.obj))
         if Dmat:
-            D = Mat(); D.mat = Dmat; CHKERR( PetscINCREF(D.obj) )
+            D = Mat(); D.mat = Dmat; CHKERR(PetscINCREF(D.obj))
         if Emat:
-            E = Mat(); E.mat = Emat; CHKERR( PetscINCREF(E.obj) )
+            E = Mat(); E.mat = Emat; CHKERR(PetscINCREF(E.obj))
         return (A, B, D, E)
 
     def setRHS(self, Mat C) -> None:
@@ -322,7 +326,7 @@ cdef class LME(Object):
         --------
         getRHS, setSolution, slepc.LMESetRHS
         """
-        CHKERR( LMESetRHS(self.lme, C.mat) )
+        CHKERR(LMESetRHS(self.lme, C.mat))
 
     def getRHS(self) -> Mat:
         """
@@ -340,8 +344,8 @@ cdef class LME(Object):
         setRHS, slepc.LMEGetRHS
         """
         cdef Mat C = Mat()
-        CHKERR( LMEGetRHS(self.lme, &C.mat) )
-        CHKERR( PetscINCREF(C.obj) )
+        CHKERR(LMEGetRHS(self.lme, &C.mat))
+        CHKERR(PetscINCREF(C.obj))
         return C
 
     def setSolution(self, Mat X = None) -> None:
@@ -377,7 +381,7 @@ cdef class LME(Object):
         solve, setRHS, getSolution, slepc.LMESetSolution
         """
         cdef PetscMat Xmat = X.mat if X is not None else <PetscMat>NULL
-        CHKERR( LMESetSolution(self.lme, Xmat) )
+        CHKERR(LMESetSolution(self.lme, Xmat))
 
     def getSolution(self) -> Mat:
         """
@@ -403,8 +407,8 @@ cdef class LME(Object):
         solve, setSolution, slepc.LMEGetSolution
         """
         cdef Mat X = Mat()
-        CHKERR( LMEGetSolution(self.lme, &X.mat) )
-        CHKERR( PetscINCREF(X.obj) )
+        CHKERR(LMEGetSolution(self.lme, &X.mat))
+        CHKERR(PetscINCREF(X.obj))
         return X
 
     def getErrorEstimate(self) -> float:
@@ -429,7 +433,7 @@ cdef class LME(Object):
         computeError, slepc.LMEGetErrorEstimate
         """
         cdef PetscReal rval = 0
-        CHKERR( LMEGetErrorEstimate(self.lme, &rval) )
+        CHKERR(LMEGetErrorEstimate(self.lme, &rval))
         return toReal(rval)
 
     def computeError(self) -> float:
@@ -456,7 +460,7 @@ cdef class LME(Object):
         getErrorEstimate, slepc.LMEComputeError
         """
         cdef PetscReal rval = 0
-        CHKERR( LMEComputeError(self.lme, &rval) )
+        CHKERR(LMEComputeError(self.lme, &rval))
         return toReal(rval)
 
     def getOptionsPrefix(self) -> str:
@@ -475,7 +479,7 @@ cdef class LME(Object):
         setOptionsPrefix, appendOptionsPrefix, slepc.LMEGetOptionsPrefix
         """
         cdef const char *prefix = NULL
-        CHKERR( LMEGetOptionsPrefix(self.lme, &prefix) )
+        CHKERR(LMEGetOptionsPrefix(self.lme, &prefix))
         return bytes2str(prefix)
 
     def setOptionsPrefix(self, prefix: str | None = None) -> None:
@@ -507,7 +511,7 @@ cdef class LME(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( LMESetOptionsPrefix(self.lme, cval) )
+        CHKERR(LMESetOptionsPrefix(self.lme, cval))
 
     def appendOptionsPrefix(self, prefix: str | None = None) -> None:
         """
@@ -529,7 +533,7 @@ cdef class LME(Object):
         """
         cdef const char *cval = NULL
         prefix = str2bytes(prefix, &cval)
-        CHKERR( LMEAppendOptionsPrefix(self.lme, cval) )
+        CHKERR(LMEAppendOptionsPrefix(self.lme, cval))
 
     def setFromOptions(self) -> None:
         """
@@ -548,7 +552,7 @@ cdef class LME(Object):
         --------
         setOptionsPrefix, slepc.LMESetFromOptions
         """
-        CHKERR( LMESetFromOptions(self.lme) )
+        CHKERR(LMESetFromOptions(self.lme))
 
     def getTolerances(self) -> tuple[float, int]:
         """
@@ -569,7 +573,7 @@ cdef class LME(Object):
         """
         cdef PetscReal rval = 0
         cdef PetscInt  ival = 0
-        CHKERR( LMEGetTolerances(self.lme, &rval, &ival) )
+        CHKERR(LMEGetTolerances(self.lme, &rval, &ival))
         return (toReal(rval), toInt(ival))
 
     def setTolerances(self, tol: float | None = None, max_it: int | None = None) -> None:
@@ -596,7 +600,7 @@ cdef class LME(Object):
         cdef PetscInt  ival = PETSC_DEFAULT
         if tol    is not None: rval = asReal(tol)
         if max_it is not None: ival = asInt(max_it)
-        CHKERR( LMESetTolerances(self.lme, rval, ival) )
+        CHKERR(LMESetTolerances(self.lme, rval, ival))
 
     def getDimensions(self) -> int:
         """
@@ -614,7 +618,7 @@ cdef class LME(Object):
         setDimensions, slepc.LMEGetDimensions
         """
         cdef PetscInt ival = 0
-        CHKERR( LMEGetDimensions(self.lme, &ival) )
+        CHKERR(LMEGetDimensions(self.lme, &ival))
         return toInt(ival)
 
     def setDimensions(self, ncv: int) -> None:
@@ -633,7 +637,7 @@ cdef class LME(Object):
         getDimensions, slepc.LMESetDimensions
         """
         cdef PetscInt ival = asInt(ncv)
-        CHKERR( LMESetDimensions(self.lme, ival) )
+        CHKERR(LMESetDimensions(self.lme, ival))
 
     def getBV(self) -> BV:
         """
@@ -651,8 +655,8 @@ cdef class LME(Object):
         setBV, slepc.LMEGetBV
         """
         cdef BV bv = BV()
-        CHKERR( LMEGetBV(self.lme, &bv.bv) )
-        CHKERR( PetscINCREF(bv.obj) )
+        CHKERR(LMEGetBV(self.lme, &bv.bv))
+        CHKERR(PetscINCREF(bv.obj))
         return bv
 
     def setBV(self, BV bv) -> None:
@@ -670,7 +674,7 @@ cdef class LME(Object):
         --------
         getBV, slepc.LMESetBV
         """
-        CHKERR( LMESetBV(self.lme, bv.bv) )
+        CHKERR(LMESetBV(self.lme, bv.bv))
 
     def setMonitor(
         self,
@@ -692,7 +696,7 @@ cdef class LME(Object):
         if monitorlist is None:
             monitorlist = []
             self.set_attr('__monitor__', monitorlist)
-            CHKERR( LMEMonitorSet(self.lme, LME_Monitor, NULL, NULL) )
+            CHKERR(LMEMonitorSet(self.lme, LME_Monitor, NULL, NULL))
         if args is None: args = ()
         if kargs is None: kargs = {}
         monitorlist.append((monitor, args, kargs))
@@ -720,7 +724,7 @@ cdef class LME(Object):
         --------
         slepc.LMEMonitorCancel
         """
-        CHKERR( LMEMonitorCancel(self.lme) )
+        CHKERR(LMEMonitorCancel(self.lme))
         self.set_attr('__monitor__', None)
 
     def setUp(self) -> None:
@@ -736,7 +740,7 @@ cdef class LME(Object):
         --------
         solve, slepc.LMESetUp
         """
-        CHKERR( LMESetUp(self.lme) )
+        CHKERR(LMESetUp(self.lme))
 
     def solve(self) -> None:
         """
@@ -753,7 +757,7 @@ cdef class LME(Object):
         --------
         setCoefficients, setRHS, setSolution, slepc.LMESolve
         """
-        CHKERR( LMESolve(self.lme) )
+        CHKERR(LMESolve(self.lme))
 
     def getIterationNumber(self) -> int:
         """
@@ -774,7 +778,7 @@ cdef class LME(Object):
         getConvergedReason, slepc.LMEGetIterationNumber
         """
         cdef PetscInt ival = 0
-        CHKERR( LMEGetIterationNumber(self.lme, &ival) )
+        CHKERR(LMEGetIterationNumber(self.lme, &ival))
         return toInt(ival)
 
     def getConvergedReason(self) -> ConvergedReason:
@@ -793,7 +797,7 @@ cdef class LME(Object):
         setTolerances, solve, setErrorIfNotConverged, slepc.LMEGetConvergedReason
         """
         cdef SlepcLMEConvergedReason val = LME_CONVERGED_ITERATING
-        CHKERR( LMEGetConvergedReason(self.lme, &val) )
+        CHKERR(LMEGetConvergedReason(self.lme, &val))
         return val
 
     def setErrorIfNotConverged(self, flg: bool = True) -> None:
@@ -818,7 +822,7 @@ cdef class LME(Object):
         getConvergedReason, solve, slepc.LMESetErrorIfNotConverged
         """
         cdef PetscBool tval = flg
-        CHKERR( LMESetErrorIfNotConverged(self.lme, tval) )
+        CHKERR(LMESetErrorIfNotConverged(self.lme, tval))
 
     def getErrorIfNotConverged(self) -> bool:
         """
@@ -839,7 +843,7 @@ cdef class LME(Object):
         setErrorIfNotConverged, slepc.LMEGetErrorIfNotConverged
         """
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR( LMEGetErrorIfNotConverged(self.lme, &tval) )
+        CHKERR(LMEGetErrorIfNotConverged(self.lme, &tval))
         return toBool(tval)
 
     #
@@ -848,6 +852,7 @@ cdef class LME(Object):
         """The tolerance value used by the LME convergence tests."""
         def __get__(self) -> float:
             return self.getTolerances()[0]
+
         def __set__(self, value):
             self.setTolerances(tol=value)
 
@@ -855,6 +860,7 @@ cdef class LME(Object):
         """The maximum iteration count used by the LME convergence tests."""
         def __get__(self) -> int:
             return self.getTolerances()[1]
+
         def __set__(self, value):
             self.setTolerances(max_it=value)
 
@@ -862,6 +868,7 @@ cdef class LME(Object):
         """The math function (`FN`) object associated to the LME object."""
         def __get__(self) -> FN:
             return self.getFN()
+
         def __set__(self, value):
             self.setFN(value)
 
@@ -869,6 +876,7 @@ cdef class LME(Object):
         """The basis vectors (`BV`) object associated to the LME object."""
         def __get__(self) -> BV:
             return self.getBV()
+
         def __set__(self, value):
             self.setBV(value)
 
