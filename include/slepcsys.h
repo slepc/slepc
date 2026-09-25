@@ -120,7 +120,7 @@ M*/
 #if PetscDefined(USE_COMPLEX)
 #define SlepcLogFlopsComplex(a) PetscLogFlops((a))
 #else
-#define SlepcLogFlopsComplex(a) PetscLogFlops((4.0*a))
+#define SlepcLogFlopsComplex(a) PetscLogFlops(4.0*(a))
 #endif
 
 /*MC
@@ -146,7 +146,7 @@ M*/
 #if PetscDefined(USE_COMPLEX)
 #define SlepcLogGpuFlopsComplex(a) PetscLogGpuFlops((a))
 #else
-#define SlepcLogGpuFlopsComplex(a) PetscLogGpuFlops((4.0*a))
+#define SlepcLogGpuFlopsComplex(a) PetscLogGpuFlops(4.0*(a))
 #endif
 
 /*
