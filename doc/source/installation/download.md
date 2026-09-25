@@ -101,6 +101,7 @@ Distribution files:
 [[3.22]](https://slepc.upv.es/download/distrib/slepc-3.22.2.tar.gz)
 [[3.23]](https://slepc.upv.es/download/distrib/slepc-3.23.3.tar.gz)
 [[3.24]](https://slepc.upv.es/download/distrib/slepc-3.24.3.tar.gz)
+[[3.25]](https://slepc.upv.es/download/distrib/slepc-3.25.2.tar.gz)
 
 :::{warning}
 Users of previous versions are strongly recommended to upgrade to the latest one.
@@ -183,5 +184,6 @@ SLEPc version | PETSc versions      | Release date
 3.23          | 3.23                | Mar 2025
 3.24          | 3.24                | Sep 2025
 3.25          | 3.25                | Mar 2026
+3.26          | 3.26                | Sep 2026
 
 :::

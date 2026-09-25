@@ -1,6 +1,6 @@
 # Changelog of SLEPc versions
 
-## [unreleased]
+## [3.26] - 2026-09-29
 
 ### Added
 
@@ -544,7 +544,8 @@
   for parameter adjustment.
 
 [unreleased]: https://gitlab.com/slepc/slepc/-/tree/main
-[3.25]: https://gitlab.com/slepc/slepc/-/tree/release
+[3.26]: https://gitlab.com/slepc/slepc/-/tree/release
+[3.25]: https://gitlab.com/slepc/slepc/-/tree/release-3.25
 [3.24]: https://gitlab.com/slepc/slepc/-/tree/release-3.24
 [3.23]: https://gitlab.com/slepc/slepc/-/tree/release-3.23
 [3.22]: https://gitlab.com/slepc/slepc/-/tree/release-3.22
