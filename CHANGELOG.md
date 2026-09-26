@@ -16,6 +16,10 @@
   below the threshold to be fully converged.
 - `MatNormEstimate()` has been deprecated in favor of `MatNormApproximate()` (from PETSc).
 
+### Deprecated
+
+- `EPSCISSSetUseST()` is superseded by `EPSCISSSetStrategy()`.
+
 ## [3.25] - 2026-03-31
 
 ### Added

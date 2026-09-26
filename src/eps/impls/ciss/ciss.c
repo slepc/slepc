@@ -48,7 +48,7 @@ typedef struct {
   PetscInt          refine_blocksize;
   EPSCISSQuadRule   quad;
   EPSCISSExtraction extraction;
-  PetscBool         usest;
+  EPSCISSStrategy   strategy;
   /* private data */
   SlepcContourData  contour;
   PetscReal         *sigma;     /* threshold for numerical rank */
@@ -60,13 +60,12 @@ typedef struct {
   BV                pV;
   BV                Y;
   PetscBool         useconj;
-  PetscBool         usest_set;  /* whether the user set the usest flag or not */
   PetscObjectId     rgid;
   PetscObjectState  rgstate;
 } EPS_CISS;
 
 /*
-  Set up KSP solvers for every integration point, only called if !ctx->usest
+  Set up KSP solvers for every integration point, only called in EPS_CISS_STRATEGY_SPLIT
 */
 static PetscErrorCode EPSCISSSetUp(EPS eps,Mat A,Mat B,Mat Pa,Mat Pb)
 {
@@ -118,7 +117,7 @@ static PetscErrorCode EPSCISSSolve(EPS eps,Mat B,BV V,PetscInt L_start,PetscInt 
   PetscCall(BVGetMat(V,&MV));
   for (i=0;i<contour->npoints;i++) {
     p_id = i*contour->subcomm->n + contour->subcomm->color;
-    if (ctx->usest)  {
+    if (ctx->strategy == EPS_CISS_STRATEGY_USEST)  {
       PetscCall(STSetShift(eps->st,ctx->omega[p_id]));
       PetscCall(STGetKSP(eps->st,&ksp));
     } else ksp = contour->ksp[i];
@@ -135,7 +134,7 @@ static PetscErrorCode EPSCISSSolve(EPS eps,Mat B,BV V,PetscInt L_start,PetscInt 
       PetscCall(KSPMatSolve(ksp,BMV,MC));
     } else PetscCall(KSPMatSolve(ksp,MV,MC));
     PetscCall(BVRestoreMat(ctx->Y,&MC));
-    if (ctx->usest && i<contour->npoints-1) PetscCall(KSPReset(ksp));
+    if (ctx->strategy == EPS_CISS_STRATEGY_USEST && i<contour->npoints-1) PetscCall(KSPReset(ksp));
   }
   PetscCall(MatDestroy(&BMV));
   PetscCall(BVRestoreMat(V,&MV));
@@ -299,8 +298,8 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
   PetscCheck(!flg,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Matrix type shell is not supported in this solver");
   if (eps->isgeneralized) PetscCall(STGetMatrix(eps->st,1,&A[1]));
 
-  if (!ctx->usest_set) ctx->usest = (ctx->npart>1)? PETSC_FALSE: PETSC_TRUE;
-  PetscCheck(!ctx->usest || ctx->npart==1,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"The usest flag is not supported when partitions > 1");
+  if (!ctx->strategy) ctx->strategy = (ctx->npart>1)? EPS_CISS_STRATEGY_SPLIT: EPS_CISS_STRATEGY_USEST;
+  PetscCheck(ctx->strategy != EPS_CISS_STRATEGY_USEST || ctx->npart==1,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"The EPS_CISS_STRATEGY_USEST strategy is not supported when partitions > 1");
 
   /* check if a user-defined split preconditioner has been set */
   PetscCall(STGetSplitPreconditionerInfo(eps->st,&nsplit,NULL));
@@ -323,7 +322,7 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
   }
 
   EPSCheckDefinite(eps);
-  EPSCheckSinvertCondition(eps,ctx->usest," (with the usest flag set)");
+  EPSCheckSinvertCondition(eps,ctx->strategy == EPS_CISS_STRATEGY_USEST," (with EPS_CISS_STRATEGY_USEST)");
 
   PetscCall(BVDestroy(&ctx->Y));
   if (contour->pA) {
@@ -408,7 +407,7 @@ static PetscErrorCode EPSSolve_CISS(EPS eps)
   else B = NULL;
   J = (contour->pA && nmat>1)? contour->pA[1]: B;
   V = contour->pA? ctx->pV: ctx->V;
-  if (!ctx->usest) {
+  if (ctx->strategy == EPS_CISS_STRATEGY_SPLIT) {
     T = contour->pA? contour->pA[0]: A;
     PetscCall(STGetSplitPreconditionerInfo(eps->st,&nsplit,NULL));
     if (nsplit) {
@@ -982,32 +981,33 @@ PetscErrorCode EPSCISSGetRefinement(EPS eps, PetscInt *inner, PetscInt *blsize)
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSCISSSetUseST_CISS(EPS eps,PetscBool usest)
+static PetscErrorCode EPSCISSSetStrategy_CISS(EPS eps,EPSCISSStrategy strategy)
 {
   EPS_CISS *ctx = (EPS_CISS*)eps->data;
 
   PetscFunctionBegin;
-  ctx->usest     = usest;
-  ctx->usest_set = PETSC_TRUE;
-  eps->state     = EPS_STATE_INITIAL;
+  if (ctx->strategy != strategy) {
+    ctx->strategy = strategy;
+    eps->state    = EPS_STATE_INITIAL;
+  }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
 /*@
-   EPSCISSSetUseST - Sets a flag indicating that the CISS solver will
-   use the `ST` object for the linear solves.
+   EPSCISSSetStrategy - Sets the strategy to be used when performing linear solves
+   associated with integration points in the CISS solver.
 
    Logically Collective
 
    Input Parameters:
-+  eps    - the linear eigensolver context
--  usest  - boolean flag to use the `ST` object or not
++  eps      - the linear eigensolver context
+-  strategy - the strategy, see `EPSCISSStrategy` for possible values
 
    Options Database Key:
-.  -eps_ciss_usest (true|false) - whether the `ST` object will be used or not
+.  -eps_ciss_strategy (usest|split) - sets the strategy
 
-   Note:
-   When this option is set, the linear solves can be configured by
+   Notes:
+   When the `usest` strategy is selected the linear solves can be configured by
    setting options for the `KSP` object obtained with `STGetKSP()`.
    Otherwise, several `KSP` objects are created, which can be accessed
    with `EPSCISSGetKSPs()`.
@@ -1017,29 +1017,29 @@ static PetscErrorCode EPSCISSSetUseST_CISS(EPS eps,PetscBool usest)
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetUseST()`, `EPSCISSSetSizes()`, `EPSCISSGetKSPs()`, `STGetKSP()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSGetStrategy()`, `EPSCISSSetSizes()`, `EPSCISSGetKSPs()`, `STGetKSP()`
 @*/
-PetscErrorCode EPSCISSSetUseST(EPS eps,PetscBool usest)
+PetscErrorCode EPSCISSSetStrategy(EPS eps,EPSCISSStrategy strategy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
-  PetscValidLogicalCollectiveBool(eps,usest,2);
-  PetscTryMethod(eps,"EPSCISSSetUseST_C",(EPS,PetscBool),(eps,usest));
+  PetscValidLogicalCollectiveEnum(eps,strategy,2);
+  PetscTryMethod(eps,"EPSCISSSetStrategy_C",(EPS,EPSCISSStrategy),(eps,strategy));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
-static PetscErrorCode EPSCISSGetUseST_CISS(EPS eps,PetscBool *usest)
+static PetscErrorCode EPSCISSGetStrategy_CISS(EPS eps,EPSCISSStrategy *strategy)
 {
   EPS_CISS *ctx = (EPS_CISS*)eps->data;
 
   PetscFunctionBegin;
-  *usest = ctx->usest;
+  *strategy = ctx->strategy;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
 /*@
-   EPSCISSGetUseST - Gets the flag for using the `ST` object
-   in the CISS solver.
+   EPSCISSGetStrategy - Gets the strategy to be used when performing linear solves
+   associated with integration points in the CISS solver.
 
    Not Collective
 
@@ -1047,18 +1047,18 @@ static PetscErrorCode EPSCISSGetUseST_CISS(EPS eps,PetscBool *usest)
 .  eps - the linear eigensolver context
 
    Output Parameter:
-.  usest - boolean flag indicating if the `ST` object is being used
+.  strategy - the strategy
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetUseST()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetStrategy()`, `EPSCISSStrategy`
 @*/
-PetscErrorCode EPSCISSGetUseST(EPS eps,PetscBool *usest)
+PetscErrorCode EPSCISSGetStrategy(EPS eps,EPSCISSStrategy *strategy)
 {
   PetscFunctionBegin;
   PetscValidHeaderSpecific(eps,EPS_CLASSID,1);
-  PetscAssertPointer(usest,2);
-  PetscUseMethod(eps,"EPSCISSGetUseST_C",(EPS,PetscBool*),(eps,usest));
+  PetscAssertPointer(strategy,2);
+  PetscUseMethod(eps,"EPSCISSGetStrategy_C",(EPS,EPSCISSStrategy*),(eps,strategy));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -1295,7 +1295,7 @@ static PetscErrorCode EPSReset_CISS(EPS eps)
   PetscCall(BVDestroy(&ctx->S));
   PetscCall(BVDestroy(&ctx->V));
   PetscCall(BVDestroy(&ctx->Y));
-  if (!ctx->usest) PetscCall(SlepcContourDataReset(ctx->contour));
+  if (ctx->strategy == EPS_CISS_STRATEGY_SPLIT) PetscCall(SlepcContourDataReset(ctx->contour));
   PetscCall(BVDestroy(&ctx->pV));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -1304,10 +1304,11 @@ static PetscErrorCode EPSSetFromOptions_CISS(EPS eps,PetscOptionItems PetscOptio
 {
   PetscReal         r3,r4;
   PetscInt          i,i1,i2,i3,i4,i5,i6,i7;
-  PetscBool         b1,b2,flg,flg2,flg3,flg4,flg5,flg6;
+  PetscBool         b1,flg,flg2,flg3,flg4,flg5,flg6;
   EPS_CISS          *ctx = (EPS_CISS*)eps->data;
   EPSCISSQuadRule   quad;
   EPSCISSExtraction extraction;
+  EPSCISSStrategy   strategy;
 
   PetscFunctionBegin;
   PetscOptionsHeadBegin(PetscOptionsObject,"EPS CISS Options");
@@ -1331,9 +1332,9 @@ static PetscErrorCode EPSSetFromOptions_CISS(EPS eps,PetscOptionItems PetscOptio
     PetscCall(PetscOptionsInt("-eps_ciss_refine_blocksize","Number of blocksize iterative refinement iterations","EPSCISSSetRefinement",i7,&i7,&flg2));
     if (flg || flg2) PetscCall(EPSCISSSetRefinement(eps,i6,i7));
 
-    PetscCall(EPSCISSGetUseST(eps,&b2));
-    PetscCall(PetscOptionsBool("-eps_ciss_usest","Use ST for linear solves","EPSCISSSetUseST",b2,&b2,&flg));
-    if (flg) PetscCall(EPSCISSSetUseST(eps,b2));
+    PetscCall(PetscOptionsDeprecated("-eps_ciss_usest", NULL, "3.26", "Use -eps_ciss_strategy usest"));
+    PetscCall(PetscOptionsEnum("-eps_ciss_strategy","Strategy for linear solves","EPSCISSSetStrategy",EPSCISSStrategies,(PetscEnum)ctx->strategy,(PetscEnum*)&strategy,&flg));
+    if (flg) PetscCall(EPSCISSSetStrategy(eps,strategy));
 
     PetscCall(PetscOptionsEnum("-eps_ciss_quadrule","Quadrature rule","EPSCISSSetQuadRule",EPSCISSQuadRules,(PetscEnum)ctx->quad,(PetscEnum*)&quad,&flg));
     if (flg) PetscCall(EPSCISSSetQuadRule(eps,quad));
@@ -1366,8 +1367,8 @@ static PetscErrorCode EPSDestroy_CISS(EPS eps)
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetThreshold_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetRefinement_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetRefinement_C",NULL));
-  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetUseST_C",NULL));
-  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetUseST_C",NULL));
+  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetStrategy_C",NULL));
+  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetStrategy_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetQuadRule_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetQuadRule_C",NULL));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetExtraction_C",NULL));
@@ -1391,20 +1392,24 @@ static PetscErrorCode EPSView_CISS(EPS eps,PetscViewer viewer)
     PetscCall(PetscViewerASCIIPrintf(viewer,"  iterative refinement { inner: %" PetscInt_FMT ", blocksize: %" PetscInt_FMT " }\n",ctx->refine_inner, ctx->refine_blocksize));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  extraction: %s\n",EPSCISSExtractions[ctx->extraction]));
     PetscCall(PetscViewerASCIIPrintf(viewer,"  quadrature rule: %s\n",EPSCISSQuadRules[ctx->quad]));
-    if (ctx->usest) PetscCall(PetscViewerASCIIPrintf(viewer,"  using ST for linear solves\n"));
-    else {
-      if (!ctx->contour || !ctx->contour->ksp) PetscCall(EPSCISSGetKSPs(eps,NULL,NULL));
-      PetscAssert(ctx->contour && ctx->contour->ksp,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Something went wrong with EPSCISSGetKSPs()");
-      PetscCall(PetscViewerASCIIPushTab(viewer));
-      if (ctx->npart>1 && ctx->contour->subcomm) {
-        PetscCall(PetscViewerGetSubViewer(viewer,ctx->contour->subcomm->child,&sviewer));
-        if (!ctx->contour->subcomm->color) PetscCall(KSPView(ctx->contour->ksp[0],sviewer));
-        PetscCall(PetscViewerFlush(sviewer));
-        PetscCall(PetscViewerRestoreSubViewer(viewer,ctx->contour->subcomm->child,&sviewer));
-        /* extra call needed because of the two calls to PetscViewerASCIIPushSynchronized() in PetscViewerGetSubViewer() */
-        PetscCall(PetscViewerASCIIPopSynchronized(viewer));
-      } else PetscCall(KSPView(ctx->contour->ksp[0],viewer));
-      PetscCall(PetscViewerASCIIPopTab(viewer));
+    switch (ctx->strategy) {
+      case EPS_CISS_STRATEGY_USEST:
+        PetscCall(PetscViewerASCIIPrintf(viewer,"  using ST for linear solves\n"));
+        break;
+      case EPS_CISS_STRATEGY_SPLIT:
+        if (!ctx->contour || !ctx->contour->ksp) PetscCall(EPSCISSGetKSPs(eps,NULL,NULL));
+        PetscAssert(ctx->contour && ctx->contour->ksp,PetscObjectComm((PetscObject)eps),PETSC_ERR_PLIB,"Something went wrong with EPSCISSGetKSPs()");
+        PetscCall(PetscViewerASCIIPushTab(viewer));
+        if (ctx->npart>1 && ctx->contour->subcomm) {
+          PetscCall(PetscViewerGetSubViewer(viewer,ctx->contour->subcomm->child,&sviewer));
+          if (!ctx->contour->subcomm->color) PetscCall(KSPView(ctx->contour->ksp[0],sviewer));
+          PetscCall(PetscViewerFlush(sviewer));
+          PetscCall(PetscViewerRestoreSubViewer(viewer,ctx->contour->subcomm->child,&sviewer));
+          /* extra call needed because of the two calls to PetscViewerASCIIPushSynchronized() in PetscViewerGetSubViewer() */
+          PetscCall(PetscViewerASCIIPopSynchronized(viewer));
+        } else PetscCall(KSPView(ctx->contour->ksp[0],viewer));
+        PetscCall(PetscViewerASCIIPopTab(viewer));
+        break;
     }
   }
   PetscFunctionReturn(PETSC_SUCCESS);
@@ -1413,13 +1418,14 @@ static PetscErrorCode EPSView_CISS(EPS eps,PetscViewer viewer)
 static PetscErrorCode EPSSetDefaultST_CISS(EPS eps)
 {
   EPS_CISS       *ctx = (EPS_CISS*)eps->data;
-  PetscBool      usest = ctx->usest;
+  PetscBool      usest;
   KSP            ksp;
   PC             pc;
 
   PetscFunctionBegin;
   if (!((PetscObject)eps->st)->type_name) {
-    if (!ctx->usest_set) usest = (ctx->npart>1)? PETSC_FALSE: PETSC_TRUE;
+    if (!ctx->strategy) usest = (ctx->npart>1)? PETSC_FALSE: PETSC_TRUE;
+    else usest = (ctx->strategy==EPS_CISS_STRATEGY_USEST)? PETSC_TRUE: PETSC_FALSE;
     if (usest) PetscCall(STSetType(eps->st,STSINVERT));
     else {
       /* we are not going to use ST, so avoid factorizing the matrix */
@@ -1448,7 +1454,7 @@ static PetscErrorCode EPSSetDefaultST_CISS(EPS eps)
    specify the region. However, the computational cost is usually high
    because multiple linear systems must be solved. For this, we can
    use the `KSP` object inside `ST`, or several independent `KSP`s,
-   see `EPSCISSSetUseST()`.
+   see `EPSCISSSetStrategy()`.
 
    Details of the implementation in SLEPc can be found in {cite:p}`Mae16`.
 
@@ -1483,8 +1489,8 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_CISS(EPS eps)
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetThreshold_C",EPSCISSGetThreshold_CISS));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetRefinement_C",EPSCISSSetRefinement_CISS));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetRefinement_C",EPSCISSGetRefinement_CISS));
-  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetUseST_C",EPSCISSSetUseST_CISS));
-  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetUseST_C",EPSCISSGetUseST_CISS));
+  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetStrategy_C",EPSCISSSetStrategy_CISS));
+  PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetStrategy_C",EPSCISSGetStrategy_CISS));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetQuadRule_C",EPSCISSSetQuadRule_CISS));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSGetQuadRule_C",EPSCISSGetQuadRule_CISS));
   PetscCall(PetscObjectComposeFunction((PetscObject)eps,"EPSCISSSetExtraction_C",EPSCISSSetExtraction_CISS));
@@ -1498,8 +1504,6 @@ SLEPC_EXTERN PetscErrorCode EPSCreate_CISS(EPS eps)
   ctx->delta              = SLEPC_DEFAULT_TOL*1e-4;
   ctx->L_max              = 64;
   ctx->spurious_threshold = PetscSqrtReal(SLEPC_DEFAULT_TOL);
-  ctx->usest              = PETSC_TRUE;
-  ctx->usest_set          = PETSC_FALSE;
   ctx->isreal             = PETSC_FALSE;
   ctx->refine_inner       = 0;
   ctx->refine_blocksize   = 0;

@@ -306,6 +306,10 @@ cdef extern from * nogil:
         EPS_CISS_EXTRACTION_RITZ
         EPS_CISS_EXTRACTION_HANKEL
 
+    ctypedef enum SlepcEPSCISSStrategy "EPSCISSStrategy":
+        EPS_CISS_STRATEGY_USEST
+        EPS_CISS_STRATEGY_SPLIT
+
     PetscErrorCode EPSCISSSetExtraction(SlepcEPS, SlepcEPSCISSExtraction)
     PetscErrorCode EPSCISSGetExtraction(SlepcEPS, SlepcEPSCISSExtraction*)
     PetscErrorCode EPSCISSSetQuadRule(SlepcEPS, SlepcEPSCISSQuadRule)
@@ -316,8 +320,8 @@ cdef extern from * nogil:
     PetscErrorCode EPSCISSGetThreshold(SlepcEPS, PetscReal*, PetscReal*)
     PetscErrorCode EPSCISSSetRefinement(SlepcEPS, PetscInt, PetscInt)
     PetscErrorCode EPSCISSGetRefinement(SlepcEPS, PetscInt*, PetscInt*)
-    PetscErrorCode EPSCISSSetUseST(SlepcEPS, PetscBool)
-    PetscErrorCode EPSCISSGetUseST(SlepcEPS, PetscBool*)
+    PetscErrorCode EPSCISSSetStrategy(SlepcEPS, SlepcEPSCISSStrategy)
+    PetscErrorCode EPSCISSGetStrategy(SlepcEPS, SlepcEPSCISSStrategy*)
     PetscErrorCode EPSCISSGetKSPs(SlepcEPS, PetscInt*, PetscKSP**)
 
 cdef extern from * nogil:

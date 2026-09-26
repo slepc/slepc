@@ -73,7 +73,7 @@ int main(int argc,char **argv)
   PetscCall(EPSSetType(eps,EPSCISS));
   PetscCall(EPSCISSSetExtraction(eps,EPS_CISS_EXTRACTION_HANKEL));
   PetscCall(EPSCISSSetQuadRule(eps,EPS_CISS_QUADRULE_CHEBYSHEV));
-  PetscCall(EPSCISSSetUseST(eps,PETSC_TRUE));
+  PetscCall(EPSCISSSetStrategy(eps,EPS_CISS_STRATEGY_USEST));
   PetscCall(EPSGetRG(eps,&rg));
   PetscCall(RGSetType(rg,RGINTERVAL));
   PetscCall(RGIntervalSetEndpoints(rg,-3000.0,0.0,0.0,0.0));

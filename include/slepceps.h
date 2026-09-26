@@ -881,7 +881,7 @@ SLEPC_EXTERN const char *EPSPowerShiftTypes[];
 /*MC
    EPS_POWER_SHIFT_CONSTANT - The power iteration will use a constant shift.
 
-   Note:
+   Notes:
    Together with `STSINVERT`, the `EPSPOWER` solver implements the inverse iteration
    method, i.e., it will apply $(A-\sigma I)^{-1}$ at each iteration, by solving
    a linear system. By default, the shift $\sigma$ is constant and given by the
@@ -898,7 +898,7 @@ M*/
    EPS_POWER_SHIFT_RAYLEIGH - The power iteration will use a variable shift
    computed with the Rayleigh quotient.
 
-   Notes:
+   Notess:
    Together with `STSINVERT`, the `EPSPOWER` solver implements the inverse iteration
    method, i.e., it will apply $(A-\sigma I)^{-1}$ at each iteration, by solving
    a linear system. With this strategy, the value of the shift will be updated at
@@ -919,7 +919,7 @@ M*/
    EPS_POWER_SHIFT_WILKINSON - The power iteration will use a variable shift
    computed with Wilkinson's approach.
 
-   Note:
+   Notes:
    Together with `STSINVERT`, the `EPSPOWER` solver implements the inverse iteration
    method, i.e., it will apply $(A-\sigma I)^{-1}$ at each iteration, by solving
    a linear system. With this strategy, the value of the shift will be updated at
@@ -1149,18 +1149,95 @@ typedef enum { EPS_CISS_EXTRACTION_RITZ,
                EPS_CISS_EXTRACTION_HANKEL } EPSCISSExtraction;
 SLEPC_EXTERN const char *EPSCISSExtractions[];
 
+/*E
+   EPSCISSStrategy - The strategy to be used when performing linear solves associated with
+   integration points in the `EPSCISS` solver.
+
+   Values:
++  `EPS_CISS_STRATEGY_USEST` - use the `ST` object for the linear solves
+-  `EPS_CISS_STRATEGY_SPLIT` - use a collection of independent `KSP` objects
+
+   Notes:
+   The most computationally expensive step in `EPSCISS` is to solve
+   $(A-z_i B)Y_i=BV$ for every integration point $z_i$. This can be done in
+   various ways.
+
+   Additional details are provided in the separate manual pages of each strategy.
+
+   The default is `EPS_CISS_STRATEGY_USEST` if the number of partitions is one
+   (see `EPSCISSSetSizes()`) and `EPS_CISS_STRATEGY_SPLIT` otherwise.
+
+   Level: advanced
+
+.seealso: [](ch:eps), `EPSCISSSetStrategy()`, `EPSCISSSetSizes()`, `EPSCISSGetKSPs()`
+E*/
+typedef enum { EPS_CISS_STRATEGY_USEST = 1,
+               EPS_CISS_STRATEGY_SPLIT = 2 } EPSCISSStrategy;
+SLEPC_EXTERN const char *EPSCISSStrategies[];
+
+/*MC
+   EPS_CISS_STRATEGY_USEST - Use the `ST` object for the linear solves associated with
+   integration points in the `EPSCISS` solver.
+
+   Notes:
+   For the linear solves $(A-z_i B)Y_i=BV$ at every integration point $z_i$, this
+   strategy uses the `ST` object and its internal linear solver. The `ST` must be
+   configured as shift-and-invert (`STSINVERT`), and the solver will solve the
+   systems sequentially, one after the other, after changing to the new shift $z_i$
+   with `STSetShift()`.
+
+   This strategy is the simplest one in terms of memory usage and objects created.
+   However, the performance may be poor, especially if the number of integration
+   points is large. The parallel scalability is also limited, especially if a direct
+   linear solver is used in the internal `KSP`.
+
+   Level: advanced
+
+.seealso: [](ch:eps), `EPSCISSStrategy`, `EPSCISSSetStrategy()`, `STSINVERT`, `STSetShift()`, `EPS_CISS_STRATEGY_SPLIT`
+M*/
+
+/*MC
+   EPS_CISS_STRATEGY_SPLIT - Use a collection of independent `KSP` objects for the
+   linear solves associated with integration points in the `EPSCISS` solver.
+
+   Notes:
+   For the linear solves $(A-z_i B)Y_i=BV$ at every integration point $z_i$, this
+   strategy uses an array of linear solver objects, see `EPSCISSGetKSPs()`.
+   The number of `KSP` solvers is equal to the number of integration points divided by
+   the number of partitions, see `EPSCISSSetSizes()`. This value is halved in the case
+   of real matrices with a region centered at the real axis.
+
+   This strategy uses more memory, compared to `EPS_CISS_STRATEGY_USEST`, but it
+   potentially has more parallelism. The memory needs grow with the number of integration
+   points, and the degree of parallelism increases with the number of partitions.
+   For large scale problems, this approach is more scalable, with two levels of parallelism
+   - several groups of MPI processes handling different integration points simultaneously
+   and solving systems in parallel within the subcommunicator.
+
+   Level: advanced
+
+.seealso: [](ch:eps), `EPSCISSStrategy`, `EPSCISSSetStrategy()`, `EPSCISSGetKSPs()`, `EPSCISSSetSizes()`, `EPS_CISS_STRATEGY_USEST`
+M*/
+
 SLEPC_EXTERN PetscErrorCode EPSCISSSetExtraction(EPS,EPSCISSExtraction);
 SLEPC_EXTERN PetscErrorCode EPSCISSGetExtraction(EPS,EPSCISSExtraction*);
 SLEPC_EXTERN PetscErrorCode EPSCISSSetQuadRule(EPS,EPSCISSQuadRule);
 SLEPC_EXTERN PetscErrorCode EPSCISSGetQuadRule(EPS,EPSCISSQuadRule*);
+SLEPC_EXTERN PetscErrorCode EPSCISSSetStrategy(EPS,EPSCISSStrategy);
+SLEPC_EXTERN PetscErrorCode EPSCISSGetStrategy(EPS,EPSCISSStrategy*);
 SLEPC_EXTERN PetscErrorCode EPSCISSSetSizes(EPS,PetscInt,PetscInt,PetscInt,PetscInt,PetscInt,PetscBool);
 SLEPC_EXTERN PetscErrorCode EPSCISSGetSizes(EPS,PetscInt*,PetscInt*,PetscInt*,PetscInt*,PetscInt*,PetscBool*);
 SLEPC_EXTERN PetscErrorCode EPSCISSSetThreshold(EPS,PetscReal,PetscReal);
 SLEPC_EXTERN PetscErrorCode EPSCISSGetThreshold(EPS,PetscReal*,PetscReal*);
 SLEPC_EXTERN PetscErrorCode EPSCISSSetRefinement(EPS,PetscInt,PetscInt);
 SLEPC_EXTERN PetscErrorCode EPSCISSGetRefinement(EPS,PetscInt*,PetscInt*);
-SLEPC_EXTERN PetscErrorCode EPSCISSSetUseST(EPS,PetscBool);
-SLEPC_EXTERN PetscErrorCode EPSCISSGetUseST(EPS,PetscBool*);
+PETSC_DEPRECATED_FUNCTION(3, 26, 0, "EPSCISSSetStrategy()", ) static inline PetscErrorCode EPSCISSSetUseST(EPS eps,PetscBool usest) {return EPSCISSSetStrategy(eps,usest?EPS_CISS_STRATEGY_USEST:EPS_CISS_STRATEGY_SPLIT);}
+PETSC_DEPRECATED_FUNCTION(3, 26, 0, "EPSCISSGetStrategy()", ) static inline PetscErrorCode EPSCISSGetUseST(EPS eps,PetscBool *usest) {
+  EPSCISSStrategy s;
+  PetscErrorCode  ierr = EPSCISSGetStrategy(eps,&s);
+  *usest = s==EPS_CISS_STRATEGY_USEST? PETSC_TRUE: PETSC_FALSE;
+  return ierr;
+}
 SLEPC_EXTERN PetscErrorCode EPSCISSGetKSPs(EPS,PetscInt*,KSP*[]);
 
 SLEPC_EXTERN PetscErrorCode EPSLyapIISetLME(EPS,LME);

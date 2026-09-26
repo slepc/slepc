@@ -155,7 +155,7 @@ int main(int argc,char **argv)
          suffix: 2
       test:
          suffix: 2_nost
-         args: -eps_ciss_usest 0
+         args: -eps_ciss_strategy split
          requires: !single
       test:
          suffix: 2_par

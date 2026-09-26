@@ -1,5 +1,8 @@
 # --------------------------------------------------------------------
 
+cdef object warnings  # this is to not expose the warnings module in the namespace
+import warnings
+
 cdef extern from * nogil:
     """
     #include "pyapicompat.h"
