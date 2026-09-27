@@ -37,6 +37,7 @@ struct _n_SlepcContourData {
   PetscSubcomm subcomm;    /* subcommunicator for top level parallelization */
   PetscInt     npoints;    /* number of integration points assigned to the local subcomm */
   KSP          *ksp;       /* ksp array for storing factorizations at integration points */
+  PetscInt     nksp;       /* number of ksp objects in array */
   Mat          *pA;        /* redundant copies of the matrices in the local subcomm */
   Mat          *pP;        /* redundant copies of the matrices (preconditioner) */
   PetscInt     nmat;       /* number of matrices in pA */

@@ -884,11 +884,12 @@ static PetscErrorCode PEPCISSGetKSPs_CISS(PEP pep,PetscInt *nsolve,KSP **ksp)
   }
   contour = ctx->contour;
   if (!contour->ksp) {
-    PetscCall(PetscMalloc1(contour->npoints,&contour->ksp));
+    contour->nksp = contour->npoints;
+    PetscCall(PetscMalloc1(contour->nksp,&contour->ksp));
     PetscCall(PEPGetST(pep,&pep->st));
     PetscCall(STGetSplitPreconditionerInfo(pep->st,&nsplit,NULL));
     PetscCall(PetscSubcommGetChild(contour->subcomm,&child));
-    for (i=0;i<contour->npoints;i++) {
+    for (i=0;i<contour->nksp;i++) {
       PetscCall(KSPCreate(child,&contour->ksp[i]));
       PetscCall(PetscObjectIncrementTabLevel((PetscObject)contour->ksp[i],(PetscObject)pep,1));
       PetscCall(KSPSetOptionsPrefix(contour->ksp[i],((PetscObject)pep)->prefix));
@@ -906,7 +907,7 @@ static PetscErrorCode PEPCISSGetKSPs_CISS(PEP pep,PetscInt *nsolve,KSP **ksp)
       }
     }
   }
-  if (nsolve) *nsolve = contour->npoints;
+  if (nsolve) *nsolve = contour->nksp;
   if (ksp)    *ksp    = contour->ksp;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
