@@ -4,6 +4,9 @@
 
 ### Added
 
+- New strategy to solve linear systems associated with integration points in contour
+  integral solvers, see `EPSCISSSetStrategy()`. Now it is possible to use a linear solver
+  such as `KSPEKSM` that handles all integration points simultaneously in a single solve.
 - Support for Kokkos vector types in `BVMAT`. Now eigensolves with `-mat_type aijkokkos`
   work instead of aborting.
 - New function `SlepcGetConfiguration()`.

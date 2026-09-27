@@ -251,26 +251,30 @@ PetscErrorCode MyEigenSort(PetscScalar ar,PetscScalar ai,PetscScalar br,PetscSca
       output_file: output/test9_5.out
 
    testset:
-      args: -eps_type ciss -eps_tol 1e-9 -rg_type ellipse -rg_ellipse_center 0.55 -rg_ellipse_radius 0.05 -rg_ellipse_vscale 0.1 -eps_ciss_strategy split -eps_all
+      args: -eps_type ciss -eps_tol 1e-9 -rg_type ellipse -rg_ellipse_center 0.55 -rg_ellipse_radius 0.05 -rg_ellipse_vscale 0.1 -eps_ciss_strategy {{split multishift}} -eps_all
       requires: !single
+      filter: sed -e "s/[+-]0\.0*i//g"
       output_file: output/test9_6.out
       test:
          suffix: 6
       test:
          suffix: 6_hankel
-         args: -eps_ciss_extraction hankel -eps_ciss_spurious_threshold 1e-6 -eps_ncv 64
+         args: -eps_ciss_extraction hankel -eps_ciss_spurious_threshold 1e-6 -eps_ncv 12
       test:
          suffix: 6_cheby
          args: -eps_ciss_quadrule chebyshev
       test:
          suffix: 6_hankel_cheby
-         args: -eps_ciss_extraction hankel -eps_ciss_quadrule chebyshev -eps_ncv 64
+         args: -eps_ciss_extraction hankel -eps_ciss_quadrule chebyshev -eps_ncv 12
       test:
          suffix: 6_refine
          args: -eps_ciss_moments 4 -eps_ciss_blocksize 5 -eps_ciss_refine_inner 1 -eps_ciss_refine_blocksize 2
-      test:
-         suffix: 6_bcgs
-         args: -eps_ciss_realmats -eps_ciss_ksp_type bcgs -eps_ciss_pc_type ilu -eps_ciss_integration_points 8
+
+   test:
+      suffix: 6_bcgs
+      args: -eps_type ciss -eps_tol 1e-9 -rg_type ellipse -rg_ellipse_center 0.55 -rg_ellipse_radius 0.05 -rg_ellipse_vscale 0.1 -eps_ciss_strategy split -eps_all -eps_ciss_realmats -eps_ciss_ksp_type bcgs -eps_ciss_pc_type ilu -eps_ciss_integration_points 8
+      requires: !single
+      output_file: output/test9_6.out
 
    test:
       suffix: 6_cheby_interval

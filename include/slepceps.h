@@ -1154,8 +1154,9 @@ SLEPC_EXTERN const char *EPSCISSExtractions[];
    integration points in the `EPSCISS` solver.
 
    Values:
-+  `EPS_CISS_STRATEGY_USEST` - use the `ST` object for the linear solves
--  `EPS_CISS_STRATEGY_SPLIT` - use a collection of independent `KSP` objects
++  `EPS_CISS_STRATEGY_USEST`      - use the `ST` object for the linear solves
+.  `EPS_CISS_STRATEGY_SPLIT`      - use a collection of independent `KSP` objects
+-  `EPS_CISS_STRATEGY_MULTISHIFT` - use a `KSP` for multiple shifted systems such as `KSPEKSM`
 
    Notes:
    The most computationally expensive step in `EPSCISS` is to solve
@@ -1171,8 +1172,9 @@ SLEPC_EXTERN const char *EPSCISSExtractions[];
 
 .seealso: [](ch:eps), `EPSCISSSetStrategy()`, `EPSCISSSetSizes()`, `EPSCISSGetKSPs()`
 E*/
-typedef enum { EPS_CISS_STRATEGY_USEST = 1,
-               EPS_CISS_STRATEGY_SPLIT = 2 } EPSCISSStrategy;
+typedef enum { EPS_CISS_STRATEGY_USEST      = 1,
+               EPS_CISS_STRATEGY_SPLIT      = 2,
+               EPS_CISS_STRATEGY_MULTISHIFT = 3 } EPSCISSStrategy;
 SLEPC_EXTERN const char *EPSCISSStrategies[];
 
 /*MC
@@ -1193,7 +1195,7 @@ SLEPC_EXTERN const char *EPSCISSStrategies[];
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSStrategy`, `EPSCISSSetStrategy()`, `STSINVERT`, `STSetShift()`, `EPS_CISS_STRATEGY_SPLIT`
+.seealso: [](ch:eps), `EPSCISSStrategy`, `EPSCISSSetStrategy()`, `STSINVERT`, `STSetShift()`, `EPS_CISS_STRATEGY_SPLIT`, `EPS_CISS_STRATEGY_MULTISHIFT`
 M*/
 
 /*MC
@@ -1216,7 +1218,32 @@ M*/
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISSStrategy`, `EPSCISSSetStrategy()`, `EPSCISSGetKSPs()`, `EPSCISSSetSizes()`, `EPS_CISS_STRATEGY_USEST`
+.seealso: [](ch:eps), `EPSCISSStrategy`, `EPSCISSSetStrategy()`, `EPSCISSGetKSPs()`, `EPSCISSSetSizes()`, `EPS_CISS_STRATEGY_USEST`, `EPS_CISS_STRATEGY_MULTISHIFT`
+M*/
+
+/*MC
+   EPS_CISS_STRATEGY_MULTISHIFT - Use a single `KSP` object to perform all the
+   linear solves associated with integration points simultaneously.
+
+   Notes:
+   For the linear solves $(A-z_i B)Y_i=BV$ at every integration point $z_i$, this
+   strategy uses a single `KSP` object to solve all shifted systems at once.
+   For this to be efficient, it has to be a solver that can handle multiple
+   shifted systems such as `KSPEKSM`.
+
+   This strategy is often cheaper in terms of memory and computational cost,
+   compared to other strategies, since the (extended) Krylov basis is built only once
+   and reused, instead of having an independent solve per each integration point.
+
+   Currently, the columns of $Y_i$ are computed column by column, not as a block solve.
+
+   When the number of partitions set in `EPSCISSSetSizes()` is larger than one, the
+   different subcommunicators own a subset of integration points, that are processed
+   simultaneously with an independent `KSPEKSM` solver, see `EPSCISSGetKSPs()`.
+
+   Level: advanced
+
+.seealso: [](ch:eps), `EPSCISSStrategy`, `EPSCISSSetStrategy()`, `EPSCISSGetKSPs()`, `EPSCISSSetSizes()`, `KSPEKSM`, `EPS_CISS_STRATEGY_USEST`, `EPS_CISS_STRATEGY_SPLIT`
 M*/
 
 SLEPC_EXTERN PetscErrorCode EPSCISSSetExtraction(EPS,EPSCISSExtraction);

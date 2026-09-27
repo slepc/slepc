@@ -350,15 +350,17 @@ class EPSCISSStrategy(object):
     """
     EPS CISS strategy to solve the linear systems.
 
-    - `USEST`: Use the `ST` object for the linear solves.
-    - `SPLIT`: Use a collection of independent `petsc4py.PETSc.KSP` objects.
+    - `USEST`:      Use the `ST` object for the linear solves.
+    - `SPLIT`:      Use a collection of independent `petsc4py.PETSc.KSP` objects.
+    - `MULTISHIFT`: Use a `petsc4py.PETSc.KSP` for multiple shifted systems.
 
     See Also
     --------
     slepc.EPSCISSStrategy
     """
-    USEST = EPS_CISS_STRATEGY_USEST
-    SPLIT = EPS_CISS_STRATEGY_SPLIT
+    USEST      = EPS_CISS_STRATEGY_USEST
+    SPLIT      = EPS_CISS_STRATEGY_SPLIT
+    MULTISHIFT = EPS_CISS_STRATEGY_MULTISHIFT
 
 # -----------------------------------------------------------------------------
 

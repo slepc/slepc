@@ -78,7 +78,7 @@ static PetscErrorCode EPSCISSGetContour_Private(EPS eps,SlepcContourData *contou
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 /*
-  Set up KSP solvers for every integration point, only called in EPS_CISS_STRATEGY_SPLIT
+  Set up KSP solvers for SPLIT strategy
 */
 static PetscErrorCode EPSCISSSetUp_SPLIT(EPS eps,Mat A,Mat B,Mat Pa,Mat Pb)
 {
@@ -102,10 +102,47 @@ static PetscErrorCode EPSCISSSetUp_SPLIT(EPS eps,Mat A,Mat B,Mat Pa,Mat Pb)
       if (Pb) PetscCall(MatAXPY(Pmat,-ctx->omega[p_id],Pb,strp));
       else PetscCall(MatShift(Pmat,-ctx->omega[p_id]));
     } else Pmat = Amat;
-    PetscCall(EPS_KSPSetOperators(contour->ksp[i],Amat,Amat));
+    PetscCall(EPS_KSPSetOperators(contour->ksp[i],Amat,Pmat));
+    if (eps->setfromoptionscalled) PetscCall(KSPSetFromOptions(contour->ksp[i]));
+    PetscCall(KSPSetUp(contour->ksp[i]));
     PetscCall(MatDestroy(&Amat));
     if (nsplit) PetscCall(MatDestroy(&Pmat));
   }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+  Set up KSP solvers for MULTISHIFT strategy
+*/
+static PetscErrorCode EPSCISSSetUp_MULTISHIFT(EPS eps,Mat A,Mat B,Mat Pa,Mat Pb)
+{
+  EPS_CISS         *ctx = (EPS_CISS*)eps->data;
+  SlepcContourData contour;
+  PetscInt         i,p_id,nsplit,nshift;
+  Mat              Amat,Pmat;
+  MatStructure     str,strp;
+  PetscScalar      *sigma,*sigma_imaginary=NULL;
+  PetscBool        explicitmat = PETSC_FALSE; // TODO: add user option
+
+  PetscFunctionBegin;
+  PetscCall(EPSCISSGetContour_Private(eps,&contour));
+  nshift = contour->npoints;
+  PetscCall(PetscCalloc2(nshift,&sigma,nshift,&sigma_imaginary));
+  for (i=0;i<nshift;i++) {
+    p_id = i*contour->subcomm->n + contour->subcomm->color;
+    sigma[i] = -ctx->omega[p_id];
+  }
+  PetscCall(STGetMatStructure(eps->st,&str));
+  PetscCall(STGetSplitPreconditionerInfo(eps->st,&nsplit,&strp));
+  PetscCall(MatCreateNestFromMultipleShifts(A,nshift,sigma,sigma_imaginary,B,explicitmat,str,&Amat));
+  if (nsplit) PetscCall(MatCreateNestFromMultipleShifts(Pa,nshift,sigma,sigma_imaginary,Pb,explicitmat,strp,&Pmat));
+  else Pmat = Amat;
+  PetscCall(EPS_KSPSetOperators(contour->ksp[0],Amat,Pmat));
+  if (eps->setfromoptionscalled) PetscCall(KSPSetFromOptions(contour->ksp[0]));
+  PetscCall(KSPSetUp(contour->ksp[0]));
+  PetscCall(MatDestroy(&Amat));
+  if (nsplit) PetscCall(MatDestroy(&Pmat));
+  PetscCall(PetscFree2(sigma,sigma_imaginary));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -159,6 +196,40 @@ static PetscErrorCode EPSCISSSolve_SPLIT(EPS eps,Mat V,PetscInt L_start,PetscInt
 }
 
 /*
+  Linear solves for the MULTISHIFT strategy
+*/
+static PetscErrorCode EPSCISSSolve_MULTISHIFT(EPS eps,Mat V,PetscInt L_start,PetscInt L_end)
+{
+  EPS_CISS         *ctx = (EPS_CISS*)eps->data;
+  SlepcContourData contour;
+  PetscInt         i,j,k=L_end-L_start;
+  Mat              A_nest;
+  Vec              b,b_nest,x,x_nest;
+  KSP              ksp;
+  PC               pc;
+
+  PetscFunctionBegin;
+  PetscCall(EPSCISSGetContour_Private(eps,&contour));
+  ksp = contour->ksp[0];
+  PetscCall(KSPGetPC(ksp,&pc));
+  PetscCall(PCGetOperators(pc,&A_nest,NULL));
+  PetscCall(MatCreateVecNestFromMultipleShifts(A_nest,NULL,&x_nest));
+  for (j=0;j<k;j++) { // TODO: solve all columns at once
+    PetscCall(MatDenseGetColumnVecRead(V,j,&b));
+    PetscCall(MatCreateVecNestFromMultipleShifts(A_nest,b,&b_nest));
+    PetscCall(KSPSolve(ksp,b_nest,x_nest));
+    for (i=0;i<contour->npoints;i++) {
+      PetscCall(VecNestGetSubVec(x_nest,i,&x));
+      PetscCall(BVInsertVec(ctx->Y,i*ctx->L+j,x));
+    }
+    PetscCall(VecDestroy(&b_nest));
+    PetscCall(MatDenseRestoreColumnVecRead(V,j,&b));
+  }
+  PetscCall(VecDestroy(&x_nest));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
   Y_i = (A-z_i B)^{-1}BV for every integration point
 */
 static PetscErrorCode EPSCISSSolve(EPS eps,Mat B,BV V,PetscInt L_start,PetscInt L_end)
@@ -182,6 +253,9 @@ static PetscErrorCode EPSCISSSolve(EPS eps,Mat B,BV V,PetscInt L_start,PetscInt 
       break;
     case EPS_CISS_STRATEGY_SPLIT:
       PetscCall(EPSCISSSolve_SPLIT(eps,B?BMV:MV,L_start,L_end));
+      break;
+    case EPS_CISS_STRATEGY_MULTISHIFT:
+      PetscCall(EPSCISSSolve_MULTISHIFT(eps,B?BMV:MV,L_start,L_end));
       break;
   }
   PetscCall(MatDestroy(&BMV));
@@ -262,11 +336,11 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
   SlepcContourData contour;
   PetscBool        istrivial,isring,isellipse,isinterval,flg;
   PetscReal        c,d;
-  PetscInt         i,nsplit;
+  PetscInt         nsplit;
   PetscRandom      rand;
   PetscObjectId    id;
   PetscObjectState state;
-  Mat              A[2],Psplit[2];
+  Mat              A[2],Psplit[2],T,J,Pa=NULL,Pb=NULL;
   Vec              v0;
 
   PetscFunctionBegin;
@@ -329,11 +403,7 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
 
   PetscCall(EPSCISSGetContour_Private(eps,&contour));
 
-  if (eps->setfromoptionscalled && ctx->strategy == EPS_CISS_STRATEGY_SPLIT) {
-    PetscCall(EPSCISSGetKSPs(eps,NULL,NULL));
-    for (i=0;i<contour->npoints;i++) PetscCall(KSPSetFromOptions(contour->ksp[i]));
-    PetscCall(PetscSubcommSetFromOptions(contour->subcomm));
-  }
+  if (eps->setfromoptionscalled && ctx->strategy != EPS_CISS_STRATEGY_USEST) PetscCall(PetscSubcommSetFromOptions(contour->subcomm));
 
   PetscCall(EPSAllocateSolution(eps,0));
   PetscCall(BVGetRandomContext(eps->V,&rand));  /* make sure the random context is available when duplicating */
@@ -350,6 +420,7 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
   PetscCall(MatIsShell(A[0],&flg));
   PetscCheck(!flg,PetscObjectComm((PetscObject)eps),PETSC_ERR_SUP,"Matrix type shell is not supported in this solver");
   if (eps->isgeneralized) PetscCall(STGetMatrix(eps->st,1,&A[1]));
+  else A[1] = NULL;
 
   /* check if a user-defined split preconditioner has been set */
   PetscCall(STGetSplitPreconditionerInfo(eps->st,&nsplit,NULL));
@@ -397,6 +468,25 @@ static PetscErrorCode EPSSetUp_CISS(EPS eps)
 #else
   PetscCall(EPSSetWorkVecs(eps,2));
 #endif
+
+  PetscCall(RGComputeQuadrature(eps->rg,ctx->quad==EPS_CISS_QUADRULE_CHEBYSHEV?RG_QUADRULE_CHEBYSHEV:RG_QUADRULE_TRAPEZOIDAL,ctx->N,ctx->omega,ctx->pp,ctx->weight));
+  J = (contour->pA && A[1])? contour->pA[1]: A[1];
+  if (ctx->strategy == EPS_CISS_STRATEGY_SPLIT || ctx->strategy == EPS_CISS_STRATEGY_MULTISHIFT) {
+    T = contour->pA? contour->pA[0]: A[0];
+    PetscCall(STGetSplitPreconditionerInfo(eps->st,&nsplit,NULL));
+    if (nsplit) {
+      if (contour->pA) {
+        Pa = contour->pP[0];
+        if (nsplit>1) Pb = contour->pP[1];
+      } else {
+        PetscCall(STGetSplitPreconditionerTerm(eps->st,0,&Pa));
+        if (nsplit>1) PetscCall(STGetSplitPreconditionerTerm(eps->st,1,&Pb));
+      }
+    }
+    PetscCall(EPSCISSGetKSPs(eps,NULL,NULL));
+    if (ctx->strategy == EPS_CISS_STRATEGY_SPLIT) PetscCall(EPSCISSSetUp_SPLIT(eps,T,J,Pa,Pb));
+    else PetscCall(EPSCISSSetUp_MULTISHIFT(eps,T,J,Pa,Pb));
+  }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -424,9 +514,9 @@ static PetscErrorCode EPSSolve_CISS(EPS eps)
 {
   EPS_CISS         *ctx = (EPS_CISS*)eps->data;
   SlepcContourData contour;
-  Mat              A,B,X,M,pA,pB,T,J,Pa=NULL,Pb=NULL;
+  Mat              A,B=NULL,X,M,pA,pB,J;
   BV               V;
-  PetscInt         i,j,ld,nmat,L_add=0,nv=0,L_base=ctx->L,inner,nlocal,*inside,nsplit;
+  PetscInt         i,j,ld,L_add=0,nv=0,L_base=ctx->L,inner,*inside;
   PetscScalar      *Mu,*H0,*H1=NULL,*rr,*temp;
   PetscReal        error,max_error,norm;
   PetscBool        *fl1;
@@ -447,31 +537,14 @@ static PetscErrorCode EPSSolve_CISS(EPS eps)
   w[1] = eps->work[2];
 #endif
   w[2] = eps->work[1];
-  PetscCall(VecGetLocalSize(w[0],&nlocal));
   PetscCall(DSGetLeadingDimension(eps->ds,&ld));
-  PetscCall(RGComputeQuadrature(eps->rg,ctx->quad==EPS_CISS_QUADRULE_CHEBYSHEV?RG_QUADRULE_CHEBYSHEV:RG_QUADRULE_TRAPEZOIDAL,ctx->N,ctx->omega,ctx->pp,ctx->weight));
-  PetscCall(STGetNumMatrices(eps->st,&nmat));
+
   PetscCall(STGetMatrix(eps->st,0,&A));
-  if (nmat>1) PetscCall(STGetMatrix(eps->st,1,&B));
-  else B = NULL;
+  if (eps->isgeneralized) PetscCall(STGetMatrix(eps->st,1,&B));
   PetscCall(EPSCISSGetContour_Private(eps,&contour));
-  J = (contour->pA && nmat>1)? contour->pA[1]: B;
+  J = (contour->pA && eps->isgeneralized)? contour->pA[1]: B;
   V = contour->pA? ctx->pV: ctx->V;
-  if (ctx->strategy == EPS_CISS_STRATEGY_SPLIT) {
-    T = contour->pA? contour->pA[0]: A;
-    PetscCall(STGetSplitPreconditionerInfo(eps->st,&nsplit,NULL));
-    if (nsplit) {
-      if (contour->pA) {
-        Pa = contour->pP[0];
-        if (nsplit>1) Pb = contour->pP[1];
-      } else {
-        PetscCall(STGetSplitPreconditionerTerm(eps->st,0,&Pa));
-        if (nsplit>1) PetscCall(STGetSplitPreconditionerTerm(eps->st,1,&Pb));
-      }
-    }
-    PetscCall(EPSCISSGetKSPs(eps,NULL,NULL));
-    PetscCall(EPSCISSSetUp_SPLIT(eps,T,J,Pa,Pb));
-  }
+
   PetscCall(BVSetActiveColumns(ctx->V,0,ctx->L));
   PetscCall(BVSetRandomSign(ctx->V));
   PetscCall(BVGetRandomContext(ctx->V,&rand));
@@ -1055,7 +1128,7 @@ static PetscErrorCode EPSCISSSetStrategy_CISS(EPS eps,EPSCISSStrategy strategy)
 -  strategy - the strategy, see `EPSCISSStrategy` for possible values
 
    Options Database Key:
-.  -eps_ciss_strategy (usest|split) - sets the strategy
+.  -eps_ciss_strategy (usest|split|multishift) - sets the strategy
 
    Notes:
    When the `usest` strategy is selected the linear solves can be configured by
@@ -1268,35 +1341,70 @@ PetscErrorCode EPSCISSGetExtraction(EPS eps,EPSCISSExtraction *extraction)
 
 static PetscErrorCode EPSCISSGetKSPs_CISS(EPS eps,PetscInt *nsolve,KSP **ksp)
 {
+  EPS_CISS         *ctx = (EPS_CISS*)eps->data;
   SlepcContourData contour;
   PetscInt         i,nsplit;
+  KSP              ksps,kspm;
   PC               pc;
   MPI_Comm         child;
 
   PetscFunctionBegin;
   PetscCall(EPSCISSGetContour_Private(eps,&contour));
   if (!contour->ksp) {
-    contour->nksp = contour->npoints;
-    PetscCall(PetscMalloc1(contour->nksp,&contour->ksp));
-    PetscCall(EPSGetST(eps,&eps->st));
-    PetscCall(STGetSplitPreconditionerInfo(eps->st,&nsplit,NULL));
-    PetscCall(PetscSubcommGetChild(contour->subcomm,&child));
-    for (i=0;i<contour->nksp;i++) {
-      PetscCall(KSPCreate(child,&contour->ksp[i]));
-      PetscCall(PetscObjectIncrementTabLevel((PetscObject)contour->ksp[i],(PetscObject)eps,1));
-      PetscCall(KSPSetOptionsPrefix(contour->ksp[i],((PetscObject)eps)->prefix));
-      PetscCall(KSPAppendOptionsPrefix(contour->ksp[i],"eps_ciss_"));
-      PetscCall(PetscObjectSetOptions((PetscObject)contour->ksp[i],((PetscObject)eps)->options));
-      PetscCall(KSPSetErrorIfNotConverged(contour->ksp[i],PETSC_TRUE));
-      PetscCall(KSPSetTolerances(contour->ksp[i],SlepcDefaultTol(eps->tol),PETSC_CURRENT,PETSC_CURRENT,PETSC_CURRENT));
-      PetscCall(KSPGetPC(contour->ksp[i],&pc));
-      if (nsplit) {
-        PetscCall(KSPSetType(contour->ksp[i],KSPBCGS));
-        PetscCall(PCSetType(pc,PCBJACOBI));
-      } else {
-        PetscCall(KSPSetType(contour->ksp[i],KSPPREONLY));
+    switch (ctx->strategy) {
+      case EPS_CISS_STRATEGY_USEST:
+        SETERRQ(PETSC_COMM_SELF,PETSC_ERR_SUP,"Should not call EPSCISSGetKSPs() with EPS_CISS_STRATEGY_USEST");
+        break;
+      case EPS_CISS_STRATEGY_SPLIT:
+        contour->nksp = contour->npoints;
+        PetscCall(PetscMalloc1(contour->nksp,&contour->ksp));
+        PetscCall(EPSGetST(eps,&eps->st));
+        PetscCall(STGetSplitPreconditionerInfo(eps->st,&nsplit,NULL));
+        PetscCall(PetscSubcommGetChild(contour->subcomm,&child));
+        for (i=0;i<contour->nksp;i++) {
+          PetscCall(KSPCreate(child,&contour->ksp[i]));
+          PetscCall(PetscObjectIncrementTabLevel((PetscObject)contour->ksp[i],(PetscObject)eps,1));
+          PetscCall(KSPSetOptionsPrefix(contour->ksp[i],((PetscObject)eps)->prefix));
+          PetscCall(KSPAppendOptionsPrefix(contour->ksp[i],"eps_ciss_"));
+          PetscCall(PetscObjectSetOptions((PetscObject)contour->ksp[i],((PetscObject)eps)->options));
+          PetscCall(KSPSetErrorIfNotConverged(contour->ksp[i],PETSC_TRUE));
+          PetscCall(KSPSetTolerances(contour->ksp[i],SlepcDefaultTol(eps->tol),PETSC_CURRENT,PETSC_CURRENT,PETSC_CURRENT));
+          PetscCall(KSPGetPC(contour->ksp[i],&pc));
+          if (nsplit) {
+            PetscCall(KSPSetType(contour->ksp[i],KSPBCGS));
+            PetscCall(PCSetType(pc,PCBJACOBI));
+          } else {
+            PetscCall(KSPSetType(contour->ksp[i],KSPPREONLY));
+            PetscCall(PCSetType(pc,PCLU));
+          }
+        }
+        break;
+      case EPS_CISS_STRATEGY_MULTISHIFT:
+        contour->nksp = 1; /* one solver per subcomm */
+        PetscCall(PetscMalloc1(contour->nksp,&contour->ksp));
+        PetscCall(EPSGetST(eps,&eps->st));
+        PetscCall(STGetSplitPreconditionerInfo(eps->st,&nsplit,NULL));
+        PetscCall(PetscSubcommGetChild(contour->subcomm,&child));
+        PetscCall(KSPCreate(child,&contour->ksp[0]));
+        PetscCall(PetscObjectIncrementTabLevel((PetscObject)contour->ksp[0],(PetscObject)eps,1));
+        PetscCall(KSPSetOptionsPrefix(contour->ksp[0],((PetscObject)eps)->prefix));
+        PetscCall(KSPAppendOptionsPrefix(contour->ksp[0],"eps_ciss_"));
+        PetscCall(PetscObjectSetOptions((PetscObject)contour->ksp[0],((PetscObject)eps)->options));
+        PetscCall(KSPSetErrorIfNotConverged(contour->ksp[0],PETSC_TRUE));
+        PetscCall(KSPSetTolerances(contour->ksp[0],SlepcDefaultTol(eps->tol),PETSC_CURRENT,PETSC_CURRENT,PETSC_CURRENT));
+        PetscCall(KSPGetPC(contour->ksp[0],&pc));
+        PetscCall(KSPSetType(contour->ksp[0],KSPEKSM));
+        PetscCall(PCSetType(pc,PCNONE));
+        PetscCall(KSPEKSMGetKSP(contour->ksp[0],&ksps,eps->isgeneralized?&kspm:NULL));
+        PetscCall(KSPGetPC(ksps,&pc));
+        PetscCall(KSPSetType(ksps,KSPPREONLY));
         PetscCall(PCSetType(pc,PCLU));
-      }
+        if (eps->isgeneralized) {
+          PetscCall(KSPGetPC(kspm,&pc));
+          PetscCall(KSPSetType(kspm,KSPPREONLY));
+          PetscCall(PCSetType(pc,PCLU));
+        }
+        break;
     }
   }
   if (nsolve) *nsolve = contour->nksp;
@@ -1317,14 +1425,19 @@ static PetscErrorCode EPSCISSGetKSPs_CISS(EPS eps,PetscInt *nsolve,KSP **ksp)
 +  nsolve - number of solver objects
 -  ksp - array of linear solver object
 
-   Note:
-   The number of `KSP` solvers is equal to the number of integration points divided by
-   the number of partitions, see `EPSCISSSetSizes()`. This value is halved in the case
-   of real matrices with a region centered at the real axis.
+   Notes:
+   In `EPS_CISS_STRATEGY_SPLIT` the number of `KSP` solvers is equal to the number of
+   integration points divided by the number of partitions, see `EPSCISSSetSizes()`. This
+   value is halved in the case of real matrices with a region centered at the real axis.
+
+   In `EPS_CISS_STRATEGY_MULTISHIFT` only one `KSP` solver is returned.
+
+   When the number of partitions is larger than one, MPI processes belonging to different
+   subcommunicators will obtain different `KSP` objects.
 
    Level: advanced
 
-.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetSizes()`
+.seealso: [](ch:eps), `EPSCISS`, `EPSCISSSetSizes()`, `EPSCISSSetStrategy()`
 @*/
 PetscErrorCode EPSCISSGetKSPs(EPS eps,PetscInt *nsolve,KSP **ksp)
 {
@@ -1342,7 +1455,7 @@ static PetscErrorCode EPSReset_CISS(EPS eps)
   PetscCall(BVDestroy(&ctx->S));
   PetscCall(BVDestroy(&ctx->V));
   PetscCall(BVDestroy(&ctx->Y));
-  if (ctx->strategy == EPS_CISS_STRATEGY_SPLIT) PetscCall(SlepcContourDataReset(ctx->contour));
+  if (ctx->strategy != EPS_CISS_STRATEGY_USEST) PetscCall(SlepcContourDataReset(ctx->contour));
   PetscCall(BVDestroy(&ctx->pV));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -1437,6 +1550,7 @@ static PetscErrorCode EPSView_CISS(EPS eps,PetscViewer viewer)
         PetscCall(PetscViewerASCIIPrintf(viewer,"  using ST for linear solves\n"));
         break;
       case EPS_CISS_STRATEGY_SPLIT:
+      case EPS_CISS_STRATEGY_MULTISHIFT:
         PetscCall(EPSCISSGetKSPs(eps,NULL,NULL));
         PetscCall(PetscViewerASCIIPushTab(viewer));
         if (ctx->npart>1 && ctx->contour->subcomm) {

@@ -309,6 +309,7 @@ cdef extern from * nogil:
     ctypedef enum SlepcEPSCISSStrategy "EPSCISSStrategy":
         EPS_CISS_STRATEGY_USEST
         EPS_CISS_STRATEGY_SPLIT
+        EPS_CISS_STRATEGY_MULTISHIFT
 
     PetscErrorCode EPSCISSSetExtraction(SlepcEPS, SlepcEPSCISSExtraction)
     PetscErrorCode EPSCISSGetExtraction(SlepcEPS, SlepcEPSCISSExtraction*)
