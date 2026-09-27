@@ -80,7 +80,7 @@ static PetscErrorCode EPSCISSGetContour_Private(EPS eps,SlepcContourData *contou
 /*
   Set up KSP solvers for every integration point, only called in EPS_CISS_STRATEGY_SPLIT
 */
-static PetscErrorCode EPSCISSSetUp(EPS eps,Mat A,Mat B,Mat Pa,Mat Pb)
+static PetscErrorCode EPSCISSSetUp_SPLIT(EPS eps,Mat A,Mat B,Mat Pa,Mat Pb)
 {
   EPS_CISS         *ctx = (EPS_CISS*)eps->data;
   SlepcContourData contour;
@@ -110,43 +110,79 @@ static PetscErrorCode EPSCISSSetUp(EPS eps,Mat A,Mat B,Mat Pa,Mat Pb)
 }
 
 /*
-  Y_i = (A-z_i B)^{-1}BV for every integration point, Y=[Y_i] is in the context
+  Linear solves for the USEST strategy
 */
-static PetscErrorCode EPSCISSSolve(EPS eps,Mat B,BV V,PetscInt L_start,PetscInt L_end)
+static PetscErrorCode EPSCISSSolve_USEST(EPS eps,Mat V,PetscInt L_start,PetscInt L_end)
 {
   EPS_CISS         *ctx = (EPS_CISS*)eps->data;
   SlepcContourData contour;
   PetscInt         i,p_id;
-  Mat              MV,BMV=NULL,MC;
+  Mat              MC;
   KSP              ksp;
 
   PetscFunctionBegin;
   PetscCall(EPSCISSGetContour_Private(eps,&contour));
-  PetscCall(BVSetActiveColumns(V,L_start,L_end));
-  PetscCall(BVGetMat(V,&MV));
   for (i=0;i<contour->npoints;i++) {
     p_id = i*contour->subcomm->n + contour->subcomm->color;
-    if (ctx->strategy == EPS_CISS_STRATEGY_USEST)  {
-      PetscCall(STSetShift(eps->st,ctx->omega[p_id]));
-      PetscCall(STGetKSP(eps->st,&ksp));
-    } else {
-      PetscCall(EPSCISSGetKSPs(eps,NULL,NULL));
-      ksp = contour->ksp[i];
-    }
+    PetscCall(STSetShift(eps->st,ctx->omega[p_id]));
+    PetscCall(STGetKSP(eps->st,&ksp));
     PetscCall(BVSetActiveColumns(ctx->Y,i*ctx->L+L_start,i*ctx->L+L_end));
     PetscCall(BVGetMat(ctx->Y,&MC));
-    if (B) {
-      if (!i) {
-        PetscCall(MatProductCreate(B,MV,NULL,&BMV));
-        PetscCall(MatProductSetType(BMV,MATPRODUCT_AB));
-        PetscCall(MatProductSetFromOptions(BMV));
-        PetscCall(MatProductSymbolic(BMV));
-      }
-      PetscCall(MatProductNumeric(BMV));
-      PetscCall(KSPMatSolve(ksp,BMV,MC));
-    } else PetscCall(KSPMatSolve(ksp,MV,MC));
+    PetscCall(KSPMatSolve(ksp,V,MC));
     PetscCall(BVRestoreMat(ctx->Y,&MC));
-    if (ctx->strategy == EPS_CISS_STRATEGY_USEST && i<contour->npoints-1) PetscCall(KSPReset(ksp));
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+  Linear solves for the SPLIT strategy
+*/
+static PetscErrorCode EPSCISSSolve_SPLIT(EPS eps,Mat V,PetscInt L_start,PetscInt L_end)
+{
+  EPS_CISS         *ctx = (EPS_CISS*)eps->data;
+  SlepcContourData contour;
+  PetscInt         i;
+  Mat              MC;
+  KSP              ksp;
+
+  PetscFunctionBegin;
+  PetscCall(EPSCISSGetContour_Private(eps,&contour));
+  for (i=0;i<contour->npoints;i++) {
+    PetscCall(EPSCISSGetKSPs(eps,NULL,NULL));
+    ksp = contour->ksp[i];
+    PetscCall(BVSetActiveColumns(ctx->Y,i*ctx->L+L_start,i*ctx->L+L_end));
+    PetscCall(BVGetMat(ctx->Y,&MC));
+    PetscCall(KSPMatSolve(ksp,V,MC));
+    PetscCall(BVRestoreMat(ctx->Y,&MC));
+  }
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+/*
+  Y_i = (A-z_i B)^{-1}BV for every integration point
+*/
+static PetscErrorCode EPSCISSSolve(EPS eps,Mat B,BV V,PetscInt L_start,PetscInt L_end)
+{
+  EPS_CISS *ctx = (EPS_CISS*)eps->data;
+  Mat      MV,BMV=NULL;
+
+  PetscFunctionBegin;
+  PetscCall(BVSetActiveColumns(V,L_start,L_end));
+  PetscCall(BVGetMat(V,&MV));
+  if (B) {
+    PetscCall(MatProductCreate(B,MV,NULL,&BMV));
+    PetscCall(MatProductSetType(BMV,MATPRODUCT_AB));
+    PetscCall(MatProductSetFromOptions(BMV));
+    PetscCall(MatProductSymbolic(BMV));
+    PetscCall(MatProductNumeric(BMV));
+  }
+  switch (ctx->strategy) {
+    case EPS_CISS_STRATEGY_USEST:
+      PetscCall(EPSCISSSolve_USEST(eps,B?BMV:MV,L_start,L_end));
+      break;
+    case EPS_CISS_STRATEGY_SPLIT:
+      PetscCall(EPSCISSSolve_SPLIT(eps,B?BMV:MV,L_start,L_end));
+      break;
   }
   PetscCall(MatDestroy(&BMV));
   PetscCall(BVRestoreMat(V,&MV));
@@ -434,7 +470,7 @@ static PetscErrorCode EPSSolve_CISS(EPS eps)
       }
     }
     PetscCall(EPSCISSGetKSPs(eps,NULL,NULL));
-    PetscCall(EPSCISSSetUp(eps,T,J,Pa,Pb));
+    PetscCall(EPSCISSSetUp_SPLIT(eps,T,J,Pa,Pb));
   }
   PetscCall(BVSetActiveColumns(ctx->V,0,ctx->L));
   PetscCall(BVSetRandomSign(ctx->V));
