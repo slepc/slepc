@@ -236,6 +236,7 @@ PetscErrorCode PEPSetFromOptions(PEP pep)
   PetscCall(STSetFromOptions(pep->st));
   if (!pep->refineksp) PetscCall(PEPRefineGetKSP(pep,&pep->refineksp));
   PetscCall(KSPSetFromOptions(pep->refineksp));
+  pep->setfromoptionscalled++;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

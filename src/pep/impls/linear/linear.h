@@ -23,7 +23,6 @@ typedef struct {
   Mat        M,C,K;            /* copy of PEP coefficient matrices */
   Vec        w[6];             /* work vectors */
   PetscReal  alpha,beta;       /* coefficients defining the linearization */
-  PetscBool  setfromoptionscalled;
 } PEP_LINEAR;
 
 /* General case for implicit matrices of degree d */

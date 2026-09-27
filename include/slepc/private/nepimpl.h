@@ -140,6 +140,7 @@ struct _p_NEP {
   NEPUserInterface fui;            /* how the user has defined the nonlinear operator */
   PetscBool      useds;            /* whether the solver uses the DS object or not */
   Mat            resolvent;        /* shell matrix to be used in NEPApplyResolvent */
+  PetscInt       setfromoptionscalled;
   NEPConvergedReason reason;
 };
 
