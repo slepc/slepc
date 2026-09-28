@@ -20,9 +20,6 @@
        [2] H.-X. Zhong, H. Xu, "Weighted Golub-Kahan-Lanczos bidiagonalization
            algorithms", Elec. Trans. Numer. Anal. 47, 2017.
 
-       [3] F. Alvarruiz, B. Mellado-Pinto, J. E. Roman, "Restarted Lanczos methods
-           for the linear response eigenvalue problem", in preparation, 2026.
-
 */
 #include <slepc/private/epsimpl.h>
 #include "krylovschur.h"

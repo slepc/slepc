@@ -1530,8 +1530,6 @@ static PetscErrorCode EPSKrylovSchurSetLREPType_KrylovSchur(EPS eps,EPSKrylovSch
    This function is relevant only for `EPS_LREP` problem types, see section
    on [](#sec:structured).
 
-   A detailed description of the methods can be found in {cite:p}`Alv26`.
-
    Level: advanced
 
 .seealso: [](ch:eps), [](#sec:structured), `EPS_LREP`, `EPSKRYLOVSCHUR`, `EPSKrylovSchurGetLREPType()`, `EPSKrylovSchurLREPType`, `MatCreateLREP()`
