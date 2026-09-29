@@ -18,7 +18,7 @@ for the computation of the action of a matrix function on a vector.
 """
 
 __author__ = 'Lisandro Dalcin'
-__version__ = '3.25.2'
+__version__ = '3.26.0'
 __credits__ = 'SLEPc Team <slepc-maint@upv.es>'
 
 # -----------------------------------------------------------------------------
