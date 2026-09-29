@@ -154,9 +154,13 @@ int main(int argc,char **argv)
       test:
          suffix: 2
       test:
-         suffix: 2_nost
-         args: -eps_ciss_usest 0
+         suffix: 2_split
+         args: -eps_ciss_strategy split
          requires: !single
+      test:
+         TODO: bad residuals, only two eigenvalues
+         suffix: 2_multishift
+         args: -eps_ciss_strategy multishift
       test:
          suffix: 2_par
          nsize: 2

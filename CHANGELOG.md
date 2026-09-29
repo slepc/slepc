@@ -4,6 +4,9 @@
 
 ### Added
 
+- New strategy to solve linear systems associated with integration points in contour
+  integral solvers, see `EPSCISSSetStrategy()`. Now it is possible to use a linear solver
+  such as `KSPEKSM` that handles all integration points simultaneously in a single solve.
 - Support for Kokkos vector types in `BVMAT`. Now eigensolves with `-mat_type aijkokkos`
   work instead of aborting.
 - New function `SlepcGetConfiguration()`.
@@ -15,6 +18,10 @@
   error estimate) is below the threshold, rather than waiting for the first value
   below the threshold to be fully converged.
 - `MatNormEstimate()` has been deprecated in favor of `MatNormApproximate()` (from PETSc).
+
+### Deprecated
+
+- `EPSCISSSetUseST()` is superseded by `EPSCISSSetStrategy()`.
 
 ## [3.25] - 2026-03-31
 

@@ -345,6 +345,23 @@ class EPSCISSExtraction(object):
     RITZ   = EPS_CISS_EXTRACTION_RITZ
     HANKEL = EPS_CISS_EXTRACTION_HANKEL
 
+
+class EPSCISSStrategy(object):
+    """
+    EPS CISS strategy to solve the linear systems.
+
+    - `USEST`:      Use the `ST` object for the linear solves.
+    - `SPLIT`:      Use a collection of independent `petsc4py.PETSc.KSP` objects.
+    - `MULTISHIFT`: Use a `petsc4py.PETSc.KSP` for multiple shifted systems.
+
+    See Also
+    --------
+    slepc.EPSCISSStrategy
+    """
+    USEST      = EPS_CISS_STRATEGY_USEST
+    SPLIT      = EPS_CISS_STRATEGY_SPLIT
+    MULTISHIFT = EPS_CISS_STRATEGY_MULTISHIFT
+
 # -----------------------------------------------------------------------------
 
 
@@ -375,6 +392,7 @@ cdef class EPS(Object):
     LanczosReorthogType = EPSLanczosReorthogType
     CISSQuadRule        = EPSCISSQuadRule
     CISSExtraction      = EPSCISSExtraction
+    CISSStrategy        = EPSCISSStrategy
 
     def __cinit__(self):
         self.obj = <PetscObject*> &self.eps
@@ -4094,6 +4112,53 @@ cdef class EPS(Object):
         CHKERR(EPSCISSGetQuadRule(self.eps, &val))
         return val
 
+    def setCISSStrategy(self, strategy: CISSStrategy) -> None:
+        """
+        Set the strategy for linear solves in the CISS solver.
+
+        Logically collective.
+
+        Parameters
+        ----------
+        strategy
+            The strategy for solving the linear systems.
+
+        Notes
+        -----
+        When the `USEST` strategy is selected, the linear solves can be
+        configured by setting options for the `petsc4py.PETSc.KSP` object
+        obtained with `ST.getKSP()`. Otherwise, several `petsc4py.PETSc.KSP`
+        objects are created, which can be accessed with `getCISSKSPs()`.
+
+        The default is to use the `ST`, unless several partitions have been
+        specified, see `setCISSSizes()`.
+
+        See Also
+        --------
+        getCISSStrategy, getCISSKSPs, setCISSSizes, slepc.EPSCISSSetStrategy
+        """
+        cdef SlepcEPSCISSStrategy val = strategy
+        CHKERR(EPSCISSSetStrategy(self.eps, val))
+
+    def getCISSStrategy(self) -> CISSStrategy:
+        """
+        Get the strategy for linear solves used in the CISS solver.
+
+        Not collective.
+
+        Returns
+        -------
+        CISSStrategy
+            The strategy for solving the linear systems.
+
+        See Also
+        --------
+        setCISSStrategy, slepc.EPSCISSGetStrategy
+        """
+        cdef SlepcEPSCISSStrategy val = EPS_CISS_STRATEGY_USEST
+        CHKERR(EPSCISSGetStrategy(self.eps, &val))
+        return val
+
     def setCISSSizes(
         self,
         ip: int | None = None,
@@ -4273,51 +4338,20 @@ cdef class EPS(Object):
         return (toInt(ival1), toInt(ival2))
 
     def setCISSUseST(self, usest: bool = True) -> None:
-        """
-        Set a flag indicating that the CISS solver will use the `ST` object.
-
-        Logically collective.
-
-        Parameters
-        ----------
-        usest
-            Whether to use the `ST` object or not.
-
-        Notes
-        -----
-        When this option is set, the linear solves can be configured by
-        setting options for the `petsc4py.PETSc.KSP` object obtained with
-        `ST.getKSP()`. Otherwise, several `petsc4py.PETSc.KSP` objects are
-        created, which can be accessed with `getCISSKSPs()`.
-
-        The default is to use the `ST`, unless several partitions have been
-        specified, see `setCISSSizes()`.
-
-        See Also
-        --------
-        getCISSUseST, getCISSKSPs, setCISSSizes, slepc.EPSCISSSetUseST
-        """
-        cdef PetscBool tval = asBool(usest)
-        CHKERR(EPSCISSSetUseST(self.eps, tval))
+        warnings.warn(
+            "setCISSUseST() is deprecated and will be removed in a future version. Use setCISSStrategy() instead.",
+            category=DeprecationWarning,
+            stacklevel=1,
+        )
+        return None
 
     def getCISSUseST(self) -> bool:
-        """
-        Get the flag indicating the use of the `ST` object in the CISS solver.
-
-        Not collective.
-
-        Returns
-        -------
-        bool
-            Whether to use the `ST` object or not.
-
-        See Also
-        --------
-        setCISSUseST, slepc.EPSCISSGetUseST
-        """
-        cdef PetscBool tval = PETSC_FALSE
-        CHKERR(EPSCISSGetUseST(self.eps, &tval))
-        return toBool(tval)
+        warnings.warn(
+            "getCISSUseST() is deprecated and will be removed in a future version. Use getCISSStrategy() instead.",
+            category=DeprecationWarning,
+            stacklevel=1,
+        )
+        return False
 
     def getCISSKSPs(self) -> list[KSP]:
         """
@@ -4476,5 +4510,6 @@ del EPSKrylovSchurLREPType
 del EPSLanczosReorthogType
 del EPSCISSQuadRule
 del EPSCISSExtraction
+del EPSCISSStrategy
 
 # -----------------------------------------------------------------------------

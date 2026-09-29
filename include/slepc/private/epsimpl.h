@@ -149,6 +149,7 @@ struct _p_EPS {
   PetscBool      ispositive;
   PetscBool      ishermitian;
   PetscBool      isstructured;
+  PetscInt       setfromoptionscalled;
   EPSConvergedReason reason;
 };
 

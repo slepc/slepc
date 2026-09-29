@@ -210,6 +210,7 @@ PetscErrorCode NEPSetFromOptions(NEP nep)
   if (!nep->refineksp) PetscCall(NEPRefineGetKSP(nep,&nep->refineksp));
   PetscCall(KSPSetFromOptions(nep->refineksp));
   if (nep->fui==NEP_USER_INTERFACE_SPLIT) for (i=0;i<nep->nt;i++) PetscCall(FNSetFromOptions(nep->f[i]));
+  nep->setfromoptionscalled++;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

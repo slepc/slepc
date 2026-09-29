@@ -149,7 +149,7 @@ int main(int argc,char **argv)
    test:
       suffix: 6
       nsize: 2
-      args: -eps_type ciss -rg_type ellipse -rg_ellipse_center 1.4 -rg_ellipse_radius 0.1 -eps_ciss_partitions 2 -terse
+      args: -eps_type ciss -rg_type ellipse -rg_ellipse_center 1.4 -rg_ellipse_radius 0.1 -eps_ciss_partitions 2 -eps_ciss_strategy {{split multishift}} -terse
       requires: !single
 
 TEST*/

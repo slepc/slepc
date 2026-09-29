@@ -255,6 +255,7 @@ PetscErrorCode EPSSetFromOptions(EPS eps)
   if (!eps->st) PetscCall(EPSGetST(eps,&eps->st));
   PetscCall(EPSSetDefaultST(eps));
   PetscCall(STSetFromOptions(eps->st));
+  eps->setfromoptionscalled++;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

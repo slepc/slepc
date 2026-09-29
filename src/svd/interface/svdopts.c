@@ -797,6 +797,7 @@ PetscErrorCode SVDSetFromOptions(SVD svd)
   if (!svd->ds) PetscCall(SVDGetDS(svd,&svd->ds));
   PetscCall(SVDSetDSType(svd));
   PetscCall(DSSetFromOptions(svd->ds));
+  svd->setfromoptionscalled++;
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

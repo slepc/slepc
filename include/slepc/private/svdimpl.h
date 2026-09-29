@@ -117,6 +117,7 @@ struct _p_SVD {
   PetscReal      nrma,nrmb;        /* computed matrix norms */
   PetscBool      isgeneralized;
   PetscBool      ishyperbolic;
+  PetscInt       setfromoptionscalled;
   SVDConvergedReason reason;
 };
 
