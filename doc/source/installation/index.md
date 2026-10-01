@@ -43,9 +43,9 @@ E4S packages are available as pre-built Spack binaries.
 :::
 
 :::{tab-item} MSYS2 (Windows)
-<https://packages.msys2.org/packages/mingw-w64-x86_64-slepc>
+<https://packages.msys2.org/base/mingw-w64-slepc>
 
-    $ pacman -S mingw-w64-x86_64-slepc
+    $ pacman -S ${MINGW_PACKAGE_PREFIX}-slepc
 :::
 
 :::{tab-item} openSUSE
