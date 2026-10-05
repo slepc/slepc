@@ -93,6 +93,8 @@ PetscErrorCode STApplyMat_Generic(ST st,Mat B,Mat C)
 @*/
 PetscErrorCode STApplyMat(ST st,Mat X,Mat Y)
 {
+  Mat Op;
+
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
   PetscValidHeaderSpecific(X,MAT_CLASSID,2);
@@ -100,7 +102,11 @@ PetscErrorCode STApplyMat(ST st,Mat X,Mat Y)
   PetscValidType(st,1);
   STCheckMatrices(st,1);
   PetscCheck(X!=Y,PetscObjectComm((PetscObject)st),PETSC_ERR_ARG_IDN,"X and Y must be different matrices");
-  PetscUseTypeMethod(st,applymat,X,Y);
+  if (st->ops->applymat) PetscUseTypeMethod(st,applymat,X,Y);
+  else {
+    PetscCall(STGetOperator_Private(st,&Op));
+    PetscCall(MatMatMult(Op,X,MAT_REUSE_MATRIX,PETSC_DEFAULT,&Y));
+  }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -135,7 +141,7 @@ PetscErrorCode STApplyTranspose_Generic(ST st,Vec x,Vec y)
 @*/
 PetscErrorCode STApplyTranspose(ST st,Vec x,Vec y)
 {
-  Mat            Op;
+  Mat Op;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
@@ -184,7 +190,7 @@ PetscErrorCode STApplyHermitianTranspose_Generic(ST st,Vec x,Vec y)
 @*/
 PetscErrorCode STApplyHermitianTranspose(ST st,Vec x,Vec y)
 {
-  Mat            Op;
+  Mat Op;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
@@ -243,7 +249,7 @@ PetscErrorCode STGetBilinearForm_Default(ST st,Mat *B)
 
 static PetscErrorCode MatMult_STOperator(Mat Op,Vec x,Vec y)
 {
-  ST             st;
+  ST st;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(Op,&st));
@@ -260,7 +266,7 @@ static PetscErrorCode MatMult_STOperator(Mat Op,Vec x,Vec y)
 
 static PetscErrorCode MatMultTranspose_STOperator(Mat Op,Vec x,Vec y)
 {
-  ST             st;
+  ST st;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(Op,&st));
@@ -278,7 +284,7 @@ static PetscErrorCode MatMultTranspose_STOperator(Mat Op,Vec x,Vec y)
 #if PetscDefined(USE_COMPLEX)
 static PetscErrorCode MatMultHermitianTranspose_STOperator(Mat Op,Vec x,Vec y)
 {
-  ST             st;
+  ST st;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(Op,&st));
@@ -310,7 +316,7 @@ static PetscErrorCode MatMultHermitianTranspose_STOperator(Mat Op,Vec x,Vec y)
 
 static PetscErrorCode MatMatMult_STOperator(Mat Op,Mat B,Mat C,void *ctx)
 {
-  ST             st;
+  ST st;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(Op,&st));
@@ -323,9 +329,9 @@ static PetscErrorCode MatMatMult_STOperator(Mat Op,Mat B,Mat C,void *ctx)
 
 PetscErrorCode STGetOperator_Private(ST st,Mat *Op)
 {
-  PetscInt       m,n,M,N;
-  Vec            v;
-  VecType        vtype;
+  PetscInt m,n,M,N;
+  Vec      v;
+  VecType  vtype;
 
   PetscFunctionBegin;
   if (!st->Op) {
@@ -464,7 +470,7 @@ PetscErrorCode STRestoreOperator(ST st,Mat *Op)
 */
 PetscErrorCode STComputeOperator(ST st)
 {
-  PC             pc;
+  PC pc;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
@@ -506,7 +512,7 @@ PetscErrorCode STComputeOperator(ST st)
 @*/
 PetscErrorCode STSetUp(ST st)
 {
-  PetscInt       i,n,k;
+  PetscInt i,n,k;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
@@ -561,11 +567,11 @@ PetscErrorCode STSetUp(ST st)
 */
 PetscErrorCode STMatMAXPY_Private(ST st,PetscScalar alpha,PetscScalar beta,PetscInt k,PetscScalar *coeffs,PetscBool initial,PetscBool precond,Mat *S)
 {
-  PetscInt       *matIdx=NULL,nmat,i,ini=-1;
-  PetscScalar    t=1.0,ta,gamma;
-  PetscBool      nz=PETSC_FALSE;
-  Mat            *A=precond?st->Psplit:st->A;
-  MatStructure   str=precond?st->strp:st->str;
+  PetscInt     *matIdx=NULL,nmat,i,ini=-1;
+  PetscScalar  t=1.0,ta,gamma;
+  PetscBool    nz=PETSC_FALSE;
+  Mat          *A=precond?st->Psplit:st->A;
+  MatStructure str=precond?st->strp:st->str;
 
   PetscFunctionBegin;
   nmat = st->nmat-k;
@@ -639,7 +645,7 @@ PetscErrorCode STMatMAXPY_Private(ST st,PetscScalar alpha,PetscScalar beta,Petsc
 */
 PetscErrorCode STCoeffs_Monomial(ST st, PetscScalar *coeffs)
 {
-  PetscInt  k,i,ini,inip;
+  PetscInt k,i,ini,inip;
 
   PetscFunctionBegin;
   /* Compute binomial coefficients */
@@ -726,7 +732,7 @@ PetscErrorCode STBackTransform(ST st,PetscInt n,PetscScalar eigr[],PetscScalar e
 @*/
 PetscErrorCode STIsInjective(ST st,PetscBool* is)
 {
-  PetscBool      shell;
+  PetscBool shell;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);
@@ -798,7 +804,7 @@ PetscErrorCode STMatSetUp(ST st,PetscScalar sigma,PetscScalar coeffs[])
 @*/
 PetscErrorCode STSetWorkVecs(ST st,PetscInt nw)
 {
-  PetscInt       i;
+  PetscInt i;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(st,ST_CLASSID,1);

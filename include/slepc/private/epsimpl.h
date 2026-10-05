@@ -314,7 +314,7 @@ struct _p_EPS {
 */
 static inline PetscErrorCode EPS_SetInnerProduct(EPS eps)
 {
-  Mat            B;
+  Mat B;
 
   PetscFunctionBegin;
   if (!eps->V) PetscCall(EPSGetBV(eps,&eps->V));
@@ -328,22 +328,24 @@ static inline PetscErrorCode EPS_SetInnerProduct(EPS eps)
 }
 
 /*
-  EPS_Purify - purify the first k vectors in the V basis
+  EPS_Purify - purify the first m vectors in the V basis
 */
-static inline PetscErrorCode EPS_Purify(EPS eps,PetscInt k)
+static inline PetscErrorCode EPS_Purify(EPS eps,PetscInt m)
 {
-  PetscInt       i;
-  Vec            v,z;
+  PetscInt l,k;
+  Mat      X,Y;
 
   PetscFunctionBegin;
-  PetscCall(BVCreateVec(eps->V,&v));
-  for (i=0;i<k;i++) {
-    PetscCall(BVCopyVec(eps->V,i,v));
-    PetscCall(BVGetColumn(eps->V,i,&z));
-    PetscCall(STApply(eps->st,v,z));
-    PetscCall(BVRestoreColumn(eps->V,i,&z));
-  }
-  PetscCall(VecDestroy(&v));
+  if (!m) PetscFunctionReturn(PETSC_SUCCESS);
+  PetscCall(BVGetActiveColumns(eps->V,&l,&k));
+  PetscCall(BVSetActiveColumns(eps->V,0,m));
+  PetscCall(BVGetMat(eps->V,&Y));
+  PetscCall(MatDuplicate(Y,MAT_COPY_VALUES,&X));
+  PetscCall(STApplyMat(eps->st,X,Y));
+  PetscCall(MatProductClear(Y));  /* release the product's reference to X before restoring the BV */
+  PetscCall(MatDestroy(&X));
+  PetscCall(BVRestoreMat(eps->V,&Y));
+  PetscCall(BVSetActiveColumns(eps->V,l,k));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -352,7 +354,7 @@ static inline PetscErrorCode EPS_Purify(EPS eps,PetscInt k)
 */
 static inline PetscErrorCode EPS_KSPSetOperators(KSP ksp,Mat A,Mat B)
 {
-  const char     *prefix;
+  const char *prefix;
 
   PetscFunctionBegin;
   PetscCall(KSPSetOperators(ksp,A,B));
@@ -384,10 +386,10 @@ static inline PetscErrorCode EPS_GetActualConverged(EPS eps,PetscInt *nconv)
 
 static inline PetscErrorCode EPS_GetEigenvector_BSE(EPS eps,BV V,PetscInt i,Vec Vr,Vec Vi)
 {
-  PetscInt  k;
-  Vec       v0,v1,w,w0,w1;
-  Mat       H;
-  IS        is[2];
+  PetscInt k;
+  Vec      v0,v1,w,w0,w1;
+  Mat      H;
+  IS       is[2];
 
   PetscFunctionBegin;
   PetscCheck(eps->which == EPS_SMALLEST_MAGNITUDE || eps->which == EPS_LARGEST_MAGNITUDE || eps->which == EPS_TARGET_MAGNITUDE,PetscObjectComm((PetscObject)(eps)),PETSC_ERR_PLIB,"Inconsistent state");

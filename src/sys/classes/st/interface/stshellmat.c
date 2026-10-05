@@ -40,10 +40,10 @@ PetscErrorCode STMatShellShift(Mat A,PetscScalar alpha)
 */
 static PetscErrorCode MatMult_Shell(Mat A,Vec x,Vec y)
 {
-  ST_MATSHELL    *ctx;
-  ST             st;
-  PetscInt       i;
-  PetscScalar    t=1.0,c;
+  ST_MATSHELL *ctx;
+  ST          st;
+  PetscInt    i;
+  PetscScalar t=1.0,c;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(A,&ctx));
@@ -64,10 +64,10 @@ static PetscErrorCode MatMult_Shell(Mat A,Vec x,Vec y)
 
 static PetscErrorCode MatMultTranspose_Shell(Mat A,Vec x,Vec y)
 {
-  ST_MATSHELL    *ctx;
-  ST             st;
-  PetscInt       i;
-  PetscScalar    t=1.0,c;
+  ST_MATSHELL *ctx;
+  ST          st;
+  PetscInt    i;
+  PetscScalar t=1.0,c;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(A,&ctx));
@@ -89,10 +89,10 @@ static PetscErrorCode MatMultTranspose_Shell(Mat A,Vec x,Vec y)
 #if PetscDefined(USE_COMPLEX)
 static PetscErrorCode MatMultHermitianTranspose_Shell(Mat A,Vec x,Vec y)
 {
-  ST_MATSHELL    *ctx;
-  ST             st;
-  PetscInt       i;
-  PetscScalar    t=1.0,c;
+  ST_MATSHELL *ctx;
+  ST          st;
+  PetscInt    i;
+  PetscScalar t=1.0,c;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(A,&ctx));
@@ -114,11 +114,11 @@ static PetscErrorCode MatMultHermitianTranspose_Shell(Mat A,Vec x,Vec y)
 
 static PetscErrorCode MatGetDiagonal_Shell(Mat A,Vec diag)
 {
-  ST_MATSHELL    *ctx;
-  ST             st;
-  Vec            diagb;
-  PetscInt       i;
-  PetscScalar    t=1.0,c;
+  ST_MATSHELL *ctx;
+  ST          st;
+  Vec         diagb;
+  PetscInt    i;
+  PetscScalar t=1.0,c;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(A,&ctx));
@@ -143,7 +143,7 @@ static PetscErrorCode MatGetDiagonal_Shell(Mat A,Vec diag)
 
 static PetscErrorCode MatDestroy_Shell(Mat A)
 {
-  ST_MATSHELL    *ctx;
+  ST_MATSHELL *ctx;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(A,&ctx));
@@ -156,9 +156,10 @@ static PetscErrorCode MatDestroy_Shell(Mat A)
 
 PetscErrorCode STMatShellCreate(ST st,PetscScalar alpha,PetscInt nmat,PetscInt *matIdx,PetscScalar *coeffs,Mat *mat)
 {
-  PetscInt       n,m,N,M,i;
-  PetscBool      has=PETSC_FALSE,hasA,hasB;
-  ST_MATSHELL    *ctx;
+  PetscInt    n,m,N,M,i;
+  PetscBool   has=PETSC_FALSE,hasA,hasB;
+  ST_MATSHELL *ctx;
+  VecType     vtype;
 
   PetscFunctionBegin;
   PetscCall(MatGetSize(st->A[0],&M,&N));
@@ -180,6 +181,8 @@ PetscErrorCode STMatShellCreate(ST st,PetscScalar alpha,PetscInt nmat,PetscInt *
   }
   PetscCall(MatCreateVecs(st->A[0],&ctx->z,NULL));
   PetscCall(MatCreateShell(PetscObjectComm((PetscObject)st),m,n,M,N,(void*)ctx,mat));
+  PetscCall(VecGetType(ctx->z,&vtype));
+  PetscCall(MatSetVecType(*mat,vtype));
   PetscCall(MatShellSetOperation(*mat,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Shell));
   PetscCall(MatShellSetOperation(*mat,MATOP_MULT_TRANSPOSE,(PetscErrorCodeFn*)MatMultTranspose_Shell));
 #if PetscDefined(USE_COMPLEX)
