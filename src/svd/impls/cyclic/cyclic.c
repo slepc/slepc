@@ -61,10 +61,6 @@ static PetscErrorCode MatDestroy_Cyclic(Mat B)
   PetscCall(VecDestroy(&ctx->x2));
   PetscCall(VecDestroy(&ctx->y1));
   PetscCall(VecDestroy(&ctx->y2));
-  if (ctx->misaligned) {
-    PetscCall(VecDestroy(&ctx->wx2));
-    PetscCall(VecDestroy(&ctx->wy2));
-  }
   PetscCall(PetscFree(ctx));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -82,8 +78,6 @@ static PetscErrorCode SVDCyclicGetCyclicMat(SVD svd,Mat A,Mat AT,Mat *C)
   Mat              Zm,Zn;
 #if PetscDefined(HAVE_CUDA) || PetscDefined(HAVE_HIP)
   PetscBool        gpu;
-  const PetscInt   *ranges;
-  PetscMPIInt      size;
 #endif
 
   PetscFunctionBegin;
@@ -131,21 +125,6 @@ static PetscErrorCode SVDCyclicGetCyclicMat(SVD svd,Mat A,Mat AT,Mat *C)
       PetscCall(MatShellSetOperation(*C,MATOP_MULT,(PetscErrorCodeFn*)MatMult_Cyclic));
     PetscCall(MatGetVecType(A,&vtype));
     PetscCall(MatSetVecType(*C,vtype));
-#if PetscDefined(HAVE_CUDA) || PetscDefined(HAVE_HIP)
-    if (gpu) {
-      /* check alignment of bottom block */
-      PetscCallMPI(MPI_Comm_size(PetscObjectComm((PetscObject)ctx->x1),&size));
-      PetscCall(VecGetOwnershipRanges(ctx->x1,&ranges));
-      for (i=0;i<size;i++) {
-        ctx->misaligned = (((ranges[i+1]-ranges[i])*sizeof(PetscScalar))%16)? PETSC_TRUE: PETSC_FALSE;
-        if (ctx->misaligned) break;
-      }
-      if (ctx->misaligned) {  /* create work vectors for MatMult */
-        PetscCall(VecDuplicate(ctx->x2,&ctx->wx2));
-        PetscCall(VecDuplicate(ctx->y2,&ctx->wy2));
-      }
-    }
-#endif
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -246,10 +225,6 @@ static PetscErrorCode MatDestroy_ECross(Mat B)
   PetscCall(VecDestroy(&ctx->y2));
   PetscCall(VecDestroy(&ctx->diag));
   PetscCall(VecDestroy(&ctx->w));
-  if (ctx->misaligned) {
-    PetscCall(VecDestroy(&ctx->wx2));
-    PetscCall(VecDestroy(&ctx->wy2));
-  }
   PetscCall(PetscFree(ctx));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -268,8 +243,6 @@ static PetscErrorCode SVDCyclicGetECrossMat(SVD svd,Mat A,Mat AT,Mat *C,Vec t)
   Mat              Id,Zm,Zn,ATA;
 #if PetscDefined(HAVE_CUDA) || PetscDefined(HAVE_HIP)
   PetscBool        gpu;
-  const PetscInt   *ranges;
-  PetscMPIInt      size;
 #endif
 
   PetscFunctionBegin;
@@ -334,21 +307,6 @@ static PetscErrorCode SVDCyclicGetECrossMat(SVD svd,Mat A,Mat AT,Mat *C,Vec t)
       PetscCall(MatShellSetOperation(*C,MATOP_MULT,(PetscErrorCodeFn*)MatMult_ECross));
     PetscCall(MatGetVecType(A,&vtype));
     PetscCall(MatSetVecType(*C,vtype));
-#if PetscDefined(HAVE_CUDA) || PetscDefined(HAVE_HIP)
-    if (gpu) {
-      /* check alignment of bottom block */
-      PetscCallMPI(MPI_Comm_size(PetscObjectComm((PetscObject)ctx->x1),&size));
-      PetscCall(VecGetOwnershipRanges(ctx->x1,&ranges));
-      for (i=0;i<size;i++) {
-        ctx->misaligned = (((ranges[i+1]-ranges[i])*sizeof(PetscScalar))%16)? PETSC_TRUE: PETSC_FALSE;
-        if (ctx->misaligned) break;
-      }
-      if (ctx->misaligned) {  /* create work vectors for MatMult */
-        PetscCall(VecDuplicate(ctx->x2,&ctx->wx2));
-        PetscCall(VecDuplicate(ctx->y2,&ctx->wy2));
-      }
-    }
-#endif
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
