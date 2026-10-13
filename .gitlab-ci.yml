@@ -416,7 +416,7 @@ gnu-lint:
     - date
     - ccache --show-stats
 
-.osx_test:
+.macos_test:
   variables:
     MAKE_CFLAGS: -Werror
     MAKE_CXXFLAGS: -Werror
@@ -426,10 +426,9 @@ gnu-lint:
     - hostname
     - sw_vers -productVersion
     - echo $(sysctl -n hw.ncpu)
-    - ccache --zero-stats
+    - brew install open-mpi
   after_script:
     - date
-    - ccache --show-stats
 
 .opensolaris_test:
   before_script:
@@ -1118,6 +1117,29 @@ aocc-c-hip:
     LOAD_MODULES: openmpi/5.0.9-aocc-5.0.0-rocm-7.2.0
     PETSC_CONFIG_OPTS: --with-hip --with-fc=0
   allow_failure: true
+
+#
+# Tests on macOS using GitLab Cloud Runners
+#
+
+macos-clang-real:
+  extends:
+    - .stage-3
+    - .macos_test
+  tags:
+    - saas-macos-large-m2pro
+  variables:
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
+
+macos-clang-complex:
+  extends:
+    - .stage-3
+    - .macos_test
+  tags:
+    - saas-macos-large-m2pro
+  variables:
+    PETSC_CONFIG_OPTS: --with-scalar-type=complex
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp
 
 #
 # Stage-4
