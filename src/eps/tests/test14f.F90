@@ -189,6 +189,6 @@ end program test14f
 !   test:
 !      suffix: 1
 !      args: -eps_ncv 14
-!      filter: sed -e "s/00001/00000/" | sed -e "s/4.99999/5.00000/" | sed -e "s/5.99999/6.00000/"
+!      filter: sed -e "s/00001/00000/g" | sed -e "s/4.99999/5.00000/" | sed -e "s/5.99999/6.00000/"
 !
 !TEST*/
