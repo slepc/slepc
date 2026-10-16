@@ -1354,7 +1354,6 @@ static PetscErrorCode EPSCISSGetKSPs_CISS(EPS eps,PetscInt *nsolve,KSP **ksp)
     switch (ctx->strategy) {
       case EPS_CISS_STRATEGY_USEST:
         SETERRQ(PETSC_COMM_SELF,PETSC_ERR_SUP,"Should not call EPSCISSGetKSPs() with EPS_CISS_STRATEGY_USEST");
-        break;
       case EPS_CISS_STRATEGY_SPLIT:
         contour->nksp = contour->npoints;
         PetscCall(PetscMalloc1(contour->nksp,&contour->ksp));
