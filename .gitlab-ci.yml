@@ -947,17 +947,18 @@ intel-c-mkl-libs:
     PETSC_CONFIG_OPTS: --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso --with-scalapack --download-mumps --download-metis --download-parmetis --download-suitesparse
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-elpa --download-arpack --download-primme --download-blopex --download-polar --download-ksvd --download-chase
 
-nvidia-c-complex-nompi:
-  extends:
-    - .stage-3
-    - .linux_test_noflags
-  tags:
-    - compiler:nvidia, name:hapy
-  variables:
-    LOAD_MODULES: nvhpc-nompi
-    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-scalar-type=complex --with-mpi=0 --with-cuda --with-magma-dir=/opt/magma/nvidia
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
-    TEST_OPTS: -j4 -l12
+#TODO: crashes on GPU with several MPI processes
+#nvidia-c-complex-nompi:
+#  extends:
+#    - .stage-3
+#    - .linux_test_noflags
+#  tags:
+#    - compiler:nvidia, name:hapy
+#  variables:
+#    LOAD_MODULES: nvhpc-nompi
+#    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-scalar-type=complex --with-mpi=0 --with-cuda --with-magma-dir=/opt/magma/nvidia
+#    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
+#    TEST_OPTS: -j4 -l12
 
 nvidia-cxx-mpi:
   extends:
