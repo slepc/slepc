@@ -1,5 +1,11 @@
 # Changelog of SLEPc versions
 
+## [unreleased]
+
+### Deprecated
+
+- `RGCanUseConjugates()` is deprecated, use `RGCheckSymmetricContour()` instead.
+
 ## [3.26] - 2026-09-29
 
 ### Added

@@ -67,11 +67,13 @@ typedef struct {
 /* initialize contour data structure */
 static PetscErrorCode EPSCISSGetContour_Private(EPS eps,SlepcContourData *contour)
 {
-  EPS_CISS *ctx = (EPS_CISS*)eps->data;
+  EPS_CISS  *ctx = (EPS_CISS*)eps->data;
+  PetscBool symmcon;
 
   PetscFunctionBegin;
   if (!ctx->contour) {
-    PetscCall(RGCanUseConjugates(eps->rg,ctx->isreal,&ctx->useconj));
+    PetscCall(RGCheckSymmetricContour(eps->rg,ctx->N,&symmcon));
+    ctx->useconj = (PetscBool)(PetscDefined(USE_COMPLEX) && ctx->isreal && symmcon);
     PetscCall(SlepcContourDataCreate(ctx->useconj?ctx->N/2:ctx->N,ctx->npart,(PetscObject)eps,&ctx->contour));
   }
   if (contour) *contour = ctx->contour;

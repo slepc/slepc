@@ -465,7 +465,7 @@ PetscErrorCode RGCheckInside(RG rg,PetscInt n,PetscScalar ar[],PetscScalar ai[],
 
    Level: intermediate
 
-.seealso: [](sec:rg), `RGCanUseConjugates()`
+.seealso: [](sec:rg), `RGCheckSymmetricContour()`
 @*/
 PetscErrorCode RGIsAxisymmetric(RG rg,PetscBool vertical,PetscBool *symm)
 {
@@ -479,50 +479,78 @@ PetscErrorCode RGIsAxisymmetric(RG rg,PetscBool vertical,PetscBool *symm)
 }
 
 /*@
-   RGCanUseConjugates - Used in contour integral methods to determine whether
-   half of integration points can be avoided (use their conjugates).
+   RGCheckSymmetricContour - Used in contour integral methods to determine whether
+   half of the integration points can be avoided (use their conjugates).
 
    Not Collective
 
    Input Parameters:
-+  rg       - the region context
--  realmats - `PETSC_TRUE` if the problem matrices are real
++  rg - the region context
+-  n  - number of integration points
 
    Output Parameter:
-.  useconj  - whether it is possible to use conjugates
+.  symmcon  - whether contour points are symmetric
 
    Notes:
-   If some integration points are the conjugates of other points, then the
-   associated computational cost can be saved. This depends on the problem
-   matrices being real and also the region being symmetric with respect to
-   the horizontal axis. The result is false if using real arithmetic or
-   in the case of a flat region (height equal to zero).
+   If all integration points are the conjugates of other points, then the
+   overall computational cost can be halved. This function first checks that
+   the region is axisymmetric and that its vertical height is not zero.
+   Then the points of the contour are generated with `RGComputeContour()`
+   (you should pass the same number `n` here and later during the algorithm)
+   and checked for symmetry with respect to the horizontal axis. If any
+   value is purely real the result is false.
 
    Level: developer
 
-.seealso: [](sec:rg), `RGIsAxisymmetric()`
+.seealso: [](sec:rg), `RGIsAxisymmetric()`, `RGComputeContour()`
 @*/
-PetscErrorCode RGCanUseConjugates(RG rg,PetscBool realmats,PetscBool *useconj)
+PetscErrorCode RGCheckSymmetricContour(RG rg,PetscInt n,PetscBool *symmcon)
 {
-#if PetscDefined(USE_COMPLEX)
-  PetscReal      c,d;
-  PetscBool      isaxisymm;
-#endif
+  PetscInt    i;
+  PetscReal   c,d,v1,v2;
+  PetscBool   isaxisymm,realpts=PETSC_FALSE,symmpts=PETSC_TRUE;
+  PetscScalar *cr,*ci=NULL;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(rg,RG_CLASSID,1);
   PetscValidType(rg,1);
-  PetscAssertPointer(useconj,3);
-  *useconj = PETSC_FALSE;
-#if PetscDefined(USE_COMPLEX)
-  if (realmats) {
-    PetscCall(RGIsAxisymmetric(rg,PETSC_FALSE,&isaxisymm));
-    if (isaxisymm) {
-      PetscCall(RGComputeBoundingBox(rg,NULL,NULL,&c,&d));
-      if (c!=d) *useconj = PETSC_TRUE;
+  PetscValidLogicalCollectiveInt(rg,n,2);
+  PetscAssertPointer(symmcon,3);
+  *symmcon = PETSC_FALSE;
+  if (!n || n%2) PetscFunctionReturn(PETSC_SUCCESS);
+  PetscCall(RGIsAxisymmetric(rg,PETSC_FALSE,&isaxisymm));
+  if (!isaxisymm) PetscFunctionReturn(PETSC_SUCCESS);
+  PetscCall(RGComputeBoundingBox(rg,NULL,NULL,&c,&d));
+  if (c==d) PetscFunctionReturn(PETSC_SUCCESS);
+  if (PetscDefined(USE_COMPLEX)) PetscCall(PetscMalloc1(n,&cr));
+  else PetscCall(PetscMalloc2(n,&cr,n,&ci));
+  PetscCall(RGComputeContour(rg,n,cr,ci));
+  /* check for real contour points */
+  for (i=0;i<n;i++) {
+    if ((PetscDefined(USE_COMPLEX) && PetscImaginaryPart(cr[i])==0.0) || (!PetscDefined(USE_COMPLEX) && ci[i]==0.0)) {
+      realpts = PETSC_TRUE;
+      break;
     }
   }
+if (realpts) printf("exit due to real\n");
+  if (!realpts) { /* check symmetric points */
+    for (i=0;i<n/2;i++) {
+#if PetscDefined(USE_COMPLEX)
+      v1 = PetscImaginaryPart(cr[i]);
+      v2 = PetscImaginaryPart(cr[n-1-i]);
+#else
+      v1 = ci[i];
+      v2 = ci[n-1-i];
 #endif
+      if (PetscAbsReal(v1+v2)>10*PETSC_MACHINE_EPSILON) {
+        symmpts = PETSC_FALSE;
+        break;
+      }
+    }
+    *symmcon = symmpts;
+  }
+  if (PetscDefined(USE_COMPLEX)) PetscCall(PetscFree(cr));
+  else PetscCall(PetscFree2(cr,ci));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

@@ -87,10 +87,11 @@ SLEPC_EXTERN PetscErrorCode RGPushScale(RG,PetscReal);
 SLEPC_EXTERN PetscErrorCode RGPopScale(RG);
 SLEPC_EXTERN PetscErrorCode RGCheckInside(RG,PetscInt,PetscScalar[],PetscScalar[],PetscInt[]);
 SLEPC_EXTERN PetscErrorCode RGIsAxisymmetric(RG,PetscBool,PetscBool*);
-SLEPC_EXTERN PetscErrorCode RGCanUseConjugates(RG,PetscBool,PetscBool*);
+PETSC_DEPRECATED_FUNCTION(3, 27, 0, "RGCheckSymmetricContour()", ) static inline PetscErrorCode RGCanUseConjugates(PETSC_UNUSED RG rg,PETSC_UNUSED PetscBool realmats,PetscBool *useconj) {*useconj=PETSC_FALSE;return PETSC_SUCCESS;}
 SLEPC_EXTERN PetscErrorCode RGComputeContour(RG,PetscInt,PetscScalar[],PetscScalar[]);
 SLEPC_EXTERN PetscErrorCode RGComputeBoundingBox(RG,PetscReal*,PetscReal*,PetscReal*,PetscReal*);
 SLEPC_EXTERN PetscErrorCode RGComputeQuadrature(RG,RGQuadRule,PetscInt,PetscScalar[],PetscScalar[],PetscScalar[]);
+SLEPC_EXTERN PetscErrorCode RGCheckSymmetricContour(RG,PetscInt,PetscBool*);
 
 SLEPC_EXTERN PetscFunctionList RGList;
 SLEPC_EXTERN PetscErrorCode RGRegister(const char[],PetscErrorCode(*)(RG));

@@ -173,7 +173,7 @@ static PetscErrorCode NEPSetUp_CISS(NEP nep)
   NEP_CISS         *ctx = (NEP_CISS*)nep->data;
   SlepcContourData contour;
   PetscInt         nwork;
-  PetscBool        istrivial,isellipse,flg;
+  PetscBool        istrivial,isellipse,flg,symmcon;
   NEP_CISS_PROJECT dsctxf;
   PetscObjectId    id;
   PetscObjectState state;
@@ -214,7 +214,8 @@ static PetscErrorCode NEPSetUp_CISS(NEP nep)
 
   /* create contour data structure */
   if (!ctx->contour) {
-    PetscCall(RGCanUseConjugates(nep->rg,ctx->isreal,&ctx->useconj));
+    PetscCall(RGCheckSymmetricContour(nep->rg,ctx->N,&symmcon));
+    ctx->useconj = (PetscBool)(PetscDefined(USE_COMPLEX) && ctx->isreal && symmcon);
     PetscCall(SlepcContourDataCreate(ctx->useconj?ctx->N/2:ctx->N,ctx->npart,(PetscObject)nep,&ctx->contour));
   }
 
@@ -910,12 +911,14 @@ static PetscErrorCode NEPCISSGetKSPs_CISS(NEP nep,PetscInt *nsolve,KSP **ksp)
   NEP_CISS         *ctx = (NEP_CISS*)nep->data;
   SlepcContourData contour;
   PetscInt         i;
+  PetscBool        symmcon;
   PC               pc;
   MPI_Comm         child;
 
   PetscFunctionBegin;
   if (!ctx->contour) {  /* initialize contour data structure first */
-    PetscCall(RGCanUseConjugates(nep->rg,ctx->isreal,&ctx->useconj));
+    PetscCall(RGCheckSymmetricContour(nep->rg,ctx->N,&symmcon));
+    ctx->useconj = (PetscBool)(PetscDefined(USE_COMPLEX) && ctx->isreal && symmcon);
     PetscCall(SlepcContourDataCreate(ctx->useconj?ctx->N/2:ctx->N,ctx->npart,(PetscObject)nep,&ctx->contour));
   }
   contour = ctx->contour;

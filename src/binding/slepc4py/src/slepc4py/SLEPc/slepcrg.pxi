@@ -34,7 +34,7 @@ cdef extern from * nogil:
     PetscErrorCode RGCheckInside(SlepcRG, PetscInt, PetscScalar*, PetscScalar*, PetscInt*)
     PetscErrorCode RGComputeContour(SlepcRG, PetscInt, PetscScalar*, PetscScalar*)
     PetscErrorCode RGComputeBoundingBox(SlepcRG, PetscReal*, PetscReal*, PetscReal*, PetscReal*)
-    PetscErrorCode RGCanUseConjugates(SlepcRG, PetscBool, PetscBool*)
+    PetscErrorCode RGCheckSymmetricContour(SlepcRG, PetscInt, PetscBool*)
     PetscErrorCode RGComputeQuadrature(SlepcRG, SlepcRGQuadRule, PetscInt, PetscScalar*, PetscScalar*, PetscScalar*)
 
     PetscErrorCode RGEllipseSetParameters(SlepcRG, PetscScalar, PetscReal, PetscReal)
