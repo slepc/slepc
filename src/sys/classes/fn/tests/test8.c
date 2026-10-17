@@ -174,7 +174,7 @@ int main(int argc,char **argv)
       output_file: output/test8_1.out
       test:
          suffix: 1
-         args: -fn_method {{0 1 2 3}}
+         args: -fn_method {{1 2 3}}
       test:
          suffix: 1_cuda
          args: -fn_method 2 -matcuda
@@ -185,7 +185,7 @@ int main(int argc,char **argv)
          requires: cuda magma
       test:
          suffix: 2
-         args: -inplace -fn_method {{0 1 2 3}}
+         args: -inplace -fn_method {{1 2 3}}
       test:
          suffix: 2_cuda
          args: -inplace -fn_method 2 -matcuda

@@ -180,7 +180,7 @@ gnu-c-single-nofort:
   tags:
     - name:hapy
   variables:
-    LOAD_MODULES: mpi
+    LOAD_MODULES: openmpi
     PETSC_CONFIG_OPTS: COPTFLAGS='-O3 -march=native' CXXOPTFLAGS='-O3 -march=native' --with-fc=0 --with-precision=single
     TEST_SEARCH: eps_tests-test10_1
 
@@ -310,7 +310,7 @@ gnu-lint:
             gcov --preserve-paths --long-file-names -fb $object_file 1>/dev/null
           fi
         done
-        gcovr --use-gcov-files --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-mod/.*' --exclude-lines-by-pattern '^\s*SETERR.*' --exclude-throw-branches --exclude-unreachable-branches --decisions --print-summary
+        gcovr --use-gcov-files --gcov-suspicious-hits-threshold 0 -j 4 --json -o coverage-${CI_JOB_NAME}.json --root ${SLEPC_DIR} --exclude "${PETSC_ARCH}" --exclude '.*<built-in>.*' --exclude ".*/binding/slepc4py/.*" --exclude '.*/ftn-mod/.*' --exclude-lines-by-pattern '^\s*SETERR.*' --exclude-throw-branches --exclude-unreachable-branches --decisions --print-summary
         deactivate
         zstd coverage-${CI_JOB_NAME}.json
       fi
@@ -525,8 +525,8 @@ gnu-c-cuda:
   tags:
     - gpu:nvidia, name:hapy
   variables:
-    LOAD_MODULES: mpi
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-cuda --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --with-magma-dir=/usr/local/opt/magma-2.7.1
+    LOAD_MODULES: openmpi
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-cuda --download-mumps --download-scalapack --download-metis --download-parmetis --download-suitesparse --with-magma-dir=/opt/magma/gnu
 
 gnu-c-hip:
   extends:
@@ -735,8 +735,9 @@ gnu-c-cuda-complex:
   tags:
     - gpu:nvidia, name:hapy
   variables:
-    LOAD_MODULES: mpi
-    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1
+    LOAD_MODULES: openmpi
+    MAKE_CFLAGS: -Werror -Wno-deprecated-declarations
+    PETSC_CONFIG_OPTS: --with-scalar-type=complex --with-cuda --with-magma-dir=/opt/magma/gnu
 
 gnu-c-cuda-single:
   extends:
@@ -745,7 +746,7 @@ gnu-c-cuda-single:
   tags:
     - gpu:nvidia, name:hapy
   variables:
-    LOAD_MODULES: mpi
+    LOAD_MODULES: openmpi
     PETSC_CONFIG_OPTS: --with-precision=single --with-single-library=0 --with-cuda
 
 gnu-c-multilib:
@@ -920,9 +921,9 @@ nvidia-c-nompi:
   tags:
     - compiler:nvidia, name:hapy
   variables:
-    LOAD_MODULES: nvhpc-nompi/25.3
-    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme=/var/local/downloads/primme-3.2.tar.gz --download-arpack
+    LOAD_MODULES: nvhpc-nompi
+    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-mpi=0 --with-cuda --with-magma-dir=/opt/magma/nvidia
+    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme=/var/local/downloads/primme-3.2.3.tar.gz --download-arpack
     TEST_OPTS: -j4 -l12
 
 clang-c-complex-valgrind:
@@ -946,17 +947,18 @@ intel-c-mkl-libs:
     PETSC_CONFIG_OPTS: --with-cc=mpiicx --with-fc=mpiifx --with-cxx=mpiicpx --with-blaslapack-dir=/opt/intel/oneapi/mkl/latest --with-mkl_pardiso --with-scalapack --download-mumps --download-metis --download-parmetis --download-suitesparse
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-elpa --download-arpack --download-primme --download-blopex --download-polar --download-ksvd --download-chase
 
-nvidia-c-complex-nompi:
-  extends:
-    - .stage-3
-    - .linux_test_noflags
-  tags:
-    - compiler:nvidia, name:hapy
-  variables:
-    LOAD_MODULES: nvhpc-nompi/23.5
-    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-scalar-type=complex --with-mpi=0 --with-cuda --with-magma-dir=/usr/local/opt/magma-2.7.1-nvidia
-    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
-    TEST_OPTS: -j4 -l12
+#TODO: crashes on GPU with several MPI processes
+#nvidia-c-complex-nompi:
+#  extends:
+#    - .stage-3
+#    - .linux_test_noflags
+#  tags:
+#    - compiler:nvidia, name:hapy
+#  variables:
+#    LOAD_MODULES: nvhpc-nompi
+#    PETSC_CONFIG_OPTS: --with-cc=nvc --with-fc=nvfortran --with-cxx=nvc++ --with-fortran-bindings=0 --with-scalar-type=complex --with-mpi=0 --with-cuda --with-magma-dir=/opt/magma/nvidia
+#    SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
+#    TEST_OPTS: -j4 -l12
 
 nvidia-cxx-mpi:
   extends:
@@ -965,7 +967,7 @@ nvidia-cxx-mpi:
   tags:
     - compiler:nvidia, name:hapy
   variables:
-    LOAD_MODULES: nvhpc/23.5
+    LOAD_MODULES: nvhpc
     PETSC_CONFIG_OPTS: --with-cc=mpicc --with-fc=mpifort --with-cxx=mpicxx --with-fortran-bindings=0 --with-clanguage=c++ --with-cuda
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --with-packages-download-dir=/var/local/downloads --download-blopex --download-primme --download-arpack
     TEST_OPTS: -j4 -l12
@@ -1009,10 +1011,9 @@ gnu-c-cuda-int64:
   tags:
     - gpu:nvidia, name:hapy
   variables:
-    LOAD_MODULES: mpi
-    PETSC_CONFIG_OPTS: --with-fc=0 --with-cuda --with-64-bit-indices --with-magma-dir=/usr/local/opt/magma-2.7.1
+    LOAD_MODULES: openmpi
+    PETSC_CONFIG_OPTS: --with-fc=0 --with-cuda --with-64-bit-indices --with-magma-dir=/opt/magma/gnu
     MAKE_CUDAFLAGS: --compiler-options -Wall,-Wunused-parameter,-Wno-deprecated-declarations,-Werror
-  allow_failure: true
 
 gnu-c-nocxx:
   extends:

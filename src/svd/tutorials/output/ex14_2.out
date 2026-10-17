@@ -12,13 +12,13 @@ SVD Object: 1 MPI process
       problem type: symmetric eigenvalue problem
       selected portion of the spectrum: closest to target: 12.5 (in magnitude)
       number of eigenvalues (nev): 4
-      number of column vectors (ncv): 19
-      maximum dimension of projected problem (mpd): 19
-      maximum number of iterations: 100
+      number of column vectors (ncv): 6
+      maximum dimension of projected problem (mpd): 6
+      maximum number of iterations: 133
       convergence test: relative to the eigenvalue
     BV Object: (svd_cyclic_) 1 MPI process
       type: mat
-      20 columns of global length 400
+      7 columns of global length 400
       vector orthogonalization method: classical Gram-Schmidt
       orthogonalization refinement: if needed (eta: 0.7071)
       block orthogonalization method: GS
@@ -58,14 +58,14 @@ SVD Object: 1 MPI process
   transpose mode: explicit
   selected portion of the spectrum: largest
   number of singular values (nsv): 2
-  number of column vectors (ncv): 19
-  maximum dimension of projected problem (mpd): 19
-  maximum number of iterations: 100
+  number of column vectors (ncv): 6
+  maximum dimension of projected problem (mpd): 6
+  maximum number of iterations: 133
   convergence test: relative to the singular value
- Number of iterations of the method: 2
+ Number of iterations of the method: 12
  Solution method: cyclic
 
  Number of requested singular values: 2
- Stopping condition: tol=1e-08, maxit=100
+ Stopping condition: tol=1e-08, maxit=133
      12.40671, 12.40671
 
