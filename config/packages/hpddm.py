@@ -17,8 +17,8 @@ class HPDDM(package.Package):
     package.Package.__init__(self,argdb,log)
     self.packagename    = 'hpddm'
     self.downloadable   = True
-    # self.gitcommit      = '913b4a9b9b6f7bc18f59437a2516e0e755091599'
-    self.version        = '2.4.1'
+    self.gitcommit      = 'c784a757791c0cf0234290c0a91cd656f68f5bcf'
+    # self.version        = '2.4.1'
     obj = self.version if hasattr(self,'version') else self.gitcommit
     self.url            = 'https://github.com/hpddm/hpddm/archive/'+('v'+obj if hasattr(self,'version') else obj)+'.tar.gz'
     self.archive        = 'hpddm-'+obj+'.tar.gz'
@@ -28,8 +28,8 @@ class HPDDM(package.Package):
 
   def Precondition(self,slepc,petsc):
     pkg = self.packagename.upper()
-    if petsc.maxcxxdialect == '':
-      self.log.Exit(pkg+' requires a functioning C++ compiler')
+    if petsc.maxcxxdialect == '' or petsc.maxcxxdialect == '11':
+      self.log.Exit(pkg+' requires a functioning C++14-compliant compiler')
     if not petsc.buildsharedlib:
       self.log.Exit(pkg+' requires a shared library build')
     package.Package.Precondition(self,slepc,petsc)

@@ -888,7 +888,7 @@ gnu-c-debug:
     - name:satet
   variables:
     LOAD_MODULES: mpich/5.0.0
-    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXOPTFLAGS='-O -g' --with-cxx-dialect=11
+    PETSC_CONFIG_OPTS: --with-fortran-bindings=0 --with-debugging=1 --CXXOPTFLAGS='-O -g' --with-cxx-dialect=14
     SLEPC_CONFIG_OPTS: --DATAFILESPATH=replace_dfp --download-arpack --download-primme --download-blopex --download-hpddm --download-evsl
 
 gnu-c-complex-debug:
