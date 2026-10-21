@@ -193,16 +193,10 @@ PetscErrorCode BVCreate(MPI_Comm comm,BV *newbv)
   bv->buffer       = NULL;
   bv->Abuffer      = NULL;
   bv->Bx           = NULL;
-  bv->xid          = 0;
-  bv->xstate       = 0;
   bv->cv[0]        = NULL;
   bv->cv[1]        = NULL;
   bv->ci[0]        = -1;
   bv->ci[1]        = -1;
-  bv->st[0]        = -1;
-  bv->st[1]        = -1;
-  bv->id[0]        = 0;
-  bv->id[1]        = 0;
   bv->h            = NULL;
   bv->c            = NULL;
   bv->omega        = NULL;
@@ -225,6 +219,10 @@ PetscErrorCode BVCreate(MPI_Comm comm,BV *newbv)
   bv->work         = NULL;
   bv->lwork        = 0;
   bv->data         = NULL;
+
+  PetscCall(VecStateInvalidate(bv->xstate));
+  PetscCall(VecStateInvalidate(bv->st[0]));
+  PetscCall(VecStateInvalidate(bv->st[1]));
 
   *newbv = bv;
   PetscFunctionReturn(PETSC_SUCCESS);

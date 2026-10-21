@@ -85,12 +85,10 @@ struct _p_BV {
   Vec                buffer;       /* buffer vector used in orthogonalization */
   Mat                Abuffer;      /* auxiliary seqdense matrix that wraps the buffer */
   Vec                Bx;           /* result of matrix times a vector x */
-  PetscObjectId      xid;          /* object id of vector x */
-  PetscObjectState   xstate;       /* state of vector x */
+  VecState           xstate;       /* state of vector x */
   Vec                cv[2];        /* column vectors obtained with BVGetColumn() */
   PetscInt           ci[2];        /* column indices of obtained vectors */
-  PetscObjectState   st[2];        /* state of obtained vectors */
-  PetscObjectId      id[2];        /* object id of obtained vectors */
+  VecState           st[2];        /* state of obtained vectors */
   PetscScalar        *h,*c;        /* orthogonalization coefficients */
   Vec                omega;        /* signature matrix values for indefinite case */
   PetscBool          defersfo;     /* deferred call to setfromoptions */
@@ -147,12 +145,16 @@ static inline PetscErrorCode BV_SafeSqrt(BV bv,PetscScalar alpha,PetscReal *res)
 */
 static inline PetscErrorCode BV_IPMatMult(BV bv,Vec x)
 {
+  VecState  xstate;
+  PetscBool same;
+
   PetscFunctionBegin;
-  if (((PetscObject)x)->id != bv->xid || ((PetscObject)x)->state != bv->xstate) {
+  PetscCall(VecGetState(x,&xstate));
+  PetscCall(VecStateCompare(xstate,bv->xstate,&same));
+  if (!same) {
     if (PetscUnlikely(!bv->Bx)) PetscCall(MatCreateVecs(bv->matrix,&bv->Bx,NULL));
     PetscCall(MatMult(bv->matrix,x,bv->Bx));
-    PetscCall(PetscObjectGetId((PetscObject)x,&bv->xid));
-    PetscCall(VecGetState(x,&bv->xstate));
+    bv->xstate = xstate;
   }
   PetscFunctionReturn(PETSC_SUCCESS);
 }
