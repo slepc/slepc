@@ -31,7 +31,7 @@ interface
     import tPetscViewer, ePetscViewerFormat
     PetscViewer viewer
     PetscViewerFormat format
-    type(*) ctx
+    type(*) :: ctx
     PetscViewerAndFormat vf
     PetscErrorCode, intent(out) :: ierr
   end subroutine
