@@ -269,7 +269,7 @@ cdef class RG(Object):
 
         See Also
         --------
-        canUseConjugates, slepc.RGIsAxisymmetric
+        checkSymmetricContour, slepc.RGIsAxisymmetric
         """
         cdef PetscBool val = asBool(vertical)
         cdef PetscBool tval = PETSC_FALSE
@@ -459,38 +459,51 @@ cdef class RG(Object):
 
     def canUseConjugates(self, realmats: bool = True) -> bool:
         """
+        :red:`Deprecated`, use checkSymmetricContour()
+        """
+        warnings.warn(
+            "canUseConjugates() is deprecated and will be removed in a future version. Use checkSymmetricContour() instead.",
+            category=DeprecationWarning,
+            stacklevel=1,
+        )
+        return False
+
+    def checkSymmetricContour(self, n: int) -> bool:
+        """
         Half of integration points can be avoided (use their conjugates).
 
         Not collective.
 
         Used in contour integral methods to determine whether half of
-        integration points can be avoided (use their conjugates).
+        the integration points can be avoided (use their conjugates).
 
         Parameters
         ----------
-        realmats
-            ``True`` if the problem matrices are real.
+        n
+            Number of integration points.
 
         Returns
         -------
         bool
-            Whether it is possible to use conjugates.
+            Whether contour points are symmetric.
 
         Notes
         -----
-        If some integration points are the conjugates of other points, then the
-        associated computational cost can be saved. This depends on the problem
-        matrices being real and also the region being symmetric with respect to
-        the horizontal axis. The result is ``false`` if using real arithmetic or
-        in the case of a flat region (height equal to zero).
+        If all integration points are the conjugates of other points, then the
+        overall computational cost can be halved. This function first checks that
+        the region is axisymmetric and that its vertical height is not zero.
+        Then the points of the contour are generated with `computeContour()`
+        (you should pass the same number ``n`` here and later during the algorithm)
+        and checked for symmetry with respect to the horizontal axis. If any
+        value is purely real the result is ``False``.
 
         See Also
         --------
-        isAxisymmetric, slepc.RGCanUseConjugates
+        isAxisymmetric, computeContour, slepc.RGCheckSymmetricContour
         """
-        cdef PetscBool bval = asBool(realmats)
+        cdef PetscBool ival = asInt(n)
         cdef PetscBool tval = PETSC_FALSE
-        CHKERR(RGCanUseConjugates(self.rg, bval, &tval))
+        CHKERR(RGCheckSymmetricContour(self.rg, ival, &tval))
         return toBool(tval)
 
     def computeQuadrature(self, quad: QuadRule, n: int) -> tuple[ArrayScalar, ArrayScalar, ArrayScalar]:

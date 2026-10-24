@@ -103,7 +103,7 @@ PetscErrorCode BVScatter(BV Vin,BV Vout,VecScatter scat,Vec xdup)
 
    Level: developer
 
-.seealso: [](sec:bv), `BVMult()`, `BVScatter()`, `BVDotQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
+.seealso: [](sec:bv), `BVMult()`, `BVScatter()`, `BVDotQuadrature()`, `RGComputeQuadrature()`, `RGCheckSymmetricContour()`
 @*/
 PetscErrorCode BVSumQuadrature(BV S,BV Y,PetscInt M,PetscInt L,PetscInt L_max,PetscScalar w[],PetscScalar zn[],VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
 {
@@ -182,7 +182,7 @@ PetscErrorCode BVSumQuadrature(BV S,BV Y,PetscInt M,PetscInt L,PetscInt L_max,Pe
 
    Level: developer
 
-.seealso: [](sec:bv), `BVDot()`, `BVScatter()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
+.seealso: [](sec:bv), `BVDot()`, `BVScatter()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCheckSymmetricContour()`
 @*/
 PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar Mu[],PetscInt M,PetscInt L,PetscInt L_max,PetscScalar w[],PetscScalar zn[],PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj)
 {
@@ -270,7 +270,7 @@ PetscErrorCode BVDotQuadrature(BV Y,BV V,PetscScalar Mu[],PetscInt M,PetscInt L,
 
    Level: developer
 
-.seealso: [](sec:bv), `BVScatter()`, `BVDotQuadrature()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCanUseConjugates()`
+.seealso: [](sec:bv), `BVScatter()`, `BVDotQuadrature()`, `BVSumQuadrature()`, `RGComputeQuadrature()`, `RGCheckSymmetricContour()`
 @*/
 PetscErrorCode BVTraceQuadrature(BV Y,BV V,PetscInt L,PetscInt L_max,PetscScalar w[],VecScatter scat,PetscSubcomm subcomm,PetscInt npoints,PetscBool useconj,PetscReal *est_eig)
 {
