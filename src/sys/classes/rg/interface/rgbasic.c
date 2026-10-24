@@ -532,7 +532,6 @@ PetscErrorCode RGCheckSymmetricContour(RG rg,PetscInt n,PetscBool *symmcon)
       break;
     }
   }
-if (realpts) printf("exit due to real\n");
   if (!realpts) { /* check symmetric points */
     for (i=0;i<n/2;i++) {
 #if PetscDefined(USE_COMPLEX)
