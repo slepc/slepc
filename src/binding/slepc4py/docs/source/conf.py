@@ -81,6 +81,10 @@ extensions = [
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+rst_prolog = """
+.. role:: red
+   :class: red
+"""
 
 default_role = 'any'
 

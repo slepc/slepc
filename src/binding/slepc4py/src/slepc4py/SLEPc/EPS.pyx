@@ -4338,6 +4338,9 @@ cdef class EPS(Object):
         return (toInt(ival1), toInt(ival2))
 
     def setCISSUseST(self, usest: bool = True) -> None:
+        """
+        :red:`Deprecated`, use setCISSStrategy()
+        """
         warnings.warn(
             "setCISSUseST() is deprecated and will be removed in a future version. Use setCISSStrategy() instead.",
             category=DeprecationWarning,
@@ -4346,6 +4349,9 @@ cdef class EPS(Object):
         return None
 
     def getCISSUseST(self) -> bool:
+        """
+        :red:`Deprecated`, use getCISSStrategy()
+        """
         warnings.warn(
             "getCISSUseST() is deprecated and will be removed in a future version. Use getCISSStrategy() instead.",
             category=DeprecationWarning,
