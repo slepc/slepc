@@ -14,6 +14,33 @@
 #include <slepc/private/dsimpl.h>      /*I "slepcds.h" I*/
 #include <slepcblaslapack.h>
 
+/*
+  Give redundant LAPACK calls the same data alignment on each process
+ */
+static PetscErrorCode DSMallocAligned_Private(size_t bytes,void **base,void **data)
+{
+  const size_t alignment = PetscMax(64,PETSC_MEMALIGN);
+
+  PetscFunctionBegin;
+  PetscCheck(bytes<=(size_t)-1-(alignment-1),PETSC_COMM_SELF,PETSC_ERR_MEM,"Allocation size overflow");
+  PetscCall(PetscMalloc(bytes+alignment-1,base));
+  *data = (char*)*base+(alignment-(PETSC_UINTPTR_T)*base%alignment)%alignment;
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode DSCreateMat_Private(PetscInt rows,PetscInt cols,Mat *mat)
+{
+  PetscScalar *data=NULL;
+  void        *base;
+
+  PetscFunctionBegin;
+  PetscCall(DSMallocAligned_Private((size_t)rows*cols*sizeof(*data),&base,(void**)&data));
+  PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,rows,cols,data,mat));
+  PetscCall(PetscObjectContainerCompose((PetscObject)*mat,"DSArray",base,PetscCtxDestroyDefault));
+  PetscCall(MatZeroEntries(*mat));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
 PetscErrorCode DSAllocateMat_Private(DS ds,DSMatType m)
 {
   PetscInt       n,d,rows=0,cols;
@@ -57,9 +84,7 @@ PetscErrorCode DSAllocateMat_Private(DS ds,DSMatType m)
       rows = n;
   }
   if (ds->omat[m]) PetscCall(MatZeroEntries(ds->omat[m]));
-  else {
-    PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,rows,cols,NULL,&ds->omat[m]));
-  }
+  else PetscCall(DSCreateMat_Private(rows,cols,&ds->omat[m]));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
@@ -76,7 +101,7 @@ PetscErrorCode DSReallocateMat_Private(DS ds,DSMatType mat,PetscInt ld)
   PetscCall(MatGetSize(ds->omat[mat],&m,&n));
   rows = ld;
   cols = m==n? ld: n;
-  PetscCall(MatCreateSeqDense(PETSC_COMM_SELF,rows,cols,NULL,&M));
+  PetscCall(DSCreateMat_Private(rows,cols,&M));
   PetscCall(MatDenseGetArrayRead(ds->omat[mat],&src));
   PetscCall(MatDenseGetArray(M,&dst));
   if (mat==DS_MAT_T && PetscDefined(USE_COMPLEX)) {
@@ -97,13 +122,13 @@ PetscErrorCode DSAllocateWork_Private(DS ds,PetscInt s,PetscInt r,PetscInt i)
 {
   PetscFunctionBegin;
   if (s>ds->lwork) {
-    PetscCall(PetscFree(ds->work));
-    PetscCall(PetscMalloc1(s,&ds->work));
+    PetscCall(PetscFree(ds->work_alloc));
+    PetscCall(DSMallocAligned_Private((size_t)s*sizeof(*ds->work),&ds->work_alloc,(void**)&ds->work));
     ds->lwork = s;
   }
   if (r>ds->lrwork) {
-    PetscCall(PetscFree(ds->rwork));
-    PetscCall(PetscMalloc1(r,&ds->rwork));
+    PetscCall(PetscFree(ds->rwork_alloc));
+    PetscCall(DSMallocAligned_Private((size_t)r*sizeof(*ds->rwork),&ds->rwork_alloc,(void**)&ds->rwork));
     ds->lrwork = r;
   }
   if (i>ds->liwork) {
