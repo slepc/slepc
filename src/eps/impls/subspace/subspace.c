@@ -27,12 +27,13 @@
 
 typedef struct {
   PetscBool estimatedrange;     /* the filter range was not set by the user */
+  MatState  fstate;             /* state of matrix used to compute the filter */
 } EPS_SUBSPACE;
 
 static PetscErrorCode EPSSetUp_Subspace_Filter(EPS eps)
 {
   EPS_SUBSPACE   *ctx = (EPS_SUBSPACE*)eps->data;
-  PetscBool      estimaterange=PETSC_TRUE;
+  PetscBool      estimaterange=PETSC_TRUE,same;
   PetscReal      rleft,rright;
   Mat            A;
 
@@ -46,8 +47,9 @@ static PetscErrorCode EPSSetUp_Subspace_Filter(EPS eps)
     PetscCall(STFilterGetRange(eps->st,&rleft,&rright));
     estimaterange = (!rleft && !rright)? PETSC_TRUE: PETSC_FALSE;
   }
-  if (estimaterange) { /* user did not set a range */
-    PetscCall(STGetMatrix(eps->st,0,&A));
+  PetscCall(STGetMatrix(eps->st,0,&A));
+  PetscCall(MatStateCompareUpdate(A,&ctx->fstate,&same));
+  if (estimaterange && !same) { /* user did not set a range */
     PetscCall(MatEstimateSpectralRange_EPS(A,&rleft,&rright));
     PetscCall(PetscInfo(eps,"Setting eigenvalue range to [%g,%g]\n",(double)rleft,(double)rright));
     PetscCall(STFilterSetRange(eps->st,rleft,rright));
