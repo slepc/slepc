@@ -134,6 +134,8 @@ PetscErrorCode DSCreate(MPI_Comm comm,DS *newds)
   ds->scset         = PETSC_FALSE;
   ds->work          = NULL;
   ds->rwork         = NULL;
+  ds->work_alloc    = NULL;
+  ds->rwork_alloc   = NULL;
   ds->iwork         = NULL;
   ds->lwork         = 0;
   ds->lrwork        = 0;
@@ -958,8 +960,8 @@ PetscErrorCode DSDestroy(DS *ds)
   if (--((PetscObject)*ds)->refct > 0) { *ds = NULL; PetscFunctionReturn(PETSC_SUCCESS); }
   PetscCall(DSReset(*ds));
   PetscTryTypeMethod(*ds,destroy);
-  PetscCall(PetscFree((*ds)->work));
-  PetscCall(PetscFree((*ds)->rwork));
+  PetscCall(PetscFree((*ds)->work_alloc));
+  PetscCall(PetscFree((*ds)->rwork_alloc));
   PetscCall(PetscFree((*ds)->iwork));
   if (!(*ds)->scset) PetscCall(PetscFree((*ds)->sc));
   PetscCall(PetscHeaderDestroy(ds));

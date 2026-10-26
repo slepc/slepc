@@ -68,6 +68,7 @@ struct _p_DS {
   PetscBool      scset;              /* the sc was provided by the user */
   PetscScalar    *work;
   PetscReal      *rwork;
+  void           *work_alloc,*rwork_alloc; /* allocation bases of aligned workspaces */
   PetscBLASInt   *iwork;
   PetscInt       lwork,lrwork,liwork;
 };
