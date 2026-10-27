@@ -61,7 +61,7 @@ PetscErrorCode EPSGetArbitraryValues(EPS eps,PetscScalar *rr,PetscScalar *ri)
 static PetscErrorCode EPSSetUp_KrylovSchur_Filter(EPS eps)
 {
   EPS_KRYLOVSCHUR *ctx = (EPS_KRYLOVSCHUR*)eps->data;
-  PetscBool       estimaterange=PETSC_TRUE;
+  PetscBool       estimaterange=PETSC_TRUE,same;
   PetscReal       rleft,rright;
   Mat             A;
 
@@ -75,8 +75,9 @@ static PetscErrorCode EPSSetUp_KrylovSchur_Filter(EPS eps)
     PetscCall(STFilterGetRange(eps->st,&rleft,&rright));
     estimaterange = (!rleft && !rright)? PETSC_TRUE: PETSC_FALSE;
   }
-  if (estimaterange) { /* user did not set a range */
-    PetscCall(STGetMatrix(eps->st,0,&A));
+  PetscCall(STGetMatrix(eps->st,0,&A));
+  PetscCall(MatStateCompareUpdate(A,&ctx->fstate,&same));
+  if (estimaterange && !same) { /* user did not set a range, and is not available from previous run */
     PetscCall(MatEstimateSpectralRange_EPS(A,&rleft,&rright));
     PetscCall(PetscInfo(eps,"Setting eigenvalue range to [%g,%g]\n",(double)rleft,(double)rright));
     PetscCall(STFilterSetRange(eps->st,rleft,rright));
