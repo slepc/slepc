@@ -1149,7 +1149,6 @@ PetscErrorCode BVGetColumn(BV bv,PetscInt j,Vec *v)
   PetscUseTypeMethod(bv,getcolumn,j,v);
   bv->ci[l] = j;
   PetscCall(VecGetState(bv->cv[l],&bv->st[l]));
-  PetscCall(PetscObjectGetId((PetscObject)bv->cv[l],&bv->id[l]));
   *v = bv->cv[l];
   PetscFunctionReturn(PETSC_SUCCESS);
 }
@@ -1173,9 +1172,9 @@ PetscErrorCode BVGetColumn(BV bv,PetscInt j,Vec *v)
 @*/
 PetscErrorCode BVRestoreColumn(BV bv,PetscInt j,Vec *v)
 {
-  PetscObjectId    id;
-  PetscObjectState st;
-  PetscInt         l;
+  VecState  st;
+  PetscBool same;
+  PetscInt  l;
 
   PetscFunctionBegin;
   PetscValidHeaderSpecific(bv,BV_CLASSID,1);
@@ -1188,14 +1187,13 @@ PetscErrorCode BVRestoreColumn(BV bv,PetscInt j,Vec *v)
   PetscCheck(j<bv->m,PetscObjectComm((PetscObject)bv),PETSC_ERR_ARG_OUTOFRANGE,"You requested column %" PetscInt_FMT " but only %" PetscInt_FMT " are available",j,bv->m);
   PetscCheck(j==bv->ci[0] || j==bv->ci[1],PetscObjectComm((PetscObject)bv),PETSC_ERR_ARG_WRONG,"Column %" PetscInt_FMT " has not been fetched with a call to BVGetColumn",j);
   l = (j==bv->ci[0])? 0: 1;
-  PetscCall(PetscObjectGetId((PetscObject)*v,&id));
-  PetscCheck(id==bv->id[l],PetscObjectComm((PetscObject)bv),PETSC_ERR_ARG_WRONG,"Argument 3 is not the same Vec that was obtained with BVGetColumn");
   PetscCall(VecGetState(*v,&st));
-  if (st!=bv->st[l]) PetscCall(PetscObjectStateIncrease((PetscObject)bv));
+  PetscCheck(st.id==bv->st[l].id,PetscObjectComm((PetscObject)bv),PETSC_ERR_ARG_WRONG,"Argument 3 is not the same Vec that was obtained with BVGetColumn");
+  PetscCall(VecStateCompare(st,bv->st[l],&same));
+  if (!same) PetscCall(PetscObjectStateIncrease((PetscObject)bv));
   PetscUseTypeMethod(bv,restorecolumn,j,v);
+  PetscCall(VecStateInvalidate(bv->st[l]));
   bv->ci[l] = -bv->nc-1;
-  bv->st[l] = -1;
-  bv->id[l] = 0;
   *v = NULL;
   PetscFunctionReturn(PETSC_SUCCESS);
 }

@@ -21,8 +21,7 @@ typedef struct {
   PetscBool        *nfactor_avail;
   PetscScalar      *dots;            /* inner products y_i'*v */
   PetscBool        *dots_avail;
-  PetscObjectId    vid;
-  PetscObjectState vstate;
+  VecState         vstate;
 } NEP_RESOLVENT_MATSHELL;
 
 static PetscErrorCode MatMult_Resolvent(Mat M,Vec v,Vec r)
@@ -32,17 +31,15 @@ static PetscErrorCode MatMult_Resolvent(Mat M,Vec v,Vec r)
   PetscInt               i,inside=1;
   PetscScalar            alpha;
   Vec                    x,y,z,w;
+  PetscBool              same;
 
   PetscFunctionBegin;
   PetscCall(MatShellGetContext(M,&ctx));
   nep = ctx->nep;
   w = nep->work[0];
   z = nep->work[1];
-  if (((PetscObject)v)->id != ctx->vid || ((PetscObject)v)->state != ctx->vstate) {
-    PetscCall(PetscArrayzero(ctx->dots_avail,ctx->nep->nconv));
-    PetscCall(PetscObjectGetId((PetscObject)v,&ctx->vid));
-    PetscCall(VecGetState(v,&ctx->vstate));
-  }
+  PetscCall(VecStateCompareUpdate(v,&ctx->vstate,&same));
+  if (!same) PetscCall(PetscArrayzero(ctx->dots_avail,ctx->nep->nconv));
   PetscCall(VecSet(r,0.0));
   for (i=0;i<nep->nconv;i++) {
     if (ctx->rg) PetscCall(RGCheckInside(ctx->rg,1,&nep->eigr[i],&nep->eigi[i],&inside));

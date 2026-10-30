@@ -124,15 +124,17 @@ PetscErrorCode STShellSetDestroy(ST st,STShellDestroyFn *destroy)
 
 static PetscErrorCode STApply_Shell(ST st,Vec x,Vec y)
 {
-  ST_SHELL         *shell = (ST_SHELL*)st->data;
-  PetscObjectState instate,outstate;
+  ST_SHELL  *shell = (ST_SHELL*)st->data;
+  VecState  instate,outstate;
+  PetscBool same;
 
   PetscFunctionBegin;
   PetscCheck(shell->apply,PetscObjectComm((PetscObject)st),PETSC_ERR_USER,"No apply() routine provided to Shell ST");
   PetscCall(VecGetState(y,&instate));
   PetscCallBack("STSHELL user function apply()",(*shell->apply)(st,x,y));
   PetscCall(VecGetState(y,&outstate));
-  if (instate == outstate) {
+  PetscCall(VecStateCompare(instate,outstate,&same));
+  if (same) {
     /* user forgot to increase the state of the output vector */
     PetscCall(PetscObjectStateIncrease((PetscObject)y));
   }
@@ -141,15 +143,17 @@ static PetscErrorCode STApply_Shell(ST st,Vec x,Vec y)
 
 static PetscErrorCode STApplyTranspose_Shell(ST st,Vec x,Vec y)
 {
-  ST_SHELL         *shell = (ST_SHELL*)st->data;
-  PetscObjectState instate,outstate;
+  ST_SHELL  *shell = (ST_SHELL*)st->data;
+  VecState  instate,outstate;
+  PetscBool same;
 
   PetscFunctionBegin;
   PetscCheck(shell->applytrans,PetscObjectComm((PetscObject)st),PETSC_ERR_USER,"No applytrans() routine provided to Shell ST");
   PetscCall(VecGetState(y,&instate));
   PetscCallBack("STSHELL user function applytrans()",(*shell->applytrans)(st,x,y));
   PetscCall(VecGetState(y,&outstate));
-  if (instate == outstate) {
+  PetscCall(VecStateCompare(instate,outstate,&same));
+  if (same) {
     /* user forgot to increase the state of the output vector */
     PetscCall(PetscObjectStateIncrease((PetscObject)y));
   }
@@ -159,16 +163,18 @@ static PetscErrorCode STApplyTranspose_Shell(ST st,Vec x,Vec y)
 #if PetscDefined(USE_COMPLEX)
 static PetscErrorCode STApplyHermitianTranspose_Shell(ST st,Vec x,Vec y)
 {
-  ST_SHELL         *shell = (ST_SHELL*)st->data;
-  PetscObjectState instate,outstate;
-  Vec              w;
+  ST_SHELL  *shell = (ST_SHELL*)st->data;
+  VecState  instate,outstate;
+  PetscBool same;
+  Vec       w;
 
   PetscFunctionBegin;
   if (shell->applyhermtrans) {
     PetscCall(VecGetState(y,&instate));
     PetscCallBack("STSHELL user function applyhermtrans()",(*shell->applyhermtrans)(st,x,y));
     PetscCall(VecGetState(y,&outstate));
-    if (instate == outstate) {
+    PetscCall(VecStateCompare(instate,outstate,&same));
+    if (same) {
       /* user forgot to increase the state of the output vector */
       PetscCall(PetscObjectStateIncrease((PetscObject)y));
     }
