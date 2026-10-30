@@ -48,7 +48,7 @@ class SLEPc(package.Package):
        spell them in native form. Everywhere else this is just SLEPC_DIR.
     '''
     wpetscdir = getattr(petsc,'wpetsc_dir','')
-    if not wpetscdir or wpetscdir == petsc.dir.replace('\\','/'):
+    if (not wpetscdir or wpetscdir == petsc.dir.replace('\\','/')) and sys.platform not in ['msys', 'cygwin', 'win32']:
       return self.dir
     try:
       return subprocess.check_output(['cygpath','-m',self.dir],universal_newlines=True).strip()
