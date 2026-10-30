@@ -106,20 +106,8 @@ pause-for-approval:
     - export SLEPC_DIR=$PWD
     - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
     - cd ..
-    - if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
+    - $SLEPC_DIR/lib/slepc/bin/maint/setup-petsc.sh
     - cd petsc
-    - git clean ${GIT_CLEAN_FLAGS}
-    - git fetch
-    - |
-      if [ -z ${PETSC_BRANCH} ]; then
-        if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
-          then git checkout origin/release;
-          else git checkout origin/main;
-        fi
-      else
-        echo "Using PETSC_BRANCH=" $PETSC_BRANCH
-        git checkout origin/$PETSC_BRANCH
-      fi
     - export PETSC_DIR=$PWD
     - export PETSC_ARCH=arch-$CI_JOB_NAME
     - bash -c "${PYTHON} ./configure --with-debugging=0 ${PETSC_CONFIG_OPTS}"
@@ -249,28 +237,8 @@ gnu-lint:
     - if [ ! -d slepcdatafiles ]; then git clone -q https://gitlab.com/slepc/datafiles.git slepcdatafiles; else cd slepcdatafiles; git pull -q; fi
     - cd ${SLEPC_DIR}/..
     - if [ ! -z ${INSTALL+x} ]; then export INSTALL_DIR=$PWD/install; rm -rf $INSTALL_DIR; fi
-    - if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
+    - $SLEPC_DIR/lib/slepc/bin/maint/setup-petsc.sh
     - cd petsc
-    - git clean ${GIT_CLEAN_FLAGS}
-    - |
-      for i in $(seq 5)
-      do
-        git fetch
-        if [ $? -eq 0 ]; then
-          break
-        fi
-        sleep 10
-      done
-    - |
-      if [ -z ${PETSC_BRANCH} ]; then
-        if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
-          then git checkout origin/release;
-          else git checkout origin/main;
-        fi
-      else
-        echo "Using PETSC_BRANCH=" $PETSC_BRANCH
-        git checkout origin/$PETSC_BRANCH
-      fi
     - export PETSC_DIR=$PWD
     - export PETSC_ARCH=arch-$CI_JOB_NAME
     - bash -c "${PYTHON} ./configure --with-debugging=0 --with-strict-petscerrorcode --COPTFLAGS='-O -g' --CXXOPTFLAGS='-O -g' --FOPTFLAGS='-O -g' --CUDAOPTFLAGS='-O3' --HIPOPTFLAGS='-O2' ${PETSC_CONFIG_OPTS} ${PETSC_COVERAGE_OPTS}"
@@ -604,19 +572,8 @@ pip-install:
       unset PETSC_DIR PETSC_ARCH SLEPC_DIR
       slepc=$PWD
       cd ..
-      if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
+      SLEPC_DIR=$slepc $slepc/lib/slepc/bin/maint/setup-petsc.sh
       cd petsc
-      git clean ${GIT_CLEAN_FLAGS}
-      git fetch
-      if [ -z ${PETSC_BRANCH} ]; then
-        if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $slepc/include/slepcversion.h) == 1 ]; then
-          git checkout origin/release
-        else
-          git checkout origin/main
-        fi
-      else
-        git checkout origin/$PETSC_BRANCH
-      fi
       petsc=$PWD
       cd ..
       set -eu pipefail
@@ -670,20 +627,8 @@ destdir-install:
     - export DESTDIR=${PWD}/destdir
     - export PREFIX=${PWD}/prefix
     - rm -rf ${DESTDIR} ${PREFIX}
-    - if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
+    - $SLEPC_DIR/lib/slepc/bin/maint/setup-petsc.sh
     - cd petsc
-    - git clean ${GIT_CLEAN_FLAGS}
-    - git fetch
-    - |
-      if [ -z ${PETSC_BRANCH} ]; then
-        if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
-          then git checkout origin/release;
-          else git checkout origin/main;
-        fi
-      else
-        echo "Using PETSC_BRANCH=" $PETSC_BRANCH
-        git checkout origin/$PETSC_BRANCH
-      fi
     - export PETSC_DIR=$PWD
     - export PETSC_ARCH=arch-$CI_JOB_NAME
     - bash -c "${PYTHON} ./configure --with-debugging=0 --with-mpi=0 --prefix=${PREFIX} COPTFLAGS=-O CXXOPTFLAGS=-O FOPTFLAGS=-O CUDAOPTFLAGS=-O1 HIPOPTFLAGS=-O1 ${PETSC_CONFIG_OPTS}"
@@ -1241,20 +1186,8 @@ docs-review:
     - export SLEPC_DIR=$PWD
     - echo -e "section_start:`date +%s`:build_petsc\r\e[0KPETSc configure and make"
     - cd ..
-    - if [ ! -d petsc ]; then git clone https://gitlab.com/petsc/petsc.git; fi
+    - $SLEPC_DIR/lib/slepc/bin/maint/setup-petsc.sh
     - cd petsc
-    - git clean ${GIT_CLEAN_FLAGS}
-    - git fetch
-    - |
-      if [ -z ${PETSC_BRANCH} ]; then
-        if [ $(awk '/define SLEPC_VERSION_RELEASE/{print $3}' $SLEPC_DIR/include/slepcversion.h) == 1 ];
-          then git checkout origin/release;
-          else git checkout origin/main;
-        fi
-      else
-        echo "Using PETSC_BRANCH=" $PETSC_BRANCH
-        git checkout origin/$PETSC_BRANCH
-      fi
     - export PETSC_DIR=$PWD
     - export PETSC_ARCH=arch-$CI_JOB_NAME
     - bash -c "${PYTHON} ./configure --with-debugging=0 ${PETSC_CONFIG_OPTS}"
