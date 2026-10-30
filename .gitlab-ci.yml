@@ -69,8 +69,8 @@ pause-for-approval:
       - $CI_MERGE_REQUEST_EVENT_TYPE == "detached"
   script:
     - echo "pause-for-approval has no script to run"
-    - if [ ! -z "${CI_PETSC_BRANCH}" ]; then echo "PETSC_BRANCH="${CI_PETSC_BRANCH};fi
     - echo "PETSC_BRANCH=${CI_PETSC_BRANCH}" > uservars.env
+    - echo "PETSC_MERGED=${CI_PETSC_MERGED}" >> uservars.env
     - cat uservars.env
   artifacts:
     reports:
