@@ -61,8 +61,8 @@ class Slepc4py(package.Package):
     envvars = 'PYTHONPATH=%s ' % pythonpath
     if slepc.isinstall:
       envvars += 'PETSC_ARCH="" SLEPC_DIR=${DESTDIR}${SLEPC_INSTALLDIR} '
-    if petsc.isIntel():
-      envvars += 'CFLAGS="" '
+    if 'CFLAGS' not in os.environ:
+      envvars += 'CFLAGS=-O0 '
     logfile = os.path.join(archdir,'lib','slepc','conf',self.packagename+'.build.log')
 
     steps = ['slepc4pybuild:',\
