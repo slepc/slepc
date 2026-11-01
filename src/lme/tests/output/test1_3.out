@@ -15,16 +15,16 @@ Lyapunov equation, N=100 (10x10 grid)
  Subspace dimension: 21
  Erroring out if convergence fails
 [0] <mat:seqdense> MatConvert(): Check superclass seqdense seqdense -> 1
-[0] <mat:seqdense> MatConvert(): Calling MatCopy
+[0] <mat:seqdense> MatConvert(): Calling MatCopy()
 [0] <lme:krylov> LMEDenseHessLyapunovChol(): Residual norm of dense Lyapunov equation = (removed)
 [0] <lme:krylov> LMEDenseHessLyapunovChol(): Residual norm of dense Lyapunov equation = (removed)
 [0] <lme:krylov> LMEDenseHessLyapunovChol(): Residual norm of dense Lyapunov equation = (removed)
 [0] <lme:krylov> LMEDenseHessLyapunovChol(): Residual norm of dense Lyapunov equation = (removed)
  Error estimate reported by the solver: 2.948e-10
 [0] <mat:seqdense> MatConvert(): Check superclass seqdense seqdense -> 1
-[0] <mat:seqdense> MatConvert(): Calling MatCopy
+[0] <mat:seqdense> MatConvert(): Calling MatCopy()
 [0] <mat:seqdense> MatConvert(): Check superclass seqdense seqdense -> 1
-[0] <mat:seqdense> MatConvert(): Calling MatCopy
+[0] <mat:seqdense> MatConvert(): Calling MatCopy()
 [0] <mat:seqdense> MatProductSetFromOptions_Private(): MatProductType AB for A seqaij, B seqdense
  Computed residual norm: 4.03e-10
 
