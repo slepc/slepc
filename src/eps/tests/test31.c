@@ -22,7 +22,7 @@ int main(int argc,char **argv)
   EPS             eps;
   ST              st;
   PetscInt        N,n=10,m,Istart,Iend,II,i,j,degree;
-  PetscBool       flag,modify=PETSC_FALSE,terse;
+  PetscBool       flag,modify=PETSC_FALSE,chinterval=PETSC_FALSE,terse;
   PetscReal       inta,intb,rleft,rright;
   STFilterType    ftype;
   STFilterDamping damp;
@@ -35,6 +35,7 @@ int main(int argc,char **argv)
   N = n*m;
   PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\n2-D Laplacian Eigenproblem, N=%" PetscInt_FMT " (%" PetscInt_FMT "x%" PetscInt_FMT " grid)\n\n",N,n,m));
   PetscCall(PetscOptionsGetBool(NULL,NULL,"-modify",&modify,&flag));
+  PetscCall(PetscOptionsGetBool(NULL,NULL,"-chinterval",&chinterval,&flag));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Create the 2-D Laplacian
@@ -81,13 +82,13 @@ int main(int argc,char **argv)
     PetscCall(STFilterGetType(st,&ftype));
     PetscCall(STFilterGetDegree(st,&degree));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD," Filter type: %s, degree: %" PetscInt_FMT "\n",STFilterTypes[ftype],degree));
-    PetscCall(STFilterGetInterval(st,&inta,&intb));
-    PetscCall(STFilterGetRange(st,&rleft,&rright));
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Requested interval: [%g,%g],  range: [%g,%g]\n\n",(double)inta,(double)intb,(double)rleft,(double)rright));
     if (ftype==ST_FILTER_CHEBYSHEV) {
       PetscCall(STFilterGetDamping(st,&damp));
       PetscCall(PetscPrintf(PETSC_COMM_WORLD," Damping: %s\n",STFilterDampings[damp]));
     }
+    PetscCall(STFilterGetInterval(st,&inta,&intb));
+    PetscCall(STFilterGetRange(st,&rleft,&rright));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Requested interval: [%g,%g],  range: [%g,%g]\n\n",(double)inta,(double)intb,(double)rleft,(double)rright));
   }
 
   PetscCall(PetscOptionsHasName(NULL,NULL,"-terse",&terse));
@@ -108,6 +109,28 @@ int main(int argc,char **argv)
     PetscCall(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY));
     PetscCall(EPSSetOperators(eps,A,NULL));
     PetscCall(EPSSolve(eps));
+    PetscCall(STFilterGetInterval(st,&inta,&intb));
+    PetscCall(STFilterGetRange(st,&rleft,&rright));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Requested interval: [%g,%g],  range: [%g,%g]\n\n",(double)inta,(double)intb,(double)rleft,(double)rright));
+    PetscCall(PetscOptionsHasName(NULL,NULL,"-terse",&terse));
+    if (terse) PetscCall(EPSErrorView(eps,EPS_ERROR_RELATIVE,NULL));
+    else {
+      PetscCall(PetscViewerPushFormat(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_ASCII_INFO_DETAIL));
+      PetscCall(EPSConvergedReasonView(eps,PETSC_VIEWER_STDOUT_WORLD));
+      PetscCall(EPSErrorView(eps,EPS_ERROR_RELATIVE,PETSC_VIEWER_STDOUT_WORLD));
+      PetscCall(PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD));
+    }
+  }
+
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+              Solve the problem again after changing the interval
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  if (chinterval) {
+    PetscCall(EPSSetInterval(eps,0.7,1.2));
+    PetscCall(EPSSolve(eps));
+    PetscCall(STFilterGetInterval(st,&inta,&intb));
+    PetscCall(STFilterGetRange(st,&rleft,&rright));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD," Requested interval: [%g,%g],  range: [%g,%g]\n\n",(double)inta,(double)intb,(double)rleft,(double)rright));
     PetscCall(PetscOptionsHasName(NULL,NULL,"-terse",&terse));
     if (terse) PetscCall(EPSErrorView(eps,EPS_ERROR_RELATIVE,NULL));
     else {
@@ -140,7 +163,7 @@ int main(int argc,char **argv)
    test:
       suffix: 3
       args: -modify -terse
-      filter: sed -e "s/0.161982,7.83797/0.162007,7.83897/"
+      filter: sed -e "s%0\.161[0-9]*%0.162%" | sed -e "s%0\.162[0-9]*%0.162%" | sed -e "s%7\.83[0-9]*%7.83%" | sed -e "s%-0.29[0-9]*%-0.29%"
       requires: !single
 
    test:
@@ -156,5 +179,11 @@ int main(int argc,char **argv)
       filter: sed -e "s/CHEBYSHEV/FILTLAN/" | grep -v Damping
       output_file: output/test31_2.out
       requires: !single
+
+   test:
+      suffix: 6
+      args: -chinterval -eps_type {{krylovschur subspace}} -st_filter_type chebyshev -terse
+      filter: sed -e "s/CHEBYSHEV/FILTLAN/" | grep -v Damping | sed -e "s%0\.161[0-9]*%0.162%" | sed -e "s%0\.162[0-9]*%0.162%" | sed -e "s%7\.83[0-9]*%7.83%"
+      requires: double
 
 TEST*/

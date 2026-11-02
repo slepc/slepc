@@ -104,6 +104,7 @@ typedef struct {
   Mat              *submata,*submatb;  /* seq matrices used in update of subcomm mats */
   /* the following are used only in filter */
   PetscBool        estimatedrange;     /* the filter range was not set by the user */
+  MatState         fstate;             /* state of matrix used to compute the filter */
   /* the following are used only for BSE/LREP problem types */
   EPSKrylovSchurBSEType  bse;          /* the BSE method */
   EPSKrylovSchurLREPType lrep;         /* the LREP method */

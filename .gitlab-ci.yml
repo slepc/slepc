@@ -147,7 +147,7 @@ pause-for-approval:
     - if [ ! -z ${RUN_LINT+x} ]; then make lint_slepc LINTER_OPTIONS="--clang_lib=`llvm-config --libdir`/libclang.so --verbose --werror -fdoc-indentation 0 -fdoc-param-list-alignment 0 -fdoc-inline-list-seealso-backticks 0"; fi
     - echo -e "section_end:`date +%s`:build_slepc\r\e[0K"
     - echo -e "section_start:`date +%s`:tests_slepc\r\e[0KSLEPc test suite"
-    - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest && make CFLAGS="${MAKE_TEST_CFLAGS}" CXXFLAGS="${MAKE_TEST_CXXFLAGS}" FFLAGS="${MAKE_TEST_FFLAGS}" EXTRA_OPTIONS="${EXTRA_OPTIONS} ${BASE_EXTRA_OPTIONS}" allgtests-tap TIMEOUT=${TIMEOUT} gmakesearch="${TEST_SEARCH}" TIMEOUT=${TIMEOUT}; fi
+    - if [ -z ${DISABLE_TESTS+x} ]; then make cleantest && make CFLAGS="${MAKE_TEST_CFLAGS}" CXXFLAGS="${MAKE_TEST_CXXFLAGS}" FFLAGS="${MAKE_TEST_FFLAGS}" EXTRA_OPTIONS="${EXTRA_OPTIONS} ${BASE_EXTRA_OPTIONS}" allgtests-tap TIMEOUT=${TIMEOUT} gmakesearch="${TEST_SEARCH}"; fi
     - echo -e "section_end:`date +%s`:tests_slepc\r\e[0K"
   variables:
     PYTHON: python3

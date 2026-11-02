@@ -7,6 +7,8 @@
  Found 7 eigenvalues, all of them computed up to the required tolerance:
      0.63499, 0.77129, 0.77129, 1.00777, 1.00777, 1.25018, 1.25018
 
+ Requested interval: [0.5,1.3],  range: [-0.3,8.]
+
  Found 7 eigenvalues, all of them computed up to the required tolerance:
      0.65463, 0.77129, 0.79116, 1.00777, 1.06372, 1.25018, 1.26542
 
