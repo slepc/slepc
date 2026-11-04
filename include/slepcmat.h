@@ -14,6 +14,7 @@
 #pragma once
 
 #include <petscmat.h>
+#include <slepcmacros.h>
 
 /* SUBMANSEC = Sys */
 

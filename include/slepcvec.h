@@ -13,7 +13,8 @@
 
 #pragma once
 
-#include <slepcsys.h>
+#include <petscmat.h>
+#include <slepcmacros.h>
 
 /* SUBMANSEC = Sys */
 

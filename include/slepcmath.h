@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <petscsys.h>
+
 /* SUBMANSEC = Sys */
 
 /*
