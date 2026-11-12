@@ -223,7 +223,10 @@ PetscErrorCode BVDotVec_BLAS_CUDA(BV bv,PetscInt n_,PetscInt k_,const PetscScala
       PetscCall(PetscLogGpuTimeEnd());
       PetscCallCUDA(cudaMemcpy(bv->work,d_work,k*sizeof(PetscScalar),cudaMemcpyDeviceToHost));
       PetscCall(PetscLogGpuToCpu(k*sizeof(PetscScalar)));
-    } else PetscCall(PetscArrayzero(bv->work,k));
+    } else {
+      PetscCall(PetscArrayzero(bv->work,k));
+      if (!y) PetscCallCUDA(cudaMemset(d_work,0,k*sizeof(PetscScalar)));
+    }
     /* reduction */
     PetscCall(PetscMPIIntCast(k,&len));
     if (!y) {
