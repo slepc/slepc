@@ -223,7 +223,10 @@ PetscErrorCode BVDotVec_BLAS_HIP(BV bv,PetscInt n_,PetscInt k_,const PetscScalar
       PetscCall(PetscLogGpuTimeEnd());
       PetscCallHIP(hipMemcpy(bv->work,d_work,k*sizeof(PetscScalar),hipMemcpyDeviceToHost));
       PetscCall(PetscLogGpuToCpu(k*sizeof(PetscScalar)));
-    } else PetscCall(PetscArrayzero(bv->work,k));
+    } else {
+      PetscCall(PetscArrayzero(bv->work,k));
+      if (!y) PetscCallHIP(hipMemset(d_work,0,k*sizeof(PetscScalar)));
+    }
     /* reduction */
     PetscCall(PetscMPIIntCast(k,&len));
     if (!y) {
