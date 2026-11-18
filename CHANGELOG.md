@@ -2,6 +2,12 @@
 
 ## [unreleased]
 
+### Added
+
+- `MFN`: new solver `MFNCRAM` that implements the Chebyshev Rational Approximation
+  Method for the matrix exponential, intended for matrices whose spectrum lies on
+  or near the negative real axis. Currently requires complex scalars.
+
 ### Deprecated
 
 - `RGCanUseConjugates()` is deprecated, use `RGCheckSymmetricContour()` instead.

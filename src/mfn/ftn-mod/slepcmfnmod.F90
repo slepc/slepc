@@ -13,6 +13,7 @@ module slepcmfndef
 end module slepcmfndef
 
 module slepcmfn
+  use petscksp
   use slepcmfndef
   use slepcbv
   use slepcfn

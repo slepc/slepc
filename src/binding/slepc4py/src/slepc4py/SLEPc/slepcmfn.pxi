@@ -3,6 +3,7 @@ cdef extern from * nogil:
     ctypedef char* SlepcMFNType "const char*"
     SlepcMFNType MFNKRYLOV
     SlepcMFNType MFNEXPOKIT
+    SlepcMFNType MFNCRAM
 
     ctypedef enum SlepcMFNConvergedReason "MFNConvergedReason":
         MFN_CONVERGED_TOL
@@ -52,6 +53,7 @@ cdef extern from * nogil:
 
     PetscErrorCode MFNGetConvergedReason(SlepcMFN, SlepcMFNConvergedReason*)
 
+    PetscErrorCode MFNCRAMGetKSP(SlepcMFN, PetscKSP*)
 # -----------------------------------------------------------------------------
 
 cdef inline MFN ref_MFN(SlepcMFN mfn):

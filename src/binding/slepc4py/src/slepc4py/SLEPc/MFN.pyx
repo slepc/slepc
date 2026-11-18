@@ -6,6 +6,7 @@ class MFNType(object):
 
     - `KRYLOV`:  Restarted Krylov solver.
     - `EXPOKIT`: Implementation of the method in Expokit.
+    - `CRAM`:    Chebyshev Rational Approximation Method.
 
     See Also
     --------
@@ -13,6 +14,7 @@ class MFNType(object):
     """
     KRYLOV   = S_(MFNKRYLOV)
     EXPOKIT  = S_(MFNEXPOKIT)
+    CRAM     = S_(MFNCRAM)
 
 
 class MFNConvergedReason(object):
@@ -670,6 +672,26 @@ cdef class MFN(Object):
         cdef PetscBool tval = PETSC_FALSE
         CHKERR(MFNGetErrorIfNotConverged(self.mfn, &tval))
         return toBool(tval)
+
+    def getCRAMKSP(self) -> KSP:
+        """
+        Get the linear solver object associated with the CRAM solver.
+
+        Collective.
+
+        Returns
+        -------
+        petsc4py.PETSc.KSP
+            The linear solver object.
+
+        See Also
+        --------
+        slepc.MFNCRAMGetKSP
+        """
+        cdef KSP ksp = KSP()
+        CHKERR(MFNCRAMGetKSP(self.mfn, &ksp.ksp))
+        CHKERR(PetscINCREF(ksp.obj))
+        return ksp
 
     #
 
