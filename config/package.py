@@ -303,7 +303,7 @@ Downloaded package %s from: %s is not a tarball.
       # check if 'dirname' is set'
       if dirname:
         quoted = shlex.quote(dirname)
-        (result,output) = self.RunCommand('chmod -R a+r '+quoted+';find  '+quoted + r' -type d -name "*" -exec chmod a+rx {} \;')
+        (result,output) = self.RunCommand('cd '+externdir+'; chmod -R a+r '+quoted+'; find  '+quoted + r' -type d -name "*" -exec chmod a+rx {} \;')
         if dirname != self.GetDirectoryName():
           self.log.write('The directory name '+dirname+' is different from the expected one, renaming to '+self.GetDirectoryName())
           os.rename(os.path.join(externdir,dirname),os.path.join(externdir,self.GetDirectoryName()))
