@@ -89,6 +89,7 @@ This parameter can also be set at run time with the option `-mfn_ncv`.
  |-------------------------|--------------|-----------------|-----------------------
  |Restarted Krylov solver  |`MFNKRYLOV`   |     `krylov`    |    Any
  |Expokit algorithm        |`MFNEXPOKIT`  |     `expokit`   |    Exponential
+ |CRAM                     |`MFNCRAM`     |     `cram`      |    Exponential
 
 :::
 
@@ -105,6 +106,8 @@ Currently implemented methods are:
 -   A Krylov method with restarts as proposed by {cite:t}`Eie06`.
 
 -   The method implemented in Expokit {cite:p}`Sid98` for the matrix exponential.
+
+-   The Chebyshev rational approximation method (CRAM) {cite:p}`Pus11` for the matrix exponential.
 
 ### Accuracy and Monitors
 

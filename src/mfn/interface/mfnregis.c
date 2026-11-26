@@ -12,6 +12,7 @@
 
 SLEPC_EXTERN PetscErrorCode MFNCreate_Krylov(MFN);
 SLEPC_EXTERN PetscErrorCode MFNCreate_Expokit(MFN);
+SLEPC_EXTERN PetscErrorCode MFNCreate_CRAM(MFN);
 
 /*@
   MFNRegisterAll - Registers all the matrix functions in the `MFN` package.
@@ -29,6 +30,7 @@ PetscErrorCode MFNRegisterAll(void)
   MFNRegisterAllCalled = PETSC_TRUE;
   PetscCall(MFNRegister(MFNKRYLOV,MFNCreate_Krylov));
   PetscCall(MFNRegister(MFNEXPOKIT,MFNCreate_Expokit));
+  PetscCall(MFNRegister(MFNCRAM,MFNCreate_CRAM));
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 

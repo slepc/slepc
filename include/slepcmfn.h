@@ -15,6 +15,7 @@
 
 #include <slepcbv.h>
 #include <slepcfn.h>
+#include <petscksp.h>
 
 /* SUBMANSEC = MFN */
 
@@ -41,6 +42,7 @@ J*/
 typedef const char *MFNType;
 #define MFNKRYLOV   "krylov"
 #define MFNEXPOKIT  "expokit"
+#define MFNCRAM     "cram"
 
 /* Logging support */
 SLEPC_EXTERN PetscClassId MFN_CLASSID;
@@ -243,3 +245,6 @@ SLEPC_EXTERN PetscErrorCode MFNRegister(const char[],PetscErrorCode(*)(MFN));
 SLEPC_EXTERN PetscErrorCode MFNMonitorRegister(const char[],PetscViewerType,PetscViewerFormat,MFNMonitorRegisterFn*,MFNMonitorRegisterCreateFn*,MFNMonitorRegisterDestroyFn*);
 
 SLEPC_EXTERN PetscErrorCode MFNAllocateSolution(MFN,PetscInt);
+
+/* Options specific to particular methods */
+SLEPC_EXTERN PetscErrorCode MFNCRAMGetKSP(MFN,KSP*);

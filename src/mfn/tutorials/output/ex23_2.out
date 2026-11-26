@@ -1,0 +1,8 @@
+
+Markov y=exp(t*A)*e_1, N=120 (m=15), shift=-2.
+
+ Number of iterations of the method: 1
+ Subspace dimension: 0
+ Stopping condition: tol=1e-07, maxit=1
+ Computed vector at time t=2 has norm 0.0452998
+

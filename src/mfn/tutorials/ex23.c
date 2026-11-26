@@ -12,6 +12,7 @@ static char help[] = "Computes exp(t*A)*v for a matrix associated with a Markov 
   "The command line options are:\n"
   "  -t <t>, where <t> = time parameter (multiplies the matrix).\n"
   "  -m <m>, where <m> = number of grid subdivisions in each dimension.\n\n"
+  "  -shift <shift>, where <shift> = diagonal shift applied to the matrix.\n\n"
   "To draw the solution run with -mfn_view_solution draw -draw_pause -1\n\n";
 
 #include <slepcmfn.h>
@@ -27,7 +28,7 @@ int main(int argc,char **argv)
   MFN                mfn;
   FN                 f;
   PetscReal          tol,norm;
-  PetscScalar        t=2.0;
+  PetscScalar        t=2.0,shift=0.0;
   Vec                v,y;
   PetscInt           N,m=15,ncv,maxit,its;
   MFNConvergedReason reason;
@@ -37,8 +38,14 @@ int main(int argc,char **argv)
 
   PetscCall(PetscOptionsGetInt(NULL,NULL,"-m",&m,NULL));
   PetscCall(PetscOptionsGetScalar(NULL,NULL,"-t",&t,NULL));
+  PetscCall(PetscOptionsGetScalar(NULL,NULL,"-shift",&shift,NULL));
   N = m*(m+1)/2;
-  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nMarkov y=exp(t*A)*e_1, N=%" PetscInt_FMT " (m=%" PetscInt_FMT ")\n\n",N,m));
+  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nMarkov y=exp(t*A)*e_1, N=%" PetscInt_FMT " (m=%" PetscInt_FMT ")",N,m));
+  if (shift!=0.0) {
+    if (PetscImaginaryPart(shift)==0.0) PetscCall(PetscPrintf(PETSC_COMM_WORLD,", shift=%g",(double)PetscRealPart(shift)));
+    else PetscCall(PetscPrintf(PETSC_COMM_WORLD,", shift=%g%+gi",(double)PetscRealPart(shift),(double)PetscImaginaryPart(shift)));
+  }
+  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\n\n"));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             Compute the transition probability matrix, A
@@ -48,6 +55,7 @@ int main(int argc,char **argv)
   PetscCall(MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,N,N));
   PetscCall(MatSetFromOptions(A));
   PetscCall(MatMarkovModel(m,A));
+  PetscCall(MatShift(A,shift));
 
   /* set v = e_1 */
   PetscCall(MatCreateVecs(A,NULL,&y));
@@ -156,5 +164,11 @@ PetscErrorCode MatMarkovModel(PetscInt m,Mat A)
    test:
       suffix: 1
       args: -mfn_ncv 6
+
+   test:
+      suffix: 2
+      requires: complex
+      args: -mfn_type cram -shift -2
+      filter: sed -e "s/0.0452997/0.0452998/"
 
 TEST*/
